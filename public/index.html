@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NeedShare Explorer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <h1>NeedShare Explorer</h1>
+        <p>
+          An interactive map of feelings, needs, situations, and care strategies inspired
+          by the original <a href="https://needshare.net/" target="_blank" rel="noreferrer">needshare.net</a> resource.
+          Select what is alive for you to discover the needs underneath and tangible next steps.
+        </p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel panel--list">
+        <div class="dataset-tabs" role="tablist" aria-label="Data set selector">
+          <button class="dataset-tab" role="tab" data-dataset="feelings" aria-selected="true">
+            Feelings
+          </button>
+          <button class="dataset-tab" role="tab" data-dataset="needs" aria-selected="false">
+            Needs
+          </button>
+          <button class="dataset-tab" role="tab" data-dataset="situations" aria-selected="false">
+            Situations
+          </button>
+          <button class="dataset-tab" role="tab" data-dataset="strategies" aria-selected="false">
+            Strategies
+          </button>
+        </div>
+
+        <label class="search" for="searchInput">
+          <span class="search__label">Search</span>
+          <input id="searchInput" type="search" placeholder="Search by title or description" autocomplete="off" />
+        </label>
+
+        <ul id="itemList" class="item-list" role="listbox" aria-live="polite"></ul>
+      </section>
+
+      <section class="panel panel--details">
+        <div id="detailsContent" class="details" aria-live="polite"></div>
+
+        <aside class="plan" aria-labelledby="planTitle">
+          <div class="plan__header">
+            <h2 id="planTitle">Care plan</h2>
+            <p class="plan__hint">Collect strategies that resonate to revisit later.</p>
+          </div>
+          <div id="planMessage" class="visually-hidden" aria-live="polite"></div>
+          <ul id="planList" class="plan__list"></ul>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Data sourced from the Need Share spreadsheets and shared under the same spirit of care.
+        Built as a starting point for further customization.
+      </p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "nvc-app",
+  "version": "1.0.0",
+  "description": "Interactive Nonviolent Communication explorer inspired by needshare.net",
+  "type": "module",
+  "scripts": {
+    "build:data": "node scripts/build-data.mjs"
+  }
+}
