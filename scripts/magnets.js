@@ -50,16 +50,6 @@ const prepareMagnets = () => {
     wrapper.appendChild(grid);
     parent.insertBefore(shuffleButton, wrapper);
 
-    const randomize = () => {
-      const shuffled = shuffleArray(magnets);
-      const fragment = document.createDocumentFragment();
-      shuffled.forEach((magnet, index) => {
-        applyMagnetStyles(magnet, index);
-        fragment.appendChild(magnet);
-      });
-      grid.appendChild(fragment);
-    };
-
     const state = {
       active: false,
       animationId: null,
@@ -69,6 +59,28 @@ const prepareMagnets = () => {
       dragState: null,
       suppressedClicks: new WeakSet(),
       mousePosition: null,
+      savedPositions: new Map(),
+      savedVelocities: new Map(),
+    };
+
+    const clearSavedLayout = () => {
+      state.savedPositions.clear();
+      state.savedVelocities.clear();
+      magnets.forEach((magnet) => {
+        magnet.style.removeProperty('--magnet-play-offset-x');
+        magnet.style.removeProperty('--magnet-play-offset-y');
+      });
+    };
+
+    const randomize = () => {
+      const shuffled = shuffleArray(magnets);
+      const fragment = document.createDocumentFragment();
+      shuffled.forEach((magnet, index) => {
+        applyMagnetStyles(magnet, index);
+        fragment.appendChild(magnet);
+      });
+      grid.appendChild(fragment);
+      clearSavedLayout();
     };
 
     const playButton = document.createElement('button');
@@ -193,7 +205,7 @@ const prepareMagnets = () => {
           if (distanceSquared < influenceRadius * influenceRadius) {
             const distance = Math.sqrt(distanceSquared) || 0.0001;
             const strength = 1 - Math.min(distance / influenceRadius, 1);
-            const force = strength * 0.3;
+            const force = strength * 0.08;
             velocity.x += (diffX / distance) * force;
             velocity.y += (diffY / distance) * force;
           }
@@ -292,6 +304,38 @@ const prepareMagnets = () => {
       }
 
       const gridRect = grid.getBoundingClientRect();
+
+      state.savedPositions.clear();
+      magnets.forEach((magnet) => {
+        const position = state.positions.get(magnet);
+        const size = state.sizes.get(magnet);
+        if (position && size) {
+          state.savedPositions.set(magnet, {
+            x: position.x,
+            y: position.y,
+            width: size.width,
+            height: size.height,
+          });
+        } else {
+          const rect = magnet.getBoundingClientRect();
+          state.savedPositions.set(magnet, {
+            x: rect.left - gridRect.left,
+            y: rect.top - gridRect.top,
+            width: rect.width,
+            height: rect.height,
+          });
+        }
+      });
+      state.savedVelocities.clear();
+      state.velocities.forEach((velocity, magnet) => {
+        if (velocity) {
+          state.savedVelocities.set(magnet, {
+            x: velocity.x,
+            y: velocity.y,
+          });
+        }
+      });
+
       const orderedMagnets = magnets
         .map((magnet) => {
           const position = state.positions.get(magnet);
@@ -331,6 +375,29 @@ const prepareMagnets = () => {
 
       resetMagnetStyles();
       updateToggleLabel();
+
+      window.requestAnimationFrame(() => {
+        const latestGridRect = grid.getBoundingClientRect();
+        magnets.forEach((magnet) => {
+          const savedPosition = state.savedPositions.get(magnet);
+          if (!savedPosition) {
+            magnet.style.removeProperty('--magnet-play-offset-x');
+            magnet.style.removeProperty('--magnet-play-offset-y');
+            return;
+          }
+
+          const rect = magnet.getBoundingClientRect();
+          const savedCenterX = savedPosition.x + (savedPosition.width ?? rect.width) / 2;
+          const savedCenterY = savedPosition.y + (savedPosition.height ?? rect.height) / 2;
+          const currentCenterX = rect.left - latestGridRect.left + rect.width / 2;
+          const currentCenterY = rect.top - latestGridRect.top + rect.height / 2;
+          const offsetX = savedCenterX - currentCenterX;
+          const offsetY = savedCenterY - currentCenterY;
+
+          magnet.style.setProperty('--magnet-play-offset-x', `${offsetX}px`);
+          magnet.style.setProperty('--magnet-play-offset-y', `${offsetY}px`);
+        });
+      });
     };
 
     const startPhysics = () => {
@@ -349,28 +416,54 @@ const prepareMagnets = () => {
       state.mousePosition = null;
       state.suppressedClicks = new WeakSet();
 
+      const width = grid.clientWidth;
+      const height = grid.clientHeight;
+
       magnets.forEach((magnet) => {
         const rect = magnet.getBoundingClientRect();
-        const position = {
-          x: rect.left - gridRect.left,
-          y: rect.top - gridRect.top,
-        };
-
-        state.positions.set(magnet, position);
-        state.velocities.set(magnet, {
-          x: (Math.random() - 0.5) * 0.6,
-          y: (Math.random() - 0.5) * 0.6,
-        });
-        state.sizes.set(magnet, {
+        const savedPosition = state.savedPositions.get(magnet);
+        const size = {
           width: rect.width,
           height: rect.height,
-        });
+        };
+
+        let position;
+        if (savedPosition) {
+          position = {
+            x: savedPosition.x,
+            y: savedPosition.y,
+          };
+        } else {
+          position = {
+            x: rect.left - gridRect.left,
+            y: rect.top - gridRect.top,
+          };
+        }
+
+        const maxX = Math.max(0, width - size.width);
+        const maxY = Math.max(0, height - size.height);
+        position.x = Math.min(Math.max(0, position.x), maxX);
+        position.y = Math.min(Math.max(0, position.y), maxY);
+
+        const savedVelocity = state.savedVelocities.get(magnet);
+        const velocity = savedVelocity
+          ? { x: savedVelocity.x * 0.6, y: savedVelocity.y * 0.6 }
+          : {
+              x: (Math.random() - 0.5) * 0.6,
+              y: (Math.random() - 0.5) * 0.6,
+            };
+
+        state.positions.set(magnet, position);
+        state.velocities.set(magnet, velocity);
+        state.sizes.set(magnet, size);
 
         magnet.style.position = 'absolute';
         magnet.style.left = `${position.x}px`;
         magnet.style.top = `${position.y}px`;
         magnet.style.margin = '0';
         magnet.style.transition = 'none';
+        magnet.style.setProperty('--magnet-play-offset-x', '0px');
+        magnet.style.setProperty('--magnet-play-offset-y', '0px');
       });
 
       state.active = true;
