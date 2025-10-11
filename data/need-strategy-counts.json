@@ -1,0 +1,746 @@
+[
+  {
+    "title": "Abundance",
+    "slug": "abundance",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Accountability",
+    "slug": "accountability",
+    "category": "Community/Belonging",
+    "strategyCount": 1
+  },
+  {
+    "title": "Agency",
+    "slug": "agency",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Anticipation",
+    "slug": "anticipation",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Awe",
+    "slug": "awe",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Balance",
+    "slug": "balance",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Causality",
+    "slug": "causality",
+    "category": "Community/Belonging",
+    "strategyCount": 1
+  },
+  {
+    "title": "Compassion",
+    "slug": "compassion",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Competence",
+    "slug": "competence",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Connection with Nature",
+    "slug": "connection-with-nature",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Consistency",
+    "slug": "consistency",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 1
+  },
+  {
+    "title": "Containment",
+    "slug": "containment",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Curiosity",
+    "slug": "curiosity",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Deliberation",
+    "slug": "deliberation",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Dignity",
+    "slug": "dignity",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Discovery",
+    "slug": "discovery",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Empathy",
+    "slug": "empathy",
+    "category": "Empathy/Understanding",
+    "strategyCount": 1
+  },
+  {
+    "title": "Energy",
+    "slug": "energy",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Equality",
+    "slug": "equality",
+    "category": "Empathy/Understanding",
+    "strategyCount": 1
+  },
+  {
+    "title": "Exploration",
+    "slug": "exploration",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Flow",
+    "slug": "flow",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Freshness",
+    "slug": "freshness",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Genuineness",
+    "slug": "genuineness",
+    "category": "Authenticity",
+    "strategyCount": 1
+  },
+  {
+    "title": "Honor",
+    "slug": "honor",
+    "category": "Love/Caring",
+    "strategyCount": 1
+  },
+  {
+    "title": "Justice",
+    "slug": "justice",
+    "category": "Community/Belonging",
+    "strategyCount": 1
+  },
+  {
+    "title": "Mental Space",
+    "slug": "mental-space",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Motivation",
+    "slug": "motivation",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Mutual Understanding",
+    "slug": "mutual-understanding",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Peer Respect",
+    "slug": "peer-respect",
+    "category": "Empathy/Understanding",
+    "strategyCount": 1
+  },
+  {
+    "title": "Physical Fitness",
+    "slug": "physical-fitness",
+    "category": "Sustenance/Health",
+    "strategyCount": 1
+  },
+  {
+    "title": "Power-with",
+    "slug": "power-with",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Practice",
+    "slug": "practice",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Preparation",
+    "slug": "preparation",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Privacy",
+    "slug": "privacy",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 1
+  },
+  {
+    "title": "Progress",
+    "slug": "progress",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Reliability",
+    "slug": "reliability",
+    "category": "Love/Caring",
+    "strategyCount": 1
+  },
+  {
+    "title": "Self-Acceptance",
+    "slug": "self-acceptance",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Self-Care",
+    "slug": "self-care",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Self-Compassion",
+    "slug": "self-compassion",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Self-Knowledge",
+    "slug": "self-knowledge",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Self-Soothing",
+    "slug": "self-soothing",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Sensory Nourishment",
+    "slug": "sensory-nourishment",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Simplicity",
+    "slug": "simplicity",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Spaciousness",
+    "slug": "spaciousness",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Stimulation",
+    "slug": "stimulation",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Strength",
+    "slug": "strength",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Structure",
+    "slug": "structure",
+    "category": "",
+    "strategyCount": 1
+  },
+  {
+    "title": "Acknowledgement",
+    "slug": "acknowledgement",
+    "category": "Empathy/Understanding",
+    "strategyCount": 2
+  },
+  {
+    "title": "Act Freely",
+    "slug": "act-freely",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 2
+  },
+  {
+    "title": "Authenticity",
+    "slug": "authenticity",
+    "category": "Authenticity",
+    "strategyCount": 2
+  },
+  {
+    "title": "Awareness",
+    "slug": "awareness",
+    "category": "",
+    "strategyCount": 2
+  },
+  {
+    "title": "Calm",
+    "slug": "calm",
+    "category": "Beauty/Peace/Play",
+    "strategyCount": 2
+  },
+  {
+    "title": "Choose Freely",
+    "slug": "choose-freely",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 2
+  },
+  {
+    "title": "Commitment",
+    "slug": "commitment",
+    "category": "Safety/Security",
+    "strategyCount": 2
+  },
+  {
+    "title": "Dependability",
+    "slug": "dependability",
+    "category": "Community/Belonging",
+    "strategyCount": 2
+  },
+  {
+    "title": "Direction",
+    "slug": "direction",
+    "category": "",
+    "strategyCount": 2
+  },
+  {
+    "title": "Do things at my own pace and in my own way",
+    "slug": "do-things-at-my-own-pace-and-in-my-own-way",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 2
+  },
+  {
+    "title": "Fairness",
+    "slug": "fairness",
+    "category": "Community/Belonging",
+    "strategyCount": 2
+  },
+  {
+    "title": "Friendship",
+    "slug": "friendship",
+    "category": "Community/Belonging",
+    "strategyCount": 2
+  },
+  {
+    "title": "Inclusion",
+    "slug": "inclusion",
+    "category": "Community/Belonging",
+    "strategyCount": 2
+  },
+  {
+    "title": "Need for all living things to flourish",
+    "slug": "need-for-all-living-things-to-flourish",
+    "category": "Meaning/Contribution",
+    "strategyCount": 2
+  },
+  {
+    "title": "Non-judgmental Communication",
+    "slug": "non-judgmental-communication",
+    "category": "Empathy/Understanding",
+    "strategyCount": 2
+  },
+  {
+    "title": "Perspective",
+    "slug": "perspective",
+    "category": "",
+    "strategyCount": 2
+  },
+  {
+    "title": "Predictability",
+    "slug": "predictability",
+    "category": "Safety/Security",
+    "strategyCount": 2
+  },
+  {
+    "title": "Recovery",
+    "slug": "recovery",
+    "category": "",
+    "strategyCount": 2
+  },
+  {
+    "title": "Relaxation",
+    "slug": "relaxation",
+    "category": "Sustenance/Health",
+    "strategyCount": 2
+  },
+  {
+    "title": "Security",
+    "slug": "security",
+    "category": "Safety/Security",
+    "strategyCount": 2
+  },
+  {
+    "title": "Self-Connection",
+    "slug": "self-connection",
+    "category": "",
+    "strategyCount": 2
+  },
+  {
+    "title": "Serenity",
+    "slug": "serenity",
+    "category": "Beauty/Peace/Play",
+    "strategyCount": 2
+  },
+  {
+    "title": "Trust",
+    "slug": "trust",
+    "category": "Safety/Security",
+    "strategyCount": 2
+  },
+  {
+    "title": "Closeness",
+    "slug": "closeness",
+    "category": "Love/Caring",
+    "strategyCount": 3
+  },
+  {
+    "title": "Community",
+    "slug": "community",
+    "category": "Community/Belonging",
+    "strategyCount": 3
+  },
+  {
+    "title": "Empowerment",
+    "slug": "empowerment",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 3
+  },
+  {
+    "title": "Learning",
+    "slug": "learning",
+    "category": "",
+    "strategyCount": 3
+  },
+  {
+    "title": "Mattering",
+    "slug": "mattering",
+    "category": "Love/Caring",
+    "strategyCount": 3
+  },
+  {
+    "title": "Nurturing",
+    "slug": "nurturing",
+    "category": "Love/Caring",
+    "strategyCount": 3
+  },
+  {
+    "title": "Orientation",
+    "slug": "orientation",
+    "category": "",
+    "strategyCount": 3
+  },
+  {
+    "title": "Participation",
+    "slug": "participation",
+    "category": "Meaning/Contribution",
+    "strategyCount": 3
+  },
+  {
+    "title": "Regulation",
+    "slug": "regulation",
+    "category": "",
+    "strategyCount": 3
+  },
+  {
+    "title": "Stability",
+    "slug": "stability",
+    "category": "",
+    "strategyCount": 3
+  },
+  {
+    "title": "Understanding",
+    "slug": "understanding",
+    "category": "Empathy/Understanding",
+    "strategyCount": 3
+  },
+  {
+    "title": "Appreciation",
+    "slug": "appreciation",
+    "category": "Beauty/Peace/Play",
+    "strategyCount": 4
+  },
+  {
+    "title": "Calmness",
+    "slug": "calmness",
+    "category": "",
+    "strategyCount": 4
+  },
+  {
+    "title": "Care",
+    "slug": "care",
+    "category": "",
+    "strategyCount": 4
+  },
+  {
+    "title": "Control",
+    "slug": "control",
+    "category": "Safety/Security",
+    "strategyCount": 4
+  },
+  {
+    "title": "Effectiveness",
+    "slug": "effectiveness",
+    "category": "",
+    "strategyCount": 4
+  },
+  {
+    "title": "Integrity",
+    "slug": "integrity",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 4
+  },
+  {
+    "title": "Love/Caring",
+    "slug": "love-caring",
+    "category": "Love/Caring",
+    "strategyCount": 4
+  },
+  {
+    "title": "Need to matter",
+    "slug": "need-to-matter",
+    "category": "Love/Caring",
+    "strategyCount": 4
+  },
+  {
+    "title": "Acceptance",
+    "slug": "acceptance",
+    "category": "Empathy/Understanding",
+    "strategyCount": 5
+  },
+  {
+    "title": "Accomplishment",
+    "slug": "accomplishment",
+    "category": "Meaning/Contribution",
+    "strategyCount": 5
+  },
+  {
+    "title": "Connection",
+    "slug": "connection",
+    "category": "Community/Belonging",
+    "strategyCount": 5
+  },
+  {
+    "title": "Consideration",
+    "slug": "consideration",
+    "category": "Empathy/Understanding",
+    "strategyCount": 5
+  },
+  {
+    "title": "Creativity",
+    "slug": "creativity",
+    "category": "",
+    "strategyCount": 5
+  },
+  {
+    "title": "Freedom",
+    "slug": "freedom",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 5
+  },
+  {
+    "title": "Growth",
+    "slug": "growth",
+    "category": "Meaning/Contribution",
+    "strategyCount": 5
+  },
+  {
+    "title": "Mutuality",
+    "slug": "mutuality",
+    "category": "Community/Belonging",
+    "strategyCount": 5
+  },
+  {
+    "title": "Recognition",
+    "slug": "recognition",
+    "category": "Empathy/Understanding",
+    "strategyCount": 5
+  },
+  {
+    "title": "Space",
+    "slug": "space",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 5
+  },
+  {
+    "title": "Beauty",
+    "slug": "beauty",
+    "category": "Beauty/Peace/Play",
+    "strategyCount": 6
+  },
+  {
+    "title": "Belonging",
+    "slug": "belonging",
+    "category": "Community/Belonging",
+    "strategyCount": 6
+  },
+  {
+    "title": "Ease",
+    "slug": "ease",
+    "category": "",
+    "strategyCount": 6
+  },
+  {
+    "title": "Meaning",
+    "slug": "meaning",
+    "category": "",
+    "strategyCount": 6
+  },
+  {
+    "title": "Order",
+    "slug": "order",
+    "category": "Safety/Security",
+    "strategyCount": 6
+  },
+  {
+    "title": "Respect",
+    "slug": "respect",
+    "category": "Empathy/Understanding",
+    "strategyCount": 6
+  },
+  {
+    "title": "Support",
+    "slug": "support",
+    "category": "Sustenance/Health",
+    "strategyCount": 6
+  },
+  {
+    "title": "Contribution",
+    "slug": "contribution",
+    "category": "Meaning/Contribution",
+    "strategyCount": 7
+  },
+  {
+    "title": "Grounding",
+    "slug": "grounding",
+    "category": "",
+    "strategyCount": 7
+  },
+  {
+    "title": "Honesty",
+    "slug": "honesty",
+    "category": "Authenticity",
+    "strategyCount": 7
+  },
+  {
+    "title": "Play",
+    "slug": "play",
+    "category": "",
+    "strategyCount": 7
+  },
+  {
+    "title": "Relief",
+    "slug": "relief",
+    "category": "",
+    "strategyCount": 7
+  },
+  {
+    "title": "To be heard",
+    "slug": "to-be-heard",
+    "category": "Empathy/Understanding",
+    "strategyCount": 7
+  },
+  {
+    "title": "To be seen",
+    "slug": "to-be-seen",
+    "category": "Empathy/Understanding",
+    "strategyCount": 7
+  },
+  {
+    "title": "Choice",
+    "slug": "choice",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 8
+  },
+  {
+    "title": "Comfort",
+    "slug": "comfort",
+    "category": "",
+    "strategyCount": 9
+  },
+  {
+    "title": "Focus",
+    "slug": "focus",
+    "category": "",
+    "strategyCount": 10
+  },
+  {
+    "title": "Rest",
+    "slug": "rest",
+    "category": "Sustenance/Health",
+    "strategyCount": 10
+  },
+  {
+    "title": "Self-Expression",
+    "slug": "self-expression",
+    "category": "",
+    "strategyCount": 10
+  },
+  {
+    "title": "Presence",
+    "slug": "presence",
+    "category": "",
+    "strategyCount": 11
+  },
+  {
+    "title": "Safety",
+    "slug": "safety",
+    "category": "Safety/Security",
+    "strategyCount": 14
+  },
+  {
+    "title": "Peace",
+    "slug": "peace",
+    "category": "Beauty/Peace/Play",
+    "strategyCount": 16
+  },
+  {
+    "title": "Autonomy",
+    "slug": "autonomy",
+    "category": "Autonomy/Freedom",
+    "strategyCount": 19
+  },
+  {
+    "title": "Physical Well-Being",
+    "slug": "physical-well-being",
+    "category": "",
+    "strategyCount": 19
+  },
+  {
+    "title": "Clarity",
+    "slug": "clarity",
+    "category": "Empathy/Understanding",
+    "strategyCount": 21
+  }
+]
