@@ -8,9 +8,9 @@ const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 
 const categoryIcons = {
-  situations: '⚡',
-  feelings: '💖',
-  needs: '🌱',
+  situations: 'icons/map-8bit.svg',
+  feelings: 'icons/feelings-8bit.svg',
+  needs: 'icons/needs-8bit.svg',
 };
 
 const directoriesToReset = ['situations', 'feelings', 'needs', 'inventory'];
@@ -203,12 +203,13 @@ function renderStrategyForm({
 }
 
 function renderHome() {
+  const basePath = basePathFromDepth(0);
   const cards = ['situations', 'feelings', 'needs']
     .map((type) => {
-      const icon = categoryIcons[type];
+      const icon = `${basePath}${categoryIcons[type]}`;
       const label = type.charAt(0).toUpperCase() + type.slice(1);
       return `<a class="category-card" href="${type}/">
-          <span class="category-card__icon" aria-hidden="true">${icon}</span>
+          <img class="category-card__icon" src="${icon}" alt="" aria-hidden="true" />
           <span class="category-card__label">${label}</span>
         </a>`;
     })
