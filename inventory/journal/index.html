@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Journal • NeedShare Magnet Explorer</title>
+    <meta name="description" content="Log feelings, needs, and reflections in a dedicated journal dashboard for your strategy inventory." />
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body data-base-path="../../">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../../">Home</a>
+        <a class="site-nav__link" href="../../situations/">Situations</a>
+        <a class="site-nav__link" href="../../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="../../">Home</a></li><li><a href="../">Inventory</a></li><li aria-current="page"><span class="breadcrumbs__label"><img src="../../icons/journal.svg" class="journal-label-icon" alt="" aria-hidden="true" /> Journal</span></li>
+        </ol>
+      </nav>
+      <main id="main" class="page" role="main">
+        
+      <header class="page-header journal-page-header">
+        <h1 class="page-title journal-page-title">
+          <img src="../../icons/journal.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
+          Journal
+        </h1>
+        <p class="page-description journal-page-description">
+          Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or
+          export them when you're ready.
+        </p>
+      </header>
+      <section class="journal-page" data-inventory-section="journal">
+        <section class="journal-actions" aria-labelledby="journal-actions-heading">
+          <div class="journal-actions__header">
+            <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
+            <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
+          </div>
+          <div class="journal-actions__buttons">
+            <button type="button" id="journal-export" class="inventory-button">Export journal</button>
+            <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
+            <input type="file" id="journal-import" accept="application/json,.json" hidden />
+          </div>
+          <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
+        </section>
+
+        <section class="journal-form-section" aria-labelledby="journal-form-heading">
+          <div class="journal-form-section__header">
+            <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
+            <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+          </div>
+          <form class="inventory-journal-form" data-journal-form>
+            <div class="inventory-journal-form__grid">
+              <div class="inventory-journal-form__field">
+                <label for="journal-emotion">Emotion (optional)</label>
+                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" />
+                <p class="journal-field-hint">Use any word that fits or return later to update it.</p>
+              </div>
+              <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
+                <label for="journal-intensity">Intensity</label>
+                <div class="inventory-journal-form__intensity">
+                  <input id="journal-intensity" name="intensity" type="range" min="1" max="10" value="5" />
+                  <output for="journal-intensity" data-journal-intensity-display>5/10</output>
+                </div>
+                <p class="journal-field-hint">Slide to note how strong the feeling is.</p>
+              </div>
+              <div class="inventory-journal-form__field">
+                <label for="journal-needs">Related needs</label>
+                <select id="journal-needs" name="needs" multiple></select>
+                <p class="journal-field-hint">Pick one or more needs that connect. Leave empty if you're not sure yet.</p>
+              </div>
+              <div class="inventory-journal-form__field">
+                <label for="journal-tags">Tags (optional)</label>
+                <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" />
+                <p class="journal-field-hint">Separate tags with commas. They'll help you filter later.</p>
+              </div>
+              <div class="inventory-journal-form__field inventory-journal-form__field--wide">
+                <label for="journal-notes">Reflection</label>
+                <textarea id="journal-notes" name="notes" rows="5" placeholder="What happened? What did you notice in your body? What need wants attention?"></textarea>
+              </div>
+            </div>
+            <aside class="journal-prompts">
+              <p>Need a nudge?</p>
+              <ul>
+                <li>What sensations stood out in your body?</li>
+                <li>What need might be shining through or feeling tender?</li>
+                <li>What support, boundary, or self-care step sounds kind?</li>
+              </ul>
+            </aside>
+            <div class="inventory-journal-form__actions">
+              <p class="journal-status" data-journal-status aria-live="polite"></p>
+              <button type="button" class="inventory-button inventory-button--ghost" data-journal-clear>Clear form</button>
+              <button type="submit" class="inventory-button">Save entry</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
+          <div class="journal-summary__header">
+            <h2 id="journal-summary-heading" class="section-title">Trends at a glance</h2>
+            <button
+              type="button"
+              class="inventory-button inventory-button--ghost"
+              data-journal-summary-toggle
+              aria-expanded="true"
+            >
+              Hide summary
+            </button>
+          </div>
+          <div class="journal-summary" data-journal-summary></div>
+        </section>
+
+        <section class="journal-history-section" aria-labelledby="journal-history-heading">
+          <div class="journal-history-section__header">
+            <h2 id="journal-history-heading" class="section-title">Journal history</h2>
+            <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
+          </div>
+          <form class="journal-filters" data-journal-filters>
+            <div class="journal-filters__field">
+              <label for="journal-filter-search">Search notes</label>
+              <input id="journal-filter-search" name="search" type="search" placeholder="Search text" />
+            </div>
+            <div class="journal-filters__field">
+              <label for="journal-filter-tag">Filter tags</label>
+              <input id="journal-filter-tag" name="tag" type="text" placeholder="e.g. work" />
+            </div>
+            <div class="journal-filters__field">
+              <label for="journal-filter-sort">Sort order</label>
+              <select id="journal-filter-sort" name="sort">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="intensity-high">Highest intensity</option>
+                <option value="intensity-low">Lowest intensity</option>
+              </select>
+            </div>
+            <div class="journal-filters__actions">
+              <button type="button" class="inventory-button inventory-button--ghost" data-journal-filters-reset>Reset filters</button>
+            </div>
+          </form>
+          <p class="journal-empty" data-journal-empty hidden>Save entries to see them listed here.</p>
+          <div class="journal-history journal-history--cards" data-journal-history></div>
+        </section>
+      </section>
+    
+      </main>
+    </div>
+    <script src="../../scripts/inventory.js" defer></script>
+  </body>
+</html>

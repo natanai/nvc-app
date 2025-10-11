@@ -1133,52 +1133,64 @@ button.site-nav__link {
   box-shadow: 0 16px 0 var(--shadow);
 }
 
-.inventory-view-toggle {
+.inventory-main,
+.journal-page {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.inventory-journal-callout {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.inventory-journal-card {
   display: grid;
   gap: 0.6rem;
-  margin-bottom: 2rem;
-}
-
-.inventory-view-toggle__buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.inventory-view-toggle__button {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.5rem 1.1rem;
+  padding: 1rem 1.25rem;
   border: 3px solid var(--outline);
-  border-radius: 999px;
+  border-radius: 16px;
   background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
-  box-shadow: 0 10px 0 var(--shadow);
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+  box-shadow: 0 12px 0 var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.inventory-view-toggle__button.is-active {
-  background: var(--rose);
-  box-shadow: 0 14px 0 var(--shadow);
-}
-
-.inventory-view-toggle__button:hover,
-.inventory-view-toggle__button:focus-visible {
+.inventory-journal-card:hover,
+.inventory-journal-card:focus-visible {
   transform: translateY(-3px);
   box-shadow: 0 16px 0 var(--shadow);
 }
 
-.inventory-view-toggle__hint {
+.inventory-journal-card__header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.inventory-journal-card__icon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.inventory-journal-card__description {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.inventory-journal-callout__hint {
   margin: 0;
   font-size: 0.9rem;
   color: var(--ink-soft);
-}
-
-.inventory-view-panel {
-  display: grid;
-  gap: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .inventory-overview,
@@ -1291,6 +1303,31 @@ button.site-nav__link {
   box-shadow: 0 12px 0 var(--shadow);
 }
 
+.breadcrumbs__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.journal-label-icon {
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+}
+
+.journal-page-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.journal-page-title__icon {
+  width: 36px;
+  height: 36px;
+  image-rendering: pixelated;
+}
+
+.journal-page-description,
 .journal-header__description {
   margin: 0;
   font-size: 1rem;

@@ -30,37 +30,29 @@
       <header class="page-header inventory-header">
         <h1 class="page-title">Strategy inventory</h1>
         <p class="page-description">
-          Collect strategies you love, then switch to the journal dashboard to follow how your feelings and needs shift over time.
+          Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
         </p>
       </header>
 
-      <section class="inventory-view-toggle" aria-label="Choose inventory view">
-        <div class="inventory-view-toggle__buttons">
-          <button
-            type="button"
-            class="inventory-view-toggle__button is-active"
-            data-inventory-view="strategies"
-            aria-pressed="true"
-          >
-            Strategy board
-          </button>
-          <button
-            type="button"
-            class="inventory-view-toggle__button"
-            data-inventory-view="journal"
-            aria-pressed="false"
-          >
-            Journal dashboard
-          </button>
-        </div>
-        <p class="inventory-view-toggle__hint">Your journal stays on this device unless you export it.</p>
+      <section class="inventory-journal-callout" aria-label="Journal tools">
+        <a class="inventory-journal-card" href="./journal/">
+          <span class="inventory-journal-card__header">
+            <img
+              src="../icons/journal.svg"
+              class="inventory-journal-card__icon"
+              alt=""
+              aria-hidden="true"
+            />
+            <span class="inventory-journal-card__label">Journal</span>
+          </span>
+          <span class="inventory-journal-card__description">
+            Log emotions, needs, and notes on a dedicated page designed for reflection.
+          </span>
+        </a>
+        <p class="inventory-journal-callout__hint">Your journal stays on this device unless you export it.</p>
       </section>
 
-      <section
-        class="inventory-view-panel is-active"
-        data-inventory-section="strategies"
-        aria-labelledby="inventory-overview-heading"
-      >
+      <section class="inventory-main" aria-labelledby="inventory-overview-heading">
         <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
           <div class="inventory-actions__header">
             <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
@@ -144,130 +136,6 @@
         </div>
         
       </div>
-        </section>
-      </section>
-
-      <section
-        class="inventory-view-panel"
-        data-inventory-section="journal"
-        aria-labelledby="journal-dashboard-heading"
-        hidden
-      >
-        <header class="journal-header">
-          <h2 id="journal-dashboard-heading" class="section-title">Journal dashboard</h2>
-          <p class="journal-header__description">
-            Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or export them when you're ready.
-          </p>
-        </header>
-
-        <section class="journal-actions" aria-labelledby="journal-actions-heading">
-          <div class="journal-actions__header">
-            <h3 id="journal-actions-heading" class="section-title">Back up or restore your journal</h3>
-            <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
-          </div>
-          <div class="journal-actions__buttons">
-            <button type="button" id="journal-export" class="inventory-button">Export journal</button>
-            <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
-            <input type="file" id="journal-import" accept="application/json,.json" hidden />
-          </div>
-          <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
-        </section>
-
-        <section class="journal-form-section" aria-labelledby="journal-form-heading">
-          <div class="journal-form-section__header">
-            <h3 id="journal-form-heading" class="section-title">Log a new entry</h3>
-            <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
-          </div>
-          <form class="inventory-journal-form" data-journal-form>
-            <div class="inventory-journal-form__grid">
-              <div class="inventory-journal-form__field">
-                <label for="journal-emotion">Emotion (optional)</label>
-                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" />
-                <p class="journal-field-hint">Use any word that fits or return later to update it.</p>
-              </div>
-              <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
-                <label for="journal-intensity">Intensity</label>
-                <div class="inventory-journal-form__intensity">
-                  <input id="journal-intensity" name="intensity" type="range" min="1" max="10" value="5" />
-                  <output for="journal-intensity" data-journal-intensity-display>5/10</output>
-                </div>
-                <p class="journal-field-hint">Slide to note how strong the feeling is.</p>
-              </div>
-              <div class="inventory-journal-form__field">
-                <label for="journal-needs">Related needs</label>
-                <select id="journal-needs" name="needs" multiple></select>
-                <p class="journal-field-hint">Pick one or more needs that connect. Leave empty if you're not sure yet.</p>
-              </div>
-              <div class="inventory-journal-form__field">
-                <label for="journal-tags">Tags (optional)</label>
-                <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" />
-                <p class="journal-field-hint">Separate tags with commas. They'll help you filter later.</p>
-              </div>
-              <div class="inventory-journal-form__field inventory-journal-form__field--wide">
-                <label for="journal-notes">Reflection</label>
-                <textarea id="journal-notes" name="notes" rows="5" placeholder="What happened? What did you notice in your body? What need wants attention?"></textarea>
-              </div>
-            </div>
-            <aside class="journal-prompts">
-              <p>Need a nudge?</p>
-              <ul>
-                <li>What sensations stood out in your body?</li>
-                <li>What need might be shining through or feeling tender?</li>
-                <li>What support, boundary, or self-care step sounds kind?</li>
-              </ul>
-            </aside>
-            <div class="inventory-journal-form__actions">
-              <p class="journal-status" data-journal-status aria-live="polite"></p>
-              <button type="button" class="inventory-button inventory-button--ghost" data-journal-clear>Clear form</button>
-              <button type="submit" class="inventory-button">Save entry</button>
-            </div>
-          </form>
-        </section>
-
-        <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
-          <div class="journal-summary__header">
-            <h3 id="journal-summary-heading" class="section-title">Trends at a glance</h3>
-            <button
-              type="button"
-              class="inventory-button inventory-button--ghost"
-              data-journal-summary-toggle
-              aria-expanded="true"
-            >
-              Hide summary
-            </button>
-          </div>
-          <div class="journal-summary" data-journal-summary></div>
-        </section>
-
-        <section class="journal-history-section" aria-labelledby="journal-history-heading">
-          <div class="journal-history-section__header">
-            <h3 id="journal-history-heading" class="section-title">Journal history</h3>
-            <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
-          </div>
-          <form class="journal-filters" data-journal-filters>
-            <div class="journal-filters__field">
-              <label for="journal-filter-search">Search notes</label>
-              <input id="journal-filter-search" name="search" type="search" placeholder="Search text" />
-            </div>
-            <div class="journal-filters__field">
-              <label for="journal-filter-tag">Filter tags</label>
-              <input id="journal-filter-tag" name="tag" type="text" placeholder="e.g. work" />
-            </div>
-            <div class="journal-filters__field">
-              <label for="journal-filter-sort">Sort order</label>
-              <select id="journal-filter-sort" name="sort">
-                <option value="newest">Newest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="intensity-high">Highest intensity</option>
-                <option value="intensity-low">Lowest intensity</option>
-              </select>
-            </div>
-            <div class="journal-filters__actions">
-              <button type="button" class="inventory-button inventory-button--ghost" data-journal-filters-reset>Reset filters</button>
-            </div>
-          </form>
-          <p class="journal-empty" data-journal-empty hidden>Save entries to see them listed here.</p>
-          <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
       </section>
     

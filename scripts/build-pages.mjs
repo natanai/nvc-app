@@ -42,10 +42,11 @@ function htmlPage({
           ${breadcrumbs
             .map((crumb, index) => {
               const isLast = index === breadcrumbs.length - 1;
+              const labelContent = crumb.html || escapeHtml(crumb.label ?? '');
               if (isLast || !crumb.href) {
-                return `<li aria-current="page">${escapeHtml(crumb.label)}</li>`;
+                return `<li aria-current="page">${labelContent}</li>`;
               }
-              return `<li><a href="${crumb.href}">${escapeHtml(crumb.label)}</a></li>`;
+              return `<li><a href="${crumb.href}">${labelContent}</a></li>`;
             })
             .join('')}
         </ol>
@@ -481,37 +482,29 @@ function renderInventoryPage() {
       <header class="page-header inventory-header">
         <h1 class="page-title">Strategy inventory</h1>
         <p class="page-description">
-          Collect strategies you love, then switch to the journal dashboard to follow how your feelings and needs shift over time.
+          Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
         </p>
       </header>
 
-      <section class="inventory-view-toggle" aria-label="Choose inventory view">
-        <div class="inventory-view-toggle__buttons">
-          <button
-            type="button"
-            class="inventory-view-toggle__button is-active"
-            data-inventory-view="strategies"
-            aria-pressed="true"
-          >
-            Strategy board
-          </button>
-          <button
-            type="button"
-            class="inventory-view-toggle__button"
-            data-inventory-view="journal"
-            aria-pressed="false"
-          >
-            Journal dashboard
-          </button>
-        </div>
-        <p class="inventory-view-toggle__hint">Your journal stays on this device unless you export it.</p>
+      <section class="inventory-journal-callout" aria-label="Journal tools">
+        <a class="inventory-journal-card" href="./journal/">
+          <span class="inventory-journal-card__header">
+            <img
+              src="../icons/journal.svg"
+              class="inventory-journal-card__icon"
+              alt=""
+              aria-hidden="true"
+            />
+            <span class="inventory-journal-card__label">Journal</span>
+          </span>
+          <span class="inventory-journal-card__description">
+            Log emotions, needs, and notes on a dedicated page designed for reflection.
+          </span>
+        </a>
+        <p class="inventory-journal-callout__hint">Your journal stays on this device unless you export it.</p>
       </section>
 
-      <section
-        class="inventory-view-panel is-active"
-        data-inventory-section="strategies"
-        aria-labelledby="inventory-overview-heading"
-      >
+      <section class="inventory-main" aria-labelledby="inventory-overview-heading">
         <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
           <div class="inventory-actions__header">
             <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
@@ -564,23 +557,37 @@ function renderInventoryPage() {
           ${personalStrategyForm}
         </section>
       </section>
+    `;
 
-      <section
-        class="inventory-view-panel"
-        data-inventory-section="journal"
-        aria-labelledby="journal-dashboard-heading"
-        hidden
-      >
-        <header class="journal-header">
-          <h2 id="journal-dashboard-heading" class="section-title">Journal dashboard</h2>
-          <p class="journal-header__description">
-            Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or export them when you're ready.
-          </p>
-        </header>
+  const html = htmlPage({
+    title: 'Inventory',
+    depth: 1,
+    breadcrumbs: [
+      { label: 'Home', href: '../' },
+      { label: 'Inventory' },
+    ],
+    main,
+  });
 
+  writePage('inventory/index.html', html);
+}
+
+function renderInventoryJournalPage() {
+  const main = `
+      <header class="page-header journal-page-header">
+        <h1 class="page-title journal-page-title">
+          <img src="../../icons/journal.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
+          Journal
+        </h1>
+        <p class="page-description journal-page-description">
+          Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or
+          export them when you're ready.
+        </p>
+      </header>
+      <section class="journal-page" data-inventory-section="journal">
         <section class="journal-actions" aria-labelledby="journal-actions-heading">
           <div class="journal-actions__header">
-            <h3 id="journal-actions-heading" class="section-title">Back up or restore your journal</h3>
+            <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
             <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
           </div>
           <div class="journal-actions__buttons">
@@ -593,7 +600,7 @@ function renderInventoryPage() {
 
         <section class="journal-form-section" aria-labelledby="journal-form-heading">
           <div class="journal-form-section__header">
-            <h3 id="journal-form-heading" class="section-title">Log a new entry</h3>
+            <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
             <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
           </div>
           <form class="inventory-journal-form" data-journal-form>
@@ -644,7 +651,7 @@ function renderInventoryPage() {
 
         <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
           <div class="journal-summary__header">
-            <h3 id="journal-summary-heading" class="section-title">Trends at a glance</h3>
+            <h2 id="journal-summary-heading" class="section-title">Trends at a glance</h2>
             <button
               type="button"
               class="inventory-button inventory-button--ghost"
@@ -659,7 +666,7 @@ function renderInventoryPage() {
 
         <section class="journal-history-section" aria-labelledby="journal-history-heading">
           <div class="journal-history-section__header">
-            <h3 id="journal-history-heading" class="section-title">Journal history</h3>
+            <h2 id="journal-history-heading" class="section-title">Journal history</h2>
             <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
           </div>
           <form class="journal-filters" data-journal-filters>
@@ -691,16 +698,20 @@ function renderInventoryPage() {
     `;
 
   const html = htmlPage({
-    title: 'Inventory',
-    depth: 1,
+    title: 'Journal',
+    depth: 2,
+    description: 'Log feelings, needs, and reflections in a dedicated journal dashboard for your strategy inventory.',
     breadcrumbs: [
-      { label: 'Home', href: '../' },
-      { label: 'Inventory' },
+      { label: 'Home', href: '../../' },
+      { label: 'Inventory', href: '../' },
+      {
+        html: '<span class="breadcrumbs__label"><img src="../../icons/journal.svg" class="journal-label-icon" alt="" aria-hidden="true" /> Journal</span>',
+      },
     ],
     main,
   });
 
-  writePage('inventory/index.html', html);
+  writePage('inventory/journal/index.html', html);
 }
 
 function renderPillGroup(label, items, type) {
@@ -730,6 +741,7 @@ function build() {
   renderCategory('feelings', data.feelings);
   renderCategory('needs', data.needs);
   renderInventoryPage();
+  renderInventoryJournalPage();
 
   const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
 
