@@ -3,121 +3,46 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NeedShare Explorer</title>
+    <title>Home • NeedShare Magnet Explorer</title>
+    <meta name="description" content="Explore situations, feelings, and needs with cross-linked strategies inspired by Need Share." />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="hero">
-      <div class="hero__content">
-        <h1 class="hero__title">NeedShare Magnet Explorer</h1>
-        <p class="hero__tagline">
-          Shuffle a cozy collection of feelings, needs, situations, and care strategies. Drag the magnets around to
-          follow the threads that speak to you.
-        </p>
-        <p class="hero__hint">Everything that glows can be picked up like a fridge magnet.</p>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="page-wrapper">
+      <div class="top-bar">
+        <a href="./" class="top-bar__link">Strategy Finder</a>
       </div>
-    </header>
-
-    <main class="app fridge-door">
-      <section class="explorer" aria-labelledby="explorerTitle">
-        <header class="explorer__intro">
-          <h2 id="explorerTitle" class="explorer__title">Follow a thread of care</h2>
-          <p class="explorer__description">
-            Begin with the doorway that feels most alive. Each magnet will gently guide you toward the need underneath
-            and offer strategies for tending to it.
-          </p>
-        </header>
-
-        <section class="stage stage--datasets" data-panel="datasets" aria-labelledby="datasetStageTitle">
-          <h3 id="datasetStageTitle" class="stage__title">What are you noticing?</h3>
-          <p class="stage__description">Choose feelings, needs, or situations to open a tray of magnets.</p>
-          <div id="datasetChoices" class="dataset-choices" role="list">
-            <button
-              type="button"
-              class="dataset-choice magnet"
-              data-dataset="feelings"
-              data-magnet="feelings"
-              data-magnet-key="choose-feelings"
-              data-ignore-drag="true"
-            >
-              Feelings
-            </button>
-            <button
-              type="button"
-              class="dataset-choice magnet"
-              data-dataset="needs"
-              data-magnet="needs"
-              data-magnet-key="choose-needs"
-              data-ignore-drag="true"
-            >
-              Needs
-            </button>
-            <button
-              type="button"
-              class="dataset-choice magnet"
-              data-dataset="situations"
-              data-magnet="situations"
-              data-magnet-key="choose-situations"
-              data-ignore-drag="true"
-            >
-              Situations
-            </button>
-          </div>
-        </section>
-
-        <section class="stage stage--list" data-panel="list" aria-labelledby="listTitle" hidden>
-          <div class="stage__header">
-            <button type="button" class="back-button magnet" data-back="datasets" data-ignore-drag="true">
-              ← Choose again
-            </button>
-            <div class="stage__intro">
-              <h3 id="listTitle" class="stage__title">Browse magnets</h3>
-              <p id="listDescription" class="stage__description">Select a magnet that resonates right now.</p>
-            </div>
-          </div>
-
-          <label class="search" for="searchInput">
-            <span class="search__label">Search magnets</span>
-            <input id="searchInput" type="search" placeholder="Search by title or description" autocomplete="off" />
-          </label>
-
-          <ul id="itemList" class="item-list" role="listbox" aria-live="polite"></ul>
-        </section>
-
-        <section class="stage stage--details" data-panel="details" aria-labelledby="detailsTitle" hidden>
-          <div class="stage__header">
-            <button type="button" class="back-button magnet" data-back="list" data-ignore-drag="true">
-              ← Back to magnets
-            </button>
-            <div class="stage__intro">
-              <h3 id="detailsTitle" class="stage__title">Magnet details</h3>
-              <p id="detailsDescription" class="stage__description">
-                Follow the threads to discover the need asking for care.
-              </p>
-            </div>
-          </div>
-
-          <div id="detailsContent" class="details" aria-live="polite"></div>
-        </section>
+      
+      <main id="main" class="page" role="main">
+        
+      <header class="page-header home-header">
+        <h1 class="page-title">NeedShare Magnet Explorer</h1>
+        <p class="page-subtitle">Follow a thread of care through situations, feelings, and needs.</p>
+      </header>
+      <section class="category-section" aria-labelledby="categorySectionTitle">
+        <div class="category-section__intro">
+          <h2 id="categorySectionTitle">Start exploring</h2>
+          <p>Choose a doorway to begin. Each path connects you with the needs underneath.</p>
+        </div>
+        <div class="category-grid">
+          <a class="category-card" href="situations/">
+          <span class="category-card__icon" aria-hidden="true">⚡</span>
+          <span class="category-card__label">Situations</span>
+        </a><a class="category-card" href="feelings/">
+          <span class="category-card__icon" aria-hidden="true">💖</span>
+          <span class="category-card__label">Feelings</span>
+        </a><a class="category-card" href="needs/">
+          <span class="category-card__icon" aria-hidden="true">🌱</span>
+          <span class="category-card__label">Needs</span>
+        </a>
+        </div>
       </section>
-    </main>
-
-    <section class="plan fridge-door" aria-labelledby="planTitle">
-      <div class="plan__header">
-        <h2 id="planTitle">Care plan</h2>
-        <p class="plan__hint">Collect strategies that resonate to revisit later.</p>
-      </div>
-      <div id="planMessage" class="visually-hidden" aria-live="polite"></div>
-      <ul id="planList" class="plan__list"></ul>
-    </section>
-
-    <footer class="footer">
-      <p>
-        Data sourced from the Need Share spreadsheets and shared under the same spirit of care.
-        Built as a starting point for further customization.
-      </p>
-    </footer>
-
-    <script type="module" src="app.js"></script>
+    
+      </main>
+      <footer class="footer">
+        <p>Data sourced from the Need Share spreadsheets and shared with appreciation for the care community.</p>
+      </footer>
+    </div>
   </body>
 </html>
