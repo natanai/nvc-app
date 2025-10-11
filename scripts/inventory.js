@@ -16,6 +16,51 @@ const COLOR_INPUTS = [
   { key: 'outline', varName: '--outline', label: 'Outline' },
 ];
 
+const FALLBACK_COLOR_PRESETS = Object.freeze([
+  {
+    name: 'Game Kid',
+    colors: {
+      plum: '#5A6D7C',
+      lavender: '#E6F6C5',
+      ink: '#1E1F2A',
+      inkSoft: '#3C3F4D',
+      rose: '#FFA5C5',
+      mint: '#8FE1B5',
+      gold: '#F7E88C',
+      sky: '#B6D7CE',
+      outline: '#101725',
+    },
+  },
+  {
+    name: 'Pastel Portal',
+    colors: {
+      plum: '#7D5DA6',
+      lavender: '#F3E9FF',
+      ink: '#231336',
+      inkSoft: '#433055',
+      rose: '#FFB5C7',
+      mint: '#9DE5CB',
+      gold: '#F8F2AA',
+      sky: '#C8E8FF',
+      outline: '#1A0D29',
+    },
+  },
+  {
+    name: 'Comfort Wave',
+    colors: {
+      plum: '#6B708F',
+      lavender: '#EFE9FF',
+      ink: '#1E1B29',
+      inkSoft: '#40374A',
+      rose: '#FFBBD2',
+      mint: '#99F4C9',
+      gold: '#F9F6B4',
+      sky: '#C3F0FF',
+      outline: '#120A1F',
+    },
+  },
+]);
+
 const paletteState = {
   container: null,
   toggle: null,
@@ -1288,6 +1333,7 @@ async function initColorCustomizer() {
     applyColors(paletteState.currentColors, { persist: false, replace: true });
   }
 
+  paletteState.presets = normalizePresetList(FALLBACK_COLOR_PRESETS);
   populatePresetSelect();
 
   try {
@@ -1297,7 +1343,7 @@ async function initColorCustomizer() {
       populatePresetSelect();
     }
   } catch (error) {
-    console.warn('Unable to load color presets from data folder', error);
+    console.warn('Unable to load color presets from data folder; using built-in presets instead', error);
   }
 }
 
@@ -1315,9 +1361,10 @@ function buildPaletteUi() {
   glyph.textContent = '+';
   toggle.appendChild(glyph);
 
+  const toggleLabelText = 'Open color palette customizer';
   const srLabel = document.createElement('span');
   srLabel.className = 'visually-hidden';
-  srLabel.textContent = 'Open color palette customizer';
+  srLabel.textContent = toggleLabelText;
   toggle.appendChild(srLabel);
 
   const nav = document.querySelector('.site-nav');
@@ -1325,9 +1372,21 @@ function buildPaletteUi() {
   if (nav) {
     mobileToggle = document.createElement('button');
     mobileToggle.type = 'button';
-    mobileToggle.className = 'site-nav__link palette-mobile-toggle';
+    mobileToggle.className = 'palette-mobile-toggle';
     mobileToggle.setAttribute('aria-haspopup', 'dialog');
-    mobileToggle.textContent = 'Color theme';
+    mobileToggle.setAttribute('aria-label', toggleLabelText);
+
+    const mobileGlyph = document.createElement('span');
+    mobileGlyph.className = 'palette-mobile-toggle__glyph';
+    mobileGlyph.setAttribute('aria-hidden', 'true');
+    mobileGlyph.textContent = '+';
+    mobileToggle.appendChild(mobileGlyph);
+
+    const mobileSrLabel = document.createElement('span');
+    mobileSrLabel.className = 'visually-hidden';
+    mobileSrLabel.textContent = toggleLabelText;
+    mobileToggle.appendChild(mobileSrLabel);
+
     nav.appendChild(mobileToggle);
   }
 
@@ -1666,6 +1725,33 @@ function sanitizeColorsMap(colors) {
   return sanitized;
 }
 
+function normalizePresetList(presets) {
+  if (!Array.isArray(presets)) {
+    return [];
+  }
+
+  const uniquePresets = new Map();
+  presets.forEach((preset) => {
+    if (!preset || typeof preset !== 'object') {
+      return;
+    }
+
+    const name = typeof preset.name === 'string' ? preset.name.trim() : '';
+    if (!name || uniquePresets.has(name)) {
+      return;
+    }
+
+    const colors = sanitizeColorsMap(preset.colors);
+    if (!Object.keys(colors).length) {
+      return;
+    }
+
+    uniquePresets.set(name, { name, colors });
+  });
+
+  return Array.from(uniquePresets.values());
+}
+
 function saveTheme(theme) {
   if (!theme || typeof theme !== 'object') {
     return;
@@ -1713,7 +1799,7 @@ async function fetchColorPresets() {
   }
 
   const text = await response.text();
-  return parseColorPaletteCsv(text);
+  return normalizePresetList(parseColorPaletteCsv(text));
 }
 
 function populatePresetSelect() {
