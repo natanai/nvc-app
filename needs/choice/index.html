@@ -80,293 +80,44 @@
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
-        <form id="suggestion-form" class="suggestion-form">
-          <label for="strategy">Your strategy</label>
-          <div class="strategy-card strategy-card--input">
-            <textarea id="strategy" name="strategy" required></textarea>
+        
+      <div class="strategy-form__container" data-strategy-form-container>
+        <form id="suggestion-form" class="strategy-form" data-strategy-form>
+          <div class="strategy-form__field">
+            <label for="suggestion-title">Strategy name</label>
+            <input id="suggestion-title" name="title" type="text" required />
           </div>
-          <fieldset class="tag-picker">
-            <legend class="tag-picker__legend">Needs this strategy supports</legend>
-            <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list tag-picker__list--scroll">
-              
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="love-caring" />
-                <span class="tag-pill__visual">Love/Caring</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="nurturing" />
-                <span class="tag-pill__visual">Nurturing</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="connection" />
-                <span class="tag-pill__visual">Connection</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="belonging" />
-                <span class="tag-pill__visual">Belonging</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="support" />
-                <span class="tag-pill__visual">Support</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="consideration" />
-                <span class="tag-pill__visual">Consideration</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="need-for-all-living-things-to-flourish" />
-                <span class="tag-pill__visual">Need for all living things to flourish</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="inclusion" />
-                <span class="tag-pill__visual">Inclusion</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="community" />
-                <span class="tag-pill__visual">Community</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="safety" />
-                <span class="tag-pill__visual">Safety</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="contribution" />
-                <span class="tag-pill__visual">Contribution</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="peer-respect" />
-                <span class="tag-pill__visual">Peer Respect</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="respect" />
-                <span class="tag-pill__visual">Respect</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="autonomy" />
-                <span class="tag-pill__visual">Autonomy</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="to-be-seen" />
-                <span class="tag-pill__visual">To be seen</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="acknowledgement" />
-                <span class="tag-pill__visual">Acknowledgement</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="appreciation" />
-                <span class="tag-pill__visual">Appreciation</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="trust" />
-                <span class="tag-pill__visual">Trust</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="dependability" />
-                <span class="tag-pill__visual">Dependability</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="honesty" />
-                <span class="tag-pill__visual">Honesty</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="honor" />
-                <span class="tag-pill__visual">Honor</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="commitment" />
-                <span class="tag-pill__visual">Commitment</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="clarity" />
-                <span class="tag-pill__visual">Clarity</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="accountability" />
-                <span class="tag-pill__visual">Accountability</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="causality" />
-                <span class="tag-pill__visual">Causality</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="fairness" />
-                <span class="tag-pill__visual">Fairness</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="justice" />
-                <span class="tag-pill__visual">Justice</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="choice" />
-                <span class="tag-pill__visual">Choice</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="freedom" />
-                <span class="tag-pill__visual">Freedom</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="reliability" />
-                <span class="tag-pill__visual">Reliability</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="act-freely" />
-                <span class="tag-pill__visual">Act Freely</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="choose-freely" />
-                <span class="tag-pill__visual">Choose Freely</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="understanding" />
-                <span class="tag-pill__visual">Understanding</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="recognition" />
-                <span class="tag-pill__visual">Recognition</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="non-judgmental-communication" />
-                <span class="tag-pill__visual">Non-judgmental Communication</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="need-to-matter" />
-                <span class="tag-pill__visual">Need to matter</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="friendship" />
-                <span class="tag-pill__visual">Friendship</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="space" />
-                <span class="tag-pill__visual">Space</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="peace" />
-                <span class="tag-pill__visual">Peace</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="serenity" />
-                <span class="tag-pill__visual">Serenity</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="do-things-at-my-own-pace-and-in-my-own-way" />
-                <span class="tag-pill__visual">Do things at my own pace and in my own way</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="calm" />
-                <span class="tag-pill__visual">Calm</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="participation" />
-                <span class="tag-pill__visual">Participation</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="to-be-heard" />
-                <span class="tag-pill__visual">To be heard</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="equality" />
-                <span class="tag-pill__visual">Equality</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="empowerment" />
-                <span class="tag-pill__visual">Empowerment</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="consistency" />
-                <span class="tag-pill__visual">Consistency</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="genuineness" />
-                <span class="tag-pill__visual">Genuineness</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="mattering" />
-                <span class="tag-pill__visual">Mattering</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="rest" />
-                <span class="tag-pill__visual">Rest</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="mutuality" />
-                <span class="tag-pill__visual">Mutuality</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="relaxation" />
-                <span class="tag-pill__visual">Relaxation</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="closeness" />
-                <span class="tag-pill__visual">Closeness</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="authenticity" />
-                <span class="tag-pill__visual">Authenticity</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="self-expression" />
-                <span class="tag-pill__visual">Self expression</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="integrity" />
-                <span class="tag-pill__visual">Integrity</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="empathy" />
-                <span class="tag-pill__visual">Empathy</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="privacy" />
-                <span class="tag-pill__visual">Privacy</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="order" />
-                <span class="tag-pill__visual">Order</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="beauty" />
-                <span class="tag-pill__visual">Beauty</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="control" />
-                <span class="tag-pill__visual">Control</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="predictability" />
-                <span class="tag-pill__visual">Predictability</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="accomplishment" />
-                <span class="tag-pill__visual">Accomplishment</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="physical-fitness" />
-                <span class="tag-pill__visual">Physical Fitness</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="acceptance" />
-                <span class="tag-pill__visual">Acceptance</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="growth" />
-                <span class="tag-pill__visual">Growth</span>
-              </label>
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="security" />
-                <span class="tag-pill__visual">Security</span>
-              </label>
+          <div class="strategy-form__field">
+            <label for="suggestion-description">Strategy details</label>
+            <div class="strategy-card strategy-card--input">
+              <textarea id="suggestion-description" name="description" rows="4" required></textarea>
             </div>
-          </fieldset>
-          <label for="name">First name (optional)</label>
-          <input id="name" name="name" type="text" />
-          <label for="location">Location (optional)</label>
-          <input id="location" name="location" type="text" />
-          <button type="submit">Submit</button>
+          </div>
+          
+        <div class="strategy-form__field">
+          <label for="suggestion-need">Primary need</label>
+          <select id="suggestion-need" name="need" required>
+            
+            <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice" selected>Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
+          </select>
+        </div>
+          
+        <div class="strategy-form__row">
+          <div class="strategy-form__field">
+            <label for="suggestion-name">First name (optional)</label>
+            <input id="suggestion-name" name="name" type="text" />
+          </div>
+          <div class="strategy-form__field">
+            <label for="suggestion-location">Location (optional)</label>
+            <input id="suggestion-location" name="location" type="text" />
+          </div>
+        </div>
+          <div class="strategy-form__actions">
+            <button type="submit" class="strategy-form__submit inventory-button">Submit strategy</button>
+          </div>
         </form>
-        <p class="form-message" hidden></p>
+      <p class="strategy-form__message" data-form-message hidden aria-live="polite"></p>
+      </div>
       </section>
     
       </main>

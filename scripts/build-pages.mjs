@@ -111,6 +111,86 @@ function writePage(relativePath, html) {
   writeFileSync(outputPath, html.trimStart());
 }
 
+function renderStrategyForm({
+  formId,
+  idPrefix,
+  submitLabel,
+  titleLabel = 'Strategy name',
+  descriptionLabel = 'Strategy details',
+  descriptionRequired = true,
+  includeNeedSelect = true,
+  includePlaceholderOption = false,
+  defaultNeedSlug = '',
+  includeContactFields = false,
+  includeMessage = false,
+}) {
+  const needOptions = data.needs
+    .map(
+      (need) =>
+        `<option value="${escapeHtml(need.slug)}"${
+          need.slug === defaultNeedSlug ? ' selected' : ''
+        }>${escapeHtml(need.title)}</option>`
+    )
+    .join('');
+
+  const placeholderOption = includePlaceholderOption
+    ? `<option value="" disabled${defaultNeedSlug ? '' : ' selected'}>Select a need</option>`
+    : '';
+
+  const needField = includeNeedSelect
+    ? `
+        <div class="strategy-form__field">
+          <label for="${idPrefix}-need">Primary need</label>
+          <select id="${idPrefix}-need" name="need" required>
+            ${placeholderOption}
+            ${needOptions}
+          </select>
+        </div>`
+    : '';
+
+  const contactFields = includeContactFields
+    ? `
+        <div class="strategy-form__row">
+          <div class="strategy-form__field">
+            <label for="${idPrefix}-name">First name (optional)</label>
+            <input id="${idPrefix}-name" name="name" type="text" />
+          </div>
+          <div class="strategy-form__field">
+            <label for="${idPrefix}-location">Location (optional)</label>
+            <input id="${idPrefix}-location" name="location" type="text" />
+          </div>
+        </div>`
+    : '';
+
+  const message = includeMessage
+    ? `
+      <p class="strategy-form__message" data-form-message hidden aria-live="polite"></p>`
+    : '';
+
+  const descriptionRequiredAttr = descriptionRequired ? ' required' : '';
+
+  return `
+      <div class="strategy-form__container" data-strategy-form-container>
+        <form id="${formId}" class="strategy-form" data-strategy-form>
+          <div class="strategy-form__field">
+            <label for="${idPrefix}-title">${escapeHtml(titleLabel)}</label>
+            <input id="${idPrefix}-title" name="title" type="text" required />
+          </div>
+          <div class="strategy-form__field">
+            <label for="${idPrefix}-description">${escapeHtml(descriptionLabel)}</label>
+            <div class="strategy-card strategy-card--input">
+              <textarea id="${idPrefix}-description" name="description" rows="4"${descriptionRequiredAttr}></textarea>
+            </div>
+          </div>
+          ${needField}
+          ${contactFields}
+          <div class="strategy-form__actions">
+            <button type="submit" class="strategy-form__submit inventory-button">${escapeHtml(submitLabel)}</button>
+          </div>
+        </form>${message}
+      </div>`;
+}
+
 function renderHome() {
   const cards = ['situations', 'feelings', 'needs']
     .map((type) => {
@@ -275,15 +355,16 @@ function renderNeed(item, strategyLookup) {
     ? `<p class="page-description">${escapeHtml(item.description)}</p>`
     : '';
 
-  const tagOptions = data.needs
-    .map(
-      (need) => `
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="${escapeHtml(need.slug)}" />
-                <span class="tag-pill__visual">${escapeHtml(need.title)}</span>
-              </label>`
-    )
-    .join('');
+  const suggestionForm = renderStrategyForm({
+    formId: 'suggestion-form',
+    idPrefix: 'suggestion',
+    submitLabel: 'Submit strategy',
+    titleLabel: 'Strategy name',
+    descriptionLabel: 'Strategy details',
+    defaultNeedSlug: item.slug,
+    includeContactFields: true,
+    includeMessage: true,
+  });
 
   const main = `
       <header class="page-header">
@@ -293,25 +374,7 @@ function renderNeed(item, strategyLookup) {
       ${strategiesHtml}
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
-        <form id="suggestion-form" class="suggestion-form">
-          <label for="strategy">Your strategy</label>
-          <div class="strategy-card strategy-card--input">
-            <textarea id="strategy" name="strategy" required></textarea>
-          </div>
-          <fieldset class="tag-picker">
-            <legend class="tag-picker__legend">Needs this strategy supports</legend>
-            <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list tag-picker__list--scroll">
-              ${tagOptions}
-            </div>
-          </fieldset>
-          <label for="name">First name (optional)</label>
-          <input id="name" name="name" type="text" />
-          <label for="location">Location (optional)</label>
-          <input id="location" name="location" type="text" />
-          <button type="submit">Submit</button>
-        </form>
-        <p class="form-message" hidden></p>
+        ${suggestionForm}
       </section>
     `;
 
@@ -332,32 +395,20 @@ function renderNeed(item, strategyLookup) {
 }
 
 function renderInventoryPage() {
-  const needOptions = data.needs
-    .map((need) => `<option value="${escapeHtml(need.slug)}">${escapeHtml(need.title)}</option>`)
-    .join('');
-
-  const tagOptions = data.needs
-    .map(
-      (need) => `
-              <label class="tag-pill" role="option">
-                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="${escapeHtml(need.slug)}" />
-                <span class="tag-pill__visual">${escapeHtml(need.title)}</span>
-              </label>`
-    )
-    .join('');
+  const personalStrategyForm = renderStrategyForm({
+    formId: 'inventory-form',
+    idPrefix: 'inventory',
+    submitLabel: 'Add to inventory',
+    titleLabel: 'Strategy name',
+    descriptionLabel: 'How do you put it into practice?',
+    includePlaceholderOption: true,
+  });
 
   const main = `
       <header class="page-header inventory-header">
         <h1 class="page-title">Strategy inventory</h1>
         <p class="page-description">Collect strategies you love and track how each need is supported.</p>
       </header>
-      <section class="inventory-overview" aria-labelledby="inventory-summary-heading">
-        <div class="inventory-overview__header">
-          <h2 id="inventory-summary-heading" class="section-title">Need coverage</h2>
-          <p class="inventory-overview__hint">Use this board to spot needs that are still waiting for care.</p>
-        </div>
-        <div id="inventory-summary" class="inventory-summary"></div>
-      </section>
       <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
         <div class="inventory-actions__header">
           <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
@@ -370,61 +421,16 @@ function renderInventoryPage() {
         </div>
         <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
       </section>
+      <section class="inventory-overview" aria-labelledby="inventory-summary-heading">
+        <div class="inventory-overview__header">
+          <h2 id="inventory-summary-heading" class="section-title">Need coverage</h2>
+          <p class="inventory-overview__hint">Use this board to spot needs that are still waiting for care.</p>
+        </div>
+        <div id="inventory-summary" class="inventory-summary"></div>
+      </section>
       <section class="inventory-form" aria-labelledby="inventory-form-heading">
         <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
-        <form id="inventory-form" class="inventory-form__form">
-          <label for="inventory-title">Strategy title</label>
-          <input id="inventory-title" name="title" type="text" required />
-          <label for="inventory-description">Description</label>
-          <div class="strategy-card strategy-card--input">
-            <textarea id="inventory-description" name="description" required></textarea>
-          </div>
-          <label for="inventory-need">Primary need</label>
-          <select id="inventory-need" name="need" required>
-            <option value="" disabled selected>Select a need</option>
-            ${needOptions}
-          </select>
-          <fieldset class="tag-picker tag-picker--compact" data-tag-picker>
-            <legend class="tag-picker__legend">Other needs this strategy supports</legend>
-            <p class="tag-picker__hint">Optional: choose more magnets so this strategy shows up for them too.</p>
-            <div class="tag-picker__control">
-              <button
-                type="button"
-                class="tag-picker__toggle"
-                data-tag-picker-toggle
-                aria-haspopup="listbox"
-                aria-expanded="false"
-              >
-                <span data-tag-picker-toggle-label>Choose supporting needs</span>
-              </button>
-              <div class="tag-picker__panel" data-tag-picker-panel hidden>
-                <label class="tag-picker__search">
-                  <span class="sr-only">Search supporting needs</span>
-                  <input
-                    type="search"
-                    class="tag-picker__search-input"
-                    placeholder="Search needs…"
-                    data-tag-picker-search
-                  />
-                </label>
-                <div
-                  class="tag-picker__list tag-picker__list--scroll tag-picker__options"
-                  data-tag-picker-options
-                  role="listbox"
-                  aria-multiselectable="true"
-                >
-              ${tagOptions}
-                </div>
-              </div>
-            </div>
-            <div class="tag-picker__selected" data-tag-picker-selected aria-live="polite"></div>
-          </fieldset>
-          <label for="inventory-name">First name (optional)</label>
-          <input id="inventory-name" name="name" type="text" />
-          <label for="inventory-location">Location (optional)</label>
-          <input id="inventory-location" name="location" type="text" />
-          <button type="submit" class="inventory-button">Add to inventory</button>
-        </form>
+        ${personalStrategyForm}
       </section>
       <section class="inventory-list-section" aria-labelledby="inventory-list-heading">
         <div class="inventory-list__header">
