@@ -1110,6 +1110,7 @@ function buildPaletteUi() {
   panel.appendChild(form);
   container.append(toggle, panel);
   document.body.appendChild(container);
+  document.body.classList.add('has-palette-corner');
 
   const handleToggle = (element) => {
     if (!element) {
