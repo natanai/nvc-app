@@ -309,6 +309,8 @@ a:focus-visible {
 .magnet-grid--playing .magnet {
   cursor: grab;
   transition: none;
+  --magnet-play-offset-x: 0px;
+  --magnet-play-offset-y: 0px;
 }
 
 .magnet-grid--playing .magnet--dragging {
@@ -343,10 +345,17 @@ a:focus-visible {
 }
 
 .magnet {
+  --magnet-play-offset-x: 0px;
+  --magnet-play-offset-y: 0px;
   cursor: pointer;
   user-select: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  transform: translate3d(0, var(--magnet-offset, 0), 0) rotate(var(--magnet-tilt, 0));
+  transform: translate3d(
+      var(--magnet-play-offset-x),
+      calc(var(--magnet-offset, 0) + var(--magnet-play-offset-y)),
+      0
+    )
+    rotate(var(--magnet-tilt, 0));
   transform-origin: center;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 }
@@ -385,7 +394,12 @@ a:focus-visible {
 
 .magnet.pill:hover,
 .magnet.pill:focus-visible {
-  transform: translateY(calc(var(--magnet-offset, 0) - 4px)) rotate(var(--magnet-tilt, 0));
+  transform: translate3d(
+      var(--magnet-play-offset-x),
+      calc(var(--magnet-offset, 0) + var(--magnet-play-offset-y) - 4px),
+      0
+    )
+    rotate(var(--magnet-tilt, 0));
   box-shadow: 0 14px 0 var(--shadow);
 }
 
