@@ -7,6 +7,10 @@ const detailsEl = document.getElementById('detailsContent');
 const planList = document.getElementById('planList');
 const planMessageEl = document.getElementById('planMessage');
 
+const magnetRegistry = new WeakSet();
+const magnetPositions = new Map();
+const MAGNET_DRAG_THRESHOLD = 6;
+
 const state = {
   dataset: 'feelings',
   searchTerm: '',
@@ -121,6 +125,7 @@ function render() {
   const filtered = renderList();
   renderDetails(filtered);
   renderPlan();
+  activateMagnets(document);
 }
 
 function updateTabs() {
@@ -142,6 +147,7 @@ function renderList() {
     empty.textContent = 'No matches found. Adjust your search or choose another data set.';
     itemList.appendChild(empty);
     state.selection = null;
+    activateMagnets(itemList);
     return filtered;
   }
 
@@ -153,8 +159,10 @@ function renderList() {
     const listItem = document.createElement('li');
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'item-button';
+    button.className = 'item-button magnet';
     button.dataset.slug = item.slug;
+    button.dataset.magnet = state.dataset;
+    button.dataset.magnetKey = createMagnetKey(`list-${state.dataset}`, item.slug ?? item.title);
 
     if (state.selection && state.selection.slug === item.slug) {
       button.classList.add('is-active');
@@ -184,6 +192,7 @@ function renderList() {
     itemList.appendChild(listItem);
   });
 
+  activateMagnets(itemList);
   return filtered;
 }
 
@@ -197,6 +206,7 @@ function renderDetails(filteredItems) {
       ? 'No entries match your current search.'
       : 'Select any item from the list to explore its connections.';
     detailsEl.appendChild(empty);
+    activateMagnets(detailsEl);
     return;
   }
 
@@ -210,6 +220,8 @@ function renderDetails(filteredItems) {
   } else if (dataset === 'strategies') {
     renderStrategyDetails(state.selection);
   }
+
+  activateMagnets(detailsEl);
 }
 
 function renderFeelingDetails(item) {
@@ -336,6 +348,7 @@ function renderStrategyDetails(item) {
   addButton.dataset.addPlan = item.slug;
   addButton.textContent = alreadyInPlan ? 'In your care plan' : 'Add to care plan';
   addButton.disabled = alreadyInPlan;
+  addButton.dataset.ignoreDrag = 'true';
   actionRow.appendChild(addButton);
   container.appendChild(actionRow);
 
@@ -382,11 +395,13 @@ function createDetailGroup(label, entries, targetDataset) {
   validEntries.forEach((entry) => {
     const chip = document.createElement('button');
     chip.type = 'button';
-    chip.className = 'chip';
+    chip.className = 'chip magnet';
     chip.textContent = entry.title;
     chip.dataset.target = targetDataset;
     if (entry.slug) chip.dataset.slug = entry.slug;
     chip.dataset.title = entry.title;
+    chip.dataset.magnet = targetDataset;
+    chip.dataset.magnetKey = createMagnetKey(`chip-${targetDataset}`, entry.slug ?? entry.title);
     chipContainer.appendChild(chip);
   });
 
@@ -396,7 +411,9 @@ function createDetailGroup(label, entries, targetDataset) {
 
 function createStrategyCard(strategy) {
   const card = document.createElement('li');
-  card.className = 'strategy-card';
+  card.className = 'strategy-card magnet';
+  card.dataset.magnet = 'strategies';
+  card.dataset.magnetKey = createMagnetKey('strategy', strategy.slug ?? strategy.title);
 
   const title = document.createElement('h3');
   title.textContent = strategy.title;
@@ -414,6 +431,7 @@ function createStrategyCard(strategy) {
   action.dataset.addPlan = strategy.slug;
   action.textContent = alreadyInPlan ? 'In your care plan' : 'Add to care plan';
   action.disabled = alreadyInPlan;
+  action.dataset.ignoreDrag = 'true';
 
   card.appendChild(action);
   return card;
@@ -427,12 +445,15 @@ function renderPlan() {
     empty.className = 'plan-empty';
     empty.textContent = 'No strategies saved yet. As you explore, add practices that resonate.';
     planList.appendChild(empty);
+    activateMagnets(planList);
     return;
   }
 
   state.plan.forEach((entry) => {
     const item = document.createElement('li');
-    item.className = 'plan-item';
+    item.className = 'plan-item magnet';
+    item.dataset.magnet = 'strategies';
+    item.dataset.magnetKey = createMagnetKey('plan', entry.slug ?? entry.title);
 
     const info = document.createElement('div');
 
@@ -451,10 +472,13 @@ function renderPlan() {
     remove.className = 'plan-remove';
     remove.dataset.remove = entry.slug;
     remove.textContent = 'Remove';
+    remove.dataset.ignoreDrag = 'true';
 
     item.append(info, remove);
     planList.appendChild(item);
   });
+
+  activateMagnets(planList);
 }
 
 function addToPlan(slug) {
@@ -527,6 +551,114 @@ function savePlan() {
   } catch (error) {
     console.warn('Unable to persist plan', error);
   }
+}
+
+function activateMagnets(root = document) {
+  if (!root || typeof root.querySelectorAll !== 'function') return;
+  root.querySelectorAll('.magnet').forEach((element) => {
+    if (magnetRegistry.has(element)) return;
+
+    const key = element.dataset.magnetKey;
+    if (key && magnetPositions.has(key)) {
+      const stored = magnetPositions.get(key);
+      element.dataset.offsetX = String(stored.x);
+      element.dataset.offsetY = String(stored.y);
+      element.style.transform = `translate(${stored.x}px, ${stored.y}px)`;
+    } else {
+      if (!element.dataset.offsetX) element.dataset.offsetX = '0';
+      if (!element.dataset.offsetY) element.dataset.offsetY = '0';
+      element.style.transform = 'translate(0px, 0px)';
+    }
+
+    makeMagnetDraggable(element);
+    magnetRegistry.add(element);
+  });
+}
+
+function makeMagnetDraggable(element) {
+  let currentX = parseFloat(element.dataset.offsetX || '0');
+  let currentY = parseFloat(element.dataset.offsetY || '0');
+
+  const onPointerDown = (event) => {
+    if (event.button !== 0 && event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+    if (element.hasAttribute('disabled')) return;
+    if (event.target.closest('[data-ignore-drag]')) return;
+
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const originX = parseFloat(element.dataset.offsetX || '0');
+    const originY = parseFloat(element.dataset.offsetY || '0');
+    let dragging = false;
+    const pointerId = event.pointerId;
+
+    element.setPointerCapture?.(pointerId);
+
+    const onPointerMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const deltaY = moveEvent.clientY - startY;
+
+      if (!dragging) {
+        if (Math.abs(deltaX) + Math.abs(deltaY) < MAGNET_DRAG_THRESHOLD) {
+          return;
+        }
+        dragging = true;
+        element.classList.add('magnet--dragging');
+      }
+
+      currentX = originX + deltaX;
+      currentY = originY + deltaY;
+      element.dataset.offsetX = String(currentX);
+      element.dataset.offsetY = String(currentY);
+      element.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    };
+
+    const onPointerUp = () => {
+      element.releasePointerCapture?.(pointerId);
+      element.removeEventListener('pointermove', onPointerMove);
+      element.removeEventListener('pointerup', onPointerUp);
+      element.removeEventListener('pointercancel', onPointerUp);
+
+      if (dragging) {
+        element.classList.remove('magnet--dragging');
+        element.dataset.justDragged = 'true';
+        const key = element.dataset.magnetKey;
+        if (key) {
+          magnetPositions.set(key, { x: currentX, y: currentY });
+        }
+        requestAnimationFrame(() => {
+          element.dataset.justDragged = 'false';
+        });
+      } else {
+        element.classList.remove('magnet--dragging');
+      }
+    };
+
+    element.addEventListener('pointermove', onPointerMove);
+    element.addEventListener('pointerup', onPointerUp);
+    element.addEventListener('pointercancel', onPointerUp);
+  };
+
+  element.addEventListener('pointerdown', onPointerDown);
+
+  element.addEventListener('click', (event) => {
+    if (element.dataset.justDragged === 'true') {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      element.dataset.justDragged = 'false';
+    }
+  });
+}
+
+function createMagnetKey(prefix, raw) {
+  const sanitized = sanitizeKey(raw);
+  return `${prefix}-${sanitized || 'magnet'}`;
+}
+
+function sanitizeKey(value) {
+  return String(value ?? '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 function matchesSearch(item, dataset, term) {

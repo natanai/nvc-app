@@ -9,28 +9,57 @@
   <body>
     <header class="hero">
       <div class="hero__content">
-        <h1>NeedShare Explorer</h1>
-        <p>
-          An interactive map of feelings, needs, situations, and care strategies inspired
-          by the original <a href="https://needshare.net/" target="_blank" rel="noreferrer">needshare.net</a> resource.
-          Select what is alive for you to discover the needs underneath and tangible next steps.
+        <h1 class="hero__title">NeedShare Magnet Explorer</h1>
+        <p class="hero__tagline">
+          Shuffle a cozy collection of feelings, needs, situations, and care strategies inspired by the original
+          <a href="https://needshare.net/" target="_blank" rel="noreferrer">needshare.net</a> resource. Drag the
+          magnets around to follow the threads that speak to you.
         </p>
+        <p class="hero__hint">Everything that glows can be picked up like a fridge magnet.</p>
       </div>
     </header>
 
-    <main class="layout">
+    <main class="layout fridge-door">
       <section class="panel panel--list">
         <div class="dataset-tabs" role="tablist" aria-label="Data set selector">
-          <button class="dataset-tab" role="tab" data-dataset="feelings" aria-selected="true">
+          <button
+            class="dataset-tab magnet"
+            role="tab"
+            data-dataset="feelings"
+            data-magnet="feelings"
+            data-magnet-key="tab-feelings"
+            aria-selected="true"
+          >
             Feelings
           </button>
-          <button class="dataset-tab" role="tab" data-dataset="needs" aria-selected="false">
+          <button
+            class="dataset-tab magnet"
+            role="tab"
+            data-dataset="needs"
+            data-magnet="needs"
+            data-magnet-key="tab-needs"
+            aria-selected="false"
+          >
             Needs
           </button>
-          <button class="dataset-tab" role="tab" data-dataset="situations" aria-selected="false">
+          <button
+            class="dataset-tab magnet"
+            role="tab"
+            data-dataset="situations"
+            data-magnet="situations"
+            data-magnet-key="tab-situations"
+            aria-selected="false"
+          >
             Situations
           </button>
-          <button class="dataset-tab" role="tab" data-dataset="strategies" aria-selected="false">
+          <button
+            class="dataset-tab magnet"
+            role="tab"
+            data-dataset="strategies"
+            data-magnet="strategies"
+            data-magnet-key="tab-strategies"
+            aria-selected="false"
+          >
             Strategies
           </button>
         </div>
