@@ -11,16 +11,30 @@
       <div class="hero__content">
         <h1 class="hero__title">NeedShare Magnet Explorer</h1>
         <p class="hero__tagline">
-          Shuffle a cozy collection of feelings, needs, situations, and care strategies inspired by the original
-          <a href="https://needshare.net/" target="_blank" rel="noreferrer">needshare.net</a> resource. Drag the
-          magnets around to follow the threads that speak to you.
+          Shuffle a cozy collection of feelings, needs, situations, and care strategies. Drag the magnets around to
+          follow the threads that speak to you.
         </p>
         <p class="hero__hint">Everything that glows can be picked up like a fridge magnet.</p>
       </div>
     </header>
 
     <main class="layout fridge-door">
-      <section class="panel panel--list">
+      <section class="board" aria-labelledby="explorerTitle">
+        <header class="board__header">
+          <div class="board__heading">
+            <h2 id="explorerTitle" class="board__title">Explore the care web</h2>
+            <p class="board__description">
+              Start with whichever data set feels alive right now. Each magnet reveals linked feelings, needs, situations,
+              and strategies to keep the exploration flowing.
+            </p>
+          </div>
+
+          <label class="search" for="searchInput">
+            <span class="search__label">Search</span>
+            <input id="searchInput" type="search" placeholder="Search by title or description" autocomplete="off" />
+          </label>
+        </header>
+
         <div class="dataset-tabs" role="tablist" aria-label="Data set selector">
           <button
             class="dataset-tab magnet"
@@ -64,26 +78,27 @@
           </button>
         </div>
 
-        <label class="search" for="searchInput">
-          <span class="search__label">Search</span>
-          <input id="searchInput" type="search" placeholder="Search by title or description" autocomplete="off" />
-        </label>
+        <div class="board__columns">
+          <section class="board__list" aria-labelledby="listHeading">
+            <h3 id="listHeading" class="board__section-title">Browse magnets</h3>
+            <ul id="itemList" class="item-list" role="listbox" aria-live="polite"></ul>
+          </section>
 
-        <ul id="itemList" class="item-list" role="listbox" aria-live="polite"></ul>
+          <section class="board__details" aria-labelledby="detailsHeading">
+            <h3 id="detailsHeading" class="board__section-title">Connections &amp; notes</h3>
+            <div id="detailsContent" class="details" aria-live="polite"></div>
+          </section>
+        </div>
       </section>
 
-      <section class="panel panel--details">
-        <div id="detailsContent" class="details" aria-live="polite"></div>
-
-        <aside class="plan" aria-labelledby="planTitle">
-          <div class="plan__header">
-            <h2 id="planTitle">Care plan</h2>
-            <p class="plan__hint">Collect strategies that resonate to revisit later.</p>
-          </div>
-          <div id="planMessage" class="visually-hidden" aria-live="polite"></div>
-          <ul id="planList" class="plan__list"></ul>
-        </aside>
-      </section>
+      <aside class="plan" aria-labelledby="planTitle">
+        <div class="plan__header">
+          <h2 id="planTitle">Care plan</h2>
+          <p class="plan__hint">Collect strategies that resonate to revisit later.</p>
+        </div>
+        <div id="planMessage" class="visually-hidden" aria-live="polite"></div>
+        <ul id="planList" class="plan__list"></ul>
+      </aside>
     </main>
 
     <footer class="footer">
