@@ -141,10 +141,12 @@ function renderStrategyForm({
     ? `
         <div class="strategy-form__field">
           <label for="${idPrefix}-need">Primary need</label>
-          <select id="${idPrefix}-need" name="need" required>
-            ${placeholderOption}
-            ${needOptions}
-          </select>
+          <div class="strategy-card strategy-card--input">
+            <select id="${idPrefix}-need" name="need" required>
+              ${placeholderOption}
+              ${needOptions}
+            </select>
+          </div>
         </div>`
     : '';
 
@@ -153,11 +155,15 @@ function renderStrategyForm({
         <div class="strategy-form__row">
           <div class="strategy-form__field">
             <label for="${idPrefix}-name">First name (optional)</label>
-            <input id="${idPrefix}-name" name="name" type="text" />
+            <div class="strategy-card strategy-card--input">
+              <input id="${idPrefix}-name" name="name" type="text" />
+            </div>
           </div>
           <div class="strategy-form__field">
             <label for="${idPrefix}-location">Location (optional)</label>
-            <input id="${idPrefix}-location" name="location" type="text" />
+            <div class="strategy-card strategy-card--input">
+              <input id="${idPrefix}-location" name="location" type="text" />
+            </div>
           </div>
         </div>`
     : '';
@@ -171,23 +177,28 @@ function renderStrategyForm({
 
   return `
       <div class="strategy-form__container" data-strategy-form-container>
-        <form id="${formId}" class="strategy-form" data-strategy-form>
-          <div class="strategy-form__field">
-            <label for="${idPrefix}-title">${escapeHtml(titleLabel)}</label>
-            <input id="${idPrefix}-title" name="title" type="text" required />
-          </div>
-          <div class="strategy-form__field">
-            <label for="${idPrefix}-description">${escapeHtml(descriptionLabel)}</label>
-            <div class="strategy-card strategy-card--input">
-              <textarea id="${idPrefix}-description" name="description" rows="4"${descriptionRequiredAttr}></textarea>
+        <div class="strategy-card strategy-card--form">
+          <form id="${formId}" class="strategy-form" data-strategy-form>
+            <div class="strategy-form__field">
+              <label for="${idPrefix}-title">${escapeHtml(titleLabel)}</label>
+              <div class="strategy-card strategy-card--input">
+                <input id="${idPrefix}-title" name="title" type="text" required />
+              </div>
             </div>
-          </div>
-          ${needField}
-          ${contactFields}
-          <div class="strategy-form__actions">
-            <button type="submit" class="strategy-form__submit inventory-button">${escapeHtml(submitLabel)}</button>
-          </div>
-        </form>${message}
+            <div class="strategy-form__field">
+              <label for="${idPrefix}-description">${escapeHtml(descriptionLabel)}</label>
+              <div class="strategy-card strategy-card--input">
+                <textarea id="${idPrefix}-description" name="description" rows="4"${descriptionRequiredAttr}></textarea>
+              </div>
+            </div>
+            ${needField}
+            ${contactFields}
+            <div class="strategy-card__actions strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
+            </div>
+          </form>
+        </div>
+        ${message}
       </div>`;
 }
 
@@ -357,7 +368,7 @@ function renderNeed(item, strategyLookup) {
   const suggestionForm = renderStrategyForm({
     formId: 'suggestion-form',
     idPrefix: 'suggestion',
-    submitLabel: 'Save to inventory',
+    submitLabel: '+ Save to inventory',
     titleLabel: 'Strategy name',
     descriptionLabel: 'Strategy details',
     defaultNeedSlug: item.slug,
@@ -372,7 +383,7 @@ function renderNeed(item, strategyLookup) {
       </header>
       ${strategiesHtml}
       <section class="suggestion" aria-labelledby="suggestion-heading">
-        <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
+        <h2 id="suggestion-heading" class="section-title">Add a strategy</h2>
         ${suggestionForm}
       </section>
     `;

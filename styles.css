@@ -358,6 +358,7 @@ a:focus-visible {
 }
 
 .strategy-card--form {
+  display: grid;
   padding: 0.85rem 1rem;
   gap: 0.65rem;
 }
@@ -380,25 +381,14 @@ a:focus-visible {
 }
 
 .strategy-form input[type='text'],
-.strategy-form select {
-  font: inherit;
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border: 3px solid var(--outline);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 -8px 0 rgba(18, 8, 31, 0.08);
-}
-
+.strategy-form select,
 .strategy-form textarea {
   font: inherit;
   width: 100%;
-}
-
-.strategy-form input[type='text']:focus-visible,
-.strategy-form select:focus-visible {
-  outline: 3px dashed var(--outline);
-  outline-offset: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
 }
 
 .strategy-form__row {
@@ -433,6 +423,7 @@ a:focus-visible {
 }
 
 .strategy-card--input {
+  display: block;
   padding: 0;
   overflow: hidden;
 }
@@ -517,6 +508,10 @@ a:focus-visible {
   .strategy-card--form .strategy-card__save {
     width: 100%;
     text-align: center;
+  }
+
+  .strategy-form__row {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -924,10 +919,6 @@ a:focus-visible {
 
   .magnet-grid {
     min-height: 20rem;
-  }
-
-  .strategy-form__row {
-    grid-template-columns: 1fr;
   }
 
   .inventory-actions__buttons {
