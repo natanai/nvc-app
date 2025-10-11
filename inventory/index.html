@@ -31,89 +31,245 @@
         <h1 class="page-title">Strategy inventory</h1>
         <p class="page-description">Collect strategies you love and track how each need is supported.</p>
       </header>
-      <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
-        <div class="inventory-actions__header">
-          <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
-          <p class="inventory-actions__hint">Export a CSV backup or import one you created earlier.</p>
-        </div>
-        <div class="inventory-actions__buttons">
-          <button type="button" id="inventory-export" class="inventory-button">Export CSV</button>
-          <button type="button" id="inventory-import-trigger" class="inventory-button">Import CSV</button>
-          <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
-        </div>
-        <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-      </section>
-      <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
-        <div class="inventory-overview__header">
-          <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
-          <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
-        </div>
-        <div id="inventory-summary" class="inventory-summary"></div>
-        <div class="inventory-list__toggle">
-          <button
-            type="button"
-            class="inventory-button"
-            data-inventory-toggle
-            aria-expanded="false"
-            aria-controls="strategies-list"
-          >
-            Show your saved strategies
-          </button>
-        </div>
-        <div
-          class="inventory-list-panel inventory-list-panel--hidden"
-          id="strategies-list"
-          data-strategies-container
-          hidden
-          aria-labelledby="inventory-list-heading"
+
+      <div class="inventory-tabs" role="tablist" aria-label="Inventory views">
+        <button
+          type="button"
+          class="inventory-tab"
+          id="inventory-tab-strategies"
+          role="tab"
+          aria-selected="true"
+          aria-controls="inventory-panel-strategies"
+          data-inventory-tab="strategies"
         >
-          <div class="inventory-list__header">
-            <h3 id="inventory-list-heading" class="section-title">Saved strategies by need</h3>
-            <p class="inventory-list__hint">
-              Expand a need to review strategies you have saved and make updates.
-            </p>
-          </div>
-          <div id="inventory-list" class="inventory-list"></div>
-        </div>
-      </section>
-      <section class="inventory-form" aria-labelledby="inventory-form-heading">
-        <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
-        
-      <div class="strategy-form__container" data-strategy-form-container>
-        <div class="strategy-card strategy-card--form">
-          <form id="inventory-form" class="strategy-form" data-strategy-form>
-            <div class="strategy-form__field">
-              <label for="inventory-title">Strategy name</label>
-              <div class="strategy-card strategy-card--input">
-                <input id="inventory-title" name="title" type="text" required />
-              </div>
-            </div>
-            <div class="strategy-form__field">
-              <label for="inventory-description">How do you put it into practice?</label>
-              <div class="strategy-card strategy-card--input">
-                <textarea id="inventory-description" name="description" rows="4" required></textarea>
-              </div>
-            </div>
-            
-        <div class="strategy-form__field">
-          <label for="inventory-need">Primary need</label>
-          <div class="strategy-card strategy-card--input">
-            <select id="inventory-need" name="need" required>
-              <option value="" disabled selected>Select a need</option>
-              <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
-            </select>
-          </div>
-        </div>
-            
-            <div class="strategy-card__actions strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
-            </div>
-          </form>
-        </div>
-        
+          Strategies
+        </button>
+        <button
+          type="button"
+          class="inventory-tab"
+          id="inventory-tab-journal"
+          role="tab"
+          aria-selected="false"
+          aria-controls="inventory-panel-journal"
+          data-inventory-tab="journal"
+        >
+          Journal
+        </button>
       </div>
-      </section>
-    
+
+      <div class="inventory-panels">
+        <div
+          id="inventory-panel-strategies"
+          class="inventory-panel"
+          role="tabpanel"
+          aria-labelledby="inventory-tab-strategies"
+          data-inventory-panel="strategies"
+        >
+          <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
+            <div class="inventory-actions__header">
+              <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
+              <p class="inventory-actions__hint">Export a CSV backup or import one you created earlier.</p>
+            </div>
+            <div class="inventory-actions__buttons">
+              <button type="button" id="inventory-export" class="inventory-button">Export CSV</button>
+              <button type="button" id="inventory-import-trigger" class="inventory-button">Import CSV</button>
+              <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
+            </div>
+            <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
+          </section>
+          <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
+            <div class="inventory-overview__header">
+              <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
+              <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
+            </div>
+            <div id="inventory-summary" class="inventory-summary"></div>
+            <div class="inventory-list__toggle">
+              <button
+                type="button"
+                class="inventory-button"
+                data-inventory-toggle
+                aria-expanded="false"
+                aria-controls="strategies-list"
+              >
+                Show your saved strategies
+              </button>
+            </div>
+            <div
+              class="inventory-list-panel inventory-list-panel--hidden"
+              id="strategies-list"
+              data-strategies-container
+              hidden
+              aria-labelledby="inventory-list-heading"
+            >
+              <div class="inventory-list__header">
+                <h3 id="inventory-list-heading" class="section-title">Saved strategies by need</h3>
+                <p class="inventory-list__hint">
+                  Expand a need to review strategies you have saved and make updates.
+                </p>
+              </div>
+              <div id="inventory-list" class="inventory-list"></div>
+            </div>
+          </section>
+          <section class="inventory-form" aria-labelledby="inventory-form-heading">
+            <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
+
+            <div class="strategy-form__container" data-strategy-form-container>
+              <div class="strategy-card strategy-card--form">
+                <form id="inventory-form" class="strategy-form" data-strategy-form>
+                  <div class="strategy-form__field">
+                    <label for="inventory-title">Strategy name</label>
+                    <div class="strategy-card strategy-card--input">
+                      <input id="inventory-title" name="title" type="text" required />
+                    </div>
+                  </div>
+                  <div class="strategy-form__field">
+                    <label for="inventory-description">How do you put it into practice?</label>
+                    <div class="strategy-card strategy-card--input">
+                      <textarea id="inventory-description" name="description" rows="4" required></textarea>
+                    </div>
+                  </div>
+
+                  <div class="strategy-form__field">
+                    <label for="inventory-need">Primary need</label>
+                    <div class="strategy-card strategy-card--input">
+                      <select id="inventory-need" name="need" required>
+                        <option value="" disabled selected>Select a need</option>
+                        <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="strategy-card__actions strategy-form__actions">
+                    <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div
+          id="inventory-panel-journal"
+          class="inventory-panel inventory-panel--hidden"
+          role="tabpanel"
+          aria-labelledby="inventory-tab-journal"
+          data-inventory-panel="journal"
+          hidden
+        >
+          <section class="journal-dashboard" aria-labelledby="journal-dashboard-heading">
+            <div class="journal-dashboard__header">
+              <h2 id="journal-dashboard-heading" class="section-title">Journal history</h2>
+              <p class="journal-dashboard__hint">Review reflections saved from the Alexithymia Support lane or add new notes here.</p>
+            </div>
+            <div class="journal-dashboard__summary">
+              <p class="journal-dashboard__stat" data-journal-count>0 entries saved on this device.</p>
+              <div class="journal-dashboard__trends" data-journal-trends></div>
+            </div>
+            <form class="journal-filters" data-journal-filters aria-label="Filter journal entries">
+              <div class="journal-filters__group">
+                <label for="journalFilterEmotion">Filter by emotion</label>
+                <select id="journalFilterEmotion" name="emotion" data-journal-filter-emotion>
+                  <option value="">All emotions</option>
+                </select>
+              </div>
+              <div class="journal-filters__group">
+                <label for="journalFilterTag">Filter by tag</label>
+                <select id="journalFilterTag" name="tag" data-journal-filter-tag>
+                  <option value="">All tags</option>
+                </select>
+              </div>
+            </form>
+            <div class="journal-list" data-journal-list>
+              <p class="support-note">Journal entries you save will appear here.</p>
+            </div>
+          </section>
+
+          <section class="journal-tools" aria-labelledby="journal-tools-heading">
+            <div class="journal-tools__header">
+              <h3 id="journal-tools-heading" class="section-title">Save or back up your journal</h3>
+              <p class="journal-tools__hint">Entries stay on this device unless you export them.</p>
+            </div>
+            <div class="journal-tools__buttons">
+              <button type="button" class="inventory-button" data-journal-export>Export JSON</button>
+              <button type="button" class="inventory-button" data-journal-import-trigger>Import JSON</button>
+              <input type="file" data-journal-import accept=".json,application/json" hidden />
+            </div>
+            <p class="inventory-message" data-journal-message hidden aria-live="polite"></p>
+          </section>
+
+          <section class="journal-entry" aria-labelledby="journal-entry-heading">
+            <h3 id="journal-entry-heading" class="section-title">Add a journal entry</h3>
+            <p class="journal-entry__intro">Capture a reflection without leaving the inventory. Entries are stored privately in this browser.</p>
+            <div class="strategy-form__container" data-journal-entry-container>
+              <div class="strategy-card strategy-card--form">
+                <form class="journal-entry-form" data-journal-entry-form>
+                  <div class="strategy-form__field">
+                    <label for="journal-entry-emotion">Emotion (optional)</label>
+                    <div class="strategy-card strategy-card--input">
+                      <input
+                        id="journal-entry-emotion"
+                        name="emotionLabel"
+                        type="text"
+                        list="journal-emotion-options"
+                        placeholder="e.g., Anxiety, Calm"
+                      />
+                    </div>
+                  </div>
+                  <div class="strategy-form__field">
+                    <label for="journal-entry-intensity">Intensity (1-10)</label>
+                    <div class="strategy-card strategy-card--input">
+                      <div class="journal-intensity">
+                        <input
+                          id="journal-entry-intensity"
+                          name="intensity"
+                          type="range"
+                          min="1"
+                          max="10"
+                          step="1"
+                          value="5"
+                          aria-describedby="journal-entry-intensity-value"
+                        />
+                        <span id="journal-entry-intensity-value" class="journal-intensity__value" aria-live="polite">5</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="strategy-form__field">
+                    <label for="journal-entry-tags">Tags (optional)</label>
+                    <div class="strategy-card strategy-card--input">
+                      <input id="journal-entry-tags" name="tags" type="text" placeholder="e.g., work, weekend" />
+                    </div>
+                    <small class="journal-form__hint">Separate tags with commas.</small>
+                  </div>
+                  <div class="strategy-form__field">
+                    <label for="journal-entry-needs">Needs connected (optional)</label>
+                    <div class="strategy-card strategy-card--input">
+                      <input id="journal-entry-needs" name="needs" type="text" placeholder="List needs separated by commas" />
+                    </div>
+                  </div>
+                  <div class="strategy-form__field">
+                    <label for="journal-entry-notes">Notes</label>
+                    <div class="strategy-card strategy-card--input">
+                      <textarea
+                        id="journal-entry-notes"
+                        name="notes"
+                        rows="4"
+                        required
+                        placeholder="What feels important to remember?"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="strategy-card__actions strategy-form__actions">
+                    <button type="submit" class="strategy-form__submit strategy-card__save">Save entry</button>
+                  </div>
+                  <p class="support-note" data-journal-entry-status role="status"></p>
+                </form>
+              </div>
+            </div>
+            <datalist id="journal-emotion-options"></datalist>
+          </section>
+        </div>
+      </div>
+
       </main>
     </div>
     <script src="../scripts/inventory.js" defer></script>

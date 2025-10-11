@@ -486,9 +486,12 @@
     },
   };
 
-  const JOURNAL_KEY = 'alexithymiaSupportJournal';
+  const JOURNAL_KEY = 'nvcApp.journalEntries';
+  const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
   const state = {
     selectedEmotion: null,
+    selectedEmotionLabel: '',
+    selectedEmotionNeeds: [],
     quadrant: null,
     activeTag: null,
   };
@@ -502,6 +505,8 @@
   const journalForm = document.querySelector('[data-journal-form]');
   const journalStatus = document.querySelector('[data-journal-status]');
   const journalHistory = document.querySelector('[data-journal-history]');
+  const journalIntensityInput = document.querySelector('#journalIntensity');
+  const journalIntensityValue = document.querySelector('#journalIntensityValue');
   const regulationCard = document.querySelector('[data-regulation-card]');
   const communicationCard = document.querySelector('[data-communication-card]');
 
@@ -684,6 +689,63 @@
     );
   }
 
+  function handleSensationSkip() {
+    renderSuggestionBlock(
+      bodySuggestions,
+      'Body-based matches',
+      'If nothing stands out yet, you can keep going and return to body sensations later.',
+      []
+    );
+    revealStep('compass');
+    focusStep('compass');
+  }
+
+  function parseListInput(value) {
+    if (!value || typeof value !== 'string') {
+      return [];
+    }
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  function toStringArray(value) {
+    if (Array.isArray(value)) {
+      return value
+        .map((item) => (typeof item === 'string' ? item.trim() : ''))
+        .filter(Boolean);
+    }
+    if (typeof value === 'string') {
+      return parseListInput(value);
+    }
+    return [];
+  }
+
+  function clampIntensity(value) {
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+      return null;
+    }
+    return Math.min(10, Math.max(1, Math.round(value)));
+  }
+
+  function generateJournalId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return `journal-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  function updateIntensityDisplay(value) {
+    if (!journalIntensityValue) return;
+    const safeValue = value ? String(value) : '5';
+    journalIntensityValue.textContent = safeValue;
+  }
+
+  function handleIntensityInput(event) {
+    updateIntensityDisplay(event.currentTarget.value);
+  }
+
   function computeQuadrant(energy, valence) {
     if (!energy || !valence) return null;
     return `${energy}-${valence}`;
@@ -741,6 +803,20 @@
     if (!emotion || !emotionLibrary) return;
     setActiveTag(sourceTag);
     state.selectedEmotion = emotionKey;
+    state.selectedEmotionLabel = emotion.name;
+    state.selectedEmotionNeeds = Array.isArray(emotion.needs) ? [...emotion.needs] : [];
+
+    if (journalForm) {
+      const needsInput = journalForm.querySelector('#journalNeeds');
+      if (needsInput) {
+        if (emotion.needs && emotion.needs.length) {
+          const preview = emotion.needs.slice(0, 3).join(', ');
+          needsInput.placeholder = `Try needs like ${preview}`;
+        } else {
+          needsInput.placeholder = 'Add one or more needs, separated by commas';
+        }
+      }
+    }
 
     const html = `
       <div class="emotion-detail">
@@ -818,21 +894,82 @@
     statusNode.textContent = 'Playing the sentence out loud—pause or stop if you prefer to speak it yourself.';
   }
 
-  function getJournalEntries() {
+  function normalizeJournalEntry(entry) {
+    if (!entry || typeof entry !== 'object') {
+      return null;
+    }
+    const text = typeof entry.text === 'string' ? entry.text.trim() : '';
+    if (!text) {
+      return null;
+    }
+    const normalized = {
+      id: typeof entry.id === 'string' && entry.id ? entry.id : generateJournalId(),
+      text,
+      emotion: typeof entry.emotion === 'string' ? entry.emotion : '',
+      emotionLabel:
+        typeof entry.emotionLabel === 'string' && entry.emotionLabel ? entry.emotionLabel : '',
+      intensity: clampIntensity(Number(entry.intensity)),
+      tags: toStringArray(entry.tags),
+      needs: toStringArray(entry.needs),
+      source:
+        typeof entry.source === 'string' && entry.source
+          ? entry.source
+          : 'alexithymia-support',
+      timestamp:
+        typeof entry.timestamp === 'string' && entry.timestamp
+          ? entry.timestamp
+          : new Date().toISOString(),
+    };
+
+    if (!normalized.emotionLabel && normalized.emotion && EMOTION_LIBRARY[normalized.emotion]) {
+      normalized.emotionLabel = EMOTION_LIBRARY[normalized.emotion].name;
+    }
+
+    return normalized;
+  }
+
+  function readJournalEntriesFromStorage(key) {
+    if (!key) return [];
     try {
-      const raw = localStorage.getItem(JOURNAL_KEY);
+      const raw = localStorage.getItem(key);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+      return parsed
+        .map((entry) => normalizeJournalEntry(entry))
+        .filter((entry) => entry !== null);
     } catch (error) {
       console.warn('Could not read journal entries', error);
       return [];
     }
   }
 
+  function getJournalEntries() {
+    let entries = readJournalEntriesFromStorage(JOURNAL_KEY);
+    if (entries.length) {
+      return entries;
+    }
+    const legacyEntries = readJournalEntriesFromStorage(LEGACY_JOURNAL_KEY);
+    if (legacyEntries.length) {
+      entries = legacyEntries;
+      saveJournalEntries(entries);
+      try {
+        localStorage.removeItem(LEGACY_JOURNAL_KEY);
+      } catch (error) {
+        console.warn('Could not remove legacy journal storage', error);
+      }
+    }
+    return entries;
+  }
+
   function saveJournalEntries(entries) {
     try {
       localStorage.setItem(JOURNAL_KEY, JSON.stringify(entries));
+      if (LEGACY_JOURNAL_KEY !== JOURNAL_KEY) {
+        localStorage.removeItem(LEGACY_JOURNAL_KEY);
+      }
     } catch (error) {
       console.warn('Could not save journal entries', error);
     }
@@ -857,8 +994,30 @@
         const item = document.createElement('li');
         item.className = 'journal-history__item';
         const date = new Date(entry.timestamp).toLocaleString();
-        const emotion = entry.emotion ? `${EMOTION_LIBRARY[entry.emotion]?.name ?? entry.emotion} — ` : '';
-        item.textContent = `${date}: ${emotion}${entry.text}`;
+        const label = entry.emotionLabel || entry.emotion || '';
+        const metaParts = [date];
+        if (label) {
+          metaParts.push(label);
+        }
+        if (entry.intensity) {
+          metaParts.push(`Intensity ${entry.intensity}/10`);
+        }
+        if (entry.tags && entry.tags.length) {
+          metaParts.push(`Tags: ${entry.tags.join(', ')}`);
+        }
+        if (entry.needs && entry.needs.length) {
+          metaParts.push(`Needs: ${entry.needs.join(', ')}`);
+        }
+
+        const meta = document.createElement('p');
+        meta.className = 'journal-history__meta';
+        meta.textContent = metaParts.join(' · ');
+        item.appendChild(meta);
+
+        const textLine = document.createElement('p');
+        textLine.className = 'journal-history__text';
+        textLine.textContent = entry.text;
+        item.appendChild(textLine);
         list.appendChild(item);
       });
     journalHistory.appendChild(list);
@@ -875,24 +1034,59 @@
       return;
     }
     const entries = getJournalEntries();
+    const intensityValue = clampIntensity(Number(form.elements.journalIntensity?.value));
+    const tags = parseListInput(form.elements.journalTags?.value ?? '');
+    const needs = parseListInput(form.elements.journalNeeds?.value ?? '');
     const entry = {
+      id: generateJournalId(),
       text: value,
       emotion: state.selectedEmotion,
+      emotionLabel: state.selectedEmotionLabel,
+      intensity: intensityValue,
+      tags,
+      needs,
+      source: 'alexithymia-support',
       timestamp: new Date().toISOString(),
     };
     entries.push(entry);
     saveJournalEntries(entries);
     renderJournalHistory(entries);
     textarea.value = '';
-    journalStatus.textContent = 'Saved locally. Only this browser can see it.';
+    if (journalIntensityInput && typeof intensityValue === 'number') {
+      journalIntensityInput.value = String(intensityValue);
+      updateIntensityDisplay(intensityValue);
+    }
+    const tagsInput = form.elements.journalTags;
+    if (tagsInput) {
+      tagsInput.value = '';
+    }
+    const needsInput = form.elements.journalNeeds;
+    if (needsInput) {
+      needsInput.value = '';
+    }
+    const savedEmotion = entry.emotionLabel || entry.emotion;
+    const emotionMessage = savedEmotion ? ` Tagged with ${savedEmotion}.` : '';
+    journalStatus.textContent = `Saved locally.${emotionMessage} Find it later in the Inventory journal.`;
   }
 
   function handleJournalClear() {
     const textarea = journalForm?.querySelector('textarea');
     if (textarea) {
       textarea.value = '';
-      journalStatus.textContent = '';
     }
+    const tagsInput = journalForm?.querySelector('#journalTags');
+    if (tagsInput) {
+      tagsInput.value = '';
+    }
+    const needsInput = journalForm?.querySelector('#journalNeeds');
+    if (needsInput) {
+      needsInput.value = '';
+    }
+    if (journalIntensityInput) {
+      journalIntensityInput.value = '5';
+      updateIntensityDisplay('5');
+    }
+    journalStatus.textContent = '';
   }
 
   function handleSuggestionClick(event) {
@@ -929,8 +1123,10 @@
 
     const sensationSubmit = document.querySelector('[data-action="sensation-submit"]');
     const sensationClear = document.querySelector('[data-action="sensation-clear"]');
+    const sensationSkip = document.querySelector('[data-action="sensation-skip"]');
     sensationSubmit?.addEventListener('click', handleSensationSubmit);
     sensationClear?.addEventListener('click', handleSensationClear);
+    sensationSkip?.addEventListener('click', handleSensationSkip);
 
     const compassForm = document.querySelector('[data-compass-form]');
     compassForm?.addEventListener('change', handleCompassChange);
@@ -943,6 +1139,9 @@
     }
     const journalClear = document.querySelector('[data-action="journal-clear"]');
     journalClear?.addEventListener('click', handleJournalClear);
+
+    journalIntensityInput?.addEventListener('input', handleIntensityInput);
+    updateIntensityDisplay(journalIntensityInput?.value || '5');
 
     communicationCard?.addEventListener('click', handleCommunicationClick);
 
