@@ -242,8 +242,14 @@ function renderNeed(item, strategyLookup) {
   const hasPrefix = item.title.toLowerCase().startsWith('need for ');
   const fullTitle = hasPrefix ? item.title : `Need for ${item.title}`;
 
-  const needOptions = data.needs
-    .map((need) => `<option value="${escapeHtml(need.slug)}">${escapeHtml(need.title)}</option>`)
+  const tagOptions = data.needs
+    .map(
+      (need) => `
+              <label class="tag-pill">
+                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="${escapeHtml(need.slug)}" />
+                <span class="tag-pill__visual">${escapeHtml(need.title)}</span>
+              </label>`
+    )
     .join('');
 
   const main = `
@@ -256,15 +262,20 @@ function renderNeed(item, strategyLookup) {
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
         <form id="suggestion-form" class="suggestion-form">
           <label for="strategy">Your strategy</label>
-          <textarea id="strategy" name="strategy" required></textarea>
-          <label for="tags">Needs this strategy supports</label>
-          <select id="tags" name="tags" multiple>
-            ${needOptions}
-          </select>
+          <div class="strategy-card strategy-card--input">
+            <textarea id="strategy" name="strategy" required></textarea>
+          </div>
+          <fieldset class="tag-picker">
+            <legend class="tag-picker__legend">Needs this strategy supports</legend>
+            <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
+            <div class="tag-picker__list">
+              ${tagOptions}
+            </div>
+          </fieldset>
           <label for="name">First name (optional)</label>
-          <input id="name" name="name" />
+          <input id="name" name="name" type="text" />
           <label for="location">Location (optional)</label>
-          <input id="location" name="location" />
+          <input id="location" name="location" type="text" />
           <button type="submit">Submit</button>
         </form>
         <p class="form-message" hidden></p>

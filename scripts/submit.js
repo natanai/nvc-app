@@ -25,7 +25,9 @@ const handleSuggestionForm = () => {
     const strategy = (formData.get('strategy') || '').toString().trim();
     const nameInput = (formData.get('name') || '').toString().trim();
     const locationInput = (formData.get('location') || '').toString().trim();
-    const tags = Array.from(form.elements.tags?.selectedOptions || []).map((option) => option.value);
+    const tags = formData
+      .getAll('tags')
+      .map((value) => value.toString());
 
     if (!strategy) {
       if (message) {
