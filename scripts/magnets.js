@@ -113,28 +113,32 @@ const prepareMagnets = () => {
     };
 
     const resolveCollisions = () => {
+      const draggingMagnet = state.dragState?.magnet ?? null;
+
       for (let i = 0; i < magnets.length; i += 1) {
         const magnetA = magnets[i];
-        if (state.dragState?.magnet === magnetA) {
+        const posA = state.positions.get(magnetA);
+        const sizeA = state.sizes.get(magnetA);
+        let velA = state.velocities.get(magnetA);
+        if (!posA || !sizeA) {
           continue;
         }
-        const posA = state.positions.get(magnetA);
-        const velA = state.velocities.get(magnetA);
-        const sizeA = state.sizes.get(magnetA);
-        if (!posA || !velA || !sizeA) {
-          continue;
+        if (!velA) {
+          velA = { x: 0, y: 0 };
+          state.velocities.set(magnetA, velA);
         }
 
         for (let j = i + 1; j < magnets.length; j += 1) {
           const magnetB = magnets[j];
-          if (state.dragState?.magnet === magnetB) {
+          const posB = state.positions.get(magnetB);
+          const sizeB = state.sizes.get(magnetB);
+          let velB = state.velocities.get(magnetB);
+          if (!posB || !sizeB) {
             continue;
           }
-          const posB = state.positions.get(magnetB);
-          const velB = state.velocities.get(magnetB);
-          const sizeB = state.sizes.get(magnetB);
-          if (!posB || !velB || !sizeB) {
-            continue;
+          if (!velB) {
+            velB = { x: 0, y: 0 };
+            state.velocities.set(magnetB, velB);
           }
 
           const centerAx = posA.x + sizeA.width / 2;
@@ -147,24 +151,45 @@ const prepareMagnets = () => {
           const overlapX = sizeA.width / 2 + sizeB.width / 2 - Math.abs(diffX);
           const overlapY = sizeA.height / 2 + sizeB.height / 2 - Math.abs(diffY);
 
-          if (overlapX > 0 && overlapY > 0) {
-            if (overlapX < overlapY) {
-              const direction = diffX > 0 ? 1 : -1;
-              const separation = overlapX / 2;
-              posA.x += separation * direction;
-              posB.x -= separation * direction;
-              const temp = velA.x;
-              velA.x = velB.x;
-              velB.x = temp;
+          if (overlapX <= 0 || overlapY <= 0) {
+            continue;
+          }
+
+          const resolveAlongX = overlapX < overlapY;
+          const direction = resolveAlongX ? (diffX > 0 ? 1 : -1) : (diffY > 0 ? 1 : -1);
+          const separation = resolveAlongX ? overlapX : overlapY;
+
+          if (draggingMagnet && (magnetA === draggingMagnet || magnetB === draggingMagnet)) {
+            const passivePos = magnetA === draggingMagnet ? posB : posA;
+            const passiveVel = magnetA === draggingMagnet ? velB : velA;
+
+            const pushDistance = Math.min(separation * 0.8 + 4, 40);
+            const pushVelocity = Math.min(separation * 0.18 + 0.2, 4);
+
+            if (resolveAlongX) {
+              passivePos.x -= pushDistance * direction;
+              passiveVel.x -= pushVelocity * direction;
             } else {
-              const direction = diffY > 0 ? 1 : -1;
-              const separation = overlapY / 2;
-              posA.y += separation * direction;
-              posB.y -= separation * direction;
-              const temp = velA.y;
-              velA.y = velB.y;
-              velB.y = temp;
+              passivePos.y -= pushDistance * direction;
+              passiveVel.y -= pushVelocity * direction;
             }
+            continue;
+          }
+
+          if (resolveAlongX) {
+            const separationAmount = separation / 2;
+            posA.x += separationAmount * direction;
+            posB.x -= separationAmount * direction;
+            const temp = velA.x;
+            velA.x = velB.x;
+            velB.x = temp;
+          } else {
+            const separationAmount = separation / 2;
+            posA.y += separationAmount * direction;
+            posB.y -= separationAmount * direction;
+            const temp = velA.y;
+            velA.y = velB.y;
+            velB.y = temp;
           }
         }
       }
@@ -372,32 +397,43 @@ const prepareMagnets = () => {
 
       grid.classList.remove('magnet-grid--playing');
       grid.style.height = '';
+      grid.style.removeProperty('touch-action');
 
       resetMagnetStyles();
       updateToggleLabel();
 
-      window.requestAnimationFrame(() => {
-        const latestGridRect = grid.getBoundingClientRect();
-        magnets.forEach((magnet) => {
-          const savedPosition = state.savedPositions.get(magnet);
-          if (!savedPosition) {
-            magnet.style.removeProperty('--magnet-play-offset-x');
-            magnet.style.removeProperty('--magnet-play-offset-y');
-            return;
-          }
+      const latestGridRect = grid.getBoundingClientRect();
+      const magnetsNeedingReset = [];
 
-          const rect = magnet.getBoundingClientRect();
-          const savedCenterX = savedPosition.x + (savedPosition.width ?? rect.width) / 2;
-          const savedCenterY = savedPosition.y + (savedPosition.height ?? rect.height) / 2;
-          const currentCenterX = rect.left - latestGridRect.left + rect.width / 2;
-          const currentCenterY = rect.top - latestGridRect.top + rect.height / 2;
-          const offsetX = savedCenterX - currentCenterX;
-          const offsetY = savedCenterY - currentCenterY;
+      magnets.forEach((magnet) => {
+        const savedPosition = state.savedPositions.get(magnet);
+        if (!savedPosition) {
+          magnet.style.removeProperty('--magnet-play-offset-x');
+          magnet.style.removeProperty('--magnet-play-offset-y');
+          return;
+        }
 
-          magnet.style.setProperty('--magnet-play-offset-x', `${offsetX}px`);
-          magnet.style.setProperty('--magnet-play-offset-y', `${offsetY}px`);
-        });
+        const rect = magnet.getBoundingClientRect();
+        const savedCenterX = savedPosition.x + (savedPosition.width ?? rect.width) / 2;
+        const savedCenterY = savedPosition.y + (savedPosition.height ?? rect.height) / 2;
+        const currentCenterX = rect.left - latestGridRect.left + rect.width / 2;
+        const currentCenterY = rect.top - latestGridRect.top + rect.height / 2;
+        const offsetX = savedCenterX - currentCenterX;
+        const offsetY = savedCenterY - currentCenterY;
+
+        magnet.style.setProperty('--magnet-play-offset-x', `${offsetX}px`);
+        magnet.style.setProperty('--magnet-play-offset-y', `${offsetY}px`);
+        magnetsNeedingReset.push(magnet);
       });
+
+      if (magnetsNeedingReset.length) {
+        window.requestAnimationFrame(() => {
+          magnetsNeedingReset.forEach((magnet) => {
+            magnet.style.setProperty('--magnet-play-offset-x', '0px');
+            magnet.style.setProperty('--magnet-play-offset-y', '0px');
+          });
+        });
+      }
     };
 
     const startPhysics = () => {
@@ -409,6 +445,7 @@ const prepareMagnets = () => {
       const gridRect = grid.getBoundingClientRect();
       grid.style.height = `${initialHeight}px`;
       grid.classList.add('magnet-grid--playing');
+      grid.style.touchAction = 'none';
 
       state.positions.clear();
       state.velocities.clear();
@@ -461,7 +498,6 @@ const prepareMagnets = () => {
         magnet.style.left = `${position.x}px`;
         magnet.style.top = `${position.y}px`;
         magnet.style.margin = '0';
-        magnet.style.transition = 'none';
         magnet.style.setProperty('--magnet-play-offset-x', '0px');
         magnet.style.setProperty('--magnet-play-offset-y', '0px');
       });
@@ -515,6 +551,8 @@ const prepareMagnets = () => {
       if (!state.dragState || state.dragState.pointerId !== event.pointerId) {
         return;
       }
+
+      event.preventDefault();
 
       const { magnet, offsetX, offsetY, startX, startY } = state.dragState;
       const position = state.positions.get(magnet);

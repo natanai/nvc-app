@@ -776,13 +776,17 @@ button.site-nav__link {
 
 .magnet-grid--playing .magnet {
   cursor: grab;
-  transition: none;
+  transition: transform 0.1s ease, box-shadow 0.18s ease;
   --magnet-play-offset-x: 0px;
   --magnet-play-offset-y: 0px;
+  --magnet-lift: 0px;
 }
 
 .magnet-grid--playing .magnet--dragging {
   cursor: grabbing;
+  --magnet-lift: -18px;
+  z-index: 30;
+  box-shadow: 0 18px 24px rgba(17, 8, 31, 0.22);
 }
 
 .shuffle-button {
@@ -815,12 +819,13 @@ button.site-nav__link {
 .magnet {
   --magnet-play-offset-x: 0px;
   --magnet-play-offset-y: 0px;
+  --magnet-lift: 0px;
   cursor: pointer;
   user-select: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   transform: translate3d(
       var(--magnet-play-offset-x),
-      calc(var(--magnet-offset, 0) + var(--magnet-play-offset-y)),
+      calc(var(--magnet-offset, 0) + var(--magnet-play-offset-y) + var(--magnet-lift)),
       0
     )
     rotate(var(--magnet-tilt, 0));
@@ -864,7 +869,7 @@ button.site-nav__link {
 .magnet.pill:focus-visible {
   transform: translate3d(
       var(--magnet-play-offset-x),
-      calc(var(--magnet-offset, 0) + var(--magnet-play-offset-y) - 4px),
+      calc(var(--magnet-offset, 0) + var(--magnet-play-offset-y) + var(--magnet-lift) - 4px),
       0
     )
     rotate(var(--magnet-tilt, 0));

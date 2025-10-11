@@ -28,6 +28,7 @@ const paletteState = {
   defaultColors: {},
   currentPreset: '',
   lastTrigger: null,
+  styleElement: null,
 };
 
 const SECTION_ALIASES = new Map([
@@ -992,6 +993,52 @@ function handleColorInputChange(event) {
   applyColors({ [key]: sanitized }, { presetName: '' });
 }
 
+function ensurePaletteStyleElement() {
+  if (paletteState.styleElement?.isConnected) {
+    return paletteState.styleElement;
+  }
+
+  if (!document.head) {
+    return null;
+  }
+
+  const style = document.createElement('style');
+  style.dataset.paletteOverrides = 'true';
+  document.head.appendChild(style);
+  paletteState.styleElement = style;
+  return style;
+}
+
+function updatePaletteStyleElement() {
+  const hasDifference = COLOR_INPUTS.some(({ key }) => {
+    const current = paletteState.currentColors[key];
+    const base = paletteState.defaultColors[key];
+    if (!current && !base) {
+      return false;
+    }
+    return current !== base;
+  });
+
+  if (!hasDifference) {
+    if (paletteState.styleElement?.isConnected) {
+      paletteState.styleElement.textContent = '';
+    }
+    return;
+  }
+
+  const style = ensurePaletteStyleElement();
+  if (!style) {
+    return;
+  }
+
+  const declarations = COLOR_INPUTS.map(({ key, varName }) => {
+    const value = paletteState.currentColors[key];
+    return value ? `  ${varName}: ${value};` : '';
+  }).filter(Boolean);
+
+  style.textContent = declarations.length ? `:root {\n${declarations.join('\n')}\n}` : '';
+}
+
 function applyColors(colors, options = {}) {
   const { presetName = '', persist = true, replace = false } = options;
 
@@ -1015,6 +1062,8 @@ function applyColors(colors, options = {}) {
       document.documentElement.style.setProperty(varName, value);
     }
   });
+
+  updatePaletteStyleElement();
 
   paletteState.currentPreset = presetName || '';
   updateInputsFromState();
