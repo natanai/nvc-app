@@ -33,8 +33,9 @@ function htmlPage({
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
-  const headDescription = description ||
-    'Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share.';
+  const headDescription =
+    description ||
+    'Map situations, feelings, and needs with retro magnet play, journaling tools, and a shareable strategy inventory inspired by NeedShare.';
 
   const breadcrumbHtml = breadcrumbs.length
     ? `<nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -65,7 +66,7 @@ function htmlPage({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${escapeHtml(title)} • NeedShare Magnet Explorer</title>
+    <title>${escapeHtml(title)} • NeedShare Explorer</title>
     <meta name="description" content="${escapeHtml(headDescription)}" />
     <link rel="stylesheet" href="${cssHref}" />
   </head>
@@ -245,8 +246,8 @@ function renderHome() {
 
   const main = `
       <header class="page-header home-header">
-        <h1 class="page-title">NeedShare Magnet Explorer</h1>
-        <p class="page-subtitle">Follow a thread of care through situations, feelings, and needs.</p>
+        <h1 class="page-title">NeedShare Explorer</h1>
+        <p class="page-subtitle">Follow a thread of care through situations, feelings, needs, and strategies.</p>
       </header>
       <section class="category-section" aria-labelledby="categorySectionTitle">
         <div class="category-section__intro">
@@ -263,7 +264,8 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
-    description: 'Explore situations, feelings, and needs with cross-linked strategies inspired by Need Share.'
+    description:
+      'Explore situations, feelings, and needs with cross-linked magnets, journal prompts, and strategy inventory tools inspired by NeedShare.'
   });
 
   writePage('index.html', html);
