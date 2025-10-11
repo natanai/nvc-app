@@ -357,26 +357,42 @@ a:focus-visible {
   gap: 0.75rem;
 }
 
+.strategy-card--form {
+  padding: 0.85rem 1rem;
+  gap: 0.65rem;
+}
+
 .strategy-form {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.65rem;
+}
+
+.strategy-form__field {
+  display: grid;
+  gap: 0.4rem;
 }
 
 .strategy-form__field label {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font: inherit;
+  font-size: 1rem;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .strategy-form input[type='text'],
 .strategy-form select {
   font: inherit;
+  width: 100%;
   padding: 0.6rem 0.75rem;
   border: 3px solid var(--outline);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: inset 0 -8px 0 rgba(18, 8, 31, 0.08);
+}
+
+.strategy-form textarea {
+  font: inherit;
+  width: 100%;
 }
 
 .strategy-form input[type='text']:focus-visible,
@@ -387,7 +403,8 @@ a:focus-visible {
 
 .strategy-form__row {
   display: grid;
-  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
 }
 
 .strategy-form__actions {
@@ -420,9 +437,55 @@ a:focus-visible {
   overflow: hidden;
 }
 
+.strategy-card--input textarea {
+  width: 100%;
+  min-height: 6.5rem;
+  padding: 0.65rem 0.85rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  resize: vertical;
+}
+
+.strategy-card--input textarea:focus-visible {
+  outline: none;
+}
+
+.strategy-card--form .strategy-card--input {
+  box-shadow: 0 10px 0 var(--shadow);
+  border-radius: 16px;
+}
+
+.strategy-card--form .strategy-card--input input[type='text'],
+.strategy-card--form .strategy-card--input select,
+.strategy-card--form .strategy-card--input textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  box-shadow: none;
+}
+
+.strategy-card--form .strategy-card--input select {
+  appearance: none;
+}
+
+.strategy-card--form .strategy-card--input input[type='text']:focus-visible,
+.strategy-card--form .strategy-card--input select:focus-visible,
+.strategy-card--form .strategy-card--input textarea:focus-visible {
+  outline: none;
+}
+
 .strategy-card__actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.strategy-card--form .strategy-card__actions {
+  margin-top: 0.15rem;
 }
 
 .strategy-card__save {
@@ -446,19 +509,15 @@ a:focus-visible {
   box-shadow: 0 14px 0 var(--shadow);
 }
 
-.strategy-card--input textarea {
-  width: 100%;
-  min-height: 8rem;
-  padding: 1rem 1.25rem;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  color: inherit;
-  resize: vertical;
-}
+@media (max-width: 600px) {
+  .strategy-card--form .strategy-card__actions {
+    justify-content: stretch;
+  }
 
-.strategy-card--input textarea:focus-visible {
-  outline: none;
+  .strategy-card--form .strategy-card__save {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 .strategy-card--input:focus-within {
@@ -844,12 +903,6 @@ a:focus-visible {
 
 .strategy-form__submit {
   width: auto;
-}
-
-@media (min-width: 640px) {
-  .strategy-form__row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 640px) {
