@@ -7865,1226 +7865,6 @@
           "slug": "lonely"
         }
       ]
-    },
-    {
-      "title": "Physical Well-Being",
-      "slug": "physical-well-being",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Sip water slowly",
-          "slug": "sip-water-slowly"
-        },
-        {
-          "title": "Neck release",
-          "slug": "neck-release"
-        },
-        {
-          "title": "Shoulder rolls",
-          "slug": "shoulder-rolls"
-        },
-        {
-          "title": "Shake for 30 seconds",
-          "slug": "shake-for-30-seconds"
-        },
-        {
-          "title": "Wall push-ups",
-          "slug": "wall-push-ups"
-        },
-        {
-          "title": "Back to wall lean",
-          "slug": "back-to-wall-lean"
-        },
-        {
-          "title": "4-7-8 breathing",
-          "slug": "4-7-8-breathing"
-        },
-        {
-          "title": "Legs up the wall",
-          "slug": "legs-up-the-wall"
-        },
-        {
-          "title": "Window minute",
-          "slug": "window-minute"
-        },
-        {
-          "title": "Barefoot on grass",
-          "slug": "barefoot-on-grass"
-        },
-        {
-          "title": "Two-minute eye rest",
-          "slug": "two-minute-eye-rest"
-        },
-        {
-          "title": "Jaw unclench",
-          "slug": "jaw-unclench"
-        },
-        {
-          "title": "Gentle sway",
-          "slug": "gentle-sway"
-        },
-        {
-          "title": "Light adjust",
-          "slug": "light-adjust"
-        },
-        {
-          "title": "Fresh socks",
-          "slug": "fresh-socks"
-        },
-        {
-          "title": "Posture reset",
-          "slug": "posture-reset"
-        },
-        {
-          "title": "One-foot balance",
-          "slug": "one-foot-balance"
-        },
-        {
-          "title": "One gentle stretch chain",
-          "slug": "one-gentle-stretch-chain"
-        },
-        {
-          "title": "Choose a supportive spot",
-          "slug": "choose-a-supportive-spot"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Presence",
-      "slug": "presence",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Sip water slowly",
-          "slug": "sip-water-slowly"
-        },
-        {
-          "title": "Count 20 exhalations",
-          "slug": "count-20-exhalations"
-        },
-        {
-          "title": "Soft-gaze minute",
-          "slug": "soft-gaze-minute"
-        },
-        {
-          "title": "Step outside briefly",
-          "slug": "step-outside-briefly"
-        },
-        {
-          "title": "Name three sounds",
-          "slug": "name-three-sounds"
-        },
-        {
-          "title": "Slow-walk 60 seconds",
-          "slug": "slow-walk-60-seconds"
-        },
-        {
-          "title": "Posture reset",
-          "slug": "posture-reset"
-        },
-        {
-          "title": "Count backward from 30",
-          "slug": "count-backward-from-30"
-        },
-        {
-          "title": "Body scan (30 sec)",
-          "slug": "body-scan-30-sec"
-        },
-        {
-          "title": "Breath with steps",
-          "slug": "breath-with-steps"
-        },
-        {
-          "title": "Return to body cue",
-          "slug": "return-to-body-cue"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Ease",
-      "slug": "ease",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Sip water slowly",
-          "slug": "sip-water-slowly"
-        },
-        {
-          "title": "Hand on heart breaths",
-          "slug": "hand-on-heart-breaths"
-        },
-        {
-          "title": "One thing off today",
-          "slug": "one-thing-off-today"
-        },
-        {
-          "title": "Gentle sway",
-          "slug": "gentle-sway"
-        },
-        {
-          "title": "Parking-lot note",
-          "slug": "parking-lot-note"
-        },
-        {
-          "title": "Senses first aid kit",
-          "slug": "senses-first-aid-kit"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Comfort",
-      "slug": "comfort",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Neck release",
-          "slug": "neck-release"
-        },
-        {
-          "title": "Shoulder rolls",
-          "slug": "shoulder-rolls"
-        },
-        {
-          "title": "Jaw unclench",
-          "slug": "jaw-unclench"
-        },
-        {
-          "title": "Wrap in a blanket",
-          "slug": "wrap-in-a-blanket"
-        },
-        {
-          "title": "Pillow nest",
-          "slug": "pillow-nest"
-        },
-        {
-          "title": "Light adjust",
-          "slug": "light-adjust"
-        },
-        {
-          "title": "Fresh socks",
-          "slug": "fresh-socks"
-        },
-        {
-          "title": "Senses first aid kit",
-          "slug": "senses-first-aid-kit"
-        },
-        {
-          "title": "Choose a supportive spot",
-          "slug": "choose-a-supportive-spot"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Relief",
-      "slug": "relief",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Neck release",
-          "slug": "neck-release"
-        },
-        {
-          "title": "Shoulder rolls",
-          "slug": "shoulder-rolls"
-        },
-        {
-          "title": "Shake for 30 seconds",
-          "slug": "shake-for-30-seconds"
-        },
-        {
-          "title": "Hold something cool",
-          "slug": "hold-something-cool"
-        },
-        {
-          "title": "Jaw unclench",
-          "slug": "jaw-unclench"
-        },
-        {
-          "title": "One gentle stretch chain",
-          "slug": "one-gentle-stretch-chain"
-        },
-        {
-          "title": "Put it on paper",
-          "slug": "put-it-on-paper"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Strength",
-      "slug": "strength",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Wall push-ups",
-          "slug": "wall-push-ups"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Effectiveness",
-      "slug": "effectiveness",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Wall push-ups",
-          "slug": "wall-push-ups"
-        },
-        {
-          "title": "Micro-request to self",
-          "slug": "micro-request-to-self"
-        },
-        {
-          "title": "Ask for specifics",
-          "slug": "ask-for-specifics"
-        },
-        {
-          "title": "One next tiny step",
-          "slug": "one-next-tiny-step"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Grounding",
-      "slug": "grounding",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Back to wall lean",
-          "slug": "back-to-wall-lean"
-        },
-        {
-          "title": "Feel your feet",
-          "slug": "feel-your-feet"
-        },
-        {
-          "title": "Barefoot on grass",
-          "slug": "barefoot-on-grass"
-        },
-        {
-          "title": "Hold something cool",
-          "slug": "hold-something-cool"
-        },
-        {
-          "title": "Slow-walk 60 seconds",
-          "slug": "slow-walk-60-seconds"
-        },
-        {
-          "title": "Texture touch",
-          "slug": "texture-touch"
-        },
-        {
-          "title": "One-foot balance",
-          "slug": "one-foot-balance"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Soothing",
-      "slug": "self-soothing",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Butterfly taps",
-          "slug": "butterfly-taps"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Stability",
-      "slug": "stability",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Box breathing",
-          "slug": "box-breathing"
-        },
-        {
-          "title": "Feel your feet",
-          "slug": "feel-your-feet"
-        },
-        {
-          "title": "Return to body cue",
-          "slug": "return-to-body-cue"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Regulation",
-      "slug": "regulation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Box breathing",
-          "slug": "box-breathing"
-        },
-        {
-          "title": "Gentle sway",
-          "slug": "gentle-sway"
-        },
-        {
-          "title": "Breath with steps",
-          "slug": "breath-with-steps"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Balance",
-      "slug": "balance",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Alternate-nostril breaths",
-          "slug": "alternate-nostril-breaths"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Calmness",
-      "slug": "calmness",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Alternate-nostril breaths",
-          "slug": "alternate-nostril-breaths"
-        },
-        {
-          "title": "Trace an object",
-          "slug": "trace-an-object"
-        },
-        {
-          "title": "Peripheral vision soften",
-          "slug": "peripheral-vision-soften"
-        },
-        {
-          "title": "Count backward from 30",
-          "slug": "count-backward-from-30"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Focus",
-      "slug": "focus",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Count 20 exhalations",
-          "slug": "count-20-exhalations"
-        },
-        {
-          "title": "Soft-gaze minute",
-          "slug": "soft-gaze-minute"
-        },
-        {
-          "title": "Color hunt",
-          "slug": "color-hunt"
-        },
-        {
-          "title": "Trace an object",
-          "slug": "trace-an-object"
-        },
-        {
-          "title": "Circle the priority",
-          "slug": "circle-the-priority"
-        },
-        {
-          "title": "Turn on Do Not Disturb",
-          "slug": "turn-on-do-not-disturb"
-        },
-        {
-          "title": "Phone face-down",
-          "slug": "phone-face-down"
-        },
-        {
-          "title": "Peripheral vision soften",
-          "slug": "peripheral-vision-soften"
-        },
-        {
-          "title": "Count backward from 30",
-          "slug": "count-backward-from-30"
-        },
-        {
-          "title": "Three shapes doodle",
-          "slug": "three-shapes-doodle"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Recovery",
-      "slug": "recovery",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Legs up the wall",
-          "slug": "legs-up-the-wall"
-        },
-        {
-          "title": "Two-minute eye rest",
-          "slug": "two-minute-eye-rest"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Orientation",
-      "slug": "orientation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "5-4-3-2-1 check",
-          "slug": "5-4-3-2-1-check"
-        },
-        {
-          "title": "Step outside briefly",
-          "slug": "step-outside-briefly"
-        },
-        {
-          "title": "Open the blinds",
-          "slug": "open-the-blinds"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Play",
-      "slug": "play",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Color hunt",
-          "slug": "color-hunt"
-        },
-        {
-          "title": "One-minute doodle",
-          "slug": "one-minute-doodle"
-        },
-        {
-          "title": "Haiku in a minute",
-          "slug": "haiku-in-a-minute"
-        },
-        {
-          "title": "Three shapes doodle",
-          "slug": "three-shapes-doodle"
-        },
-        {
-          "title": "One-foot balance",
-          "slug": "one-foot-balance"
-        },
-        {
-          "title": "Future-walk sketch",
-          "slug": "future-walk-sketch"
-        },
-        {
-          "title": "Micro-celebration",
-          "slug": "micro-celebration"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Discovery",
-      "slug": "discovery",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Color hunt",
-          "slug": "color-hunt"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Freshness",
-      "slug": "freshness",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Window minute",
-          "slug": "window-minute"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Connection with Nature",
-      "slug": "connection-with-nature",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Barefoot on grass",
-          "slug": "barefoot-on-grass"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Awe",
-      "slug": "awe",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Sky glance",
-          "slug": "sky-glance"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Perspective",
-      "slug": "perspective",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Sky glance",
-          "slug": "sky-glance"
-        },
-        {
-          "title": "Name what’s outside control",
-          "slug": "name-what-s-outside-control"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Awareness",
-      "slug": "awareness",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Name three sounds",
-          "slug": "name-three-sounds"
-        },
-        {
-          "title": "Body scan (30 sec)",
-          "slug": "body-scan-30-sec"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Expression",
-      "slug": "self-expression",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "One-minute doodle",
-          "slug": "one-minute-doodle"
-        },
-        {
-          "title": "Write three sentences",
-          "slug": "write-three-sentences"
-        },
-        {
-          "title": "Haiku in a minute",
-          "slug": "haiku-in-a-minute"
-        },
-        {
-          "title": "Two-sentence story",
-          "slug": "two-sentence-story"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Creativity",
-      "slug": "creativity",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "One-minute doodle",
-          "slug": "one-minute-doodle"
-        },
-        {
-          "title": "Haiku in a minute",
-          "slug": "haiku-in-a-minute"
-        },
-        {
-          "title": "Needs → strategies map",
-          "slug": "needs-strategies-map"
-        },
-        {
-          "title": "Three shapes doodle",
-          "slug": "three-shapes-doodle"
-        },
-        {
-          "title": "Two-sentence story",
-          "slug": "two-sentence-story"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Connection",
-      "slug": "self-connection",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Name three needs alive",
-          "slug": "name-three-needs-alive"
-        },
-        {
-          "title": "Trace your hand",
-          "slug": "trace-your-hand"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Meaning",
-      "slug": "meaning",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Name three needs alive",
-          "slug": "name-three-needs-alive"
-        },
-        {
-          "title": "Translate a “should”",
-          "slug": "translate-a-should"
-        },
-        {
-          "title": "Name → need link",
-          "slug": "name-need-link"
-        },
-        {
-          "title": "Five gratitudes by need",
-          "slug": "five-gratitudes-by-need"
-        },
-        {
-          "title": "Trace your hand",
-          "slug": "trace-your-hand"
-        },
-        {
-          "title": "Two-sentence story",
-          "slug": "two-sentence-story"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Learning",
-      "slug": "learning",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Observation only",
-          "slug": "observation-only"
-        },
-        {
-          "title": "Name → need link",
-          "slug": "name-need-link"
-        },
-        {
-          "title": "Read one paragraph",
-          "slug": "read-one-paragraph"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Compassion",
-      "slug": "self-compassion",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Unsended appreciation",
-          "slug": "unsended-appreciation"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Direction",
-      "slug": "direction",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Circle the priority",
-          "slug": "circle-the-priority"
-        },
-        {
-          "title": "Value compass card",
-          "slug": "value-compass-card"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Power-with",
-      "slug": "power-with",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Name a limit kindly",
-          "slug": "name-a-limit-kindly"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Mutual Understanding",
-      "slug": "mutual-understanding",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Ask for specifics",
-          "slug": "ask-for-specifics"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Simplicity",
-      "slug": "simplicity",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "One thing off today",
-          "slug": "one-thing-off-today"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Spaciousness",
-      "slug": "spaciousness",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Peripheral vision soften",
-          "slug": "peripheral-vision-soften"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Sensory Nourishment",
-      "slug": "sensory-nourishment",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Texture touch",
-          "slug": "texture-touch"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Curiosity",
-      "slug": "curiosity",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Texture touch",
-          "slug": "texture-touch"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Energy",
-      "slug": "energy",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Open the blinds",
-          "slug": "open-the-blinds"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Care",
-      "slug": "care",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Fresh socks",
-          "slug": "fresh-socks"
-        },
-        {
-          "title": "One kind text",
-          "slug": "one-kind-text"
-        },
-        {
-          "title": "Kind comment online",
-          "slug": "kind-comment-online"
-        },
-        {
-          "title": "Choose a supportive spot",
-          "slug": "choose-a-supportive-spot"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Dignity",
-      "slug": "dignity",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Posture reset",
-          "slug": "posture-reset"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Acceptance",
-      "slug": "self-acceptance",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Mirror kindness",
-          "slug": "mirror-kindness"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Abundance",
-      "slug": "abundance",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Five gratitudes by need",
-          "slug": "five-gratitudes-by-need"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Mental Space",
-      "slug": "mental-space",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Parking-lot note",
-          "slug": "parking-lot-note"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Progress",
-      "slug": "progress",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "One next tiny step",
-          "slug": "one-next-tiny-step"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Competence",
-      "slug": "competence",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "One next tiny step",
-          "slug": "one-next-tiny-step"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Anticipation",
-      "slug": "anticipation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Mark a date on a calendar",
-          "slug": "mark-a-date-on-a-calendar"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Structure",
-      "slug": "structure",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Mark a date on a calendar",
-          "slug": "mark-a-date-on-a-calendar"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Knowledge",
-      "slug": "self-knowledge",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Self-check scale",
-          "slug": "self-check-scale"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Agency",
-      "slug": "agency",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Name what’s within control",
-          "slug": "name-what-s-within-control"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Self-Care",
-      "slug": "self-care",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Choose a gentler word",
-          "slug": "choose-a-gentler-word"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Compassion",
-      "slug": "compassion",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Choose a gentler word",
-          "slug": "choose-a-gentler-word"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Exploration",
-      "slug": "exploration",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Future-walk sketch",
-          "slug": "future-walk-sketch"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Stimulation",
-      "slug": "stimulation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Read one paragraph",
-          "slug": "read-one-paragraph"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Flow",
-      "slug": "flow",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "One gentle stretch chain",
-          "slug": "one-gentle-stretch-chain"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Preparation",
-      "slug": "preparation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Senses first aid kit",
-          "slug": "senses-first-aid-kit"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Deliberation",
-      "slug": "deliberation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Three breaths before reply",
-          "slug": "three-breaths-before-reply"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Containment",
-      "slug": "containment",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Put it on paper",
-          "slug": "put-it-on-paper"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Motivation",
-      "slug": "motivation",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Micro-celebration",
-          "slug": "micro-celebration"
-        }
-      ],
-      "situations": [],
-      "feelings": []
-    },
-    {
-      "title": "Practice",
-      "slug": "practice",
-      "category": "",
-      "description": "",
-      "strategies": [
-        {
-          "title": "Return to body cue",
-          "slug": "return-to-body-cue"
-        }
-      ],
-      "situations": [],
-      "feelings": []
     }
   ],
   "situations": [
@@ -12226,58 +11006,19 @@
       "title": "Sip water slowly",
       "slug": "sip-water-slowly",
       "description": "Pause and take ten tiny sips, noticing the temperature and sensation.",
-      "needs": [
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
-        },
-        {
-          "title": "Ease",
-          "slug": "ease"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Neck release",
       "slug": "neck-release",
       "description": "Roll your head in small circles; then tilt ear to shoulder for three breaths each side.",
-      "needs": [
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
-          "title": "Relief",
-          "slug": "relief"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Shoulder rolls",
       "slug": "shoulder-rolls",
       "description": "Roll shoulders forward ten times, then back ten times, noticing any change.",
-      "needs": [
-        {
-          "title": "Relief",
-          "slug": "relief"
-        },
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Shake for 30 seconds",
@@ -12285,16 +11026,8 @@
       "description": "Set a timer and gently shake arms, hands, and legs to discharge tension.",
       "needs": [
         {
-          "title": "Relief",
-          "slug": "relief"
-        },
-        {
           "title": "Freedom",
           "slug": "freedom"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -12302,20 +11035,7 @@
       "title": "Wall push-ups",
       "slug": "wall-push-ups",
       "description": "Do five slow wall push-ups; feel your strength and breathing.",
-      "needs": [
-        {
-          "title": "Strength",
-          "slug": "strength"
-        },
-        {
-          "title": "Effectiveness",
-          "slug": "effectiveness"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Back to wall lean",
@@ -12325,14 +11045,6 @@
         {
           "title": "Safety",
           "slug": "safety"
-        },
-        {
-          "title": "Grounding",
-          "slug": "grounding"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -12341,10 +11053,6 @@
       "slug": "butterfly-taps",
       "description": "Cross arms over chest and tap alternately left/right for 60 seconds.",
       "needs": [
-        {
-          "title": "Self-Soothing",
-          "slug": "self-soothing"
-        },
         {
           "title": "Safety",
           "slug": "safety"
@@ -12367,10 +11075,6 @@
         {
           "title": "Peace",
           "slug": "peace"
-        },
-        {
-          "title": "Ease",
-          "slug": "ease"
         }
       ]
     },
@@ -12382,14 +11086,6 @@
         {
           "title": "Peace",
           "slug": "peace"
-        },
-        {
-          "title": "Stability",
-          "slug": "stability"
-        },
-        {
-          "title": "Regulation",
-          "slug": "regulation"
         }
       ]
     },
@@ -12405,10 +11101,6 @@
         {
           "title": "Rest",
           "slug": "rest"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -12418,16 +11110,8 @@
       "description": "Gently alternate closing nostrils; breathe through one, then the other.",
       "needs": [
         {
-          "title": "Balance",
-          "slug": "balance"
-        },
-        {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Calmness",
-          "slug": "calmness"
         }
       ]
     },
@@ -12436,14 +11120,6 @@
       "slug": "count-20-exhalations",
       "description": "Silently count only the out-breaths from 1 to 20. If you lose count, restart.",
       "needs": [
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
-        },
         {
           "title": "Peace",
           "slug": "peace"
@@ -12458,14 +11134,6 @@
         {
           "title": "Rest",
           "slug": "rest"
-        },
-        {
-          "title": "Recovery",
-          "slug": "recovery"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -12494,16 +11162,8 @@
       "description": "Choose one spot and rest your gaze there for 60 seconds.",
       "needs": [
         {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
           "title": "Peace",
           "slug": "peace"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
         }
       ]
     },
@@ -12512,10 +11172,6 @@
       "slug": "5-4-3-2-1-check",
       "description": "Name 5 things you see, 4 feel, 3 hear, 2 smell, 1 taste.",
       "needs": [
-        {
-          "title": "Orientation",
-          "slug": "orientation"
-        },
         {
           "title": "Safety",
           "slug": "safety"
@@ -12530,20 +11186,7 @@
       "title": "Color hunt",
       "slug": "color-hunt",
       "description": "Pick one color and find five items of that color around you.",
-      "needs": [
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Discovery",
-          "slug": "discovery"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Window minute",
@@ -12551,16 +11194,8 @@
       "description": "Open a window and take five fuller breaths of outside air.",
       "needs": [
         {
-          "title": "Freshness",
-          "slug": "freshness"
-        },
-        {
           "title": "Space",
           "slug": "space"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -12570,16 +11205,8 @@
       "description": "Step outside (or to a doorway) and notice temperature and light.",
       "needs": [
         {
-          "title": "Orientation",
-          "slug": "orientation"
-        },
-        {
           "title": "Space",
           "slug": "space"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
         }
       ]
     },
@@ -12589,16 +11216,8 @@
       "description": "Place both feet flat; press toes, heels, edges; notice contact.",
       "needs": [
         {
-          "title": "Grounding",
-          "slug": "grounding"
-        },
-        {
           "title": "Safety",
           "slug": "safety"
-        },
-        {
-          "title": "Stability",
-          "slug": "stability"
         }
       ]
     },
@@ -12606,20 +11225,7 @@
       "title": "Barefoot on grass",
       "slug": "barefoot-on-grass",
       "description": "If available, stand barefoot on grass or carpet for 30 seconds.",
-      "needs": [
-        {
-          "title": "Connection with Nature",
-          "slug": "connection-with-nature"
-        },
-        {
-          "title": "Grounding",
-          "slug": "grounding"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Hold something cool",
@@ -12627,16 +11233,8 @@
       "description": "Hold a cool object or an ice cube and notice the sensation for 20 seconds.",
       "needs": [
         {
-          "title": "Grounding",
-          "slug": "grounding"
-        },
-        {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Relief",
-          "slug": "relief"
         }
       ]
     },
@@ -12645,14 +11243,6 @@
       "slug": "sky-glance",
       "description": "Look up at the sky and track one cloud or patch of blue for 30 seconds.",
       "needs": [
-        {
-          "title": "Awe",
-          "slug": "awe"
-        },
-        {
-          "title": "Perspective",
-          "slug": "perspective"
-        },
         {
           "title": "Peace",
           "slug": "peace"
@@ -12665,16 +11255,8 @@
       "description": "Listen and name three distinct sounds near or far.",
       "needs": [
         {
-          "title": "Awareness",
-          "slug": "awareness"
-        },
-        {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
         }
       ]
     },
@@ -12683,14 +11265,6 @@
       "slug": "trace-an-object",
       "description": "With your finger, trace the outline of any object slowly.",
       "needs": [
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Calmness",
-          "slug": "calmness"
-        },
         {
           "title": "Beauty",
           "slug": "beauty"
@@ -12701,20 +11275,7 @@
       "title": "One-minute doodle",
       "slug": "one-minute-doodle",
       "description": "Draw lines, dots, or shapes continuously for 60 seconds.",
-      "needs": [
-        {
-          "title": "Self-Expression",
-          "slug": "self-expression"
-        },
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Creativity",
-          "slug": "creativity"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Write three sentences",
@@ -12728,10 +11289,6 @@
         {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Self-Expression",
-          "slug": "self-expression"
         }
       ]
     },
@@ -12739,20 +11296,7 @@
       "title": "Haiku in a minute",
       "slug": "haiku-in-a-minute",
       "description": "Write a 5-7-5 poem about what you notice.",
-      "needs": [
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Creativity",
-          "slug": "creativity"
-        },
-        {
-          "title": "Self-Expression",
-          "slug": "self-expression"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Name three needs alive",
@@ -12760,16 +11304,8 @@
       "description": "Write down three needs that feel alive for you in this moment.",
       "needs": [
         {
-          "title": "Self-Connection",
-          "slug": "self-connection"
-        },
-        {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Meaning",
-          "slug": "meaning"
         }
       ]
     },
@@ -12785,10 +11321,6 @@
         {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Learning",
-          "slug": "learning"
         }
       ]
     },
@@ -12804,10 +11336,6 @@
         {
           "title": "Integrity",
           "slug": "integrity"
-        },
-        {
-          "title": "Meaning",
-          "slug": "meaning"
         }
       ]
     },
@@ -12816,10 +11344,6 @@
       "slug": "micro-request-to-self",
       "description": "Write one tiny, do-now request you can meet in 2 minutes.",
       "needs": [
-        {
-          "title": "Effectiveness",
-          "slug": "effectiveness"
-        },
         {
           "title": "Autonomy",
           "slug": "autonomy"
@@ -12842,10 +11366,6 @@
         {
           "title": "Recognition",
           "slug": "recognition"
-        },
-        {
-          "title": "Self-Compassion",
-          "slug": "self-compassion"
         }
       ]
     },
@@ -12861,10 +11381,6 @@
         {
           "title": "Autonomy",
           "slug": "autonomy"
-        },
-        {
-          "title": "Creativity",
-          "slug": "creativity"
         }
       ]
     },
@@ -12876,14 +11392,6 @@
         {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Direction",
-          "slug": "direction"
         }
       ]
     },
@@ -12899,10 +11407,6 @@
         {
           "title": "Respect",
           "slug": "respect"
-        },
-        {
-          "title": "Power-with",
-          "slug": "power-with"
         }
       ]
     },
@@ -12952,14 +11456,6 @@
         {
           "title": "Clarity",
           "slug": "clarity"
-        },
-        {
-          "title": "Effectiveness",
-          "slug": "effectiveness"
-        },
-        {
-          "title": "Mutual Understanding",
-          "slug": "mutual-understanding"
         }
       ]
     },
@@ -12968,10 +11464,6 @@
       "slug": "turn-on-do-not-disturb",
       "description": "Set DND for 10 minutes; return when the timer ends.",
       "needs": [
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
         {
           "title": "Peace",
           "slug": "peace"
@@ -12988,10 +11480,6 @@
       "description": "Place phone face-down/out of reach for five minutes.",
       "needs": [
         {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
           "title": "Autonomy",
           "slug": "autonomy"
         },
@@ -13007,14 +11495,6 @@
       "description": "Choose one nonessential thing you will not do today.",
       "needs": [
         {
-          "title": "Simplicity",
-          "slug": "simplicity"
-        },
-        {
-          "title": "Ease",
-          "slug": "ease"
-        },
-        {
           "title": "Autonomy",
           "slug": "autonomy"
         }
@@ -13028,14 +11508,6 @@
         {
           "title": "Rest",
           "slug": "rest"
-        },
-        {
-          "title": "Recovery",
-          "slug": "recovery"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -13043,58 +11515,19 @@
       "title": "Jaw unclench",
       "slug": "jaw-unclench",
       "description": "Place tongue on the floor of your mouth; relax jaw for 10 breaths.",
-      "needs": [
-        {
-          "title": "Relief",
-          "slug": "relief"
-        },
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Peripheral vision soften",
       "slug": "peripheral-vision-soften",
       "description": "Widen your visual field to the edges for 30 seconds.",
-      "needs": [
-        {
-          "title": "Calmness",
-          "slug": "calmness"
-        },
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Spaciousness",
-          "slug": "spaciousness"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Gentle sway",
       "slug": "gentle-sway",
       "description": "Stand or sit and sway side-to-side with your breath.",
-      "needs": [
-        {
-          "title": "Regulation",
-          "slug": "regulation"
-        },
-        {
-          "title": "Ease",
-          "slug": "ease"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Slow-walk 60 seconds",
@@ -13102,16 +11535,8 @@
       "description": "Walk deliberately slowly for one minute, feeling each step.",
       "needs": [
         {
-          "title": "Presence",
-          "slug": "presence"
-        },
-        {
           "title": "Peace",
           "slug": "peace"
-        },
-        {
-          "title": "Grounding",
-          "slug": "grounding"
         }
       ]
     },
@@ -13119,30 +11544,13 @@
       "title": "Texture touch",
       "slug": "texture-touch",
       "description": "Touch wood, fabric, or stone; describe the texture to yourself.",
-      "needs": [
-        {
-          "title": "Sensory Nourishment",
-          "slug": "sensory-nourishment"
-        },
-        {
-          "title": "Grounding",
-          "slug": "grounding"
-        },
-        {
-          "title": "Curiosity",
-          "slug": "curiosity"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Wrap in a blanket",
       "slug": "wrap-in-a-blanket",
       "description": "Wrap shoulders and torso; notice warmth and weight.",
       "needs": [
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
         {
           "title": "Safety",
           "slug": "safety"
@@ -13163,10 +11571,6 @@
           "slug": "support"
         },
         {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
           "title": "Rest",
           "slug": "rest"
         }
@@ -13178,16 +11582,8 @@
       "description": "Increase or dim the light to suit your body right now.",
       "needs": [
         {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
           "title": "Choice",
           "slug": "choice"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
         }
       ]
     },
@@ -13199,14 +11595,6 @@
         {
           "title": "Beauty",
           "slug": "beauty"
-        },
-        {
-          "title": "Energy",
-          "slug": "energy"
-        },
-        {
-          "title": "Orientation",
-          "slug": "orientation"
         }
       ]
     },
@@ -13214,39 +11602,13 @@
       "title": "Fresh socks",
       "slug": "fresh-socks",
       "description": "Change into clean or cozy socks for a reset.",
-      "needs": [
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        },
-        {
-          "title": "Care",
-          "slug": "care"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Posture reset",
       "slug": "posture-reset",
       "description": "Sit or stand tall; lengthen spine; soften shoulders.",
-      "needs": [
-        {
-          "title": "Dignity",
-          "slug": "dignity"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "One kind text",
@@ -13256,10 +11618,6 @@
         {
           "title": "Connection",
           "slug": "connection"
-        },
-        {
-          "title": "Care",
-          "slug": "care"
         },
         {
           "title": "Mutuality",
@@ -13298,10 +11656,6 @@
         {
           "title": "Community",
           "slug": "community"
-        },
-        {
-          "title": "Care",
-          "slug": "care"
         }
       ]
     },
@@ -13315,10 +11669,6 @@
           "slug": "recognition"
         },
         {
-          "title": "Self-Acceptance",
-          "slug": "self-acceptance"
-        },
-        {
           "title": "Respect",
           "slug": "respect"
         }
@@ -13328,34 +11678,13 @@
       "title": "Count backward from 30",
       "slug": "count-backward-from-30",
       "description": "Count down slowly; notice your breath syncing with the count.",
-      "needs": [
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Calmness",
-          "slug": "calmness"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Name → need link",
       "slug": "name-need-link",
       "description": "Write one sentence: “When I did/experienced __, the need was __.”",
       "needs": [
-        {
-          "title": "Meaning",
-          "slug": "meaning"
-        },
-        {
-          "title": "Learning",
-          "slug": "learning"
-        },
         {
           "title": "Clarity",
           "slug": "clarity"
@@ -13370,14 +11699,6 @@
         {
           "title": "Appreciation",
           "slug": "appreciation"
-        },
-        {
-          "title": "Abundance",
-          "slug": "abundance"
-        },
-        {
-          "title": "Meaning",
-          "slug": "meaning"
         }
       ]
     },
@@ -13387,16 +11708,8 @@
       "description": "Make a note titled “Parking Lot” and park one worry there.",
       "needs": [
         {
-          "title": "Ease",
-          "slug": "ease"
-        },
-        {
           "title": "Order",
           "slug": "order"
-        },
-        {
-          "title": "Mental Space",
-          "slug": "mental-space"
         }
       ]
     },
@@ -13404,20 +11717,7 @@
       "title": "One next tiny step",
       "slug": "one-next-tiny-step",
       "description": "Choose the smallest next step on something and do only that.",
-      "needs": [
-        {
-          "title": "Progress",
-          "slug": "progress"
-        },
-        {
-          "title": "Effectiveness",
-          "slug": "effectiveness"
-        },
-        {
-          "title": "Competence",
-          "slug": "competence"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Calendar one thing",
@@ -13443,14 +11743,6 @@
       "slug": "mark-a-date-on-a-calendar",
       "description": "Circle a meaningful upcoming date (rest day, call, walk).",
       "needs": [
-        {
-          "title": "Anticipation",
-          "slug": "anticipation"
-        },
-        {
-          "title": "Structure",
-          "slug": "structure"
-        },
         {
           "title": "Order",
           "slug": "order"
@@ -13486,10 +11778,6 @@
           "slug": "clarity"
         },
         {
-          "title": "Self-Knowledge",
-          "slug": "self-knowledge"
-        },
-        {
           "title": "Honesty",
           "slug": "honesty"
         }
@@ -13501,14 +11789,6 @@
       "description": "Scan from toes to head naming neutral sensations only.",
       "needs": [
         {
-          "title": "Awareness",
-          "slug": "awareness"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
-        },
-        {
           "title": "Peace",
           "slug": "peace"
         }
@@ -13518,34 +11798,13 @@
       "title": "Three shapes doodle",
       "slug": "three-shapes-doodle",
       "description": "Draw one circle, one triangle, one square repeatedly for a minute.",
-      "needs": [
-        {
-          "title": "Focus",
-          "slug": "focus"
-        },
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Creativity",
-          "slug": "creativity"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Trace your hand",
       "slug": "trace-your-hand",
       "description": "Outline your hand and write a need in each finger.",
       "needs": [
-        {
-          "title": "Self-Connection",
-          "slug": "self-connection"
-        },
-        {
-          "title": "Meaning",
-          "slug": "meaning"
-        },
         {
           "title": "Clarity",
           "slug": "clarity"
@@ -13556,20 +11815,7 @@
       "title": "One-foot balance",
       "slug": "one-foot-balance",
       "description": "Stand on one foot near support for 20–30 seconds.",
-      "needs": [
-        {
-          "title": "Grounding",
-          "slug": "grounding"
-        },
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Breath with steps",
@@ -13577,16 +11823,8 @@
       "description": "Take ten steps; inhale for two steps, exhale for three.",
       "needs": [
         {
-          "title": "Regulation",
-          "slug": "regulation"
-        },
-        {
           "title": "Peace",
           "slug": "peace"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
         }
       ]
     },
@@ -13595,10 +11833,6 @@
       "slug": "name-what-s-within-control",
       "description": "List three things within your influence today.",
       "needs": [
-        {
-          "title": "Agency",
-          "slug": "agency"
-        },
         {
           "title": "Clarity",
           "slug": "clarity"
@@ -13621,10 +11855,6 @@
         {
           "title": "Peace",
           "slug": "peace"
-        },
-        {
-          "title": "Perspective",
-          "slug": "perspective"
         }
       ]
     },
@@ -13636,14 +11866,6 @@
         {
           "title": "Respect",
           "slug": "respect"
-        },
-        {
-          "title": "Self-Care",
-          "slug": "self-care"
-        },
-        {
-          "title": "Compassion",
-          "slug": "compassion"
         }
       ]
     },
@@ -13652,14 +11874,6 @@
       "slug": "future-walk-sketch",
       "description": "Pick a nearby block on a map and sketch a simple future walking loop.",
       "needs": [
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Exploration",
-          "slug": "exploration"
-        },
         {
           "title": "Autonomy",
           "slug": "autonomy"
@@ -13691,10 +11905,6 @@
       "description": "Write five values/needs on a card/note you can glance at.",
       "needs": [
         {
-          "title": "Direction",
-          "slug": "direction"
-        },
-        {
           "title": "Integrity",
           "slug": "integrity"
         },
@@ -13708,20 +11918,7 @@
       "title": "Two-sentence story",
       "slug": "two-sentence-story",
       "description": "Write a two-sentence story about today from your own point of view.",
-      "needs": [
-        {
-          "title": "Self-Expression",
-          "slug": "self-expression"
-        },
-        {
-          "title": "Meaning",
-          "slug": "meaning"
-        },
-        {
-          "title": "Creativity",
-          "slug": "creativity"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Read one paragraph",
@@ -13729,16 +11926,8 @@
       "description": "Read one paragraph from any nonfiction page you have nearby.",
       "needs": [
         {
-          "title": "Learning",
-          "slug": "learning"
-        },
-        {
           "title": "Growth",
           "slug": "growth"
-        },
-        {
-          "title": "Stimulation",
-          "slug": "stimulation"
         }
       ]
     },
@@ -13746,39 +11935,13 @@
       "title": "One gentle stretch chain",
       "slug": "one-gentle-stretch-chain",
       "description": "Reach up, fold forward, roll up—three times, slowly.",
-      "needs": [
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        },
-        {
-          "title": "Flow",
-          "slug": "flow"
-        },
-        {
-          "title": "Relief",
-          "slug": "relief"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Senses first aid kit",
       "slug": "senses-first-aid-kit",
       "description": "List one favorite sight, sound, taste, touch, and smell you can access easily.",
-      "needs": [
-        {
-          "title": "Preparation",
-          "slug": "preparation"
-        },
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
-          "title": "Ease",
-          "slug": "ease"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Name a want & a don’t",
@@ -13809,10 +11972,6 @@
           "slug": "consideration"
         },
         {
-          "title": "Deliberation",
-          "slug": "deliberation"
-        },
-        {
           "title": "Peace",
           "slug": "peace"
         }
@@ -13824,14 +11983,6 @@
       "description": "Write a worry on paper and place it in an envelope or book.",
       "needs": [
         {
-          "title": "Relief",
-          "slug": "relief"
-        },
-        {
-          "title": "Containment",
-          "slug": "containment"
-        },
-        {
           "title": "Order",
           "slug": "order"
         }
@@ -13841,20 +11992,7 @@
       "title": "Choose a supportive spot",
       "slug": "choose-a-supportive-spot",
       "description": "Move to a seat with back support or softer light.",
-      "needs": [
-        {
-          "title": "Comfort",
-          "slug": "comfort"
-        },
-        {
-          "title": "Care",
-          "slug": "care"
-        },
-        {
-          "title": "Physical Well-Being",
-          "slug": "physical-well-being"
-        }
-      ]
+      "needs": []
     },
     {
       "title": "Micro-celebration",
@@ -13864,14 +12002,6 @@
         {
           "title": "Recognition",
           "slug": "recognition"
-        },
-        {
-          "title": "Play",
-          "slug": "play"
-        },
-        {
-          "title": "Motivation",
-          "slug": "motivation"
         }
       ]
     },
@@ -13898,20 +12028,7 @@
       "title": "Return to body cue",
       "slug": "return-to-body-cue",
       "description": "Set a simple cue (e.g., every doorframe = one deep breath) for today only.",
-      "needs": [
-        {
-          "title": "Practice",
-          "slug": "practice"
-        },
-        {
-          "title": "Presence",
-          "slug": "presence"
-        },
-        {
-          "title": "Stability",
-          "slug": "stability"
-        }
-      ]
+      "needs": []
     }
   ]
 }
