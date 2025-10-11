@@ -16,6 +16,7 @@ const state = {
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.inventory = loadInventory();
+  highlightNavigation();
   updateInventoryCount();
   setupNeedPage();
   setupInventoryPage();
@@ -291,6 +292,70 @@ function setupInventoryPage() {
       }
     });
   }
+}
+
+function highlightNavigation() {
+  const navLinks = Array.from(document.querySelectorAll('.site-nav__link'));
+  if (!navLinks.length) {
+    return;
+  }
+
+  const currentPath = normalizePath(window.location.pathname);
+  let activeLink = null;
+  let longestMatch = 0;
+
+  const entries = navLinks.map((link) => {
+    link.removeAttribute('aria-current');
+    const href = link.getAttribute('href');
+    if (!href) {
+      return { link, linkPath: null };
+    }
+
+    const linkPath = normalizePath(new URL(href, window.location.origin).pathname);
+    return { link, linkPath };
+  });
+
+  entries.forEach(({ link, linkPath }) => {
+    if (!linkPath) {
+      return;
+    }
+
+    if (linkPath === '/' && currentPath !== '/') {
+      return;
+    }
+
+    if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
+      if (linkPath.length > longestMatch) {
+        activeLink = link;
+        longestMatch = linkPath.length;
+      }
+    }
+  });
+
+  if (!activeLink && currentPath.includes('/alexithymia-support/')) {
+    activeLink = entries.find(({ linkPath }) => linkPath === '/feelings/')?.link || null;
+  }
+
+  if (activeLink) {
+    activeLink.setAttribute('aria-current', 'page');
+  }
+}
+
+function normalizePath(pathname) {
+  if (!pathname) {
+    return '/';
+  }
+
+  let normalized = pathname.replace(/index\.html$/i, '');
+  if (!normalized.endsWith('/')) {
+    normalized += '/';
+  }
+
+  if (!normalized.startsWith('/')) {
+    normalized = `/${normalized}`;
+  }
+
+  return normalized === '//' ? '/' : normalized;
 }
 
 function captureNeedsFromForm() {
