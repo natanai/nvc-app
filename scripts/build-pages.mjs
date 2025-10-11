@@ -295,7 +295,6 @@ function renderFeeling(item) {
       <header class="page-header">
         <h1 class="page-title">Feeling: ${escapeHtml(item.title)}</h1>
       </header>
-      ${renderPillGroup('Situations', item.situations, 'situations')}
       ${renderPillGroup('Needs', item.needs, 'needs')}
     `;
 
