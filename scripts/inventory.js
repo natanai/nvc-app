@@ -378,8 +378,13 @@ function highlightNavigation() {
       return { link, linkPath: null };
     }
 
-    const linkPath = normalizePath(new URL(href, window.location.origin).pathname);
-    return { link, linkPath };
+    try {
+      const linkUrl = new URL(href, window.location.href);
+      const linkPath = normalizePath(linkUrl.pathname);
+      return { link, linkPath };
+    } catch (error) {
+      return { link, linkPath: null };
+    }
   });
 
   entries.forEach(({ link, linkPath }) => {
@@ -432,14 +437,17 @@ function resolveSectionAlias(pathname) {
     return null;
   }
 
-  if (SECTION_ALIASES.has(pathname)) {
-    return SECTION_ALIASES.get(pathname);
-  }
-
   for (const [pattern, target] of SECTION_ALIASES.entries()) {
-    if (pathname.startsWith(pattern)) {
-      return target;
+    const normalizedPattern = normalizePath(pattern);
+    const normalizedTarget = normalizePath(target);
+
+    const patternIndex = pathname.indexOf(normalizedPattern);
+    if (patternIndex === -1) {
+      continue;
     }
+
+    const prefix = pathname.slice(0, patternIndex);
+    return normalizePath(`${prefix}${normalizedTarget}`);
   }
 
   return null;
