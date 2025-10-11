@@ -291,8 +291,10 @@ button,
 
 .floating-scroll-button {
   position: fixed;
-  right: clamp(1rem, 4vw, 2rem);
-  bottom: clamp(1.2rem, 5vw, 2.5rem);
+  --floating-scroll-bottom: clamp(1.2rem, 5vw, 2.5rem);
+  --floating-scroll-horizontal: clamp(1rem, 4vw, 2rem);
+  right: var(--floating-scroll-horizontal);
+  bottom: var(--floating-scroll-bottom);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -318,6 +320,10 @@ button,
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+body.has-palette-corner .floating-scroll-button {
+  bottom: calc(var(--floating-scroll-bottom) + clamp(3.8rem, 8vw, 4.8rem));
 }
 
 @media (prefers-reduced-motion: reduce) {
