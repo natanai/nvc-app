@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.inventory = loadInventory();
   updateInventoryCount();
-  enhanceTagPickers();
   setupNeedPage();
   setupInventoryPage();
 });
@@ -133,13 +132,7 @@ function setupInventoryPage() {
         return;
       }
 
-      const tags = formData
-        .getAll('tags')
-        .map((value) => value.toString())
-        .filter(Boolean);
-      if (!tags.includes(needSlug)) {
-        tags.push(needSlug);
-      }
+      const tags = needSlug ? [needSlug] : [];
 
       const needTitle = state.needsBySlug.get(needSlug)?.title || needSlug;
 
@@ -163,6 +156,10 @@ function setupInventoryPage() {
         inventoryMessage: `Added “${title}” to your inventory.`,
       });
       form.reset();
+      const needSelect = form.querySelector('#inventory-need');
+      if (needSelect) {
+        needSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     });
   }
 
@@ -331,13 +328,16 @@ function renderInventoryList() {
     extras.push(entry);
   });
 
+  let openedNeed = false;
+
   state.needs.forEach((need) => {
     const entries = grouped.get(need.slug) || [];
     const details = document.createElement('details');
     details.className = 'inventory-need';
     details.id = `inventory-${need.slug}`;
-    if (entries.length) {
+    if (entries.length && !openedNeed) {
       details.open = true;
+      openedNeed = true;
     }
 
     const summary = document.createElement('summary');
@@ -379,7 +379,10 @@ function renderInventoryList() {
     const details = document.createElement('details');
     details.className = 'inventory-need inventory-need--extra';
     details.id = 'inventory-uncategorized';
-    details.open = true;
+    if (!openedNeed) {
+      details.open = true;
+      openedNeed = true;
+    }
 
     const summary = document.createElement('summary');
     summary.className = 'inventory-need__summary';
@@ -766,186 +769,6 @@ function findNeedSlugByTitle(title) {
     }
   }
   return '';
-}
-
-function enhanceTagPickers() {
-  const pickers = document.querySelectorAll('[data-tag-picker]');
-  pickers.forEach((picker) => {
-    if (picker.dataset.enhanced === 'true') {
-      return;
-    }
-
-    const toggle = picker.querySelector('[data-tag-picker-toggle]');
-    const panel = picker.querySelector('[data-tag-picker-panel]');
-    const searchInput = picker.querySelector('[data-tag-picker-search]');
-    const selectedContainer = picker.querySelector('[data-tag-picker-selected]');
-    const checkboxes = Array.from(picker.querySelectorAll('.tag-pill__checkbox'));
-    const toggleLabel = picker.querySelector('[data-tag-picker-toggle-label]');
-
-    if (!toggle || !panel || !selectedContainer || !checkboxes.length) {
-      return;
-    }
-
-    picker.dataset.enhanced = 'true';
-
-    const labels = checkboxes.map((checkbox) => checkbox.closest('.tag-pill'));
-    labels.forEach((label) => {
-      if (!label) {
-        return;
-      }
-      const text = label.textContent?.trim().toLowerCase() || '';
-      label.dataset.label = text;
-    });
-
-    const closePanel = () => {
-      if (panel.hidden) {
-        return;
-      }
-      panel.hidden = true;
-      toggle.setAttribute('aria-expanded', 'false');
-    };
-
-    const openPanel = () => {
-      if (!panel.hidden) {
-        return;
-      }
-      panel.hidden = false;
-      toggle.setAttribute('aria-expanded', 'true');
-      if (searchInput) {
-        searchInput.focus();
-        searchInput.select();
-      } else {
-        const firstCheckbox = checkboxes.find((checkbox) => !checkbox.closest('.tag-pill')?.hidden);
-        firstCheckbox?.focus();
-      }
-    };
-
-    const handleDocumentClick = (event) => {
-      if (!picker.contains(event.target)) {
-        closePanel();
-      }
-    };
-
-    document.addEventListener('click', handleDocumentClick);
-
-    toggle.addEventListener('click', () => {
-      if (panel.hidden) {
-        openPanel();
-      } else {
-        closePanel();
-      }
-    });
-
-    toggle.addEventListener('keydown', (event) => {
-      if ((event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') && panel.hidden) {
-        event.preventDefault();
-        openPanel();
-      }
-    });
-
-    panel.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        closePanel();
-        toggle.focus();
-      }
-    });
-
-    const filterOptions = (query) => {
-      const searchTerm = query.trim().toLowerCase();
-      labels.forEach((label) => {
-        if (!label) {
-          return;
-        }
-        const matches = !searchTerm || label.dataset.label?.includes(searchTerm);
-        label.hidden = !matches;
-        if (matches) {
-          label.removeAttribute('aria-hidden');
-        } else {
-          label.setAttribute('aria-hidden', 'true');
-        }
-      });
-    };
-
-    if (searchInput) {
-      searchInput.addEventListener('input', (event) => {
-        filterOptions(event.target.value);
-      });
-    }
-
-    checkboxes.forEach((checkbox, index) => {
-      checkbox.addEventListener('keydown', (event) => {
-        let targetIndex = null;
-        if (event.key === 'ArrowDown') {
-          targetIndex = (index + 1) % checkboxes.length;
-        } else if (event.key === 'ArrowUp') {
-          targetIndex = (index - 1 + checkboxes.length) % checkboxes.length;
-        } else if (event.key === ' ' || event.key === 'Enter') {
-          event.preventDefault();
-          checkbox.checked = !checkbox.checked;
-          checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-          return;
-        }
-
-        if (targetIndex !== null) {
-          event.preventDefault();
-          const nextCheckbox = checkboxes[targetIndex];
-          const nextLabel = labels[targetIndex];
-          if (nextLabel?.hidden) {
-            const visibleCheckbox = checkboxes.find((candidate, candidateIndex) => !labels[candidateIndex]?.hidden);
-            visibleCheckbox?.focus();
-          } else {
-            nextCheckbox.focus();
-          }
-        }
-      });
-    });
-
-    const updateToggleLabel = () => {
-      if (!toggleLabel) {
-        return;
-      }
-      const selectedCount = checkboxes.filter((checkbox) => checkbox.checked).length;
-      if (selectedCount === 0) {
-        toggleLabel.textContent = 'Choose supporting needs';
-      } else {
-        toggleLabel.textContent = `${selectedCount} need${selectedCount === 1 ? '' : 's'} selected`;
-      }
-    };
-
-    const renderSelected = () => {
-      selectedContainer.innerHTML = '';
-      const selectedCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
-      selectedContainer.dataset.empty = selectedCheckboxes.length ? 'false' : 'true';
-
-      selectedCheckboxes.forEach((checkbox) => {
-        const label = checkbox.closest('.tag-pill');
-        const text = label?.textContent?.trim() || checkbox.value;
-        const chip = document.createElement('button');
-        chip.type = 'button';
-        chip.className = 'tag-selected-pill';
-        chip.setAttribute('aria-label', `Remove ${text}`);
-        chip.innerHTML = `<span class="tag-selected-pill__label">${text}</span><span class="tag-selected-pill__remove" aria-hidden="true">✕</span>`;
-        chip.addEventListener('click', () => {
-          checkbox.checked = false;
-          checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-        });
-        selectedContainer.appendChild(chip);
-      });
-    };
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener('change', () => {
-        updateToggleLabel();
-        renderSelected();
-      });
-    });
-
-    renderSelected();
-    updateToggleLabel();
-    if (searchInput) {
-      filterOptions(searchInput.value || '');
-    }
-  });
 }
 
 function focusNeedSection(slug) {
