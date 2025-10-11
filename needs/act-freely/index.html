@@ -10,9 +10,6 @@
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
-      <div class="top-bar">
-        <a href="../../" class="top-bar__link">Strategy Finder</a>
-      </div>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Act Freely</li>
@@ -41,14 +38,25 @@
           </div>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
-        <h2 id="suggestion-heading" class="section-title">Have a suggestion?</h2>
-        <p>We welcome new care strategies. Email <a href="mailto:hello@nvc.app">hello@nvc.app</a> to share yours.</p>
+        <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
+        <form id="suggestion-form" class="suggestion-form">
+          <label for="strategy">Your strategy</label>
+          <textarea id="strategy" name="strategy" required></textarea>
+          <label for="tags">Needs this strategy supports</label>
+          <select id="tags" name="tags" multiple>
+            <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
+          </select>
+          <label for="name">First name (optional)</label>
+          <input id="name" name="name" />
+          <label for="location">Location (optional)</label>
+          <input id="location" name="location" />
+          <button type="submit">Submit</button>
+        </form>
+        <p class="form-message" hidden></p>
       </section>
     
       </main>
-      <footer class="footer">
-        <p>Data sourced from the Need Share spreadsheets and shared with appreciation for the care community.</p>
-      </footer>
     </div>
+    <script src="../../scripts/submit.js" defer></script>
   </body>
 </html>

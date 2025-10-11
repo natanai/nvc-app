@@ -43,7 +43,7 @@ A retro-styled companion to [needshare.net](https://needshare.net/) that mirrors
 
 ## Layout highlights
 
-- **Strategy Finder bar:** every page begins with a compact “Strategy Finder” link back to the home page, mirroring Need Share.
-- **Category hubs:** each category displays a grid of clickable pills that navigate to item pages.
-- **Cross-linking:** situation and feeling pages list their related items in labelled pill sections, while need pages highlight strategies and an invitation to contribute more.
+- **Magnet play:** category, situation, and feeling pages present their pills as draggable magnets with a shuffle button for delightful re-arranging.
+- **Category hubs:** each category displays a grid of clickable entries that navigate to item pages.
+- **Cross-linking:** situation and feeling pages list their related items in labelled magnet panels, while need pages highlight strategies and a share-a-strategy form.
 - **Responsive retro styling:** keeps the playful palette and pixel fonts from the original magnet explorer while adopting the hierarchical flow of Site A.

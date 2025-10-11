@@ -13,8 +13,6 @@ const categoryIcons = {
   needs: '🌱',
 };
 
-const suggestionEmail = 'hello@nvc.app';
-
 const directoriesToReset = ['situations', 'feelings', 'needs'];
 for (const dir of directoriesToReset) {
   rmSync(join(rootDir, dir), { recursive: true, force: true });
@@ -24,10 +22,8 @@ function basePathFromDepth(depth) {
   return depth === 0 ? '' : '../'.repeat(depth);
 }
 
-function htmlPage({ title, depth, breadcrumbs = [], main, description = '' }) {
+function htmlPage({ title, depth, breadcrumbs = [], main, description = '', scripts = [] }) {
   const basePath = basePathFromDepth(depth);
-  const homeHref = depth === 0 ? './' : basePath;
-  const strategyHref = homeHref;
   const cssHref = `${basePath}styles.css`;
   const headDescription = description ||
     'Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share.';
@@ -48,6 +44,11 @@ function htmlPage({ title, depth, breadcrumbs = [], main, description = '' }) {
       </nav>`
     : '';
 
+  const scriptsHtml = scripts
+    .map((src) => `    <script src="${basePath}${src}" defer></script>`)
+    .join('\n');
+  const scriptsBlock = scripts.length ? `${scriptsHtml}\n` : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -60,18 +61,12 @@ function htmlPage({ title, depth, breadcrumbs = [], main, description = '' }) {
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
-      <div class="top-bar">
-        <a href="${strategyHref}" class="top-bar__link">Strategy Finder</a>
-      </div>
       ${breadcrumbHtml}
       <main id="main" class="page" role="main">
         ${main}
       </main>
-      <footer class="footer">
-        <p>Data sourced from the Need Share spreadsheets and shared with appreciation for the care community.</p>
-      </footer>
     </div>
-  </body>
+${scriptsBlock}  </body>
 </html>
 `;
 }
@@ -160,6 +155,7 @@ function renderCategory(type, items) {
       { label: title }
     ],
     main,
+    scripts: ['scripts/magnets.js'],
   });
 
   writePage(`${type}/index.html`, html);
@@ -183,6 +179,7 @@ function renderSituation(item) {
       { label: item.title }
     ],
     main,
+    scripts: ['scripts/magnets.js'],
   });
 
   writePage(`situations/${item.slug}/index.html`, html);
@@ -206,6 +203,7 @@ function renderFeeling(item) {
       { label: item.title }
     ],
     main,
+    scripts: ['scripts/magnets.js'],
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
@@ -241,20 +239,40 @@ function renderNeed(item, strategyLookup) {
     ? `<p class="page-description">${escapeHtml(item.description)}</p>`
     : '';
 
+  const hasPrefix = item.title.toLowerCase().startsWith('need for ');
+  const fullTitle = hasPrefix ? item.title : `Need for ${item.title}`;
+
+  const needOptions = data.needs
+    .map((need) => `<option value="${escapeHtml(need.slug)}">${escapeHtml(need.title)}</option>`)
+    .join('');
+
   const main = `
       <header class="page-header">
-        <h1 class="page-title">Need for ${escapeHtml(item.title)}</h1>
+        <h1 class="page-title">${escapeHtml(fullTitle)}</h1>
         ${descriptionHtml}
       </header>
       ${strategiesHtml}
       <section class="suggestion" aria-labelledby="suggestion-heading">
-        <h2 id="suggestion-heading" class="section-title">Have a suggestion?</h2>
-        <p>We welcome new care strategies. Email <a href="mailto:${suggestionEmail}">${suggestionEmail}</a> to share yours.</p>
+        <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
+        <form id="suggestion-form" class="suggestion-form">
+          <label for="strategy">Your strategy</label>
+          <textarea id="strategy" name="strategy" required></textarea>
+          <label for="tags">Needs this strategy supports</label>
+          <select id="tags" name="tags" multiple>
+            ${needOptions}
+          </select>
+          <label for="name">First name (optional)</label>
+          <input id="name" name="name" />
+          <label for="location">Location (optional)</label>
+          <input id="location" name="location" />
+          <button type="submit">Submit</button>
+        </form>
+        <p class="form-message" hidden></p>
       </section>
     `;
 
   const html = htmlPage({
-    title: `Need for ${item.title}`,
+    title: fullTitle,
     depth: 2,
     breadcrumbs: [
       { label: 'Home', href: '../../' },
@@ -262,6 +280,7 @@ function renderNeed(item, strategyLookup) {
       { label: item.title }
     ],
     main,
+    scripts: ['scripts/submit.js'],
   });
 
   writePage(`needs/${item.slug}/index.html`, html);
