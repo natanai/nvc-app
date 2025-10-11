@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alexithymia Support • NeedShare Magnet Explorer</title>
+    <meta
+      name="description"
+      content="Follow a guided check-in that helps you notice body sensations, match them with emotions, and care for your needs."
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body data-base-path="../">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../">Home</a>
+        <a class="site-nav__link" href="../situations/">Situations</a>
+        <a class="site-nav__link" href="../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="../">Home</a></li>
+          <li aria-current="page">Alexithymia Support</li>
+        </ol>
+      </nav>
+      <main id="main" class="page" role="main">
+        <header class="page-header support-header">
+          <h1 class="page-title">Alexithymia Support</h1>
+          <p class="page-subtitle">
+            About one in ten people live with alexithymia. If naming a feeling is hard, this step-by-step lane offers gentle
+            structure so you can notice your body, explore possible emotions, and choose caring next steps.
+          </p>
+        </header>
+        <section class="support-flow" aria-labelledby="supportFlowTitle">
+          <h2 id="supportFlowTitle" class="visually-hidden">Guided support flow</h2>
+
+          <article class="support-step" data-step="intro">
+            <h3 class="support-step__title">Start with reassurance</h3>
+            <p>
+              There are no wrong answers here. Treat every sensation you notice as valuable information. Move at the pace that
+              feels kind to you.
+            </p>
+            <button class="support-button" type="button" data-action="start">Begin check-in</button>
+          </article>
+
+          <article class="support-step is-hidden" data-step="breathing" aria-live="polite">
+            <h3 class="support-step__title">Optional pause: settle your body</h3>
+            <p>
+              If you feel revved up, try a short breathing cycle before checking in. Slow, counted breaths can help your nervous
+              system shift toward safety.
+            </p>
+            <div class="breathing-card">
+              <p class="breathing-card__prompt" data-breathing-display>Press start to try a 30-second guided breath.</p>
+              <div class="breathing-visual" data-breathing-visual aria-hidden="true"></div>
+              <div class="breathing-card__actions">
+                <button class="support-button" type="button" data-action="breathing-start">Start breathing</button>
+                <button class="support-button support-button--ghost" type="button" data-action="breathing-skip">
+                  Skip to body check-in
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="body">
+            <h3 class="support-step__title">Step 1: What does your body notice?</h3>
+            <p>
+              Scan slowly from head to toe. Select any sensations that stand out. They do not have to make sense yet.
+            </p>
+            <form class="sensation-form" data-sensation-form>
+              <fieldset>
+                <legend class="sensation-form__legend">Choose all sensations that apply</legend>
+                <ul class="sensation-list">
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="tight-chest" />
+                      <span class="sensation-label">
+                        <strong>Chest: tight, heavy, or pounding</strong>
+                        <small>Breath feels shallow or heart racing</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="stomach-knots" />
+                      <span class="sensation-label">
+                        <strong>Stomach: knots, fluttery, or queasy</strong>
+                        <small>Butterflies, nausea, rolling sensation</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="throat-tight" />
+                      <span class="sensation-label">
+                        <strong>Throat: lump or tightness</strong>
+                        <small>Words feel stuck, urge to cry</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="jaw-clench" />
+                      <span class="sensation-label">
+                        <strong>Jaw or fists: clenched or hot</strong>
+                        <small>Muscles braced, face flushed</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="head-fog" />
+                      <span class="sensation-label">
+                        <strong>Head: foggy, buzzing, or heavy</strong>
+                        <small>Hard to focus, pressure behind eyes</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="shoulders-weight" />
+                      <span class="sensation-label">
+                        <strong>Shoulders: weighted or lifted</strong>
+                        <small>Carrying tension or bracing to act</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="limbs-lead" />
+                      <span class="sensation-label">
+                        <strong>Arms or legs: heavy, numb, or restless</strong>
+                        <small>Hard to move or urge to pace</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="temperature-shift" />
+                      <span class="sensation-label">
+                        <strong>Temperature shifts</strong>
+                        <small>Flush of heat, sudden chill, or prickly skin</small>
+                      </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="sensation" value="no-sensation" />
+                      <span class="sensation-label">
+                        <strong>Hard to notice anything</strong>
+                        <small>Numb, blank, or disconnected</small>
+                      </span>
+                    </label>
+                  </li>
+                </ul>
+              </fieldset>
+              <div class="sensation-actions">
+                <button class="support-button" type="button" data-action="sensation-submit">See possible emotions</button>
+                <button class="support-button support-button--ghost" type="button" data-action="sensation-clear">Clear choices</button>
+              </div>
+            </form>
+            <div class="emotion-suggestions" data-body-suggestions>
+              <p class="support-note">Your body-based matches will appear here after you choose sensations.</p>
+            </div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="compass">
+            <h3 class="support-step__title">Step 2: Emotion compass</h3>
+            <p>
+              If the body suggestions feel uncertain, try plotting your state on the emotion compass. Estimate your energy and how
+              pleasant or unpleasant things feel right now.
+            </p>
+            <form class="compass-form" data-compass-form>
+              <fieldset>
+                <legend>Energy level</legend>
+                <div class="compass-options">
+                  <label><input type="radio" name="energy" value="low" />Low — sluggish or drained</label>
+                  <label><input type="radio" name="energy" value="medium" />Steady — grounded or alert</label>
+                  <label><input type="radio" name="energy" value="high" />High — wired or restless</label>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Pleasantness</legend>
+                <div class="compass-options">
+                  <label><input type="radio" name="valence" value="unpleasant" />Unpleasant or distressed</label>
+                  <label><input type="radio" name="valence" value="neutral" />Neutral or mixed</label>
+                  <label><input type="radio" name="valence" value="pleasant" />Pleasant or easeful</label>
+                </div>
+              </fieldset>
+            </form>
+            <div class="emotion-suggestions" data-compass-suggestions>
+              <p class="support-note">Pick one energy and one pleasantness option to see suggestions.</p>
+            </div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="library">
+            <h3 class="support-step__title">Step 3: Explore an emotion</h3>
+            <p>
+              Choose a suggested emotion to read its description. Notice which parts match your experience. You can always go back
+              and try another.
+            </p>
+            <div class="emotion-library" data-emotion-library>
+              <p class="support-note">Select an emotion above to load its details.</p>
+            </div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="journal">
+            <h3 class="support-step__title">Step 4: Reflect and journal</h3>
+            <p>
+              Linking a feeling to context strengthens emotional awareness. Use the prompts below as writing cues or simply sit
+              with them.
+            </p>
+            <ul class="prompt-list">
+              <li>What was happening right before you noticed this feeling?</li>
+              <li>Does the emotion you selected fit? What signals line up or feel different?</li>
+              <li>How intense is it right now on a scale from 1 (barely there) to 10 (all-consuming)?</li>
+              <li>What do you need or long for in this moment?</li>
+            </ul>
+            <form class="journal-form" data-journal-form>
+              <label class="journal-form__label" for="journalEntry">Write a few notes (saved only on this device)</label>
+              <textarea id="journalEntry" name="journalEntry" rows="6" placeholder="Today I noticed..."></textarea>
+              <div class="journal-actions">
+                <button class="support-button" type="submit">Save reflection</button>
+                <button class="support-button support-button--ghost" type="button" data-action="journal-clear">Clear text</button>
+              </div>
+              <p class="support-note" data-journal-status role="status"></p>
+            </form>
+            <div class="journal-history-wrapper" data-journal-history></div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="regulation">
+            <h3 class="support-step__title">Step 5: Care for what you feel</h3>
+            <div class="regulation-card" data-regulation-card>
+              <p class="support-note">Suggestions will appear after you choose an emotion.</p>
+            </div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="communication">
+            <h3 class="support-step__title">Step 6: Share if you want to</h3>
+            <p>
+              Putting a feeling into words—just for yourself or with a trusted person—can build confidence. Use this starter
+              sentence or edit it to fit your voice.
+            </p>
+            <div class="communication-card" data-communication-card>
+              <p class="support-note">We will suggest a sentence once you pick an emotion.</p>
+            </div>
+          </article>
+
+          <article class="support-step is-hidden" data-step="closing">
+            <h3 class="support-step__title">Keep practicing gently</h3>
+            <p>
+              You did courageous work by checking in. Emotional vocabulary grows with repetition. Return whenever you want a guide,
+              and celebrate every moment of connection you create with yourself.
+            </p>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script src="../scripts/inventory.js" defer></script>
+    <script src="../scripts/alexithymia-support.js" defer></script>
+  </body>
+</html>

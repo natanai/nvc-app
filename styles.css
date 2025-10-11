@@ -33,6 +33,17 @@ body {
   padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2.5rem);
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -181,6 +192,10 @@ a:focus-visible {
   max-width: 60ch;
 }
 
+.support-header .page-subtitle {
+  max-width: 65ch;
+}
+
 .category-section {
   display: grid;
   gap: 1.25rem;
@@ -196,6 +211,337 @@ a:focus-visible {
 .category-section__intro p {
   margin: 0.25rem 0 0;
   max-width: 50ch;
+}
+
+.support-flow {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.support-step {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 3px solid var(--outline);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 0 rgba(18, 8, 31, 0.2);
+}
+
+.support-step.is-hidden {
+  display: none;
+}
+
+.support-step__title {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  font-size: clamp(0.9rem, calc(0.6rem + 2vw), 1.2rem);
+  letter-spacing: 0.06em;
+}
+
+.support-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.support-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1.1rem;
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  background: var(--gold);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 10px 0 rgba(18, 8, 31, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.support-button:hover,
+.support-button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 rgba(18, 8, 31, 0.22);
+}
+
+.support-button--ghost {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.breathing-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 2px dashed var(--outline);
+  border-radius: 18px;
+  background: rgba(211, 241, 255, 0.6);
+}
+
+.breathing-card__prompt {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.breathing-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.breathing-visual {
+  width: min(180px, 60vw);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 4px solid var(--outline);
+  background: radial-gradient(circle, var(--mint) 0%, rgba(150, 251, 199, 0.65) 55%, rgba(150, 251, 199, 0.2) 100%);
+  transform: scale(0.75);
+  opacity: 0.9;
+}
+
+.breathing-visual.is-active {
+  animation: breathe 8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(0.75);
+  }
+  40% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(0.65);
+  }
+}
+
+.sensation-form fieldset,
+.compass-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.sensation-form__legend {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.sensation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.sensation-list label {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.7rem 0.85rem;
+  border: 2px solid var(--outline);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sensation-list label:hover,
+.sensation-list label:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 rgba(18, 8, 31, 0.18);
+}
+
+.sensation-list input {
+  margin-top: 0.25rem;
+}
+
+.sensation-label {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.sensation-label small {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.sensation-actions,
+.journal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.emotion-suggestions {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 2px dashed var(--outline);
+  background: rgba(237, 228, 255, 0.6);
+}
+
+.emotion-suggestions__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: bold;
+}
+
+.emotion-suggestions__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.emotion-tag {
+  border: 2px solid var(--outline);
+  border-radius: 999px;
+  background: var(--rose);
+  padding: 0.35rem 0.9rem;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.emotion-tag.is-active {
+  background: var(--mint);
+}
+
+.emotion-tag:hover,
+.emotion-tag:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(18, 8, 31, 0.18);
+}
+
+.emotion-library {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  border: 2px solid var(--outline);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.emotion-detail__name {
+  margin: 0;
+  font-size: 1.35rem;
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: 0.04em;
+}
+
+.emotion-detail__definition {
+  margin: 0;
+}
+
+.emotion-detail__list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.emotion-detail__list li {
+  margin-bottom: 0.35rem;
+}
+
+.prompt-list {
+  margin: 0 0 1rem;
+  padding-left: 1.35rem;
+}
+
+.journal-form textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 2px solid var(--outline);
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  background: #fff;
+  resize: vertical;
+}
+
+.journal-form textarea:focus-visible {
+  outline: 3px dashed var(--ink);
+  outline-offset: 3px;
+}
+
+.regulation-card,
+.communication-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  border: 2px solid var(--outline);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.communication-template {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 2px dashed var(--outline);
+  background: rgba(247, 255, 174, 0.6);
+  font-size: 1rem;
+}
+
+.communication-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.communication-actions .support-button--ghost {
+  background: rgba(237, 228, 255, 0.65);
+}
+
+.journal-history {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.journal-history-wrapper {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  border: 2px dashed var(--outline);
+  background: rgba(211, 241, 255, 0.4);
+}
+
+.journal-history__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: bold;
+}
+
+.journal-history__item {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+  .breathing-card__actions,
+  .sensation-actions,
+  .journal-actions,
+  .communication-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .support-button {
+    width: 100%;
+  }
 }
 
 .category-grid {
