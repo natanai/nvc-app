@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
   <title id="title">Heart and compass pixel icon</title>
   <desc id="desc">A pixel heart resting on a compass to represent guidance with feelings.</desc>
-  <rect width="64" height="64" rx="8" fill="#ede4ff"/>
   <rect x="6" y="6" width="52" height="52" rx="6" fill="#fff" stroke="#12081f" stroke-width="4"/>
   <path d="M32 42c9-6 14-11 14-18a9 9 0 0 0-14-7 9 9 0 0 0-14 7c0 7 5 12 14 18z" fill="#ffb3cb" stroke="#12081f" stroke-width="4" stroke-linejoin="round"/>
   <circle cx="32" cy="46" r="10" fill="#96fbc7" stroke="#12081f" stroke-width="4"/>
