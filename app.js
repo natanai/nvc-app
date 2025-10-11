@@ -39,6 +39,7 @@ async function init() {
     }
     const payload = await response.json();
     Object.assign(data, payload);
+    shuffleDatasets();
   } catch (error) {
     showErrorState(error);
     console.error(error);
@@ -128,6 +129,22 @@ function render() {
   renderDetails(filtered);
   renderPlan();
   activateMagnets(document);
+}
+
+function shuffleDatasets() {
+  ['feelings', 'needs', 'situations', 'strategies'].forEach((key) => {
+    if (!Array.isArray(data[key])) return;
+    data[key] = shuffleArray(data[key]);
+  });
+}
+
+function shuffleArray(items) {
+  const shuffled = [...items];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
 }
 
 function updateTabs() {
