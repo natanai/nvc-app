@@ -67,6 +67,8 @@ const prepareMagnets = () => {
       velocities: new Map(),
       sizes: new Map(),
       dragState: null,
+      suppressedClicks: new WeakSet(),
+      mousePosition: null,
     };
 
     const playButton = document.createElement('button');
@@ -84,6 +86,18 @@ const prepareMagnets = () => {
         playButton.textContent = '+ play with';
         playButton.setAttribute('aria-pressed', 'false');
       }
+    };
+
+    const updateMousePosition = (event) => {
+      if (typeof event.clientX !== 'number' || typeof event.clientY !== 'number') {
+        state.mousePosition = null;
+        return;
+      }
+      const gridRect = grid.getBoundingClientRect();
+      state.mousePosition = {
+        x: event.clientX - gridRect.left,
+        y: event.clientY - gridRect.top,
+      };
     };
 
     const resolveCollisions = () => {
@@ -151,6 +165,7 @@ const prepareMagnets = () => {
 
       const width = grid.clientWidth;
       const height = grid.clientHeight;
+      const pointer = state.mousePosition;
 
       magnets.forEach((magnet) => {
         if (state.dragState?.magnet === magnet) {
@@ -167,6 +182,23 @@ const prepareMagnets = () => {
 
         velocity.x += (Math.random() - 0.5) * 0.05;
         velocity.y += (Math.random() - 0.5) * 0.05;
+
+        if (pointer) {
+          const centerX = position.x + size.width / 2;
+          const centerY = position.y + size.height / 2;
+          const diffX = centerX - pointer.x;
+          const diffY = centerY - pointer.y;
+          const distanceSquared = diffX * diffX + diffY * diffY;
+          const influenceRadius = 180;
+          if (distanceSquared < influenceRadius * influenceRadius) {
+            const distance = Math.sqrt(distanceSquared) || 0.0001;
+            const strength = 1 - Math.min(distance / influenceRadius, 1);
+            const force = strength * 0.3;
+            velocity.x += (diffX / distance) * force;
+            velocity.y += (diffY / distance) * force;
+          }
+        }
+
         velocity.x *= 0.99;
         velocity.y *= 0.99;
 
@@ -259,15 +291,45 @@ const prepareMagnets = () => {
         state.dragState = null;
       }
 
+      const gridRect = grid.getBoundingClientRect();
+      const orderedMagnets = magnets
+        .map((magnet) => {
+          const position = state.positions.get(magnet);
+          const size = state.sizes.get(magnet);
+          if (position && size) {
+            return {
+              magnet,
+              centerX: position.x + size.width / 2,
+              centerY: position.y + size.height / 2,
+            };
+          }
+
+          const rect = magnet.getBoundingClientRect();
+          return {
+            magnet,
+            centerX: rect.left - gridRect.left + rect.width / 2,
+            centerY: rect.top - gridRect.top + rect.height / 2,
+          };
+        })
+        .sort((a, b) => (a.centerY - b.centerY) || (a.centerX - b.centerX));
+
+      const fragment = document.createDocumentFragment();
+      orderedMagnets.forEach(({ magnet }, index) => {
+        magnet.style.order = String(index);
+        fragment.appendChild(magnet);
+      });
+      grid.appendChild(fragment);
+
       state.positions.clear();
       state.velocities.clear();
       state.sizes.clear();
+      state.mousePosition = null;
+      state.suppressedClicks = new WeakSet();
 
       grid.classList.remove('magnet-grid--playing');
       grid.style.height = '';
 
       resetMagnetStyles();
-      randomize();
       updateToggleLabel();
     };
 
@@ -284,6 +346,8 @@ const prepareMagnets = () => {
       state.positions.clear();
       state.velocities.clear();
       state.sizes.clear();
+      state.mousePosition = null;
+      state.suppressedClicks = new WeakSet();
 
       magnets.forEach((magnet) => {
         const rect = magnet.getBoundingClientRect();
@@ -333,6 +397,9 @@ const prepareMagnets = () => {
         pointerId: event.pointerId,
         offsetX: event.clientX - gridRect.left - position.x,
         offsetY: event.clientY - gridRect.top - position.y,
+        startX: event.clientX,
+        startY: event.clientY,
+        hasDragged: false,
       };
 
       const velocity = state.velocities.get(magnet);
@@ -343,6 +410,8 @@ const prepareMagnets = () => {
 
       magnet.classList.add('magnet--dragging');
       magnet.setPointerCapture(event.pointerId);
+      state.suppressedClicks.delete(magnet);
+      updateMousePosition(event);
     };
 
     const handlePointerMove = (event) => {
@@ -354,7 +423,7 @@ const prepareMagnets = () => {
         return;
       }
 
-      const { magnet, offsetX, offsetY } = state.dragState;
+      const { magnet, offsetX, offsetY, startX, startY } = state.dragState;
       const position = state.positions.get(magnet);
       const size = state.sizes.get(magnet);
       if (!position || !size) {
@@ -378,6 +447,16 @@ const prepareMagnets = () => {
       position.y = y;
       magnet.style.left = `${x}px`;
       magnet.style.top = `${y}px`;
+
+      if (!state.dragState.hasDragged) {
+        const moveX = Math.abs(event.clientX - startX);
+        const moveY = Math.abs(event.clientY - startY);
+        if (moveX > 6 || moveY > 6) {
+          state.dragState.hasDragged = true;
+        }
+      }
+
+      updateMousePosition(event);
     };
 
     const handlePointerUp = (event) => {
@@ -385,9 +464,25 @@ const prepareMagnets = () => {
         return;
       }
 
-      state.dragState.magnet.classList.remove('magnet--dragging');
-      state.dragState.magnet.releasePointerCapture(event.pointerId);
+      const { magnet, hasDragged } = state.dragState;
+      magnet.classList.remove('magnet--dragging');
+      magnet.releasePointerCapture(event.pointerId);
+      if (hasDragged) {
+        state.suppressedClicks.add(magnet);
+      }
       state.dragState = null;
+      updateMousePosition(event);
+    };
+
+    const handleGridPointerMove = (event) => {
+      if (!state.active) {
+        return;
+      }
+      updateMousePosition(event);
+    };
+
+    const handleGridPointerLeave = () => {
+      state.mousePosition = null;
     };
 
     magnets.forEach((magnet, index) => {
@@ -395,8 +490,18 @@ const prepareMagnets = () => {
       magnet.addEventListener('pointermove', handlePointerMove);
       magnet.addEventListener('pointerup', handlePointerUp);
       magnet.addEventListener('pointercancel', handlePointerUp);
+      magnet.addEventListener('click', (event) => {
+        if (state.active && state.suppressedClicks.has(magnet)) {
+          event.preventDefault();
+          event.stopPropagation();
+          state.suppressedClicks.delete(magnet);
+        }
+      });
       applyMagnetStyles(magnet, index);
     });
+
+    grid.addEventListener('pointermove', handleGridPointerMove);
+    grid.addEventListener('pointerleave', handleGridPointerLeave);
 
     shuffleButton.addEventListener('click', () => {
       if (state.active) {
