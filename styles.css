@@ -582,6 +582,18 @@ a:focus-visible {
   position: relative;
 }
 
+.category-card__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
 .category-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 0 var(--shadow);
@@ -621,7 +633,15 @@ a:focus-visible {
   border: 2px solid rgba(18, 8, 31, 0.7);
   border-radius: 999px;
   box-shadow: 0 4px 0 rgba(18, 8, 31, 0.12);
-  pointer-events: none;
+  color: var(--outline);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.category-card__tag:hover,
+.category-card__tag:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(18, 8, 31, 0.18);
 }
 
 .section-title {
