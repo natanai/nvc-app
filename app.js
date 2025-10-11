@@ -17,6 +17,10 @@ const state = {
   plan: [],
 };
 
+const disableTouchDragging = typeof window !== 'undefined' && window.matchMedia
+  ? window.matchMedia('(pointer: coarse)').matches
+  : false;
+
 const data = {
   feelings: [],
   needs: [],
@@ -44,7 +48,6 @@ async function init() {
   state.plan = loadPlan();
   setDataset('feelings');
   bindEvents();
-  render();
 }
 
 function bindEvents() {
@@ -115,7 +118,7 @@ function setDataset(dataset, { slug, title } = {}) {
   state.dataset = dataset;
   state.searchTerm = '';
   searchInput.value = '';
-  state.selection = findItem(dataset, slug, title) ?? data[dataset][0] ?? null;
+  state.selection = slug || title ? findItem(dataset, slug, title) ?? null : null;
   render();
 }
 
@@ -150,8 +153,13 @@ function renderList() {
     return filtered;
   }
 
-  if (!state.selection || !filtered.some((entry) => entry.slug === state.selection.slug)) {
-    state.selection = filtered[0];
+  const currentSlug = state.selection?.slug;
+  const selectionStillVisible = currentSlug
+    ? filtered.some((entry) => entry.slug === currentSlug)
+    : false;
+
+  if (!selectionStillVisible) {
+    state.selection = null;
   }
 
   filtered.forEach((item) => {
@@ -163,9 +171,11 @@ function renderList() {
     button.dataset.magnet = state.dataset;
     button.dataset.magnetKey = createMagnetKey(`list-${state.dataset}`, item.slug ?? item.title);
 
-    if (state.selection && state.selection.slug === item.slug) {
+    const isSelected = state.selection && state.selection.slug === item.slug;
+    if (isSelected) {
       button.classList.add('is-active');
     }
+    button.setAttribute('aria-pressed', String(Boolean(isSelected)));
 
     const title = document.createElement('span');
     title.className = 'item-title';
@@ -569,6 +579,7 @@ function makeMagnetDraggable(element) {
   let { x: currentX, y: currentY } = getMagnetOffset(element);
 
   const onPointerDown = (event) => {
+    if (disableTouchDragging && event.pointerType === 'touch') return;
     if (event.button !== 0 && event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
     if (element.hasAttribute('disabled')) return;
     if (event.target.closest('[data-ignore-drag]')) return;
