@@ -554,7 +554,16 @@ function buildPaletteUi() {
     mobileToggle.type = 'button';
     mobileToggle.className = 'site-nav__link palette-mobile-toggle';
     mobileToggle.setAttribute('aria-haspopup', 'dialog');
-    mobileToggle.textContent = 'Color theme';
+    const mobileGlyph = document.createElement('span');
+    mobileGlyph.className = 'palette-mobile-toggle__glyph';
+    mobileGlyph.setAttribute('aria-hidden', 'true');
+    mobileGlyph.textContent = '+';
+
+    const mobileSrLabel = document.createElement('span');
+    mobileSrLabel.className = 'visually-hidden';
+    mobileSrLabel.textContent = 'Open color palette customizer';
+
+    mobileToggle.append(mobileGlyph, mobileSrLabel);
     nav.appendChild(mobileToggle);
   }
 
@@ -972,7 +981,7 @@ function parseColorPaletteCsv(text) {
     return [];
   }
 
-  const rows = parseCsv(text);
+  const rows = parsePaletteCsvRows(text);
   if (!rows.length) {
     return [];
   }
@@ -1018,7 +1027,7 @@ function parseColorPaletteCsv(text) {
   return presets;
 }
 
-function parseCsv(text) {
+function parsePaletteCsvRows(text) {
   const rows = [];
   let current = '';
   let row = [];
