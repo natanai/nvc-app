@@ -10,13 +10,13 @@ An interactive single-page app that mirrors the core flows of [needshare.net](ht
    ```
    The command parses the CSV exports into `data/index.json`, which the web app consumes at runtime.
 
-2. Serve the `public` directory with any static file server. For example:
+2. Serve the repository root with any static file server. For example:
    ```bash
    python -m http.server 8000
    ```
-   Then open <http://localhost:8000/public/> in your browser.
+   Then open <http://localhost:8000/> in your browser.
 
-   > Tip: When using another tooling setup (Vite, Parcel, etc.), ensure the `data` directory is available at `../data/index.json` relative to `public/index.html` or update the fetch path inside `public/app.js`.
+   > Tip: When using another tooling setup (Vite, Parcel, etc.), ensure the `data` directory is available at `/data/index.json` relative to `index.html` or update the fetch path inside `app.js`.
 
 ## Features
 
@@ -28,22 +28,21 @@ An interactive single-page app that mirrors the core flows of [needshare.net](ht
 ## Project structure
 
 ```
-├── Feelings.csv
-├── Needs.csv
-├── Situations.csv
-├── Strategies.csv
+├── app.js                  # front-end logic
+├── index.html
+├── styles.css
 ├── data/
+│   ├── Feelings.csv
+│   ├── Needs.csv
+│   ├── Situations.csv
+│   ├── Strategies.csv
 │   └── index.json          # generated dataset
-├── public/
-│   ├── app.js              # front-end logic
-│   ├── index.html
-│   └── styles.css
 └── scripts/
     └── build-data.mjs      # CSV → JSON converter
 ```
 
 ## Making further changes
 
-- Update the CSV files and rerun `node scripts/build-data.mjs` to refresh the JSON data.
-- Customize the UI by editing `public/styles.css` or extend functionality within `public/app.js`.
+- Update the CSV files in `data/` and rerun `node scripts/build-data.mjs` to refresh the JSON data.
+- Customize the UI by editing `styles.css` or extend functionality within `app.js`.
 - The JSON structure in `data/index.json` mirrors the CSV relationships and can be reused for other clients.
