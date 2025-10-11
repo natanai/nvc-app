@@ -152,4 +152,27 @@ const dataset = { feelings, needs, situations, strategies };
 
 writeFileSync(join(DATA_DIR, 'index.json'), JSON.stringify(dataset, null, 2));
 
-console.log('Wrote data/index.json');
+const needCounts = new Map(
+  needs.map((need) => [need.slug, { title: need.title, slug: need.slug, category: need.category, strategyCount: 0 }]),
+);
+
+strategies.forEach((strategy) => {
+  strategy.needs.forEach(({ slug }) => {
+    if (!slug || !needCounts.has(slug)) return;
+    needCounts.get(slug).strategyCount += 1;
+  });
+});
+
+const needStrategyCounts = Array.from(needCounts.values()).sort((a, b) => {
+  if (a.strategyCount !== b.strategyCount) {
+    return a.strategyCount - b.strategyCount;
+  }
+  return a.title.localeCompare(b.title);
+});
+
+writeFileSync(
+  join(DATA_DIR, 'need-strategy-counts.json'),
+  `${JSON.stringify(needStrategyCounts, null, 2)}\n`,
+);
+
+console.log('Wrote data/index.json and data/need-strategy-counts.json');
