@@ -16,6 +16,19 @@ const clamp = (value, min, max) => {
   return value;
 };
 
+const PHYSICS_CONFIG = {
+  brownianAcceleration: 18,
+  dampingPerFrame: 0.92,
+  separationDistanceFactor: 0.45,
+  separationStrength: 900,
+  dragRepelMultiplier: 2.4,
+  cursorRadius: 150,
+  cursorStrength: 16,
+  boundaryRestitution: 0.18,
+  maxSpeed: 160,
+  maxStep: 1 / 30,
+};
+
 const applyMagnetStyles = (magnet, index) => {
   magnet.classList.add('magnet');
   magnet.style.order = String(index);
@@ -23,6 +36,19 @@ const applyMagnetStyles = (magnet, index) => {
   const offset = randomFrom(offsetOptions);
   magnet.style.setProperty('--magnet-tilt', `${tilt}deg`);
   magnet.style.setProperty('--magnet-offset', `${offset}px`);
+};
+
+const getOrCreateMagnetState = (state, magnet) => {
+  let magnetState = state.magnetStates.get(magnet);
+  if (!magnetState) {
+    magnetState = {
+      position: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
+      size: { width: 0, height: 0 },
+    };
+    state.magnetStates.set(magnet, magnetState);
+  }
+  return magnetState;
 };
 
 const toPercentages = (position, size, containerWidth, containerHeight) => {
@@ -96,6 +122,11 @@ const persistLayout = (state) => {
 };
 
 const applyPosition = (state, magnet, x, y) => {
+  const magnetState = state.magnetStates.get(magnet);
+  if (magnetState) {
+    magnetState.position.x = x;
+    magnetState.position.y = y;
+  }
   state.positions.set(magnet, { x, y });
   magnet.style.setProperty('--magnet-position-x', `${x}px`);
   magnet.style.setProperty('--magnet-position-y', `${y}px`);
@@ -117,6 +148,8 @@ const applyLayout = (state, options = {}) => {
   const rect = grid.getBoundingClientRect();
   const currentWidth = rect.width || state.baseWidth || grid.clientWidth || 1;
   const currentHeight = parseFloat(grid.style.height) || rect.height || state.baseHeight || 1;
+  state.containerWidth = currentWidth;
+  state.containerHeight = currentHeight;
   let maxBottom = 0;
 
   state.magnets.forEach((magnet) => {
@@ -124,6 +157,11 @@ const applyLayout = (state, options = {}) => {
     const measuredHeight = magnet.offsetHeight || magnet.getBoundingClientRect().height || state.baseSizes.get(magnet)?.height || 0;
     const size = { width: measuredWidth, height: measuredHeight };
     state.sizes.set(magnet, size);
+    const magnetState = getOrCreateMagnetState(state, magnet);
+    magnetState.size.width = size.width;
+    magnetState.size.height = size.height;
+    magnetState.velocity.x = 0;
+    magnetState.velocity.y = 0;
 
     const percentages = state.layout.get(magnet) || { xPct: 0, yPct: 0 };
     const { x, y } = fromPercentages(percentages, size, currentWidth, currentHeight);
@@ -145,16 +183,21 @@ const shuffleLayout = (state) => {
   const rect = state.grid.getBoundingClientRect();
   const containerWidth = rect.width || state.grid.clientWidth || 1;
   const containerHeight = parseFloat(state.grid.style.height) || rect.height || state.grid.clientHeight || 1;
+  state.containerWidth = containerWidth;
+  state.containerHeight = containerHeight;
   state.grid.classList.add('magnet-grid--no-transitions');
   state.magnets.forEach((magnet) => {
     const size = state.sizes.get(magnet);
     if (!size) {
       return;
     }
+    const magnetState = getOrCreateMagnetState(state, magnet);
     const maxX = Math.max(containerWidth - size.width, 0);
     const maxY = Math.max(containerHeight - size.height, 0);
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
+    magnetState.velocity.x = 0;
+    magnetState.velocity.y = 0;
     applyPosition(state, magnet, x, y);
     const percentages = toPercentages({ x, y }, size, containerWidth, containerHeight);
     state.layout.set(magnet, percentages);
@@ -175,13 +218,254 @@ const updateToggleLabel = (state) => {
   }
 };
 
+const updatePercentagesForState = (state, magnet, containerWidth, containerHeight) => {
+  updatePercentagesForMagnet(state, magnet, containerWidth, containerHeight);
+};
+
+const updatePhysics = (state, dt) => {
+  if (dt <= 0) {
+    return;
+  }
+  const {
+    brownianAcceleration,
+    dampingPerFrame,
+    separationDistanceFactor,
+    separationStrength,
+    dragRepelMultiplier,
+    cursorRadius,
+    cursorStrength,
+    boundaryRestitution,
+    maxSpeed,
+  } = PHYSICS_CONFIG;
+
+  const draggedMagnet = state.dragState?.magnet || null;
+  const containerWidth = state.containerWidth || state.grid.clientWidth || state.baseWidth || 1;
+  const containerHeight =
+    state.containerHeight || parseFloat(state.grid.style.height) || state.grid.clientHeight || state.baseHeight || 1;
+
+  const forces = new Map();
+  state.magnets.forEach((magnet) => {
+    const magnetState = state.magnetStates.get(magnet);
+    if (!magnetState) {
+      return;
+    }
+    forces.set(magnet, { x: 0, y: 0 });
+  });
+
+  state.magnets.forEach((magnet) => {
+    if (magnet === draggedMagnet) {
+      return;
+    }
+    const magnetState = state.magnetStates.get(magnet);
+    if (!magnetState) {
+      return;
+    }
+    const force = forces.get(magnet);
+    force.x += (Math.random() * 2 - 1) * brownianAcceleration;
+    force.y += (Math.random() * 2 - 1) * brownianAcceleration;
+  });
+
+  for (let i = 0; i < state.magnets.length; i += 1) {
+    const magnetA = state.magnets[i];
+    const stateA = state.magnetStates.get(magnetA);
+    if (!stateA) {
+      continue;
+    }
+    for (let j = i + 1; j < state.magnets.length; j += 1) {
+      const magnetB = state.magnets[j];
+      const stateB = state.magnetStates.get(magnetB);
+      if (!stateB) {
+        continue;
+      }
+
+      const centerAX = stateA.position.x + stateA.size.width / 2;
+      const centerAY = stateA.position.y + stateA.size.height / 2;
+      const centerBX = stateB.position.x + stateB.size.width / 2;
+      const centerBY = stateB.position.y + stateB.size.height / 2;
+      const diffX = centerBX - centerAX;
+      const diffY = centerBY - centerAY;
+      const distance = Math.hypot(diffX, diffY) || 0.0001;
+      const radiusA = Math.hypot(stateA.size.width, stateA.size.height) * separationDistanceFactor;
+      const radiusB = Math.hypot(stateB.size.width, stateB.size.height) * separationDistanceFactor;
+      const minDistance = radiusA + radiusB;
+      if (distance >= minDistance || minDistance === 0) {
+        continue;
+      }
+
+      const penetration = minDistance - distance;
+      const directionX = diffX / distance;
+      const directionY = diffY / distance;
+      const baseStrength = separationStrength * (penetration / minDistance);
+      const appliesToA = magnetA !== draggedMagnet;
+      const appliesToB = magnetB !== draggedMagnet;
+      const multiplier = magnetA === draggedMagnet || magnetB === draggedMagnet ? dragRepelMultiplier : 1;
+
+      if (appliesToA) {
+        const forceA = forces.get(magnetA);
+        forceA.x -= directionX * baseStrength * multiplier;
+        forceA.y -= directionY * baseStrength * multiplier;
+      }
+
+      if (appliesToB) {
+        const forceB = forces.get(magnetB);
+        forceB.x += directionX * baseStrength * multiplier;
+        forceB.y += directionY * baseStrength * multiplier;
+      }
+    }
+  }
+
+  if (state.pointerField.active && !draggedMagnet) {
+    const { x: cursorX, y: cursorY } = state.pointerField;
+    state.magnets.forEach((magnet) => {
+      const magnetState = state.magnetStates.get(magnet);
+      if (!magnetState) {
+        return;
+      }
+      const centerX = magnetState.position.x + magnetState.size.width / 2;
+      const centerY = magnetState.position.y + magnetState.size.height / 2;
+      const diffX = centerX - cursorX;
+      const diffY = centerY - cursorY;
+      const distance = Math.hypot(diffX, diffY);
+      if (distance === 0 || distance > cursorRadius) {
+        return;
+      }
+      const strength = cursorStrength * (1 - distance / cursorRadius);
+      const force = forces.get(magnet);
+      if (!force) {
+        return;
+      }
+      force.x += (diffX / distance) * strength;
+      force.y += (diffY / distance) * strength;
+    });
+  }
+
+  const damping = Math.pow(dampingPerFrame, dt * 60);
+  state.magnets.forEach((magnet) => {
+    if (magnet === draggedMagnet) {
+      return;
+    }
+    const magnetState = state.magnetStates.get(magnet);
+    if (!magnetState) {
+      return;
+    }
+    const force = forces.get(magnet);
+    if (!force) {
+      return;
+    }
+    magnetState.velocity.x += force.x * dt;
+    magnetState.velocity.y += force.y * dt;
+
+    magnetState.velocity.x *= damping;
+    magnetState.velocity.y *= damping;
+
+    const speed = Math.hypot(magnetState.velocity.x, magnetState.velocity.y);
+    if (speed > maxSpeed) {
+      const scale = maxSpeed / speed;
+      magnetState.velocity.x *= scale;
+      magnetState.velocity.y *= scale;
+    }
+
+    magnetState.position.x += magnetState.velocity.x * dt;
+    magnetState.position.y += magnetState.velocity.y * dt;
+
+    const maxX = Math.max(containerWidth - magnetState.size.width, 0);
+    const maxY = Math.max(containerHeight - magnetState.size.height, 0);
+
+    if (magnetState.position.x < 0) {
+      magnetState.position.x = 0;
+      magnetState.velocity.x = Math.abs(magnetState.velocity.x) * boundaryRestitution;
+    } else if (magnetState.position.x > maxX) {
+      magnetState.position.x = maxX;
+      magnetState.velocity.x = -Math.abs(magnetState.velocity.x) * boundaryRestitution;
+    }
+
+    if (magnetState.position.y < 0) {
+      magnetState.position.y = 0;
+      magnetState.velocity.y = Math.abs(magnetState.velocity.y) * boundaryRestitution;
+    } else if (magnetState.position.y > maxY) {
+      magnetState.position.y = maxY;
+      magnetState.velocity.y = -Math.abs(magnetState.velocity.y) * boundaryRestitution;
+    }
+
+    applyPosition(state, magnet, magnetState.position.x, magnetState.position.y);
+    updatePercentagesForState(state, magnet, containerWidth, containerHeight);
+  });
+};
+
+const runAnimationFrame = (state, timestamp) => {
+  if (!state.active) {
+    state.animationFrame = null;
+    state.lastFrameTime = null;
+    return;
+  }
+  if (state.lastFrameTime == null) {
+    state.lastFrameTime = timestamp;
+  }
+  let delta = (timestamp - state.lastFrameTime) / 1000;
+  if (!Number.isFinite(delta) || delta < 0) {
+    delta = 0;
+  }
+  const cappedDelta = Math.min(delta, 0.12);
+  let remaining = cappedDelta;
+  while (remaining > 0) {
+    const step = Math.min(remaining, PHYSICS_CONFIG.maxStep);
+    updatePhysics(state, step);
+    remaining -= step;
+  }
+  state.lastFrameTime = timestamp;
+  state.animationFrame = requestAnimationFrame((nextTimestamp) => runAnimationFrame(state, nextTimestamp));
+};
+
+const startAnimationLoop = (state) => {
+  if (state.animationFrame != null) {
+    return;
+  }
+  state.lastFrameTime = performance.now();
+  state.animationFrame = requestAnimationFrame((timestamp) => runAnimationFrame(state, timestamp));
+};
+
+const stopAnimationLoop = (state) => {
+  if (state.animationFrame != null) {
+    cancelAnimationFrame(state.animationFrame);
+  }
+  state.animationFrame = null;
+  state.lastFrameTime = null;
+  state.pointerField.active = false;
+  state.magnets.forEach((magnet) => {
+    const magnetState = state.magnetStates.get(magnet);
+    if (magnetState) {
+      magnetState.velocity.x = 0;
+      magnetState.velocity.y = 0;
+    }
+  });
+};
+
 const stopDragging = (state) => {
   if (!state.dragState) {
     return;
   }
   const { magnet, pointerId } = state.dragState;
+  const containerWidth = state.containerWidth || state.grid.clientWidth || state.baseWidth || 1;
+  const containerHeight =
+    state.containerHeight || parseFloat(state.grid.style.height) || state.grid.clientHeight || state.baseHeight || 1;
+  updatePercentagesForState(state, magnet, containerWidth, containerHeight);
+  const magnetState = state.magnetStates.get(magnet);
+  if (magnetState) {
+    magnetState.velocity.x = 0;
+    magnetState.velocity.y = 0;
+  }
   magnet.classList.remove('magnet--dragging');
-  magnet.releasePointerCapture(pointerId);
+  if (typeof magnet.hasPointerCapture === 'function' && magnet.hasPointerCapture(pointerId)) {
+    magnet.releasePointerCapture(pointerId);
+  } else if (typeof magnet.releasePointerCapture === 'function') {
+    try {
+      magnet.releasePointerCapture(pointerId);
+    } catch (error) {
+      // Ignore if the pointer was already released.
+    }
+  }
+  state.grid.removeAttribute('data-dragging');
+  state.pointerField.active = false;
   state.dragState = null;
 };
 
@@ -195,6 +479,7 @@ const handlePointerDown = (state, event) => {
   if (!position || !size) {
     return;
   }
+  const magnetState = getOrCreateMagnetState(state, magnet);
   const gridRect = state.grid.getBoundingClientRect();
   const offsetX = event.clientX - (gridRect.left + position.x);
   const offsetY = event.clientY - (gridRect.top + position.y);
@@ -204,11 +489,15 @@ const handlePointerDown = (state, event) => {
     pointerId: event.pointerId,
     offsetX,
     offsetY,
-    hasDragged: false,
+    lastTimestamp: event.timeStamp,
   };
 
+  magnetState.velocity.x = 0;
+  magnetState.velocity.y = 0;
   magnet.classList.add('magnet--dragging');
   magnet.setPointerCapture(event.pointerId);
+  state.grid.setAttribute('data-dragging', 'true');
+  state.pointerField.active = false;
 };
 
 const handlePointerMove = (state, event) => {
@@ -232,22 +521,53 @@ const handlePointerMove = (state, event) => {
   const maxY = Math.max(containerHeight - size.height, 0);
   x = clamp(x, 0, maxX);
   y = clamp(y, 0, maxY);
+  const magnetState = state.magnetStates.get(magnet);
+  if (magnetState) {
+    const previousX = magnetState.position.x;
+    const previousY = magnetState.position.y;
+    const elapsed = Math.max((event.timeStamp - (state.dragState.lastTimestamp ?? event.timeStamp)) / 1000, 0.001);
+    magnetState.velocity.x = (x - previousX) / elapsed;
+    magnetState.velocity.y = (y - previousY) / elapsed;
+  }
   applyPosition(state, magnet, x, y);
-  updatePercentagesForMagnet(state, magnet, containerWidth, containerHeight);
-  state.dragState.hasDragged = true;
+  updatePercentagesForState(state, magnet, containerWidth, containerHeight);
+  state.dragState.lastTimestamp = event.timeStamp;
+  state.containerWidth = containerWidth;
+  state.containerHeight = containerHeight;
+  if (event.pointerType !== 'mouse') {
+    event.preventDefault();
+  }
 };
 
 const handlePointerUp = (state, event) => {
   if (!state.dragState || state.dragState.pointerId !== event.pointerId) {
     return;
   }
-  const { magnet } = state.dragState;
-  const gridRect = state.grid.getBoundingClientRect();
-  const containerWidth = gridRect.width || state.grid.clientWidth || 1;
-  const containerHeight = parseFloat(state.grid.style.height) || gridRect.height || state.grid.clientHeight || 1;
-  updatePercentagesForMagnet(state, magnet, containerWidth, containerHeight);
   stopDragging(state);
   persistLayout(state);
+};
+
+const handlePointerFieldMove = (state, event) => {
+  if (!state.active || state.dragState || event.pointerType !== 'mouse' || event.buttons !== 0) {
+    return;
+  }
+  const rect = state.grid.getBoundingClientRect();
+  const x = clamp(event.clientX - rect.left, 0, rect.width || state.containerWidth || 1);
+  const y = clamp(event.clientY - rect.top, 0, rect.height || state.containerHeight || 1);
+  state.pointerField.active = true;
+  state.pointerField.x = x;
+  state.pointerField.y = y;
+  if (rect.width) {
+    state.containerWidth = rect.width;
+  }
+  const height = parseFloat(state.grid.style.height) || rect.height;
+  if (height) {
+    state.containerHeight = height;
+  }
+};
+
+const handlePointerFieldLeave = (state) => {
+  state.pointerField.active = false;
 };
 
 const initializeGrid = (grid, magnets, storageKey) => {
@@ -297,6 +617,12 @@ const initializeGrid = (grid, magnets, storageKey) => {
     baseWidth,
     baseHeight,
     resizeObserver: null,
+    magnetStates: new Map(),
+    animationFrame: null,
+    lastFrameTime: null,
+    pointerField: { active: false, x: 0, y: 0 },
+    containerWidth: baseWidth,
+    containerHeight: baseHeight,
   };
 
   magnets.forEach((magnet, index) => {
@@ -345,11 +671,14 @@ const initializeGrid = (grid, magnets, storageKey) => {
     state.active = !state.active;
     grid.classList.toggle('magnet-grid--interactive', state.active);
     updateToggleLabel(state);
+    state.pointerField.active = false;
     if (!state.active) {
       stopDragging(state);
+      stopAnimationLoop(state);
       persistLayout(state);
     } else {
       applyLayout(state, { suppressTransitions: true });
+      startAnimationLoop(state);
     }
   });
 
@@ -361,6 +690,10 @@ const initializeGrid = (grid, magnets, storageKey) => {
     magnet.addEventListener('pointerup', (event) => handlePointerUp(state, event));
     magnet.addEventListener('pointercancel', (event) => handlePointerUp(state, event));
   });
+
+  grid.addEventListener('pointermove', (event) => handlePointerFieldMove(state, event));
+  grid.addEventListener('pointerleave', () => handlePointerFieldLeave(state));
+  grid.addEventListener('pointercancel', () => handlePointerFieldLeave(state));
 
   return state;
 };
