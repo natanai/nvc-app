@@ -121,6 +121,8 @@ const strategies = rawStrategies.map((row) => ({
   slug: slugify(row.Title),
   description: row.Description || '',
   needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
+  firstName: row['First Name'] || '',
+  location: row.Location || '',
 }));
 
 const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), item.slug]));
