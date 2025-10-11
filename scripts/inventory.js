@@ -19,6 +19,7 @@ const COLOR_INPUTS = [
 const paletteState = {
   container: null,
   toggle: null,
+  mobileToggle: null,
   panel: null,
   presetSelect: null,
   inputs: new Map(),
@@ -27,6 +28,7 @@ const paletteState = {
   currentColors: {},
   defaultColors: {},
   currentPreset: '',
+  lastTrigger: null,
 };
 
 const SECTION_ALIASES = new Map([
@@ -271,6 +273,47 @@ function saveJournalEntries(entries) {
   } catch (error) {
     console.warn('Unable to save journal entries', error);
   }
+function resolveAssetPath(path) {
+  try {
+    const basePath = document.body?.dataset?.basePath ?? '';
+    const base = new URL(basePath || './', window.location.href);
+    return new URL(path, base).toString();
+  } catch (error) {
+    console.warn('Unable to resolve asset path', error);
+    return path;
+  }
+}
+
+function isMobilePaletteLayout() {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+  return window.matchMedia('(max-width: 720px)').matches;
+}
+
+function setPaletteExpanded(expanded) {
+  const value = expanded ? 'true' : 'false';
+  paletteState.toggle?.setAttribute('aria-expanded', value);
+  paletteState.mobileToggle?.setAttribute('aria-expanded', value);
+}
+
+function rememberPaletteTrigger(element) {
+  if (element instanceof HTMLElement) {
+    paletteState.lastTrigger = element;
+  }
+}
+
+function isPaletteEventTarget(target) {
+  if (typeof Node === 'undefined' || !(target instanceof Node)) {
+    return false;
+  }
+  if (paletteState.container?.contains(target)) {
+    return true;
+  }
+  if (paletteState.mobileToggle?.contains?.(target)) {
+    return true;
+  }
+  return false;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1153,8 +1196,13 @@ function highlightNavigation() {
       return { link, linkPath: null };
     }
 
-    const linkPath = normalizePath(new URL(href, window.location.origin).pathname);
-    return { link, linkPath };
+    try {
+      const linkUrl = new URL(href, window.location.href);
+      const linkPath = normalizePath(linkUrl.pathname);
+      return { link, linkPath };
+    } catch (error) {
+      return { link, linkPath: null };
+    }
   });
 
   entries.forEach(({ link, linkPath }) => {
@@ -1207,14 +1255,17 @@ function resolveSectionAlias(pathname) {
     return null;
   }
 
-  if (SECTION_ALIASES.has(pathname)) {
-    return SECTION_ALIASES.get(pathname);
-  }
-
   for (const [pattern, target] of SECTION_ALIASES.entries()) {
-    if (pathname.startsWith(pattern)) {
-      return target;
+    const normalizedPattern = normalizePath(pattern);
+    const normalizedTarget = normalizePath(target);
+
+    const patternIndex = pathname.indexOf(normalizedPattern);
+    if (patternIndex === -1) {
+      continue;
     }
+
+    const prefix = pathname.slice(0, patternIndex);
+    return normalizePath(`${prefix}${normalizedTarget}`);
   }
 
   return null;
@@ -1257,7 +1308,6 @@ function buildPaletteUi() {
   const toggle = document.createElement('button');
   toggle.type = 'button';
   toggle.className = 'palette-corner__toggle';
-  toggle.setAttribute('aria-expanded', 'false');
   toggle.setAttribute('aria-haspopup', 'dialog');
 
   const glyph = document.createElement('span');
@@ -1269,6 +1319,22 @@ function buildPaletteUi() {
   srLabel.className = 'visually-hidden';
   srLabel.textContent = 'Open color palette customizer';
   toggle.appendChild(srLabel);
+
+  const nav = document.querySelector('.site-nav');
+  let mobileToggle = null;
+  if (nav) {
+    mobileToggle = document.createElement('button');
+    mobileToggle.type = 'button';
+    mobileToggle.className = 'site-nav__link palette-mobile-toggle';
+    mobileToggle.setAttribute('aria-haspopup', 'dialog');
+    mobileToggle.textContent = 'Color theme';
+    nav.appendChild(mobileToggle);
+  }
+
+  toggle.setAttribute('aria-expanded', 'false');
+  if (mobileToggle) {
+    mobileToggle.setAttribute('aria-expanded', 'false');
+  }
 
   const panel = document.createElement('div');
   panel.className = 'palette-corner__panel';
@@ -1295,7 +1361,15 @@ function buildPaletteUi() {
   subtitle.className = 'palette-form__subtitle';
   subtitle.textContent = 'Pick a preset or enter your own hex codes.';
 
-  header.append(title, subtitle);
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'palette-form__close';
+  closeButton.innerHTML = '<span aria-hidden="true">×</span><span class="visually-hidden">Close color palette customizer</span>';
+  closeButton.addEventListener('click', () => {
+    closePalettePanel({ restoreFocus: true });
+  });
+
+  header.append(title, subtitle, closeButton);
   form.appendChild(header);
 
   const presetField = document.createElement('label');
@@ -1386,35 +1460,53 @@ function buildPaletteUi() {
   container.append(toggle, panel);
   document.body.appendChild(container);
 
-  toggle.addEventListener('click', () => {
-    if (toggle.getAttribute('aria-expanded') === 'true') {
-      closePalettePanel();
+  const handleToggle = (element) => {
+    if (!element) {
+      return;
+    }
+
+    rememberPaletteTrigger(element);
+    if (element.getAttribute('aria-expanded') === 'true') {
+      closePalettePanel({ restoreFocus: false });
     } else {
       openPalettePanel();
     }
+  };
+
+  toggle.addEventListener('click', () => {
+    handleToggle(toggle);
   });
 
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', () => {
+      handleToggle(mobileToggle);
+    });
+  }
+
   document.addEventListener('click', (event) => {
-    if (!paletteState.container || !paletteState.toggle) {
+    if (!paletteState.container) {
       return;
     }
-    if (paletteState.toggle.getAttribute('aria-expanded') !== 'true') {
+    if (paletteState.toggle?.getAttribute('aria-expanded') !== 'true' && paletteState.mobileToggle?.getAttribute('aria-expanded') !== 'true') {
       return;
     }
-    if (!paletteState.container.contains(event.target)) {
+    if (!isPaletteEventTarget(event.target)) {
       closePalettePanel();
     }
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && paletteState.toggle?.getAttribute('aria-expanded') === 'true') {
-      closePalettePanel();
-      paletteState.toggle?.focus();
+    const expanded =
+      paletteState.toggle?.getAttribute('aria-expanded') === 'true' ||
+      paletteState.mobileToggle?.getAttribute('aria-expanded') === 'true';
+    if (event.key === 'Escape' && expanded) {
+      closePalettePanel({ restoreFocus: true });
     }
   });
 
   paletteState.container = container;
   paletteState.toggle = toggle;
+  paletteState.mobileToggle = mobileToggle;
   paletteState.panel = panel;
   paletteState.presetSelect = presetSelect;
 }
@@ -1424,31 +1516,38 @@ function openPalettePanel() {
     return;
   }
 
-  paletteState.toggle.setAttribute('aria-expanded', 'true');
+  setPaletteExpanded(true);
   paletteState.container?.classList.add('is-open');
   paletteState.panel.hidden = false;
 
   const firstInput = paletteState.inputs.values().next().value;
-  if (firstInput instanceof HTMLElement) {
-    window.requestAnimationFrame(() => {
+  const shouldAutoFocusInput = !isMobilePaletteLayout();
+  window.requestAnimationFrame(() => {
+    if (firstInput instanceof HTMLElement && shouldAutoFocusInput) {
       firstInput.focus();
       if (firstInput instanceof HTMLInputElement) {
         firstInput.select();
       }
-    });
-  } else {
-    paletteState.panel.focus();
-  }
+      return;
+    }
+
+    paletteState.panel?.focus();
+  });
 }
 
-function closePalettePanel() {
-  if (!paletteState.panel || !paletteState.toggle) {
+function closePalettePanel(options = {}) {
+  const { restoreFocus = false } = options;
+  if (!paletteState.panel) {
     return;
   }
 
-  paletteState.toggle.setAttribute('aria-expanded', 'false');
+  setPaletteExpanded(false);
   paletteState.container?.classList.remove('is-open');
   paletteState.panel.hidden = true;
+
+  if (restoreFocus && paletteState.lastTrigger instanceof HTMLElement) {
+    paletteState.lastTrigger.focus();
+  }
 }
 
 function handleColorInputChange(event) {
@@ -1607,7 +1706,7 @@ function loadSavedTheme() {
 }
 
 async function fetchColorPresets() {
-  const path = `${state.basePath || ''}data/color-palettes.csv`;
+  const path = resolveAssetPath('data/color-palettes.csv');
   const response = await fetch(path, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Failed to load presets: ${response.status}`);
