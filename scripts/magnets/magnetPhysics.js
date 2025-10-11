@@ -9,6 +9,13 @@ const DEFAULT_CONFIG = {
   mouseStrength: 0.6,
 };
 
+const DRAG_DISTANCE_THRESHOLD = 6;
+const DRAG_TIME_THRESHOLD = 150;
+
+const getNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
+  ? performance.now()
+  : Date.now());
+
 const clamp = (value, min, max) => {
   if (value < min) return min;
   if (value > max) return max;
@@ -72,6 +79,20 @@ const addPointerListeners = (state) => {
     const magnetState = state.magnets.find((magnet) => magnet.element === target);
     if (!magnetState) return;
 
+    if (event.pointerType === 'mouse') {
+      state.dragIntent.pointerId = event.pointerId;
+      state.dragIntent.pointerType = 'mouse';
+      state.dragIntent.downX = event.clientX;
+      state.dragIntent.downY = event.clientY;
+      state.dragIntent.downT = getNow();
+      state.dragIntent.moved = false;
+    } else {
+      state.dragIntent.pointerId = null;
+      state.dragIntent.pointerType = '';
+      state.dragIntent.moved = false;
+      state.dragIntent.downT = 0;
+    }
+
     state.dragging = magnetState;
     magnetState.dragging = true;
     magnetState.pointerId = event.pointerId;
@@ -107,6 +128,22 @@ const addPointerListeners = (state) => {
       magnetState.vy = 0;
       applyTransform(magnetState);
       notifyPositions(state);
+      if (
+        event.pointerType === 'mouse' &&
+        state.dragIntent.pointerId === event.pointerId &&
+        !state.dragIntent.moved
+      ) {
+        const dx = event.clientX - state.dragIntent.downX;
+        const dy = event.clientY - state.dragIntent.downY;
+        const elapsed = getNow() - state.dragIntent.downT;
+        if (
+          Math.abs(dx) > DRAG_DISTANCE_THRESHOLD ||
+          Math.abs(dy) > DRAG_DISTANCE_THRESHOLD ||
+          elapsed > DRAG_TIME_THRESHOLD
+        ) {
+          state.dragIntent.moved = true;
+        }
+      }
       if (event.pointerType !== 'mouse') {
         event.preventDefault();
       }
@@ -139,6 +176,28 @@ const addPointerListeners = (state) => {
     state.dragging = null;
     delete state.board.dataset.dragging;
     notifyPositions(state);
+    if (
+      state.dragIntent.pointerId === event.pointerId &&
+      state.dragIntent.pointerType === 'mouse' &&
+      !state.dragIntent.moved &&
+      state.dragIntent.downT > 0
+    ) {
+      const elapsed = getNow() - state.dragIntent.downT;
+      if (elapsed > DRAG_TIME_THRESHOLD) {
+        state.dragIntent.moved = true;
+      }
+    }
+    const shouldSuppress =
+      state.dragIntent.pointerId === event.pointerId &&
+      state.dragIntent.pointerType === 'mouse' &&
+      state.dragIntent.moved;
+    state.dragIntent.pointerId = null;
+    state.dragIntent.pointerType = '';
+    state.dragIntent.moved = false;
+    state.dragIntent.downT = 0;
+    if (shouldSuppress && state.onDragRelease) {
+      state.onDragRelease();
+    }
   };
 
   const handlePointerCancel = (event) => {
@@ -159,6 +218,12 @@ const addPointerListeners = (state) => {
     state.dragging = null;
     delete state.board.dataset.dragging;
     notifyPositions(state);
+    if (state.dragIntent.pointerId === event.pointerId) {
+      state.dragIntent.pointerId = null;
+      state.dragIntent.pointerType = '';
+      state.dragIntent.moved = false;
+      state.dragIntent.downT = 0;
+    }
   };
 
   const handlePointerLeave = () => {
@@ -364,6 +429,15 @@ export function startPhysics(options) {
     dragging: null,
     onPositions: options.onPositions,
     getBoardSize: options.getBoardSize,
+    onDragRelease: options.onDragRelease,
+    dragIntent: {
+      pointerId: null,
+      pointerType: '',
+      downX: 0,
+      downY: 0,
+      downT: 0,
+      moved: false,
+    },
   };
 
   const removePointerListeners = addPointerListeners(state);
@@ -379,6 +453,11 @@ export function startPhysics(options) {
         magnet.element.classList.remove('dragging');
       });
       delete state.board.dataset.dragging;
+      state.dragIntent.pointerId = null;
+      state.dragIntent.pointerType = '';
+      state.dragIntent.moved = false;
+      state.dragIntent.downT = 0;
+      state.pointerField.active = false;
     },
     shuffle: () => {
       shuffleMagnets(state);
