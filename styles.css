@@ -114,52 +114,12 @@ input {
   box-shadow: 0 10px 0 var(--shadow-strong);
 }
 
-.layout {
-  width: min(1200px, 100%);
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(280px, 360px);
-  grid-template-areas: 'board plan';
-  gap: 2.5rem;
-  align-items: flex-start;
-}
-
-.board {
-  grid-area: board;
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-}
-
-.plan {
-  grid-area: plan;
-}
-
 .fridge-door {
   background: var(--lavender);
   border: 4px solid var(--outline);
   border-radius: 28px;
   padding: 2.75rem clamp(1.25rem, 5vw, 3rem);
   box-shadow: 0 30px 0 var(--shadow-strong);
-}
-
-@media (max-width: 1024px) {
-  .layout {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'board'
-      'plan';
-  }
-
-  .board__header {
-    align-items: stretch;
-  }
-
-  .board__columns {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'details'
-      'list';
-  }
 }
 
 @media (max-width: 640px) {
@@ -171,8 +131,18 @@ input {
     padding: 2.25rem 1.5rem;
   }
 
-  .dataset-tab {
-    flex: 1 1 100%;
+  .strategy-carousel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .strategy-carousel__track {
+    width: 100%;
+  }
+
+  .carousel-nav {
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -180,19 +150,6 @@ input {
   body {
     padding: 2.5rem 1rem 3.5rem;
     align-items: stretch;
-  }
-
-  .layout {
-    width: 100%;
-    gap: 2rem;
-  }
-
-  .board__columns {
-    gap: 1.5rem;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'details'
-      'list';
   }
 
   .item-list {
@@ -206,102 +163,108 @@ input {
     padding: 1.5rem;
   }
 
-  .board__details .details {
-    min-height: clamp(260px, 60vh, 420px);
-  }
-
   .plan {
     padding: 1.5rem;
   }
 }
 
-.board__header {
+.app {
+  width: min(960px, 100%);
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.board__heading {
-  flex: 1 1 280px;
+.explorer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.explorer__intro {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.board__header .search {
-  flex: 1 1 260px;
-  max-width: 420px;
-}
-
-.board__title {
+.explorer__title {
   margin: 0;
   font-family: 'Press Start 2P', cursive;
-  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+  font-size: clamp(1.25rem, 2.6vw, 1.6rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.board__description {
+.explorer__description {
   margin: 0;
   color: var(--ink-soft);
   font-size: 1.05rem;
   max-width: 60ch;
 }
 
-.board__columns {
-  display: grid;
-  grid-template-columns: minmax(320px, 2fr) minmax(280px, 1fr);
-  grid-template-areas: 'list details';
-  gap: 1.75rem;
-  align-items: flex-start;
-}
-
-.board__list,
-.board__details {
+.stage {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-.board__list {
-  grid-area: list;
-}
-
-.board__details {
-  grid-area: details;
-}
-
-.board__section-title {
-  margin: 0;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.dataset-tabs {
+.stage__header {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem;
-  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
-.dataset-tab {
-  flex: 1 1 180px;
-  min-height: 3.75rem;
-  padding: 0.85rem 1.5rem;
-  font-size: 1.05rem;
-  text-transform: uppercase;
+.stage__intro {
+  flex: 1 1 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stage__title {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
   letter-spacing: 0.08em;
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
+  text-transform: uppercase;
 }
 
-.dataset-tab[aria-selected='true'] {
-  filter: brightness(1.1);
-  box-shadow: 0 4px 0 var(--outline), inset 0 -6px 0 rgba(27, 15, 45, 0.25);
+.stage__description {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  max-width: 60ch;
+}
+
+.dataset-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.1rem;
+}
+
+.dataset-choice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  align-self: flex-start;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  padding: 0.65rem 1.15rem;
+}
+
+.stage[hidden] {
+  display: none !important;
 }
 
 .search {
@@ -313,6 +276,11 @@ input {
   border-radius: 18px;
   padding: 1rem 1.25rem 1.2rem;
   box-shadow: 0 12px 0 var(--shadow-strong);
+  width: min(100%, 420px);
+}
+
+.stage--list .search {
+  max-width: 420px;
 }
 
 .search__label {
@@ -410,10 +378,6 @@ input {
   min-height: 360px;
 }
 
-.board__details .details {
-  min-height: clamp(320px, 55vh, 480px);
-}
-
 .details h2,
 .details h3 {
   margin: 0;
@@ -465,13 +429,48 @@ input {
   font-size: 0.85rem;
 }
 
-.strategy-list {
+.strategy-carousel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.strategy-carousel__track {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  flex: 1 1 auto;
+  padding-bottom: 0.25rem;
+}
+
+.strategy-carousel__track > .strategy-card {
+  flex: 0 0 min(280px, 80%);
+  scroll-snap-align: start;
+}
+
+.carousel-nav {
+  border: 3px solid var(--outline);
+  border-radius: 14px;
+  background: var(--plum);
+  color: #fff;
+  padding: 0.55rem 0.8rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 10px 0 var(--shadow-strong);
+}
+
+.carousel-nav:hover,
+.carousel-nav:focus-visible {
+  box-shadow: 0 6px 0 var(--shadow-strong), inset 0 -6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.carousel-nav:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .strategy-card {
@@ -521,6 +520,7 @@ input {
 }
 
 .plan {
+  width: min(960px, 100%);
   background: var(--rose);
   border: 3px solid var(--outline);
   border-radius: 24px;
@@ -682,7 +682,8 @@ input {
   outline-offset: 2px;
 }
 
-.dataset-tab.magnet {
+.dataset-choice.magnet,
+.back-button.magnet {
   box-shadow: 0 12px 0 var(--shadow-strong);
 }
 
