@@ -8,8 +8,9 @@ const state = {
   inventoryListEl: null,
   inventorySummaryEl: null,
   inventoryMessageEl: null,
-  inventoryPanelEl: null,
+  strategiesContainerEl: null,
   inventoryToggleButton: null,
+  showStrategies: false,
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -168,19 +169,18 @@ function setupInventoryPage() {
   state.inventoryListEl = listEl;
   state.inventorySummaryEl = document.getElementById('inventory-summary');
   state.inventoryMessageEl = document.querySelector('[data-inventory-message]');
-  state.inventoryPanelEl = document.querySelector('[data-inventory-panel]');
+  state.strategiesContainerEl = document.querySelector('[data-strategies-container]');
+  state.showStrategies = state.strategiesContainerEl ? !state.strategiesContainerEl.hidden : false;
   state.inventoryToggleButton = document.querySelector('[data-inventory-toggle]');
 
-  if (state.inventoryToggleButton && state.inventoryPanelEl) {
+  if (state.inventoryToggleButton) {
     state.inventoryToggleButton.addEventListener('click', () => {
-      if (state.inventoryPanelEl.hasAttribute('hidden')) {
-        openInventoryPanel();
-      } else {
-        closeInventoryPanel();
-      }
+      setShowStrategies(!state.showStrategies);
     });
-    updateInventoryToggleLabel();
   }
+
+  updateStrategiesVisibility();
+  updateInventoryToggleLabel();
 
   captureNeedsFromForm();
   renderInventoryViews();
@@ -317,6 +317,7 @@ function renderInventoryViews() {
   renderInventorySummary();
   renderInventoryList();
   updateInventoryCount();
+  updateStrategiesVisibility();
   updateInventoryToggleLabel();
 }
 
@@ -381,18 +382,21 @@ function renderInventorySummary() {
 }
 
 function renderInventoryList() {
-  if (!state.inventoryListEl || !state.needs.length) {
+  if (!state.inventoryListEl) {
     return;
   }
 
   state.inventoryListEl.innerHTML = '';
 
-  const grouped = new Map(state.needs.map((need) => [need.slug, []]));
+  const grouped = new Map();
   const extras = [];
 
   state.inventory.forEach((entry) => {
     const slug = pickNeedSlug(entry);
-    if (slug && grouped.has(slug)) {
+    if (slug && state.needsBySlug.has(slug)) {
+      if (!grouped.has(slug)) {
+        grouped.set(slug, []);
+      }
       grouped.get(slug).push(entry);
       return;
     }
@@ -401,12 +405,18 @@ function renderInventoryList() {
 
   let openedNeed = false;
 
-  state.needs.forEach((need) => {
+  const needsWithEntries = state.needs.filter((need) => grouped.has(need.slug));
+
+  needsWithEntries.forEach((need) => {
     const entries = grouped.get(need.slug) || [];
+    if (!entries.length) {
+      return;
+    }
+
     const details = document.createElement('details');
     details.className = 'inventory-need';
     details.id = `inventory-${need.slug}`;
-    if (entries.length && !openedNeed) {
+    if (!openedNeed) {
       details.open = true;
       openedNeed = true;
     }
@@ -421,9 +431,7 @@ function renderInventoryList() {
 
     const badge = document.createElement('span');
     badge.className = 'inventory-need__badge';
-    badge.textContent = entries.length
-      ? `${entries.length} ${entries.length === 1 ? 'strategy' : 'strategies'}`
-      : 'None yet';
+    badge.textContent = `${entries.length} ${entries.length === 1 ? 'strategy' : 'strategies'}`;
     summary.append(badge);
 
     details.append(summary);
@@ -431,16 +439,9 @@ function renderInventoryList() {
     const body = document.createElement('div');
     body.className = 'inventory-need__body';
 
-    if (!entries.length) {
-      const empty = document.createElement('p');
-      empty.className = 'inventory-need__empty';
-      empty.innerHTML = `No strategies saved yet. <a href="${state.basePath}needs/${need.slug}/">Browse need page</a>.`;
-      body.append(empty);
-    } else {
-      entries.forEach((entry) => {
-        body.append(renderInventoryItem(entry));
-      });
-    }
+    entries.forEach((entry) => {
+      body.append(renderInventoryItem(entry));
+    });
 
     details.append(body);
     state.inventoryListEl.append(details);
@@ -479,45 +480,57 @@ function renderInventoryList() {
     state.inventoryListEl.append(details);
   }
 
-  if (!state.inventory.length) {
+  if (!needsWithEntries.length && !extras.length) {
     const emptyNotice = document.createElement('p');
     emptyNotice.className = 'inventory-empty';
-    emptyNotice.textContent = 'No strategies saved yet. Visit a need page to add one or create your own above.';
+    emptyNotice.textContent = 'No saved strategies yet – use the Need Page button above to add one.';
     state.inventoryListEl.append(emptyNotice);
   }
 }
 
-function openInventoryPanel() {
-  if (!state.inventoryPanelEl) {
+function setShowStrategies(visible) {
+  const nextValue = Boolean(visible);
+  if (state.showStrategies === nextValue) {
+    updateStrategiesVisibility();
+    updateInventoryToggleLabel();
     return;
   }
-  state.inventoryPanelEl.removeAttribute('hidden');
+  state.showStrategies = nextValue;
+  updateStrategiesVisibility();
   updateInventoryToggleLabel();
 }
 
-function closeInventoryPanel() {
-  if (!state.inventoryPanelEl) {
+function updateStrategiesVisibility() {
+  if (!state.strategiesContainerEl) {
     return;
   }
-  if (!state.inventoryPanelEl.hasAttribute('hidden')) {
-    state.inventoryPanelEl.setAttribute('hidden', '');
-  }
-  updateInventoryToggleLabel();
+  const isVisible = Boolean(state.showStrategies);
+  state.strategiesContainerEl.hidden = !isVisible;
+  state.strategiesContainerEl.classList.toggle('inventory-list-panel--hidden', !isVisible);
+  state.strategiesContainerEl.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+}
+
+function openInventoryPanel() {
+  setShowStrategies(true);
+}
+
+function closeInventoryPanel() {
+  setShowStrategies(false);
 }
 
 function updateInventoryToggleLabel() {
   if (!state.inventoryToggleButton) {
     return;
   }
-  const isOpen = state.inventoryPanelEl ? !state.inventoryPanelEl.hasAttribute('hidden') : false;
+  const isOpen = state.showStrategies;
   const total = state.inventory.length;
   const baseLabel = isOpen ? 'Hide your saved strategies' : 'Show your saved strategies';
   const suffix = !isOpen && total ? ` (${total})` : '';
   state.inventoryToggleButton.textContent = `${baseLabel}${suffix}`;
   state.inventoryToggleButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  if (state.inventoryPanelEl) {
-    const panelId = state.inventoryPanelEl.id || 'inventory-list-panel';
-    state.inventoryPanelEl.id = panelId;
+  if (state.strategiesContainerEl) {
+    const panelId = state.strategiesContainerEl.id || 'strategies-list';
+    state.strategiesContainerEl.id = panelId;
     state.inventoryToggleButton.setAttribute('aria-controls', panelId);
   }
 }
@@ -897,6 +910,11 @@ function focusNeedSection(slug) {
   openInventoryPanel();
   const target = document.getElementById(`inventory-${slug}`);
   if (!target) {
+    const needTitle = state.needsBySlug.get(slug)?.title || 'this need';
+    showInventoryMessage(
+      `No saved strategies for ${needTitle} yet. Use the Need Page button above to add one.`,
+      'warning'
+    );
     return;
   }
   if (target instanceof HTMLDetailsElement) {

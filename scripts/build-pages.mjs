@@ -433,15 +433,23 @@ function renderInventoryPage() {
             class="inventory-button"
             data-inventory-toggle
             aria-expanded="false"
-            aria-controls="inventory-list-panel"
+            aria-controls="strategies-list"
           >
             Show your saved strategies
           </button>
         </div>
-        <div class="inventory-list-panel" data-inventory-panel hidden id="inventory-list-panel">
+        <div
+          class="inventory-list-panel inventory-list-panel--hidden"
+          id="strategies-list"
+          data-strategies-container
+          hidden
+          aria-labelledby="inventory-list-heading"
+        >
           <div class="inventory-list__header">
-            <h3 id="inventory-list-heading" class="section-title">Your strategies</h3>
-            <p class="inventory-list__hint">Grouped by need so you can spot any empty sections.</p>
+            <h3 id="inventory-list-heading" class="section-title">Saved strategies by need</h3>
+            <p class="inventory-list__hint">
+              Expand a need to review strategies you have saved and make updates.
+            </p>
           </div>
           <div id="inventory-list" class="inventory-list"></div>
         </div>
