@@ -278,7 +278,7 @@ function renderNeed(item, strategyLookup) {
   const tagOptions = data.needs
     .map(
       (need) => `
-              <label class="tag-pill">
+              <label class="tag-pill" role="option">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="${escapeHtml(need.slug)}" />
                 <span class="tag-pill__visual">${escapeHtml(need.title)}</span>
               </label>`
@@ -339,7 +339,7 @@ function renderInventoryPage() {
   const tagOptions = data.needs
     .map(
       (need) => `
-              <label class="tag-pill">
+              <label class="tag-pill" role="option">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="${escapeHtml(need.slug)}" />
                 <span class="tag-pill__visual">${escapeHtml(need.title)}</span>
               </label>`
@@ -384,12 +384,40 @@ function renderInventoryPage() {
             <option value="" disabled selected>Select a need</option>
             ${needOptions}
           </select>
-          <fieldset class="tag-picker tag-picker--compact">
+          <fieldset class="tag-picker tag-picker--compact" data-tag-picker>
             <legend class="tag-picker__legend">Other needs this strategy supports</legend>
             <p class="tag-picker__hint">Optional: choose more magnets so this strategy shows up for them too.</p>
-            <div class="tag-picker__list tag-picker__list--scroll">
+            <div class="tag-picker__control">
+              <button
+                type="button"
+                class="tag-picker__toggle"
+                data-tag-picker-toggle
+                aria-haspopup="listbox"
+                aria-expanded="false"
+              >
+                <span data-tag-picker-toggle-label>Choose supporting needs</span>
+              </button>
+              <div class="tag-picker__panel" data-tag-picker-panel hidden>
+                <label class="tag-picker__search">
+                  <span class="sr-only">Search supporting needs</span>
+                  <input
+                    type="search"
+                    class="tag-picker__search-input"
+                    placeholder="Search needs…"
+                    data-tag-picker-search
+                  />
+                </label>
+                <div
+                  class="tag-picker__list tag-picker__list--scroll tag-picker__options"
+                  data-tag-picker-options
+                  role="listbox"
+                  aria-multiselectable="true"
+                >
               ${tagOptions}
+                </div>
+              </div>
             </div>
+            <div class="tag-picker__selected" data-tag-picker-selected aria-live="polite"></div>
           </fieldset>
           <label for="inventory-name">First name (optional)</label>
           <input id="inventory-name" name="name" type="text" />
