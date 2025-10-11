@@ -14,6 +14,15 @@ const DEFAULT_CONFIG = {
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];
 const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 
+const LAYOUT_GAP_X = 12;
+const LAYOUT_GAP_Y = 14;
+const BOARD_PADDING = 24;
+const CLICK_SUPPRESS_WINDOW = 150;
+
+const getNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
+  ? performance.now()
+  : Date.now());
+
 const randomFrom = (values) => values[Math.floor(Math.random() * values.length)];
 
 const clamp = (value, min, max) => {
@@ -73,7 +82,7 @@ const updateBoardHeight = (state) => {
   state.magnets.forEach((magnet) => {
     maxBottom = Math.max(maxBottom, magnet.y + magnet.height);
   });
-  const height = Math.max(state.minHeight, maxBottom);
+  const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
   state.board.style.height = `${height}px`;
 };
@@ -121,10 +130,15 @@ const persistLayout = (state, immediate = false) => {
 
 const applyPercentLayout = (state) => {
   const rect = state.board.getBoundingClientRect();
-  const width = rect.width || state.board.clientWidth || state.boardWidth || 1;
+  const width = Math.max(rect.width || state.board.clientWidth || state.boardWidth || 1, 1);
   state.boardWidth = width;
-  const baseHeight = state.boardHeight || state.minHeight || rect.height || 1;
-  const layoutHeight = Math.max(baseHeight, 1);
+  const layoutHeight = Math.max(
+    state.boardHeight || 0,
+    state.minHeight || 0,
+    rect.height || 0,
+    1,
+  );
+  state.boardHeight = Math.max(state.boardHeight || 0, layoutHeight);
   state.magnets.forEach((magnet) => {
     const percentages = state.layout.get(magnet.id);
     if (percentages) {
@@ -141,30 +155,28 @@ const applyPercentLayout = (state) => {
 };
 
 const seedLayout = (state) => {
-  const width = Math.max(state.boardWidth, 1);
-  const baseHeight = Math.max(state.boardHeight, state.minHeight, 1);
-  const count = state.magnets.length;
-  if (!count) {
-    return;
-  }
-  const columns = Math.max(1, Math.round(Math.sqrt(count)));
-  const rows = Math.max(1, Math.ceil(count / columns));
-  const cellWidth = width / columns;
-  const cellHeight = baseHeight / rows;
-  state.magnets.forEach((magnet, index) => {
-    const column = index % columns;
-    const row = Math.floor(index / columns);
-    const jitterX = (Math.random() - 0.5) * Math.min(cellWidth * 0.2, 20);
-    const jitterY = (Math.random() - 0.5) * Math.min(cellHeight * 0.2, 20);
-    const baseX = column * cellWidth + (cellWidth - magnet.width) / 2 + jitterX;
-    const baseY = row * cellHeight + (cellHeight - magnet.height) / 2 + jitterY;
-    const maxX = Math.max(width - magnet.width, 0);
-    const maxY = Math.max(baseHeight - magnet.height, 0);
-    magnet.x = clamp(baseX, 0, maxX);
-    magnet.y = clamp(baseY, 0, maxY);
+  const rect = state.board.getBoundingClientRect();
+  const width = Math.max(rect.width || state.board.clientWidth || state.boardWidth || 1, 1);
+  state.boardWidth = width;
+  let x = LAYOUT_GAP_X;
+  let y = LAYOUT_GAP_Y;
+  let lineHeight = 0;
+  state.magnets.forEach((magnet) => {
+    const magnetWidth = magnet.width;
+    const magnetHeight = magnet.height;
+    if (x > LAYOUT_GAP_X && x + magnetWidth + LAYOUT_GAP_X > width) {
+      x = LAYOUT_GAP_X;
+      y += lineHeight + LAYOUT_GAP_Y;
+      lineHeight = 0;
+    }
+    const maxX = Math.max(width - magnetWidth, 0);
+    const placeX = clamp(x, 0, maxX);
+    magnet.x = placeX;
+    magnet.y = y;
     setMagnetTransform(magnet);
+    x = placeX + magnetWidth + LAYOUT_GAP_X;
+    lineHeight = Math.max(lineHeight, magnetHeight);
   });
-  state.boardHeight = baseHeight;
   updateBoardHeight(state);
 };
 
@@ -203,7 +215,6 @@ const shuffleWithoutPhysics = (state) => {
 };
 
 const handlePositionsUpdate = (state, list) => {
-  let maxBottom = 0;
   list.forEach((item) => {
     const magnet = state.magnetMap.get(item.id);
     if (!magnet) {
@@ -211,12 +222,8 @@ const handlePositionsUpdate = (state, list) => {
     }
     magnet.x = item.x;
     magnet.y = item.y;
-    maxBottom = Math.max(maxBottom, magnet.y + magnet.height);
   });
-  if (maxBottom > 0) {
-    state.boardHeight = Math.max(state.minHeight, maxBottom);
-    state.board.style.height = `${state.boardHeight}px`;
-  }
+  updateBoardHeight(state);
   updateLayout(state);
   persistLayout(state);
 };
@@ -228,6 +235,9 @@ const setPlayState = (state, active) => {
     }
     state.board.dataset.active = '1';
     state.root?.setAttribute('data-magnet-active', '1');
+    state.magnets.forEach((magnet) => {
+      magnet.element.setAttribute('draggable', 'false');
+    });
     const magnetElements = state.magnets.map((magnet) => magnet.element);
     state.physics = startPhysics({
       board: state.board,
@@ -235,6 +245,7 @@ const setPlayState = (state, active) => {
       config: DEFAULT_CONFIG,
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
+      onDragRelease: () => state.setClickSuppress(),
     });
   } else {
     if (!state.physics) {
@@ -244,9 +255,14 @@ const setPlayState = (state, active) => {
     state.physics = null;
     delete state.board.dataset.active;
     state.root?.removeAttribute('data-magnet-active');
+    state.magnets.forEach((magnet) => {
+      magnet.element.removeAttribute('draggable');
+    });
+    state.suppressUntil = 0;
     updateLayout(state);
     persistLayout(state, true);
   }
+  state.playActive = active;
   updateToggleLabel(state.toggle, active);
 };
 
@@ -282,14 +298,30 @@ const initializeBoard = async (root, index) => {
     magnetMap: new Map(),
     layout: new Map(),
     physics: null,
-    boardWidth: boardRect.width || board.clientWidth || 1,
-    boardHeight: boardRect.height || board.clientHeight || 1,
+    boardWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
+    boardHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
     minHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
     saveTimer: null,
     lastSaveTime: 0,
     resizeObserver: null,
     cleanupResize: null,
+    playActive: false,
+    suppressUntil: 0,
   };
+
+  state.setClickSuppress = () => {
+    state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;
+  };
+
+  board.addEventListener('click', (event) => {
+    if (!state.playActive) {
+      return;
+    }
+    if (getNow() < state.suppressUntil) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
 
   measured.forEach((magnet) => {
     magnet.id = magnet.id || `${index}-${state.magnetMap.size}`;
