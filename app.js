@@ -1,20 +1,63 @@
 const PLAN_STORAGE_KEY = 'needshare-care-plan';
 
-const datasetTabs = document.querySelectorAll('.dataset-tab');
 const searchInput = document.getElementById('searchInput');
 const itemList = document.getElementById('itemList');
 const detailsEl = document.getElementById('detailsContent');
 const planList = document.getElementById('planList');
 const planMessageEl = document.getElementById('planMessage');
+const datasetChoices = document.getElementById('datasetChoices');
+const datasetButtons = datasetChoices ? datasetChoices.querySelectorAll('[data-dataset]') : [];
+const panels = {
+  datasets: document.querySelector('[data-panel="datasets"]'),
+  list: document.querySelector('[data-panel="list"]'),
+  details: document.querySelector('[data-panel="details"]'),
+};
+const listTitleEl = document.getElementById('listTitle');
+const listDescriptionEl = document.getElementById('listDescription');
+const detailsTitleEl = document.getElementById('detailsTitle');
+const detailsDescriptionEl = document.getElementById('detailsDescription');
+const backButtons = document.querySelectorAll('.back-button[data-back]');
 
 const magnetRegistry = new WeakSet();
 const MAGNET_DRAG_THRESHOLD = 6;
 
 const state = {
-  dataset: 'feelings',
+  stage: 'datasets',
+  dataset: null,
   searchTerm: '',
   selection: null,
   plan: [],
+};
+
+const datasetCopy = {
+  feelings: {
+    listTitle: 'Feelings on the surface',
+    listDescription: 'Notice the sensations and emotional tones arriving for you right now.',
+    detailsTitle: 'Tracing this feeling',
+    detailsDescription:
+      'Let the feeling guide you toward the needs underneath. Tap a linked need when you are ready to focus there.',
+  },
+  needs: {
+    listTitle: 'Needs asking for care',
+    listDescription: 'Listen for the essential need that longs to be heard and held.',
+    detailsTitle: 'Listening to this need',
+    detailsDescription:
+      'Offer presence to this need and explore gentle strategies that could tend to it.',
+  },
+  situations: {
+    listTitle: 'Situations unfolding',
+    listDescription: 'Choose a situation that mirrors what is happening around or within you.',
+    detailsTitle: 'Exploring this situation',
+    detailsDescription:
+      'Notice the feelings and needs that this situation awakens. Follow them to continue your exploration.',
+  },
+  strategies: {
+    listTitle: 'Care strategies',
+    listDescription: 'Gather practices that might nourish the needs you are tending.',
+    detailsTitle: 'Practicing this strategy',
+    detailsDescription:
+      'Notice how this practice lands in your body and which needs it may support.',
+  },
 };
 
 const disableTouchDragging = typeof window !== 'undefined' && window.matchMedia
@@ -47,19 +90,44 @@ async function init() {
   }
 
   state.plan = loadPlan();
-  setDataset('feelings');
+  setStage('datasets');
+  updateStageCopy();
+  render();
   bindEvents();
 }
 
 function bindEvents() {
-  datasetTabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      setDataset(tab.dataset.dataset);
+  datasetButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      openDataset(button.dataset.dataset);
+    });
+  });
+
+  backButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = button.dataset.back;
+      if (target === 'datasets') {
+        state.dataset = null;
+        state.selection = null;
+        state.searchTerm = '';
+        if (searchInput) searchInput.value = '';
+        setStage('datasets');
+        updateStageCopy();
+        render();
+      } else if (target === 'list') {
+        state.selection = null;
+        setStage('list');
+        updateStageCopy();
+        render();
+      }
     });
   });
 
   searchInput.addEventListener('input', (event) => {
     state.searchTerm = event.target.value;
+    if (state.stage !== 'list') {
+      setStage('list');
+    }
     render();
   });
 
@@ -70,6 +138,8 @@ function bindEvents() {
     const selection = findItem(state.dataset, slug);
     if (!selection) return;
     state.selection = selection;
+    setStage('details');
+    updateStageCopy();
     render();
   });
 
@@ -78,7 +148,7 @@ function bindEvents() {
     if (chip) {
       const targetDataset = chip.dataset.target;
       const { slug, title } = chip.dataset;
-      setDataset(targetDataset, { slug, title });
+      openEntry(targetDataset, { slug, title });
       return;
     }
 
@@ -114,19 +184,76 @@ function showErrorState(error) {
   detailsEl.append(message, hint);
 }
 
-function setDataset(dataset, { slug, title } = {}) {
+function setStage(stage) {
+  if (!panels[stage]) return;
+  state.stage = stage;
+  updatePanels();
+}
+
+function updatePanels() {
+  Object.entries(panels).forEach(([stage, element]) => {
+    if (!element) return;
+    const isActive = state.stage === stage;
+    element.hidden = !isActive;
+    element.setAttribute('data-active', String(isActive));
+  });
+}
+
+function updateStageCopy() {
+  const copy = datasetCopy[state.dataset] ?? null;
+  if (listTitleEl) {
+    listTitleEl.textContent = copy?.listTitle ?? 'Browse magnets';
+  }
+  if (listDescriptionEl) {
+    listDescriptionEl.textContent = copy?.listDescription ?? 'Select a magnet that resonates right now.';
+  }
+  if (detailsTitleEl) {
+    detailsTitleEl.textContent = copy?.detailsTitle ?? 'Magnet details';
+  }
+  if (detailsDescriptionEl) {
+    detailsDescriptionEl.textContent =
+      copy?.detailsDescription ?? 'Follow the threads to discover the need asking for care.';
+  }
+}
+
+function openDataset(dataset) {
   if (!data[dataset]) return;
   state.dataset = dataset;
   state.searchTerm = '';
-  searchInput.value = '';
+  state.selection = null;
+  if (searchInput) searchInput.value = '';
+  setStage('list');
+  updateStageCopy();
+  render();
+}
+
+function openEntry(dataset, { slug, title } = {}) {
+  if (!data[dataset]) return;
+  state.dataset = dataset;
+  state.searchTerm = '';
+  if (searchInput) searchInput.value = '';
   state.selection = slug || title ? findItem(dataset, slug, title) ?? null : null;
+  setStage(state.selection ? 'details' : 'list');
+  updateStageCopy();
   render();
 }
 
 function render() {
-  updateTabs();
-  const filtered = renderList();
-  renderDetails(filtered);
+  updatePanels();
+  updateStageCopy();
+
+  if (state.stage === 'datasets') {
+    itemList.innerHTML = '';
+    detailsEl.innerHTML = '';
+  } else {
+    const filtered = renderList();
+    if (state.stage === 'details') {
+      renderDetails(filtered);
+    } else {
+      detailsEl.innerHTML = '';
+    }
+  }
+
   renderPlan();
   activateMagnets(document);
 }
@@ -147,15 +274,12 @@ function shuffleArray(items) {
   return shuffled;
 }
 
-function updateTabs() {
-  datasetTabs.forEach((tab) => {
-    const isActive = tab.dataset.dataset === state.dataset;
-    tab.setAttribute('aria-selected', String(isActive));
-    tab.setAttribute('tabindex', isActive ? '0' : '-1');
-  });
-}
-
 function renderList() {
+  if (!state.dataset) {
+    itemList.innerHTML = '';
+    return [];
+  }
+
   itemList.innerHTML = '';
   const datasetItems = data[state.dataset] ?? [];
   const filtered = datasetItems.filter((item) => matchesSearch(item, state.dataset, state.searchTerm));
@@ -165,7 +289,9 @@ function renderList() {
     empty.className = 'item-list__empty';
     empty.textContent = 'No matches found. Adjust your search or choose another data set.';
     itemList.appendChild(empty);
-    state.selection = null;
+    if (state.stage !== 'details') {
+      state.selection = null;
+    }
     activateMagnets(itemList);
     return filtered;
   }
@@ -175,7 +301,7 @@ function renderList() {
     ? filtered.some((entry) => entry.slug === currentSlug)
     : false;
 
-  if (!selectionStillVisible) {
+  if (!selectionStillVisible && state.stage !== 'details') {
     state.selection = null;
   }
 
@@ -222,7 +348,7 @@ function renderList() {
   return filtered;
 }
 
-function renderDetails(filteredItems) {
+function renderDetails(filteredItems = []) {
   detailsEl.innerHTML = '';
 
   if (!state.selection) {
@@ -230,7 +356,7 @@ function renderDetails(filteredItems) {
     empty.className = 'details__empty';
     empty.textContent = filteredItems && filteredItems.length === 0
       ? 'No entries match your current search.'
-      : 'Select any item from the list to explore its connections.';
+      : 'Choose a magnet to explore its connections.';
     detailsEl.appendChild(empty);
     activateMagnets(detailsEl);
     return;
@@ -298,14 +424,8 @@ function renderNeedDetails(item) {
   container.appendChild(header);
 
   appendDescription(container, item.description, {
-    emptyMessage: 'This need is calling for attention. Try a strategy below or explore linked feelings for empathy clues.',
+    emptyMessage: 'This need is calling for attention. Offer it presence and explore the strategies below for gentle support.',
   });
-
-  const feelingsGroup = createDetailGroup('Feelings connected to this need', item.feelings, 'feelings');
-  if (feelingsGroup) container.appendChild(feelingsGroup);
-
-  const situationsGroup = createDetailGroup('Situations that often bring this need forward', item.situations, 'situations');
-  if (situationsGroup) container.appendChild(situationsGroup);
 
   const strategySection = document.createElement('section');
   strategySection.className = 'detail-group';
@@ -315,20 +435,14 @@ function renderNeedDetails(item) {
   strategyTitle.textContent = 'Care strategies to experiment with';
   strategySection.appendChild(strategyTitle);
 
-  const strategiesList = document.createElement('ul');
-  strategiesList.className = 'strategy-list';
-
   const strategies = resolveEntries(item.strategies, 'strategies');
   if (strategies.length === 0) {
     const placeholder = document.createElement('p');
     placeholder.className = 'details__description';
-    placeholder.textContent = 'No strategies have been linked yet. Try searching the strategies tab directly.';
+    placeholder.textContent = 'No strategies have been linked yet. Explore nearby magnets to discover practices that resonate.';
     strategySection.appendChild(placeholder);
   } else {
-    strategies.forEach((strategy) => {
-      strategiesList.appendChild(createStrategyCard(strategy));
-    });
-    strategySection.appendChild(strategiesList);
+    strategySection.appendChild(createStrategyCarousel(strategies));
   }
 
   container.appendChild(strategySection);
@@ -461,6 +575,48 @@ function createStrategyCard(strategy) {
 
   card.appendChild(action);
   return card;
+}
+
+function createStrategyCarousel(strategies) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'strategy-carousel';
+
+  const track = document.createElement('ul');
+  track.className = 'strategy-carousel__track';
+
+  strategies.forEach((strategy) => {
+    track.appendChild(createStrategyCard(strategy));
+  });
+
+  if (strategies.length > 1) {
+    const prev = document.createElement('button');
+    prev.type = 'button';
+    prev.className = 'carousel-nav';
+    prev.dataset.ignoreDrag = 'true';
+    prev.setAttribute('aria-label', 'Scroll strategies left');
+    prev.textContent = '←';
+    prev.addEventListener('click', () => scrollCarousel(track, -1));
+
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'carousel-nav';
+    next.dataset.ignoreDrag = 'true';
+    next.setAttribute('aria-label', 'Scroll strategies right');
+    next.textContent = '→';
+    next.addEventListener('click', () => scrollCarousel(track, 1));
+
+    wrapper.append(prev, track, next);
+  } else {
+    wrapper.appendChild(track);
+  }
+
+  return wrapper;
+}
+
+function scrollCarousel(track, direction) {
+  if (!track) return;
+  const distance = track.clientWidth * 0.8 * direction;
+  track.scrollBy({ left: distance, behavior: 'smooth' });
 }
 
 function renderPlan() {

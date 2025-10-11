@@ -18,88 +18,98 @@
       </div>
     </header>
 
-    <main class="layout fridge-door">
-      <section class="board" aria-labelledby="explorerTitle">
-        <header class="board__header">
-          <div class="board__heading">
-            <h2 id="explorerTitle" class="board__title">Explore the care web</h2>
-            <p class="board__description">
-              Start with whichever data set feels alive right now. Each magnet reveals linked feelings, needs, situations,
-              and strategies to keep the exploration flowing.
-            </p>
+    <main class="app fridge-door">
+      <section class="explorer" aria-labelledby="explorerTitle">
+        <header class="explorer__intro">
+          <h2 id="explorerTitle" class="explorer__title">Follow a thread of care</h2>
+          <p class="explorer__description">
+            Begin with the doorway that feels most alive. Each magnet will gently guide you toward the need underneath
+            and offer strategies for tending to it.
+          </p>
+        </header>
+
+        <section class="stage stage--datasets" data-panel="datasets" aria-labelledby="datasetStageTitle">
+          <h3 id="datasetStageTitle" class="stage__title">What are you noticing?</h3>
+          <p class="stage__description">Choose feelings, needs, or situations to open a tray of magnets.</p>
+          <div id="datasetChoices" class="dataset-choices" role="list">
+            <button
+              type="button"
+              class="dataset-choice magnet"
+              data-dataset="feelings"
+              data-magnet="feelings"
+              data-magnet-key="choose-feelings"
+              data-ignore-drag="true"
+            >
+              Feelings
+            </button>
+            <button
+              type="button"
+              class="dataset-choice magnet"
+              data-dataset="needs"
+              data-magnet="needs"
+              data-magnet-key="choose-needs"
+              data-ignore-drag="true"
+            >
+              Needs
+            </button>
+            <button
+              type="button"
+              class="dataset-choice magnet"
+              data-dataset="situations"
+              data-magnet="situations"
+              data-magnet-key="choose-situations"
+              data-ignore-drag="true"
+            >
+              Situations
+            </button>
+          </div>
+        </section>
+
+        <section class="stage stage--list" data-panel="list" aria-labelledby="listTitle" hidden>
+          <div class="stage__header">
+            <button type="button" class="back-button magnet" data-back="datasets" data-ignore-drag="true">
+              ← Choose again
+            </button>
+            <div class="stage__intro">
+              <h3 id="listTitle" class="stage__title">Browse magnets</h3>
+              <p id="listDescription" class="stage__description">Select a magnet that resonates right now.</p>
+            </div>
           </div>
 
           <label class="search" for="searchInput">
-            <span class="search__label">Search</span>
+            <span class="search__label">Search magnets</span>
             <input id="searchInput" type="search" placeholder="Search by title or description" autocomplete="off" />
           </label>
-        </header>
 
-        <div class="dataset-tabs" role="tablist" aria-label="Data set selector">
-          <button
-            class="dataset-tab magnet"
-            role="tab"
-            data-dataset="feelings"
-            data-magnet="feelings"
-            data-magnet-key="tab-feelings"
-            aria-selected="true"
-          >
-            Feelings
-          </button>
-          <button
-            class="dataset-tab magnet"
-            role="tab"
-            data-dataset="needs"
-            data-magnet="needs"
-            data-magnet-key="tab-needs"
-            aria-selected="false"
-          >
-            Needs
-          </button>
-          <button
-            class="dataset-tab magnet"
-            role="tab"
-            data-dataset="situations"
-            data-magnet="situations"
-            data-magnet-key="tab-situations"
-            aria-selected="false"
-          >
-            Situations
-          </button>
-          <button
-            class="dataset-tab magnet"
-            role="tab"
-            data-dataset="strategies"
-            data-magnet="strategies"
-            data-magnet-key="tab-strategies"
-            aria-selected="false"
-          >
-            Strategies
-          </button>
-        </div>
+          <ul id="itemList" class="item-list" role="listbox" aria-live="polite"></ul>
+        </section>
 
-        <div class="board__columns">
-          <section class="board__list" aria-labelledby="listHeading">
-            <h3 id="listHeading" class="board__section-title">Browse magnets</h3>
-            <ul id="itemList" class="item-list" role="listbox" aria-live="polite"></ul>
-          </section>
+        <section class="stage stage--details" data-panel="details" aria-labelledby="detailsTitle" hidden>
+          <div class="stage__header">
+            <button type="button" class="back-button magnet" data-back="list" data-ignore-drag="true">
+              ← Back to magnets
+            </button>
+            <div class="stage__intro">
+              <h3 id="detailsTitle" class="stage__title">Magnet details</h3>
+              <p id="detailsDescription" class="stage__description">
+                Follow the threads to discover the need asking for care.
+              </p>
+            </div>
+          </div>
 
-          <section class="board__details" aria-labelledby="detailsHeading">
-            <h3 id="detailsHeading" class="board__section-title">Connections &amp; notes</h3>
-            <div id="detailsContent" class="details" aria-live="polite"></div>
-          </section>
-        </div>
+          <div id="detailsContent" class="details" aria-live="polite"></div>
+        </section>
       </section>
-
-      <aside class="plan" aria-labelledby="planTitle">
-        <div class="plan__header">
-          <h2 id="planTitle">Care plan</h2>
-          <p class="plan__hint">Collect strategies that resonate to revisit later.</p>
-        </div>
-        <div id="planMessage" class="visually-hidden" aria-live="polite"></div>
-        <ul id="planList" class="plan__list"></ul>
-      </aside>
     </main>
+
+    <section class="plan fridge-door" aria-labelledby="planTitle">
+      <div class="plan__header">
+        <h2 id="planTitle">Care plan</h2>
+        <p class="plan__hint">Collect strategies that resonate to revisit later.</p>
+      </div>
+      <div id="planMessage" class="visually-hidden" aria-live="polite"></div>
+      <ul id="planList" class="plan__list"></ul>
+    </section>
 
     <footer class="footer">
       <p>
