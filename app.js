@@ -8,7 +8,6 @@ const planList = document.getElementById('planList');
 const planMessageEl = document.getElementById('planMessage');
 
 const magnetRegistry = new WeakSet();
-const magnetPositions = new Map();
 const MAGNET_DRAG_THRESHOLD = 6;
 
 const state = {
@@ -556,19 +555,10 @@ function savePlan() {
 function activateMagnets(root = document) {
   if (!root || typeof root.querySelectorAll !== 'function') return;
   root.querySelectorAll('.magnet').forEach((element) => {
-    if (magnetRegistry.has(element)) return;
+    const { x, y } = getMagnetOffset(element);
+    setMagnetOffset(element, x, y);
 
-    const key = element.dataset.magnetKey;
-    if (key && magnetPositions.has(key)) {
-      const stored = magnetPositions.get(key);
-      element.dataset.offsetX = String(stored.x);
-      element.dataset.offsetY = String(stored.y);
-      element.style.transform = `translate(${stored.x}px, ${stored.y}px)`;
-    } else {
-      if (!element.dataset.offsetX) element.dataset.offsetX = '0';
-      if (!element.dataset.offsetY) element.dataset.offsetY = '0';
-      element.style.transform = 'translate(0px, 0px)';
-    }
+    if (magnetRegistry.has(element)) return;
 
     makeMagnetDraggable(element);
     magnetRegistry.add(element);
@@ -576,8 +566,7 @@ function activateMagnets(root = document) {
 }
 
 function makeMagnetDraggable(element) {
-  let currentX = parseFloat(element.dataset.offsetX || '0');
-  let currentY = parseFloat(element.dataset.offsetY || '0');
+  let { x: currentX, y: currentY } = getMagnetOffset(element);
 
   const onPointerDown = (event) => {
     if (event.button !== 0 && event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
@@ -607,9 +596,8 @@ function makeMagnetDraggable(element) {
 
       currentX = originX + deltaX;
       currentY = originY + deltaY;
-      element.dataset.offsetX = String(currentX);
-      element.dataset.offsetY = String(currentY);
-      element.style.transform = `translate(${currentX}px, ${currentY}px)`;
+      setMagnetOffset(element, currentX, currentY);
+      resolveMagnetCollisions(element);
     };
 
     const onPointerUp = () => {
@@ -621,10 +609,7 @@ function makeMagnetDraggable(element) {
       if (dragging) {
         element.classList.remove('magnet--dragging');
         element.dataset.justDragged = 'true';
-        const key = element.dataset.magnetKey;
-        if (key) {
-          magnetPositions.set(key, { x: currentX, y: currentY });
-        }
+        resolveMagnetCollisions(element);
         requestAnimationFrame(() => {
           element.dataset.justDragged = 'false';
         });
@@ -652,6 +637,79 @@ function makeMagnetDraggable(element) {
 function createMagnetKey(prefix, raw) {
   const sanitized = sanitizeKey(raw);
   return `${prefix}-${sanitized || 'magnet'}`;
+}
+
+function getMagnetOffset(element) {
+  const offsetX = Number.parseFloat(element?.dataset?.offsetX ?? '0');
+  const offsetY = Number.parseFloat(element?.dataset?.offsetY ?? '0');
+  return {
+    x: Number.isFinite(offsetX) ? offsetX : 0,
+    y: Number.isFinite(offsetY) ? offsetY : 0,
+  };
+}
+
+function setMagnetOffset(element, x, y) {
+  const nextX = Number.isFinite(x) ? x : 0;
+  const nextY = Number.isFinite(y) ? y : 0;
+  element.dataset.offsetX = String(nextX);
+  element.dataset.offsetY = String(nextY);
+  element.style.transform = `translate(${nextX}px, ${nextY}px)`;
+}
+
+function adjustMagnetOffset(element, deltaX, deltaY) {
+  const { x, y } = getMagnetOffset(element);
+  setMagnetOffset(element, x + deltaX, y + deltaY);
+}
+
+function resolveMagnetCollisions(activeMagnet) {
+  if (!activeMagnet || typeof activeMagnet.getBoundingClientRect !== 'function') return;
+
+  const magnets = Array.from(document.querySelectorAll('.magnet'));
+  const visited = new Set();
+  const queue = [activeMagnet];
+  let guard = 0;
+
+  while (queue.length && guard < 100) {
+    guard += 1;
+    const magnet = queue.shift();
+    if (!magnet || visited.has(magnet)) continue;
+    visited.add(magnet);
+
+    const rectA = magnet.getBoundingClientRect();
+
+    magnets.forEach((other) => {
+      if (other === magnet) return;
+      const rectB = other.getBoundingClientRect();
+      const overlapX = Math.min(rectA.right, rectB.right) - Math.max(rectA.left, rectB.left);
+      const overlapY = Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.top, rectB.top);
+      if (overlapX <= 0 || overlapY <= 0) return;
+
+      const centerAX = rectA.left + rectA.width / 2;
+      const centerAY = rectA.top + rectA.height / 2;
+      const centerBX = rectB.left + rectB.width / 2;
+      const centerBY = rectB.top + rectB.height / 2;
+
+      let pushX = 0;
+      let pushY = 0;
+
+      if (overlapX < overlapY) {
+        const directionX = centerBX === centerAX ? randomDirection() : Math.sign(centerBX - centerAX);
+        pushX = overlapX * directionX;
+      } else {
+        const directionY = centerBY === centerAY ? randomDirection() : Math.sign(centerBY - centerAY);
+        pushY = overlapY * directionY;
+      }
+
+      adjustMagnetOffset(other, pushX, pushY);
+      if (!visited.has(other)) {
+        queue.push(other);
+      }
+    });
+  }
+}
+
+function randomDirection() {
+  return Math.random() > 0.5 ? 1 : -1;
 }
 
 function sanitizeKey(value) {
