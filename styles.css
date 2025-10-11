@@ -223,7 +223,10 @@ a:focus-visible {
 }
 
 .category-card__icon {
-  font-size: 2rem;
+  width: 3rem;
+  height: 3rem;
+  display: block;
+  image-rendering: pixelated;
 }
 
 .category-card__label {
