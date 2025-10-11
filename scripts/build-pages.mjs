@@ -350,7 +350,7 @@ function renderHome() {
               <img class="category-card__icon" src="${icon}" alt="" aria-hidden="true" />
               <span class="category-card__label">${label}</span>
             </a>
-            <a class="category-card__tag" href="${supportHref}" aria-label="Alexithymia support">+ alexithymia support</a>
+            <a class="category-card__tag" href="${supportHref}" aria-label="Alexithymia support">+ support</a>
           </div>`;
       }
 
