@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_STORAGE_KEY = 'nvcApp.journal';
+const CONTRAST_STORAGE_KEY = 'nvcApp.highContrast';
 const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
 
 const DEFAULT_PALETTE = {
@@ -46,6 +47,16 @@ const paletteState = {
 const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
 ]);
+
+const contrastState = {
+  enabled: false,
+  button: null,
+};
+
+const scrollButtonState = {
+  button: null,
+  threshold: 800,
+};
 
 const state = {
   inventory: [],
@@ -141,14 +152,260 @@ function isPaletteEventTarget(target) {
   return false;
 }
 
+function initHighContrast() {
+  applyHighContrast(loadStoredContrastPreference() ?? false, { persist: false });
+}
+
+function loadStoredContrastPreference() {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return null;
+  }
+  try {
+    const stored = window.localStorage.getItem(CONTRAST_STORAGE_KEY);
+    if (stored === '1') {
+      return true;
+    }
+    if (stored === '0') {
+      return false;
+    }
+  } catch (error) {
+    console.warn('Unable to read contrast preference', error);
+  }
+  return null;
+}
+
+function applyHighContrast(enabled, options = {}) {
+  const { persist = true } = options;
+  contrastState.enabled = Boolean(enabled);
+  if (document?.documentElement) {
+    document.documentElement.dataset.contrast = contrastState.enabled ? 'high' : 'normal';
+  }
+  if (persist && typeof window !== 'undefined' && window.localStorage) {
+    try {
+      window.localStorage.setItem(CONTRAST_STORAGE_KEY, contrastState.enabled ? '1' : '0');
+    } catch (error) {
+      console.warn('Unable to persist contrast preference', error);
+    }
+  }
+  updateContrastToggleLabel();
+  scheduleAutoContrast();
+}
+
+function updateContrastToggleLabel() {
+  if (!contrastState.button) {
+    return;
+  }
+  contrastState.button.setAttribute('aria-pressed', contrastState.enabled ? 'true' : 'false');
+  const status = contrastState.button.querySelector('[data-contrast-status]');
+  if (status) {
+    const label = contrastState.enabled ? 'On' : 'Off';
+    status.textContent = label;
+    status.setAttribute('data-state-label', label);
+  }
+}
+
+const autoContrastState = {
+  scheduled: false,
+};
+
+function createContrastToggleField() {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  const field = document.createElement('div');
+  field.className = 'palette-form__field palette-form__field--toggle';
+
+  const label = document.createElement('span');
+  label.className = 'palette-form__label';
+  label.textContent = 'High contrast mode';
+  field.appendChild(label);
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'palette-form__contrast-toggle high-contrast-toggle';
+  button.setAttribute('data-contrast-toggle', '');
+  button.setAttribute('aria-pressed', contrastState.enabled ? 'true' : 'false');
+  button.innerHTML = `
+    <span class="palette-form__contrast-toggle-indicator" aria-hidden="true"></span>
+    <span class="high-contrast-toggle__status" data-contrast-status></span>
+    <span class="visually-hidden">Toggle high contrast mode</span>
+  `;
+  button.addEventListener('click', () => {
+    applyHighContrast(!contrastState.enabled);
+  });
+
+  const note = document.createElement('p');
+  note.className = 'palette-form__toggle-note';
+  note.id = 'contrastModeNote';
+  note.textContent = 'Boosts text contrast for easier reading across the site.';
+
+  button.setAttribute('aria-describedby', note.id);
+
+  field.append(button, note);
+
+  contrastState.button = button;
+  updateContrastToggleLabel();
+
+  return field;
+}
+
+function scheduleAutoContrast() {
+  if (autoContrastState.scheduled) {
+    return;
+  }
+  autoContrastState.scheduled = true;
+  const schedule = typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function'
+    ? window.requestAnimationFrame
+    : (fn) => setTimeout(fn, 16);
+  schedule(() => {
+    autoContrastState.scheduled = false;
+    applyAutoContrast();
+  });
+}
+
+function applyAutoContrast() {
+  if (typeof window === 'undefined' || !document?.documentElement) {
+    return;
+  }
+  const root = document.documentElement;
+  const styles = getComputedStyle(root);
+  const buttonColor = parseColorValue(styles.getPropertyValue('--btn-bg'));
+  if (buttonColor) {
+    root.style.setProperty('--btn-fg', pickForegroundColor(buttonColor));
+  }
+  const chipColor = parseColorValue(styles.getPropertyValue('--chip-bg'));
+  if (chipColor) {
+    root.style.setProperty('--chip-fg', pickForegroundColor(chipColor));
+  }
+}
+
+function parseColorValue(value) {
+  if (typeof value !== 'string') {
+    return null;
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+  if (trimmed.startsWith('#')) {
+    const hex = trimmed.length === 4
+      ? `#${[1, 2, 3].map((index) => trimmed[index] + trimmed[index]).join('')}`
+      : trimmed;
+    const int = parseInt(hex.slice(1), 16);
+    if (Number.isNaN(int)) {
+      return null;
+    }
+    return {
+      r: (int >> 16) & 255,
+      g: (int >> 8) & 255,
+      b: int & 255,
+    };
+  }
+  const rgbMatch = trimmed.match(/rgba?\(([^)]+)\)/i);
+  if (!rgbMatch) {
+    return null;
+  }
+  const parts = rgbMatch[1]
+    .split(/[\s,\/]+/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+  if (parts.length < 3) {
+    return null;
+  }
+  return {
+    r: normalizeChannel(parts[0]),
+    g: normalizeChannel(parts[1]),
+    b: normalizeChannel(parts[2]),
+  };
+}
+
+function normalizeChannel(value) {
+  if (!value) {
+    return 0;
+  }
+  if (value.endsWith('%')) {
+    const percent = Number.parseFloat(value.slice(0, -1));
+    return Number.isFinite(percent) ? Math.round(Math.min(Math.max(percent, 0), 100) * 2.55) : 0;
+  }
+  const number = Number.parseFloat(value);
+  if (!Number.isFinite(number)) {
+    return 0;
+  }
+  return Math.round(Math.min(Math.max(number, 0), 255));
+}
+
+function pickForegroundColor(background) {
+  const backgroundLum = relativeLuminance(background);
+  const contrastWithBlack = contrastRatio(backgroundLum, 0);
+  const contrastWithWhite = contrastRatio(backgroundLum, 1);
+  if (contrastWithBlack >= 4.5 && contrastWithBlack >= contrastWithWhite) {
+    return '#000000';
+  }
+  if (contrastWithWhite >= 4.5 && contrastWithWhite >= contrastWithBlack) {
+    return '#FFFFFF';
+  }
+  return contrastWithBlack > contrastWithWhite ? '#000000' : '#FFFFFF';
+}
+
+function relativeLuminance(color) {
+  const channels = ['r', 'g', 'b'].map((key) => {
+    const value = color[key] / 255;
+    return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+function contrastRatio(l1, l2) {
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function initBackToTopButton() {
+  if (scrollButtonState.button || typeof document === 'undefined') {
+    return;
+  }
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'floating-scroll-button';
+  button.setAttribute('data-back-to-top', '');
+  button.innerHTML = '<span aria-hidden="true">Top</span><span class="visually-hidden">Scroll to top</span>';
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  document.body?.appendChild(button);
+  scrollButtonState.button = button;
+  window.addEventListener('scroll', handleScrollButtonVisibility, { passive: true });
+  handleScrollButtonVisibility();
+}
+
+function handleScrollButtonVisibility() {
+  if (!scrollButtonState.button) {
+    return;
+  }
+  if (typeof window === 'undefined') {
+    return;
+  }
+  if (window.scrollY > scrollButtonState.threshold) {
+    scrollButtonState.button.classList.add('is-visible');
+  } else {
+    scrollButtonState.button.classList.remove('is-visible');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
+  initHighContrast();
+  initBackToTopButton();
   state.inventory = loadInventory();
   state.journalEntries = loadJournalEntries();
   highlightNavigation();
   initColorCustomizer().catch((error) => {
     console.warn('Unable to set up the color customizer', error);
   });
+  scheduleAutoContrast();
   updateInventoryCount();
   setupNeedPage();
   setupInventoryPage();
@@ -789,6 +1046,11 @@ function buildPaletteUi() {
   presetField.append(presetLabel, presetSelect);
   form.appendChild(presetField);
 
+  const contrastField = createContrastToggleField();
+  if (contrastField) {
+    form.appendChild(contrastField);
+  }
+
   const grid = document.createElement('div');
   grid.className = 'palette-form__grid';
   form.appendChild(grid);
@@ -1044,6 +1306,8 @@ function applyColors(colors, options = {}) {
   if (persist) {
     saveTheme({ values: paletteState.currentColors, preset: paletteState.currentPreset });
   }
+
+  scheduleAutoContrast();
 }
 
 function updateInputsFromState() {
