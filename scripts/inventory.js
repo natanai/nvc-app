@@ -3,6 +3,18 @@ const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_STORAGE_KEY = 'nvcApp.journal';
 const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
 
+const DEFAULT_PALETTE = {
+  plum: '#74569B',
+  lavender: '#EDE4FF',
+  ink: '#1F1230',
+  inkSoft: '#392351',
+  rose: '#FFB3CB',
+  mint: '#96FBC7',
+  gold: '#F7FFAE',
+  sky: '#D3F1FF',
+  outline: '#12081F',
+};
+
 const COLOR_INPUTS = [
   { key: 'plum', varName: '--plum', label: 'Canvas glow' },
   { key: 'lavender', varName: '--lavender', label: 'Panel mist' },
@@ -639,14 +651,21 @@ async function initColorCustomizer() {
 
   buildPaletteUi();
 
-  paletteState.defaultColors = sanitizeColorsMap(readComputedColors());
+  const themePreapplied = document.documentElement.getAttribute('data-theme-preapplied') === 'true';
+  const computedDefaults = themePreapplied ? {} : sanitizeColorsMap(readComputedColors());
+  paletteState.defaultColors = { ...DEFAULT_PALETTE, ...computedDefaults };
   paletteState.currentColors = { ...paletteState.defaultColors };
 
   const savedTheme = loadSavedTheme();
   if (savedTheme?.values && Object.keys(savedTheme.values).length) {
-    applyColors(savedTheme.values, { presetName: savedTheme.preset || '', persist: false, replace: true });
+    applyColors(savedTheme.values, {
+      presetName: savedTheme.preset || '',
+      persist: false,
+      replace: true,
+      skipDomUpdate: themePreapplied,
+    });
   } else {
-    applyColors(paletteState.currentColors, { persist: false, replace: true });
+    applyColors(paletteState.currentColors, { persist: false, replace: true, skipDomUpdate: themePreapplied });
   }
 
   populatePresetSelect();
@@ -990,7 +1009,7 @@ function updatePaletteStyleElement() {
 }
 
 function applyColors(colors, options = {}) {
-  const { presetName = '', persist = true, replace = false } = options;
+  const { presetName = '', persist = true, replace = false, skipDomUpdate = false } = options;
 
   if (replace) {
     const nextColors = { ...paletteState.defaultColors };
@@ -1008,7 +1027,7 @@ function applyColors(colors, options = {}) {
 
   COLOR_INPUTS.forEach(({ key, varName }) => {
     const value = paletteState.currentColors[key];
-    if (value) {
+    if (value && !skipDomUpdate) {
       document.documentElement.style.setProperty(varName, value);
     }
   });

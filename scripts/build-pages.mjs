@@ -13,6 +13,61 @@ const categoryIcons = {
   needs: 'icons/needs-8bit.svg',
 };
 
+const themePreloadScript = String.raw`    <script>
+      (function() {
+        const STORAGE_KEY = 'nvcApp.theme';
+        const VAR_MAP = {
+          plum: '--plum',
+          lavender: '--lavender',
+          ink: '--ink',
+          inkSoft: '--ink-soft',
+          rose: '--rose',
+          mint: '--mint',
+          gold: '--gold',
+          sky: '--sky',
+          outline: '--outline',
+        };
+        const HEX_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+        try {
+          const stored = window.localStorage ? localStorage.getItem(STORAGE_KEY) : null;
+          if (!stored) {
+            return;
+          }
+          const parsed = JSON.parse(stored);
+          if (!parsed || typeof parsed !== 'object' || !parsed.values || typeof parsed.values !== 'object') {
+            return;
+          }
+          const root = document.documentElement;
+          let applied = false;
+          for (const [key, varName] of Object.entries(VAR_MAP)) {
+            let value = parsed.values[key];
+            if (typeof value !== 'string') {
+              continue;
+            }
+            value = value.trim();
+            if (!value) {
+              continue;
+            }
+            if (!value.startsWith('#')) {
+              value = '#' + value;
+            }
+            if (!HEX_PATTERN.test(value)) {
+              continue;
+            }
+            root.style.setProperty(varName, value.toUpperCase());
+            applied = true;
+          }
+          if (applied) {
+            root.setAttribute('data-theme-preapplied', 'true');
+          }
+        } catch (error) {
+          if (typeof console !== 'undefined' && console.warn) {
+            console.warn('Unable to preapply theme', error);
+          }
+        }
+      })();
+    </script>`;
+
 const directoriesToReset = ['situations', 'feelings', 'needs', 'inventory'];
 for (const dir of directoriesToReset) {
   rmSync(join(rootDir, dir), { recursive: true, force: true });
@@ -68,6 +123,7 @@ function htmlPage({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(title)} • NeedShare Explorer</title>
     <meta name="description" content="${escapeHtml(headDescription)}" />
+    ${themePreloadScript}
     <link rel="stylesheet" href="${cssHref}" />
   </head>
   <body data-base-path="${basePath}">
