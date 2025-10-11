@@ -118,8 +118,20 @@ input {
   width: min(1200px, 100%);
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(280px, 360px);
+  grid-template-areas: 'board plan';
   gap: 2.5rem;
   align-items: flex-start;
+}
+
+.board {
+  grid-area: board;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.plan {
+  grid-area: plan;
 }
 
 .fridge-door {
@@ -133,6 +145,9 @@ input {
 @media (max-width: 1024px) {
   .layout {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      'board'
+      'plan';
   }
 
   .board__header {
@@ -141,6 +156,9 @@ input {
 
   .board__columns {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      'list'
+      'details';
   }
 }
 
@@ -154,14 +172,46 @@ input {
   }
 
   .dataset-tab {
-    flex: 1 1 45%;
+    flex: 1 1 100%;
   }
 }
 
-.board {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
+@media (max-width: 768px) {
+  body {
+    padding: 2.5rem 1rem 3.5rem;
+    align-items: stretch;
+  }
+
+  .layout {
+    width: 100%;
+    gap: 2rem;
+  }
+
+  .board__columns {
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'list'
+      'details';
+  }
+
+  .item-list {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .details {
+    min-height: clamp(260px, 60vh, 420px);
+    padding: 1.5rem;
+  }
+
+  .board__details .details {
+    min-height: clamp(260px, 60vh, 420px);
+  }
+
+  .plan {
+    padding: 1.5rem;
+  }
 }
 
 .board__header {
@@ -201,6 +251,7 @@ input {
 .board__columns {
   display: grid;
   grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  grid-template-areas: 'list details';
   gap: 1.75rem;
   align-items: flex-start;
 }
@@ -212,16 +263,20 @@ input {
   gap: 1.25rem;
 }
 
+.board__list {
+  grid-area: list;
+}
+
+.board__details {
+  grid-area: details;
+}
+
 .board__section-title {
   margin: 0;
   font-family: 'Press Start 2P', cursive;
   font-size: 0.8rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-}
-
-.board__details .details {
-  min-height: 0;
 }
 
 .dataset-tabs {
@@ -233,8 +288,9 @@ input {
 
 .dataset-tab {
   flex: 1 1 180px;
-  min-height: 3.25rem;
-  font-size: 0.95rem;
+  min-height: 3.75rem;
+  padding: 0.85rem 1.5rem;
+  font-size: 1.05rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   justify-content: center;
@@ -307,22 +363,22 @@ input {
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  font-size: 1.1rem;
+  gap: 0.3rem;
+  font-size: 0.95rem;
   line-height: 1.3;
-  padding: 0.9rem 1rem;
+  padding: 0.7rem 0.85rem;
 }
 
 .item-button .item-title {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .item-button .item-meta,
 .item-button .badge {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--ink-soft);
 }
 
@@ -350,6 +406,10 @@ input {
   flex-direction: column;
   gap: 1.25rem;
   min-height: 360px;
+}
+
+.board__details .details {
+  min-height: clamp(320px, 55vh, 480px);
 }
 
 .details h2,
@@ -399,8 +459,8 @@ input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.6rem 0.85rem;
-  font-size: 0.95rem;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.85rem;
 }
 
 .strategy-list {
@@ -416,13 +476,15 @@ input {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.1rem 1.2rem;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 0 var(--shadow-strong);
 }
 
 .strategy-card h3 {
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   margin: 0;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -430,7 +492,7 @@ input {
 
 .strategy-card p {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--ink-soft);
 }
 
@@ -500,8 +562,12 @@ input {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
   padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: var(--rose);
+  border: 3px solid var(--outline);
+  box-shadow: 0 8px 0 var(--shadow-strong);
 }
 
 .plan-item h3 {
@@ -514,7 +580,7 @@ input {
 
 .plan-item p {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--ink-soft);
 }
 
@@ -572,9 +638,15 @@ input {
   box-shadow: 0 8px 0 var(--shadow-strong);
   cursor: grab;
   position: relative;
-  touch-action: none;
+  touch-action: pan-y;
   user-select: none;
   transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+@media (pointer: coarse) {
+  .magnet {
+    cursor: default;
+  }
 }
 
 .magnet:hover {
@@ -606,6 +678,10 @@ input {
 .magnet:focus-visible {
   outline: 4px solid var(--mint);
   outline-offset: 2px;
+}
+
+.dataset-tab.magnet {
+  box-shadow: 0 12px 0 var(--shadow-strong);
 }
 
 ::-webkit-scrollbar {
