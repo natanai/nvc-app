@@ -648,6 +648,11 @@ a:focus-visible {
   gap: 0.75rem;
 }
 
+.inventory-list-panel[hidden],
+.inventory-list-panel--hidden {
+  display: none;
+}
+
 .inventory-list {
   display: grid;
   gap: 1rem;
