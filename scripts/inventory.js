@@ -46,8 +46,6 @@ const state = {
   strategiesContainerEl: null,
   inventoryToggleButton: null,
   showStrategies: false,
-  activeInventoryView: 'strategies',
-  viewToggleButtons: [],
   journalEntries: [],
   journalForm: null,
   journalStatusEl: null,
@@ -142,6 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
   updateInventoryCount();
   setupNeedPage();
   setupInventoryPage();
+  setupJournalSection();
+  migrateJournalEntries();
+  renderJournalViews();
 });
 
 function loadInventory() {
@@ -417,8 +418,6 @@ function setupInventoryPage() {
   state.showStrategies = state.strategiesContainerEl ? !state.strategiesContainerEl.hidden : false;
   state.inventoryToggleButton = document.querySelector('[data-inventory-toggle]');
 
-  setupInventoryViewToggle();
-
   if (state.inventoryToggleButton) {
     state.inventoryToggleButton.addEventListener('click', () => {
       setShowStrategies(!state.showStrategies);
@@ -429,9 +428,6 @@ function setupInventoryPage() {
   updateInventoryToggleLabel();
 
   captureNeedsFromForm();
-  setupJournalSection();
-  migrateJournalEntries();
-
   renderInventoryViews();
 
   const form = document.getElementById('inventory-form');
@@ -540,52 +536,6 @@ function setupInventoryPage() {
       }
     });
   }
-}
-
-function setupInventoryViewToggle() {
-  const buttons = Array.from(document.querySelectorAll('[data-inventory-view]'));
-  if (!buttons.length) {
-    return;
-  }
-  state.viewToggleButtons = buttons;
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const view = button.dataset.inventoryView || 'strategies';
-      setInventoryView(view);
-      if (typeof window !== 'undefined') {
-        if (view === 'journal') {
-          if (window.location.hash !== '#journal-dashboard') {
-            history.replaceState(null, '', '#journal-dashboard');
-          }
-        } else if (window.location.hash) {
-          history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-      }
-    });
-  });
-  let initialView = 'strategies';
-  if (typeof window !== 'undefined') {
-    const hash = window.location.hash?.toLowerCase();
-    if (hash === '#journal-dashboard' || hash === '#journal') {
-      initialView = 'journal';
-    }
-  }
-  setInventoryView(initialView);
-}
-
-function setInventoryView(view) {
-  state.activeInventoryView = view;
-  const panels = document.querySelectorAll('[data-inventory-section]');
-  panels.forEach((panel) => {
-    const matches = panel.dataset.inventorySection === view;
-    panel.hidden = !matches;
-    panel.classList.toggle('is-active', matches);
-  });
-  state.viewToggleButtons.forEach((button) => {
-    const matches = button.dataset.inventoryView === view;
-    button.classList.toggle('is-active', matches);
-    button.setAttribute('aria-pressed', matches ? 'true' : 'false');
-  });
 }
 
 function highlightNavigation() {
