@@ -7,13 +7,19 @@ const shuffleArray = (items) => {
   return array;
 };
 
+// Whole-number transforms help keep the magnet text crisp on high-density displays.
+const tiltOptions = [-2, -1, 0, 1, 2];
+const offsetOptions = [-3, -2, -1, 0, 1, 2, 3];
+
+const randomFrom = (options) => options[Math.floor(Math.random() * options.length)];
+
 const applyMagnetStyles = (magnet, index) => {
   magnet.classList.add('magnet');
   magnet.style.order = String(index);
-  const tilt = (Math.random() - 0.5) * 4; // -2deg to 2deg
-  const offset = (Math.random() - 0.5) * 6; // slight vertical wiggle
-  magnet.style.setProperty('--magnet-tilt', `${tilt.toFixed(2)}deg`);
-  magnet.style.setProperty('--magnet-offset', `${offset.toFixed(2)}px`);
+  const tilt = randomFrom(tiltOptions);
+  const offset = randomFrom(offsetOptions);
+  magnet.style.setProperty('--magnet-tilt', `${tilt}deg`);
+  magnet.style.setProperty('--magnet-offset', `${offset}px`);
 };
 
 const prepareMagnets = () => {

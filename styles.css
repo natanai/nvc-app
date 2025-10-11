@@ -167,9 +167,10 @@ a:focus-visible {
 .page-title {
   margin: 0;
   font-family: 'Press Start 2P', cursive;
-  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-size: clamp(1rem, calc(0.5rem + 4vw), 1.9rem);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: clamp(0.04em, 0.06em, 0.08em);
+  max-width: 100%;
 }
 
 .page-subtitle,
@@ -293,7 +294,16 @@ a:focus-visible {
   cursor: pointer;
   user-select: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  transform: translateY(var(--magnet-offset, 0)) rotate(var(--magnet-tilt, 0));
+  transform: translate3d(0, var(--magnet-offset, 0), 0) rotate(var(--magnet-tilt, 0));
+  transform-origin: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 460px) {
+  .page-title {
+    font-size: clamp(0.95rem, calc(0.65rem + 3.6vw), 1.6rem);
+    letter-spacing: clamp(0.035em, 0.05em, 0.06em);
+  }
 }
 
 
