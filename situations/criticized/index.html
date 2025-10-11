@@ -84,22 +84,34 @@
       <header class="page-header">
         <h1 class="page-title">Situation: Criticized</h1>
       </header>
-      <section class="pill-section" aria-labelledby="feelings-heading">
-      <h2 id="feelings-heading" class="section-title">Feelings</h2>
-      <div class="pill-grid">
-        <a class="pill" href="../../feelings/in-pain/">In pain</a><a class="pill" href="../../feelings/scared/">Scared</a><a class="pill" href="../../feelings/anxious/">Anxious</a><a class="pill" href="../../feelings/frustrated/">Frustrated</a><a class="pill" href="../../feelings/humiliated/">Humiliated</a><a class="pill" href="../../feelings/angry/">Angry</a><a class="pill" href="../../feelings/embarrassed/">Embarrassed</a>
+      <section class="pill-section magnet-section" aria-labelledby="feelings-heading" data-magnet-root>
+      <div class="magnet-section__header">
+        <h2 id="feelings-heading" class="section-title">Feelings</h2>
+        <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+      </div>
+      <div class="magnet-board-wrapper">
+        <div class="pill-grid magnet-board" data-magnet-board>
+          <a class="pill magnet" data-magnet-id="feelings-in-pain" href="../../feelings/in-pain/">In pain</a><a class="pill magnet" data-magnet-id="feelings-scared" href="../../feelings/scared/">Scared</a><a class="pill magnet" data-magnet-id="feelings-anxious" href="../../feelings/anxious/">Anxious</a><a class="pill magnet" data-magnet-id="feelings-frustrated" href="../../feelings/frustrated/">Frustrated</a><a class="pill magnet" data-magnet-id="feelings-humiliated" href="../../feelings/humiliated/">Humiliated</a><a class="pill magnet" data-magnet-id="feelings-angry" href="../../feelings/angry/">Angry</a><a class="pill magnet" data-magnet-id="feelings-embarrassed" href="../../feelings/embarrassed/">Embarrassed</a>
+        </div>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
       </div>
     </section>
-      <section class="pill-section" aria-labelledby="needs-heading">
-      <h2 id="needs-heading" class="section-title">Needs</h2>
-      <div class="pill-grid">
-        <a class="pill" href="../../needs/understanding/">Understanding</a><a class="pill" href="../../needs/acknowledgement/">Acknowledgement</a><a class="pill" href="../../needs/recognition/">Recognition</a><a class="pill" href="../../needs/accountability/">Accountability</a><a class="pill" href="../../needs/non-judgmental-communication/">Non-judgmental Communication</a>
+      <section class="pill-section magnet-section" aria-labelledby="needs-heading" data-magnet-root>
+      <div class="magnet-section__header">
+        <h2 id="needs-heading" class="section-title">Needs</h2>
+        <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+      </div>
+      <div class="magnet-board-wrapper">
+        <div class="pill-grid magnet-board" data-magnet-board>
+          <a class="pill magnet" data-magnet-id="needs-understanding" href="../../needs/understanding/">Understanding</a><a class="pill magnet" data-magnet-id="needs-acknowledgement" href="../../needs/acknowledgement/">Acknowledgement</a><a class="pill magnet" data-magnet-id="needs-recognition" href="../../needs/recognition/">Recognition</a><a class="pill magnet" data-magnet-id="needs-accountability" href="../../needs/accountability/">Accountability</a><a class="pill magnet" data-magnet-id="needs-non-judgmental-communication" href="../../needs/non-judgmental-communication/">Non-judgmental Communication</a>
+        </div>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
       </div>
     </section>
     
       </main>
     </div>
     <script src="../../scripts/inventory.js" defer></script>
-    <script src="../../scripts/magnets.js" defer></script>
+    <script src="../../scripts/magnets.js" type="module"></script>
   </body>
 </html>

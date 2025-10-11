@@ -723,7 +723,25 @@ button.site-nav__link {
   gap: 0.75rem;
 }
 
-.magnet-grid {
+.magnet-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.magnet-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.magnet-board-wrapper {
+  position: relative;
+  padding-top: 0.75rem;
+}
+
+.magnet-board {
   position: relative;
   display: block;
   padding: 1.25rem;
@@ -735,8 +753,12 @@ button.site-nav__link {
   overscroll-behavior: contain;
 }
 
-.magnet-grid-wrapper {
-  position: relative;
+.magnet-board[data-active='1'] {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.magnet-board[data-dragging='1'] {
+  touch-action: none;
 }
 
 .magnet-play-toggle {
@@ -755,7 +777,7 @@ button.site-nav__link {
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-  z-index: 1;
+  z-index: 2;
 }
 
 .magnet-play-toggle:hover,
@@ -769,35 +791,10 @@ button.site-nav__link {
   outline-offset: 3px;
 }
 
-.magnet-grid--interactive {
-  display: block;
-}
-
-.magnet-grid--interactive .magnet {
-  cursor: grab;
-  transition: transform 0.1s ease, box-shadow 0.18s ease;
-}
-
-.magnet-grid--interactive .magnet--dragging {
-  cursor: grabbing;
-  --magnet-lift: -18px;
-  z-index: 30;
-  box-shadow: 0 18px 24px rgba(17, 8, 31, 0.22);
-}
-
-.magnet-grid[data-dragging='true'],
-.magnet-grid[data-dragging='true'] .magnet {
-  touch-action: none;
-}
-
-.magnet-grid--no-transitions .magnet {
-  transition: none !important;
-}
 
 
 .shuffle-button {
   align-self: flex-start;
-  margin-bottom: 0.75rem;
   font-family: var(--font-display);
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -823,40 +820,46 @@ button.site-nav__link {
 }
 
 .magnet {
-  --magnet-play-offset-x: 0px;
-  --magnet-play-offset-y: 0px;
-  --magnet-lift: 0px;
-  --magnet-position-x: 0px;
-  --magnet-position-y: 0px;
-  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 0;
   user-select: none;
+  touch-action: none;
   box-sizing: border-box;
   will-change: transform;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  transform: translate3d(
-      calc(var(--magnet-position-x) + var(--magnet-play-offset-x)),
-      calc(var(--magnet-position-y) + var(--magnet-offset, 0) + var(--magnet-play-offset-y) + var(--magnet-lift)),
-      0
-    )
-    rotate(var(--magnet-tilt, 0));
   transform-origin: center;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  --magnet-hover-offset: 0px;
 }
 
-@media (max-width: 460px) {
-  .page-title {
-    font-size: clamp(0.7rem, calc(0.4rem + 2vw), 1.25rem);
-    letter-spacing: 0.04em;
-  }
+.magnet-board:not([data-ready='1']) .magnet {
+  position: static;
+  transform: none !important;
+  touch-action: auto;
+  transition: none;
 }
 
-@media (max-width: 360px) {
-  .page-title {
-    font-size: clamp(0.65rem, calc(0.4rem + 1.5vw), 1.1rem);
-    letter-spacing: 0.035em;
-  }
+.magnet-board[data-active='1'] .magnet {
+  cursor: grab;
+  transition: transform 0.1s ease, box-shadow 0.18s ease;
 }
 
+.magnet.dragging {
+  cursor: grabbing;
+  z-index: 10;
+  box-shadow: 0 18px 24px rgba(17, 8, 31, 0.22);
+}
+
+.no-transitions * {
+  transition: none !important;
+}
+
+.magnet-board[data-ready='1'] .pill:hover,
+.magnet-board[data-ready='1'] .pill:focus-visible {
+  transform: none;
+}
 
 .pill {
   display: inline-flex;
@@ -877,13 +880,22 @@ button.site-nav__link {
 
 .magnet.pill:hover,
 .magnet.pill:focus-visible {
-  transform: translate3d(
-      calc(var(--magnet-position-x) + var(--magnet-play-offset-x)),
-      calc(var(--magnet-position-y) + var(--magnet-offset, 0) + var(--magnet-play-offset-y) + var(--magnet-lift) - 4px),
-      0
-    )
-    rotate(var(--magnet-tilt, 0));
+  --magnet-hover-offset: -4px;
   box-shadow: 0 14px 0 var(--shadow);
+}
+
+@media (max-width: 460px) {
+  .page-title {
+    font-size: clamp(0.7rem, calc(0.4rem + 2vw), 1.25rem);
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-title {
+    font-size: clamp(0.65rem, calc(0.4rem + 1.5vw), 1.1rem);
+    letter-spacing: 0.035em;
+  }
 }
 
 .strategy-section,

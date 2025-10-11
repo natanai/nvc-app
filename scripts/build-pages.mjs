@@ -77,6 +77,43 @@ function basePathFromDepth(depth) {
   return depth === 0 ? '' : '../'.repeat(depth);
 }
 
+function normalizeScripts(scripts) {
+  const baseScripts = [{ src: 'scripts/inventory.js', defer: true }];
+  const entries = [...baseScripts, ...scripts];
+  const seen = new Set();
+  const normalized = [];
+  for (const entry of entries) {
+    if (!entry) {
+      continue;
+    }
+    const resolved =
+      typeof entry === 'string'
+        ? { src: entry, type: undefined, defer: true, async: false, nomodule: false }
+        : {
+            src: entry.src,
+            type: entry.module ? 'module' : entry.type,
+            defer: entry.defer ?? (!entry.module && entry.type !== 'module'),
+            async: entry.async ?? false,
+            nomodule: entry.nomodule ?? false,
+            crossOrigin: entry.crossOrigin ?? entry.crossorigin,
+            integrity: entry.integrity,
+            referrerPolicy: entry.referrerPolicy ?? entry.referrerpolicy,
+          };
+    if (!resolved.src) {
+      continue;
+    }
+    const key = `${resolved.src}|${resolved.type ?? ''}|${resolved.defer ? 'd' : ''}|${
+      resolved.async ? 'a' : ''
+    }|${resolved.nomodule ? 'n' : ''}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    normalized.push(resolved);
+  }
+  return normalized;
+}
+
 function htmlPage({
   title,
   depth,
@@ -109,9 +146,33 @@ function htmlPage({
       </nav>`
     : '';
 
-  const scriptSources = Array.from(new Set(['scripts/inventory.js', ...scripts]));
-  const scriptsHtml = scriptSources
-    .map((src) => `    <script src="${basePath}${src}" defer></script>`)
+  const scriptEntries = normalizeScripts(scripts);
+  const scriptsHtml = scriptEntries
+    .map((script) => {
+      const attrs = [`src="${basePath}${script.src}"`];
+      if (script.type) {
+        attrs.push(`type="${script.type}"`);
+      }
+      if (script.defer) {
+        attrs.push('defer');
+      }
+      if (script.async) {
+        attrs.push('async');
+      }
+      if (script.nomodule) {
+        attrs.push('nomodule');
+      }
+      if (script.crossOrigin) {
+        attrs.push(`crossorigin="${script.crossOrigin}"`);
+      }
+      if (script.integrity) {
+        attrs.push(`integrity="${script.integrity}"`);
+      }
+      if (script.referrerPolicy) {
+        attrs.push(`referrerpolicy="${script.referrerPolicy}"`);
+      }
+      return `    <script ${attrs.join(' ')}></script>`;
+    })
     .join('\n');
   const navHtml = renderNav(basePath);
   const mainAttrs = mainAttributes ? ` ${mainAttributes}` : '';
@@ -343,8 +404,13 @@ function renderCategory(type, items) {
         </div>`
       : '';
 
-  const pills = items
-    .map((item) => `<a class="pill" href="${item.slug}/">${escapeHtml(item.title)}</a>`)
+  const magnets = items
+    .map(
+      (item) =>
+        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/">${escapeHtml(
+          item.title,
+        )}</a>`,
+    )
     .join('');
 
   const main = `
@@ -354,10 +420,16 @@ function renderCategory(type, items) {
           supportLinks ? `\n        ${supportLinks}` : ''
         }
       </header>
-      <section aria-labelledby="${type}-list" class="pill-section">
-        <h2 id="${type}-list" class="section-title">${escapeHtml(title)} directory</h2>
-        <div class="pill-grid">
-          ${pills}
+      <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
+        <div class="magnet-section__header">
+          <h2 id="${type}-list" class="section-title">${escapeHtml(title)} directory</h2>
+          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+        </div>
+        <div class="magnet-board-wrapper">
+          <div class="pill-grid magnet-board" data-magnet-board>
+            ${magnets}
+          </div>
+          <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
         </div>
       </section>
     `;
@@ -370,7 +442,7 @@ function renderCategory(type, items) {
       { label: title }
     ],
     main,
-    scripts: ['scripts/magnets.js'],
+    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
   });
 
   writePage(`${type}/index.html`, html);
@@ -394,7 +466,7 @@ function renderSituation(item) {
       { label: item.title }
     ],
     main,
-    scripts: ['scripts/magnets.js'],
+    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
   });
 
   writePage(`situations/${item.slug}/index.html`, html);
@@ -417,7 +489,7 @@ function renderFeeling(item) {
       { label: item.title }
     ],
     main,
-    scripts: ['scripts/magnets.js'],
+    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
@@ -777,14 +849,25 @@ function renderPillGroup(label, items, type) {
     return '';
   }
 
-  const pills = items
-    .map((item) => `<a class="pill" href="../../${type}/${item.slug}/">${escapeHtml(item.title)}</a>`)
+  const magnets = items
+    .map(
+      (item) =>
+        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="../../${type}/${item.slug}/">${escapeHtml(
+          item.title,
+        )}</a>`,
+    )
     .join('');
 
-  return `<section class="pill-section" aria-labelledby="${slugify(label)}-heading">
-      <h2 id="${slugify(label)}-heading" class="section-title">${escapeHtml(label)}</h2>
-      <div class="pill-grid">
-        ${pills}
+  return `<section class="pill-section magnet-section" aria-labelledby="${slugify(label)}-heading" data-magnet-root>
+      <div class="magnet-section__header">
+        <h2 id="${slugify(label)}-heading" class="section-title">${escapeHtml(label)}</h2>
+        <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+      </div>
+      <div class="magnet-board-wrapper">
+        <div class="pill-grid magnet-board" data-magnet-board>
+          ${magnets}
+        </div>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
       </div>
     </section>`;
 }
