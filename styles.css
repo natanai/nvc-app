@@ -169,7 +169,8 @@ a:focus-visible {
   font-family: 'Press Start 2P', cursive;
   font-size: clamp(1rem, calc(0.5rem + 4vw), 1.9rem);
   text-transform: uppercase;
-  letter-spacing: clamp(0.04em, 0.06em, 0.08em);
+  letter-spacing: 0.06em;
+  text-wrap: balance;
   max-width: 100%;
 }
 
@@ -304,8 +305,15 @@ a:focus-visible {
 
 @media (max-width: 460px) {
   .page-title {
-    font-size: clamp(0.95rem, calc(0.65rem + 3.6vw), 1.6rem);
-    letter-spacing: clamp(0.035em, 0.05em, 0.06em);
+    font-size: clamp(0.7rem, calc(0.4rem + 2vw), 1.25rem);
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-title {
+    font-size: clamp(0.65rem, calc(0.4rem + 1.5vw), 1.1rem);
+    letter-spacing: 0.035em;
   }
 }
 
