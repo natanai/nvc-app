@@ -358,7 +358,7 @@ function renderNeed(item, strategyLookup) {
   const suggestionForm = renderStrategyForm({
     formId: 'suggestion-form',
     idPrefix: 'suggestion',
-    submitLabel: 'Submit strategy',
+    submitLabel: 'Save to inventory',
     titleLabel: 'Strategy name',
     descriptionLabel: 'Strategy details',
     defaultNeedSlug: item.slug,
@@ -387,7 +387,7 @@ function renderNeed(item, strategyLookup) {
       { label: item.title }
     ],
     main,
-    scripts: ['scripts/submit.js'],
+    scripts: [],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
   });
 
@@ -421,23 +421,34 @@ function renderInventoryPage() {
         </div>
         <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
       </section>
-      <section class="inventory-overview" aria-labelledby="inventory-summary-heading">
+      <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
         <div class="inventory-overview__header">
-          <h2 id="inventory-summary-heading" class="section-title">Need coverage</h2>
-          <p class="inventory-overview__hint">Use this board to spot needs that are still waiting for care.</p>
+          <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
+          <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
         </div>
         <div id="inventory-summary" class="inventory-summary"></div>
+        <div class="inventory-list__toggle">
+          <button
+            type="button"
+            class="inventory-button"
+            data-inventory-toggle
+            aria-expanded="false"
+            aria-controls="inventory-list-panel"
+          >
+            Show your saved strategies
+          </button>
+        </div>
+        <div class="inventory-list-panel" data-inventory-panel hidden id="inventory-list-panel">
+          <div class="inventory-list__header">
+            <h3 id="inventory-list-heading" class="section-title">Your strategies</h3>
+            <p class="inventory-list__hint">Grouped by need so you can spot any empty sections.</p>
+          </div>
+          <div id="inventory-list" class="inventory-list"></div>
+        </div>
       </section>
       <section class="inventory-form" aria-labelledby="inventory-form-heading">
         <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
         ${personalStrategyForm}
-      </section>
-      <section class="inventory-list-section" aria-labelledby="inventory-list-heading">
-        <div class="inventory-list__header">
-          <h2 id="inventory-list-heading" class="section-title">Your strategies</h2>
-          <p class="inventory-list__hint">Grouped by need so you can spot any empty sections.</p>
-        </div>
-        <div id="inventory-list" class="inventory-list"></div>
       </section>
     `;
 

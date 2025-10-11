@@ -638,6 +638,16 @@ a:focus-visible {
   color: var(--ink-soft);
 }
 
+.inventory-list__toggle {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.inventory-list-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .inventory-list {
   display: grid;
   gap: 1rem;
