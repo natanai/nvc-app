@@ -78,6 +78,7 @@
       care: [
         'Offer gentle comfort: wrap in a blanket, hold a warm mug, or play soothing sounds.',
         'If it feels right, reach out to someone who can sit with you or send a caring message.',
+        'Try a slow body scan or progressive muscle relaxation to reassure weighted muscles.',
       ],
     },
     'medium-unpleasant': {
@@ -87,6 +88,7 @@
       care: [
         'Name what feels out of alignment and what value or need wants attention.',
         'Try a grounding check: notice 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.',
+        'Follow a short guided body scan or mindful stretch to ease tension as you journal patterns.',
       ],
     },
     'high-unpleasant': {
@@ -96,6 +98,7 @@
       care: [
         'Lengthen your exhale or press your feet into the floor to remind your body it is supported.',
         'Shake out your hands or shoulders to release excess adrenaline before responding.',
+        'Move through progressive muscle relaxation or mindful stretching to discharge the surge.',
       ],
     },
     'low-neutral': {
@@ -105,6 +108,7 @@
       care: [
         'Take a sensory inventory: notice texture, temperature, or gentle movement to wake up interoception.',
         'Try a small action such as stretching, stepping outside, or sipping water.',
+        'Experiment with mindful stretching or tai chi to invite subtle sensations back online.',
       ],
     },
     'medium-neutral': {
@@ -114,6 +118,7 @@
       care: [
         'Jot down what you know and what questions you still have—naming them can clarify direction.',
         'Check whether you need more information, reassurance, or time before acting.',
+        'Tag the situation in your journal so you can track what helps clarity return.',
       ],
     },
     'high-neutral': {
@@ -123,13 +128,18 @@
       care: [
         'Channel the energy into a clear next step or into movement like a brisk walk.',
         'Double-check your plan with a supportive person if you want validation before moving forward.',
+        'Try mindful stretching, dance, or shaking to partner with the momentum without burning out.',
       ],
     },
     'low-pleasant': {
       label: 'Low energy · Pleasant',
       description: 'Easeful and grounded sensations often pair with calm or relief after effort.',
       emotions: ['calm', 'relief', 'contentment'],
-      care: ['Savor the ease—lengthen the exhale, stretch gently, or notice what feels safe.', 'Thank your body for the steadiness.'],
+      care: [
+        'Savor the ease—lengthen the exhale, stretch gently, or notice what feels safe.',
+        'Thank your body for the steadiness.',
+        'Try a guided body scan to anchor the memory so you can revisit it later.',
+      ],
     },
     'medium-pleasant': {
       label: 'Steady energy · Pleasant',
@@ -138,6 +148,7 @@
       care: [
         'Write down what is working right now so you can return to it later.',
         'Share appreciation with someone involved if that feels good.',
+        'Log a gratitude entry with tags so future-you can spot what supports you.',
       ],
     },
     'high-pleasant': {
@@ -147,6 +158,7 @@
       care: [
         'Let yourself celebrate—move, dance, or tell someone the good news.',
         'Anchor the moment by noting what contributed to the joy.',
+        'Capture quick journal tags so you remember what sparked the delight.',
       ],
     },
   };
@@ -486,7 +498,8 @@
     },
   };
 
-  const JOURNAL_KEY = 'alexithymiaSupportJournal';
+  const JOURNAL_KEY = 'nvcApp.journal';
+  const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
   const state = {
     selectedEmotion: null,
     quadrant: null,
@@ -684,6 +697,11 @@
     );
   }
 
+  function handleSensationSkip() {
+    revealStep('compass');
+    focusStep('compass');
+  }
+
   function computeQuadrant(energy, valence) {
     if (!energy || !valence) return null;
     return `${energy}-${valence}`;
@@ -726,6 +744,42 @@
     `;
   }
 
+  function renderNeedLinks(needs) {
+    if (!needs || !needs.length) {
+      return '';
+    }
+    const items = needs
+      .map((need) => {
+        const href = `${basePath}needs/?focus=${encodeURIComponent(need.toLowerCase())}`;
+        return `<li><a class="emotion-need-link" href="${href}">${need}</a></li>`;
+      })
+      .join('');
+    return `
+      <div>
+        <h4 class="emotion-suggestions__title">Needs this feeling may point to</h4>
+        <ul class="emotion-detail__list emotion-detail__list--links">${items}</ul>
+      </div>
+    `;
+  }
+
+  function renderRegulationNeeds(needs) {
+    if (!needs || !needs.length) {
+      return '';
+    }
+    const items = needs
+      .map((need) => {
+        const href = `${basePath}needs/?focus=${encodeURIComponent(need.toLowerCase())}`;
+        return `<li><a class="regulation-needs__link" href="${href}">${need}</a></li>`;
+      })
+      .join('');
+    return `
+      <div class="regulation-needs">
+        <p class="regulation-needs__title">Need cues to explore</p>
+        <ul class="regulation-needs__list">${items}</ul>
+      </div>
+    `;
+  }
+
   function setActiveTag(tag) {
     if (state.activeTag) {
       state.activeTag.classList.remove('is-active');
@@ -749,7 +803,7 @@
         ${renderListSection('Common body cues', emotion.bodySignals)}
         ${renderListSection('Typical thoughts', emotion.thoughts)}
         ${renderListSection('When it often appears', emotion.contexts)}
-        ${renderListSection('Needs this feeling may point to', emotion.needs)}
+        ${renderNeedLinks(emotion.needs)}
         ${renderListSection('Care ideas to experiment with', emotion.regulation)}
         <p class="support-note">Everyone feels emotions uniquely. Use these clues as invitations, not rules.</p>
       </div>
@@ -768,13 +822,23 @@
     if (!regulationCard) return;
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
     const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
-    const needsLink = `${basePath}needs/`;
+    const needsList = renderRegulationNeeds(emotion.needs);
+    const primaryNeed = Array.isArray(emotion.needs) && emotion.needs.length ? emotion.needs[0] : '';
+    const needsLink = primaryNeed
+      ? `${basePath}needs/?focus=${encodeURIComponent(primaryNeed.toLowerCase())}`
+      : `${basePath}needs/`;
+    const needsButtonLabel = primaryNeed ? `See strategies for ${primaryNeed}` : 'Browse basic needs';
+    const journalLink = `${basePath}inventory/#journal-dashboard`;
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
       ${renderListSection('Try one of these nurturing steps', emotion.regulation)}
       ${extraCare}
-      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. When you're ready, explore the needs library to choose strategies that fit.</p>
-      <a class="support-button support-button--link" href="${needsLink}">Browse basic needs</a>
+      ${needsList}
+      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. When you're ready, explore the needs library or add a journal note to track what supports you.</p>
+      <div class="regulation-actions">
+        <a class="support-button support-button--link" href="${needsLink}">${needsButtonLabel}</a>
+        <a class="support-button support-button--link support-button--ghost" href="${journalLink}">Open journal dashboard</a>
+      </div>
     `;
   }
 
@@ -818,16 +882,65 @@
     statusNode.textContent = 'Playing the sentence out loud—pause or stop if you prefer to speak it yourself.';
   }
 
-  function getJournalEntries() {
+  function readEntriesFromKey(storageKey) {
     try {
-      const raw = localStorage.getItem(JOURNAL_KEY);
+      const raw = localStorage.getItem(storageKey);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      return Array.isArray(parsed) ? parsed.filter((entry) => entry && typeof entry === 'object') : [];
     } catch (error) {
       console.warn('Could not read journal entries', error);
       return [];
     }
+  }
+
+  function migrateLegacyJournalEntries() {
+    if (!LEGACY_JOURNAL_KEY) {
+      return;
+    }
+    try {
+      const legacyEntries = readEntriesFromKey(LEGACY_JOURNAL_KEY);
+      if (!legacyEntries.length) {
+        localStorage.removeItem(LEGACY_JOURNAL_KEY);
+        return;
+      }
+      const currentEntries = readEntriesFromKey(JOURNAL_KEY);
+      const signatures = new Set(
+        currentEntries.map((entry) => `${entry.timestamp ?? ''}|${(entry.text ?? '').trim()}`)
+      );
+      let changed = false;
+      legacyEntries.forEach((legacy) => {
+        if (!legacy || typeof legacy !== 'object') {
+          return;
+        }
+        const text = typeof legacy.text === 'string' ? legacy.text : '';
+        const emotion = typeof legacy.emotion === 'string' ? legacy.emotion : legacy.emotion?.key || null;
+        const timestamp = legacy.timestamp || legacy.date || legacy.savedAt || null;
+        const signature = `${timestamp ?? ''}|${text.trim()}`;
+        if (signature && signatures.has(signature)) {
+          return;
+        }
+        const entry = {
+          text,
+          emotion,
+          timestamp: timestamp || new Date().toISOString(),
+        };
+        currentEntries.push(entry);
+        signatures.add(signature);
+        changed = true;
+      });
+      if (changed) {
+        currentEntries.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
+        saveJournalEntries(currentEntries);
+      }
+      localStorage.removeItem(LEGACY_JOURNAL_KEY);
+    } catch (error) {
+      console.warn('Unable to migrate legacy journal entries', error);
+    }
+  }
+
+  function getJournalEntries() {
+    return readEntriesFromKey(JOURNAL_KEY);
   }
 
   function saveJournalEntries(entries) {
@@ -842,6 +955,10 @@
     if (!journalHistory) return;
     journalHistory.innerHTML = '';
     if (!entries.length) {
+      const empty = document.createElement('p');
+      empty.className = 'support-note';
+      empty.textContent = 'Your saved reflections will appear here and in the Inventory journal tab.';
+      journalHistory.appendChild(empty);
       return;
     }
     const title = document.createElement('p');
@@ -862,6 +979,11 @@
         list.appendChild(item);
       });
     journalHistory.appendChild(list);
+    const link = document.createElement('a');
+    link.className = 'support-button support-button--link support-button--ghost';
+    link.href = `${basePath}inventory/#journal-dashboard`;
+    link.textContent = 'Open full journal dashboard';
+    journalHistory.appendChild(link);
   }
 
   function handleJournalSubmit(event) {
@@ -884,7 +1006,7 @@
     saveJournalEntries(entries);
     renderJournalHistory(entries);
     textarea.value = '';
-    journalStatus.textContent = 'Saved locally. Only this browser can see it.';
+    journalStatus.textContent = 'Saved locally. Review it anytime in the inventory journal tab.';
   }
 
   function handleJournalClear() {
@@ -929,8 +1051,10 @@
 
     const sensationSubmit = document.querySelector('[data-action="sensation-submit"]');
     const sensationClear = document.querySelector('[data-action="sensation-clear"]');
+    const sensationNext = document.querySelector('[data-action="sensation-next"]');
     sensationSubmit?.addEventListener('click', handleSensationSubmit);
     sensationClear?.addEventListener('click', handleSensationClear);
+    sensationNext?.addEventListener('click', handleSensationSkip);
 
     const compassForm = document.querySelector('[data-compass-form]');
     compassForm?.addEventListener('change', handleCompassChange);
@@ -958,6 +1082,7 @@
       'Pick one energy and one pleasantness option to see suggestions.',
       []
     );
+    migrateLegacyJournalEntries();
     renderJournalHistory(getJournalEntries());
   }
 

@@ -67,7 +67,7 @@
             </div>
           </article>
 
-          <article class="support-step is-hidden" data-step="body">
+          <article class="support-step support-step--has-next is-hidden" data-step="body">
             <h3 class="support-step__title">Step 1: What does your body notice?</h3>
             <p>
               Scan slowly from head to toe. Select any sensations that stand out. They do not have to make sense yet.
@@ -163,13 +163,19 @@
                 <button class="support-button" type="button" data-action="sensation-submit">See possible emotions</button>
                 <button class="support-button support-button--ghost" type="button" data-action="sensation-clear">Clear choices</button>
               </div>
+              <div class="sensation-actions sensation-actions--secondary">
+                <button class="support-button support-button--ghost" type="button" data-action="sensation-next">
+                  I’m not sure — skip to the compass
+                </button>
+              </div>
             </form>
             <div class="emotion-suggestions" data-body-suggestions>
               <p class="support-note">Your body-based matches will appear here after you choose sensations.</p>
             </div>
+            <p class="support-scroll-hint" aria-hidden="true">Keep scrolling for the next step ↓</p>
           </article>
 
-          <article class="support-step is-hidden" data-step="compass">
+          <article class="support-step support-step--has-next is-hidden" data-step="compass">
             <h3 class="support-step__title">Step 2: Emotion compass</h3>
             <p>
               If the body suggestions feel uncertain, try plotting your state on the emotion compass. Estimate your energy and how
@@ -196,9 +202,10 @@
             <div class="emotion-suggestions" data-compass-suggestions>
               <p class="support-note">Pick one energy and one pleasantness option to see suggestions.</p>
             </div>
+            <p class="support-scroll-hint" aria-hidden="true">More guidance is just below ↓</p>
           </article>
 
-          <article class="support-step is-hidden" data-step="library">
+          <article class="support-step support-step--has-next is-hidden" data-step="library">
             <h3 class="support-step__title">Step 3: Explore an emotion</h3>
             <p>
               Choose a suggested emotion to read its description. Notice which parts match your experience. You can always go back
@@ -207,9 +214,10 @@
             <div class="emotion-library" data-emotion-library>
               <p class="support-note">Select an emotion above to load its details.</p>
             </div>
+            <p class="support-scroll-hint" aria-hidden="true">Scroll down to capture reflections ↓</p>
           </article>
 
-          <article class="support-step is-hidden" data-step="journal">
+          <article class="support-step support-step--has-next is-hidden" data-step="journal">
             <h3 class="support-step__title">Step 4: Reflect and journal</h3>
             <p>
               Linking a feeling to context strengthens emotional awareness. Use the prompts below as writing cues or simply sit
@@ -231,16 +239,20 @@
               <p class="support-note" data-journal-status role="status"></p>
             </form>
             <div class="journal-history-wrapper" data-journal-history></div>
+            <p class="support-note support-note--subtle">
+              Saved reflections now appear in the Inventory journal tab so you can review or export them later.
+            </p>
           </article>
 
-          <article class="support-step is-hidden" data-step="regulation">
+          <article class="support-step support-step--has-next is-hidden" data-step="regulation">
             <h3 class="support-step__title">Step 5: Care for what you feel</h3>
             <div class="regulation-card" data-regulation-card>
               <p class="support-note">Suggestions will appear after you choose an emotion.</p>
             </div>
+            <p class="support-scroll-hint" aria-hidden="true">Communication support follows below ↓</p>
           </article>
 
-          <article class="support-step is-hidden" data-step="communication">
+          <article class="support-step support-step--has-next is-hidden" data-step="communication">
             <h3 class="support-step__title">Step 6: Share if you want to</h3>
             <p>
               Putting a feeling into words—just for yourself or with a trusted person—can build confidence. Use this starter
@@ -249,6 +261,7 @@
             <div class="communication-card" data-communication-card>
               <p class="support-note">We will suggest a sentence once you pick an emotion.</p>
             </div>
+            <p class="support-scroll-hint" aria-hidden="true">One more encouragement is below ↓</p>
           </article>
 
           <article class="support-step is-hidden" data-step="closing">
