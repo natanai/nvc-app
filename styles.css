@@ -157,8 +157,8 @@ input {
   .board__columns {
     grid-template-columns: 1fr;
     grid-template-areas:
-      'list'
-      'details';
+      'details'
+      'list';
   }
 }
 
@@ -191,11 +191,12 @@ input {
     gap: 1.5rem;
     grid-template-columns: 1fr;
     grid-template-areas:
-      'list'
-      'details';
+      'details'
+      'list';
   }
 
   .item-list {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     max-height: none;
     overflow: visible;
   }
@@ -250,7 +251,7 @@ input {
 
 .board__columns {
   display: grid;
-  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(320px, 2fr) minmax(280px, 1fr);
   grid-template-areas: 'list details';
   gap: 1.75rem;
   align-items: flex-start;
@@ -340,9 +341,10 @@ input {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
+  align-content: start;
   max-height: 60vh;
   overflow-y: auto;
 }
