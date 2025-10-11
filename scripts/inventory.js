@@ -8,6 +8,8 @@ const state = {
   inventoryListEl: null,
   inventorySummaryEl: null,
   inventoryMessageEl: null,
+  inventoryPanelEl: null,
+  inventoryToggleButton: null,
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -101,6 +103,60 @@ function setupNeedPage() {
       });
     });
   });
+
+  const suggestionForm = main.querySelector('#suggestion-form');
+  if (suggestionForm) {
+    const message = suggestionForm
+      .closest('[data-strategy-form-container]')
+      ?.querySelector('[data-form-message]');
+
+    suggestionForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(suggestionForm);
+      const title = (formData.get('title') || '').toString().trim();
+      const description = (formData.get('description') || '').toString().trim();
+      let selectedNeedSlug = (formData.get('need') || '').toString();
+      const firstName = (formData.get('name') || '').toString().trim();
+      const location = (formData.get('location') || '').toString().trim();
+
+      if (!title || !description) {
+        showFormMessage(message, 'Please share a strategy name and description before saving.', 'error');
+        return;
+      }
+
+      if (!selectedNeedSlug) {
+        selectedNeedSlug = needSlug || '';
+      }
+
+      const needSelect = suggestionForm.querySelector('select[name="need"]');
+      let selectedNeedTitle = '';
+      if (needSelect instanceof HTMLSelectElement) {
+        selectedNeedTitle = needSelect.options[needSelect.selectedIndex]?.textContent?.trim() || '';
+      }
+
+      const entry = {
+        id: generateId(),
+        title,
+        description,
+        need: selectedNeedTitle || needTitle,
+        needSlug: selectedNeedSlug,
+        tags: selectedNeedSlug ? [selectedNeedSlug] : [],
+        personal: true,
+        sourceNeedPage: '',
+        strategySlug: '',
+        firstName,
+        location,
+        createdAt: new Date().toISOString(),
+      };
+
+      const nextInventory = [...state.inventory, entry];
+      persistInventory(nextInventory);
+
+      suggestionForm.reset();
+      showFormMessage(message, `Saved “${title}” to your inventory. Visit the inventory page to review it anytime.`, 'success');
+    });
+  }
 }
 
 function setupInventoryPage() {
@@ -112,6 +168,19 @@ function setupInventoryPage() {
   state.inventoryListEl = listEl;
   state.inventorySummaryEl = document.getElementById('inventory-summary');
   state.inventoryMessageEl = document.querySelector('[data-inventory-message]');
+  state.inventoryPanelEl = document.querySelector('[data-inventory-panel]');
+  state.inventoryToggleButton = document.querySelector('[data-inventory-toggle]');
+
+  if (state.inventoryToggleButton && state.inventoryPanelEl) {
+    state.inventoryToggleButton.addEventListener('click', () => {
+      if (state.inventoryPanelEl.hasAttribute('hidden')) {
+        openInventoryPanel();
+      } else {
+        closeInventoryPanel();
+      }
+    });
+    updateInventoryToggleLabel();
+  }
 
   captureNeedsFromForm();
   renderInventoryViews();
@@ -154,6 +223,7 @@ function setupInventoryPage() {
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory, {
         inventoryMessage: `Added “${title}” to your inventory.`,
+        openList: true,
       });
       form.reset();
       const needSelect = form.querySelector('#inventory-need');
@@ -247,6 +317,7 @@ function renderInventoryViews() {
   renderInventorySummary();
   renderInventoryList();
   updateInventoryCount();
+  updateInventoryToggleLabel();
 }
 
 function renderInventorySummary() {
@@ -416,6 +487,41 @@ function renderInventoryList() {
   }
 }
 
+function openInventoryPanel() {
+  if (!state.inventoryPanelEl) {
+    return;
+  }
+  state.inventoryPanelEl.removeAttribute('hidden');
+  updateInventoryToggleLabel();
+}
+
+function closeInventoryPanel() {
+  if (!state.inventoryPanelEl) {
+    return;
+  }
+  if (!state.inventoryPanelEl.hasAttribute('hidden')) {
+    state.inventoryPanelEl.setAttribute('hidden', '');
+  }
+  updateInventoryToggleLabel();
+}
+
+function updateInventoryToggleLabel() {
+  if (!state.inventoryToggleButton) {
+    return;
+  }
+  const isOpen = state.inventoryPanelEl ? !state.inventoryPanelEl.hasAttribute('hidden') : false;
+  const total = state.inventory.length;
+  const baseLabel = isOpen ? 'Hide your saved strategies' : 'Show your saved strategies';
+  const suffix = !isOpen && total ? ` (${total})` : '';
+  state.inventoryToggleButton.textContent = `${baseLabel}${suffix}`;
+  state.inventoryToggleButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  if (state.inventoryPanelEl) {
+    const panelId = state.inventoryPanelEl.id || 'inventory-list-panel';
+    state.inventoryPanelEl.id = panelId;
+    state.inventoryToggleButton.setAttribute('aria-controls', panelId);
+  }
+}
+
 function renderInventoryItem(entry) {
   const card = document.createElement('article');
   card.className = 'inventory-item';
@@ -519,6 +625,9 @@ function persistInventory(items, options = {}) {
   state.inventory = items;
   saveInventory(items);
   renderInventoryViews();
+  if (options.openList) {
+    openInventoryPanel();
+  }
   if (options.inventoryMessage && state.inventoryMessageEl) {
     showInventoryMessage(options.inventoryMessage, options.inventoryMessageType || 'success');
   }
@@ -575,6 +684,18 @@ function showFeedback(element, message, type = 'success') {
       : type === 'warning'
       ? 'inventory-feedback--warning'
       : 'inventory-feedback--success';
+  element.classList.add(className);
+}
+
+function showFormMessage(element, message, type = 'success') {
+  if (!element) {
+    return;
+  }
+  element.textContent = message;
+  element.hidden = false;
+  element.classList.remove('success', 'error', 'warning');
+  const className =
+    type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'success';
   element.classList.add(className);
 }
 
@@ -683,6 +804,7 @@ function handleImportInventory(file) {
     const merged = Array.from(map.values());
     persistInventory(merged, {
       inventoryMessage: replace ? 'Inventory replaced from imported file.' : 'Inventory updated with imported strategies.',
+      openList: true,
     });
   });
   reader.readAsText(file);
@@ -772,6 +894,7 @@ function findNeedSlugByTitle(title) {
 }
 
 function focusNeedSection(slug) {
+  openInventoryPanel();
   const target = document.getElementById(`inventory-${slug}`);
   if (!target) {
     return;
