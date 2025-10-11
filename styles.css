@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&family=Baloo+2:wght@500;700&display=swap');
 
 :root {
   --plum: #74569b;
@@ -10,8 +10,10 @@
   --gold: #f7ffae;
   --sky: #d3f1ff;
   --outline: #12081f;
-  --shadow: rgba(18, 8, 31, 0.55);
-  font-family: 'VT323', monospace;
+  --shadow: color-mix(in srgb, var(--outline) 55%, transparent);
+  --font-body: 'Atkinson Hyperlegible', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.55;
 }
@@ -23,14 +25,14 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--plum);
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 48px),
-    linear-gradient(rgba(255, 255, 255, 0.08) 0, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 48px);
-  background-size: 48px 48px;
+  background: radial-gradient(circle at top left, color-mix(in srgb, var(--lavender) 60%, transparent) 0 30%, transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--plum) 75%, #000 5%) 0%, color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
+      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
   color: var(--ink);
   display: flex;
   justify-content: center;
   padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2.5rem);
+  font-family: var(--font-body);
 }
 
 .visually-hidden {
@@ -64,7 +66,7 @@ a:focus-visible {
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.75rem;
   align-items: center;
 }
 
@@ -72,43 +74,46 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.5rem 0.9rem;
+  padding: 0.6rem 1.1rem;
   border: 3px solid var(--outline);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.75rem;
+  background: color-mix(in srgb, var(--lavender) 65%, #fff 35%);
+  font-family: var(--font-display);
+  font-size: 0.92rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  box-shadow: 0 10px 0 rgba(18, 8, 31, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  box-shadow: 0 10px 0 var(--shadow);
+  position: relative;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .site-nav__link:hover,
 .site-nav__link:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 0 rgba(18, 8, 31, 0.22);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 45%, transparent);
 }
 
 .site-nav__link[aria-current='page'] {
-  background: var(--sky);
-  box-shadow: inset 0 -6px 0 rgba(18, 8, 31, 0.18);
-  transform: translateY(0);
+  background: color-mix(in srgb, var(--sky) 85%, #fff 15%);
+  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 25%, transparent), 0 10px 0 var(--shadow);
+  transform: translateY(-1px);
 }
 
 .site-nav__link[aria-current='page']:hover,
 .site-nav__link[aria-current='page']:focus-visible {
-  transform: translateY(0);
-  box-shadow: inset 0 -6px 0 rgba(18, 8, 31, 0.22);
+  transform: translateY(-1px);
+  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 30%, transparent), 0 12px 0 color-mix(in srgb, var(--outline) 38%, transparent);
 }
 
 .site-nav__link--inventory {
-  background: var(--mint);
+  background: color-mix(in srgb, var(--mint) 80%, #fff 10%);
+  letter-spacing: 0.12em;
 }
 
 .site-nav__link--inventory[aria-current='page'] {
-  background: var(--mint);
-  box-shadow: inset 0 -6px 0 rgba(18, 8, 31, 0.25);
+  background: color-mix(in srgb, var(--mint) 70%, #fff 20%);
+  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 35%, transparent), 0 10px 0 var(--shadow);
 }
 
 .site-nav__count {
@@ -194,7 +199,7 @@ a:focus-visible {
 
 .page-title {
   margin: 0;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: clamp(1rem, calc(0.5rem + 4vw), 1.9rem);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -241,8 +246,8 @@ a:focus-visible {
   padding: clamp(1.25rem, 3vw, 1.75rem);
   border: 3px solid var(--outline);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 16px 0 rgba(18, 8, 31, 0.2);
+  background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+  box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 32%, transparent);
 }
 
 .support-step.is-hidden {
@@ -251,7 +256,7 @@ a:focus-visible {
 
 .support-step__title {
   margin: 0;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   text-transform: uppercase;
   font-size: clamp(0.9rem, calc(0.6rem + 2vw), 1.2rem);
   letter-spacing: 0.06em;
@@ -271,24 +276,24 @@ a:focus-visible {
   padding: 0.55rem 1.1rem;
   border: 3px solid var(--outline);
   border-radius: 999px;
-  background: var(--gold);
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.75rem;
+  background: color-mix(in srgb, var(--gold) 85%, #fff 15%);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  box-shadow: 0 10px 0 rgba(18, 8, 31, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 32%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .support-button:hover,
 .support-button:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 0 rgba(18, 8, 31, 0.22);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 42%, transparent);
 }
 
 .support-button--ghost {
-  background: rgba(255, 255, 255, 0.8);
+  background: color-mix(in srgb, #ffffff 85%, var(--lavender) 15%);
 }
 
 .breathing-card {
@@ -298,6 +303,7 @@ a:focus-visible {
   border: 2px dashed var(--outline);
   border-radius: 18px;
   background: rgba(211, 241, 255, 0.6);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 32%, transparent);
 }
 
 .breathing-card__prompt {
@@ -367,13 +373,13 @@ a:focus-visible {
   border: 2px solid var(--outline);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.9);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .sensation-list label:hover,
 .sensation-list label:focus-within {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 0 rgba(18, 8, 31, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 30%, transparent);
 }
 
 .sensation-list input {
@@ -404,6 +410,7 @@ a:focus-visible {
   border-radius: 16px;
   border: 2px dashed var(--outline);
   background: rgba(237, 228, 255, 0.6);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 22%, transparent);
 }
 
 .emotion-suggestions__title {
@@ -426,11 +433,11 @@ a:focus-visible {
   border-radius: 999px;
   background: var(--rose);
   padding: 0.35rem 0.9rem;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .emotion-tag.is-active {
@@ -439,8 +446,8 @@ a:focus-visible {
 
 .emotion-tag:hover,
 .emotion-tag:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 0 rgba(18, 8, 31, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 28%, transparent);
 }
 
 .emotion-library {
@@ -455,7 +462,7 @@ a:focus-visible {
 .emotion-detail__name {
   margin: 0;
   font-size: 1.35rem;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   letter-spacing: 0.04em;
 }
 
@@ -611,7 +618,7 @@ a:focus-visible {
 }
 
 .category-card__label {
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -625,23 +632,23 @@ a:focus-visible {
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.55rem;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.48rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   background: rgba(255, 255, 255, 0.88);
-  border: 2px solid rgba(18, 8, 31, 0.7);
+  border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
   border-radius: 999px;
-  box-shadow: 0 4px 0 rgba(18, 8, 31, 0.12);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
   color: var(--outline);
   text-decoration: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .category-card__tag:hover,
 .category-card__tag:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 rgba(18, 8, 31, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 28%, transparent);
 }
 
 .section-title {
@@ -671,7 +678,7 @@ a:focus-visible {
   background: rgba(255, 255, 255, 0.85);
   border: 3px solid var(--outline);
   border-radius: 20px;
-  box-shadow: inset 0 12px 0 rgba(18, 8, 31, 0.08);
+  box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent);
 }
 
 .magnet-grid-wrapper {
@@ -683,7 +690,7 @@ a:focus-visible {
   top: -0.85rem;
   right: 1rem;
   padding: 0.3rem 0.45rem;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.6rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -692,15 +699,15 @@ a:focus-visible {
   border-radius: 999px;
   color: var(--outline);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 6px 0 rgba(18, 8, 31, 0.15);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 24%, transparent);
   z-index: 1;
 }
 
 .magnet-play-toggle:hover,
 .magnet-play-toggle:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 9px 0 rgba(18, 8, 31, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 color-mix(in srgb, var(--outline) 28%, transparent);
 }
 
 .magnet-play-toggle:focus-visible {
@@ -727,7 +734,7 @@ a:focus-visible {
 .shuffle-button {
   align-self: flex-start;
   margin-bottom: 0.75rem;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -904,7 +911,7 @@ a:focus-visible {
   border: 3px solid var(--outline);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.92);
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -977,7 +984,7 @@ a:focus-visible {
 
 .strategy-card__save {
   align-self: flex-end;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1044,7 +1051,7 @@ a:focus-visible {
 }
 
 .inventory-button {
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1156,7 +1163,7 @@ a:focus-visible {
 .inventory-summary__link {
   display: inline-flex;
   align-items: center;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1212,7 +1219,7 @@ a:focus-visible {
   border: 3px solid var(--outline);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 14px 0 rgba(18, 8, 31, 0.25);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 38%, transparent);
   padding: 0.35rem 0.75rem 0.75rem;
   transition: box-shadow 0.2s ease;
 }
@@ -1233,7 +1240,7 @@ a:focus-visible {
   padding: 0.45rem 0;
   cursor: pointer;
   list-style: none;
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1350,7 +1357,7 @@ a:focus-visible {
 }
 
 .inventory-item__link {
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1368,7 +1375,7 @@ a:focus-visible {
 }
 
 .inventory-item__delete {
-  font-family: 'Press Start 2P', cursive;
+  font-family: var(--font-display);
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1434,5 +1441,211 @@ a:focus-visible {
   .inventory-item__delete {
     width: 100%;
     text-align: center;
+  }
+}
+
+.palette-corner {
+  position: fixed;
+  bottom: clamp(1rem, 3vw, 1.6rem);
+  right: clamp(1rem, 3vw, 1.6rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.palette-corner__toggle,
+.palette-corner__panel {
+  pointer-events: auto;
+}
+
+.palette-corner__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  border: 3px solid var(--outline);
+  padding: 0;
+  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, #ffffff 65%, transparent), transparent),
+    color-mix(in srgb, var(--lavender) 85%, #fff 15%);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.palette-corner__toggle:hover,
+.palette-corner__toggle:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 32%, transparent);
+}
+
+.palette-corner__toggle:focus-visible {
+  outline: 2px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.palette-corner.is-open .palette-corner__toggle {
+  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, #ffffff 65%, transparent), transparent),
+    color-mix(in srgb, var(--sky) 75%, #fff 25%);
+}
+
+.palette-corner__glyph {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--outline);
+  text-shadow: 2px 2px 0 color-mix(in srgb, #ffffff 70%, transparent);
+  pointer-events: none;
+  transition: transform 0.22s ease;
+}
+
+.palette-corner.is-open .palette-corner__glyph {
+  transform: rotate(45deg);
+}
+
+.palette-corner__panel {
+  width: min(320px, 88vw);
+  padding: 1.1rem 1.3rem 1.35rem;
+  border: 3px solid var(--outline);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--lavender) 92%, #fff 8%);
+  box-shadow: -14px 22px 0 var(--shadow);
+  display: grid;
+  gap: 1rem;
+  backdrop-filter: blur(4px);
+  animation: palette-pop 0.22s ease-out;
+}
+
+.palette-corner__panel[hidden] {
+  display: none;
+}
+
+.palette-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.palette-form__header {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.palette-form__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.palette-form__subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.palette-form__field {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.palette-form__field--select {
+  gap: 0.4rem;
+}
+
+.palette-form__label {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.palette-form__field-inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.palette-form__swatch {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 8px;
+  border: 2px solid var(--outline);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, #ffffff 70%, transparent);
+  background: var(--lavender);
+}
+
+.palette-form__input,
+.palette-form__select {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.42rem 0.55rem;
+  border: 2px solid var(--outline);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+}
+
+.palette-form__input:focus-visible,
+.palette-form__select:focus-visible {
+  outline: 2px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.palette-form__grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.palette-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.palette-form__reset {
+  border: 2px solid var(--outline);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sky) 82%, #fff 12%);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.palette-form__reset:hover,
+.palette-form__reset:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+}
+
+@media (max-width: 600px) {
+  .palette-form__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes palette-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

@@ -1,4 +1,34 @@
 const STORAGE_KEY = 'nvcApp.inventory';
+const THEME_STORAGE_KEY = 'nvcApp.theme';
+
+const COLOR_INPUTS = [
+  { key: 'plum', varName: '--plum', label: 'Canvas glow' },
+  { key: 'lavender', varName: '--lavender', label: 'Panel mist' },
+  { key: 'ink', varName: '--ink', label: 'Ink' },
+  { key: 'inkSoft', varName: '--ink-soft', label: 'Soft ink' },
+  { key: 'rose', varName: '--rose', label: 'Blush accent' },
+  { key: 'mint', varName: '--mint', label: 'Mint accent' },
+  { key: 'gold', varName: '--gold', label: 'Sunbeam accent' },
+  { key: 'sky', varName: '--sky', label: 'Sky accent' },
+  { key: 'outline', varName: '--outline', label: 'Outline' },
+];
+
+const paletteState = {
+  container: null,
+  toggle: null,
+  panel: null,
+  presetSelect: null,
+  inputs: new Map(),
+  swatches: new Map(),
+  presets: [],
+  currentColors: {},
+  defaultColors: {},
+  currentPreset: '',
+};
+
+const SECTION_ALIASES = new Map([
+  ['/alexithymia-support/', '/feelings/'],
+]);
 
 const state = {
   inventory: [],
@@ -42,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.inventory = loadInventory();
   highlightNavigation();
+  initColorCustomizer().catch((error) => {
+    console.warn('Unable to set up the color customizer', error);
+  });
   updateInventoryCount();
   setupNeedPage();
   setupInventoryPage();
@@ -333,6 +366,8 @@ function highlightNavigation() {
   }
 
   const currentPath = normalizePath(window.location.pathname);
+  const aliasPath = resolveSectionAlias(currentPath);
+  const candidatePaths = aliasPath ? [currentPath, aliasPath] : [currentPath];
   let activeLink = null;
   let longestMatch = 0;
 
@@ -352,21 +387,23 @@ function highlightNavigation() {
       return;
     }
 
-    if (linkPath === '/' && currentPath !== '/') {
-      return;
-    }
-
-    if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
-      if (linkPath.length > longestMatch) {
-        activeLink = link;
-        longestMatch = linkPath.length;
+    candidatePaths.forEach((candidatePath) => {
+      if (!candidatePath) {
+        return;
       }
-    }
-  });
 
-  if (!activeLink && currentPath.includes('/alexithymia-support/')) {
-    activeLink = entries.find(({ linkPath }) => linkPath === '/feelings/')?.link || null;
-  }
+      if (linkPath === '/' && candidatePath !== '/') {
+        return;
+      }
+
+      if (candidatePath === linkPath || candidatePath.startsWith(linkPath)) {
+        if (linkPath.length > longestMatch) {
+          activeLink = link;
+          longestMatch = linkPath.length;
+        }
+      }
+    });
+  });
 
   if (activeLink) {
     activeLink.setAttribute('aria-current', 'page');
@@ -388,6 +425,541 @@ function normalizePath(pathname) {
   }
 
   return normalized === '//' ? '/' : normalized;
+}
+
+function resolveSectionAlias(pathname) {
+  if (!pathname) {
+    return null;
+  }
+
+  if (SECTION_ALIASES.has(pathname)) {
+    return SECTION_ALIASES.get(pathname);
+  }
+
+  for (const [pattern, target] of SECTION_ALIASES.entries()) {
+    if (pathname.startsWith(pattern)) {
+      return target;
+    }
+  }
+
+  return null;
+}
+
+async function initColorCustomizer() {
+  if (!document.body || paletteState.container) {
+    return;
+  }
+
+  buildPaletteUi();
+
+  paletteState.defaultColors = sanitizeColorsMap(readComputedColors());
+  paletteState.currentColors = { ...paletteState.defaultColors };
+
+  const savedTheme = loadSavedTheme();
+  if (savedTheme?.values && Object.keys(savedTheme.values).length) {
+    applyColors(savedTheme.values, { presetName: savedTheme.preset || '', persist: false, replace: true });
+  } else {
+    applyColors(paletteState.currentColors, { persist: false, replace: true });
+  }
+
+  populatePresetSelect();
+
+  try {
+    const presets = await fetchColorPresets();
+    if (Array.isArray(presets) && presets.length) {
+      paletteState.presets = presets;
+      populatePresetSelect();
+    }
+  } catch (error) {
+    console.warn('Unable to load color presets from data folder', error);
+  }
+}
+
+function buildPaletteUi() {
+  const container = document.createElement('div');
+  container.className = 'palette-corner';
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'palette-corner__toggle';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-haspopup', 'dialog');
+
+  const glyph = document.createElement('span');
+  glyph.className = 'palette-corner__glyph';
+  glyph.textContent = '+';
+  toggle.appendChild(glyph);
+
+  const srLabel = document.createElement('span');
+  srLabel.className = 'visually-hidden';
+  srLabel.textContent = 'Open color palette customizer';
+  toggle.appendChild(srLabel);
+
+  const panel = document.createElement('div');
+  panel.className = 'palette-corner__panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-label', 'Color palette customizer');
+  panel.hidden = true;
+  panel.tabIndex = -1;
+
+  const form = document.createElement('form');
+  form.className = 'palette-form';
+  form.setAttribute('data-palette-form', '');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+  });
+
+  const header = document.createElement('div');
+  header.className = 'palette-form__header';
+
+  const title = document.createElement('p');
+  title.className = 'palette-form__title';
+  title.textContent = 'Color tuner';
+
+  const subtitle = document.createElement('p');
+  subtitle.className = 'palette-form__subtitle';
+  subtitle.textContent = 'Pick a preset or enter your own hex codes.';
+
+  header.append(title, subtitle);
+  form.appendChild(header);
+
+  const presetField = document.createElement('label');
+  presetField.className = 'palette-form__field palette-form__field--select';
+
+  const presetLabel = document.createElement('span');
+  presetLabel.className = 'palette-form__label';
+  presetLabel.textContent = 'Presets';
+
+  const presetSelect = document.createElement('select');
+  presetSelect.className = 'palette-form__select';
+  presetSelect.setAttribute('data-palette-preset', '');
+  presetSelect.innerHTML = '<option value="">Current colors</option>';
+  presetSelect.addEventListener('change', (event) => {
+    const selectedName = event.target.value;
+    if (!selectedName) {
+      paletteState.currentPreset = '';
+      saveTheme({ values: paletteState.currentColors, preset: '' });
+      return;
+    }
+
+    const selectedPreset = paletteState.presets.find((preset) => preset.name === selectedName);
+    if (selectedPreset) {
+      applyColors(selectedPreset.colors, { presetName: selectedPreset.name, replace: true });
+    }
+  });
+
+  presetField.append(presetLabel, presetSelect);
+  form.appendChild(presetField);
+
+  const grid = document.createElement('div');
+  grid.className = 'palette-form__grid';
+  form.appendChild(grid);
+
+  COLOR_INPUTS.forEach((color) => {
+    const field = document.createElement('label');
+    field.className = 'palette-form__field';
+
+    const fieldLabel = document.createElement('span');
+    fieldLabel.className = 'palette-form__label';
+    fieldLabel.textContent = color.label;
+
+    const fieldInner = document.createElement('span');
+    fieldInner.className = 'palette-form__field-inner';
+
+    const swatch = document.createElement('span');
+    swatch.className = 'palette-form__swatch';
+
+    const input = document.createElement('input');
+    input.className = 'palette-form__input';
+    input.type = 'text';
+    input.maxLength = 7;
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+    input.inputMode = 'text';
+    input.setAttribute('pattern', '^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
+    input.setAttribute('title', 'Use a hex color like #A1B2C3');
+    input.dataset.colorKey = color.key;
+    input.addEventListener('input', () => {
+      input.setCustomValidity('');
+    });
+    input.addEventListener('change', handleColorInputChange);
+
+    fieldInner.append(swatch, input);
+    field.append(fieldLabel, fieldInner);
+    grid.appendChild(field);
+
+    paletteState.inputs.set(color.key, input);
+    paletteState.swatches.set(color.key, swatch);
+  });
+
+  const actions = document.createElement('div');
+  actions.className = 'palette-form__actions';
+
+  const resetButton = document.createElement('button');
+  resetButton.type = 'button';
+  resetButton.className = 'palette-form__reset';
+  resetButton.setAttribute('data-palette-reset', '');
+  resetButton.textContent = 'Reset to default';
+  resetButton.addEventListener('click', () => {
+    applyColors(paletteState.defaultColors, { presetName: '', replace: true });
+  });
+
+  actions.appendChild(resetButton);
+  form.appendChild(actions);
+
+  panel.appendChild(form);
+  container.append(toggle, panel);
+  document.body.appendChild(container);
+
+  toggle.addEventListener('click', () => {
+    if (toggle.getAttribute('aria-expanded') === 'true') {
+      closePalettePanel();
+    } else {
+      openPalettePanel();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!paletteState.container || !paletteState.toggle) {
+      return;
+    }
+    if (paletteState.toggle.getAttribute('aria-expanded') !== 'true') {
+      return;
+    }
+    if (!paletteState.container.contains(event.target)) {
+      closePalettePanel();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && paletteState.toggle?.getAttribute('aria-expanded') === 'true') {
+      closePalettePanel();
+      paletteState.toggle?.focus();
+    }
+  });
+
+  paletteState.container = container;
+  paletteState.toggle = toggle;
+  paletteState.panel = panel;
+  paletteState.presetSelect = presetSelect;
+}
+
+function openPalettePanel() {
+  if (!paletteState.panel || !paletteState.toggle) {
+    return;
+  }
+
+  paletteState.toggle.setAttribute('aria-expanded', 'true');
+  paletteState.container?.classList.add('is-open');
+  paletteState.panel.hidden = false;
+
+  const firstInput = paletteState.inputs.values().next().value;
+  if (firstInput instanceof HTMLElement) {
+    window.requestAnimationFrame(() => {
+      firstInput.focus();
+      if (firstInput instanceof HTMLInputElement) {
+        firstInput.select();
+      }
+    });
+  } else {
+    paletteState.panel.focus();
+  }
+}
+
+function closePalettePanel() {
+  if (!paletteState.panel || !paletteState.toggle) {
+    return;
+  }
+
+  paletteState.toggle.setAttribute('aria-expanded', 'false');
+  paletteState.container?.classList.remove('is-open');
+  paletteState.panel.hidden = true;
+}
+
+function handleColorInputChange(event) {
+  const input = event.target;
+  if (!(input instanceof HTMLInputElement)) {
+    return;
+  }
+
+  const key = input.dataset.colorKey;
+  if (!key) {
+    return;
+  }
+
+  const sanitized = sanitizeHex(input.value);
+  if (!sanitized) {
+    input.setCustomValidity('Use a hex color like #A1B2C3');
+    input.reportValidity();
+    updateInputsFromState();
+    return;
+  }
+
+  input.value = sanitized;
+  applyColors({ [key]: sanitized }, { presetName: '' });
+}
+
+function applyColors(colors, options = {}) {
+  const { presetName = '', persist = true, replace = false } = options;
+
+  if (replace) {
+    const nextColors = { ...paletteState.defaultColors };
+    COLOR_INPUTS.forEach(({ key }) => {
+      const candidate = sanitizeHex(colors[key]);
+      if (candidate) {
+        nextColors[key] = candidate;
+      }
+    });
+    paletteState.currentColors = nextColors;
+  } else {
+    const sanitized = sanitizeColorsMap(colors);
+    paletteState.currentColors = { ...paletteState.currentColors, ...sanitized };
+  }
+
+  COLOR_INPUTS.forEach(({ key, varName }) => {
+    const value = paletteState.currentColors[key];
+    if (value) {
+      document.documentElement.style.setProperty(varName, value);
+    }
+  });
+
+  paletteState.currentPreset = presetName || '';
+  updateInputsFromState();
+
+  if (paletteState.presetSelect && paletteState.presetSelect.value !== paletteState.currentPreset) {
+    paletteState.presetSelect.value = paletteState.currentPreset;
+  }
+
+  if (persist) {
+    saveTheme({ values: paletteState.currentColors, preset: paletteState.currentPreset });
+  }
+}
+
+function updateInputsFromState() {
+  COLOR_INPUTS.forEach(({ key }) => {
+    const value = paletteState.currentColors[key] || paletteState.defaultColors[key] || '';
+    const input = paletteState.inputs.get(key);
+    const swatch = paletteState.swatches.get(key);
+    if (input) {
+      input.value = value;
+    }
+    if (swatch) {
+      swatch.style.backgroundColor = value || 'transparent';
+    }
+  });
+}
+
+function readComputedColors() {
+  const computed = getComputedStyle(document.documentElement);
+  const colors = {};
+  COLOR_INPUTS.forEach(({ key, varName }) => {
+    const raw = computed.getPropertyValue(varName).trim();
+    const sanitized = sanitizeHex(raw);
+    if (sanitized) {
+      colors[key] = sanitized;
+    }
+  });
+  return colors;
+}
+
+function sanitizeHex(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  const prefixed = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
+  return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(prefixed) ? prefixed.toUpperCase() : '';
+}
+
+function sanitizeColorsMap(colors) {
+  const sanitized = {};
+  if (!colors || typeof colors !== 'object') {
+    return sanitized;
+  }
+
+  COLOR_INPUTS.forEach(({ key }) => {
+    const value = sanitizeHex(colors[key]);
+    if (value) {
+      sanitized[key] = value;
+    }
+  });
+
+  return sanitized;
+}
+
+function saveTheme(theme) {
+  if (!theme || typeof theme !== 'object') {
+    return;
+  }
+
+  const payload = {
+    values: sanitizeColorsMap(theme.values || paletteState.currentColors),
+    preset: typeof theme.preset === 'string' ? theme.preset : '',
+  };
+
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(payload));
+  } catch (error) {
+    console.warn('Unable to persist color theme', error);
+  }
+}
+
+function loadSavedTheme() {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (!stored) {
+      return null;
+    }
+
+    const parsed = JSON.parse(stored);
+    if (!parsed || typeof parsed !== 'object') {
+      return null;
+    }
+
+    return {
+      values: sanitizeColorsMap(parsed.values),
+      preset: typeof parsed.preset === 'string' ? parsed.preset : '',
+    };
+  } catch (error) {
+    console.warn('Unable to read saved color theme', error);
+    return null;
+  }
+}
+
+async function fetchColorPresets() {
+  const path = `${state.basePath || ''}data/color-palettes.csv`;
+  const response = await fetch(path, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load presets: ${response.status}`);
+  }
+
+  const text = await response.text();
+  return parseColorPaletteCsv(text);
+}
+
+function populatePresetSelect() {
+  const select = paletteState.presetSelect;
+  if (!select) {
+    return;
+  }
+
+  Array.from(select.querySelectorAll('option[data-generated="true"]')).forEach((option) => option.remove());
+
+  paletteState.presets.forEach((preset) => {
+    const option = document.createElement('option');
+    option.value = preset.name;
+    option.textContent = preset.name;
+    option.dataset.generated = 'true';
+    select.appendChild(option);
+  });
+
+  if (paletteState.currentPreset) {
+    const match = paletteState.presets.some((preset) => preset.name === paletteState.currentPreset);
+    select.value = match ? paletteState.currentPreset : '';
+  } else {
+    select.value = '';
+  }
+}
+
+function parseColorPaletteCsv(text) {
+  if (typeof text !== 'string') {
+    return [];
+  }
+
+  const rows = parseCsv(text);
+  if (!rows.length) {
+    return [];
+  }
+
+  const header = rows.shift().map((cell) => cell.trim());
+  const headerMap = new Map();
+  header.forEach((name, index) => {
+    if (name) {
+      headerMap.set(name.toLowerCase(), index);
+    }
+  });
+
+  const nameIndex = headerMap.get('name');
+  if (typeof nameIndex !== 'number') {
+    return [];
+  }
+
+  const presets = [];
+  rows.forEach((cells) => {
+    if (!cells || !cells.length) {
+      return;
+    }
+
+    const rawName = cells[nameIndex]?.trim();
+    if (!rawName) {
+      return;
+    }
+
+    const colors = {};
+    COLOR_INPUTS.forEach(({ key }) => {
+      const columnIndex = headerMap.get(key.toLowerCase());
+      if (typeof columnIndex === 'number') {
+        colors[key] = cells[columnIndex]?.trim();
+      }
+    });
+
+    const sanitized = sanitizeColorsMap(colors);
+    if (Object.keys(sanitized).length) {
+      presets.push({ name: rawName, colors: sanitized });
+    }
+  });
+
+  return presets;
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let current = '';
+  let row = [];
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i];
+
+    if (char === '"') {
+      if (inQuotes && text[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === ',' && !inQuotes) {
+      row.push(current);
+      current = '';
+      continue;
+    }
+
+    if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (char === '\r' && text[i + 1] === '\n') {
+        i += 1;
+      }
+      row.push(current);
+      rows.push(row);
+      row = [];
+      current = '';
+      continue;
+    }
+
+    current += char;
+  }
+
+  row.push(current);
+  rows.push(row);
+
+  return rows.filter((cells) => cells.some((cell) => cell.trim().length));
 }
 
 function captureNeedsFromForm() {
