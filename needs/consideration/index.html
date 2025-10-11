@@ -7,15 +7,25 @@
     <meta name="description" content="Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share." />
     <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body>
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../../">Home</a>
+        <a class="site-nav__link" href="../../situations/">Situations</a>
+        <a class="site-nav__link" href="../../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Consideration</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main" data-need-slug="consideration" data-need-name="Consideration" data-need-title="Need for Consideration">
         
       <header class="page-header">
         <h1 class="page-title">Need for Consideration</h1>
@@ -26,17 +36,24 @@ Interestingly I find that tending to the need for consideration in others someti
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication">
                     <h3 class="strategy-card__title">Call a friend</h3>
                     <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="volunteering-acts-of-kindness" data-strategy-tags="consideration">
                     <h3 class="strategy-card__title">Volunteering / Acts of Kindness</h3>
                     <p class="strategy-card__description">Tend to the life in others. Looks for ways that seem like trustworthy strategies to truly make life more wonderful for others. Sometimes we find that serving life in others turns out to serve life in us as well. Be careful to truly hear and identify what someone is needing before you try to do something you think they&#39;d enjoy as it can turn out to be especially discouraging to have tried to make life wonderful for someone only to realize they were needing something else altogether. Make space for them to share their needs and make a clear request or seek out volunteer work that are confident really is doing good work.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
           </div>
+          <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
@@ -48,7 +65,7 @@ Interestingly I find that tending to the need for consideration in others someti
           <fieldset class="tag-picker">
             <legend class="tag-picker__legend">Needs this strategy supports</legend>
             <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list">
+            <div class="tag-picker__list tag-picker__list--scroll">
               
               <label class="tag-pill">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="love-caring" />
@@ -331,6 +348,7 @@ Interestingly I find that tending to the need for consideration in others someti
     
       </main>
     </div>
+    <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/submit.js" defer></script>
   </body>
 </html>

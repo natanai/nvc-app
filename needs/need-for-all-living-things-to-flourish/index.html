@@ -7,15 +7,25 @@
     <meta name="description" content="Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share." />
     <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body>
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../../">Home</a>
+        <a class="site-nav__link" href="../../situations/">Situations</a>
+        <a class="site-nav__link" href="../../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Need for all living things to flourish</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main" data-need-slug="need-for-all-living-things-to-flourish" data-need-name="all living things to flourish" data-need-title="Need for all living things to flourish">
         
       <header class="page-header">
         <h1 class="page-title">Need for all living things to flourish</h1>
@@ -25,18 +35,25 @@
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="tend-to-a-plant" data-strategy-tags="need-for-all-living-things-to-flourish|nurturing">
                     <h3 class="strategy-card__title">Tend to a plant</h3>
                     <p class="strategy-card__description">Water a plant. Research how to care for your specific plant. Don&#39;t have a plant? Do you want one? Consider making an event of getting one.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="share-your-strategies" data-strategy-tags="need-for-all-living-things-to-flourish|contribution">
                     <h3 class="strategy-card__title">Share your strategies!</h3>
                     <p class="strategy-card__description">No one likes unsolicited advise (unfortunately), but you can share your strategies here for others to find when they are looking for them ;)
 It would make our lives so much more wonderful if you did!</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
           </div>
+          <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
@@ -48,7 +65,7 @@ It would make our lives so much more wonderful if you did!</p>
           <fieldset class="tag-picker">
             <legend class="tag-picker__legend">Needs this strategy supports</legend>
             <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list">
+            <div class="tag-picker__list tag-picker__list--scroll">
               
               <label class="tag-pill">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="love-caring" />
@@ -331,6 +348,7 @@ It would make our lives so much more wonderful if you did!</p>
     
       </main>
     </div>
+    <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/submit.js" defer></script>
   </body>
 </html>

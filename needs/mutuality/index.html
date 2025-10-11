@@ -7,15 +7,25 @@
     <meta name="description" content="Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share." />
     <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body>
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../../">Home</a>
+        <a class="site-nav__link" href="../../situations/">Situations</a>
+        <a class="site-nav__link" href="../../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Mutuality</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main" data-need-slug="mutuality" data-need-name="Mutuality" data-need-title="Need for Mutuality">
         
       <header class="page-header">
         <h1 class="page-title">Need for Mutuality</h1>
@@ -25,17 +35,24 @@
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication">
                     <h3 class="strategy-card__title">Call a friend</h3>
                     <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="make-a-request-in-conversation" data-strategy-tags="autonomy|freedom|choice|choose-freely|mutuality">
                     <h3 class="strategy-card__title">Make a request in conversation</h3>
                     <p class="strategy-card__description">Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
           </div>
+          <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
@@ -47,7 +64,7 @@
           <fieldset class="tag-picker">
             <legend class="tag-picker__legend">Needs this strategy supports</legend>
             <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list">
+            <div class="tag-picker__list tag-picker__list--scroll">
               
               <label class="tag-pill">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="love-caring" />
@@ -330,6 +347,7 @@
     
       </main>
     </div>
+    <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/submit.js" defer></script>
   </body>
 </html>

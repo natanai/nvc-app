@@ -50,6 +50,51 @@ a:focus-visible {
   gap: 1.5rem;
 }
 
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  box-shadow: 0 10px 0 rgba(18, 8, 31, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 rgba(18, 8, 31, 0.22);
+}
+
+.site-nav__link--inventory {
+  background: var(--mint);
+}
+
+.site-nav__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.7rem;
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;
@@ -290,6 +335,9 @@ a:focus-visible {
   border-radius: 18px;
   padding: 1rem 1.25rem;
   box-shadow: 0 16px 0 var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .strategy-card__title {
@@ -331,6 +379,32 @@ a:focus-visible {
 .strategy-card--input {
   padding: 0;
   overflow: hidden;
+}
+
+.strategy-card__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.strategy-card__save {
+  align-self: flex-end;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.45rem 0.85rem;
+  border: 3px solid var(--outline);
+  border-radius: 12px;
+  background: var(--rose);
+  box-shadow: 0 10px 0 var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.strategy-card__save:hover,
+.strategy-card__save:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 var(--shadow);
 }
 
 .strategy-card--input textarea {
@@ -378,6 +452,17 @@ a:focus-visible {
   display: grid;
   gap: 0.65rem;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  max-height: min(20rem, 50vh);
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.tag-picker__list--scroll {
+  max-height: min(22rem, 55vh);
+}
+
+.tag-picker--compact .tag-picker__list {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
 .tag-pill {
@@ -403,7 +488,9 @@ a:focus-visible {
   border-radius: 999px;
   font-weight: bold;
   box-shadow: 0 10px 0 var(--shadow);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  text-align: center;
+  line-height: 1.2;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 
 .tag-pill:hover .tag-pill__visual {
@@ -415,6 +502,13 @@ a:focus-visible {
   background: var(--mint);
   box-shadow: 0 14px 0 var(--shadow);
   transform: translateY(-2px);
+  color: var(--ink);
+}
+
+.tag-pill__checkbox:checked + .tag-pill__visual::after {
+  content: '✓';
+  margin-left: 0.4rem;
+  font-size: 0.9rem;
 }
 
 .tag-pill__checkbox:focus-visible + .tag-pill__visual {
@@ -468,6 +562,369 @@ a:focus-visible {
 .form-message.error {
   background: #ffd4d4;
   border-color: var(--outline);
+}
+
+.inventory-feedback,
+.inventory-message {
+  margin: 0;
+  padding: 0.6rem 0.9rem;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.inventory-feedback--success,
+.inventory-message--success {
+  background: var(--mint);
+  border-color: var(--outline);
+}
+
+.inventory-feedback--warning,
+.inventory-message--warning {
+  background: #fff2c2;
+  border-color: var(--outline);
+}
+
+.inventory-feedback--error,
+.inventory-message--error {
+  background: #ffd4d4;
+  border-color: var(--outline);
+}
+
+.inventory-button {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 1rem;
+  border: 3px solid var(--outline);
+  border-radius: 12px;
+  background: var(--rose);
+  box-shadow: 0 12px 0 var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.inventory-button:hover,
+.inventory-button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 0 var(--shadow);
+}
+
+.inventory-overview,
+.inventory-actions,
+.inventory-form,
+.inventory-list-section {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.inventory-actions__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.inventory-form__form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.inventory-form__form label {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.inventory-form__form input[type='text'],
+.inventory-form__form select {
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 3px solid var(--outline);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 -8px 0 rgba(18, 8, 31, 0.08);
+}
+
+.inventory-form__form input[type='text']:focus-visible,
+.inventory-form__form select:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.inventory-summary {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.inventory-summary__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border: 3px solid var(--outline);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 0 var(--shadow);
+}
+
+.inventory-summary__item--ready {
+  background: rgba(150, 251, 199, 0.85);
+}
+
+.inventory-summary__item--missing {
+  background: rgba(255, 212, 212, 0.85);
+}
+
+.inventory-summary__focus {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  flex: 1;
+}
+
+.inventory-summary__focus:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.inventory-summary__status {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: #ffd4d4;
+  border: 2px solid var(--outline);
+}
+
+.inventory-summary__item--ready .inventory-summary__status {
+  background: var(--mint);
+}
+
+.inventory-summary__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.inventory-summary__label {
+  font-weight: bold;
+}
+
+.inventory-summary__count {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.inventory-summary__link {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.6rem;
+  border: 3px solid var(--outline);
+  border-radius: 12px;
+  background: var(--sky);
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.inventory-summary__link:hover,
+.inventory-summary__link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 0 var(--shadow);
+}
+
+.inventory-overview__header,
+.inventory-actions__header,
+.inventory-list__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.inventory-overview__hint,
+.inventory-actions__hint,
+.inventory-list__hint {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.inventory-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.inventory-need {
+  border: 3px solid var(--outline);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 0 rgba(18, 8, 31, 0.25);
+  padding: 0.35rem 0.75rem 0.75rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.inventory-need--highlight {
+  box-shadow: 0 18px 0 var(--shadow);
+}
+
+.inventory-need summary::-webkit-details-marker {
+  display: none;
+}
+
+.inventory-need__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inventory-need__name {
+  font-size: 0.9rem;
+}
+
+.inventory-need__badge {
+  font-size: 0.75rem;
+  background: var(--gold);
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+}
+
+.inventory-need__body {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.inventory-need__empty {
+  margin: 0;
+  font-style: italic;
+}
+
+.inventory-empty {
+  margin: 0;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.inventory-item {
+  background: var(--mint);
+  border: 3px solid var(--outline);
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 12px 0 var(--shadow);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.inventory-item__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inventory-item__title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.inventory-item__description {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.inventory-item__meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.inventory-item__tags {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.inventory-item__tag,
+.inventory-item__tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 3px solid var(--outline);
+  background: var(--sky);
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.inventory-item__tag--source {
+  background: var(--rose);
+}
+
+.inventory-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.inventory-item__link {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.6rem;
+  border: 3px solid var(--outline);
+  border-radius: 12px;
+  background: var(--sky);
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.inventory-item__link:hover,
+.inventory-item__link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 0 var(--shadow);
+}
+
+.inventory-item__delete {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.75rem;
+  border: 3px solid var(--outline);
+  border-radius: 12px;
+  background: #ffd4d4;
+  box-shadow: 0 8px 0 var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.inventory-item__delete:hover,
+.inventory-item__delete:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 0 var(--shadow);
 }
 
 .empty-state {

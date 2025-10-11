@@ -7,15 +7,25 @@
     <meta name="description" content="Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share." />
     <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body>
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../../">Home</a>
+        <a class="site-nav__link" href="../../situations/">Situations</a>
+        <a class="site-nav__link" href="../../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Community</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main" data-need-slug="community" data-need-name="Community" data-need-title="Need for Community">
         
       <header class="page-header">
         <h1 class="page-title">Need for Community</h1>
@@ -25,17 +35,24 @@
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="try-meetup" data-strategy-tags="inclusion|community|participation">
                     <h3 class="strategy-card__title">Try Meetup</h3>
                     <p class="strategy-card__description">Meetup is a website that tries to connect you to people with similar interests. Worth a shot?</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth">
                     <h3 class="strategy-card__title">Play a video game</h3>
                     <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
           </div>
+          <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
@@ -47,7 +64,7 @@
           <fieldset class="tag-picker">
             <legend class="tag-picker__legend">Needs this strategy supports</legend>
             <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list">
+            <div class="tag-picker__list tag-picker__list--scroll">
               
               <label class="tag-pill">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="love-caring" />
@@ -330,6 +347,7 @@
     
       </main>
     </div>
+    <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/submit.js" defer></script>
   </body>
 </html>
