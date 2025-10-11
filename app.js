@@ -26,7 +26,7 @@ init();
 async function init() {
   showLoadingState();
   try {
-    const response = await fetch('../data/index.json');
+    const response = await fetch('data/index.json');
     if (!response.ok) {
       throw new Error(`Failed to load data (${response.status})`);
     }

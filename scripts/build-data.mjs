@@ -86,10 +86,10 @@ function uniqueByTitle(items) {
   });
 }
 
-const rawFeelings = readCsv('Feelings.csv');
-const rawNeeds = readCsv('Needs.csv');
-const rawSituations = readCsv('Situations.csv');
-const rawStrategies = readCsv('Strategies.csv');
+const rawFeelings = readCsv('data/Feelings.csv');
+const rawNeeds = readCsv('data/Needs.csv');
+const rawSituations = readCsv('data/Situations.csv');
+const rawStrategies = readCsv('data/Strategies.csv');
 
 const feelings = rawFeelings.map((row) => ({
   title: row.Title,
