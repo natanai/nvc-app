@@ -161,14 +161,12 @@
               </fieldset>
               <div class="sensation-actions">
                 <button class="support-button" type="button" data-action="sensation-submit">See possible emotions</button>
-                <button class="support-button" type="button" data-action="sensation-skip">Skip for now</button>
                 <button class="support-button support-button--ghost" type="button" data-action="sensation-clear">Clear choices</button>
               </div>
             </form>
             <div class="emotion-suggestions" data-body-suggestions>
               <p class="support-note">Your body-based matches will appear here after you choose sensations.</p>
             </div>
-            <p class="step-scroll-hint" aria-hidden="true">Scroll for Step 2 <span class="step-scroll-hint__arrow" aria-hidden="true">↓</span></p>
           </article>
 
           <article class="support-step is-hidden" data-step="compass">
@@ -198,7 +196,6 @@
             <div class="emotion-suggestions" data-compass-suggestions>
               <p class="support-note">Pick one energy and one pleasantness option to see suggestions.</p>
             </div>
-            <p class="step-scroll-hint" aria-hidden="true">Scroll for Step 3 <span class="step-scroll-hint__arrow" aria-hidden="true">↓</span></p>
           </article>
 
           <article class="support-step is-hidden" data-step="library">
@@ -210,7 +207,6 @@
             <div class="emotion-library" data-emotion-library>
               <p class="support-note">Select an emotion above to load its details.</p>
             </div>
-            <p class="step-scroll-hint" aria-hidden="true">Scroll for Step 4 <span class="step-scroll-hint__arrow" aria-hidden="true">↓</span></p>
           </article>
 
           <article class="support-step is-hidden" data-step="journal">
@@ -228,46 +224,6 @@
             <form class="journal-form" data-journal-form>
               <label class="journal-form__label" for="journalEntry">Write a few notes (saved only on this device)</label>
               <textarea id="journalEntry" name="journalEntry" rows="6" placeholder="Today I noticed..."></textarea>
-              <div class="journal-form__row">
-                <div class="journal-form__field">
-                  <label for="journalIntensity">How strong is this feeling right now?</label>
-                  <div class="journal-intensity">
-                    <input
-                      id="journalIntensity"
-                      name="journalIntensity"
-                      type="range"
-                      min="1"
-                      max="10"
-                      step="1"
-                      value="5"
-                      aria-describedby="journalIntensityValue"
-                    />
-                    <span id="journalIntensityValue" class="journal-intensity__value" aria-live="polite">5</span>
-                  </div>
-                </div>
-                <div class="journal-form__field">
-                  <label for="journalTags">Tag this entry (optional)</label>
-                  <input
-                    id="journalTags"
-                    name="journalTags"
-                    type="text"
-                    placeholder="e.g., work, relationship, weekend"
-                    aria-describedby="journalTagsHint"
-                  />
-                  <small id="journalTagsHint" class="journal-form__hint">Separate tags with commas.</small>
-                </div>
-              </div>
-              <div class="journal-form__field">
-                <label for="journalNeeds">Which needs feel connected? (optional)</label>
-                <input
-                  id="journalNeeds"
-                  name="journalNeeds"
-                  type="text"
-                  placeholder="Add one or more needs, separated by commas"
-                  aria-describedby="journalNeedsHint"
-                />
-                <small id="journalNeedsHint" class="journal-form__hint">Start typing to name any needs that want care.</small>
-              </div>
               <div class="journal-actions">
                 <button class="support-button" type="submit">Save reflection</button>
                 <button class="support-button support-button--ghost" type="button" data-action="journal-clear">Clear text</button>
@@ -275,7 +231,6 @@
               <p class="support-note" data-journal-status role="status"></p>
             </form>
             <div class="journal-history-wrapper" data-journal-history></div>
-            <p class="step-scroll-hint" aria-hidden="true">Scroll for Step 5 <span class="step-scroll-hint__arrow" aria-hidden="true">↓</span></p>
           </article>
 
           <article class="support-step is-hidden" data-step="regulation">
@@ -283,7 +238,6 @@
             <div class="regulation-card" data-regulation-card>
               <p class="support-note">Suggestions will appear after you choose an emotion.</p>
             </div>
-            <p class="step-scroll-hint" aria-hidden="true">Scroll for Step 6 <span class="step-scroll-hint__arrow" aria-hidden="true">↓</span></p>
           </article>
 
           <article class="support-step is-hidden" data-step="communication">
@@ -295,7 +249,6 @@
             <div class="communication-card" data-communication-card>
               <p class="support-note">We will suggest a sentence once you pick an emotion.</p>
             </div>
-            <p class="step-scroll-hint" aria-hidden="true">Scroll for Step 7 <span class="step-scroll-hint__arrow" aria-hidden="true">↓</span></p>
           </article>
 
           <article class="support-step is-hidden" data-step="closing">

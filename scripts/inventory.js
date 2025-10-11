@@ -1,8 +1,5 @@
 const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
-const JOURNAL_STORAGE_KEY = 'nvcApp.journalEntries';
-const JOURNAL_LEGACY_KEY = 'alexithymiaSupportJournal';
-const DEFAULT_JOURNAL_EXPORT_NAME = 'nvc-journal';
 
 const COLOR_INPUTS = [
   { key: 'plum', varName: '--plum', label: 'Canvas glow' },
@@ -15,51 +12,6 @@ const COLOR_INPUTS = [
   { key: 'sky', varName: '--sky', label: 'Sky accent' },
   { key: 'outline', varName: '--outline', label: 'Outline' },
 ];
-
-const FALLBACK_COLOR_PRESETS = Object.freeze([
-  {
-    name: 'Game Kid',
-    colors: {
-      plum: '#5A6D7C',
-      lavender: '#E6F6C5',
-      ink: '#1E1F2A',
-      inkSoft: '#3C3F4D',
-      rose: '#FFA5C5',
-      mint: '#8FE1B5',
-      gold: '#F7E88C',
-      sky: '#B6D7CE',
-      outline: '#101725',
-    },
-  },
-  {
-    name: 'Pastel Portal',
-    colors: {
-      plum: '#7D5DA6',
-      lavender: '#F3E9FF',
-      ink: '#231336',
-      inkSoft: '#433055',
-      rose: '#FFB5C7',
-      mint: '#9DE5CB',
-      gold: '#F8F2AA',
-      sky: '#C8E8FF',
-      outline: '#1A0D29',
-    },
-  },
-  {
-    name: 'Comfort Wave',
-    colors: {
-      plum: '#6B708F',
-      lavender: '#EFE9FF',
-      ink: '#1E1B29',
-      inkSoft: '#40374A',
-      rose: '#FFBBD2',
-      mint: '#99F4C9',
-      gold: '#F9F6B4',
-      sky: '#C3F0FF',
-      outline: '#120A1F',
-    },
-  },
-]);
 
 const paletteState = {
   container: null,
@@ -80,38 +32,6 @@ const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
 ]);
 
-const JOURNAL_EMOTIONS = [
-  { key: 'anxiety', label: 'Anxiety' },
-  { key: 'fear', label: 'Fear' },
-  { key: 'anger', label: 'Anger' },
-  { key: 'overwhelm', label: 'Overwhelm' },
-  { key: 'excitement', label: 'Excitement' },
-  { key: 'worry', label: 'Worry' },
-  { key: 'sadness', label: 'Sadness' },
-  { key: 'grief', label: 'Grief' },
-  { key: 'tired', label: 'Tired' },
-  { key: 'lonely', label: 'Lonely' },
-  { key: 'guilt', label: 'Guilt' },
-  { key: 'shame', label: 'Shame' },
-  { key: 'stress', label: 'Stress' },
-  { key: 'frustration', label: 'Frustration' },
-  { key: 'numb', label: 'Numb' },
-  { key: 'bored', label: 'Bored' },
-  { key: 'curiosity', label: 'Curiosity' },
-  { key: 'thoughtful', label: 'Thoughtful' },
-  { key: 'uncertain', label: 'Uncertain' },
-  { key: 'determined', label: 'Determined' },
-  { key: 'focused', label: 'Focused' },
-  { key: 'anticipation', label: 'Anticipation' },
-  { key: 'calm', label: 'Calm' },
-  { key: 'relief', label: 'Relief' },
-  { key: 'contentment', label: 'Contentment' },
-  { key: 'hope', label: 'Hope' },
-  { key: 'gratitude', label: 'Gratitude' },
-  { key: 'joy', label: 'Joy' },
-  { key: 'pride', label: 'Pride' },
-];
-
 const state = {
   inventory: [],
   needs: [],
@@ -123,30 +43,6 @@ const state = {
   strategiesContainerEl: null,
   inventoryToggleButton: null,
   showStrategies: false,
-  journalEntries: [],
-  journalFilters: {
-    emotion: '',
-    tag: '',
-  },
-  journalElements: {
-    list: null,
-    count: null,
-    trends: null,
-    emotionFilter: null,
-    tagFilter: null,
-    message: null,
-    importInput: null,
-    exportButton: null,
-    importTrigger: null,
-    entryForm: null,
-    entryStatus: null,
-    intensityInput: null,
-    intensityValue: null,
-    emotionOptions: null,
-  },
-  inventoryTabs: new Map(),
-  inventoryPanels: new Map(),
-  activeTab: 'strategies',
 };
 
 function sanitizeContributorName(value) {
@@ -174,150 +70,6 @@ function normalizeInventoryEntry(entry) {
   return normalized;
 }
 
-function parseListInput(value) {
-  if (!value || typeof value !== 'string') {
-    return [];
-  }
-  return value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function toStringArray(value) {
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => (typeof item === 'string' ? item.trim() : ''))
-      .filter(Boolean);
-  }
-  if (typeof value === 'string') {
-    return parseListInput(value);
-  }
-  return [];
-}
-
-function clampIntensity(value) {
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    return null;
-  }
-  return Math.min(10, Math.max(1, Math.round(value)));
-}
-
-function generateJournalId() {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-  return `journal-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-}
-
-function slugifyEmotion(label) {
-  if (!label || typeof label !== 'string') {
-    return '';
-  }
-  return label
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-function titleCase(value) {
-  if (!value) {
-    return '';
-  }
-  return value.replace(/(^|\s)([a-z])/g, (match, space, letter) => `${space}${letter.toUpperCase()}`);
-}
-
-function normalizeJournalEntry(entry) {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-  const text = typeof entry.text === 'string' ? entry.text.trim() : '';
-  if (!text) {
-    return null;
-  }
-  const intensityValue = typeof entry.intensity === 'number' ? entry.intensity : Number(entry.intensity);
-  const normalized = {
-    id: typeof entry.id === 'string' && entry.id ? entry.id : generateJournalId(),
-    text,
-    emotion: typeof entry.emotion === 'string' ? entry.emotion : '',
-    emotionLabel: typeof entry.emotionLabel === 'string' ? entry.emotionLabel.trim() : '',
-    intensity: clampIntensity(intensityValue),
-    tags: toStringArray(entry.tags),
-    needs: toStringArray(entry.needs),
-    source:
-      typeof entry.source === 'string' && entry.source
-        ? entry.source
-        : 'alexithymia-support',
-    timestamp:
-      typeof entry.timestamp === 'string' && entry.timestamp
-        ? entry.timestamp
-        : new Date().toISOString(),
-  };
-
-  if (!normalized.emotionLabel && normalized.emotion) {
-    const match = JOURNAL_EMOTIONS.find((emotion) => emotion.key === normalized.emotion);
-    if (match) {
-      normalized.emotionLabel = match.label;
-    } else {
-      normalized.emotionLabel = titleCase(normalized.emotion.replace(/-/g, ' '));
-    }
-  }
-
-  if (!normalized.emotion && normalized.emotionLabel) {
-    normalized.emotion = slugifyEmotion(normalized.emotionLabel);
-  }
-
-  return normalized;
-}
-
-function readJournalEntriesFromStorage(key) {
-  if (!key) {
-    return [];
-  }
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) {
-      return [];
-    }
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-    return parsed
-      .map((entry) => normalizeJournalEntry(entry))
-      .filter((entry) => entry !== null);
-  } catch (error) {
-    console.warn('Unable to read journal entries', error);
-    return [];
-  }
-}
-
-function loadJournalEntries() {
-  let entries = readJournalEntriesFromStorage(JOURNAL_STORAGE_KEY);
-  if (entries.length) {
-    return entries;
-  }
-  const legacyEntries = readJournalEntriesFromStorage(JOURNAL_LEGACY_KEY);
-  if (legacyEntries.length) {
-    entries = legacyEntries;
-    saveJournalEntries(entries);
-    try {
-      localStorage.removeItem(JOURNAL_LEGACY_KEY);
-    } catch (error) {
-      console.warn('Unable to remove legacy journal storage', error);
-    }
-  }
-  return entries;
-}
-
-function saveJournalEntries(entries) {
-  try {
-    localStorage.setItem(JOURNAL_STORAGE_KEY, JSON.stringify(entries));
-  } catch (error) {
-    console.warn('Unable to save journal entries', error);
-  }
 function resolveAssetPath(path) {
   try {
     const basePath = document.body?.dataset?.basePath ?? '';
@@ -364,7 +116,6 @@ function isPaletteEventTarget(target) {
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.inventory = loadInventory();
-  state.journalEntries = loadJournalEntries();
   highlightNavigation();
   initColorCustomizer().catch((error) => {
     console.warn('Unable to set up the color customizer', error);
@@ -521,12 +272,8 @@ function setupNeedPage() {
 }
 
 function setupInventoryPage() {
-  setupInventoryTabs();
-  setupJournalDashboard();
-
   const listEl = document.getElementById('inventory-list');
   if (!listEl) {
-    renderJournalContent();
     return;
   }
 
@@ -655,571 +402,6 @@ function setupInventoryPage() {
       }
     });
   }
-
-  renderJournalContent();
-}
-
-function setupInventoryTabs() {
-  const tabs = document.querySelectorAll('[data-inventory-tab]');
-  const panels = document.querySelectorAll('[data-inventory-panel]');
-  if (!tabs.length || !panels.length) {
-    return;
-  }
-
-  tabs.forEach((tab) => {
-    const key = tab.dataset.inventoryTab;
-    if (!key) {
-      return;
-    }
-    state.inventoryTabs.set(key, tab);
-    tab.addEventListener('click', () => {
-      activateInventoryTab(key);
-    });
-  });
-
-  panels.forEach((panel) => {
-    const key = panel.dataset.inventoryPanel;
-    if (!key) {
-      return;
-    }
-    state.inventoryPanels.set(key, panel);
-  });
-
-  if (!state.inventoryTabs.has(state.activeTab)) {
-    state.activeTab = 'strategies';
-  }
-
-  activateInventoryTab(state.activeTab);
-}
-
-function activateInventoryTab(key) {
-  state.activeTab = key;
-  state.inventoryTabs.forEach((tab, tabKey) => {
-    const isActive = tabKey === key;
-    tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-  });
-  state.inventoryPanels.forEach((panel, panelKey) => {
-    const isActive = panelKey === key;
-    panel.classList.toggle('inventory-panel--hidden', !isActive);
-    panel.hidden = !isActive;
-  });
-  if (key === 'journal') {
-    renderJournalContent();
-  }
-}
-
-function setupJournalDashboard() {
-  const elements = state.journalElements;
-  elements.list = document.querySelector('[data-journal-list]');
-  elements.count = document.querySelector('[data-journal-count]');
-  elements.trends = document.querySelector('[data-journal-trends]');
-  elements.emotionFilter = document.querySelector('[data-journal-filter-emotion]');
-  elements.tagFilter = document.querySelector('[data-journal-filter-tag]');
-  elements.message = document.querySelector('[data-journal-message]');
-  elements.importInput = document.querySelector('[data-journal-import]');
-  elements.importTrigger = document.querySelector('[data-journal-import-trigger]');
-  elements.exportButton = document.querySelector('[data-journal-export]');
-  elements.entryForm = document.querySelector('[data-journal-entry-form]');
-  elements.entryStatus = document.querySelector('[data-journal-entry-status]');
-  elements.intensityInput = document.getElementById('journal-entry-intensity');
-  elements.intensityValue = document.getElementById('journal-entry-intensity-value');
-  elements.emotionOptions = document.getElementById('journal-emotion-options');
-
-  const hasJournalUi =
-    elements.list ||
-    elements.entryForm ||
-    elements.exportButton ||
-    elements.importTrigger ||
-    elements.emotionFilter ||
-    elements.tagFilter;
-
-  if (!hasJournalUi) {
-    return;
-  }
-
-  if (elements.emotionFilter) {
-    elements.emotionFilter.addEventListener('change', handleJournalFilterChange);
-  }
-
-  if (elements.tagFilter) {
-    elements.tagFilter.addEventListener('change', handleJournalFilterChange);
-  }
-
-  if (elements.exportButton) {
-    elements.exportButton.addEventListener('click', handleJournalExport);
-  }
-
-  if (elements.importTrigger && elements.importInput) {
-    elements.importTrigger.addEventListener('click', () => {
-      elements.importInput.click();
-    });
-    elements.importInput.addEventListener('change', (event) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        handleJournalImport(file);
-      }
-      event.target.value = '';
-    });
-  }
-
-  if (elements.entryForm) {
-    elements.entryForm.addEventListener('submit', handleJournalEntrySubmit);
-  }
-
-  if (elements.intensityInput) {
-    elements.intensityInput.addEventListener('input', handleJournalEntryIntensityInput);
-    updateEntryIntensityDisplay(elements.intensityInput.value);
-  }
-
-  renderJournalFilters();
-  renderJournalEmotionOptions();
-  renderJournalContent();
-}
-
-function updateEntryIntensityDisplay(value) {
-  const display = state.journalElements.intensityValue;
-  if (!display) {
-    return;
-  }
-  const safeValue = value ? String(value) : '5';
-  display.textContent = safeValue;
-}
-
-function renderJournalEmotionOptions() {
-  const datalist = state.journalElements.emotionOptions;
-  if (!datalist) {
-    return;
-  }
-  const options = new Map();
-  JOURNAL_EMOTIONS.forEach(({ label }) => {
-    options.set(label.toLowerCase(), label);
-  });
-  state.journalEntries.forEach((entry) => {
-    const label = entry.emotionLabel || (entry.emotion ? titleCase(entry.emotion.replace(/-/g, ' ')) : '');
-    if (!label) {
-      return;
-    }
-    options.set(label.toLowerCase(), label);
-  });
-  datalist.innerHTML = '';
-  Array.from(options.values())
-    .sort((a, b) => a.localeCompare(b))
-    .forEach((label) => {
-      const option = document.createElement('option');
-      option.value = label;
-      datalist.appendChild(option);
-    });
-}
-
-function renderJournalFilters() {
-  const { emotionFilter, tagFilter } = state.journalElements;
-
-  if (emotionFilter instanceof HTMLSelectElement) {
-    const selectedValue = state.journalFilters.emotion;
-    const options = new Map();
-    JOURNAL_EMOTIONS.forEach(({ key, label }) => {
-      options.set(key, label);
-    });
-    state.journalEntries.forEach((entry) => {
-      const label = entry.emotionLabel || (entry.emotion ? titleCase(entry.emotion.replace(/-/g, ' ')) : '');
-      const key = entry.emotion || (label ? slugifyEmotion(label) : '');
-      if (key && label) {
-        options.set(key, label);
-      }
-    });
-    emotionFilter.innerHTML = '';
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'All emotions';
-    emotionFilter.appendChild(defaultOption);
-    let hasSelected = false;
-    Array.from(options.entries())
-      .sort((a, b) => a[1].localeCompare(b[1]))
-      .forEach(([value, label]) => {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = label;
-        if (value === selectedValue) {
-          option.selected = true;
-          hasSelected = true;
-        }
-        emotionFilter.appendChild(option);
-      });
-    if (selectedValue && !hasSelected) {
-      state.journalFilters.emotion = '';
-      emotionFilter.value = '';
-    } else if (!selectedValue) {
-      emotionFilter.value = '';
-    }
-  }
-
-  if (tagFilter instanceof HTMLSelectElement) {
-    const selectedTag = state.journalFilters.tag;
-    const tags = new Set();
-    state.journalEntries.forEach((entry) => {
-      (entry.tags || []).forEach((tag) => {
-        if (tag) {
-          tags.add(tag);
-        }
-      });
-    });
-    tagFilter.innerHTML = '';
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'All tags';
-    tagFilter.appendChild(defaultOption);
-    let hasSelectedTag = false;
-    Array.from(tags)
-      .sort((a, b) => a.localeCompare(b))
-      .forEach((tag) => {
-        const option = document.createElement('option');
-        option.value = tag;
-        option.textContent = tag;
-        if (tag === selectedTag) {
-          option.selected = true;
-          hasSelectedTag = true;
-        }
-        tagFilter.appendChild(option);
-      });
-    if (selectedTag && !hasSelectedTag) {
-      state.journalFilters.tag = '';
-      tagFilter.value = '';
-    } else if (!selectedTag) {
-      tagFilter.value = '';
-    }
-  }
-}
-
-function getFilteredJournalEntries() {
-  const { emotion, tag } = state.journalFilters;
-  return state.journalEntries.filter((entry) => {
-    const matchesEmotion = !emotion || entry.emotion === emotion;
-    const matchesTag = !tag || (entry.tags && entry.tags.includes(tag));
-    return matchesEmotion && matchesTag;
-  });
-}
-
-function buildJournalCard(entry) {
-  const card = document.createElement('article');
-  card.className = 'journal-card';
-
-  const header = document.createElement('header');
-  header.className = 'journal-card__header';
-
-  const title = document.createElement('h4');
-  title.className = 'journal-card__title';
-  const titleParts = [];
-  if (entry.emotionLabel) {
-    titleParts.push(entry.emotionLabel);
-  }
-  if (typeof entry.intensity === 'number') {
-    titleParts.push(`${entry.intensity}/10 intensity`);
-  }
-  title.textContent = titleParts.length ? titleParts.join(' · ') : 'Reflection';
-  header.appendChild(title);
-
-  const time = document.createElement('time');
-  time.className = 'journal-card__date';
-  time.dateTime = entry.timestamp;
-  try {
-    time.textContent = new Date(entry.timestamp).toLocaleString();
-  } catch (error) {
-    time.textContent = entry.timestamp;
-  }
-  header.appendChild(time);
-
-  card.appendChild(header);
-
-  const notes = document.createElement('p');
-  notes.className = 'journal-card__notes';
-  notes.textContent = entry.text;
-  card.appendChild(notes);
-
-  const metaGroups = [];
-
-  if (entry.tags && entry.tags.length) {
-    const group = document.createElement('div');
-    group.className = 'journal-card__group';
-    const label = document.createElement('span');
-    label.className = 'journal-card__meta-label';
-    label.textContent = 'Tags';
-    group.appendChild(label);
-    const chips = document.createElement('div');
-    chips.className = 'journal-card__chips';
-    entry.tags.forEach((tag) => {
-      const chip = document.createElement('span');
-      chip.className = 'journal-chip journal-chip--tag';
-      chip.textContent = tag;
-      chips.appendChild(chip);
-    });
-    group.appendChild(chips);
-    metaGroups.push(group);
-  }
-
-  if (entry.needs && entry.needs.length) {
-    const group = document.createElement('div');
-    group.className = 'journal-card__group';
-    const label = document.createElement('span');
-    label.className = 'journal-card__meta-label';
-    label.textContent = 'Needs';
-    group.appendChild(label);
-    const chips = document.createElement('div');
-    chips.className = 'journal-card__chips';
-    entry.needs.forEach((need) => {
-      const chip = document.createElement('span');
-      chip.className = 'journal-chip journal-chip--need';
-      chip.textContent = need;
-      chips.appendChild(chip);
-    });
-    group.appendChild(chips);
-    metaGroups.push(group);
-  }
-
-  if (metaGroups.length) {
-    const meta = document.createElement('div');
-    meta.className = 'journal-card__meta';
-    metaGroups.forEach((group) => meta.appendChild(group));
-    card.appendChild(meta);
-  }
-
-  const source = document.createElement('p');
-  source.className = 'journal-card__source';
-  source.textContent =
-    entry.source === 'inventory'
-      ? 'Added from the inventory journal.'
-      : 'Saved from the Alexithymia Support lane.';
-  card.appendChild(source);
-
-  return card;
-}
-
-function renderJournalList(entries = []) {
-  const container = state.journalElements.list;
-  if (!container) {
-    return;
-  }
-  container.innerHTML = '';
-  if (!entries.length) {
-    const note = document.createElement('p');
-    note.className = 'support-note';
-    note.textContent = state.journalEntries.length
-      ? 'No journal entries match your current filters yet.'
-      : 'Journal entries you save will appear here.';
-    container.appendChild(note);
-    return;
-  }
-  const sorted = [...entries].sort((a, b) => {
-    const aTime = new Date(a.timestamp).getTime();
-    const bTime = new Date(b.timestamp).getTime();
-    return bTime - aTime;
-  });
-  sorted.forEach((entry) => {
-    const card = buildJournalCard(entry);
-    container.appendChild(card);
-  });
-}
-
-function updateJournalSummary(entries = state.journalEntries) {
-  const { count, trends } = state.journalElements;
-  if (count) {
-    const total = entries.length;
-    count.textContent = total
-      ? `${total} journal ${total === 1 ? 'entry' : 'entries'} saved on this device.`
-      : 'No journal entries yet.';
-  }
-
-  if (trends) {
-    trends.innerHTML = '';
-    if (!entries.length) {
-      const note = document.createElement('p');
-      note.className = 'support-note';
-      note.textContent = 'Log reflections to discover which emotions and needs appear most often.';
-      trends.appendChild(note);
-      return;
-    }
-
-    const emotionCounts = new Map();
-    entries.forEach((entry) => {
-      const label = entry.emotionLabel || (entry.emotion ? titleCase(entry.emotion.replace(/-/g, ' ')) : 'Unlabeled');
-      const key = label.toLowerCase();
-      const current = emotionCounts.get(key) || { label, count: 0 };
-      current.count += 1;
-      emotionCounts.set(key, current);
-    });
-
-    const sorted = Array.from(emotionCounts.values()).sort((a, b) => {
-      if (b.count !== a.count) {
-        return b.count - a.count;
-      }
-      return a.label.localeCompare(b.label);
-    });
-
-    const list = document.createElement('ul');
-    list.className = 'journal-trends';
-    sorted.slice(0, 3).forEach((item) => {
-      const li = document.createElement('li');
-      li.textContent = `${item.label}: ${item.count}`;
-      list.appendChild(li);
-    });
-    trends.appendChild(list);
-  }
-}
-
-function renderJournalContent() {
-  const entries = getFilteredJournalEntries();
-  renderJournalList(entries);
-  updateJournalSummary(entries);
-}
-
-function handleJournalFilterChange() {
-  const { emotionFilter, tagFilter } = state.journalElements;
-  state.journalFilters.emotion = emotionFilter instanceof HTMLSelectElement ? emotionFilter.value : '';
-  state.journalFilters.tag = tagFilter instanceof HTMLSelectElement ? tagFilter.value : '';
-  renderJournalContent();
-}
-
-function handleJournalEntrySubmit(event) {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const status = state.journalElements.entryStatus;
-  const notes = form.elements.notes?.value?.toString().trim() || '';
-  if (!notes) {
-    if (status) {
-      status.textContent = 'Add a few notes before saving your entry.';
-    }
-    return;
-  }
-
-  const emotionLabel = form.elements.emotionLabel?.value?.toString().trim() || '';
-  const intensity = clampIntensity(Number(form.elements.intensity?.value));
-  const tags = parseListInput(form.elements.tags?.value?.toString() || '');
-  const needs = parseListInput(form.elements.needs?.value?.toString() || '');
-  const emotionKey = emotionLabel ? slugifyEmotion(emotionLabel) : '';
-
-  const entry = {
-    id: generateJournalId(),
-    text: notes,
-    emotion: emotionKey,
-    emotionLabel,
-    intensity,
-    tags,
-    needs,
-    source: 'inventory',
-    timestamp: new Date().toISOString(),
-  };
-
-  state.journalEntries = [...state.journalEntries, entry];
-  saveJournalEntries(state.journalEntries);
-  renderJournalFilters();
-  renderJournalEmotionOptions();
-  renderJournalContent();
-
-  if (status) {
-    const detail = emotionLabel ? ` Tagged with ${emotionLabel}.` : '';
-    status.textContent = `Entry saved.${detail}`;
-  }
-
-  form.reset();
-
-  if (state.journalElements.intensityInput) {
-    state.journalElements.intensityInput.value = '5';
-    updateEntryIntensityDisplay('5');
-  }
-}
-
-function handleJournalEntryIntensityInput(event) {
-  updateEntryIntensityDisplay(event.currentTarget.value);
-}
-
-function handleJournalExport() {
-  if (!state.journalEntries.length) {
-    showJournalMessage('No journal entries to export yet. Save a reflection first.', 'warning');
-    return;
-  }
-  const fileName = `${DEFAULT_JOURNAL_EXPORT_NAME}-${new Date().toISOString().slice(0, 10)}.json`;
-  const json = JSON.stringify(state.journalEntries, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-  showJournalMessage(`Journal exported as ${fileName}.`, 'success');
-}
-
-function handleJournalImport(file) {
-  if (!file) {
-    return;
-  }
-  const reader = new FileReader();
-  reader.addEventListener('error', () => {
-    showJournalMessage('Something went wrong while reading that file. Please try again.', 'error');
-  });
-  reader.addEventListener('load', () => {
-    try {
-      const text = reader.result?.toString() || '';
-      const parsed = JSON.parse(text);
-      if (!Array.isArray(parsed)) {
-        throw new Error('Unexpected format');
-      }
-      const normalized = parsed
-        .map((entry) => normalizeJournalEntry(entry))
-        .filter((entry) => entry !== null);
-      if (!normalized.length) {
-        showJournalMessage('No journal entries were found in that file.', 'warning');
-        return;
-      }
-      const existingIds = new Map(state.journalEntries.map((entry) => [entry.id, entry]));
-      let added = 0;
-      normalized.forEach((entry) => {
-        if (existingIds.has(entry.id)) {
-          existingIds.set(entry.id, entry);
-        } else {
-          existingIds.set(entry.id, entry);
-          added += 1;
-        }
-      });
-      state.journalEntries = Array.from(existingIds.values());
-      saveJournalEntries(state.journalEntries);
-      renderJournalFilters();
-      renderJournalEmotionOptions();
-      renderJournalContent();
-      showJournalMessage(
-        added
-          ? `Imported ${added} new journal ${added === 1 ? 'entry' : 'entries'}.`
-          : 'Imported journal file. Existing entries were updated.',
-        'success'
-      );
-    } catch (error) {
-      console.warn('Unable to import journal file', error);
-      showJournalMessage('Unable to import that file. Please choose a JSON export from this app.', 'error');
-    }
-  });
-  reader.readAsText(file);
-}
-
-function showJournalMessage(message, type = 'success') {
-  const messageEl = state.journalElements.message;
-  if (!messageEl) {
-    return;
-  }
-  messageEl.textContent = message;
-  messageEl.hidden = false;
-  messageEl.classList.remove(
-    'inventory-message--error',
-    'inventory-message--success',
-    'inventory-message--warning'
-  );
-  const className =
-    type === 'error'
-      ? 'inventory-message--error'
-      : type === 'warning'
-      ? 'inventory-message--warning'
-      : 'inventory-message--success';
-  messageEl.classList.add(className);
 }
 
 function highlightNavigation() {
@@ -1333,7 +515,6 @@ async function initColorCustomizer() {
     applyColors(paletteState.currentColors, { persist: false, replace: true });
   }
 
-  paletteState.presets = normalizePresetList(FALLBACK_COLOR_PRESETS);
   populatePresetSelect();
 
   try {
@@ -1343,7 +524,7 @@ async function initColorCustomizer() {
       populatePresetSelect();
     }
   } catch (error) {
-    console.warn('Unable to load color presets from data folder; using built-in presets instead', error);
+    console.warn('Unable to load color presets from data folder', error);
   }
 }
 
@@ -1361,10 +542,9 @@ function buildPaletteUi() {
   glyph.textContent = '+';
   toggle.appendChild(glyph);
 
-  const toggleLabelText = 'Open color palette customizer';
   const srLabel = document.createElement('span');
   srLabel.className = 'visually-hidden';
-  srLabel.textContent = toggleLabelText;
+  srLabel.textContent = 'Open color palette customizer';
   toggle.appendChild(srLabel);
 
   const nav = document.querySelector('.site-nav');
@@ -1372,21 +552,9 @@ function buildPaletteUi() {
   if (nav) {
     mobileToggle = document.createElement('button');
     mobileToggle.type = 'button';
-    mobileToggle.className = 'palette-mobile-toggle';
+    mobileToggle.className = 'site-nav__link palette-mobile-toggle';
     mobileToggle.setAttribute('aria-haspopup', 'dialog');
-    mobileToggle.setAttribute('aria-label', toggleLabelText);
-
-    const mobileGlyph = document.createElement('span');
-    mobileGlyph.className = 'palette-mobile-toggle__glyph';
-    mobileGlyph.setAttribute('aria-hidden', 'true');
-    mobileGlyph.textContent = '+';
-    mobileToggle.appendChild(mobileGlyph);
-
-    const mobileSrLabel = document.createElement('span');
-    mobileSrLabel.className = 'visually-hidden';
-    mobileSrLabel.textContent = toggleLabelText;
-    mobileToggle.appendChild(mobileSrLabel);
-
+    mobileToggle.textContent = 'Color theme';
     nav.appendChild(mobileToggle);
   }
 
@@ -1725,33 +893,6 @@ function sanitizeColorsMap(colors) {
   return sanitized;
 }
 
-function normalizePresetList(presets) {
-  if (!Array.isArray(presets)) {
-    return [];
-  }
-
-  const uniquePresets = new Map();
-  presets.forEach((preset) => {
-    if (!preset || typeof preset !== 'object') {
-      return;
-    }
-
-    const name = typeof preset.name === 'string' ? preset.name.trim() : '';
-    if (!name || uniquePresets.has(name)) {
-      return;
-    }
-
-    const colors = sanitizeColorsMap(preset.colors);
-    if (!Object.keys(colors).length) {
-      return;
-    }
-
-    uniquePresets.set(name, { name, colors });
-  });
-
-  return Array.from(uniquePresets.values());
-}
-
 function saveTheme(theme) {
   if (!theme || typeof theme !== 'object') {
     return;
@@ -1799,7 +940,7 @@ async function fetchColorPresets() {
   }
 
   const text = await response.text();
-  return normalizePresetList(parseColorPaletteCsv(text));
+  return parseColorPaletteCsv(text);
 }
 
 function populatePresetSelect() {

@@ -47,7 +47,3 @@ A retro-styled companion to [needshare.net](https://needshare.net/) that mirrors
 - **Category hubs:** each category displays a grid of clickable entries that navigate to item pages.
 - **Cross-linking:** situation and feeling pages list their related items in labelled magnet panels, while need pages highlight strategies and a share-a-strategy form.
 - **Responsive retro styling:** keeps the playful palette and pixel fonts from the original magnet explorer while adopting the hierarchical flow of Site A.
-
-## Additional resources
-
-- [Alexithymia Support Lane Review](docs/alexithymia-support-recommendations.md): Summary of hands-on findings and evidence-backed recommendations to enhance the Alexithymia Support lane and Inventory experience.
