@@ -842,6 +842,12 @@ a:focus-visible {
   color: var(--ink-soft);
 }
 
+.strategy-card__meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
 .strategy-form__container {
   display: grid;
   gap: 0.75rem;

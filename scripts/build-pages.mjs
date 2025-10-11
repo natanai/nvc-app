@@ -105,6 +105,21 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function sanitizeContributorName(value) {
+  if (!value) {
+    return '';
+  }
+  const trimmed = value.trim();
+  return trimmed && trimmed.toLowerCase() !== 'placeholder' ? trimmed : '';
+}
+
+function sanitizeLocation(value) {
+  if (!value) {
+    return '';
+  }
+  return value.trim();
+}
+
 function writePage(relativePath, html) {
   const outputPath = join(rootDir, relativePath);
   mkdirSync(dirname(outputPath), { recursive: true });
@@ -339,20 +354,43 @@ function renderNeed(item, strategyLookup) {
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             ${strategies
-              .map(
-                (strategy) => {
-                  const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
-                  return `
-                  <article class="strategy-card" data-strategy-slug="${escapeHtml(strategy.slug)}" data-strategy-tags="${escapeHtml(tags)}">
+              .map((strategy) => {
+                const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
+                const firstName = sanitizeContributorName(strategy.firstName);
+                const location = sanitizeLocation(strategy.location);
+                const contributorParts = [];
+                if (firstName) {
+                  contributorParts.push(firstName);
+                }
+                if (location) {
+                  contributorParts.push(location);
+                }
+                const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
+                const contributorHtml = contributorText
+                  ? `<p class="strategy-card__meta">${contributorText}</p>`
+                  : '';
+                const dataAttrs = [
+                  `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
+                  `data-strategy-tags="${escapeHtml(tags)}"`,
+                ];
+                if (firstName) {
+                  dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
+                }
+                if (location) {
+                  dataAttrs.push(`data-location="${escapeHtml(location)}"`);
+                }
+                const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+                return `
+                  <article class="strategy-card"${dataAttrString}>
                     <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                     <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
+                    ${contributorHtml}
                     <div class="strategy-card__actions">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 `;
-                }
-              )
+              })
               .join('')}
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>

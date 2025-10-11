@@ -11087,7 +11087,7 @@
       "slug": "sip-water-slowly",
       "description": "Pause and take ten tiny sips, noticing the temperature and sensation.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11095,7 +11095,7 @@
       "slug": "neck-release",
       "description": "Roll your head in small circles; then tilt ear to shoulder for three breaths each side.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11103,7 +11103,7 @@
       "slug": "shoulder-rolls",
       "description": "Roll shoulders forward ten times, then back ten times, noticing any change.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11116,7 +11116,7 @@
           "slug": "freedom"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11124,7 +11124,7 @@
       "slug": "wall-push-ups",
       "description": "Do five slow wall push-ups; feel your strength and breathing.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11137,7 +11137,7 @@
           "slug": "safety"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11154,7 +11154,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11171,7 +11171,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11184,7 +11184,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11201,7 +11201,7 @@
           "slug": "rest"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11214,7 +11214,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11227,7 +11227,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11240,7 +11240,7 @@
           "slug": "rest"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11261,7 +11261,7 @@
           "slug": "support"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11274,7 +11274,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11291,7 +11291,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11299,7 +11299,7 @@
       "slug": "color-hunt",
       "description": "Pick one color and find five items of that color around you.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11312,7 +11312,7 @@
           "slug": "space"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11325,7 +11325,7 @@
           "slug": "space"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11338,7 +11338,7 @@
           "slug": "safety"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11346,7 +11346,7 @@
       "slug": "barefoot-on-grass",
       "description": "If available, stand barefoot on grass or carpet for 30 seconds.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11359,7 +11359,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11372,7 +11372,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11385,7 +11385,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11398,7 +11398,7 @@
           "slug": "beauty"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11406,7 +11406,7 @@
       "slug": "one-minute-doodle",
       "description": "Draw lines, dots, or shapes continuously for 60 seconds.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11423,7 +11423,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11431,7 +11431,7 @@
       "slug": "haiku-in-a-minute",
       "description": "Write a 5-7-5 poem about what you notice.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11444,7 +11444,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11461,7 +11461,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11478,7 +11478,7 @@
           "slug": "integrity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11495,7 +11495,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11512,7 +11512,7 @@
           "slug": "recognition"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11529,7 +11529,7 @@
           "slug": "autonomy"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11542,7 +11542,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11559,7 +11559,7 @@
           "slug": "respect"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11580,7 +11580,7 @@
           "slug": "space"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11601,7 +11601,7 @@
           "slug": "consideration"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11614,7 +11614,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11631,7 +11631,7 @@
           "slug": "autonomy"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11648,7 +11648,7 @@
           "slug": "space"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11661,7 +11661,7 @@
           "slug": "autonomy"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11674,7 +11674,7 @@
           "slug": "rest"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11682,7 +11682,7 @@
       "slug": "jaw-unclench",
       "description": "Place tongue on the floor of your mouth; relax jaw for 10 breaths.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11690,7 +11690,7 @@
       "slug": "peripheral-vision-soften",
       "description": "Widen your visual field to the edges for 30 seconds.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11698,7 +11698,7 @@
       "slug": "gentle-sway",
       "description": "Stand or sit and sway side-to-side with your breath.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11711,7 +11711,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11719,7 +11719,7 @@
       "slug": "texture-touch",
       "description": "Touch wood, fabric, or stone; describe the texture to yourself.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11736,7 +11736,7 @@
           "slug": "rest"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11753,7 +11753,7 @@
           "slug": "rest"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11766,7 +11766,7 @@
           "slug": "choice"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11779,7 +11779,7 @@
           "slug": "beauty"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11787,7 +11787,7 @@
       "slug": "fresh-socks",
       "description": "Change into clean or cozy socks for a reset.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11795,7 +11795,7 @@
       "slug": "posture-reset",
       "description": "Sit or stand tall; lengthen spine; soften shoulders.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11812,7 +11812,7 @@
           "slug": "mutuality"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11833,7 +11833,7 @@
           "slug": "connection"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11850,7 +11850,7 @@
           "slug": "community"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11867,7 +11867,7 @@
           "slug": "respect"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11875,7 +11875,7 @@
       "slug": "count-backward-from-30",
       "description": "Count down slowly; notice your breath syncing with the count.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11888,7 +11888,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11901,7 +11901,7 @@
           "slug": "appreciation"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11914,7 +11914,7 @@
           "slug": "order"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11922,7 +11922,7 @@
       "slug": "one-next-tiny-step",
       "description": "Choose the smallest next step on something and do only that.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11943,7 +11943,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11956,7 +11956,7 @@
           "slug": "order"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11977,7 +11977,7 @@
           "slug": "choice"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -11994,7 +11994,7 @@
           "slug": "honesty"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12007,7 +12007,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12015,7 +12015,7 @@
       "slug": "three-shapes-doodle",
       "description": "Draw one circle, one triangle, one square repeatedly for a minute.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12028,7 +12028,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12036,7 +12036,7 @@
       "slug": "one-foot-balance",
       "description": "Stand on one foot near support for 20–30 seconds.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12049,7 +12049,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12066,7 +12066,7 @@
           "slug": "autonomy"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12083,7 +12083,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12096,7 +12096,7 @@
           "slug": "respect"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12109,7 +12109,7 @@
           "slug": "autonomy"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12130,7 +12130,7 @@
           "slug": "integrity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12147,7 +12147,7 @@
           "slug": "clarity"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12155,7 +12155,7 @@
       "slug": "two-sentence-story",
       "description": "Write a two-sentence story about today from your own point of view.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12168,7 +12168,7 @@
           "slug": "growth"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12176,7 +12176,7 @@
       "slug": "one-gentle-stretch-chain",
       "description": "Reach up, fold forward, roll up—three times, slowly.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12184,7 +12184,7 @@
       "slug": "senses-first-aid-kit",
       "description": "List one favorite sight, sound, taste, touch, and smell you can access easily.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12205,7 +12205,7 @@
           "slug": "autonomy"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12222,7 +12222,7 @@
           "slug": "peace"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12235,7 +12235,7 @@
           "slug": "order"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12243,7 +12243,7 @@
       "slug": "choose-a-supportive-spot",
       "description": "Move to a seat with back support or softer light.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12256,7 +12256,7 @@
           "slug": "recognition"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12277,7 +12277,7 @@
           "slug": "contribution"
         }
       ],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     },
     {
@@ -12285,7 +12285,7 @@
       "slug": "return-to-body-cue",
       "description": "Set a simple cue (e.g., every doorframe = one deep breath) for today only.",
       "needs": [],
-      "firstName": "placeholder",
+      "firstName": "",
       "location": ""
     }
   ]

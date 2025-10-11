@@ -13,6 +13,31 @@ const state = {
   showStrategies: false,
 };
 
+function sanitizeContributorName(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  const trimmed = value.trim();
+  return trimmed && trimmed.toLowerCase() !== 'placeholder' ? trimmed : '';
+}
+
+function sanitizeLocation(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  return value.trim();
+}
+
+function normalizeInventoryEntry(entry) {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+  const normalized = { ...entry };
+  normalized.firstName = sanitizeContributorName(entry.firstName || '');
+  normalized.location = sanitizeLocation(entry.location || '');
+  return normalized;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.inventory = loadInventory();
@@ -29,7 +54,12 @@ function loadInventory() {
       return [];
     }
     const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed
+      .map((item) => normalizeInventoryEntry(item))
+      .filter((item) => item && typeof item === 'object');
   } catch (error) {
     console.warn('Unable to load inventory from storage', error);
     return [];
@@ -67,6 +97,8 @@ function setupNeedPage() {
       const description = card.querySelector('.strategy-card__description')?.textContent?.trim() || '';
       const strategySlug = card.dataset.strategySlug || '';
       const tags = buildStrategyTags(card.dataset.strategyTags, needSlug);
+      const firstName = sanitizeContributorName(card.dataset.firstName || '');
+      const location = sanitizeLocation(card.dataset.location || '');
 
       const entry = {
         id: generateId(),
@@ -78,8 +110,8 @@ function setupNeedPage() {
         personal: false,
         sourceNeedPage: strategySlug ? needSlug : '',
         strategySlug,
-        firstName: '',
-        location: '',
+        firstName,
+        location,
         createdAt: new Date().toISOString(),
       };
 
@@ -119,8 +151,8 @@ function setupNeedPage() {
       const title = (formData.get('title') || '').toString().trim();
       const description = (formData.get('description') || '').toString().trim();
       let selectedNeedSlug = (formData.get('need') || '').toString();
-      const firstName = (formData.get('name') || '').toString().trim();
-      const location = (formData.get('location') || '').toString().trim();
+      const firstName = sanitizeContributorName(formData.get('name'));
+      const location = sanitizeLocation(formData.get('location'));
 
       if (!title || !description) {
         showFormMessage(message, 'Please share a strategy name and description before saving.', 'error');
@@ -194,8 +226,8 @@ function setupInventoryPage() {
       const title = (formData.get('title') || '').toString().trim();
       const description = (formData.get('description') || '').toString().trim();
       const needSlug = (formData.get('need') || '').toString();
-      const firstName = (formData.get('name') || '').toString().trim();
-      const location = (formData.get('location') || '').toString().trim();
+      const firstName = sanitizeContributorName(formData.get('name'));
+      const location = sanitizeLocation(formData.get('location'));
 
       if (!title || !description || !needSlug) {
         showInventoryMessage('Please fill in the title, description, and primary need before adding.', 'error');
@@ -637,11 +669,13 @@ function renderInventoryItem(entry) {
   }
 
   const metaParts = [];
-  if (entry.firstName) {
-    metaParts.push(entry.firstName);
+  const firstName = sanitizeContributorName(entry.firstName || '');
+  const location = sanitizeLocation(entry.location || '');
+  if (firstName) {
+    metaParts.push(firstName);
   }
-  if (entry.location) {
-    metaParts.push(entry.location);
+  if (location) {
+    metaParts.push(location);
   }
   if (metaParts.length) {
     const meta = document.createElement('p');
@@ -873,8 +907,8 @@ function handleImportInventory(file) {
         personal: item.personal === true,
         sourceNeedPage: item.sourceNeedPage || resolvedNeedSlug || '',
         strategySlug: item.strategySlug || '',
-        firstName: item.firstName || '',
-        location: item.location || '',
+        firstName: sanitizeContributorName(item.firstName || ''),
+        location: sanitizeLocation(item.location || ''),
         createdAt: item.createdAt || new Date().toISOString(),
       });
     });

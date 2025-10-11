@@ -86,6 +86,21 @@ function uniqueByTitle(items) {
   });
 }
 
+function sanitizeContributorName(value) {
+  if (!value) {
+    return '';
+  }
+  const trimmed = value.trim();
+  return trimmed && trimmed.toLowerCase() !== 'placeholder' ? trimmed : '';
+}
+
+function sanitizeLocation(value) {
+  if (!value) {
+    return '';
+  }
+  return value.trim();
+}
+
 const rawFeelings = readCsv('data/Feelings.csv');
 const rawNeeds = readCsv('data/Needs.csv');
 const rawSituations = readCsv('data/Situations.csv');
@@ -121,8 +136,8 @@ const strategies = rawStrategies.map((row) => ({
   slug: slugify(row.Title),
   description: row.Description || '',
   needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
-  firstName: row['First Name'] || '',
-  location: row.Location || '',
+  firstName: sanitizeContributorName(row['First Name']),
+  location: sanitizeLocation(row.Location),
 }));
 
 const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), item.slug]));
