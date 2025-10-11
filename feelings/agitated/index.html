@@ -84,16 +84,22 @@
       <header class="page-header">
         <h1 class="page-title">Feeling: Agitated</h1>
       </header>
-      <section class="pill-section" aria-labelledby="needs-heading">
-      <h2 id="needs-heading" class="section-title">Needs</h2>
-      <div class="pill-grid">
-        <a class="pill" href="../../needs/safety/">Safety</a><a class="pill" href="../../needs/respect/">Respect</a><a class="pill" href="../../needs/autonomy/">Autonomy</a><a class="pill" href="../../needs/trust/">Trust</a><a class="pill" href="../../needs/space/">Space</a><a class="pill" href="../../needs/privacy/">Privacy</a>
+      <section class="pill-section magnet-section" aria-labelledby="needs-heading" data-magnet-root>
+      <div class="magnet-section__header">
+        <h2 id="needs-heading" class="section-title">Needs</h2>
+        <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+      </div>
+      <div class="magnet-board-wrapper">
+        <div class="pill-grid magnet-board" data-magnet-board>
+          <a class="pill magnet" data-magnet-id="needs-safety" href="../../needs/safety/">Safety</a><a class="pill magnet" data-magnet-id="needs-respect" href="../../needs/respect/">Respect</a><a class="pill magnet" data-magnet-id="needs-autonomy" href="../../needs/autonomy/">Autonomy</a><a class="pill magnet" data-magnet-id="needs-trust" href="../../needs/trust/">Trust</a><a class="pill magnet" data-magnet-id="needs-space" href="../../needs/space/">Space</a><a class="pill magnet" data-magnet-id="needs-privacy" href="../../needs/privacy/">Privacy</a>
+        </div>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
       </div>
     </section>
     
       </main>
     </div>
     <script src="../../scripts/inventory.js" defer></script>
-    <script src="../../scripts/magnets.js" defer></script>
+    <script src="../../scripts/magnets.js" type="module"></script>
   </body>
 </html>
