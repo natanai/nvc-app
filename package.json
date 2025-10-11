@@ -4,6 +4,7 @@
   "description": "Interactive Nonviolent Communication explorer inspired by needshare.net",
   "type": "module",
   "scripts": {
-    "build:data": "node scripts/build-data.mjs"
+    "build:data": "node scripts/build-data.mjs",
+    "build:pages": "node scripts/build-pages.mjs"
   }
 }
