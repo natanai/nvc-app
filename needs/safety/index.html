@@ -7,15 +7,25 @@
     <meta name="description" content="Browse situations, feelings, and needs in a retro strategy finder inspired by Need Share." />
     <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body>
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
+      <nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="../../">Home</a>
+        <a class="site-nav__link" href="../../situations/">Situations</a>
+        <a class="site-nav__link" href="../../feelings/">Feelings</a>
+        <a class="site-nav__link" href="../../needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Safety</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main" data-need-slug="safety" data-need-name="Safety" data-need-title="Need for Safety">
         
       <header class="page-header">
         <h1 class="page-title">Need for Safety</h1>
@@ -25,37 +35,56 @@
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security">
                     <h3 class="strategy-card__title">Crunch the numbers</h3>
                     <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="stare-off" data-strategy-tags="safety|peace|rest">
                     <h3 class="strategy-card__title">Stare off</h3>
                     <p class="strategy-card__description">Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I&#39;m just staring off. Reminding myself where I am in the world.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="self-holding" data-strategy-tags="love-caring|safety">
                     <h3 class="strategy-card__title">Self holding</h3>
                     <p class="strategy-card__description">Place your hands on the opposite sides of your face and breathe deeply</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="snuggle-a-pet" data-strategy-tags="love-caring|safety|nurturing">
                     <h3 class="strategy-card__title">Snuggle a pet</h3>
                     <p class="strategy-card__description">Don&#39;t have one? Go get one and make a day of it!</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy">
                     <h3 class="strategy-card__title">Road trip</h3>
                     <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
-                  <article class="strategy-card">
+                  <article class="strategy-card" data-strategy-slug="watch-a-comfort-show" data-strategy-tags="security|safety">
                     <h3 class="strategy-card__title">Watch a comfort show</h3>
                     <p class="strategy-card__description">Try to make space to watch a tv show or movie that feels something like home for you.</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
                 
           </div>
+          <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Share a strategy</h2>
@@ -67,7 +96,7 @@
           <fieldset class="tag-picker">
             <legend class="tag-picker__legend">Needs this strategy supports</legend>
             <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list">
+            <div class="tag-picker__list tag-picker__list--scroll">
               
               <label class="tag-pill">
                 <input class="tag-pill__checkbox" type="checkbox" name="tags" value="love-caring" />
@@ -350,6 +379,7 @@
     
       </main>
     </div>
+    <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/submit.js" defer></script>
   </body>
 </html>

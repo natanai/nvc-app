@@ -13,7 +13,7 @@ const categoryIcons = {
   needs: '🌱',
 };
 
-const directoriesToReset = ['situations', 'feelings', 'needs'];
+const directoriesToReset = ['situations', 'feelings', 'needs', 'inventory'];
 for (const dir of directoriesToReset) {
   rmSync(join(rootDir, dir), { recursive: true, force: true });
 }
@@ -22,7 +22,15 @@ function basePathFromDepth(depth) {
   return depth === 0 ? '' : '../'.repeat(depth);
 }
 
-function htmlPage({ title, depth, breadcrumbs = [], main, description = '', scripts = [] }) {
+function htmlPage({
+  title,
+  depth,
+  breadcrumbs = [],
+  main,
+  description = '',
+  scripts = [],
+  mainAttributes = '',
+}) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
   const headDescription = description ||
@@ -44,10 +52,12 @@ function htmlPage({ title, depth, breadcrumbs = [], main, description = '', scri
       </nav>`
     : '';
 
-  const scriptsHtml = scripts
+  const scriptSources = Array.from(new Set(['scripts/inventory.js', ...scripts]));
+  const scriptsHtml = scriptSources
     .map((src) => `    <script src="${basePath}${src}" defer></script>`)
     .join('\n');
-  const scriptsBlock = scripts.length ? `${scriptsHtml}\n` : '';
+  const navHtml = renderNav(basePath);
+  const mainAttrs = mainAttributes ? ` ${mainAttributes}` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -58,17 +68,32 @@ function htmlPage({ title, depth, breadcrumbs = [], main, description = '', scri
     <meta name="description" content="${escapeHtml(headDescription)}" />
     <link rel="stylesheet" href="${cssHref}" />
   </head>
-  <body>
+  <body data-base-path="${basePath}">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
+      ${navHtml}
       ${breadcrumbHtml}
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main"${mainAttrs}>
         ${main}
       </main>
     </div>
-${scriptsBlock}  </body>
+${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
 </html>
 `;
+}
+
+function renderNav(basePath) {
+  const homeHref = basePath || './';
+  return `<nav class="site-nav" aria-label="Primary">
+        <a class="site-nav__link" href="${homeHref}">Home</a>
+        <a class="site-nav__link" href="${basePath}situations/">Situations</a>
+        <a class="site-nav__link" href="${basePath}feelings/">Feelings</a>
+        <a class="site-nav__link" href="${basePath}needs/">Needs</a>
+        <a class="site-nav__link site-nav__link--inventory" href="${basePath}inventory/">
+          Inventory
+          <span class="site-nav__count" data-inventory-count hidden>0</span>
+        </a>
+      </nav>`;
 }
 
 function escapeHtml(value) {
@@ -214,21 +239,32 @@ function renderNeed(item, strategyLookup) {
     .map((strategy) => strategyLookup.get(strategy.slug))
     .filter(Boolean);
 
+  const hasPrefix = item.title.toLowerCase().startsWith('need for ');
+  const displayTitle = hasPrefix ? item.title.replace(/^Need for\s*/i, '') : item.title;
+  const fullTitle = `Need for ${displayTitle}`;
+
   const strategiesHtml = strategies.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <div class="strategy-list">
             ${strategies
               .map(
-                (strategy) => `
-                  <article class="strategy-card">
+                (strategy) => {
+                  const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
+                  return `
+                  <article class="strategy-card" data-strategy-slug="${escapeHtml(strategy.slug)}" data-strategy-tags="${escapeHtml(tags)}">
                     <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                     <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
+                    <div class="strategy-card__actions">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
                   </article>
-                `
+                `;
+                }
               )
               .join('')}
           </div>
+          <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>`
     : `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
@@ -238,9 +274,6 @@ function renderNeed(item, strategyLookup) {
   const descriptionHtml = item.description
     ? `<p class="page-description">${escapeHtml(item.description)}</p>`
     : '';
-
-  const hasPrefix = item.title.toLowerCase().startsWith('need for ');
-  const fullTitle = hasPrefix ? item.title : `Need for ${item.title}`;
 
   const tagOptions = data.needs
     .map(
@@ -268,7 +301,7 @@ function renderNeed(item, strategyLookup) {
           <fieldset class="tag-picker">
             <legend class="tag-picker__legend">Needs this strategy supports</legend>
             <p class="tag-picker__hint">Select every need this strategy might tend to.</p>
-            <div class="tag-picker__list">
+            <div class="tag-picker__list tag-picker__list--scroll">
               ${tagOptions}
             </div>
           </fieldset>
@@ -292,9 +325,99 @@ function renderNeed(item, strategyLookup) {
     ],
     main,
     scripts: ['scripts/submit.js'],
+    mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
   });
 
   writePage(`needs/${item.slug}/index.html`, html);
+}
+
+function renderInventoryPage() {
+  const needOptions = data.needs
+    .map((need) => `<option value="${escapeHtml(need.slug)}">${escapeHtml(need.title)}</option>`)
+    .join('');
+
+  const tagOptions = data.needs
+    .map(
+      (need) => `
+              <label class="tag-pill">
+                <input class="tag-pill__checkbox" type="checkbox" name="tags" value="${escapeHtml(need.slug)}" />
+                <span class="tag-pill__visual">${escapeHtml(need.title)}</span>
+              </label>`
+    )
+    .join('');
+
+  const main = `
+      <header class="page-header inventory-header">
+        <h1 class="page-title">Strategy inventory</h1>
+        <p class="page-description">Collect strategies you love and track how each need is supported.</p>
+      </header>
+      <section class="inventory-overview" aria-labelledby="inventory-summary-heading">
+        <div class="inventory-overview__header">
+          <h2 id="inventory-summary-heading" class="section-title">Need coverage</h2>
+          <p class="inventory-overview__hint">Use this board to spot needs that are still waiting for care.</p>
+        </div>
+        <div id="inventory-summary" class="inventory-summary"></div>
+      </section>
+      <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
+        <div class="inventory-actions__header">
+          <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
+          <p class="inventory-actions__hint">Export a CSV backup or import one you created earlier.</p>
+        </div>
+        <div class="inventory-actions__buttons">
+          <button type="button" id="inventory-export" class="inventory-button">Export CSV</button>
+          <button type="button" id="inventory-import-trigger" class="inventory-button">Import CSV</button>
+          <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
+        </div>
+        <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
+      </section>
+      <section class="inventory-form" aria-labelledby="inventory-form-heading">
+        <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
+        <form id="inventory-form" class="inventory-form__form">
+          <label for="inventory-title">Strategy title</label>
+          <input id="inventory-title" name="title" type="text" required />
+          <label for="inventory-description">Description</label>
+          <div class="strategy-card strategy-card--input">
+            <textarea id="inventory-description" name="description" required></textarea>
+          </div>
+          <label for="inventory-need">Primary need</label>
+          <select id="inventory-need" name="need" required>
+            <option value="" disabled selected>Select a need</option>
+            ${needOptions}
+          </select>
+          <fieldset class="tag-picker tag-picker--compact">
+            <legend class="tag-picker__legend">Other needs this strategy supports</legend>
+            <p class="tag-picker__hint">Optional: choose more magnets so this strategy shows up for them too.</p>
+            <div class="tag-picker__list tag-picker__list--scroll">
+              ${tagOptions}
+            </div>
+          </fieldset>
+          <label for="inventory-name">First name (optional)</label>
+          <input id="inventory-name" name="name" type="text" />
+          <label for="inventory-location">Location (optional)</label>
+          <input id="inventory-location" name="location" type="text" />
+          <button type="submit" class="inventory-button">Add to inventory</button>
+        </form>
+      </section>
+      <section class="inventory-list-section" aria-labelledby="inventory-list-heading">
+        <div class="inventory-list__header">
+          <h2 id="inventory-list-heading" class="section-title">Your strategies</h2>
+          <p class="inventory-list__hint">Grouped by need so you can spot any empty sections.</p>
+        </div>
+        <div id="inventory-list" class="inventory-list"></div>
+      </section>
+    `;
+
+  const html = htmlPage({
+    title: 'Inventory',
+    depth: 1,
+    breadcrumbs: [
+      { label: 'Home', href: '../' },
+      { label: 'Inventory' },
+    ],
+    main,
+  });
+
+  writePage('inventory/index.html', html);
 }
 
 function renderPillGroup(label, items, type) {
@@ -323,6 +446,7 @@ function build() {
   renderCategory('situations', data.situations);
   renderCategory('feelings', data.feelings);
   renderCategory('needs', data.needs);
+  renderInventoryPage();
 
   const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
 
