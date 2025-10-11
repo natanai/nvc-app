@@ -870,7 +870,7 @@ a:focus-visible {
   }
 
   .magnet-grid {
-    height: 20rem;
+    min-height: 20rem;
   }
 
   .strategy-form__row {
