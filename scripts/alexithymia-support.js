@@ -11,6 +11,8 @@
     closing: document.querySelector('[data-step="closing"]'),
   };
 
+  const basePath = document.body?.dataset?.basePath || '';
+
   const BODY_SENSATIONS = {
     'tight-chest': {
       label: 'Chest: tight, heavy, or pounding',
@@ -766,11 +768,13 @@
     if (!regulationCard) return;
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
     const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
+    const needsLink = `${basePath}needs/`;
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
       ${renderListSection('Try one of these nurturing steps', emotion.regulation)}
       ${extraCare}
-      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today.</p>
+      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. When you're ready, explore the needs library to choose strategies that fit.</p>
+      <a class="support-button support-button--link" href="${needsLink}">Browse basic needs</a>
     `;
   }
 
