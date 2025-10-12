@@ -309,6 +309,155 @@ function isPaletteEventTarget(target) {
   return false;
 }
 
+function setupScrollTopButton() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+
+  const requiredSegments = 3;
+  const minScrollToShow = 120;
+  const scrollListeners = { scroll: null, resize: null };
+  let button = null;
+  let isVisible = false;
+  let segmentsScrolled = 0;
+  let segmentSize = 0;
+  let nextThreshold = 0;
+
+  const mobileQuery = typeof window.matchMedia === 'function' ? window.matchMedia('(max-width: 720px)') : null;
+
+  function getScrollY() {
+    return window.scrollY || document.documentElement.scrollTop || 0;
+  }
+
+  function computeSegmentSize() {
+    return Math.max(200, Math.round(window.innerHeight * 0.45));
+  }
+
+  function updateVisibility() {
+    if (!button) {
+      return;
+    }
+    const shouldShow = segmentsScrolled >= requiredSegments && getScrollY() > minScrollToShow;
+    if (shouldShow === isVisible) {
+      return;
+    }
+    isVisible = shouldShow;
+    button.classList.toggle('is-visible', shouldShow);
+    button.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+    button.tabIndex = shouldShow ? 0 : -1;
+  }
+
+  function handleScroll() {
+    if (!button) {
+      return;
+    }
+    const scrollY = getScrollY();
+    while (scrollY >= nextThreshold && segmentsScrolled < requiredSegments) {
+      segmentsScrolled += 1;
+      nextThreshold = segmentSize * (segmentsScrolled + 1);
+    }
+    updateVisibility();
+  }
+
+  function handleResize() {
+    if (!button) {
+      return;
+    }
+    segmentSize = computeSegmentSize();
+    nextThreshold = segmentSize * (segmentsScrolled + 1);
+    updateVisibility();
+  }
+
+  function enableButton() {
+    if (button || !document.body) {
+      return;
+    }
+
+    button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'scroll-top-button';
+    button.setAttribute('aria-label', 'Return to top');
+
+    const icon = document.createElement('span');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = '↑';
+    const label = document.createElement('span');
+    label.className = 'visually-hidden';
+    label.textContent = 'Return to top';
+    button.append(icon, label);
+
+    button.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.body.appendChild(button);
+
+    segmentsScrolled = 0;
+    segmentSize = computeSegmentSize();
+    nextThreshold = segmentSize;
+    isVisible = false;
+    updateVisibility();
+
+    scrollListeners.scroll = handleScroll;
+    scrollListeners.resize = () => {
+      handleResize();
+      if (!mobileQuery) {
+        toggleForFallback();
+      }
+    };
+    window.addEventListener('scroll', scrollListeners.scroll, { passive: true });
+    window.addEventListener('resize', scrollListeners.resize);
+    handleScroll();
+  }
+
+  function disableButton() {
+    if (!button) {
+      return;
+    }
+    window.removeEventListener('scroll', scrollListeners.scroll || handleScroll);
+    window.removeEventListener('resize', scrollListeners.resize || handleResize);
+    button.remove();
+    button = null;
+    isVisible = false;
+    segmentsScrolled = 0;
+    nextThreshold = 0;
+  }
+
+  function toggleForFallback() {
+    if (window.innerWidth <= 720) {
+      enableButton();
+    } else {
+      disableButton();
+    }
+  }
+
+  if (mobileQuery) {
+    const handleChange = (event) => {
+      if (event.matches) {
+        enableButton();
+        handleScroll();
+      } else {
+        disableButton();
+      }
+    };
+    if (typeof mobileQuery.addEventListener === 'function') {
+      mobileQuery.addEventListener('change', handleChange);
+    } else if (typeof mobileQuery.addListener === 'function') {
+      mobileQuery.addListener(handleChange);
+    }
+    if (mobileQuery.matches) {
+      enableButton();
+      handleScroll();
+    }
+  } else {
+    const fallbackResize = () => {
+      toggleForFallback();
+    };
+    window.addEventListener('resize', fallbackResize);
+    toggleForFallback();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
@@ -325,6 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupJournalSection();
   renderJournalViews();
   loadJournalReferenceData();
+  setupScrollTopButton();
 });
 
 function loadInventory() {
