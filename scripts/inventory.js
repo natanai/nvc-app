@@ -122,6 +122,29 @@ const state = {
 
 const SUMMARY_FILTERS = new Set(['all', 'missing', 'ready', 'none']);
 
+function normalizeNeedSlugValue(value) {
+  if (value == null) {
+    return '';
+  }
+  const trimmed = value.toString().trim().toLowerCase();
+  return trimmed;
+}
+
+function normalizeTagsList(raw) {
+  if (Array.isArray(raw)) {
+    return raw
+      .map((tag) => (typeof tag === 'string' ? tag.trim() : String(tag).trim()))
+      .filter(Boolean);
+  }
+  if (typeof raw === 'string') {
+    return raw
+      .split('|')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
+
 function resolveJournalStore() {
   if (typeof window === 'undefined') {
     return null;
@@ -176,6 +199,17 @@ function normalizeInventoryEntry(entry) {
   const normalized = { ...entry };
   normalized.firstName = sanitizeContributorName(entry.firstName || '');
   normalized.location = sanitizeLocation(entry.location || '');
+  normalized.need = typeof entry.need === 'string' ? entry.need.trim() : normalized.need || '';
+  const normalizedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
+  normalized.needSlug = normalizedSlug;
+  if (typeof normalized.sourceNeedPage === 'string') {
+    normalized.sourceNeedPage = normalized.sourceNeedPage.trim();
+  }
+  const tags = normalizeTagsList(entry.tags);
+  if (normalizedSlug && !tags.some((tag) => normalizeNeedSlugValue(tag) === normalizedSlug)) {
+    tags.push(normalizedSlug);
+  }
+  normalized.tags = tags;
   return normalized;
 }
 
@@ -1845,6 +1879,10 @@ function applyNeedsData(needs) {
       state.needsBySlug.set(titleKey, need);
     }
   });
+
+  if (backfillInventoryNeedSlugs()) {
+    renderInventoryViews();
+  }
 }
 
 function captureNeedsFromForm() {
@@ -3812,16 +3850,94 @@ function renderInventoryItem(entry) {
 }
 
 function pickNeedSlug(entry) {
-  if (entry.needSlug) {
-    return entry.needSlug;
+  if (!entry || typeof entry !== 'object') {
+    return '';
+  }
+  const storedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
+  if (storedSlug && state.needsBySlug.has(storedSlug)) {
+    return storedSlug;
   }
   if (Array.isArray(entry.tags)) {
-    const match = entry.tags.find((tag) => state.needsBySlug.has(tag));
+    const match = entry.tags
+      .map((tag) => normalizeNeedSlugValue(tag))
+      .find((tag) => tag && state.needsBySlug.has(tag));
     if (match) {
       return match;
     }
   }
-  return null;
+  return findNeedSlugByTitle(entry.need);
+}
+
+function backfillInventoryNeedSlugs() {
+  if (!state.inventory.length || !state.needsBySlug.size) {
+    return false;
+  }
+
+  let updated = false;
+
+  const nextInventory = state.inventory.map((entry) => {
+    if (!entry || typeof entry !== 'object') {
+      return entry;
+    }
+
+    const normalized = { ...entry };
+    const cleanedTags = normalizeTagsList(normalized.tags);
+    if (!Array.isArray(normalized.tags) || normalized.tags.length !== cleanedTags.length) {
+      updated = true;
+    } else {
+      for (let i = 0; i < cleanedTags.length; i += 1) {
+        if (normalized.tags[i] !== cleanedTags[i]) {
+          updated = true;
+          break;
+        }
+      }
+    }
+    normalized.tags = cleanedTags;
+
+    let slug = normalizeNeedSlugValue(normalized.needSlug || normalized.sourceNeedPage);
+    if (slug && !state.needsBySlug.has(slug)) {
+      slug = '';
+    }
+
+    if (!slug && normalized.tags.length) {
+      const tagMatch = normalized.tags
+        .map((tag) => normalizeNeedSlugValue(tag))
+        .find((tag) => tag && state.needsBySlug.has(tag));
+      if (tagMatch) {
+        slug = tagMatch;
+      }
+    }
+
+    if (!slug) {
+      slug = findNeedSlugByTitle(normalized.need);
+    }
+
+    if (slug) {
+      if (normalized.needSlug !== slug) {
+        normalized.needSlug = slug;
+        updated = true;
+      }
+      const needInfo = state.needsBySlug.get(slug);
+      if (needInfo?.title && normalized.need !== needInfo.title) {
+        normalized.need = needInfo.title;
+        updated = true;
+      }
+      const hasSlugTag = normalized.tags.some((tag) => normalizeNeedSlugValue(tag) === slug);
+      if (!hasSlugTag) {
+        normalized.tags = [...normalized.tags, slug];
+        updated = true;
+      }
+    }
+
+    return normalized;
+  });
+
+  if (updated) {
+    state.inventory = nextInventory;
+    saveInventory(nextInventory);
+  }
+
+  return updated;
 }
 
 function persistInventory(items, options = {}) {
