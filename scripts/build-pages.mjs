@@ -451,6 +451,10 @@ ${doorMarkup}
         <div class="door-grid">
 ${cards}
         </div>
+        <p class="home-doorways__support-note">
+          Navigating alexithymia?
+          <a href="${basePath}alexithymia-support/">Visit the support lane</a>.
+        </p>
       </section>
     `;
 
