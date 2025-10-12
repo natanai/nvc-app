@@ -1,7 +1,25 @@
-export const emptyEntry = () => ({
-  id: (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-    ? crypto.randomUUID()
-    : `journal-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`),
+const hasSecureUUID = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function';
+
+const fallbackUUID = () =>
+  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+    const random = Math.random() * 16 || 0;
+    const value = char === 'x' ? Math.floor(random) : (Math.floor(random) & 0x3) | 0x8;
+    return value.toString(16);
+  });
+
+const createId = () => {
+  try {
+    if (hasSecureUUID) {
+      return crypto.randomUUID();
+    }
+  } catch (error) {
+    // Ignore crypto errors and fall back to a deterministic helper.
+  }
+  return fallbackUUID();
+};
+
+export const makeEntry = (overrides = {}) => ({
+  id: createId(),
   dateISO: new Date().toISOString(),
   emotion: '',
   intensity: undefined,
@@ -13,7 +31,8 @@ export const emptyEntry = () => ({
   notes: '',
   energy: undefined,
   valence: undefined,
-  source: 'lane',
+  source: 'journal',
+  ...overrides,
 });
 
 const attachToGlobal = () => {
@@ -23,9 +42,9 @@ const attachToGlobal = () => {
   if (!window.NVCJournal) {
     window.NVCJournal = {};
   }
-  window.NVCJournal.emptyEntry = emptyEntry;
+  window.NVCJournal.makeEntry = makeEntry;
 };
 
 attachToGlobal();
 
-export default emptyEntry;
+export default makeEntry;

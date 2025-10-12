@@ -171,16 +171,16 @@
             <div class="inventory-journal-form__grid">
               <div class="inventory-journal-form__field">
                 <label for="journal-emotion">Emotion (optional)</label>
-                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" />
+                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" data-journal-emotion />
                 <p class="journal-field-hint">Use any word that fits or return later to update it.</p>
               </div>
               <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
                 <label for="journal-intensity">Intensity</label>
                 <div class="inventory-journal-form__intensity">
-                  <input id="journal-intensity" name="intensity" type="range" min="1" max="10" value="5" />
+                  <input id="journal-intensity" name="intensity" type="range" min="0" max="10" value="5" data-journal-intensity />
                   <output for="journal-intensity" data-journal-intensity-display>5/10</output>
                 </div>
-                <p class="journal-field-hint">Slide to note how strong the feeling is.</p>
+                <p class="journal-field-hint">Slide to note how strong the feeling is (0 is absent, 10 is overwhelming).</p>
               </div>
               <div class="inventory-journal-form__field">
                 <label for="journal-needs">Related needs</label>
@@ -189,13 +189,32 @@
               </div>
               <div class="inventory-journal-form__field">
                 <label for="journal-tags">Tags (optional)</label>
-                <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" />
-                <p class="journal-field-hint">Separate tags with commas. They'll help you filter later.</p>
-                <div class="journal-tag-suggestions" data-journal-tag-suggestions hidden></div>
+                <input
+                  id="journal-tags"
+                  name="tags"
+                  type="text"
+                  placeholder="work, weekend, boundaries"
+                  autocomplete="off"
+                  data-journal-tags
+                />
+                <p class="journal-field-hint">Type to see suggestions. Use commas to separate multiple tags.</p>
+                <div
+                  class="journal-tag-suggestions"
+                  data-journal-tag-suggestions
+                  hidden
+                  role="listbox"
+                  aria-label="Tag suggestions"
+                ></div>
               </div>
               <div class="inventory-journal-form__field inventory-journal-form__field--wide">
                 <label for="journal-notes">Reflection</label>
-                <textarea id="journal-notes" name="notes" rows="5" placeholder="What happened? What did you notice in your body? What need wants attention?"></textarea>
+                <textarea
+                  id="journal-notes"
+                  name="notes"
+                  rows="5"
+                  placeholder="What happened? What did you notice in your body? What need wants attention?"
+                  data-journal-notes
+                ></textarea>
               </div>
             </div>
             <aside class="journal-prompts">
@@ -209,7 +228,7 @@
             <div class="inventory-journal-form__actions">
               <p class="journal-status" data-journal-status aria-live="polite"></p>
               <button type="button" class="inventory-button inventory-button--ghost" data-journal-clear>Clear form</button>
-              <button type="submit" class="inventory-button">Save entry</button>
+              <button type="submit" class="inventory-button" data-journal-submit>Save entry</button>
             </div>
           </form>
         </section>
@@ -244,6 +263,14 @@
               <input id="journal-filter-tag" name="tag" type="text" placeholder="e.g. work" />
             </div>
             <div class="journal-filters__field">
+              <label for="journal-filter-range">Date range</label>
+              <select id="journal-filter-range" name="range">
+                <option value="all">All time</option>
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+              </select>
+            </div>
+            <div class="journal-filters__field">
               <label for="journal-filter-sort">Sort order</label>
               <select id="journal-filter-sort" name="sort">
                 <option value="newest">Newest first</option>
@@ -264,6 +291,7 @@
       </main>
     </div>
     <script src="../../assets/js/journal/store.js" type="module"></script>
+    <script src="../../assets/js/journal/tags.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
   </body>
 </html>

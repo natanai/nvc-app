@@ -293,10 +293,71 @@
               <li>What do you need or long for in this moment?</li>
             </ul>
             <form class="journal-form" data-journal-form>
-              <label class="journal-form__label" for="journalEntry">Write a few notes (saved only on this device)</label>
-              <textarea id="journalEntry" name="journalEntry" rows="6" placeholder="Today I noticed..."></textarea>
+              <div class="journal-form__grid">
+                <div class="journal-form__field">
+                  <label for="support-journal-emotion">Emotion (optional)</label>
+                  <input
+                    id="support-journal-emotion"
+                    name="emotion"
+                    type="text"
+                    autocomplete="off"
+                    data-support-journal-emotion
+                  />
+                </div>
+                <div class="journal-form__field journal-form__field--intensity">
+                  <label for="support-journal-intensity">Intensity</label>
+                  <div class="journal-form__intensity">
+                    <input
+                      id="support-journal-intensity"
+                      name="intensity"
+                      type="range"
+                      min="0"
+                      max="10"
+                      value="5"
+                      data-support-journal-intensity
+                    />
+                    <output for="support-journal-intensity" data-support-journal-intensity-display>5/10</output>
+                  </div>
+                </div>
+                <div class="journal-form__field">
+                  <label for="support-journal-tags">Tags (optional)</label>
+                  <input
+                    id="support-journal-tags"
+                    name="tags"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="work, weekend, boundaries"
+                    data-support-journal-tags
+                  />
+                  <div
+                    class="journal-tag-suggestions"
+                    data-support-journal-tag-suggestions
+                    hidden
+                    role="listbox"
+                    aria-label="Suggested tags"
+                  ></div>
+                </div>
+                <div class="journal-form__field journal-form__field--wide">
+                  <label for="journalEntry">Write a few notes (saved only on this device)</label>
+                  <textarea
+                    id="journalEntry"
+                    name="journalEntry"
+                    rows="6"
+                    placeholder="Today I noticed..."
+                    data-support-journal-notes
+                  ></textarea>
+                </div>
+              </div>
               <div class="journal-actions">
-                <button class="support-button" type="submit">Save reflection</button>
+                <div class="journal-actions__primary">
+                  <button class="support-button" type="submit" data-support-journal-submit>Save reflection</button>
+                  <a
+                    class="support-button support-button--link support-button--ghost journal-open-link"
+                    href="#"
+                    data-support-journal-open
+                    hidden
+                  >Open in Journal</a>
+                </div>
                 <button class="support-button support-button--ghost" type="button" data-action="journal-clear">Clear text</button>
               </div>
               <p class="support-note" data-journal-status role="status"></p>
@@ -345,6 +406,7 @@
     <script src="../assets/js/ui/segmented.js" defer></script>
     <script src="../assets/js/ui/compass.js" defer></script>
     <script src="../assets/js/journal/store.js" type="module"></script>
+    <script src="../assets/js/journal/tags.js" type="module"></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/alexithymia-support.js" defer></script>
   </body>
