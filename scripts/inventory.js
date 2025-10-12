@@ -1571,6 +1571,20 @@ function setupJournalSection() {
   if (!panel) {
     return;
   }
+  const renderJournalForm = window.NVCJournal?.renderForm;
+  if (typeof renderJournalForm === 'function') {
+    const mount = panel.querySelector('[data-journal-module]');
+    if (mount) {
+      try {
+        renderJournalForm(mount, {
+          variant: mount.dataset.journalVariant || 'inventory',
+          idPrefix: mount.dataset.journalIdPrefix || 'journal',
+        });
+      } catch (error) {
+        console.warn('Unable to render shared journal form', error);
+      }
+    }
+  }
   const createJournalForm = window.NVCJournal?.createForm;
   if (typeof createJournalForm === 'function') {
     const needsData = state.needs.length
