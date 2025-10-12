@@ -3715,6 +3715,53 @@ button.site-nav__link {
   letter-spacing: 0.01em;
 }
 
+.scroll-top-button {
+  position: fixed;
+  right: clamp(0.75rem, 4vw, 1.5rem);
+  bottom: clamp(1.5rem, 6vw, 2.75rem);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid color-mix(in srgb, var(--outline) 12%, transparent);
+  background: color-mix(in srgb, var(--btn-bg) 85%, #ffffff 15%);
+  color: var(--btn-fg);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--outline) 18%, transparent);
+  opacity: 0;
+  transform: translateY(0.85rem);
+  pointer-events: none;
+  z-index: 40;
+  transition: opacity 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.scroll-top-button > span[aria-hidden='true'] {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+.scroll-top-button.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top-button:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+@media (max-width: 720px) {
+  .scroll-top-button {
+    display: inline-flex;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .inventory-spring {
     transition: none;
