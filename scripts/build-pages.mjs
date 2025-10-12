@@ -706,29 +706,31 @@ function renderInventoryPage() {
 
   const main = `
       <header class="page-header inventory-header">
-        <h1 class="page-title">Strategy inventory</h1>
-        <p class="page-description">
-          Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
-        </p>
-      </header>
-
-      <section class="inventory-journal-callout" aria-label="Journal tools">
-        <a class="inventory-journal-card" href="./journal/">
-          <span class="inventory-journal-card__header">
+        <div class="inventory-header__layout">
+          <div class="inventory-header__content">
+            <h1 class="page-title">Strategy inventory</h1>
+            <p class="page-description">
+              Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
+            </p>
+            <div class="strategy-quick-actions inventory-header__quick-actions">
+              <a class="strategy-quick-actions__link" href="#inventory-form">
+                <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
+                <span>Add personal strategy</span>
+              </a>
+            </div>
+          </div>
+          <a class="inventory-journal-button" href="./journal/">
             <img
-              src="../icons/journal.svg"
-              class="inventory-journal-card__icon"
+              src="../icons/journal-32bit.svg"
+              class="inventory-journal-button__icon"
               alt=""
               aria-hidden="true"
             />
-            <span class="inventory-journal-card__label">Journal</span>
-          </span>
-          <span class="inventory-journal-card__description">
-            Log emotions, needs, and notes on a dedicated page designed for reflection.
-          </span>
-        </a>
-        <p class="inventory-journal-callout__hint">Your journal stays on this device unless you export it.</p>
-      </section>
+            <span class="inventory-journal-button__label">Journal</span>
+          </a>
+        </div>
+        <p class="inventory-header__hint">Your journal stays on this device unless you export it.</p>
+      </header>
 
       <section class="inventory-main" aria-labelledby="inventory-overview-heading">
         <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
@@ -738,7 +740,7 @@ function renderInventoryPage() {
           </div>
           <div class="inventory-actions__buttons">
             <button type="button" id="inventory-export" class="inventory-button">Export CSV</button>
-            <button type="button" id="inventory-import-trigger" class="inventory-button">Import CSV</button>
+            <button type="button" id="inventory-import-trigger" class="inventory-button inventory-button--ghost">Import CSV</button>
             <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
