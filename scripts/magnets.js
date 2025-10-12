@@ -90,6 +90,21 @@ const parsePx = (value) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const measureBoardHeight = (board) => {
+  if (!board) {
+    return 0;
+  }
+  const rect = board.getBoundingClientRect();
+  if (rect && rect.height) {
+    return rect.height;
+  }
+  let computedHeight = 0;
+  if (typeof window !== 'undefined' && typeof window.getComputedStyle === 'function') {
+    computedHeight = parsePx((window.getComputedStyle(board).height) || '0');
+  }
+  return Math.max(board.clientHeight || 0, computedHeight || 0, 0);
+};
+
 const waitForAnimationFrames = async (count = 2) => {
   if (count <= 0) {
     return;
@@ -190,6 +205,9 @@ const remeasureMagnets = (state) => {
   state.boardWidth = width;
   state.boardHeight = Math.max(state.boardHeight || 0, height);
   state.minHeight = Math.max(state.minHeight || 0, height);
+  if (!state.playActive) {
+    state.inactiveHeight = Math.max(state.inactiveHeight || 0, state.boardHeight);
+  }
 };
 
 const getMagnetBounds = (magnet) => {
@@ -227,8 +245,14 @@ const updateBoardHeight = (state) => {
     const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
     maxBottom = Math.max(maxBottom, bottom);
   });
-  const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
+  const baseHeight = state.playActive
+    ? (state.minHeight || 0)
+    : Math.max(state.minHeight || 0, state.inactiveHeight || 0);
+  const height = Math.max(baseHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
+  if (!state.playActive) {
+    state.inactiveHeight = height;
+  }
   state.board.style.height = `${height}px`;
 };
 
@@ -436,11 +460,23 @@ const setPlayState = (state, active) => {
         magnet.element.removeAttribute('draggable');
       });
       state.suppressUntil = 0;
-      persistLayout(state, true);
-      state.lastLayoutType = 'manual';
+      state.playActive = false;
+      const measuredHeight = measureBoardHeight(state.board);
+      if (measuredHeight > 0) {
+        state.boardHeight = Math.max(measuredHeight, state.boardHeight || 0, state.minHeight || 0);
+        state.inactiveHeight = state.boardHeight;
+      }
       updateBoardHeight(state);
       const magnetElements = state.magnets.map((magnet) => magnet.element);
-      syncBoardHeightFromDOM(state.board, magnetElements);
+      const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
+      if (typeof syncedHeight === 'number' && syncedHeight > 0) {
+        const resolvedHeight = Math.max(syncedHeight, state.minHeight || 0, state.boardHeight || 0);
+        state.boardHeight = resolvedHeight;
+        state.inactiveHeight = resolvedHeight;
+      }
+      updateLayout(state);
+      persistLayout(state, true);
+      state.lastLayoutType = 'manual';
       beginToggleGuard();
     }
   }
@@ -483,6 +519,7 @@ const initializeBoard = async (root, index) => {
     boardWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
     boardHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
     minHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
+    inactiveHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
     saveTimer: null,
     lastSaveTime: 0,
     resizeObserver: null,
