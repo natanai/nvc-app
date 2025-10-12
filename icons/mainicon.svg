@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-labelledby="title desc" role="img">
+  <title id="title">Three Doorways (Solid Tricolor)</title>
+  <desc id="desc">Three filled arched doorways in ink/rose/mint; transparent background.</desc>
+  <g>
+    <path d="M6 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#5f65b5"/>
+    <path d="M12 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#e19bd9"/>
+    <path d="M18 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#8fe1b5"/>
+  </g>
+</svg>
