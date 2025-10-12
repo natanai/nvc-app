@@ -94,15 +94,21 @@ const addTiltListener = (state, options = {}) => {
     } = state.config ?? {};
 
     if (Number.isFinite(event.gamma) && tiltGammaNormalizer) {
-      const normalizedX = applyTiltDeadzone(event.gamma / tiltGammaNormalizer, tiltDeadzone);
+      if (tilt.baselineGamma == null) {
+        tilt.baselineGamma = event.gamma;
+      }
+      const deltaGamma = event.gamma - (tilt.baselineGamma ?? 0);
+      const normalizedX = applyTiltDeadzone(deltaGamma / tiltGammaNormalizer, tiltDeadzone);
       tilt.targetX = normalizedX;
     }
 
     if (Number.isFinite(event.beta) && tiltBetaNormalizer) {
-      const normalizedY = applyTiltDeadzone(
-        (event.beta - tiltBetaUprightOffset) / tiltBetaNormalizer,
-        tiltDeadzone,
-      );
+      const adjustedBeta = event.beta - tiltBetaUprightOffset;
+      if (tilt.baselineBeta == null) {
+        tilt.baselineBeta = adjustedBeta;
+      }
+      const deltaBeta = adjustedBeta - (tilt.baselineBeta ?? 0);
+      const normalizedY = applyTiltDeadzone(deltaBeta / tiltBetaNormalizer, tiltDeadzone);
       tilt.targetY = normalizedY;
     }
   };
@@ -133,6 +139,8 @@ const addTiltListener = (state, options = {}) => {
       tilt.y = 0;
       tilt.targetX = 0;
       tilt.targetY = 0;
+      tilt.baselineGamma = null;
+      tilt.baselineBeta = null;
     }
     if (typeof options.onPermissionDenied === 'function') {
       options.onPermissionDenied(reason);
@@ -160,13 +168,7 @@ const addTiltListener = (state, options = {}) => {
           handlePermissionDenied(error);
         });
     } else {
-      // If the permission API is available we rely on the caller to request permission.
-      Promise.resolve().then(() => {
-        if (!active) {
-          return;
-        }
-        handlePermissionDenied(new Error('deviceorientation permission unavailable'));
-      });
+      attachListener();
     }
 
     return () => {
@@ -787,6 +789,8 @@ export function startPhysics(options) {
       y: 0,
       targetX: 0,
       targetY: 0,
+      baselineGamma: null,
+      baselineBeta: null,
     },
   };
 
@@ -795,6 +799,14 @@ export function startPhysics(options) {
 
   const enableTilt = (permissionPromise) => {
     removeTiltListener?.();
+    if (state.tilt) {
+      state.tilt.x = 0;
+      state.tilt.y = 0;
+      state.tilt.targetX = 0;
+      state.tilt.targetY = 0;
+      state.tilt.baselineGamma = null;
+      state.tilt.baselineBeta = null;
+    }
     const teardown = addTiltListener(state, {
       permissionPromise,
       onPermissionDenied: options.onTiltPermissionDenied,
@@ -828,6 +840,8 @@ export function startPhysics(options) {
       state.tilt.y = 0;
       state.tilt.targetX = 0;
       state.tilt.targetY = 0;
+      state.tilt.baselineGamma = null;
+      state.tilt.baselineBeta = null;
       state.board.classList.remove('no-transitions');
     },
     shuffle: () => {
