@@ -9,11 +9,6 @@ const DEFAULT_CONFIG = {
   mouseStrength: 0.6,
 };
 
-const SHUFFLE_GAP_X = 12;
-const SHUFFLE_GAP_Y = 14;
-const SHUFFLE_JITTER_X = 18;
-const SHUFFLE_JITTER_Y = 12;
-
 const DRAG_DISTANCE_THRESHOLD = 6;
 const DRAG_TIME_THRESHOLD = 150;
 
@@ -385,49 +380,38 @@ const stopAnimation = (state) => {
 };
 
 const shuffleMagnets = (state) => {
-  const { width } = getBoardSize(state);
-  if (!width) {
+  const { width, height } = getBoardSize(state);
+  if (!width || !height) {
     return;
   }
   const count = state.magnets.length;
   if (!count) {
     return;
   }
+  const columns = Math.max(1, Math.round(Math.sqrt(count)));
+  const rows = Math.max(1, Math.ceil(count / columns));
+  const cellWidth = width / columns;
+  const cellHeight = height / rows;
   const order = state.magnets.slice();
   for (let i = order.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
-
-  let x = SHUFFLE_GAP_X;
-  let y = SHUFFLE_GAP_Y;
-  let lineHeight = 0;
-
-  order.forEach((magnet) => {
-    const magnetWidth = magnet.w;
-    const magnetHeight = magnet.h;
-    if (x > SHUFFLE_GAP_X && x + magnetWidth + SHUFFLE_GAP_X > width) {
-      x = SHUFFLE_GAP_X;
-      y += lineHeight + SHUFFLE_GAP_Y;
-      lineHeight = 0;
-    }
-
-    const maxX = Math.max(width - magnetWidth, 0);
-    const jitterX = (Math.random() - 0.5) * Math.min(magnetWidth * 0.25, SHUFFLE_JITTER_X);
-    const jitterY = (Math.random() - 0.5) * Math.min(magnetHeight * 0.25, SHUFFLE_JITTER_Y);
-    const placeX = clamp(x + jitterX, 0, maxX);
-    const placeY = Math.max(y + jitterY, 0);
-
-    magnet.x = placeX;
-    magnet.y = placeY;
+  order.forEach((magnet, index) => {
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    const jitterX = (Math.random() - 0.5) * Math.min(cellWidth * 0.3, 24);
+    const jitterY = (Math.random() - 0.5) * Math.min(cellHeight * 0.3, 24);
+    const baseX = column * cellWidth + (cellWidth - magnet.w) / 2 + jitterX;
+    const baseY = row * cellHeight + (cellHeight - magnet.h) / 2 + jitterY;
+    const maxX = Math.max(width - magnet.w, 0);
+    const maxY = Math.max(height - magnet.h, 0);
+    magnet.x = clamp(baseX, 0, maxX);
+    magnet.y = clamp(baseY, 0, maxY);
     magnet.vx = 0;
     magnet.vy = 0;
     applyTransform(magnet);
-
-    x = placeX + magnetWidth + SHUFFLE_GAP_X;
-    lineHeight = Math.max(lineHeight, magnetHeight);
   });
-
   notifyPositions(state);
 };
 
