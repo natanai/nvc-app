@@ -643,6 +643,35 @@ button.site-nav__link {
   outline-offset: 4px;
 }
 
+@media (max-width: 600px) {
+  .support-journal__header {
+    padding: clamp(0.65rem, 4vw, 0.85rem) clamp(0.9rem, 6vw, 1.2rem);
+    gap: clamp(0.5rem, 3vw, 0.75rem);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--outline) 18%, transparent);
+  }
+
+  .support-journal__titles {
+    gap: 0.2rem;
+  }
+
+  .support-journal__eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+
+  .support-journal__heading {
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+  }
+
+  .support-journal__close {
+    width: clamp(2.15rem, 12vw, 2.35rem);
+    height: clamp(2.15rem, 12vw, 2.35rem);
+    font-size: clamp(1.1rem, 6vw, 1.4rem);
+    border-width: 2px;
+    box-shadow: 0 8px 16px color-mix(in srgb, var(--outline) 24%, transparent);
+  }
+}
+
 body.has-support-journal-open {
   overflow: hidden;
 }
@@ -2412,6 +2441,29 @@ body.has-support-journal-open {
   image-rendering: pixelated;
 }
 
+.journal-page-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.85rem, 3vw, 1.5rem);
+}
+
+.journal-page-title-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.journal-fullscreen-button {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.journal-inline-container {
+  display: contents;
+}
+
 .journal-page-description,
 .journal-header__description {
   margin: 0;
@@ -3072,6 +3124,20 @@ body.has-support-journal-open {
   main[data-page-id='inventory-journal'] .journal-actions__buttons .inventory-button {
     flex: 1 1 auto;
     width: 100%;
+  }
+
+  .journal-page-title-row {
+    gap: clamp(0.7rem, 4vw, 1.1rem);
+  }
+
+  .journal-page-title-row__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .journal-page-title-row__actions .journal-fullscreen-button {
+    width: 100%;
+    justify-content: center;
   }
 
   main[data-page-id='inventory-journal'] .journal-form,
