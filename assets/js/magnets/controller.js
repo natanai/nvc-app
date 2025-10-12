@@ -1,6 +1,7 @@
 import { startPhysics } from './physics.js';
 import { readTransform, setTransform, updateBoardHeight, boardRect } from './layout.js';
 import { savePositions } from './store.js';
+import { DEBUG_MAGNETS } from './debug.js';
 
 const DEFAULT_CONFIG = {
   drift: 3,
@@ -122,7 +123,9 @@ export function enterPlay(board) {
     magnet.setAttribute('draggable', 'false');
   });
   startBoardPhysics(state);
-  console.info('[magnets] play->', true);
+  if (DEBUG_MAGNETS) {
+    console.info('[magnets] play->', true);
+  }
   toggling = false;
 }
 
@@ -174,14 +177,15 @@ export function exitPlay(board) {
   stopBoardPhysics(state);
   const byId = currentPositionsPct(board);
   savePositions(byId);
-  console.info('[magnets] save', Object.keys(byId).length);
   updateBoardHeight(board, state.magnets);
   state.isPlaying = false;
   delete board.dataset.active;
   state.magnets.forEach((magnet) => {
     magnet.removeAttribute('draggable');
   });
-  console.info('[magnets] play->', false);
+  if (DEBUG_MAGNETS) {
+    console.info('[magnets] play->', false);
+  }
   window.setTimeout(() => {
     toggling = false;
   }, 120);
@@ -198,5 +202,4 @@ export function requestShuffle(board) {
 export function persist(board) {
   const byId = currentPositionsPct(board);
   savePositions(byId);
-  console.info('[magnets] save', Object.keys(byId).length);
 }

@@ -13,6 +13,7 @@ import { readTransform, setTransform, boardRect, updateBoardHeight } from './lay
 import { setupResize } from './resize.js';
 import { shuffle } from './shuffle.js';
 import { setupClickGuard } from './drag.js';
+import { DEBUG_MAGNETS } from './debug.js';
 
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];
 const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
@@ -155,10 +156,10 @@ const updateToggleLabel = (toggle, active) => {
 const reconcileBoard = (board, magnets, reason) => {
   syncMagnets(board, magnets);
   const data = loadPositions();
-  const count = data?.byId ? Object.keys(data.byId).length : 0;
-  console.info('[magnets] restore', count);
   if (!data?.byId) {
-    console.info('[magnets] reseed CALLED', reason ?? 'initial');
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] reseed CALLED', reason ?? 'initial');
+    }
     rowPackAll(board, magnets);
     persist(board);
     return;
@@ -166,7 +167,9 @@ const reconcileBoard = (board, magnets, reason) => {
 
   const applied = applyPositionsPct(board, data.byId);
   if (!applied.size) {
-    console.info('[magnets] reseed CALLED', `${reason ?? 'initial'}-full`);
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] reseed CALLED', `${reason ?? 'initial'}-full`);
+    }
     rowPackAll(board, magnets);
     persist(board);
     return;
@@ -174,7 +177,9 @@ const reconcileBoard = (board, magnets, reason) => {
 
   const missing = magnets.filter((magnet) => !applied.has(magnet.dataset.magnetId || ''));
   if (missing.length) {
-    console.info('[magnets] reseed CALLED', `${reason ?? 'load'}-missing`);
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] reseed CALLED', `${reason ?? 'load'}-missing`);
+    }
     placeNewMagnetsAtEnd(board, magnets, missing, applied);
   }
 

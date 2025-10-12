@@ -1,3 +1,5 @@
+import { DEBUG_MAGNETS } from './debug.js';
+
 const PATH_KEY = window.location.pathname.replace(/\/index\.html?$/i, '');
 const STORAGE_KEY = `magnets:${PATH_KEY}`;
 const VERSION = 2;
@@ -41,12 +43,20 @@ const readLegacyPositions = (storage) => {
 export function loadPositions() {
   const storage = getStorage();
   if (!storage) {
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] restore', 0);
+    }
     return null;
   }
   try {
     const raw = storage.getItem(STORAGE_KEY);
     if (!raw) {
-      return readLegacyPositions(storage);
+      const legacy = readLegacyPositions(storage);
+      if (DEBUG_MAGNETS) {
+        const count = legacy?.byId ? Object.keys(legacy.byId).length : 0;
+        console.info('[magnets] restore', count);
+      }
+      return legacy;
     }
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== 'object' || typeof parsed.byId !== 'object') {
@@ -59,10 +69,21 @@ export function loadPositions() {
           // ignore
         }
       }
+      if (DEBUG_MAGNETS) {
+        const count = legacy?.byId ? Object.keys(legacy.byId).length : 0;
+        console.info('[magnets] restore', count);
+      }
       return legacy;
     }
-    return { byId: { ...parsed.byId } };
+    const result = { byId: { ...parsed.byId } };
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] restore', Object.keys(result.byId).length);
+    }
+    return result;
   } catch {
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] restore', 0);
+    }
     return null;
   }
 }
@@ -72,11 +93,18 @@ export function savePositions(byId) {
   if (!storage) {
     return;
   }
+  const count = byId ? Object.keys(byId).length : 0;
   try {
     const payload = { version: VERSION, byId: { ...byId } };
     storage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] save', count);
+    }
   } catch {
     // Ignore storage errors (quota, privacy mode, etc.).
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] save', count);
+    }
   }
 }
 
