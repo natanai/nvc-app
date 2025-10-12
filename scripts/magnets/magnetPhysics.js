@@ -15,6 +15,11 @@ const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 24;
 const SHUFFLE_DEBOUNCE_MS = 500;
+const SHAKE_DECAY_RATE = 1.6;
+const SHAKE_FORCE = 60;
+const SHAKE_SENSITIVITY = 4.5;
+const SHAKE_BASELINE_FAST = 0.12;
+const SHAKE_BASELINE_SLOW = 0.035;
 
 const getNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
   ? performance.now()
@@ -50,6 +55,71 @@ const waitForAnimationFrames = async (count = 1) => {
 const delay = (ms) => new Promise((resolve) => {
   window.setTimeout(resolve, ms);
 });
+
+const supportsDeviceMotion = () => typeof window !== 'undefined' && 'DeviceMotionEvent' in window;
+
+const addShakeListener = (state) => {
+  if (!supportsDeviceMotion()) {
+    return null;
+  }
+
+  const handleMotion = (event) => {
+    const accel = event.acceleration || event.accelerationIncludingGravity;
+    if (!accel) {
+      return;
+    }
+    const ax = Number.isFinite(accel.x) ? accel.x : 0;
+    const ay = Number.isFinite(accel.y) ? accel.y : 0;
+    const az = Number.isFinite(accel.z) ? accel.z : 0;
+    const magnitude = Math.sqrt(ax * ax + ay * ay + az * az);
+    if (!Number.isFinite(magnitude)) {
+      return;
+    }
+
+    const shake = state.shake;
+    if (!shake) {
+      return;
+    }
+
+    if (!shake.hasBaseline) {
+      shake.baseline = magnitude;
+      shake.hasBaseline = true;
+    } else {
+      const smoothing = magnitude > shake.baseline ? SHAKE_BASELINE_FAST : SHAKE_BASELINE_SLOW;
+      shake.baseline += (magnitude - shake.baseline) * smoothing;
+    }
+
+    const delta = Math.max(0, magnitude - shake.baseline);
+    const normalized = clamp(delta / shake.sensitivity, 0, 1);
+    if (normalized > shake.target) {
+      shake.target = normalized;
+    } else {
+      shake.target = shake.target * 0.9 + normalized * 0.1;
+    }
+  };
+
+  window.addEventListener('devicemotion', handleMotion, { passive: true });
+  return () => {
+    window.removeEventListener('devicemotion', handleMotion);
+  };
+};
+
+const updateShake = (state, dt) => {
+  const shake = state.shake;
+  if (!shake) {
+    return;
+  }
+  const target = shake.target;
+  const rate = Math.min(dt * 10, 1);
+  shake.strength += (target - shake.strength) * rate;
+  shake.target = Math.max(0, target - dt * SHAKE_DECAY_RATE);
+  if (shake.strength < 0.001) {
+    shake.strength = 0;
+  }
+  if (shake.target < 0.001) {
+    shake.target = 0;
+  }
+};
 
 const getBoardSize = (state) => {
   if (state.getBoardSize) {
@@ -372,6 +442,11 @@ const integrateMotion = (state, dt) => {
     if (!magnet.dragging) {
       magnet.vx += (Math.random() * 2 - 1) * drift * dt;
       magnet.vy += (Math.random() * 2 - 1) * drift * dt;
+      if (state.shake?.strength) {
+        const shakeVelocity = state.shake.strength * state.shake.force * dt;
+        magnet.vx += (Math.random() * 2 - 1) * shakeVelocity;
+        magnet.vy += (Math.random() * 2 - 1) * shakeVelocity;
+      }
     }
     magnet.vx *= damping;
     magnet.vy *= damping;
@@ -416,6 +491,7 @@ const frameStep = (state, timestamp) => {
   for (let i = 0; i < iterations; i += 1) {
     applySeparationForces(state, dt);
     applyPointerField(state, dt);
+    updateShake(state, dt);
     integrateMotion(state, dt);
   }
   state.lastTimestamp = timestamp;
@@ -617,14 +693,24 @@ export function startPhysics(options) {
       downT: 0,
       moved: false,
     },
+    shake: {
+      strength: 0,
+      target: 0,
+      baseline: 0,
+      hasBaseline: false,
+      sensitivity: SHAKE_SENSITIVITY,
+      force: SHAKE_FORCE,
+    },
   };
 
   const removePointerListeners = addPointerListeners(state);
+  const removeShakeListener = addShakeListener(state);
   state.animationFrame = window.requestAnimationFrame((timestamp) => frameStep(state, timestamp));
 
   return {
     stop: () => {
       removePointerListeners?.();
+      removeShakeListener?.();
       stopAnimation(state);
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
@@ -641,6 +727,10 @@ export function startPhysics(options) {
       state.pointerField.active = false;
       state.isShuffling = false;
       state.shufflePromise = null;
+      state.shake.strength = 0;
+      state.shake.target = 0;
+      state.shake.baseline = 0;
+      state.shake.hasBaseline = false;
       state.board.classList.remove('no-transitions');
     },
     shuffle: () => {
