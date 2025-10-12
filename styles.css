@@ -1101,6 +1101,8 @@ button.site-nav__link {
   }
 
   .support-button {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
     width: 100%;
   }
 }
