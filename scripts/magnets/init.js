@@ -88,6 +88,8 @@ export function updateBoardHeight(board, magnets) {
     const height = element.offsetHeight || Number.parseFloat(style.height || '0') || 0;
     bottom = Math.max(bottom, y + height);
   });
-  board.style.height = `${Math.ceil(bottom + 24)}px`;
+  const height = Math.ceil(bottom + 24);
+  board.style.height = `${height}px`;
+  return height;
 }
 
