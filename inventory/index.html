@@ -219,6 +219,60 @@
             <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
             <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
           </div>
+          <div class="inventory-overview__tools">
+            <button
+              type="button"
+              class="inventory-button inventory-button--ghost inventory-overview__jump"
+              data-jump-to-strategies
+              aria-controls="strategies-list"
+              aria-expanded="false"
+            >
+              <span class="inventory-button__glyph" aria-hidden="true">↓</span>
+              <span class="inventory-button__text">Jump to saved strategies</span>
+            </button>
+            <div class="inventory-summary__filters" role="group" aria-label="Filter needs coverage list">
+              <button
+                type="button"
+                class="inventory-summary__filter-button"
+                data-summary-filter="all"
+                aria-pressed="true"
+                title="Show all needs"
+              >
+                <span aria-hidden="true">◎</span>
+                <span class="visually-hidden">Show all needs</span>
+              </button>
+              <button
+                type="button"
+                class="inventory-summary__filter-button"
+                data-summary-filter="missing"
+                aria-pressed="false"
+                title="Show needs with no coverage"
+              >
+                <span aria-hidden="true">!</span>
+                <span class="visually-hidden">Show needs with no coverage</span>
+              </button>
+              <button
+                type="button"
+                class="inventory-summary__filter-button"
+                data-summary-filter="ready"
+                aria-pressed="false"
+                title="Show needs with coverage"
+              >
+                <span aria-hidden="true">✓</span>
+                <span class="visually-hidden">Show needs with coverage</span>
+              </button>
+              <button
+                type="button"
+                class="inventory-summary__filter-button"
+                data-summary-filter="none"
+                aria-pressed="false"
+                title="Hide all needs"
+              >
+                <span aria-hidden="true">⊘</span>
+                <span class="visually-hidden">Hide all needs</span>
+              </button>
+            </div>
+          </div>
           <div id="inventory-summary" class="inventory-summary"></div>
           <div class="inventory-list__toggle">
             <button
@@ -239,7 +293,7 @@
             aria-labelledby="inventory-list-heading"
           >
             <div class="inventory-list__header">
-              <h3 id="inventory-list-heading" class="section-title">Saved strategies by need</h3>
+              <h3 id="inventory-list-heading" class="section-title" tabindex="-1">Saved strategies by need</h3>
               <p class="inventory-list__hint">
                 Expand a need to review strategies you have saved and make updates.
               </p>
