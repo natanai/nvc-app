@@ -831,7 +831,7 @@ function renderInventoryJournalPage(needsList = []) {
   const main = `
       <header class="page-header journal-page-header">
         <h1 class="page-title journal-page-title">
-          <img src="../../icons/journal.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
+          <img src="../../icons/journal-32bit.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
           Journal
         </h1>
         <p class="page-description journal-page-description">
@@ -922,7 +922,7 @@ function renderInventoryJournalPage(needsList = []) {
       { label: 'Home', href: '../../' },
       { label: 'Inventory', href: '../' },
       {
-        html: '<span class="breadcrumbs__label"><img src="../../icons/journal.svg" class="journal-label-icon" alt="" aria-hidden="true" /> Journal</span>',
+        html: '<span class="breadcrumbs__label"><img src="../../icons/journal-32bit.svg" class="journal-label-icon" alt="" aria-hidden="true" /> Journal</span>',
       },
     ],
     main,
