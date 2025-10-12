@@ -138,7 +138,10 @@ function basePathFromDepth(depth) {
 }
 
 function normalizeScripts(scripts) {
-  const baseScripts = [{ src: 'scripts/inventory.js', defer: true }];
+  const baseScripts = [
+    { src: 'assets/js/journal/store.js', module: true },
+    { src: 'scripts/inventory.js', defer: true },
+  ];
   const entries = [...baseScripts, ...scripts];
   const seen = new Set();
   const normalized = [];
@@ -817,6 +820,7 @@ function renderInventoryJournalPage() {
                 <label for="journal-tags">Tags (optional)</label>
                 <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" />
                 <p class="journal-field-hint">Separate tags with commas. They'll help you filter later.</p>
+                <div class="journal-tag-suggestions" data-journal-tag-suggestions hidden></div>
               </div>
               <div class="inventory-journal-form__field inventory-journal-form__field--wide">
                 <label for="journal-notes">Reflection</label>
