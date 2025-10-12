@@ -394,19 +394,67 @@ button.site-nav__link {
   max-width: 65ch;
 }
 
+
 .home-doorways {
   display: grid;
-  gap: 1.75rem;
+  gap: 1.6rem;
   text-align: center;
-  align-items: center;
+  justify-items: center;
+}
+
+.home-doorways__copy {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
 }
 
 .home-doorways__prompt {
-  margin: 0 auto;
-  max-width: 40ch;
-  font-size: 1.1rem;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.home-doorways__prompt-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.25rem 0.4rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
+  background: color-mix(in srgb, #ffffff 74%, var(--lavender) 26%);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  font-family: var(--font-display);
+  font-size: clamp(0.75rem, 1.1vw + 0.55rem, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ink) 80%, #fff 20%);
+}
+
+.home-doorways__note {
+  margin: 0;
+  font-size: clamp(0.75rem, 0.8vw + 0.65rem, 0.95rem);
+  letter-spacing: 0.015em;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ink) 70%, #fff 30%);
+}
+
+.home-doorways__support-note {
+  margin: 0.5rem auto 0;
+  font-size: 0.85rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  font-family: var(--font-display);
+  display: none;
+}
+
+.home-doorways__support-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: color-mix(in srgb, var(--outline) 70%, transparent);
 }
 
 .support-flow {
@@ -1163,7 +1211,75 @@ button.site-nav__link {
 
 @media (max-width: 640px) {
   .door-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .home-doorways {
+    gap: 1.2rem;
+  }
+
+  .home-doorways__copy {
+    gap: 0.4rem;
+  }
+
+  .home-doorways__prompt-badge {
+    padding: 0.3rem 0.9rem 0.26rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.045em;
+    text-transform: none;
+    box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .home-doorways__note {
+    font-size: 0.55rem;
+    letter-spacing: 0.01em;
+    color: color-mix(in srgb, var(--ink) 58%, #fff 42%);
+  }
+
+  .home-doorways__support-note {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+  }
+
+  .door-card {
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .door-card__link {
+    gap: 0.35rem;
+    min-height: auto;
+    padding: 0.35rem 0 0.75rem;
+    align-items: stretch;
+  }
+
+  .door-card__door {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .door-card__label {
+    width: 100%;
+  }
+
+  .door-card__label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .door-card__support {
+    display: none;
+  }
+
+  .door-card__support:hover,
+  .door-card__support:focus-visible {
+    transform: translateY(-2px);
   }
 }
 
