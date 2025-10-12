@@ -2270,30 +2270,8 @@ body.has-support-journal-open {
     gap: 0.65rem;
   }
 
-  .inventory-actions__buttons .inventory-button--compact {
+  .inventory-actions__buttons .inventory-button {
     flex: 0 0 auto;
-  }
-
-  .inventory-button--compact {
-    width: clamp(3rem, 3.6vw, 3.4rem);
-    aspect-ratio: 1;
-    padding: 0;
-    border-radius: var(--radius-md);
-    box-shadow: 0 8px 0 var(--shadow);
-  }
-
-  .inventory-button--compact .inventory-button__glyph {
-    font-size: clamp(1.35rem, 2vw, 1.55rem);
-  }
-
-  .inventory-button--compact .inventory-button__text {
-    display: none;
-  }
-
-  .inventory-button--compact:hover,
-  .inventory-button--compact:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 0 var(--shadow);
   }
 }
 
