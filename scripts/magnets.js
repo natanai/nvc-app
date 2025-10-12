@@ -77,12 +77,10 @@ const setMagnetTransform = (magnet) => {
 const updateToggleLabel = (toggle, active) => {
   if (!toggle) return;
 
-  const status = toggle.querySelector('.magnet-play-toggle__status');
   const srState = toggle.querySelector('.magnet-play-toggle__sr-state');
+  const input = toggle.querySelector('.magnet-play-toggle__input');
 
-  if (status) {
-    status.textContent = active ? 'On' : 'Off';
-  } else if (!toggle.querySelector('.magnet-play-toggle__track')) {
+  if (!toggle.querySelector('.magnet-play-toggle__track')) {
     toggle.textContent = active ? 'Physics on' : 'Physics off';
   }
 
@@ -90,9 +88,12 @@ const updateToggleLabel = (toggle, active) => {
     srState.textContent = active ? 'Physics is on' : 'Physics is off';
   }
 
+  if (input) {
+    input.checked = active;
+    input.setAttribute('aria-label', active ? 'Disable magnet physics' : 'Enable magnet physics');
+  }
+
   toggle.dataset.state = active ? 'on' : 'off';
-  toggle.setAttribute('aria-pressed', active ? 'true' : 'false');
-  toggle.setAttribute('aria-label', active ? 'Disable magnet physics' : 'Enable magnet physics');
 };
 
 const createStorageKey = (index) => {
@@ -505,6 +506,7 @@ const initializeBoard = async (root, index) => {
     return;
   }
   const toggle = root.querySelector('[data-magnet-toggle]');
+  const toggleInput = toggle?.querySelector('.magnet-play-toggle__input');
   const shuffleButton = root.querySelector('[data-magnet-shuffle]');
   const magnetElements = Array.from(board.querySelectorAll('.magnet'));
   if (!magnetElements.length) {
@@ -525,6 +527,7 @@ const initializeBoard = async (root, index) => {
     root,
     board,
     toggle,
+    toggleInput,
     shuffleButton,
     storageKey: createStorageKey(index),
     magnets: measured,
@@ -680,7 +683,11 @@ const initializeBoard = async (root, index) => {
     state.cleanupResize = () => window.removeEventListener('resize', handleResize);
   }
 
-  if (toggle) {
+  if (state.toggleInput) {
+    state.toggleInput.addEventListener('change', () => {
+      setPlayState(state, state.toggleInput.checked);
+    });
+  } else if (toggle) {
     toggle.addEventListener('click', () => {
       const shouldActivate = !state.physics;
       setPlayState(state, shouldActivate);
