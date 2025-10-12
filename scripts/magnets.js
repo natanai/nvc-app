@@ -632,10 +632,14 @@ const initializeBoard = async (root, index) => {
       }
 
       if (state.lastLayoutType === 'manual') {
-        restoreLayoutFromPercentages(state, { persist: false });
-        if (layoutHasOverlap(state)) {
-          applyRowPackedLayout(state, state.magnets, { persist: true });
-          return;
+        if (widthChanged) {
+          restoreLayoutFromPercentages(state, { persist: false });
+          if (layoutHasOverlap(state)) {
+            applyRowPackedLayout(state, state.magnets, { persist: true });
+            return;
+          }
+        } else {
+          updateBoardHeight(state);
         }
         updateLayout(state);
         persistLayout(state, true);
