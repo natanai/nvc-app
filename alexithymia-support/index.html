@@ -294,22 +294,61 @@
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="journal">
-            <h3 class="support-step__title">Step 4: Reflect and journal</h3>
+            <h3 id="support-journal-title" class="support-step__title">Step 4: Reflect and journal</h3>
             <p>
               Linking a feeling to context strengthens emotional awareness. Use the prompts below as writing cues or simply sit
               with them.
             </p>
-            <div
-              class="journal-module journal-module--support"
-              data-journal-module
-              data-journal-variant="support"
-              data-journal-id-prefix="support-journal"
-            >
-              <noscript>
-                <p class="support-note">Enable JavaScript to capture journal reflections.</p>
-              </noscript>
+            <div class="support-journal" data-support-journal>
+              <button
+                class="support-button support-journal__open"
+                type="button"
+                data-support-journal-open
+                aria-expanded="false"
+                aria-controls="support-journal-layer"
+              >
+                Open reflection journal
+              </button>
+              <div
+                id="support-journal-layer"
+                class="support-journal__layer"
+                data-support-journal-layer
+                data-state="closed"
+                aria-hidden="true"
+              >
+                <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
+                  <header class="support-journal__header">
+                    <div class="support-journal__titles" aria-hidden="true">
+                      <p class="support-journal__eyebrow">Support journal</p>
+                      <h3 class="support-journal__heading" data-support-journal-heading></h3>
+                    </div>
+                    <button
+                      class="support-journal__close"
+                      type="button"
+                      data-support-journal-close
+                      aria-label="Close journal"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </header>
+                  <div class="support-journal__body">
+                    <div class="support-journal__content">
+                      <div
+                        class="journal-module journal-module--support"
+                        data-journal-module
+                        data-journal-variant="support"
+                        data-journal-id-prefix="support-journal"
+                      >
+                        <noscript>
+                          <p class="support-note">Enable JavaScript to capture journal reflections.</p>
+                        </noscript>
+                      </div>
+                      <div class="journal-history-wrapper" data-journal-history></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="journal-history-wrapper" data-journal-history></div>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="regulation">
