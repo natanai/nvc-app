@@ -1138,9 +1138,8 @@ button.site-nav__link {
 }
 
 .magnet-board:not([data-ready='1']) .magnet {
-  position: static;
-  transform: none !important;
-  touch-action: auto;
+  position: absolute;
+  touch-action: none;
   transition: none;
 }
 

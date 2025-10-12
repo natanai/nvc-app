@@ -20,6 +20,28 @@ const BOARD_PADDING = 24;
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
 const SHUFFLE_LABEL_BUSY = 'Shuffling…';
+const TOGGLE_GUARD_MS = 120;
+
+let isToggling = false;
+let toggleGuardTimer = null;
+
+const clearToggleGuard = () => {
+  if (toggleGuardTimer != null) {
+    window.clearTimeout(toggleGuardTimer);
+    toggleGuardTimer = null;
+  }
+  isToggling = false;
+};
+
+const beginToggleGuard = () => {
+  clearToggleGuard();
+  isToggling = true;
+  toggleGuardTimer = window.setTimeout(() => {
+    isToggling = false;
+    toggleGuardTimer = null;
+    console.info('[magnets] exitPlay: done');
+  }, TOGGLE_GUARD_MS);
+};
 
 const getNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
   ? performance.now()
@@ -255,6 +277,7 @@ const persistLayout = (state, immediate = false) => {
 };
 
 const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
+  console.info('[magnets] reseed CALLED', 'restoreLayoutFromPercentages');
   const width = Math.max(state.boardWidth || 0, 1);
   const height = Math.max(Math.max(state.boardHeight || 0, state.minHeight || 0), 1);
   const placements = state.magnets.map((magnet) => {
@@ -283,6 +306,7 @@ const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
 };
 
 const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
+  console.info('[magnets] reseed CALLED', 'applyRowPackedLayout');
   const width = Math.max(state.boardWidth || 0, 1);
   const startX = LAYOUT_GAP_X;
   const startY = LAYOUT_GAP_Y;
@@ -352,6 +376,13 @@ const handlePositionsUpdate = (state, list) => {
   persistLayout(state);
 };
 
+const stopPhysicsLoop = (state) => {
+  if (state.physics) {
+    state.physics.stop();
+    state.physics = null;
+  }
+};
+
 const setPlayState = (state, active) => {
   if (!active && state.isShuffling) {
     state.isShuffling = false;
@@ -366,6 +397,8 @@ const setPlayState = (state, active) => {
     if (state.physics) {
       return;
     }
+    clearToggleGuard();
+    console.info('[magnets] play->', true);
     if (state.shuffleButton) {
       state.shuffleButton.disabled = false;
       state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || state.shuffleButton.textContent;
@@ -390,15 +423,16 @@ const setPlayState = (state, active) => {
     if (!state.physics) {
       return;
     }
-    state.physics.stop();
-    state.physics = null;
+    console.info('[magnets] play->', false);
+    console.info('[magnets] exitPlay: begin');
+    beginToggleGuard();
+    stopPhysicsLoop(state);
     delete state.board.dataset.active;
     state.root?.removeAttribute('data-magnet-active');
     state.magnets.forEach((magnet) => {
       magnet.element.removeAttribute('draggable');
     });
     state.suppressUntil = 0;
-    updateLayout(state);
     persistLayout(state, true);
     state.lastLayoutType = 'manual';
   }
@@ -517,10 +551,19 @@ const initializeBoard = async (root, index) => {
     if (state.isShuffling) {
       return;
     }
+    if (isToggling) {
+      console.info('[magnets] resize ignored (toggling)');
+      return;
+    }
     state.resizeScheduled = true;
     Promise.resolve().then(async () => {
       if (state.isShuffling) {
         state.resizeScheduled = false;
+        return;
+      }
+      if (isToggling) {
+        state.resizeScheduled = false;
+        console.info('[magnets] resize ignored (toggling)');
         return;
       }
       state.resizeScheduled = false;
