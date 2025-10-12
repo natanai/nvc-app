@@ -135,7 +135,11 @@
     function handlePointerDown(event) {
       if (!(event instanceof PointerEvent)) return;
       event.preventDefault();
-      board.focus({ preventScroll: true });
+      const shouldFocus =
+        !event.pointerType || event.pointerType === 'mouse' || event.pointerType === 'pen';
+      if (shouldFocus) {
+        board.focus({ preventScroll: true });
+      }
       isDragging = true;
       board.dataset.dragging = '1';
       try {
