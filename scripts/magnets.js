@@ -76,7 +76,7 @@ const setMagnetTransform = (magnet) => {
 
 const updateToggleLabel = (toggle, active) => {
   if (!toggle) return;
-  toggle.textContent = active ? 'Done' : '+ Play with';
+  toggle.textContent = active ? 'Disable click and drag' : '+ Play with';
   toggle.setAttribute('aria-pressed', active ? 'true' : 'false');
 };
 
@@ -670,7 +670,6 @@ const initializeBoard = async (root, index) => {
       const shouldActivate = !state.physics;
       setPlayState(state, shouldActivate);
     });
-    updateToggleLabel(toggle, false);
   }
 
   if (shuffleButton) {
@@ -700,6 +699,8 @@ const initializeBoard = async (root, index) => {
       }
     });
   }
+
+  setPlayState(state, true);
 };
 
 const setup = async () => {
