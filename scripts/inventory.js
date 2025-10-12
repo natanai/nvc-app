@@ -61,6 +61,7 @@ const SECTION_ALIASES = new Map([
 const state = {
   inventory: [],
   needs: [],
+  feelings: [],
   needsBySlug: new Map(),
   basePath: '',
   inventoryListEl: null,
@@ -214,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupInventoryPage();
   setupJournalSection();
   renderJournalViews();
+  loadJournalReferenceData();
 });
 
 function loadInventory() {
@@ -1468,6 +1470,29 @@ function parsePaletteCsvRows(text) {
   return rows.filter((cells) => cells.some((cell) => cell.trim().length));
 }
 
+function applyNeedsData(needs) {
+  if (!Array.isArray(needs)) {
+    state.needs = [];
+    state.needsBySlug = new Map();
+    return;
+  }
+  const normalized = needs
+    .map((item) => ({ slug: item.slug || item.value || '', title: item.title || item.label || '' }))
+    .filter((item) => item.slug && item.title);
+  state.needs = normalized;
+  state.needsBySlug = new Map();
+  normalized.forEach((need) => {
+    const slugKey = need.slug?.toLowerCase();
+    if (slugKey) {
+      state.needsBySlug.set(slugKey, need);
+    }
+    const titleKey = need.title?.toLowerCase();
+    if (titleKey && !state.needsBySlug.has(titleKey)) {
+      state.needsBySlug.set(titleKey, need);
+    }
+  });
+}
+
 function captureNeedsFromForm() {
   const select = document.getElementById('inventory-need');
   let needs = [];
@@ -1486,16 +1511,50 @@ function captureNeedsFromForm() {
     if (typeof loader === 'function') {
       const loaded = loader();
       if (Array.isArray(loaded)) {
-        needs = loaded
-          .map((item) => ({ slug: item.slug || item.value || '', title: item.title || item.label || '' }))
-          .filter((item) => item.slug && item.title);
+        needs = loaded;
       }
     }
   }
 
-  state.needs = needs;
-  state.needsBySlug = new Map(needs.map((need) => [need.slug, need]));
+  applyNeedsData(needs);
   populateJournalNeedsOptions();
+}
+
+function loadJournalReferenceData() {
+  const loadNeeds = window.NVCJournal?.loadNeedsList;
+  const loadFeelings = window.NVCJournal?.loadFeelingsList;
+  if (typeof loadNeeds !== 'function' && typeof loadFeelings !== 'function') {
+    return;
+  }
+  const basePath = state.basePath;
+  const needsPromise = typeof loadNeeds === 'function' ? loadNeeds({ basePath }) : Promise.resolve([]);
+  const feelingsPromise = typeof loadFeelings === 'function' ? loadFeelings({ basePath }) : Promise.resolve([]);
+  Promise.all([
+    needsPromise.catch((error) => {
+      console.warn('Inventory: unable to load needs list', error);
+      return [];
+    }),
+    feelingsPromise.catch((error) => {
+      console.warn('Inventory: unable to load feelings list', error);
+      return [];
+    }),
+  ]).then(([needs, feelings]) => {
+    if (Array.isArray(needs) && needs.length) {
+      applyNeedsData(needs);
+      if (state.journalController && typeof state.journalController.setNeedsOptions === 'function') {
+        state.journalController.setNeedsOptions(needs);
+        state.journalNeedsSelect = state.journalController.needsSelect;
+      } else {
+        populateJournalNeedsOptions();
+      }
+    }
+    if (Array.isArray(feelings) && feelings.length) {
+      state.feelings = feelings;
+      if (state.journalController && typeof state.journalController.setEmotionOptions === 'function') {
+        state.journalController.setEmotionOptions(feelings);
+      }
+    }
+  });
 }
 
 function renderInventoryViews() {
@@ -1578,10 +1637,13 @@ function setupJournalSection() {
     });
   }
 
-  state.journalNeedsSelect?.addEventListener('change', () => {
-    resetJournalSaveButton();
-    scheduleJournalDraftSave();
-  });
+  if (state.journalNeedsSelect) {
+    const needsEvent = state.journalNeedsSelect instanceof HTMLSelectElement ? 'change' : 'input';
+    state.journalNeedsSelect.addEventListener(needsEvent, () => {
+      resetJournalSaveButton();
+      scheduleJournalDraftSave();
+    });
+  }
 
   const journalExport = panel.querySelector('#journal-export');
   journalExport?.addEventListener('click', handleJournalExport);
@@ -1636,6 +1698,9 @@ function populateJournalNeedsOptions() {
 
   const select = state.journalNeedsSelect;
   if (!select) {
+    return;
+  }
+  if (!(select instanceof HTMLSelectElement)) {
     return;
   }
   select.innerHTML = '';
@@ -1707,9 +1772,18 @@ function collectJournalFormData() {
   const emotion = (formData.get('emotion') || '').toString().trim();
   const intensityValue = Number(formData.get('intensity'));
   const intensity = Number.isFinite(intensityValue) ? Math.min(10, Math.max(0, Math.round(intensityValue))) : undefined;
-  const needs = state.journalNeedsSelect
-    ? Array.from(state.journalNeedsSelect.selectedOptions || []).map((option) => option.value).filter(Boolean)
-    : [];
+  let needs = [];
+  if (state.journalNeedsSelect instanceof HTMLSelectElement) {
+    needs = Array.from(state.journalNeedsSelect.selectedOptions || [])
+      .map((option) => option.value)
+      .filter(Boolean);
+  } else if (state.journalNeedsSelect) {
+    needs = (state.journalNeedsSelect.value || '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .map((value) => resolveNeedLabel(value) || value);
+  }
   const tags = normalizeJournalTags((formData.get('tags') || '').toString());
   const notes = (formData.get('notes') || '').toString().trim();
   return { emotion, intensity, needs, tags, notes };
@@ -1766,11 +1840,16 @@ function fillJournalForm(values = {}) {
     state.journalIntensityInput.value = String(intensityValue);
   }
   updateJournalIntensityDisplay(intensityValue);
-  if (state.journalNeedsSelect) {
+  if (state.journalNeedsSelect instanceof HTMLSelectElement) {
     const selectedNeeds = Array.isArray(values.needs) ? values.needs.map((need) => need.toString()) : [];
     Array.from(state.journalNeedsSelect.options).forEach((option) => {
       option.selected = selectedNeeds.includes(option.value);
     });
+  } else if (state.journalNeedsSelect) {
+    const needsList = Array.isArray(values.needs)
+      ? values.needs.map((value) => resolveNeedLabel(value) || value)
+      : [];
+    state.journalNeedsSelect.value = needsList.length ? `${needsList.join(', ')}` : '';
   }
   if (state.journalTagsInput) {
     const tagsValue = Array.isArray(values.tags)

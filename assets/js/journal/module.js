@@ -69,6 +69,55 @@ const getTagFragment = (value) => {
   return fragment.replace(/^#/, '').trim();
 };
 
+const getNeedFragment = (value) => {
+  if (!value) {
+    return '';
+  }
+  const segments = value.split(',');
+  const fragment = segments[segments.length - 1] || '';
+  return fragment.trim();
+};
+
+const normalizeNeedOption = (need) => {
+  if (!need) {
+    return null;
+  }
+  if (typeof need === 'string') {
+    const label = need.trim();
+    if (!label) {
+      return null;
+    }
+    return { slug: '', label, value: label };
+  }
+  if (typeof need !== 'object') {
+    return null;
+  }
+  const rawSlug = typeof need.slug === 'string' ? need.slug : need.value;
+  const slug = typeof rawSlug === 'string' ? rawSlug.trim() : '';
+  const rawLabel = need.title || need.label || '';
+  const label = rawLabel ? rawLabel.toString().trim() : slug;
+  if (!label) {
+    return null;
+  }
+  const value = slug || label;
+  return { slug, label, value };
+};
+
+const joinListValues = (values, { trailing = false } = {}) => {
+  const list = Array.isArray(values) ? values.filter(Boolean) : [];
+  if (!list.length) {
+    return '';
+  }
+  const joined = list.join(', ');
+  return trailing ? `${joined}, ` : joined;
+};
+
+let uniqueIdCounter = 0;
+const createUniqueId = (prefix) => {
+  uniqueIdCounter += 1;
+  return `${prefix}-${uniqueIdCounter}`;
+};
+
 function resolveStore() {
   if (store) {
     return store;
@@ -104,6 +153,7 @@ class JournalFormController {
     }
     this.options = {
       needs: [],
+      feelings: [],
       draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
       draftDelay: DRAFT_DELAY_MS,
       tagLimit: DEFAULT_TAG_LIMIT,
@@ -118,6 +168,7 @@ class JournalFormController {
     this.statusEl = this.root.querySelector('[data-journal-status]');
     this.messageEl = this.root.querySelector('[data-journal-message]');
     this.needsSelect = this.root.querySelector('[data-journal-needs]');
+    this.needsSuggestionsEl = this.root.querySelector('[data-journal-need-suggestions]');
     this.emotionInput = this.root.querySelector('[data-journal-emotion]');
     this.intensityInput = this.root.querySelector('[data-journal-intensity]');
     this.intensityDisplay = this.root.querySelector('[data-journal-intensity-display]');
@@ -126,6 +177,11 @@ class JournalFormController {
     this.notesInput = this.root.querySelector('[data-journal-notes]');
     this.clearButton = this.root.querySelector('[data-journal-clear]');
     this.saveButton = this.root.querySelector('[data-journal-submit]');
+
+    this.emotionDatalist = null;
+    this.emotionOptions = [];
+    this.needsOptions = [];
+    this.needsActiveIndex = -1;
 
     this.draftPath = this.options.draftPath;
     this.draftTimer = null;
@@ -147,6 +203,7 @@ class JournalFormController {
 
     this.attachEvents();
     this.setNeedsOptions(this.options.needs);
+    this.setEmotionOptions(this.options.feelings);
     this.refreshTagSource();
     this.updateIntensityDisplay(
       normalizeNumber(this.intensityInput?.value, this.options.intensityRange.min, this.options.intensityRange.max) ??
@@ -231,11 +288,30 @@ class JournalFormController {
       });
     }
 
-    if (this.needsSelect) {
+    if (this.needsSelect instanceof HTMLSelectElement) {
       this.needsSelect.addEventListener('change', () => {
         this.resetSaveButton();
         this.scheduleDraftSave();
       });
+    } else if (this.needsSelect) {
+      this.needsSelect.setAttribute('role', 'combobox');
+      this.needsSelect.setAttribute('aria-autocomplete', 'list');
+      this.needsSelect.setAttribute('aria-expanded', 'false');
+      this.needsSelect.addEventListener('input', () => {
+        this.resetSaveButton();
+        this.scheduleDraftSave();
+        this.updateNeedsSuggestions();
+      });
+      this.needsSelect.addEventListener('keydown', (event) => this.handleNeedKeydown(event));
+      this.needsSelect.addEventListener('focus', () => {
+        this.updateNeedsSuggestions();
+      });
+    }
+
+    if (this.needsSuggestionsEl) {
+      this.needsSuggestionsEl.addEventListener('mousedown', (event) => event.preventDefault());
+      this.needsSuggestionsEl.addEventListener('mousemove', (event) => this.handleNeedSuggestionMouseOver(event));
+      this.needsSuggestionsEl.addEventListener('click', (event) => this.handleNeedSuggestionClick(event));
     }
 
     if (this.clearButton) {
@@ -267,6 +343,27 @@ class JournalFormController {
     this.intensityDisplay.textContent = `${clamped}/10`;
   }
 
+  resolveNeedValue(value) {
+    const raw = typeof value === 'string' ? value.trim() : '';
+    if (!raw) {
+      return '';
+    }
+    const options = Array.isArray(this.needsOptions) ? this.needsOptions : [];
+    const normalized = raw.toLowerCase();
+    const withoutPrefix = normalized.replace(/^need for\s+/, '');
+    const labelMatch = options.find((option) =>
+      option.label && option.label.toLowerCase().replace(/^need for\s+/, '') === withoutPrefix
+    );
+    if (labelMatch) {
+      return labelMatch.label;
+    }
+    const slugMatch = options.find((option) => option.slug && option.slug.toLowerCase() === normalized);
+    if (slugMatch) {
+      return slugMatch.label;
+    }
+    return raw;
+  }
+
   collectData() {
     const emotion = this.emotionInput?.value?.trim() || '';
     const intensityValue = normalizeNumber(
@@ -274,11 +371,15 @@ class JournalFormController {
       this.options.intensityRange.min,
       this.options.intensityRange.max,
     );
-    const needs = this.needsSelect
-      ? Array.from(this.needsSelect.selectedOptions || [])
-          .map((option) => option.value)
-          .filter(Boolean)
-      : [];
+    let needs = [];
+    if (this.needsSelect instanceof HTMLSelectElement) {
+      needs = Array.from(this.needsSelect.selectedOptions || [])
+        .map((option) => option.value)
+        .filter(Boolean);
+    } else if (this.needsSelect) {
+      const list = normalizeList(this.needsSelect.value);
+      needs = list.map((need) => this.resolveNeedValue(need)).filter(Boolean);
+    }
     const tags = this.tagsInput ? normalizeTags(this.tagsInput.value) : [];
     const notes = this.notesInput?.value?.trim() || '';
     return { emotion, intensity: intensityValue, needs, tags, notes };
@@ -301,11 +402,15 @@ class JournalFormController {
       this.intensityInput.value = intensityValue !== undefined ? String(intensityValue) : String(this.defaultIntensity);
       this.updateIntensityDisplay(intensityValue ?? this.defaultIntensity);
     }
-    if (this.needsSelect) {
+    if (this.needsSelect instanceof HTMLSelectElement) {
       const needs = normalizeList(data.needs);
       Array.from(this.needsSelect.options).forEach((option) => {
         option.selected = needs.includes(option.value);
       });
+    } else if (this.needsSelect) {
+      const needs = normalizeList(data.needs).map((need) => this.resolveNeedValue(need)).filter(Boolean);
+      this.needsSelect.value = joinListValues(needs);
+      this.updateNeedsSuggestions();
     }
     if (this.tagsInput) {
       const tags = normalizeTags(data.tags);
@@ -325,11 +430,14 @@ class JournalFormController {
     if (this.tagsInput) {
       this.tagsInput.value = '';
     }
-    if (this.needsSelect) {
+    if (this.needsSelect instanceof HTMLSelectElement) {
       Array.from(this.needsSelect.options).forEach((option) => {
         option.selected = false;
       });
+    } else if (this.needsSelect) {
+      this.needsSelect.value = '';
     }
+    this.hideNeedSuggestions();
     this.resetSaveButton();
     this.hideTagSuggestions();
     if (this.statusEl) {
@@ -348,25 +456,75 @@ class JournalFormController {
     if (!this.needsSelect) {
       return;
     }
-    const list = Array.isArray(needs) ? needs : [];
-    const currentValues = new Set(Array.from(this.needsSelect.selectedOptions || []).map((option) => option.value));
-    this.needsSelect.innerHTML = '';
-    list.forEach((need) => {
-      if (!need || typeof need !== 'object') {
-        return;
+    const normalizedList = Array.isArray(needs)
+      ? needs
+          .map((item) => normalizeNeedOption(item))
+          .filter(Boolean)
+          .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+      : [];
+    this.needsOptions = normalizedList;
+    if (this.needsSelect instanceof HTMLSelectElement) {
+      const currentValues = new Set(Array.from(this.needsSelect.selectedOptions || []).map((option) => option.value));
+      this.needsSelect.innerHTML = '';
+      normalizedList.forEach((need) => {
+        const option = document.createElement('option');
+        option.value = need.value;
+        option.textContent = need.label;
+        if (currentValues.has(option.value)) {
+          option.selected = true;
+        }
+        this.needsSelect.append(option);
+      });
+    } else {
+      const trailing = /,\s*$/.test(this.needsSelect.value || '');
+      const needsValues = normalizeList(this.needsSelect.value).map((need) => this.resolveNeedValue(need)).filter(Boolean);
+      this.needsSelect.value = needsValues.length
+        ? joinListValues(needsValues, { trailing })
+        : '';
+      this.updateNeedsSuggestions();
+    }
+  }
+
+  setEmotionOptions(feelings = []) {
+    if (!this.emotionInput) {
+      return;
+    }
+    const options = Array.isArray(feelings)
+      ? feelings
+          .map((item) => {
+            if (typeof item === 'string') {
+              return item.trim();
+            }
+            if (item && typeof item === 'object') {
+              const label = item.title || item.label || item.name || item.slug || '';
+              return label ? label.toString().trim() : '';
+            }
+            return '';
+          })
+          .filter(Boolean)
+          .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+      : [];
+    this.emotionOptions = options;
+    if (!options.length) {
+      if (this.emotionDatalist) {
+        this.emotionDatalist.remove();
+        this.emotionDatalist = null;
       }
-      const value = need.slug || need.value || '';
-      if (!value) {
-        return;
-      }
-      const label = need.title || need.label || value;
+      this.emotionInput.removeAttribute('list');
+      return;
+    }
+    if (!this.emotionDatalist) {
+      this.emotionDatalist = document.createElement('datalist');
+      this.emotionDatalist.id = createUniqueId('journal-emotion-options');
+      document.body.appendChild(this.emotionDatalist);
+      this.emotionInput.setAttribute('list', this.emotionDatalist.id);
+      this.emotionInput.setAttribute('aria-autocomplete', 'list');
+    }
+    this.emotionDatalist.innerHTML = '';
+    options.forEach((label) => {
       const option = document.createElement('option');
-      option.value = value;
-      option.textContent = label;
-      if (currentValues.has(value)) {
-        option.selected = true;
-      }
-      this.needsSelect.append(option);
+      option.value = label;
+      this.emotionDatalist.append(option);
     });
   }
 
@@ -623,6 +781,154 @@ class JournalFormController {
     this.tagsInput.focus();
     this.scheduleDraftSave();
   }
+
+  updateNeedsSuggestions() {
+    if (!this.needsSuggestionsEl || !this.needsSelect || this.needsSelect instanceof HTMLSelectElement) {
+      return;
+    }
+    const fragment = getNeedFragment(this.needsSelect.value || '');
+    const limit = Math.max(this.options.tagLimit, DEFAULT_TAG_LIMIT);
+    const normalizedFragment = fragment.trim().toLowerCase();
+    const matches = [];
+    const seen = new Set();
+    const source = Array.isArray(this.needsOptions) ? this.needsOptions : [];
+    source.forEach((option) => {
+      if (!option || !option.label) {
+        return;
+      }
+      const labelKey = option.label.trim().toLowerCase();
+      if (seen.has(labelKey)) {
+        return;
+      }
+      const slugKey = option.slug ? option.slug.toLowerCase() : '';
+      if (!normalizedFragment || labelKey.includes(normalizedFragment) || (slugKey && slugKey.includes(normalizedFragment))) {
+        seen.add(labelKey);
+        matches.push(option);
+      }
+    });
+    const suggestions = matches.slice(0, limit);
+    if (!suggestions.length) {
+      this.hideNeedSuggestions();
+      return;
+    }
+    this.needsSuggestionsEl.innerHTML = '';
+    suggestions.forEach((option, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'journal-tag-suggestions__option';
+      button.textContent = option.label;
+      button.dataset.journalNeedSuggestion = option.label;
+      if (option.slug) {
+        button.dataset.needSlug = option.slug;
+      }
+      button.setAttribute('role', 'option');
+      button.setAttribute('data-index', String(index));
+      this.needsSuggestionsEl.append(button);
+    });
+    this.needsSuggestionsEl.hidden = false;
+    this.needsSelect.setAttribute('aria-expanded', 'true');
+    this.needsActiveIndex = -1;
+  }
+
+  hideNeedSuggestions() {
+    if (!this.needsSuggestionsEl || !this.needsSelect) {
+      return;
+    }
+    this.needsSuggestionsEl.hidden = true;
+    this.needsSuggestionsEl.innerHTML = '';
+    this.needsSelect.setAttribute('aria-expanded', 'false');
+    this.needsActiveIndex = -1;
+  }
+
+  handleNeedSuggestionMouseOver(event) {
+    if (!this.needsSuggestionsEl) {
+      return;
+    }
+    const button = event.target.closest('[data-journal-need-suggestion]');
+    if (!button) {
+      return;
+    }
+    const index = Number(button.dataset.index);
+    if (Number.isFinite(index)) {
+      this.needsActiveIndex = index;
+      this.highlightActiveNeed();
+    }
+  }
+
+  highlightActiveNeed() {
+    if (!this.needsSuggestionsEl) {
+      return;
+    }
+    const buttons = this.needsSuggestionsEl.querySelectorAll('[data-journal-need-suggestion]');
+    buttons.forEach((button, index) => {
+      if (index === this.needsActiveIndex) {
+        button.classList.add('is-active');
+      } else {
+        button.classList.remove('is-active');
+      }
+    });
+  }
+
+  handleNeedSuggestionClick(event) {
+    const button = event.target.closest('[data-journal-need-suggestion]');
+    if (!button) {
+      return;
+    }
+    const label = button.dataset.journalNeedSuggestion || '';
+    if (label) {
+      const slug = button.dataset.needSlug || '';
+      this.applyNeedSuggestion({ label, slug });
+    }
+  }
+
+  handleNeedKeydown(event) {
+    if (!this.needsSuggestionsEl || this.needsSuggestionsEl.hidden) {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        this.updateNeedsSuggestions();
+      }
+      return;
+    }
+    const buttons = this.needsSuggestionsEl.querySelectorAll('[data-journal-need-suggestion]');
+    if (!buttons.length) {
+      return;
+    }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      this.needsActiveIndex = (this.needsActiveIndex + direction + buttons.length) % buttons.length;
+      this.highlightActiveNeed();
+    } else if ((event.key === 'Enter' || event.key === 'Tab') && this.needsActiveIndex >= 0) {
+      event.preventDefault();
+      const button = buttons[this.needsActiveIndex];
+      if (button) {
+        this.applyNeedSuggestion({
+          label: button.dataset.journalNeedSuggestion || '',
+          slug: button.dataset.needSlug || '',
+        });
+      }
+    } else if (event.key === 'Escape') {
+      this.hideNeedSuggestions();
+    }
+  }
+
+  applyNeedSuggestion(option) {
+    if (!this.needsSelect || this.needsSelect instanceof HTMLSelectElement) {
+      return;
+    }
+    const label = typeof option === 'string' ? option : option?.label;
+    if (!label) {
+      return;
+    }
+    const current = this.needsSelect.value || '';
+    const segments = current.split(',');
+    segments[segments.length - 1] = ` ${label}`;
+    const normalized = segments.join(',').replace(/^\s+/, '');
+    this.needsSelect.value = `${normalized.trim()}, `;
+    this.hideNeedSuggestions();
+    this.needsSelect.focus();
+    this.resetSaveButton();
+    this.scheduleDraftSave();
+  }
 }
 
 export function createJournalForm(root, options = {}) {
@@ -631,6 +937,74 @@ export function createJournalForm(root, options = {}) {
 
 export function loadNeedsFromScript(selector = '#journal-needs-data') {
   return parseJsonScript(selector) || [];
+}
+
+const catalogCache = new Map();
+
+const resolveBasePath = (basePath) => {
+  if (typeof basePath === 'string') {
+    return basePath;
+  }
+  if (typeof document !== 'undefined') {
+    return document.body?.dataset?.basePath || '';
+  }
+  return '';
+};
+
+const resolveCatalogUrl = (basePath) => {
+  if (typeof window === 'undefined') {
+    return `${basePath}data/index.json`;
+  }
+  try {
+    return new URL(`${basePath || ''}data/index.json`, window.location.href).toString();
+  } catch (error) {
+    return `${basePath || ''}data/index.json`;
+  }
+};
+
+export function loadCatalogData(options = {}) {
+  const basePath = resolveBasePath(options.basePath);
+  const url = resolveCatalogUrl(basePath);
+  if (!catalogCache.has(url)) {
+    if (typeof fetch !== 'function') {
+      catalogCache.set(url, Promise.resolve(null));
+    } else {
+      const request = fetch(url, { headers: { Accept: 'application/json' } })
+        .then((response) => (response.ok ? response.json() : null))
+        .catch((error) => {
+          console.warn('Journal module: unable to load catalog data', error);
+          return null;
+        });
+      catalogCache.set(url, request);
+    }
+  }
+  return catalogCache.get(url).then((data) => (data && typeof data === 'object' ? data : null));
+}
+
+export function loadFeelingsList(options = {}) {
+  return loadCatalogData(options).then((data) => {
+    if (!data || !Array.isArray(data.feelings)) {
+      return [];
+    }
+    return data.feelings
+      .map((item) => ({ title: item?.title || item?.name || '', slug: item?.slug || '' }))
+      .filter((item) => item.title);
+  });
+}
+
+export function loadNeedsList(options = {}) {
+  const scriptNeeds = loadNeedsFromScript();
+  if (Array.isArray(scriptNeeds) && scriptNeeds.length) {
+    return Promise.resolve(scriptNeeds);
+  }
+  return loadCatalogData(options).then((data) => {
+    if (!data || !Array.isArray(data.needs)) {
+      return [];
+    }
+    return data.needs
+      .map((item) => ({ slug: item?.slug || item?.value || '', title: item?.title || item?.label || '' }))
+      .filter((item) => item.slug && item.title);
+  });
 }
 
 const attachToGlobal = () => {
@@ -642,6 +1016,9 @@ const attachToGlobal = () => {
   }
   window.NVCJournal.createForm = createJournalForm;
   window.NVCJournal.loadNeedsFromScript = loadNeedsFromScript;
+  window.NVCJournal.loadCatalogData = loadCatalogData;
+  window.NVCJournal.loadFeelingsList = loadFeelingsList;
+  window.NVCJournal.loadNeedsList = loadNeedsList;
   window.NVCJournal.normalizeJournalTags = normalizeTags;
   window.NVCJournal.joinJournalTags = joinTags;
 };
@@ -651,6 +1028,9 @@ attachToGlobal();
 export default {
   createForm: createJournalForm,
   loadNeedsFromScript,
+  loadCatalogData,
+  loadFeelingsList,
+  loadNeedsList,
   normalizeJournalTags: normalizeTags,
   joinJournalTags: joinTags,
 };

@@ -325,15 +325,9 @@
               Linking a feeling to context strengthens emotional awareness. Use the prompts below as writing cues or simply sit
               with them.
             </p>
-            <ul class="prompt-list">
-              <li>What was happening right before you noticed this feeling?</li>
-              <li>Does the emotion you selected fit? What signals line up or feel different?</li>
-              <li>How intense is it right now on a scale from 1 (barely there) to 10 (all-consuming)?</li>
-              <li>What do you need or long for in this moment?</li>
-            </ul>
-            <form class="journal-form" data-journal-form>
-              <div class="journal-form__grid">
-                <div class="journal-form__field">
+            <form class="inventory-journal-form support-journal-form" data-journal-form>
+              <div class="inventory-journal-form__grid">
+                <div class="inventory-journal-form__field">
                   <label for="support-journal-emotion">Emotion (optional)</label>
                   <input
                     id="support-journal-emotion"
@@ -343,10 +337,13 @@
                     data-support-journal-emotion
                     data-journal-emotion
                   />
+                  <p class="journal-field-hint">
+                    Begin typing to autocomplete from the feelings library, or leave it blank if you're unsure.
+                  </p>
                 </div>
-                <div class="journal-form__field journal-form__field--intensity">
+                <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
                   <label for="support-journal-intensity">Intensity</label>
-                  <div class="journal-form__intensity">
+                  <div class="inventory-journal-form__intensity">
                     <input
                       id="support-journal-intensity"
                       name="intensity"
@@ -363,8 +360,32 @@
                       data-journal-intensity-display
                     >5/10</output>
                   </div>
+                  <p class="journal-field-hint">Slide to capture how strong the feeling is.</p>
                 </div>
-                <div class="journal-form__field">
+                <div class="inventory-journal-form__field">
+                  <label for="support-journal-needs">Related needs</label>
+                  <input
+                    id="support-journal-needs"
+                    name="needs"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Start typing a need"
+                    data-support-journal-needs
+                    data-journal-needs
+                  />
+                  <p class="journal-field-hint">
+                    Begin typing to autocomplete needs from the library. Separate multiple needs with commas.
+                  </p>
+                  <div
+                    class="journal-tag-suggestions"
+                    data-support-journal-need-suggestions
+                    data-journal-need-suggestions
+                    hidden
+                    role="listbox"
+                    aria-label="Suggested needs"
+                  ></div>
+                </div>
+                <div class="inventory-journal-form__field">
                   <label for="support-journal-tags">Tags (optional)</label>
                   <input
                     id="support-journal-tags"
@@ -375,16 +396,17 @@
                     data-support-journal-tags
                     data-journal-tags
                   />
+                  <p class="journal-field-hint">Separate tags with commas to group related entries.</p>
                   <div
                     class="journal-tag-suggestions"
                     data-support-journal-tag-suggestions
+                    data-journal-tag-suggestions
                     hidden
                     role="listbox"
                     aria-label="Suggested tags"
-                    data-journal-tag-suggestions
                   ></div>
                 </div>
-                <div class="journal-form__field journal-form__field--wide">
+                <div class="inventory-journal-form__field inventory-journal-form__field--wide">
                   <label for="journalEntry">Write a few notes (saved only on this device)</label>
                   <textarea
                     id="journalEntry"
@@ -396,6 +418,15 @@
                   ></textarea>
                 </div>
               </div>
+              <aside class="journal-prompts">
+                <p>Need a nudge?</p>
+                <ul>
+                  <li>What was happening right before you noticed this feeling?</li>
+                  <li>Does the emotion you selected fit? What signals line up or feel different?</li>
+                  <li>How intense is it right now on a scale from 1 (barely there) to 10 (all-consuming)?</li>
+                  <li>What do you need or long for in this moment?</li>
+                </ul>
+              </aside>
               <div class="journal-actions">
                 <div class="journal-actions__primary">
                   <button class="support-button" type="submit" data-support-journal-submit data-journal-submit>
@@ -404,6 +435,8 @@
                   <a
                     class="support-button support-button--link support-button--ghost journal-open-link"
                     href="#"
+                    target="_blank"
+                    rel="noopener"
                     data-support-journal-open
                     hidden
                   >Open in Journal</a>
