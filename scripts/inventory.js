@@ -73,7 +73,11 @@ const state = {
   inventoryMessageEl: null,
   strategiesContainerEl: null,
   inventoryToggleButton: null,
+  jumpToStrategiesButton: null,
+  inventoryListHeading: null,
   showStrategies: false,
+  summaryFilter: 'all',
+  summaryFilterButtons: [],
   journalEntries: [],
   journalStore: null,
   journalForm: null,
@@ -104,6 +108,8 @@ const state = {
   journalSavedTimer: null,
   journalSaveLabel: '',
 };
+
+const SUMMARY_FILTERS = new Set(['all', 'missing', 'ready', 'none']);
 
 function resolveJournalStore() {
   if (typeof window === 'undefined') {
@@ -640,6 +646,9 @@ function setupInventoryPage() {
   state.strategiesContainerEl = document.querySelector('[data-strategies-container]');
   state.showStrategies = state.strategiesContainerEl ? !state.strategiesContainerEl.hidden : false;
   state.inventoryToggleButton = document.querySelector('[data-inventory-toggle]');
+  state.jumpToStrategiesButton = document.querySelector('[data-jump-to-strategies]');
+  state.inventoryListHeading = document.getElementById('inventory-list-heading');
+  state.summaryFilterButtons = Array.from(document.querySelectorAll('[data-summary-filter]'));
 
   if (state.inventoryToggleButton) {
     state.inventoryToggleButton.addEventListener('click', () => {
@@ -647,8 +656,20 @@ function setupInventoryPage() {
     });
   }
 
+  if (state.jumpToStrategiesButton) {
+    state.jumpToStrategiesButton.addEventListener('click', handleJumpToStrategies);
+  }
+
+  state.summaryFilterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.summaryFilter || 'all';
+      setSummaryFilter(filter);
+    });
+  });
+
   updateStrategiesVisibility();
   updateInventoryToggleLabel();
+  updateSummaryFilterButtons();
 
   captureNeedsFromForm();
   renderInventoryViews();
@@ -1880,6 +1901,7 @@ function loadJournalReferenceData() {
 
 function renderInventoryViews() {
   renderInventorySummary();
+  applySummaryFilter();
   renderInventoryList();
   updateInventoryCount();
   updateStrategiesVisibility();
@@ -3233,6 +3255,86 @@ function renderInventorySummary() {
   });
 }
 
+function handleJumpToStrategies(event) {
+  if (event) {
+    event.preventDefault();
+  }
+  jumpToSavedStrategies();
+}
+
+function jumpToSavedStrategies() {
+  setShowStrategies(true);
+  if (!state.strategiesContainerEl) {
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    const heading = state.inventoryListHeading;
+    const target = heading || state.strategiesContainerEl;
+    if (target && typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (heading && typeof heading.focus === 'function') {
+      try {
+        heading.focus({ preventScroll: true });
+      } catch (error) {
+        heading.focus();
+      }
+    }
+  });
+}
+
+function setSummaryFilter(nextFilter) {
+  const normalized = SUMMARY_FILTERS.has(nextFilter) ? nextFilter : 'all';
+  if (state.summaryFilter === normalized) {
+    applySummaryFilter();
+    return;
+  }
+  state.summaryFilter = normalized;
+  applySummaryFilter();
+}
+
+function updateSummaryFilterButtons() {
+  state.summaryFilterButtons.forEach((button) => {
+    const value = button.dataset.summaryFilter || 'all';
+    const isActive = value === state.summaryFilter;
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    button.classList.toggle('inventory-summary__filter-button--active', isActive);
+  });
+}
+
+function applySummaryFilter() {
+  if (!state.inventorySummaryEl) {
+    return;
+  }
+
+  const filter = state.summaryFilter;
+  const hideAll = filter === 'none';
+
+  if (hideAll) {
+    state.inventorySummaryEl.hidden = true;
+    state.inventorySummaryEl.setAttribute('aria-hidden', 'true');
+    updateSummaryFilterButtons();
+    return;
+  }
+
+  state.inventorySummaryEl.hidden = false;
+  state.inventorySummaryEl.removeAttribute('aria-hidden');
+
+  const items = state.inventorySummaryEl.querySelectorAll('.inventory-summary__item');
+  items.forEach((item) => {
+    let shouldHide = false;
+    if (filter === 'missing') {
+      shouldHide = !item.classList.contains('inventory-summary__item--missing');
+    } else if (filter === 'ready') {
+      shouldHide = !item.classList.contains('inventory-summary__item--ready');
+    }
+    item.hidden = shouldHide;
+  });
+
+  updateSummaryFilterButtons();
+}
+
 function renderInventoryList() {
   if (!state.inventoryListEl) {
     return;
@@ -3380,6 +3482,9 @@ function updateInventoryToggleLabel() {
   const suffix = !isOpen && total ? ` (${total})` : '';
   state.inventoryToggleButton.textContent = `${baseLabel}${suffix}`;
   state.inventoryToggleButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  if (state.jumpToStrategiesButton) {
+    state.jumpToStrategiesButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
   if (state.strategiesContainerEl) {
     const panelId = state.strategiesContainerEl.id || 'strategies-list';
     state.strategiesContainerEl.id = panelId;
