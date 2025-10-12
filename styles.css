@@ -1137,6 +1137,13 @@ button.site-nav__link {
   --magnet-hover-offset: 0px;
 }
 
+.magnet-board:not([data-ready='1']) .magnet {
+  position: static;
+  transform: none !important;
+  touch-action: auto;
+  transition: none;
+}
+
 .magnet-board[data-active='1'] .magnet {
   cursor: grab;
   transition: transform 0.1s ease, box-shadow 0.18s ease;
