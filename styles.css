@@ -597,10 +597,85 @@ button.site-nav__link {
 }
 
 .emotion-compass__readout {
+  --energy-color: color-mix(in srgb, var(--lavender) 55%, #ffffff 45%);
+  --energy-ring: color-mix(in srgb, var(--lavender) 60%, transparent);
+  --valence-color: color-mix(in srgb, var(--sky) 55%, #ffffff 45%);
+  --valence-ring: color-mix(in srgb, var(--sky) 60%, transparent);
   margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.emotion-compass__readout[data-energy-state='low'] {
+  --energy-color: color-mix(in srgb, var(--lavender) 65%, #ffffff 35%);
+  --energy-ring: color-mix(in srgb, var(--lavender) 72%, transparent);
+}
+
+.emotion-compass__readout[data-energy-state='high'] {
+  --energy-color: color-mix(in srgb, var(--gold) 60%, #ffffff 40%);
+  --energy-ring: color-mix(in srgb, var(--gold) 70%, transparent);
+}
+
+.emotion-compass__readout[data-valence-state='pleasant'] {
+  --valence-color: color-mix(in srgb, var(--mint) 65%, #ffffff 35%);
+  --valence-ring: color-mix(in srgb, var(--mint) 72%, transparent);
+}
+
+.emotion-compass__readout[data-valence-state='unpleasant'] {
+  --valence-color: color-mix(in srgb, var(--rose) 62%, #ffffff 38%);
+  --valence-ring: color-mix(in srgb, var(--rose) 70%, transparent);
+}
+
+.compass-readout__chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 1rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 35%, transparent);
+  background: color-mix(in srgb, var(--outline) 6%, transparent);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  min-width: min(220px, 100%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.compass-readout__chip--energy {
+  background: var(--energy-color);
+  box-shadow: 0 8px 0 var(--energy-ring);
+}
+
+.compass-readout__chip--valence {
+  background: var(--valence-color);
+  box-shadow: 0 8px 0 var(--valence-ring);
+}
+
+.compass-readout__label {
+  font-size: 0.75rem;
   font-weight: 700;
-  font-size: 1rem;
-  text-align: center;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 60%, transparent);
+}
+
+.compass-readout__value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.support-jump-link {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.support-jump-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 0.125rem;
+  border-radius: 0.125rem;
 }
 
 .sensation-actions,

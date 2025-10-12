@@ -67,6 +67,10 @@
     root.appendChild(board);
 
     const readout = root.parentElement?.querySelector('[data-compass-readout]');
+    const energyLabelNode =
+      readout instanceof HTMLElement ? readout.querySelector('[data-compass-energy]') : null;
+    const valenceLabelNode =
+      readout instanceof HTMLElement ? readout.querySelector('[data-compass-valence]') : null;
 
     let energy = 0;
     let valence = 0;
@@ -85,7 +89,14 @@
       root.dataset.energyKey = energyInfo.key;
       root.dataset.valenceKey = valenceInfo.key;
       if (readout instanceof HTMLElement) {
-        readout.textContent = `Energy: ${energyInfo.label} · Pleasantness: ${valenceInfo.label}`;
+        readout.dataset.energyState = energyInfo.key;
+        readout.dataset.valenceState = valenceInfo.key;
+      }
+      if (energyLabelNode instanceof HTMLElement) {
+        energyLabelNode.textContent = energyInfo.label;
+      }
+      if (valenceLabelNode instanceof HTMLElement) {
+        valenceLabelNode.textContent = valenceInfo.label;
       }
     }
 
