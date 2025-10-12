@@ -1,5 +1,11 @@
 export interface PhysicsConfig {
   drift: number; // px/s
+  tiltStrength: number;
+  tiltDriftScale: number;
+  tiltDeadzone: number;
+  tiltGammaNormalizer: number;
+  tiltBetaNormalizer: number;
+  tiltBetaUprightOffset: number;
   damping: number; // per frame coefficient ~0.96-0.985
   sepRadiusScale: number;
   sepStrength: number;
@@ -32,6 +38,8 @@ export interface StartPhysicsOptions {
   onPositions?: (list: { id: string; x: number; y: number }[]) => void;
   getBoardSize?: () => { width: number; height: number };
   onDragRelease?: () => void;
+  tiltPermission?: Promise<unknown>;
+  onTiltPermissionDenied?: (reason: unknown) => void;
 }
 
 interface InternalMagnetState extends MagnetSnapshot {
@@ -56,10 +64,17 @@ interface InternalState {
   shufflePromise: Promise<void> | null;
   lastShuffleTime: number;
   baseHeight: number;
+  tilt: { x: number; y: number; targetX: number; targetY: number };
 }
 
 const DEFAULT_CONFIG: PhysicsConfig = {
   drift: 3,
+  tiltStrength: 40,
+  tiltDriftScale: 0.35,
+  tiltDeadzone: 0.02,
+  tiltGammaNormalizer: 30,
+  tiltBetaNormalizer: 30,
+  tiltBetaUprightOffset: 90,
   damping: 0.975,
   sepRadiusScale: 0.7,
   sepStrength: 18,
@@ -73,6 +88,8 @@ const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 24;
 const SHUFFLE_DEBOUNCE_MS = 500;
+const TILT_RESPONSE_RATE = 10;
+const TILT_SETTLE_THRESHOLD = 0.01;
 
 const clamp = (value: number, min: number, max: number) => {
   if (value < min) return min;
@@ -109,6 +126,152 @@ const waitForAnimationFrames = async (count = 1): Promise<void> => {
 const delay = (ms: number) => new Promise<void>((resolve) => {
   window.setTimeout(resolve, ms);
 });
+
+const supportsDeviceOrientation = () => typeof window !== 'undefined' && 'DeviceOrientationEvent' in window;
+
+const hasDeviceOrientationPermissionAPI = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  const DeviceOrientation = window.DeviceOrientationEvent as
+    | (typeof DeviceOrientationEvent & { requestPermission?: () => Promise<unknown> })
+    | undefined;
+  return Boolean(DeviceOrientation && typeof DeviceOrientation.requestPermission === 'function');
+};
+
+const isTiltPermissionGranted = (value: unknown): boolean => value === 'granted' || value === true;
+
+const applyTiltDeadzone = (value: number, deadzone: number) => {
+  if (Math.abs(value) < deadzone) {
+    return 0;
+  }
+  return clamp(value, -1, 1);
+};
+
+const addTiltListener = (
+  state: InternalState,
+  options: { permissionPromise?: Promise<unknown>; onPermissionDenied?: (reason: unknown) => void } = {},
+): (() => void) | null => {
+  if (!supportsDeviceOrientation()) {
+    return null;
+  }
+
+  const handleOrientation = (event: DeviceOrientationEvent) => {
+    const tilt = state.tilt;
+    if (!tilt) {
+      return;
+    }
+
+    const {
+      tiltDeadzone = DEFAULT_CONFIG.tiltDeadzone,
+      tiltGammaNormalizer = DEFAULT_CONFIG.tiltGammaNormalizer,
+      tiltBetaNormalizer = DEFAULT_CONFIG.tiltBetaNormalizer,
+      tiltBetaUprightOffset = DEFAULT_CONFIG.tiltBetaUprightOffset,
+    } = state.config ?? {};
+
+    if (typeof event.gamma === 'number' && Number.isFinite(event.gamma) && tiltGammaNormalizer) {
+      const normalizedX = applyTiltDeadzone(event.gamma / tiltGammaNormalizer, tiltDeadzone);
+      tilt.targetX = normalizedX;
+    }
+
+    if (typeof event.beta === 'number' && Number.isFinite(event.beta) && tiltBetaNormalizer) {
+      const normalizedY = applyTiltDeadzone(
+        (event.beta - tiltBetaUprightOffset) / tiltBetaNormalizer,
+        tiltDeadzone,
+      );
+      tilt.targetY = normalizedY;
+    }
+  };
+
+  let attached = false;
+  let active = true;
+
+  const attachListener = () => {
+    if (!active || attached) {
+      return;
+    }
+    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+    attached = true;
+  };
+
+  const detachListener = () => {
+    if (!attached) {
+      return;
+    }
+    window.removeEventListener('deviceorientation', handleOrientation);
+    attached = false;
+  };
+
+  const handlePermissionDenied = (reason: unknown) => {
+    const tilt = state.tilt;
+    if (tilt) {
+      tilt.x = 0;
+      tilt.y = 0;
+      tilt.targetX = 0;
+      tilt.targetY = 0;
+    }
+    options.onPermissionDenied?.(reason);
+  };
+
+  if (hasDeviceOrientationPermissionAPI()) {
+    const { permissionPromise } = options;
+    if (permissionPromise && typeof permissionPromise.then === 'function') {
+      permissionPromise
+        .then((result) => {
+          if (!active) {
+            return;
+          }
+          if (isTiltPermissionGranted(result)) {
+            attachListener();
+          } else {
+            handlePermissionDenied(result);
+          }
+        })
+        .catch((error) => {
+          if (!active) {
+            return;
+          }
+          handlePermissionDenied(error);
+        });
+    } else {
+      Promise.resolve().then(() => {
+        if (!active) {
+          return;
+        }
+        handlePermissionDenied(new Error('deviceorientation permission unavailable'));
+      });
+    }
+
+    return () => {
+      active = false;
+      detachListener();
+    };
+  }
+
+  attachListener();
+  return () => {
+    active = false;
+    detachListener();
+  };
+};
+
+const updateTilt = (state: InternalState, dt: number) => {
+  const tilt = state.tilt;
+  if (!tilt) {
+    return;
+  }
+
+  const rate = Math.min(dt * TILT_RESPONSE_RATE, 1);
+  tilt.x += (tilt.targetX - tilt.x) * rate;
+  tilt.y += (tilt.targetY - tilt.y) * rate;
+
+  if (Math.abs(tilt.x) < TILT_SETTLE_THRESHOLD) {
+    tilt.x = 0;
+  }
+  if (Math.abs(tilt.y) < TILT_SETTLE_THRESHOLD) {
+    tilt.y = 0;
+  }
+};
 
 const getBoardSize = (
   state: InternalState,
@@ -369,12 +532,31 @@ const applyPointerField = (state: InternalState, dt: number) => {
 };
 
 const integrateMotion = (state: InternalState, dt: number) => {
-  const { drift, damping, edgeBounce } = state.config;
+  const {
+    drift,
+    damping,
+    edgeBounce,
+    tiltStrength = DEFAULT_CONFIG.tiltStrength,
+    tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
+  } = state.config;
   const { width, height } = getBoardSize(state);
+  const jitterFloor = clamp(
+    Number.isFinite(tiltDriftScale) ? tiltDriftScale : DEFAULT_CONFIG.tiltDriftScale,
+    0,
+    1,
+  );
+  const tiltX = state.tilt?.x ?? 0;
+  const tiltY = state.tilt?.y ?? 0;
+  const tiltAbsX = Math.min(Math.abs(tiltX), 1);
+  const tiltAbsY = Math.min(Math.abs(tiltY), 1);
+  const jitterScaleX = clamp(1 - tiltAbsX * (1 - jitterFloor), 0, 1);
+  const jitterScaleY = clamp(1 - tiltAbsY * (1 - jitterFloor), 0, 1);
   state.magnets.forEach((magnet) => {
     if (!magnet.dragging) {
-      magnet.vx += (Math.random() * 2 - 1) * drift * dt;
-      magnet.vy += (Math.random() * 2 - 1) * drift * dt;
+      magnet.vx += (Math.random() * 2 - 1) * drift * jitterScaleX * dt;
+      magnet.vy += (Math.random() * 2 - 1) * drift * jitterScaleY * dt;
+      magnet.vx += tiltStrength * tiltX * dt;
+      magnet.vy += tiltStrength * tiltY * dt;
     }
     magnet.vx *= damping;
     magnet.vy *= damping;
@@ -419,6 +601,7 @@ const frameStep = (state: InternalState, timestamp: number) => {
   for (let i = 0; i < iterations; i += 1) {
     applySeparationForces(state, dt);
     applyPointerField(state, dt);
+    updateTilt(state, dt);
     integrateMotion(state, dt);
   }
   state.lastTimestamp = timestamp;
@@ -556,6 +739,12 @@ const shuffleMagnets = async (state: InternalState): Promise<void> => {
       state.shufflePromise = null;
       state.dragging = null;
       state.pointerField.active = false;
+      if (state.tilt) {
+        state.tilt.x = 0;
+        state.tilt.y = 0;
+        state.tilt.targetX = 0;
+        state.tilt.targetY = 0;
+      }
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
         magnet.pointerId = null;
@@ -602,14 +791,25 @@ export function startPhysics(options: StartPhysicsOptions): { stop: () => void; 
           parsePx((options.board instanceof HTMLElement ? getComputedStyle(options.board).height : '') || '0'),
         0,
       ) || 0,
+    tilt: {
+      x: 0,
+      y: 0,
+      targetX: 0,
+      targetY: 0,
+    },
   };
 
   const removePointerListeners = addPointerListeners(state);
+  const removeTiltListener = addTiltListener(state, {
+    permissionPromise: options.tiltPermission,
+    onPermissionDenied: options.onTiltPermissionDenied,
+  });
   state.animationFrame = window.requestAnimationFrame((timestamp) => frameStep(state, timestamp));
 
   return {
     stop: () => {
       removePointerListeners?.();
+      removeTiltListener?.();
       stopAnimation(state);
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
@@ -622,6 +822,12 @@ export function startPhysics(options: StartPhysicsOptions): { stop: () => void; 
       state.isShuffling = false;
       state.shufflePromise = null;
       state.board.classList.remove('no-transitions');
+      if (state.tilt) {
+        state.tilt.x = 0;
+        state.tilt.y = 0;
+        state.tilt.targetX = 0;
+        state.tilt.targetY = 0;
+      }
     },
     shuffle: () => {
       return shuffleMagnets(state);

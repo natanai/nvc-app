@@ -1,5 +1,11 @@
 const DEFAULT_CONFIG = {
   drift: 3,
+  tiltStrength: 40,
+  tiltDriftScale: 0.35,
+  tiltDeadzone: 0.02,
+  tiltGammaNormalizer: 30,
+  tiltBetaNormalizer: 30,
+  tiltBetaUprightOffset: 90,
   damping: 0.975,
   sepRadiusScale: 0.7,
   sepStrength: 18,
@@ -16,11 +22,7 @@ const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 24;
 const SHUFFLE_DEBOUNCE_MS = 500;
 const TILT_RESPONSE_RATE = 10;
-const TILT_TARGET_DEADZONE = 0.05;
 const TILT_SETTLE_THRESHOLD = 0.01;
-const TILT_GAMMA_NORMALIZER = 45;
-const TILT_BETA_NORMALIZER = 45;
-const TILT_BETA_UPRIGHT_OFFSET = 90;
 
 const getNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
   ? performance.now()
@@ -66,8 +68,8 @@ const hasDeviceOrientationPermissionAPI = () =>
 
 const isTiltPermissionGranted = (value) => value === 'granted' || value === true;
 
-const applyTiltDeadzone = (value) => {
-  if (Math.abs(value) < TILT_TARGET_DEADZONE) {
+const applyTiltDeadzone = (value, deadzone) => {
+  if (Math.abs(value) < deadzone) {
     return 0;
   }
   return clamp(value, -1, 1);
@@ -84,13 +86,23 @@ const addTiltListener = (state, options = {}) => {
       return;
     }
 
-    if (Number.isFinite(event.gamma)) {
-      const normalizedX = applyTiltDeadzone(event.gamma / TILT_GAMMA_NORMALIZER);
+    const {
+      tiltDeadzone = DEFAULT_CONFIG.tiltDeadzone,
+      tiltGammaNormalizer = DEFAULT_CONFIG.tiltGammaNormalizer,
+      tiltBetaNormalizer = DEFAULT_CONFIG.tiltBetaNormalizer,
+      tiltBetaUprightOffset = DEFAULT_CONFIG.tiltBetaUprightOffset,
+    } = state.config ?? {};
+
+    if (Number.isFinite(event.gamma) && tiltGammaNormalizer) {
+      const normalizedX = applyTiltDeadzone(event.gamma / tiltGammaNormalizer, tiltDeadzone);
       tilt.targetX = normalizedX;
     }
 
-    if (Number.isFinite(event.beta)) {
-      const normalizedY = applyTiltDeadzone((event.beta - TILT_BETA_UPRIGHT_OFFSET) / TILT_BETA_NORMALIZER);
+    if (Number.isFinite(event.beta) && tiltBetaNormalizer) {
+      const normalizedY = applyTiltDeadzone(
+        (event.beta - tiltBetaUprightOffset) / tiltBetaNormalizer,
+        tiltDeadzone,
+      );
       tilt.targetY = normalizedY;
     }
   };
@@ -503,14 +515,27 @@ const applyPointerField = (state, dt) => {
 };
 
 const integrateMotion = (state, dt) => {
-  const { drift, damping, edgeBounce } = state.config;
+  const {
+    drift,
+    damping,
+    edgeBounce,
+    tiltStrength = DEFAULT_CONFIG.tiltStrength,
+    tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
+  } = state.config;
   const { width, height } = getBoardSize(state);
+  const jitterFloor = clamp(Number.isFinite(tiltDriftScale) ? tiltDriftScale : DEFAULT_CONFIG.tiltDriftScale, 0, 1);
+  const tiltX = state.tilt?.x ?? 0;
+  const tiltY = state.tilt?.y ?? 0;
+  const tiltAbsX = Math.min(Math.abs(tiltX), 1);
+  const tiltAbsY = Math.min(Math.abs(tiltY), 1);
+  const jitterScaleX = clamp(1 - tiltAbsX * (1 - jitterFloor), 0, 1);
+  const jitterScaleY = clamp(1 - tiltAbsY * (1 - jitterFloor), 0, 1);
   state.magnets.forEach((magnet) => {
     if (!magnet.dragging) {
-      const tiltX = state.tilt?.x ?? 0;
-      const tiltY = state.tilt?.y ?? 0;
-      magnet.vx += (Math.random() * 2 - 1 + tiltX) * drift * dt;
-      magnet.vy += (Math.random() * 2 - 1 + tiltY) * drift * dt;
+      magnet.vx += (Math.random() * 2 - 1) * drift * jitterScaleX * dt;
+      magnet.vy += (Math.random() * 2 - 1) * drift * jitterScaleY * dt;
+      magnet.vx += tiltStrength * tiltX * dt;
+      magnet.vy += tiltStrength * tiltY * dt;
     }
     magnet.vx *= damping;
     magnet.vy *= damping;
