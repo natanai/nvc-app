@@ -505,7 +505,7 @@ function renderCategory(type, items) {
       { label: title }
     ],
     main,
-    scripts: [{ src: 'assets/js/magnets/index.js', type: 'module' }],
+    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
   });
 
   writePage(`${type}/index.html`, html);
@@ -529,7 +529,7 @@ function renderSituation(item) {
       { label: item.title }
     ],
     main,
-    scripts: [{ src: 'assets/js/magnets/index.js', type: 'module' }],
+    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
   });
 
   writePage(`situations/${item.slug}/index.html`, html);
@@ -552,7 +552,7 @@ function renderFeeling(item) {
       { label: item.title }
     ],
     main,
-    scripts: [{ src: 'assets/js/magnets/index.js', type: 'module' }],
+    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);

@@ -649,3 +649,79 @@ export function startPhysics(options) {
   };
 }
 
+const STORAGE_PREFIX = 'magnetPositions:';
+
+const isStorageAvailable = () => {
+  try {
+    const testKey = '__magnet-test__';
+    window.localStorage.setItem(testKey, '1');
+    window.localStorage.removeItem(testKey);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const normalizeKey = (key) => {
+  if (key.startsWith(STORAGE_PREFIX)) {
+    return key;
+  }
+  return `${STORAGE_PREFIX}${key}`;
+};
+
+export function loadPositions(storageKey, boardSize, magnetSizes) {
+  if (!isStorageAvailable()) {
+    return null;
+  }
+  try {
+    const raw = window.localStorage.getItem(normalizeKey(storageKey));
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
+      return null;
+    }
+    const snapshots = [];
+    for (const [id, value] of Object.entries(parsed.magnets)) {
+      if (!value || typeof value !== 'object') {
+        continue;
+      }
+      const entry = value;
+      const width = magnetSizes.get(id)?.width ?? 0;
+      const height = magnetSizes.get(id)?.height ?? 0;
+      const maxX = Math.max(boardSize.width - width, 0);
+      const maxY = Math.max(boardSize.height - height, 0);
+      const xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
+      const yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
+      const x = clamp(xPct * boardSize.width, 0, maxX);
+      const y = clamp(yPct * boardSize.height, 0, maxY);
+      snapshots.push({ id, x, y, vx: 0, vy: 0, w: width, h: height });
+    }
+    return snapshots.length ? snapshots : null;
+  } catch {
+    return null;
+  }
+}
+
+export function savePositions(storageKey, boardSize, magnets) {
+  if (!isStorageAvailable()) {
+    return;
+  }
+  const payload = { magnets: {} };
+  const width = boardSize.width || 1;
+  const height = boardSize.height || 1;
+  for (const magnet of magnets) {
+    const xPct = width ? clamp(magnet.x / width, 0, 1) : 0;
+    const yPct = height ? clamp(magnet.y / height, 0, 1) : 0;
+    payload.magnets[magnet.id] = {
+      xPct: Number(xPct.toFixed(4)),
+      yPct: Number(yPct.toFixed(4)),
+    };
+  }
+  try {
+    window.localStorage.setItem(normalizeKey(storageKey), JSON.stringify(payload));
+  } catch {
+    // Swallow write errors (quota, private mode, etc.).
+  }
+}
