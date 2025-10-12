@@ -2786,6 +2786,68 @@ body.has-support-journal-open {
   color: var(--ink-soft);
 }
 
+.journal-needs-summary {
+  display: grid;
+  gap: clamp(0.4rem, 1.2vw, 0.6rem);
+  padding: clamp(0.6rem, 2vw, 0.85rem);
+  border-radius: var(--radius-xl);
+  border: 2px dashed color-mix(in srgb, var(--mint) 52%, transparent);
+  background: color-mix(in srgb, #ffffff 92%, var(--mint) 8%);
+}
+
+.journal-needs-summary__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ink-soft) 82%, var(--mint) 18%);
+}
+
+.journal-needs-summary__label::before {
+  content: '✓';
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ink) 74%, var(--mint) 26%);
+}
+
+.journal-needs-summary__empty {
+  margin: 0;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--ink-soft) 74%, transparent);
+}
+
+.journal-needs-summary__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journal-needs-summary__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid color-mix(in srgb, var(--mint) 58%, transparent);
+  background: color-mix(in srgb, #ffffff 90%, var(--mint) 10%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--ink) 78%, var(--mint) 22%);
+}
+
+.journal-needs-summary__item::before {
+  content: '✓';
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--ink) 78%, var(--mint) 22%);
+}
+
 .journal-form__field--notes label,
 .inventory-journal-form__field--notes label {
   position: static;
