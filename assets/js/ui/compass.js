@@ -1,6 +1,5 @@
 (function () {
   const COMPASS_SELECTOR = '[data-compass]';
-  const KEYBOARD_STEP = 0.12;
   const ENERGY_THRESHOLD = 0.33;
   const VALENCE_THRESHOLD = 0.33;
 
@@ -57,19 +56,9 @@
 
     const board = document.createElement('div');
     board.className = 'emotion-compass__board';
-    board.tabIndex = 0;
-    board.setAttribute('role', 'application');
-    board.setAttribute('aria-roledescription', 'Emotion compass');
     const ariaLabel = root.getAttribute('aria-label');
     if (ariaLabel) {
       board.setAttribute('aria-label', ariaLabel);
-    }
-    const hint = root.querySelector('[data-compass-hint]');
-    if (hint instanceof HTMLElement) {
-      if (!hint.id) {
-        hint.id = `compass-hint-${Math.random().toString(36).slice(2, 9)}`;
-      }
-      board.setAttribute('aria-describedby', hint.id);
     }
 
     const handle = document.createElement('div');
@@ -174,39 +163,6 @@
       }
     }
 
-    function handleKeyDown(event) {
-      const { key } = event;
-      let handled = false;
-      if (key === 'ArrowUp') {
-        applyValue(energy + KEYBOARD_STEP, valence, { userTriggered: true });
-        handled = true;
-      } else if (key === 'ArrowDown') {
-        applyValue(energy - KEYBOARD_STEP, valence, { userTriggered: true });
-        handled = true;
-      } else if (key === 'ArrowRight') {
-        applyValue(energy, valence + KEYBOARD_STEP, { userTriggered: true });
-        handled = true;
-      } else if (key === 'ArrowLeft') {
-        applyValue(energy, valence - KEYBOARD_STEP, { userTriggered: true });
-        handled = true;
-      } else if (key === 'Home') {
-        applyValue(0, -1, { userTriggered: true });
-        handled = true;
-      } else if (key === 'End') {
-        applyValue(0, 1, { userTriggered: true });
-        handled = true;
-      } else if (key === 'PageUp') {
-        applyValue(1, 0, { userTriggered: true });
-        handled = true;
-      } else if (key === 'PageDown') {
-        applyValue(-1, 0, { userTriggered: true });
-        handled = true;
-      }
-      if (handled) {
-        event.preventDefault();
-      }
-    }
-
     board.addEventListener('pointerdown', handlePointerDown);
     board.addEventListener('pointermove', handlePointerMove);
     board.addEventListener('pointerup', stopDragging);
@@ -215,7 +171,6 @@
       isDragging = false;
       delete board.dataset.dragging;
     });
-    board.addEventListener('keydown', handleKeyDown);
 
     updateVisuals();
   }

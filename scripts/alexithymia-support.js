@@ -1261,27 +1261,6 @@
     }, 120);
   }
 
-  function handleSupportTagKeydown(event) {
-    if (event.key === 'Escape') {
-      hideSupportTagSuggestions();
-      return;
-    }
-    if (!state.tagSuggestions.length) {
-      return;
-    }
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault();
-      const direction = event.key === 'ArrowDown' ? 1 : -1;
-      const nextIndex =
-        (state.tagActiveIndex + direction + state.tagSuggestions.length) % state.tagSuggestions.length;
-      setSupportTagActive(nextIndex);
-    } else if ((event.key === 'Enter' || event.key === 'Tab') && state.tagActiveIndex >= 0) {
-      event.preventDefault();
-      const tag = state.tagSuggestions[state.tagActiveIndex];
-      applySupportTagSuggestion(tag);
-    }
-  }
-
   function handleSupportTagSuggestionClick(event) {
     const button = event.target.closest('[data-support-journal-tag]');
     if (!button) {
@@ -1656,7 +1635,6 @@
       supportJournalTagsInput.addEventListener('input', handleSupportTagInput);
       supportJournalTagsInput.addEventListener('focus', handleSupportTagFocus);
       supportJournalTagsInput.addEventListener('blur', handleSupportTagBlur);
-      supportJournalTagsInput.addEventListener('keydown', handleSupportTagKeydown);
     }
     supportJournalTagSuggestions?.addEventListener('mousedown', (event) => event.preventDefault());
     supportJournalTagSuggestions?.addEventListener('click', handleSupportTagSuggestionClick);
