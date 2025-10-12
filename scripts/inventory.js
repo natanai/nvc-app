@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
+const THEME_HIGH_CONTRAST_KEY = 'themeHighContrast';
 const JOURNAL_STORAGE_KEY = 'nvcApp.journal';
 const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
 
@@ -41,6 +42,8 @@ const paletteState = {
   currentPreset: '',
   lastTrigger: null,
   styleElement: null,
+  highContrastToggle: null,
+  highContrastEnabled: false,
 };
 
 const SECTION_ALIASES = new Map([
@@ -649,6 +652,7 @@ async function initColorCustomizer() {
     return;
   }
 
+  paletteState.highContrastEnabled = loadHighContrastPreference();
   buildPaletteUi();
 
   const themePreapplied = document.documentElement.getAttribute('data-theme-preapplied') === 'true';
@@ -830,6 +834,29 @@ function buildPaletteUi() {
     paletteState.swatches.set(color.key, swatch);
   });
 
+  const contrastField = document.createElement('div');
+  contrastField.className = 'palette-form__field palette-form__field--toggle';
+
+  const contrastLabel = document.createElement('span');
+  contrastLabel.className = 'palette-form__label';
+  contrastLabel.id = 'paletteHighContrastLabel';
+  contrastLabel.textContent = 'High contrast';
+
+  const contrastToggle = document.createElement('button');
+  contrastToggle.type = 'button';
+  contrastToggle.className = 'palette-form__switch';
+  contrastToggle.setAttribute('role', 'switch');
+  contrastToggle.setAttribute('aria-labelledby', 'paletteHighContrastLabel');
+  contrastToggle.addEventListener('click', () => {
+    setHighContrastEnabled(!paletteState.highContrastEnabled);
+  });
+
+  contrastField.append(contrastLabel, contrastToggle);
+  form.appendChild(contrastField);
+
+  paletteState.highContrastToggle = contrastToggle;
+  updateHighContrastToggle();
+
   const actions = document.createElement('div');
   actions.className = 'palette-form__actions';
 
@@ -1010,6 +1037,7 @@ function updatePaletteStyleElement() {
 
 function applyColors(colors, options = {}) {
   const { presetName = '', persist = true, replace = false, skipDomUpdate = false } = options;
+  const root = document.documentElement;
 
   if (replace) {
     const nextColors = { ...paletteState.defaultColors };
@@ -1028,9 +1056,20 @@ function applyColors(colors, options = {}) {
   COLOR_INPUTS.forEach(({ key, varName }) => {
     const value = paletteState.currentColors[key];
     if (value && !skipDomUpdate) {
-      document.documentElement.style.setProperty(varName, value);
+      root?.style?.setProperty(varName, value);
     }
   });
+
+  if (!skipDomUpdate && root) {
+    const buttonBase = paletteState.currentColors.rose || paletteState.defaultColors.rose || DEFAULT_PALETTE.rose;
+    if (buttonBase) {
+      root.style.setProperty('--btn-bg', buttonBase);
+    }
+    root.style.setProperty('--btn-fg', '#111111');
+    root.style.setProperty('--chip-fg', '#111111');
+    applyHighContrastOverlay({ skipAutoContrast: true });
+    runAutoContrast();
+  }
 
   updatePaletteStyleElement();
 
@@ -1043,6 +1082,112 @@ function applyColors(colors, options = {}) {
 
   if (persist) {
     saveTheme({ values: paletteState.currentColors, preset: paletteState.currentPreset });
+  }
+}
+
+function applyHighContrastOverlay(options = {}) {
+  const { skipAutoContrast = false, skipDomUpdate = false } = options;
+  if (skipDomUpdate) {
+    return;
+  }
+
+  const root = document.documentElement;
+  if (!root) {
+    return;
+  }
+
+  const baseInk = paletteState.currentColors.ink || paletteState.defaultColors.ink || DEFAULT_PALETTE.ink;
+  let nextInk = baseInk;
+
+  if (paletteState.highContrastEnabled) {
+    try {
+      const adjust = window.NVCContrast?.adjustLightness;
+      if (typeof adjust === 'function' && baseInk) {
+        const darker = adjust(baseInk, -20);
+        if (darker) {
+          nextInk = darker;
+        }
+      }
+    } catch (error) {
+      console.warn('Unable to adjust ink for high contrast', error);
+    }
+    root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 70%, transparent)');
+  } else {
+    root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 55%, transparent)');
+  }
+
+  if (nextInk) {
+    root.style.setProperty('--ink', nextInk);
+  }
+
+  if (!skipAutoContrast) {
+    runAutoContrast();
+  }
+}
+
+function runAutoContrast() {
+  try {
+    if (window.NVCContrast && typeof window.NVCContrast.autoContrast === 'function') {
+      window.NVCContrast.autoContrast('--btn-bg', '--btn-fg');
+    }
+  } catch (error) {
+    console.warn('Unable to auto-adjust button contrast', error);
+  }
+}
+
+function loadHighContrastPreference() {
+  try {
+    return window.localStorage ? localStorage.getItem(THEME_HIGH_CONTRAST_KEY) === '1' : false;
+  } catch (error) {
+    console.warn('Unable to read high contrast preference', error);
+    return false;
+  }
+}
+
+function saveHighContrastPreference(enabled) {
+  try {
+    if (window.localStorage) {
+      localStorage.setItem(THEME_HIGH_CONTRAST_KEY, enabled ? '1' : '0');
+    }
+  } catch (error) {
+    console.warn('Unable to persist high contrast preference', error);
+  }
+}
+
+function updateHighContrastToggle() {
+  const toggle = paletteState.highContrastToggle;
+  if (!toggle) {
+    return;
+  }
+  const enabled = !!paletteState.highContrastEnabled;
+  toggle.setAttribute('aria-checked', enabled ? 'true' : 'false');
+  toggle.classList.toggle('is-on', enabled);
+  toggle.textContent = enabled ? 'On' : 'Off';
+}
+
+function reapplyPaletteColors() {
+  applyColors({}, { persist: false, presetName: paletteState.currentPreset });
+}
+
+function setHighContrastEnabled(enabled, options = {}) {
+  const { persistPreference = true, reapply = true, force = false } = options;
+  const next = !!enabled;
+  if (!force && paletteState.highContrastEnabled === next) {
+    updateHighContrastToggle();
+    return;
+  }
+
+  paletteState.highContrastEnabled = next;
+  updateHighContrastToggle();
+
+  if (persistPreference) {
+    saveHighContrastPreference(next);
+  }
+
+  if (reapply) {
+    reapplyPaletteColors();
+  } else {
+    applyHighContrastOverlay();
   }
 }
 
