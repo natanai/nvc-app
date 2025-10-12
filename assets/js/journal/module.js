@@ -904,6 +904,7 @@ class JournalFormController {
         this.resetSaveButton();
         this.scheduleDraftSave();
       });
+      this.needsSelect.addEventListener('mousedown', (event) => this.handleNeedPointerToggle(event));
     } else if (this.needsSelect) {
       this.needsSelect.setAttribute('role', 'combobox');
       this.needsSelect.setAttribute('aria-autocomplete', 'list');
@@ -1507,6 +1508,25 @@ class JournalFormController {
       const slug = button.dataset.needSlug || '';
       this.applyNeedSuggestion({ label, slug });
     }
+  }
+
+  handleNeedPointerToggle(event) {
+    if (!(this.needsSelect instanceof HTMLSelectElement)) {
+      return;
+    }
+    const option = event.target;
+    if (!(option instanceof HTMLOptionElement)) {
+      return;
+    }
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+      return;
+    }
+    event.preventDefault();
+    option.selected = !option.selected;
+    this.needsSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    requestAnimationFrame(() => {
+      this.needsSelect?.focus();
+    });
   }
 
   handleNeedKeydown(event) {
