@@ -217,6 +217,19 @@ a:focus-visible {
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
+.site-nav__icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: block;
+}
+
+.site-nav__link--home {
+  padding: 0.45rem;
+  gap: 0;
+  justify-content: center;
+  min-width: 0;
+}
+
 button.site-nav__link {
   font: inherit;
   cursor: pointer;
@@ -1291,6 +1304,59 @@ button.site-nav__link {
 .suggestion {
   display: grid;
   gap: 1rem;
+}
+
+.strategy-quick-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 1.5rem;
+}
+
+.strategy-quick-actions__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--rose) 70%, #fff 30%);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--ink);
+  box-shadow: 0 10px 0 var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.strategy-quick-actions__link:hover,
+.strategy-quick-actions__link:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 45%, transparent);
+}
+
+.strategy-quick-actions__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .strategy-quick-actions {
+    justify-content: center;
+  }
+
+  .strategy-quick-actions__link {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .strategy-list {

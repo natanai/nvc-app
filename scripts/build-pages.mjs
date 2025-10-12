@@ -274,7 +274,15 @@ ${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
 function renderNav(basePath) {
   const homeHref = basePath || './';
   return `<nav class="site-nav" aria-label="Primary">
-        <a class="site-nav__link" href="${homeHref}">Home</a>
+        <a class="site-nav__link site-nav__link--home" href="${homeHref}">
+          <img
+            class="site-nav__icon"
+            src="${basePath}icons/home-8bit.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <span class="visually-hidden">Home</span>
+        </a>
         <a class="site-nav__link" href="${basePath}situations/">Situations</a>
         <a class="site-nav__link" href="${basePath}feelings/">Feelings</a>
         <a class="site-nav__link" href="${basePath}needs/">Needs</a>
@@ -629,6 +637,14 @@ function renderNeed(item, strategyLookup) {
     ? `<p class="page-description">${escapeHtml(item.description)}</p>`
     : '';
 
+  const quickAddHtml = `
+      <div class="strategy-quick-actions">
+        <a class="strategy-quick-actions__link" href="#suggestion-form">
+          <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
+          <span>Add personal strategy</span>
+        </a>
+      </div>`;
+
   const suggestionForm = renderStrategyForm({
     formId: 'suggestion-form',
     idPrefix: 'suggestion',
@@ -645,6 +661,7 @@ function renderNeed(item, strategyLookup) {
         <h1 class="page-title">${escapeHtml(fullTitle)}</h1>
         ${descriptionHtml}
       </header>
+      ${quickAddHtml}
       ${strategiesHtml}
       <section class="suggestion" aria-labelledby="suggestion-heading">
         <h2 id="suggestion-heading" class="section-title">Add a strategy</h2>
