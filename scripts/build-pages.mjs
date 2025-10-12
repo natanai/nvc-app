@@ -13,9 +13,13 @@ const categoryIcons = {
   needs: 'icons/needs-8bit.svg',
 };
 
-const themePreloadScript = String.raw`    <script>
+const themePreloadScript = (basePath) => {
+  const contrastSrc = `${basePath}assets/js/ui/contrast.js`;
+  return String.raw`    <script src="${contrastSrc}"></script>
+    <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
+        const HIGH_CONTRAST_KEY = 'themeHighContrast';
         const VAR_MAP = {
           plum: '--plum',
           lavender: '--lavender',
@@ -28,45 +32,101 @@ const themePreloadScript = String.raw`    <script>
           outline: '--outline',
         };
         const HEX_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+        const root = document.documentElement;
+        if (!root) {
+          return;
+        }
+        let applied = false;
         try {
           const stored = window.localStorage ? localStorage.getItem(STORAGE_KEY) : null;
-          if (!stored) {
-            return;
-          }
-          const parsed = JSON.parse(stored);
-          if (!parsed || typeof parsed !== 'object' || !parsed.values || typeof parsed.values !== 'object') {
-            return;
-          }
-          const root = document.documentElement;
-          let applied = false;
-          for (const [key, varName] of Object.entries(VAR_MAP)) {
-            let value = parsed.values[key];
-            if (typeof value !== 'string') {
-              continue;
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed && typeof parsed === 'object' && parsed.values && typeof parsed.values === 'object') {
+              for (const [key, varName] of Object.entries(VAR_MAP)) {
+                let value = parsed.values[key];
+                if (typeof value !== 'string') {
+                  continue;
+                }
+                value = value.trim();
+                if (!value) {
+                  continue;
+                }
+                if (!value.startsWith('#')) {
+                  value = '#' + value;
+                }
+                if (!HEX_PATTERN.test(value)) {
+                  continue;
+                }
+                root.style.setProperty(varName, value.toUpperCase());
+                applied = true;
+              }
             }
-            value = value.trim();
-            if (!value) {
-              continue;
-            }
-            if (!value.startsWith('#')) {
-              value = '#' + value;
-            }
-            if (!HEX_PATTERN.test(value)) {
-              continue;
-            }
-            root.style.setProperty(varName, value.toUpperCase());
-            applied = true;
-          }
-          if (applied) {
-            root.setAttribute('data-theme-preapplied', 'true');
           }
         } catch (error) {
           if (typeof console !== 'undefined' && console.warn) {
             console.warn('Unable to preapply theme', error);
           }
         }
+
+        try {
+          if (!root.style.getPropertyValue('--btn-bg')) {
+            const roseValue = root.style.getPropertyValue('--rose').trim();
+            if (roseValue) {
+              root.style.setProperty('--btn-bg', roseValue);
+            } else {
+              root.style.setProperty('--btn-bg', '#FFB3CB');
+            }
+          }
+          root.style.setProperty('--btn-fg', '#111111');
+          root.style.setProperty('--chip-fg', '#111111');
+
+          const highContrastEnabled = window.localStorage ? localStorage.getItem(HIGH_CONTRAST_KEY) === '1' : false;
+          if (highContrastEnabled) {
+            try {
+              if (window.NVCContrast && typeof window.NVCContrast.adjustLightness === 'function') {
+                const inkValue = root.style.getPropertyValue('--ink').trim();
+                if (inkValue) {
+                  const darkerInk = window.NVCContrast.adjustLightness(inkValue, -20);
+                  if (darkerInk) {
+                    root.style.setProperty('--ink', darkerInk);
+                  }
+                }
+              }
+            } catch (error) {
+              if (typeof console !== 'undefined' && console.warn) {
+                console.warn('Unable to adjust ink for high contrast', error);
+              }
+            }
+            root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 70%, transparent)');
+            applied = true;
+          } else {
+            root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 55%, transparent)');
+          }
+
+          if (window.NVCContrast && typeof window.NVCContrast.autoContrast === 'function') {
+            try {
+              const ratio = window.NVCContrast.autoContrast('--btn-bg', '--btn-fg');
+              if (typeof ratio === 'number') {
+                applied = true;
+              }
+            } catch (error) {
+              if (typeof console !== 'undefined' && console.warn) {
+                console.warn('Unable to auto-adjust button contrast', error);
+              }
+            }
+          }
+
+          if (applied) {
+            root.setAttribute('data-theme-preapplied', 'true');
+          }
+        } catch (error) {
+          if (typeof console !== 'undefined' && console.warn) {
+            console.warn('Unable to apply prepaint adjustments', error);
+          }
+        }
       })();
     </script>`;
+};
 
 const directoriesToReset = ['situations', 'feelings', 'needs', 'inventory'];
 for (const dir of directoriesToReset) {
@@ -184,7 +244,7 @@ function htmlPage({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(title)} • NeedShare Explorer</title>
     <meta name="description" content="${escapeHtml(headDescription)}" />
-    ${themePreloadScript}
+    ${themePreloadScript(basePath)}
     <link rel="stylesheet" href="${cssHref}" />
   </head>
   <body data-base-path="${basePath}">
