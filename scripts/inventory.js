@@ -1,8 +1,7 @@
 const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
 const THEME_HIGH_CONTRAST_KEY = 'themeHighContrast';
-const JOURNAL_STORAGE_KEY = 'nvcApp.journal';
-const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
+const JOURNAL_EDIT_HASH_PREFIX = '#journal-edit=';
 
 const DEFAULT_PALETTE = {
   plum: '#74569B',
@@ -62,6 +61,7 @@ const state = {
   inventoryToggleButton: null,
   showStrategies: false,
   journalEntries: [],
+  journalStore: null,
   journalForm: null,
   journalStatusEl: null,
   journalMessageEl: null,
@@ -72,9 +72,40 @@ const state = {
   journalFiltersForm: null,
   journalIntensityDisplay: null,
   journalNeedsSelect: null,
+  journalTagsInput: null,
+  journalTagSuggestionsEl: null,
+  journalTagSuggestions: [],
+  journalDraftPath: '',
+  journalEditingId: '',
+  journalEditingEntry: null,
   journalFilters: { search: '', tag: '', sort: 'newest' },
   journalSummaryCollapsed: false,
 };
+
+function resolveJournalStore() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  return window.NVCJournalStore || window.NVCJournal?.store || null;
+}
+
+function ensureJournalStore() {
+  if (!state.journalStore) {
+    state.journalStore = resolveJournalStore();
+  }
+  return state.journalStore;
+}
+
+function updateJournalEntriesFromStore() {
+  const store = ensureJournalStore();
+  state.journalEntries = store ? store.list() : [];
+  updateJournalTagSource();
+}
+
+function updateJournalTagSource() {
+  const store = ensureJournalStore();
+  state.journalTagSuggestions = store ? store.tagHistory() : [];
+}
 
 function sanitizeContributorName(value) {
   if (typeof value !== 'string') {
@@ -146,8 +177,10 @@ function isPaletteEventTarget(target) {
 
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
+  state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
   state.inventory = loadInventory();
-  state.journalEntries = loadJournalEntries();
+  state.journalStore = resolveJournalStore();
+  updateJournalEntriesFromStore();
   highlightNavigation();
   initColorCustomizer().catch((error) => {
     console.warn('Unable to set up the color customizer', error);
@@ -156,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNeedPage();
   setupInventoryPage();
   setupJournalSection();
-  migrateJournalEntries();
   renderJournalViews();
 });
 
@@ -187,119 +219,6 @@ function saveInventory(items) {
   }
 }
 
-function normalizeJournalEntry(entry) {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-  const normalized = { ...entry };
-  normalized.id = typeof entry.id === 'string' && entry.id ? entry.id : generateJournalId();
-  normalized.emotion = typeof entry.emotion === 'string' ? entry.emotion.trim() : '';
-  const intensityValue = Number(entry.intensity);
-  normalized.intensity = Number.isFinite(intensityValue)
-    ? Math.min(10, Math.max(1, Math.round(intensityValue)))
-    : null;
-  if (Array.isArray(entry.needs)) {
-    normalized.needs = entry.needs.map((value) => (typeof value === 'string' ? value.trim() : String(value))).filter(Boolean);
-  } else if (entry.need) {
-    normalized.needs = [String(entry.need).trim()];
-  } else {
-    normalized.needs = [];
-  }
-  if (Array.isArray(entry.tags)) {
-    normalized.tags = entry.tags
-      .map((tag) => (typeof tag === 'string' ? tag.replace(/^#/, '').trim() : String(tag).trim()))
-      .filter(Boolean);
-  } else if (typeof entry.tags === 'string') {
-    normalized.tags = entry.tags
-      .split(/[,|]/)
-      .map((tag) => tag.replace(/^#/, '').trim())
-      .filter(Boolean);
-  } else {
-    normalized.tags = [];
-  }
-  normalized.notes = typeof entry.notes === 'string' && entry.notes.trim()
-    ? entry.notes.trim()
-    : typeof entry.text === 'string'
-    ? entry.text.trim()
-    : '';
-  normalized.timestamp =
-    typeof entry.timestamp === 'string' && entry.timestamp
-      ? entry.timestamp
-      : typeof entry.createdAt === 'string' && entry.createdAt
-      ? entry.createdAt
-      : typeof entry.date === 'string' && entry.date
-      ? entry.date
-      : new Date().toISOString();
-  return normalized;
-}
-
-function loadJournalEntriesFromKey(storageKey) {
-  try {
-    const stored = localStorage.getItem(storageKey);
-    if (!stored) {
-      return [];
-    }
-    const parsed = JSON.parse(stored);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-    return parsed
-      .map((item) => normalizeJournalEntry(item))
-      .filter((item) => item && typeof item === 'object')
-      .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-  } catch (error) {
-    console.warn('Unable to load journal entries from storage', error);
-    return [];
-  }
-}
-
-function loadJournalEntries() {
-  return loadJournalEntriesFromKey(JOURNAL_STORAGE_KEY);
-}
-
-function saveJournalEntries(entries) {
-  try {
-    localStorage.setItem(JOURNAL_STORAGE_KEY, JSON.stringify(entries));
-  } catch (error) {
-    console.warn('Unable to save journal entries', error);
-  }
-}
-
-function migrateJournalEntries() {
-  try {
-    const legacyEntries = loadJournalEntriesFromKey(LEGACY_JOURNAL_KEY);
-    if (!legacyEntries.length) {
-      localStorage.removeItem(LEGACY_JOURNAL_KEY);
-      return;
-    }
-    const existing = Array.isArray(state.journalEntries) ? [...state.journalEntries] : [];
-    const signatures = new Set(
-      existing.map((entry) => `${entry.timestamp ?? ''}|${(entry.notes ?? '').trim()}`)
-    );
-    let changed = false;
-    legacyEntries.forEach((legacy) => {
-      const normalized = normalizeJournalEntry(legacy);
-      if (!normalized) {
-        return;
-      }
-      const signature = `${normalized.timestamp ?? ''}|${normalized.notes.trim()}`;
-      if (signatures.has(signature)) {
-        return;
-      }
-      existing.push(normalized);
-      signatures.add(signature);
-      changed = true;
-    });
-    if (changed) {
-      existing.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-      state.journalEntries = existing;
-      saveJournalEntries(existing);
-    }
-    localStorage.removeItem(LEGACY_JOURNAL_KEY);
-  } catch (error) {
-    console.warn('Unable to migrate journal entries', error);
-  }
-}
 
 function setupNeedPage() {
   const main = document.querySelector('main[data-need-slug]');
@@ -1463,6 +1382,8 @@ function setupJournalSection() {
   state.journalFiltersForm = panel.querySelector('[data-journal-filters]');
   state.journalIntensityDisplay = panel.querySelector('[data-journal-intensity-display]');
   state.journalNeedsSelect = panel.querySelector('#journal-needs');
+  state.journalTagsInput = panel.querySelector('#journal-tags');
+  state.journalTagSuggestionsEl = panel.querySelector('[data-journal-tag-suggestions]');
 
   const intensityInput = panel.querySelector('#journal-intensity');
   if (intensityInput) {
@@ -1473,11 +1394,13 @@ function setupJournalSection() {
 
   if (state.journalForm) {
     state.journalForm.addEventListener('submit', handleJournalFormSubmit);
+    state.journalForm.addEventListener('input', handleJournalFormInput);
   }
   const journalClear = panel.querySelector('[data-journal-clear]');
   journalClear?.addEventListener('click', handleJournalFormClear);
 
   state.journalHistoryEl?.addEventListener('click', handleJournalHistoryClick);
+  state.journalTagSuggestionsEl?.addEventListener('click', handleTagSuggestionClick);
 
   if (state.journalFiltersForm) {
     state.journalFiltersForm.addEventListener('input', handleJournalFiltersChange);
@@ -1485,12 +1408,19 @@ function setupJournalSection() {
   const filtersReset = panel.querySelector('[data-journal-filters-reset]');
   filtersReset?.addEventListener('click', handleJournalFiltersReset);
 
+  if (state.journalTagsInput) {
+    state.journalTagsInput.addEventListener('input', handleJournalTagInput);
+    state.journalTagsInput.addEventListener('focus', handleJournalTagInput);
+  }
+
   if (state.journalSummaryToggle) {
     state.journalSummaryToggle.addEventListener('click', () => {
       state.journalSummaryCollapsed = !state.journalSummaryCollapsed;
       updateJournalSummaryVisibility();
     });
   }
+
+  state.journalNeedsSelect?.addEventListener('change', saveJournalDraft);
 
   const journalExport = panel.querySelector('#journal-export');
   journalExport?.addEventListener('click', handleJournalExport);
@@ -1511,6 +1441,25 @@ function setupJournalSection() {
   populateJournalNeedsOptions();
   updateJournalIntensityDisplay(intensityInput?.value || '5');
   updateJournalSummaryVisibility();
+  applyJournalDraft();
+  if (!state.journalEditingId) {
+    const hashId = getJournalEditIdFromHash();
+    if (hashId) {
+      startJournalEdit(hashId, { focusHistory: true });
+    }
+  }
+  if (typeof window !== 'undefined') {
+    window.addEventListener('hashchange', handleJournalHashChange);
+    window.addEventListener('nvc-journal-store-ready', () => {
+      state.journalStore = resolveJournalStore();
+      updateJournalEntriesFromStore();
+      renderJournalViews();
+      const notesField = state.journalForm?.querySelector('#journal-notes');
+      if (notesField && !notesField.value) {
+        applyJournalDraft();
+      }
+    });
+  }
 }
 
 function populateJournalNeedsOptions() {
@@ -1534,6 +1483,284 @@ function renderJournalViews() {
   renderJournalSummary();
   renderJournalHistory();
   updateJournalSummaryVisibility();
+}
+
+function parseTagInput(value) {
+  return (value || '')
+    .split(',')
+    .map((tag) => (typeof tag === 'string' ? tag.replace(/^#/, '').trim() : ''))
+    .filter(Boolean);
+}
+
+function collectJournalFormData() {
+  if (!state.journalForm) {
+    return { emotion: '', intensity: undefined, needs: [], tags: [], notes: '' };
+  }
+  const formData = new FormData(state.journalForm);
+  const emotion = (formData.get('emotion') || '').toString().trim();
+  const intensityValue = Number(formData.get('intensity'));
+  const intensity = Number.isFinite(intensityValue) ? Math.min(10, Math.max(1, Math.round(intensityValue))) : undefined;
+  const needs = state.journalNeedsSelect
+    ? Array.from(state.journalNeedsSelect.selectedOptions || []).map((option) => option.value).filter(Boolean)
+    : [];
+  const tags = parseTagInput((formData.get('tags') || '').toString());
+  const notes = (formData.get('notes') || '').toString().trim();
+  return { emotion, intensity, needs, tags, notes };
+}
+
+function fillJournalForm(values = {}) {
+  if (!state.journalForm) {
+    return;
+  }
+  const emotionInput = state.journalForm.querySelector('#journal-emotion');
+  if (emotionInput) {
+    emotionInput.value = values.emotion || '';
+  }
+  const notesInput = state.journalForm.querySelector('#journal-notes');
+  if (notesInput) {
+    notesInput.value = values.notes || '';
+  }
+  const intensityInput = state.journalForm.querySelector('#journal-intensity');
+  const intensityValue = Number.isFinite(values.intensity) ? String(values.intensity) : '5';
+  if (intensityInput) {
+    intensityInput.value = intensityValue;
+  }
+  updateJournalIntensityDisplay(intensityValue);
+  if (state.journalNeedsSelect) {
+    const selectedNeeds = Array.isArray(values.needs) ? values.needs.map((need) => need.toString()) : [];
+    Array.from(state.journalNeedsSelect.options).forEach((option) => {
+      option.selected = selectedNeeds.includes(option.value);
+    });
+  }
+  if (state.journalTagsInput) {
+    const tagsValue = Array.isArray(values.tags) && values.tags.length ? values.tags.join(', ') : '';
+    state.journalTagsInput.value = tagsValue;
+  }
+}
+
+function resetJournalForm(options = {}) {
+  if (!state.journalForm) {
+    return;
+  }
+  state.journalForm.reset();
+  state.journalEditingId = '';
+  state.journalEditingEntry = null;
+  fillJournalForm({});
+  hideJournalTagSuggestions();
+  if (!options.keepStatus) {
+    showJournalStatus('');
+  }
+  if (state.journalStore && state.journalDraftPath) {
+    state.journalStore.clearDraft(state.journalDraftPath);
+  }
+  setJournalEditHash('');
+}
+
+function escapeSelector(value) {
+  if (typeof window !== 'undefined' && window.CSS && typeof window.CSS.escape === 'function') {
+    return window.CSS.escape(value);
+  }
+  return value.replace(/[^a-zA-Z0-9_\-]/g, '\\$&');
+}
+
+function focusJournalHistoryCard(id) {
+  if (!state.journalHistoryEl || !id) {
+    return;
+  }
+  const selector = `[data-journal-id="${escapeSelector(id)}"]`;
+  const card = state.journalHistoryEl.querySelector(selector);
+  if (!card) {
+    return;
+  }
+  card.classList.add('journal-entry--highlight');
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  window.setTimeout(() => {
+    card.classList.remove('journal-entry--highlight');
+  }, 2000);
+}
+
+function saveJournalDraft() {
+  const store = ensureJournalStore();
+  if (!store || !state.journalDraftPath || !state.journalForm) {
+    return;
+  }
+  const draft = { ...collectJournalFormData() };
+  if (state.journalEditingId) {
+    draft.editingId = state.journalEditingId;
+  }
+  const hasContent =
+    draft.emotion ||
+    draft.notes ||
+    (Array.isArray(draft.tags) && draft.tags.length) ||
+    (Array.isArray(draft.needs) && draft.needs.length) ||
+    Number.isFinite(draft.intensity);
+  if (!hasContent) {
+    store.clearDraft(state.journalDraftPath);
+    return;
+  }
+  store.saveDraft(state.journalDraftPath, draft);
+}
+
+function loadJournalDraft() {
+  const store = ensureJournalStore();
+  if (!store || !state.journalDraftPath) {
+    return null;
+  }
+  return store.loadDraft(state.journalDraftPath);
+}
+
+function setJournalEditHash(id) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  const hashValue = id ? `${JOURNAL_EDIT_HASH_PREFIX}${encodeURIComponent(id)}` : '';
+  if (window.history && typeof window.history.replaceState === 'function') {
+    const url = `${window.location.pathname}${window.location.search}${hashValue}`;
+    window.history.replaceState(null, '', url);
+  } else if (hashValue) {
+    window.location.hash = hashValue;
+  } else {
+    window.location.hash = '';
+  }
+}
+
+function startJournalEdit(id, { focusHistory = false } = {}) {
+  const store = ensureJournalStore();
+  if (!store) {
+    showJournalStatus('Unable to edit right now. Try reloading.');
+    return;
+  }
+  const entry = store.get(id);
+  if (!entry) {
+    showJournalStatus('Entry not found.');
+    return;
+  }
+  state.journalEditingId = entry.id;
+  state.journalEditingEntry = entry;
+  fillJournalForm(entry);
+  setJournalEditHash(entry.id);
+  const formattedDate = formatJournalDate(entry.dateISO);
+  showJournalStatus(`Editing entry from ${formattedDate}. Save to update or clear to cancel.`);
+  if (focusHistory) {
+    focusJournalHistoryCard(entry.id);
+  }
+  saveJournalDraft();
+}
+
+function applyJournalDraft() {
+  const draft = loadJournalDraft();
+  if (!draft) {
+    return;
+  }
+  if (draft.editingId) {
+    const store = ensureJournalStore();
+    const entry = store?.get(draft.editingId);
+    if (entry) {
+      state.journalEditingId = entry.id;
+      state.journalEditingEntry = entry;
+      setJournalEditHash(entry.id);
+    }
+  }
+  fillJournalForm(draft);
+  if (draft.editingId) {
+    showJournalStatus('Restored draft. Finish editing and save when ready.');
+  }
+}
+
+function hideJournalTagSuggestions() {
+  if (!state.journalTagSuggestionsEl) {
+    return;
+  }
+  state.journalTagSuggestionsEl.hidden = true;
+  state.journalTagSuggestionsEl.innerHTML = '';
+}
+
+function showJournalTagSuggestions(matches) {
+  if (!state.journalTagSuggestionsEl) {
+    return;
+  }
+  if (!matches.length) {
+    hideJournalTagSuggestions();
+    return;
+  }
+  state.journalTagSuggestionsEl.hidden = false;
+  state.journalTagSuggestionsEl.innerHTML = '';
+  matches.forEach((tag) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'journal-tag-suggestion';
+    button.dataset.journalTagSuggestion = tag;
+    button.textContent = `#${tag}`;
+    state.journalTagSuggestionsEl.appendChild(button);
+  });
+}
+
+function handleJournalTagInput() {
+  saveJournalDraft();
+  if (!state.journalTagsInput) {
+    return;
+  }
+  const value = state.journalTagsInput.value || '';
+  const segments = value.split(',');
+  const current = segments[segments.length - 1]?.replace(/^#/, '').trim().toLowerCase() || '';
+  if (!current) {
+    hideJournalTagSuggestions();
+    return;
+  }
+  const matches = state.journalTagSuggestions
+    .filter((tag) => tag.toLowerCase().startsWith(current))
+    .slice(0, 6);
+  showJournalTagSuggestions(matches);
+}
+
+function applyTagSuggestion(tag) {
+  if (!state.journalTagsInput) {
+    return;
+  }
+  const existing = parseTagInput(state.journalTagsInput.value);
+  if (!existing.includes(tag)) {
+    existing.push(tag);
+  }
+  state.journalTagsInput.value = existing.join(', ') + ', ';
+  state.journalTagsInput.focus();
+  hideJournalTagSuggestions();
+  saveJournalDraft();
+}
+
+function handleTagSuggestionClick(event) {
+  const button = event.target.closest('[data-journal-tag-suggestion]');
+  if (!button) {
+    return;
+  }
+  event.preventDefault();
+  applyTagSuggestion(button.dataset.journalTagSuggestion);
+}
+
+function handleJournalFormInput(event) {
+  if (event?.target === state.journalTagsInput) {
+    handleJournalTagInput();
+  } else {
+    saveJournalDraft();
+  }
+}
+
+function getJournalEditIdFromHash() {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+  const hash = window.location.hash || '';
+  if (hash.startsWith(JOURNAL_EDIT_HASH_PREFIX)) {
+    return decodeURIComponent(hash.slice(JOURNAL_EDIT_HASH_PREFIX.length));
+  }
+  return '';
+}
+
+function handleJournalHashChange() {
+  const id = getJournalEditIdFromHash();
+  if (!id) {
+    return;
+  }
+  startJournalEdit(id, { focusHistory: true });
 }
 
 function updateJournalSummaryVisibility() {
@@ -1741,7 +1968,7 @@ function renderJournalHistory() {
     const meta = document.createElement('div');
     meta.className = 'journal-entry__meta';
     const date = document.createElement('span');
-    date.textContent = formatJournalDate(entry.timestamp);
+    date.textContent = formatJournalDate(entry.dateISO);
     meta.appendChild(date);
     if (Number.isFinite(entry.intensity)) {
       const intensity = document.createElement('span');
@@ -1786,6 +2013,14 @@ function renderJournalHistory() {
 
     const actions = document.createElement('div');
     actions.className = 'journal-entry__actions';
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'journal-entry__edit';
+    editButton.dataset.journalAction = 'edit';
+    editButton.dataset.journalId = entry.id;
+    editButton.textContent = 'Edit';
+    actions.appendChild(editButton);
+
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'journal-entry__delete';
@@ -1821,9 +2056,9 @@ function getFilteredJournalEntries() {
     );
   }
 
-  const sortByTimestamp = (a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
+  const sortByTimestamp = (a, b) => new Date(b.dateISO || 0) - new Date(a.dateISO || 0);
   if (sort === 'oldest') {
-    filtered.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
+    filtered.sort((a, b) => new Date(a.dateISO || 0) - new Date(b.dateISO || 0));
   } else if (sort === 'intensity-high') {
     filtered.sort((a, b) => {
       const aVal = Number.isFinite(a.intensity) ? a.intensity : -Infinity;
@@ -1891,57 +2126,70 @@ function handleJournalFormSubmit(event) {
   if (!state.journalForm) {
     return;
   }
-  const formData = new FormData(state.journalForm);
-  const emotion = (formData.get('emotion') || '').toString().trim();
-  const intensityValue = Number(formData.get('intensity'));
-  const needs = state.journalNeedsSelect
-    ? Array.from(state.journalNeedsSelect.selectedOptions || []).map((option) => option.value).filter(Boolean)
-    : [];
-  const tagsInput = (formData.get('tags') || '').toString();
-  const tags = tagsInput
-    .split(',')
-    .map((tag) => tag.replace(/^#/, '').trim())
-    .filter(Boolean);
-  const notes = (formData.get('notes') || '').toString().trim();
-
-  if (!notes && !emotion) {
+  const store = ensureJournalStore();
+  if (!store) {
+    showJournalStatus('Unable to save right now. Try reloading the page.');
+    return;
+  }
+  const formData = collectJournalFormData();
+  if (!formData.notes && !formData.emotion) {
     showJournalStatus('Add a few words or an emotion before saving.');
     return;
   }
 
-  const entry = normalizeJournalEntry({
-    id: generateJournalId(),
-    emotion,
-    intensity: Number.isFinite(intensityValue) ? intensityValue : null,
-    needs,
-    tags,
-    notes,
-    timestamp: new Date().toISOString(),
-  });
-
-  const nextEntries = [entry, ...state.journalEntries];
-  persistJournalEntries(nextEntries, {
-    status: 'Saved entry. It stays on this device until you export it.',
-  });
-  showJournalMessage('');
-  state.journalForm.reset();
-  const intensityInput = state.journalForm.querySelector('#journal-intensity');
-  if (intensityInput) {
-    intensityInput.value = '5';
+  let savedEntry;
+  if (state.journalEditingId) {
+    const base = state.journalEditingEntry || store.get(state.journalEditingId) || {};
+    savedEntry = store.update(state.journalEditingId, {
+      ...base,
+      ...formData,
+      id: state.journalEditingId,
+      dateISO: base.dateISO,
+      source: base.source || 'journal',
+      sensations: base.sensations,
+      energy: base.energy,
+      valence: base.valence,
+      confidence: base.confidence,
+      strategies: base.strategies,
+    });
+    if (!savedEntry) {
+      showJournalStatus('This entry was not found. It may have been deleted.');
+      return;
+    }
+    showJournalStatus('Updated entry.');
+  } else {
+    savedEntry = store.create({
+      ...formData,
+      source: 'journal',
+    });
+    showJournalStatus('Saved entry. It stays on this device until you export it.');
   }
-  updateJournalIntensityDisplay('5');
+
+  state.journalStore = store;
+  updateJournalEntriesFromStore();
+  renderJournalViews();
+  state.journalStore.clearDraft(state.journalDraftPath);
+  showJournalMessage('');
+  resetJournalForm({ keepStatus: true });
+  if (savedEntry) {
+    focusJournalHistoryCard(savedEntry.id);
+  }
 }
 
 function handleJournalFormClear() {
-  if (!state.journalForm) {
-    return;
-  }
-  state.journalForm.reset();
-  updateJournalIntensityDisplay('5');
-  showJournalStatus('');
+  resetJournalForm();
 }
 
 function handleJournalHistoryClick(event) {
+  const editButton = event.target.closest('[data-journal-action="edit"]');
+  if (editButton) {
+    const journalId = editButton.dataset.journalId;
+    if (journalId) {
+      startJournalEdit(journalId, { focusHistory: false });
+      saveJournalDraft();
+    }
+    return;
+  }
   const deleteButton = event.target.closest('[data-journal-action="delete"]');
   if (!deleteButton) {
     return;
@@ -1950,16 +2198,22 @@ function handleJournalHistoryClick(event) {
   if (!journalId) {
     return;
   }
-  const entry = state.journalEntries.find((item) => item.id === journalId);
-  if (!entry) {
-    return;
-  }
   const confirmed = window.confirm('Delete this journal entry? This cannot be undone.');
   if (!confirmed) {
     return;
   }
-  const nextEntries = state.journalEntries.filter((item) => item.id !== journalId);
-  persistJournalEntries(nextEntries, { status: 'Entry deleted.' });
+  const store = ensureJournalStore();
+  if (!store) {
+    showJournalStatus('Unable to delete entry right now.');
+    return;
+  }
+  store.remove(journalId);
+  updateJournalEntriesFromStore();
+  renderJournalViews();
+  showJournalStatus('Entry deleted.');
+  if (state.journalStore && state.journalDraftPath) {
+    state.journalStore.clearDraft(state.journalDraftPath);
+  }
 }
 
 function handleJournalFiltersChange() {
@@ -2011,6 +2265,11 @@ function handleJournalExport() {
 
 async function handleJournalImport(file) {
   try {
+    const store = ensureJournalStore();
+    if (!store) {
+      showJournalMessage('Import unavailable right now. Reload and try again.', 'error');
+      return;
+    }
     const text = await file.text();
     const parsed = JSON.parse(text);
     const list = Array.isArray(parsed)
@@ -2022,43 +2281,20 @@ async function handleJournalImport(file) {
       showJournalMessage('No entries found in the import file.', 'warning');
       return;
     }
-    const normalized = list.map((item) => normalizeJournalEntry(item)).filter(Boolean);
-    if (!normalized.length) {
-      showJournalMessage('No valid entries found in the import file.', 'warning');
+    const result = store.importEntries(list);
+    if (!result.added && !result.updated) {
+      showJournalMessage('No new entries found to import.', 'warning');
       return;
     }
-    const merged = mergeJournalEntriesList(state.journalEntries, normalized);
-    persistJournalEntries(merged, {
-      status: `Imported ${normalized.length} ${normalized.length === 1 ? 'entry' : 'entries'}.`,
-      message: 'Import complete. Entries stay on this device unless you export them.',
-    });
+    updateJournalEntriesFromStore();
+    renderJournalViews();
+    const total = result.added + result.updated;
+    showJournalStatus(`Imported ${total} ${total === 1 ? 'entry' : 'entries'}.`);
+    showJournalMessage('Import complete. Entries stay on this device unless you export them.', 'success');
   } catch (error) {
     console.warn('Unable to import journal entries', error);
     showJournalMessage('Import failed. Make sure you selected a JSON export from this app.', 'error');
   }
-}
-
-function mergeJournalEntriesList(existing, additions) {
-  const merged = new Map();
-  const signatureSet = new Set();
-  const addEntry = (entry) => {
-    const normalized = normalizeJournalEntry(entry);
-    if (!normalized) {
-      return;
-    }
-    const signature = `${normalized.timestamp ?? ''}|${(normalized.notes ?? '').trim()}`;
-    if (signature && signatureSet.has(signature)) {
-      return;
-    }
-    if (merged.has(normalized.id)) {
-      return;
-    }
-    merged.set(normalized.id, normalized);
-    signatureSet.add(signature);
-  };
-  (existing || []).forEach(addEntry);
-  (additions || []).forEach(addEntry);
-  return Array.from(merged.values()).sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 }
 
 function capitalizeWord(value) {
@@ -2398,22 +2634,6 @@ function persistInventory(items, options = {}) {
   }
 }
 
-function persistJournalEntries(entries, options = {}) {
-  const normalized = Array.isArray(entries)
-    ? entries.map((entry) => normalizeJournalEntry(entry)).filter(Boolean)
-    : [];
-  normalized.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-  state.journalEntries = normalized;
-  saveJournalEntries(normalized);
-  renderJournalViews();
-  if (options.status) {
-    showJournalStatus(options.status);
-  }
-  if (options.message) {
-    showJournalMessage(options.message, options.messageType || 'success');
-  }
-}
-
 function updateInventoryCount() {
   const counter = document.querySelector('[data-inventory-count]');
   if (!counter) {
@@ -2644,10 +2864,6 @@ function splitCsvLine(line) {
 
 function generateId() {
   return `inv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function generateJournalId() {
-  return `journal-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function buildStrategyTags(rawTags, needSlug) {

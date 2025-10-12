@@ -1825,6 +1825,11 @@ button.site-nav__link {
   box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 24%, transparent);
 }
 
+.journal-entry--highlight {
+  outline: 4px solid var(--mint);
+  outline-offset: 4px;
+}
+
 .journal-entry__header {
   display: flex;
   flex-wrap: wrap;
@@ -1894,6 +1899,7 @@ button.site-nav__link {
   gap: 0.5rem;
 }
 
+.journal-entry__edit,
 .journal-entry__delete {
   border: 2px solid var(--outline);
   border-radius: 8px;
@@ -1907,10 +1913,43 @@ button.site-nav__link {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.journal-entry__edit {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.journal-entry__edit:hover,
+.journal-entry__edit:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
 .journal-entry__delete:hover,
 .journal-entry__delete:focus-visible {
   transform: translateY(-2px);
   box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 26%, transparent);
+}
+
+.journal-tag-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.journal-tag-suggestion {
+  border: 2px solid var(--outline);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.journal-tag-suggestion:hover,
+.journal-tag-suggestion:focus-visible {
+  transform: translateY(-1px);
+  background: var(--mint);
 }
 
 .emotion-detail__list--links {

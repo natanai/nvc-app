@@ -500,8 +500,7 @@
     },
   };
 
-  const JOURNAL_KEY = 'nvcApp.journal';
-  const LEGACY_JOURNAL_KEY = 'alexithymiaSupportJournal';
+  const JOURNAL_EDIT_HASH_PREFIX = '#journal-edit=';
   const state = {
     selectedEmotion: null,
     quadrant: null,
@@ -510,6 +509,7 @@
     compassTouched: false,
     energyValue: 0,
     valenceValue: 0,
+    draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
   };
 
   const startButton = steps.intro?.querySelector('[data-action="start"]');
@@ -528,6 +528,10 @@
   const communicationCard = document.querySelector('[data-communication-card]');
 
   let breathingTimer = null;
+
+  function getJournalStore() {
+    return window.NVCJournalStore || window.NVCJournal?.store || null;
+  }
 
   function revealStep(key) {
     const step = steps[key];
@@ -990,7 +994,7 @@
       ? `${basePath}needs/?focus=${encodeURIComponent(primaryNeed.toLowerCase())}`
       : `${basePath}needs/`;
     const needsButtonLabel = primaryNeed ? `See strategies for ${primaryNeed}` : 'Browse basic needs';
-    const journalLink = `${basePath}inventory/#journal-dashboard`;
+    const journalLink = `${basePath}inventory/journal/`;
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
       ${renderListSection('Try one of these nurturing steps', emotion.regulation)}
@@ -1044,77 +1048,10 @@
     statusNode.textContent = 'Playing the sentence out loud—pause or stop if you prefer to speak it yourself.';
   }
 
-  function readEntriesFromKey(storageKey) {
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed.filter((entry) => entry && typeof entry === 'object') : [];
-    } catch (error) {
-      console.warn('Could not read journal entries', error);
-      return [];
-    }
-  }
-
-  function migrateLegacyJournalEntries() {
-    if (!LEGACY_JOURNAL_KEY) {
-      return;
-    }
-    try {
-      const legacyEntries = readEntriesFromKey(LEGACY_JOURNAL_KEY);
-      if (!legacyEntries.length) {
-        localStorage.removeItem(LEGACY_JOURNAL_KEY);
-        return;
-      }
-      const currentEntries = readEntriesFromKey(JOURNAL_KEY);
-      const signatures = new Set(
-        currentEntries.map((entry) => `${entry.timestamp ?? ''}|${(entry.text ?? '').trim()}`)
-      );
-      let changed = false;
-      legacyEntries.forEach((legacy) => {
-        if (!legacy || typeof legacy !== 'object') {
-          return;
-        }
-        const text = typeof legacy.text === 'string' ? legacy.text : '';
-        const emotion = typeof legacy.emotion === 'string' ? legacy.emotion : legacy.emotion?.key || null;
-        const timestamp = legacy.timestamp || legacy.date || legacy.savedAt || null;
-        const signature = `${timestamp ?? ''}|${text.trim()}`;
-        if (signature && signatures.has(signature)) {
-          return;
-        }
-        const entry = {
-          text,
-          emotion,
-          timestamp: timestamp || new Date().toISOString(),
-        };
-        currentEntries.push(entry);
-        signatures.add(signature);
-        changed = true;
-      });
-      if (changed) {
-        currentEntries.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
-        saveJournalEntries(currentEntries);
-      }
-      localStorage.removeItem(LEGACY_JOURNAL_KEY);
-    } catch (error) {
-      console.warn('Unable to migrate legacy journal entries', error);
-    }
-  }
-
-  function getJournalEntries() {
-    return readEntriesFromKey(JOURNAL_KEY);
-  }
-
-  function saveJournalEntries(entries) {
-    try {
-      localStorage.setItem(JOURNAL_KEY, JSON.stringify(entries));
-    } catch (error) {
-      console.warn('Could not save journal entries', error);
-    }
-  }
-
-  function renderJournalHistory(entries) {
+  function renderJournalHistory() {
     if (!journalHistory) return;
+    const store = getJournalStore();
+    const entries = store ? store.list() : [];
     journalHistory.innerHTML = '';
     if (!entries.length) {
       const empty = document.createElement('p');
@@ -1130,20 +1067,19 @@
     const list = document.createElement('ul');
     list.className = 'journal-history';
     entries
-      .slice(-5)
-      .reverse()
+      .slice(0, 5)
       .forEach((entry) => {
         const item = document.createElement('li');
         item.className = 'journal-history__item';
-        const date = new Date(entry.timestamp).toLocaleString();
+        const date = entry.dateISO ? new Date(entry.dateISO).toLocaleString() : '';
         const emotion = entry.emotion ? `${EMOTION_LIBRARY[entry.emotion]?.name ?? entry.emotion} — ` : '';
-        item.textContent = `${date}: ${emotion}${entry.text}`;
+        item.textContent = `${date}: ${emotion}${entry.notes || ''}`;
         list.appendChild(item);
       });
     journalHistory.appendChild(list);
     const link = document.createElement('a');
     link.className = 'support-button support-button--link support-button--ghost';
-    link.href = `${basePath}inventory/#journal-dashboard`;
+    link.href = `${basePath}inventory/journal/`;
     link.textContent = 'Open full journal dashboard';
     journalHistory.appendChild(link);
   }
@@ -1158,17 +1094,29 @@
       journalStatus.textContent = 'Add a few words before saving. Even a sentence counts.';
       return;
     }
-    const entries = getJournalEntries();
-    const entry = {
-      text: value,
-      emotion: state.selectedEmotion,
-      timestamp: new Date().toISOString(),
-    };
-    entries.push(entry);
-    saveJournalEntries(entries);
-    renderJournalHistory(entries);
+    const store = getJournalStore();
+    if (!store) {
+      journalStatus.textContent = 'Saving is unavailable right now. Try reloading and saving again.';
+      return;
+    }
+    const entry = store.create({
+      notes: value,
+      emotion: state.selectedEmotion || '',
+      energy: state.energyValue,
+      valence: state.valenceValue,
+      sensations: getSelectedSensations(sensationChips),
+      needs: state.selectedEmotion ? EMOTION_LIBRARY[state.selectedEmotion]?.needs ?? [] : [],
+      source: 'lane',
+    });
     textarea.value = '';
-    journalStatus.textContent = 'Saved locally. Review it anytime in the inventory journal tab.';
+    store.clearDraft(state.draftPath);
+    renderJournalHistory();
+    journalStatus.textContent = '';
+    const message = document.createTextNode('Saved ✓ ');
+    const link = document.createElement('a');
+    link.href = `${basePath}inventory/journal/${JOURNAL_EDIT_HASH_PREFIX}${encodeURIComponent(entry.id)}`;
+    link.textContent = 'Open in Journal';
+    journalStatus.append(message, link);
   }
 
   function handleJournalClear() {
@@ -1176,6 +1124,56 @@
     if (textarea) {
       textarea.value = '';
       journalStatus.textContent = '';
+    }
+    const store = getJournalStore();
+    store?.clearDraft?.(state.draftPath);
+  }
+
+  function saveLaneDraft() {
+    const store = getJournalStore();
+    if (!store || !journalForm) {
+      return;
+    }
+    const textarea = journalForm.querySelector('textarea');
+    if (!textarea) {
+      return;
+    }
+    const notes = textarea.value || '';
+    const hasNotes = notes.trim().length > 0;
+    if (!hasNotes) {
+      store.clearDraft(state.draftPath);
+      return;
+    }
+    store.saveDraft(state.draftPath, {
+      notes,
+      emotion: state.selectedEmotion || '',
+      energy: state.energyValue,
+      valence: state.valenceValue,
+      sensations: getSelectedSensations(sensationChips),
+    });
+  }
+
+  function applyLaneDraft() {
+    const store = getJournalStore();
+    if (!store || !journalForm) {
+      return;
+    }
+    const draft = store.loadDraft(state.draftPath);
+    if (!draft) {
+      return;
+    }
+    const textarea = journalForm.querySelector('textarea');
+    if (textarea && typeof draft.notes === 'string') {
+      textarea.value = draft.notes;
+    }
+    if (typeof draft.energy === 'number') {
+      state.energyValue = draft.energy;
+    }
+    if (typeof draft.valence === 'number') {
+      state.valenceValue = draft.valence;
+    }
+    if (draft.notes) {
+      journalStatus.textContent = 'Draft restored. Save when you are ready.';
     }
   }
 
@@ -1228,6 +1226,8 @@
 
     if (journalForm) {
       journalForm.addEventListener('submit', handleJournalSubmit);
+      const journalTextarea = journalForm.querySelector('textarea');
+      journalTextarea?.addEventListener('input', saveLaneDraft);
     }
     const journalClear = document.querySelector('[data-action="journal-clear"]');
     journalClear?.addEventListener('click', handleJournalClear);
@@ -1246,9 +1246,19 @@
       'Pick one energy and one pleasantness option to see suggestions.',
       []
     );
-    migrateLegacyJournalEntries();
-    renderJournalHistory(getJournalEntries());
+    applyLaneDraft();
+    renderJournalHistory();
     updateFooter();
+    if (!getJournalStore() && typeof window !== 'undefined') {
+      window.addEventListener(
+        'nvc-journal-store-ready',
+        () => {
+          applyLaneDraft();
+          renderJournalHistory();
+        },
+        { once: true }
+      );
+    }
   }
 
   if (document.readyState === 'loading') {
