@@ -175,7 +175,7 @@ const JOURNAL_BASE_CONFIG = {
   idPrefix: 'journal',
   needsMode: 'select',
   intensityRange: { min: 1, max: 10, defaultValue: DEFAULT_INTENSITY },
-  notes: { rows: 6 },
+  notes: { rows: 12 },
   labels: {
     emotion: 'Emotion (optional)',
     intensity: 'Intensity',
@@ -194,7 +194,7 @@ const JOURNAL_BASE_CONFIG = {
     emotion: '',
     needs: '',
     tags: 'work, weekend, boundaries',
-    notes: 'What happened? What did you notice in your body? What need wants attention?',
+    notes: '',
   },
   prompts: {
     heading: 'Need a nudge?',
@@ -226,6 +226,21 @@ const JOURNAL_BASE_CONFIG = {
     form: ['journal-form', 'inventory-journal-form'],
     grid: ['journal-form__grid', 'inventory-journal-form__grid'],
     field: ['journal-form__field', 'inventory-journal-form__field'],
+    notesField: [
+      'journal-form__field',
+      'journal-form__field--notes',
+      'inventory-journal-form__field',
+      'inventory-journal-form__field--notes',
+    ],
+    layout: ['journal-form__layout'],
+    pages: ['journal-form__pages'],
+    page: ['journal-form__page'],
+    primaryPage: ['journal-form__page', 'journal-form__page--primary'],
+    sheet: ['journal-form__sheet'],
+    sidebar: ['journal-form__sidebar'],
+    sidebarInner: ['journal-form__sidebar-inner'],
+    sidebarSection: ['journal-form__sidebar-section'],
+    notesInput: ['journal-form__notes'],
     intensityField: [
       'journal-form__field',
       'journal-form__field--intensity',
@@ -258,9 +273,9 @@ const JOURNAL_VARIANT_CONFIG = {
     },
     placeholders: {
       needs: 'Start typing a need',
-      notes: 'Today I noticed…',
+      notes: 'Let your reflection spill across the page…',
     },
-    notes: { rows: 6 },
+    notes: { rows: 12 },
     labels: {
       notes: 'Reflection (saved only on this device)',
     },
@@ -663,6 +678,7 @@ export function renderJournalForm(root, overrides = {}) {
 
   const notesId = `${config.idPrefix}-notes`;
   const notesTextarea = createElement('textarea', {
+    classes: config.classes.notesInput || [],
     attrs: {
       id: notesId,
       name: 'notes',
@@ -677,21 +693,48 @@ export function renderJournalForm(root, overrides = {}) {
     id: notesId,
     input: notesTextarea,
     hint: config.hints.notes,
-    fieldClasses: config.classes.wideField || config.classes.field,
+    fieldClasses: config.classes.notesField || config.classes.wideField || config.classes.field,
   });
-  grid.append(notesField);
-
-  form.append(grid);
 
   const prompts = buildPrompts(config);
+  const { container: actionsContainer, statusEl, openLink } = buildActions(config);
+
+  const layout = createElement('div', { classes: config.classes.layout || [] });
+  const pages = createElement('div', { classes: config.classes.pages || [] });
+  const primaryPage = createElement('section', { classes: config.classes.primaryPage || config.classes.page || [] });
+  const sheet = createElement('div', { classes: config.classes.sheet || [] });
+  sheet.append(notesField);
+  primaryPage.append(sheet);
+  pages.append(primaryPage);
+
+  const sidebarInner = createElement('div', { classes: config.classes.sidebarInner || [] });
+  if (grid.childElementCount > 0) {
+    const fieldsSection = config.classes.sidebarSection?.length
+      ? createElement('div', { classes: config.classes.sidebarSection })
+      : null;
+    if (fieldsSection) {
+      fieldsSection.append(grid);
+      sidebarInner.append(fieldsSection);
+    } else {
+      sidebarInner.append(grid);
+    }
+  }
   if (prompts) {
-    form.append(prompts);
+    sidebarInner.append(prompts);
+  }
+  if (actionsContainer) {
+    sidebarInner.append(actionsContainer);
   }
 
-  const { container: actionsContainer, statusEl, openLink } = buildActions(config);
-  if (actionsContainer) {
-    form.append(actionsContainer);
+  if (sidebarInner.childElementCount > 0) {
+    const sidebar = createElement('aside', { classes: config.classes.sidebar || [] });
+    sidebar.append(sidebarInner);
+    pages.append(sidebar);
   }
+
+  layout.append(pages);
+  form.append(layout);
+
   if (statusEl && config.actions.statusPlacement === 'after') {
     form.append(statusEl);
   }
@@ -742,6 +785,7 @@ class JournalFormController {
     this.notesInput = this.root.querySelector('[data-journal-notes]');
     this.clearButton = this.root.querySelector('[data-journal-clear]');
     this.saveButton = this.root.querySelector('[data-journal-submit]');
+    this.notesBaseHeight = null;
 
     this.emotionDatalist = null;
     this.emotionOptions = [];
@@ -767,6 +811,7 @@ class JournalFormController {
     }
 
     this.attachEvents();
+    this.autoResizeNotes();
     this.setNeedsOptions(this.options.needs);
     this.setEmotionOptions(this.options.feelings);
     this.refreshTagSource();
@@ -843,6 +888,7 @@ class JournalFormController {
       this.notesInput.addEventListener('input', () => {
         this.resetSaveButton();
         this.scheduleDraftSave();
+        this.autoResizeNotes();
       });
     }
 
@@ -885,6 +931,21 @@ class JournalFormController {
         this.resetForm();
       });
     }
+  }
+
+  autoResizeNotes() {
+    if (!this.notesInput) {
+      return;
+    }
+    const textarea = this.notesInput;
+    if (this.notesBaseHeight === null) {
+      textarea.style.height = 'auto';
+      this.notesBaseHeight = Math.max(textarea.scrollHeight, textarea.clientHeight);
+    }
+    textarea.style.height = 'auto';
+    const minHeight = this.notesBaseHeight || Math.max(textarea.scrollHeight, textarea.clientHeight);
+    const targetHeight = Math.max(textarea.scrollHeight, minHeight);
+    textarea.style.height = `${targetHeight}px`;
   }
 
   refreshTagSource() {
@@ -957,6 +1018,7 @@ class JournalFormController {
     }
     if (this.notesInput) {
       this.notesInput.value = data.notes || '';
+      this.autoResizeNotes();
     }
     if (this.intensityInput) {
       const intensityValue = normalizeNumber(
@@ -1013,6 +1075,7 @@ class JournalFormController {
       this.clearDraft();
     }
     if (this.notesInput) {
+      this.autoResizeNotes();
       this.notesInput.focus();
     }
   }
