@@ -18,6 +18,8 @@ const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 24;
 const CLICK_SUPPRESS_WINDOW = 150;
+const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
+const SHUFFLE_LABEL_BUSY = 'Shuffling…';
 
 const getNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
   ? performance.now()
@@ -351,9 +353,22 @@ const handlePositionsUpdate = (state, list) => {
 };
 
 const setPlayState = (state, active) => {
+  if (!active && state.isShuffling) {
+    state.isShuffling = false;
+    if (state.shuffleButton) {
+      state.shuffleButton.disabled = false;
+      state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || SHUFFLE_LABEL_DEFAULT;
+      state.shuffleButton.removeAttribute('aria-busy');
+    }
+  }
   if (active) {
     if (state.physics) {
       return;
+    }
+    if (state.shuffleButton) {
+      state.shuffleButton.disabled = false;
+      state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || state.shuffleButton.textContent;
+      state.shuffleButton.removeAttribute('aria-busy');
     }
     state.board.dataset.active = '1';
     state.root?.setAttribute('data-magnet-active', '1');
@@ -431,6 +446,7 @@ const initializeBoard = async (root, index) => {
     lastSeedWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
     lastLayoutType: 'seed',
     resizeScheduled: false,
+    isShuffling: false,
   };
 
   state.setClickSuppress = () => {
@@ -496,8 +512,15 @@ const initializeBoard = async (root, index) => {
     if (state.resizeScheduled) {
       return;
     }
+    if (state.isShuffling) {
+      return;
+    }
     state.resizeScheduled = true;
     Promise.resolve().then(async () => {
+      if (state.isShuffling) {
+        state.resizeScheduled = false;
+        return;
+      }
       state.resizeScheduled = false;
       const previousWidth = state.boardWidth;
       await waitForAnimationFrames(2);
@@ -556,8 +579,24 @@ const initializeBoard = async (root, index) => {
 
   if (shuffleButton) {
     shuffleButton.addEventListener('click', () => {
+      if (state.isShuffling) {
+        return;
+      }
       if (state.physics && state.physics.shuffle) {
-        state.physics.shuffle();
+        state.isShuffling = true;
+        const originalLabel = shuffleButton.dataset.originalLabel || shuffleButton.textContent || SHUFFLE_LABEL_DEFAULT;
+        shuffleButton.dataset.originalLabel = originalLabel;
+        shuffleButton.textContent = SHUFFLE_LABEL_BUSY;
+        shuffleButton.setAttribute('aria-busy', 'true');
+        shuffleButton.disabled = true;
+        Promise.resolve(state.physics.shuffle())
+          .catch(() => {})
+          .finally(() => {
+            state.isShuffling = false;
+            shuffleButton.disabled = false;
+            shuffleButton.textContent = shuffleButton.dataset.originalLabel || SHUFFLE_LABEL_DEFAULT;
+            shuffleButton.removeAttribute('aria-busy');
+          });
       } else {
         shuffleWithoutPhysics(state);
       }
