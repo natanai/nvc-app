@@ -514,6 +514,8 @@
     lastSavedEntryId: '',
     saveButtonDefaultLabel: '',
     journalController: null,
+    needs: [],
+    feelings: [],
   };
 
   const startButton = steps.intro?.querySelector('[data-action="start"]');
@@ -534,6 +536,7 @@
   let supportJournalEmotion = null;
   let supportJournalIntensity = null;
   let supportJournalIntensityDisplay = null;
+  let supportJournalNeedsInput = null;
   let supportJournalTagsInput = null;
   let supportJournalNotes = null;
   let supportJournalSubmit = null;
@@ -564,6 +567,7 @@
   supportJournalIntensity = state.journalController?.intensityInput || document.querySelector('[data-support-journal-intensity]');
   supportJournalIntensityDisplay =
     state.journalController?.intensityDisplay || document.querySelector('[data-support-journal-intensity-display]');
+  supportJournalNeedsInput = state.journalController?.needsSelect || document.querySelector('[data-support-journal-needs]');
   supportJournalTagsInput = state.journalController?.tagsInput || document.querySelector('[data-support-journal-tags]');
   supportJournalNotes = state.journalController?.notesInput || document.querySelector('[data-support-journal-notes]');
   supportJournalSubmit = state.journalController?.saveButton || document.querySelector('[data-support-journal-submit]');
@@ -614,8 +618,16 @@
     const backButton = cta.querySelector('[data-step-back]');
     const nextButton = cta.querySelector('[data-step-next]');
     const skipButton = cta.querySelector('[data-step-skip]');
-    setControlButtonState(backButton, index <= 0);
-    setControlButtonState(nextButton, index >= STEP_SEQUENCE.length - 1);
+    if (backButton) {
+      const hideBack = index <= 0;
+      backButton.hidden = hideBack;
+      setControlButtonState(backButton, hideBack);
+    }
+    if (nextButton) {
+      const hideNext = index >= STEP_SEQUENCE.length - 1;
+      nextButton.hidden = hideNext;
+      setControlButtonState(nextButton, hideNext);
+    }
     if (skipButton) {
       const disableSkip = index >= STEP_SEQUENCE.length - 1;
       setControlButtonState(skipButton, disableSkip);
@@ -1251,10 +1263,17 @@
         ? Math.min(10, Math.round(intensityValue))
         : undefined;
     const tags = normalizeJournalTagsValue(supportJournalTagsInput?.value || '');
+    const needs = supportJournalNeedsInput
+      ? (supportJournalNeedsInput.value || '')
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : [];
     return {
       notes,
       emotion: emotionValue.trim(),
       intensity,
+      needs,
       tags,
     };
   }
@@ -1355,7 +1374,10 @@
     const data = gatherSupportJournalData();
     const sensations = getSelectedSensations(sensationChips);
     const hasContent =
-      data.notes.trim().length > 0 || data.emotion || (Array.isArray(data.tags) && data.tags.length > 0);
+      data.notes.trim().length > 0 ||
+      data.emotion ||
+      (Array.isArray(data.tags) && data.tags.length > 0) ||
+      (Array.isArray(data.needs) && data.needs.length > 0);
     if (!hasContent) {
       store.clearDraft(state.draftPath);
       return;
@@ -1365,6 +1387,7 @@
       emotion: data.emotion,
       intensity: data.intensity,
       tags: data.tags,
+      needs: data.needs,
       energy: state.energyValue,
       valence: state.valenceValue,
       sensations,
@@ -1391,6 +1414,7 @@
       emotion: typeof draft.emotion === 'string' ? draft.emotion : '',
       intensity: Number.isFinite(draft.intensity) ? Number(draft.intensity) : undefined,
       tags: draftTags,
+      needs: Array.isArray(draft.needs) ? draft.needs : [],
     };
     if (state.journalController && typeof state.journalController.setValues === 'function') {
       state.journalController.setValues(draftData, { trailingTags: draftTags.length > 0 });
@@ -1404,6 +1428,9 @@
       if (supportJournalIntensity && Number.isFinite(draftData.intensity)) {
         supportJournalIntensity.value = Math.max(0, Math.min(10, Math.round(draftData.intensity)));
         updateLaneIntensityDisplay(Number(supportJournalIntensity.value));
+      }
+      if (supportJournalNeedsInput) {
+        supportJournalNeedsInput.value = draftData.needs.length ? `${draftData.needs.join(', ')}` : '';
       }
       if (supportJournalTagsInput) {
         supportJournalTagsInput.value = joinJournalTagsValue(draftTags, { trailing: draftTags.length > 0 });
@@ -1440,11 +1467,33 @@
       ? EMOTION_LIBRARY[state.selectedEmotion]?.name ?? state.selectedEmotion
       : '';
     const emotionValue = data.emotion || emotionName;
-    const hasContent = trimmedNotes || emotionValue || (Array.isArray(data.tags) && data.tags.length);
+    const hasContent =
+      trimmedNotes ||
+      emotionValue ||
+      (Array.isArray(data.tags) && data.tags.length) ||
+      (Array.isArray(data.needs) && data.needs.length);
     if (!hasContent) {
       journalStatus.textContent = 'Add a few notes, an emotion, or a tag before saving.';
       return;
     }
+    const typedNeeds = Array.isArray(data.needs) ? data.needs : [];
+    const suggestedNeeds = state.selectedEmotion ? EMOTION_LIBRARY[state.selectedEmotion]?.needs ?? [] : [];
+    const mergedNeedsRaw = normalizeNeeds([...typedNeeds, ...suggestedNeeds]);
+    const mergedNeeds = [];
+    const seenNeeds = new Set();
+    mergedNeedsRaw.forEach((need) => {
+      const label = need?.label || '';
+      if (!label) {
+        return;
+      }
+      const key = label.toLowerCase();
+      if (seenNeeds.has(key)) {
+        return;
+      }
+      seenNeeds.add(key);
+      mergedNeeds.push(label);
+    });
+
     const entry = createLaneEntry({
       emotion: emotionValue,
       intensity: data.intensity,
@@ -1453,7 +1502,7 @@
       energy: Number.isFinite(state.energyValue) ? state.energyValue : undefined,
       valence: Number.isFinite(state.valenceValue) ? state.valenceValue : undefined,
       sensations: getSelectedSensations(sensationChips),
-      needs: state.selectedEmotion ? EMOTION_LIBRARY[state.selectedEmotion]?.needs ?? [] : [],
+      needs: mergedNeeds,
       source: 'lane',
     });
     const saved = store.create(entry);
@@ -1504,6 +1553,9 @@
         updateLaneIntensityDisplay(5);
       } else {
         updateLaneIntensityDisplay(5);
+      }
+      if (supportJournalNeedsInput) {
+        supportJournalNeedsInput.value = '';
       }
       if (supportJournalTagsInput) {
         supportJournalTagsInput.value = '';
@@ -1557,6 +1609,40 @@
     } else if (action === 'speak-template') {
       speakTemplate(text, statusNode);
     }
+  }
+
+  function loadLaneReferenceData() {
+    const loadNeeds = window.NVCJournal?.loadNeedsList;
+    const loadFeelings = window.NVCJournal?.loadFeelingsList;
+    if (typeof loadNeeds !== 'function' && typeof loadFeelings !== 'function') {
+      return;
+    }
+    const needsPromise = typeof loadNeeds === 'function' ? loadNeeds({ basePath }) : Promise.resolve([]);
+    const feelingsPromise = typeof loadFeelings === 'function' ? loadFeelings({ basePath }) : Promise.resolve([]);
+    Promise.all([
+      needsPromise.catch((error) => {
+        console.warn('Support lane: unable to load needs list', error);
+        return [];
+      }),
+      feelingsPromise.catch((error) => {
+        console.warn('Support lane: unable to load feelings list', error);
+        return [];
+      }),
+    ]).then(([needs, feelings]) => {
+      if (Array.isArray(needs) && needs.length) {
+        state.needs = needs;
+        if (state.journalController && typeof state.journalController.setNeedsOptions === 'function') {
+          state.journalController.setNeedsOptions(needs);
+          supportJournalNeedsInput = state.journalController.needsSelect || supportJournalNeedsInput;
+        }
+      }
+      if (Array.isArray(feelings) && feelings.length) {
+        state.feelings = feelings;
+        if (state.journalController && typeof state.journalController.setEmotionOptions === 'function') {
+          state.journalController.setEmotionOptions(feelings);
+        }
+      }
+    });
   }
 
   function init() {
@@ -1616,6 +1702,13 @@
         scheduleLaneDraftSave();
       });
     }
+    if (!state.journalController && supportJournalNeedsInput) {
+      supportJournalNeedsInput.setAttribute('aria-autocomplete', 'list');
+      supportJournalNeedsInput.addEventListener('input', () => {
+        resetLaneSaveButton();
+        scheduleLaneDraftSave();
+      });
+    }
     const journalClear = document.querySelector('[data-action="journal-clear"]');
     journalClear?.addEventListener('click', handleJournalClear);
 
@@ -1634,6 +1727,7 @@
       []
     );
     applyLaneDraft();
+    loadLaneReferenceData();
     renderJournalHistory();
     updateStepControls();
     if (!getJournalStore() && typeof window !== 'undefined') {
