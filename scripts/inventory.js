@@ -52,6 +52,10 @@ const paletteState = {
   cornerSlider: null,
   cornerValue: null,
   cornerRoundness: DEFAULT_ROUNDNESS,
+  tiltField: null,
+  tiltToggle: null,
+  tiltStatus: null,
+  tiltSnapshot: null,
 };
 
 const SECTION_ALIASES = new Map([
@@ -187,6 +191,111 @@ function rememberPaletteTrigger(element) {
   }
 }
 
+function updateTiltPermissionUI(snapshot) {
+  const toggle = paletteState.tiltToggle;
+  const statusEl = paletteState.tiltStatus;
+  const field = paletteState.tiltField;
+  if (!toggle || !statusEl) {
+    return;
+  }
+
+  const liveState = snapshot && typeof snapshot === 'object'
+    ? snapshot
+    : (typeof window !== 'undefined' && window.NVCMagnetTiltState) || null;
+
+  const hasOrientationSensors = typeof window !== 'undefined'
+    && typeof window.DeviceOrientationEvent !== 'undefined';
+  const supportsTiltPermissionRequests = hasOrientationSensors
+    && typeof window.DeviceOrientationEvent.requestPermission === 'function';
+
+  const supported = liveState && 'supported' in liveState
+    ? Boolean(liveState.supported)
+    : supportsTiltPermissionRequests;
+  const available = liveState && 'available' in liveState
+    ? Boolean(liveState.available)
+    : hasOrientationSensors;
+
+  let permissionState = liveState && typeof liveState.state === 'string'
+    ? liveState.state
+    : null;
+
+  if (permissionState !== 'granted' && permissionState !== 'denied' && permissionState !== 'unknown') {
+    permissionState = supportsTiltPermissionRequests
+      ? 'unknown'
+      : (hasOrientationSensors ? 'granted' : 'unknown');
+  }
+
+  const pending = liveState && 'pending' in liveState
+    ? Boolean(liveState.pending)
+    : false;
+
+  paletteState.tiltSnapshot = {
+    supported,
+    available,
+    state: permissionState,
+    pending,
+  };
+
+  const isGranted = permissionState === 'granted';
+  toggle.setAttribute('aria-checked', isGranted ? 'true' : 'false');
+  const disableToggle = pending || !available || (!supported && permissionState === 'granted');
+  toggle.disabled = disableToggle;
+  if (disableToggle) {
+    toggle.setAttribute('aria-disabled', 'true');
+  } else {
+    toggle.removeAttribute('aria-disabled');
+  }
+
+  let label = 'Request permission';
+  let statusText = '';
+  let statusState = '';
+
+  if (!available) {
+    label = 'Unavailable';
+    statusText = 'Tilt controls are not supported on this device.';
+    statusState = 'error';
+  } else if (pending) {
+    label = 'Requesting…';
+    statusText = 'Waiting for device permission…';
+    statusState = 'pending';
+  } else if (isGranted) {
+    label = 'On';
+    statusText = supported
+      ? 'Device tilt control is active.'
+      : 'Tilt responds automatically.';
+  } else if (permissionState === 'denied') {
+    label = 'Request again';
+    statusText = 'Permission denied. Tap to try again.';
+    statusState = 'error';
+  } else {
+    statusText = 'Request permission to let magnets follow your device tilt.';
+  }
+
+  toggle.textContent = label;
+  toggle.dataset.state = pending ? 'pending' : permissionState;
+  statusEl.textContent = statusText;
+  statusEl.dataset.state = statusState;
+  statusEl.hidden = !statusText;
+
+  if (field) {
+    if (!available) {
+      field.setAttribute('data-tilt-unavailable', 'true');
+    } else {
+      field.removeAttribute('data-tilt-unavailable');
+    }
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('magnettiltstatuschange', (event) => {
+    if (event && typeof event === 'object' && 'detail' in event) {
+      updateTiltPermissionUI(event.detail);
+    } else {
+      updateTiltPermissionUI(null);
+    }
+  });
+}
+
 function isPaletteEventTarget(target) {
   if (typeof Node === 'undefined' || !(target instanceof Node)) {
     return false;
@@ -207,8 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
   state.journalStore = resolveJournalStore();
   updateJournalEntriesFromStore();
   highlightNavigation();
-  initColorCustomizer().catch((error) => {
-    console.warn('Unable to set up the color customizer', error);
+  initCustomizer().catch((error) => {
+    console.warn('Unable to set up the customizer', error);
   });
   updateInventoryCount();
   setupNeedPage();
@@ -592,7 +701,7 @@ function resolveSectionAlias(pathname) {
   return null;
 }
 
-async function initColorCustomizer() {
+async function initCustomizer() {
   if (!document.body || paletteState.container) {
     return;
   }
@@ -651,7 +760,7 @@ function buildPaletteUi() {
 
   const srLabel = document.createElement('span');
   srLabel.className = 'visually-hidden';
-  srLabel.textContent = 'Open color palette customizer';
+  srLabel.textContent = 'Open customizer';
   toggle.appendChild(srLabel);
 
   const nav = document.querySelector('.site-nav');
@@ -668,7 +777,7 @@ function buildPaletteUi() {
 
     const mobileSrLabel = document.createElement('span');
     mobileSrLabel.className = 'visually-hidden';
-    mobileSrLabel.textContent = 'Open color palette customizer';
+    mobileSrLabel.textContent = 'Open customizer';
 
     mobileToggle.append(mobileGlyph, mobileSrLabel);
     nav.appendChild(mobileToggle);
@@ -682,7 +791,7 @@ function buildPaletteUi() {
   const panel = document.createElement('div');
   panel.className = 'palette-corner__panel';
   panel.setAttribute('role', 'dialog');
-  panel.setAttribute('aria-label', 'Color palette customizer');
+  panel.setAttribute('aria-label', 'Customizer');
   panel.hidden = true;
   panel.tabIndex = -1;
 
@@ -698,16 +807,16 @@ function buildPaletteUi() {
 
   const title = document.createElement('p');
   title.className = 'palette-form__title';
-  title.textContent = 'Color tuner';
+  title.textContent = 'Customizer';
 
   const subtitle = document.createElement('p');
   subtitle.className = 'palette-form__subtitle';
-  subtitle.textContent = 'Pick a preset or enter your own hex codes.';
+  subtitle.textContent = 'Fine-tune colors, corners, and device controls.';
 
   const closeButton = document.createElement('button');
   closeButton.type = 'button';
   closeButton.className = 'palette-form__close';
-  closeButton.innerHTML = '<span aria-hidden="true">×</span><span class="visually-hidden">Close color palette customizer</span>';
+  closeButton.innerHTML = '<span aria-hidden="true">×</span><span class="visually-hidden">Close customizer</span>';
   closeButton.addEventListener('click', () => {
     closePalettePanel({ restoreFocus: true });
   });
@@ -783,6 +892,29 @@ function buildPaletteUi() {
   paletteState.cornerValue = roundnessValue;
   updateRoundnessDisplay(paletteState.cornerRoundness);
 
+  const contrastField = document.createElement('div');
+  contrastField.className = 'palette-form__field palette-form__field--toggle';
+
+  const contrastLabel = document.createElement('span');
+  contrastLabel.className = 'palette-form__label';
+  contrastLabel.id = 'paletteHighContrastLabel';
+  contrastLabel.textContent = 'High contrast';
+
+  const contrastToggle = document.createElement('button');
+  contrastToggle.type = 'button';
+  contrastToggle.className = 'palette-form__switch';
+  contrastToggle.setAttribute('role', 'switch');
+  contrastToggle.setAttribute('aria-labelledby', 'paletteHighContrastLabel');
+  contrastToggle.addEventListener('click', () => {
+    setHighContrastEnabled(!paletteState.highContrastEnabled);
+  });
+
+  contrastField.append(contrastLabel, contrastToggle);
+  form.appendChild(contrastField);
+
+  paletteState.highContrastToggle = contrastToggle;
+  updateHighContrastToggle();
+
   const grid = document.createElement('div');
   grid.className = 'palette-form__grid';
   form.appendChild(grid);
@@ -824,28 +956,60 @@ function buildPaletteUi() {
     paletteState.swatches.set(color.key, swatch);
   });
 
-  const contrastField = document.createElement('div');
-  contrastField.className = 'palette-form__field palette-form__field--toggle';
+  const tiltField = document.createElement('div');
+  tiltField.className = 'palette-form__field palette-form__field--toggle';
 
-  const contrastLabel = document.createElement('span');
-  contrastLabel.className = 'palette-form__label';
-  contrastLabel.id = 'paletteHighContrastLabel';
-  contrastLabel.textContent = 'High contrast';
+  const tiltInfo = document.createElement('div');
+  tiltInfo.className = 'palette-form__toggle-info';
 
-  const contrastToggle = document.createElement('button');
-  contrastToggle.type = 'button';
-  contrastToggle.className = 'palette-form__switch';
-  contrastToggle.setAttribute('role', 'switch');
-  contrastToggle.setAttribute('aria-labelledby', 'paletteHighContrastLabel');
-  contrastToggle.addEventListener('click', () => {
-    setHighContrastEnabled(!paletteState.highContrastEnabled);
+  const tiltLabel = document.createElement('span');
+  tiltLabel.className = 'palette-form__label';
+  tiltLabel.id = 'paletteTiltLabel';
+  tiltLabel.textContent = 'Device tilt access';
+
+  const tiltDescription = document.createElement('span');
+  tiltDescription.className = 'palette-form__description';
+  tiltDescription.id = 'paletteTiltDescription';
+  tiltDescription.textContent = 'Let magnets respond to how you hold your phone.';
+
+  tiltInfo.append(tiltLabel, tiltDescription);
+
+  const tiltControls = document.createElement('div');
+  tiltControls.className = 'palette-form__toggle-controls';
+
+  const tiltToggle = document.createElement('button');
+  tiltToggle.type = 'button';
+  tiltToggle.className = 'palette-form__switch';
+  tiltToggle.setAttribute('role', 'switch');
+  tiltToggle.setAttribute('aria-labelledby', 'paletteTiltLabel');
+  tiltToggle.setAttribute('aria-describedby', 'paletteTiltDescription paletteTiltStatus');
+  tiltToggle.textContent = 'Request permission';
+  tiltToggle.addEventListener('click', () => {
+    if (tiltToggle.disabled) {
+      return;
+    }
+    const snapshot = paletteState.tiltSnapshot || ((typeof window !== 'undefined' && window.NVCMagnetTiltState) || {});
+    if (snapshot && snapshot.pending) {
+      return;
+    }
+    if (snapshot && snapshot.supported === false && snapshot.available && snapshot.state === 'granted') {
+      return;
+    }
+    window.dispatchEvent(new CustomEvent('magnettiltrequest'));
   });
 
-  contrastField.append(contrastLabel, contrastToggle);
-  form.appendChild(contrastField);
+  const tiltStatus = document.createElement('span');
+  tiltStatus.className = 'palette-form__status';
+  tiltStatus.id = 'paletteTiltStatus';
+  tiltStatus.setAttribute('aria-live', 'polite');
 
-  paletteState.highContrastToggle = contrastToggle;
-  updateHighContrastToggle();
+  tiltControls.append(tiltToggle, tiltStatus);
+  tiltField.append(tiltInfo, tiltControls);
+  form.appendChild(tiltField);
+
+  paletteState.tiltField = tiltField;
+  paletteState.tiltToggle = tiltToggle;
+  paletteState.tiltStatus = tiltStatus;
 
   const actions = document.createElement('div');
   actions.className = 'palette-form__actions';
@@ -916,6 +1080,8 @@ function buildPaletteUi() {
   paletteState.mobileToggle = mobileToggle;
   paletteState.panel = panel;
   paletteState.presetSelect = presetSelect;
+
+  updateTiltPermissionUI(typeof window !== 'undefined' ? window.NVCMagnetTiltState : null);
 }
 
 function openPalettePanel() {

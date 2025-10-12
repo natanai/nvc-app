@@ -145,6 +145,93 @@ const supportsTiltPermissionRequests = () => typeof window !== 'undefined'
   && typeof window.DeviceOrientationEvent !== 'undefined'
   && typeof window.DeviceOrientationEvent.requestPermission === 'function';
 
+const tiltSensorsAvailable = typeof window !== 'undefined'
+  && typeof window.DeviceOrientationEvent !== 'undefined';
+const tiltPermissionSupported = supportsTiltPermissionRequests();
+
+const tiltSources = new Set();
+const tiltPermissionStatus = {
+  supported: tiltPermissionSupported,
+  available: tiltSensorsAvailable,
+  state: tiltPermissionSupported ? 'unknown' : 'granted',
+  pending: false,
+};
+
+const publishTiltStatus = () => {
+  const detail = { ...tiltPermissionStatus };
+  if (typeof window !== 'undefined') {
+    window.NVCMagnetTiltState = detail;
+    window.dispatchEvent(new CustomEvent('magnettiltstatuschange', { detail }));
+  }
+};
+
+const recomputeTiltStatus = () => {
+  let hasGranted = !tiltPermissionStatus.supported;
+  let hasDenied = false;
+  let hasUnknown = tiltPermissionStatus.supported;
+  let pending = false;
+  tiltSources.forEach((source) => {
+    if (!source) {
+      return;
+    }
+    const permission = source.tiltPermissionState || 'unknown';
+    if (source.tiltPermissionRequest) {
+      pending = true;
+    }
+    if (permission === 'granted') {
+      hasGranted = true;
+    } else if (permission === 'denied') {
+      hasDenied = true;
+    } else if (permission === 'unknown') {
+      hasUnknown = true;
+    }
+  });
+
+  let nextState;
+  if (hasGranted) {
+    nextState = 'granted';
+  } else if (hasDenied) {
+    nextState = 'denied';
+  } else if (hasUnknown) {
+    nextState = 'unknown';
+  } else {
+    nextState = tiltPermissionStatus.supported ? 'unknown' : 'granted';
+  }
+
+  if (nextState !== tiltPermissionStatus.state || pending !== tiltPermissionStatus.pending) {
+    tiltPermissionStatus.state = nextState;
+    tiltPermissionStatus.pending = pending;
+    globalTiltSource.tiltPermissionState = nextState;
+    if (!pending) {
+      globalTiltSource.tiltPermissionRequest = null;
+    }
+    publishTiltStatus();
+  }
+};
+
+const registerTiltSource = (source) => {
+  if (!source) {
+    return () => {};
+  }
+  tiltSources.add(source);
+  recomputeTiltStatus();
+  return () => {
+    tiltSources.delete(source);
+    recomputeTiltStatus();
+  };
+};
+
+const globalTiltSource = {
+  tiltPermissionState: tiltPermissionSupported ? 'unknown' : 'granted',
+  tiltPermissionRequest: null,
+  tiltPermissionLoggedDenied: false,
+  root: null,
+  cleanupTiltToggleRequest: null,
+};
+
+registerTiltSource(globalTiltSource);
+publishTiltStatus();
+
 const normalizeTiltPermissionResult = (value) => (value === 'granted' || value === true ? 'granted' : 'denied');
 
 function updateTiltRequestUI(state) {
@@ -153,38 +240,6 @@ function updateTiltRequestUI(state) {
   }
 
   const permissionState = state.tiltPermissionState || 'unknown';
-  const pending = Boolean(state.tiltPermissionRequest);
-  const button = state.tiltRequestButton;
-  const statusLabel = state.tiltStatusLabel;
-
-  if (button) {
-    const granted = permissionState === 'granted';
-    if (granted) {
-      button.hidden = true;
-      button.disabled = true;
-      button.setAttribute('aria-disabled', 'true');
-    } else {
-      button.hidden = false;
-      const disabled = pending || permissionState === 'denied';
-      button.disabled = disabled;
-      if (disabled) {
-        button.setAttribute('aria-disabled', 'true');
-      } else {
-        button.removeAttribute('aria-disabled');
-      }
-    }
-  }
-
-  if (statusLabel) {
-    let text = '';
-    if (pending) {
-      text = 'Requesting tilt access…';
-    } else if (permissionState === 'denied') {
-      text = 'Tilt access denied';
-    }
-    statusLabel.textContent = text;
-    statusLabel.hidden = text.length === 0;
-  }
 
   if (
     (permissionState === 'granted' || permissionState === 'denied')
@@ -193,16 +248,17 @@ function updateTiltRequestUI(state) {
     state.cleanupTiltToggleRequest();
     state.cleanupTiltToggleRequest = null;
   }
+
+  recomputeTiltStatus();
 }
 
 const setTiltPermissionIndicator = (state, status) => {
-  if (!state?.root) {
-    return;
-  }
-  if (status === 'denied') {
-    state.root.setAttribute('data-magnet-tilt-permission', 'denied');
-  } else {
-    state.root.removeAttribute('data-magnet-tilt-permission');
+  if (state?.root) {
+    if (status === 'denied') {
+      state.root.setAttribute('data-magnet-tilt-permission', 'denied');
+    } else {
+      state.root.removeAttribute('data-magnet-tilt-permission');
+    }
   }
   updateTiltRequestUI(state);
 };
@@ -279,6 +335,12 @@ const enableTiltForState = (state, permissionPromise) => {
   if (!state?.physics || typeof state.physics.enableTilt !== 'function') {
     return;
   }
+
+  if (!permissionPromise && state.tiltPermissionState === 'granted') {
+    state.physics.enableTilt(Promise.resolve('granted'));
+    return;
+  }
+
   state.physics.enableTilt(permissionPromise);
 };
 
@@ -394,6 +456,20 @@ const handleTiltPermissionDenied = (state, reason) => {
   state.tiltPermissionLoggedDenied = true;
   updateTiltRequestUI(state);
 };
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('magnettiltrequest', () => {
+    if (!tiltSensorsAvailable) {
+      return;
+    }
+    const boardState = Array.from(tiltSources).find((source) => source && source.board);
+    if (boardState) {
+      requestTiltFromUser(boardState);
+      return;
+    }
+    requestTiltPermission(globalTiltSource);
+  });
+}
 
 const waitForStableBoard = async (board) => {
   await fontsReady;
@@ -808,11 +884,9 @@ const initializeBoard = async (root, index) => {
     lastLayoutType: 'seed',
     resizeScheduled: false,
     isShuffling: false,
-    tiltPermissionState: supportsTiltPermissionRequests() ? 'unknown' : 'granted',
-    tiltPermissionRequest: null,
-    tiltPermissionLoggedDenied: false,
-    tiltRequestButton: null,
-    tiltStatusLabel: null,
+    tiltPermissionState: globalTiltSource.tiltPermissionState,
+    tiltPermissionRequest: globalTiltSource.tiltPermissionRequest,
+    tiltPermissionLoggedDenied: globalTiltSource.tiltPermissionState === 'denied',
     cleanupTiltToggleRequest: null,
   };
 
@@ -820,35 +894,7 @@ const initializeBoard = async (root, index) => {
     state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;
   };
 
-  const header = root.querySelector('.magnet-section__header');
-  if (header) {
-    let tiltButton = header.querySelector('[data-magnet-tilt-request]');
-    if (!tiltButton) {
-      tiltButton = document.createElement('button');
-      tiltButton.type = 'button';
-      tiltButton.className = 'magnet-tilt-button';
-      tiltButton.setAttribute('data-magnet-tilt-request', '');
-      tiltButton.textContent = 'Enable tilt';
-      header.appendChild(tiltButton);
-    }
-    state.tiltRequestButton = tiltButton;
-
-    let tiltStatus = header.querySelector('[data-magnet-tilt-status]');
-    if (!tiltStatus) {
-      tiltStatus = document.createElement('span');
-      tiltStatus.className = 'magnet-tilt-status';
-      tiltStatus.setAttribute('data-magnet-tilt-status', '');
-      header.appendChild(tiltStatus);
-    }
-    state.tiltStatusLabel = tiltStatus;
-
-    if (state.tiltRequestButton) {
-      state.tiltRequestButton.addEventListener('click', () => {
-        requestTiltFromUser(state);
-      });
-    }
-  }
-
+  registerTiltSource(state);
   updateTiltRequestUI(state);
 
   board.addEventListener('click', (event) => {
