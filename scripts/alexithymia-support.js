@@ -544,9 +544,21 @@
 
   const DRAFT_DEBOUNCE_MS = 1200;
 
-  const baseJournalForm = document.querySelector('[data-journal-form]');
-  const journalStep = baseJournalForm?.closest('[data-step="journal"]') || baseJournalForm;
-  if (journalStep && typeof window.NVCJournal?.createForm === 'function') {
+  const journalStep = document.querySelector('[data-step="journal"]');
+  const journalMount = journalStep?.querySelector('[data-journal-module]') || journalStep;
+  const renderJournalForm = window.NVCJournal?.renderForm;
+  if (journalMount && typeof renderJournalForm === 'function') {
+    try {
+      renderJournalForm(journalMount, {
+        variant: journalMount.dataset.journalVariant || 'support',
+        idPrefix: journalMount.dataset.journalIdPrefix || 'support-journal',
+      });
+    } catch (error) {
+      console.warn('Unable to render lane journal form', error);
+    }
+  }
+  const baseJournalForm = journalMount?.querySelector('[data-journal-form]') || journalStep?.querySelector('[data-journal-form]');
+  if (journalStep && baseJournalForm && typeof window.NVCJournal?.createForm === 'function') {
     try {
       state.journalController = window.NVCJournal.createForm(journalStep, {
         draftPath: state.draftPath,
@@ -559,19 +571,19 @@
   }
 
   journalForm = state.journalController?.form || baseJournalForm || null;
-  journalStatus = state.journalController?.statusEl || document.querySelector('[data-journal-status]');
+  journalStatus = state.journalController?.statusEl || journalStep?.querySelector('[data-journal-status]');
   journalHistory = document.querySelector('[data-journal-history]');
   regulationCard = document.querySelector('[data-regulation-card]');
   communicationCard = document.querySelector('[data-communication-card]');
-  supportJournalEmotion = state.journalController?.emotionInput || document.querySelector('[data-support-journal-emotion]');
-  supportJournalIntensity = state.journalController?.intensityInput || document.querySelector('[data-support-journal-intensity]');
+  supportJournalEmotion = state.journalController?.emotionInput || journalStep?.querySelector('[data-journal-emotion]');
+  supportJournalIntensity = state.journalController?.intensityInput || journalStep?.querySelector('[data-journal-intensity]');
   supportJournalIntensityDisplay =
-    state.journalController?.intensityDisplay || document.querySelector('[data-support-journal-intensity-display]');
-  supportJournalNeedsInput = state.journalController?.needsSelect || document.querySelector('[data-support-journal-needs]');
-  supportJournalTagsInput = state.journalController?.tagsInput || document.querySelector('[data-support-journal-tags]');
-  supportJournalNotes = state.journalController?.notesInput || document.querySelector('[data-support-journal-notes]');
-  supportJournalSubmit = state.journalController?.saveButton || document.querySelector('[data-support-journal-submit]');
-  supportJournalOpenLink = document.querySelector('[data-support-journal-open]');
+    state.journalController?.intensityDisplay || journalStep?.querySelector('[data-journal-intensity-display]');
+  supportJournalNeedsInput = state.journalController?.needsSelect || journalStep?.querySelector('[data-journal-needs]');
+  supportJournalTagsInput = state.journalController?.tagsInput || journalStep?.querySelector('[data-journal-tags]');
+  supportJournalNotes = state.journalController?.notesInput || journalStep?.querySelector('[data-journal-notes]');
+  supportJournalSubmit = state.journalController?.saveButton || journalStep?.querySelector('[data-journal-submit]');
+  supportJournalOpenLink = journalStep?.querySelector('[data-journal-open-link]');
 
   state.saveButtonDefaultLabel = supportJournalSubmit?.textContent || 'Save reflection';
 
@@ -1709,7 +1721,7 @@
         scheduleLaneDraftSave();
       });
     }
-    const journalClear = document.querySelector('[data-action="journal-clear"]');
+    const journalClear = journalStep?.querySelector('[data-journal-clear]');
     journalClear?.addEventListener('click', handleJournalClear);
 
     communicationCard?.addEventListener('click', handleCommunicationClick);

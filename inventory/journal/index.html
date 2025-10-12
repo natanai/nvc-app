@@ -185,51 +185,11 @@
             <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
             <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
           </div>
-          <form class="inventory-journal-form" data-journal-form>
-            <div class="inventory-journal-form__grid">
-              <div class="inventory-journal-form__field">
-                <label for="journal-emotion">Emotion (optional)</label>
-                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" data-journal-emotion />
-                <p class="journal-field-hint">Use any word that fits or return later to update it.</p>
-              </div>
-              <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
-                <label for="journal-intensity">Intensity</label>
-                <div class="inventory-journal-form__intensity">
-                  <input id="journal-intensity" name="intensity" type="range" min="1" max="10" value="5" data-journal-intensity />
-                  <output for="journal-intensity" data-journal-intensity-display>5/10</output>
-                </div>
-                <p class="journal-field-hint">Slide to note how strong the feeling is.</p>
-              </div>
-              <div class="inventory-journal-form__field">
-                <label for="journal-needs">Related needs</label>
-                <select id="journal-needs" name="needs" multiple data-journal-needs></select>
-                <p class="journal-field-hint">Pick one or more needs that connect. Leave empty if you're not sure yet.</p>
-              </div>
-              <div class="inventory-journal-form__field">
-                <label for="journal-tags">Tags (optional)</label>
-                <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" data-journal-tags />
-                <p class="journal-field-hint">Separate tags with commas. They'll help you filter later.</p>
-                <div class="journal-tag-suggestions" data-journal-tag-suggestions hidden></div>
-              </div>
-              <div class="inventory-journal-form__field inventory-journal-form__field--wide">
-                <label for="journal-notes">Reflection</label>
-                <textarea id="journal-notes" name="notes" rows="5" placeholder="What happened? What did you notice in your body? What need wants attention?" data-journal-notes></textarea>
-              </div>
-            </div>
-            <aside class="journal-prompts">
-              <p>Need a nudge?</p>
-              <ul>
-                <li>What sensations stood out in your body?</li>
-                <li>What need might be shining through or feeling tender?</li>
-                <li>What support, boundary, or self-care step sounds kind?</li>
-              </ul>
-            </aside>
-            <div class="inventory-journal-form__actions">
-              <p class="journal-status" data-journal-status aria-live="polite"></p>
-              <button type="button" class="inventory-button inventory-button--ghost" data-journal-clear>Clear form</button>
-              <button type="submit" class="inventory-button" data-journal-submit>Save entry</button>
-            </div>
-          </form>
+          <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
+            <noscript>
+              <p class="journal-status">Enable JavaScript to use the journal form.</p>
+            </noscript>
+          </div>
         </section>
 
         <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
