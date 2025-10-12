@@ -1,4 +1,5 @@
 import { isToggling } from './controller.js';
+import { DEBUG_MAGNETS } from './debug.js';
 
 export function setupResize(board, callback) {
   let scheduled = false;
@@ -6,7 +7,9 @@ export function setupResize(board, callback) {
   const run = () => {
     scheduled = false;
     const info = { w: board.clientWidth, h: board.clientHeight, isToggling: isToggling() };
-    console.info('[magnets] resize', info);
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] resize', info);
+    }
     if (isToggling()) {
       return;
     }

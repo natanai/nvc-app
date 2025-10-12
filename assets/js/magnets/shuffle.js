@@ -1,5 +1,6 @@
 import { setTransform, updateBoardHeight, boardRect } from './layout.js';
 import { isPlaying, requestShuffle, persist } from './controller.js';
+import { DEBUG_MAGNETS } from './debug.js';
 
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
@@ -72,13 +73,17 @@ function layoutRowPacked(board, magnets) {
 
 export function shuffle(board, magnets) {
   if (isPlaying(board)) {
-    console.info('[magnets] reseed CALLED', 'shuffle-physics');
+    if (DEBUG_MAGNETS) {
+      console.info('[magnets] reseed CALLED', 'shuffle-physics');
+    }
     return requestShuffle(board).then(() => {
       persist(board);
     });
   }
 
-  console.info('[magnets] reseed CALLED', 'shuffle-manual');
+  if (DEBUG_MAGNETS) {
+    console.info('[magnets] reseed CALLED', 'shuffle-manual');
+  }
   layoutRowPacked(board, magnets);
   persist(board);
   return Promise.resolve();
