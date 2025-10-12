@@ -147,6 +147,54 @@ const supportsTiltPermissionRequests = () => typeof window !== 'undefined'
 
 const normalizeTiltPermissionResult = (value) => (value === 'granted' || value === true ? 'granted' : 'denied');
 
+function updateTiltRequestUI(state) {
+  if (!state) {
+    return;
+  }
+
+  const permissionState = state.tiltPermissionState || 'unknown';
+  const pending = Boolean(state.tiltPermissionRequest);
+  const button = state.tiltRequestButton;
+  const statusLabel = state.tiltStatusLabel;
+
+  if (button) {
+    const granted = permissionState === 'granted';
+    if (granted) {
+      button.hidden = true;
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    } else {
+      button.hidden = false;
+      const disabled = pending || permissionState === 'denied';
+      button.disabled = disabled;
+      if (disabled) {
+        button.setAttribute('aria-disabled', 'true');
+      } else {
+        button.removeAttribute('aria-disabled');
+      }
+    }
+  }
+
+  if (statusLabel) {
+    let text = '';
+    if (pending) {
+      text = 'Requesting tilt access…';
+    } else if (permissionState === 'denied') {
+      text = 'Tilt access denied';
+    }
+    statusLabel.textContent = text;
+    statusLabel.hidden = text.length === 0;
+  }
+
+  if (
+    (permissionState === 'granted' || permissionState === 'denied')
+    && typeof state.cleanupTiltToggleRequest === 'function'
+  ) {
+    state.cleanupTiltToggleRequest();
+    state.cleanupTiltToggleRequest = null;
+  }
+}
+
 const setTiltPermissionIndicator = (state, status) => {
   if (!state?.root) {
     return;
@@ -156,6 +204,7 @@ const setTiltPermissionIndicator = (state, status) => {
   } else {
     state.root.removeAttribute('data-magnet-tilt-permission');
   }
+  updateTiltRequestUI(state);
 };
 
 const requestTiltPermission = (state) => {
@@ -206,7 +255,9 @@ const requestTiltPermission = (state) => {
         })
         .finally(() => {
           state.tiltPermissionRequest = null;
+          updateTiltRequestUI(state);
         });
+      updateTiltRequestUI(state);
       return state.tiltPermissionRequest;
     }
 
@@ -221,6 +272,102 @@ const requestTiltPermission = (state) => {
     state.tiltPermissionState = 'denied';
     setTiltPermissionIndicator(state, 'denied');
     return Promise.reject(error);
+  }
+};
+
+const enableTiltForState = (state, permissionPromise) => {
+  if (!state?.physics || typeof state.physics.enableTilt !== 'function') {
+    return;
+  }
+  state.physics.enableTilt(permissionPromise);
+};
+
+const requestTiltFromUser = (state) => {
+  if (!state) {
+    return undefined;
+  }
+
+  if (state.tiltPermissionState === 'granted') {
+    enableTiltForState(state);
+    return undefined;
+  }
+
+  if (state.tiltPermissionState === 'denied') {
+    updateTiltRequestUI(state);
+    return Promise.resolve('denied');
+  }
+
+  if (state.tiltPermissionRequest) {
+    enableTiltForState(state, state.tiltPermissionRequest);
+    return state.tiltPermissionRequest;
+  }
+
+  const permissionPromise = requestTiltPermission(state);
+  if (permissionPromise && typeof permissionPromise.then === 'function') {
+    enableTiltForState(state, permissionPromise);
+    return permissionPromise;
+  }
+
+  enableTiltForState(state);
+  return undefined;
+};
+
+const attachTiltPermissionOnToggle = (state) => {
+  if (!state) {
+    return;
+  }
+  if (state.tiltPermissionState === 'granted' || state.tiltPermissionState === 'denied') {
+    return;
+  }
+  if (state.cleanupTiltToggleRequest) {
+    return;
+  }
+
+  if (state.toggleInput) {
+    const handler = (event) => {
+      if (!event?.target?.checked) {
+        return;
+      }
+      Promise.resolve().then(() => {
+        requestTiltFromUser(state);
+      });
+      if (state.cleanupTiltToggleRequest) {
+        state.cleanupTiltToggleRequest();
+      }
+    };
+    state.toggleInput.addEventListener('change', handler);
+    state.cleanupTiltToggleRequest = () => {
+      if (!state.toggleInput) {
+        return;
+      }
+      state.toggleInput.removeEventListener('change', handler);
+      state.cleanupTiltToggleRequest = null;
+    };
+    return;
+  }
+
+  if (state.toggle) {
+    const useCapture = true;
+    const handler = () => {
+      const willActivate = !state.physics;
+      if (!willActivate) {
+        return;
+      }
+      Promise.resolve().then(() => {
+        requestTiltFromUser(state);
+      });
+      if (state.cleanupTiltToggleRequest) {
+        state.cleanupTiltToggleRequest();
+      }
+    };
+    state.toggle.addEventListener('click', handler, useCapture);
+    state.cleanupTiltToggleRequest = () => {
+      if (!state.toggle) {
+        return;
+      }
+      state.toggle.removeEventListener('click', handler, useCapture);
+      state.cleanupTiltToggleRequest = null;
+    };
   }
 };
 
@@ -245,6 +392,7 @@ const handleTiltPermissionDenied = (state, reason) => {
     console.info('[magnets] tilt permission denied; continuing without tilt input');
   }
   state.tiltPermissionLoggedDenied = true;
+  updateTiltRequestUI(state);
 };
 
 const waitForStableBoard = async (board) => {
@@ -560,7 +708,6 @@ const setPlayState = (state, active) => {
       magnet.element.setAttribute('draggable', 'false');
     });
     const magnetElements = state.magnets.map((magnet) => magnet.element);
-    const tiltPermissionPromise = requestTiltPermission(state);
     state.physics = startPhysics({
       board: state.board,
       magnets: magnetElements,
@@ -568,9 +715,13 @@ const setPlayState = (state, active) => {
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),
-      tiltPermission: tiltPermissionPromise,
       onTiltPermissionDenied: (reason) => handleTiltPermissionDenied(state, reason),
     });
+    if (state.tiltPermissionState === 'granted') {
+      enableTiltForState(state);
+    } else if (state.tiltPermissionRequest) {
+      enableTiltForState(state, state.tiltPermissionRequest);
+    }
     isToggling = false;
     console.info('[magnets] enterPlay: done');
   } else {
@@ -660,11 +811,45 @@ const initializeBoard = async (root, index) => {
     tiltPermissionState: supportsTiltPermissionRequests() ? 'unknown' : 'granted',
     tiltPermissionRequest: null,
     tiltPermissionLoggedDenied: false,
+    tiltRequestButton: null,
+    tiltStatusLabel: null,
+    cleanupTiltToggleRequest: null,
   };
 
   state.setClickSuppress = () => {
     state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;
   };
+
+  const header = root.querySelector('.magnet-section__header');
+  if (header) {
+    let tiltButton = header.querySelector('[data-magnet-tilt-request]');
+    if (!tiltButton) {
+      tiltButton = document.createElement('button');
+      tiltButton.type = 'button';
+      tiltButton.className = 'magnet-tilt-button';
+      tiltButton.setAttribute('data-magnet-tilt-request', '');
+      tiltButton.textContent = 'Enable tilt';
+      header.appendChild(tiltButton);
+    }
+    state.tiltRequestButton = tiltButton;
+
+    let tiltStatus = header.querySelector('[data-magnet-tilt-status]');
+    if (!tiltStatus) {
+      tiltStatus = document.createElement('span');
+      tiltStatus.className = 'magnet-tilt-status';
+      tiltStatus.setAttribute('data-magnet-tilt-status', '');
+      header.appendChild(tiltStatus);
+    }
+    state.tiltStatusLabel = tiltStatus;
+
+    if (state.tiltRequestButton) {
+      state.tiltRequestButton.addEventListener('click', () => {
+        requestTiltFromUser(state);
+      });
+    }
+  }
+
+  updateTiltRequestUI(state);
 
   board.addEventListener('click', (event) => {
     if (!state.playActive) {
@@ -805,6 +990,8 @@ const initializeBoard = async (root, index) => {
       setPlayState(state, shouldActivate);
     });
   }
+
+  attachTiltPermissionOnToggle(state);
 
   if (shuffleButton) {
     shuffleButton.addEventListener('click', () => {

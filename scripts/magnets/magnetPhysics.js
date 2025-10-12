@@ -791,16 +791,23 @@ export function startPhysics(options) {
   };
 
   const removePointerListeners = addPointerListeners(state);
-  const removeTiltListener = addTiltListener(state, {
-    permissionPromise: options.tiltPermission,
-    onPermissionDenied: options.onTiltPermissionDenied,
-  });
+  let removeTiltListener = null;
+
+  const enableTilt = (permissionPromise) => {
+    removeTiltListener?.();
+    const teardown = addTiltListener(state, {
+      permissionPromise,
+      onPermissionDenied: options.onTiltPermissionDenied,
+    });
+    removeTiltListener = typeof teardown === 'function' ? teardown : null;
+  };
   state.animationFrame = window.requestAnimationFrame((timestamp) => frameStep(state, timestamp));
 
   return {
     stop: () => {
       removePointerListeners?.();
       removeTiltListener?.();
+      removeTiltListener = null;
       stopAnimation(state);
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
@@ -825,6 +832,9 @@ export function startPhysics(options) {
     },
     shuffle: () => {
       return shuffleMagnets(state);
+    },
+    enableTilt: (permissionPromise) => {
+      enableTilt(permissionPromise);
     },
   };
 }

@@ -1319,6 +1319,52 @@ button.site-nav__link {
   flex-wrap: wrap;
 }
 
+.magnet-tilt-button {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 2px solid color-mix(in srgb, var(--outline) 40%, transparent);
+  background: color-mix(in srgb, var(--sky) 60%, #ffffff 40%);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.magnet-tilt-button:hover,
+.magnet-tilt-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+}
+
+.magnet-tilt-button:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.magnet-tilt-button[disabled],
+.magnet-tilt-button[aria-disabled='true'] {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+  opacity: 0.65;
+}
+
+.magnet-tilt-status {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  min-width: 44px;
+}
+
+[data-magnet-tilt-permission='denied'] .magnet-tilt-status {
+  color: color-mix(in srgb, var(--rose) 45%, #8b1c4a 55%);
+  font-weight: 600;
+}
+
 .magnet-board-wrapper {
   position: relative;
   padding-top: 0.75rem;
