@@ -522,7 +522,7 @@
   const breathingVisual = document.querySelector('[data-breathing-visual]');
   const bodySuggestions = document.querySelector('[data-body-suggestions]');
   const compassSuggestions = document.querySelector('[data-compass-suggestions]');
-  const supportFooter = document.querySelector('[data-support-footer]');
+  const supportFlow = document.querySelector('.support-flow');
   const sensationChips = document.querySelector('[data-sensation-chips]');
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
@@ -566,7 +566,7 @@
     return STEP_SEQUENCE.indexOf(key);
   }
 
-  function setFooterButtonState(button, disabled) {
+  function setControlButtonState(button, disabled) {
     if (!button) return;
     if (disabled) {
       button.disabled = true;
@@ -577,17 +577,20 @@
     }
   }
 
-  function updateFooter() {
-    if (!supportFooter) return;
+  function updateStepControls() {
     const index = getStepIndex(state.activeStep);
-    const backButton = supportFooter.querySelector('[data-nav="back"]');
-    const nextButton = supportFooter.querySelector('[data-nav="next"]');
-    const skipButton = supportFooter.querySelector('[data-nav="skip"]');
-    setFooterButtonState(backButton, index <= 0);
-    setFooterButtonState(nextButton, index >= STEP_SEQUENCE.length - 1);
+    const currentStep = steps[state.activeStep];
+    if (!currentStep) return;
+    const cta = currentStep.querySelector('[data-step-cta]');
+    if (!cta) return;
+    const backButton = cta.querySelector('[data-step-back]');
+    const nextButton = cta.querySelector('[data-step-next]');
+    const skipButton = cta.querySelector('[data-step-skip]');
+    setControlButtonState(backButton, index <= 0);
+    setControlButtonState(nextButton, index >= STEP_SEQUENCE.length - 1);
     if (skipButton) {
-      skipButton.disabled = false;
-      skipButton.removeAttribute('aria-disabled');
+      const disableSkip = index >= STEP_SEQUENCE.length - 1;
+      setControlButtonState(skipButton, disableSkip);
     }
   }
 
@@ -596,7 +599,18 @@
     if (!step) return;
     revealStep(key);
     state.activeStep = key;
-    updateFooter();
+    document.querySelectorAll('.support-step.step-current').forEach((node) => {
+      node.classList.remove('step-current');
+    });
+    step.classList.add('step-current');
+    updateStepControls();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('lane:stepchange', {
+          detail: { step: key },
+        })
+      );
+    }
     if (options.focus !== false) {
       focusStep(key);
     }
@@ -673,22 +687,24 @@
     }
   }
 
-  function handleFooterClick(event) {
-    const button = event.target.closest('[data-nav]');
-    if (!button) return;
-    event.preventDefault();
-    const action = button.dataset.nav;
-    if (action === 'back') {
-      retreatFromStep(state.activeStep);
-    } else if (action === 'next') {
-      advanceFromStep(state.activeStep);
-    } else if (action === 'skip') {
-      advanceFromStep(state.activeStep, { skip: true });
-    }
-  }
-
   function handleStart() {
     goToStep('breathing');
+  }
+
+  function handleStepCtaClick(event) {
+    const button = event.target.closest('[data-step-back],[data-step-next],[data-step-skip]');
+    if (!button || button.disabled) return;
+    const stepArticle = button.closest('[data-step]');
+    const stepKey = stepArticle?.dataset?.step;
+    if (!stepKey || stepKey !== state.activeStep) return;
+    event.preventDefault();
+    if (button.hasAttribute('data-step-back')) {
+      retreatFromStep(stepKey);
+    } else if (button.hasAttribute('data-step-skip')) {
+      advanceFromStep(stepKey, { skip: true });
+    } else if (button.hasAttribute('data-step-next')) {
+      advanceFromStep(stepKey);
+    }
   }
 
   const BREATH_SEQUENCE = [
@@ -715,7 +731,7 @@
       return;
     }
     revealStep('body');
-    updateFooter();
+    updateStepControls();
     if (breathingTimer) {
       clearInterval(breathingTimer);
       breathingTimer = null;
@@ -910,7 +926,7 @@
     if (libraryWasHidden || state.activeStep === 'compass') {
       goToStep('library');
     } else {
-      updateFooter();
+      updateStepControls();
     }
   }
 
@@ -998,7 +1014,7 @@
     revealStep('closing');
     renderRegulationCard(emotion);
     renderCommunicationCard(emotion);
-    updateFooter();
+    updateStepControls();
   }
 
   function renderRegulationCard(emotion) {
@@ -1583,6 +1599,9 @@
   }
 
   function init() {
+    const initialStepElement = steps[state.activeStep];
+    initialStepElement?.classList.add('step-current');
+
     if (startButton) {
       startButton.addEventListener('click', handleStart);
     }
@@ -1601,7 +1620,7 @@
 
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 
-    supportFooter?.addEventListener('click', handleFooterClick);
+    supportFlow?.addEventListener('click', handleStepCtaClick);
 
     bodySuggestions?.addEventListener('click', handleSuggestionClick);
     compassSuggestions?.addEventListener('click', handleSuggestionClick);
@@ -1661,7 +1680,7 @@
     );
     applyLaneDraft();
     renderJournalHistory();
-    updateFooter();
+    updateStepControls();
     if (!getJournalStore() && typeof window !== 'undefined') {
       window.addEventListener(
         'nvc-journal-store-ready',
