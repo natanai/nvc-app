@@ -1,3 +1,4 @@
+import { initMagnetBoard, updateBoardHeight as syncBoardHeightFromDOM } from './magnets/init.js';
 import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhysics.js';
 
 const DEFAULT_CONFIG = {
@@ -398,7 +399,9 @@ const setPlayState = (state, active) => {
       return;
     }
     clearToggleGuard();
-    console.info('[magnets] play->', true);
+    console.info('[magnets] enterPlay: begin');
+    isToggling = true;
+    state.playActive = true;
     if (state.shuffleButton) {
       state.shuffleButton.disabled = false;
       state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || state.shuffleButton.textContent;
@@ -419,22 +422,27 @@ const setPlayState = (state, active) => {
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),
     });
+    isToggling = false;
+    console.info('[magnets] enterPlay: done');
   } else {
-    if (!state.physics) {
-      return;
+    if (state.physics) {
+      console.info('[magnets] exitPlay: begin');
+      clearToggleGuard();
+      isToggling = true;
+      stopPhysicsLoop(state);
+      delete state.board.dataset.active;
+      state.root?.removeAttribute('data-magnet-active');
+      state.magnets.forEach((magnet) => {
+        magnet.element.removeAttribute('draggable');
+      });
+      state.suppressUntil = 0;
+      persistLayout(state, true);
+      state.lastLayoutType = 'manual';
+      updateBoardHeight(state);
+      const magnetElements = state.magnets.map((magnet) => magnet.element);
+      syncBoardHeightFromDOM(state.board, magnetElements);
+      beginToggleGuard();
     }
-    console.info('[magnets] play->', false);
-    console.info('[magnets] exitPlay: begin');
-    beginToggleGuard();
-    stopPhysicsLoop(state);
-    delete state.board.dataset.active;
-    state.root?.removeAttribute('data-magnet-active');
-    state.magnets.forEach((magnet) => {
-      magnet.element.removeAttribute('draggable');
-    });
-    state.suppressUntil = 0;
-    persistLayout(state, true);
-    state.lastLayoutType = 'manual';
   }
   state.playActive = active;
   updateToggleLabel(state.toggle, active);
@@ -451,6 +459,8 @@ const initializeBoard = async (root, index) => {
   if (!magnetElements.length) {
     return;
   }
+
+  await initMagnetBoard(board, magnetElements);
 
   magnetElements.forEach((element, magnetIndex) => {
     const id = element.dataset.magnetId || `${index}-${magnetIndex}`;
