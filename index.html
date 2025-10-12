@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home • NeedShare Explorer</title>
     <meta name="description" content="Explore situations, feelings, and needs with cross-linked magnets, journal prompts, and strategy inventory tools inspired by NeedShare." />
+    <link rel="icon" type="image/svg+xml" href="icons/main.svg" />
+    <meta property="og:image" content="icons/main.svg" />
+    <meta name="twitter:image" content="icons/main.svg" />
         <script src="assets/js/ui/contrast.js"></script>
     <script>
       (function() {
@@ -149,31 +152,35 @@
       
       <main id="main" class="page" role="main">
         
-      <header class="page-header home-header">
-        <h1 class="page-title">NeedShare Explorer</h1>
-        <p class="page-subtitle">Follow a thread of care through situations, feelings, needs, and strategies.</p>
-      </header>
-      <section class="category-section" aria-labelledby="categorySectionTitle">
-        <div class="category-section__intro">
-          <h2 id="categorySectionTitle">Start exploring</h2>
-          <p>Choose a doorway to begin. Each path connects you with the needs underneath.</p>
-        </div>
-        <div class="category-grid">
-          <a class="category-card" href="situations/">
-            <img class="category-card__icon" src="icons/map-8bit.svg" alt="" aria-hidden="true" />
-            <span class="category-card__label">Situations</span>
-          </a>
-          <div class="category-card category-card--with-tag">
-            <a class="category-card__link" href="feelings/">
-              <img class="category-card__icon" src="icons/feelings-8bit.svg" alt="" aria-hidden="true" />
-              <span class="category-card__label">Feelings</span>
+      <section class="home-doorways" aria-labelledby="doorwaysTitle">
+        <h1 id="doorwaysTitle" class="visually-hidden">Choose a doorway</h1>
+        <p class="home-doorways__prompt">Step through a doorway to begin exploring.</p>
+        <div class="door-grid">
+          <div class="door-card door-card--situations">
+            <a class="door-card__link" href="situations/">
+              <span class="door-card__door" aria-hidden="true">
+                <img class="door-card__icon" src="icons/door-situations.svg" alt="" aria-hidden="true" loading="lazy" />
+              </span>
+              <span class="door-card__label">Situations</span>
             </a>
-            <a class="category-card__tag" href="alexithymia-support/" aria-label="Alexithymia support">+ support</a>
           </div>
-          <a class="category-card" href="needs/">
-            <img class="category-card__icon" src="icons/needs-8bit.svg" alt="" aria-hidden="true" />
-            <span class="category-card__label">Needs</span>
-          </a>
+          <div class="door-card door-card--feelings">
+            <a class="door-card__link" href="feelings/">
+              <span class="door-card__door" aria-hidden="true">
+                <img class="door-card__icon" src="icons/door-feelings.svg" alt="" aria-hidden="true" loading="lazy" />
+              </span>
+              <span class="door-card__label">Feelings</span>
+            </a>
+            <a class="door-card__support" href="alexithymia-support/">Alexithymia support</a>
+          </div>
+          <div class="door-card door-card--needs">
+            <a class="door-card__link" href="needs/">
+              <span class="door-card__door" aria-hidden="true">
+                <img class="door-card__icon" src="icons/door-needs.svg" alt="" aria-hidden="true" loading="lazy" />
+              </span>
+              <span class="door-card__label">Needs</span>
+            </a>
+          </div>
         </div>
       </section>
     

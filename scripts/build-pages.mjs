@@ -7,12 +7,6 @@ const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 
-const categoryIcons = {
-  situations: 'icons/map-8bit.svg',
-  feelings: 'icons/feelings-8bit.svg',
-  needs: 'icons/needs-8bit.svg',
-};
-
 const themePreloadScript = (basePath) => {
   const contrastSrc = `${basePath}assets/js/ui/contrast.js`;
   return String.raw`    <script src="${contrastSrc}"></script>
@@ -254,6 +248,9 @@ function htmlPage({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(title)} • NeedShare Explorer</title>
     <meta name="description" content="${escapeHtml(headDescription)}" />
+    <link rel="icon" type="image/svg+xml" href="${basePath}icons/main.svg" />
+    <meta property="og:image" content="${basePath}icons/main.svg" />
+    <meta name="twitter:image" content="${basePath}icons/main.svg" />
     ${themePreloadScript(basePath)}
     <link rel="stylesheet" href="${cssHref}" />
   </head>
@@ -416,40 +413,42 @@ function renderStrategyForm({
 
 function renderHome() {
   const basePath = basePathFromDepth(0);
+  const iconMap = {
+    situations: `${basePath}icons/door-situations.svg`,
+    feelings: `${basePath}icons/door-feelings.svg`,
+    needs: `${basePath}icons/door-needs.svg`,
+  };
   const cards = ['situations', 'feelings', 'needs']
     .map((type) => {
-      const icon = `${basePath}${categoryIcons[type]}`;
       const label = type.charAt(0).toUpperCase() + type.slice(1);
+      const icon = iconMap[type]
+        ? `                <img class="door-card__icon" src="${iconMap[type]}" alt="" aria-hidden="true" loading="lazy" />\n`
+        : '';
+      const doorMarkup = `              <span class="door-card__door" aria-hidden="true">\n${icon}              </span>\n              <span class="door-card__label">${label}</span>`;
 
       if (type === 'feelings') {
         const supportHref = `${basePath}alexithymia-support/`;
-        return `          <div class="category-card category-card--with-tag">
-            <a class="category-card__link" href="${type}/">
-              <img class="category-card__icon" src="${icon}" alt="" aria-hidden="true" />
-              <span class="category-card__label">${label}</span>
+        return `          <div class="door-card door-card--${type}">
+            <a class="door-card__link" href="${type}/">
+${doorMarkup}
             </a>
-            <a class="category-card__tag" href="${supportHref}" aria-label="Alexithymia support">+ support</a>
+            <a class="door-card__support" href="${supportHref}">Alexithymia support</a>
           </div>`;
       }
 
-      return `          <a class="category-card" href="${type}/">
-            <img class="category-card__icon" src="${icon}" alt="" aria-hidden="true" />
-            <span class="category-card__label">${label}</span>
-          </a>`;
+      return `          <div class="door-card door-card--${type}">
+            <a class="door-card__link" href="${type}/">
+${doorMarkup}
+            </a>
+          </div>`;
     })
     .join('\n');
 
   const main = `
-      <header class="page-header home-header">
-        <h1 class="page-title">NeedShare Explorer</h1>
-        <p class="page-subtitle">Follow a thread of care through situations, feelings, needs, and strategies.</p>
-      </header>
-      <section class="category-section" aria-labelledby="categorySectionTitle">
-        <div class="category-section__intro">
-          <h2 id="categorySectionTitle">Start exploring</h2>
-          <p>Choose a doorway to begin. Each path connects you with the needs underneath.</p>
-        </div>
-        <div class="category-grid">
+      <section class="home-doorways" aria-labelledby="doorwaysTitle">
+        <h1 id="doorwaysTitle" class="visually-hidden">Choose a doorway</h1>
+        <p class="home-doorways__prompt">Step through a doorway to begin exploring.</p>
+        <div class="door-grid">
 ${cards}
         </div>
       </section>
