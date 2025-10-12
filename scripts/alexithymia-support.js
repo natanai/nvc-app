@@ -921,13 +921,8 @@
       `${info.label}: ${info.description}`,
       info.emotions
     );
-    const libraryWasHidden = steps.library?.classList.contains('is-hidden');
     revealStep('library');
-    if (libraryWasHidden || state.activeStep === 'compass') {
-      goToStep('library');
-    } else {
-      updateStepControls();
-    }
+    updateStepControls();
   }
 
   function renderListSection(title, items) {
