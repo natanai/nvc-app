@@ -2187,6 +2187,18 @@ button.site-nav__link {
   white-space: pre-wrap;
 }
 
+.feeling-body {
+  margin-block: var(--space-xl);
+}
+
+.feeling-body__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+  list-style: disc;
+}
+
 .journal-entry__actions {
   display: flex;
   flex-wrap: wrap;

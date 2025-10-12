@@ -187,6 +187,9 @@
           "title": "Closeness",
           "slug": "closeness"
         }
+      ],
+      "bodySignals": [
+        "Dull ache across the chest or heart area; Throat tightening like tears might rise; Shoulders curling inward to guard the torso"
       ]
     },
     {
@@ -220,6 +223,10 @@
           "title": "Support",
           "slug": "support"
         }
+      ],
+      "bodySignals": [
+        "Body stiffening or frozen in place; Cold",
+        "trembling hands or legs ready to bolt; Wide eyes with breath caught high in the chest"
       ]
     },
     {
@@ -285,6 +292,9 @@
           "title": "Empathy",
           "slug": "empathy"
         }
+      ],
+      "bodySignals": [
+        "Brows knit with a light squeeze around the eyes; Head tilting or turning as if searching for focus; Light flutter in the stomach or chest while processing"
       ]
     },
     {
@@ -486,6 +496,10 @@
           "title": "Physical Fitness",
           "slug": "physical-fitness"
         }
+      ],
+      "bodySignals": [
+        "Heavy sensation in the chest or throat; Slow",
+        "weighted movements and sighs; Moist eyes or a lump just behind the eyes"
       ]
     },
     {
@@ -631,6 +645,10 @@
           "title": "Security",
           "slug": "security"
         }
+      ],
+      "bodySignals": [
+        "Heart pounding against the ribs; Breath quick and shallow high in the chest; Muscles tensing",
+        "ready to hide or flee"
       ]
     },
     {
@@ -748,6 +766,9 @@
           "title": "Security",
           "slug": "security"
         }
+      ],
+      "bodySignals": [
+        "Hollow feeling in the chest or stomach; Arms instinctively wrapping around the body; Eyes searching for connection or softening with tears"
       ]
     },
     {
@@ -1093,6 +1114,9 @@
           "title": "Privacy",
           "slug": "privacy"
         }
+      ],
+      "bodySignals": [
+        "Heat rising through the face or neck; Jaw clenching and fists tightening; Breath getting faster and more forceful"
       ]
     },
     {
@@ -1338,6 +1362,9 @@
           "title": "Growth",
           "slug": "growth"
         }
+      ],
+      "bodySignals": [
+        "Jaw or temples tightening with pressure; Hands fidgeting or gripping objects harder; Chest constricting with repeated sighs"
       ]
     },
     {
@@ -1539,6 +1566,9 @@
           "title": "Security",
           "slug": "security"
         }
+      ],
+      "bodySignals": [
+        "Skin feeling prickly or chilled; Muscles tightening around the shoulders; Eyes widening while scanning surroundings"
       ]
     },
     {
@@ -1592,6 +1622,9 @@
           "title": "To be heard",
           "slug": "to-be-heard"
         }
+      ],
+      "bodySignals": [
+        "Restless energy pacing through limbs; Tense stomach that flips or churns; Voice catching or rising unexpectedly"
       ]
     },
     {
@@ -1633,6 +1666,9 @@
           "title": "Growth",
           "slug": "growth"
         }
+      ],
+      "bodySignals": [
+        "Shoulders inching up toward the ears; Clenched jaw or teeth grinding quietly; Shallow breathing that barely moves the ribs"
       ]
     },
     {
@@ -1694,6 +1730,9 @@
           "title": "Security",
           "slug": "security"
         }
+      ],
+      "bodySignals": [
+        "Tight band-like feeling around the chest; Hands wringing or gripping for relief; Tearful eyes and uneven breathing"
       ]
     },
     {
@@ -1775,6 +1814,10 @@
           "title": "Accomplishment",
           "slug": "accomplishment"
         }
+      ],
+      "bodySignals": [
+        "Chest sinking and posture slumping; Soft",
+        "deflated sighs leaving the body; Gaze dropping toward the floor or away"
       ]
     },
     {
@@ -1812,6 +1855,9 @@
           "title": "Clarity",
           "slug": "clarity"
         }
+      ],
+      "bodySignals": [
+        "Hot surge pulsing through the entire body; Face flushed with jaw locked tight; Voice wanting to roar or push forcefully outward"
       ]
     },
     {
@@ -1857,6 +1903,9 @@
           "title": "Equality",
           "slug": "equality"
         }
+      ],
+      "bodySignals": [
+        "Forehead wrinkling with squinting eyes; Head tilting or shaking slightly; Stomach fluttering as thoughts loop"
       ]
     },
     {
@@ -1898,6 +1947,9 @@
           "title": "Justice",
           "slug": "justice"
         }
+      ],
+      "bodySignals": [
+        "Chest puffing or leaning forward aggressively; Jaw jutting with lips pressed thin; Hands ready to point or push away"
       ]
     },
     {
@@ -1951,6 +2003,10 @@
           "title": "Empathy",
           "slug": "empathy"
         }
+      ],
+      "bodySignals": [
+        "Muscles coiled like a spring across shoulders; Eyes narrowing into a hard stare; Voice sharpening",
+        "ready to strike"
       ]
     },
     {
@@ -1996,6 +2052,9 @@
           "title": "Peace",
           "slug": "peace"
         }
+      ],
+      "bodySignals": [
+        "Tight band of tension circling the temples; Breath held high as if time is squeezing; Hands tapping or bouncing to release urgency"
       ]
     },
     {
@@ -2061,6 +2120,9 @@
           "title": "Genuineness",
           "slug": "genuineness"
         }
+      ],
+      "bodySignals": [
+        "Chest tightening as momentum slams to a halt; Brows furrowing with a forceful exhale; Hands clenching or pushing against surfaces"
       ]
     },
     {
@@ -2178,6 +2240,10 @@
           "title": "Security",
           "slug": "security"
         }
+      ],
+      "bodySignals": [
+        "Fluttering or buzzing energy in the stomach; Chest feeling tight with quick",
+        "shallow breaths; Hands or feet fidgeting to discharge nerves"
       ]
     },
     {
@@ -2311,6 +2377,9 @@
           "title": "Integrity",
           "slug": "integrity"
         }
+      ],
+      "bodySignals": [
+        "Arms crossing tightly over the chest; Jaw setting with a bitter taste in the mouth; Heat simmering low in the gut"
       ]
     },
     {
@@ -2344,6 +2413,9 @@
           "title": "Non-judgmental Communication",
           "slug": "non-judgmental-communication"
         }
+      ],
+      "bodySignals": [
+        "Protective hunching around the sore area; Face tightening or wincing reflexively; Breathing becoming shallow to brace discomfort"
       ]
     },
     {
@@ -2377,6 +2449,9 @@
           "title": "Non-judgmental Communication",
           "slug": "non-judgmental-communication"
         }
+      ],
+      "bodySignals": [
+        "Face flushing hot while eyes want to look away; Stomach dropping as if on a roller coaster; Body shrinking or folding inward to hide"
       ]
     },
     {
@@ -2474,6 +2549,9 @@
           "title": "Integrity",
           "slug": "integrity"
         }
+      ],
+      "bodySignals": [
+        "Cheeks warming or blushing; Hands wanting to cover the face or mouth; Nervous laughter or fidgeting in place"
       ]
     },
     {
@@ -2539,6 +2617,9 @@
           "title": "Relaxation",
           "slug": "relaxation"
         }
+      ],
+      "bodySignals": [
+        "Tightness spreading across head and shoulders; Chest feeling compressed by invisible weight; Urge to close eyes or press palms against temples"
       ]
     },
     {
@@ -2596,6 +2677,9 @@
           "title": "Calm",
           "slug": "calm"
         }
+      ],
+      "bodySignals": [
+        "Twitching muscles in the jaw or around the eyes; Shoulders stiffening with quick exhales; Hands flicking or tapping with impatience"
       ]
     },
     {
@@ -2641,6 +2725,9 @@
           "title": "Privacy",
           "slug": "privacy"
         }
+      ],
+      "bodySignals": [
+        "Heart fluttering faster than usual; Nervous tension coiling in the belly; Breath catching high in the throat"
       ]
     },
     {
@@ -2670,6 +2757,9 @@
           "title": "Contribution",
           "slug": "contribution"
         }
+      ],
+      "bodySignals": [
+        "Cold rush moving through arms and legs; Body crouching or leaning away from the trigger; Eyes widening with breath stuck mid-inhale"
       ]
     },
     {
@@ -2719,6 +2809,9 @@
           "title": "Accomplishment",
           "slug": "accomplishment"
         }
+      ],
+      "bodySignals": [
+        "Limbs feeling heavy or drained of strength; Chest collapsing inward with shallow breath; Hands falling open without energy to grip"
       ]
     },
     {
@@ -2748,6 +2841,10 @@
           "title": "Equality",
           "slug": "equality"
         }
+      ],
+      "bodySignals": [
+        "Stomach knotting with a hollow drop; Shoulders slumping as energy drains; Hands loosening",
+        "unsure where to act"
       ]
     },
     {
@@ -2797,6 +2894,9 @@
           "title": "Growth",
           "slug": "growth"
         }
+      ],
+      "bodySignals": [
+        "Weight settling into the hips or knees; Arms hanging limp at the sides; Eyes glazing or looking to others for cues"
       ]
     },
     {
@@ -2826,6 +2926,9 @@
           "title": "Rest",
           "slug": "rest"
         }
+      ],
+      "bodySignals": [
+        "Eyelids feeling heavy and slow to lift; Limbs dragging with low muscle tone; Yawns stretching the jaw repeatedly"
       ]
     },
     {
@@ -2879,6 +2982,9 @@
           "title": "Growth",
           "slug": "growth"
         }
+      ],
+      "bodySignals": [
+        "Spine straightening with chin lifted high; Hands planted firmly or fists on hips; Eyes fixed in an unwavering stare"
       ]
     },
     {
@@ -2912,6 +3018,9 @@
           "title": "Justice",
           "slug": "justice"
         }
+      ],
+      "bodySignals": [
+        "Tension coiling low in the stomach; Jaw grinding softly while lips press thin; Arms crossing or body turning slightly away"
       ]
     },
     {
@@ -2945,6 +3054,9 @@
           "title": "Self expression",
           "slug": "self-expression"
         }
+      ],
+      "bodySignals": [
+        "Heart thudding loudly in the chest; Muscles bracing as if for impact; Breath shortening with each scan of the room"
       ]
     },
     {
@@ -2978,6 +3090,9 @@
           "title": "Self expression",
           "slug": "self-expression"
         }
+      ],
+      "bodySignals": [
+        "Chest heaving as breath becomes ragged; Hands grasping or pleading toward others; Restless pacing or frantic movement in the limbs"
       ]
     },
     {
@@ -2999,6 +3114,9 @@
           "title": "Autonomy",
           "slug": "autonomy"
         }
+      ],
+      "bodySignals": [
+        "Sudden jolt of adrenaline across the body; Eyes snapping wide with eyebrows raised; Hands instinctively lifting in defense"
       ]
     },
     {
@@ -3040,6 +3158,9 @@
           "title": "Privacy",
           "slug": "privacy"
         }
+      ],
+      "bodySignals": [
+        "Energy buzzing through arms and legs; Breath quickening with sharp exhales; Constant shifting weight from foot to foot"
       ]
     },
     {
@@ -3065,6 +3186,9 @@
           "title": "Inclusion",
           "slug": "inclusion"
         }
+      ],
+      "bodySignals": [
+        "Chest tightening with a pinch in the heart area; Eyes narrowing while tracking the rival; Hands clenching subtly as thoughts churn"
       ]
     }
   ],
