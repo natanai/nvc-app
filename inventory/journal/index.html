@@ -190,9 +190,7 @@
               <div class="inventory-journal-form__field">
                 <label for="journal-emotion">Emotion (optional)</label>
                 <input id="journal-emotion" name="emotion" type="text" autocomplete="off" data-journal-emotion />
-                <p class="journal-field-hint">
-                  Begin typing to autocomplete from the feelings library, or leave it blank if you're unsure.
-                </p>
+                <p class="journal-field-hint">Use any word that fits or return later to update it.</p>
               </div>
               <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
                 <label for="journal-intensity">Intensity</label>
@@ -204,24 +202,8 @@
               </div>
               <div class="inventory-journal-form__field">
                 <label for="journal-needs">Related needs</label>
-                <input
-                  id="journal-needs"
-                  name="needs"
-                  type="text"
-                  autocomplete="off"
-                  placeholder="Start typing a need"
-                  data-journal-needs
-                />
-                <p class="journal-field-hint">
-                  Begin typing to autocomplete needs from the library. Separate multiple needs with commas.
-                </p>
-                <div
-                  class="journal-tag-suggestions"
-                  data-journal-need-suggestions
-                  hidden
-                  role="listbox"
-                  aria-label="Suggested needs"
-                ></div>
+                <select id="journal-needs" name="needs" multiple data-journal-needs></select>
+                <p class="journal-field-hint">Pick one or more needs that connect. Leave empty if you're not sure yet.</p>
               </div>
               <div class="inventory-journal-form__field">
                 <label for="journal-tags">Tags (optional)</label>
