@@ -506,7 +506,12 @@ function renderCategory(type, items) {
           <div class="pill-grid magnet-board" data-magnet-board>
             ${magnets}
           </div>
-          <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
+          <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false" aria-label="Disable magnet physics" data-state="on">
+            <span class="magnet-play-toggle__track" aria-hidden="true">
+              <span class="magnet-play-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+          </button>
         </div>
       </section>
     `;
@@ -976,7 +981,12 @@ function renderPillGroup(label, items, type) {
         <div class="pill-grid magnet-board" data-magnet-board>
           ${magnets}
         </div>
-        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false" aria-label="Disable magnet physics" data-state="on">
+          <span class="magnet-play-toggle__track" aria-hidden="true">
+            <span class="magnet-play-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+        </button>
       </div>
     </section>`;
 }

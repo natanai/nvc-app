@@ -76,8 +76,23 @@ const setMagnetTransform = (magnet) => {
 
 const updateToggleLabel = (toggle, active) => {
   if (!toggle) return;
-  toggle.textContent = active ? 'Disable Click + Drag' : '+ Play with';
+
+  const status = toggle.querySelector('.magnet-play-toggle__status');
+  const srState = toggle.querySelector('.magnet-play-toggle__sr-state');
+
+  if (status) {
+    status.textContent = active ? 'On' : 'Off';
+  } else if (!toggle.querySelector('.magnet-play-toggle__track')) {
+    toggle.textContent = active ? 'Physics on' : 'Physics off';
+  }
+
+  if (srState) {
+    srState.textContent = active ? 'Physics is on' : 'Physics is off';
+  }
+
+  toggle.dataset.state = active ? 'on' : 'off';
   toggle.setAttribute('aria-pressed', active ? 'true' : 'false');
+  toggle.setAttribute('aria-label', active ? 'Disable magnet physics' : 'Enable magnet physics');
 };
 
 const createStorageKey = (index) => {

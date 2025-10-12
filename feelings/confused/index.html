@@ -174,7 +174,12 @@
         <div class="pill-grid magnet-board" data-magnet-board>
           <a class="pill magnet" data-magnet-id="needs-autonomy" href="../../needs/autonomy/">Autonomy</a><a class="pill magnet" data-magnet-id="needs-accountability" href="../../needs/accountability/">Accountability</a><a class="pill magnet" data-magnet-id="needs-causality" href="../../needs/causality/">Causality</a><a class="pill magnet" data-magnet-id="needs-fairness" href="../../needs/fairness/">Fairness</a><a class="pill magnet" data-magnet-id="needs-justice" href="../../needs/justice/">Justice</a><a class="pill magnet" data-magnet-id="needs-freedom" href="../../needs/freedom/">Freedom</a><a class="pill magnet" data-magnet-id="needs-equality" href="../../needs/equality/">Equality</a>
         </div>
-        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false" aria-label="Disable magnet physics" data-state="on">
+          <span class="magnet-play-toggle__track" aria-hidden="true">
+            <span class="magnet-play-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+        </button>
       </div>
     </section>
     

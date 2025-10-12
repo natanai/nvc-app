@@ -174,7 +174,12 @@
         <div class="pill-grid magnet-board" data-magnet-board>
           <a class="pill magnet" data-magnet-id="needs-safety" href="../../needs/safety/">Safety</a><a class="pill magnet" data-magnet-id="needs-autonomy" href="../../needs/autonomy/">Autonomy</a><a class="pill magnet" data-magnet-id="needs-justice" href="../../needs/justice/">Justice</a><a class="pill magnet" data-magnet-id="needs-freedom" href="../../needs/freedom/">Freedom</a><a class="pill magnet" data-magnet-id="needs-equality" href="../../needs/equality/">Equality</a><a class="pill magnet" data-magnet-id="needs-empowerment" href="../../needs/empowerment/">Empowerment</a><a class="pill magnet" data-magnet-id="needs-mutuality" href="../../needs/mutuality/">Mutuality</a><a class="pill magnet" data-magnet-id="needs-growth" href="../../needs/growth/">Growth</a>
         </div>
-        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false">+ Play with</button>
+        <button type="button" class="magnet-play-toggle" data-magnet-toggle aria-pressed="false" aria-label="Disable magnet physics" data-state="on">
+          <span class="magnet-play-toggle__track" aria-hidden="true">
+            <span class="magnet-play-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+        </button>
       </div>
     </section>
     
