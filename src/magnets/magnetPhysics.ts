@@ -31,7 +31,6 @@ export interface StartPhysicsOptions {
   config?: Partial<PhysicsConfig>;
   onPositions?: (list: { id: string; x: number; y: number }[]) => void;
   getBoardSize?: () => { width: number; height: number };
-  onDragRelease?: () => void;
 }
 
 interface InternalMagnetState extends MagnetSnapshot {
@@ -52,10 +51,6 @@ interface InternalState {
   dragging: InternalMagnetState | null;
   onPositions?: (list: { id: string; x: number; y: number }[]) => void;
   getBoardSize?: () => { width: number; height: number };
-  isShuffling: boolean;
-  shufflePromise: Promise<void> | null;
-  lastShuffleTime: number;
-  baseHeight: number;
 }
 
 const DEFAULT_CONFIG: PhysicsConfig = {
@@ -69,46 +64,11 @@ const DEFAULT_CONFIG: PhysicsConfig = {
   mouseStrength: 0.6,
 };
 
-const LAYOUT_GAP_X = 12;
-const LAYOUT_GAP_Y = 14;
-const BOARD_PADDING = 24;
-const SHUFFLE_DEBOUNCE_MS = 500;
-
 const clamp = (value: number, min: number, max: number) => {
   if (value < min) return min;
   if (value > max) return max;
   return value;
 };
-
-const getNow = () =>
-  typeof performance !== 'undefined' && typeof performance.now === 'function'
-    ? performance.now()
-    : Date.now();
-
-const parsePx = (value: string | null | undefined) => {
-  const parsed = Number.parseFloat(value || '0');
-  return Number.isFinite(parsed) ? parsed : 0;
-};
-
-const waitForAnimationFrames = async (count = 1): Promise<void> => {
-  if (count <= 0) {
-    return;
-  }
-  await new Promise<void>((resolve) => {
-    const step = (remaining: number) => {
-      if (remaining <= 0) {
-        resolve();
-        return;
-      }
-      window.requestAnimationFrame(() => step(remaining - 1));
-    };
-    window.requestAnimationFrame(() => step(count - 1));
-  });
-};
-
-const delay = (ms: number) => new Promise<void>((resolve) => {
-  window.setTimeout(resolve, ms);
-});
 
 const getBoardSize = (
   state: InternalState,
@@ -164,9 +124,6 @@ const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnet
 
 const addPointerListeners = (state: InternalState) => {
   const handlePointerDown = (event: PointerEvent) => {
-    if (state.isShuffling) {
-      return;
-    }
     const target = event.currentTarget as HTMLElement | null;
     if (!target) return;
     const magnetState = state.magnets.find((magnet) => magnet.element === target);
@@ -193,9 +150,6 @@ const addPointerListeners = (state: InternalState) => {
   };
 
   const handlePointerMove = (event: PointerEvent) => {
-    if (state.isShuffling) {
-      return;
-    }
     if (state.dragging && state.dragging.pointerId === event.pointerId) {
       const magnetState = state.dragging;
       const boardRect = state.board.getBoundingClientRect();
@@ -225,9 +179,6 @@ const addPointerListeners = (state: InternalState) => {
   };
 
   const handlePointerUp = (event: PointerEvent) => {
-    if (state.isShuffling) {
-      return;
-    }
     if (!state.dragging || state.dragging.pointerId !== event.pointerId) {
       return;
     }
@@ -248,9 +199,6 @@ const addPointerListeners = (state: InternalState) => {
   };
 
   const handlePointerCancel = (event: PointerEvent) => {
-    if (state.isShuffling) {
-      return;
-    }
     if (!state.dragging || state.dragging.pointerId !== event.pointerId) {
       return;
     }
@@ -278,16 +226,10 @@ const addPointerListeners = (state: InternalState) => {
   });
 
   const handlePointerLeave = () => {
-    if (state.isShuffling) {
-      return;
-    }
     state.pointerField.active = false;
   };
 
   const handlePointerCancelField = () => {
-    if (state.isShuffling) {
-      return;
-    }
     state.pointerField.active = false;
   };
 
@@ -403,11 +345,6 @@ const integrateMotion = (state: InternalState, dt: number) => {
 };
 
 const frameStep = (state: InternalState, timestamp: number) => {
-  if (state.isShuffling) {
-    state.lastTimestamp = timestamp;
-    state.animationFrame = window.requestAnimationFrame((next) => frameStep(state, next));
-    return;
-  }
   if (state.lastTimestamp == null) {
     state.lastTimestamp = timestamp;
   }
@@ -434,150 +371,43 @@ const stopAnimation = (state: InternalState) => {
   state.lastTimestamp = null;
 };
 
-const shuffleMagnets = async (state: InternalState): Promise<void> => {
-  if (state.isShuffling) {
-    return state.shufflePromise ?? Promise.resolve();
+const shuffleMagnets = (state: InternalState) => {
+  const { width, height } = getBoardSize(state);
+  if (!width || !height) {
+    return;
   }
-  const now = getNow();
-  if (state.lastShuffleTime && now - state.lastShuffleTime < SHUFFLE_DEBOUNCE_MS) {
-    return Promise.resolve();
+  const count = state.magnets.length;
+  if (!count) {
+    return;
   }
-  const runShuffle = async () => {
-    state.isShuffling = true;
-    state.lastShuffleTime = now;
-    stopAnimation(state);
-    if (state.dragging && typeof state.dragging.element.releasePointerCapture === 'function' && state.dragging.pointerId != null) {
-      try {
-        state.dragging.element.releasePointerCapture(state.dragging.pointerId);
-      } catch {
-        // ignore
-      }
-    }
-    state.magnets.forEach((magnet) => {
-      if (magnet.pointerId != null && typeof magnet.element.releasePointerCapture === 'function') {
-        try {
-          magnet.element.releasePointerCapture(magnet.pointerId);
-        } catch {
-          // ignore
-        }
-      }
-      magnet.dragging = false;
-      magnet.pointerId = null;
-      magnet.element.classList.remove('dragging');
-    });
-    state.dragging = null;
-    delete state.board.dataset.dragging;
-    state.pointerField.active = false;
-
-    state.board.classList.add('no-transitions');
-
-    let width = 0;
-    let height = 0;
-    let attempts = 0;
-    while (attempts < 5) {
-      await waitForAnimationFrames(2);
-      const size = getBoardSize(state);
-      width = size.width;
-      height = size.height;
-      if (width > 0) {
-        break;
-      }
-      attempts += 1;
-      await delay(Math.min(50 * attempts, 250));
-    }
-
-    if (!width) {
-      width = state.board.clientWidth || parsePx(getComputedStyle(state.board).width) || 1;
-    }
-    if (!height) {
-      const computedHeight = parsePx(
-        (state.board instanceof HTMLElement ? getComputedStyle(state.board).height : '') || '0',
-      );
-      height = state.board.clientHeight || computedHeight || state.baseHeight || 1;
-    }
-
-    const order = state.magnets.slice();
-    for (let i = order.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-
-    const startX = LAYOUT_GAP_X;
-    const startY = LAYOUT_GAP_Y;
-    let cursorX = startX;
-    let cursorY = startY;
-    let rowHeight = 0;
-    let maxBottom = startY;
-
-    const placements = order.map((magnet) => {
-      const styles = window.getComputedStyle(magnet.element);
-      const marginLeft = parsePx(styles.marginLeft);
-      const marginRight = parsePx(styles.marginRight);
-      const marginTop = parsePx(styles.marginTop);
-      const marginBottom = parsePx(styles.marginBottom);
-      const footprintWidth = magnet.w + marginLeft + marginRight;
-      const footprintHeight = magnet.h + marginTop + marginBottom;
-      if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
-        cursorX = startX;
-        cursorY += rowHeight + LAYOUT_GAP_Y;
-        rowHeight = 0;
-      }
-      const maxX = Math.max(width - magnet.w, 0);
-      const x = clamp(cursorX + marginLeft, 0, maxX);
-      const y = cursorY + marginTop;
-      cursorX += footprintWidth + LAYOUT_GAP_X;
-      rowHeight = Math.max(rowHeight, footprintHeight);
-      maxBottom = Math.max(maxBottom, y + magnet.h + marginBottom);
-      return { magnet, x, y };
-    });
-
-    const baseHeight = state.baseHeight || height || 0;
-    const targetHeight = Math.max(baseHeight, maxBottom + BOARD_PADDING);
-
-    placements.forEach(({ magnet, x, y }) => {
-      magnet.x = x;
-      magnet.y = y;
-      magnet.vx = 0;
-      magnet.vy = 0;
-      applyTransform(magnet);
-    });
-
-    state.baseHeight = Math.max(state.baseHeight || 0, targetHeight);
-    state.board.style.height = `${targetHeight}px`;
-    notifyPositions(state);
-
-    await waitForAnimationFrames(1);
-    window.requestAnimationFrame(() => {
-      state.board.classList.remove('no-transitions');
-    });
-  } finally {
-    state.isShuffling = false;
-    state.shufflePromise = null;
-    state.dragging = null;
-    state.pointerField.active = false;
-    state.magnets.forEach((magnet) => {
-      magnet.dragging = false;
-      magnet.pointerId = null;
-      magnet.vx = 0;
-      magnet.vy = 0;
-      magnet.element.classList.remove('dragging');
-    });
-    delete state.board.dataset.dragging;
-    state.animationFrame = window.requestAnimationFrame((timestamp) => {
-      state.lastTimestamp = timestamp;
-      frameStep(state, timestamp);
-    });
+  const columns = Math.max(1, Math.round(Math.sqrt(count)));
+  const rows = Math.max(1, Math.ceil(count / columns));
+  const cellWidth = width / columns;
+  const cellHeight = height / rows;
+  const order = state.magnets.slice();
+  for (let i = order.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
   }
-};
-  state.shufflePromise = runShuffle().catch(() => {
-    window.requestAnimationFrame(() => {
-      state.board.classList.remove('no-transitions');
-    });
+  order.forEach((magnet, index) => {
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    const jitterX = (Math.random() - 0.5) * Math.min(cellWidth * 0.3, 24);
+    const jitterY = (Math.random() - 0.5) * Math.min(cellHeight * 0.3, 24);
+    const baseX = column * cellWidth + (cellWidth - magnet.w) / 2 + jitterX;
+    const baseY = row * cellHeight + (cellHeight - magnet.h) / 2 + jitterY;
+    const maxX = Math.max(width - magnet.w, 0);
+    const maxY = Math.max(height - magnet.h, 0);
+    magnet.x = clamp(baseX, 0, maxX);
+    magnet.y = clamp(baseY, 0, maxY);
+    magnet.vx = 0;
+    magnet.vy = 0;
+    applyTransform(magnet);
   });
-  return state.shufflePromise;
+  notifyPositions(state);
 };
 
-export function startPhysics(options: StartPhysicsOptions): { stop: () => void; shuffle: () => Promise<void> } {
+export function startPhysics(options: StartPhysicsOptions): { stop: () => void; shuffle: () => void } {
   const boardRect = options.board.getBoundingClientRect();
   const magnetStates = options.magnets.map((element) => measureMagnet(boardRect, element));
   const config: PhysicsConfig = { ...DEFAULT_CONFIG, ...options.config };
@@ -591,16 +421,6 @@ export function startPhysics(options: StartPhysicsOptions): { stop: () => void; 
     dragging: null,
     onPositions: options.onPositions,
     getBoardSize: options.getBoardSize,
-    isShuffling: false,
-    shufflePromise: null,
-    lastShuffleTime: 0,
-    baseHeight:
-      Math.max(
-        boardRect.height ||
-          options.board.clientHeight ||
-          parsePx((options.board instanceof HTMLElement ? getComputedStyle(options.board).height : '') || '0'),
-        0,
-      ) || 0,
   };
 
   const removePointerListeners = addPointerListeners(state);
@@ -616,14 +436,9 @@ export function startPhysics(options: StartPhysicsOptions): { stop: () => void; 
         magnet.element.classList.remove('dragging');
       });
       delete state.board.dataset.dragging;
-      state.dragging = null;
-      state.pointerField.active = false;
-      state.isShuffling = false;
-      state.shufflePromise = null;
-      state.board.classList.remove('no-transitions');
     },
     shuffle: () => {
-      return shuffleMagnets(state);
+      shuffleMagnets(state);
     },
   };
 }
