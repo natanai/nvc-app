@@ -140,6 +140,112 @@ const delay = (ms) => new Promise((resolve) => {
   window.setTimeout(resolve, ms);
 });
 
+const supportsTiltPermissionRequests = () => typeof window !== 'undefined'
+  && typeof window.DeviceOrientationEvent !== 'undefined'
+  && typeof window.DeviceOrientationEvent.requestPermission === 'function';
+
+const normalizeTiltPermissionResult = (value) => (value === 'granted' || value === true ? 'granted' : 'denied');
+
+const setTiltPermissionIndicator = (state, status) => {
+  if (!state?.root) {
+    return;
+  }
+  if (status === 'denied') {
+    state.root.setAttribute('data-magnet-tilt-permission', 'denied');
+  } else {
+    state.root.removeAttribute('data-magnet-tilt-permission');
+  }
+};
+
+const requestTiltPermission = (state) => {
+  if (!state) {
+    return undefined;
+  }
+
+  if (!supportsTiltPermissionRequests()) {
+    state.tiltPermissionState = 'granted';
+    state.tiltPermissionRequest = null;
+    state.tiltPermissionLoggedDenied = false;
+    setTiltPermissionIndicator(state, 'granted');
+    return undefined;
+  }
+
+  if (state.tiltPermissionState === 'granted') {
+    state.tiltPermissionLoggedDenied = false;
+    setTiltPermissionIndicator(state, 'granted');
+    return Promise.resolve('granted');
+  }
+
+  if (state.tiltPermissionState === 'denied') {
+    setTiltPermissionIndicator(state, 'denied');
+    return Promise.resolve('denied');
+  }
+
+  if (state.tiltPermissionRequest) {
+    return state.tiltPermissionRequest;
+  }
+
+  try {
+    const request = window.DeviceOrientationEvent.requestPermission();
+    if (request && typeof request.then === 'function') {
+      state.tiltPermissionRequest = request
+        .then((result) => {
+          const normalized = normalizeTiltPermissionResult(result);
+          state.tiltPermissionState = normalized;
+          if (normalized === 'granted') {
+            state.tiltPermissionLoggedDenied = false;
+          }
+          setTiltPermissionIndicator(state, normalized);
+          return normalized;
+        })
+        .catch((error) => {
+          state.tiltPermissionState = 'denied';
+          setTiltPermissionIndicator(state, 'denied');
+          throw error;
+        })
+        .finally(() => {
+          state.tiltPermissionRequest = null;
+        });
+      return state.tiltPermissionRequest;
+    }
+
+    const normalized = normalizeTiltPermissionResult(request);
+    state.tiltPermissionState = normalized;
+    if (normalized === 'granted') {
+      state.tiltPermissionLoggedDenied = false;
+    }
+    setTiltPermissionIndicator(state, normalized);
+    return Promise.resolve(normalized);
+  } catch (error) {
+    state.tiltPermissionState = 'denied';
+    setTiltPermissionIndicator(state, 'denied');
+    return Promise.reject(error);
+  }
+};
+
+const handleTiltPermissionDenied = (state, reason) => {
+  if (!state) {
+    return;
+  }
+  state.tiltPermissionState = 'denied';
+  setTiltPermissionIndicator(state, 'denied');
+  if (state.tiltPermissionLoggedDenied) {
+    return;
+  }
+  let detail = '';
+  if (reason instanceof Error && typeof reason.message === 'string' && reason.message) {
+    detail = reason.message;
+  } else if (typeof reason === 'string' && reason) {
+    detail = reason;
+  }
+  if (detail) {
+    console.info(`[magnets] tilt permission denied; continuing without tilt input (${detail})`);
+  } else {
+    console.info('[magnets] tilt permission denied; continuing without tilt input');
+  }
+  state.tiltPermissionLoggedDenied = true;
+};
+
 const waitForStableBoard = async (board) => {
   await fontsReady;
   let attempt = 0;
@@ -453,6 +559,7 @@ const setPlayState = (state, active) => {
       magnet.element.setAttribute('draggable', 'false');
     });
     const magnetElements = state.magnets.map((magnet) => magnet.element);
+    const tiltPermissionPromise = requestTiltPermission(state);
     state.physics = startPhysics({
       board: state.board,
       magnets: magnetElements,
@@ -460,6 +567,8 @@ const setPlayState = (state, active) => {
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),
+      tiltPermission: tiltPermissionPromise,
+      onTiltPermissionDenied: (reason) => handleTiltPermissionDenied(state, reason),
     });
     isToggling = false;
     console.info('[magnets] enterPlay: done');
@@ -545,6 +654,9 @@ const initializeBoard = async (root, index) => {
     lastLayoutType: 'seed',
     resizeScheduled: false,
     isShuffling: false,
+    tiltPermissionState: supportsTiltPermissionRequests() ? 'unknown' : 'granted',
+    tiltPermissionRequest: null,
+    tiltPermissionLoggedDenied: false,
   };
 
   state.setClickSuppress = () => {

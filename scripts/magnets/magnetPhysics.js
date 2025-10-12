@@ -59,6 +59,13 @@ const delay = (ms) => new Promise((resolve) => {
 
 const supportsDeviceOrientation = () => typeof window !== 'undefined' && 'DeviceOrientationEvent' in window;
 
+const hasDeviceOrientationPermissionAPI = () =>
+  typeof window !== 'undefined'
+  && typeof window.DeviceOrientationEvent !== 'undefined'
+  && typeof window.DeviceOrientationEvent.requestPermission === 'function';
+
+const isTiltPermissionGranted = (value) => value === 'granted' || value === true;
+
 const applyTiltDeadzone = (value) => {
   if (Math.abs(value) < TILT_TARGET_DEADZONE) {
     return 0;
@@ -66,7 +73,7 @@ const applyTiltDeadzone = (value) => {
   return clamp(value, -1, 1);
 };
 
-const addTiltListener = (state) => {
+const addTiltListener = (state, options = {}) => {
   if (!supportsDeviceOrientation()) {
     return null;
   }
@@ -88,9 +95,78 @@ const addTiltListener = (state) => {
     }
   };
 
-  window.addEventListener('deviceorientation', handleOrientation, { passive: true });
-  return () => {
+  let attached = false;
+  let active = true;
+
+  const attachListener = () => {
+    if (!active || attached) {
+      return;
+    }
+    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+    attached = true;
+  };
+
+  const detachListener = () => {
+    if (!attached) {
+      return;
+    }
     window.removeEventListener('deviceorientation', handleOrientation);
+    attached = false;
+  };
+
+  const handlePermissionDenied = (reason) => {
+    const tilt = state.tilt;
+    if (tilt) {
+      tilt.x = 0;
+      tilt.y = 0;
+      tilt.targetX = 0;
+      tilt.targetY = 0;
+    }
+    if (typeof options.onPermissionDenied === 'function') {
+      options.onPermissionDenied(reason);
+    }
+  };
+
+  if (hasDeviceOrientationPermissionAPI()) {
+    const { permissionPromise } = options;
+    if (permissionPromise && typeof permissionPromise.then === 'function') {
+      permissionPromise
+        .then((result) => {
+          if (!active) {
+            return;
+          }
+          if (isTiltPermissionGranted(result)) {
+            attachListener();
+          } else {
+            handlePermissionDenied(result);
+          }
+        })
+        .catch((error) => {
+          if (!active) {
+            return;
+          }
+          handlePermissionDenied(error);
+        });
+    } else {
+      // If the permission API is available we rely on the caller to request permission.
+      Promise.resolve().then(() => {
+        if (!active) {
+          return;
+        }
+        handlePermissionDenied(new Error('deviceorientation permission unavailable'));
+      });
+    }
+
+    return () => {
+      active = false;
+      detachListener();
+    };
+  }
+
+  attachListener();
+  return () => {
+    active = false;
+    detachListener();
   };
 };
 
@@ -690,7 +766,10 @@ export function startPhysics(options) {
   };
 
   const removePointerListeners = addPointerListeners(state);
-  const removeTiltListener = addTiltListener(state);
+  const removeTiltListener = addTiltListener(state, {
+    permissionPromise: options.tiltPermission,
+    onPermissionDenied: options.onTiltPermissionDenied,
+  });
   state.animationFrame = window.requestAnimationFrame((timestamp) => frameStep(state, timestamp));
 
   return {
