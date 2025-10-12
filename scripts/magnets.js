@@ -76,7 +76,7 @@ const setMagnetTransform = (magnet) => {
 
 const updateToggleLabel = (toggle, active) => {
   if (!toggle) return;
-  toggle.textContent = active ? 'Disable click and drag' : '+ Play with';
+  toggle.textContent = active ? 'Disable Click + Drag' : '+ Play with';
   toggle.setAttribute('aria-pressed', active ? 'true' : 'false');
 };
 
