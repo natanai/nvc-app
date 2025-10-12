@@ -2412,6 +2412,8 @@ button.site-nav__link {
 .inventory-journal-form__field textarea {
   width: 100%;
   max-width: 100%;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .journal-form__field--notes,
@@ -2603,6 +2605,12 @@ button.site-nav__link {
 .journal-filters__field {
   display: grid;
   gap: 0.25rem;
+}
+
+.journal-filters select,
+.journal-filters input {
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .journal-filters__field label {
