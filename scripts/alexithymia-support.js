@@ -11,6 +11,8 @@
     closing: document.querySelector('[data-step="closing"]'),
   };
 
+  const STEP_SEQUENCE = ['intro', 'breathing', 'body', 'compass', 'library', 'journal', 'regulation', 'communication', 'closing'];
+
   const basePath = document.body?.dataset?.basePath || '';
 
   const BODY_SENSATIONS = {
@@ -504,6 +506,10 @@
     selectedEmotion: null,
     quadrant: null,
     activeTag: null,
+    activeStep: STEP_SEQUENCE[0],
+    compassTouched: false,
+    energyValue: 0,
+    valenceValue: 0,
   };
 
   const startButton = steps.intro?.querySelector('[data-action="start"]');
@@ -511,6 +517,9 @@
   const breathingVisual = document.querySelector('[data-breathing-visual]');
   const bodySuggestions = document.querySelector('[data-body-suggestions]');
   const compassSuggestions = document.querySelector('[data-compass-suggestions]');
+  const supportFooter = document.querySelector('[data-support-footer]');
+  const sensationChips = document.querySelector('[data-sensation-chips]');
+  const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
   const journalForm = document.querySelector('[data-journal-form]');
   const journalStatus = document.querySelector('[data-journal-status]');
@@ -533,9 +542,133 @@
     }
   }
 
+  function getStepIndex(key) {
+    return STEP_SEQUENCE.indexOf(key);
+  }
+
+  function setFooterButtonState(button, disabled) {
+    if (!button) return;
+    if (disabled) {
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    } else {
+      button.disabled = false;
+      button.removeAttribute('aria-disabled');
+    }
+  }
+
+  function updateFooter() {
+    if (!supportFooter) return;
+    const index = getStepIndex(state.activeStep);
+    const backButton = supportFooter.querySelector('[data-nav="back"]');
+    const nextButton = supportFooter.querySelector('[data-nav="next"]');
+    const skipButton = supportFooter.querySelector('[data-nav="skip"]');
+    setFooterButtonState(backButton, index <= 0);
+    setFooterButtonState(nextButton, index >= STEP_SEQUENCE.length - 1);
+    if (skipButton) {
+      skipButton.disabled = false;
+      skipButton.removeAttribute('aria-disabled');
+    }
+  }
+
+  function goToStep(key, options = {}) {
+    const step = steps[key];
+    if (!step) return;
+    revealStep(key);
+    state.activeStep = key;
+    updateFooter();
+    if (options.focus !== false) {
+      focusStep(key);
+    }
+  }
+
+  function advanceFromStep(current, { skip = false } = {}) {
+    switch (current) {
+      case 'intro':
+        goToStep('breathing');
+        break;
+      case 'breathing':
+        goToStep('body');
+        break;
+      case 'body':
+        if (skip) {
+          goToStep('compass');
+        } else {
+          handleSensationSubmit();
+        }
+        break;
+      case 'compass':
+        if (skip || state.compassTouched) {
+          goToStep('library');
+        } else {
+          const board = compassRoot?.querySelector('.emotion-compass__board');
+          board?.focus();
+        }
+        break;
+      case 'library':
+        goToStep('journal');
+        break;
+      case 'journal':
+        goToStep('regulation');
+        break;
+      case 'regulation':
+        goToStep('communication');
+        break;
+      case 'communication':
+        goToStep('closing');
+        break;
+      default:
+        break;
+    }
+  }
+
+  function retreatFromStep(current) {
+    switch (current) {
+      case 'breathing':
+        goToStep('intro');
+        break;
+      case 'body':
+        goToStep('breathing');
+        break;
+      case 'compass':
+        goToStep('body');
+        break;
+      case 'library':
+        goToStep('compass');
+        break;
+      case 'journal':
+        goToStep('library');
+        break;
+      case 'regulation':
+        goToStep('journal');
+        break;
+      case 'communication':
+        goToStep('regulation');
+        break;
+      case 'closing':
+        goToStep('communication');
+        break;
+      default:
+        break;
+    }
+  }
+
+  function handleFooterClick(event) {
+    const button = event.target.closest('[data-nav]');
+    if (!button) return;
+    event.preventDefault();
+    const action = button.dataset.nav;
+    if (action === 'back') {
+      retreatFromStep(state.activeStep);
+    } else if (action === 'next') {
+      advanceFromStep(state.activeStep);
+    } else if (action === 'skip') {
+      advanceFromStep(state.activeStep, { skip: true });
+    }
+  }
+
   function handleStart() {
-    revealStep('breathing');
-    focusStep('breathing');
+    goToStep('breathing');
   }
 
   const BREATH_SEQUENCE = [
@@ -558,11 +691,11 @@
 
   function startBreathing() {
     if (!breathingDisplay || !breathingVisual) {
-      revealStep('body');
-      focusStep('body');
+      goToStep('body');
       return;
     }
     revealStep('body');
+    updateFooter();
     if (breathingTimer) {
       clearInterval(breathingTimer);
       breathingTimer = null;
@@ -586,15 +719,14 @@
         breathingTimer = null;
         breathingVisual.classList.remove('is-active');
         breathingDisplay.textContent = 'Nice job noticing your breath. Ready for the body check-in when it feels right.';
-        focusStep('body');
+        goToStep('body');
       }
     }, 1000);
   }
 
   function skipBreathing() {
     resetBreathingVisual();
-    revealStep('body');
-    focusStep('body');
+    goToStep('body');
   }
 
   function buildEmotionTag(emotionKey) {
@@ -641,10 +773,28 @@
     container.appendChild(list);
   }
 
-  function handleSensationSubmit() {
-    const form = document.querySelector('[data-sensation-form]');
-    if (!form) return;
-    const selected = Array.from(form.querySelectorAll('input[name="sensation"]:checked')).map((input) => input.value);
+  function setChipState(button, pressed) {
+    if (!button) return;
+    button.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    button.classList.toggle('is-active', pressed);
+  }
+
+  function getSelectedSensations(container) {
+    if (!container) return [];
+    return Array.from(container.querySelectorAll('[data-sensation][aria-pressed="true"]')).map((button) => button.dataset.sensation);
+  }
+
+  function handleSensationChipClick(event) {
+    const button = event.target.closest('[data-sensation]');
+    if (!button) return;
+    event.preventDefault();
+    const pressed = button.getAttribute('aria-pressed') === 'true';
+    setChipState(button, !pressed);
+  }
+
+  function handleSensationSubmit(event) {
+    event?.preventDefault?.();
+    const selected = getSelectedSensations(sensationChips);
     if (!selected.length) {
       renderSuggestionBlock(
         bodySuggestions,
@@ -652,9 +802,8 @@
         'Try choosing one or two sensations. If nothing stands out, move on to the emotion compass.',
         []
       );
-      revealStep('compass');
-      focusStep('compass');
-      return;
+      goToStep('compass');
+      return false;
     }
 
     const emotionCounts = new Map();
@@ -681,14 +830,14 @@
       message || 'Notice how each sensation might point toward a feeling.',
       sortedEmotions
     );
-    revealStep('compass');
-    focusStep('compass');
+    goToStep('compass');
+    return true;
   }
 
   function handleSensationClear() {
-    const form = document.querySelector('[data-sensation-form]');
-    if (!form) return;
-    form.reset();
+    if (sensationChips) {
+      sensationChips.querySelectorAll('[data-sensation]').forEach((button) => setChipState(button, false));
+    }
     renderSuggestionBlock(
       bodySuggestions,
       'Body-based matches',
@@ -698,8 +847,7 @@
   }
 
   function handleSensationSkip() {
-    revealStep('compass');
-    focusStep('compass');
+    goToStep('compass');
   }
 
   function computeQuadrant(energy, valence) {
@@ -707,11 +855,19 @@
     return `${energy}-${valence}`;
   }
 
-  function handleCompassChange(event) {
-    const form = event.currentTarget;
-    const energy = form.elements.energy?.value;
-    const valence = form.elements.valence?.value;
-    const quadrantKey = computeQuadrant(energy, valence);
+  function handleCompassSelection(event) {
+    const detail = event?.detail;
+    if (!detail) return;
+    if (typeof detail.energy === 'number') {
+      state.energyValue = detail.energy;
+    }
+    if (typeof detail.valence === 'number') {
+      state.valenceValue = detail.valence;
+    }
+    if (detail.userTriggered) {
+      state.compassTouched = true;
+    }
+    const quadrantKey = computeQuadrant(detail.energyKey, detail.valenceKey);
     state.quadrant = quadrantKey;
     if (!quadrantKey || !QUADRANT_SUGGESTIONS[quadrantKey]) {
       renderSuggestionBlock(
@@ -729,8 +885,13 @@
       `${info.label}: ${info.description}`,
       info.emotions
     );
+    const libraryWasHidden = steps.library?.classList.contains('is-hidden');
     revealStep('library');
-    focusStep('library');
+    if (libraryWasHidden || state.activeStep === 'compass') {
+      goToStep('library');
+    } else {
+      updateFooter();
+    }
   }
 
   function renderListSection(title, items) {
@@ -816,6 +977,7 @@
     revealStep('closing');
     renderRegulationCard(emotion);
     renderCommunicationCard(emotion);
+    updateFooter();
   }
 
   function renderRegulationCard(emotion) {
@@ -1022,7 +1184,7 @@
     if (!target) return;
     const emotionKey = target.dataset.emotion;
     renderEmotionDetails(emotionKey, target);
-    focusStep('library');
+    goToStep('library');
   }
 
   function handleCommunicationClick(event) {
@@ -1052,12 +1214,14 @@
     const sensationSubmit = document.querySelector('[data-action="sensation-submit"]');
     const sensationClear = document.querySelector('[data-action="sensation-clear"]');
     const sensationNext = document.querySelector('[data-action="sensation-next"]');
+    sensationChips?.addEventListener('click', handleSensationChipClick);
     sensationSubmit?.addEventListener('click', handleSensationSubmit);
     sensationClear?.addEventListener('click', handleSensationClear);
     sensationNext?.addEventListener('click', handleSensationSkip);
 
-    const compassForm = document.querySelector('[data-compass-form]');
-    compassForm?.addEventListener('change', handleCompassChange);
+    compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
+
+    supportFooter?.addEventListener('click', handleFooterClick);
 
     bodySuggestions?.addEventListener('click', handleSuggestionClick);
     compassSuggestions?.addEventListener('click', handleSuggestionClick);
@@ -1084,6 +1248,7 @@
     );
     migrateLegacyJournalEntries();
     renderJournalHistory(getJournalEntries());
+    updateFooter();
   }
 
   if (document.readyState === 'loading') {

@@ -186,89 +186,49 @@
             <form class="sensation-form" data-sensation-form>
               <fieldset>
                 <legend class="sensation-form__legend">Choose all sensations that apply</legend>
-                <ul class="sensation-list">
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="tight-chest" />
-                      <span class="sensation-label">
-                        <strong>Chest: tight, heavy, or pounding</strong>
-                        <small>Breath feels shallow or heart racing</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="stomach-knots" />
-                      <span class="sensation-label">
-                        <strong>Stomach: knots, fluttery, or queasy</strong>
-                        <small>Butterflies, nausea, rolling sensation</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="throat-tight" />
-                      <span class="sensation-label">
-                        <strong>Throat: lump or tightness</strong>
-                        <small>Words feel stuck, urge to cry</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="jaw-clench" />
-                      <span class="sensation-label">
-                        <strong>Jaw or fists: clenched or hot</strong>
-                        <small>Muscles braced, face flushed</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="head-fog" />
-                      <span class="sensation-label">
-                        <strong>Head: foggy, buzzing, or heavy</strong>
-                        <small>Hard to focus, pressure behind eyes</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="shoulders-weight" />
-                      <span class="sensation-label">
-                        <strong>Shoulders: weighted or lifted</strong>
-                        <small>Carrying tension or bracing to act</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="limbs-lead" />
-                      <span class="sensation-label">
-                        <strong>Arms or legs: heavy, numb, or restless</strong>
-                        <small>Hard to move or urge to pace</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="temperature-shift" />
-                      <span class="sensation-label">
-                        <strong>Temperature shifts</strong>
-                        <small>Flush of heat, sudden chill, or prickly skin</small>
-                      </span>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="checkbox" name="sensation" value="no-sensation" />
-                      <span class="sensation-label">
-                        <strong>Hard to notice anything</strong>
-                        <small>Numb, blank, or disconnected</small>
-                      </span>
-                    </label>
-                  </li>
-                </ul>
+                <div
+                  class="form-row sensation-chips"
+                  data-sensation-chips
+                  role="group"
+                  aria-label="Body sensations"
+                >
+                  <button type="button" class="chip chip--stacked" data-sensation="tight-chest" aria-pressed="false">
+                    <span class="chip__title">Chest: tight, heavy, or pounding</span>
+                    <span class="chip__note">Breath feels shallow or heart racing</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="stomach-knots" aria-pressed="false">
+                    <span class="chip__title">Stomach: knots, fluttery, or queasy</span>
+                    <span class="chip__note">Butterflies, nausea, rolling sensation</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="throat-tight" aria-pressed="false">
+                    <span class="chip__title">Throat: lump or tightness</span>
+                    <span class="chip__note">Words feel stuck, urge to cry</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="jaw-clench" aria-pressed="false">
+                    <span class="chip__title">Jaw or fists: clenched or hot</span>
+                    <span class="chip__note">Muscles braced, face flushed</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="head-fog" aria-pressed="false">
+                    <span class="chip__title">Head: foggy, buzzing, or heavy</span>
+                    <span class="chip__note">Hard to focus, pressure behind eyes</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="shoulders-weight" aria-pressed="false">
+                    <span class="chip__title">Shoulders: weighted or lifted</span>
+                    <span class="chip__note">Carrying tension or bracing to act</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="limbs-lead" aria-pressed="false">
+                    <span class="chip__title">Arms or legs: heavy, numb, or restless</span>
+                    <span class="chip__note">Hard to move or urge to pace</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="temperature-shift" aria-pressed="false">
+                    <span class="chip__title">Temperature shifts</span>
+                    <span class="chip__note">Flush of heat, sudden chill, or prickly skin</span>
+                  </button>
+                  <button type="button" class="chip chip--stacked" data-sensation="no-sensation" aria-pressed="false">
+                    <span class="chip__title">Hard to notice anything</span>
+                    <span class="chip__note">Numb, blank, or disconnected</span>
+                  </button>
+                </div>
               </fieldset>
               <div class="sensation-actions">
                 <button class="support-button" type="button" data-action="sensation-submit">See possible emotions</button>
@@ -292,24 +252,16 @@
               If the body suggestions feel uncertain, try plotting your state on the emotion compass. Estimate your energy and how
               pleasant or unpleasant things feel right now.
             </p>
-            <form class="compass-form" data-compass-form>
-              <fieldset>
-                <legend>Energy level</legend>
-                <div class="compass-options form-row">
-                  <label><input type="radio" name="energy" value="low" />Low — sluggish or drained</label>
-                  <label><input type="radio" name="energy" value="medium" />Steady — grounded or alert</label>
-                  <label><input type="radio" name="energy" value="high" />High — wired or restless</label>
-                </div>
-              </fieldset>
-              <fieldset>
-                <legend>Pleasantness</legend>
-                <div class="compass-options form-row">
-                  <label><input type="radio" name="valence" value="unpleasant" />Unpleasant or distressed</label>
-                  <label><input type="radio" name="valence" value="neutral" />Neutral or mixed</label>
-                  <label><input type="radio" name="valence" value="pleasant" />Pleasant or easeful</label>
-                </div>
-              </fieldset>
-            </form>
+            <div class="compass-panel">
+              <div class="emotion-compass" data-compass aria-label="Emotion compass">
+                <p class="visually-hidden" data-compass-hint>
+                  Drag the dot or use arrow keys to adjust your energy and pleasantness levels.
+                </p>
+              </div>
+              <p class="emotion-compass__readout" data-compass-readout>
+                Energy: Steady · Pleasantness: Neutral
+              </p>
+            </div>
             <div class="emotion-suggestions" data-compass-suggestions>
               <p class="support-note">Pick one energy and one pleasantness option to see suggestions.</p>
             </div>
@@ -383,8 +335,15 @@
             </p>
           </article>
         </section>
+        <footer class="support-footer" data-support-footer aria-label="Step controls">
+          <button type="button" class="support-footer__button" data-nav="back">Back</button>
+          <button type="button" class="support-footer__button support-footer__button--ghost" data-nav="skip">Skip</button>
+          <button type="button" class="support-footer__button" data-nav="next">Next</button>
+        </footer>
       </main>
     </div>
+    <script src="../assets/js/ui/segmented.js" defer></script>
+    <script src="../assets/js/ui/compass.js" defer></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/alexithymia-support.js" defer></script>
   </body>

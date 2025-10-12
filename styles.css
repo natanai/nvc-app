@@ -13,6 +13,7 @@
   --shadow: color-mix(in srgb, var(--outline) 55%, transparent);
   --btn-bg: #ffb3cb;
   --btn-fg: #111111;
+  --chip-bg: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
   --chip-fg: #111111;
   --font-body: 'Atkinson Hyperlegible', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -51,6 +52,104 @@ button,
   display: flex;
   flex-wrap: wrap;
   gap: 10px 12px;
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  border-radius: 999px;
+  border: 3px solid var(--outline);
+  background: var(--chip-bg);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+}
+
+.segmented > button {
+  border: 2px solid transparent;
+  background: transparent;
+  color: var(--chip-fg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.segmented > button:hover {
+  background: color-mix(in srgb, var(--chip-bg) 72%, var(--mint) 28%);
+}
+
+.segmented > button[aria-checked='true'] {
+  background: color-mix(in srgb, var(--chip-bg) 45%, var(--mint) 55%);
+  border-color: var(--outline);
+  box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.segmented > button:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 2px;
+}
+
+.chip {
+  border: 3px solid var(--outline);
+  border-radius: 16px;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  padding: 0.65rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.chip--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.25rem;
+  width: min(100%, 320px);
+  flex: 1 1 260px;
+}
+
+.chip__title {
+  font-weight: 700;
+}
+
+.chip__note {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.chip:hover,
+.chip:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 26%, transparent);
+}
+
+.chip:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.chip.is-active,
+.chip[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--chip-bg) 40%, var(--mint) 60%);
+  border-color: var(--outline);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 32%, transparent);
+  transform: translateY(-3px);
 }
 
 .visually-hidden {
@@ -263,6 +362,7 @@ button.site-nav__link {
 .support-flow {
   display: grid;
   gap: 1.75rem;
+  padding-bottom: 6.5rem;
 }
 
 .support-step {
@@ -409,8 +509,7 @@ button.site-nav__link {
   }
 }
 
-.sensation-form fieldset,
-.compass-form fieldset {
+.sensation-form fieldset {
   margin: 0;
   padding: 0;
   border: none;
@@ -421,43 +520,144 @@ button.site-nav__link {
   margin-bottom: 0.5rem;
 }
 
-.sensation-list {
-  list-style: none;
+.sensation-chips {
+  margin-top: 0.75rem;
+  justify-content: flex-start;
+}
+
+.compass-panel {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  margin: 1rem 0 1.5rem;
+}
+
+.emotion-compass {
+  width: min(320px, 100%);
+  display: grid;
+  justify-items: center;
+}
+
+.emotion-compass__board {
+  position: relative;
+  width: min(320px, 100%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 4px solid var(--outline);
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--mint) 36%, #ffffff 64%) 0%,
+      color-mix(in srgb, var(--sky) 45%, #ffffff 55%) 60%, color-mix(in srgb, var(--lavender) 65%, transparent) 100%);
+  box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+  cursor: grab;
+  touch-action: none;
+  transition: box-shadow 0.18s ease;
+}
+
+.emotion-compass__board::before,
+.emotion-compass__board::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: color-mix(in srgb, var(--outline) 35%, transparent);
+  pointer-events: none;
+}
+
+.emotion-compass__board::before {
+  width: 2px;
+  height: 88%;
+}
+
+.emotion-compass__board::after {
+  width: 88%;
+  height: 2px;
+}
+
+.emotion-compass__board[data-dragging='1'] {
+  cursor: grabbing;
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 34%, transparent);
+}
+
+.emotion-compass__handle {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 4px solid var(--outline);
+  background: var(--chip-bg);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.emotion-compass__board[data-dragging='1'] .emotion-compass__handle {
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 32%, transparent);
+  transition: none;
+}
+
+.emotion-compass__readout {
   margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
 }
 
-.sensation-list label {
+.support-footer {
+  position: sticky;
+  bottom: 0;
+  margin-top: 2rem;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
-  align-items: flex-start;
-  padding: 0.7rem 0.85rem;
-  border: 2px solid var(--outline);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-top: 3px solid var(--outline);
+  border-radius: 18px 18px 0 0;
+  background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+  box-shadow: 0 -10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+  z-index: 5;
 }
 
-.sensation-list label:hover,
-.sensation-list label:focus-within {
+.support-footer__button {
+  flex: 1 1 140px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 3px solid var(--outline);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 8px 0 var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.support-footer__button--ghost {
+  background: color-mix(in srgb, var(--btn-bg) 32%, #ffffff 68%);
+  color: var(--btn-fg);
+}
+
+.support-footer__button:hover,
+.support-footer__button:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 30%, transparent);
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 42%, transparent);
 }
 
-.sensation-list input {
-  margin-top: 0.25rem;
+.support-footer__button:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
 }
 
-.sensation-label {
-  display: grid;
-  gap: 0.2rem;
-}
-
-.sensation-label small {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
+.support-footer__button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 0 0 transparent;
 }
 
 .sensation-actions,
