@@ -713,7 +713,18 @@ function renderInventoryPage() {
       <header class="page-header inventory-header">
         <div class="inventory-header__layout">
           <div class="inventory-header__content">
-            <h1 class="page-title">Strategy inventory</h1>
+            <div class="inventory-header__title-row">
+              <h1 class="page-title">Strategy inventory</h1>
+              <a class="inventory-journal-button" href="./journal/">
+                <img
+                  src="../icons/journal-32bit.svg"
+                  class="inventory-journal-button__icon"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <span class="inventory-journal-button__label">Journal</span>
+              </a>
+            </div>
             <p class="page-description">
               Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
             </p>
@@ -724,17 +735,7 @@ function renderInventoryPage() {
               </a>
             </div>
           </div>
-          <a class="inventory-journal-button" href="./journal/">
-            <img
-              src="../icons/journal-32bit.svg"
-              class="inventory-journal-button__icon"
-              alt=""
-              aria-hidden="true"
-            />
-            <span class="inventory-journal-button__label">Journal</span>
-          </a>
         </div>
-        <p class="inventory-header__hint">Your journal stays on this device unless you export it.</p>
       </header>
 
       <section class="inventory-main" aria-labelledby="inventory-overview-heading">
@@ -744,8 +745,24 @@ function renderInventoryPage() {
             <p class="inventory-actions__hint">Export a CSV backup or import one you created earlier.</p>
           </div>
           <div class="inventory-actions__buttons">
-            <button type="button" id="inventory-export" class="inventory-button">Export CSV</button>
-            <button type="button" id="inventory-import-trigger" class="inventory-button inventory-button--ghost">Import CSV</button>
+            <button
+              type="button"
+              id="inventory-export"
+              class="inventory-button inventory-button--compact"
+              aria-label="Export CSV"
+            >
+              <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
+              <span class="inventory-button__text">Export CSV</span>
+            </button>
+            <button
+              type="button"
+              id="inventory-import-trigger"
+              class="inventory-button inventory-button--ghost inventory-button--compact"
+              aria-label="Import CSV"
+            >
+              <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
+              <span class="inventory-button__text">Import CSV</span>
+            </button>
             <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
