@@ -28,6 +28,11 @@ const COLOR_INPUTS = [
   { key: 'outline', varName: '--outline', label: 'Outline' },
 ];
 
+const DEFAULT_ROUNDNESS = 100;
+const ROUNDNESS_MIN = 0;
+const ROUNDNESS_MAX = 200;
+const ROUNDNESS_STEP = 10;
+
 const paletteState = {
   container: null,
   toggle: null,
@@ -44,6 +49,9 @@ const paletteState = {
   styleElement: null,
   highContrastToggle: null,
   highContrastEnabled: false,
+  cornerSlider: null,
+  cornerValue: null,
+  cornerRoundness: DEFAULT_ROUNDNESS,
 };
 
 const SECTION_ALIASES = new Map([
@@ -595,6 +603,11 @@ async function initColorCustomizer() {
   paletteState.currentColors = { ...paletteState.defaultColors };
 
   const savedTheme = loadSavedTheme();
+  if (savedTheme?.roundness !== undefined) {
+    setCornerRoundness(savedTheme.roundness, { persist: false });
+  } else {
+    setCornerRoundness(DEFAULT_ROUNDNESS, { persist: false });
+  }
   if (savedTheme?.values && Object.keys(savedTheme.values).length) {
     applyColors(savedTheme.values, {
       presetName: savedTheme.preset || '',
@@ -727,6 +740,46 @@ function buildPaletteUi() {
   presetField.append(presetLabel, presetSelect);
   form.appendChild(presetField);
 
+  const roundnessField = document.createElement('label');
+  roundnessField.className = 'palette-form__field palette-form__field--slider';
+
+  const roundnessHeader = document.createElement('span');
+  roundnessHeader.className = 'palette-form__label-row';
+
+  const roundnessLabel = document.createElement('span');
+  roundnessLabel.className = 'palette-form__label';
+  roundnessLabel.textContent = 'Corner roundness';
+
+  const roundnessValue = document.createElement('span');
+  roundnessValue.className = 'palette-form__value';
+  roundnessValue.textContent = formatRoundnessLabel(paletteState.cornerRoundness);
+
+  roundnessHeader.append(roundnessLabel, roundnessValue);
+
+  const roundnessSlider = document.createElement('input');
+  roundnessSlider.type = 'range';
+  roundnessSlider.className = 'palette-form__slider';
+  roundnessSlider.min = String(ROUNDNESS_MIN);
+  roundnessSlider.max = String(ROUNDNESS_MAX);
+  roundnessSlider.step = String(ROUNDNESS_STEP);
+  roundnessSlider.value = String(paletteState.cornerRoundness);
+  roundnessSlider.name = 'corner-roundness';
+
+  roundnessSlider.addEventListener('input', () => {
+    setCornerRoundness(roundnessSlider.valueAsNumber, { persist: false, skipSliderUpdate: true });
+  });
+
+  roundnessSlider.addEventListener('change', () => {
+    setCornerRoundness(roundnessSlider.valueAsNumber);
+  });
+
+  roundnessField.append(roundnessHeader, roundnessSlider);
+  form.appendChild(roundnessField);
+
+  paletteState.cornerSlider = roundnessSlider;
+  paletteState.cornerValue = roundnessValue;
+  updateRoundnessDisplay(paletteState.cornerRoundness);
+
   const grid = document.createElement('div');
   grid.className = 'palette-form__grid';
   form.appendChild(grid);
@@ -801,6 +854,7 @@ function buildPaletteUi() {
   resetButton.textContent = 'Reset to default';
   resetButton.addEventListener('click', () => {
     applyColors(paletteState.defaultColors, { presetName: '', replace: true });
+    setCornerRoundness(DEFAULT_ROUNDNESS);
   });
 
   actions.appendChild(resetButton);
@@ -870,14 +924,19 @@ function openPalettePanel() {
   paletteState.container?.classList.add('is-open');
   paletteState.panel.hidden = false;
 
-  const firstInput = paletteState.inputs.values().next().value;
-  const shouldAutoFocusInput = !isMobilePaletteLayout();
+  paletteState.panel.scrollTop = 0;
+
+  const slider = paletteState.cornerSlider;
+  const presetSelect = paletteState.presetSelect;
+  const shouldAutoFocus = !isMobilePaletteLayout();
   window.requestAnimationFrame(() => {
-    if (firstInput instanceof HTMLElement && shouldAutoFocusInput) {
-      firstInput.focus();
-      if (firstInput instanceof HTMLInputElement) {
-        firstInput.select();
-      }
+    if (slider instanceof HTMLElement && shouldAutoFocus) {
+      slider.focus();
+      return;
+    }
+
+    if (presetSelect instanceof HTMLElement && shouldAutoFocus) {
+      presetSelect.focus();
       return;
     }
 
@@ -1182,6 +1241,58 @@ function sanitizeColorsMap(colors) {
   return sanitized;
 }
 
+function clampRoundness(value) {
+  const number = typeof value === 'number' ? value : Number.parseFloat(value);
+  if (!Number.isFinite(number)) {
+    return DEFAULT_ROUNDNESS;
+  }
+  return Math.min(ROUNDNESS_MAX, Math.max(ROUNDNESS_MIN, Math.round(number)));
+}
+
+function formatRoundnessLabel(value) {
+  const clamped = clampRoundness(value);
+  return `${clamped}%`;
+}
+
+function applyCornerScaleToRoot(roundness) {
+  const root = document.documentElement;
+  if (!root?.style) {
+    return;
+  }
+  const scale = clampRoundness(roundness) / 100;
+  root.style.setProperty('--corner-scale', scale.toString());
+}
+
+function updateRoundnessDisplay(roundness) {
+  if (paletteState.cornerValue) {
+    paletteState.cornerValue.textContent = formatRoundnessLabel(roundness);
+  }
+}
+
+function setCornerRoundness(value, options = {}) {
+  const { persist = true, skipDomUpdate = false, skipSliderUpdate = false } = options;
+  const clamped = clampRoundness(value);
+  paletteState.cornerRoundness = clamped;
+
+  if (!skipDomUpdate) {
+    applyCornerScaleToRoot(clamped);
+  }
+
+  if (!skipSliderUpdate && paletteState.cornerSlider) {
+    paletteState.cornerSlider.value = String(clamped);
+  }
+
+  updateRoundnessDisplay(clamped);
+
+  if (persist) {
+    saveTheme({
+      values: paletteState.currentColors,
+      preset: paletteState.currentPreset,
+      roundness: clamped,
+    });
+  }
+}
+
 function saveTheme(theme) {
   if (!theme || typeof theme !== 'object') {
     return;
@@ -1190,6 +1301,9 @@ function saveTheme(theme) {
   const payload = {
     values: sanitizeColorsMap(theme.values || paletteState.currentColors),
     preset: typeof theme.preset === 'string' ? theme.preset : '',
+    roundness: clampRoundness(
+      typeof theme.roundness === 'number' ? theme.roundness : paletteState.cornerRoundness,
+    ),
   };
 
   try {
@@ -1214,6 +1328,7 @@ function loadSavedTheme() {
     return {
       values: sanitizeColorsMap(parsed.values),
       preset: typeof parsed.preset === 'string' ? parsed.preset : '',
+      roundness: clampRoundness(parsed.roundness),
     };
   } catch (error) {
     console.warn('Unable to read saved color theme', error);

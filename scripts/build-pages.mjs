@@ -60,6 +60,13 @@ const themePreloadScript = (basePath) => {
                 root.style.setProperty(varName, value.toUpperCase());
                 applied = true;
               }
+              const roundnessRaw =
+                typeof parsed.roundness === 'number' ? parsed.roundness : Number(parsed.roundness);
+              if (!Number.isNaN(roundnessRaw)) {
+                const clampedRoundness = Math.min(200, Math.max(0, Math.round(roundnessRaw)));
+                root.style.setProperty('--corner-scale', String(clampedRoundness / 100));
+                applied = true;
+              }
             }
           }
         } catch (error) {
