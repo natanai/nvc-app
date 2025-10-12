@@ -2446,6 +2446,17 @@ button.site-nav__link {
   border-radius: var(--radius-2xl);
   border: 2px solid color-mix(in srgb, var(--outline) 12%, transparent);
   background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+  min-width: 0;
+}
+
+.journal-form__field select,
+.journal-form__field input,
+.journal-form__field textarea,
+.inventory-journal-form__field select,
+.inventory-journal-form__field input,
+.inventory-journal-form__field textarea {
+  width: 100%;
+  max-width: 100%;
 }
 
 .journal-form__field--notes,
