@@ -402,6 +402,11 @@ button.site-nav__link {
   justify-items: center;
 }
 
+.home-doorways > .door-grid {
+  justify-self: stretch;
+  width: 100%;
+}
+
 .home-doorways__copy {
   display: grid;
   gap: 0.65rem;
