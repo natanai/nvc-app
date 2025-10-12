@@ -172,7 +172,7 @@
       bodySignals: ['Tight or fluttery chest', 'Fast heartbeat', 'Butterflies in the stomach', 'Restless energy in hands or feet'],
       thoughts: ['“What if something goes wrong?”', 'Planning every possible outcome', 'Scanning for threats or mistakes'],
       contexts: ['Facing uncertainty or change', 'Waiting for results', 'Holding lots of responsibility'],
-      needs: ['reassurance', 'clarity', 'safety', 'support'],
+      needs: ['Safety', 'Clarity', 'Support', 'Trust'],
       regulation: [
         'Try 4-4-6 breathing: inhale 4, hold 4, exhale 6 to downshift activation.',
         'Orient to the present—name five things you can see or touch to remind your body it is here now.',
@@ -185,7 +185,7 @@
       bodySignals: ['Cold hands', 'Wide eyes', 'Tense muscles ready to flee or freeze'],
       thoughts: ['“I might get hurt.”', '“This is risky.”'],
       contexts: ['Perceiving physical or emotional threat', 'Entering unfamiliar spaces without support'],
-      needs: ['safety', 'reassurance', 'protection'],
+      needs: ['Safety', 'Security', 'Support'],
       regulation: [
         'Let someone you trust know you feel scared; co-regulation calms fear.',
         'Create a small safety ritual—lock doors, check facts, or hold a grounding object.',
@@ -198,7 +198,7 @@
       bodySignals: ['Heat in face or hands', 'Clenched jaw or fists', 'Quick breathing'],
       thoughts: ['“This isn’t fair.”', '“Stop this now.”'],
       contexts: ['Experiencing injustice or disrespect', 'Sensing a boundary violation'],
-      needs: ['respect', 'fairness', 'boundaries', 'change'],
+      needs: ['Respect', 'Fairness', 'Justice', 'Integrity'],
       regulation: [
         'Move the energy safely—shake your arms, stomp gently, or press into a pillow.',
         'Write down what boundary was crossed before deciding how to respond.',
@@ -211,7 +211,7 @@
       bodySignals: ['Pressure in the head', 'Difficulty focusing', 'Sighing or shallow breath'],
       thoughts: ['“It’s too much.”', '“I can’t keep up.”'],
       contexts: ['Juggling competing demands', 'Taking in intense sensory or emotional input'],
-      needs: ['space', 'support', 'prioritization'],
+      needs: ['Space', 'Support', 'Rest'],
       regulation: [
         'List the tasks and circle the single next step; let the rest wait.',
         'Take a sensory break—step outside, dim lights, or use noise reduction.',
@@ -224,7 +224,7 @@
       bodySignals: ['Bouncing legs', 'Quick speech', 'Warmth in the face'],
       thoughts: ['“This is going to be great!”', '“I can’t wait.”'],
       contexts: ['Anticipating a positive event', 'Working on an inspiring idea'],
-      needs: ['play', 'celebration', 'expression'],
+      needs: ['Appreciation', 'Self expression', 'Connection'],
       regulation: ['Channel the spark—dance, share the news, or map out how to savor it.', 'Notice if you also need grounding to rest later.'],
       communication: 'I’m excited and want to celebrate or plan how to enjoy this moment.',
     },
@@ -234,7 +234,7 @@
       bodySignals: ['Tension behind eyes', 'Fidgeting', 'Tight shoulders'],
       thoughts: ['“Have I missed something?”', '“I should double-check.”'],
       contexts: ['Unfinished tasks', 'Ambiguous feedback', 'Caring deeply about an outcome'],
-      needs: ['reassurance', 'information', 'contingency plans'],
+      needs: ['Clarity', 'Predictability', 'Support'],
       regulation: [
         'Write down the worry, then note what is in your control versus what is not.',
         'Schedule a specific time to revisit the concern so your brain can rest meanwhile.',
@@ -247,7 +247,7 @@
       bodySignals: ['Heavy chest or throat', 'Tears or eye pressure', 'Slower movements'],
       thoughts: ['“This hurts.”', '“I miss what was possible.”'],
       contexts: ['After disappointments', 'Missing someone or something important'],
-      needs: ['comfort', 'acknowledgment', 'companionship'],
+      needs: ['Connection', 'Support', 'Empathy'],
       regulation: [
         'Allow tears or sighs—they help the wave move through.',
         'Offer warmth: wrap in a blanket, hold a pillow, or listen to gentle music.',
@@ -260,7 +260,7 @@
       bodySignals: ['Hollowness in the chest or stomach', 'Wave-like surges of emotion', 'Exhaustion after crying'],
       thoughts: ['“This shouldn’t be gone.”', '“I don’t know who I am without it.”'],
       contexts: ['Bereavement', 'Major life transitions', 'Letting go of a dream'],
-      needs: ['mourning space', 'witnessing', 'ritual'],
+      needs: ['Community', 'Support', 'Honor'],
       regulation: [
         'Create a small ritual—light a candle, write a letter, or look at photos.',
         'Ask someone to simply listen while you share memories or feelings.',
@@ -273,7 +273,7 @@
       bodySignals: ['Heavy limbs', 'Yawning', 'Difficulty concentrating'],
       thoughts: ['“I can’t push much more.”', '“I need a break.”'],
       contexts: ['Long stretches of effort', 'Emotional caregiving', 'Lack of sleep or nutrition'],
-      needs: ['rest', 'recovery', 'nourishment'],
+      needs: ['Rest', 'Relaxation', 'Support'],
       regulation: ['Schedule real rest—even 10 minutes counts.', 'Check in with basic care: water, food, movement, sleep.'],
       communication: 'I’m tired and need rest or help sharing responsibilities.',
     },
@@ -283,7 +283,7 @@
       bodySignals: ['Ache in the chest', 'Hollow stomach', 'Tears without clear reason'],
       thoughts: ['“No one gets me.”', '“I wish someone were here.”'],
       contexts: ['Being isolated', 'Feeling unseen in a crowd', 'Transitions away from familiar people'],
-      needs: ['belonging', 'closeness', 'shared experience'],
+      needs: ['Belonging', 'Closeness', 'Connection'],
       regulation: [
         'Reach out with a simple message—even a text counts.',
         'Engage in a community space that feels low-pressure, such as an online group or forum.',
@@ -296,7 +296,7 @@
       bodySignals: ['Weighted shoulders', 'Knotted stomach', 'Downcast gaze'],
       thoughts: ['“I should make this right.”', '“I let them down.”'],
       contexts: ['Hurting someone unintentionally', 'Not living up to your own standards'],
-      needs: ['repair', 'integrity', 'forgiveness'],
+      needs: ['Accountability', 'Integrity', 'Honesty'],
       regulation: [
         'Acknowledge what happened and what you value.',
         'Plan a repair action, even if it is a small apology or change.',
@@ -309,7 +309,7 @@
       bodySignals: ['Heat in the face', 'Desire to hide', 'Collapsed posture'],
       thoughts: ['“I am the problem.”', '“People will reject me.”'],
       contexts: ['Receiving harsh criticism', 'Reliving past hurts', 'Comparing yourself to others'],
-      needs: ['acceptance', 'empathy', 'self-compassion'],
+      needs: ['Acceptance', 'Empathy', 'To be seen'],
       regulation: [
         'Reach out to someone who can meet you with kindness.',
         'Place a hand on your heart and say a supportive phrase such as “I deserve care even when I err.”',
@@ -322,7 +322,7 @@
       bodySignals: ['Tight shoulders', 'Headaches', 'Shallow breathing'],
       thoughts: ['“There’s so much to do.”', '“I can’t drop any balls.”'],
       contexts: ['High workloads', 'Caregiving with few breaks', 'Competing deadlines'],
-      needs: ['support', 'structure', 'recovery'],
+      needs: ['Support', 'Rest', 'Reliability'],
       regulation: [
         'Chunk tasks into small steps and set a realistic window for each.',
         'Ask for support or renegotiate expectations where possible.',
@@ -335,7 +335,7 @@
       bodySignals: ['Tense jaw', 'Sighing', 'Fidgeting'],
       thoughts: ['“Why isn’t this working?”', '“I’m stuck.”'],
       contexts: ['Technical issues', 'Miscommunication', 'Delays outside your control'],
-      needs: ['movement', 'problem-solving', 'understanding'],
+      needs: ['Autonomy', 'Support', 'Understanding'],
       regulation: [
         'Step back for a short break to reset your focus.',
         'Name what is in your control and brainstorm one new approach.',
@@ -348,7 +348,7 @@
       bodySignals: ['Flat or absent sensation', 'Difficulty naming emotions', 'Detached awareness'],
       thoughts: ['“I don’t know what I feel.”', '“It’s just blank.”'],
       contexts: ['Overload after intense emotions', 'Protective shutdown when overwhelmed'],
-      needs: ['gentle curiosity', 'safety', 'time'],
+      needs: ['Calm', 'Empathy', 'Safety'],
       regulation: [
         'Check in with basic senses—hold something textured, taste something minty, or move slowly.',
         'Remind yourself that numbness is a protective signal, not a failure.',
@@ -361,7 +361,7 @@
       bodySignals: ['Restless legs', 'Sighing', 'Difficulty focusing'],
       thoughts: ['“This is pointless.”', '“I want something different.”'],
       contexts: ['Repeating tasks', 'Lack of creative outlet'],
-      needs: ['stimulation', 'meaning', 'variety'],
+      needs: ['Growth', 'Participation', 'Freedom'],
       regulation: [
         'Introduce a small change—switch locations, add music, or gamify a task.',
         'Reconnect with a longer-term goal or why the task matters to you.',
@@ -374,7 +374,7 @@
       bodySignals: ['Leaning forward', 'Eyes widening', 'Gentle alertness'],
       thoughts: ['“What is this about?”', '“I want to understand.”'],
       contexts: ['Encountering new ideas', 'Having space to explore without pressure'],
-      needs: ['information', 'play', 'autonomy'],
+      needs: ['Clarity', 'Autonomy', 'Freedom'],
       regulation: ['Follow the thread—research, ask questions, or experiment safely.', 'Protect time to wander without judging productivity.'],
       communication: 'I’m curious and would like time or resources to explore this further.',
     },
@@ -384,7 +384,7 @@
       bodySignals: ['Soft gaze', 'Slower pace', 'Focus on inner imagery'],
       thoughts: ['“Let me think this through.”', '“How does this fit?”'],
       contexts: ['Making decisions', 'Integrating new insight'],
-      needs: ['reflection', 'quiet', 'clarity'],
+      needs: ['Understanding', 'Calm', 'Clarity'],
       regulation: ['Give yourself unhurried space to journal or map ideas.', 'Balance reflection with small grounding breaks.'],
       communication: 'I’m feeling thoughtful and could use space to process before responding.',
     },
@@ -394,7 +394,7 @@
       bodySignals: ['Mixed sensations', 'Alternating tension and release'],
       thoughts: ['“I need more data.”', '“I’m on the fence.”'],
       contexts: ['Facing ambiguous outcomes', 'Transition periods'],
-      needs: ['information', 'time', 'guidance'],
+      needs: ['Clarity', 'Predictability', 'Support'],
       regulation: ['List what you know, what you guess, and what you need to find out.', 'Decide on the next small check-in point.'],
       communication: 'I’m uncertain and need more information or time before committing.',
     },
@@ -404,7 +404,7 @@
       bodySignals: ['Tight jaw', 'Forward posture', 'Strong grip'],
       thoughts: ['“I will make this happen.”', '“Keep going.”'],
       contexts: ['Working toward a meaningful goal', 'Protecting someone or something important'],
-      needs: ['progress', 'agency', 'support'],
+      needs: ['Accomplishment', 'Support', 'Commitment'],
       regulation: ['Channel the drive into a clear action plan.', 'Balance effort with intentional pauses to avoid burnout.'],
       communication: 'I’m feeling determined and would appreciate support or acknowledgement as I work on this.',
     },
@@ -414,7 +414,7 @@
       bodySignals: ['Steady gaze', 'Still body with poised energy'],
       thoughts: ['“Stay on target.”', '“One step at a time.”'],
       contexts: ['Working through complex tasks', 'Solving a problem'],
-      needs: ['clarity', 'minimal distractions', 'completion'],
+      needs: ['Clarity', 'Order', 'Accomplishment'],
       regulation: ['Protect your focus window—silence notifications or set a timer.', 'Plan a closing ritual so you can release the task afterward.'],
       communication: 'I’m focused right now and need minimal interruptions until I finish.',
     },
@@ -424,7 +424,7 @@
       bodySignals: ['Quickened breath', 'Forward-leaning posture', 'Tingling skin'],
       thoughts: ['“It’s almost time.”', '“I wonder how it will go.”'],
       contexts: ['Waiting for news', 'Preparing for an event'],
-      needs: ['preparation', 'information', 'ritual'],
+      needs: ['Predictability', 'Support', 'Trust'],
       regulation: ['Channel the build-up into preparation or a grounding routine.', 'Alternate between activity and calming breaths.'],
       communication: 'I’m feeling anticipation and would like support as I get ready.',
     },
@@ -434,7 +434,7 @@
       bodySignals: ['Even breathing', 'Relaxed muscles', 'Warm, steady presence'],
       thoughts: ['“I can breathe.”', '“I have enough for this moment.”'],
       contexts: ['After soothing connection', 'When needs are met'],
-      needs: ['rest', 'stability', 'presence'],
+      needs: ['Rest', 'Serenity', 'Peace'],
       regulation: ['Savor the calm by breathing slowly or practicing gratitude.', 'Note what supports this state for future reference.'],
       communication: 'I feel calm and grounded, which tells me my needs are met right now.',
     },
@@ -444,7 +444,7 @@
       bodySignals: ['Deep exhale', 'Softening shoulders', 'Warmth spreading'],
       thoughts: ['“It’s over.”', '“I can rest now.”'],
       contexts: ['Receiving good news', 'After a stressful event ends'],
-      needs: ['rest', 'celebration', 'integration'],
+      needs: ['Rest', 'Relaxation', 'Appreciation'],
       regulation: ['Let your body fully exhale and shake out leftover stress.', 'Mark the moment with a small reward or acknowledgement.'],
       communication: 'I’m relieved and want to honor the effort it took to get here.',
     },
@@ -454,7 +454,7 @@
       bodySignals: ['Soft smile', 'Relaxed belly', 'Balanced posture'],
       thoughts: ['“This is enough for now.”', '“I can enjoy this.”'],
       contexts: ['Simple pleasures', 'Quality time with loved ones', 'Finishing meaningful work'],
-      needs: ['appreciation', 'stability', 'belonging'],
+      needs: ['Appreciation', 'Belonging', 'Peace'],
       regulation: ['Pause to notice sensory details—savor taste, texture, or scenery.', 'Share gratitude or document what you appreciate.'],
       communication: 'I feel content and grateful for how things are landing right now.',
     },
@@ -464,7 +464,7 @@
       bodySignals: ['Light chest', 'Lifted gaze', 'Gentle energy'],
       thoughts: ['“Something good could happen.”', '“There are options.”'],
       contexts: ['Glimpsing new possibilities', 'Receiving encouragement'],
-      needs: ['vision', 'support', 'agency'],
+      needs: ['Growth', 'Support', 'Empowerment'],
       regulation: ['Capture the ideas that spark hope so you can revisit them.', 'Pair hope with one practical next step.'],
       communication: 'I’m feeling hopeful and want to nurture this possibility together.',
     },
@@ -474,7 +474,7 @@
       bodySignals: ['Warm chest', 'Soft smile', 'Moist eyes'],
       thoughts: ['“Thank you.”', '“This matters to me.”'],
       contexts: ['Receiving help', 'Noticing beauty', 'Moments of generosity'],
-      needs: ['acknowledgment', 'connection', 'celebration'],
+      needs: ['Appreciation', 'Connection', 'Mutuality'],
       regulation: ['Express thanks aloud, in writing, or through a small gesture.', 'Record the moment so you can revisit it later.'],
       communication: 'I feel grateful and want to express appreciation for what you did.',
     },
@@ -484,7 +484,7 @@
       bodySignals: ['Light, bouncy energy', 'Laughing', 'Sparkling eyes'],
       thoughts: ['“This is wonderful!”', '“I love this.”'],
       contexts: ['Celebrations', 'Shared laughter', 'Creative breakthroughs'],
-      needs: ['play', 'connection', 'expression'],
+      needs: ['Connection', 'Self expression', 'Freedom'],
       regulation: ['Amplify the joy—dance, sing, or share it.', 'Snapshot the moment mentally or physically to savor later.'],
       communication: 'I feel joyful and want to celebrate this together.',
     },
@@ -494,7 +494,7 @@
       bodySignals: ['Expanded chest', 'Lifted chin', 'Steady stance'],
       thoughts: ['“I did it.”', '“I’m proud of myself.”'],
       contexts: ['Finishing a tough task', 'Living your values', 'Showing up bravely'],
-      needs: ['recognition', 'self-respect', 'celebration'],
+      needs: ['Recognition', 'Integrity', 'Support'],
       regulation: ['Name the strengths you used.', 'Share the win with someone who will celebrate with you.'],
       communication: 'I feel proud of what I accomplished and want to mark this success.',
     },
@@ -941,14 +941,56 @@
     `;
   }
 
-  function renderNeedLinks(needs) {
-    if (!needs || !needs.length) {
+  function slugifyNeed(label) {
+    if (typeof label !== 'string') {
       return '';
     }
-    const items = needs
+    return label
+      .trim()
+      .toLowerCase()
+      .replace(/&/g, 'and')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function isNormalizedNeed(value) {
+    return !!value && typeof value === 'object' && typeof value.label === 'string';
+  }
+
+  function normalizeNeed(need) {
+    if (!need) {
+      return null;
+    }
+    if (isNormalizedNeed(need)) {
+      const slug = typeof need.slug === 'string' && need.slug ? need.slug : slugifyNeed(need.label);
+      return { label: need.label, slug };
+    }
+    if (typeof need === 'string') {
+      const label = need.trim();
+      if (!label) {
+        return null;
+      }
+      return { label, slug: slugifyNeed(label) };
+    }
+    return null;
+  }
+
+  function normalizeNeeds(needs) {
+    if (!Array.isArray(needs)) {
+      return [];
+    }
+    return needs.map((need) => normalizeNeed(need)).filter(Boolean);
+  }
+
+  function renderNeedLinks(needs) {
+    const normalized = Array.isArray(needs) && needs.every(isNormalizedNeed) ? needs : normalizeNeeds(needs);
+    if (!normalized.length) {
+      return '';
+    }
+    const items = normalized
       .map((need) => {
-        const href = `${basePath}needs/?focus=${encodeURIComponent(need.toLowerCase())}`;
-        return `<li><a class="emotion-need-link" href="${href}">${need}</a></li>`;
+        const href = need.slug ? `${basePath}needs/${need.slug}/` : `${basePath}needs/`;
+        return `<li><a class="emotion-need-link" href="${href}">${need.label}</a></li>`;
       })
       .join('');
     return `
@@ -960,13 +1002,14 @@
   }
 
   function renderRegulationNeeds(needs) {
-    if (!needs || !needs.length) {
+    const normalized = Array.isArray(needs) && needs.every(isNormalizedNeed) ? needs : normalizeNeeds(needs);
+    if (!normalized.length) {
       return '';
     }
-    const items = needs
+    const items = normalized
       .map((need) => {
-        const href = `${basePath}needs/?focus=${encodeURIComponent(need.toLowerCase())}`;
-        return `<li><a class="regulation-needs__link" href="${href}">${need}</a></li>`;
+        const href = need.slug ? `${basePath}needs/${need.slug}/` : `${basePath}needs/`;
+        return `<li><a class="regulation-needs__link" href="${href}">${need.label}</a></li>`;
       })
       .join('');
     return `
@@ -1021,12 +1064,11 @@
     if (!regulationCard) return;
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
     const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
-    const needsList = renderRegulationNeeds(emotion.needs);
-    const primaryNeed = Array.isArray(emotion.needs) && emotion.needs.length ? emotion.needs[0] : '';
-    const needsLink = primaryNeed
-      ? `${basePath}needs/?focus=${encodeURIComponent(primaryNeed.toLowerCase())}`
-      : `${basePath}needs/`;
-    const needsButtonLabel = primaryNeed ? `See strategies for ${primaryNeed}` : 'Browse basic needs';
+    const normalizedNeeds = normalizeNeeds(emotion.needs);
+    const needsList = renderRegulationNeeds(normalizedNeeds);
+    const primaryNeed = normalizedNeeds.length ? normalizedNeeds[0] : null;
+    const needsLink = primaryNeed ? `${basePath}needs/${primaryNeed.slug}/` : `${basePath}needs/`;
+    const needsButtonLabel = primaryNeed ? `See strategies for ${primaryNeed.label}` : 'Browse basic needs';
     const journalLink = `${basePath}inventory/journal/`;
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
@@ -1043,8 +1085,9 @@
 
   function renderCommunicationCard(emotion) {
     if (!communicationCard) return;
-    const need = emotion.needs && emotion.needs.length ? emotion.needs[0] : 'support';
-    const template = `I feel ${emotion.name.toLowerCase()} because I need ${need}.`;
+    const normalizedNeeds = normalizeNeeds(emotion.needs);
+    const needLabel = normalizedNeeds.length ? normalizedNeeds[0].label.toLowerCase() : 'support';
+    const template = `I feel ${emotion.name.toLowerCase()} because I need ${needLabel}.`;
     communicationCard.innerHTML = `
       <p class="communication-template" data-communication-template>${template}</p>
       <div class="communication-actions">

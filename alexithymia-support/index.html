@@ -273,11 +273,24 @@
                   Drag the dot or use arrow keys to adjust your energy and pleasantness levels.
                 </p>
               </div>
-              <p class="emotion-compass__readout" data-compass-readout>
-                Energy: Steady · Pleasantness: Neutral
-              </p>
+              <div
+                class="emotion-compass__readout"
+                data-compass-readout
+                data-energy-state="medium"
+                data-valence-state="neutral"
+                aria-live="polite"
+              >
+                <div class="compass-readout__chip compass-readout__chip--energy">
+                  <span class="compass-readout__label">Energy</span>
+                  <span class="compass-readout__value" data-compass-energy>Steady</span>
+                </div>
+                <div class="compass-readout__chip compass-readout__chip--valence">
+                  <span class="compass-readout__label">Pleasantness</span>
+                  <span class="compass-readout__value" data-compass-valence>Neutral</span>
+                </div>
+              </div>
             </div>
-            <div class="emotion-suggestions" data-compass-suggestions>
+            <div class="emotion-suggestions" id="compass-suggestions" data-compass-suggestions>
               <p class="support-note">Pick one energy and one pleasantness option to see suggestions.</p>
             </div>
             <p class="support-scroll-hint" aria-hidden="true">More guidance is just below ↓</p>
@@ -291,8 +304,9 @@
           <article class="support-step support-step--has-next is-hidden" data-step="library">
             <h3 class="support-step__title">Step 3: Explore an emotion</h3>
             <p>
-              Choose a suggested emotion to read its description. Notice which parts match your experience. You can always go back
-              and try another.
+              Choose a suggested emotion to read its description. The matches you unlocked appear just above—need a reminder?
+              <a class="support-jump-link" href="#compass-suggestions">Jump to the list of emotions</a> and pick one to load
+              details here.
             </p>
             <div class="emotion-library" data-emotion-library>
               <p class="support-note">Select an emotion above to load its details.</p>
