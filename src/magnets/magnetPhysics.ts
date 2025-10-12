@@ -38,7 +38,6 @@ export interface StartPhysicsOptions {
   onPositions?: (list: { id: string; x: number; y: number }[]) => void;
   getBoardSize?: () => { width: number; height: number };
   onDragRelease?: () => void;
-  tiltPermission?: Promise<unknown>;
   onTiltPermissionDenied?: (reason: unknown) => void;
 }
 
@@ -767,7 +766,11 @@ const shuffleMagnets = async (state: InternalState): Promise<void> => {
   return state.shufflePromise;
 };
 
-export function startPhysics(options: StartPhysicsOptions): { stop: () => void; shuffle: () => Promise<void> } {
+export function startPhysics(options: StartPhysicsOptions): {
+  stop: () => void;
+  shuffle: () => Promise<void>;
+  enableTilt: (permissionPromise?: Promise<unknown>) => void;
+} {
   const boardRect = options.board.getBoundingClientRect();
   const magnetStates = options.magnets.map((element) => measureMagnet(boardRect, element));
   const config: PhysicsConfig = { ...DEFAULT_CONFIG, ...options.config };
@@ -800,16 +803,23 @@ export function startPhysics(options: StartPhysicsOptions): { stop: () => void; 
   };
 
   const removePointerListeners = addPointerListeners(state);
-  const removeTiltListener = addTiltListener(state, {
-    permissionPromise: options.tiltPermission,
-    onPermissionDenied: options.onTiltPermissionDenied,
-  });
+  let removeTiltListener: (() => void) | null = null;
+
+  const enableTilt = (permissionPromise?: Promise<unknown>) => {
+    removeTiltListener?.();
+    const teardown = addTiltListener(state, {
+      permissionPromise,
+      onPermissionDenied: options.onTiltPermissionDenied,
+    });
+    removeTiltListener = typeof teardown === 'function' ? teardown : null;
+  };
   state.animationFrame = window.requestAnimationFrame((timestamp) => frameStep(state, timestamp));
 
   return {
     stop: () => {
       removePointerListeners?.();
       removeTiltListener?.();
+      removeTiltListener = null;
       stopAnimation(state);
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
@@ -831,6 +841,9 @@ export function startPhysics(options: StartPhysicsOptions): { stop: () => void; 
     },
     shuffle: () => {
       return shuffleMagnets(state);
+    },
+    enableTilt: (permissionPromise?: Promise<unknown>) => {
+      enableTilt(permissionPromise);
     },
   };
 }
