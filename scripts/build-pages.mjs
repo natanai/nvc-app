@@ -926,6 +926,7 @@ function renderInventoryJournalPage(needsList = []) {
       },
     ],
     main,
+    mainAttributes: 'data-page-id="inventory-journal"',
     scripts: [
       { src: 'assets/js/journal/store.js', type: 'module' },
       { src: 'assets/js/journal/module.js', type: 'module' },

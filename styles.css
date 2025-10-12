@@ -2819,6 +2819,92 @@ button.site-nav__link {
   background: var(--mint);
 }
 
+@media (max-width: 720px) {
+  main[data-page-id='inventory-journal'] {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: clamp(1rem, 5vw, 1.4rem) clamp(0.75rem, 5vw, 1.2rem);
+    gap: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  main[data-page-id='inventory-journal'] .journal-page {
+    gap: clamp(1rem, 4vw, 1.4rem);
+  }
+
+  main[data-page-id='inventory-journal'] .journal-actions {
+    align-items: stretch;
+    gap: clamp(0.75rem, 3vw, 1.1rem);
+  }
+
+  main[data-page-id='inventory-journal'] .journal-actions__buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-actions__buttons .inventory-button {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-form,
+  main[data-page-id='inventory-journal'] .inventory-journal-form {
+    padding: clamp(1rem, 5vw, 1.3rem);
+    border-width: 2px;
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 96%, var(--mint) 4%);
+    box-shadow: none;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-form__pages::before {
+    display: none;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-summary__stat,
+  main[data-page-id='inventory-journal'] .journal-history-wrapper {
+    border-width: 2px;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, #ffffff 96%, var(--lavender) 4%);
+    box-shadow: none;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-history {
+    padding-left: 0;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-history--cards {
+    gap: clamp(0.85rem, 4vw, 1.15rem);
+  }
+
+  main[data-page-id='inventory-journal'] .journal-entry {
+    padding: clamp(0.85rem, 4vw, 1.1rem);
+    border-width: 2px;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, #ffffff 96%, var(--lavender) 4%);
+    box-shadow: none;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-entry__actions {
+    justify-content: flex-end;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-entry__edit,
+  main[data-page-id='inventory-journal'] .journal-entry__delete {
+    border-width: 1px;
+    box-shadow: none;
+  }
+
+  main[data-page-id='inventory-journal'] .journal-filters {
+    grid-template-columns: 1fr;
+    gap: clamp(0.65rem, 3vw, 0.9rem);
+  }
+
+  main[data-page-id='inventory-journal'] .journal-message {
+    border-width: 1px;
+  }
+}
+
 .emotion-detail__list--links {
   display: flex;
   flex-wrap: wrap;
