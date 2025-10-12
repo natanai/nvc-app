@@ -929,7 +929,7 @@
     renderSuggestionBlock(
       bodySuggestions,
       'Body-based matches',
-      'Your body-based matches will appear here after you choose sensations.',
+      'Body-based matches will appear here after you choose sensations.',
       []
     );
   }
@@ -961,7 +961,7 @@
       renderSuggestionBlock(
         compassSuggestions,
         'Emotion compass matches',
-        'Pick one energy and one pleasantness option to see suggestions.',
+        'Pick one energy and one pleasantness option to see compass matches.',
         []
       );
       return;
@@ -1048,25 +1048,6 @@
     `;
   }
 
-  function renderRegulationNeeds(needs) {
-    const normalized = Array.isArray(needs) && needs.every(isNormalizedNeed) ? needs : normalizeNeeds(needs);
-    if (!normalized.length) {
-      return '';
-    }
-    const items = normalized
-      .map((need) => {
-        const href = need.slug ? `${basePath}needs/${need.slug}/` : `${basePath}needs/`;
-        return `<li><a class="regulation-needs__link" href="${href}">${need.label}</a></li>`;
-      })
-      .join('');
-    return `
-      <div class="regulation-needs">
-        <p class="regulation-needs__title">Need cues to explore</p>
-        <ul class="regulation-needs__list">${items}</ul>
-      </div>
-    `;
-  }
-
   function setActiveTag(tag) {
     if (state.activeTag) {
       state.activeTag.classList.remove('is-active');
@@ -1111,21 +1092,14 @@
     if (!regulationCard) return;
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
     const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
-    const normalizedNeeds = normalizeNeeds(emotion.needs);
-    const needsList = renderRegulationNeeds(normalizedNeeds);
-    const primaryNeed = normalizedNeeds.length ? normalizedNeeds[0] : null;
-    const needsLink = primaryNeed ? `${basePath}needs/${primaryNeed.slug}/` : `${basePath}needs/`;
-    const needsButtonLabel = primaryNeed ? `See strategies for ${primaryNeed.label}` : 'Browse basic needs';
     const journalLink = `${basePath}inventory/journal/`;
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
       ${renderListSection('Try one of these nurturing steps', emotion.regulation)}
       ${extraCare}
-      ${needsList}
-      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. When you're ready, explore the needs library or add a journal note to track what supports you.</p>
+      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. Track what works or needs tweaking so future-you can adjust with care.</p>
       <div class="regulation-actions">
-        <a class="support-button support-button--link" href="${needsLink}">${needsButtonLabel}</a>
-        <a class="support-button support-button--link support-button--ghost" href="${journalLink}">Open journal dashboard</a>
+        <a class="support-button support-button--link" href="${journalLink}">Open journal dashboard</a>
       </div>
     `;
   }
