@@ -619,7 +619,11 @@ function setupNeedPage() {
       persistInventory(nextInventory);
 
       suggestionForm.reset();
-      showFormMessage(message, `Saved “${title}” to your inventory. Visit the inventory page to review it anytime.`, 'success');
+      showFormMessage(
+        message,
+        `Saved “${title}” to your inventory. Personal strategies stay on this browser. Visit the inventory page anytime to export a backup.`,
+        'success'
+      );
     });
   }
 }
@@ -686,7 +690,8 @@ function setupInventoryPage() {
 
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory, {
-        inventoryMessage: `Added “${title}” to your inventory.`,
+        inventoryMessage:
+          `Added “${title}” to your inventory. Strategies you add stay on this browser, so export a CSV whenever you would like a backup.`,
         openList: true,
       });
       form.reset();

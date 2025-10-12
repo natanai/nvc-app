@@ -60,7 +60,8 @@ const handleSuggestionForm = () => {
     form.reset();
 
     if (message) {
-      message.textContent = 'Thanks for your suggestion! It will be reviewed.';
+      message.textContent =
+        'Saved! Personal strategies stay on this browser. Visit the inventory screen to export them whenever you want a backup.';
       message.hidden = false;
       message.classList.remove('error');
       message.classList.add('success');

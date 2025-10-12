@@ -1671,6 +1671,17 @@ button.site-nav__link {
   justify-content: flex-end;
 }
 
+.strategy-form__notice {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.strategy-form__notice a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .strategy-form__message {
   margin: 0;
   padding: 0.65rem 0.75rem;

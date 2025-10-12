@@ -332,6 +332,7 @@ function renderStrategyForm({
   defaultNeedSlug = '',
   includeContactFields = false,
   includeMessage = false,
+  notice = '',
 }) {
   const needOptions = data.needs
     .map(
@@ -382,6 +383,9 @@ function renderStrategyForm({
       <p class="strategy-form__message" data-form-message hidden aria-live="polite"></p>`
     : '';
 
+  const noticeMarkup = notice ? `
+      ${notice}` : '';
+
   const descriptionRequiredAttr = descriptionRequired ? ' required' : '';
 
   return `
@@ -407,6 +411,7 @@ function renderStrategyForm({
             </div>
           </form>
         </div>
+        ${noticeMarkup}
         ${message}
       </div>`;
 }
@@ -664,6 +669,9 @@ function renderNeed(item, strategyLookup) {
         </a>
       </div>`;
 
+  const suggestionNotice =
+    '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="../../inventory/">inventory screen</a> to export them if you would like a backup.</p>';
+
   const suggestionForm = renderStrategyForm({
     formId: 'suggestion-form',
     idPrefix: 'suggestion',
@@ -673,6 +681,7 @@ function renderNeed(item, strategyLookup) {
     defaultNeedSlug: item.slug,
     includeContactFields: true,
     includeMessage: true,
+    notice: suggestionNotice,
   });
 
   const main = `
@@ -705,6 +714,9 @@ function renderNeed(item, strategyLookup) {
 }
 
 function renderInventoryPage() {
+  const inventoryFormNotice =
+    '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>';
+
   const personalStrategyForm = renderStrategyForm({
     formId: 'inventory-form',
     idPrefix: 'inventory',
@@ -712,6 +724,7 @@ function renderInventoryPage() {
     titleLabel: 'Strategy name',
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
+    notice: inventoryFormNotice,
   });
 
   const main = `
