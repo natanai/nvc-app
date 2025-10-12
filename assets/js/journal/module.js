@@ -186,7 +186,7 @@ const JOURNAL_BASE_CONFIG = {
   hints: {
     emotion: 'Use any word that fits. Unsure? Leave it blank for now.',
     intensity: 'Slide to note how strong the feeling is.',
-    needs: 'Pick one or more needs that connect. Leave blank if you are not sure yet.',
+    needs: 'Pick one or more needs that connect. Selected needs appear below so you can double-check them. Leave blank if you are not sure yet.',
     tags: 'Separate tags with commas so you can filter later.',
     notes: '',
   },
@@ -441,13 +441,52 @@ const buildNeedsField = (config) => {
     },
   });
   select.setAttribute('data-journal-needs', '');
-  return buildJournalField({
+  const hintText = config.hints.needs;
+  const field = buildJournalField({
     config,
     label: config.labels.needs,
     id,
     input: select,
-    hint: config.hints.needs,
+    hint: null,
   });
+
+  const summary = createElement('div', {
+    classes: ['journal-needs-summary'],
+    attrs: {
+      'data-journal-needs-summary': '',
+      'aria-live': 'polite',
+    },
+  });
+  const summaryLabel = createElement('div', {
+    classes: ['journal-needs-summary__label'],
+    text: 'Selected needs',
+  });
+  summaryLabel.id = createUniqueId(`${config.idPrefix}-needs-summary-label`);
+  const summaryStatus = createElement('span', {
+    classes: ['visually-hidden'],
+    attrs: { 'data-journal-needs-summary-status': '' },
+  });
+  const summaryEmpty = createElement('p', {
+    classes: ['journal-needs-summary__empty'],
+    attrs: { 'data-journal-needs-summary-empty': '' },
+    text: 'No needs selected yet.',
+  });
+  const summaryList = createElement('ul', {
+    classes: ['journal-needs-summary__list'],
+    attrs: { 'data-journal-needs-summary-list': '', role: 'list' },
+  });
+  summary.append(summaryLabel, summaryStatus, summaryEmpty, summaryList);
+  const describedBy = [select.getAttribute('aria-describedby'), summaryLabel.id]
+    .filter(Boolean)
+    .join(' ');
+  if (describedBy) {
+    select.setAttribute('aria-describedby', describedBy);
+  }
+  field.append(summary);
+  if (hintText) {
+    field.append(createElement('p', { classes: config.classes.hint, text: hintText }));
+  }
+  return field;
 };
 
 const buildTagsField = (config) => {
@@ -777,6 +816,10 @@ class JournalFormController {
     this.messageEl = this.root.querySelector('[data-journal-message]');
     this.needsSelect = this.root.querySelector('[data-journal-needs]');
     this.needsSuggestionsEl = this.root.querySelector('[data-journal-need-suggestions]');
+    this.needsSummaryEl = this.root.querySelector('[data-journal-needs-summary]');
+    this.needsSummaryList = this.root.querySelector('[data-journal-needs-summary-list]');
+    this.needsSummaryStatus = this.root.querySelector('[data-journal-needs-summary-status]');
+    this.needsSummaryEmpty = this.root.querySelector('[data-journal-needs-summary-empty]');
     this.emotionInput = this.root.querySelector('[data-journal-emotion]');
     this.intensityInput = this.root.querySelector('[data-journal-intensity]');
     this.intensityDisplay = this.root.querySelector('[data-journal-intensity-display]');
@@ -903,6 +946,7 @@ class JournalFormController {
       this.needsSelect.addEventListener('change', () => {
         this.resetSaveButton();
         this.scheduleDraftSave();
+        this.updateNeedsSummary();
       });
       this.needsSelect.addEventListener('mousedown', (event) => this.handleNeedPointerToggle(event));
     } else if (this.needsSelect) {
@@ -947,6 +991,47 @@ class JournalFormController {
     const minHeight = this.notesBaseHeight || Math.max(textarea.scrollHeight, textarea.clientHeight);
     const targetHeight = Math.max(textarea.scrollHeight, minHeight);
     textarea.style.height = `${targetHeight}px`;
+  }
+
+  updateNeedsSummary() {
+    if (!this.needsSummaryEl || !this.needsSummaryList) {
+      return;
+    }
+    if (!(this.needsSelect instanceof HTMLSelectElement)) {
+      this.needsSummaryList.innerHTML = '';
+      if (this.needsSummaryEmpty) {
+        this.needsSummaryEmpty.hidden = true;
+      }
+      if (this.needsSummaryStatus) {
+        this.needsSummaryStatus.textContent = '';
+      }
+      delete this.needsSummaryEl.dataset.count;
+      return;
+    }
+    const selectedOptions = Array.from(this.needsSelect.selectedOptions || []).filter((option) => option.value);
+    this.needsSummaryList.innerHTML = '';
+    const labels = [];
+    selectedOptions.forEach((option) => {
+      const label = option.textContent?.trim() || option.value;
+      if (!label) {
+        return;
+      }
+      labels.push(label);
+      const item = document.createElement('li');
+      item.className = 'journal-needs-summary__item';
+      item.textContent = label;
+      this.needsSummaryList.append(item);
+    });
+    const hasSelection = labels.length > 0;
+    if (this.needsSummaryEmpty) {
+      this.needsSummaryEmpty.hidden = hasSelection;
+    }
+    this.needsSummaryEl.dataset.count = String(labels.length);
+    if (this.needsSummaryStatus) {
+      this.needsSummaryStatus.textContent = hasSelection
+        ? `Selected needs: ${labels.join(', ')}.`
+        : 'No needs selected.';
+    }
   }
 
   refreshTagSource() {
@@ -1040,6 +1125,7 @@ class JournalFormController {
       this.needsSelect.value = joinListValues(needs);
       this.updateNeedsSuggestions();
     }
+    this.updateNeedsSummary();
     if (this.tagsInput) {
       const tags = normalizeTags(data.tags);
       this.tagsInput.value = joinTags(tags, { trailing: trailingTags });
@@ -1065,6 +1151,7 @@ class JournalFormController {
     } else if (this.needsSelect) {
       this.needsSelect.value = '';
     }
+    this.updateNeedsSummary();
     this.hideNeedSuggestions();
     this.resetSaveButton();
     this.hideTagSuggestions();
@@ -1112,6 +1199,7 @@ class JournalFormController {
         : '';
       this.updateNeedsSuggestions();
     }
+    this.updateNeedsSummary();
   }
 
   setEmotionOptions(feelings = []) {
