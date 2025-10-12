@@ -341,6 +341,7 @@
                     type="text"
                     autocomplete="off"
                     data-support-journal-emotion
+                    data-journal-emotion
                   />
                 </div>
                 <div class="journal-form__field journal-form__field--intensity">
@@ -354,8 +355,13 @@
                       max="10"
                       value="5"
                       data-support-journal-intensity
+                      data-journal-intensity
                     />
-                    <output for="support-journal-intensity" data-support-journal-intensity-display>5/10</output>
+                    <output
+                      for="support-journal-intensity"
+                      data-support-journal-intensity-display
+                      data-journal-intensity-display
+                    >5/10</output>
                   </div>
                 </div>
                 <div class="journal-form__field">
@@ -367,6 +373,7 @@
                     autocomplete="off"
                     placeholder="work, weekend, boundaries"
                     data-support-journal-tags
+                    data-journal-tags
                   />
                   <div
                     class="journal-tag-suggestions"
@@ -374,6 +381,7 @@
                     hidden
                     role="listbox"
                     aria-label="Suggested tags"
+                    data-journal-tag-suggestions
                   ></div>
                 </div>
                 <div class="journal-form__field journal-form__field--wide">
@@ -384,12 +392,15 @@
                     rows="6"
                     placeholder="Today I noticed..."
                     data-support-journal-notes
+                    data-journal-notes
                   ></textarea>
                 </div>
               </div>
               <div class="journal-actions">
                 <div class="journal-actions__primary">
-                  <button class="support-button" type="submit" data-support-journal-submit>Save reflection</button>
+                  <button class="support-button" type="submit" data-support-journal-submit data-journal-submit>
+                    Save reflection
+                  </button>
                   <a
                     class="support-button support-button--link support-button--ghost journal-open-link"
                     href="#"
@@ -397,7 +408,14 @@
                     hidden
                   >Open in Journal</a>
                 </div>
-                <button class="support-button support-button--ghost" type="button" data-action="journal-clear">Clear text</button>
+                <button
+                  class="support-button support-button--ghost"
+                  type="button"
+                  data-action="journal-clear"
+                  data-journal-clear
+                >
+                  Clear text
+                </button>
               </div>
               <p class="support-note" data-journal-status role="status"></p>
             </form>
@@ -460,6 +478,7 @@
     <script src="../assets/js/ui/segmented.js" defer></script>
     <script src="../assets/js/ui/compass.js" defer></script>
     <script src="../assets/js/journal/store.js" type="module"></script>
+    <script src="../assets/js/journal/module.js" type="module"></script>
     <script src="../assets/js/journal/tags.js" type="module"></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/alexithymia-support.js" defer></script>

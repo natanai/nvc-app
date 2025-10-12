@@ -550,10 +550,20 @@ function renderSituation(item) {
 }
 
 function renderFeeling(item) {
+  const bodySignals = Array.isArray(item.bodySignals) ? item.bodySignals.filter(Boolean) : [];
+  const bodyHtml = bodySignals.length
+    ? `<section class="feeling-body" aria-labelledby="feeling-body-heading">
+        <h2 id="feeling-body-heading" class="section-title">How it may feel in your body</h2>
+        <ul class="feeling-body__list">
+          ${bodySignals.map((signal) => `<li>${escapeHtml(signal)}</li>`).join('')}
+        </ul>
+      </section>`
+    : '';
   const main = `
       <header class="page-header">
         <h1 class="page-title">Feeling: ${escapeHtml(item.title)}</h1>
       </header>
+      ${bodyHtml}
       ${renderPillGroup('Needs', item.needs, 'needs')}
     `;
 
@@ -788,7 +798,11 @@ function renderInventoryPage() {
   writePage('inventory/index.html', html);
 }
 
-function renderInventoryJournalPage() {
+function renderInventoryJournalPage(needsList = []) {
+  const needsDataset = needsList
+    .map((need) => ({ slug: need.slug, title: need.title }))
+    .filter((item) => item.slug && item.title);
+  const needsJson = JSON.stringify(needsDataset);
   const main = `
       <header class="page-header journal-page-header">
         <h1 class="page-title journal-page-title">
@@ -823,31 +837,31 @@ function renderInventoryJournalPage() {
             <div class="inventory-journal-form__grid">
               <div class="inventory-journal-form__field">
                 <label for="journal-emotion">Emotion (optional)</label>
-                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" />
+                <input id="journal-emotion" name="emotion" type="text" autocomplete="off" data-journal-emotion />
                 <p class="journal-field-hint">Use any word that fits or return later to update it.</p>
               </div>
               <div class="inventory-journal-form__field inventory-journal-form__field--intensity">
                 <label for="journal-intensity">Intensity</label>
                 <div class="inventory-journal-form__intensity">
-                  <input id="journal-intensity" name="intensity" type="range" min="1" max="10" value="5" />
+                  <input id="journal-intensity" name="intensity" type="range" min="1" max="10" value="5" data-journal-intensity />
                   <output for="journal-intensity" data-journal-intensity-display>5/10</output>
                 </div>
                 <p class="journal-field-hint">Slide to note how strong the feeling is.</p>
               </div>
               <div class="inventory-journal-form__field">
                 <label for="journal-needs">Related needs</label>
-                <select id="journal-needs" name="needs" multiple></select>
+                <select id="journal-needs" name="needs" multiple data-journal-needs></select>
                 <p class="journal-field-hint">Pick one or more needs that connect. Leave empty if you're not sure yet.</p>
               </div>
               <div class="inventory-journal-form__field">
                 <label for="journal-tags">Tags (optional)</label>
-                <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" />
+                <input id="journal-tags" name="tags" type="text" placeholder="work, weekend, boundaries" data-journal-tags />
                 <p class="journal-field-hint">Separate tags with commas. They'll help you filter later.</p>
                 <div class="journal-tag-suggestions" data-journal-tag-suggestions hidden></div>
               </div>
               <div class="inventory-journal-form__field inventory-journal-form__field--wide">
                 <label for="journal-notes">Reflection</label>
-                <textarea id="journal-notes" name="notes" rows="5" placeholder="What happened? What did you notice in your body? What need wants attention?"></textarea>
+                <textarea id="journal-notes" name="notes" rows="5" placeholder="What happened? What did you notice in your body? What need wants attention?" data-journal-notes></textarea>
               </div>
             </div>
             <aside class="journal-prompts">
@@ -861,7 +875,7 @@ function renderInventoryJournalPage() {
             <div class="inventory-journal-form__actions">
               <p class="journal-status" data-journal-status aria-live="polite"></p>
               <button type="button" class="inventory-button inventory-button--ghost" data-journal-clear>Clear form</button>
-              <button type="submit" class="inventory-button">Save entry</button>
+              <button type="submit" class="inventory-button" data-journal-submit>Save entry</button>
             </div>
           </form>
         </section>
@@ -912,6 +926,7 @@ function renderInventoryJournalPage() {
           <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
       </section>
+      <script type="application/json" id="journal-needs-data">${escapeHtml(needsJson)}</script>
     `;
 
   const html = htmlPage({
@@ -926,6 +941,11 @@ function renderInventoryJournalPage() {
       },
     ],
     main,
+    scripts: [
+      { src: 'assets/js/journal/store.js', type: 'module' },
+      { src: 'assets/js/journal/module.js', type: 'module' },
+      { src: 'scripts/inventory.js', defer: true },
+    ],
   });
 
   writePage('inventory/journal/index.html', html);
@@ -969,7 +989,7 @@ function build() {
   renderCategory('feelings', data.feelings);
   renderCategory('needs', data.needs);
   renderInventoryPage();
-  renderInventoryJournalPage();
+  renderInventoryJournalPage(data.needs);
 
   const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
 

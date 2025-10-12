@@ -509,12 +509,11 @@
     energyValue: 0,
     valenceValue: 0,
     draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
-    tagSuggestions: [],
-    tagActiveIndex: -1,
     draftTimer: null,
     savedFeedbackTimer: null,
     lastSavedEntryId: '',
     saveButtonDefaultLabel: '',
+    journalController: null,
   };
 
   const startButton = steps.intro?.querySelector('[data-action="start"]');
@@ -526,21 +525,50 @@
   const sensationChips = document.querySelector('[data-sensation-chips]');
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
-  const journalForm = document.querySelector('[data-journal-form]');
-  const journalStatus = document.querySelector('[data-journal-status]');
-  const journalHistory = document.querySelector('[data-journal-history]');
-  const regulationCard = document.querySelector('[data-regulation-card]');
-  const communicationCard = document.querySelector('[data-communication-card]');
-  const supportJournalEmotion = document.querySelector('[data-support-journal-emotion]');
-  const supportJournalIntensity = document.querySelector('[data-support-journal-intensity]');
-  const supportJournalIntensityDisplay = document.querySelector('[data-support-journal-intensity-display]');
-  const supportJournalTagsInput = document.querySelector('[data-support-journal-tags]');
-  const supportJournalTagSuggestions = document.querySelector('[data-support-journal-tag-suggestions]');
-  const supportJournalNotes = document.querySelector('[data-support-journal-notes]');
-  const supportJournalSubmit = document.querySelector('[data-support-journal-submit]');
-  const supportJournalOpenLink = document.querySelector('[data-support-journal-open]');
+
+  let journalForm = null;
+  let journalStatus = null;
+  let journalHistory = null;
+  let regulationCard = null;
+  let communicationCard = null;
+  let supportJournalEmotion = null;
+  let supportJournalIntensity = null;
+  let supportJournalIntensityDisplay = null;
+  let supportJournalTagsInput = null;
+  let supportJournalNotes = null;
+  let supportJournalSubmit = null;
+  let supportJournalOpenLink = null;
 
   const DRAFT_DEBOUNCE_MS = 1200;
+
+  const baseJournalForm = document.querySelector('[data-journal-form]');
+  const journalStep = baseJournalForm?.closest('[data-step="journal"]') || baseJournalForm;
+  if (journalStep && typeof window.NVCJournal?.createForm === 'function') {
+    try {
+      state.journalController = window.NVCJournal.createForm(journalStep, {
+        draftPath: state.draftPath,
+        autoDraft: false,
+      });
+    } catch (error) {
+      console.warn('Unable to initialise lane journal module', error);
+      state.journalController = null;
+    }
+  }
+
+  journalForm = state.journalController?.form || baseJournalForm || null;
+  journalStatus = state.journalController?.statusEl || document.querySelector('[data-journal-status]');
+  journalHistory = document.querySelector('[data-journal-history]');
+  regulationCard = document.querySelector('[data-regulation-card]');
+  communicationCard = document.querySelector('[data-communication-card]');
+  supportJournalEmotion = state.journalController?.emotionInput || document.querySelector('[data-support-journal-emotion]');
+  supportJournalIntensity = state.journalController?.intensityInput || document.querySelector('[data-support-journal-intensity]');
+  supportJournalIntensityDisplay =
+    state.journalController?.intensityDisplay || document.querySelector('[data-support-journal-intensity-display]');
+  supportJournalTagsInput = state.journalController?.tagsInput || document.querySelector('[data-support-journal-tags]');
+  supportJournalNotes = state.journalController?.notesInput || document.querySelector('[data-support-journal-notes]');
+  supportJournalSubmit = state.journalController?.saveButton || document.querySelector('[data-support-journal-submit]');
+  supportJournalOpenLink = document.querySelector('[data-support-journal-open]');
+
   state.saveButtonDefaultLabel = supportJournalSubmit?.textContent || 'Save reflection';
 
   let breathingTimer = null;
@@ -1155,7 +1183,10 @@
     journalHistory.appendChild(link);
   }
 
-  function normalizeSupportTagsInput(value) {
+  function normalizeJournalTagsValue(value) {
+    if (window.NVCJournal?.normalizeJournalTags) {
+      return window.NVCJournal.normalizeJournalTags(value);
+    }
     if (!value) {
       return [];
     }
@@ -1177,7 +1208,10 @@
     return tags;
   }
 
-  function joinSupportTags(tags, { trailing = false } = {}) {
+  function joinJournalTagsValue(tags, { trailing = false } = {}) {
+    if (window.NVCJournal?.joinJournalTags) {
+      return window.NVCJournal.joinJournalTags(tags, { trailing });
+    }
     const list = Array.isArray(tags) ? tags.filter(Boolean) : [];
     if (!list.length) {
       return '';
@@ -1186,140 +1220,11 @@
     return trailing ? `${joined}, ` : joined;
   }
 
-  function getSupportTagFragment(value) {
-    if (!value) {
-      return '';
-    }
-    const segments = value.split(',');
-    const fragment = segments[segments.length - 1] || '';
-    return fragment.replace(/^#/, '').trim();
-  }
-
-  function hideSupportTagSuggestions() {
-    if (!supportJournalTagSuggestions) {
+  function updateLaneIntensityDisplay(value) {
+    if (state.journalController && typeof state.journalController.updateIntensityDisplay === 'function') {
+      state.journalController.updateIntensityDisplay(value);
       return;
     }
-    supportJournalTagSuggestions.hidden = true;
-    supportJournalTagSuggestions.innerHTML = '';
-    state.tagSuggestions = [];
-    state.tagActiveIndex = -1;
-    supportJournalTagsInput?.setAttribute('aria-expanded', 'false');
-  }
-
-  function renderSupportTagSuggestions(suggestions) {
-    if (!supportJournalTagSuggestions) {
-      return;
-    }
-    supportJournalTagSuggestions.innerHTML = '';
-    if (!Array.isArray(suggestions) || !suggestions.length) {
-      hideSupportTagSuggestions();
-      return;
-    }
-    supportJournalTagSuggestions.hidden = false;
-    supportJournalTagsInput?.setAttribute('aria-expanded', 'true');
-    suggestions.forEach((tag, index) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'journal-tag-suggestion';
-      button.dataset.supportJournalTag = tag;
-      button.dataset.index = String(index);
-      button.setAttribute('role', 'option');
-      button.setAttribute('aria-selected', 'false');
-      button.textContent = `#${tag}`;
-      supportJournalTagSuggestions.appendChild(button);
-    });
-  }
-
-  function setSupportTagActive(index) {
-    state.tagActiveIndex = index;
-    if (!supportJournalTagSuggestions) {
-      return;
-    }
-    const buttons = supportJournalTagSuggestions.querySelectorAll('[data-support-journal-tag]');
-    buttons.forEach((button, idx) => {
-      const active = idx === index;
-      button.classList.toggle('is-active', active);
-      button.setAttribute('aria-selected', active ? 'true' : 'false');
-    });
-  }
-
-  function refreshSupportTagSuggestions(fragment) {
-    const provider = window.NVCJournalTags?.getSuggestions;
-    if (typeof provider !== 'function') {
-      hideSupportTagSuggestions();
-      return;
-    }
-    const suggestions = provider(fragment || '');
-    state.tagSuggestions = Array.isArray(suggestions) ? suggestions : [];
-    if (!state.tagSuggestions.length) {
-      hideSupportTagSuggestions();
-      return;
-    }
-    renderSupportTagSuggestions(state.tagSuggestions);
-    setSupportTagActive(0);
-  }
-
-  function applySupportTagSuggestion(tag) {
-    if (!supportJournalTagsInput) {
-      return;
-    }
-    const value = supportJournalTagsInput.value || '';
-    const segments = value.split(',');
-    const leading = segments
-      .slice(0, -1)
-      .map((segment) => segment.replace(/^#/, '').trim())
-      .filter(Boolean);
-    const normalized = (tag || '').trim();
-    const lower = normalized.toLowerCase();
-    const withoutDuplicates = leading.filter((existing) => existing.toLowerCase() !== lower);
-    withoutDuplicates.push(normalized);
-    supportJournalTagsInput.value = joinSupportTags(withoutDuplicates, { trailing: true });
-    hideSupportTagSuggestions();
-    supportJournalTagsInput.focus();
-    scheduleLaneDraftSave();
-  }
-
-  function handleSupportTagInput() {
-    resetLaneSaveButton();
-    scheduleLaneDraftSave();
-    const fragment = getSupportTagFragment(supportJournalTagsInput?.value || '');
-    refreshSupportTagSuggestions(fragment);
-  }
-
-  function handleSupportTagFocus() {
-    const fragment = getSupportTagFragment(supportJournalTagsInput?.value || '');
-    refreshSupportTagSuggestions(fragment);
-  }
-
-  function handleSupportTagBlur() {
-    setTimeout(() => {
-      if (document.activeElement !== supportJournalTagsInput) {
-        hideSupportTagSuggestions();
-      }
-    }, 120);
-  }
-
-  function handleSupportTagSuggestionClick(event) {
-    const button = event.target.closest('[data-support-journal-tag]');
-    if (!button) {
-      return;
-    }
-    event.preventDefault();
-    applySupportTagSuggestion(button.dataset.supportJournalTag || '');
-  }
-
-  function handleSupportTagSuggestionMouseOver(event) {
-    const button = event.target.closest('[data-support-journal-tag]');
-    if (!button) {
-      return;
-    }
-    const index = Number.parseInt(button.dataset.index, 10);
-    if (Number.isFinite(index)) {
-      setSupportTagActive(index);
-    }
-  }
-
-  function updateSupportIntensityDisplay(value) {
     if (!supportJournalIntensityDisplay) {
       return;
     }
@@ -1327,14 +1232,17 @@
     supportJournalIntensityDisplay.textContent = `${displayValue}/10`;
   }
 
-  function handleSupportIntensityInput(event) {
+  function handleLaneIntensityInput(event) {
     const value = Number(event.target?.value);
-    updateSupportIntensityDisplay(value);
+    updateLaneIntensityDisplay(value);
     resetLaneSaveButton();
     scheduleLaneDraftSave();
   }
 
   function gatherSupportJournalData() {
+    if (state.journalController && typeof state.journalController.collectData === 'function') {
+      return state.journalController.collectData();
+    }
     const notes = supportJournalNotes?.value || '';
     const emotionValue = supportJournalEmotion?.value || '';
     const intensityValue = supportJournalIntensity ? Number(supportJournalIntensity.value) : undefined;
@@ -1342,7 +1250,7 @@
       Number.isFinite(intensityValue) && intensityValue >= 0
         ? Math.min(10, Math.round(intensityValue))
         : undefined;
-    const tags = normalizeSupportTagsInput(supportJournalTagsInput?.value || '');
+    const tags = normalizeJournalTagsValue(supportJournalTagsInput?.value || '');
     return {
       notes,
       emotion: emotionValue.trim(),
@@ -1473,23 +1381,40 @@
     if (!draft) {
       return;
     }
-    if (supportJournalNotes && typeof draft.notes === 'string') {
-      supportJournalNotes.value = draft.notes;
-    }
-    if (supportJournalEmotion && typeof draft.emotion === 'string') {
-      supportJournalEmotion.value = draft.emotion;
-      supportJournalEmotion.dataset.autofill = 'false';
-    }
-    if (supportJournalIntensity && Number.isFinite(draft.intensity)) {
-      supportJournalIntensity.value = Math.max(0, Math.min(10, Math.round(draft.intensity)));
-      updateSupportIntensityDisplay(Number(supportJournalIntensity.value));
-    }
-    if (supportJournalTagsInput) {
-      if (Array.isArray(draft.tags)) {
-        supportJournalTagsInput.value = joinSupportTags(draft.tags, { trailing: draft.tags.length > 0 });
-      } else if (typeof draft.tags === 'string') {
-        supportJournalTagsInput.value = draft.tags;
+    const draftTags = Array.isArray(draft.tags)
+      ? draft.tags
+      : typeof draft.tags === 'string'
+      ? normalizeJournalTagsValue(draft.tags)
+      : [];
+    const draftData = {
+      notes: typeof draft.notes === 'string' ? draft.notes : '',
+      emotion: typeof draft.emotion === 'string' ? draft.emotion : '',
+      intensity: Number.isFinite(draft.intensity) ? Number(draft.intensity) : undefined,
+      tags: draftTags,
+    };
+    if (state.journalController && typeof state.journalController.setValues === 'function') {
+      state.journalController.setValues(draftData, { trailingTags: draftTags.length > 0 });
+    } else {
+      if (supportJournalNotes) {
+        supportJournalNotes.value = draftData.notes;
       }
+      if (supportJournalEmotion) {
+        supportJournalEmotion.value = draftData.emotion;
+      }
+      if (supportJournalIntensity && Number.isFinite(draftData.intensity)) {
+        supportJournalIntensity.value = Math.max(0, Math.min(10, Math.round(draftData.intensity)));
+        updateLaneIntensityDisplay(Number(supportJournalIntensity.value));
+      }
+      if (supportJournalTagsInput) {
+        supportJournalTagsInput.value = joinJournalTagsValue(draftTags, { trailing: draftTags.length > 0 });
+      }
+    }
+    if (!state.journalController && supportJournalIntensity) {
+      const current = Number(supportJournalIntensity.value);
+      updateLaneIntensityDisplay(Number.isFinite(current) ? current : 5);
+    }
+    if (supportJournalEmotion && draftData.emotion) {
+      supportJournalEmotion.dataset.autofill = 'false';
     }
     if (typeof draft.energy === 'number') {
       state.energyValue = draft.energy;
@@ -1536,42 +1461,61 @@
     showLaneSavedFeedback();
     setSupportOpenLink(saved?.id);
     store.clearDraft(state.draftPath);
-    if (supportJournalNotes) {
-      supportJournalNotes.value = '';
-      supportJournalNotes.focus();
-    }
-    if (supportJournalTagsInput) {
-      supportJournalTagsInput.value = '';
-    }
-    if (supportJournalIntensity) {
-      supportJournalIntensity.value = 5;
-      updateSupportIntensityDisplay(5);
+    if (state.journalController && typeof state.journalController.resetForm === 'function') {
+      state.journalController.resetForm();
+    } else {
+      if (supportJournalNotes) {
+        supportJournalNotes.value = '';
+      }
+      if (supportJournalTagsInput) {
+        supportJournalTagsInput.value = '';
+      }
+      if (supportJournalIntensity) {
+        supportJournalIntensity.value = 5;
+        updateLaneIntensityDisplay(5);
+      } else {
+        updateLaneIntensityDisplay(5);
+      }
+      if (supportJournalEmotion) {
+        supportJournalEmotion.value = '';
+      }
     }
     if (supportJournalEmotion) {
       delete supportJournalEmotion.dataset.autofill;
     }
+    if (supportJournalNotes) {
+      supportJournalNotes.focus();
+    }
     prefillSupportEmotion(state.selectedEmotion, { force: false });
-    hideSupportTagSuggestions();
+    state.journalController?.hideTagSuggestions?.();
     renderJournalHistory();
     journalStatus.textContent = 'Saved locally. Open in Journal to continue or edit.';
   }
 
   function handleJournalClear() {
+    if (state.journalController && typeof state.journalController.resetForm === 'function') {
+      state.journalController.resetForm();
+    } else {
+      if (supportJournalEmotion) {
+        supportJournalEmotion.value = '';
+      }
+      if (supportJournalIntensity) {
+        supportJournalIntensity.value = 5;
+        updateLaneIntensityDisplay(5);
+      } else {
+        updateLaneIntensityDisplay(5);
+      }
+      if (supportJournalTagsInput) {
+        supportJournalTagsInput.value = '';
+      }
+      if (supportJournalNotes) {
+        supportJournalNotes.value = '';
+      }
+    }
+    state.journalController?.hideTagSuggestions?.();
     if (supportJournalEmotion) {
-      supportJournalEmotion.value = '';
       delete supportJournalEmotion.dataset.autofill;
     }
-    if (supportJournalIntensity) {
-      supportJournalIntensity.value = 5;
-      updateSupportIntensityDisplay(5);
-    }
-    if (supportJournalTagsInput) {
-      supportJournalTagsInput.value = '';
-    }
-    if (supportJournalNotes) {
-      supportJournalNotes.value = '';
-    }
-    hideSupportTagSuggestions();
     journalStatus.textContent = '';
     resetLaneSaveButton();
     clearSupportOpenLink();
@@ -1660,23 +1604,18 @@
       });
     }
     if (supportJournalIntensity) {
-      supportJournalIntensity.addEventListener('input', handleSupportIntensityInput);
+      supportJournalIntensity.addEventListener('input', handleLaneIntensityInput);
       const initialIntensity = Number(supportJournalIntensity.value);
-      updateSupportIntensityDisplay(Number.isFinite(initialIntensity) ? initialIntensity : 5);
+      updateLaneIntensityDisplay(Number.isFinite(initialIntensity) ? initialIntensity : 5);
     } else {
-      updateSupportIntensityDisplay(5);
+      updateLaneIntensityDisplay(5);
     }
     if (supportJournalTagsInput) {
-      supportJournalTagsInput.setAttribute('role', 'combobox');
-      supportJournalTagsInput.setAttribute('aria-autocomplete', 'list');
-      supportJournalTagsInput.setAttribute('aria-expanded', 'false');
-      supportJournalTagsInput.addEventListener('input', handleSupportTagInput);
-      supportJournalTagsInput.addEventListener('focus', handleSupportTagFocus);
-      supportJournalTagsInput.addEventListener('blur', handleSupportTagBlur);
+      supportJournalTagsInput.addEventListener('input', () => {
+        resetLaneSaveButton();
+        scheduleLaneDraftSave();
+      });
     }
-    supportJournalTagSuggestions?.addEventListener('mousedown', (event) => event.preventDefault());
-    supportJournalTagSuggestions?.addEventListener('click', handleSupportTagSuggestionClick);
-    supportJournalTagSuggestions?.addEventListener('mousemove', handleSupportTagSuggestionMouseOver);
     const journalClear = document.querySelector('[data-action="journal-clear"]');
     journalClear?.addEventListener('click', handleJournalClear);
 
