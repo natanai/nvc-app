@@ -92,6 +92,17 @@ const state = {
   journalSaveButton: null,
   journalTagsInput: null,
   journalTagSuggestionsEl: null,
+  journalInlineContainer: null,
+  journalFormSectionEl: null,
+  journalOverlayContainer: null,
+  journalOverlayLayer: null,
+  journalOverlayDialog: null,
+  journalOverlayContent: null,
+  journalOverlayOpenButton: null,
+  journalOverlayCloseButton: null,
+  journalOverlayHeading: null,
+  journalOverlayOpen: false,
+  journalOverlayHistoryEl: null,
   journalController: null,
   journalTagSuggestions: [],
   journalTagActiveIndex: -1,
@@ -123,6 +134,7 @@ function updateJournalEntriesFromStore() {
   const store = ensureJournalStore();
   state.journalEntries = store ? store.list() : [];
   updateJournalTagSource();
+  renderJournalOverlayHistory();
 }
 
 function updateJournalTagSource() {
@@ -1892,6 +1904,9 @@ function setupJournalSection() {
   if (!panel) {
     return;
   }
+  state.journalInlineContainer = document.querySelector('[data-journal-inline-container]');
+  state.journalFormSectionEl =
+    state.journalInlineContainer?.querySelector('.journal-form-section') || panel.querySelector('.journal-form-section');
   const renderJournalForm = window.NVCJournal?.renderForm;
   if (typeof renderJournalForm === 'function') {
     const mount = panel.querySelector('[data-journal-module]');
@@ -2003,6 +2018,7 @@ function setupJournalSection() {
   }
   updateJournalSummaryVisibility();
   applyJournalDraft();
+  setupJournalOverlay();
 
   if (typeof window !== 'undefined') {
     window.addEventListener('nvc-journal-store-ready', () => {
@@ -2022,6 +2038,172 @@ function setupJournalSection() {
   if (initialEditId && !state.journalEditingId) {
     startJournalEdit(initialEditId, { focusHistory: true });
   }
+}
+
+function setupJournalOverlay() {
+  const container = document.querySelector('[data-journal-overlay]');
+  state.journalOverlayContainer = container || null;
+  state.journalOverlayLayer = container?.querySelector('[data-support-journal-layer]') || null;
+  state.journalOverlayDialog = container?.querySelector('[data-support-journal-dialog]') || null;
+  state.journalOverlayContent = container?.querySelector('[data-journal-overlay-content]') || null;
+  state.journalOverlayOpenButton = container?.querySelector('[data-support-journal-open]') || null;
+  state.journalOverlayCloseButton = container?.querySelector('[data-support-journal-close]') || null;
+  state.journalOverlayHeading = container?.querySelector('[data-support-journal-heading]') || null;
+  state.journalOverlayHistoryEl = container?.querySelector('[data-journal-overlay-history]') || null;
+
+  if (!container) {
+    return;
+  }
+
+  if (state.journalOverlayHeading && !state.journalOverlayHeading.id) {
+    state.journalOverlayHeading.id = 'inventory-support-journal-heading';
+  }
+
+  if (state.journalOverlayLayer) {
+    state.journalOverlayLayer.dataset.state = 'closed';
+    state.journalOverlayLayer.setAttribute('aria-hidden', 'true');
+  }
+
+  if (state.journalOverlayOpenButton) {
+    state.journalOverlayOpenButton.setAttribute('aria-expanded', 'false');
+    state.journalOverlayOpenButton.setAttribute('aria-haspopup', 'dialog');
+    state.journalOverlayOpenButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      openJournalOverlay();
+    });
+  }
+
+  if (state.journalOverlayCloseButton) {
+    state.journalOverlayCloseButton.addEventListener('click', () => closeJournalOverlay());
+  }
+
+  if (state.journalOverlayLayer) {
+    state.journalOverlayLayer.addEventListener('click', handleJournalOverlayLayerClick);
+  }
+
+  if (state.journalOverlayHistoryEl) {
+    state.journalOverlayHistoryEl.addEventListener('click', handleJournalOverlayHistoryClick);
+  }
+
+  restoreJournalFormToInline();
+  renderJournalOverlayHistory();
+}
+
+function moveJournalFormToOverlay() {
+  if (!state.journalOverlayContent || !state.journalFormSectionEl) {
+    return;
+  }
+  if (state.journalOverlayContent.contains(state.journalFormSectionEl)) {
+    return;
+  }
+  state.journalOverlayContent.appendChild(state.journalFormSectionEl);
+}
+
+function restoreJournalFormToInline() {
+  if (!state.journalInlineContainer || !state.journalFormSectionEl) {
+    return;
+  }
+  if (state.journalInlineContainer.contains(state.journalFormSectionEl)) {
+    return;
+  }
+  state.journalInlineContainer.appendChild(state.journalFormSectionEl);
+}
+
+function enableJournalOverlayDialogAttributes() {
+  if (!state.journalOverlayDialog) {
+    return;
+  }
+  state.journalOverlayDialog.setAttribute('role', 'dialog');
+  state.journalOverlayDialog.setAttribute('aria-modal', 'true');
+  if (state.journalOverlayHeading?.id) {
+    state.journalOverlayDialog.setAttribute('aria-labelledby', state.journalOverlayHeading.id);
+  }
+}
+
+function disableJournalOverlayDialogAttributes() {
+  if (!state.journalOverlayDialog) {
+    return;
+  }
+  state.journalOverlayDialog.removeAttribute('role');
+  state.journalOverlayDialog.removeAttribute('aria-modal');
+  state.journalOverlayDialog.removeAttribute('aria-labelledby');
+}
+
+function openJournalOverlay() {
+  if (!state.journalOverlayLayer || state.journalOverlayOpen) {
+    return;
+  }
+  moveJournalFormToOverlay();
+  state.journalOverlayOpen = true;
+  state.journalOverlayLayer.dataset.state = 'open';
+  state.journalOverlayLayer.setAttribute('aria-hidden', 'false');
+  if (state.journalOverlayOpenButton) {
+    state.journalOverlayOpenButton.setAttribute('aria-expanded', 'true');
+  }
+  enableJournalOverlayDialogAttributes();
+  if (document.body?.classList) {
+    document.body.classList.add('has-support-journal-open');
+  }
+  renderJournalOverlayHistory();
+  const focusDialog = () => {
+    if (!state.journalOverlayDialog) {
+      return;
+    }
+    try {
+      state.journalOverlayDialog.focus({ preventScroll: true });
+    } catch (error) {
+      state.journalOverlayDialog.focus();
+    }
+  };
+  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(focusDialog);
+  } else {
+    focusDialog();
+  }
+  document.addEventListener('keydown', handleJournalOverlayKeydown);
+}
+
+function closeJournalOverlay(options = {}) {
+  const { returnFocus = true } = options;
+  if (!state.journalOverlayLayer || !state.journalOverlayOpen) {
+    return;
+  }
+  state.journalOverlayOpen = false;
+  state.journalOverlayLayer.dataset.state = 'closed';
+  state.journalOverlayLayer.setAttribute('aria-hidden', 'true');
+  if (state.journalOverlayOpenButton) {
+    state.journalOverlayOpenButton.setAttribute('aria-expanded', 'false');
+    if (returnFocus) {
+      state.journalOverlayOpenButton.focus();
+    }
+  }
+  disableJournalOverlayDialogAttributes();
+  if (document.body?.classList) {
+    document.body.classList.remove('has-support-journal-open');
+  }
+  document.removeEventListener('keydown', handleJournalOverlayKeydown);
+  restoreJournalFormToInline();
+}
+
+function handleJournalOverlayLayerClick(event) {
+  if (!state.journalOverlayLayer || event.target !== state.journalOverlayLayer) {
+    return;
+  }
+  closeJournalOverlay();
+}
+
+function handleJournalOverlayKeydown(event) {
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    closeJournalOverlay();
+  }
+}
+
+function handleJournalOverlayHistoryClick(event) {
+  const link = event.target.closest('a');
+  if (!link) {
+    return;
+  }
+  closeJournalOverlay({ returnFocus: false });
 }
 
 function populateJournalNeedsOptions() {
@@ -2053,6 +2235,7 @@ function populateJournalNeedsOptions() {
 function renderJournalViews() {
   renderJournalSummary();
   renderJournalHistory();
+  renderJournalOverlayHistory();
   updateJournalSummaryVisibility();
 }
 
@@ -2820,6 +3003,54 @@ function renderJournalHistory() {
 
     container.appendChild(card);
   });
+}
+
+function renderJournalOverlayHistory() {
+  const container = state.journalOverlayHistoryEl;
+  if (!container) {
+    return;
+  }
+  container.innerHTML = '';
+  const entries = Array.isArray(state.journalEntries) ? [...state.journalEntries] : [];
+  if (!entries.length) {
+    const empty = document.createElement('p');
+    empty.className = 'support-note';
+    empty.textContent = 'Your saved reflections will appear here and in the dashboard below.';
+    container.appendChild(empty);
+    return;
+  }
+  const title = document.createElement('p');
+  title.className = 'journal-history__title';
+  title.textContent = 'Recent reflections on this device';
+  container.appendChild(title);
+  const list = document.createElement('ul');
+  list.className = 'journal-history';
+  entries
+    .slice()
+    .sort((a, b) => new Date(b.dateISO || 0) - new Date(a.dateISO || 0))
+    .slice(0, 5)
+    .forEach((entry) => {
+      const item = document.createElement('li');
+      item.className = 'journal-history__item';
+      const segments = [];
+      const dateLabel = formatJournalDate(entry.dateISO);
+      if (dateLabel) {
+        segments.push(dateLabel);
+      }
+      const emotionLabel = entry.emotion ? `${capitalizeWord(entry.emotion)} — ` : '';
+      const detail = `${emotionLabel}${entry.notes || ''}`.trim();
+      if (detail) {
+        segments.push(detail);
+      }
+      item.textContent = segments.join(': ');
+      list.appendChild(item);
+    });
+  container.appendChild(list);
+  const link = document.createElement('a');
+  link.className = 'support-button support-button--link support-button--ghost';
+  link.href = '#journal-history-heading';
+  link.textContent = 'Jump to journal history';
+  container.appendChild(link);
 }
 
 function getFilteredJournalEntries() {
