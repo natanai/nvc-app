@@ -251,7 +251,6 @@ const JOURNAL_VARIANT_CONFIG = {
     variant: 'support',
     idPrefix: 'support-journal',
     needsMode: 'combobox',
-    intensityRange: { min: 0, max: 10, defaultValue: DEFAULT_INTENSITY },
     hints: {
       emotion: "Begin typing to autocomplete from the feelings library, or leave it blank if you're unsure.",
       needs: 'Begin typing to autocomplete needs from the library. Separate multiple needs with commas.',
@@ -273,25 +272,6 @@ const JOURNAL_VARIANT_CONFIG = {
         'How strong is it right now on a scale from 1 (just there) to 10 (all-consuming)?',
         'What do you need or long for in this moment?',
       ],
-    },
-    actions: {
-      layout: 'split',
-      statusPlacement: 'after',
-      submitLabel: 'Save reflection',
-      clearLabel: 'Clear text',
-      statusAttributes: { 'aria-live': 'polite', role: 'status' },
-      classes: {
-        container: ['journal-actions'],
-        primaryGroup: ['journal-actions__primary'],
-        status: ['support-note'],
-        submit: ['support-button'],
-        clear: ['support-button', 'support-button--ghost'],
-        open: ['support-button', 'support-button--link', 'support-button--ghost', 'journal-open-link'],
-      },
-      openLink: {
-        label: 'Open in Journal',
-        attributes: { href: '#', target: '_blank', rel: 'noopener' },
-      },
     },
     footnote: {
       text: 'Saved reflections now appear in the Inventory journal tab so you can review or export them later.',
