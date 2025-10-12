@@ -1794,6 +1794,95 @@ button.site-nav__link {
   gap: clamp(1.5rem, 3vw, 2.25rem);
 }
 
+.inventory-header__layout {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.inventory-header__content {
+  display: grid;
+  gap: clamp(0.75rem, 1.8vw, 1.1rem);
+}
+
+.inventory-header__hint {
+  margin: clamp(0.25rem, 1vw, 0.5rem) 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.inventory-header .page-title {
+  letter-spacing: 0.085em;
+  line-height: 1.2;
+}
+
+.inventory-header__quick-actions {
+  margin: 0;
+  justify-content: flex-start;
+}
+
+.inventory-header__quick-actions .strategy-quick-actions__link {
+  width: auto;
+}
+
+@media (max-width: 640px) {
+  .inventory-header__quick-actions {
+    justify-content: flex-start;
+  }
+
+  .inventory-header__quick-actions .strategy-quick-actions__link {
+    width: auto;
+  }
+}
+
+.inventory-journal-button {
+  justify-self: end;
+  width: clamp(140px, 46vw, 220px);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  gap: 0.65rem;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-3xl);
+  background: color-mix(in srgb, #ffffff 70%, var(--sky) 30%);
+  box-shadow: 0 18px 0 var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.inventory-journal-button:hover,
+.inventory-journal-button:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 0 var(--shadow);
+}
+
+.inventory-journal-button:focus-visible {
+  outline: 2px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.inventory-journal-button__icon {
+  width: min(100%, clamp(96px, 42vw, 176px));
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.inventory-journal-button__label {
+  font-family: var(--font-display);
+  font-size: clamp(0.75rem, 2.4vw, 0.95rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 720px) {
+  .inventory-header__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 220px);
+  }
+}
+
 .inventory-journal-callout {
   display: grid;
   gap: 0.5rem;
@@ -2694,11 +2783,22 @@ button.site-nav__link {
   }
 
   .inventory-actions__buttons {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.4rem;
   }
 
   .inventory-actions__buttons .inventory-button {
-    width: 100%;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    border-radius: 0;
+    border-width: 2px;
+    box-shadow: 0 6px 0 var(--shadow);
   }
 
   .inventory-item__actions {
