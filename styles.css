@@ -549,6 +549,9 @@ button.site-nav__link {
   display: grid;
   grid-template-rows: auto 1fr;
   min-height: 100dvh;
+  max-height: 100dvh;
+  height: 100%;
+  overflow: hidden;
   background: linear-gradient(
       135deg,
       color-mix(in srgb, #ffffff 88%, var(--lavender) 12%) 0%,
@@ -699,6 +702,7 @@ body.has-support-journal-open {
     margin: 0 auto;
     max-width: min(100%, 960px);
     min-height: calc(100dvh - clamp(3.5rem, 10vw, 6rem));
+    max-height: calc(100dvh - clamp(3.5rem, 10vw, 6rem));
     border: 3px solid var(--outline);
     border-radius: var(--radius-3xl);
     box-shadow: 0 24px 36px color-mix(in srgb, var(--outline) 46%, transparent);
