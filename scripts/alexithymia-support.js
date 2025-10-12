@@ -500,7 +500,6 @@
     },
   };
 
-  const JOURNAL_EDIT_HASH_PREFIX = '#journal-edit=';
   const state = {
     selectedEmotion: null,
     quadrant: null,
@@ -510,6 +509,12 @@
     energyValue: 0,
     valenceValue: 0,
     draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
+    tagSuggestions: [],
+    tagActiveIndex: -1,
+    draftTimer: null,
+    savedFeedbackTimer: null,
+    lastSavedEntryId: '',
+    saveButtonDefaultLabel: '',
   };
 
   const startButton = steps.intro?.querySelector('[data-action="start"]');
@@ -526,6 +531,17 @@
   const journalHistory = document.querySelector('[data-journal-history]');
   const regulationCard = document.querySelector('[data-regulation-card]');
   const communicationCard = document.querySelector('[data-communication-card]');
+  const supportJournalEmotion = document.querySelector('[data-support-journal-emotion]');
+  const supportJournalIntensity = document.querySelector('[data-support-journal-intensity]');
+  const supportJournalIntensityDisplay = document.querySelector('[data-support-journal-intensity-display]');
+  const supportJournalTagsInput = document.querySelector('[data-support-journal-tags]');
+  const supportJournalTagSuggestions = document.querySelector('[data-support-journal-tag-suggestions]');
+  const supportJournalNotes = document.querySelector('[data-support-journal-notes]');
+  const supportJournalSubmit = document.querySelector('[data-support-journal-submit]');
+  const supportJournalOpenLink = document.querySelector('[data-support-journal-open]');
+
+  const DRAFT_DEBOUNCE_MS = 1200;
+  state.saveButtonDefaultLabel = supportJournalSubmit?.textContent || 'Save reflection';
 
   let breathingTimer = null;
 
@@ -960,6 +976,7 @@
     if (!emotion || !emotionLibrary) return;
     setActiveTag(sourceTag);
     state.selectedEmotion = emotionKey;
+    prefillSupportEmotion(emotionKey, { force: true });
 
     const html = `
       <div class="emotion-detail">
@@ -1084,49 +1101,309 @@
     journalHistory.appendChild(link);
   }
 
-  function handleJournalSubmit(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const textarea = form.querySelector('textarea');
-    if (!textarea) return;
-    const value = textarea.value.trim();
+  function normalizeSupportTagsInput(value) {
     if (!value) {
-      journalStatus.textContent = 'Add a few words before saving. Even a sentence counts.';
-      return;
+      return [];
     }
-    const store = getJournalStore();
-    if (!store) {
-      journalStatus.textContent = 'Saving is unavailable right now. Try reloading and saving again.';
-      return;
-    }
-    const entry = store.create({
-      notes: value,
-      emotion: state.selectedEmotion || '',
-      energy: state.energyValue,
-      valence: state.valenceValue,
-      sensations: getSelectedSensations(sensationChips),
-      needs: state.selectedEmotion ? EMOTION_LIBRARY[state.selectedEmotion]?.needs ?? [] : [],
-      source: 'lane',
+    const segments = value.split(',');
+    const seen = new Set();
+    const tags = [];
+    segments.forEach((segment) => {
+      const trimmed = segment.replace(/^#/, '').trim();
+      if (!trimmed) {
+        return;
+      }
+      const key = trimmed.toLowerCase();
+      if (seen.has(key)) {
+        return;
+      }
+      seen.add(key);
+      tags.push(trimmed);
     });
-    textarea.value = '';
-    store.clearDraft(state.draftPath);
-    renderJournalHistory();
-    journalStatus.textContent = '';
-    const message = document.createTextNode('Saved ✓ ');
-    const link = document.createElement('a');
-    link.href = `${basePath}inventory/journal/${JOURNAL_EDIT_HASH_PREFIX}${encodeURIComponent(entry.id)}`;
-    link.textContent = 'Open in Journal';
-    journalStatus.append(message, link);
+    return tags;
   }
 
-  function handleJournalClear() {
-    const textarea = journalForm?.querySelector('textarea');
-    if (textarea) {
-      textarea.value = '';
-      journalStatus.textContent = '';
+  function joinSupportTags(tags, { trailing = false } = {}) {
+    const list = Array.isArray(tags) ? tags.filter(Boolean) : [];
+    if (!list.length) {
+      return '';
     }
+    const joined = list.join(', ');
+    return trailing ? `${joined}, ` : joined;
+  }
+
+  function getSupportTagFragment(value) {
+    if (!value) {
+      return '';
+    }
+    const segments = value.split(',');
+    const fragment = segments[segments.length - 1] || '';
+    return fragment.replace(/^#/, '').trim();
+  }
+
+  function hideSupportTagSuggestions() {
+    if (!supportJournalTagSuggestions) {
+      return;
+    }
+    supportJournalTagSuggestions.hidden = true;
+    supportJournalTagSuggestions.innerHTML = '';
+    state.tagSuggestions = [];
+    state.tagActiveIndex = -1;
+    supportJournalTagsInput?.setAttribute('aria-expanded', 'false');
+  }
+
+  function renderSupportTagSuggestions(suggestions) {
+    if (!supportJournalTagSuggestions) {
+      return;
+    }
+    supportJournalTagSuggestions.innerHTML = '';
+    if (!Array.isArray(suggestions) || !suggestions.length) {
+      hideSupportTagSuggestions();
+      return;
+    }
+    supportJournalTagSuggestions.hidden = false;
+    supportJournalTagsInput?.setAttribute('aria-expanded', 'true');
+    suggestions.forEach((tag, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'journal-tag-suggestion';
+      button.dataset.supportJournalTag = tag;
+      button.dataset.index = String(index);
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-selected', 'false');
+      button.textContent = `#${tag}`;
+      supportJournalTagSuggestions.appendChild(button);
+    });
+  }
+
+  function setSupportTagActive(index) {
+    state.tagActiveIndex = index;
+    if (!supportJournalTagSuggestions) {
+      return;
+    }
+    const buttons = supportJournalTagSuggestions.querySelectorAll('[data-support-journal-tag]');
+    buttons.forEach((button, idx) => {
+      const active = idx === index;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  }
+
+  function refreshSupportTagSuggestions(fragment) {
+    const provider = window.NVCJournalTags?.getSuggestions;
+    if (typeof provider !== 'function') {
+      hideSupportTagSuggestions();
+      return;
+    }
+    const suggestions = provider(fragment || '');
+    state.tagSuggestions = Array.isArray(suggestions) ? suggestions : [];
+    if (!state.tagSuggestions.length) {
+      hideSupportTagSuggestions();
+      return;
+    }
+    renderSupportTagSuggestions(state.tagSuggestions);
+    setSupportTagActive(0);
+  }
+
+  function applySupportTagSuggestion(tag) {
+    if (!supportJournalTagsInput) {
+      return;
+    }
+    const value = supportJournalTagsInput.value || '';
+    const segments = value.split(',');
+    const leading = segments
+      .slice(0, -1)
+      .map((segment) => segment.replace(/^#/, '').trim())
+      .filter(Boolean);
+    const normalized = (tag || '').trim();
+    const lower = normalized.toLowerCase();
+    const withoutDuplicates = leading.filter((existing) => existing.toLowerCase() !== lower);
+    withoutDuplicates.push(normalized);
+    supportJournalTagsInput.value = joinSupportTags(withoutDuplicates, { trailing: true });
+    hideSupportTagSuggestions();
+    supportJournalTagsInput.focus();
+    scheduleLaneDraftSave();
+  }
+
+  function handleSupportTagInput() {
+    resetLaneSaveButton();
+    scheduleLaneDraftSave();
+    const fragment = getSupportTagFragment(supportJournalTagsInput?.value || '');
+    refreshSupportTagSuggestions(fragment);
+  }
+
+  function handleSupportTagFocus() {
+    const fragment = getSupportTagFragment(supportJournalTagsInput?.value || '');
+    refreshSupportTagSuggestions(fragment);
+  }
+
+  function handleSupportTagBlur() {
+    setTimeout(() => {
+      if (document.activeElement !== supportJournalTagsInput) {
+        hideSupportTagSuggestions();
+      }
+    }, 120);
+  }
+
+  function handleSupportTagKeydown(event) {
+    if (event.key === 'Escape') {
+      hideSupportTagSuggestions();
+      return;
+    }
+    if (!state.tagSuggestions.length) {
+      return;
+    }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex =
+        (state.tagActiveIndex + direction + state.tagSuggestions.length) % state.tagSuggestions.length;
+      setSupportTagActive(nextIndex);
+    } else if ((event.key === 'Enter' || event.key === 'Tab') && state.tagActiveIndex >= 0) {
+      event.preventDefault();
+      const tag = state.tagSuggestions[state.tagActiveIndex];
+      applySupportTagSuggestion(tag);
+    }
+  }
+
+  function handleSupportTagSuggestionClick(event) {
+    const button = event.target.closest('[data-support-journal-tag]');
+    if (!button) {
+      return;
+    }
+    event.preventDefault();
+    applySupportTagSuggestion(button.dataset.supportJournalTag || '');
+  }
+
+  function handleSupportTagSuggestionMouseOver(event) {
+    const button = event.target.closest('[data-support-journal-tag]');
+    if (!button) {
+      return;
+    }
+    const index = Number.parseInt(button.dataset.index, 10);
+    if (Number.isFinite(index)) {
+      setSupportTagActive(index);
+    }
+  }
+
+  function updateSupportIntensityDisplay(value) {
+    if (!supportJournalIntensityDisplay) {
+      return;
+    }
+    const displayValue = Number.isFinite(value) ? Math.max(0, Math.min(10, Math.round(value))) : 0;
+    supportJournalIntensityDisplay.textContent = `${displayValue}/10`;
+  }
+
+  function handleSupportIntensityInput(event) {
+    const value = Number(event.target?.value);
+    updateSupportIntensityDisplay(value);
+    resetLaneSaveButton();
+    scheduleLaneDraftSave();
+  }
+
+  function gatherSupportJournalData() {
+    const notes = supportJournalNotes?.value || '';
+    const emotionValue = supportJournalEmotion?.value || '';
+    const intensityValue = supportJournalIntensity ? Number(supportJournalIntensity.value) : undefined;
+    const intensity =
+      Number.isFinite(intensityValue) && intensityValue >= 0
+        ? Math.min(10, Math.round(intensityValue))
+        : undefined;
+    const tags = normalizeSupportTagsInput(supportJournalTagsInput?.value || '');
+    return {
+      notes,
+      emotion: emotionValue.trim(),
+      intensity,
+      tags,
+    };
+  }
+
+  function createLaneEntry(overrides = {}) {
+    const factory = window.NVCJournal?.makeEntry || window.NVCJournal?.emptyEntry;
+    if (typeof factory === 'function') {
+      return factory({ ...overrides });
+    }
+    const fallback = {
+      id: `lane-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`,
+      dateISO: new Date().toISOString(),
+      emotion: '',
+      intensity: undefined,
+      confidence: undefined,
+      sensations: [],
+      needs: [],
+      strategies: [],
+      tags: [],
+      notes: '',
+      energy: undefined,
+      valence: undefined,
+      source: 'lane',
+    };
+    return { ...fallback, ...overrides };
+  }
+
+  function setSupportOpenLink(id) {
+    if (!supportJournalOpenLink) {
+      return;
+    }
+    if (!id) {
+      clearSupportOpenLink();
+      return;
+    }
+    state.lastSavedEntryId = id;
+    supportJournalOpenLink.href = `${basePath}inventory/journal/?e=${encodeURIComponent(id)}#edit`;
+    supportJournalOpenLink.hidden = false;
+  }
+
+  function clearSupportOpenLink() {
+    if (!supportJournalOpenLink) {
+      return;
+    }
+    state.lastSavedEntryId = '';
+    supportJournalOpenLink.hidden = true;
+    supportJournalOpenLink.removeAttribute('href');
+  }
+
+  function resetLaneSaveButton() {
+    if (!supportJournalSubmit) {
+      return;
+    }
+    if (state.savedFeedbackTimer) {
+      clearTimeout(state.savedFeedbackTimer);
+      state.savedFeedbackTimer = null;
+    }
+    supportJournalSubmit.textContent = state.saveButtonDefaultLabel;
+    supportJournalSubmit.disabled = false;
+    supportJournalSubmit.removeAttribute('aria-disabled');
+  }
+
+  function showLaneSavedFeedback() {
+    if (!supportJournalSubmit) {
+      return;
+    }
+    resetLaneSaveButton();
+    supportJournalSubmit.textContent = 'Saved ✓';
+    supportJournalSubmit.disabled = true;
+    supportJournalSubmit.setAttribute('aria-disabled', 'true');
+    state.savedFeedbackTimer = setTimeout(() => {
+      supportJournalSubmit.textContent = state.saveButtonDefaultLabel;
+      supportJournalSubmit.disabled = false;
+      supportJournalSubmit.removeAttribute('aria-disabled');
+      state.savedFeedbackTimer = null;
+    }, 1500);
+  }
+
+  function scheduleLaneDraftSave() {
     const store = getJournalStore();
-    store?.clearDraft?.(state.draftPath);
+    if (!store) {
+      return;
+    }
+    if (state.draftTimer) {
+      clearTimeout(state.draftTimer);
+    }
+    state.draftTimer = setTimeout(() => {
+      state.draftTimer = null;
+      saveLaneDraft();
+    }, DRAFT_DEBOUNCE_MS);
   }
 
   function saveLaneDraft() {
@@ -1134,23 +1411,24 @@
     if (!store || !journalForm) {
       return;
     }
-    const textarea = journalForm.querySelector('textarea');
-    if (!textarea) {
-      return;
-    }
-    const notes = textarea.value || '';
-    const hasNotes = notes.trim().length > 0;
-    if (!hasNotes) {
+    const data = gatherSupportJournalData();
+    const sensations = getSelectedSensations(sensationChips);
+    const hasContent =
+      data.notes.trim().length > 0 || data.emotion || (Array.isArray(data.tags) && data.tags.length > 0);
+    if (!hasContent) {
       store.clearDraft(state.draftPath);
       return;
     }
-    store.saveDraft(state.draftPath, {
-      notes,
-      emotion: state.selectedEmotion || '',
+    const draft = {
+      notes: data.notes,
+      emotion: data.emotion,
+      intensity: data.intensity,
+      tags: data.tags,
       energy: state.energyValue,
       valence: state.valenceValue,
-      sensations: getSelectedSensations(sensationChips),
-    });
+      sensations,
+    };
+    store.saveDraft(state.draftPath, draft);
   }
 
   function applyLaneDraft() {
@@ -1162,9 +1440,23 @@
     if (!draft) {
       return;
     }
-    const textarea = journalForm.querySelector('textarea');
-    if (textarea && typeof draft.notes === 'string') {
-      textarea.value = draft.notes;
+    if (supportJournalNotes && typeof draft.notes === 'string') {
+      supportJournalNotes.value = draft.notes;
+    }
+    if (supportJournalEmotion && typeof draft.emotion === 'string') {
+      supportJournalEmotion.value = draft.emotion;
+      supportJournalEmotion.dataset.autofill = 'false';
+    }
+    if (supportJournalIntensity && Number.isFinite(draft.intensity)) {
+      supportJournalIntensity.value = Math.max(0, Math.min(10, Math.round(draft.intensity)));
+      updateSupportIntensityDisplay(Number(supportJournalIntensity.value));
+    }
+    if (supportJournalTagsInput) {
+      if (Array.isArray(draft.tags)) {
+        supportJournalTagsInput.value = joinSupportTags(draft.tags, { trailing: draft.tags.length > 0 });
+      } else if (typeof draft.tags === 'string') {
+        supportJournalTagsInput.value = draft.tags;
+      }
     }
     if (typeof draft.energy === 'number') {
       state.energyValue = draft.energy;
@@ -1174,6 +1466,96 @@
     }
     if (draft.notes) {
       journalStatus.textContent = 'Draft restored. Save when you are ready.';
+    }
+  }
+
+  function handleJournalSubmit(event) {
+    event.preventDefault();
+    const store = getJournalStore();
+    if (!store || !journalForm) {
+      journalStatus.textContent = 'Saving is unavailable right now. Try reloading and saving again.';
+      return;
+    }
+    const data = gatherSupportJournalData();
+    const trimmedNotes = data.notes.trim();
+    const emotionName = state.selectedEmotion
+      ? EMOTION_LIBRARY[state.selectedEmotion]?.name ?? state.selectedEmotion
+      : '';
+    const emotionValue = data.emotion || emotionName;
+    const hasContent = trimmedNotes || emotionValue || (Array.isArray(data.tags) && data.tags.length);
+    if (!hasContent) {
+      journalStatus.textContent = 'Add a few notes, an emotion, or a tag before saving.';
+      return;
+    }
+    const entry = createLaneEntry({
+      emotion: emotionValue,
+      intensity: data.intensity,
+      tags: data.tags,
+      notes: trimmedNotes,
+      energy: Number.isFinite(state.energyValue) ? state.energyValue : undefined,
+      valence: Number.isFinite(state.valenceValue) ? state.valenceValue : undefined,
+      sensations: getSelectedSensations(sensationChips),
+      needs: state.selectedEmotion ? EMOTION_LIBRARY[state.selectedEmotion]?.needs ?? [] : [],
+      source: 'lane',
+    });
+    const saved = store.create(entry);
+    resetLaneSaveButton();
+    showLaneSavedFeedback();
+    setSupportOpenLink(saved?.id);
+    store.clearDraft(state.draftPath);
+    if (supportJournalNotes) {
+      supportJournalNotes.value = '';
+      supportJournalNotes.focus();
+    }
+    if (supportJournalTagsInput) {
+      supportJournalTagsInput.value = '';
+    }
+    if (supportJournalIntensity) {
+      supportJournalIntensity.value = 5;
+      updateSupportIntensityDisplay(5);
+    }
+    if (supportJournalEmotion) {
+      delete supportJournalEmotion.dataset.autofill;
+    }
+    prefillSupportEmotion(state.selectedEmotion, { force: false });
+    hideSupportTagSuggestions();
+    renderJournalHistory();
+    journalStatus.textContent = 'Saved locally. Open in Journal to continue or edit.';
+  }
+
+  function handleJournalClear() {
+    if (supportJournalEmotion) {
+      supportJournalEmotion.value = '';
+      delete supportJournalEmotion.dataset.autofill;
+    }
+    if (supportJournalIntensity) {
+      supportJournalIntensity.value = 5;
+      updateSupportIntensityDisplay(5);
+    }
+    if (supportJournalTagsInput) {
+      supportJournalTagsInput.value = '';
+    }
+    if (supportJournalNotes) {
+      supportJournalNotes.value = '';
+    }
+    hideSupportTagSuggestions();
+    journalStatus.textContent = '';
+    resetLaneSaveButton();
+    clearSupportOpenLink();
+    const store = getJournalStore();
+    store?.clearDraft?.(state.draftPath);
+    prefillSupportEmotion(state.selectedEmotion, { force: false });
+  }
+
+  function prefillSupportEmotion(emotionKey, { force = false } = {}) {
+    if (!supportJournalEmotion || !emotionKey) {
+      return;
+    }
+    const emotion = EMOTION_LIBRARY[emotionKey];
+    const label = emotion?.name || emotionKey;
+    if (force || !supportJournalEmotion.value || supportJournalEmotion.dataset.autofill === 'true') {
+      supportJournalEmotion.value = label;
+      supportJournalEmotion.dataset.autofill = 'true';
     }
   }
 
@@ -1226,9 +1608,40 @@
 
     if (journalForm) {
       journalForm.addEventListener('submit', handleJournalSubmit);
-      const journalTextarea = journalForm.querySelector('textarea');
-      journalTextarea?.addEventListener('input', saveLaneDraft);
     }
+    if (supportJournalNotes) {
+      supportJournalNotes.addEventListener('input', () => {
+        resetLaneSaveButton();
+        scheduleLaneDraftSave();
+      });
+    }
+    if (supportJournalEmotion) {
+      supportJournalEmotion.setAttribute('aria-autocomplete', 'list');
+      supportJournalEmotion.addEventListener('input', () => {
+        supportJournalEmotion.dataset.autofill = 'false';
+        resetLaneSaveButton();
+        scheduleLaneDraftSave();
+      });
+    }
+    if (supportJournalIntensity) {
+      supportJournalIntensity.addEventListener('input', handleSupportIntensityInput);
+      const initialIntensity = Number(supportJournalIntensity.value);
+      updateSupportIntensityDisplay(Number.isFinite(initialIntensity) ? initialIntensity : 5);
+    } else {
+      updateSupportIntensityDisplay(5);
+    }
+    if (supportJournalTagsInput) {
+      supportJournalTagsInput.setAttribute('role', 'combobox');
+      supportJournalTagsInput.setAttribute('aria-autocomplete', 'list');
+      supportJournalTagsInput.setAttribute('aria-expanded', 'false');
+      supportJournalTagsInput.addEventListener('input', handleSupportTagInput);
+      supportJournalTagsInput.addEventListener('focus', handleSupportTagFocus);
+      supportJournalTagsInput.addEventListener('blur', handleSupportTagBlur);
+      supportJournalTagsInput.addEventListener('keydown', handleSupportTagKeydown);
+    }
+    supportJournalTagSuggestions?.addEventListener('mousedown', (event) => event.preventDefault());
+    supportJournalTagSuggestions?.addEventListener('click', handleSupportTagSuggestionClick);
+    supportJournalTagSuggestions?.addEventListener('mousemove', handleSupportTagSuggestionMouseOver);
     const journalClear = document.querySelector('[data-action="journal-clear"]');
     journalClear?.addEventListener('click', handleJournalClear);
 

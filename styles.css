@@ -1952,6 +1952,11 @@ button.site-nav__link {
   background: var(--mint);
 }
 
+.journal-tag-suggestion.is-active {
+  transform: translateY(-1px);
+  background: var(--mint);
+}
+
 .emotion-detail__list--links {
   display: flex;
   flex-wrap: wrap;
