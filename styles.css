@@ -2617,23 +2617,30 @@ body.has-support-journal-open {
 }
 
 .journal-form__pages {
+  --journal-pages-gap: clamp(1.1rem, 3vw, 2rem);
+  --journal-sidebar-width: clamp(220px, 28vw, 320px);
   position: relative;
   display: grid;
-  gap: clamp(1.1rem, 3vw, 2rem);
+  gap: var(--journal-pages-gap);
 }
 
 @media (min-width: 860px) {
   .journal-form__pages {
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+    grid-template-columns: minmax(0, 1fr) var(--journal-sidebar-width);
     align-items: stretch;
   }
 
   .journal-form__pages::before {
     content: '';
     position: absolute;
-    inset: clamp(0.75rem, 2vw, 1.25rem) auto clamp(0.75rem, 2vw, 1.25rem) 50%;
+    inset:
+      clamp(0.75rem, 2vw, 1.25rem)
+      auto
+      clamp(0.75rem, 2vw, 1.25rem)
+      calc(
+        100% - var(--journal-sidebar-width) - (var(--journal-pages-gap) / 2) - 2px
+      );
     width: 4px;
-    transform: translateX(-50%);
     background: repeating-linear-gradient(
       to bottom,
       color-mix(in srgb, var(--outline) 28%, transparent),
