@@ -1543,6 +1543,11 @@ body.has-support-journal-open {
   gap: 0.35rem;
 }
 
+.emotion-tag__wrapper--rejected {
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
 .emotion-tag {
   border: 2px solid var(--outline);
   border-radius: var(--radius-pill);
@@ -1564,6 +1569,12 @@ body.has-support-journal-open {
   box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 24%, transparent);
 }
 
+.emotion-tag--rejected {
+  background: color-mix(in srgb, var(--sand) 80%, white 20%);
+  border-color: color-mix(in srgb, var(--outline) 60%, white 40%);
+  color: color-mix(in srgb, var(--ink) 60%, var(--outline) 40%);
+}
+
 .emotion-tag:hover,
 .emotion-tag:focus-visible {
   transform: translateY(-3px);
@@ -1581,12 +1592,25 @@ body.has-support-journal-open {
   transition: background 0.18s ease, color 0.18s ease;
 }
 
+.emotion-tag__reject--recent {
+  border-style: dashed;
+  color: color-mix(in srgb, var(--outline) 65%, var(--ink) 35%);
+}
+
 .emotion-tag__reject:hover,
 .emotion-tag__reject:focus-visible {
   background: color-mix(in srgb, var(--lavender) 60%, white 40%);
   color: var(--outline);
   outline: 2px dashed var(--outline);
   outline-offset: 2px;
+}
+
+.emotion-tag__feedback {
+  display: inline-block;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--ink) 70%, var(--outline) 30%);
+  max-width: 10rem;
 }
 
 .step-cta {
