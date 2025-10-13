@@ -1068,6 +1068,10 @@ body.has-support-journal-open {
   gap: 0.75rem;
 }
 
+.sensation-actions {
+  margin-top: 1rem;
+}
+
 .sensation-actions--secondary {
   margin-top: 0.5rem;
   flex-basis: 100%;
