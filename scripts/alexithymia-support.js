@@ -1711,10 +1711,8 @@
     if (!target) return;
     const emotionKey = target.dataset.emotion;
     renderEmotionDetails(emotionKey, target);
-    if (state.activeStep === 'library') {
+    if (state.activeStep !== 'library') {
       goToStep('library', { focus: false });
-    } else {
-      goToStep('library');
     }
   }
 
