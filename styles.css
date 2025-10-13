@@ -2407,6 +2407,10 @@ body.has-support-journal-open {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.inventory-summary[hidden] {
+  display: none !important;
+}
+
 .inventory-summary__item {
   display: flex;
   align-items: center;
