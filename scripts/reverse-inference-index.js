@@ -40,21 +40,29 @@ function clampRelativeWeight(value) {
   return Math.round(clamped * 100) / 100;
 }
 
-export function intensityBandFromWeight(weight) {
+export function intensityBandFromWeight(weight, arousal = 'medium') {
   const numeric = Number(weight);
+  const baseBands = {
+    low: { min: 1, max: 7 },
+    medium: { min: 3, max: 9 },
+    high: { min: 5, max: 10 },
+  };
+  const base = baseBands[arousal] || baseBands.medium;
+
   if (!Number.isFinite(numeric) || numeric <= 0) {
-    return [6, 10];
+    const midpoint = Math.round((base.min + base.max) / 2);
+    const fallbackMin = Math.max(1, midpoint - 1);
+    return [fallbackMin, base.max];
   }
-  if (numeric >= 1.2) {
-    return [3, 10];
+
+  const clamped = Math.min(Math.max(numeric, 0.6), 1.4);
+  const ratio = (clamped - 0.6) / (1.4 - 0.6);
+  const adjustable = Math.max(base.max - base.min - 2, 0);
+  const min = Math.max(1, Math.floor(base.min + (1 - ratio) * adjustable));
+  if (base.max - min < 2) {
+    return [Math.max(1, base.max - 2), base.max];
   }
-  if (numeric >= 1.0) {
-    return [4, 10];
-  }
-  if (numeric >= 0.8) {
-    return [5, 10];
-  }
-  return [6, 10];
+  return [min, base.max];
 }
 
 function skillsForArousal(arousal) {
@@ -150,7 +158,8 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [] } = {}) {
     if (!anchor) {
       return;
     }
-    const primaryZone = `${anchor.arousal}-${anchor.valence}`;
+    const arousal = anchor.arousal || 'medium';
+    const primaryZone = `${arousal}-${anchor.valence}`;
     const zoneSet = new Set([primaryZone]);
     Object.entries(QUADRANT_SUGGESTIONS).forEach(([zoneKey, info]) => {
       if (info?.emotions?.includes(feelingKey)) {
@@ -188,7 +197,8 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [] } = {}) {
         optionId: entry.optionId,
         title: entry.title,
         note: entry.note,
-        intensityBand: intensityBandFromWeight(entry.weight),
+        intensityBand: intensityBandFromWeight(entry.weight, arousal),
+        arousal,
         relativeWeight: clampRelativeWeight(entry.weight / total),
         evidenceKey: entry.optionId,
       }));
@@ -197,7 +207,7 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [] } = {}) {
       return;
     }
 
-    const skills = skillsForArousal(anchor.arousal).slice(0, 2);
+    const skills = skillsForArousal(arousal).slice(0, 2);
     const evidenceKeys = new Set();
     evidenceKeys.add(`zone-${anchor.valence}-${anchor.arousal}`);
     evidenceKeys.add(`emotion-${feelingKey}`);
