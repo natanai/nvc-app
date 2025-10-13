@@ -76,6 +76,8 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
   const EMOTION_LIBRARY = EMOTION_LIBRARY_DATA;
 
+  let rejectionFeedbackIdCounter = 0;
+
   const state = {
     selectedEmotion: null,
     quadrant: null,
@@ -647,6 +649,20 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     reject.textContent = 'Not it';
     wrapper.appendChild(reject);
 
+    if (state.lastRejectedEmotion === emotionKey) {
+      const sanitizedKey = String(emotionKey).replace(/[^a-z0-9_-]/gi, '-');
+      const feedbackId = `emotion-reject-feedback-${sanitizedKey}-${rejectionFeedbackIdCounter++}`;
+      wrapper.classList.add('emotion-tag__wrapper--rejected');
+      button.classList.add('emotion-tag--rejected');
+      reject.classList.add('emotion-tag__reject--recent');
+      const feedback = document.createElement('span');
+      feedback.className = 'emotion-tag__feedback';
+      feedback.id = feedbackId;
+      feedback.textContent = "We\u2019ll show this less.";
+      wrapper.appendChild(feedback);
+      reject.setAttribute('aria-describedby', feedbackId);
+    }
+
     return wrapper;
   }
 
@@ -799,6 +815,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         state.compassSuggestionMeta.contextKeys
       );
       state.compassCandidates = displayEntries.slice(0, 5).map(({ key, confidence }) => ({ key, confidence }));
+    }
+
+    if (state.lastRejectedEmotion) {
+      state.lastRejectedEmotion = null;
     }
 
     updateCandidateSnapshot();
