@@ -220,8 +220,19 @@
         
       <header class="page-header">
         <h1 class="page-title">Feeling: Frustrated</h1>
-        <p class="page-description page-description--feeling">Irritated energy that shows up when progress feels blocked.</p>
       </header>
+      
+      <section class="feeling-inference-wrapper" data-reverse-inference-container hidden>
+        <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="reverse-inference-panel-frustrated" disabled>
+          <span class="feeling-inference-toggle__copy">
+            <span class="feeling-inference-toggle__badge">Alexithymia support</span>
+            <span class="feeling-inference-toggle__label">How this feeling might be inferred</span>
+          </span>
+        </button>
+        <div id="reverse-inference-panel-frustrated" class="feeling-inference-panel" data-reverse-inference-panel hidden>
+          <section class="feeling-inference" data-reverse-inference hidden></section>
+        </div>
+      </section>
       <section class="pill-section magnet-section" aria-labelledby="related-needs-heading" data-magnet-root>
       <div class="magnet-section__header">
         <h2 id="related-needs-heading" class="section-title">Related needs</h2>
@@ -240,21 +251,6 @@
         </label>
       </div>
     </section>
-      
-      <section class="feeling-inference-wrapper" data-reverse-inference-container hidden>
-        <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="reverse-inference-panel-frustrated" disabled>
-          How might this feeling be inferred?
-        </button>
-        <div id="reverse-inference-panel-frustrated" class="feeling-inference-panel" data-reverse-inference-panel hidden>
-          <section class="feeling-inference" data-reverse-inference hidden></section>
-        </div>
-      </section>
-      <section class="feeling-body" aria-labelledby="feeling-body-heading">
-        <h2 id="feeling-body-heading" class="section-title">How it may feel in your body</h2>
-        <ul class="feeling-body__list">
-          <li>Jaw or temples tightening with pressure; Hands fidgeting or gripping objects harder; Chest constricting with repeated sighs</li>
-        </ul>
-      </section>
     
       </main>
     </div>
