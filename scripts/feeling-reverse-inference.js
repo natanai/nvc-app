@@ -132,15 +132,15 @@ function createIntensityDisplay(band, arousal) {
   const container = createEl('div', 'feeling-inference__cue-intensity');
   const energyLabel = describeArousal(arousal);
   const rangeLabel = formatIntensityBand(normalized || band);
-  const labelTextParts = ['Intensity range where people often notice it'];
+  const label = createEl('div', 'feeling-inference__cue-intensity-label');
+  const labelTitle = createEl('span', 'feeling-inference__cue-intensity-title', 'Typical intensity window (0–10)');
+  label.appendChild(labelTitle);
   if (energyLabel) {
-    labelTextParts.push(`(${energyLabel})`);
+    label.appendChild(createEl('span', 'feeling-inference__cue-intensity-energy', energyLabel));
   }
-  let labelText = `${labelTextParts.join(' ')}: ${rangeLabel}`;
-  if (rangeLabel !== '—') {
-    labelText += '/10';
-  }
-  container.appendChild(createEl('div', 'feeling-inference__cue-intensity-label', labelText));
+  const rangeText = rangeLabel === '—' ? 'Not enough data yet' : `${rangeLabel}/10`;
+  label.appendChild(createEl('span', 'feeling-inference__cue-intensity-value', rangeText));
+  container.appendChild(label);
 
   if (!normalized) {
     return container;
@@ -212,7 +212,7 @@ function buildBodyCueSection(entry) {
   const disclaimer = createEl(
     'p',
     'feeling-inference__disclaimer',
-    'Cues are invitations, not rules; people differ. Intensity bars show how strong the feeling (0–10) usually needs to register before folks notice a cue.'
+    'Cues are invitations, not rules; people differ. The green bar shows the feeling intensity (0–10) where folks tend to notice it. The purple bar shows how much this cue mattered compared with other cues in the same body area.'
   );
   section.appendChild(heading);
   section.appendChild(disclaimer);
@@ -233,16 +233,36 @@ function buildBodyCueSection(entry) {
       }
       const intensity = createIntensityDisplay(cue.intensityBand, cue.arousal);
       item.appendChild(intensity);
+      const weightLabelId = `feeling-cue-${cue.optionId}-weight-label`;
+      const weightPercent = Math.round(cue.relativeWeight * 100);
+      const weightLabel = createEl('div', 'feeling-inference__cue-weight-label');
+      weightLabel.id = weightLabelId;
+      weightLabel.appendChild(
+        createEl('span', 'feeling-inference__cue-weight-heading', 'How strongly this cue points to this feeling')
+      );
+      weightLabel.appendChild(
+        createEl(
+          'span',
+          'feeling-inference__cue-weight-detail',
+          `${weightPercent}% of the body-cue signal for this area`
+        )
+      );
       const weight = createEl('div', 'feeling-inference__cue-weight');
       weight.setAttribute('role', 'img');
       weight.setAttribute(
         'aria-label',
-        `Relative contribution approximately ${Math.round(cue.relativeWeight * 100)}%`
+        `Relative contribution approximately ${weightPercent}% of the body-cue signal for this feeling in this area.`
       );
+      weight.setAttribute('aria-labelledby', weightLabelId);
       const weightFill = createEl('div', 'feeling-inference__cue-weight-fill');
-      weightFill.style.width = `${Math.round(cue.relativeWeight * 100)}%`;
+      weightFill.style.width = `${weightPercent}%`;
       weight.appendChild(weightFill);
+      const weightScale = createEl('div', 'feeling-inference__cue-weight-scale');
+      weightScale.appendChild(createEl('span', null, '0% (weak match)'));
+      weightScale.appendChild(createEl('span', null, '100% (primary cue)'));
+      item.appendChild(weightLabel);
       item.appendChild(weight);
+      item.appendChild(weightScale);
       region.appendChild(item);
     });
     regionContainer.appendChild(region);
