@@ -2017,6 +2017,7 @@ function renderInventoryViews() {
 function setupJournalSection() {
   const panel = document.querySelector('[data-inventory-section="journal"]');
   if (!panel) {
+    setupJournalOverlay();
     return;
   }
   state.journalInlineContainer = document.querySelector('[data-journal-inline-container]');
