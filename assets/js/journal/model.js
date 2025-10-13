@@ -31,6 +31,10 @@ export const makeEntry = (overrides = {}) => ({
   notes: '',
   energy: undefined,
   valence: undefined,
+  zone: null,
+  emotionCandidates: [],
+  chosenEmotionConfidence: undefined,
+  regulationUsed: [],
   source: 'journal',
   ...overrides,
 });

@@ -119,7 +119,70 @@ const normalizeStringList = (value, { separator = /[,|]/ } = {}) => {
 const normalizeTags = (value) =>
   normalizeStringList(value, {
     separator: /[,|]/,
-  }).map((tag) => tag.replace(/^#/, '').trim()).filter(Boolean);
+  })
+    .map((tag) => tag.replace(/^#/, '').trim())
+    .filter(Boolean);
+
+const ZONE_PATTERN = /^(low|medium|high)-(pleasant|neutral|unpleasant)$/;
+
+const sanitizeZoneKey = (value) => {
+  if (typeof value !== 'string') {
+    return null;
+  }
+  const trimmed = value.trim().toLowerCase();
+  if (!trimmed) {
+    return null;
+  }
+  if (ZONE_PATTERN.test(trimmed)) {
+    return trimmed;
+  }
+  return trimmed;
+};
+
+const normalizeEmotionCandidates = (value) => {
+  if (!value) {
+    return [];
+  }
+  if (typeof value === 'string') {
+    return normalizeStringList(value).map((emotion) => ({ emotion, confidence: null }));
+  }
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  const seen = new Map();
+  value.forEach((item) => {
+    let emotion = '';
+    let confidence = null;
+    if (typeof item === 'string') {
+      emotion = item.trim();
+    } else if (item && typeof item === 'object') {
+      if (typeof item.emotion === 'string') {
+        emotion = item.emotion.trim();
+      } else if (typeof item.key === 'string') {
+        emotion = item.key.trim();
+      } else if (typeof item.name === 'string') {
+        emotion = item.name.trim();
+      }
+      const candidateConfidence =
+        item.confidence ?? item.score ?? item.value ?? item.probability ?? item.weight;
+      const normalizedConfidence = sanitizeFloat(candidateConfidence, { min: 0, max: 1 });
+      if (typeof normalizedConfidence === 'number') {
+        confidence = normalizedConfidence;
+      }
+    }
+    if (!emotion) {
+      return;
+    }
+    const key = emotion.toLowerCase();
+    const existing = seen.get(key);
+    if (!existing || (typeof confidence === 'number' && confidence > (existing.confidence ?? -1))) {
+      seen.set(key, { emotion, confidence: typeof confidence === 'number' ? confidence : null });
+    }
+  });
+  return Array.from(seen.values());
+};
+
+const normalizeRegulationUsed = (value) => normalizeStringList(value);
 
 const normalizeNeeds = (value, fallback) => {
   const normalized = normalizeStringList(value);
@@ -204,6 +267,19 @@ const normalizeEntry = (raw = {}) => {
   const valenceCandidate = raw.valence ?? raw.valenceValue ?? extras.valence;
   overrides.valence = sanitizeFloat(valenceCandidate, { min: -1, max: 1 });
 
+  const zoneCandidate = raw.zone ?? raw.quadrant ?? extras.zone;
+  overrides.zone = sanitizeZoneKey(zoneCandidate);
+
+  overrides.emotionCandidates = normalizeEmotionCandidates(
+    raw.emotionCandidates ?? raw.candidateEmotions ?? extras.emotionCandidates
+  );
+
+  const chosenConfidenceCandidate =
+    raw.chosenEmotionConfidence ?? raw.chosenConfidence ?? extras.chosenEmotionConfidence;
+  const normalizedChosenConfidence = sanitizeFloat(chosenConfidenceCandidate, { min: 0, max: 1 });
+  overrides.chosenEmotionConfidence =
+    typeof normalizedChosenConfidence === 'number' ? normalizedChosenConfidence : undefined;
+
   overrides.sensations = normalizeStringList(
     raw.sensations ?? raw.bodySignals ?? raw.bodySensations ?? extras.sensations
   );
@@ -211,6 +287,10 @@ const normalizeEntry = (raw = {}) => {
   overrides.strategies = normalizeStringList(raw.strategies ?? raw.strategy ?? raw.actions ?? extras.strategies);
   overrides.tags = normalizeTags(raw.tags ?? raw.tagList ?? raw.tag ?? extras.tags);
   overrides.notes = coerceNotes(raw.notes ?? raw.text ?? raw.entry ?? extras.notes ?? extras.text);
+
+  overrides.regulationUsed = normalizeRegulationUsed(
+    raw.regulationUsed ?? raw.skills ?? raw.interventions ?? extras.regulationUsed
+  );
 
   const source = typeof raw.source === 'string' ? raw.source.trim().toLowerCase() : '';
   overrides.source = source === 'lane' ? 'lane' : 'journal';
@@ -223,6 +303,13 @@ const normalizeEntry = (raw = {}) => {
     needs: Array.isArray(overrides.needs) ? overrides.needs : [],
     strategies: Array.isArray(overrides.strategies) ? overrides.strategies : [],
     tags: Array.isArray(overrides.tags) ? overrides.tags : [],
+    emotionCandidates: Array.isArray(overrides.emotionCandidates)
+      ? overrides.emotionCandidates.map(({ emotion, confidence }) => ({
+          emotion,
+          confidence: typeof confidence === 'number' ? confidence : null,
+        }))
+      : [],
+    regulationUsed: Array.isArray(overrides.regulationUsed) ? overrides.regulationUsed : [],
   };
 };
 
@@ -232,6 +319,36 @@ const cloneEntry = (entry) => ({
   needs: Array.isArray(entry.needs) ? [...entry.needs] : [],
   strategies: Array.isArray(entry.strategies) ? [...entry.strategies] : [],
   tags: Array.isArray(entry.tags) ? [...entry.tags] : [],
+  emotionCandidates: Array.isArray(entry.emotionCandidates)
+    ? entry.emotionCandidates
+        .map((candidate) => {
+          if (!candidate) {
+            return null;
+          }
+          if (typeof candidate === 'string') {
+            const emotion = candidate.trim();
+            return emotion ? { emotion, confidence: null } : null;
+          }
+          if (typeof candidate === 'object') {
+            const emotion =
+              typeof candidate.emotion === 'string'
+                ? candidate.emotion
+                : typeof candidate.key === 'string'
+                ? candidate.key
+                : '';
+            if (!emotion) {
+              return null;
+            }
+            const confidence = Number.isFinite(candidate.confidence)
+              ? Number(candidate.confidence)
+              : null;
+            return { emotion, confidence };
+          }
+          return null;
+        })
+        .filter(Boolean)
+    : [],
+  regulationUsed: Array.isArray(entry.regulationUsed) ? [...entry.regulationUsed] : [],
 });
 
 const sortEntries = (entries) =>

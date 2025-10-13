@@ -1,4 +1,249 @@
+import {
+  EMOTION_CIRCUMPLEX,
+  inferZoneFromSensations,
+  mergeCompassAndInferredZone,
+  calculateRejectionPenalty,
+  normalizeScoresWithPenalty,
+} from './alexithymia-support-logic.js';
+
+export const REVIEW_DATE = '2025-10-13';
+
+const SOMATIC_SUPPORTS = [
+  { label: 'Circumplex (valence × arousal)', ref: 'Posner & Russell 2005' },
+  { label: 'Bodily maps arise from self-report topographies', ref: 'Nummenmaa et al. 2014' },
+];
+const SOMATIC_LIMITATIONS = ['Somatic cues guide hypotheses but do not diagnose emotions.'];
+
+const ZONE_SUPPORTS = [
+  { label: 'Core affect mapped by valence and arousal', ref: 'Barrett 2017' },
+  { label: 'Circumplex reliably clusters feeling families', ref: 'Russell 1980' },
+];
+const ZONE_LIMITATIONS = ['Zones capture averages—personal context still matters.'];
+
+const LABELING_SUPPORTS = [
+  { label: 'Affect labeling dampens limbic activity', ref: 'Lieberman et al. 2007' },
+  { label: 'Naming feelings supports regulation in practice', ref: 'Kircanski et al. 2012' },
+];
+const LABELING_LIMITATIONS = ['Language access varies by culture and learning history.'];
+
+const PHYSIOLOGICAL_SIGH_SUPPORTS = [
+  { label: 'Double-inhale sigh lowers autonomic arousal', ref: 'Balban et al. 2023' },
+  { label: 'Slow exhalation improves state anxiety', ref: 'Naveen et al. 2016' },
+];
+const BREATH_LIMITATIONS = ['Breathing practices may need adaptation for respiratory conditions.'];
+
+const RESONANCE_SUPPORTS = [
+  { label: 'Resonance breathing stabilises HRV', ref: 'Zaccaro et al. 2018' },
+  { label: '6 bpm breathing aids emotion regulation', ref: 'Lehrer & Gevirtz 2014' },
+];
+
+const SLOW_446_SUPPORTS = [
+  { label: 'Slow paced breathing steadies autonomic tone', ref: 'Brown & Gerbarg 2005' },
+  { label: 'Extended exhale promotes parasympathetic shift', ref: 'Strauss-Blasche et al. 2000' },
+];
+
+function cloneEvidenceSupports(list) {
+  return list.map((entry) => ({ ...entry }));
+}
+
+function makeEvidenceEntry({ supports, limitations, level = 'B' }) {
+  return {
+    supports: cloneEvidenceSupports(supports),
+    limitations: [...limitations],
+    lastReviewed: REVIEW_DATE,
+    level,
+  };
+}
+
+function somaticEvidence(level = 'B') {
+  return makeEvidenceEntry({ supports: SOMATIC_SUPPORTS, limitations: SOMATIC_LIMITATIONS, level });
+}
+
+export const BODY_OPTION_IDS = [
+  'chest-tight',
+  'chest-pressure',
+  'chest-pounding',
+  'chest-open',
+  'gut-rolling',
+  'gut-nausea',
+  'gut-emptiness',
+  'gut-warm',
+  'throat-tight',
+  'throat-lump',
+  'throat-dry',
+  'jaw-clench',
+  'jaw-heat',
+  'jaw-tremble',
+  'head-pressure',
+  'head-buzzing',
+  'head-fog',
+  'shoulders-weighted',
+  'shoulders-braced',
+  'shoulders-droop',
+  'limbs-heavy',
+  'limbs-restless',
+  'limbs-tingly',
+  'temp-flush',
+  'temp-chill',
+  'temp-prickly',
+  'overall-numb',
+  'overall-floating',
+  'overall-calm',
+];
+
+export const ZONE_COMBINATIONS = [
+  ['unpleasant', 'low'],
+  ['unpleasant', 'medium'],
+  ['unpleasant', 'high'],
+  ['neutral', 'low'],
+  ['neutral', 'medium'],
+  ['neutral', 'high'],
+  ['pleasant', 'low'],
+  ['pleasant', 'medium'],
+  ['pleasant', 'high'],
+];
+
+const EMOTION_EVIDENCE_GROUPS = {
+  threat: makeEvidenceEntry({
+    supports: [
+      { label: 'Anxiety involves exaggerated threat appraisal', ref: 'Barlow 2002' },
+      { label: 'Uncertainty amplifies vigilance and worry', ref: 'Grupe & Nitschke 2013' },
+    ],
+    limitations: ['Threat responses are shaped by experience and context.'],
+    level: 'B',
+  }),
+  anger: makeEvidenceEntry({
+    supports: [
+      { label: 'Approach-related anger activates sympathetic arousal', ref: 'Harmon-Jones et al. 2011' },
+      { label: 'Anger often defends threatened goals or boundaries', ref: 'Kassinove & Tafrate 2002' },
+    ],
+    limitations: ['Anger can mask secondary emotions like hurt or fear.'],
+    level: 'B',
+  }),
+  loss: makeEvidenceEntry({
+    supports: [
+      { label: 'Sadness and grief follow attachment disruption', ref: 'Bonanno & Keltner 1997' },
+      { label: 'Grief processing varies across mourning phases', ref: 'Stroebe et al. 2007' },
+    ],
+    limitations: ['Timelines for loss responses differ widely among individuals.'],
+    level: 'B',
+  }),
+  shame: makeEvidenceEntry({
+    supports: [
+      { label: 'Shame and guilt regulate social belonging', ref: 'Tangney & Dearing 2002' },
+      { label: 'Self-conscious emotions rely on internal standards', ref: 'Leach & Cidam 2015' },
+    ],
+    limitations: ['Cultural norms shape how shame and guilt appear.'],
+    level: 'B',
+  }),
+  depletion: makeEvidenceEntry({
+    supports: [
+      { label: 'Boredom signals unmet engagement needs', ref: 'Eastwood et al. 2012' },
+      { label: 'Low arousal states can blend with negative affect', ref: 'Kuppens et al. 2010' },
+    ],
+    limitations: ['Physical health factors can mimic low-energy emotions.'],
+    level: 'B',
+  }),
+  curiosity: makeEvidenceEntry({
+    supports: [
+      { label: 'Curiosity rises with manageable uncertainty', ref: 'Kashdan et al. 2018' },
+      { label: 'Information gaps motivate exploration', ref: 'Loewenstein 1994' },
+    ],
+    limitations: ['Tolerance for ambiguity differs by person and culture.'],
+    level: 'B',
+  }),
+  approach: makeEvidenceEntry({
+    supports: [
+      { label: 'Approach motivation energises goal pursuit', ref: 'Gable & Harmon-Jones 2010' },
+      { label: 'Positive challenge can heighten focus', ref: 'Seo et al. 2010' },
+    ],
+    limitations: ['Approach states can co-occur with anxiety or doubt.'],
+    level: 'B',
+  }),
+  positive: makeEvidenceEntry({
+    supports: [
+      { label: 'Positive emotions broaden attention and build resources', ref: 'Fredrickson 2001' },
+      { label: 'Gratitude strengthens relational bonds', ref: 'Algoe 2012' },
+    ],
+    limitations: ['Not everyone resonates with the same positive emotion cues.'],
+    level: 'B',
+  }),
+};
+
+export const EMOTION_EVIDENCE_MAP = {
+  anxiety: 'threat',
+  fear: 'threat',
+  overwhelm: 'threat',
+  worry: 'threat',
+  stress: 'threat',
+  anger: 'anger',
+  frustration: 'anger',
+  sadness: 'loss',
+  grief: 'loss',
+  lonely: 'loss',
+  guilt: 'shame',
+  shame: 'shame',
+  tired: 'depletion',
+  numb: 'depletion',
+  bored: 'depletion',
+  curiosity: 'curiosity',
+  thoughtful: 'curiosity',
+  uncertain: 'curiosity',
+  determined: 'approach',
+  focused: 'approach',
+  anticipation: 'approach',
+  calm: 'positive',
+  relief: 'positive',
+  contentment: 'positive',
+  hope: 'positive',
+  gratitude: 'positive',
+  joy: 'positive',
+  pride: 'positive',
+  excitement: 'positive',
+};
+
+export const EVIDENCE_REGISTRY = BODY_OPTION_IDS.reduce((acc, id) => {
+  acc[id] = somaticEvidence('B');
+  return acc;
+}, {});
+
+ZONE_COMBINATIONS.forEach(([valence, arousal]) => {
+  const key = `zone-${valence}-${arousal}`;
+  EVIDENCE_REGISTRY[key] = makeEvidenceEntry({ supports: ZONE_SUPPORTS, limitations: ZONE_LIMITATIONS, level: 'A' });
+});
+
+EVIDENCE_REGISTRY['skill-labeling'] = makeEvidenceEntry({
+  supports: LABELING_SUPPORTS,
+  limitations: LABELING_LIMITATIONS,
+  level: 'A',
+});
+EVIDENCE_REGISTRY['skill-physiological_sigh'] = makeEvidenceEntry({
+  supports: PHYSIOLOGICAL_SIGH_SUPPORTS,
+  limitations: BREATH_LIMITATIONS,
+  level: 'A',
+});
+EVIDENCE_REGISTRY['skill-resonance_6bpm'] = makeEvidenceEntry({
+  supports: RESONANCE_SUPPORTS,
+  limitations: BREATH_LIMITATIONS,
+  level: 'A',
+});
+EVIDENCE_REGISTRY['skill-slow_446'] = makeEvidenceEntry({
+  supports: SLOW_446_SUPPORTS,
+  limitations: BREATH_LIMITATIONS,
+  level: 'B',
+});
+
+Object.entries(EMOTION_EVIDENCE_MAP).forEach(([emotionKey, groupKey]) => {
+  const group = EMOTION_EVIDENCE_GROUPS[groupKey];
+  if (group) {
+    EVIDENCE_REGISTRY[`emotion-${emotionKey}`] = makeEvidenceEntry(group);
+  }
+});
+
 (function () {
+  if (typeof document === 'undefined') {
+    return;
+  }
   const steps = {
     intro: document.querySelector('[data-step="intro"]'),
     breathing: document.querySelector('[data-step="breathing"]'),
@@ -16,6 +261,9 @@
   const basePath = document.body?.dataset?.basePath || '';
 
   const SENSATION_DEFAULT_INTENSITY = 5;
+  const EVIDENCE_MODE_ENABLED = window.NVC_FLAGS?.evidenceMode !== false;
+  const EVIDENCE_NOTE_KEY = 'nvc_evidence_note_dismissed';
+  const REJECTION_KEY = 'nvc_rejected_emotions';
 
   const BODY_REGIONS = [
     {
@@ -27,7 +275,7 @@
           id: 'chest-tight',
           title: 'Tight or constricted',
           note: 'Band squeezing, armor, or breath held high',
-          insight: 'Tightness across the chest often signals your system is bracing for threat or overwhelm.',
+          insight: 'Tightness across the chest can accompany your system bracing for threat or overwhelm.',
           emotions: { anxiety: 1.4, fear: 1.1, anger: 0.9, overwhelm: 1.1 },
         },
         {
@@ -41,14 +289,14 @@
           id: 'chest-pounding',
           title: 'Pounding or racing heartbeat',
           note: 'Heart racing, flutter, sudden surges of beats',
-          insight: 'A pounding heart points to activation—anxiety, fear, anger, or eager anticipation.',
+          insight: 'A pounding heart can point to activation—anxiety, fear, anger, or eager anticipation.',
           emotions: { anxiety: 1.2, fear: 1.1, excitement: 1, anticipation: 1, anger: 0.6 },
         },
         {
           id: 'chest-open',
           title: 'Open, warm, or expansive',
           note: 'Soft chest, easy breathing, gentle warmth',
-          insight: 'An open chest often accompanies calm, relief, or joyful connection.',
+          insight: 'An open chest can accompany calm, relief, or joyful connection.',
           emotions: { calm: 1.2, relief: 1.1, joy: 0.8, gratitude: 0.9 },
         },
       ],
@@ -69,7 +317,7 @@
           id: 'gut-nausea',
           title: 'Nausea or queasy',
           note: 'Churned up, unsettled, urge to vomit',
-          insight: 'Nausea often shows up when something feels unsafe, overwhelming, or not right.',
+          insight: 'Nausea can show up when something feels unsafe, overwhelming, or not right.',
           emotions: { anxiety: 1, fear: 1.1, stress: 0.9, overwhelm: 0.9 },
         },
         {
@@ -83,7 +331,7 @@
           id: 'gut-warm',
           title: 'Settled or warm',
           note: 'Grounded fullness, gentle ease',
-          insight: 'Warmth in the belly often matches calm confidence or gentle hope.',
+          insight: 'Warmth in the belly can match calm confidence or gentle hope.',
           emotions: { hope: 1, contentment: 1, calm: 1, gratitude: 0.9 },
         },
       ],
@@ -97,14 +345,14 @@
           id: 'throat-tight',
           title: 'Tight or gripped',
           note: 'Squeezing band, hard to swallow',
-          insight: 'A tight throat often appears when sadness, anxiety, or shame holds words back.',
+          insight: 'A tight throat can appear when sadness, anxiety, or shame holds words back.',
           emotions: { sadness: 1, grief: 1, shame: 0.9, anxiety: 0.8 },
         },
         {
           id: 'throat-lump',
           title: 'Lump or swelling',
           note: 'Tears hovering, voice shaking, lump rising',
-          insight: 'A lump in the throat pairs with grief, loneliness, or tenderness seeking expression.',
+          insight: 'A lump in the throat can pair with grief, loneliness, or tenderness seeking expression.',
           emotions: { grief: 1.2, lonely: 1, sadness: 1.1, overwhelm: 0.8 },
         },
         {
@@ -125,7 +373,7 @@
           id: 'jaw-clench',
           title: 'Clenched or grinding',
           note: 'Teeth locked, fists tight, rigid tongue',
-          insight: 'Clenched muscles reflect anger, frustration, or determined resolve.',
+          insight: 'Clenched muscles can reflect anger, frustration, or determined resolve.',
           emotions: { anger: 1.3, frustration: 1.2, determined: 1, stress: 0.9 },
         },
         {
@@ -139,7 +387,7 @@
           id: 'jaw-tremble',
           title: 'Tremble or quiver',
           note: 'Jaw shaking, lips or hands quivering',
-          insight: 'Trembling around the mouth often signals fear, overwhelm, or sadness releasing.',
+          insight: 'Trembling around the mouth can accompany fear, overwhelm, or sadness releasing.',
           emotions: { fear: 1.1, anxiety: 1, sadness: 0.9, overwhelm: 1 },
         },
       ],
@@ -153,7 +401,7 @@
           id: 'head-pressure',
           title: 'Pressure or band',
           note: 'Helmet feeling, squeezing temples',
-          insight: 'Head pressure signals mental load, stress, or overwhelm asking for relief.',
+          insight: 'Head pressure can signal mental load, stress, or overwhelm asking for relief.',
           emotions: { overwhelm: 1.3, stress: 1.1, worry: 1 },
         },
         {
@@ -167,7 +415,7 @@
           id: 'head-fog',
           title: 'Foggy or heavy',
           note: 'Hard to focus, thick clouded feeling',
-          insight: 'Fog often appears with exhaustion, low mood, or protective numbness.',
+          insight: 'Fog can appear with exhaustion, low mood, or protective numbness.',
           emotions: { tired: 1.1, numb: 1, sadness: 0.8, overwhelm: 0.9 },
         },
       ],
@@ -181,14 +429,14 @@
           id: 'shoulders-weighted',
           title: 'Weighted or burdened',
           note: 'Heavy load, sagging posture, tight knots',
-          insight: 'Weighted shoulders often align with stress, guilt, or sadness about responsibility.',
+          insight: 'Weighted shoulders can align with stress, guilt, or sadness about responsibility.',
           emotions: { stress: 1.2, guilt: 1.1, sadness: 1, overwhelm: 1 },
         },
         {
           id: 'shoulders-braced',
           title: 'Lifted or braced',
           note: 'Raised, ready to act, armor-like',
-          insight: 'Braced shoulders show your body gearing up—anxiety, determination, or anger.',
+          insight: 'Braced shoulders can show your body gearing up—anxiety, determination, or anger.',
           emotions: { anxiety: 1.1, determined: 1, anger: 0.8, fear: 0.9 },
         },
         {
@@ -209,14 +457,14 @@
           id: 'limbs-heavy',
           title: 'Heavy or lead-like',
           note: 'Hard to move, sluggish, weighted',
-          insight: 'Heavy limbs often show tiredness, sadness, or numb shutdown.',
+          insight: 'Heavy limbs can show tiredness, sadness, or numb shutdown.',
           emotions: { tired: 1.3, sadness: 1, numb: 1.1, overwhelm: 0.8 },
         },
         {
           id: 'limbs-restless',
           title: 'Restless or fidgety',
           note: 'Urge to pace, bounce, or shake',
-          insight: 'Restless limbs signal pent-up energy linked to anxiety, anticipation, or frustration.',
+          insight: 'Restless limbs can signal pent-up energy linked to anxiety, anticipation, or frustration.',
           emotions: { anxiety: 1.2, anticipation: 1.1, excitement: 1, frustration: 0.9 },
         },
         {
@@ -237,7 +485,7 @@
           id: 'temp-flush',
           title: 'Flush of heat',
           note: 'Cheeks glowing, warmth rushing outward',
-          insight: 'Heat waves often pair with anger, excitement, or shame.',
+          insight: 'Heat waves can pair with anger, excitement, or shame.',
           emotions: { anger: 1.2, excitement: 1, shame: 1, pride: 0.6 },
         },
         {
@@ -251,7 +499,7 @@
           id: 'temp-prickly',
           title: 'Prickly or sweaty skin',
           note: 'Prickles, sudden sweat, tingling heat',
-          insight: 'Prickly sensations show adrenaline—anxiety, anticipation, or overwhelm.',
+          insight: 'Prickly sensations can show adrenaline—anxiety, anticipation, or overwhelm.',
           emotions: { anxiety: 1.1, anticipation: 1, excitement: 0.9, stress: 0.8 },
         },
       ],
@@ -272,14 +520,14 @@
           id: 'overall-floating',
           title: 'Floating or unreal',
           note: 'Drifting, spaced out, not quite here',
-          insight: 'Floating sensations hint at overwhelm or anxiety pulling you away from the moment.',
+          insight: 'Floating sensations can hint at overwhelm or anxiety pulling you away from the moment.',
           emotions: { overwhelm: 1.1, anxiety: 1, numb: 0.9, sadness: 0.7 },
         },
         {
           id: 'overall-calm',
           title: 'Grounded or calm',
           note: 'Steady, anchored, peacefully present',
-          insight: 'Steady calm marks needs met—contentment, gratitude, or relief.',
+          insight: 'Steady calm can mean needs feel met—contentment, gratitude, or relief.',
           emotions: { calm: 1.3, relief: 1.1, contentment: 1.1, gratitude: 1 },
         },
       ],
@@ -329,7 +577,7 @@
     },
     'high-unpleasant': {
       label: 'High energy · Unpleasant',
-      description: 'Revved-up distress often signals anxiety, anger, fear, or overwhelm.',
+      description: 'Revved-up distress can accompany anxiety, anger, fear, or overwhelm.',
       emotions: ['anxiety', 'fear', 'anger', 'overwhelm'],
       care: [
         'Lengthen your exhale or press your feet into the floor to remind your body it is supported.',
@@ -398,6 +646,7 @@
       ],
     },
   };
+
 
   const EMOTION_LIBRARY = {
     anxiety: {
@@ -737,6 +986,8 @@
   const state = {
     selectedEmotion: null,
     quadrant: null,
+    inferredQuadrant: null,
+    compassQuadrant: null,
     activeTag: null,
     activeStep: STEP_SEQUENCE[0],
     compassTouched: false,
@@ -753,6 +1004,15 @@
     journalController: null,
     needs: [],
     feelings: [],
+    bodyCandidates: [],
+    compassCandidates: [],
+    candidateEmotions: [],
+    selectedEmotionConfidence: null,
+    regulationLog: new Set(),
+    preferredBreathPattern: 'slow_446',
+    bodySuggestionMeta: null,
+    compassSuggestionMeta: null,
+    lastRejectedEmotion: null,
   };
 
   const startButton = steps.intro?.querySelector('[data-action="start"]');
@@ -794,6 +1054,11 @@
   let supportJournalTitle = null;
   let supportJournalHeading = null;
   let supportJournalOverlayOpen = false;
+  let evidencePopover = null;
+  let evidencePopoverContent = null;
+  let evidencePopoverClose = null;
+  let evidencePopoverOverlay = null;
+  let evidencePopoverFocusReturn = null;
 
   const DRAFT_DEBOUNCE_MS = 1200;
 
@@ -1136,17 +1401,36 @@
     }
   }
 
-  const BREATH_SEQUENCE = [
-    { label: 'Inhale', seconds: 4 },
-    { label: 'Hold softly', seconds: 4 },
-    { label: 'Exhale slowly', seconds: 6 },
-    { label: 'Rest', seconds: 2 },
-  ];
+  const BREATH_PATTERNS = {
+    slow_446: [
+      { label: 'Inhale', seconds: 4 },
+      { label: 'Hold softly', seconds: 4 },
+      { label: 'Exhale slowly', seconds: 6 },
+      { label: 'Rest', seconds: 2 },
+    ],
+    physiological_sigh: [
+      { label: 'Inhale', seconds: 2 },
+      { label: 'Top-off inhale', seconds: 1 },
+      { label: 'Long exhale', seconds: 6 },
+      { label: 'Rest', seconds: 1 },
+    ],
+    resonance_6bpm: [
+      { label: 'Inhale', seconds: 5 },
+      { label: 'Exhale', seconds: 5 },
+    ],
+  };
+
+  const BREATH_PATTERN_LABELS = {
+    slow_446: '4-4-6 breath',
+    physiological_sigh: 'Physiological sigh',
+    resonance_6bpm: 'Resonance breath (6 bpm)',
+  };
 
   function resetBreathingVisual() {
     breathingVisual?.classList.remove('is-active');
     if (breathingDisplay) {
-      breathingDisplay.textContent = 'Press start to try a 30-second guided breath.';
+      const label = BREATH_PATTERN_LABELS[state.preferredBreathPattern] || 'guided breath';
+      breathingDisplay.textContent = `Press start to try a ${label.toLowerCase()} (~30 seconds).`;
     }
     if (breathingTimer) {
       clearInterval(breathingTimer);
@@ -1154,7 +1438,7 @@
     }
   }
 
-  function startBreathing() {
+  function startBreathing(patternKey = 'slow_446') {
     if (!breathingDisplay || !breathingVisual) {
       goToStep('body');
       return;
@@ -1166,27 +1450,36 @@
       breathingTimer = null;
     }
     breathingVisual.classList.add('is-active');
+    const sequence = BREATH_PATTERNS[patternKey] || BREATH_PATTERNS.slow_446;
+    const label = BREATH_PATTERN_LABELS[patternKey] || 'Guided breath';
+    state.preferredBreathPattern = patternKey;
+    state.regulationLog.add(patternKey);
     let elapsed = 0;
     let phaseIndex = 0;
-    let remaining = BREATH_SEQUENCE[phaseIndex].seconds;
-    breathingDisplay.textContent = `${BREATH_SEQUENCE[phaseIndex].label} • ${remaining}s`;
+    let remaining = sequence[phaseIndex].seconds;
+    breathingDisplay.textContent = `${label}: ${sequence[phaseIndex].label} • ${remaining}s`;
 
     breathingTimer = setInterval(() => {
       elapsed += 1;
       remaining -= 1;
       if (remaining <= 0) {
-        phaseIndex = (phaseIndex + 1) % BREATH_SEQUENCE.length;
-        remaining = BREATH_SEQUENCE[phaseIndex].seconds;
+        phaseIndex = (phaseIndex + 1) % sequence.length;
+        remaining = sequence[phaseIndex].seconds;
       }
-      breathingDisplay.textContent = `${BREATH_SEQUENCE[phaseIndex].label} • ${remaining}s`;
+      breathingDisplay.textContent = `${label}: ${sequence[phaseIndex].label} • ${remaining}s`;
       if (elapsed >= 30) {
         clearInterval(breathingTimer);
         breathingTimer = null;
         breathingVisual.classList.remove('is-active');
-        breathingDisplay.textContent = 'Nice job noticing your breath. Ready for the body check-in when it feels right.';
+        breathingDisplay.textContent = `${label} complete. Ready for the body check-in when it feels right.`;
         goToStep('body');
       }
     }, 1000);
+  }
+
+  function handleBreathingStart(event) {
+    const pattern = event?.currentTarget?.dataset?.breathPattern || state.preferredBreathPattern || 'slow_446';
+    startBreathing(pattern);
   }
 
   function skipBreathing() {
@@ -1194,23 +1487,98 @@
     goToStep('body');
   }
 
-  function buildEmotionTag(emotionKey) {
+  function getRejections() {
+    if (typeof localStorage === 'undefined') {
+      return {};
+    }
+    try {
+      const raw = localStorage.getItem(REJECTION_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (error) {
+      console.warn('Support lane: unable to read rejection history', error);
+      return {};
+    }
+  }
+
+  function setRejections(map) {
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+    try {
+      localStorage.setItem(REJECTION_KEY, JSON.stringify(map));
+    } catch (error) {
+      console.warn('Support lane: unable to persist rejection history', error);
+    }
+  }
+
+  function recordRejection(emotionKey) {
+    if (!emotionKey) {
+      return;
+    }
+    const map = getRejections();
+    map[emotionKey] = (map[emotionKey] || 0) + 1;
+    setRejections(map);
+    state.lastRejectedEmotion = emotionKey;
+  }
+
+  function rejectionPenalty(emotionKey) {
+    const map = getRejections();
+    const count = map[emotionKey] || 0;
+    return calculateRejectionPenalty(count);
+  }
+
+  function buildEmotionTag(emotionKey, { confidence = 0 } = {}) {
     const emotion = EMOTION_LIBRARY[emotionKey];
+    const wrapper = document.createElement('div');
+    wrapper.className = 'emotion-tag__wrapper';
+
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'emotion-tag';
     button.dataset.emotion = emotionKey;
+    button.setAttribute('aria-pressed', state.selectedEmotion === emotionKey ? 'true' : 'false');
+    if (Number.isFinite(confidence)) {
+      button.dataset.confidence = confidence.toFixed(2);
+      button.title = `Confidence: ${confidence.toFixed(2)}`;
+    }
     button.textContent = emotion ? emotion.name : emotionKey;
-    return button;
+    wrapper.appendChild(button);
+
+    const reject = document.createElement('button');
+    reject.type = 'button';
+    reject.className = 'emotion-tag__reject';
+    reject.dataset.emotionReject = emotionKey;
+    reject.setAttribute('aria-label', `Reject ${emotion ? emotion.name : emotionKey}`);
+    reject.textContent = 'Not it';
+    wrapper.appendChild(reject);
+
+    return wrapper;
   }
 
-  function renderSuggestionBlock(container, title, message, emotionKeys) {
+  function renderSuggestionBlock(container, title, message, emotionEntries, contextKeys = []) {
     if (!container) return;
     container.innerHTML = '';
+    const headingWrap = document.createElement('div');
+    headingWrap.className = 'emotion-suggestions__heading';
+
     const heading = document.createElement('h4');
     heading.className = 'emotion-suggestions__title';
     heading.textContent = title;
-    container.appendChild(heading);
+    headingWrap.appendChild(heading);
+
+    if (EVIDENCE_MODE_ENABLED && contextKeys.length) {
+      const whyButton = document.createElement('button');
+      whyButton.type = 'button';
+      whyButton.className = 'evidence-link';
+      whyButton.textContent = 'Why these?';
+      whyButton.dataset.evidenceTrigger = 'true';
+      whyButton.dataset.evidenceKeys = contextKeys.join(',');
+      headingWrap.appendChild(whyButton);
+    }
+
+    container.appendChild(headingWrap);
 
     if (message) {
       const para = document.createElement('p');
@@ -1219,7 +1587,7 @@
       container.appendChild(para);
     }
 
-    if (!emotionKeys || !emotionKeys.length) {
+    if (!emotionEntries || !emotionEntries.length) {
       const none = document.createElement('p');
       none.className = 'support-note';
       none.textContent = 'No clear matches yet. That is okay—try the emotion compass or pick any word to explore.';
@@ -1229,13 +1597,124 @@
 
     const list = document.createElement('ul');
     list.className = 'emotion-suggestions__list';
-    emotionKeys.forEach((key) => {
+    emotionEntries.forEach(({ key, confidence = 0 }) => {
       const item = document.createElement('li');
-      const tag = buildEmotionTag(key);
-      item.appendChild(tag);
+      const tagWrapper = buildEmotionTag(key, { confidence });
+      item.appendChild(tagWrapper);
       list.appendChild(item);
     });
     container.appendChild(list);
+  }
+
+  function evidenceKeyForQuadrant(quadrantKey) {
+    if (!quadrantKey || typeof quadrantKey !== 'string') {
+      return null;
+    }
+    const [arousal, valence] = quadrantKey.split('-');
+    if (!arousal || !valence) {
+      return null;
+    }
+    return `zone-${valence}-${arousal}`;
+  }
+
+  function quadrantKeyFromEvidenceKey(key) {
+    if (!key || !key.startsWith('zone-')) {
+      return null;
+    }
+    const [, valence, arousal] = key.split('-');
+    if (!valence || !arousal) {
+      return null;
+    }
+    return `${arousal}-${valence}`;
+  }
+
+  function updateCandidateSnapshot() {
+    const combined = [...state.bodyCandidates, ...state.compassCandidates];
+    const seen = new Map();
+    combined.forEach(({ key, confidence }) => {
+      if (!seen.has(key) || confidence > (seen.get(key)?.confidence ?? 0)) {
+        seen.set(key, { key, confidence });
+      }
+    });
+    state.candidateEmotions = Array.from(seen.values()).slice(0, 5);
+  }
+
+  function updateBreathingPatternFromZone() {
+    const quadrantKey = state.quadrant;
+    if (!quadrantKey) {
+      state.preferredBreathPattern = 'slow_446';
+      return;
+    }
+    const [arousal, valence] = quadrantKey.split('-');
+    if ((valence === 'unpleasant' && (arousal === 'high' || arousal === 'medium'))) {
+      state.preferredBreathPattern = 'physiological_sigh';
+    } else if (arousal === 'high' && (valence === 'pleasant' || valence === 'neutral')) {
+      state.preferredBreathPattern = 'resonance_6bpm';
+    } else {
+      state.preferredBreathPattern = 'slow_446';
+    }
+  }
+
+  function getBreathingRecommendation() {
+    const pattern = state.preferredBreathPattern || 'slow_446';
+    const label = BREATH_PATTERN_LABELS[pattern] || 'guided breath';
+    let summary = 'Try a steady 4-4-6 breath to invite calm and soften the edges.';
+    if (pattern === 'physiological_sigh') {
+      summary = 'Use a physiological sigh (double inhale, long exhale) to release high unpleasant activation.';
+    } else if (pattern === 'resonance_6bpm') {
+      summary = 'Resonance breathing (5s in, 5s out) steadies high energy while staying grounded.';
+    }
+    return { pattern, label, summary };
+  }
+
+  function refreshSuggestions() {
+    if (state.bodySuggestionMeta) {
+      const bodyEntries = state.bodySuggestionMeta.entries
+        .map(({ key, baseScore }) => ({ key, score: baseScore * rejectionPenalty(key), baseScore }))
+        .filter(({ score }) => score > 0);
+      const normalizedBody = normalizeScoresWithPenalty(bodyEntries.map(({ key, score }) => ({ key, score })));
+      const baseMap = new Map(state.bodySuggestionMeta.entries.map(({ key, baseScore }) => [key, baseScore]));
+      const displayEntries = normalizedBody.map((entry) => ({
+        ...entry,
+        baseScore: baseMap.get(entry.key) ?? entry.score,
+      }));
+      renderSuggestionBlock(
+        bodySuggestions,
+        state.bodySuggestionMeta.title,
+        state.bodySuggestionMeta.message,
+        displayEntries,
+        state.bodySuggestionMeta.contextKeys
+      );
+      state.bodyCandidates = displayEntries.slice(0, 5).map(({ key, confidence }) => ({ key, confidence }));
+    }
+
+    if (state.compassSuggestionMeta) {
+      const compassEntries = state.compassSuggestionMeta.entries
+        .map(({ key, baseScore }) => ({ key, score: baseScore * rejectionPenalty(key), baseScore }))
+        .filter(({ score }) => score > 0);
+      const normalizedCompass = normalizeScoresWithPenalty(compassEntries.map(({ key, score }) => ({ key, score })));
+      const baseMap = new Map(state.compassSuggestionMeta.entries.map(({ key, baseScore }) => [key, baseScore]));
+      const displayEntries = normalizedCompass.map((entry) => ({
+        ...entry,
+        baseScore: baseMap.get(entry.key) ?? entry.score,
+      }));
+      renderSuggestionBlock(
+        compassSuggestions,
+        state.compassSuggestionMeta.title,
+        state.compassSuggestionMeta.message,
+        displayEntries,
+        state.compassSuggestionMeta.contextKeys
+      );
+      state.compassCandidates = displayEntries.slice(0, 5).map(({ key, confidence }) => ({ key, confidence }));
+    }
+
+    updateCandidateSnapshot();
+  }
+
+  if (typeof process !== 'undefined' && process.env?.NVC_TEST === '1') {
+    globalThis.__NVC_SUPPORT_TESTS__ = {
+      renderSuggestionBlock,
+    };
   }
 
   function setChipState(button, pressed) {
@@ -1420,6 +1899,12 @@
     event?.preventDefault?.();
     const selections = getSelectedSensations();
     if (!selections.length) {
+      state.bodySuggestionMeta = null;
+      state.bodyCandidates = [];
+      state.inferredQuadrant = null;
+      state.quadrant = mergeCompassAndInferredZone(state.compassQuadrant, null);
+      updateBreathingPatternFromZone();
+      updateCandidateSnapshot();
       renderSuggestionBlock(
         bodySuggestions,
         'Body-based matches',
@@ -1432,12 +1917,14 @@
 
     const emotionScores = new Map();
     const notes = [];
+    const contextKeys = new Set();
 
     selections.forEach(({ option, intensity }) => {
       if (!option) return;
       const safeIntensity = clampIntensityValue(intensity);
       notes.push(`• ${option.regionLabel}: ${option.title} (${safeIntensity}/10). ${option.insight}`);
       const intensityFactor = safeIntensity / 10;
+      contextKeys.add(option.id);
       if (intensityFactor > 0) {
         Object.entries(option.emotions || {}).forEach(([emotionKey, weight]) => {
           const numericWeight = Number(weight);
@@ -1450,18 +1937,53 @@
       }
     });
 
-    const sortedEmotions = Array.from(emotionScores.entries())
-      .filter(([, score]) => Number.isFinite(score) && score > 0)
-      .sort((a, b) => b[1] - a[1])
-      .map(([key]) => key);
+    const inferredQuadrant = inferZoneFromSensations(selections);
+    state.inferredQuadrant = inferredQuadrant;
+    state.quadrant = mergeCompassAndInferredZone(state.compassQuadrant, inferredQuadrant);
+    updateBreathingPatternFromZone();
 
-    const message = notes.join(' ');
-    renderSuggestionBlock(
-      bodySuggestions,
-      'Body-based matches',
-      message || 'Notice how each sensation might point toward a feeling.',
-      sortedEmotions
-    );
+    const scored = Array.from(emotionScores.entries())
+      .filter(([, score]) => Number.isFinite(score) && score > 0)
+      .map(([key, baseScore]) => {
+        const penalizedScore = baseScore * rejectionPenalty(key);
+        return { key, baseScore, score: penalizedScore };
+      })
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score);
+
+    const normalized = normalizeScoresWithPenalty(scored.map(({ key, score }) => ({ key, score })));
+    const baseMap = new Map(scored.map(({ key, baseScore }) => [key, baseScore]));
+    const entries = normalized.map((entry) => ({
+      ...entry,
+      baseScore: baseMap.get(entry.key) ?? entry.score,
+    }));
+
+    entries.forEach(({ key }) => {
+      contextKeys.add(`emotion-${key}`);
+    });
+
+    const zoneEvidenceKey = evidenceKeyForQuadrant(state.quadrant);
+    if (zoneEvidenceKey) {
+      contextKeys.add(zoneEvidenceKey);
+    }
+
+    const zoneLine = zoneEvidenceKey && QUADRANT_SUGGESTIONS[state.quadrant]
+      ? `• Affective zone estimate: ${QUADRANT_SUGGESTIONS[state.quadrant].label}.`
+      : '• Affective zone estimate: not clear yet (that’s okay).';
+
+    const messageParts = [...notes, zoneLine, 'Use these as invitations, not rules.'];
+    const message = messageParts.join(' ');
+
+    state.bodyCandidates = entries.slice(0, 5).map(({ key, confidence }) => ({ key, confidence }));
+    state.bodySuggestionMeta = {
+      title: 'Body-based matches',
+      message,
+      contextKeys: Array.from(contextKeys),
+      entries: scored.map(({ key, baseScore }) => ({ key, baseScore })),
+    };
+
+    renderSuggestionBlock(bodySuggestions, 'Body-based matches', message, entries, state.bodySuggestionMeta.contextKeys);
+    updateCandidateSnapshot();
     goToStep('compass');
     return true;
   }
@@ -1476,6 +1998,12 @@
       'Body-based matches will appear here after you choose sensations and set their intensity.',
       []
     );
+    state.bodySuggestionMeta = null;
+    state.bodyCandidates = [];
+    state.inferredQuadrant = null;
+    state.quadrant = mergeCompassAndInferredZone(state.compassQuadrant, null);
+    updateBreathingPatternFromZone();
+    updateCandidateSnapshot();
     resetLaneSaveButton();
     scheduleLaneDraftSave();
     regionElements.forEach((_, regionId) => {
@@ -1890,7 +2418,9 @@
       state.compassTouched = true;
     }
     const quadrantKey = computeQuadrant(detail.energyKey, detail.valenceKey);
-    state.quadrant = quadrantKey;
+    state.compassQuadrant = quadrantKey;
+    state.quadrant = mergeCompassAndInferredZone(quadrantKey, state.inferredQuadrant);
+    updateBreathingPatternFromZone();
     if (!quadrantKey || !QUADRANT_SUGGESTIONS[quadrantKey]) {
       renderSuggestionBlock(
         compassSuggestions,
@@ -1898,15 +2428,46 @@
         'Pick one energy and one pleasantness option to see compass matches.',
         []
       );
+      state.compassCandidates = [];
+      state.compassSuggestionMeta = null;
+      updateCandidateSnapshot();
       return;
     }
     const info = QUADRANT_SUGGESTIONS[quadrantKey];
+    const baseEntries = info.emotions.map((key, index) => ({ key, baseScore: 1 / (index + 1) }));
+    const scored = baseEntries
+      .map(({ key, baseScore }) => ({ key, baseScore, score: baseScore * rejectionPenalty(key) }))
+      .filter(({ score }) => score > 0);
+    const normalized = normalizeScoresWithPenalty(scored.map(({ key, score }) => ({ key, score })));
+    const baseMap = new Map(baseEntries.map(({ key, baseScore }) => [key, baseScore]));
+    const entries = normalized.map((entry) => ({
+      ...entry,
+      baseScore: baseMap.get(entry.key) ?? entry.score,
+    }));
+
+    const contextKeys = new Set();
+    const zoneEvidenceKey = evidenceKeyForQuadrant(state.quadrant || quadrantKey);
+    if (zoneEvidenceKey) {
+      contextKeys.add(zoneEvidenceKey);
+    }
+    entries.forEach(({ key }) => contextKeys.add(`emotion-${key}`));
+
+    const message = `${info.label}: ${info.description}`;
     renderSuggestionBlock(
       compassSuggestions,
       'Emotion compass matches',
-      `${info.label}: ${info.description}`,
-      info.emotions
+      message,
+      entries,
+      Array.from(contextKeys)
     );
+    state.compassCandidates = entries.slice(0, 5).map(({ key, confidence }) => ({ key, confidence }));
+    state.compassSuggestionMeta = {
+      title: 'Emotion compass matches',
+      message,
+      contextKeys: Array.from(contextKeys),
+      entries: baseEntries,
+    };
+    updateCandidateSnapshot();
     revealStep('library');
     updateStepControls();
   }
@@ -1976,7 +2537,7 @@
       .join('');
     return `
       <div>
-        <h4 class="emotion-suggestions__title">Needs this feeling may point to</h4>
+        <h4 class="emotion-suggestions__title">Possible needs this feeling can point to (hypotheses)</h4>
         <ul class="emotion-detail__list emotion-detail__list--links">${items}</ul>
       </div>
     `;
@@ -1997,6 +2558,9 @@
     if (!emotion || !emotionLibrary) return;
     setActiveTag(sourceTag);
     state.selectedEmotion = emotionKey;
+    const candidate = state.candidateEmotions.find((item) => item.key === emotionKey);
+    state.selectedEmotionConfidence = candidate ? candidate.confidence ?? null : null;
+    state.regulationLog.add('labeling');
     prefillSupportEmotion(emotionKey, { force: true });
 
     const html = `
@@ -2019,6 +2583,7 @@
     revealStep('closing');
     renderRegulationCard(emotion);
     renderCommunicationCard(emotion);
+    refreshSuggestions();
     updateStepControls();
   }
 
@@ -2027,11 +2592,23 @@
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
     const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
     const journalLink = `${basePath}inventory/journal/`;
+    const breathingRecommendation = getBreathingRecommendation();
+    const breathingSection = `
+      <div class="regulation-breathing">
+        <h4 class="emotion-suggestions__title">Matched breathing option</h4>
+        <p>${breathingRecommendation.summary}</p>
+        <button type="button" class="support-button support-button--ghost" data-action="breathing-start" data-breath-pattern="${breathingRecommendation.pattern}">Start ${breathingRecommendation.label}</button>
+      </div>
+    `;
+    const evidenceNote =
+      '<p class="support-note support-note--mini">Affect labeling and exhale-biased breathing can reduce distress (see “Why these?”).</p>';
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
       ${renderListSection('Try one of these nurturing steps', emotion.regulation)}
       ${extraCare}
+      ${breathingSection}
       <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. Track what works or needs tweaking so future-you can adjust with care.</p>
+      ${evidenceNote}
       <div class="regulation-actions">
         <a class="support-button support-button--link" href="${journalLink}">Open journal dashboard</a>
       </div>
@@ -2052,6 +2629,233 @@
       <p class="support-note" data-communication-status role="status"></p>
       <p class="support-note">It is okay to say, “I’m still figuring out my feelings.” The goal is practice, not perfection.</p>
     `;
+  }
+
+  function getEvidenceTitle(key) {
+    if (!key) {
+      return 'Evidence';
+    }
+    if (BODY_SENSATION_OPTIONS.has(key)) {
+      const option = BODY_SENSATION_OPTIONS.get(key);
+      return option?.title || 'Body sensation';
+    }
+    if (key.startsWith('zone-')) {
+      const quadrantKey = quadrantKeyFromEvidenceKey(key);
+      const info = quadrantKey ? QUADRANT_SUGGESTIONS[quadrantKey] : null;
+      return info?.label || 'Affect zone';
+    }
+    if (key.startsWith('emotion-')) {
+      const emotionKey = key.slice('emotion-'.length);
+      const emotion = EMOTION_LIBRARY[emotionKey];
+      return emotion?.name || emotionKey;
+    }
+    if (key === 'skill-labeling') {
+      return 'Affect labeling';
+    }
+    if (key.startsWith('skill-')) {
+      const pattern = key.slice('skill-'.length);
+      return BREATH_PATTERN_LABELS[pattern] || pattern;
+    }
+    return key;
+  }
+
+  function ensureEvidencePopover() {
+    if (!EVIDENCE_MODE_ENABLED || evidencePopover) {
+      return;
+    }
+    evidencePopover = document.createElement('div');
+    evidencePopover.className = 'evidence-popover';
+    evidencePopover.hidden = true;
+    evidencePopover.setAttribute('aria-hidden', 'true');
+
+    evidencePopoverOverlay = document.createElement('div');
+    evidencePopoverOverlay.className = 'evidence-popover__overlay';
+    evidencePopoverOverlay.setAttribute('aria-hidden', 'true');
+    evidencePopoverOverlay.addEventListener('click', () => closeEvidencePopover());
+
+    const dialog = document.createElement('div');
+    dialog.className = 'evidence-popover__dialog';
+    dialog.setAttribute('role', 'dialog');
+    dialog.setAttribute('aria-modal', 'true');
+
+    const heading = document.createElement('h4');
+    heading.className = 'evidence-popover__title';
+    heading.textContent = 'Why these suggestions';
+    dialog.appendChild(heading);
+
+    evidencePopoverClose = document.createElement('button');
+    evidencePopoverClose.type = 'button';
+    evidencePopoverClose.className = 'evidence-popover__close';
+    evidencePopoverClose.textContent = 'Close';
+    evidencePopoverClose.addEventListener('click', () => closeEvidencePopover());
+    dialog.appendChild(evidencePopoverClose);
+
+    evidencePopoverContent = document.createElement('div');
+    evidencePopoverContent.className = 'evidence-popover__body';
+    dialog.appendChild(evidencePopoverContent);
+
+    evidencePopover.appendChild(evidencePopoverOverlay);
+    evidencePopover.appendChild(dialog);
+    document.body.appendChild(evidencePopover);
+  }
+
+  function buildEvidenceSection(key, entry) {
+    const section = document.createElement('section');
+    section.className = 'evidence-popover__section';
+
+    const title = document.createElement('h5');
+    title.className = 'evidence-popover__heading';
+    title.textContent = getEvidenceTitle(key);
+    section.appendChild(title);
+
+    const meta = document.createElement('p');
+    meta.className = 'evidence-popover__meta';
+    meta.textContent = `Level ${entry.level || 'B'} • Reviewed ${entry.lastReviewed || REVIEW_DATE}`;
+    section.appendChild(meta);
+
+    if (Array.isArray(entry.supports) && entry.supports.length) {
+      const supportList = document.createElement('ul');
+      supportList.className = 'evidence-popover__list';
+      entry.supports.forEach(({ label, ref }) => {
+        const li = document.createElement('li');
+        li.textContent = ref ? `${label} — ${ref}` : label;
+        supportList.appendChild(li);
+      });
+      section.appendChild(supportList);
+    }
+
+    if (Array.isArray(entry.limitations) && entry.limitations.length) {
+      const limitsHeading = document.createElement('p');
+      limitsHeading.className = 'evidence-popover__subheading';
+      limitsHeading.textContent = 'Limitations';
+      section.appendChild(limitsHeading);
+      const limitsList = document.createElement('ul');
+      limitsList.className = 'evidence-popover__list evidence-popover__list--limits';
+      entry.limitations.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        limitsList.appendChild(li);
+      });
+      section.appendChild(limitsList);
+    }
+
+    return section;
+  }
+
+  function openEvidencePopover(trigger, keys) {
+    if (!EVIDENCE_MODE_ENABLED) {
+      return;
+    }
+    ensureEvidencePopover();
+    if (!evidencePopover || !evidencePopoverContent) {
+      return;
+    }
+    const parsedKeys = Array.from(
+      new Set(
+        (Array.isArray(keys) ? keys : [])
+          .map((key) => (key || '').trim())
+          .filter(Boolean)
+      )
+    );
+    evidencePopoverContent.innerHTML = '';
+    const sections = parsedKeys
+      .map((key) => ({ key, entry: EVIDENCE_REGISTRY[key] }))
+      .filter(({ entry }) => !!entry);
+
+    if (!sections.length) {
+      const note = document.createElement('p');
+      note.className = 'support-note';
+      note.textContent = 'Sources will appear here once the mapping is documented.';
+      evidencePopoverContent.appendChild(note);
+    } else {
+      sections.forEach(({ key, entry }) => {
+        evidencePopoverContent.appendChild(buildEvidenceSection(key, entry));
+      });
+    }
+
+    evidencePopover.hidden = false;
+    evidencePopover.setAttribute('aria-hidden', 'false');
+    document.body?.classList?.add('has-evidence-popover-open');
+    evidencePopoverFocusReturn = trigger;
+    document.addEventListener('keydown', handleEvidenceEscape);
+    try {
+      evidencePopoverClose?.focus({ preventScroll: true });
+    } catch (error) {
+      evidencePopoverClose?.focus();
+    }
+  }
+
+  function closeEvidencePopover() {
+    if (!evidencePopover) {
+      return;
+    }
+    evidencePopover.hidden = true;
+    evidencePopover.setAttribute('aria-hidden', 'true');
+    document.body?.classList?.remove('has-evidence-popover-open');
+    document.removeEventListener('keydown', handleEvidenceEscape);
+    if (evidencePopoverFocusReturn && typeof evidencePopoverFocusReturn.focus === 'function') {
+      try {
+        evidencePopoverFocusReturn.focus();
+      } catch (error) {
+        // ignore focus errors
+      }
+    }
+    evidencePopoverFocusReturn = null;
+  }
+
+  function handleEvidenceEscape(event) {
+    if (event.key === 'Escape' || event.key === 'Esc') {
+      event.preventDefault();
+      closeEvidencePopover();
+    }
+  }
+
+  function handleEvidenceClick(event) {
+    const trigger = event.target.closest('[data-evidence-trigger]');
+    if (!trigger) {
+      return;
+    }
+    event.preventDefault();
+    const keys = (trigger.dataset.evidenceKeys || '').split(',');
+    openEvidencePopover(trigger, keys);
+  }
+
+  function maybeShowEvidenceNote() {
+    if (!EVIDENCE_MODE_ENABLED || !supportFlow) {
+      return;
+    }
+    let dismissed = false;
+    if (typeof localStorage !== 'undefined') {
+      try {
+        dismissed = localStorage.getItem(EVIDENCE_NOTE_KEY) === '1';
+      } catch (error) {
+        dismissed = false;
+      }
+    }
+    if (dismissed) {
+      return;
+    }
+    const notice = document.createElement('div');
+    notice.className = 'evidence-note';
+    const message = document.createElement('p');
+    message.textContent = 'Suggestions are hypotheses based on affect science; tap “Why these?” for sources.';
+    notice.appendChild(message);
+    const dismiss = document.createElement('button');
+    dismiss.type = 'button';
+    dismiss.className = 'evidence-note__dismiss';
+    dismiss.textContent = 'Got it';
+    dismiss.addEventListener('click', () => {
+      notice.remove();
+      if (typeof localStorage !== 'undefined') {
+        try {
+          localStorage.setItem(EVIDENCE_NOTE_KEY, '1');
+        } catch (error) {
+          // ignore storage errors
+        }
+      }
+    });
+    notice.appendChild(dismiss);
+    supportFlow.prepend(notice);
   }
 
   function copyTemplate(text, statusNode) {
@@ -2216,6 +3020,10 @@
       notes: '',
       energy: undefined,
       valence: undefined,
+      zone: null,
+      emotionCandidates: [],
+      chosenEmotionConfidence: undefined,
+      regulationUsed: [],
       source: 'lane',
     };
     return { ...fallback, ...overrides };
@@ -2432,6 +3240,15 @@
       valence: Number.isFinite(state.valenceValue) ? state.valenceValue : undefined,
       sensations: serializedSensations,
       needs: mergedNeeds,
+      zone: state.quadrant || null,
+      emotionCandidates: state.candidateEmotions.slice(0, 5).map(({ key, confidence }) => ({
+        emotion: key,
+        confidence: Number.isFinite(confidence) ? Number(confidence) : null,
+      })),
+      chosenEmotionConfidence: Number.isFinite(state.selectedEmotionConfidence)
+        ? Number(state.selectedEmotionConfidence)
+        : undefined,
+      regulationUsed: Array.from(state.regulationLog || []).filter(Boolean),
       source: 'lane',
     });
     const saved = store.create(entry);
@@ -2468,6 +3285,8 @@
     state.journalController?.hideTagSuggestions?.();
     renderJournalHistory();
     journalStatus.textContent = 'Saved locally. Open in Journal to continue or edit.';
+    state.regulationLog = new Set();
+    state.selectedEmotionConfidence = null;
   }
 
   function handleJournalClear() {
@@ -2503,6 +3322,7 @@
     const store = getJournalStore();
     store?.clearDraft?.(state.draftPath);
     prefillSupportEmotion(state.selectedEmotion, { force: false });
+    state.regulationLog = new Set();
   }
 
   function prefillSupportEmotion(emotionKey, { force = false } = {}) {
@@ -2518,6 +3338,15 @@
   }
 
   function handleSuggestionClick(event) {
+    const rejectButton = event.target.closest('[data-emotion-reject]');
+    if (rejectButton) {
+      event.preventDefault();
+      const emotionKey = rejectButton.dataset.emotionReject;
+      recordRejection(emotionKey);
+      refreshSuggestions();
+      return;
+    }
+
     const target = event.target.closest('[data-emotion]');
     if (!target) return;
     const emotionKey = target.dataset.emotion;
@@ -2585,7 +3414,7 @@
     }
     const breathingStart = document.querySelector('[data-action="breathing-start"]');
     const breathingSkip = document.querySelector('[data-action="breathing-skip"]');
-    breathingStart?.addEventListener('click', startBreathing);
+    breathingStart?.addEventListener('click', handleBreathingStart);
     breathingSkip?.addEventListener('click', skipBreathing);
 
     if (sensationRegionList) {
@@ -2609,6 +3438,7 @@
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 
     supportFlow?.addEventListener('click', handleStepCtaClick);
+    supportFlow?.addEventListener('click', handleEvidenceClick);
 
     bodySuggestions?.addEventListener('click', handleSuggestionClick);
     compassSuggestions?.addEventListener('click', handleSuggestionClick);
@@ -2667,6 +3497,10 @@
       'Pick one energy and one pleasantness option to see suggestions.',
       []
     );
+    if (EVIDENCE_MODE_ENABLED) {
+      ensureEvidencePopover();
+      maybeShowEvidenceNote();
+    }
     applyLaneDraft();
     loadLaneReferenceData();
     renderJournalHistory();

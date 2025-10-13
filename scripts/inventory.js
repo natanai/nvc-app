@@ -2829,6 +2829,10 @@ function createJournalEntry(overrides = {}) {
     notes: '',
     energy: undefined,
     valence: undefined,
+    zone: null,
+    emotionCandidates: [],
+    chosenEmotionConfidence: undefined,
+    regulationUsed: [],
     source: 'journal',
   };
   return { ...fallback, ...overrides, source: 'journal' };
