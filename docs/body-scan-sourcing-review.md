@@ -1,24 +1,32 @@
-# Body Scan to Emotion Mapping Review
+# Alexithymia Support Lane — Methods & References
 
-## Overview of current implementation
+_Last reviewed: 2025-10-13_
 
-The alexithymia support experience converts user-selected body sensations into suggested emotions inside `scripts/alexithymia-support.js`. Each body region enumerates qualitative sensations alongside a fixed weight map of emotions. The final suggestion score multiplies the emotion weight by the user-selected intensity and ranks the totals to present "Body-based matches". 【F:scripts/alexithymia-support.js†L20-L228】【F:scripts/alexithymia-support.js†L1420-L1463】
+## Scientific model
 
-The same file also contains a static "emotion library" that lists descriptive body signals for each feeling. These entries are surfaced throughout the flow without any inline citations or references. 【F:scripts/alexithymia-support.js†L360-L714】
+1. **Somatic noticing → affect zone inference.** Weighted body sensations are mapped to a circumplex anchor (valence × arousal) derived from cross-cultural affect research. The app tallies weighted anchors to estimate a zone (e.g., high-unpleasant) when the user reports sensations. This layer draws on evidence that core affect can be modelled along orthogonal valence and arousal dimensions and that interoceptive cues are informative but non-diagnostic.
+2. **Affect zone → candidate emotion labels.** Each zone proposes 3–5 feeling hypotheses aligned with the circumplex anchor and emotion families documented in appraisal research. Users can confirm, explore, or reject every tag; "Not it" feedback down-weights future suggestions on the same device.
+3. **Emotion labels → hypothesised needs.** Confirmed emotions surface needs hypotheses grouped by Self-Determination Theory umbrellas (autonomy, competence, relatedness) plus restoration needs (rest, safety). These are framed as invitations, not prescriptions.
+4. **Micro-regulation skills.** The lane offers affect labeling (naming the emotion aloud or in writing) and zone-matched breathing (physiological sigh for high unpleasant activation, resonance breathing for high pleasant/neutral activation, and slow 4-4-6 pacing as a default). Each skill includes in-line evidence summaries and is tracked in the journal export.
 
-Outside of the alexithymia support script, the canonical dataset is compiled from CSV spreadsheets via `scripts/build-data.mjs`. The `Body` column in `data/Feelings.csv` feeds each emotion's "bodySignals" list in the generated JSON bundle, again without pointing to empirical sources. 【F:scripts/build-data.mjs†L101-L139】【F:data/Feelings.csv†L1-L16】
+## Provenance & limitations
 
-## Scientific verification
+* Bodily sensation maps originate from self-report topographies. They are helpful heuristics, not diagnostic tools. Cultural learning, neurodiversity, medication, and health conditions can reshape interoceptive patterns.
+* Affect zones capture blended states. The circumplex cannot guarantee discrete emotions; it narrows the search space so that user confirmation remains central.
+* Needs hypotheses depend on appraisal and context. They should be treated as prompts for reflection, not therapeutic directives.
+* Regulation skills have empirical support for average effects, yet individual responses vary. The app encourages experimentation, logging what helps, and consulting clinicians for personalized care.
+* All mappings include evidence metadata (sources, limitations, review date) enforced through CI so that future edits stay auditable.
 
-A repository-wide search found no citations, bibliographies, or links to peer-reviewed research that justify the body sensation/emotion pairings. None of the hard-coded weightings, descriptive "insight" text, or CSV body-signal lists reference validated assessment tools (e.g., PANAS, LEAS), psychophysiological datasets, or clinical guidance. The implementation appears to rely on internally-authored heuristics rather than externally verified mappings.
+## Key references
 
-Because of this, we cannot confirm that the current suggestions meet the user's request for scientific reliability or third-party verification. Delivering that assurance would require sourcing evidence-based correlations between interoceptive cues and discrete emotions, documenting those citations alongside the code, and ideally encoding provenance metadata with each mapping.
+* Algoe, S. B. (2012). Find, remind, and bind: The functions of gratitude in everyday relationships. *Social and Personality Psychology Compass, 6*(6), 455–469.
+* Balban, M. Y., et al. (2023). Brief structured breathing improves mood and physiology compared to mindfulness meditation. *Cell Reports Medicine, 4*(2), 100895.
+* Barrett, L. F. (2017). *How Emotions Are Made: The Secret Life of the Brain*. Houghton Mifflin Harcourt.
+* Brown, R. P., & Gerbarg, P. L. (2005). Sudarshan Kriya yogic breathing in the treatment of stress, anxiety, and depression. *Journal of Alternative and Complementary Medicine, 11*(4), 711–717.
+* Deci, E. L., & Ryan, R. M. (2000). The "what" and "why" of goal pursuits: Human needs and the self-determination of behavior. *Psychological Inquiry, 11*(4), 227–268.
+* Lieberman, M. D., et al. (2007). Putting feelings into words: Affect labeling disrupts amygdala activity. *Psychological Science, 18*(5), 421–428.
+* Nummenmaa, L., Glerean, E., Hari, R., & Hietanen, J. K. (2014). Bodily maps of emotions. *Proceedings of the National Academy of Sciences, 111*(2), 646–651.
+* Posner, J., Russell, J. A., & Peterson, B. S. (2005). The circumplex model of affect: An integrative approach to affective neuroscience, cognitive development, and psychopathology. *Development and Psychopathology, 17*(3), 715–734.
+* Zaccaro, A., et al. (2018). How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing. *Frontiers in Human Neuroscience, 12*, 353.
 
-## Recommendations
-
-* **Source and cite research** – Identify empirical studies, clinical manuals, or reputable psychoeducational resources that describe bodily correlates for emotions. Incorporate inline citations (e.g., DOI, textbook, or organization publications) wherever the app surfaces those correlations.
-* **Track provenance in data** – Extend the data schema so each body sensation entry includes fields such as `source`, `publicationYear`, and `evidenceNotes`. This would let the UI communicate confidence levels or display links for further reading.
-* **Expert review** – Before shipping updates, have licensed clinicians or researchers review the mappings and attest to their appropriateness for the intended audience.
-* **Ongoing validation** – If observational or user feedback data are available, analyze it to verify whether the suggested feelings align with user-reported emotions, and iterate based on findings.
-
-Until such steps are taken, the body scan conversion logic should be treated as an unverified heuristic rather than a scientifically validated assessment.
+_For clinical consultation or implementation feedback, please contact the NVC-App maintainers with relevant credentials and context._
