@@ -5402,6 +5402,25 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
+  align-items: baseline;
+}
+
+.feeling-inference__cue-intensity-title {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.feeling-inference__cue-intensity-energy {
+  font-weight: 500;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+
+.feeling-inference__cue-intensity-value {
+  font-weight: 600;
+  font-style: normal;
+  background: color-mix(in srgb, var(--mint) 22%, transparent);
+  padding: 0.05rem 0.4rem;
+  border-radius: var(--radius-pill);
 }
 
 .feeling-inference__cue-intensity-meter {
@@ -5427,18 +5446,49 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   color: color-mix(in srgb, var(--ink) 55%, transparent);
 }
 
+.feeling-inference__cue-weight-label {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
+}
+
+.feeling-inference__cue-weight-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.feeling-inference__cue-weight-detail {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
 .feeling-inference__cue-weight {
-  background: color-mix(in srgb, var(--outline) 24%, transparent);
+  background: color-mix(in srgb, var(--plum) 26%, transparent);
   border-radius: 999px;
   height: 0.5rem;
   overflow: hidden;
 }
 
 .feeling-inference__cue-weight-fill {
-  background: color-mix(in srgb, var(--mint) 65%, transparent);
+  background: color-mix(in srgb, var(--plum) 70%, transparent);
   height: 100%;
   border-radius: inherit;
   min-width: 0.35rem;
+}
+
+.feeling-inference__cue-weight-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
 }
 
 .feeling-inference__sdt {
