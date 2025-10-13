@@ -15,62 +15,296 @@
 
   const basePath = document.body?.dataset?.basePath || '';
 
-  const BODY_SENSATIONS = {
-    'tight-chest': {
-      label: 'Chest: tight, heavy, or pounding',
-      message:
-        'When the chest tightens or the heart races, your body may be preparing for a challenge. That activation can signal fear, anger, or high alert worry.',
-      emotions: ['anxiety', 'fear', 'anger', 'overwhelm'],
+  const SENSATION_DEFAULT_INTENSITY = 5;
+
+  const BODY_REGIONS = [
+    {
+      id: 'chest',
+      label: 'Chest or heart space',
+      prompt: 'Rest your attention on your chest or heart space. Notice breath depth, expansion, or pulsing.',
+      options: [
+        {
+          id: 'chest-tight',
+          title: 'Tight or constricted',
+          note: 'Band squeezing, armor, or breath held high',
+          insight: 'Tightness across the chest often signals your system is bracing for threat or overwhelm.',
+          emotions: { anxiety: 1.4, fear: 1.1, anger: 0.9, overwhelm: 1.1 },
+        },
+        {
+          id: 'chest-pressure',
+          title: 'Weighted or pressured',
+          note: 'Heavy stone, shoulders collapsing inward',
+          insight: 'Weight or pressure here can reflect grief, sadness, or responsibility carried for others.',
+          emotions: { sadness: 1.1, grief: 1.2, stress: 1, guilt: 0.9 },
+        },
+        {
+          id: 'chest-pounding',
+          title: 'Pounding or racing heartbeat',
+          note: 'Heart racing, flutter, sudden surges of beats',
+          insight: 'A pounding heart points to activation—anxiety, fear, anger, or eager anticipation.',
+          emotions: { anxiety: 1.2, fear: 1.1, excitement: 1, anticipation: 1, anger: 0.6 },
+        },
+        {
+          id: 'chest-open',
+          title: 'Open, warm, or expansive',
+          note: 'Soft chest, easy breathing, gentle warmth',
+          insight: 'An open chest often accompanies calm, relief, or joyful connection.',
+          emotions: { calm: 1.2, relief: 1.1, joy: 0.8, gratitude: 0.9 },
+        },
+      ],
     },
-    'stomach-knots': {
-      label: 'Stomach: knots, fluttery, or queasy',
-      message:
-        'Stomach flips often show up with anticipation. People notice them when anxious, worried, or energized by something uncertain.',
-      emotions: ['anxiety', 'worry', 'fear', 'excitement'],
+    {
+      id: 'gut',
+      label: 'Stomach or gut',
+      prompt: 'Soften awareness into your belly. Notice flips, hollowness, or steadiness.',
+      options: [
+        {
+          id: 'gut-rolling',
+          title: 'Rolling or fluttering',
+          note: 'Butterflies, swirls, churning movement',
+          insight: 'Rolling sensations can blend anxious worry with hopeful excitement about what is next.',
+          emotions: { anxiety: 1.1, worry: 1, excitement: 0.9, anticipation: 1 },
+        },
+        {
+          id: 'gut-nausea',
+          title: 'Nausea or queasy',
+          note: 'Churned up, unsettled, urge to vomit',
+          insight: 'Nausea often shows up when something feels unsafe, overwhelming, or not right.',
+          emotions: { anxiety: 1, fear: 1.1, stress: 0.9, overwhelm: 0.9 },
+        },
+        {
+          id: 'gut-emptiness',
+          title: 'Hollow or empty',
+          note: 'Sinking, dropping, missing center',
+          insight: 'Emptiness in the gut can flag sadness, loneliness, or grief.',
+          emotions: { sadness: 1.2, grief: 1.2, lonely: 1, numb: 0.8 },
+        },
+        {
+          id: 'gut-warm',
+          title: 'Settled or warm',
+          note: 'Grounded fullness, gentle ease',
+          insight: 'Warmth in the belly often matches calm confidence or gentle hope.',
+          emotions: { hope: 1, contentment: 1, calm: 1, gratitude: 0.9 },
+        },
+      ],
     },
-    'throat-tight': {
-      label: 'Throat: lump or tightness',
-      message:
-        'A lump in the throat frequently accompanies sadness, grief, or loneliness when words or tears feel stuck.',
-      emotions: ['sadness', 'grief', 'shame', 'lonely'],
+    {
+      id: 'throat',
+      label: 'Throat and voice',
+      prompt: 'Bring attention to your throat and voice box. Notice tightness, urge to speak, or dryness.',
+      options: [
+        {
+          id: 'throat-tight',
+          title: 'Tight or gripped',
+          note: 'Squeezing band, hard to swallow',
+          insight: 'A tight throat often appears when sadness, anxiety, or shame holds words back.',
+          emotions: { sadness: 1, grief: 1, shame: 0.9, anxiety: 0.8 },
+        },
+        {
+          id: 'throat-lump',
+          title: 'Lump or swelling',
+          note: 'Tears hovering, voice shaking, lump rising',
+          insight: 'A lump in the throat pairs with grief, loneliness, or tenderness seeking expression.',
+          emotions: { grief: 1.2, lonely: 1, sadness: 1.1, overwhelm: 0.8 },
+        },
+        {
+          id: 'throat-dry',
+          title: 'Dry or closed off',
+          note: 'Scratchy, hard to speak, voice fades',
+          insight: 'Dryness can indicate fear or anticipation about speaking up.',
+          emotions: { fear: 1, anxiety: 1, anticipation: 0.8, shame: 0.7 },
+        },
+      ],
     },
-    'jaw-clench': {
-      label: 'Jaw or fists: clenched or hot',
-      message:
-        'Braced muscles and heat in the face can mean anger or frustration. Sometimes it also shows determination to push through.',
-      emotions: ['anger', 'frustration', 'stress', 'determined'],
+    {
+      id: 'jaw',
+      label: 'Jaw, mouth, or fists',
+      prompt: 'Notice your jaw, tongue, and hands. Are they loose, braced, or buzzing?',
+      options: [
+        {
+          id: 'jaw-clench',
+          title: 'Clenched or grinding',
+          note: 'Teeth locked, fists tight, rigid tongue',
+          insight: 'Clenched muscles reflect anger, frustration, or determined resolve.',
+          emotions: { anger: 1.3, frustration: 1.2, determined: 1, stress: 0.9 },
+        },
+        {
+          id: 'jaw-heat',
+          title: 'Heat or flush',
+          note: 'Warm cheeks, heat pooling in jaw',
+          insight: 'Heat in the jaw can mark anger, shame, or a boundary flare.',
+          emotions: { anger: 1.1, shame: 1, frustration: 0.8, guilt: 0.7 },
+        },
+        {
+          id: 'jaw-tremble',
+          title: 'Tremble or quiver',
+          note: 'Jaw shaking, lips or hands quivering',
+          insight: 'Trembling around the mouth often signals fear, overwhelm, or sadness releasing.',
+          emotions: { fear: 1.1, anxiety: 1, sadness: 0.9, overwhelm: 1 },
+        },
+      ],
     },
-    'head-fog': {
-      label: 'Head: foggy, buzzing, or heavy',
-      message:
-        'Brain fog can indicate overwhelm, mental load, or exhaustion. It may also appear with worry spirals.',
-      emotions: ['overwhelm', 'tired', 'numb', 'worry'],
+    {
+      id: 'head',
+      label: 'Head and mind space',
+      prompt: 'Check your forehead, temples, and behind the eyes. Notice pressure, buzzing, or fog.',
+      options: [
+        {
+          id: 'head-pressure',
+          title: 'Pressure or band',
+          note: 'Helmet feeling, squeezing temples',
+          insight: 'Head pressure signals mental load, stress, or overwhelm asking for relief.',
+          emotions: { overwhelm: 1.3, stress: 1.1, worry: 1 },
+        },
+        {
+          id: 'head-buzzing',
+          title: 'Buzzing or static',
+          note: 'Quick thoughts, humming energy',
+          insight: 'Buzzing in the head can come with anxious energy or excited anticipation.',
+          emotions: { anxiety: 1.1, excitement: 0.9, anticipation: 0.9, overwhelm: 0.8 },
+        },
+        {
+          id: 'head-fog',
+          title: 'Foggy or heavy',
+          note: 'Hard to focus, thick clouded feeling',
+          insight: 'Fog often appears with exhaustion, low mood, or protective numbness.',
+          emotions: { tired: 1.1, numb: 1, sadness: 0.8, overwhelm: 0.9 },
+        },
+      ],
     },
-    'shoulders-weight': {
-      label: 'Shoulders: weighted or lifted',
-      message:
-        'Weighted shoulders can reflect carrying responsibility, guilt, or sadness. Lifted shoulders can show you are bracing to respond.',
-      emotions: ['sadness', 'stress', 'guilt', 'anxiety'],
+    {
+      id: 'shoulders',
+      label: 'Shoulders and upper back',
+      prompt: 'Sense the slope of your shoulders and upper back. Notice if they lift, droop, or carry weight.',
+      options: [
+        {
+          id: 'shoulders-weighted',
+          title: 'Weighted or burdened',
+          note: 'Heavy load, sagging posture, tight knots',
+          insight: 'Weighted shoulders often align with stress, guilt, or sadness about responsibility.',
+          emotions: { stress: 1.2, guilt: 1.1, sadness: 1, overwhelm: 1 },
+        },
+        {
+          id: 'shoulders-braced',
+          title: 'Lifted or braced',
+          note: 'Raised, ready to act, armor-like',
+          insight: 'Braced shoulders show your body gearing up—anxiety, determination, or anger.',
+          emotions: { anxiety: 1.1, determined: 1, anger: 0.8, fear: 0.9 },
+        },
+        {
+          id: 'shoulders-droop',
+          title: 'Drooping or collapsed',
+          note: 'Slumped, no lift, giving way',
+          insight: 'Drooping shoulders can reflect fatigue, discouragement, or grief.',
+          emotions: { tired: 1.1, sadness: 1, grief: 0.9, numb: 0.9 },
+        },
+      ],
     },
-    'limbs-lead': {
-      label: 'Arms or legs: heavy, numb, or restless',
-      message:
-        'Heavy limbs may point toward tiredness or low mood; restless limbs can show pent-up energy looking for movement.',
-      emotions: ['tired', 'sadness', 'numb', 'anxiety'],
+    {
+      id: 'limbs',
+      label: 'Arms, hands, or legs',
+      prompt: 'Let awareness move through arms and legs. Notice heaviness, restlessness, or tingles.',
+      options: [
+        {
+          id: 'limbs-heavy',
+          title: 'Heavy or lead-like',
+          note: 'Hard to move, sluggish, weighted',
+          insight: 'Heavy limbs often show tiredness, sadness, or numb shutdown.',
+          emotions: { tired: 1.3, sadness: 1, numb: 1.1, overwhelm: 0.8 },
+        },
+        {
+          id: 'limbs-restless',
+          title: 'Restless or fidgety',
+          note: 'Urge to pace, bounce, or shake',
+          insight: 'Restless limbs signal pent-up energy linked to anxiety, anticipation, or frustration.',
+          emotions: { anxiety: 1.2, anticipation: 1.1, excitement: 1, frustration: 0.9 },
+        },
+        {
+          id: 'limbs-tingly',
+          title: 'Tingly or sparkly',
+          note: 'Buzzing skin, energetic tingles',
+          insight: 'Tingles can mean excited anticipation or anxious vigilance.',
+          emotions: { anticipation: 1.2, excitement: 1.1, fear: 0.9, joy: 0.8 },
+        },
+      ],
     },
-    'temperature-shift': {
+    {
+      id: 'temperature',
       label: 'Temperature shifts',
-      message:
-        'Sudden heat, chills, or prickly skin often accompany strong anger, fear, or excitement when adrenaline releases.',
-      emotions: ['anger', 'fear', 'anxiety', 'excitement'],
+      prompt: 'Notice any sudden changes in temperature or skin sensation.',
+      options: [
+        {
+          id: 'temp-flush',
+          title: 'Flush of heat',
+          note: 'Cheeks glowing, warmth rushing outward',
+          insight: 'Heat waves often pair with anger, excitement, or shame.',
+          emotions: { anger: 1.2, excitement: 1, shame: 1, pride: 0.6 },
+        },
+        {
+          id: 'temp-chill',
+          title: 'Chill or cold rush',
+          note: 'Goosebumps, cold core, shivers',
+          insight: 'Chills may signal fear, anxiety, or grief moving through.',
+          emotions: { fear: 1.2, anxiety: 1.1, sadness: 0.8, overwhelm: 0.9 },
+        },
+        {
+          id: 'temp-prickly',
+          title: 'Prickly or sweaty skin',
+          note: 'Prickles, sudden sweat, tingling heat',
+          insight: 'Prickly sensations show adrenaline—anxiety, anticipation, or overwhelm.',
+          emotions: { anxiety: 1.1, anticipation: 1, excitement: 0.9, stress: 0.8 },
+        },
+      ],
     },
-    'no-sensation': {
-      label: 'Hard to notice anything',
-      message:
-        'Feeling blank or disconnected is common in alexithymia. Numbness can mask overwhelm or simply mean your system needs more time.',
-      emotions: ['numb', 'bored', 'overwhelm', 'tired'],
+    {
+      id: 'overall',
+      label: 'Whole-body sense',
+      prompt: 'Step back and notice the overall tone of your body right now.',
+      options: [
+        {
+          id: 'overall-numb',
+          title: 'Muted or numb',
+          note: 'Blank, disconnected, hard to feel',
+          insight: 'Numbness can be protective when overwhelm maxes out.',
+          emotions: { numb: 1.4, bored: 1.1, overwhelm: 0.9, tired: 0.9 },
+        },
+        {
+          id: 'overall-floating',
+          title: 'Floating or unreal',
+          note: 'Drifting, spaced out, not quite here',
+          insight: 'Floating sensations hint at overwhelm or anxiety pulling you away from the moment.',
+          emotions: { overwhelm: 1.1, anxiety: 1, numb: 0.9, sadness: 0.7 },
+        },
+        {
+          id: 'overall-calm',
+          title: 'Grounded or calm',
+          note: 'Steady, anchored, peacefully present',
+          insight: 'Steady calm marks needs met—contentment, gratitude, or relief.',
+          emotions: { calm: 1.3, relief: 1.1, contentment: 1.1, gratitude: 1 },
+        },
+      ],
     },
-  };
+  ];
+
+  const BODY_SENSATION_OPTIONS = new Map();
+  const REGION_OPTION_IDS = new Map();
+  const BODY_SCAN_SEQUENCE = [];
+  const sensationOptionElements = new Map();
+  const regionElements = new Map();
+
+  BODY_REGIONS.forEach((region) => {
+    BODY_SCAN_SEQUENCE.push(region.id);
+    const ids = [];
+    region.options.forEach((option) => {
+      BODY_SENSATION_OPTIONS.set(option.id, {
+        ...option,
+        regionId: region.id,
+        regionLabel: region.label,
+      });
+      ids.push(option.id);
+    });
+    REGION_OPTION_IDS.set(region.id, ids);
+  });
 
   const QUADRANT_SUGGESTIONS = {
     'low-unpleasant': {
@@ -508,6 +742,9 @@
     compassTouched: false,
     energyValue: 0,
     valenceValue: 0,
+    guidedScanActive: false,
+    guidedScanIndex: -1,
+    guidedScanStarted: false,
     draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
     draftTimer: null,
     savedFeedbackTimer: null,
@@ -524,7 +761,15 @@
   const bodySuggestions = document.querySelector('[data-body-suggestions]');
   const compassSuggestions = document.querySelector('[data-compass-suggestions]');
   const supportFlow = document.querySelector('.support-flow');
-  const sensationChips = document.querySelector('[data-sensation-chips]');
+  const sensationRegionList = document.querySelector('[data-sensation-region-list]');
+  const bodyScanPanel = document.querySelector('[data-sensation-scan]');
+  const scanControls = bodyScanPanel?.querySelector('[data-scan-controls]');
+  const scanStatus = bodyScanPanel?.querySelector('[data-scan-status]');
+  const scanPrompt = bodyScanPanel?.querySelector('[data-scan-prompt]');
+  const scanStartButton = bodyScanPanel?.querySelector('[data-action="scan-start"]');
+  const scanBackButton = bodyScanPanel?.querySelector('[data-action="scan-back"]');
+  const scanNextButton = bodyScanPanel?.querySelector('[data-action="scan-next"]');
+  const scanFinishButton = bodyScanPanel?.querySelector('[data-action="scan-finish"]');
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
 
@@ -999,47 +1244,214 @@
     button.classList.toggle('is-active', pressed);
   }
 
-  function getSelectedSensations(container) {
-    if (!container) return [];
-    return Array.from(container.querySelectorAll('[data-sensation][aria-pressed="true"]')).map((button) => button.dataset.sensation);
+  function clampIntensityValue(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+      return SENSATION_DEFAULT_INTENSITY;
+    }
+    return Math.max(0, Math.min(10, Math.round(numeric)));
   }
 
-  function handleSensationChipClick(event) {
+  function getSensationIntensity(optionId) {
+    const elements = sensationOptionElements.get(optionId);
+    if (!elements) {
+      return SENSATION_DEFAULT_INTENSITY;
+    }
+    const rawValue = Number(elements.slider?.value ?? elements.defaultValue ?? SENSATION_DEFAULT_INTENSITY);
+    return clampIntensityValue(rawValue);
+  }
+
+  function syncSensationIntensity(optionId, rawValue) {
+    const elements = sensationOptionElements.get(optionId);
+    if (!elements) {
+      return SENSATION_DEFAULT_INTENSITY;
+    }
+    const clamped = clampIntensityValue(rawValue);
+    if (elements.slider && Number(elements.slider.value) !== clamped) {
+      elements.slider.value = String(clamped);
+    }
+    if (elements.output) {
+      elements.output.textContent = String(clamped);
+    }
+    return clamped;
+  }
+
+  function updateRegionSummary(regionId) {
+    const region = regionElements.get(regionId);
+    if (!region) return;
+    const optionIds = REGION_OPTION_IDS.get(regionId) || [];
+    const selections = [];
+    optionIds.forEach((optionId) => {
+      const elements = sensationOptionElements.get(optionId);
+      if (!elements) return;
+      if (elements.button?.getAttribute('aria-pressed') !== 'true') {
+        return;
+      }
+      const option = BODY_SENSATION_OPTIONS.get(optionId);
+      if (!option) return;
+      const intensity = getSensationIntensity(optionId);
+      selections.push(`${option.title} (${intensity}/10)`);
+    });
+    if (!selections.length) {
+      const fallback =
+        region.defaultSummary || region.summary.dataset.defaultSummary || 'We can check in here whenever you\'re ready.';
+      region.summary.textContent = fallback;
+      region.summary.dataset.hasSelection = 'false';
+      return;
+    }
+    const display = selections.slice(0, 3).join(', ');
+    region.summary.textContent = selections.length === 1 ? `Noticing: ${display}.` : `Noticing: ${display}${
+      selections.length > 3 ? '…' : ''
+    }.`;
+    region.summary.dataset.hasSelection = 'true';
+  }
+
+  function setSensationState(optionId, active, { focusSlider = false, skipDraft = false } = {}) {
+    const elements = sensationOptionElements.get(optionId);
+    if (!elements) return;
+    setChipState(elements.button, active);
+    if (elements.wrapper) {
+      elements.wrapper.classList.toggle('is-selected', active);
+    }
+    if (elements.intensity) {
+      elements.intensity.hidden = !active;
+    }
+    if (elements.slider) {
+      if (active) {
+        elements.slider.disabled = false;
+        syncSensationIntensity(optionId, elements.slider.value);
+        if (focusSlider) {
+          try {
+            elements.slider.focus({ preventScroll: true });
+          } catch (error) {
+            // ignore focus errors
+          }
+        }
+      } else {
+        elements.slider.disabled = true;
+        syncSensationIntensity(optionId, elements.defaultValue);
+      }
+    }
+    const option = BODY_SENSATION_OPTIONS.get(optionId);
+    if (option) {
+      updateRegionSummary(option.regionId);
+    }
+    if (!skipDraft) {
+      resetLaneSaveButton();
+      scheduleLaneDraftSave();
+    }
+  }
+
+  function getSelectedSensations() {
+    const selections = [];
+    sensationOptionElements.forEach((elements, optionId) => {
+      if (!elements?.button) return;
+      if (elements.button.getAttribute('aria-pressed') !== 'true') {
+        return;
+      }
+      const option = BODY_SENSATION_OPTIONS.get(optionId);
+      if (!option) return;
+      const intensity = getSensationIntensity(optionId);
+      selections.push({ id: optionId, intensity, option });
+    });
+    return selections;
+  }
+
+  function serializeSensationSelections(selections) {
+    if (!Array.isArray(selections) || !selections.length) {
+      return [];
+    }
+    return selections.map(({ id, intensity }) => `${id}:${clampIntensityValue(intensity)}`);
+  }
+
+  function handleSensationChoiceClick(event) {
+    const toggle = event.target.closest('[data-region-toggle]');
+    if (toggle) {
+      event.preventDefault();
+      const regionId = toggle.dataset.regionToggle;
+      if (!regionId) {
+        return;
+      }
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        collapseRegion(regionId);
+      } else {
+        expandRegion(regionId, { focus: true });
+      }
+      return;
+    }
+
+    const closeButton = event.target.closest('[data-region-close]');
+    if (closeButton) {
+      event.preventDefault();
+      const regionId = closeButton.dataset.regionClose;
+      if (!regionId) {
+        return;
+      }
+      collapseRegion(regionId, { returnFocus: true });
+      return;
+    }
+
     const button = event.target.closest('[data-sensation]');
     if (!button) return;
     event.preventDefault();
+    const optionId = button.dataset.sensation;
+    if (!optionId) return;
     const pressed = button.getAttribute('aria-pressed') === 'true';
-    setChipState(button, !pressed);
+    setSensationState(optionId, !pressed, { focusSlider: !pressed });
+  }
+
+  function handleSensationIntensityInput(event) {
+    const input = event.target;
+    if (!input || !input.dataset || !input.dataset.sensationIntensity) {
+      return;
+    }
+    const optionId = input.dataset.sensationIntensity;
+    const option = BODY_SENSATION_OPTIONS.get(optionId);
+    syncSensationIntensity(optionId, input.value);
+    if (option) {
+      updateRegionSummary(option.regionId);
+    }
+    resetLaneSaveButton();
+    scheduleLaneDraftSave();
   }
 
   function handleSensationSubmit(event) {
     event?.preventDefault?.();
-    const selected = getSelectedSensations(sensationChips);
-    if (!selected.length) {
+    const selections = getSelectedSensations();
+    if (!selections.length) {
       renderSuggestionBlock(
         bodySuggestions,
         'Body-based matches',
-        'Try choosing one or two sensations. If nothing stands out, move on to the emotion compass.',
+        'Try choosing a region and setting how strong the sensation feels. If nothing stands out, move on to the emotion compass.',
         []
       );
       goToStep('compass');
       return false;
     }
 
-    const emotionCounts = new Map();
+    const emotionScores = new Map();
     const notes = [];
 
-    selected.forEach((id) => {
-      const sensation = BODY_SENSATIONS[id];
-      if (!sensation) return;
-      notes.push(`• ${sensation.message}`);
-      sensation.emotions.forEach((emotionKey) => {
-        const current = emotionCounts.get(emotionKey) ?? 0;
-        emotionCounts.set(emotionKey, current + 1);
-      });
+    selections.forEach(({ option, intensity }) => {
+      if (!option) return;
+      const safeIntensity = clampIntensityValue(intensity);
+      notes.push(`• ${option.regionLabel}: ${option.title} (${safeIntensity}/10). ${option.insight}`);
+      const intensityFactor = safeIntensity / 10;
+      if (intensityFactor > 0) {
+        Object.entries(option.emotions || {}).forEach(([emotionKey, weight]) => {
+          const numericWeight = Number(weight);
+          if (!Number.isFinite(numericWeight) || numericWeight <= 0) {
+            return;
+          }
+          const score = numericWeight * intensityFactor;
+          emotionScores.set(emotionKey, (emotionScores.get(emotionKey) ?? 0) + score);
+        });
+      }
     });
 
-    const sortedEmotions = Array.from(emotionCounts.entries())
+    const sortedEmotions = Array.from(emotionScores.entries())
+      .filter(([, score]) => Number.isFinite(score) && score > 0)
       .sort((a, b) => b[1] - a[1])
       .map(([key]) => key);
 
@@ -1055,19 +1467,409 @@
   }
 
   function handleSensationClear() {
-    if (sensationChips) {
-      sensationChips.querySelectorAll('[data-sensation]').forEach((button) => setChipState(button, false));
-    }
+    sensationOptionElements.forEach((_, optionId) => {
+      setSensationState(optionId, false, { skipDraft: true });
+    });
     renderSuggestionBlock(
       bodySuggestions,
       'Body-based matches',
-      'Body-based matches will appear here after you choose sensations.',
+      'Body-based matches will appear here after you choose sensations and set their intensity.',
       []
     );
+    resetLaneSaveButton();
+    scheduleLaneDraftSave();
+    regionElements.forEach((_, regionId) => {
+      collapseRegion(regionId);
+    });
   }
 
   function handleSensationSkip() {
+    finishGuidedScan();
     goToStep('compass');
+  }
+
+  function renderBodyRegions(container) {
+    if (!container) return;
+    container.innerHTML = '';
+    sensationOptionElements.clear();
+    regionElements.clear();
+
+    BODY_REGIONS.forEach((region) => {
+      const section = document.createElement('section');
+      section.className = 'sensation-region';
+      section.dataset.region = region.id;
+
+      const header = document.createElement('div');
+      header.className = 'sensation-region__header';
+
+      const meta = document.createElement('div');
+      meta.className = 'sensation-region__meta';
+
+      const detailsId = `sensation-region-${region.id}-details`;
+
+      const title = document.createElement('h4');
+      title.className = 'sensation-region__title';
+      title.textContent = region.label;
+      meta.appendChild(title);
+
+      const summary = document.createElement('p');
+      summary.className = 'sensation-region__summary';
+      summary.dataset.hasSelection = 'false';
+      const defaultSummary = 'We can check in here whenever you\'re ready.';
+      summary.dataset.defaultSummary = defaultSummary;
+      summary.textContent = defaultSummary;
+      meta.appendChild(summary);
+
+      header.appendChild(meta);
+
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'support-button support-button--ghost sensation-region__toggle';
+      toggle.dataset.regionToggle = region.id;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-controls', detailsId);
+      toggle.textContent = 'Check in';
+      header.appendChild(toggle);
+
+      section.appendChild(header);
+
+      const details = document.createElement('div');
+      details.className = 'sensation-region__details';
+      details.dataset.regionDetails = region.id;
+      details.hidden = true;
+      details.id = detailsId;
+      details.setAttribute('aria-hidden', 'true');
+
+      if (region.prompt) {
+        const prompt = document.createElement('p');
+        prompt.className = 'sensation-region__prompt support-note support-note--subtle';
+        prompt.textContent = region.prompt;
+        details.appendChild(prompt);
+      }
+
+      const instructions = document.createElement('p');
+      instructions.className = 'sensation-region__instructions support-note support-note--subtle';
+      instructions.textContent = 'Tap the sensation that fits. A 0–10 slider will appear after you choose.';
+      details.appendChild(instructions);
+
+      const optionsContainer = document.createElement('div');
+      optionsContainer.className = 'sensation-region__options';
+      details.appendChild(optionsContainer);
+
+      region.options.forEach((option) => {
+        const optionWrapper = document.createElement('div');
+        optionWrapper.className = 'sensation-option';
+        optionWrapper.dataset.sensationOption = option.id;
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'chip chip--stacked';
+        button.dataset.sensation = option.id;
+        button.setAttribute('aria-pressed', 'false');
+        button.setAttribute('aria-label', `${region.label}: ${option.title}`);
+
+        const buttonTitle = document.createElement('span');
+        buttonTitle.className = 'chip__title';
+        buttonTitle.textContent = option.title;
+        button.appendChild(buttonTitle);
+
+        if (option.note) {
+          const note = document.createElement('span');
+          note.className = 'chip__note';
+          note.textContent = option.note;
+          button.appendChild(note);
+        }
+
+        optionWrapper.appendChild(button);
+
+        const intensity = document.createElement('div');
+        intensity.className = 'sensation-intensity';
+        intensity.dataset.sensationIntensityContainer = option.id;
+        intensity.hidden = true;
+        const sliderId = `sensation-${option.id}-intensity`;
+        const defaultValue = clampIntensityValue(option.defaultIntensity ?? SENSATION_DEFAULT_INTENSITY);
+
+        const label = document.createElement('label');
+        label.className = 'sensation-intensity__label';
+        label.setAttribute('for', sliderId);
+        label.textContent = 'Intensity (0–10)';
+        const valueDisplay = document.createElement('span');
+        valueDisplay.className = 'sensation-intensity__value';
+        valueDisplay.dataset.intensityOutput = option.id;
+        valueDisplay.textContent = String(defaultValue);
+        label.appendChild(valueDisplay);
+        intensity.appendChild(label);
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.className = 'sensation-intensity__slider';
+        slider.id = sliderId;
+        slider.name = sliderId;
+        slider.min = '0';
+        slider.max = '10';
+        slider.step = '1';
+        slider.value = String(defaultValue);
+        slider.dataset.sensationIntensity = option.id;
+        slider.disabled = true;
+        slider.setAttribute('aria-label', `${option.title} intensity (0 to 10)`);
+        intensity.appendChild(slider);
+
+        const scale = document.createElement('div');
+        scale.className = 'sensation-intensity__scale';
+        const minLabel = document.createElement('span');
+        minLabel.textContent = '0';
+        const maxLabel = document.createElement('span');
+        maxLabel.textContent = '10';
+        scale.appendChild(minLabel);
+        scale.appendChild(maxLabel);
+        intensity.appendChild(scale);
+
+        optionWrapper.appendChild(intensity);
+        optionsContainer.appendChild(optionWrapper);
+
+        sensationOptionElements.set(option.id, {
+          wrapper: optionWrapper,
+          button,
+          slider,
+          output: valueDisplay,
+          defaultValue,
+          regionId: region.id,
+          intensity,
+        });
+      });
+
+      const closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.className = 'support-button support-button--ghost sensation-region__close';
+      closeButton.dataset.regionClose = region.id;
+      closeButton.textContent = 'Done with this area';
+      details.appendChild(closeButton);
+
+      section.appendChild(details);
+      container.appendChild(section);
+
+      regionElements.set(region.id, {
+        element: section,
+        summary,
+        label: region.label,
+        toggle,
+        details,
+        defaultSummary,
+      });
+    });
+  }
+
+  function collapseRegion(regionId, { returnFocus = false } = {}) {
+    const region = regionElements.get(regionId);
+    if (!region) return;
+    region.element?.classList.remove('sensation-region--open');
+    region.element?.classList.remove('sensation-region--scan-active');
+    if (region.details) {
+      region.details.hidden = true;
+      region.details.setAttribute('aria-hidden', 'true');
+    }
+    if (region.toggle) {
+      region.toggle.setAttribute('aria-expanded', 'false');
+      if (returnFocus) {
+        try {
+          region.toggle.focus({ preventScroll: true });
+        } catch (error) {
+          // ignore focus errors
+        }
+      }
+    }
+  }
+
+  function expandRegion(regionId, { focus = false, collapseOthers = true } = {}) {
+    const region = regionElements.get(regionId);
+    if (!region) return;
+    if (collapseOthers) {
+      regionElements.forEach((_, otherId) => {
+        if (otherId !== regionId) {
+          collapseRegion(otherId);
+        }
+      });
+    }
+    if (region.details) {
+      region.details.hidden = false;
+      region.details.setAttribute('aria-hidden', 'false');
+    }
+    region.element?.classList.add('sensation-region--open');
+    if (region.toggle) {
+      region.toggle.setAttribute('aria-expanded', 'true');
+    }
+    if (focus && region.details) {
+      const selected = region.details.querySelector('[data-sensation][aria-pressed="true"]');
+      const firstButton = selected || region.details.querySelector('[data-sensation]');
+      if (firstButton) {
+        try {
+          firstButton.focus({ preventScroll: true });
+        } catch (error) {
+          // ignore focus errors
+        }
+      }
+    }
+  }
+
+  function clearScanHighlights() {
+    regionElements.forEach((region) => {
+      region.element.classList.remove('sensation-region--scan-active');
+    });
+  }
+
+  function highlightScanRegion(regionId) {
+    expandRegion(regionId, { focus: false, collapseOthers: true });
+    let target = null;
+    regionElements.forEach((region, id) => {
+      const isActive = id === regionId;
+      region.element.classList.toggle('sensation-region--scan-active', isActive);
+      if (isActive) {
+        target = region.element;
+      }
+    });
+    if (target) {
+      try {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (error) {
+        // ignore scroll errors
+      }
+    }
+  }
+
+  function updateScanUi() {
+    if (!scanControls) return;
+    if (!state.guidedScanActive) {
+      scanControls.classList.add('is-hidden');
+      clearScanHighlights();
+      return;
+    }
+
+    const total = BODY_SCAN_SEQUENCE.length;
+    if (!total) {
+      return;
+    }
+
+    if (state.guidedScanIndex < 0) {
+      state.guidedScanIndex = 0;
+    } else if (state.guidedScanIndex >= total) {
+      state.guidedScanIndex = total - 1;
+    }
+
+    scanControls.classList.remove('is-hidden');
+    const regionId = BODY_SCAN_SEQUENCE[state.guidedScanIndex];
+    highlightScanRegion(regionId);
+
+    const regionMeta = regionElements.get(regionId);
+    if (scanStatus) {
+      const label = regionMeta?.label || 'this area';
+      scanStatus.textContent = `Focusing on ${label} (${state.guidedScanIndex + 1} of ${total}).`;
+    }
+    if (scanPrompt) {
+      const prompt = BODY_REGIONS.find((item) => item.id === regionId)?.prompt || '';
+      scanPrompt.textContent = prompt;
+    }
+    if (scanBackButton) {
+      scanBackButton.disabled = state.guidedScanIndex <= 0;
+    }
+    if (scanNextButton) {
+      scanNextButton.textContent = state.guidedScanIndex >= total - 1 ? 'Finish scan' : 'Next area';
+    }
+  }
+
+  function startGuidedScan() {
+    if (!BODY_SCAN_SEQUENCE.length) {
+      return;
+    }
+    state.guidedScanActive = true;
+    state.guidedScanStarted = true;
+    state.guidedScanIndex = 0;
+    if (scanStartButton) {
+      scanStartButton.textContent = 'Restart scan';
+    }
+    updateScanUi();
+  }
+
+  function finishGuidedScan({ completed = false } = {}) {
+    if (scanStatus) {
+      scanStatus.textContent = completed
+        ? 'Scan complete. Choose any areas that still want attention.'
+        : 'Scan paused. Restart whenever you want more guidance.';
+    }
+    state.guidedScanActive = false;
+    state.guidedScanIndex = -1;
+    clearScanHighlights();
+    if (scanControls) {
+      scanControls.classList.add('is-hidden');
+    }
+    if (scanPrompt) {
+      scanPrompt.textContent = '';
+    }
+  }
+
+  function moveGuidedScan(step) {
+    if (!state.guidedScanActive) {
+      return;
+    }
+    state.guidedScanIndex += step;
+    updateScanUi();
+  }
+
+  function handleScanStart() {
+    if (state.guidedScanActive) {
+      state.guidedScanIndex = 0;
+      updateScanUi();
+      return;
+    }
+    startGuidedScan();
+  }
+
+  function handleScanBack() {
+    moveGuidedScan(-1);
+  }
+
+  function handleScanNext() {
+    if (!state.guidedScanActive) {
+      startGuidedScan();
+      return;
+    }
+    if (state.guidedScanIndex >= BODY_SCAN_SEQUENCE.length - 1) {
+      finishGuidedScan({ completed: true });
+    } else {
+      moveGuidedScan(1);
+    }
+  }
+
+  function handleScanFinish() {
+    finishGuidedScan({ completed: true });
+  }
+
+  function restoreSensationSelections(serialized) {
+    if (!Array.isArray(serialized) || !serialized.length) {
+      sensationOptionElements.forEach((_, optionId) => {
+        setSensationState(optionId, false, { skipDraft: true });
+      });
+      return;
+    }
+    const intensityMap = new Map();
+    serialized.forEach((entry) => {
+      if (typeof entry !== 'string') return;
+      const [id, raw] = entry.split(':');
+      if (!id || !BODY_SENSATION_OPTIONS.has(id)) return;
+      intensityMap.set(id, clampIntensityValue(Number(raw)));
+    });
+    sensationOptionElements.forEach((_, optionId) => {
+      if (!intensityMap.has(optionId)) {
+        setSensationState(optionId, false, { skipDraft: true });
+        return;
+      }
+      const value = intensityMap.get(optionId);
+      setSensationState(optionId, true, { skipDraft: true });
+      syncSensationIntensity(optionId, value);
+      const option = BODY_SENSATION_OPTIONS.get(optionId);
+      if (option) {
+        updateRegionSummary(option.regionId);
+      }
+    });
   }
 
   function computeQuadrant(energy, valence) {
@@ -1490,7 +2292,8 @@
       return;
     }
     const data = gatherSupportJournalData();
-    const sensations = getSelectedSensations(sensationChips);
+    const selections = getSelectedSensations();
+    const sensations = serializeSensationSelections(selections);
     const hasContent =
       data.notes.trim().length > 0 ||
       data.emotion ||
@@ -1567,6 +2370,11 @@
     if (typeof draft.valence === 'number') {
       state.valenceValue = draft.valence;
     }
+    if (Array.isArray(draft.sensations)) {
+      restoreSensationSelections(draft.sensations);
+    } else {
+      restoreSensationSelections([]);
+    }
     if (draft.notes) {
       journalStatus.textContent = 'Draft restored. Save when you are ready.';
     }
@@ -1612,6 +2420,9 @@
       mergedNeeds.push(label);
     });
 
+    const selections = getSelectedSensations();
+    const serializedSensations = serializeSensationSelections(selections);
+
     const entry = createLaneEntry({
       emotion: emotionValue,
       intensity: data.intensity,
@@ -1619,7 +2430,7 @@
       notes: trimmedNotes,
       energy: Number.isFinite(state.energyValue) ? state.energyValue : undefined,
       valence: Number.isFinite(state.valenceValue) ? state.valenceValue : undefined,
-      sensations: getSelectedSensations(sensationChips),
+      sensations: serializedSensations,
       needs: mergedNeeds,
       source: 'lane',
     });
@@ -1777,13 +2588,23 @@
     breathingStart?.addEventListener('click', startBreathing);
     breathingSkip?.addEventListener('click', skipBreathing);
 
+    if (sensationRegionList) {
+      renderBodyRegions(sensationRegionList);
+      sensationRegionList.addEventListener('click', handleSensationChoiceClick);
+      sensationRegionList.addEventListener('input', handleSensationIntensityInput);
+    }
+
     const sensationSubmit = document.querySelector('[data-action="sensation-submit"]');
     const sensationClear = document.querySelector('[data-action="sensation-clear"]');
     const sensationNext = document.querySelector('[data-action="sensation-next"]');
-    sensationChips?.addEventListener('click', handleSensationChipClick);
     sensationSubmit?.addEventListener('click', handleSensationSubmit);
     sensationClear?.addEventListener('click', handleSensationClear);
     sensationNext?.addEventListener('click', handleSensationSkip);
+
+    scanStartButton?.addEventListener('click', handleScanStart);
+    scanBackButton?.addEventListener('click', handleScanBack);
+    scanNextButton?.addEventListener('click', handleScanNext);
+    scanFinishButton?.addEventListener('click', handleScanFinish);
 
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 
@@ -1837,7 +2658,7 @@
     renderSuggestionBlock(
       bodySuggestions,
       'Body-based matches',
-      'Your body-based matches will appear here after you choose sensations.',
+      'Body-based matches will appear here after you choose sensations and set their intensity.',
       []
     );
     renderSuggestionBlock(
