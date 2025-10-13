@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-labelledby="title desc">
+  <title id="title">NeedShare Home Screen Icon</title>
+  <desc id="desc">Rounded square backdrop with three arched doorways in plum, rose, and mint.</desc>
+  <rect width="24" height="24" rx="4" fill="#FBF7FF"/>
+  <path d="M6 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#5f65b5"/>
+  <path d="M12 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#e19bd9"/>
+  <path d="M18 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#8fe1b5"/>
+</svg>

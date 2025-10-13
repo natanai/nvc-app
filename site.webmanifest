@@ -1,0 +1,17 @@
+{
+  "name": "NeedShare",
+  "short_name": "NeedShare",
+  "description": "Explore situations, feelings, and needs with NeedShare Explorer.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FBF7FF",
+  "theme_color": "#7E5CFF",
+  "icons": [
+    {
+      "src": "icons/needshare-touch.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
