@@ -5390,10 +5390,41 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 }
 
 .feeling-inference__cue-intensity {
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.6rem;
   font-size: 0.9rem;
-  font-style: italic;
   color: color-mix(in srgb, var(--ink) 65%, transparent);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.feeling-inference__cue-intensity-label {
+  font-style: italic;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.feeling-inference__cue-intensity-meter {
+  position: relative;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--outline) 24%, transparent);
+  overflow: hidden;
+}
+
+.feeling-inference__cue-intensity-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--mint) 65%, transparent);
+}
+
+.feeling-inference__cue-intensity-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
 }
 
 .feeling-inference__cue-weight {

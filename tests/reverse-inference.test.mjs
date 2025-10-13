@@ -5,10 +5,10 @@ import { intensityBandFromWeight, buildReverseInferenceIndex } from '../scripts/
 import { EVIDENCE_REGISTRY } from '../scripts/evidence-registry.js';
 
 test('intensityBandFromWeight follows heuristic thresholds', () => {
-  assert.deepEqual(intensityBandFromWeight(1.25), [3, 10]);
-  assert.deepEqual(intensityBandFromWeight(1), [4, 10]);
-  assert.deepEqual(intensityBandFromWeight(0.85), [5, 10]);
-  assert.deepEqual(intensityBandFromWeight(0.5), [6, 10]);
+  assert.deepEqual(intensityBandFromWeight(1.25, 'high'), [5, 10]);
+  assert.deepEqual(intensityBandFromWeight(1, 'medium'), [5, 9]);
+  assert.deepEqual(intensityBandFromWeight(0.85, 'low'), [3, 7]);
+  assert.deepEqual(intensityBandFromWeight(0.5, 'high'), [8, 10]);
 });
 
 const reverseIndex = buildReverseInferenceIndex();
@@ -29,4 +29,15 @@ test('reverse index evidence keys exist in registry', () => {
       assert.ok(EVIDENCE_REGISTRY[cue.evidenceKey], `Body cue evidence missing for ${feelingKey}:${cue.optionId}`);
     });
   });
+});
+
+test('reverse index body cues carry arousal-aware intensity', () => {
+  const fearEntry = reverseIndex.fear;
+  assert.ok(fearEntry?.bodyCues?.length, 'fear cues missing');
+  const [firstCue] = fearEntry.bodyCues;
+  assert.equal(firstCue?.arousal, 'high');
+  assert.ok(
+    Array.isArray(firstCue?.intensityBand),
+    'intensity band missing from arousal-aware cue'
+  );
 });

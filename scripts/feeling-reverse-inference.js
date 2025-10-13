@@ -33,6 +33,12 @@ const SDT_LABELS = {
   relatedness: 'Relatedness',
 };
 
+const AROUSAL_LABELS = {
+  high: 'High energy',
+  medium: 'Moderate energy',
+  low: 'Low energy',
+};
+
 let reverseIndexPromise = null;
 
 function slugify(text) {
@@ -94,11 +100,71 @@ function formatZoneLabel(zoneKey) {
   return `${energyLabel} energy · ${valenceLabel}`;
 }
 
-function formatIntensityBand(band) {
+function normalizeIntensityBand(band) {
   if (!Array.isArray(band) || band.length < 2) {
+    return null;
+  }
+  const min = Number(band[0]);
+  const max = Number(band[1]);
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    return null;
+  }
+  const clampedMin = Math.max(0, Math.min(10, min));
+  const clampedMax = Math.max(clampedMin, Math.min(10, max));
+  return [Math.round(clampedMin), Math.round(clampedMax)];
+}
+
+function formatIntensityBand(band) {
+  const normalized = normalizeIntensityBand(band);
+  if (!normalized) {
     return '—';
   }
-  return `${band[0]}–${band[1]}`;
+  return `${normalized[0]}–${normalized[1]}`;
+}
+
+function describeArousal(arousal) {
+  const label = AROUSAL_LABELS[arousal];
+  return label || null;
+}
+
+function createIntensityDisplay(band, arousal) {
+  const normalized = normalizeIntensityBand(band);
+  const container = createEl('div', 'feeling-inference__cue-intensity');
+  const energyLabel = describeArousal(arousal);
+  const rangeLabel = formatIntensityBand(normalized || band);
+  const labelTextParts = ['Intensity range where people often notice it'];
+  if (energyLabel) {
+    labelTextParts.push(`(${energyLabel})`);
+  }
+  let labelText = `${labelTextParts.join(' ')}: ${rangeLabel}`;
+  if (rangeLabel !== '—') {
+    labelText += '/10';
+  }
+  container.appendChild(createEl('div', 'feeling-inference__cue-intensity-label', labelText));
+
+  if (!normalized) {
+    return container;
+  }
+
+  const [min, max] = normalized;
+  const meter = createEl('div', 'feeling-inference__cue-intensity-meter');
+  meter.setAttribute('role', 'img');
+  meter.setAttribute('aria-label', `Intensity range ${min} to ${max} on a 0 to 10 scale.`);
+  const fill = createEl('div', 'feeling-inference__cue-intensity-fill');
+  const startPercent = Math.max(0, Math.min(100, (min / 10) * 100));
+  const endPercent = Math.max(startPercent, Math.min(100, (max / 10) * 100));
+  const widthPercent = Math.min(100 - startPercent, Math.max(4, endPercent - startPercent));
+  fill.style.left = `${startPercent}%`;
+  fill.style.width = `${widthPercent}%`;
+  meter.appendChild(fill);
+  container.appendChild(meter);
+
+  const scale = createEl('div', 'feeling-inference__cue-intensity-scale');
+  scale.appendChild(createEl('span', null, '0'));
+  scale.appendChild(createEl('span', null, '10'));
+  container.appendChild(scale);
+
+  return container;
 }
 
 function createEl(tag, className, text) {
@@ -146,7 +212,7 @@ function buildBodyCueSection(entry) {
   const disclaimer = createEl(
     'p',
     'feeling-inference__disclaimer',
-    'Cues are invitations, not rules; people differ.'
+    'Cues are invitations, not rules; people differ. Intensity bars show how strong the feeling (0–10) usually needs to register before folks notice a cue.'
   );
   section.appendChild(heading);
   section.appendChild(disclaimer);
@@ -165,11 +231,7 @@ function buildBodyCueSection(entry) {
       if (cue.note) {
         item.appendChild(createEl('p', 'feeling-inference__cue-note', cue.note));
       }
-      const intensity = createEl(
-        'p',
-        'feeling-inference__cue-intensity',
-        `Intensity that often helps you notice it: ${formatIntensityBand(cue.intensityBand)}`
-      );
+      const intensity = createIntensityDisplay(cue.intensityBand, cue.arousal);
       item.appendChild(intensity);
       const weight = createEl('div', 'feeling-inference__cue-weight');
       weight.setAttribute('role', 'img');
