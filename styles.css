@@ -2419,6 +2419,10 @@ body.has-support-journal-open {
   box-shadow: 0 12px 0 var(--shadow);
 }
 
+.inventory-summary__item[hidden] {
+  display: none !important;
+}
+
 .inventory-summary__item--ready {
   background: rgba(150, 251, 199, 0.85);
 }
