@@ -219,10 +219,27 @@
       <main id="main" class="page" role="main" data-page-id="inventory-journal">
         
       <header class="page-header journal-page-header">
-        <h1 class="page-title journal-page-title">
-          <img src="../../icons/journal-32bit.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
-          Journal
-        </h1>
+        <div class="journal-page-title-row">
+          <h1 class="page-title journal-page-title">
+            <img src="../../icons/journal-32bit.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
+            Journal
+          </h1>
+          <div class="journal-page-title-row__actions">
+            <button
+              type="button"
+              class="journal-fullscreen-button journal-fullscreen-button--spotlight"
+              data-support-journal-open
+              aria-expanded="false"
+              aria-controls="global-support-journal-layer"
+            >
+              <span class="journal-fullscreen-button__icon" aria-hidden="true"></span>
+              <span class="journal-fullscreen-button__text">
+                <span class="journal-fullscreen-button__title">Open full screen journal</span>
+                <span>Capture entries from anywhere in the app.</span>
+              </span>
+            </button>
+          </div>
+        </div>
         <p class="page-description journal-page-description">
           Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or
           export them when you're ready.
@@ -242,17 +259,19 @@
           <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
         </section>
 
-        <section class="journal-form-section" aria-labelledby="journal-form-heading">
-          <div class="journal-form-section__header">
-            <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
-            <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
-          </div>
-          <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
-            <noscript>
-              <p class="journal-status">Enable JavaScript to use the journal form.</p>
-            </noscript>
-          </div>
-        </section>
+        <div class="journal-inline-container" data-journal-inline-container>
+          <section class="journal-form-section" aria-labelledby="journal-form-heading">
+            <div class="journal-form-section__header">
+              <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
+              <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+            </div>
+            <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
+              <noscript>
+                <p class="journal-status">Enable JavaScript to use the journal form.</p>
+              </noscript>
+            </div>
+          </section>
+        </div>
 
         <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
           <div class="journal-summary__header">
