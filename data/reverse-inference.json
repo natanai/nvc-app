@@ -1,0 +1,2602 @@
+{
+  "anxiety": {
+    "zones": [
+      "high-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-tight",
+        "title": "Tight or constricted",
+        "note": "Band squeezing, armor, or breath held high",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "chest-tight"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "chest-pounding"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-restless",
+        "title": "Restless or fidgety",
+        "note": "Urge to pace, bounce, or shake",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "limbs-restless"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-rolling",
+        "title": "Rolling or fluttering",
+        "note": "Butterflies, swirls, churning movement",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "gut-rolling"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-buzzing",
+        "title": "Buzzing or static",
+        "note": "Quick thoughts, humming energy",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "head-buzzing"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-braced",
+        "title": "Lifted or braced",
+        "note": "Raised, ready to act, armor-like",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "shoulders-braced"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-chill",
+        "title": "Chill or cold rush",
+        "note": "Goosebumps, cold core, shivers",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "temp-chill"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-prickly",
+        "title": "Prickly or sweaty skin",
+        "note": "Prickles, sudden sweat, tingling heat",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "temp-prickly"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-nausea",
+        "title": "Nausea or queasy",
+        "note": "Churned up, unsettled, urge to vomit",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "gut-nausea"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-dry",
+        "title": "Dry or closed off",
+        "note": "Scratchy, hard to speak, voice fades",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "throat-dry"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-tremble",
+        "title": "Tremble or quiver",
+        "note": "Jaw shaking, lips or hands quivering",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "jaw-tremble"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-floating",
+        "title": "Floating or unreal",
+        "note": "Drifting, spaced out, not quite here",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "overall-floating"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-tight",
+        "title": "Tight or gripped",
+        "note": "Squeezing band, hard to swallow",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "throat-tight"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-high",
+      "emotion-anxiety",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "chest-tight",
+      "chest-pounding",
+      "limbs-restless",
+      "gut-rolling",
+      "head-buzzing",
+      "shoulders-braced",
+      "temp-chill",
+      "temp-prickly",
+      "gut-nausea",
+      "throat-dry",
+      "jaw-tremble",
+      "overall-floating",
+      "throat-tight"
+    ]
+  },
+  "fear": {
+    "zones": [
+      "high-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-chill",
+        "title": "Chill or cold rush",
+        "note": "Goosebumps, cold core, shivers",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.14,
+        "evidenceKey": "temp-chill"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-tight",
+        "title": "Tight or constricted",
+        "note": "Band squeezing, armor, or breath held high",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "chest-tight"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "chest-pounding"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-nausea",
+        "title": "Nausea or queasy",
+        "note": "Churned up, unsettled, urge to vomit",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "gut-nausea"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-tremble",
+        "title": "Tremble or quiver",
+        "note": "Jaw shaking, lips or hands quivering",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "jaw-tremble"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-dry",
+        "title": "Dry or closed off",
+        "note": "Scratchy, hard to speak, voice fades",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.12,
+        "evidenceKey": "throat-dry"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-braced",
+        "title": "Lifted or braced",
+        "note": "Raised, ready to act, armor-like",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.11,
+        "evidenceKey": "shoulders-braced"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-tingly",
+        "title": "Tingly or sparkly",
+        "note": "Buzzing skin, energetic tingles",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.11,
+        "evidenceKey": "limbs-tingly"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Security",
+          "slug": "security"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-high",
+      "emotion-fear",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "temp-chill",
+      "chest-tight",
+      "chest-pounding",
+      "gut-nausea",
+      "jaw-tremble",
+      "throat-dry",
+      "shoulders-braced",
+      "limbs-tingly"
+    ]
+  },
+  "anger": {
+    "zones": [
+      "high-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-clench",
+        "title": "Clenched or grinding",
+        "note": "Teeth locked, fists tight, rigid tongue",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.22,
+        "evidenceKey": "jaw-clench"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-flush",
+        "title": "Flush of heat",
+        "note": "Cheeks glowing, warmth rushing outward",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.2,
+        "evidenceKey": "temp-flush"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-heat",
+        "title": "Heat or flush",
+        "note": "Warm cheeks, heat pooling in jaw",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.19,
+        "evidenceKey": "jaw-heat"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-tight",
+        "title": "Tight or constricted",
+        "note": "Band squeezing, armor, or breath held high",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "chest-tight"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-braced",
+        "title": "Lifted or braced",
+        "note": "Raised, ready to act, armor-like",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.14,
+        "evidenceKey": "shoulders-braced"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "chest-pounding"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Respect",
+          "slug": "respect"
+        },
+        {
+          "title": "Fairness",
+          "slug": "fairness"
+        },
+        {
+          "title": "Justice",
+          "slug": "justice"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-high",
+      "emotion-anger",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "jaw-clench",
+      "temp-flush",
+      "jaw-heat",
+      "chest-tight",
+      "shoulders-braced",
+      "chest-pounding"
+    ]
+  },
+  "overwhelm": {
+    "zones": [
+      "high-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-pressure",
+        "title": "Pressure or band",
+        "note": "Helmet feeling, squeezing temples",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.11,
+        "evidenceKey": "head-pressure"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-tight",
+        "title": "Tight or constricted",
+        "note": "Band squeezing, armor, or breath held high",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "chest-tight"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-floating",
+        "title": "Floating or unreal",
+        "note": "Drifting, spaced out, not quite here",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "overall-floating"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-tremble",
+        "title": "Tremble or quiver",
+        "note": "Jaw shaking, lips or hands quivering",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "jaw-tremble"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-weighted",
+        "title": "Weighted or burdened",
+        "note": "Heavy load, sagging posture, tight knots",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "shoulders-weighted"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-nausea",
+        "title": "Nausea or queasy",
+        "note": "Churned up, unsettled, urge to vomit",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "gut-nausea"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-fog",
+        "title": "Foggy or heavy",
+        "note": "Hard to focus, thick clouded feeling",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "head-fog"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-chill",
+        "title": "Chill or cold rush",
+        "note": "Goosebumps, cold core, shivers",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "temp-chill"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-numb",
+        "title": "Muted or numb",
+        "note": "Blank, disconnected, hard to feel",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "overall-numb"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-lump",
+        "title": "Lump or swelling",
+        "note": "Tears hovering, voice shaking, lump rising",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "throat-lump"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-buzzing",
+        "title": "Buzzing or static",
+        "note": "Quick thoughts, humming energy",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "head-buzzing"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-heavy",
+        "title": "Heavy or lead-like",
+        "note": "Hard to move, sluggish, weighted",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "limbs-heavy"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-high",
+      "emotion-overwhelm",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "head-pressure",
+      "chest-tight",
+      "overall-floating",
+      "jaw-tremble",
+      "shoulders-weighted",
+      "gut-nausea",
+      "head-fog",
+      "temp-chill",
+      "overall-numb",
+      "throat-lump",
+      "head-buzzing",
+      "limbs-heavy"
+    ]
+  },
+  "sadness": {
+    "zones": [
+      "low-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-emptiness",
+        "title": "Hollow or empty",
+        "note": "Sinking, dropping, missing center",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.11,
+        "evidenceKey": "gut-emptiness"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pressure",
+        "title": "Weighted or pressured",
+        "note": "Heavy stone, shoulders collapsing inward",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "chest-pressure"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-lump",
+        "title": "Lump or swelling",
+        "note": "Tears hovering, voice shaking, lump rising",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "throat-lump"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-tight",
+        "title": "Tight or gripped",
+        "note": "Squeezing band, hard to swallow",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "throat-tight"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-weighted",
+        "title": "Weighted or burdened",
+        "note": "Heavy load, sagging posture, tight knots",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "shoulders-weighted"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-droop",
+        "title": "Drooping or collapsed",
+        "note": "Slumped, no lift, giving way",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "shoulders-droop"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-heavy",
+        "title": "Heavy or lead-like",
+        "note": "Hard to move, sluggish, weighted",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "limbs-heavy"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-tremble",
+        "title": "Tremble or quiver",
+        "note": "Jaw shaking, lips or hands quivering",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "jaw-tremble"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-fog",
+        "title": "Foggy or heavy",
+        "note": "Hard to focus, thick clouded feeling",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "head-fog"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-chill",
+        "title": "Chill or cold rush",
+        "note": "Goosebumps, cold core, shivers",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "temp-chill"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-floating",
+        "title": "Floating or unreal",
+        "note": "Drifting, spaced out, not quite here",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "relativeWeight": 0.1,
+        "evidenceKey": "overall-floating"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Empathy",
+          "slug": "empathy"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-low",
+      "emotion-sadness",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "gut-emptiness",
+      "chest-pressure",
+      "throat-lump",
+      "throat-tight",
+      "shoulders-weighted",
+      "shoulders-droop",
+      "limbs-heavy",
+      "jaw-tremble",
+      "head-fog",
+      "temp-chill",
+      "overall-floating"
+    ]
+  },
+  "grief": {
+    "zones": [
+      "low-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pressure",
+        "title": "Weighted or pressured",
+        "note": "Heavy stone, shoulders collapsing inward",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.22,
+        "evidenceKey": "chest-pressure"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-emptiness",
+        "title": "Hollow or empty",
+        "note": "Sinking, dropping, missing center",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.22,
+        "evidenceKey": "gut-emptiness"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-lump",
+        "title": "Lump or swelling",
+        "note": "Tears hovering, voice shaking, lump rising",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.22,
+        "evidenceKey": "throat-lump"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-tight",
+        "title": "Tight or gripped",
+        "note": "Squeezing band, hard to swallow",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.18,
+        "evidenceKey": "throat-tight"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-droop",
+        "title": "Drooping or collapsed",
+        "note": "Slumped, no lift, giving way",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.16,
+        "evidenceKey": "shoulders-droop"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Community",
+          "slug": "community"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Honor",
+          "slug": "honor"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-low",
+      "emotion-grief",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "chest-pressure",
+      "gut-emptiness",
+      "throat-lump",
+      "throat-tight",
+      "shoulders-droop"
+    ]
+  },
+  "stress": {
+    "zones": [
+      "high-unpleasant",
+      "medium-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-weighted",
+        "title": "Weighted or burdened",
+        "note": "Heavy load, sagging posture, tight knots",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.2,
+        "evidenceKey": "shoulders-weighted"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-pressure",
+        "title": "Pressure or band",
+        "note": "Helmet feeling, squeezing temples",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.19,
+        "evidenceKey": "head-pressure"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pressure",
+        "title": "Weighted or pressured",
+        "note": "Heavy stone, shoulders collapsing inward",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.17,
+        "evidenceKey": "chest-pressure"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-nausea",
+        "title": "Nausea or queasy",
+        "note": "Churned up, unsettled, urge to vomit",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "gut-nausea"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-clench",
+        "title": "Clenched or grinding",
+        "note": "Teeth locked, fists tight, rigid tongue",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "jaw-clench"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-prickly",
+        "title": "Prickly or sweaty skin",
+        "note": "Prickles, sudden sweat, tingling heat",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.14,
+        "evidenceKey": "temp-prickly"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Reliability",
+          "slug": "reliability"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-high",
+      "emotion-stress",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "shoulders-weighted",
+      "head-pressure",
+      "chest-pressure",
+      "gut-nausea",
+      "jaw-clench",
+      "temp-prickly"
+    ]
+  },
+  "guilt": {
+    "zones": [
+      "medium-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-weighted",
+        "title": "Weighted or burdened",
+        "note": "Heavy load, sagging posture, tight knots",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.41,
+        "evidenceKey": "shoulders-weighted"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pressure",
+        "title": "Weighted or pressured",
+        "note": "Heavy stone, shoulders collapsing inward",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.33,
+        "evidenceKey": "chest-pressure"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-heat",
+        "title": "Heat or flush",
+        "note": "Warm cheeks, heat pooling in jaw",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "relativeWeight": 0.26,
+        "evidenceKey": "jaw-heat"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Accountability",
+          "slug": "accountability"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        },
+        {
+          "title": "Honesty",
+          "slug": "honesty"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "slow_446"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-medium",
+      "emotion-guilt",
+      "skill-labeling",
+      "skill-slow_446",
+      "shoulders-weighted",
+      "chest-pressure",
+      "jaw-heat"
+    ]
+  },
+  "excitement": {
+    "zones": [
+      "high-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-tingly",
+        "title": "Tingly or sparkly",
+        "note": "Buzzing skin, energetic tingles",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.16,
+        "evidenceKey": "limbs-tingly"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "chest-pounding"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-restless",
+        "title": "Restless or fidgety",
+        "note": "Urge to pace, bounce, or shake",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "limbs-restless"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-flush",
+        "title": "Flush of heat",
+        "note": "Cheeks glowing, warmth rushing outward",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "temp-flush"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-rolling",
+        "title": "Rolling or fluttering",
+        "note": "Butterflies, swirls, churning movement",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "gut-rolling"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-buzzing",
+        "title": "Buzzing or static",
+        "note": "Quick thoughts, humming energy",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "head-buzzing"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-prickly",
+        "title": "Prickly or sweaty skin",
+        "note": "Prickles, sudden sweat, tingling heat",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "temp-prickly"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "competence",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-high",
+      "emotion-excitement",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "limbs-tingly",
+      "chest-pounding",
+      "limbs-restless",
+      "temp-flush",
+      "gut-rolling",
+      "head-buzzing",
+      "temp-prickly"
+    ]
+  },
+  "anticipation": {
+    "zones": [
+      "high-neutral"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-tingly",
+        "title": "Tingly or sparkly",
+        "note": "Buzzing skin, energetic tingles",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.17,
+        "evidenceKey": "limbs-tingly"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-restless",
+        "title": "Restless or fidgety",
+        "note": "Urge to pace, bounce, or shake",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.16,
+        "evidenceKey": "limbs-restless"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.14,
+        "evidenceKey": "chest-pounding"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-rolling",
+        "title": "Rolling or fluttering",
+        "note": "Butterflies, swirls, churning movement",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.14,
+        "evidenceKey": "gut-rolling"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-prickly",
+        "title": "Prickly or sweaty skin",
+        "note": "Prickles, sudden sweat, tingling heat",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.14,
+        "evidenceKey": "temp-prickly"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-buzzing",
+        "title": "Buzzing or static",
+        "note": "Quick thoughts, humming energy",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "head-buzzing"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-dry",
+        "title": "Dry or closed off",
+        "note": "Scratchy, hard to speak, voice fades",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.11,
+        "evidenceKey": "throat-dry"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Predictability",
+          "slug": "predictability"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-neutral-high",
+      "emotion-anticipation",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "limbs-tingly",
+      "limbs-restless",
+      "chest-pounding",
+      "gut-rolling",
+      "temp-prickly",
+      "head-buzzing",
+      "throat-dry"
+    ]
+  },
+  "calm": {
+    "zones": [
+      "low-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-calm",
+        "title": "Grounded or calm",
+        "note": "Steady, anchored, peacefully present",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.37,
+        "evidenceKey": "overall-calm"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-open",
+        "title": "Open, warm, or expansive",
+        "note": "Soft chest, easy breathing, gentle warmth",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.34,
+        "evidenceKey": "chest-open"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-warm",
+        "title": "Settled or warm",
+        "note": "Grounded fullness, gentle ease",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.29,
+        "evidenceKey": "gut-warm"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-low",
+      "emotion-calm",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "overall-calm",
+      "chest-open",
+      "gut-warm"
+    ]
+  },
+  "relief": {
+    "zones": [
+      "low-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-open",
+        "title": "Open, warm, or expansive",
+        "note": "Soft chest, easy breathing, gentle warmth",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "chest-open"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-calm",
+        "title": "Grounded or calm",
+        "note": "Steady, anchored, peacefully present",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "overall-calm"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-low",
+      "emotion-relief",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "chest-open",
+      "overall-calm"
+    ]
+  },
+  "joy": {
+    "zones": [
+      "high-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-open",
+        "title": "Open, warm, or expansive",
+        "note": "Soft chest, easy breathing, gentle warmth",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "chest-open"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-tingly",
+        "title": "Tingly or sparkly",
+        "note": "Buzzing skin, energetic tingles",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "limbs-tingly"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "competence",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-high",
+      "emotion-joy",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "chest-open",
+      "limbs-tingly"
+    ]
+  },
+  "gratitude": {
+    "zones": [
+      "medium-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-calm",
+        "title": "Grounded or calm",
+        "note": "Steady, anchored, peacefully present",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.36,
+        "evidenceKey": "overall-calm"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-open",
+        "title": "Open, warm, or expansive",
+        "note": "Soft chest, easy breathing, gentle warmth",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.32,
+        "evidenceKey": "chest-open"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-warm",
+        "title": "Settled or warm",
+        "note": "Grounded fullness, gentle ease",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.32,
+        "evidenceKey": "gut-warm"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Mutuality",
+          "slug": "mutuality"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "slow_446"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-medium",
+      "emotion-gratitude",
+      "skill-labeling",
+      "skill-slow_446",
+      "overall-calm",
+      "chest-open",
+      "gut-warm"
+    ]
+  },
+  "worry": {
+    "zones": [
+      "medium-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-rolling",
+        "title": "Rolling or fluttering",
+        "note": "Butterflies, swirls, churning movement",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "gut-rolling"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-pressure",
+        "title": "Pressure or band",
+        "note": "Helmet feeling, squeezing temples",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "head-pressure"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Predictability",
+          "slug": "predictability"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "slow_446"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-medium",
+      "emotion-worry",
+      "skill-labeling",
+      "skill-slow_446",
+      "gut-rolling",
+      "head-pressure"
+    ]
+  },
+  "lonely": {
+    "zones": [
+      "low-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-emptiness",
+        "title": "Hollow or empty",
+        "note": "Sinking, dropping, missing center",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "gut-emptiness"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-lump",
+        "title": "Lump or swelling",
+        "note": "Tears hovering, voice shaking, lump rising",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "throat-lump"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Closeness",
+          "slug": "closeness"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-low",
+      "emotion-lonely",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "gut-emptiness",
+      "throat-lump"
+    ]
+  },
+  "numb": {
+    "zones": [
+      "low-neutral"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-numb",
+        "title": "Muted or numb",
+        "note": "Blank, disconnected, hard to feel",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.23,
+        "evidenceKey": "overall-numb"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-heavy",
+        "title": "Heavy or lead-like",
+        "note": "Hard to move, sluggish, weighted",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.18,
+        "evidenceKey": "limbs-heavy"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-fog",
+        "title": "Foggy or heavy",
+        "note": "Hard to focus, thick clouded feeling",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.16,
+        "evidenceKey": "head-fog"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-droop",
+        "title": "Drooping or collapsed",
+        "note": "Slumped, no lift, giving way",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "shoulders-droop"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-floating",
+        "title": "Floating or unreal",
+        "note": "Drifting, spaced out, not quite here",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.15,
+        "evidenceKey": "overall-floating"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-emptiness",
+        "title": "Hollow or empty",
+        "note": "Sinking, dropping, missing center",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.13,
+        "evidenceKey": "gut-emptiness"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Empathy",
+          "slug": "empathy"
+        },
+        {
+          "title": "Safety",
+          "slug": "safety"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-neutral-low",
+      "emotion-numb",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "overall-numb",
+      "limbs-heavy",
+      "head-fog",
+      "shoulders-droop",
+      "overall-floating",
+      "gut-emptiness"
+    ]
+  },
+  "hope": {
+    "zones": [
+      "medium-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-warm",
+        "title": "Settled or warm",
+        "note": "Grounded fullness, gentle ease",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 1,
+        "evidenceKey": "gut-warm"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "competence",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Empowerment",
+          "slug": "empowerment"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "slow_446"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-medium",
+      "emotion-hope",
+      "skill-labeling",
+      "skill-slow_446",
+      "gut-warm"
+    ]
+  },
+  "contentment": {
+    "zones": [
+      "medium-pleasant",
+      "low-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-calm",
+        "title": "Grounded or calm",
+        "note": "Steady, anchored, peacefully present",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.52,
+        "evidenceKey": "overall-calm"
+      },
+      {
+        "regionId": "gut",
+        "regionLabel": "Stomach or gut",
+        "optionId": "gut-warm",
+        "title": "Settled or warm",
+        "note": "Grounded fullness, gentle ease",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.48,
+        "evidenceKey": "gut-warm"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "slow_446"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-medium",
+      "emotion-contentment",
+      "skill-labeling",
+      "skill-slow_446",
+      "overall-calm",
+      "gut-warm"
+    ]
+  },
+  "shame": {
+    "zones": [
+      "medium-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-heat",
+        "title": "Heat or flush",
+        "note": "Warm cheeks, heat pooling in jaw",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.28,
+        "evidenceKey": "jaw-heat"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-flush",
+        "title": "Flush of heat",
+        "note": "Cheeks glowing, warmth rushing outward",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.28,
+        "evidenceKey": "temp-flush"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-tight",
+        "title": "Tight or gripped",
+        "note": "Squeezing band, hard to swallow",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.25,
+        "evidenceKey": "throat-tight"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-dry",
+        "title": "Dry or closed off",
+        "note": "Scratchy, hard to speak, voice fades",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "relativeWeight": 0.19,
+        "evidenceKey": "throat-dry"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Acceptance",
+          "slug": "acceptance"
+        },
+        {
+          "title": "Empathy",
+          "slug": "empathy"
+        },
+        {
+          "title": "To be seen",
+          "slug": "to-be-seen"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "slow_446"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-medium",
+      "emotion-shame",
+      "skill-labeling",
+      "skill-slow_446",
+      "jaw-heat",
+      "temp-flush",
+      "throat-tight",
+      "throat-dry"
+    ]
+  },
+  "frustration": {
+    "zones": [
+      "high-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-clench",
+        "title": "Clenched or grinding",
+        "note": "Teeth locked, fists tight, rigid tongue",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.41,
+        "evidenceKey": "jaw-clench"
+      },
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-restless",
+        "title": "Restless or fidgety",
+        "note": "Urge to pace, bounce, or shake",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.31,
+        "evidenceKey": "limbs-restless"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-heat",
+        "title": "Heat or flush",
+        "note": "Warm cheeks, heat pooling in jaw",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.28,
+        "evidenceKey": "jaw-heat"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy",
+        "relatedness"
+      ],
+      "nvc": [
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-unpleasant-high",
+      "emotion-frustration",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "jaw-clench",
+      "limbs-restless",
+      "jaw-heat"
+    ]
+  },
+  "determined": {
+    "zones": [
+      "high-neutral"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-clench",
+        "title": "Clenched or grinding",
+        "note": "Teeth locked, fists tight, rigid tongue",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "jaw-clench"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-braced",
+        "title": "Lifted or braced",
+        "note": "Raised, ready to act, armor-like",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.5,
+        "evidenceKey": "shoulders-braced"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "competence",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Accomplishment",
+          "slug": "accomplishment"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Commitment",
+          "slug": "commitment"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-neutral-high",
+      "emotion-determined",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "jaw-clench",
+      "shoulders-braced"
+    ]
+  },
+  "tired": {
+    "zones": [
+      "low-neutral",
+      "low-unpleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-heavy",
+        "title": "Heavy or lead-like",
+        "note": "Hard to move, sluggish, weighted",
+        "intensityBand": [
+          3,
+          10
+        ],
+        "relativeWeight": 0.3,
+        "evidenceKey": "limbs-heavy"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-fog",
+        "title": "Foggy or heavy",
+        "note": "Hard to focus, thick clouded feeling",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.25,
+        "evidenceKey": "head-fog"
+      },
+      {
+        "regionId": "shoulders",
+        "regionLabel": "Shoulders and upper back",
+        "optionId": "shoulders-droop",
+        "title": "Drooping or collapsed",
+        "note": "Slumped, no lift, giving way",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 0.25,
+        "evidenceKey": "shoulders-droop"
+      },
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-numb",
+        "title": "Muted or numb",
+        "note": "Blank, disconnected, hard to feel",
+        "intensityBand": [
+          5,
+          10
+        ],
+        "relativeWeight": 0.2,
+        "evidenceKey": "overall-numb"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-neutral-low",
+      "emotion-tired",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "limbs-heavy",
+      "head-fog",
+      "shoulders-droop",
+      "overall-numb"
+    ]
+  },
+  "pride": {
+    "zones": [
+      "high-pleasant"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-flush",
+        "title": "Flush of heat",
+        "note": "Cheeks glowing, warmth rushing outward",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "relativeWeight": 1,
+        "evidenceKey": "temp-flush"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "relatedness",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "physiological_sigh"
+    ],
+    "evidenceKeys": [
+      "zone-pleasant-high",
+      "emotion-pride",
+      "skill-labeling",
+      "skill-physiological_sigh",
+      "temp-flush"
+    ]
+  },
+  "bored": {
+    "zones": [
+      "low-neutral"
+    ],
+    "bodyCues": [
+      {
+        "regionId": "overall",
+        "regionLabel": "Whole-body sense",
+        "optionId": "overall-numb",
+        "title": "Muted or numb",
+        "note": "Blank, disconnected, hard to feel",
+        "intensityBand": [
+          4,
+          10
+        ],
+        "relativeWeight": 1,
+        "evidenceKey": "overall-numb"
+      }
+    ],
+    "needsHypotheses": {
+      "sdt": [
+        "competence",
+        "autonomy"
+      ],
+      "nvc": [
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Participation",
+          "slug": "participation"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        }
+      ]
+    },
+    "skills": [
+      "labeling",
+      "resonance_6bpm"
+    ],
+    "evidenceKeys": [
+      "zone-neutral-low",
+      "emotion-bored",
+      "skill-labeling",
+      "skill-resonance_6bpm",
+      "overall-numb"
+    ]
+  },
+  "_meta": {
+    "slugMap": {
+      "anxious": "anxiety",
+      "anxiety": "anxiety",
+      "sad": "sadness",
+      "lonely": "lonely",
+      "angry": "anger",
+      "enraged": "anger",
+      "antagonistic": "anger",
+      "hostile": "anger",
+      "resentful": "anger",
+      "resentment": "anger",
+      "irritated": "frustration",
+      "frustrated": "frustration",
+      "thwarted": "frustration",
+      "pressured": "stress",
+      "tense": "stress",
+      "distressed": "stress",
+      "upset": "stress",
+      "agitated": "stress",
+      "overwhelmed": "overwhelm",
+      "overwhelm": "overwhelm",
+      "fear": "fear",
+      "afraid": "fear",
+      "frightened": "fear",
+      "scared": "fear",
+      "terrified": "fear",
+      "alarmed": "fear",
+      "bewildered": "uncertain",
+      "confused": "uncertain",
+      "defiant": "determined",
+      "anxiousness": "anxiety",
+      "humiliated": "shame",
+      "embarrassed": "shame",
+      "shame": "shame",
+      "guilt": "guilt",
+      "hurt": "sadness",
+      "in-pain": "sadness",
+      "powerless": "numb",
+      "helpless": "numb",
+      "impotent": "numb",
+      "desperation": "overwhelm",
+      "jealous": "worry",
+      "tired": "tired"
+    }
+  }
+}

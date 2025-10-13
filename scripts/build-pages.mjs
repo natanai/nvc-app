@@ -1,11 +1,13 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { EMOTION_LIBRARY, FEELING_SLUG_ALIASES } from './alexithymia-support-data.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
+const FEELING_SUMMARIES = buildFeelingSummaries();
 
 const themePreloadScript = (basePath) => {
   const contrastSrc = `${basePath}assets/js/ui/contrast.js`;
@@ -626,6 +628,38 @@ function renderSituation(item) {
   writePage(`situations/${item.slug}/index.html`, html);
 }
 
+function buildFeelingSummaries() {
+  const summaries = new Map();
+
+  Object.entries(EMOTION_LIBRARY).forEach(([key, entry]) => {
+    const summary = entry?.definition?.trim();
+    if (!summary) {
+      return;
+    }
+    const keySlug = slugify(key);
+    if (keySlug && !summaries.has(keySlug)) {
+      summaries.set(keySlug, summary);
+    }
+    const nameSlug = slugify(entry?.name);
+    if (nameSlug && !summaries.has(nameSlug)) {
+      summaries.set(nameSlug, summary);
+    }
+  });
+
+  Object.entries(FEELING_SLUG_ALIASES).forEach(([rawSlug, aliasKey]) => {
+    const normalizedSlug = slugify(rawSlug);
+    if (!normalizedSlug || summaries.has(normalizedSlug)) {
+      return;
+    }
+    const aliasSlug = slugify(aliasKey);
+    if (aliasSlug && summaries.has(aliasSlug)) {
+      summaries.set(normalizedSlug, summaries.get(aliasSlug));
+    }
+  });
+
+  return summaries;
+}
+
 function renderFeeling(item) {
   const bodySignals = Array.isArray(item.bodySignals) ? item.bodySignals.filter(Boolean) : [];
   const bodyHtml = bodySignals.length
@@ -636,12 +670,30 @@ function renderFeeling(item) {
         </ul>
       </section>`
     : '';
+  const summaryText = (item.description && item.description.trim()) || FEELING_SUMMARIES.get(slugify(item.slug)) || '';
+  const descriptionHtml = summaryText
+    ? `<p class="page-description page-description--feeling">${escapeHtml(summaryText)}</p>`
+    : '';
+  const inferencePanelId = `reverse-inference-panel-${slugify(item.slug)}`;
+  const inferenceSection = `
+      <section class="feeling-inference-wrapper" data-reverse-inference-container hidden>
+        <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="${inferencePanelId}" disabled>
+          How might this feeling be inferred?
+        </button>
+        <div id="${inferencePanelId}" class="feeling-inference-panel" data-reverse-inference-panel hidden>
+          <section class="feeling-inference" data-reverse-inference hidden></section>
+        </div>
+      </section>`;
+  const needsSection = renderPillGroup('Related needs', item.needs, 'needs');
+
   const main = `
       <header class="page-header">
         <h1 class="page-title">Feeling: ${escapeHtml(item.title)}</h1>
+        ${descriptionHtml}
       </header>
+      ${needsSection}
+      ${inferenceSection}
       ${bodyHtml}
-      ${renderPillGroup('Needs', item.needs, 'needs')}
     `;
 
   const html = htmlPage({
@@ -653,7 +705,11 @@ function renderFeeling(item) {
       { label: item.title }
     ],
     main,
-    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    scripts: [
+      { src: 'scripts/magnets.js', type: 'module' },
+      { src: 'scripts/feeling-reverse-inference.js', type: 'module' },
+    ],
+    mainAttributes: ` data-feeling-slug="${escapeHtml(item.slug)}"`,
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);

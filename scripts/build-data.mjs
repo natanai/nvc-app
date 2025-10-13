@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
+import { buildReverseInferenceIndex } from './reverse-inference-index.js';
+
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA_DIR = join(ROOT, 'data');
 
@@ -170,6 +172,9 @@ const dataset = { feelings, needs, situations, strategies };
 
 writeFileSync(join(DATA_DIR, 'index.json'), JSON.stringify(dataset, null, 2));
 
+const reverseIndex = buildReverseInferenceIndex({ needs, feelings });
+writeFileSync(join(DATA_DIR, 'reverse-inference.json'), `${JSON.stringify(reverseIndex, null, 2)}\n`);
+
 const needCounts = new Map(
   needs.map((need) => [need.slug, { title: need.title, slug: need.slug, category: need.category, strategyCount: 0 }]),
 );
@@ -193,4 +198,4 @@ writeFileSync(
   `${JSON.stringify(needStrategyCounts, null, 2)}\n`,
 );
 
-console.log('Wrote data/index.json and data/need-strategy-counts.json');
+console.log('Wrote data/index.json, data/reverse-inference.json, and data/need-strategy-counts.json');

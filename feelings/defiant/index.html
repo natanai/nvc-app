@@ -216,20 +216,15 @@
           <li><a href="../../">Home</a></li><li><a href="../">Feelings</a></li><li aria-current="page">Defiant</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page" role="main"  data-feeling-slug="defiant">
         
       <header class="page-header">
         <h1 class="page-title">Feeling: Defiant</h1>
+        <p class="page-description page-description--feeling">Focused drive to push toward a goal despite challenges.</p>
       </header>
-      <section class="feeling-body" aria-labelledby="feeling-body-heading">
-        <h2 id="feeling-body-heading" class="section-title">How it may feel in your body</h2>
-        <ul class="feeling-body__list">
-          <li>Spine straightening with chin lifted high; Hands planted firmly or fists on hips; Eyes fixed in an unwavering stare</li>
-        </ul>
-      </section>
-      <section class="pill-section magnet-section" aria-labelledby="needs-heading" data-magnet-root>
+      <section class="pill-section magnet-section" aria-labelledby="related-needs-heading" data-magnet-root>
       <div class="magnet-section__header">
-        <h2 id="needs-heading" class="section-title">Needs</h2>
+        <h2 id="related-needs-heading" class="section-title">Related needs</h2>
         <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
       </div>
       <div class="magnet-board-wrapper">
@@ -245,11 +240,27 @@
         </label>
       </div>
     </section>
+      
+      <section class="feeling-inference-wrapper" data-reverse-inference-container hidden>
+        <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="reverse-inference-panel-defiant" disabled>
+          How might this feeling be inferred?
+        </button>
+        <div id="reverse-inference-panel-defiant" class="feeling-inference-panel" data-reverse-inference-panel hidden>
+          <section class="feeling-inference" data-reverse-inference hidden></section>
+        </div>
+      </section>
+      <section class="feeling-body" aria-labelledby="feeling-body-heading">
+        <h2 id="feeling-body-heading" class="section-title">How it may feel in your body</h2>
+        <ul class="feeling-body__list">
+          <li>Spine straightening with chin lifted high; Hands planted firmly or fists on hips; Eyes fixed in an unwavering stare</li>
+        </ul>
+      </section>
     
       </main>
     </div>
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/feeling-reverse-inference.js" type="module"></script>
   </body>
 </html>
