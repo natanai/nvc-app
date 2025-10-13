@@ -1049,6 +1049,204 @@ body.has-support-journal-open {
   justify-content: flex-start;
 }
 
+.sensation-scan {
+  margin: 1rem 0 1.5rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sensation-scan__controls {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid color-mix(in srgb, var(--outline) 28%, transparent);
+  background: color-mix(in srgb, var(--mint) 18%, #ffffff 82%);
+}
+
+.sensation-scan__controls.is-hidden {
+  display: none;
+}
+
+.sensation-scan__status {
+  margin: 0;
+}
+
+.sensation-scan__prompt {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.sensation-scan__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sensation-region-list {
+  display: grid;
+  gap: clamp(1rem, 2.6vw, 1.6rem);
+  margin-top: 1.25rem;
+}
+
+.sensation-region {
+  display: grid;
+  gap: 0.5rem;
+  padding: clamp(0.85rem, 2.4vw, 1.25rem);
+  border-radius: var(--radius-xl);
+  border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
+  background: color-mix(in srgb, var(--lavender) 12%, #ffffff 88%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sensation-region--scan-active {
+  border-color: color-mix(in srgb, var(--rose) 62%, var(--outline) 38%);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rose) 18%, transparent);
+}
+
+.sensation-region--open {
+  border-color: color-mix(in srgb, var(--mint) 58%, var(--outline) 42%);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.sensation-region__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.sensation-region__meta {
+  display: grid;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: min(240px, 100%);
+}
+
+.sensation-region__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.sensation-region__summary {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.sensation-region__summary[data-has-selection='true'] {
+  color: var(--ink);
+}
+
+
+.sensation-region__toggle {
+  align-self: flex-start;
+  margin-left: auto;
+}
+
+.sensation-region__toggle[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--mint) 35%, #ffffff 65%);
+  color: var(--ink);
+}
+
+.sensation-region__prompt {
+  margin: 0;
+  color: color-mix(in srgb, var(--ink) 72%, var(--ink-soft) 28%);
+  font-size: 0.95rem;
+}
+
+.sensation-region__details {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed color-mix(in srgb, var(--outline) 28%, transparent);
+}
+
+.sensation-region__details[hidden] {
+  display: none;
+}
+
+.sensation-region__instructions {
+  margin: 0;
+}
+
+.sensation-region__options {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 720px) {
+  .sensation-region__options {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+.sensation-option {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--mint) 12%, transparent);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sensation-option.is-selected {
+  background: color-mix(in srgb, var(--mint) 35%, transparent);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.sensation-option .chip {
+  width: 100%;
+  max-width: none;
+}
+
+.sensation-intensity[hidden] {
+  display: none;
+}
+
+.sensation-intensity {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sensation-intensity__label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sensation-intensity__slider {
+  width: 100%;
+}
+
+.sensation-intensity__slider:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sensation-intensity__value {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sensation-intensity__scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.sensation-region__close {
+  justify-self: start;
+}
+
 .compass-panel {
   display: grid;
   gap: 1rem;

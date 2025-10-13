@@ -181,54 +181,30 @@
           <article class="support-step support-step--has-next is-hidden" data-step="body">
             <h3 class="support-step__title">Step 1: What does your body notice?</h3>
             <p>
-              Scan slowly from head to toe. Select any sensations that stand out. They do not have to make sense yet.
+              Invite awareness to your body. Let us guide a scan or open only the areas that speak up. We'll surface a few
+              sensations at a time and ask how strong they feel (0–10) after you choose.
             </p>
-            <form class="sensation-form" data-sensation-form>
-              <fieldset>
-                <legend class="sensation-form__legend">Choose all sensations that apply</legend>
-                <div
-                  class="form-row sensation-chips"
-                  data-sensation-chips
-                  role="group"
-                  aria-label="Body sensations"
-                >
-                  <button type="button" class="chip chip--stacked" data-sensation="tight-chest" aria-pressed="false">
-                    <span class="chip__title">Chest: tight, heavy, or pounding</span>
-                    <span class="chip__note">Breath feels shallow or heart racing</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="stomach-knots" aria-pressed="false">
-                    <span class="chip__title">Stomach: knots, fluttery, or queasy</span>
-                    <span class="chip__note">Butterflies, nausea, rolling sensation</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="throat-tight" aria-pressed="false">
-                    <span class="chip__title">Throat: lump or tightness</span>
-                    <span class="chip__note">Words feel stuck, urge to cry</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="jaw-clench" aria-pressed="false">
-                    <span class="chip__title">Jaw or fists: clenched or hot</span>
-                    <span class="chip__note">Muscles braced, face flushed</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="head-fog" aria-pressed="false">
-                    <span class="chip__title">Head: foggy, buzzing, or heavy</span>
-                    <span class="chip__note">Hard to focus, pressure behind eyes</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="shoulders-weight" aria-pressed="false">
-                    <span class="chip__title">Shoulders: weighted or lifted</span>
-                    <span class="chip__note">Carrying tension or bracing to act</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="limbs-lead" aria-pressed="false">
-                    <span class="chip__title">Arms or legs: heavy, numb, or restless</span>
-                    <span class="chip__note">Hard to move or urge to pace</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="temperature-shift" aria-pressed="false">
-                    <span class="chip__title">Temperature shifts</span>
-                    <span class="chip__note">Flush of heat, sudden chill, or prickly skin</span>
-                  </button>
-                  <button type="button" class="chip chip--stacked" data-sensation="no-sensation" aria-pressed="false">
-                    <span class="chip__title">Hard to notice anything</span>
-                    <span class="chip__note">Numb, blank, or disconnected</span>
+            <div class="sensation-scan" data-sensation-scan>
+              <button class="support-button support-button--ghost" type="button" data-action="scan-start">
+                Guide me through a full body scan
+              </button>
+              <p class="support-note">Prefer to explore solo? Tap any region below in any order.</p>
+              <div class="sensation-scan__controls is-hidden" data-scan-controls>
+                <p class="support-note sensation-scan__status" data-scan-status aria-live="polite"></p>
+                <p class="sensation-scan__prompt" data-scan-prompt></p>
+                <div class="sensation-scan__actions">
+                  <button class="support-button support-button--ghost" type="button" data-action="scan-back">Back</button>
+                  <button class="support-button" type="button" data-action="scan-next">Next area</button>
+                  <button class="support-button support-button--ghost" type="button" data-action="scan-finish">
+                    Finish scan
                   </button>
                 </div>
+              </div>
+            </div>
+            <form class="sensation-form" data-sensation-form>
+              <fieldset>
+                <legend class="sensation-form__legend">Explore sensations by region</legend>
+                <div class="sensation-region-list" data-sensation-region-list aria-live="polite"></div>
               </fieldset>
               <div class="sensation-actions">
                 <button class="support-button" type="button" data-action="sensation-submit">See possible emotions</button>
@@ -236,7 +212,7 @@
               </div>
               <div class="sensation-actions sensation-actions--secondary">
                 <button class="support-button support-button--ghost" type="button" data-action="sensation-next">
-                  I’m not sure — skip to the compass
+                  I'm not sure — skip to the compass
                 </button>
               </div>
             </form>
