@@ -2015,22 +2015,32 @@ function renderInventoryViews() {
 }
 
 function setupJournalSection() {
+  setupJournalOverlay();
+
   const panel = document.querySelector('[data-inventory-section="journal"]');
-  if (!panel) {
-    setupJournalOverlay();
-    return;
+  const hasPanel = !!panel;
+  let formRoot = null;
+
+  if (hasPanel) {
+    state.journalInlineContainer = document.querySelector('[data-journal-inline-container]');
+    state.journalFormSectionEl =
+      state.journalInlineContainer?.querySelector('.journal-form-section') || panel.querySelector('.journal-form-section');
+    formRoot = panel;
+  } else {
+    state.journalInlineContainer = null;
+    const overlaySection = ensureOverlayJournalFormSection();
+    state.journalFormSectionEl = overlaySection || state.journalOverlayContent || null;
+    formRoot = state.journalFormSectionEl || state.journalOverlayContent || null;
   }
-  state.journalInlineContainer = document.querySelector('[data-journal-inline-container]');
-  state.journalFormSectionEl =
-    state.journalInlineContainer?.querySelector('.journal-form-section') || panel.querySelector('.journal-form-section');
+
   const renderJournalForm = window.NVCJournal?.renderForm;
-  if (typeof renderJournalForm === 'function') {
-    const mount = panel.querySelector('[data-journal-module]');
+  if (typeof renderJournalForm === 'function' && formRoot) {
+    const mount = formRoot.querySelector('[data-journal-module]');
     if (mount) {
       try {
         renderJournalForm(mount, {
-          variant: mount.dataset.journalVariant || 'inventory',
-          idPrefix: mount.dataset.journalIdPrefix || 'journal',
+          variant: mount.dataset.journalVariant || (hasPanel ? 'inventory' : 'support'),
+          idPrefix: mount.dataset.journalIdPrefix || (hasPanel ? 'journal' : 'support-journal'),
         });
       } catch (error) {
         console.warn('Unable to render shared journal form', error);
@@ -2038,14 +2048,14 @@ function setupJournalSection() {
     }
   }
   const createJournalForm = window.NVCJournal?.createForm;
-  if (typeof createJournalForm === 'function') {
+  if (typeof createJournalForm === 'function' && formRoot) {
     const needsData = state.needs.length
       ? state.needs
       : typeof window.NVCJournal?.loadNeedsFromScript === 'function'
       ? window.NVCJournal.loadNeedsFromScript()
       : [];
     try {
-      state.journalController = createJournalForm(panel, {
+      state.journalController = createJournalForm(formRoot, {
         draftPath: state.journalDraftPath,
         needs: needsData,
         autoDraft: false,
@@ -2056,22 +2066,25 @@ function setupJournalSection() {
     }
   }
 
-  state.journalForm = state.journalController?.form || panel.querySelector('[data-journal-form]');
-  state.journalStatusEl = state.journalController?.statusEl || panel.querySelector('[data-journal-status]');
-  state.journalMessageEl = state.journalController?.messageEl || panel.querySelector('[data-journal-message]');
-  state.journalHistoryEl = panel.querySelector('[data-journal-history]');
-  state.journalEmptyEl = panel.querySelector('[data-journal-empty]');
-  state.journalSummaryEl = panel.querySelector('[data-journal-summary]');
-  state.journalSummaryToggle = panel.querySelector('[data-journal-summary-toggle]');
-  state.journalFiltersForm = panel.querySelector('[data-journal-filters]');
-  state.journalIntensityDisplay = state.journalController?.intensityDisplay || panel.querySelector('[data-journal-intensity-display]');
-  state.journalNeedsSelect = state.journalController?.needsSelect || panel.querySelector('[data-journal-needs]');
-  state.journalEmotionInput = state.journalController?.emotionInput || panel.querySelector('#journal-emotion');
-  state.journalNotesInput = state.journalController?.notesInput || panel.querySelector('#journal-notes');
-  state.journalIntensityInput = state.journalController?.intensityInput || panel.querySelector('#journal-intensity');
-  state.journalTagsInput = state.journalController?.tagsInput || panel.querySelector('#journal-tags');
-  state.journalTagSuggestionsEl = state.journalController?.tagSuggestionsEl || panel.querySelector('[data-journal-tag-suggestions]');
-  state.journalSaveButton = state.journalController?.saveButton || panel.querySelector('[data-journal-submit]');
+  state.journalForm = state.journalController?.form || formRoot?.querySelector('[data-journal-form]');
+  state.journalStatusEl = state.journalController?.statusEl || formRoot?.querySelector('[data-journal-status]');
+  state.journalMessageEl = state.journalController?.messageEl || formRoot?.querySelector('[data-journal-message]');
+  state.journalHistoryEl = panel?.querySelector('[data-journal-history]') || null;
+  state.journalEmptyEl = panel?.querySelector('[data-journal-empty]') || null;
+  state.journalSummaryEl = panel?.querySelector('[data-journal-summary]') || null;
+  state.journalSummaryToggle = panel?.querySelector('[data-journal-summary-toggle]') || null;
+  state.journalFiltersForm = panel?.querySelector('[data-journal-filters]') || null;
+  state.journalIntensityDisplay =
+    state.journalController?.intensityDisplay || formRoot?.querySelector('[data-journal-intensity-display]');
+  state.journalNeedsSelect = state.journalController?.needsSelect || formRoot?.querySelector('[data-journal-needs]');
+  state.journalEmotionInput = state.journalController?.emotionInput || formRoot?.querySelector('[data-journal-emotion]');
+  state.journalNotesInput = state.journalController?.notesInput || formRoot?.querySelector('[data-journal-notes]');
+  state.journalIntensityInput =
+    state.journalController?.intensityInput || formRoot?.querySelector('[data-journal-intensity]');
+  state.journalTagsInput = state.journalController?.tagsInput || formRoot?.querySelector('[data-journal-tags]');
+  state.journalTagSuggestionsEl =
+    state.journalController?.tagSuggestionsEl || formRoot?.querySelector('[data-journal-tag-suggestions]');
+  state.journalSaveButton = state.journalController?.saveButton || formRoot?.querySelector('[data-journal-submit]');
   if (state.journalSaveButton) {
     state.journalSaveLabel = state.journalSaveButton.textContent || 'Save entry';
     state.journalSaveButton.dataset.defaultLabel = state.journalSaveLabel;
@@ -2083,7 +2096,8 @@ function setupJournalSection() {
     state.journalForm.addEventListener('change', handleJournalFormInput);
   }
 
-  const journalClear = panel.querySelector('[data-journal-clear]');
+  const journalClearRoot = panel || formRoot;
+  const journalClear = journalClearRoot?.querySelector('[data-journal-clear]');
   if (journalClear) {
     journalClear.addEventListener('click', handleJournalFormClear);
   }
@@ -2093,7 +2107,7 @@ function setupJournalSection() {
   if (state.journalFiltersForm) {
     state.journalFiltersForm.addEventListener('input', handleJournalFiltersChange);
   }
-  const filtersReset = panel.querySelector('[data-journal-filters-reset]');
+  const filtersReset = panel?.querySelector('[data-journal-filters-reset]');
   filtersReset?.addEventListener('click', handleJournalFiltersReset);
 
   if (state.journalSummaryToggle) {
@@ -2111,20 +2125,22 @@ function setupJournalSection() {
     });
   }
 
-  const journalExport = panel.querySelector('#journal-export');
-  journalExport?.addEventListener('click', handleJournalExport);
+  if (panel) {
+    const journalExport = panel.querySelector('#journal-export');
+    journalExport?.addEventListener('click', handleJournalExport);
 
-  const journalImportTrigger = panel.querySelector('#journal-import-trigger');
-  const journalImportInput = panel.querySelector('#journal-import');
-  if (journalImportTrigger && journalImportInput) {
-    journalImportTrigger.addEventListener('click', () => journalImportInput.click());
-    journalImportInput.addEventListener('change', (event) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        handleJournalImport(file);
-      }
-      journalImportInput.value = '';
-    });
+    const journalImportTrigger = panel.querySelector('#journal-import-trigger');
+    const journalImportInput = panel.querySelector('#journal-import');
+    if (journalImportTrigger && journalImportInput) {
+      journalImportTrigger.addEventListener('click', () => journalImportInput.click());
+      journalImportInput.addEventListener('change', (event) => {
+        const file = event.target.files?.[0];
+        if (file) {
+          handleJournalImport(file);
+        }
+        journalImportInput.value = '';
+      });
+    }
   }
 
   populateJournalNeedsOptions();
@@ -2134,7 +2150,6 @@ function setupJournalSection() {
   }
   updateJournalSummaryVisibility();
   applyJournalDraft();
-  setupJournalOverlay();
 
   if (typeof window !== 'undefined') {
     window.addEventListener('nvc-journal-store-ready', () => {
@@ -2258,6 +2273,30 @@ function restoreJournalFormToInline() {
     return;
   }
   state.journalInlineContainer.appendChild(state.journalFormSectionEl);
+}
+
+function ensureOverlayJournalFormSection() {
+  if (!state.journalOverlayContent) {
+    state.journalOverlayContent = document.querySelector('[data-journal-overlay-content]');
+  }
+  const container = state.journalOverlayContent;
+  if (!container) {
+    return null;
+  }
+  let section = container.querySelector('[data-support-journal-form-section]');
+  if (!section) {
+    section = document.createElement('section');
+    section.classList.add('journal-form-section');
+    section.setAttribute('data-support-journal-form-section', '');
+    const module = document.createElement('div');
+    module.classList.add('journal-module');
+    module.setAttribute('data-journal-module', '');
+    module.dataset.journalVariant = 'support';
+    module.dataset.journalIdPrefix = 'support-journal';
+    section.appendChild(module);
+    container.prepend(section);
+  }
+  return section;
 }
 
 function enableJournalOverlayDialogAttributes() {
