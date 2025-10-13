@@ -836,6 +836,172 @@ const setPlayState = (state, active) => {
   updateToggleLabel(state.toggle, active);
 };
 
+const enterSearchMode = (state) => {
+  if (!state || state.searchActive) {
+    return;
+  }
+  state.searchActive = true;
+  state.searchWasPlaying = state.playActive;
+  if (state.playActive) {
+    setPlayState(state, false);
+  }
+  if (state.boardWrapper) {
+    state.boardWrapper.dataset.magnetSearchPrevHidden = state.boardWrapper.hidden ? '1' : '0';
+    state.boardWrapper.hidden = true;
+  } else if (state.board) {
+    state.board.dataset.magnetSearchPrevHidden = state.board.hidden ? '1' : '0';
+    state.board.hidden = true;
+  }
+  if (state.shuffleButton) {
+    state.shuffleButton.dataset.magnetSearchPrevDisabled = state.shuffleButton.disabled ? '1' : '0';
+    state.shuffleButton.disabled = true;
+    state.shuffleButton.setAttribute('aria-disabled', 'true');
+  }
+  if (state.root) {
+    state.root.setAttribute('data-magnet-search-active', '1');
+  }
+};
+
+const exitSearchMode = (state) => {
+  if (!state || !state.searchActive) {
+    if (state?.searchResults) {
+      state.searchResults.hidden = true;
+    }
+    if (state?.searchCount) {
+      state.searchCount.hidden = true;
+      state.searchCount.textContent = '';
+    }
+    if (state?.searchList) {
+      state.searchList.innerHTML = '';
+    }
+    return;
+  }
+  state.searchActive = false;
+  if (state.root) {
+    state.root.removeAttribute('data-magnet-search-active');
+  }
+  if (state.boardWrapper) {
+    const prevHidden = state.boardWrapper.dataset.magnetSearchPrevHidden === '1';
+    delete state.boardWrapper.dataset.magnetSearchPrevHidden;
+    state.boardWrapper.hidden = prevHidden;
+  } else if (state.board) {
+    const prevHidden = state.board.dataset.magnetSearchPrevHidden === '1';
+    delete state.board.dataset.magnetSearchPrevHidden;
+    state.board.hidden = prevHidden;
+  }
+  if (state.shuffleButton) {
+    const wasDisabled = state.shuffleButton.dataset.magnetSearchPrevDisabled === '1';
+    delete state.shuffleButton.dataset.magnetSearchPrevDisabled;
+    if (wasDisabled) {
+      state.shuffleButton.disabled = true;
+      state.shuffleButton.setAttribute('aria-disabled', 'true');
+    } else if (!state.isShuffling) {
+      state.shuffleButton.disabled = false;
+      state.shuffleButton.removeAttribute('aria-disabled');
+    }
+  }
+  if (state.searchResults) {
+    state.searchResults.hidden = true;
+  }
+  if (state.searchCount) {
+    state.searchCount.hidden = true;
+    state.searchCount.textContent = '';
+  }
+  if (state.searchList) {
+    state.searchList.innerHTML = '';
+  }
+  if (state.searchWasPlaying) {
+    setPlayState(state, true);
+  }
+  state.searchWasPlaying = false;
+};
+
+const renderSearchResults = (state, matches, query) => {
+  if (!state || !state.searchResults || !state.searchList || !state.searchCount) {
+    return;
+  }
+  const trimmedQuery = (query || '').trim();
+  state.searchList.innerHTML = '';
+  if (matches.length) {
+    const fragment = document.createDocumentFragment();
+    matches.forEach((magnet) => {
+      if (!magnet || !magnet.element) {
+        return;
+      }
+      const item = document.createElement('li');
+      item.className = 'magnet-search__item';
+      const link = document.createElement('a');
+      link.className = 'pill magnet-search__link';
+      link.textContent = magnet.searchLabel || magnet.element.textContent || '';
+      link.setAttribute('data-magnet-search-result', magnet.id);
+      if (magnet.href) {
+        link.setAttribute('href', magnet.href);
+      } else if (magnet.element instanceof HTMLAnchorElement && magnet.element.href) {
+        link.href = magnet.element.href;
+      } else {
+        link.setAttribute('href', '#');
+      }
+      const target = magnet.element.getAttribute ? magnet.element.getAttribute('target') : null;
+      if (target) {
+        link.setAttribute('target', target);
+      }
+      const rel = magnet.element.getAttribute ? magnet.element.getAttribute('rel') : null;
+      if (rel) {
+        link.setAttribute('rel', rel);
+      }
+      item.appendChild(link);
+      fragment.appendChild(item);
+    });
+    state.searchList.appendChild(fragment);
+  }
+  state.searchResults.hidden = false;
+  if (matches.length) {
+    const label = matches.length === 1 ? 'Found 1 match' : `Found ${matches.length} matches`;
+    state.searchCount.textContent = `${label} for “${trimmedQuery}”`;
+  } else {
+    state.searchCount.textContent = trimmedQuery ? `No matches for “${trimmedQuery}”` : '';
+  }
+  state.searchCount.hidden = !state.searchCount.textContent;
+};
+
+const applySearchQuery = (state, queryRaw) => {
+  if (!state || !state.searchInput || !state.searchResults || !state.searchList || !state.searchCount) {
+    return;
+  }
+  const query = typeof queryRaw === 'string' ? queryRaw.trim() : '';
+  if (!query) {
+    exitSearchMode(state);
+    return;
+  }
+  const normalized = query.toLocaleLowerCase();
+  const matches = state.magnets.filter((magnet) => {
+    if (!magnet || typeof magnet.searchValue !== 'string') {
+      return false;
+    }
+    return magnet.searchValue.includes(normalized);
+  });
+  enterSearchMode(state);
+  renderSearchResults(state, matches, query);
+};
+
+const attachSearch = (state) => {
+  if (!state || !state.searchInput || !state.searchResults || !state.searchList || !state.searchCount) {
+    return;
+  }
+  const handleSearchInput = (event) => {
+    applySearchQuery(state, event?.target?.value || '');
+  };
+  state.searchInput.addEventListener('input', handleSearchInput);
+  state.searchInput.addEventListener('search', handleSearchInput);
+  state.cleanupSearch = () => {
+    state.searchInput.removeEventListener('input', handleSearchInput);
+    state.searchInput.removeEventListener('search', handleSearchInput);
+  };
+  if (state.searchInput.value) {
+    applySearchQuery(state, state.searchInput.value);
+  }
+};
+
 const initializeBoard = async (root, index) => {
   const board = root.querySelector('[data-magnet-board]');
   if (!board) {
@@ -859,12 +1025,38 @@ const initializeBoard = async (root, index) => {
 
   const boardRect = await waitForStableBoard(board);
   const measured = createMagnetStates(board, magnetElements);
+  const boardWrapper = root.querySelector('.magnet-board-wrapper');
+  const searchContainer = root.querySelector('[data-magnet-search]');
+  const searchInput = searchContainer?.querySelector('[data-magnet-search-input]');
+  const searchResults = searchContainer?.querySelector('[data-magnet-search-results]');
+  const searchCount = searchContainer?.querySelector('[data-magnet-search-count]');
+  const searchList = searchContainer?.querySelector('[data-magnet-search-list]');
+
+  measured.forEach((magnet) => {
+    const label = (magnet.element.textContent || '').trim();
+    magnet.searchLabel = label;
+    magnet.searchValue = label.toLocaleLowerCase();
+    const hrefAttr = magnet.element.getAttribute ? magnet.element.getAttribute('href') : null;
+    if (hrefAttr) {
+      magnet.href = hrefAttr;
+    } else if (magnet.element instanceof HTMLAnchorElement && magnet.element.href) {
+      magnet.href = magnet.element.href;
+    } else {
+      magnet.href = '';
+    }
+  });
   const state = {
     root,
     board,
+    boardWrapper,
     toggle,
     toggleInput,
     shuffleButton,
+    searchContainer,
+    searchInput,
+    searchResults,
+    searchCount,
+    searchList,
     storageKey: createStorageKey(index),
     magnets: measured,
     magnetMap: new Map(),
@@ -888,6 +1080,9 @@ const initializeBoard = async (root, index) => {
     tiltPermissionRequest: globalTiltSource.tiltPermissionRequest,
     tiltPermissionLoggedDenied: globalTiltSource.tiltPermissionState === 'denied',
     cleanupTiltToggleRequest: null,
+    searchActive: false,
+    searchWasPlaying: false,
+    cleanupSearch: null,
   };
 
   state.setClickSuppress = () => {
@@ -1068,6 +1263,7 @@ const initializeBoard = async (root, index) => {
   }
 
   setPlayState(state, true);
+  attachSearch(state);
 };
 
 const setup = async () => {
