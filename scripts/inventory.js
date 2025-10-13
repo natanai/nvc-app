@@ -76,7 +76,6 @@ const state = {
   jumpToStrategiesButton: null,
   inventoryListHeading: null,
   showStrategies: false,
-  filterHiddenStrategies: null,
   summaryFilter: 'all',
   summaryFilterButtons: [],
   journalEntries: [],
@@ -696,7 +695,6 @@ function setupInventoryPage() {
   state.jumpToStrategiesButton = document.querySelector('[data-jump-to-strategies]');
   state.inventoryListHeading = document.getElementById('inventory-list-heading');
   state.summaryFilterButtons = Array.from(document.querySelectorAll('[data-summary-filter]'));
-  state.filterHiddenStrategies = null;
 
   if (state.inventoryToggleButton) {
     state.inventoryToggleButton.addEventListener('click', () => {
@@ -3613,38 +3611,7 @@ function renderInventoryList() {
     return;
   }
 
-  const filter = state.summaryFilter;
-  const hideAll = filter === 'none';
-
-  if (hideAll) {
-    state.inventoryListEl.innerHTML = '';
-    if (state.filterHiddenStrategies === null) {
-      state.filterHiddenStrategies = state.showStrategies;
-    }
-    setShowStrategies(false);
-    return;
-  }
-
-  if (state.filterHiddenStrategies !== null) {
-    const previousVisibility = state.filterHiddenStrategies;
-    state.filterHiddenStrategies = null;
-    if (state.showStrategies !== previousVisibility) {
-      setShowStrategies(previousVisibility);
-    } else {
-      updateStrategiesVisibility();
-      updateInventoryToggleLabel();
-    }
-  }
-
   state.inventoryListEl.innerHTML = '';
-
-  if (filter === 'missing') {
-    const notice = document.createElement('p');
-    notice.className = 'inventory-empty';
-    notice.textContent = 'Saved strategies are hidden while viewing needs without coverage.';
-    state.inventoryListEl.append(notice);
-    return;
-  }
 
   const grouped = new Map();
   const extras = [];
