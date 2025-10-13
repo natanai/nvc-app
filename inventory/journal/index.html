@@ -213,17 +213,14 @@
       </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../../">Home</a></li><li><a href="../">Inventory</a></li><li aria-current="page"><span class="breadcrumbs__label"><img src="../../icons/journal-32bit.svg" class="journal-label-icon" alt="" aria-hidden="true" /> Journal</span></li>
+          <li><a href="../../">Home</a></li><li><a href="../">Inventory</a></li><li aria-current="page"><span class="breadcrumbs__label">Journal</span></li>
         </ol>
       </nav>
       <main id="main" class="page" role="main" data-page-id="inventory-journal">
         
       <header class="page-header journal-page-header">
         <div class="journal-page-title-row">
-          <h1 class="page-title journal-page-title">
-            <img src="../../icons/journal-32bit.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
-            Journal
-          </h1>
+          <h1 class="page-title visually-hidden">Journal</h1>
           <div class="journal-page-title-row__actions">
             <button
               type="button"
@@ -235,7 +232,6 @@
               <span class="journal-fullscreen-button__icon" aria-hidden="true"></span>
               <span class="journal-fullscreen-button__text">
                 <span class="journal-fullscreen-button__title">Open full screen journal</span>
-                <span>Capture entries from anywhere in the app.</span>
               </span>
             </button>
           </div>
@@ -246,49 +242,37 @@
         </p>
       </header>
       <section class="journal-page" data-inventory-section="journal">
-        <section class="journal-actions" aria-labelledby="journal-actions-heading">
-          <div class="journal-actions__header">
-            <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
-            <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
-          </div>
-          <div class="journal-actions__buttons">
-            <button type="button" id="journal-export" class="inventory-button">Export journal</button>
-            <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
-            <input type="file" id="journal-import" accept="application/json,.json" hidden />
-          </div>
-          <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
-        </section>
+        <div class="journal-overview-grid">
+          <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
+            <div class="journal-actions__header">
+              <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
+              <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
+            </div>
+            <div class="journal-actions__buttons">
+              <button type="button" id="journal-export" class="inventory-button">Export journal</button>
+              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
+              <input type="file" id="journal-import" accept="application/json,.json" hidden />
+            </div>
+            <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
+          </section>
 
-        <div class="journal-inline-container" data-journal-inline-container>
-          <section class="journal-form-section" aria-labelledby="journal-form-heading">
-            <div class="journal-form-section__header">
-              <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
-              <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+          <section class="journal-summary-section journal-panel" aria-labelledby="journal-summary-heading">
+            <div class="journal-summary__header">
+              <h2 id="journal-summary-heading" class="section-title">Trends at a glance</h2>
+              <button
+                type="button"
+                class="inventory-button inventory-button--ghost"
+                data-journal-summary-toggle
+                aria-expanded="true"
+              >
+                Hide summary
+              </button>
             </div>
-            <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
-              <noscript>
-                <p class="journal-status">Enable JavaScript to use the journal form.</p>
-              </noscript>
-            </div>
+            <div class="journal-summary" data-journal-summary></div>
           </section>
         </div>
 
-        <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
-          <div class="journal-summary__header">
-            <h2 id="journal-summary-heading" class="section-title">Trends at a glance</h2>
-            <button
-              type="button"
-              class="inventory-button inventory-button--ghost"
-              data-journal-summary-toggle
-              aria-expanded="true"
-            >
-              Hide summary
-            </button>
-          </div>
-          <div class="journal-summary" data-journal-summary></div>
-        </section>
-
-        <section class="journal-history-section" aria-labelledby="journal-history-heading">
+        <section class="journal-history-section journal-panel journal-panel--history" aria-labelledby="journal-history-heading">
           <div class="journal-history-section__header">
             <h2 id="journal-history-heading" class="section-title">Journal history</h2>
             <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
@@ -318,6 +302,32 @@
           <p class="journal-empty" data-journal-empty hidden>Save entries to see them listed here.</p>
           <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
+
+        <details class="journal-inline-fallback" data-journal-inline-fallback>
+          <summary class="journal-inline-fallback__summary">
+            <span class="journal-inline-fallback__summary-text">Full screen journal unavailable? Use the legacy inline form.</span>
+          </summary>
+          <div class="journal-inline-fallback__body">
+            <p class="journal-inline-fallback__note">
+              The full screen journal above is the best experience&mdash;it's roomier, faster, and stays current with
+              new features. This legacy form is more constrained and less polished, so only use it if the primary
+              journal will not load.
+            </p>
+            <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>
+              <section class="journal-form-section" aria-labelledby="journal-form-heading">
+                <div class="journal-form-section__header">
+                  <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
+                  <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+                </div>
+                <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
+                  <noscript>
+                    <p class="journal-status">Enable JavaScript to use the journal form.</p>
+                  </noscript>
+                </div>
+              </section>
+            </div>
+          </div>
+        </details>
       </section>
       <script type="application/json" id="journal-needs-data">[{&quot;slug&quot;:&quot;love-caring&quot;,&quot;title&quot;:&quot;Love/Caring&quot;},{&quot;slug&quot;:&quot;nurturing&quot;,&quot;title&quot;:&quot;Nurturing&quot;},{&quot;slug&quot;:&quot;connection&quot;,&quot;title&quot;:&quot;Connection&quot;},{&quot;slug&quot;:&quot;belonging&quot;,&quot;title&quot;:&quot;Belonging&quot;},{&quot;slug&quot;:&quot;support&quot;,&quot;title&quot;:&quot;Support&quot;},{&quot;slug&quot;:&quot;consideration&quot;,&quot;title&quot;:&quot;Consideration&quot;},{&quot;slug&quot;:&quot;need-for-all-living-things-to-flourish&quot;,&quot;title&quot;:&quot;Need for all living things to flourish&quot;},{&quot;slug&quot;:&quot;inclusion&quot;,&quot;title&quot;:&quot;Inclusion&quot;},{&quot;slug&quot;:&quot;community&quot;,&quot;title&quot;:&quot;Community&quot;},{&quot;slug&quot;:&quot;safety&quot;,&quot;title&quot;:&quot;Safety&quot;},{&quot;slug&quot;:&quot;contribution&quot;,&quot;title&quot;:&quot;Contribution&quot;},{&quot;slug&quot;:&quot;peer-respect&quot;,&quot;title&quot;:&quot;Peer Respect&quot;},{&quot;slug&quot;:&quot;respect&quot;,&quot;title&quot;:&quot;Respect&quot;},{&quot;slug&quot;:&quot;autonomy&quot;,&quot;title&quot;:&quot;Autonomy&quot;},{&quot;slug&quot;:&quot;to-be-seen&quot;,&quot;title&quot;:&quot;To be seen&quot;},{&quot;slug&quot;:&quot;acknowledgement&quot;,&quot;title&quot;:&quot;Acknowledgement&quot;},{&quot;slug&quot;:&quot;appreciation&quot;,&quot;title&quot;:&quot;Appreciation&quot;},{&quot;slug&quot;:&quot;trust&quot;,&quot;title&quot;:&quot;Trust&quot;},{&quot;slug&quot;:&quot;dependability&quot;,&quot;title&quot;:&quot;Dependability&quot;},{&quot;slug&quot;:&quot;honesty&quot;,&quot;title&quot;:&quot;Honesty&quot;},{&quot;slug&quot;:&quot;honor&quot;,&quot;title&quot;:&quot;Honor&quot;},{&quot;slug&quot;:&quot;commitment&quot;,&quot;title&quot;:&quot;Commitment&quot;},{&quot;slug&quot;:&quot;clarity&quot;,&quot;title&quot;:&quot;Clarity&quot;},{&quot;slug&quot;:&quot;accountability&quot;,&quot;title&quot;:&quot;Accountability&quot;},{&quot;slug&quot;:&quot;causality&quot;,&quot;title&quot;:&quot;Causality&quot;},{&quot;slug&quot;:&quot;fairness&quot;,&quot;title&quot;:&quot;Fairness&quot;},{&quot;slug&quot;:&quot;justice&quot;,&quot;title&quot;:&quot;Justice&quot;},{&quot;slug&quot;:&quot;choice&quot;,&quot;title&quot;:&quot;Choice&quot;},{&quot;slug&quot;:&quot;freedom&quot;,&quot;title&quot;:&quot;Freedom&quot;},{&quot;slug&quot;:&quot;reliability&quot;,&quot;title&quot;:&quot;Reliability&quot;},{&quot;slug&quot;:&quot;act-freely&quot;,&quot;title&quot;:&quot;Act Freely&quot;},{&quot;slug&quot;:&quot;choose-freely&quot;,&quot;title&quot;:&quot;Choose Freely&quot;},{&quot;slug&quot;:&quot;understanding&quot;,&quot;title&quot;:&quot;Understanding&quot;},{&quot;slug&quot;:&quot;recognition&quot;,&quot;title&quot;:&quot;Recognition&quot;},{&quot;slug&quot;:&quot;non-judgmental-communication&quot;,&quot;title&quot;:&quot;Non-judgmental Communication&quot;},{&quot;slug&quot;:&quot;need-to-matter&quot;,&quot;title&quot;:&quot;Need to matter&quot;},{&quot;slug&quot;:&quot;friendship&quot;,&quot;title&quot;:&quot;Friendship&quot;},{&quot;slug&quot;:&quot;space&quot;,&quot;title&quot;:&quot;Space&quot;},{&quot;slug&quot;:&quot;peace&quot;,&quot;title&quot;:&quot;Peace&quot;},{&quot;slug&quot;:&quot;serenity&quot;,&quot;title&quot;:&quot;Serenity&quot;},{&quot;slug&quot;:&quot;do-things-at-my-own-pace-and-in-my-own-way&quot;,&quot;title&quot;:&quot;Do things at my own pace and in my own way&quot;},{&quot;slug&quot;:&quot;calm&quot;,&quot;title&quot;:&quot;Calm&quot;},{&quot;slug&quot;:&quot;participation&quot;,&quot;title&quot;:&quot;Participation&quot;},{&quot;slug&quot;:&quot;to-be-heard&quot;,&quot;title&quot;:&quot;To be heard&quot;},{&quot;slug&quot;:&quot;equality&quot;,&quot;title&quot;:&quot;Equality&quot;},{&quot;slug&quot;:&quot;empowerment&quot;,&quot;title&quot;:&quot;Empowerment&quot;},{&quot;slug&quot;:&quot;consistency&quot;,&quot;title&quot;:&quot;Consistency&quot;},{&quot;slug&quot;:&quot;genuineness&quot;,&quot;title&quot;:&quot;Genuineness&quot;},{&quot;slug&quot;:&quot;mattering&quot;,&quot;title&quot;:&quot;Mattering&quot;},{&quot;slug&quot;:&quot;rest&quot;,&quot;title&quot;:&quot;Rest&quot;},{&quot;slug&quot;:&quot;mutuality&quot;,&quot;title&quot;:&quot;Mutuality&quot;},{&quot;slug&quot;:&quot;relaxation&quot;,&quot;title&quot;:&quot;Relaxation&quot;},{&quot;slug&quot;:&quot;closeness&quot;,&quot;title&quot;:&quot;Closeness&quot;},{&quot;slug&quot;:&quot;authenticity&quot;,&quot;title&quot;:&quot;Authenticity&quot;},{&quot;slug&quot;:&quot;self-expression&quot;,&quot;title&quot;:&quot;Self expression&quot;},{&quot;slug&quot;:&quot;integrity&quot;,&quot;title&quot;:&quot;Integrity&quot;},{&quot;slug&quot;:&quot;empathy&quot;,&quot;title&quot;:&quot;Empathy&quot;},{&quot;slug&quot;:&quot;privacy&quot;,&quot;title&quot;:&quot;Privacy&quot;},{&quot;slug&quot;:&quot;order&quot;,&quot;title&quot;:&quot;Order&quot;},{&quot;slug&quot;:&quot;beauty&quot;,&quot;title&quot;:&quot;Beauty&quot;},{&quot;slug&quot;:&quot;control&quot;,&quot;title&quot;:&quot;Control&quot;},{&quot;slug&quot;:&quot;predictability&quot;,&quot;title&quot;:&quot;Predictability&quot;},{&quot;slug&quot;:&quot;accomplishment&quot;,&quot;title&quot;:&quot;Accomplishment&quot;},{&quot;slug&quot;:&quot;physical-fitness&quot;,&quot;title&quot;:&quot;Physical Fitness&quot;},{&quot;slug&quot;:&quot;acceptance&quot;,&quot;title&quot;:&quot;Acceptance&quot;},{&quot;slug&quot;:&quot;growth&quot;,&quot;title&quot;:&quot;Growth&quot;},{&quot;slug&quot;:&quot;security&quot;,&quot;title&quot;:&quot;Security&quot;}]</script>
     
