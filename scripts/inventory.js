@@ -118,9 +118,35 @@ const state = {
   journalSummaryCollapsed: false,
   journalSavedTimer: null,
   journalSaveLabel: '',
+  viewportHeightListenersAttached: false,
 };
 
 const SUMMARY_FILTERS = new Set(['all', 'missing', 'ready', 'none']);
+
+function updateViewportHeightCustomProperty() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+  const root = document.documentElement;
+  if (!root?.style) {
+    return;
+  }
+  const vh = window.innerHeight * 0.01;
+  root.style.setProperty('--vh', `${vh}px`);
+}
+
+function setupViewportHeightProperty() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  updateViewportHeightCustomProperty();
+  if (state.viewportHeightListenersAttached) {
+    return;
+  }
+  window.addEventListener('resize', updateViewportHeightCustomProperty);
+  window.addEventListener('orientationchange', updateViewportHeightCustomProperty);
+  state.viewportHeightListenersAttached = true;
+}
 
 function normalizeNeedSlugValue(value) {
   if (value == null) {
@@ -513,6 +539,7 @@ function setupScrollTopButton() {
 document.addEventListener('DOMContentLoaded', () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  setupViewportHeightProperty();
   state.inventory = loadInventory();
   state.journalStore = resolveJournalStore();
   updateJournalEntriesFromStore();
