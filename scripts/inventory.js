@@ -2170,7 +2170,12 @@ function setupJournalOverlay() {
   state.journalOverlayHeading = container?.querySelector('[data-support-journal-heading]') || null;
   state.journalOverlayHistoryEl = container?.querySelector('[data-journal-overlay-history]') || null;
 
-  const openButtons = Array.from(document.querySelectorAll('[data-support-journal-open]'));
+  const openButtons = Array.from(document.querySelectorAll('[data-support-journal-open]')).filter((button) => {
+    if (!(button instanceof HTMLElement)) {
+      return false;
+    }
+    return !button.hasAttribute('data-journal-overlay-ignore');
+  });
   state.journalOverlayOpenTriggers = openButtons;
   state.journalOverlayOpenButton = container?.querySelector('[data-support-journal-open]') || openButtons[0] || null;
 
