@@ -103,6 +103,8 @@ const state = {
   journalOverlayDialog: null,
   journalOverlayContent: null,
   journalOverlayOpenButton: null,
+  journalOverlayOpenTriggers: [],
+  journalOverlayActiveTrigger: null,
   journalOverlayCloseButton: null,
   journalOverlayHeading: null,
   journalOverlayOpen: false,
@@ -1015,21 +1017,47 @@ function buildPaletteUi() {
   const nav = document.querySelector('.site-nav');
   let mobileToggle = null;
   if (nav) {
-    mobileToggle = document.createElement('button');
-    mobileToggle.type = 'button';
-    mobileToggle.className = 'site-nav__link palette-mobile-toggle';
-    mobileToggle.setAttribute('aria-haspopup', 'dialog');
-    const mobileGlyph = document.createElement('span');
-    mobileGlyph.className = 'palette-mobile-toggle__glyph';
-    mobileGlyph.setAttribute('aria-hidden', 'true');
-    mobileGlyph.textContent = '+';
+    const existingNavToggle = nav.querySelector('[data-palette-toggle]');
+    if (existingNavToggle instanceof HTMLElement) {
+      mobileToggle = existingNavToggle;
+      if (!mobileToggle.hasAttribute('type')) {
+        mobileToggle.setAttribute('type', 'button');
+      }
+      mobileToggle.setAttribute('aria-haspopup', 'dialog');
+      if (!mobileToggle.hasAttribute('data-palette-toggle')) {
+        mobileToggle.setAttribute('data-palette-toggle', '');
+      }
+    } else {
+      mobileToggle = document.createElement('button');
+      mobileToggle.type = 'button';
+      mobileToggle.className = 'site-nav__link site-nav__link--customizer';
+      mobileToggle.setAttribute('data-palette-toggle', '');
+      mobileToggle.setAttribute('aria-haspopup', 'dialog');
+      const mobileGlyph = document.createElement('span');
+      mobileGlyph.className = 'site-nav__glyph';
+      mobileGlyph.setAttribute('aria-hidden', 'true');
+      mobileGlyph.textContent = '+';
 
-    const mobileSrLabel = document.createElement('span');
-    mobileSrLabel.className = 'visually-hidden';
-    mobileSrLabel.textContent = 'Open customizer';
+      const mobileSrLabel = document.createElement('span');
+      mobileSrLabel.className = 'visually-hidden';
+      mobileSrLabel.textContent = 'Open customizer';
 
-    mobileToggle.append(mobileGlyph, mobileSrLabel);
-    nav.appendChild(mobileToggle);
+      mobileToggle.append(mobileGlyph, mobileSrLabel);
+
+      const primaryRow = nav.querySelector('.site-nav__row--primary');
+      if (primaryRow) {
+        const homeLink = primaryRow.querySelector('.site-nav__link--home');
+        if (homeLink?.nextSibling) {
+          primaryRow.insertBefore(mobileToggle, homeLink.nextSibling);
+        } else if (homeLink) {
+          primaryRow.appendChild(mobileToggle);
+        } else {
+          primaryRow.insertBefore(mobileToggle, primaryRow.firstChild ?? null);
+        }
+      } else {
+        nav.appendChild(mobileToggle);
+      }
+    }
   }
 
   toggle.setAttribute('aria-expanded', 'false');
@@ -2128,37 +2156,58 @@ function setupJournalSection() {
 }
 
 function setupJournalOverlay() {
-  const container = document.querySelector('[data-journal-overlay]');
+  const containers = Array.from(document.querySelectorAll('[data-journal-overlay]'));
+  const container =
+    containers.find((element) => element?.querySelector('[data-support-journal-layer]')) ||
+    containers[0] ||
+    null;
   state.journalOverlayContainer = container || null;
   state.journalOverlayLayer = container?.querySelector('[data-support-journal-layer]') || null;
   state.journalOverlayDialog = container?.querySelector('[data-support-journal-dialog]') || null;
   state.journalOverlayContent = container?.querySelector('[data-journal-overlay-content]') || null;
-  state.journalOverlayOpenButton = container?.querySelector('[data-support-journal-open]') || null;
   state.journalOverlayCloseButton = container?.querySelector('[data-support-journal-close]') || null;
   state.journalOverlayHeading = container?.querySelector('[data-support-journal-heading]') || null;
   state.journalOverlayHistoryEl = container?.querySelector('[data-journal-overlay-history]') || null;
+
+  const openButtons = Array.from(document.querySelectorAll('[data-support-journal-open]'));
+  state.journalOverlayOpenTriggers = openButtons;
+  state.journalOverlayOpenButton = container?.querySelector('[data-support-journal-open]') || openButtons[0] || null;
 
   if (!container) {
     return;
   }
 
   if (state.journalOverlayHeading && !state.journalOverlayHeading.id) {
-    state.journalOverlayHeading.id = 'inventory-support-journal-heading';
+    state.journalOverlayHeading.id = 'global-support-journal-heading';
   }
 
   if (state.journalOverlayLayer) {
+    if (!state.journalOverlayLayer.id) {
+      state.journalOverlayLayer.id = 'global-support-journal-layer';
+    }
     state.journalOverlayLayer.dataset.state = 'closed';
     state.journalOverlayLayer.setAttribute('aria-hidden', 'true');
   }
 
-  if (state.journalOverlayOpenButton) {
-    state.journalOverlayOpenButton.setAttribute('aria-expanded', 'false');
-    state.journalOverlayOpenButton.setAttribute('aria-haspopup', 'dialog');
-    state.journalOverlayOpenButton.addEventListener('click', (event) => {
+  const overlayId = state.journalOverlayLayer?.id || 'global-support-journal-layer';
+
+  openButtons.forEach((button) => {
+    if (!(button instanceof HTMLElement)) {
+      return;
+    }
+    if (button.dataset.journalOverlayBound === 'true') {
+      return;
+    }
+    button.dataset.journalOverlayBound = 'true';
+    button.setAttribute('aria-haspopup', 'dialog');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', overlayId);
+    button.addEventListener('click', (event) => {
       event.preventDefault();
+      state.journalOverlayActiveTrigger = button;
       openJournalOverlay();
     });
-  }
+  });
 
   if (state.journalOverlayCloseButton) {
     state.journalOverlayCloseButton.addEventListener('click', () => closeJournalOverlay());
@@ -2174,6 +2223,15 @@ function setupJournalOverlay() {
 
   restoreJournalFormToInline();
   renderJournalOverlayHistory();
+}
+
+function updateJournalOverlayTriggerExpanded(expanded) {
+  const value = expanded ? 'true' : 'false';
+  state.journalOverlayOpenTriggers.forEach((button) => {
+    if (button instanceof HTMLElement) {
+      button.setAttribute('aria-expanded', value);
+    }
+  });
 }
 
 function moveJournalFormToOverlay() {
@@ -2224,9 +2282,7 @@ function openJournalOverlay() {
   state.journalOverlayOpen = true;
   state.journalOverlayLayer.dataset.state = 'open';
   state.journalOverlayLayer.setAttribute('aria-hidden', 'false');
-  if (state.journalOverlayOpenButton) {
-    state.journalOverlayOpenButton.setAttribute('aria-expanded', 'true');
-  }
+  updateJournalOverlayTriggerExpanded(true);
   enableJournalOverlayDialogAttributes();
   if (document.body?.classList) {
     document.body.classList.add('has-support-journal-open');
@@ -2258,12 +2314,14 @@ function closeJournalOverlay(options = {}) {
   state.journalOverlayOpen = false;
   state.journalOverlayLayer.dataset.state = 'closed';
   state.journalOverlayLayer.setAttribute('aria-hidden', 'true');
-  if (state.journalOverlayOpenButton) {
-    state.journalOverlayOpenButton.setAttribute('aria-expanded', 'false');
-    if (returnFocus) {
-      state.journalOverlayOpenButton.focus();
+  updateJournalOverlayTriggerExpanded(false);
+  if (returnFocus) {
+    const focusTarget = state.journalOverlayActiveTrigger || state.journalOverlayOpenButton;
+    if (focusTarget instanceof HTMLElement) {
+      focusTarget.focus();
     }
   }
+  state.journalOverlayActiveTrigger = null;
   disableJournalOverlayDialogAttributes();
   if (document.body?.classList) {
     document.body.classList.remove('has-support-journal-open');
