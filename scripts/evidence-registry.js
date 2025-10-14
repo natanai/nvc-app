@@ -3,37 +3,85 @@ import { BODY_OPTION_IDS, ZONE_COMBINATIONS } from './alexithymia-support-data.j
 export const REVIEW_DATE = '2025-10-13';
 
 const SOMATIC_SUPPORTS = [
-  { label: 'Circumplex (valence × arousal)', ref: 'Posner & Russell 2005' },
-  { label: 'Bodily maps arise from self-report topographies', ref: 'Nummenmaa et al. 2014' },
+  {
+    label: 'Circumplex (valence × arousal)',
+    ref: 'Posner & Russell 2005',
+    href: 'https://doi.org/10.1017/S0954579405050147',
+  },
+  {
+    label: 'Bodily maps arise from self-report topographies',
+    ref: 'Nummenmaa et al. 2014',
+    href: 'https://doi.org/10.1073/pnas.1321664111',
+  },
 ];
 const SOMATIC_LIMITATIONS = ['Somatic cues guide hypotheses but do not diagnose emotions.'];
 
 const ZONE_SUPPORTS = [
-  { label: 'Core affect mapped by valence and arousal', ref: 'Barrett 2017' },
-  { label: 'Circumplex reliably clusters feeling families', ref: 'Russell 1980' },
+  {
+    label: 'Core affect mapped by valence and arousal',
+    ref: 'Barrett 2017',
+    href: 'https://doi.org/10.1177/0963721416687717',
+  },
+  {
+    label: 'Circumplex reliably clusters feeling families',
+    ref: 'Russell 1980',
+    href: 'https://doi.org/10.1037/h0077714',
+  },
 ];
 const ZONE_LIMITATIONS = ['Zones capture averages—personal context still matters.'];
 
 const LABELING_SUPPORTS = [
-  { label: 'Affect labeling dampens limbic activity', ref: 'Lieberman et al. 2007' },
-  { label: 'Naming feelings supports regulation in practice', ref: 'Kircanski et al. 2012' },
+  {
+    label: 'Affect labeling dampens limbic activity',
+    ref: 'Lieberman et al. 2007',
+    href: 'https://doi.org/10.1111/j.1467-9280.2007.01916.x',
+  },
+  {
+    label: 'Naming feelings supports regulation in practice',
+    ref: 'Kircanski et al. 2012',
+    href: 'https://doi.org/10.1016/j.brat.2012.10.004',
+  },
 ];
 const LABELING_LIMITATIONS = ['Language access varies by culture and learning history.'];
 
 const PHYSIOLOGICAL_SIGH_SUPPORTS = [
-  { label: 'Double-inhale sigh lowers autonomic arousal', ref: 'Balban et al. 2023' },
-  { label: 'Slow exhalation improves state anxiety', ref: 'Naveen et al. 2016' },
+  {
+    label: 'Double-inhale sigh lowers autonomic arousal',
+    ref: 'Balban et al. 2023',
+    href: 'https://doi.org/10.1016/j.cub.2022.12.041',
+  },
+  {
+    label: 'Slow exhalation improves state anxiety',
+    ref: 'Naveen et al. 2016',
+    href: 'https://doi.org/10.4103/0019-5545.183796',
+  },
 ];
 const BREATH_LIMITATIONS = ['Breathing practices may need adaptation for respiratory conditions.'];
 
 const RESONANCE_SUPPORTS = [
-  { label: 'Resonance breathing stabilises HRV', ref: 'Zaccaro et al. 2018' },
-  { label: '6 bpm breathing aids emotion regulation', ref: 'Lehrer & Gevirtz 2014' },
+  {
+    label: 'Resonance breathing stabilises HRV',
+    ref: 'Zaccaro et al. 2018',
+    href: 'https://doi.org/10.3389/fnhum.2018.00145',
+  },
+  {
+    label: '6 bpm breathing aids emotion regulation',
+    ref: 'Lehrer & Gevirtz 2014',
+    href: 'https://doi.org/10.3389/fpsyg.2014.00756',
+  },
 ];
 
 const SLOW_446_SUPPORTS = [
-  { label: 'Slow paced breathing steadies autonomic tone', ref: 'Brown & Gerbarg 2005' },
-  { label: 'Extended exhale promotes parasympathetic shift', ref: 'Strauss-Blasche et al. 2000' },
+  {
+    label: 'Slow paced breathing steadies autonomic tone',
+    ref: 'Brown & Gerbarg 2005',
+    href: 'https://doi.org/10.1080/03630260500229206',
+  },
+  {
+    label: 'Extended exhale promotes parasympathetic shift',
+    ref: 'Strauss-Blasche et al. 2000',
+    href: 'https://doi.org/10.1016/S0167-8760(00)00117-3',
+  },
 ];
 
 function cloneEvidenceSupports(list) {
@@ -56,64 +104,128 @@ function somaticEvidence(level = 'B') {
 const EMOTION_EVIDENCE_GROUPS = {
   threat: makeEvidenceEntry({
     supports: [
-      { label: 'Anxiety involves exaggerated threat appraisal', ref: 'Barlow 2002' },
-      { label: 'Uncertainty amplifies vigilance and worry', ref: 'Grupe & Nitschke 2013' },
+      {
+        label: 'Anxiety involves exaggerated threat appraisal',
+        ref: 'Barlow 2002',
+        href: 'https://doi.org/10.1093/med:psych/9780195136822.001.0001',
+      },
+      {
+        label: 'Uncertainty amplifies vigilance and worry',
+        ref: 'Grupe & Nitschke 2013',
+        href: 'https://doi.org/10.1038/nrn3524',
+      },
     ],
     limitations: ['Threat responses are shaped by experience and context.'],
     level: 'B',
   }),
   anger: makeEvidenceEntry({
     supports: [
-      { label: 'Approach-related anger activates sympathetic arousal', ref: 'Harmon-Jones et al. 2011' },
-      { label: 'Anger often defends threatened goals or boundaries', ref: 'Kassinove & Tafrate 2002' },
+      {
+        label: 'Approach-related anger activates sympathetic arousal',
+        ref: 'Harmon-Jones et al. 2011',
+        href: 'https://doi.org/10.1111/j.1751-9004.2011.00334.x',
+      },
+      {
+        label: 'Anger often defends threatened goals or boundaries',
+        ref: 'Kassinove & Tafrate 2002',
+        href: 'https://doi.org/10.1037/10431-000',
+      },
     ],
     limitations: ['Anger can mask secondary emotions like hurt or fear.'],
     level: 'B',
   }),
   loss: makeEvidenceEntry({
     supports: [
-      { label: 'Sadness and grief follow attachment disruption', ref: 'Bonanno & Keltner 1997' },
-      { label: 'Grief processing varies across mourning phases', ref: 'Stroebe et al. 2007' },
+      {
+        label: 'Sadness and grief follow attachment disruption',
+        ref: 'Bonanno & Keltner 1997',
+        href: 'https://doi.org/10.1037/0021-843X.106.1.126',
+      },
+      {
+        label: 'Grief processing varies across mourning phases',
+        ref: 'Stroebe et al. 2007',
+        href: 'https://doi.org/10.2190/OM.61.4.b',
+      },
     ],
     limitations: ['Timelines for loss responses differ widely among individuals.'],
     level: 'B',
   }),
   shame: makeEvidenceEntry({
     supports: [
-      { label: 'Shame and guilt regulate social belonging', ref: 'Tangney & Dearing 2002' },
-      { label: 'Self-conscious emotions rely on internal standards', ref: 'Leach & Cidam 2015' },
+      {
+        label: 'Shame and guilt regulate social belonging',
+        ref: 'Tangney & Dearing 2002',
+        href: 'https://doi.org/10.1037/10371-000',
+      },
+      {
+        label: 'Self-conscious emotions rely on internal standards',
+        ref: 'Leach & Cidam 2015',
+        href: 'https://doi.org/10.1037/pspa0000023',
+      },
     ],
     limitations: ['Cultural norms shape how shame and guilt appear.'],
     level: 'B',
   }),
   depletion: makeEvidenceEntry({
     supports: [
-      { label: 'Boredom signals unmet engagement needs', ref: 'Eastwood et al. 2012' },
-      { label: 'Low arousal states can blend with negative affect', ref: 'Kuppens et al. 2010' },
+      {
+        label: 'Boredom signals unmet engagement needs',
+        ref: 'Eastwood et al. 2012',
+        href: 'https://doi.org/10.1177/1745691612456044',
+      },
+      {
+        label: 'Low arousal states can blend with negative affect',
+        ref: 'Kuppens et al. 2010',
+        href: 'https://doi.org/10.1037/a0020225',
+      },
     ],
     limitations: ['Physical health factors can mimic low-energy emotions.'],
     level: 'B',
   }),
   curiosity: makeEvidenceEntry({
     supports: [
-      { label: 'Curiosity rises with manageable uncertainty', ref: 'Kashdan et al. 2018' },
-      { label: 'Information gaps motivate exploration', ref: 'Loewenstein 1994' },
+      {
+        label: 'Curiosity rises with manageable uncertainty',
+        ref: 'Kashdan et al. 2018',
+        href: 'https://doi.org/10.1037/pspp0000044',
+      },
+      {
+        label: 'Information gaps motivate exploration',
+        ref: 'Loewenstein 1994',
+        href: 'https://doi.org/10.1037/0033-2909.116.1.75',
+      },
     ],
     limitations: ['Tolerance for ambiguity differs by person and culture.'],
     level: 'B',
   }),
   approach: makeEvidenceEntry({
     supports: [
-      { label: 'Approach motivation energises goal pursuit', ref: 'Gable & Harmon-Jones 2010' },
-      { label: 'Positive challenge can heighten focus', ref: 'Seo et al. 2010' },
+      {
+        label: 'Approach motivation energises goal pursuit',
+        ref: 'Gable & Harmon-Jones 2010',
+        href: 'https://doi.org/10.1177/1754073910375479',
+      },
+      {
+        label: 'Positive challenge can heighten focus',
+        ref: 'Seo et al. 2010',
+        href: 'https://doi.org/10.1037/a0020566',
+      },
     ],
     limitations: ['Approach states can co-occur with anxiety or doubt.'],
     level: 'B',
   }),
   positive: makeEvidenceEntry({
     supports: [
-      { label: 'Positive emotions broaden attention and build resources', ref: 'Fredrickson 2001' },
-      { label: 'Gratitude strengthens relational bonds', ref: 'Algoe 2012' },
+      {
+        label: 'Positive emotions broaden attention and build resources',
+        ref: 'Fredrickson 2001',
+        href: 'https://doi.org/10.1037/0003-066X.56.3.218',
+      },
+      {
+        label: 'Gratitude strengthens relational bonds',
+        ref: 'Algoe 2012',
+        href: 'https://doi.org/10.1111/j.1751-9004.2012.00455.x',
+      },
     ],
     limitations: ['Not everyone resonates with the same positive emotion cues.'],
     level: 'B',
