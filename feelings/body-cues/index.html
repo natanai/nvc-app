@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Feeling: Powerless • NeedShare Explorer</title>
-    <meta name="description" content="Map situations, feelings, and needs with retro magnet play, journaling tools, and a shareable strategy inventory inspired by NeedShare." />
+    <title>Body Cues explorer • NeedShare Explorer</title>
+    <meta name="description" content="Describe the body sensations you notice and see which feelings might align with them." />
     <link rel="icon" type="image/svg+xml" href="../../icons/main.svg" />
     <meta property="og:image" content="../../icons/main.svg" />
     <meta name="twitter:image" content="../../icons/main.svg" />
@@ -293,56 +293,60 @@
         </div>
         <div class="site-nav__row site-nav__row--secondary">
           <a class="site-nav__link" href="../../situations/">Situations</a>
-          <a class="site-nav__link" href="../../feelings/" aria-current="page">Feelings</a>
+          <a class="site-nav__link" href="../../feelings/">Feelings</a>
+          <a class="site-nav__link" href="../../feelings/body-cues/" aria-current="page">Feelings &gt; Body Cues</a>
           <a class="site-nav__link" href="../../needs/">Needs</a>
         </div>
       </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../../">Home</a></li><li><a href="../">Feelings</a></li><li aria-current="page">Powerless</li>
+          <li><a href="../../">Home</a></li><li><a href="../">Feelings</a></li><li aria-current="page">Body Cues</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main" data-feeling-slug="powerless">
+      <main id="main" class="page body-cues-page" role="main">
         
       <header class="page-header">
-        <h1 class="page-title">Feeling: Powerless</h1>
+        <h1 class="page-title">Body Cues explorer</h1>
+        <p class="page-description">
+          Move the sliders to describe what your body is doing. We will surface feelings that often ride along with
+          those cues so you can follow your curiosity instead of guessing in the dark.
+        </p>
       </header>
-      
-      <section class="feeling-inference-wrapper" data-reverse-inference-container hidden>
-        <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="reverse-inference-panel-powerless" disabled>
-          <span class="feeling-inference-toggle__copy">
-            <span class="feeling-inference-toggle__badge">Alexithymia support</span>
-            <span class="feeling-inference-toggle__label">How this feeling might be inferred</span>
-          </span>
-        </button>
-        <div id="reverse-inference-panel-powerless" class="feeling-inference-panel" data-reverse-inference-panel hidden>
-          <section class="feeling-inference" data-reverse-inference hidden></section>
+
+      <section class="body-cues-tool" data-body-cues-root>
+        <div class="body-cues-tool__intro">
+          <p>
+            Start with one or two sensations that stand out. You can always add more later. Matches update as you go so
+            you can see how the story shifts.
+          </p>
+          <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
+        </div>
+        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
+          <div class="body-cues-tool__magnet-header">
+            <h2 id="body-cues-magnets-heading">Matching magnets</h2>
+            <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
+          </div>
+          <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
+        </section>
+        <div class="body-cues-tool__layout">
+          <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+          <section class="body-cues-tool__results-panel">
+            <h2 class="body-cues-tool__results-title">Matching feelings</h2>
+            <p class="body-cues-tool__empty" data-body-cues-empty>
+              Adjust the sliders to describe what your body is doing. We'll show feelings that often travel with that mix.
+            </p>
+            <p class="body-cues-tool__error" data-body-cues-error hidden>
+              We couldn't load the body cues data. Check your connection and try again.
+            </p>
+            <ol class="body-cues-tool__results-list" data-body-cues-results></ol>
+          </section>
         </div>
       </section>
-      <section class="pill-section magnet-section" aria-labelledby="related-needs-heading" data-magnet-root>
-      <div class="magnet-section__header">
-        <h2 id="related-needs-heading" class="section-title">Related needs</h2>
-        <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
-      </div>
-      <div class="magnet-board-wrapper">
-        <div class="pill-grid magnet-board" data-magnet-board>
-          <a class="pill magnet" data-magnet-id="needs-connection" href="../../needs/connection/">Connection</a><a class="pill magnet" data-magnet-id="needs-autonomy" href="../../needs/autonomy/">Autonomy</a><a class="pill magnet" data-magnet-id="needs-trust" href="../../needs/trust/">Trust</a><a class="pill magnet" data-magnet-id="needs-freedom" href="../../needs/freedom/">Freedom</a><a class="pill magnet" data-magnet-id="needs-choose-freely" href="../../needs/choose-freely/">Choose Freely</a><a class="pill magnet" data-magnet-id="needs-equality" href="../../needs/equality/">Equality</a><a class="pill magnet" data-magnet-id="needs-empowerment" href="../../needs/empowerment/">Empowerment</a><a class="pill magnet" data-magnet-id="needs-genuineness" href="../../needs/genuineness/">Genuineness</a><a class="pill magnet" data-magnet-id="needs-accomplishment" href="../../needs/accomplishment/">Accomplishment</a>
-        </div>
-        <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-          <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
-          <span class="magnet-play-toggle__track" aria-hidden="true">
-            <span class="magnet-play-toggle__thumb"></span>
-          </span>
-          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
-        </label>
-      </div>
-    </section>
     
       </main>
     </div>
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
-    <script src="../../scripts/magnets.js" type="module"></script>
-    <script src="../../scripts/feeling-reverse-inference.js" type="module"></script>
+    <script src="../../scripts/body-cues-tool.js" type="module"></script>
   </body>
 </html>
