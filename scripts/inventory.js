@@ -67,6 +67,8 @@ const state = {
   needs: [],
   feelings: [],
   needsBySlug: new Map(),
+  savedStrategySlugs: new Set(),
+  strategyButtons: new Map(),
   basePath: '',
   inventoryListEl: null,
   inventorySummaryEl: null,
@@ -274,6 +276,13 @@ function sanitizeLocation(value) {
   return value.trim();
 }
 
+function normalizeStrategySlug(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  return value.trim().toLowerCase();
+}
+
 function normalizeInventoryEntry(entry) {
   if (!entry || typeof entry !== 'object') {
     return null;
@@ -284,6 +293,7 @@ function normalizeInventoryEntry(entry) {
   normalized.need = typeof entry.need === 'string' ? entry.need.trim() : normalized.need || '';
   const normalizedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
   normalized.needSlug = normalizedSlug;
+  normalized.strategySlug = normalizeStrategySlug(entry.strategySlug || '');
   if (typeof normalized.sourceNeedPage === 'string') {
     normalized.sourceNeedPage = normalized.sourceNeedPage.trim();
   }
@@ -672,6 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
   setupViewportHeightProperty();
   state.inventory = loadInventory();
+  refreshSavedStrategyIndex();
   state.journalStore = resolveJournalStore();
   updateJournalEntriesFromStore();
   highlightNavigation();
@@ -716,6 +727,68 @@ function saveInventory(items) {
 }
 
 
+function refreshSavedStrategyIndex() {
+  const slugs = new Set();
+  if (Array.isArray(state.inventory)) {
+    state.inventory.forEach((entry) => {
+      const slug = normalizeStrategySlug(entry?.strategySlug || '');
+      if (slug) {
+        slugs.add(slug);
+      }
+    });
+  }
+  state.savedStrategySlugs = slugs;
+}
+
+function isStrategySaved(slug) {
+  const normalizedSlug = normalizeStrategySlug(slug);
+  if (!normalizedSlug) {
+    return false;
+  }
+  return state.savedStrategySlugs.has(normalizedSlug);
+}
+
+function updateStrategySaveButton(button, isSaved) {
+  if (!button) {
+    return;
+  }
+  if (!button.dataset.defaultLabel) {
+    button.dataset.defaultLabel = button.textContent?.trim() || '+ Save to inventory';
+  }
+  if (!button.dataset.savedLabel) {
+    button.dataset.savedLabel = '✓ In your inventory';
+  }
+  const defaultLabel = button.dataset.defaultLabel;
+  const savedLabel = button.dataset.savedLabel;
+  button.textContent = isSaved ? savedLabel : defaultLabel;
+  button.dataset.saved = isSaved ? 'true' : 'false';
+  button.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+  button.classList.toggle('strategy-card__save--saved', Boolean(isSaved));
+}
+
+function updateStrategySaveButtonStates() {
+  state.strategyButtons.forEach((buttons, slug) => {
+    const saved = isStrategySaved(slug);
+    buttons.forEach((button) => {
+      updateStrategySaveButton(button, saved);
+    });
+  });
+}
+
+function registerStrategySaveButton(slug, button) {
+  const normalizedSlug = normalizeStrategySlug(slug);
+  if (!normalizedSlug || !button) {
+    return;
+  }
+  if (!state.strategyButtons.has(normalizedSlug)) {
+    state.strategyButtons.set(normalizedSlug, new Set());
+  }
+  const buttonSet = state.strategyButtons.get(normalizedSlug);
+  buttonSet.add(button);
+  updateStrategySaveButton(button, isStrategySaved(normalizedSlug));
+}
+
+
 function setupNeedPage() {
   const main = document.querySelector('main[data-need-slug]');
   if (!main) {
@@ -734,10 +807,26 @@ function setupNeedPage() {
       return;
     }
 
+    const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
+    if (strategySlug) {
+      registerStrategySaveButton(strategySlug, saveButton);
+    }
+
     saveButton.addEventListener('click', () => {
       const title = card.querySelector('.strategy-card__title')?.textContent?.trim() || 'Untitled strategy';
       const description = card.querySelector('.strategy-card__description')?.textContent?.trim() || '';
-      const strategySlug = card.dataset.strategySlug || '';
+      if (strategySlug && isStrategySaved(strategySlug)) {
+        const nextInventory = state.inventory.filter(
+          (item) => normalizeStrategySlug(item.strategySlug) !== strategySlug
+        );
+        persistInventory(nextInventory, {
+          feedbackElement: feedback,
+          feedbackMessage: `Removed “${title}” from your inventory for ${needName}.`,
+          feedbackMessageType: 'warning',
+        });
+        return;
+      }
+
       const tags = buildStrategyTags(card.dataset.strategyTags, needSlug);
       const firstName = sanitizeContributorName(card.dataset.firstName || '');
       const location = sanitizeLocation(card.dataset.location || '');
@@ -4438,6 +4527,8 @@ function backfillInventoryNeedSlugs() {
   if (updated) {
     state.inventory = nextInventory;
     saveInventory(nextInventory);
+    refreshSavedStrategyIndex();
+    updateStrategySaveButtonStates();
   }
 
   return updated;
@@ -4445,8 +4536,10 @@ function backfillInventoryNeedSlugs() {
 
 function persistInventory(items, options = {}) {
   state.inventory = items;
+  refreshSavedStrategyIndex();
   saveInventory(items);
   renderInventoryViews();
+  updateStrategySaveButtonStates();
   if (options.openList) {
     openInventoryPanel();
   }
@@ -4454,7 +4547,11 @@ function persistInventory(items, options = {}) {
     showInventoryMessage(options.inventoryMessage, options.inventoryMessageType || 'success');
   }
   if (options.feedbackElement && options.feedbackMessage) {
-    showFeedback(options.feedbackElement, options.feedbackMessage, 'success');
+    showFeedback(
+      options.feedbackElement,
+      options.feedbackMessage,
+      options.feedbackMessageType || 'success'
+    );
   }
 }
 
