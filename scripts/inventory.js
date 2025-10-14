@@ -56,6 +56,7 @@ const paletteState = {
   tiltToggle: null,
   tiltStatus: null,
   tiltSnapshot: null,
+  swatchDrag: null,
 };
 
 const SECTION_ALIASES = new Map([
@@ -1451,6 +1452,9 @@ function buildPaletteUi() {
 
     const swatch = document.createElement('span');
     swatch.className = 'palette-form__swatch';
+    swatch.addEventListener('pointerdown', (event) => {
+      handleSwatchPointerDown(event, color.key);
+    });
 
     const input = document.createElement('input');
     input.className = 'palette-form__input';
@@ -1668,6 +1672,275 @@ function handleColorInputChange(event) {
 
   input.value = sanitized;
   applyColors({ [key]: sanitized }, { presetName: '' });
+}
+
+function handleSwatchPointerDown(event, key) {
+  if (typeof PointerEvent === 'undefined' || !(event instanceof PointerEvent)) {
+    return;
+  }
+
+  const swatch = event.currentTarget;
+  if (!(swatch instanceof HTMLElement)) {
+    return;
+  }
+
+  const baseHex =
+    sanitizeHex(
+      paletteState.currentColors[key] ||
+        paletteState.defaultColors[key] ||
+        DEFAULT_PALETTE[key] ||
+        paletteState.currentColors.ink ||
+        DEFAULT_PALETTE.ink
+    ) || '#000000';
+
+  const startHsl = hexToHsl(baseHex);
+  if (!startHsl) {
+    return;
+  }
+
+  event.preventDefault();
+
+  try {
+    swatch.setPointerCapture(event.pointerId);
+  } catch (error) {
+    // Ignore browsers that do not support pointer capture.
+  }
+
+  paletteState.swatchDrag = {
+    key,
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    startHsl,
+    startHex: baseHex,
+    previewHex: baseHex,
+    swatch,
+  };
+
+  swatch.addEventListener('pointermove', handleSwatchPointerMove);
+  swatch.addEventListener('pointerup', handleSwatchPointerUp);
+  swatch.addEventListener('pointercancel', handleSwatchPointerCancel);
+}
+
+function handleSwatchPointerMove(event) {
+  if (typeof PointerEvent === 'undefined' || !(event instanceof PointerEvent)) {
+    return;
+  }
+
+  const drag = paletteState.swatchDrag;
+  if (!drag || event.pointerId !== drag.pointerId) {
+    return;
+  }
+
+  const deltaX = event.clientX - drag.startX;
+  const deltaY = event.clientY - drag.startY;
+
+  const hue = normalizeHue(drag.startHsl.h + deltaX * 0.5);
+  const next = { ...drag.startHsl, h: hue };
+
+  if (event.shiftKey) {
+    next.s = clampNumber(drag.startHsl.s - deltaY * 0.5, 0, 100);
+  } else {
+    next.l = clampNumber(drag.startHsl.l - deltaY * 0.3, 5, 95);
+  }
+
+  const nextHex = hslToHex(next);
+  if (!nextHex || nextHex === drag.previewHex) {
+    return;
+  }
+
+  drag.previewHex = nextHex;
+  applyColors({ [drag.key]: nextHex }, { presetName: '', persist: false });
+}
+
+function handleSwatchPointerUp(event) {
+  finalizeSwatchPointerInteraction(event, { commit: true });
+}
+
+function handleSwatchPointerCancel(event) {
+  finalizeSwatchPointerInteraction(event, { commit: false });
+}
+
+function finalizeSwatchPointerInteraction(event, options = {}) {
+  if (typeof PointerEvent === 'undefined' || !(event instanceof PointerEvent)) {
+    return;
+  }
+
+  const drag = paletteState.swatchDrag;
+  const swatch = event.currentTarget;
+  if (!drag || !(swatch instanceof HTMLElement) || event.pointerId !== drag.pointerId) {
+    return;
+  }
+
+  const { commit = false } = options;
+
+  try {
+    swatch.releasePointerCapture(event.pointerId);
+  } catch (error) {
+    // Ignore browsers that do not support pointer capture.
+  }
+
+  swatch.removeEventListener('pointermove', handleSwatchPointerMove);
+  swatch.removeEventListener('pointerup', handleSwatchPointerUp);
+  swatch.removeEventListener('pointercancel', handleSwatchPointerCancel);
+
+  const hexToApply = commit ? drag.previewHex || drag.startHex : drag.startHex;
+  const persist = commit;
+
+  if (hexToApply) {
+    applyColors({ [drag.key]: hexToApply }, { presetName: '', persist });
+  }
+
+  paletteState.swatchDrag = null;
+}
+
+function clampNumber(value, min, max) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.min(Math.max(value, min), max);
+}
+
+function normalizeHue(value) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  const normalized = value % 360;
+  return normalized < 0 ? normalized + 360 : normalized;
+}
+
+function hexToRgb(hex) {
+  const sanitized = sanitizeHex(hex);
+  if (!sanitized) {
+    return null;
+  }
+
+  const value = sanitized.slice(1);
+  if (value.length === 3) {
+    const r = Number.parseInt(value[0] + value[0], 16);
+    const g = Number.parseInt(value[1] + value[1], 16);
+    const b = Number.parseInt(value[2] + value[2], 16);
+    if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
+      return null;
+    }
+    return { r, g, b };
+  }
+
+  if (value.length === 6) {
+    const r = Number.parseInt(value.slice(0, 2), 16);
+    const g = Number.parseInt(value.slice(2, 4), 16);
+    const b = Number.parseInt(value.slice(4, 6), 16);
+    if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
+      return null;
+    }
+    return { r, g, b };
+  }
+
+  return null;
+}
+
+function rgbToHex(rgb) {
+  if (!rgb) {
+    return '';
+  }
+  const toHex = (component) => Math.round(clampNumber(component, 0, 255)).toString(16).padStart(2, '0');
+  return `#${toHex(rgb.r)}${toHex(rgb.g)}${toHex(rgb.b)}`.toUpperCase();
+}
+
+function rgbToHsl(rgb) {
+  if (!rgb) {
+    return null;
+  }
+
+  const r = clampNumber(rgb.r, 0, 255) / 255;
+  const g = clampNumber(rgb.g, 0, 255) / 255;
+  const b = clampNumber(rgb.b, 0, 255) / 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
+
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      default:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+
+  return {
+    h: h * 360,
+    s: s * 100,
+    l: l * 100,
+  };
+}
+
+function hueToRgb(p, q, t) {
+  let temp = t;
+  if (temp < 0) {
+    temp += 1;
+  }
+  if (temp > 1) {
+    temp -= 1;
+  }
+  if (temp < 1 / 6) {
+    return p + (q - p) * 6 * temp;
+  }
+  if (temp < 1 / 2) {
+    return q;
+  }
+  if (temp < 2 / 3) {
+    return p + (q - p) * (2 / 3 - temp) * 6;
+  }
+  return p;
+}
+
+function hslToRgb(hsl) {
+  if (!hsl) {
+    return null;
+  }
+
+  const h = normalizeHue(hsl.h) / 360;
+  const s = clampNumber(hsl.s, 0, 100) / 100;
+  const l = clampNumber(hsl.l, 0, 100) / 100;
+
+  if (s === 0) {
+    const value = Math.round(l * 255);
+    return { r: value, g: value, b: value };
+  }
+
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+
+  const r = Math.round(hueToRgb(p, q, h + 1 / 3) * 255);
+  const g = Math.round(hueToRgb(p, q, h) * 255);
+  const b = Math.round(hueToRgb(p, q, h - 1 / 3) * 255);
+
+  return { r, g, b };
+}
+
+function hexToHsl(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) {
+    return null;
+  }
+  return rgbToHsl(rgb);
+}
+
+function hslToHex(hsl) {
+  const rgb = hslToRgb(hsl);
+  return rgbToHex(rgb);
 }
 
 function ensurePaletteStyleElement() {
