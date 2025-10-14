@@ -12,9 +12,7 @@ const themePreloadScript = (basePath) => {
     <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
-        const THEME_COOKIE_KEY = 'nvcTheme';
         const HIGH_CONTRAST_KEY = 'themeHighContrast';
-        const HIGH_CONTRAST_COOKIE_KEY = 'nvcThemeContrast';
         const VAR_MAP = {
           plum: '--plum',
           lavender: '--lavender',
@@ -48,26 +46,6 @@ const themePreloadScript = (basePath) => {
           }
           const prefixed = trimmed.startsWith('#') ? trimmed : '#' + trimmed;
           return HEX_PATTERN.test(prefixed) ? prefixed.toUpperCase() : '';
-        }
-
-        function readCookie(name) {
-          if (typeof document === 'undefined' || typeof document.cookie !== 'string') {
-            return '';
-          }
-          const prefix = name + '=';
-          const segments = document.cookie ? document.cookie.split(';') : [];
-          for (let index = 0; index < segments.length; index += 1) {
-            const segment = segments[index].trim();
-            if (segment.startsWith(prefix)) {
-              const value = segment.slice(prefix.length);
-              try {
-                return decodeURIComponent(value);
-              } catch (error) {
-                return value;
-              }
-            }
-          }
-          return '';
         }
 
         function readPaletteVar(varName) {
@@ -128,9 +106,6 @@ const themePreloadScript = (basePath) => {
             if (typeof console !== 'undefined' && console.warn) {
               console.warn('Unable to access saved theme', error);
             }
-          }
-          if (!raw) {
-            raw = readCookie(THEME_COOKIE_KEY);
           }
           if (!raw) {
             return null;
@@ -203,9 +178,6 @@ const themePreloadScript = (basePath) => {
             if (typeof console !== 'undefined' && console.warn) {
               console.warn('Unable to read high contrast preference', error);
             }
-          }
-          if (!highContrastPreference) {
-            highContrastPreference = readCookie(HIGH_CONTRAST_COOKIE_KEY);
           }
           const highContrastEnabled = highContrastPreference === '1';
           if (highContrastEnabled) {
