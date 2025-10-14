@@ -1078,8 +1078,13 @@ function setupInventoryPage() {
 }
 
 function highlightNavigation() {
-  const navLinks = Array.from(document.querySelectorAll('.site-nav__link'));
+  const navLinks = Array.from(document.querySelectorAll('.site-nav__link[href]'));
   if (!navLinks.length) {
+    return;
+  }
+
+  const hasPreRenderedHighlight = navLinks.some((link) => link.hasAttribute('aria-current'));
+  if (hasPreRenderedHighlight) {
     return;
   }
 
@@ -1090,7 +1095,6 @@ function highlightNavigation() {
   let longestMatch = 0;
 
   const entries = navLinks.map((link) => {
-    link.removeAttribute('aria-current');
     const href = link.getAttribute('href');
     if (!href) {
       return { link, linkPath: null };
