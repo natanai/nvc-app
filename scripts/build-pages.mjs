@@ -575,7 +575,7 @@ function renderCategory(type, items) {
         </div>
         <div class="magnet-search" data-magnet-search>
           <label class="magnet-search__field">
-            <span class="magnet-search__label">Search ${lowerTitle}</span>
+            <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
             <input
               type="search"
               name="${type}-search"
@@ -585,7 +585,7 @@ function renderCategory(type, items) {
               data-magnet-search-input
             >
           </label>
-          <div class="magnet-search__results" data-magnet-search-results aria-live="polite">
+          <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
             <div class="magnet-search__list" data-magnet-search-list></div>
           </div>
