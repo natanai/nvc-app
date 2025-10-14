@@ -41,6 +41,17 @@ A retro-styled companion to [needshare.net](https://needshare.net/) that mirrors
 
 The tests expect the generated pages to be present. Re-run `npm run build:pages` if you modify the data or templates.
 
+## Stable local release snapshot
+
+To reproduce the `release-stable-local` GitHub Actions workflow without pushing a release, run the helper script:
+
+```bash
+./scripts/run-release-stable-local.sh
+```
+
+The script creates a timestamped ZIP archive under `releases/` that mirrors the artifact the workflow would publish. Pass a
+custom directory as the first argument to store the archive elsewhere.
+
 ## Project structure
 
 ```
