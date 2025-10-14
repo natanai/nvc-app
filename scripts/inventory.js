@@ -917,6 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
   state.journalStore = resolveJournalStore();
   updateJournalEntriesFromStore();
   highlightNavigation();
+  setupInventoryHoldDrop();
   initCustomizer().catch((error) => {
     console.warn('Unable to set up the customizer', error);
   });
@@ -938,6 +939,7 @@ if (
   window.__NVC_INVENTORY_TESTS__ = {
     highlightNavigation,
     resolveNavCustomizerToggle,
+    setupInventoryHoldDrop,
   };
 }
 
@@ -1447,6 +1449,220 @@ function highlightNavigation() {
   if (activeLink) {
     activeLink.setAttribute('aria-current', 'page');
   }
+}
+
+const HOLD_DROP_DELAY_MS = 425;
+const HOLD_DROP_MOVE_CANCEL_PX = 10;
+
+function setupInventoryHoldDrop() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+
+  const nav = document.querySelector('.site-nav');
+  const inventoryLink = nav?.querySelector('.site-nav__link--inventory');
+  if (!(inventoryLink instanceof HTMLElement)) {
+    return;
+  }
+
+  if (inventoryLink.dataset.holdDropReady === 'true') {
+    return;
+  }
+  inventoryLink.dataset.holdDropReady = 'true';
+
+  const navRow = inventoryLink.parentElement;
+  if (!(navRow instanceof HTMLElement)) {
+    return;
+  }
+  navRow.classList.add('site-nav__row--has-hold-drop');
+
+  const panel = document.createElement('a');
+  panel.className = 'site-nav__hold-drop';
+  panel.setAttribute('data-state', 'closed');
+  panel.setAttribute('aria-hidden', 'true');
+  panel.tabIndex = -1;
+  panel.textContent = 'Journal';
+
+  const journalHref = `${state.basePath || ''}inventory/journal/`;
+  panel.href = journalHref;
+
+  navRow.appendChild(panel);
+
+  let holdTimer = null;
+  let holdActive = false;
+  let pointerId = null;
+  let suppressNextClick = false;
+  let panelActive = false;
+  let startX = 0;
+  let startY = 0;
+
+  const repositionPanel = () => {
+    if (!holdActive) {
+      return;
+    }
+    const linkRect = inventoryLink.getBoundingClientRect();
+    const rowRect = navRow.getBoundingClientRect();
+    panel.style.position = 'absolute';
+    panel.style.width = `${linkRect.width}px`;
+    panel.style.left = `${linkRect.left - rowRect.left}px`;
+    panel.style.top = `${linkRect.bottom - rowRect.top - linkRect.height * 0.15}px`;
+  };
+
+  const closePanel = () => {
+    panel.setAttribute('data-state', 'closed');
+    panel.setAttribute('aria-hidden', 'true');
+    panel.removeAttribute('data-active');
+    panelActive = false;
+    window.removeEventListener('scroll', repositionPanel, true);
+    window.removeEventListener('resize', repositionPanel);
+  };
+
+  const updatePanelHighlight = (clientX, clientY) => {
+    if (!holdActive) {
+      return;
+    }
+    const rect = panel.getBoundingClientRect();
+    const isInside =
+      clientX >= rect.left &&
+      clientX <= rect.right &&
+      clientY >= rect.top &&
+      clientY <= rect.bottom;
+    panelActive = isInside;
+    if (isInside) {
+      panel.setAttribute('data-active', 'true');
+    } else {
+      panel.removeAttribute('data-active');
+    }
+  };
+
+  const openPanel = () => {
+    holdActive = true;
+    repositionPanel();
+    panel.setAttribute('data-state', 'open');
+    panel.setAttribute('aria-hidden', 'false');
+    window.addEventListener('scroll', repositionPanel, true);
+    window.addEventListener('resize', repositionPanel);
+  };
+
+  const clearHoldTimer = () => {
+    if (holdTimer !== null) {
+      window.clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+  };
+
+  const releasePointerCapture = () => {
+    if (pointerId !== null && typeof inventoryLink.releasePointerCapture === 'function') {
+      try {
+        if (inventoryLink.hasPointerCapture(pointerId)) {
+          inventoryLink.releasePointerCapture(pointerId);
+        }
+      } catch (error) {
+        // Ignore capture release errors
+      }
+    }
+    pointerId = null;
+  };
+
+  const cancelHold = () => {
+    clearHoldTimer();
+    if (holdActive) {
+      closePanel();
+    }
+    holdActive = false;
+    panelActive = false;
+    releasePointerCapture();
+  };
+
+  const handlePointerDown = (event) => {
+    if (event.button !== 0) {
+      cancelHold();
+      return;
+    }
+
+    clearHoldTimer();
+    suppressNextClick = false;
+    holdActive = false;
+    panelActive = false;
+    startX = event.clientX;
+    startY = event.clientY;
+    pointerId = event.pointerId;
+
+    holdTimer = window.setTimeout(() => {
+      holdTimer = null;
+      openPanel();
+      if (pointerId !== null && typeof inventoryLink.setPointerCapture === 'function') {
+        try {
+          inventoryLink.setPointerCapture(pointerId);
+        } catch (error) {
+          // Ignore capture errors
+        }
+      }
+      updatePanelHighlight(event.clientX, event.clientY);
+    }, HOLD_DROP_DELAY_MS);
+  };
+
+  const handlePointerMove = (event) => {
+    if (holdTimer !== null) {
+      const deltaX = event.clientX - startX;
+      const deltaY = event.clientY - startY;
+      if (Math.hypot(deltaX, deltaY) > HOLD_DROP_MOVE_CANCEL_PX) {
+        cancelHold();
+      }
+      return;
+    }
+
+    if (holdActive) {
+      updatePanelHighlight(event.clientX, event.clientY);
+    }
+  };
+
+  const handlePointerEnd = (event) => {
+    if (holdTimer !== null) {
+      clearHoldTimer();
+      return;
+    }
+
+    if (!holdActive) {
+      cancelHold();
+      return;
+    }
+
+    suppressNextClick = true;
+    event.preventDefault();
+    event.stopPropagation();
+
+    const shouldNavigate = panelActive;
+    closePanel();
+    holdActive = false;
+    panelActive = false;
+    releasePointerCapture();
+
+    if (shouldNavigate) {
+      window.requestAnimationFrame(() => {
+        window.location.href = journalHref;
+      });
+    }
+  };
+
+  const handlePointerCancel = () => {
+    cancelHold();
+  };
+
+  inventoryLink.addEventListener('pointerdown', handlePointerDown);
+  inventoryLink.addEventListener('pointermove', handlePointerMove);
+  inventoryLink.addEventListener('pointerup', handlePointerEnd);
+  inventoryLink.addEventListener('pointercancel', handlePointerCancel);
+  inventoryLink.addEventListener('lostpointercapture', cancelHold);
+
+  inventoryLink.addEventListener('click', (event) => {
+    if (!suppressNextClick) {
+      return;
+    }
+    suppressNextClick = false;
+    event.preventDefault();
+    event.stopPropagation();
+  });
 }
 
 function normalizePath(pathname) {
