@@ -5216,6 +5216,21 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   outline: none;
 }
 
+@media (max-width: 540px) {
+  .evidence-note {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .evidence-note__dismiss {
+    border-width: 1px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    align-self: flex-end;
+  }
+}
+
 .page-description--feeling {
   margin-top: 0.75rem;
   max-width: 60ch;
