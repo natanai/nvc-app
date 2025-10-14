@@ -1001,7 +1001,7 @@ body.has-support-journal-open {
   }
 }
 
-@media (max-width: 959px) and (orientation: landscape) {
+@media (max-width: 959px) and (min-height: 600px) and (orientation: landscape) {
   .support-journal__layer[data-state='open'] {
     align-items: center;
   }
