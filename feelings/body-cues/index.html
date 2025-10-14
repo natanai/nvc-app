@@ -3,12 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Feelings • NeedShare Explorer</title>
-    <meta name="description" content="Map situations, feelings, and needs with retro magnet play, journaling tools, and a shareable strategy inventory inspired by NeedShare." />
-    <link rel="icon" type="image/svg+xml" href="../icons/main.svg" />
-    <meta property="og:image" content="../icons/main.svg" />
-    <meta name="twitter:image" content="../icons/main.svg" />
-        <script src="../assets/js/ui/contrast.js"></script>
+    <title>Body Cues explorer • NeedShare Explorer</title>
+    <meta
+      name="description"
+      content="Describe the body sensations you notice and see which feelings might align with them."
+    />
+    <link rel="icon" type="image/svg+xml" href="../../icons/main.svg" />
+    <meta property="og:image" content="../../icons/main.svg" />
+    <meta name="twitter:image" content="../../icons/main.svg" />
+        <script src="../../assets/js/ui/contrast.js"></script>
     <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
@@ -201,28 +204,28 @@
               }
             }
           }
-
-          if (applied) {
-            root.setAttribute('data-theme-preapplied', 'true');
-          }
         } catch (error) {
           if (typeof console !== 'undefined' && console.warn) {
             console.warn('Unable to apply prepaint adjustments', error);
           }
         }
+
+        if (applied) {
+          root.setAttribute('data-theme-preapplied', 'true');
+        }
       })();
     </script>
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body data-base-path="../">
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
       <nav class="site-nav" aria-label="Primary">
         <div class="site-nav__row site-nav__row--primary">
-          <a class="site-nav__link site-nav__link--home" href="../">
+          <a class="site-nav__link site-nav__link--home" href="../../">
             <img
               class="site-nav__icon"
-              src="../icons/home-8bit.svg"
+              src="../../icons/home-8bit.svg"
               alt=""
               aria-hidden="true"
             />
@@ -238,25 +241,18 @@
             <span class="site-nav__glyph" aria-hidden="true">+</span>
             <span class="visually-hidden">Customizer</span>
           </button>
-          <div class="site-nav__journal" data-support-journal data-journal-overlay>
+          <div class="support-journal" data-support-journal>
             <button
-              class="site-nav__link site-nav__link--journal"
+              class="site-nav__link"
               type="button"
-              data-support-journal-open
-              aria-haspopup="dialog"
+              data-support-journal-trigger
               aria-expanded="false"
-              aria-controls="global-support-journal-layer"
+              aria-controls="global-support-journal"
             >
-              <span class="site-nav__icon site-nav__icon--journal" aria-hidden="true"></span>
-              <span class="site-nav__label">Journal</span>
+              <span class="support-journal__label">Journal</span>
             </button>
-            <div
-              id="global-support-journal-layer"
-              class="support-journal__layer"
-              data-support-journal-layer
-              data-state="closed"
-              aria-hidden="true"
-            >
+            <div class="support-journal__overlay" data-support-journal-overlay hidden>
+              <div class="support-journal__backdrop" data-support-journal-backdrop></div>
               <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
                 <header class="support-journal__header">
                   <div class="support-journal__titles">
@@ -286,73 +282,69 @@
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="../inventory/">
+          <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
             Inventory
             <span class="site-nav__count" data-inventory-count hidden></span>
           </a>
         </div>
         <div class="site-nav__row site-nav__row--secondary">
-          <a class="site-nav__link" href="../situations/">Situations</a>
-          <a class="site-nav__link" href="../feelings/" aria-current="page">Feelings</a>
-          <a class="site-nav__link" href="../needs/">Needs</a>
+          <a class="site-nav__link" href="../../situations/">Situations</a>
+          <a class="site-nav__link" href="../">Feelings</a>
+          <a class="site-nav__link" href="./" aria-current="page">Feelings &gt; Body Cues</a>
+          <a class="site-nav__link" href="../../needs/">Needs</a>
         </div>
       </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../">Home</a></li><li aria-current="page">Feelings</li>
+          <li><a href="../../">Home</a></li><li><a href="../">Feelings</a></li><li aria-current="page">Body Cues</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
-        
+      <main id="main" class="page body-cues-page" role="main">
+
       <header class="page-header">
-        <h1 class="page-title">Feelings</h1>
-        <p class="page-description">Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.</p>
-        <div class="support-actions">
-          <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="body-cues/">Explore body cues explorer</a>
-          <a class="support-button support-button--ghost" href="../inventory/#journal-dashboard">Visit your journal dashboard</a>
-        </div>
+        <h1 class="page-title">Body Cues explorer</h1>
+        <p class="page-description">
+          Move the sliders to describe what your body is doing. We will surface feelings that often ride along with
+          those cues so you can follow your curiosity instead of guessing in the dark.
+        </p>
       </header>
-      <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root>
-        <div class="magnet-section__header">
-          <h2 id="feelings-list" class="section-title">Feelings directory</h2>
-          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+
+      <section class="body-cues-tool" data-body-cues-root>
+        <div class="body-cues-tool__intro">
+          <p>
+            Start with one or two sensations that stand out. You can always add more later. Matches update as you go so
+            you can see how the story shifts.
+          </p>
+          <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
         </div>
-        <div class="magnet-search" data-magnet-search>
-          <label class="magnet-search__field">
-            <span class="magnet-search__label visually-hidden">Search feelings</span>
-            <input
-              type="search"
-              name="feelings-search"
-              class="magnet-search__input"
-              placeholder="Search feelings"
-              autocomplete="off"
-              data-magnet-search-input
-            >
-          </label>
-          <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
-            <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
-            <div class="magnet-search__list" data-magnet-search-list></div>
+        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
+          <div class="body-cues-tool__magnet-header">
+            <h2 id="body-cues-magnets-heading">Feeling magnets</h2>
+            <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live>
+              No matches yet.
+            </p>
           </div>
-        </div>
-        <div class="magnet-board-wrapper">
-          <div class="pill-grid magnet-board" data-magnet-board>
-            <a class="pill magnet" data-magnet-id="feelings-hurt" href="hurt/">Hurt</a><a class="pill magnet" data-magnet-id="feelings-terrified" href="terrified/">Terrified</a><a class="pill magnet" data-magnet-id="feelings-bewildered" href="bewildered/">Bewildered</a><a class="pill magnet" data-magnet-id="feelings-sad" href="sad/">Sad</a><a class="pill magnet" data-magnet-id="feelings-frightened" href="frightened/">Frightened</a><a class="pill magnet" data-magnet-id="feelings-lonely" href="lonely/">Lonely</a><a class="pill magnet" data-magnet-id="feelings-angry" href="angry/">Angry</a><a class="pill magnet" data-magnet-id="feelings-frustrated" href="frustrated/">Frustrated</a><a class="pill magnet" data-magnet-id="feelings-scared" href="scared/">Scared</a><a class="pill magnet" data-magnet-id="feelings-upset" href="upset/">Upset</a><a class="pill magnet" data-magnet-id="feelings-tense" href="tense/">Tense</a><a class="pill magnet" data-magnet-id="feelings-distressed" href="distressed/">Distressed</a><a class="pill magnet" data-magnet-id="feelings-disappointed" href="disappointed/">Disappointed</a><a class="pill magnet" data-magnet-id="feelings-enraged" href="enraged/">Enraged</a><a class="pill magnet" data-magnet-id="feelings-confused" href="confused/">Confused</a><a class="pill magnet" data-magnet-id="feelings-antagonistic" href="antagonistic/">Antagonistic</a><a class="pill magnet" data-magnet-id="feelings-hostile" href="hostile/">Hostile</a><a class="pill magnet" data-magnet-id="feelings-pressured" href="pressured/">Pressured</a><a class="pill magnet" data-magnet-id="feelings-thwarted" href="thwarted/">Thwarted</a><a class="pill magnet" data-magnet-id="feelings-anxious" href="anxious/">Anxious</a><a class="pill magnet" data-magnet-id="feelings-resentful" href="resentful/">Resentful</a><a class="pill magnet" data-magnet-id="feelings-in-pain" href="in-pain/">In pain</a><a class="pill magnet" data-magnet-id="feelings-humiliated" href="humiliated/">Humiliated</a><a class="pill magnet" data-magnet-id="feelings-embarrassed" href="embarrassed/">Embarrassed</a><a class="pill magnet" data-magnet-id="feelings-overwhelmed" href="overwhelmed/">Overwhelmed</a><a class="pill magnet" data-magnet-id="feelings-irritated" href="irritated/">Irritated</a><a class="pill magnet" data-magnet-id="feelings-anxiety" href="anxiety/">Anxiety</a><a class="pill magnet" data-magnet-id="feelings-afraid" href="afraid/">Afraid</a><a class="pill magnet" data-magnet-id="feelings-powerless" href="powerless/">Powerless</a><a class="pill magnet" data-magnet-id="feelings-impotent" href="impotent/">Impotent</a><a class="pill magnet" data-magnet-id="feelings-helpless" href="helpless/">Helpless</a><a class="pill magnet" data-magnet-id="feelings-tired" href="tired/">Tired</a><a class="pill magnet" data-magnet-id="feelings-defiant" href="defiant/">Defiant</a><a class="pill magnet" data-magnet-id="feelings-resentment" href="resentment/">Resentment</a><a class="pill magnet" data-magnet-id="feelings-fear" href="fear/">Fear</a><a class="pill magnet" data-magnet-id="feelings-desperation" href="desperation/">Desperation</a><a class="pill magnet" data-magnet-id="feelings-alarmed" href="alarmed/">Alarmed</a><a class="pill magnet" data-magnet-id="feelings-agitated" href="agitated/">Agitated</a><a class="pill magnet" data-magnet-id="feelings-jealous" href="jealous/">Jealous</a>
-          </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
-          </label>
+          <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
+        </section>
+        <div class="body-cues-tool__layout">
+          <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+          <section class="body-cues-tool__results-panel">
+            <h2 class="body-cues-tool__results-title">Matching feelings</h2>
+            <p class="body-cues-tool__empty" data-body-cues-empty>
+              Adjust the sliders to see feelings that frequently pair with those cues.
+            </p>
+            <p class="body-cues-tool__error" data-body-cues-error hidden>
+              We could not load the body cue library. Please refresh to try again.
+            </p>
+            <ol class="body-cues-tool__results-list" data-body-cues-results></ol>
+          </section>
         </div>
       </section>
-    
+
       </main>
     </div>
-    <script src="../assets/js/journal/store.js" type="module"></script>
-    <script src="../scripts/inventory.js" defer></script>
-    <script src="../scripts/magnets.js" type="module"></script>
+    <script src="../../assets/js/journal/store.js" type="module"></script>
+    <script src="../../scripts/inventory.js" defer></script>
+    <script src="../../scripts/body-cues-tool.js" type="module"></script>
   </body>
 </html>
