@@ -1828,9 +1828,6 @@ function buildPaletteUi() {
   paletteState.tiltToggle = tiltToggle;
   paletteState.tiltStatus = tiltStatus;
 
-  const actions = document.createElement('div');
-  actions.className = 'palette-form__actions';
-
   const clearButton = document.createElement('button');
   clearButton.type = 'button';
   clearButton.className = 'palette-form__clear';
@@ -1878,6 +1875,9 @@ function buildPaletteUi() {
     }
   });
 
+  const actions = document.createElement('div');
+  actions.className = 'palette-form__actions';
+
   const resetButton = document.createElement('button');
   resetButton.type = 'button';
   resetButton.className = 'palette-form__reset';
@@ -1888,8 +1888,13 @@ function buildPaletteUi() {
     setCornerRoundness(DEFAULT_ROUNDNESS);
   });
 
-  actions.append(clearButton, resetButton);
-  form.appendChild(actions);
+  actions.append(resetButton);
+
+  const footer = document.createElement('div');
+  footer.className = 'palette-form__footer';
+  footer.append(clearButton);
+
+  form.append(actions, footer);
 
   panel.appendChild(form);
   container.append(toggle, panel);
