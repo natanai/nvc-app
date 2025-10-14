@@ -4,6 +4,11 @@ A retro-styled companion to [needshare.net](https://needshare.net/) that mirrors
 
 ## Getting started
 
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
 1. (Optional) Regenerate the JSON dataset from the source spreadsheets if they change:
    ```bash
    npm run build:data
@@ -21,6 +26,20 @@ A retro-styled companion to [needshare.net](https://needshare.net/) that mirrors
    python -m http.server 8000
    ```
    Then open <http://localhost:8000/> in your browser.
+
+## Development workflow
+
+- **Lint the generated scripts:**
+  ```bash
+  npm run lint
+  ```
+
+- **Run the Playwright smoke tests:**
+  ```bash
+  npm test
+  ```
+
+The tests expect the generated pages to be present. Re-run `npm run build:pages` if you modify the data or templates.
 
 ## Project structure
 
