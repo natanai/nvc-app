@@ -5435,41 +5435,6 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   color: color-mix(in srgb, var(--ink) 55%, transparent);
 }
 
-.feeling-inference__sdt {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.feeling-inference__sdt-chip {
-  padding: 0.4rem 0.85rem;
-  background: color-mix(in srgb, var(--chip-bg) 70%, transparent);
-  border-radius: 999px;
-  font-weight: 600;
-}
-
-.feeling-inference__needs-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  font-size: 0.95rem;
-}
-
-.feeling-inference__needs-list li::marker {
-  content: '';
-}
-
-.feeling-inference__need-link {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-decoration-color: color-mix(in srgb, var(--mint) 55%, transparent);
-}
-
 .feeling-inference__skills {
   display: grid;
   gap: 1rem;
