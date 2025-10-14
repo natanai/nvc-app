@@ -699,6 +699,17 @@ document.addEventListener('DOMContentLoaded', () => {
   setupScrollTopButton();
 });
 
+if (
+  typeof window !== 'undefined' &&
+  typeof process !== 'undefined' &&
+  process?.env?.NVC_TEST === '1'
+) {
+  window.__NVC_INVENTORY_TESTS__ = {
+    highlightNavigation,
+    resolveNavCustomizerToggle,
+  };
+}
+
 function loadInventory() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -1078,8 +1089,13 @@ function setupInventoryPage() {
 }
 
 function highlightNavigation() {
-  const navLinks = Array.from(document.querySelectorAll('.site-nav__link'));
+  const navLinks = Array.from(document.querySelectorAll('.site-nav__link[href]'));
   if (!navLinks.length) {
+    return;
+  }
+
+  const hasPreRenderedHighlight = navLinks.some((link) => link.hasAttribute('aria-current'));
+  if (hasPreRenderedHighlight) {
     return;
   }
 
@@ -1090,7 +1106,6 @@ function highlightNavigation() {
   let longestMatch = 0;
 
   const entries = navLinks.map((link) => {
-    link.removeAttribute('aria-current');
     const href = link.getAttribute('href');
     if (!href) {
       return { link, linkPath: null };
@@ -1214,6 +1229,57 @@ async function initCustomizer() {
   }
 }
 
+function resolveNavCustomizerToggle(nav) {
+  if (!nav) {
+    return null;
+  }
+
+  const existingNavToggle = nav.querySelector('[data-palette-toggle]');
+  if (existingNavToggle instanceof HTMLElement) {
+    if (!existingNavToggle.hasAttribute('type')) {
+      existingNavToggle.setAttribute('type', 'button');
+    }
+    existingNavToggle.setAttribute('aria-haspopup', 'dialog');
+    if (!existingNavToggle.hasAttribute('data-palette-toggle')) {
+      existingNavToggle.setAttribute('data-palette-toggle', '');
+    }
+    return existingNavToggle;
+  }
+
+  const mobileToggle = document.createElement('button');
+  mobileToggle.type = 'button';
+  mobileToggle.className = 'site-nav__link site-nav__link--customizer';
+  mobileToggle.setAttribute('data-palette-toggle', '');
+  mobileToggle.setAttribute('aria-haspopup', 'dialog');
+
+  const mobileGlyph = document.createElement('span');
+  mobileGlyph.className = 'site-nav__glyph';
+  mobileGlyph.setAttribute('aria-hidden', 'true');
+  mobileGlyph.textContent = '+';
+
+  const mobileSrLabel = document.createElement('span');
+  mobileSrLabel.className = 'visually-hidden';
+  mobileSrLabel.textContent = 'Open customizer';
+
+  mobileToggle.append(mobileGlyph, mobileSrLabel);
+
+  const primaryRow = nav.querySelector('.site-nav__row--primary');
+  if (primaryRow) {
+    const homeLink = primaryRow.querySelector('.site-nav__link--home');
+    if (homeLink?.nextSibling) {
+      primaryRow.insertBefore(mobileToggle, homeLink.nextSibling);
+    } else if (homeLink) {
+      primaryRow.appendChild(mobileToggle);
+    } else {
+      primaryRow.insertBefore(mobileToggle, primaryRow.firstChild ?? null);
+    }
+  } else {
+    nav.appendChild(mobileToggle);
+  }
+
+  return mobileToggle;
+}
+
 function buildPaletteUi() {
   const container = document.createElement('div');
   container.className = 'palette-corner';
@@ -1234,50 +1300,7 @@ function buildPaletteUi() {
   toggle.appendChild(srLabel);
 
   const nav = document.querySelector('.site-nav');
-  let mobileToggle = null;
-  if (nav) {
-    const existingNavToggle = nav.querySelector('[data-palette-toggle]');
-    if (existingNavToggle instanceof HTMLElement) {
-      mobileToggle = existingNavToggle;
-      if (!mobileToggle.hasAttribute('type')) {
-        mobileToggle.setAttribute('type', 'button');
-      }
-      mobileToggle.setAttribute('aria-haspopup', 'dialog');
-      if (!mobileToggle.hasAttribute('data-palette-toggle')) {
-        mobileToggle.setAttribute('data-palette-toggle', '');
-      }
-    } else {
-      mobileToggle = document.createElement('button');
-      mobileToggle.type = 'button';
-      mobileToggle.className = 'site-nav__link site-nav__link--customizer';
-      mobileToggle.setAttribute('data-palette-toggle', '');
-      mobileToggle.setAttribute('aria-haspopup', 'dialog');
-      const mobileGlyph = document.createElement('span');
-      mobileGlyph.className = 'site-nav__glyph';
-      mobileGlyph.setAttribute('aria-hidden', 'true');
-      mobileGlyph.textContent = '+';
-
-      const mobileSrLabel = document.createElement('span');
-      mobileSrLabel.className = 'visually-hidden';
-      mobileSrLabel.textContent = 'Open customizer';
-
-      mobileToggle.append(mobileGlyph, mobileSrLabel);
-
-      const primaryRow = nav.querySelector('.site-nav__row--primary');
-      if (primaryRow) {
-        const homeLink = primaryRow.querySelector('.site-nav__link--home');
-        if (homeLink?.nextSibling) {
-          primaryRow.insertBefore(mobileToggle, homeLink.nextSibling);
-        } else if (homeLink) {
-          primaryRow.appendChild(mobileToggle);
-        } else {
-          primaryRow.insertBefore(mobileToggle, primaryRow.firstChild ?? null);
-        }
-      } else {
-        nav.appendChild(mobileToggle);
-      }
-    }
-  }
+  const mobileToggle = resolveNavCustomizerToggle(nav);
 
   toggle.setAttribute('aria-expanded', 'false');
   if (mobileToggle) {
