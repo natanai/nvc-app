@@ -41,46 +41,100 @@ const ROUNDNESS_MIN = 0;
 const ROUNDNESS_MAX = 200;
 const ROUNDNESS_STEP = 10;
 
+function parseStoredUpdatedAt(value) {
+  if (typeof value !== 'string') {
+    return 0;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed[0] !== '{') {
+    return 0;
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed);
+    const candidate = parsed && typeof parsed === 'object' ? parsed.updatedAt : null;
+    return typeof candidate === 'number' && Number.isFinite(candidate) ? candidate : 0;
+  } catch (error) {
+    return 0;
+  }
+}
+
+function collectStorageCandidates(key) {
+  const candidates = [];
+  const errors = [];
+
+  if (typeof window === 'undefined') {
+    return { candidates, errors };
+  }
+
+  try {
+    if (window.localStorage) {
+      const raw = window.localStorage.getItem(key);
+      const value = typeof raw === 'string' ? raw.trim() : '';
+      if (value) {
+        candidates.push({ value, index: candidates.length });
+      }
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  try {
+    if (window.sessionStorage) {
+      const raw = window.sessionStorage.getItem(key);
+      const value = typeof raw === 'string' ? raw.trim() : '';
+      if (value) {
+        candidates.push({ value, index: candidates.length });
+      }
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  return { candidates, errors };
+}
+
+function selectMostRecentStorageCandidate(candidates) {
+  if (!Array.isArray(candidates) || candidates.length === 0) {
+    return { value: '', index: 0 };
+  }
+
+  if (candidates.length === 1) {
+    return candidates[0];
+  }
+
+  let best = candidates[0];
+  let bestTimestamp = parseStoredUpdatedAt(best.value);
+  let bestIndex = typeof best.index === 'number' ? best.index : 0;
+
+  for (let i = 1; i < candidates.length; i += 1) {
+    const candidate = candidates[i];
+    const timestamp = parseStoredUpdatedAt(candidate.value);
+    const index = typeof candidate.index === 'number' ? candidate.index : i;
+    if (timestamp > bestTimestamp || (timestamp === bestTimestamp && index < bestIndex)) {
+      best = candidate;
+      bestTimestamp = timestamp;
+      bestIndex = index;
+    }
+  }
+
+  return best;
+}
+
 function storageGetItem(key) {
   if (!key) {
     return { value: '', error: null };
   }
 
-  const errors = [];
-  let localValue;
-  try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localValue = window.localStorage.getItem(key);
-    }
-  } catch (error) {
-    errors.push(error);
+  const { candidates, errors } = collectStorageCandidates(key);
+
+  if (!candidates.length) {
+    return { value: '', error: errors[errors.length - 1] || null };
   }
 
-  if (typeof localValue === 'string' && localValue) {
-    return { value: localValue, error: null };
-  }
-
-  let sessionValue;
-  try {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      sessionValue = window.sessionStorage.getItem(key);
-    }
-  } catch (error) {
-    errors.push(error);
-  }
-
-  if (typeof sessionValue === 'string' && sessionValue) {
-    return { value: sessionValue, error: null };
-  }
-
-  const fallbackValue =
-    typeof localValue === 'string' && localValue
-      ? localValue
-      : typeof sessionValue === 'string'
-      ? sessionValue
-      : '';
-  const error = fallbackValue ? null : errors[errors.length - 1] || null;
-  return { value: fallbackValue || '', error };
+  const preferred = selectMostRecentStorageCandidate(candidates);
+  return { value: preferred.value || '', error: null };
 }
 
 function storageSetItem(key, value) {
@@ -98,6 +152,13 @@ function storageSetItem(key, value) {
     }
   } catch (error) {
     errors.push(error);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.removeItem === 'function') {
+        window.localStorage.removeItem(key);
+      }
+    } catch (removeError) {
+      errors.push(removeError);
+    }
   }
 
   try {
@@ -107,6 +168,13 @@ function storageSetItem(key, value) {
     }
   } catch (error) {
     errors.push(error);
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage && typeof window.sessionStorage.removeItem === 'function') {
+        window.sessionStorage.removeItem(key);
+      }
+    } catch (removeError) {
+      errors.push(removeError);
+    }
   }
 
   return { success, error: success ? null : errors[errors.length - 1] || null };
@@ -2471,6 +2539,7 @@ function saveTheme(theme) {
     roundness: clampRoundness(
       typeof theme.roundness === 'number' ? theme.roundness : paletteState.cornerRoundness,
     ),
+    updatedAt: Date.now(),
   };
 
   const serialized = JSON.stringify(payload);
