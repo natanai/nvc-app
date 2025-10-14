@@ -185,6 +185,7 @@ function htmlPage({
   description = '',
   scripts = [],
   mainAttributes = '',
+  activeNav,
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
@@ -237,7 +238,7 @@ function htmlPage({
       return `    <script ${attrs.join(' ')}></script>`;
     })
     .join('\n');
-  const navHtml = renderNav(basePath);
+  const navHtml = renderNav(basePath, activeNav);
   const mainAttrs = mainAttributes ? ` ${mainAttributes}` : '';
 
   return `<!DOCTYPE html>
@@ -267,11 +268,12 @@ ${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
 `;
 }
 
-function renderNav(basePath) {
+function renderNav(basePath, activeNav) {
+  const activeAttr = (key) => (activeNav === key ? ' aria-current="page"' : '');
   const homeHref = basePath || './';
   return `<nav class="site-nav" aria-label="Primary">
         <div class="site-nav__row site-nav__row--primary">
-          <a class="site-nav__link site-nav__link--home" href="${homeHref}">
+          <a class="site-nav__link site-nav__link--home" href="${homeHref}"${activeAttr('home')}>
             <img
               class="site-nav__icon"
               src="${basePath}icons/home-8bit.svg"
@@ -338,15 +340,15 @@ function renderNav(basePath) {
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="${basePath}inventory/">
+          <a class="site-nav__link site-nav__link--inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
             Inventory
-            <span class="site-nav__count" data-inventory-count hidden>0</span>
+            <span class="site-nav__count" data-inventory-count hidden></span>
           </a>
         </div>
         <div class="site-nav__row site-nav__row--secondary">
-          <a class="site-nav__link" href="${basePath}situations/">Situations</a>
-          <a class="site-nav__link" href="${basePath}feelings/">Feelings</a>
-          <a class="site-nav__link" href="${basePath}needs/">Needs</a>
+          <a class="site-nav__link" href="${basePath}situations/"${activeAttr('situations')}>Situations</a>
+          <a class="site-nav__link" href="${basePath}feelings/"${activeAttr('feelings')}>Feelings</a>
+          <a class="site-nav__link" href="${basePath}needs/"${activeAttr('needs')}>Needs</a>
         </div>
       </nav>`;
 }
@@ -528,7 +530,8 @@ ${cards}
     depth: 0,
     main,
     description:
-      'Explore situations, feelings, and needs with cross-linked magnets, journal prompts, and strategy inventory tools inspired by NeedShare.'
+      'Explore situations, feelings, and needs with cross-linked magnets, journal prompts, and strategy inventory tools inspired by NeedShare.',
+    activeNav: 'home',
   });
 
   writePage('index.html', html);
@@ -614,6 +617,7 @@ function renderCategory(type, items) {
     ],
     main,
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    activeNav: type,
   });
 
   writePage(`${type}/index.html`, html);
@@ -638,6 +642,7 @@ function renderSituation(item) {
     ],
     main,
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    activeNav: 'situations',
   });
 
   writePage(`situations/${item.slug}/index.html`, html);
@@ -681,6 +686,7 @@ function renderFeeling(item) {
       { src: 'scripts/feeling-reverse-inference.js', type: 'module' },
     ],
     mainAttributes: ` data-feeling-slug="${escapeHtml(item.slug)}"`,
+    activeNav: 'feelings',
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
@@ -797,6 +803,7 @@ function renderNeed(item, strategyLookup) {
     main,
     scripts: [],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
+    activeNav: 'needs',
   });
 
   writePage(`needs/${item.slug}/index.html`, html);
@@ -978,6 +985,7 @@ function renderInventoryPage() {
       { label: 'Inventory' },
     ],
     main,
+    activeNav: 'inventory',
   });
 
   writePage('inventory/index.html', html);
@@ -1121,6 +1129,7 @@ function renderInventoryJournalPage(needsList = []) {
       { src: 'assets/js/journal/module.js', type: 'module' },
       { src: 'scripts/inventory.js', defer: true },
     ],
+    activeNav: 'inventory',
   });
 
   writePage('inventory/journal/index.html', html);
