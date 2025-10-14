@@ -25,10 +25,79 @@ const themePreloadScript = (basePath) => {
           outline: '--outline',
         };
         const HEX_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+        const HIGH_CONTRAST_TEXT = '#10121C';
+        const HIGH_CONTRAST_TEXT_SOFT = '#343852';
+        const HIGH_CONTRAST_OUTLINE = '#05060C';
+        const HIGH_CONTRAST_MIN_RATIO = 9;
+        const HIGH_CONTRAST_ACCENT_RATIO = 10;
+        const HIGH_CONTRAST_CHIP_RATIO = 11;
+        const HIGH_CONTRAST_ADJUST_STEP = 8;
         const root = document.documentElement;
         if (!root) {
           return;
         }
+        function normalizeHex(value) {
+          if (typeof value !== 'string') {
+            return '';
+          }
+          const trimmed = value.trim();
+          if (!trimmed) {
+            return '';
+          }
+          const prefixed = trimmed.startsWith('#') ? trimmed : '#' + trimmed;
+          return HEX_PATTERN.test(prefixed) ? prefixed.toUpperCase() : '';
+        }
+
+        function readPaletteVar(varName) {
+          const direct = normalizeHex(root.style.getPropertyValue(varName));
+          if (direct) {
+            return direct;
+          }
+          try {
+            const computed = getComputedStyle(root).getPropertyValue(varName);
+            return normalizeHex(computed);
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to read palette color', varName, error);
+            }
+          }
+          return '';
+        }
+
+        function ensureHighContrastColor(value, targetRatio) {
+          const base = normalizeHex(value);
+          if (!base) {
+            return '';
+          }
+          const adjust = window.NVCContrast?.adjustLightness;
+          const getRatio = window.NVCContrast?.getContrastRatio;
+          if (typeof adjust !== 'function' || typeof getRatio !== 'function') {
+            return base;
+          }
+          let current = base;
+          let attempts = 0;
+          const desired = typeof targetRatio === 'number' ? targetRatio : HIGH_CONTRAST_MIN_RATIO;
+          try {
+            let ratio = getRatio(current, HIGH_CONTRAST_TEXT);
+            while (ratio < desired && attempts < 12) {
+              const next = adjust(current, HIGH_CONTRAST_ADJUST_STEP);
+              if (!next || next === current) {
+                break;
+              }
+              const normalized = normalizeHex(next);
+              current = normalized || current;
+              ratio = getRatio(current, HIGH_CONTRAST_TEXT);
+              attempts += 1;
+            }
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to adjust color for high contrast', error);
+            }
+            return base;
+          }
+          return current;
+        }
+
         let applied = false;
         try {
           const stored = window.localStorage ? localStorage.getItem(STORAGE_KEY) : null;
@@ -83,24 +152,55 @@ const themePreloadScript = (basePath) => {
           const highContrastEnabled = window.localStorage ? localStorage.getItem(HIGH_CONTRAST_KEY) === '1' : false;
           if (highContrastEnabled) {
             try {
-              if (window.NVCContrast && typeof window.NVCContrast.adjustLightness === 'function') {
-                const inkValue = root.style.getPropertyValue('--ink').trim();
-                if (inkValue) {
-                  const darkerInk = window.NVCContrast.adjustLightness(inkValue, -20);
-                  if (darkerInk) {
-                    root.style.setProperty('--ink', darkerInk);
-                  }
-                }
+              const plumValue = ensureHighContrastColor(readPaletteVar('--plum'), HIGH_CONTRAST_MIN_RATIO);
+              if (plumValue) {
+                root.style.setProperty('--plum', plumValue);
               }
+              const lavenderValue = ensureHighContrastColor(readPaletteVar('--lavender'), HIGH_CONTRAST_ACCENT_RATIO);
+              if (lavenderValue) {
+                root.style.setProperty('--lavender', lavenderValue);
+              }
+              const roseValue = ensureHighContrastColor(readPaletteVar('--rose'), HIGH_CONTRAST_ACCENT_RATIO);
+              if (roseValue) {
+                root.style.setProperty('--rose', roseValue);
+              }
+              const mintValue = ensureHighContrastColor(readPaletteVar('--mint'), HIGH_CONTRAST_ACCENT_RATIO);
+              if (mintValue) {
+                root.style.setProperty('--mint', mintValue);
+              }
+              const goldValue = ensureHighContrastColor(readPaletteVar('--gold'), HIGH_CONTRAST_ACCENT_RATIO);
+              if (goldValue) {
+                root.style.setProperty('--gold', goldValue);
+              }
+              const skyValue = ensureHighContrastColor(readPaletteVar('--sky'), HIGH_CONTRAST_CHIP_RATIO);
+              if (skyValue) {
+                root.style.setProperty('--sky', skyValue);
+                root.style.setProperty('--chip-bg', skyValue);
+              }
+              root.style.setProperty('--ink', HIGH_CONTRAST_TEXT);
+              root.style.setProperty('--ink-soft', HIGH_CONTRAST_TEXT_SOFT);
+              root.style.setProperty('--outline', HIGH_CONTRAST_OUTLINE);
+              root.style.setProperty('--chip-fg', HIGH_CONTRAST_TEXT);
+              root.style.setProperty('--btn-fg', HIGH_CONTRAST_TEXT);
+              const buttonSource = roseValue || plumValue || skyValue;
+              const buttonBg = ensureHighContrastColor(buttonSource, HIGH_CONTRAST_ACCENT_RATIO);
+              if (buttonBg) {
+                root.style.setProperty('--btn-bg', buttonBg);
+              }
+              root.style.setProperty('--shadow', 'color-mix(in srgb, ' + HIGH_CONTRAST_OUTLINE + ' 75%, transparent)');
+              root.setAttribute('data-theme-contrast', 'high');
+              applied = true;
             } catch (error) {
               if (typeof console !== 'undefined' && console.warn) {
-                console.warn('Unable to adjust ink for high contrast', error);
+                console.warn('Unable to apply high contrast', error);
               }
             }
-            root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 70%, transparent)');
-            applied = true;
           } else {
             root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 55%, transparent)');
+            root.removeAttribute('data-theme-contrast');
+            root.style.removeProperty('--chip-bg');
+            root.style.setProperty('--btn-fg', '#111111');
+            root.style.setProperty('--chip-fg', '#111111');
           }
 
           if (window.NVCContrast && typeof window.NVCContrast.autoContrast === 'function') {

@@ -16,6 +16,14 @@ const DEFAULT_PALETTE = {
   outline: '#12081F',
 };
 
+const HIGH_CONTRAST_TEXT = '#10121C';
+const HIGH_CONTRAST_TEXT_SOFT = '#343852';
+const HIGH_CONTRAST_OUTLINE = '#05060C';
+const HIGH_CONTRAST_MIN_RATIO = 9;
+const HIGH_CONTRAST_ACCENT_RATIO = 10;
+const HIGH_CONTRAST_CHIP_RATIO = 11;
+const HIGH_CONTRAST_ADJUST_STEP = 8;
+
 const COLOR_INPUTS = [
   { key: 'plum', varName: '--plum', label: 'Canvas glow' },
   { key: 'lavender', varName: '--lavender', label: 'Panel mist' },
@@ -2050,28 +2058,80 @@ function applyHighContrastOverlay(options = {}) {
     return;
   }
 
-  const baseInk = paletteState.currentColors.ink || paletteState.defaultColors.ink || DEFAULT_PALETTE.ink;
-  let nextInk = baseInk;
+  const baseInk = resolvePaletteColor('ink', '--ink');
+  const baseInkSoft = resolvePaletteColor('inkSoft', '--ink-soft');
+  const baseOutline = resolvePaletteColor('outline', '--outline');
+  const baseRose = resolvePaletteColor('rose', '--rose');
 
   if (paletteState.highContrastEnabled) {
     try {
-      const adjust = window.NVCContrast?.adjustLightness;
-      if (typeof adjust === 'function' && baseInk) {
-        const darker = adjust(baseInk, -20);
-        if (darker) {
-          nextInk = darker;
-        }
+      const resolvedPlum = resolvePaletteColor('plum', '--plum');
+      const contrastPlum = ensureHighContrastColor(resolvedPlum, HIGH_CONTRAST_MIN_RATIO);
+      if (contrastPlum) {
+        root.style.setProperty('--plum', contrastPlum);
       }
-    } catch (error) {
-      console.warn('Unable to adjust ink for high contrast', error);
-    }
-    root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 70%, transparent)');
-  } else {
-    root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 55%, transparent)');
-  }
 
-  if (nextInk) {
-    root.style.setProperty('--ink', nextInk);
+      const lavender = ensureHighContrastColor(resolvePaletteColor('lavender', '--lavender'), HIGH_CONTRAST_ACCENT_RATIO);
+      if (lavender) {
+        root.style.setProperty('--lavender', lavender);
+      }
+
+      const rose = ensureHighContrastColor(baseRose, HIGH_CONTRAST_ACCENT_RATIO);
+      if (rose) {
+        root.style.setProperty('--rose', rose);
+      }
+
+      const mint = ensureHighContrastColor(resolvePaletteColor('mint', '--mint'), HIGH_CONTRAST_ACCENT_RATIO);
+      if (mint) {
+        root.style.setProperty('--mint', mint);
+      }
+
+      const gold = ensureHighContrastColor(resolvePaletteColor('gold', '--gold'), HIGH_CONTRAST_ACCENT_RATIO);
+      if (gold) {
+        root.style.setProperty('--gold', gold);
+      }
+
+      const sky = ensureHighContrastColor(resolvePaletteColor('sky', '--sky'), HIGH_CONTRAST_CHIP_RATIO);
+      if (sky) {
+        root.style.setProperty('--sky', sky);
+        root.style.setProperty('--chip-bg', sky);
+      }
+
+      root.style.setProperty('--ink', HIGH_CONTRAST_TEXT);
+      root.style.setProperty('--ink-soft', HIGH_CONTRAST_TEXT_SOFT);
+      root.style.setProperty('--outline', HIGH_CONTRAST_OUTLINE);
+      root.style.setProperty('--chip-fg', HIGH_CONTRAST_TEXT);
+      root.style.setProperty('--btn-fg', HIGH_CONTRAST_TEXT);
+
+      const buttonSource = baseRose || contrastPlum || sky;
+      const buttonBg = ensureHighContrastColor(buttonSource, HIGH_CONTRAST_ACCENT_RATIO);
+      if (buttonBg) {
+        root.style.setProperty('--btn-bg', buttonBg);
+      }
+
+      root.style.setProperty('--shadow', `color-mix(in srgb, ${HIGH_CONTRAST_OUTLINE} 75%, transparent)`);
+      root.setAttribute('data-theme-contrast', 'high');
+    } catch (error) {
+      console.warn('Unable to apply high contrast adjustments', error);
+    }
+  } else {
+    if (baseInk) {
+      root.style.setProperty('--ink', baseInk);
+    }
+    if (baseInkSoft) {
+      root.style.setProperty('--ink-soft', baseInkSoft);
+    }
+    if (baseOutline) {
+      root.style.setProperty('--outline', baseOutline);
+    }
+    if (baseRose) {
+      root.style.setProperty('--btn-bg', baseRose);
+    }
+    root.style.setProperty('--chip-fg', '#111111');
+    root.style.setProperty('--btn-fg', '#111111');
+    root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 55%, transparent)');
+    root.style.removeAttribute('data-theme-contrast');
+    root.style.removeProperty('--chip-bg');
   }
 
   if (!skipAutoContrast) {
@@ -2200,6 +2260,91 @@ function sanitizeColorsMap(colors) {
   });
 
   return sanitized;
+}
+
+function getComputedRootColor(varName) {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const root = document.documentElement;
+  if (!root) {
+    return '';
+  }
+
+  const inline = root.style?.getPropertyValue(varName)?.trim();
+  const inlineHex = sanitizeHex(inline);
+  if (inlineHex) {
+    return inlineHex;
+  }
+
+  try {
+    const computed = window.getComputedStyle ? getComputedStyle(root).getPropertyValue(varName).trim() : '';
+    return sanitizeHex(computed);
+  } catch (error) {
+    console.warn('Unable to read computed color', varName, error);
+  }
+
+  return '';
+}
+
+function resolvePaletteColor(key, varName) {
+  const fromCurrent = sanitizeHex(paletteState.currentColors[key]);
+  if (fromCurrent) {
+    return fromCurrent;
+  }
+
+  const fromDefault = sanitizeHex(paletteState.defaultColors[key]);
+  if (fromDefault) {
+    return fromDefault;
+  }
+
+  const fromBase = sanitizeHex(DEFAULT_PALETTE[key]);
+  if (fromBase) {
+    return fromBase;
+  }
+
+  if (varName) {
+    const computed = getComputedRootColor(varName);
+    if (computed) {
+      return computed;
+    }
+  }
+
+  return '';
+}
+
+function ensureHighContrastColor(color, targetRatio = HIGH_CONTRAST_MIN_RATIO) {
+  const sanitized = sanitizeHex(color);
+  if (!sanitized) {
+    return '';
+  }
+
+  const adjust = window.NVCContrast?.adjustLightness;
+  const getRatio = window.NVCContrast?.getContrastRatio;
+  if (typeof adjust !== 'function' || typeof getRatio !== 'function') {
+    return sanitized;
+  }
+
+  let attempts = 0;
+  let current = sanitized;
+  try {
+    let ratio = getRatio(current, HIGH_CONTRAST_TEXT);
+    while (ratio < targetRatio && attempts < 12) {
+      const updated = adjust(current, HIGH_CONTRAST_ADJUST_STEP);
+      if (!updated || updated === current) {
+        break;
+      }
+      current = sanitizeHex(updated) || current;
+      ratio = getRatio(current, HIGH_CONTRAST_TEXT);
+      attempts += 1;
+    }
+  } catch (error) {
+    console.warn('Unable to adjust color for high contrast', error);
+    return sanitized;
+  }
+
+  return current;
 }
 
 function clampRoundness(value) {
