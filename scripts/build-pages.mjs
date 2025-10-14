@@ -536,6 +536,8 @@ ${cards}
 
 function renderCategory(type, items) {
   const title = type.charAt(0).toUpperCase() + type.slice(1);
+  const escapedTitle = escapeHtml(title);
+  const lowerTitle = escapeHtml(title.toLowerCase());
   const description = type === 'situations'
     ? 'Situations (sometimes called evaluations or faux-feelings) are often the first stories that surface. Follow them to the feelings and needs underneath.'
     : type === 'feelings'
@@ -561,15 +563,32 @@ function renderCategory(type, items) {
 
   const main = `
       <header class="page-header">
-        <h1 class="page-title">${escapeHtml(title)}</h1>
+        <h1 class="page-title">${escapedTitle}</h1>
         ${description ? `<p class="page-description">${escapeHtml(description)}</p>` : ''}${
           supportLinks ? `\n        ${supportLinks}` : ''
         }
       </header>
       <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
-          <h2 id="${type}-list" class="section-title">${escapeHtml(title)} directory</h2>
+          <h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>
           <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+        </div>
+        <div class="magnet-search" data-magnet-search>
+          <label class="magnet-search__field">
+            <span class="magnet-search__label">Search ${lowerTitle}</span>
+            <input
+              type="search"
+              name="${type}-search"
+              class="magnet-search__input"
+              placeholder="Search ${lowerTitle}"
+              autocomplete="off"
+              data-magnet-search-input
+            >
+          </label>
+          <div class="magnet-search__results" data-magnet-search-results aria-live="polite">
+            <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
+            <div class="magnet-search__list" data-magnet-search-list></div>
+          </div>
         </div>
         <div class="magnet-board-wrapper">
           <div class="pill-grid magnet-board" data-magnet-board>
