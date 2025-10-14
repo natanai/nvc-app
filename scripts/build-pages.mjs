@@ -477,6 +477,7 @@ function renderStrategyForm({
   descriptionRequired = true,
   includeNeedSelect = true,
   includePlaceholderOption = false,
+  needSelectMultiple = false,
   defaultNeedSlug = '',
   includeContactFields = false,
   includeMessage = false,
@@ -492,15 +493,17 @@ function renderStrategyForm({
     .join('');
 
   const placeholderOption = includePlaceholderOption
-    ? `<option value="" disabled${defaultNeedSlug ? '' : ' selected'}>Select a need</option>`
+    ? `<option value="" disabled${!needSelectMultiple && !defaultNeedSlug ? ' selected' : ''}>Select a need</option>`
     : '';
+
+  const multipleAttr = needSelectMultiple ? ' multiple' : '';
 
   const needField = includeNeedSelect
     ? `
         <div class="strategy-form__field">
           <label for="${idPrefix}-need">Primary need</label>
           <div class="strategy-card strategy-card--input">
-            <select id="${idPrefix}-need" name="need" required>
+            <select id="${idPrefix}-need" name="need"${multipleAttr} required>
               ${placeholderOption}
               ${needOptions}
             </select>
@@ -859,6 +862,7 @@ function renderNeed(item, strategyLookup) {
     titleLabel: 'Strategy name',
     descriptionLabel: 'Strategy details',
     defaultNeedSlug: item.slug,
+    needSelectMultiple: true,
     includeContactFields: true,
     includeMessage: true,
     notice: suggestionNotice,
@@ -905,6 +909,7 @@ function renderInventoryPage() {
     titleLabel: 'Strategy name',
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
+    needSelectMultiple: true,
     notice: inventoryFormNotice,
   });
 
