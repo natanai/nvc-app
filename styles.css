@@ -4820,25 +4820,39 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 
 .palette-form__actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
 
+.palette-form__footer {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed color-mix(in srgb, var(--outline) 28%, transparent);
+  display: flex;
+  justify-content: flex-end;
+}
+
 .palette-form__clear {
   border: none;
   background: none;
-  color: inherit;
+  color: color-mix(in srgb, var(--ink-soft) 35%, #fff 65%);
   font: inherit;
-  text-decoration: underline;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   cursor: pointer;
-  padding: 0.25rem 0;
+  padding: 0.2rem 0;
+  opacity: 0.45;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 .palette-form__clear:hover,
 .palette-form__clear:focus-visible {
-  text-decoration: none;
+  opacity: 0.9;
+  color: color-mix(in srgb, var(--ink-soft) 60%, #fff 40%);
 }
 
 .palette-form__clear:focus-visible {
