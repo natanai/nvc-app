@@ -7,6 +7,7 @@
     "build:data": "node scripts/build-data.mjs",
     "build:pages": "node scripts/build-pages.mjs",
     "lint:evidence": "node scripts/lint-evidence.mjs",
-    "build": "npm run lint:evidence && npm run build:data && npm run build:pages"
+    "lint:entrypoints": "node scripts/lint-entrypoints.mjs",
+    "build": "npm run lint:evidence && npm run build:data && npm run build:pages && npm run lint:entrypoints"
   }
 }

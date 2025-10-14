@@ -11,9 +11,10 @@
         "title": "Tight or constricted",
         "note": "Band squeezing, armor, or breath held high",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "chest-tight"
       },
@@ -24,9 +25,10 @@
         "title": "Pounding or racing heartbeat",
         "note": "Heart racing, flutter, sudden surges of beats",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "chest-pounding"
       },
@@ -37,9 +39,10 @@
         "title": "Restless or fidgety",
         "note": "Urge to pace, bounce, or shake",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "limbs-restless"
       },
@@ -50,9 +53,10 @@
         "title": "Rolling or fluttering",
         "note": "Butterflies, swirls, churning movement",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "gut-rolling"
       },
@@ -63,9 +67,10 @@
         "title": "Buzzing or static",
         "note": "Quick thoughts, humming energy",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "head-buzzing"
       },
@@ -76,9 +81,10 @@
         "title": "Lifted or braced",
         "note": "Raised, ready to act, armor-like",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "shoulders-braced"
       },
@@ -89,9 +95,10 @@
         "title": "Chill or cold rush",
         "note": "Goosebumps, cold core, shivers",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "temp-chill"
       },
@@ -102,9 +109,10 @@
         "title": "Prickly or sweaty skin",
         "note": "Prickles, sudden sweat, tingling heat",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "temp-prickly"
       },
@@ -115,9 +123,10 @@
         "title": "Nausea or queasy",
         "note": "Churned up, unsettled, urge to vomit",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "gut-nausea"
       },
@@ -128,9 +137,10 @@
         "title": "Dry or closed off",
         "note": "Scratchy, hard to speak, voice fades",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "throat-dry"
       },
@@ -141,9 +151,10 @@
         "title": "Tremble or quiver",
         "note": "Jaw shaking, lips or hands quivering",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "jaw-tremble"
       },
@@ -154,9 +165,10 @@
         "title": "Floating or unreal",
         "note": "Drifting, spaced out, not quite here",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "overall-floating"
       },
@@ -167,9 +179,10 @@
         "title": "Tight or gripped",
         "note": "Squeezing band, hard to swallow",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "throat-tight"
       }
@@ -234,9 +247,10 @@
         "title": "Chill or cold rush",
         "note": "Goosebumps, cold core, shivers",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.14,
         "evidenceKey": "temp-chill"
       },
@@ -247,9 +261,10 @@
         "title": "Tight or constricted",
         "note": "Band squeezing, armor, or breath held high",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "chest-tight"
       },
@@ -260,9 +275,10 @@
         "title": "Pounding or racing heartbeat",
         "note": "Heart racing, flutter, sudden surges of beats",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "chest-pounding"
       },
@@ -273,9 +289,10 @@
         "title": "Nausea or queasy",
         "note": "Churned up, unsettled, urge to vomit",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "gut-nausea"
       },
@@ -286,9 +303,10 @@
         "title": "Tremble or quiver",
         "note": "Jaw shaking, lips or hands quivering",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "jaw-tremble"
       },
@@ -299,9 +317,10 @@
         "title": "Dry or closed off",
         "note": "Scratchy, hard to speak, voice fades",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.12,
         "evidenceKey": "throat-dry"
       },
@@ -312,9 +331,10 @@
         "title": "Lifted or braced",
         "note": "Raised, ready to act, armor-like",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.11,
         "evidenceKey": "shoulders-braced"
       },
@@ -325,9 +345,10 @@
         "title": "Tingly or sparkly",
         "note": "Buzzing skin, energetic tingles",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.11,
         "evidenceKey": "limbs-tingly"
       }
@@ -382,9 +403,10 @@
         "title": "Clenched or grinding",
         "note": "Teeth locked, fists tight, rigid tongue",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.22,
         "evidenceKey": "jaw-clench"
       },
@@ -395,9 +417,10 @@
         "title": "Flush of heat",
         "note": "Cheeks glowing, warmth rushing outward",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.2,
         "evidenceKey": "temp-flush"
       },
@@ -408,9 +431,10 @@
         "title": "Heat or flush",
         "note": "Warm cheeks, heat pooling in jaw",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.19,
         "evidenceKey": "jaw-heat"
       },
@@ -421,9 +445,10 @@
         "title": "Tight or constricted",
         "note": "Band squeezing, armor, or breath held high",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.15,
         "evidenceKey": "chest-tight"
       },
@@ -434,9 +459,10 @@
         "title": "Lifted or braced",
         "note": "Raised, ready to act, armor-like",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.14,
         "evidenceKey": "shoulders-braced"
       },
@@ -447,9 +473,10 @@
         "title": "Pounding or racing heartbeat",
         "note": "Heart racing, flutter, sudden surges of beats",
         "intensityBand": [
-          6,
+          8,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "chest-pounding"
       }
@@ -507,9 +534,10 @@
         "title": "Pressure or band",
         "note": "Helmet feeling, squeezing temples",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.11,
         "evidenceKey": "head-pressure"
       },
@@ -520,9 +548,10 @@
         "title": "Tight or constricted",
         "note": "Band squeezing, armor, or breath held high",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "chest-tight"
       },
@@ -533,9 +562,10 @@
         "title": "Floating or unreal",
         "note": "Drifting, spaced out, not quite here",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "overall-floating"
       },
@@ -546,9 +576,10 @@
         "title": "Tremble or quiver",
         "note": "Jaw shaking, lips or hands quivering",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "jaw-tremble"
       },
@@ -559,9 +590,10 @@
         "title": "Weighted or burdened",
         "note": "Heavy load, sagging posture, tight knots",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "shoulders-weighted"
       },
@@ -572,9 +604,10 @@
         "title": "Nausea or queasy",
         "note": "Churned up, unsettled, urge to vomit",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "gut-nausea"
       },
@@ -585,9 +618,10 @@
         "title": "Foggy or heavy",
         "note": "Hard to focus, thick clouded feeling",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "head-fog"
       },
@@ -598,9 +632,10 @@
         "title": "Chill or cold rush",
         "note": "Goosebumps, cold core, shivers",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "temp-chill"
       },
@@ -611,9 +646,10 @@
         "title": "Muted or numb",
         "note": "Blank, disconnected, hard to feel",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "overall-numb"
       },
@@ -624,9 +660,10 @@
         "title": "Lump or swelling",
         "note": "Tears hovering, voice shaking, lump rising",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "throat-lump"
       },
@@ -637,9 +674,10 @@
         "title": "Buzzing or static",
         "note": "Quick thoughts, humming energy",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "head-buzzing"
       },
@@ -650,9 +688,10 @@
         "title": "Heavy or lead-like",
         "note": "Hard to move, sluggish, weighted",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.1,
         "evidenceKey": "limbs-heavy"
       }
@@ -711,9 +750,10 @@
         "title": "Hollow or empty",
         "note": "Sinking, dropping, missing center",
         "intensityBand": [
-          3,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.11,
         "evidenceKey": "gut-emptiness"
       },
@@ -724,9 +764,10 @@
         "title": "Weighted or pressured",
         "note": "Heavy stone, shoulders collapsing inward",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "chest-pressure"
       },
@@ -737,9 +778,10 @@
         "title": "Lump or swelling",
         "note": "Tears hovering, voice shaking, lump rising",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "throat-lump"
       },
@@ -750,9 +792,10 @@
         "title": "Tight or gripped",
         "note": "Squeezing band, hard to swallow",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "throat-tight"
       },
@@ -763,9 +806,10 @@
         "title": "Weighted or burdened",
         "note": "Heavy load, sagging posture, tight knots",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "shoulders-weighted"
       },
@@ -776,9 +820,10 @@
         "title": "Drooping or collapsed",
         "note": "Slumped, no lift, giving way",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "shoulders-droop"
       },
@@ -789,9 +834,10 @@
         "title": "Heavy or lead-like",
         "note": "Hard to move, sluggish, weighted",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "limbs-heavy"
       },
@@ -802,9 +848,10 @@
         "title": "Tremble or quiver",
         "note": "Jaw shaking, lips or hands quivering",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "jaw-tremble"
       },
@@ -815,9 +862,10 @@
         "title": "Foggy or heavy",
         "note": "Hard to focus, thick clouded feeling",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "head-fog"
       },
@@ -828,9 +876,10 @@
         "title": "Chill or cold rush",
         "note": "Goosebumps, cold core, shivers",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "temp-chill"
       },
@@ -841,9 +890,10 @@
         "title": "Floating or unreal",
         "note": "Drifting, spaced out, not quite here",
         "intensityBand": [
-          6,
-          10
+          4,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.1,
         "evidenceKey": "overall-floating"
       }
@@ -902,9 +952,10 @@
         "title": "Weighted or pressured",
         "note": "Heavy stone, shoulders collapsing inward",
         "intensityBand": [
-          3,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.22,
         "evidenceKey": "chest-pressure"
       },
@@ -915,9 +966,10 @@
         "title": "Hollow or empty",
         "note": "Sinking, dropping, missing center",
         "intensityBand": [
-          3,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.22,
         "evidenceKey": "gut-emptiness"
       },
@@ -928,9 +980,10 @@
         "title": "Lump or swelling",
         "note": "Tears hovering, voice shaking, lump rising",
         "intensityBand": [
-          3,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.22,
         "evidenceKey": "throat-lump"
       },
@@ -941,9 +994,10 @@
         "title": "Tight or gripped",
         "note": "Squeezing band, hard to swallow",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.18,
         "evidenceKey": "throat-tight"
       },
@@ -954,9 +1008,10 @@
         "title": "Drooping or collapsed",
         "note": "Slumped, no lift, giving way",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.16,
         "evidenceKey": "shoulders-droop"
       }
@@ -1010,9 +1065,10 @@
         "title": "Weighted or burdened",
         "note": "Heavy load, sagging posture, tight knots",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.2,
         "evidenceKey": "shoulders-weighted"
       },
@@ -1023,9 +1079,10 @@
         "title": "Pressure or band",
         "note": "Helmet feeling, squeezing temples",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.19,
         "evidenceKey": "head-pressure"
       },
@@ -1036,9 +1093,10 @@
         "title": "Weighted or pressured",
         "note": "Heavy stone, shoulders collapsing inward",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.17,
         "evidenceKey": "chest-pressure"
       },
@@ -1049,9 +1107,10 @@
         "title": "Nausea or queasy",
         "note": "Churned up, unsettled, urge to vomit",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.15,
         "evidenceKey": "gut-nausea"
       },
@@ -1062,9 +1121,10 @@
         "title": "Clenched or grinding",
         "note": "Teeth locked, fists tight, rigid tongue",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.15,
         "evidenceKey": "jaw-clench"
       },
@@ -1075,9 +1135,10 @@
         "title": "Prickly or sweaty skin",
         "note": "Prickles, sudden sweat, tingling heat",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.14,
         "evidenceKey": "temp-prickly"
       }
@@ -1132,8 +1193,9 @@
         "note": "Heavy load, sagging posture, tight knots",
         "intensityBand": [
           4,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.41,
         "evidenceKey": "shoulders-weighted"
       },
@@ -1145,8 +1207,9 @@
         "note": "Heavy stone, shoulders collapsing inward",
         "intensityBand": [
           5,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.33,
         "evidenceKey": "chest-pressure"
       },
@@ -1158,8 +1221,9 @@
         "note": "Warm cheeks, heat pooling in jaw",
         "intensityBand": [
           6,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.26,
         "evidenceKey": "jaw-heat"
       }
@@ -1210,9 +1274,10 @@
         "title": "Tingly or sparkly",
         "note": "Buzzing skin, energetic tingles",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.16,
         "evidenceKey": "limbs-tingly"
       },
@@ -1223,9 +1288,10 @@
         "title": "Pounding or racing heartbeat",
         "note": "Heart racing, flutter, sudden surges of beats",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.15,
         "evidenceKey": "chest-pounding"
       },
@@ -1236,9 +1302,10 @@
         "title": "Restless or fidgety",
         "note": "Urge to pace, bounce, or shake",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.15,
         "evidenceKey": "limbs-restless"
       },
@@ -1249,9 +1316,10 @@
         "title": "Flush of heat",
         "note": "Cheeks glowing, warmth rushing outward",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.15,
         "evidenceKey": "temp-flush"
       },
@@ -1262,9 +1330,10 @@
         "title": "Rolling or fluttering",
         "note": "Butterflies, swirls, churning movement",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "gut-rolling"
       },
@@ -1275,9 +1344,10 @@
         "title": "Buzzing or static",
         "note": "Quick thoughts, humming energy",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "head-buzzing"
       },
@@ -1288,9 +1358,10 @@
         "title": "Prickly or sweaty skin",
         "note": "Prickles, sudden sweat, tingling heat",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "temp-prickly"
       }
@@ -1346,9 +1417,10 @@
         "title": "Tingly or sparkly",
         "note": "Buzzing skin, energetic tingles",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.17,
         "evidenceKey": "limbs-tingly"
       },
@@ -1359,9 +1431,10 @@
         "title": "Restless or fidgety",
         "note": "Urge to pace, bounce, or shake",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.16,
         "evidenceKey": "limbs-restless"
       },
@@ -1372,9 +1445,10 @@
         "title": "Pounding or racing heartbeat",
         "note": "Heart racing, flutter, sudden surges of beats",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.14,
         "evidenceKey": "chest-pounding"
       },
@@ -1385,9 +1459,10 @@
         "title": "Rolling or fluttering",
         "note": "Butterflies, swirls, churning movement",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.14,
         "evidenceKey": "gut-rolling"
       },
@@ -1398,9 +1473,10 @@
         "title": "Prickly or sweaty skin",
         "note": "Prickles, sudden sweat, tingling heat",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.14,
         "evidenceKey": "temp-prickly"
       },
@@ -1411,9 +1487,10 @@
         "title": "Buzzing or static",
         "note": "Quick thoughts, humming energy",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "head-buzzing"
       },
@@ -1424,9 +1501,10 @@
         "title": "Dry or closed off",
         "note": "Scratchy, hard to speak, voice fades",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.11,
         "evidenceKey": "throat-dry"
       }
@@ -1480,9 +1558,10 @@
         "title": "Grounded or calm",
         "note": "Steady, anchored, peacefully present",
         "intensityBand": [
-          3,
-          10
+          1,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.37,
         "evidenceKey": "overall-calm"
       },
@@ -1493,9 +1572,10 @@
         "title": "Open, warm, or expansive",
         "note": "Soft chest, easy breathing, gentle warmth",
         "intensityBand": [
-          3,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.34,
         "evidenceKey": "chest-open"
       },
@@ -1506,9 +1586,10 @@
         "title": "Settled or warm",
         "note": "Grounded fullness, gentle ease",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.29,
         "evidenceKey": "gut-warm"
       }
@@ -1558,9 +1639,10 @@
         "title": "Open, warm, or expansive",
         "note": "Soft chest, easy breathing, gentle warmth",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.5,
         "evidenceKey": "chest-open"
       },
@@ -1571,9 +1653,10 @@
         "title": "Grounded or calm",
         "note": "Steady, anchored, peacefully present",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.5,
         "evidenceKey": "overall-calm"
       }
@@ -1622,9 +1705,10 @@
         "title": "Open, warm, or expansive",
         "note": "Soft chest, easy breathing, gentle warmth",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.5,
         "evidenceKey": "chest-open"
       },
@@ -1635,9 +1719,10 @@
         "title": "Tingly or sparkly",
         "note": "Buzzing skin, energetic tingles",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.5,
         "evidenceKey": "limbs-tingly"
       }
@@ -1688,9 +1773,10 @@
         "title": "Grounded or calm",
         "note": "Steady, anchored, peacefully present",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.36,
         "evidenceKey": "overall-calm"
       },
@@ -1702,8 +1788,9 @@
         "note": "Soft chest, easy breathing, gentle warmth",
         "intensityBand": [
           5,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.32,
         "evidenceKey": "chest-open"
       },
@@ -1715,8 +1802,9 @@
         "note": "Grounded fullness, gentle ease",
         "intensityBand": [
           5,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.32,
         "evidenceKey": "gut-warm"
       }
@@ -1767,9 +1855,10 @@
         "title": "Rolling or fluttering",
         "note": "Butterflies, swirls, churning movement",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.5,
         "evidenceKey": "gut-rolling"
       },
@@ -1780,9 +1869,10 @@
         "title": "Pressure or band",
         "note": "Helmet feeling, squeezing temples",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.5,
         "evidenceKey": "head-pressure"
       }
@@ -1832,9 +1922,10 @@
         "title": "Hollow or empty",
         "note": "Sinking, dropping, missing center",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.5,
         "evidenceKey": "gut-emptiness"
       },
@@ -1845,9 +1936,10 @@
         "title": "Lump or swelling",
         "note": "Tears hovering, voice shaking, lump rising",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.5,
         "evidenceKey": "throat-lump"
       }
@@ -1896,9 +1988,10 @@
         "title": "Muted or numb",
         "note": "Blank, disconnected, hard to feel",
         "intensityBand": [
-          3,
-          10
+          1,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.23,
         "evidenceKey": "overall-numb"
       },
@@ -1909,9 +2002,10 @@
         "title": "Heavy or lead-like",
         "note": "Hard to move, sluggish, weighted",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.18,
         "evidenceKey": "limbs-heavy"
       },
@@ -1922,9 +2016,10 @@
         "title": "Foggy or heavy",
         "note": "Hard to focus, thick clouded feeling",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.16,
         "evidenceKey": "head-fog"
       },
@@ -1935,9 +2030,10 @@
         "title": "Drooping or collapsed",
         "note": "Slumped, no lift, giving way",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.15,
         "evidenceKey": "shoulders-droop"
       },
@@ -1948,9 +2044,10 @@
         "title": "Floating or unreal",
         "note": "Drifting, spaced out, not quite here",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.15,
         "evidenceKey": "overall-floating"
       },
@@ -1961,9 +2058,10 @@
         "title": "Hollow or empty",
         "note": "Sinking, dropping, missing center",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.13,
         "evidenceKey": "gut-emptiness"
       }
@@ -2017,9 +2115,10 @@
         "title": "Settled or warm",
         "note": "Grounded fullness, gentle ease",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 1,
         "evidenceKey": "gut-warm"
       }
@@ -2070,8 +2169,9 @@
         "note": "Steady, anchored, peacefully present",
         "intensityBand": [
           4,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.52,
         "evidenceKey": "overall-calm"
       },
@@ -2082,9 +2182,10 @@
         "title": "Settled or warm",
         "note": "Grounded fullness, gentle ease",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.48,
         "evidenceKey": "gut-warm"
       }
@@ -2134,9 +2235,10 @@
         "title": "Heat or flush",
         "note": "Warm cheeks, heat pooling in jaw",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.28,
         "evidenceKey": "jaw-heat"
       },
@@ -2147,9 +2249,10 @@
         "title": "Flush of heat",
         "note": "Cheeks glowing, warmth rushing outward",
         "intensityBand": [
-          4,
-          10
+          5,
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.28,
         "evidenceKey": "temp-flush"
       },
@@ -2161,8 +2264,9 @@
         "note": "Squeezing band, hard to swallow",
         "intensityBand": [
           5,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.25,
         "evidenceKey": "throat-tight"
       },
@@ -2174,8 +2278,9 @@
         "note": "Scratchy, hard to speak, voice fades",
         "intensityBand": [
           6,
-          10
+          9
         ],
+        "arousal": "medium",
         "relativeWeight": 0.19,
         "evidenceKey": "throat-dry"
       }
@@ -2226,9 +2331,10 @@
         "title": "Clenched or grinding",
         "note": "Teeth locked, fists tight, rigid tongue",
         "intensityBand": [
-          3,
+          5,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.41,
         "evidenceKey": "jaw-clench"
       },
@@ -2239,9 +2345,10 @@
         "title": "Restless or fidgety",
         "note": "Urge to pace, bounce, or shake",
         "intensityBand": [
-          5,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.31,
         "evidenceKey": "limbs-restless"
       },
@@ -2252,9 +2359,10 @@
         "title": "Heat or flush",
         "note": "Warm cheeks, heat pooling in jaw",
         "intensityBand": [
-          5,
+          7,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.28,
         "evidenceKey": "jaw-heat"
       }
@@ -2305,9 +2413,10 @@
         "title": "Clenched or grinding",
         "note": "Teeth locked, fists tight, rigid tongue",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.5,
         "evidenceKey": "jaw-clench"
       },
@@ -2318,9 +2427,10 @@
         "title": "Lifted or braced",
         "note": "Raised, ready to act, armor-like",
         "intensityBand": [
-          4,
+          6,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 0.5,
         "evidenceKey": "shoulders-braced"
       }
@@ -2371,9 +2481,10 @@
         "title": "Heavy or lead-like",
         "note": "Hard to move, sluggish, weighted",
         "intensityBand": [
-          3,
-          10
+          1,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.3,
         "evidenceKey": "limbs-heavy"
       },
@@ -2384,9 +2495,10 @@
         "title": "Foggy or heavy",
         "note": "Hard to focus, thick clouded feeling",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.25,
         "evidenceKey": "head-fog"
       },
@@ -2397,9 +2509,10 @@
         "title": "Drooping or collapsed",
         "note": "Slumped, no lift, giving way",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.25,
         "evidenceKey": "shoulders-droop"
       },
@@ -2410,9 +2523,10 @@
         "title": "Muted or numb",
         "note": "Blank, disconnected, hard to feel",
         "intensityBand": [
-          5,
-          10
+          3,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 0.2,
         "evidenceKey": "overall-numb"
       }
@@ -2463,9 +2577,10 @@
         "title": "Flush of heat",
         "note": "Cheeks glowing, warmth rushing outward",
         "intensityBand": [
-          6,
+          8,
           10
         ],
+        "arousal": "high",
         "relativeWeight": 1,
         "evidenceKey": "temp-flush"
       }
@@ -2514,9 +2629,10 @@
         "title": "Muted or numb",
         "note": "Blank, disconnected, hard to feel",
         "intensityBand": [
-          4,
-          10
+          2,
+          7
         ],
+        "arousal": "low",
         "relativeWeight": 1,
         "evidenceKey": "overall-numb"
       }
