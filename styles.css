@@ -5447,6 +5447,9 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   background: color-mix(in srgb, var(--chip-bg) 70%, transparent);
   border-radius: 999px;
   font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--outline) 30%, transparent);
+  color: color-mix(in srgb, var(--ink) 92%, transparent);
+  cursor: default;
 }
 
 .feeling-inference__needs-list {
@@ -5464,7 +5467,7 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 }
 
 .feeling-inference__need-link {
-  color: inherit;
+  color: color-mix(in srgb, var(--mint) 55%, var(--ink) 45%);
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-decoration-color: color-mix(in srgb, var(--mint) 55%, transparent);

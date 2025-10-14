@@ -133,12 +133,12 @@ function createIntensityDisplay(band, arousal) {
   const energyLabel = describeArousal(arousal);
   const rangeLabel = formatIntensityBand(normalized || band);
   const label = createEl('div', 'feeling-inference__cue-intensity-label');
-  const labelTitle = createEl('span', 'feeling-inference__cue-intensity-title', 'Typical intensity window (0–10)');
+  const labelTitle = createEl('span', 'feeling-inference__cue-intensity-title', 'Typical intensity range');
   label.appendChild(labelTitle);
   if (energyLabel) {
     label.appendChild(createEl('span', 'feeling-inference__cue-intensity-energy', energyLabel));
   }
-  const rangeText = rangeLabel === '—' ? 'Not enough data yet' : `${rangeLabel}/10`;
+  const rangeText = rangeLabel === '—' ? 'Not enough data yet' : rangeLabel;
   label.appendChild(createEl('span', 'feeling-inference__cue-intensity-value', rangeText));
   container.appendChild(label);
 
@@ -282,7 +282,7 @@ function buildNeedsSection(entry, basePath) {
     const sdtList = createEl('div', 'feeling-inference__sdt');
     entry.needsHypotheses.sdt.forEach((key) => {
       const label = SDT_LABELS[key] || key;
-      sdtList.appendChild(createEl('span', 'feeling-inference__sdt-chip chip', label));
+      sdtList.appendChild(createEl('span', 'feeling-inference__sdt-chip', label));
     });
     section.appendChild(sdtList);
   }
