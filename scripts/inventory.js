@@ -1834,9 +1834,48 @@ function buildPaletteUi() {
   const clearButton = document.createElement('button');
   clearButton.type = 'button';
   clearButton.className = 'palette-form__clear';
-  clearButton.textContent = 'Clear customizations';
+  clearButton.textContent = 'Delete localStorage';
   clearButton.addEventListener('click', () => {
+    const confirmationMessage = [
+      'Deleting localStorage will remove all saved customizations, inventory entries, journal entries, and any other data stored in this browser.',
+      'If you have anything you want to keep, please export backups of your inventory and journal before continuing.',
+      'Do you want to delete localStorage now?',
+    ].join('\n\n');
+
+    const confirmed =
+      typeof window === 'undefined' || typeof window.confirm !== 'function'
+        ? true
+        : window.confirm(confirmationMessage);
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.clear();
+      }
+    } catch (error) {
+      console.warn('Unable to clear localStorage', error);
+    }
+
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.clear();
+      }
+    } catch (error) {
+      console.warn('Unable to clear sessionStorage', error);
+    }
+
     clearSavedTheme();
+
+    try {
+      if (typeof window !== 'undefined' && typeof window.location?.reload === 'function') {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.warn('Unable to reload after clearing storage', error);
+    }
   });
 
   const resetButton = document.createElement('button');
