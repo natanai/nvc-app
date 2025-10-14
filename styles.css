@@ -299,6 +299,114 @@ a:focus-visible {
   justify-content: center;
 }
 
+.site-nav__inventory {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.site-nav__inventory .site-nav__link--inventory {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.site-nav__inventory-toggle {
+  position: absolute;
+  top: 50%;
+  right: 1.4rem;
+  transform: translateY(-50%);
+  min-width: 0;
+  min-height: 0;
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--outline) 65%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.18s ease;
+  z-index: 3;
+  letter-spacing: normal;
+}
+
+.site-nav__inventory-toggle:hover,
+.site-nav__inventory-toggle:focus-visible {
+  opacity: 0.85;
+}
+
+.site-nav__inventory-toggle:focus-visible {
+  outline: 2px dashed color-mix(in srgb, var(--outline) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.site-nav__inventory-toggle--open {
+  opacity: 0.7;
+}
+
+.site-nav__inventory-toggle-glyph {
+  display: block;
+  transform-origin: center;
+  transition: transform 0.24s ease;
+}
+
+.site-nav__inventory-toggle--open .site-nav__inventory-toggle-glyph {
+  transform: rotate(90deg);
+}
+
+.site-nav__inventory-shadow {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: calc(100% + 2px);
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+  z-index: 1;
+}
+
+.site-nav__inventory-shadow:focus-visible {
+  outline-offset: 6px;
+}
+
+.site-nav__inventory--open .site-nav__link--inventory {
+  box-shadow: none;
+  transform: translateY(2px);
+}
+
+.site-nav__inventory--open .site-nav__inventory-toggle {
+  opacity: 0.7;
+}
+
+.site-nav__inventory--open .site-nav__inventory-shadow {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(12px);
+}
+
+.site-nav__inventory--open .site-nav__inventory-shadow:hover,
+.site-nav__inventory--open .site-nav__inventory-shadow:focus-visible {
+  opacity: 1;
+}
+
+.site-nav__journal {
+  transition: transform 0.24s ease;
+}
+
+.site-nav__journal--shifted {
+  transform: translateY(14px);
+}
+
 .site-nav__glyph {
   width: 1.4rem;
   height: 1.4rem;

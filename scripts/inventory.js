@@ -916,6 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshSavedStrategyIndex();
   state.journalStore = resolveJournalStore();
   updateJournalEntriesFromStore();
+  setupSecretInventoryShadow();
   highlightNavigation();
   initCustomizer().catch((error) => {
     console.warn('Unable to set up the customizer', error);
@@ -938,6 +939,7 @@ if (
   window.__NVC_INVENTORY_TESTS__ = {
     highlightNavigation,
     resolveNavCustomizerToggle,
+    setupSecretInventoryShadow,
   };
 }
 
@@ -1387,6 +1389,105 @@ function setupInventoryPage() {
       }
     });
   }
+}
+
+function setupSecretInventoryShadow() {
+  const navs = Array.from(document.querySelectorAll('.site-nav'));
+  if (!navs.length) {
+    return;
+  }
+
+  navs.forEach((nav) => {
+    if (!(nav instanceof HTMLElement)) {
+      return;
+    }
+
+    const inventoryLink = nav.querySelector('.site-nav__link--inventory');
+    if (!(inventoryLink instanceof HTMLElement)) {
+      return;
+    }
+
+    const existingWrapper = inventoryLink.closest('.site-nav__inventory');
+    if (existingWrapper) {
+      return;
+    }
+
+    const parent = inventoryLink.parentElement;
+    if (!parent) {
+      return;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'site-nav__inventory';
+    parent.insertBefore(wrapper, inventoryLink);
+    wrapper.appendChild(inventoryLink);
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'site-nav__inventory-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Nudge inventory shadow');
+
+    const toggleGlyph = document.createElement('span');
+    toggleGlyph.className = 'site-nav__inventory-toggle-glyph';
+    toggleGlyph.setAttribute('aria-hidden', 'true');
+    toggleGlyph.textContent = '‹';
+
+    const toggleLabel = document.createElement('span');
+    toggleLabel.className = 'visually-hidden';
+    toggleLabel.textContent = 'Nudge inventory shadow';
+
+    toggle.append(toggleGlyph, toggleLabel);
+    wrapper.appendChild(toggle);
+
+    const shadowLink = document.createElement('a');
+    shadowLink.className = 'site-nav__inventory-shadow';
+    shadowLink.href = `${state.basePath || ''}inventory/journal/`;
+
+    const shadowLabel = document.createElement('span');
+    shadowLabel.className = 'visually-hidden';
+    shadowLabel.textContent = 'Journal';
+
+    shadowLink.appendChild(shadowLabel);
+    shadowLink.setAttribute('tabindex', '-1');
+    wrapper.appendChild(shadowLink);
+
+    const journalContainer = wrapper.previousElementSibling;
+    const shouldShiftJournal = journalContainer instanceof HTMLElement &&
+      journalContainer.classList.contains('site-nav__journal');
+
+    const setOpenState = (isOpen) => {
+      wrapper.classList.toggle('site-nav__inventory--open', isOpen);
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      shadowLink.setAttribute('tabindex', isOpen ? '0' : '-1');
+      toggle.classList.toggle('site-nav__inventory-toggle--open', isOpen);
+      if (shouldShiftJournal && journalContainer) {
+        journalContainer.classList.toggle('site-nav__journal--shifted', isOpen);
+      }
+    };
+
+    toggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = !wrapper.classList.contains('site-nav__inventory--open');
+      setOpenState(isOpen);
+    });
+
+    toggle.addEventListener('blur', () => {
+      if (!wrapper.contains(document.activeElement)) {
+        setOpenState(false);
+      }
+    });
+
+    shadowLink.addEventListener('click', () => {
+      setOpenState(false);
+    });
+
+    shadowLink.addEventListener('blur', () => {
+      if (!wrapper.contains(document.activeElement)) {
+        setOpenState(false);
+      }
+    });
+  });
 }
 
 function highlightNavigation() {
