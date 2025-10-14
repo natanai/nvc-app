@@ -1,6 +1,5 @@
 const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
-const THEME_HIGH_CONTRAST_KEY = 'themeHighContrast';
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
 
@@ -15,14 +14,6 @@ const DEFAULT_PALETTE = {
   sky: '#D3F1FF',
   outline: '#12081F',
 };
-
-const HIGH_CONTRAST_TEXT = '#10121C';
-const HIGH_CONTRAST_TEXT_SOFT = '#343852';
-const HIGH_CONTRAST_OUTLINE = '#05060C';
-const HIGH_CONTRAST_MIN_RATIO = 9;
-const HIGH_CONTRAST_ACCENT_RATIO = 10;
-const HIGH_CONTRAST_CHIP_RATIO = 11;
-const HIGH_CONTRAST_ADJUST_STEP = 8;
 
 const COLOR_INPUTS = [
   { key: 'plum', varName: '--plum', label: 'Canvas glow' },
@@ -223,8 +214,6 @@ const paletteState = {
   currentPreset: '',
   lastTrigger: null,
   styleElement: null,
-  highContrastToggle: null,
-  highContrastEnabled: false,
   cornerSlider: null,
   cornerValue: null,
   cornerRoundness: DEFAULT_ROUNDNESS,
@@ -1317,7 +1306,7 @@ async function initCustomizer() {
     return;
   }
 
-  paletteState.highContrastEnabled = loadHighContrastPreference();
+  storageRemoveItem('themeHighContrast');
   buildPaletteUi();
 
   const themePreapplied = document.documentElement.getAttribute('data-theme-preapplied') === 'true';
@@ -1541,29 +1530,6 @@ function buildPaletteUi() {
   paletteState.cornerValue = roundnessValue;
   updateRoundnessDisplay(paletteState.cornerRoundness);
 
-  const contrastField = document.createElement('div');
-  contrastField.className = 'palette-form__field palette-form__field--toggle';
-
-  const contrastLabel = document.createElement('span');
-  contrastLabel.className = 'palette-form__label';
-  contrastLabel.id = 'paletteHighContrastLabel';
-  contrastLabel.textContent = 'High contrast';
-
-  const contrastToggle = document.createElement('button');
-  contrastToggle.type = 'button';
-  contrastToggle.className = 'palette-form__switch';
-  contrastToggle.setAttribute('role', 'switch');
-  contrastToggle.setAttribute('aria-labelledby', 'paletteHighContrastLabel');
-  contrastToggle.addEventListener('click', () => {
-    setHighContrastEnabled(!paletteState.highContrastEnabled);
-  });
-
-  contrastField.append(contrastLabel, contrastToggle);
-  form.appendChild(contrastField);
-
-  paletteState.highContrastToggle = contrastToggle;
-  updateHighContrastToggle();
-
   const grid = document.createElement('div');
   grid.className = 'palette-form__grid';
   form.appendChild(grid);
@@ -1597,6 +1563,19 @@ function buildPaletteUi() {
     input.dataset.colorKey = color.key;
     input.addEventListener('input', () => {
       input.setCustomValidity('');
+      const preview = sanitizeHex(input.value);
+      const swatchTarget = paletteState.swatches.get(color.key);
+      if (swatchTarget) {
+        if (preview) {
+          swatchTarget.style.backgroundColor = preview;
+        } else {
+          const fallback =
+            paletteState.currentColors[color.key] ||
+            paletteState.defaultColors[color.key] ||
+            '';
+          swatchTarget.style.backgroundColor = fallback || 'transparent';
+        }
+      }
     });
     input.addEventListener('change', handleColorInputChange);
 
@@ -1666,6 +1645,14 @@ function buildPaletteUi() {
   const actions = document.createElement('div');
   actions.className = 'palette-form__actions';
 
+  const clearButton = document.createElement('button');
+  clearButton.type = 'button';
+  clearButton.className = 'palette-form__clear';
+  clearButton.textContent = 'Clear customizations';
+  clearButton.addEventListener('click', () => {
+    clearSavedTheme();
+  });
+
   const resetButton = document.createElement('button');
   resetButton.type = 'button';
   resetButton.className = 'palette-form__reset';
@@ -1676,7 +1663,7 @@ function buildPaletteUi() {
     setCornerRoundness(DEFAULT_ROUNDNESS);
   });
 
-  actions.appendChild(resetButton);
+  actions.append(clearButton, resetButton);
   form.appendChild(actions);
 
   panel.appendChild(form);
@@ -2144,13 +2131,22 @@ function applyColors(colors, options = {}) {
   });
 
   if (!skipDomUpdate && root) {
-    const buttonBase = paletteState.currentColors.rose || paletteState.defaultColors.rose || DEFAULT_PALETTE.rose;
+    const buttonBase =
+      paletteState.currentColors.rose || paletteState.defaultColors.rose || DEFAULT_PALETTE.rose;
     if (buttonBase) {
       root.style.setProperty('--btn-bg', buttonBase);
     }
+
+    const outlineBase =
+      paletteState.currentColors.outline || paletteState.defaultColors.outline || DEFAULT_PALETTE.outline;
+    if (outlineBase) {
+      root.style.setProperty('--shadow', `color-mix(in srgb, ${outlineBase} 55%, transparent)`);
+    }
+
     root.style.setProperty('--btn-fg', '#111111');
     root.style.setProperty('--chip-fg', '#111111');
-    applyHighContrastOverlay({ skipAutoContrast: true });
+    root.removeAttribute('data-theme-contrast');
+    root.style.removeProperty('--chip-bg');
     runAutoContrast();
   }
 
@@ -2168,98 +2164,6 @@ function applyColors(colors, options = {}) {
   }
 }
 
-function applyHighContrastOverlay(options = {}) {
-  const { skipAutoContrast = false, skipDomUpdate = false } = options;
-  if (skipDomUpdate) {
-    return;
-  }
-
-  const root = document.documentElement;
-  if (!root) {
-    return;
-  }
-
-  const baseInk = resolvePaletteColor('ink', '--ink');
-  const baseInkSoft = resolvePaletteColor('inkSoft', '--ink-soft');
-  const baseOutline = resolvePaletteColor('outline', '--outline');
-  const baseRose = resolvePaletteColor('rose', '--rose');
-
-  if (paletteState.highContrastEnabled) {
-    try {
-      const resolvedPlum = resolvePaletteColor('plum', '--plum');
-      const contrastPlum = ensureHighContrastColor(resolvedPlum, HIGH_CONTRAST_MIN_RATIO);
-      if (contrastPlum) {
-        root.style.setProperty('--plum', contrastPlum);
-      }
-
-      const lavender = ensureHighContrastColor(resolvePaletteColor('lavender', '--lavender'), HIGH_CONTRAST_ACCENT_RATIO);
-      if (lavender) {
-        root.style.setProperty('--lavender', lavender);
-      }
-
-      const rose = ensureHighContrastColor(baseRose, HIGH_CONTRAST_ACCENT_RATIO);
-      if (rose) {
-        root.style.setProperty('--rose', rose);
-      }
-
-      const mint = ensureHighContrastColor(resolvePaletteColor('mint', '--mint'), HIGH_CONTRAST_ACCENT_RATIO);
-      if (mint) {
-        root.style.setProperty('--mint', mint);
-      }
-
-      const gold = ensureHighContrastColor(resolvePaletteColor('gold', '--gold'), HIGH_CONTRAST_ACCENT_RATIO);
-      if (gold) {
-        root.style.setProperty('--gold', gold);
-      }
-
-      const sky = ensureHighContrastColor(resolvePaletteColor('sky', '--sky'), HIGH_CONTRAST_CHIP_RATIO);
-      if (sky) {
-        root.style.setProperty('--sky', sky);
-        root.style.setProperty('--chip-bg', sky);
-      }
-
-      root.style.setProperty('--ink', HIGH_CONTRAST_TEXT);
-      root.style.setProperty('--ink-soft', HIGH_CONTRAST_TEXT_SOFT);
-      root.style.setProperty('--outline', HIGH_CONTRAST_OUTLINE);
-      root.style.setProperty('--chip-fg', HIGH_CONTRAST_TEXT);
-      root.style.setProperty('--btn-fg', HIGH_CONTRAST_TEXT);
-
-      const buttonSource = baseRose || contrastPlum || sky;
-      const buttonBg = ensureHighContrastColor(buttonSource, HIGH_CONTRAST_ACCENT_RATIO);
-      if (buttonBg) {
-        root.style.setProperty('--btn-bg', buttonBg);
-      }
-
-      root.style.setProperty('--shadow', `color-mix(in srgb, ${HIGH_CONTRAST_OUTLINE} 75%, transparent)`);
-      root.setAttribute('data-theme-contrast', 'high');
-    } catch (error) {
-      console.warn('Unable to apply high contrast adjustments', error);
-    }
-  } else {
-    if (baseInk) {
-      root.style.setProperty('--ink', baseInk);
-    }
-    if (baseInkSoft) {
-      root.style.setProperty('--ink-soft', baseInkSoft);
-    }
-    if (baseOutline) {
-      root.style.setProperty('--outline', baseOutline);
-    }
-    if (baseRose) {
-      root.style.setProperty('--btn-bg', baseRose);
-    }
-    root.style.setProperty('--chip-fg', '#111111');
-    root.style.setProperty('--btn-fg', '#111111');
-    root.style.setProperty('--shadow', 'color-mix(in srgb, var(--outline) 55%, transparent)');
-    root.style.removeAttribute('data-theme-contrast');
-    root.style.removeProperty('--chip-bg');
-  }
-
-  if (!skipAutoContrast) {
-    runAutoContrast();
-  }
-}
-
 function runAutoContrast() {
   try {
     if (window.NVCContrast && typeof window.NVCContrast.autoContrast === 'function') {
@@ -2267,58 +2171,6 @@ function runAutoContrast() {
     }
   } catch (error) {
     console.warn('Unable to auto-adjust button contrast', error);
-  }
-}
-
-function loadHighContrastPreference() {
-  const { value, error } = storageGetItem(THEME_HIGH_CONTRAST_KEY);
-  if (!value && error) {
-    console.warn('Unable to read high contrast preference', error);
-  }
-  return value === '1';
-}
-
-function saveHighContrastPreference(enabled) {
-  const { success, error } = storageSetItem(THEME_HIGH_CONTRAST_KEY, enabled ? '1' : '0');
-  if (!success && error) {
-    console.warn('Unable to persist high contrast preference', error);
-  }
-}
-
-function updateHighContrastToggle() {
-  const toggle = paletteState.highContrastToggle;
-  if (!toggle) {
-    return;
-  }
-  const enabled = !!paletteState.highContrastEnabled;
-  toggle.setAttribute('aria-checked', enabled ? 'true' : 'false');
-  toggle.classList.toggle('is-on', enabled);
-  toggle.textContent = enabled ? 'On' : 'Off';
-}
-
-function reapplyPaletteColors() {
-  applyColors({}, { persist: false, presetName: paletteState.currentPreset });
-}
-
-function setHighContrastEnabled(enabled, options = {}) {
-  const { persistPreference = true, reapply = true, force = false } = options;
-  const next = !!enabled;
-  if (!force && paletteState.highContrastEnabled === next) {
-    updateHighContrastToggle();
-    return;
-  }
-
-  paletteState.highContrastEnabled = next;
-  updateHighContrastToggle();
-
-  if (persistPreference) {
-    saveHighContrastPreference(next);
-  }
-
-  if (reapply) {
-    reapplyPaletteColors();
-  } else {
-    applyHighContrastOverlay();
   }
 }
 
@@ -2377,91 +2229,6 @@ function sanitizeColorsMap(colors) {
   });
 
   return sanitized;
-}
-
-function getComputedRootColor(varName) {
-  if (typeof window === 'undefined') {
-    return '';
-  }
-
-  const root = document.documentElement;
-  if (!root) {
-    return '';
-  }
-
-  const inline = root.style?.getPropertyValue(varName)?.trim();
-  const inlineHex = sanitizeHex(inline);
-  if (inlineHex) {
-    return inlineHex;
-  }
-
-  try {
-    const computed = window.getComputedStyle ? getComputedStyle(root).getPropertyValue(varName).trim() : '';
-    return sanitizeHex(computed);
-  } catch (error) {
-    console.warn('Unable to read computed color', varName, error);
-  }
-
-  return '';
-}
-
-function resolvePaletteColor(key, varName) {
-  const fromCurrent = sanitizeHex(paletteState.currentColors[key]);
-  if (fromCurrent) {
-    return fromCurrent;
-  }
-
-  const fromDefault = sanitizeHex(paletteState.defaultColors[key]);
-  if (fromDefault) {
-    return fromDefault;
-  }
-
-  const fromBase = sanitizeHex(DEFAULT_PALETTE[key]);
-  if (fromBase) {
-    return fromBase;
-  }
-
-  if (varName) {
-    const computed = getComputedRootColor(varName);
-    if (computed) {
-      return computed;
-    }
-  }
-
-  return '';
-}
-
-function ensureHighContrastColor(color, targetRatio = HIGH_CONTRAST_MIN_RATIO) {
-  const sanitized = sanitizeHex(color);
-  if (!sanitized) {
-    return '';
-  }
-
-  const adjust = window.NVCContrast?.adjustLightness;
-  const getRatio = window.NVCContrast?.getContrastRatio;
-  if (typeof adjust !== 'function' || typeof getRatio !== 'function') {
-    return sanitized;
-  }
-
-  let attempts = 0;
-  let current = sanitized;
-  try {
-    let ratio = getRatio(current, HIGH_CONTRAST_TEXT);
-    while (ratio < targetRatio && attempts < 12) {
-      const updated = adjust(current, HIGH_CONTRAST_ADJUST_STEP);
-      if (!updated || updated === current) {
-        break;
-      }
-      current = sanitizeHex(updated) || current;
-      ratio = getRatio(current, HIGH_CONTRAST_TEXT);
-      attempts += 1;
-    }
-  } catch (error) {
-    console.warn('Unable to adjust color for high contrast', error);
-    return sanitized;
-  }
-
-  return current;
 }
 
 function clampRoundness(value) {
@@ -2547,6 +2314,37 @@ function saveTheme(theme) {
   if (!success && error) {
     console.warn('Unable to persist color theme', error);
   }
+}
+
+function clearSavedTheme() {
+  storageRemoveItem(THEME_STORAGE_KEY);
+  storageRemoveItem('themeHighContrast');
+
+  const root = document.documentElement;
+  if (root?.style) {
+    COLOR_INPUTS.forEach(({ varName }) => {
+      root.style.removeProperty(varName);
+    });
+    root.style.removeProperty('--btn-bg');
+    root.style.removeProperty('--btn-fg');
+    root.style.removeProperty('--chip-fg');
+    root.style.removeProperty('--chip-bg');
+    root.style.removeProperty('--shadow');
+  }
+
+  paletteState.currentPreset = '';
+  paletteState.currentColors = { ...paletteState.defaultColors };
+  if (paletteState.styleElement?.isConnected) {
+    paletteState.styleElement.textContent = '';
+  }
+  updatePaletteStyleElement();
+  updateInputsFromState();
+  setCornerRoundness(DEFAULT_ROUNDNESS, { persist: false });
+  if (paletteState.presetSelect) {
+    paletteState.presetSelect.value = '';
+  }
+  document.documentElement?.removeAttribute('data-theme-preapplied');
+  runAutoContrast();
 }
 
 function loadSavedTheme() {
