@@ -2654,6 +2654,18 @@ body.has-support-journal-open {
   box-shadow: 0 14px 0 var(--shadow);
 }
 
+.strategy-card__save--saved {
+  background: var(--mint);
+  color: var(--ink);
+  box-shadow: 0 6px 0 var(--shadow);
+}
+
+.strategy-card__save--saved:hover,
+.strategy-card__save--saved:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
 @media (max-width: 600px) {
   .strategy-card--form .strategy-card__actions {
     justify-content: stretch;
