@@ -678,10 +678,12 @@ button.site-nav__link {
   background: color-mix(in srgb, var(--ink) 46%, transparent);
   backdrop-filter: blur(8px);
   z-index: 2600;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .support-journal__layer[data-state='open'] {
-  display: block;
+  display: flex;
 }
 
 .support-journal__dialog {
@@ -691,6 +693,7 @@ button.site-nav__link {
   min-height: 100dvh;
   height: 100dvh;
   max-height: 100dvh;
+  width: min(100vw, 100%);
   overflow: hidden;
   background: linear-gradient(
       135deg,
@@ -964,18 +967,14 @@ body.has-support-journal-open {
 }
 
 @media (min-width: 960px) {
-  .support-journal__layer {
-    padding: 0;
-  }
-
   .support-journal__dialog {
     grid-template-rows: auto 1fr;
-    width: min(1080px, 94vw);
+    width: 100vw;
     max-width: none;
     max-height: none;
-    margin: 0 auto;
-    border-radius: var(--radius-4xl);
-    box-shadow: 0 24px 48px color-mix(in srgb, var(--outline) 32%, transparent);
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
     overflow: hidden;
   }
 
@@ -999,6 +998,23 @@ body.has-support-journal-open {
 
   .support-journal__close {
     box-shadow: 0 16px 28px color-mix(in srgb, var(--outline) 32%, transparent);
+  }
+}
+
+@media (max-width: 959px) and (orientation: landscape) {
+  .support-journal__layer[data-state='open'] {
+    align-items: center;
+  }
+
+  .support-journal__dialog {
+    width: min(92vh, 560px);
+    max-width: min(92vh, 560px);
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0 auto;
+    border-radius: var(--radius-3xl);
+    box-shadow: 0 18px 36px color-mix(in srgb, var(--outline) 28%, transparent);
   }
 }
 
