@@ -5654,6 +5654,17 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   color: color-mix(in srgb, var(--ink) 70%, transparent);
 }
 
+.feeling-inference__evidence-ref[href] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: color-mix(in srgb, var(--outline) 70%, transparent);
+}
+
+.feeling-inference__evidence-ref[href]:hover,
+.feeling-inference__evidence-ref[href]:focus-visible {
+  text-decoration-color: color-mix(in srgb, var(--mint) 65%, transparent);
+}
+
 .feeling-inference__popover-subheading {
   margin: 0 0 0.5rem;
   font-size: 1rem;

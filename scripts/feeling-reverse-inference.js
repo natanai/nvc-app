@@ -361,17 +361,32 @@ function renderEvidencePopover(container, trigger, feelingKey, entry) {
   title.id = titleId;
 
   const list = createEl('ul', 'feeling-inference__evidence-list');
-  evidence.forEach(({ key, record }) => {
-    const support = record.supports?.[0];
-    if (!support) return;
+  const uniqueSupports = [];
+  const seenSupports = new Set();
+  evidence.forEach(({ record }) => {
+    (record.supports || []).forEach((support) => {
+      if (!support?.label) return;
+      const key = `${support.label}|${support.ref || ''}|${support.href || ''}`;
+      if (seenSupports.has(key)) return;
+      seenSupports.add(key);
+      uniqueSupports.push(support);
+    });
+  });
+
+  uniqueSupports.forEach((support) => {
     const item = createEl('li', 'feeling-inference__evidence-item');
     const label = createEl('span', 'feeling-inference__evidence-label', support.label);
+    item.appendChild(label);
     if (support.ref) {
-      const ref = createEl('span', 'feeling-inference__evidence-ref', support.ref);
-      item.appendChild(label);
+      const ref = support.href
+        ? createEl('a', 'feeling-inference__evidence-ref', support.ref)
+        : createEl('span', 'feeling-inference__evidence-ref', support.ref);
+      if (support.href) {
+        ref.href = support.href;
+        ref.target = '_blank';
+        ref.rel = 'noopener noreferrer';
+      }
       item.appendChild(ref);
-    } else {
-      item.appendChild(label);
     }
     list.appendChild(item);
   });
