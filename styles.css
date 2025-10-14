@@ -4820,7 +4820,30 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 
 .palette-form__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.palette-form__clear {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.palette-form__clear:hover,
+.palette-form__clear:focus-visible {
+  text-decoration: none;
+}
+
+.palette-form__clear:focus-visible {
+  outline: 2px dashed var(--outline);
+  outline-offset: 2px;
 }
 
 .palette-form__reset {

@@ -8,6 +8,7 @@
     "build:pages": "node scripts/build-pages.mjs",
     "lint:evidence": "node scripts/lint-evidence.mjs",
     "lint:entrypoints": "node scripts/lint-entrypoints.mjs",
-    "build": "npm run lint:evidence && npm run build:data && npm run build:pages && npm run lint:entrypoints"
+    "build": "npm run lint:evidence && npm run build:data && npm run build:pages && npm run lint:entrypoints",
+    "test:customizer": "node tests/customizer-integrity.test.mjs"
   }
 }
