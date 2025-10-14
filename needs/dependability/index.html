@@ -12,7 +12,9 @@
     <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
+        const THEME_COOKIE_KEY = 'nvcTheme';
         const HIGH_CONTRAST_KEY = 'themeHighContrast';
+        const HIGH_CONTRAST_COOKIE_KEY = 'nvcThemeContrast';
         const VAR_MAP = {
           plum: '--plum',
           lavender: '--lavender',
@@ -46,6 +48,26 @@
           }
           const prefixed = trimmed.startsWith('#') ? trimmed : '#' + trimmed;
           return HEX_PATTERN.test(prefixed) ? prefixed.toUpperCase() : '';
+        }
+
+        function readCookie(name) {
+          if (typeof document === 'undefined' || typeof document.cookie !== 'string') {
+            return '';
+          }
+          const prefix = name + '=';
+          const segments = document.cookie ? document.cookie.split(';') : [];
+          for (let index = 0; index < segments.length; index += 1) {
+            const segment = segments[index].trim();
+            if (segment.startsWith(prefix)) {
+              const value = segment.slice(prefix.length);
+              try {
+                return decodeURIComponent(value);
+              } catch (error) {
+                return value;
+              }
+            }
+          }
+          return '';
         }
 
         function readPaletteVar(varName) {
@@ -98,37 +120,60 @@
           return current;
         }
 
+        function readStoredThemePayload() {
+          let raw = '';
+          try {
+            raw = window.localStorage ? localStorage.getItem(STORAGE_KEY) || '' : '';
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to access saved theme', error);
+            }
+          }
+          if (!raw) {
+            raw = readCookie(THEME_COOKIE_KEY);
+          }
+          if (!raw) {
+            return null;
+          }
+          try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' ? parsed : null;
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to parse saved theme', error);
+            }
+            return null;
+          }
+        }
+
         let applied = false;
         try {
-          const stored = window.localStorage ? localStorage.getItem(STORAGE_KEY) : null;
-          if (stored) {
-            const parsed = JSON.parse(stored);
-            if (parsed && typeof parsed === 'object' && parsed.values && typeof parsed.values === 'object') {
-              for (const [key, varName] of Object.entries(VAR_MAP)) {
-                let value = parsed.values[key];
-                if (typeof value !== 'string') {
-                  continue;
-                }
-                value = value.trim();
-                if (!value) {
-                  continue;
-                }
-                if (!value.startsWith('#')) {
-                  value = '#' + value;
-                }
-                if (!HEX_PATTERN.test(value)) {
-                  continue;
-                }
-                root.style.setProperty(varName, value.toUpperCase());
-                applied = true;
+          const parsed = readStoredThemePayload();
+          if (parsed && typeof parsed === 'object' && parsed.values && typeof parsed.values === 'object') {
+            for (const [key, varName] of Object.entries(VAR_MAP)) {
+              let value = parsed.values[key];
+              if (typeof value !== 'string') {
+                continue;
               }
-              const roundnessRaw =
-                typeof parsed.roundness === 'number' ? parsed.roundness : Number(parsed.roundness);
-              if (!Number.isNaN(roundnessRaw)) {
-                const clampedRoundness = Math.min(200, Math.max(0, Math.round(roundnessRaw)));
-                root.style.setProperty('--corner-scale', String(clampedRoundness / 100));
-                applied = true;
+              value = value.trim();
+              if (!value) {
+                continue;
               }
+              if (!value.startsWith('#')) {
+                value = '#' + value;
+              }
+              if (!HEX_PATTERN.test(value)) {
+                continue;
+              }
+              root.style.setProperty(varName, value.toUpperCase());
+              applied = true;
+            }
+            const roundnessRaw =
+              typeof parsed.roundness === 'number' ? parsed.roundness : Number(parsed.roundness);
+            if (!Number.isNaN(roundnessRaw)) {
+              const clampedRoundness = Math.min(200, Math.max(0, Math.round(roundnessRaw)));
+              root.style.setProperty('--corner-scale', String(clampedRoundness / 100));
+              applied = true;
             }
           }
         } catch (error) {
@@ -149,7 +194,20 @@
           root.style.setProperty('--btn-fg', '#111111');
           root.style.setProperty('--chip-fg', '#111111');
 
-          const highContrastEnabled = window.localStorage ? localStorage.getItem(HIGH_CONTRAST_KEY) === '1' : false;
+          let highContrastPreference = '';
+          try {
+            highContrastPreference = window.localStorage
+              ? localStorage.getItem(HIGH_CONTRAST_KEY) || ''
+              : '';
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to read high contrast preference', error);
+            }
+          }
+          if (!highContrastPreference) {
+            highContrastPreference = readCookie(HIGH_CONTRAST_COOKIE_KEY);
+          }
+          const highContrastEnabled = highContrastPreference === '1';
           if (highContrastEnabled) {
             try {
               const plumValue = ensureHighContrastColor(readPaletteVar('--plum'), HIGH_CONTRAST_MIN_RATIO);
