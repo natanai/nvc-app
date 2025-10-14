@@ -8,7 +8,7 @@
   "theme_color": "#7E5CFF",
   "icons": [
     {
-      "src": "icons/needshare-touch.svg",
+      "src": "icons/main.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
