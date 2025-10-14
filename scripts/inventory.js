@@ -124,6 +124,7 @@ const state = {
   viewportHeightListenersAttached: false,
   journalStoreListenersAttached: false,
   journalModuleReadyPromise: null,
+  journalOrientationLockActive: false,
 };
 
 const SUMMARY_FILTERS = new Set(['all', 'missing', 'ready', 'none']);
@@ -151,6 +152,56 @@ function setupViewportHeightProperty() {
   window.addEventListener('resize', updateViewportHeightCustomProperty);
   window.addEventListener('orientationchange', updateViewportHeightCustomProperty);
   state.viewportHeightListenersAttached = true;
+}
+
+function lockJournalOverlayOrientation() {
+  if (typeof window === 'undefined' || !window.screen?.orientation) {
+    return;
+  }
+  const orientation = window.screen.orientation;
+  if (typeof orientation.lock !== 'function') {
+    return;
+  }
+  try {
+    const lockResult = orientation.lock('portrait-primary');
+    if (lockResult && typeof lockResult.then === 'function') {
+      lockResult
+        .then(() => {
+          state.journalOrientationLockActive = true;
+          if (!state.journalOverlayOpen) {
+            unlockJournalOverlayOrientation();
+          }
+        })
+        .catch(() => {
+          state.journalOrientationLockActive = false;
+        });
+    } else {
+      state.journalOrientationLockActive = true;
+      if (!state.journalOverlayOpen) {
+        unlockJournalOverlayOrientation();
+      }
+    }
+  } catch (error) {
+    state.journalOrientationLockActive = false;
+  }
+}
+
+function unlockJournalOverlayOrientation() {
+  if (typeof window === 'undefined' || !window.screen?.orientation) {
+    state.journalOrientationLockActive = false;
+    return;
+  }
+  const orientation = window.screen.orientation;
+  if (typeof orientation.unlock !== 'function') {
+    state.journalOrientationLockActive = false;
+    return;
+  }
+  try {
+    orientation.unlock();
+  } catch (error) {
+    // ignore unsupported unlock requests
+  }
+  state.journalOrientationLockActive = false;
 }
 
 function normalizeNeedSlugValue(value) {
@@ -2646,6 +2697,7 @@ function openJournalOverlay() {
   if (document.body?.classList) {
     document.body.classList.add('has-support-journal-open');
   }
+  lockJournalOverlayOrientation();
   renderJournalOverlayHistory();
   const focusDialog = () => {
     if (!state.journalOverlayDialog) {
@@ -2685,6 +2737,7 @@ function closeJournalOverlay(options = {}) {
   if (document.body?.classList) {
     document.body.classList.remove('has-support-journal-open');
   }
+  unlockJournalOverlayOrientation();
   document.removeEventListener('keydown', handleJournalOverlayKeydown);
   restoreJournalFormToInline();
 }
