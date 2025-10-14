@@ -1,6 +1,9 @@
 const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
+const THEME_COOKIE_KEY = 'nvcTheme';
 const THEME_HIGH_CONTRAST_KEY = 'themeHighContrast';
+const THEME_HIGH_CONTRAST_COOKIE_KEY = 'nvcThemeContrast';
+const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
 
@@ -2150,12 +2153,19 @@ function runAutoContrast() {
 }
 
 function loadHighContrastPreference() {
+  let stored = '';
   try {
-    return window.localStorage ? localStorage.getItem(THEME_HIGH_CONTRAST_KEY) === '1' : false;
+    stored = window.localStorage ? localStorage.getItem(THEME_HIGH_CONTRAST_KEY) || '' : '';
   } catch (error) {
     console.warn('Unable to read high contrast preference', error);
-    return false;
   }
+
+  if (stored) {
+    return stored === '1';
+  }
+
+  const cookieValue = readHighContrastCookie();
+  return cookieValue === '1';
 }
 
 function saveHighContrastPreference(enabled) {
@@ -2166,6 +2176,8 @@ function saveHighContrastPreference(enabled) {
   } catch (error) {
     console.warn('Unable to persist high contrast preference', error);
   }
+
+  persistHighContrastCookie(enabled);
 }
 
 function updateHighContrastToggle() {
@@ -2399,6 +2411,95 @@ function setCornerRoundness(value, options = {}) {
   }
 }
 
+function readCookieValue(name) {
+  if (typeof document === 'undefined' || typeof document.cookie !== 'string') {
+    return '';
+  }
+
+  const prefix = `${name}=`;
+  const segments = document.cookie ? document.cookie.split(';') : [];
+  for (let index = 0; index < segments.length; index += 1) {
+    const segment = segments[index].trim();
+    if (segment.startsWith(prefix)) {
+      const value = segment.slice(prefix.length);
+      try {
+        return decodeURIComponent(value);
+      } catch (error) {
+        return value;
+      }
+    }
+  }
+
+  return '';
+}
+
+function writeCookieValue(name, value, maxAgeSeconds = THEME_COOKIE_MAX_AGE) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const encodedValue = encodeURIComponent(value);
+  let cookie = `${name}=${encodedValue}; path=/; samesite=lax`;
+  if (typeof maxAgeSeconds === 'number' && Number.isFinite(maxAgeSeconds)) {
+    const clamped = Math.max(0, Math.round(maxAgeSeconds));
+    cookie += `; max-age=${clamped}`;
+  }
+
+  document.cookie = cookie;
+}
+
+function normalizeThemePayload(theme) {
+  if (!theme || typeof theme !== 'object') {
+    return null;
+  }
+
+  return {
+    values: sanitizeColorsMap(theme.values),
+    preset: typeof theme.preset === 'string' ? theme.preset : '',
+    roundness: clampRoundness(theme.roundness),
+  };
+}
+
+function persistThemeCookie(payload) {
+  try {
+    writeCookieValue(THEME_COOKIE_KEY, JSON.stringify(payload));
+  } catch (error) {
+    console.warn('Unable to persist theme cookie', error);
+  }
+}
+
+function readThemeCookie() {
+  try {
+    const raw = readCookieValue(THEME_COOKIE_KEY);
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    return normalizeThemePayload(parsed);
+  } catch (error) {
+    console.warn('Unable to read theme cookie', error);
+    return null;
+  }
+}
+
+function persistHighContrastCookie(enabled) {
+  try {
+    writeCookieValue(THEME_HIGH_CONTRAST_COOKIE_KEY, enabled ? '1' : '0');
+  } catch (error) {
+    console.warn('Unable to persist high contrast cookie', error);
+  }
+}
+
+function readHighContrastCookie() {
+  try {
+    return readCookieValue(THEME_HIGH_CONTRAST_COOKIE_KEY);
+  } catch (error) {
+    console.warn('Unable to read high contrast cookie', error);
+    return '';
+  }
+}
+
 function saveTheme(theme) {
   if (!theme || typeof theme !== 'object') {
     return;
@@ -2413,32 +2514,29 @@ function saveTheme(theme) {
   };
 
   try {
-    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(payload));
+    if (window.localStorage) {
+      localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(payload));
+    }
   } catch (error) {
     console.warn('Unable to persist color theme', error);
   }
+
+  persistThemeCookie(payload);
 }
 
 function loadSavedTheme() {
   try {
-    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    const stored = window.localStorage ? localStorage.getItem(THEME_STORAGE_KEY) : null;
     if (!stored) {
-      return null;
+      return readThemeCookie();
     }
 
     const parsed = JSON.parse(stored);
-    if (!parsed || typeof parsed !== 'object') {
-      return null;
-    }
-
-    return {
-      values: sanitizeColorsMap(parsed.values),
-      preset: typeof parsed.preset === 'string' ? parsed.preset : '',
-      roundness: clampRoundness(parsed.roundness),
-    };
+    const normalized = normalizeThemePayload(parsed);
+    return normalized || readThemeCookie();
   } catch (error) {
     console.warn('Unable to read saved color theme', error);
-    return null;
+    return readThemeCookie();
   }
 }
 
