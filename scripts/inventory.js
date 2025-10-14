@@ -41,6 +41,106 @@ const ROUNDNESS_MIN = 0;
 const ROUNDNESS_MAX = 200;
 const ROUNDNESS_STEP = 10;
 
+function storageGetItem(key) {
+  if (!key) {
+    return { value: '', error: null };
+  }
+
+  const errors = [];
+  let localValue;
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localValue = window.localStorage.getItem(key);
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  if (typeof localValue === 'string' && localValue) {
+    return { value: localValue, error: null };
+  }
+
+  let sessionValue;
+  try {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      sessionValue = window.sessionStorage.getItem(key);
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  if (typeof sessionValue === 'string' && sessionValue) {
+    return { value: sessionValue, error: null };
+  }
+
+  const fallbackValue =
+    typeof localValue === 'string' && localValue
+      ? localValue
+      : typeof sessionValue === 'string'
+      ? sessionValue
+      : '';
+  const error = fallbackValue ? null : errors[errors.length - 1] || null;
+  return { value: fallbackValue || '', error };
+}
+
+function storageSetItem(key, value) {
+  if (!key) {
+    return { success: false, error: null };
+  }
+
+  const errors = [];
+  let success = false;
+
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(key, value);
+      success = true;
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  try {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      window.sessionStorage.setItem(key, value);
+      success = true;
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  return { success, error: success ? null : errors[errors.length - 1] || null };
+}
+
+function storageRemoveItem(key) {
+  if (!key) {
+    return { success: false, error: null };
+  }
+
+  const errors = [];
+  let success = false;
+
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(key);
+      success = true;
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  try {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      window.sessionStorage.removeItem(key);
+      success = true;
+    }
+  } catch (error) {
+    errors.push(error);
+  }
+
+  return { success, error: success ? null : errors[errors.length - 1] || null };
+}
+
 const paletteState = {
   container: null,
   toggle: null,
@@ -2103,22 +2203,16 @@ function runAutoContrast() {
 }
 
 function loadHighContrastPreference() {
-  try {
-    const stored = window.localStorage ? localStorage.getItem(THEME_HIGH_CONTRAST_KEY) || '' : '';
-    return stored === '1';
-  } catch (error) {
+  const { value, error } = storageGetItem(THEME_HIGH_CONTRAST_KEY);
+  if (!value && error) {
     console.warn('Unable to read high contrast preference', error);
   }
-
-  return false;
+  return value === '1';
 }
 
 function saveHighContrastPreference(enabled) {
-  try {
-    if (window.localStorage) {
-      localStorage.setItem(THEME_HIGH_CONTRAST_KEY, enabled ? '1' : '0');
-    }
-  } catch (error) {
+  const { success, error } = storageSetItem(THEME_HIGH_CONTRAST_KEY, enabled ? '1' : '0');
+  if (!success && error) {
     console.warn('Unable to persist high contrast preference', error);
   }
 }
@@ -2379,27 +2473,28 @@ function saveTheme(theme) {
     ),
   };
 
-  try {
-    if (window.localStorage) {
-      localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(payload));
-    }
-  } catch (error) {
+  const serialized = JSON.stringify(payload);
+  const { success, error } = storageSetItem(THEME_STORAGE_KEY, serialized);
+  if (!success && error) {
     console.warn('Unable to persist color theme', error);
   }
 }
 
 function loadSavedTheme() {
-  try {
-    const stored = window.localStorage ? localStorage.getItem(THEME_STORAGE_KEY) : null;
-    if (!stored) {
-      return null;
+  const { value, error } = storageGetItem(THEME_STORAGE_KEY);
+  if (!value) {
+    if (error) {
+      console.warn('Unable to read saved color theme', error);
     }
+    return null;
+  }
 
-    const parsed = JSON.parse(stored);
+  try {
+    const parsed = JSON.parse(value);
     const normalized = normalizeThemePayload(parsed);
     return normalized;
-  } catch (error) {
-    console.warn('Unable to read saved color theme', error);
+  } catch (parseError) {
+    console.warn('Unable to parse saved color theme', parseError);
     return null;
   }
 }

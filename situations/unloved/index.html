@@ -36,6 +36,45 @@
         if (!root) {
           return;
         }
+        function readStorageValue(key) {
+          if (!key) {
+            return '';
+          }
+          let storedValue = '';
+          let storageError = null;
+          try {
+            if (window.localStorage) {
+              const candidate = localStorage.getItem(key);
+              if (typeof candidate === 'string' && candidate) {
+                return candidate;
+              }
+              if (typeof candidate === 'string') {
+                storedValue = candidate;
+              }
+            }
+          } catch (error) {
+            storageError = error;
+          }
+          try {
+            if (window.sessionStorage) {
+              const candidate = sessionStorage.getItem(key);
+              if (typeof candidate === 'string' && candidate) {
+                return candidate;
+              }
+              if (!storedValue && typeof candidate === 'string') {
+                storedValue = candidate;
+              }
+            }
+          } catch (error) {
+            if (!storageError) {
+              storageError = error;
+            }
+          }
+          if (!storedValue && storageError && typeof console !== 'undefined' && console.warn) {
+            console.warn('Unable to access theme storage', storageError);
+          }
+          return storedValue || '';
+        }
         function normalizeHex(value) {
           if (typeof value !== 'string') {
             return '';
@@ -99,14 +138,7 @@
         }
 
         function readStoredThemePayload() {
-          let raw = '';
-          try {
-            raw = window.localStorage ? localStorage.getItem(STORAGE_KEY) || '' : '';
-          } catch (error) {
-            if (typeof console !== 'undefined' && console.warn) {
-              console.warn('Unable to access saved theme', error);
-            }
-          }
+          const raw = readStorageValue(STORAGE_KEY);
           if (!raw) {
             return null;
           }
@@ -169,16 +201,7 @@
           root.style.setProperty('--btn-fg', '#111111');
           root.style.setProperty('--chip-fg', '#111111');
 
-          let highContrastPreference = '';
-          try {
-            highContrastPreference = window.localStorage
-              ? localStorage.getItem(HIGH_CONTRAST_KEY) || ''
-              : '';
-          } catch (error) {
-            if (typeof console !== 'undefined' && console.warn) {
-              console.warn('Unable to read high contrast preference', error);
-            }
-          }
+          const highContrastPreference = readStorageValue(HIGH_CONTRAST_KEY);
           const highContrastEnabled = highContrastPreference === '1';
           if (highContrastEnabled) {
             try {
