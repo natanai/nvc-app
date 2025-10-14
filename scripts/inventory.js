@@ -1153,7 +1153,11 @@ async function initCustomizer() {
   buildPaletteUi();
 
   const themePreapplied = document.documentElement.getAttribute('data-theme-preapplied') === 'true';
-  const computedDefaults = sanitizeColorsMap(readComputedColors());
+  // When a saved theme is preapplied during the first paint the computed
+  // styles on :root already include the customized values. In that case we do
+  // not treat them as defaults so that “Reset to default” and the presets keep
+  // referencing the real baseline palette from styles.css.
+  const computedDefaults = themePreapplied ? {} : sanitizeColorsMap(readComputedColors());
   paletteState.defaultColors = { ...DEFAULT_PALETTE, ...computedDefaults };
   paletteState.currentColors = { ...paletteState.defaultColors };
 
