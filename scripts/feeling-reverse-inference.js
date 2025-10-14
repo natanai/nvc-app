@@ -27,12 +27,6 @@ const SKILL_LIBRARY = {
   },
 };
 
-const SDT_LABELS = {
-  autonomy: 'Autonomy',
-  competence: 'Competence',
-  relatedness: 'Relatedness',
-};
-
 const AROUSAL_LABELS = {
   high: 'High energy',
   medium: 'Moderate energy',
@@ -272,40 +266,6 @@ function buildBodyCueSection(entry) {
   return section;
 }
 
-function buildNeedsSection(entry, basePath) {
-  const section = createEl('section', 'feeling-inference__section feeling-inference__section--needs');
-  section.appendChild(
-    createEl('h3', 'feeling-inference__subheading', 'Possible needs if this fits (hypotheses)')
-  );
-
-  if (entry.needsHypotheses.sdt.length) {
-    const sdtList = createEl('div', 'feeling-inference__sdt');
-    entry.needsHypotheses.sdt.forEach((key) => {
-      const label = SDT_LABELS[key] || key;
-      sdtList.appendChild(createEl('span', 'feeling-inference__sdt-chip', label));
-    });
-    section.appendChild(sdtList);
-  }
-
-  if (entry.needsHypotheses.nvc.length) {
-    const list = createEl('ul', 'feeling-inference__needs-list');
-    entry.needsHypotheses.nvc.forEach((need) => {
-      const li = document.createElement('li');
-      if (need.slug) {
-        const link = createEl('a', 'feeling-inference__need-link', need.title);
-        link.href = `${basePath}needs/${need.slug}/`;
-        li.appendChild(link);
-      } else {
-        li.textContent = need.title;
-      }
-      list.appendChild(li);
-    });
-    section.appendChild(list);
-  }
-
-  return section;
-}
-
 function buildSkillsSection(entry) {
   const section = createEl('section', 'feeling-inference__section feeling-inference__section--skills');
   section.appendChild(createEl('h3', 'feeling-inference__subheading', 'Try now'));
@@ -502,8 +462,6 @@ function renderPanel(container, feelingKey, entry) {
   }
   container.appendChild(buildBodyCueSection(entry));
 
-  const basePath = getBasePath();
-  container.appendChild(buildNeedsSection(entry, basePath));
   container.appendChild(buildSkillsSection(entry));
 
   const footer = createEl(
