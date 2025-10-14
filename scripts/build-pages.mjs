@@ -518,8 +518,7 @@ ${doorMarkup}
 ${cards}
         </div>
         <p class="home-doorways__support-note">
-          Navigating alexithymia?
-          <a href="${basePath}alexithymia-support/">Visit the support lane</a>.
+          <a href="${basePath}alexithymia-support/">Alexithymia Support</a>
         </p>
       </section>
     `;
@@ -972,57 +971,60 @@ function renderInventoryJournalPage(needsList = []) {
   const needsJson = JSON.stringify(needsDataset);
   const main = `
       <header class="page-header journal-page-header">
-        <h1 class="page-title journal-page-title">
-          <img src="../../icons/journal-32bit.svg" class="journal-page-title__icon" alt="" aria-hidden="true" />
-          Journal
-        </h1>
+        <div class="journal-page-title-row">
+          <h1 class="page-title visually-hidden">Journal</h1>
+          <div class="journal-page-title-row__actions">
+            <button
+              type="button"
+              class="journal-fullscreen-button journal-fullscreen-button--spotlight"
+              data-support-journal-open
+              aria-expanded="false"
+              aria-controls="global-support-journal-layer"
+            >
+              <span class="journal-fullscreen-button__icon" aria-hidden="true"></span>
+              <span class="journal-fullscreen-button__text">
+                <span class="journal-fullscreen-button__title">Open full screen journal</span>
+              </span>
+            </button>
+          </div>
+        </div>
         <p class="page-description journal-page-description">
           Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or
           export them when you're ready.
         </p>
       </header>
       <section class="journal-page" data-inventory-section="journal">
-        <section class="journal-actions" aria-labelledby="journal-actions-heading">
-          <div class="journal-actions__header">
-            <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
-            <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
-          </div>
-          <div class="journal-actions__buttons">
-            <button type="button" id="journal-export" class="inventory-button">Export journal</button>
-            <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
-            <input type="file" id="journal-import" accept="application/json,.json" hidden />
-          </div>
-          <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
-        </section>
+        <div class="journal-overview-grid">
+          <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
+            <div class="journal-actions__header">
+              <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
+              <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
+            </div>
+            <div class="journal-actions__buttons">
+              <button type="button" id="journal-export" class="inventory-button">Export journal</button>
+              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
+              <input type="file" id="journal-import" accept="application/json,.json" hidden />
+            </div>
+            <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
+          </section>
 
-        <section class="journal-form-section" aria-labelledby="journal-form-heading">
-          <div class="journal-form-section__header">
-            <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
-            <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
-          </div>
-          <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
-            <noscript>
-              <p class="journal-status">Enable JavaScript to use the journal form.</p>
-            </noscript>
-          </div>
-        </section>
+          <section class="journal-summary-section journal-panel" aria-labelledby="journal-summary-heading">
+            <div class="journal-summary__header">
+              <h2 id="journal-summary-heading" class="section-title">Trends at a glance</h2>
+              <button
+                type="button"
+                class="inventory-button inventory-button--ghost"
+                data-journal-summary-toggle
+                aria-expanded="true"
+              >
+                Hide summary
+              </button>
+            </div>
+            <div class="journal-summary" data-journal-summary></div>
+          </section>
+        </div>
 
-        <section class="journal-summary-section" aria-labelledby="journal-summary-heading">
-          <div class="journal-summary__header">
-            <h2 id="journal-summary-heading" class="section-title">Trends at a glance</h2>
-            <button
-              type="button"
-              class="inventory-button inventory-button--ghost"
-              data-journal-summary-toggle
-              aria-expanded="true"
-            >
-              Hide summary
-            </button>
-          </div>
-          <div class="journal-summary" data-journal-summary></div>
-        </section>
-
-        <section class="journal-history-section" aria-labelledby="journal-history-heading">
+        <section class="journal-history-section journal-panel journal-panel--history" aria-labelledby="journal-history-heading">
           <div class="journal-history-section__header">
             <h2 id="journal-history-heading" class="section-title">Journal history</h2>
             <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
@@ -1052,6 +1054,32 @@ function renderInventoryJournalPage(needsList = []) {
           <p class="journal-empty" data-journal-empty hidden>Save entries to see them listed here.</p>
           <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
+
+        <details class="journal-inline-fallback" data-journal-inline-fallback>
+          <summary class="journal-inline-fallback__summary">
+            <span class="journal-inline-fallback__summary-text">Full screen journal unavailable? Use the legacy inline form.</span>
+          </summary>
+          <div class="journal-inline-fallback__body">
+            <p class="journal-inline-fallback__note">
+              The full screen journal above is the best experience&mdash;it's roomier, faster, and stays current with
+              new features. This legacy form is more constrained and less polished, so only use it if the primary
+              journal will not load.
+            </p>
+            <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>
+              <section class="journal-form-section" aria-labelledby="journal-form-heading">
+                <div class="journal-form-section__header">
+                  <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
+                  <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+                </div>
+                <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
+                  <noscript>
+                    <p class="journal-status">Enable JavaScript to use the journal form.</p>
+                  </noscript>
+                </div>
+              </section>
+            </div>
+          </div>
+        </details>
       </section>
       <script type="application/json" id="journal-needs-data">${escapeHtml(needsJson)}</script>
     `;
