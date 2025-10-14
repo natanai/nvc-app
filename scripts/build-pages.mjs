@@ -40,40 +40,78 @@ const themePreloadScript = (basePath) => {
           if (!key) {
             return '';
           }
-          let storedValue = '';
-          let storageError = null;
+
+          const candidates = [];
+          const errors = [];
+
           try {
             if (window.localStorage) {
-              const candidate = localStorage.getItem(key);
-              if (typeof candidate === 'string' && candidate) {
-                return candidate;
-              }
-              if (typeof candidate === 'string') {
-                storedValue = candidate;
+              const raw = localStorage.getItem(key);
+              const value = typeof raw === 'string' ? raw.trim() : '';
+              if (value) {
+                candidates.push({ value, index: candidates.length });
               }
             }
           } catch (error) {
-            storageError = error;
+            errors.push(error);
           }
+
           try {
             if (window.sessionStorage) {
-              const candidate = sessionStorage.getItem(key);
-              if (typeof candidate === 'string' && candidate) {
-                return candidate;
-              }
-              if (!storedValue && typeof candidate === 'string') {
-                storedValue = candidate;
+              const raw = sessionStorage.getItem(key);
+              const value = typeof raw === 'string' ? raw.trim() : '';
+              if (value) {
+                candidates.push({ value, index: candidates.length });
               }
             }
           } catch (error) {
-            if (!storageError) {
-              storageError = error;
+            errors.push(error);
+          }
+
+          if (!candidates.length) {
+            if (errors.length && typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to access theme storage', errors[errors.length - 1]);
+            }
+            return '';
+          }
+
+          if (candidates.length === 1) {
+            return candidates[0].value;
+          }
+
+          let best = candidates[0];
+          let bestTimestamp = readUpdatedAt(best.value);
+          let bestIndex = typeof best.index === 'number' ? best.index : 0;
+
+          for (let i = 1; i < candidates.length; i += 1) {
+            const candidate = candidates[i];
+            const timestamp = readUpdatedAt(candidate.value);
+            const index = typeof candidate.index === 'number' ? candidate.index : i;
+            if (timestamp > bestTimestamp || (timestamp === bestTimestamp && index < bestIndex)) {
+              best = candidate;
+              bestTimestamp = timestamp;
+              bestIndex = index;
             }
           }
-          if (!storedValue && storageError && typeof console !== 'undefined' && console.warn) {
-            console.warn('Unable to access theme storage', storageError);
+
+          return best.value;
+        }
+
+        function readUpdatedAt(value) {
+          if (typeof value !== 'string') {
+            return 0;
           }
-          return storedValue || '';
+          const trimmed = value.trim();
+          if (!trimmed || trimmed[0] !== '{') {
+            return 0;
+          }
+          try {
+            const parsed = JSON.parse(trimmed);
+            const candidate = parsed && typeof parsed === 'object' ? parsed.updatedAt : null;
+            return typeof candidate === 'number' && Number.isFinite(candidate) ? candidate : 0;
+          } catch (error) {
+            return 0;
+          }
         }
         function normalizeHex(value) {
           if (typeof value !== 'string') {
