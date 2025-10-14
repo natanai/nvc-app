@@ -329,6 +329,36 @@ function normalizeNeedSlugValue(value) {
   return trimmed;
 }
 
+function normalizeNeedSlugList(raw) {
+  if (raw == null) {
+    return [];
+  }
+
+  const values = Array.isArray(raw) ? raw : typeof raw === 'string' ? raw.split('|') : [raw];
+  const seen = new Set();
+  const normalized = [];
+
+  values.forEach((value) => {
+    if (Array.isArray(value)) {
+      normalizeNeedSlugList(value).forEach((slug) => {
+        if (!seen.has(slug)) {
+          seen.add(slug);
+          normalized.push(slug);
+        }
+      });
+      return;
+    }
+
+    const slug = normalizeNeedSlugValue(value);
+    if (slug && !seen.has(slug)) {
+      seen.add(slug);
+      normalized.push(slug);
+    }
+  });
+
+  return normalized;
+}
+
 function normalizeTagsList(raw) {
   if (Array.isArray(raw)) {
     return raw
@@ -408,16 +438,102 @@ function normalizeInventoryEntry(entry) {
   normalized.need = typeof entry.need === 'string' ? entry.need.trim() : normalized.need || '';
   const normalizedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
   normalized.needSlug = normalizedSlug;
+  const normalizedNeedSlugs = normalizeNeedSlugList(entry.needSlugs || entry.needs || []);
   normalized.strategySlug = normalizeStrategySlug(entry.strategySlug || '');
   if (typeof normalized.sourceNeedPage === 'string') {
     normalized.sourceNeedPage = normalized.sourceNeedPage.trim();
   }
   const tags = normalizeTagsList(entry.tags);
-  if (normalizedSlug && !tags.some((tag) => normalizeNeedSlugValue(tag) === normalizedSlug)) {
-    tags.push(normalizedSlug);
+  if (normalizedSlug && !normalizedNeedSlugs.includes(normalizedSlug)) {
+    normalizedNeedSlugs.push(normalizedSlug);
   }
-  normalized.tags = tags;
+  const normalizedTagSlugs = normalizeNeedSlugList([...tags, ...normalizedNeedSlugs]);
+  const nextTags = [...tags];
+  normalizedTagSlugs.forEach((slug) => {
+    if (!nextTags.some((tag) => normalizeNeedSlugValue(tag) === slug)) {
+      nextTags.push(slug);
+    }
+  });
+  normalized.needSlugs = normalizedNeedSlugs;
+  if (!normalized.needSlug && normalizedNeedSlugs.length) {
+    normalized.needSlug = normalizedNeedSlugs[0];
+  }
+  normalized.tags = nextTags;
   return normalized;
+}
+
+function isValidNeedSlug(slug) {
+  const normalized = normalizeNeedSlugValue(slug);
+  if (!normalized) {
+    return false;
+  }
+  if (!state.needsBySlug.size) {
+    return true;
+  }
+  const need = state.needsBySlug.get(normalized);
+  if (!need || !need.slug) {
+    return false;
+  }
+  return normalizeNeedSlugValue(need.slug) === normalized;
+}
+
+function resolveNeedSlugsFromTags(tags, fallbackSlug = '') {
+  const combined = normalizeNeedSlugList([tags || [], fallbackSlug || '']);
+  if (!combined.length) {
+    return [];
+  }
+  const resolved = [];
+  combined.forEach((slug) => {
+    if (!slug || resolved.includes(slug)) {
+      return;
+    }
+    if (isValidNeedSlug(slug)) {
+      resolved.push(slug);
+    }
+  });
+  if (!resolved.length) {
+    const normalizedFallback = normalizeNeedSlugValue(fallbackSlug);
+    if (normalizedFallback) {
+      resolved.push(normalizedFallback);
+    }
+  }
+  return resolved;
+}
+
+function resolveEntryNeedSlugs(entry) {
+  if (!entry || typeof entry !== 'object') {
+    return [];
+  }
+  const candidates = normalizeNeedSlugList([
+    entry.needSlugs || [],
+    entry.needSlug,
+    entry.sourceNeedPage,
+    entry.tags || [],
+  ]);
+  const resolved = [];
+  candidates.forEach((slug) => {
+    if (!slug || resolved.includes(slug)) {
+      return;
+    }
+    if (isValidNeedSlug(slug)) {
+      resolved.push(slug);
+    }
+  });
+  if (!resolved.length && entry.need) {
+    const matched = findNeedSlugByTitle(entry.need);
+    if (matched) {
+      resolved.push(matched);
+    }
+  }
+  return resolved;
+}
+
+function haveSharedNeedSlugs(existing, candidate) {
+  if (!Array.isArray(existing) || !Array.isArray(candidate) || !existing.length || !candidate.length) {
+    return false;
+  }
+  const normalizedExisting = new Set(existing.map((slug) => normalizeNeedSlugValue(slug)).filter(Boolean));
+  return candidate.some((slug) => normalizedExisting.has(normalizeNeedSlugValue(slug)));
 }
 
 function resolveAssetPath(path) {
@@ -954,16 +1070,22 @@ function setupNeedPage() {
       }
 
       const tags = buildStrategyTags(card.dataset.strategyTags, needSlug);
+      const needSlugs = resolveNeedSlugsFromTags(tags, needSlug);
       const firstName = sanitizeContributorName(card.dataset.firstName || '');
       const location = sanitizeLocation(card.dataset.location || '');
+      const normalizedTags = Array.from(
+        new Set([...tags, ...needSlugs].map((tag) => tag?.toString().trim()).filter(Boolean))
+      );
+      const primaryNeedSlug = needSlugs[0] || needSlug;
 
       const entry = {
         id: generateId(),
         title,
         description,
         need: needTitle,
-        needSlug,
-        tags,
+        needSlug: primaryNeedSlug,
+        needSlugs,
+        tags: normalizedTags,
         personal: false,
         sourceNeedPage: strategySlug ? needSlug : '',
         strategySlug,
@@ -974,7 +1096,8 @@ function setupNeedPage() {
 
       const duplicate = state.inventory.find(
         (item) =>
-          item.needSlug === entry.needSlug && item.title.trim().toLowerCase() === entry.title.trim().toLowerCase()
+          item.title.trim().toLowerCase() === entry.title.trim().toLowerCase() &&
+          haveSharedNeedSlugs(resolveEntryNeedSlugs(item), needSlugs)
       );
 
       if (duplicate) {
@@ -1007,7 +1130,10 @@ function setupNeedPage() {
       const formData = new FormData(suggestionForm);
       const title = (formData.get('title') || '').toString().trim();
       const description = (formData.get('description') || '').toString().trim();
-      let selectedNeedSlug = (formData.get('need') || '').toString();
+      const selectedNeedValues = formData
+        .getAll('need')
+        .map((value) => value?.toString().trim())
+        .filter(Boolean);
       const firstName = sanitizeContributorName(formData.get('name'));
       const location = sanitizeLocation(formData.get('location'));
 
@@ -1016,23 +1142,49 @@ function setupNeedPage() {
         return;
       }
 
-      if (!selectedNeedSlug) {
-        selectedNeedSlug = needSlug || '';
+      const needSelect = suggestionForm.querySelector('select[name="need"]');
+      const selectedNeedOptions =
+        needSelect instanceof HTMLSelectElement
+          ? Array.from(needSelect.selectedOptions)
+              .map((option) => ({
+                slug: option.value?.toString().trim(),
+                title: option.textContent?.trim() || option.value,
+              }))
+              .filter((item) => item.slug)
+          : [];
+
+      let selectedNeedSlugs = normalizeNeedSlugList(selectedNeedValues);
+      if (!selectedNeedSlugs.length && needSlug) {
+        selectedNeedSlugs = [normalizeNeedSlugValue(needSlug)];
       }
 
-      const needSelect = suggestionForm.querySelector('select[name="need"]');
-      let selectedNeedTitle = '';
-      if (needSelect instanceof HTMLSelectElement) {
-        selectedNeedTitle = needSelect.options[needSelect.selectedIndex]?.textContent?.trim() || '';
+      const selectedNeedTitles = selectedNeedOptions
+        .filter((option) => selectedNeedSlugs.includes(normalizeNeedSlugValue(option.slug)))
+        .map((option) => option.title)
+        .filter(Boolean);
+
+      const primaryNeedSlug = selectedNeedSlugs[0] || normalizeNeedSlugValue(needSlug);
+      const primaryNeedTitle = selectedNeedTitles[0] || needTitle;
+
+      const tags = buildStrategyTags(selectedNeedSlugs.join('|'), primaryNeedSlug);
+      const needSlugs = resolveNeedSlugsFromTags(tags, primaryNeedSlug);
+      if (!needSlugs.length) {
+        showFormMessage(message, 'Select at least one need before saving.', 'error');
+        return;
       }
+
+      const normalizedTags = Array.from(
+        new Set([...tags, ...needSlugs].map((tag) => tag?.toString().trim()).filter(Boolean))
+      );
 
       const entry = {
         id: generateId(),
         title,
         description,
-        need: selectedNeedTitle || needTitle,
-        needSlug: selectedNeedSlug,
-        tags: selectedNeedSlug ? [selectedNeedSlug] : [],
+        need: primaryNeedTitle,
+        needSlug: needSlugs[0] || primaryNeedSlug,
+        needSlugs,
+        tags: normalizedTags,
         personal: true,
         sourceNeedPage: '',
         strategySlug: '',
@@ -1040,6 +1192,22 @@ function setupNeedPage() {
         location,
         createdAt: new Date().toISOString(),
       };
+
+      const duplicate = state.inventory.find(
+        (item) =>
+          item.title.trim().toLowerCase() === entry.title.trim().toLowerCase() &&
+          haveSharedNeedSlugs(resolveEntryNeedSlugs(item), needSlugs)
+      );
+
+      if (duplicate) {
+        const confirmDuplicate = window.confirm(
+          'You already saved a strategy with this title for one of the selected needs. Save another copy?'
+        );
+        if (!confirmDuplicate) {
+          showFormMessage(message, 'Skipped saving duplicate strategy.', 'warning');
+          return;
+        }
+      }
 
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory);
@@ -1101,26 +1269,28 @@ function setupInventoryPage() {
       const formData = new FormData(form);
       const title = (formData.get('title') || '').toString().trim();
       const description = (formData.get('description') || '').toString().trim();
-      const needSlug = (formData.get('need') || '').toString();
+      const needSlugs = normalizeNeedSlugList(formData.getAll('need'));
       const firstName = sanitizeContributorName(formData.get('name'));
       const location = sanitizeLocation(formData.get('location'));
 
-      if (!title || !description || !needSlug) {
-        showInventoryMessage('Please fill in the title, description, and primary need before adding.', 'error');
+      if (!title || !description || !needSlugs.length) {
+        showInventoryMessage('Please fill in the title, description, and at least one need before adding.', 'error');
         return;
       }
 
-      const tags = needSlug ? [needSlug] : [];
-
-      const needTitle = state.needsBySlug.get(needSlug)?.title || needSlug;
+      const tags = Array.from(new Set(needSlugs));
+      const primaryNeedSlug = needSlugs[0];
+      const needTitle = state.needsBySlug.get(primaryNeedSlug)?.title || primaryNeedSlug;
+      const resolvedNeedSlugs = resolveNeedSlugsFromTags(tags, primaryNeedSlug);
 
       const entry = {
         id: generateId(),
         title,
         description,
         need: needTitle,
-        needSlug,
-        tags,
+        needSlug: resolvedNeedSlugs[0] || primaryNeedSlug,
+        needSlugs: resolvedNeedSlugs,
+        tags: Array.from(new Set([...tags, ...resolvedNeedSlugs])),
         personal: true,
         sourceNeedPage: '',
         strategySlug: '',
@@ -1128,6 +1298,22 @@ function setupInventoryPage() {
         location,
         createdAt: new Date().toISOString(),
       };
+
+      const duplicate = state.inventory.find(
+        (item) =>
+          item.title.trim().toLowerCase() === entry.title.trim().toLowerCase() &&
+          haveSharedNeedSlugs(resolveEntryNeedSlugs(item), resolvedNeedSlugs)
+      );
+
+      if (duplicate) {
+        const confirmDuplicate = window.confirm(
+          'You already saved a strategy with this title for one of the selected needs. Save another copy?'
+        );
+        if (!confirmDuplicate) {
+          showInventoryMessage('Skipped saving duplicate strategy.', 'warning');
+          return;
+        }
+      }
 
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory, {
@@ -4425,10 +4611,13 @@ function renderInventorySummary() {
   const counts = new Map();
   state.needs.forEach((need) => counts.set(need.slug, 0));
   state.inventory.forEach((entry) => {
-    const slug = pickNeedSlug(entry);
-    if (slug && counts.has(slug)) {
-      counts.set(slug, counts.get(slug) + 1);
-    }
+    const slugs = resolveEntryNeedSlugs(entry);
+    const uniqueSlugs = new Set(slugs);
+    uniqueSlugs.forEach((slug) => {
+      if (counts.has(slug)) {
+        counts.set(slug, counts.get(slug) + 1);
+      }
+    });
   });
 
   state.inventorySummaryEl.innerHTML = '';
@@ -4570,12 +4759,19 @@ function renderInventoryList() {
   const extras = [];
 
   state.inventory.forEach((entry) => {
-    const slug = pickNeedSlug(entry);
-    if (slug && state.needsBySlug.has(slug)) {
+    const slugs = resolveEntryNeedSlugs(entry);
+    let added = false;
+    slugs.forEach((slug) => {
+      if (!slug || !state.needsBySlug.has(slug)) {
+        return;
+      }
       if (!grouped.has(slug)) {
         grouped.set(slug, []);
       }
       grouped.get(slug).push(entry);
+      added = true;
+    });
+    if (added) {
       return;
     }
     extras.push(entry);
@@ -4618,7 +4814,7 @@ function renderInventoryList() {
     body.className = 'inventory-need__body';
 
     entries.forEach((entry) => {
-      body.append(renderInventoryItem(entry));
+      body.append(renderInventoryItem(entry, { needSlug: need.slug }));
     });
 
     details.append(body);
@@ -4716,7 +4912,7 @@ function updateInventoryToggleLabel() {
   }
 }
 
-function renderInventoryItem(entry) {
+function renderInventoryItem(entry, options = {}) {
   const card = document.createElement('article');
   card.className = 'inventory-item';
   card.dataset.id = entry.id;
@@ -4771,10 +4967,17 @@ function renderInventoryItem(entry) {
   if (entry.tags?.length) {
     const tagList = document.createElement('ul');
     tagList.className = 'inventory-item__tags';
+    const seenTags = new Set();
     entry.tags.forEach((tag) => {
       const item = document.createElement('li');
       item.className = 'inventory-item__tag-pill';
-      item.textContent = state.needsBySlug.get(tag)?.title || tag;
+      const normalizedTag = typeof tag === 'string' ? tag.trim() : String(tag).trim();
+      if (!normalizedTag || seenTags.has(normalizedTag)) {
+        return;
+      }
+      seenTags.add(normalizedTag);
+      const needTitle = state.needsBySlug.get(normalizeNeedSlugValue(normalizedTag))?.title;
+      item.textContent = needTitle || normalizedTag;
       tagList.append(item);
     });
     card.append(tagList);
@@ -4783,11 +4986,29 @@ function renderInventoryItem(entry) {
   const actions = document.createElement('div');
   actions.className = 'inventory-item__actions';
 
-  if (entry.needSlug) {
+  const requestedSlug = normalizeNeedSlugValue(options.needSlug || '');
+  const resolvedSlugs = resolveEntryNeedSlugs(entry);
+  let linkSlug = '';
+  if (requestedSlug && isValidNeedSlug(requestedSlug)) {
+    linkSlug = requestedSlug;
+  } else if (resolvedSlugs.length) {
+    linkSlug = resolvedSlugs[0];
+  } else if (entry.needSlug) {
+    const normalized = normalizeNeedSlugValue(entry.needSlug);
+    if (normalized) {
+      linkSlug = normalized;
+    }
+  }
+
+  if (linkSlug && isValidNeedSlug(linkSlug)) {
     const visitLink = document.createElement('a');
     visitLink.className = 'inventory-item__link';
-    visitLink.href = `${state.basePath}needs/${entry.needSlug}/`;
+    visitLink.href = `${state.basePath}needs/${linkSlug}/`;
     visitLink.textContent = 'Need page';
+    const linkNeed = state.needsBySlug.get(linkSlug);
+    if (linkNeed?.title) {
+      visitLink.setAttribute('aria-label', `Need page for ${linkNeed.title}`);
+    }
     actions.append(visitLink);
   }
 
@@ -4805,22 +5026,8 @@ function renderInventoryItem(entry) {
 }
 
 function pickNeedSlug(entry) {
-  if (!entry || typeof entry !== 'object') {
-    return '';
-  }
-  const storedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
-  if (storedSlug && state.needsBySlug.has(storedSlug)) {
-    return storedSlug;
-  }
-  if (Array.isArray(entry.tags)) {
-    const match = entry.tags
-      .map((tag) => normalizeNeedSlugValue(tag))
-      .find((tag) => tag && state.needsBySlug.has(tag));
-    if (match) {
-      return match;
-    }
-  }
-  return findNeedSlugByTitle(entry.need);
+  const slugs = resolveEntryNeedSlugs(entry);
+  return slugs[0] || '';
 }
 
 function backfillInventoryNeedSlugs() {
@@ -4849,39 +5056,57 @@ function backfillInventoryNeedSlugs() {
     }
     normalized.tags = cleanedTags;
 
+    const existingNeedSlugs = normalizeNeedSlugList(normalized.needSlugs);
+
     let slug = normalizeNeedSlugValue(normalized.needSlug || normalized.sourceNeedPage);
     if (slug && !state.needsBySlug.has(slug)) {
       slug = '';
     }
 
-    if (!slug && normalized.tags.length) {
-      const tagMatch = normalized.tags
-        .map((tag) => normalizeNeedSlugValue(tag))
-        .find((tag) => tag && state.needsBySlug.has(tag));
-      if (tagMatch) {
-        slug = tagMatch;
+    const tagSlugs = normalized.tags.map((tag) => normalizeNeedSlugValue(tag)).filter(Boolean);
+    const combinedSlugs = normalizeNeedSlugList([existingNeedSlugs, slug, tagSlugs]);
+
+    let validSlugs = combinedSlugs.filter((candidate) => isValidNeedSlug(candidate));
+
+    if (!validSlugs.length) {
+      const fallbackFromTitle = findNeedSlugByTitle(normalized.need);
+      if (fallbackFromTitle) {
+        validSlugs = [fallbackFromTitle];
+      } else {
+        const normalizedFallback = normalizeNeedSlugValue(slug);
+        if (normalizedFallback) {
+          validSlugs = [normalizedFallback];
+        }
       }
     }
 
-    if (!slug) {
-      slug = findNeedSlugByTitle(normalized.need);
-    }
-
-    if (slug) {
-      if (normalized.needSlug !== slug) {
-        normalized.needSlug = slug;
+    if (validSlugs.length) {
+      if (normalized.needSlug !== validSlugs[0]) {
+        normalized.needSlug = validSlugs[0];
         updated = true;
       }
-      const needInfo = state.needsBySlug.get(slug);
+      const needInfo = state.needsBySlug.get(validSlugs[0]);
       if (needInfo?.title && normalized.need !== needInfo.title) {
         normalized.need = needInfo.title;
         updated = true;
       }
-      const hasSlugTag = normalized.tags.some((tag) => normalizeNeedSlugValue(tag) === slug);
-      if (!hasSlugTag) {
-        normalized.tags = [...normalized.tags, slug];
-        updated = true;
-      }
+      validSlugs.forEach((needSlug) => {
+        const hasTag = normalized.tags.some((tag) => normalizeNeedSlugValue(tag) === needSlug);
+        if (!hasTag) {
+          normalized.tags = [...normalized.tags, needSlug];
+          updated = true;
+        }
+      });
+    }
+
+    const normalizedNeedSlugs = validSlugs;
+    const originalNeedSlugs = normalizeNeedSlugList(normalized.needSlugs);
+    if (
+      normalizedNeedSlugs.length !== originalNeedSlugs.length ||
+      normalizedNeedSlugs.some((value, index) => value !== originalNeedSlugs[index])
+    ) {
+      normalized.needSlugs = normalizedNeedSlugs;
+      updated = true;
     }
 
     return normalized;
@@ -5007,6 +5232,7 @@ function inventoryToCsv(items) {
     'description',
     'need',
     'needSlug',
+    'needSlugs',
     'tags',
     'personal',
     'sourceNeedPage',
@@ -5062,17 +5288,30 @@ function handleImportInventory(file) {
 
     parsed.forEach((item) => {
       const id = item.id || generateId();
-      const resolvedNeedSlug = item.needSlug || item.sourceNeedPage || findNeedSlugByTitle(item.need);
-      const tags = Array.isArray(item.tags) ? [...item.tags] : [];
-      if (resolvedNeedSlug && !tags.includes(resolvedNeedSlug)) {
-        tags.push(resolvedNeedSlug);
-      }
+      const importedNeedSlugs = normalizeNeedSlugList(item.needSlugs);
+      const initialNeedSlug = normalizeNeedSlugValue(item.needSlug || item.sourceNeedPage);
+      const resolvedNeedSlug =
+        initialNeedSlug || findNeedSlugByTitle(item.need) || importedNeedSlugs[0] || '';
+      const combinedNeedSlugs = normalizeNeedSlugList([importedNeedSlugs, resolvedNeedSlug]);
+      const tags = normalizeTagsList(item.tags);
+      combinedNeedSlugs.forEach((slug) => {
+        if (!tags.some((tag) => normalizeNeedSlugValue(tag) === slug)) {
+          tags.push(slug);
+        }
+      });
+
       map.set(id, {
         id,
         title: item.title || 'Untitled strategy',
         description: item.description || '',
-        need: item.need || state.needsBySlug.get(resolvedNeedSlug)?.title || resolvedNeedSlug || '',
-        needSlug: resolvedNeedSlug || '',
+        need:
+          item.need ||
+          state.needsBySlug.get(combinedNeedSlugs[0] || resolvedNeedSlug)?.title ||
+          combinedNeedSlugs[0] ||
+          resolvedNeedSlug ||
+          '',
+        needSlug: combinedNeedSlugs[0] || resolvedNeedSlug || '',
+        needSlugs: combinedNeedSlugs,
         tags,
         personal: item.personal === true,
         sourceNeedPage: item.sourceNeedPage || resolvedNeedSlug || '',
@@ -5111,6 +5350,9 @@ function parseCsv(text) {
     });
     if (entry.tags) {
       entry.tags = entry.tags.split('|').filter(Boolean);
+    }
+    if (entry.needSlugs) {
+      entry.needSlugs = entry.needSlugs.split('|').filter(Boolean);
     }
     if (entry.personal) {
       entry.personal = entry.personal === true || entry.personal.toString().toLowerCase() === 'true';
