@@ -673,7 +673,7 @@ function renderCategory(type, items) {
 
   const supportLinks =
     type === 'feelings'
-      ? `<div class="support-actions">
+      ? `<div class="support-actions support-actions--muted">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
           <a class="support-button support-button--ghost" href="../inventory/#journal-dashboard">Visit your journal dashboard</a>
         </div>`
@@ -698,26 +698,28 @@ function renderCategory(type, items) {
       <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
           <h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>
-          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
         </div>
         <div class="magnet-search" data-magnet-search>
-          <div class="magnet-search__controls">
-            <label class="magnet-search__field">
-              <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
-              <input
-                type="search"
-                name="${type}-search"
-                class="magnet-search__input"
-                placeholder="Search ${lowerTitle}"
-                autocomplete="off"
-                data-magnet-search-input
-              >
-            </label>
-            ${
-              type === 'feelings'
-                ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
-                : ''
-            }
+          <div class="magnet-search__toolbar">
+            <div class="magnet-search__controls">
+              <label class="magnet-search__field">
+                <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
+                <input
+                  type="search"
+                  name="${type}-search"
+                  class="magnet-search__input"
+                  placeholder="Search ${lowerTitle}"
+                  autocomplete="off"
+                  data-magnet-search-input
+                >
+              </label>
+              ${
+                type === 'feelings'
+                  ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
+                  : ''
+              }
+            </div>
+            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
@@ -757,31 +759,21 @@ function renderCategory(type, items) {
 function renderBodyCuesPage() {
   const main = `
       <section class="body-cues-tool" data-body-cues-root>
-        <div class="body-cues-tool__top">
-          <div class="body-cues-tool__heading">
-            <h1 class="body-cues-tool__title">Body Cues explorer</h1>
-            <p class="body-cues-tool__lede">
-              Describe a few body sensations that stand out. We'll surface feelings that commonly travel with that mix.
-            </p>
+        <h1 class="visually-hidden">Body Cues explorer</h1>
+        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
+          <div class="body-cues-tool__magnet-header">
+            <h2 id="body-cues-magnets-heading">Matching magnets</h2>
+            <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
           </div>
-          <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
-            <div class="body-cues-tool__magnet-header">
-              <h2 id="body-cues-magnets-heading">Matching magnets</h2>
-              <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
-            </div>
-            <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
-            <p class="body-cues-tool__empty" data-body-cues-empty>
-              Adjust the sliders to describe what your body is doing. We'll show feelings that often travel with that mix.
-            </p>
-            <p class="body-cues-tool__error" data-body-cues-error hidden>
-              We couldn't load the body cues data. Check your connection and try again.
-            </p>
-          </section>
-        </div>
-        <div class="body-cues-tool__intro">
-          <p>Slide any cues that feel relevant—matches update instantly so you can follow the shifts.</p>
-          <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
-        </div>
+          <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
+          <p class="body-cues-tool__empty" data-body-cues-empty>
+            Adjust the sliders to describe what your body is doing. We'll show feelings that often travel with that mix.
+          </p>
+          <p class="body-cues-tool__error" data-body-cues-error hidden>
+            We couldn't load the body cues data. Check your connection and try again.
+          </p>
+        </section>
+        <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
         <p class="body-cues-tool__scroll-hint">
           <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
           <span>Scroll through the body cues list below to explore more sliders.</span>

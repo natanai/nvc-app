@@ -1067,6 +1067,34 @@ body.has-support-journal-open {
   margin-top: 0.75rem;
 }
 
+.support-actions--muted {
+  gap: 0.6rem;
+}
+
+.support-actions--muted .support-button {
+  padding: 0.55rem 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.015em;
+  text-transform: none;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+  background: color-mix(in srgb, #ffffff 95%, var(--sky) 5%);
+  color: color-mix(in srgb, var(--outline) 75%, var(--ink-soft) 25%);
+  box-shadow: none;
+}
+
+.support-actions--muted .support-button:hover,
+.support-actions--muted .support-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--outline) 40%, transparent);
+}
+
+.support-actions--muted .support-button--ghost {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
 .breathing-card {
   display: grid;
   gap: 1rem;
@@ -2106,7 +2134,7 @@ body.has-support-journal-open {
 .magnet-section__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
@@ -2118,11 +2146,30 @@ body.has-support-journal-open {
   gap: 0.75rem;
 }
 
-.magnet-search__controls {
+.magnet-search__toolbar {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.magnet-search__controls {
+  display: grid;
   gap: 0.75rem;
   width: 100%;
+  flex: 1 1 16rem;
+  align-items: stretch;
+}
+
+.magnet-search__controls > .magnet-search__field {
+  width: 100%;
+}
+
+.magnet-search__shuffle {
+  margin-left: auto;
+  align-self: flex-start;
+  flex: 0 0 auto;
 }
 
 .magnet-search__label {
@@ -2224,15 +2271,22 @@ body.has-support-journal-open {
   width: 100%;
 }
 
-@media (min-width: 720px) {
-  .magnet-search__controls {
-    flex-direction: row;
+@media (min-width: 640px) {
+  .magnet-search__toolbar {
     align-items: center;
+  }
+
+  .magnet-search__controls {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .magnet-search__alt {
     align-self: stretch;
     padding-inline: 1.35rem;
+  }
+
+  .magnet-search__shuffle {
+    align-self: stretch;
   }
 }
 
@@ -2423,49 +2477,13 @@ body.has-support-journal-open {
 .body-cues-tool {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
   padding: clamp(1.25rem, 2vw, 2rem);
   border-radius: var(--radius-3xl);
   border: 3px solid var(--outline);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent),
     0 18px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-}
-
-.body-cues-tool__top {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: stretch;
-}
-
-.body-cues-tool__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  flex: 1 1 20rem;
-}
-
-.body-cues-tool__title {
-  margin: 0;
-  font-size: clamp(2.1rem, 4vw, 2.6rem);
-}
-
-.body-cues-tool__lede {
-  margin: 0;
-  max-width: 55ch;
-}
-
-.body-cues-tool__intro {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  align-items: flex-start;
-}
-
-.body-cues-tool__intro p {
-  margin: 0;
-  max-width: 65ch;
 }
 
 .body-cues-tool__reset {
@@ -2586,7 +2604,7 @@ body.has-support-journal-open {
 .body-cues-tool__controls {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.15rem;
   position: relative;
   scrollbar-gutter: stable both-edges;
   scrollbar-width: thin;
@@ -2608,14 +2626,9 @@ body.has-support-journal-open {
 }
 
 .body-cues-tool__region {
-  padding: clamp(0.85rem, 2.2vw, 1.25rem);
-  border-radius: var(--radius-2xl);
-  border: 1px solid color-mix(in srgb, var(--outline) 38%, transparent);
-  background: color-mix(in srgb, #ffffff 92%, var(--sky) 8%);
-  box-shadow: inset 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
   display: flex;
   flex-direction: column;
-  gap: clamp(0.75rem, 2vw, 0.95rem);
+  gap: clamp(0.7rem, 1.9vw, 0.9rem);
 }
 
 .body-cues-tool__region-header {
@@ -2747,10 +2760,6 @@ body.has-support-journal-open {
     padding: clamp(1rem, 5vw, 1.5rem);
   }
 
-  .body-cues-tool__top {
-    gap: 1.25rem;
-  }
-
   .body-cues-tool__magnets {
     padding-block: clamp(0.35rem, 3vw, 0.75rem);
     padding-inline: clamp(0.25rem, 3vw, 0.6rem);
@@ -2766,32 +2775,16 @@ body.has-support-journal-open {
     max-height: min(60dvh, 28rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: clamp(0.45rem, 3vw, 0.65rem);
-    border-radius: var(--radius-2xl);
-    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-    background: color-mix(in srgb, #ffffff 94%, var(--sky) 6%);
-    box-shadow: inset 0 -12px 16px -12px color-mix(in srgb, var(--outline) 35%, transparent);
-  }
-
-  .body-cues-tool__region {
-    padding: clamp(0.65rem, 4vw, 0.95rem);
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .body-cues-tool__option {
     padding-block: clamp(0.5rem, 3vw, 0.7rem);
     padding-inline: clamp(0.45rem, 3.2vw, 0.7rem);
-  }
-}
-
-@media (min-width: 880px) {
-  .body-cues-tool__top {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: clamp(1.5rem, 4vw, 3rem);
-  }
-
-  .body-cues-tool__heading {
-    max-width: 36rem;
   }
 }
 

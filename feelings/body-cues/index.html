@@ -306,31 +306,21 @@
       <main id="main" class="page body-cues-page" role="main">
         
       <section class="body-cues-tool" data-body-cues-root>
-        <div class="body-cues-tool__top">
-          <div class="body-cues-tool__heading">
-            <h1 class="body-cues-tool__title">Body Cues explorer</h1>
-            <p class="body-cues-tool__lede">
-              Describe a few body sensations that stand out. We'll surface feelings that commonly travel with that mix.
-            </p>
+        <h1 class="visually-hidden">Body Cues explorer</h1>
+        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
+          <div class="body-cues-tool__magnet-header">
+            <h2 id="body-cues-magnets-heading">Matching magnets</h2>
+            <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
           </div>
-          <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
-            <div class="body-cues-tool__magnet-header">
-              <h2 id="body-cues-magnets-heading">Matching magnets</h2>
-              <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
-            </div>
-            <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
-            <p class="body-cues-tool__empty" data-body-cues-empty>
-              Adjust the sliders to describe what your body is doing. We'll show feelings that often travel with that mix.
-            </p>
-            <p class="body-cues-tool__error" data-body-cues-error hidden>
-              We couldn't load the body cues data. Check your connection and try again.
-            </p>
-          </section>
-        </div>
-        <div class="body-cues-tool__intro">
-          <p>Slide any cues that feel relevant—matches update instantly so you can follow the shifts.</p>
-          <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
-        </div>
+          <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
+          <p class="body-cues-tool__empty" data-body-cues-empty>
+            Adjust the sliders to describe what your body is doing. We'll show feelings that often travel with that mix.
+          </p>
+          <p class="body-cues-tool__error" data-body-cues-error hidden>
+            We couldn't load the body cues data. Check your connection and try again.
+          </p>
+        </section>
+        <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
         <p class="body-cues-tool__scroll-hint">
           <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
           <span>Scroll through the body cues list below to explore more sliders.</span>
