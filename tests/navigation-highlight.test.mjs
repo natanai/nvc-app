@@ -44,6 +44,20 @@ class FakeElement {
     }
   }
 
+  removeAttribute(name) {
+    if (name === 'class') {
+      this.className = '';
+      return;
+    }
+    this.attributes.delete(name);
+    if (name === 'type') {
+      this.type = '';
+    }
+    if (name === 'href') {
+      this.href = '';
+    }
+  }
+
   getAttribute(name) {
     if (name === 'class') {
       return this.className || null;
@@ -219,6 +233,20 @@ test('highlightNavigation leaves pre-rendered active link unchanged', () => {
 
   assert.equal(feelingsLink.getAttribute('aria-current'), 'page');
   assert.equal(needsLink.hasAttribute('aria-current'), false);
+});
+
+test('highlightNavigation prefers the most specific matching link', () => {
+  const feelingsLink = makeLink('../../feelings/');
+  feelingsLink.setAttribute('aria-current', 'page');
+  const bodyCuesLink = makeLink('../../feelings/body-cues/');
+  currentNavLinks = [feelingsLink, bodyCuesLink];
+  window.location.pathname = '/feelings/body-cues/';
+  window.location.href = 'https://example.com/feelings/body-cues/';
+
+  highlightNavigation();
+
+  assert.equal(bodyCuesLink.getAttribute('aria-current'), 'page');
+  assert.equal(feelingsLink.hasAttribute('aria-current'), false);
 });
 
 test('highlightNavigation falls back to alias when needed', () => {
