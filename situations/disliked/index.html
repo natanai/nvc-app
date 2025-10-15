@@ -9,6 +9,7 @@
     <meta property="og:image" content="../../icons/main.svg" />
     <meta name="twitter:image" content="../../icons/main.svg" />
         <script src="../../assets/js/ui/contrast.js"></script>
+    <script src="../../assets/js/ui/nav-swipe.js" defer></script>
     <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
@@ -286,14 +287,34 @@
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
-            Inventory
-            <span class="site-nav__count" data-inventory-count hidden></span>
-          </a>
+          <div class="site-nav__swipe site-nav__swipe--primary" data-nav-blade="inventory" data-blade-state="closed">
+            <a
+              class="site-nav__link site-nav__link--inventory site-nav__blade"
+              href="../../inventory/"
+              data-nav-blade-front
+            >
+              Inventory
+              <span class="site-nav__count" data-inventory-count hidden></span>
+            </a>
+            <a
+              class="site-nav__link site-nav__blade-reveal"
+              href="../../inventory/journal/"
+              data-nav-blade-reveal
+            >
+              Journal
+            </a>
+          </div>
         </div>
         <div class="site-nav__row site-nav__row--secondary">
           <a class="site-nav__link" href="../../situations/" aria-current="page">Situations</a>
-          <a class="site-nav__link" href="../../feelings/">Feelings</a>
+          <div class="site-nav__swipe" data-nav-blade="feelings" data-blade-state="closed">
+            <a class="site-nav__link site-nav__blade" href="../../feelings/" data-nav-blade-front>
+              Feelings
+            </a>
+            <a class="site-nav__link site-nav__blade-reveal" href="../../feelings/body-cues/" data-nav-blade-reveal>
+              Body cues
+            </a>
+          </div>
           <a class="site-nav__link" href="../../needs/">Needs</a>
         </div>
       </nav>

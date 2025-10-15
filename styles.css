@@ -237,6 +237,71 @@ a:focus-visible {
   min-width: 0;
 }
 
+.site-nav__swipe {
+  position: relative;
+  display: grid;
+  align-items: stretch;
+  justify-items: stretch;
+  perspective: 960px;
+  perspective-origin: left center;
+  transform-style: preserve-3d;
+}
+
+.site-nav__row--primary > .site-nav__swipe {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.site-nav__swipe > * {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.site-nav__blade,
+.site-nav__blade-reveal {
+  width: 100%;
+}
+
+.site-nav__blade {
+  transform-origin: left center;
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+  transition: transform 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+  z-index: 2;
+}
+
+.site-nav__swipe[data-blade-state='open'] .site-nav__blade {
+  transform: rotateY(-108deg);
+  z-index: 0;
+}
+
+.site-nav__blade-reveal {
+  pointer-events: none;
+  z-index: 1;
+  background: color-mix(in srgb, var(--peach) 75%, #fff 25%);
+  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 18%, transparent),
+    0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+  transform: translateZ(-2px);
+}
+
+.site-nav__swipe[data-blade-state='open'] .site-nav__blade-reveal {
+  pointer-events: auto;
+}
+
+.site-nav__swipe[data-nav-blade='inventory'] .site-nav__blade-reveal {
+  background: color-mix(in srgb, var(--plum) 65%, #fff 35%);
+  color: var(--ink);
+}
+
+.site-nav__swipe[data-nav-blade='feelings'] .site-nav__blade-reveal {
+  background: color-mix(in srgb, var(--rose) 70%, #fff 30%);
+  color: var(--ink);
+}
+
+.site-nav__swipe[data-blade-state='open'] .site-nav__blade-reveal {
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+}
+
 .site-nav__journal .site-nav__link {
   width: 100%;
 }
