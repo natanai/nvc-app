@@ -2155,15 +2155,17 @@ body.has-support-journal-open {
 }
 
 .magnet-search__controls {
-  display: grid;
-  gap: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
   width: 100%;
   flex: 1 1 16rem;
   align-items: stretch;
 }
 
 .magnet-search__controls > .magnet-search__field {
-  width: 100%;
+  flex: 1 1 16rem;
+  min-width: min(19rem, 100%);
 }
 
 .magnet-search__shuffle {
@@ -2201,29 +2203,28 @@ body.has-support-journal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 1.6rem;
-  border-radius: var(--radius-pill);
+  flex: 1 1 14rem;
+  min-width: min(14rem, 100%);
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-lg);
   border: 3px solid var(--outline);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 62%, #fff 38%), color-mix(in srgb, var(--sky) 78%, var(--mint) 22%));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, #ffffff 45%), color-mix(in srgb, var(--sky) 35%, var(--mint) 65%));
   background-size: 180% 180%;
-  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   text-decoration: none;
   color: var(--outline);
-  font-weight: 700;
-  text-shadow: 0 2px 0 rgba(17, 17, 17, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-position 0.35s ease;
 }
 
 .magnet-search__alt:hover,
 .magnet-search__alt:focus-visible {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 28%, transparent);
-  filter: brightness(1.02);
-  background-position: 75% 25%;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+  filter: brightness(1.03);
+  background-position: 72% 28%;
 }
 
 .magnet-search__alt:focus-visible {
@@ -2277,12 +2278,13 @@ body.has-support-journal-open {
   }
 
   .magnet-search__controls {
-    grid-template-columns: minmax(0, 1fr) auto;
+    flex-wrap: nowrap;
   }
 
   .magnet-search__alt {
-    align-self: stretch;
-    padding-inline: 1.35rem;
+    flex: 0 0 auto;
+    min-width: 12.5rem;
+    padding-inline: 1.3rem;
   }
 
   .magnet-search__shuffle {
@@ -2568,7 +2570,6 @@ body.has-support-journal-open {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
-  min-height: 2.8rem;
 }
 
 .body-cues-tool__empty {

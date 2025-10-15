@@ -688,6 +688,27 @@ function renderCategory(type, items) {
     )
     .join('');
 
+  const searchAltLink =
+    type === 'feelings'
+      ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
+      : null;
+
+  const searchInputMarkup = `<label class="magnet-search__field">
+                <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
+                <input
+                  type="search"
+                  name="${type}-search"
+                  class="magnet-search__input"
+                  placeholder="Search ${lowerTitle}"
+                  autocomplete="off"
+                  data-magnet-search-input
+                >
+              </label>`;
+
+  const searchControlsMarkup = [searchAltLink, searchInputMarkup]
+    .filter(Boolean)
+    .join('\n              ');
+
   const main = `
       <header class="page-header">
         <h1 class="page-title">${escapedTitle}</h1>
@@ -702,22 +723,7 @@ function renderCategory(type, items) {
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
-              <label class="magnet-search__field">
-                <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
-                <input
-                  type="search"
-                  name="${type}-search"
-                  class="magnet-search__input"
-                  placeholder="Search ${lowerTitle}"
-                  autocomplete="off"
-                  data-magnet-search-input
-                >
-              </label>
-              ${
-                type === 'feelings'
-                  ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
-                  : ''
-              }
+              ${searchControlsMarkup}
             </div>
             <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
           </div>
@@ -796,16 +802,8 @@ function renderBodyCuesPage() {
     ],
     main,
     scripts: [{ src: 'scripts/body-cues-tool.js', type: 'module' }],
-    activeNav: 'feelings-body-cues',
+    activeNav: 'feelings',
     mainClass: 'page body-cues-page',
-    navOptions: {
-      secondaryLinks: [
-        { key: 'situations', href: 'situations/', label: 'Situations' },
-        { key: 'feelings', href: 'feelings/', label: 'Feelings' },
-        { key: 'feelings-body-cues', href: 'feelings/body-cues/', label: 'Feelings > Body Cues' },
-        { key: 'needs', href: 'needs/', label: 'Needs' },
-      ],
-    },
   });
 
   writePage('feelings/body-cues/index.html', html);
