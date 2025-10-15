@@ -6,3 +6,4 @@ releases/
 # Generated integrity reports
 data/reports/*
 !data/reports/.gitkeep
+!data/reports/missing-landing-pages.csv
