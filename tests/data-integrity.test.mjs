@@ -277,35 +277,47 @@ const KNOWN_INFERENCE_GAPS = new Set(['uncertain']);
 
 clearMissingVocabularySpreadsheet();
 
-const dataset = readJsonFile('data/index.json');
-const reverseIndex = readJsonFile('data/reverse-inference.json');
-
-const {
-  BODY_REGIONS,
-  QUADRANT_SUGGESTIONS,
-  EMOTION_LIBRARY,
-} = await import(new URL('../scripts/alexithymia-support-data.js', import.meta.url));
-
-const feelings = ensureArray(dataset.feelings, 'Feelings');
-const needs = ensureArray(dataset.needs, 'Needs');
-const situations = ensureArray(dataset.situations, 'Situations');
-const strategies = ensureArray(dataset.strategies, 'Strategies');
-
-const feelingsBySlug = createSlugIndex(feelings, { label: 'Feeling', directory: 'feelings' });
-const needsBySlug = createSlugIndex(needs, { label: 'Need', directory: 'needs' });
-const situationsBySlug = createSlugIndex(situations, {
-  label: 'Situation',
-  directory: 'situations',
-});
-const strategiesBySlug = createSlugIndex(strategies, { label: 'Strategy' });
-
-const needsByTitle = buildTitleIndex(needsBySlug);
-const feelingsByTitle = buildTitleIndex(feelingsBySlug);
-const situationsByTitle = buildTitleIndex(situationsBySlug);
-const strategiesByTitle = buildTitleIndex(strategiesBySlug);
-
 const alexithymiaFeelingReferences = new Map();
 const alexithymiaNeedReferences = new Map();
+
+let dataset;
+let reverseIndex;
+let feelings = [];
+let needs = [];
+let situations = [];
+let strategies = [];
+let reverseKeys = [];
+let successMessage = '';
+let failureMessage = '';
+let unexpectedError = null;
+
+try {
+  dataset = readJsonFile('data/index.json');
+  reverseIndex = readJsonFile('data/reverse-inference.json');
+
+  const {
+    BODY_REGIONS,
+    QUADRANT_SUGGESTIONS,
+    EMOTION_LIBRARY,
+  } = await import(new URL('../scripts/alexithymia-support-data.js', import.meta.url));
+
+  feelings = ensureArray(dataset.feelings, 'Feelings');
+  needs = ensureArray(dataset.needs, 'Needs');
+  situations = ensureArray(dataset.situations, 'Situations');
+  strategies = ensureArray(dataset.strategies, 'Strategies');
+
+  const feelingsBySlug = createSlugIndex(feelings, { label: 'Feeling', directory: 'feelings' });
+  const needsBySlug = createSlugIndex(needs, { label: 'Need', directory: 'needs' });
+  const situationsBySlug = createSlugIndex(situations, {
+    label: 'Situation',
+    directory: 'situations',
+  });
+  const strategiesBySlug = createSlugIndex(strategies, { label: 'Strategy' });
+
+  const needsByTitle = buildTitleIndex(needsBySlug);
+  const feelingsByTitle = buildTitleIndex(feelingsBySlug);
+  const situationsByTitle = buildTitleIndex(situationsBySlug);
+  const strategiesByTitle = buildTitleIndex(strategiesBySlug);
 
 function trackMissingReference(map, word, context) {
   const normalized = typeof word === 'string' ? word.trim() : '';
@@ -340,44 +352,209 @@ function ensureNeedWordHasPage(word, context) {
   }
 }
 
-BODY_REGIONS.forEach((region) => {
-  region?.options?.forEach((option) => {
-    const context = `alexithymia body option "${option?.id ?? 'unknown'}"`;
-    Object.keys(option?.emotions ?? {}).forEach((emotion) => {
-      ensureFeelingWordHasPage(emotion, context);
+  BODY_REGIONS.forEach((region) => {
+    region?.options?.forEach((option) => {
+      const context = `alexithymia body option "${option?.id ?? 'unknown'}"`;
+      Object.keys(option?.emotions ?? {}).forEach((emotion) => {
+        ensureFeelingWordHasPage(emotion, context);
+      });
     });
   });
-});
 
-Object.entries(QUADRANT_SUGGESTIONS ?? {}).forEach(([quadrant, suggestion]) => {
-  suggestion?.emotions?.forEach((emotion) => {
-    ensureFeelingWordHasPage(emotion, `alexithymia quadrant "${quadrant}"`);
+  Object.entries(QUADRANT_SUGGESTIONS ?? {}).forEach(([quadrant, suggestion]) => {
+    suggestion?.emotions?.forEach((emotion) => {
+      ensureFeelingWordHasPage(emotion, `alexithymia quadrant "${quadrant}"`);
+    });
   });
-});
 
-Object.entries(EMOTION_LIBRARY ?? {}).forEach(([emotionSlug, config]) => {
-  ensureFeelingWordHasPage(emotionSlug, `alexithymia emotion entry "${emotionSlug}"`);
-  config?.needs?.forEach((need) => {
-    ensureNeedWordHasPage(need, `alexithymia emotion "${emotionSlug}"`);
+  Object.entries(EMOTION_LIBRARY ?? {}).forEach(([emotionSlug, config]) => {
+    ensureFeelingWordHasPage(emotionSlug, `alexithymia emotion entry "${emotionSlug}"`);
+    config?.needs?.forEach((need) => {
+      ensureNeedWordHasPage(need, `alexithymia emotion "${emotionSlug}"`);
+    });
   });
-});
 
-if (alexithymiaFeelingReferences.size > 0) {
-  alexithymiaFeelingReferences.forEach((contexts, word) => {
-    const contextList = Array.from(contexts).sort().join('; ');
-    warnings.push(
-      `Alexithymia data references feeling "${word}" (${contextList}) but the site has no matching feeling page.`,
-    );
-  });
-}
+  if (alexithymiaFeelingReferences.size > 0) {
+    alexithymiaFeelingReferences.forEach((contexts, word) => {
+      const contextList = Array.from(contexts).sort().join('; ');
+      warnings.push(
+        `Alexithymia data references feeling "${word}" (${contextList}) but the site has no matching feeling page.`,
+      );
+    });
+  }
 
-if (alexithymiaNeedReferences.size > 0) {
-  alexithymiaNeedReferences.forEach((contexts, word) => {
-    const contextList = Array.from(contexts).sort().join('; ');
-    warnings.push(
-      `Alexithymia data references need "${word}" (${contextList}) but the site has no matching need page.`,
-    );
+  if (alexithymiaNeedReferences.size > 0) {
+    alexithymiaNeedReferences.forEach((contexts, word) => {
+      const contextList = Array.from(contexts).sort().join('; ');
+      warnings.push(
+        `Alexithymia data references need "${word}" (${contextList}) but the site has no matching need page.`,
+      );
+    });
+  }
+
+  verifyDirectoryCoverage('feelings', feelingsBySlug, 'Feeling');
+  verifyDirectoryCoverage('needs', needsBySlug, 'Need');
+  verifyDirectoryCoverage('situations', situationsBySlug, 'Situation');
+
+  feelings.forEach((feeling) => {
+    checkReferenceList({
+      sourceLabel: 'Feeling',
+      sourceItem: feeling,
+      listKey: 'needs',
+      targetLabel: 'Need',
+      targetMap: needsBySlug,
+      targetTitleIndex: needsByTitle,
+    });
+    checkReferenceList({
+      sourceLabel: 'Feeling',
+      sourceItem: feeling,
+      listKey: 'situations',
+      targetLabel: 'Situation',
+      targetMap: situationsBySlug,
+      targetTitleIndex: situationsByTitle,
+    });
+    checkBodySignals(feeling);
   });
+
+  needs.forEach((need) => {
+    checkReferenceList({
+      sourceLabel: 'Need',
+      sourceItem: need,
+      listKey: 'strategies',
+      targetLabel: 'Strategy',
+      targetMap: strategiesBySlug,
+      targetTitleIndex: strategiesByTitle,
+    });
+    checkReferenceList({
+      sourceLabel: 'Need',
+      sourceItem: need,
+      listKey: 'situations',
+      targetLabel: 'Situation',
+      targetMap: situationsBySlug,
+      targetTitleIndex: situationsByTitle,
+    });
+    checkReferenceList({
+      sourceLabel: 'Need',
+      sourceItem: need,
+      listKey: 'feelings',
+      targetLabel: 'Feeling',
+      targetMap: feelingsBySlug,
+      targetTitleIndex: feelingsByTitle,
+    });
+  });
+
+  situations.forEach((situation) => {
+    checkReferenceList({
+      sourceLabel: 'Situation',
+      sourceItem: situation,
+      listKey: 'feelings',
+      targetLabel: 'Feeling',
+      targetMap: feelingsBySlug,
+      targetTitleIndex: feelingsByTitle,
+    });
+    checkReferenceList({
+      sourceLabel: 'Situation',
+      sourceItem: situation,
+      listKey: 'needs',
+      targetLabel: 'Need',
+      targetMap: needsBySlug,
+      targetTitleIndex: needsByTitle,
+    });
+  });
+
+  strategies.forEach((strategy) => {
+    checkReferenceList({
+      sourceLabel: 'Strategy',
+      sourceItem: strategy,
+      listKey: 'needs',
+      targetLabel: 'Need',
+      targetMap: needsBySlug,
+      targetTitleIndex: needsByTitle,
+    });
+  });
+
+  const slugMap = reverseIndex?._meta?.slugMap;
+  if (!slugMap || typeof slugMap !== 'object') {
+    issues.push('Reverse inference slug map is missing.');
+  }
+
+  reverseKeys = Object.keys(reverseIndex).filter((key) => key !== '_meta');
+  reverseKeys.forEach((key) => {
+    const entry = reverseIndex[key];
+    if (!entry || typeof entry !== 'object') {
+      issues.push(`Reverse inference entry "${key}" is not an object.`);
+      return;
+    }
+
+    const nvcList = entry.needsHypotheses?.nvc;
+    if (nvcList !== undefined) {
+      if (!Array.isArray(nvcList)) {
+        issues.push(`Reverse inference entry "${key}" has a non-array needsHypotheses.nvc list.`);
+      } else {
+        nvcList.forEach((need, index) => {
+          const slug = typeof need?.slug === 'string' ? need.slug.trim() : '';
+          const title = typeof need?.title === 'string' ? need.title.trim() : '';
+          if (!slug) {
+            issues.push(
+              `Reverse inference entry "${key}" has a needs hypothesis without a slug${
+                title ? ` (title "${title}")` : ''
+              } at position ${index}.`,
+            );
+            return;
+          }
+          if (!needsBySlug.has(slug)) {
+            issues.push(
+              `Reverse inference entry "${key}" references missing need slug "${slug}"${
+                title ? ` (title "${title}")` : ''
+              }.`,
+            );
+          }
+        });
+      }
+    }
+  });
+
+  if (slugMap && typeof slugMap === 'object') {
+    Object.entries(slugMap).forEach(([slug, feelingKey]) => {
+      if (typeof feelingKey !== 'string' || !feelingKey.trim()) {
+        issues.push(`Reverse inference slug map entry for "${slug}" is invalid.`);
+        return;
+      }
+      if (!reverseIndex[feelingKey]) {
+        if (KNOWN_INFERENCE_GAPS.has(feelingKey)) {
+          return;
+        }
+        issues.push(
+          `Reverse inference slug map points slug "${slug}" to missing entry "${feelingKey}".`,
+        );
+      }
+    });
+  }
+
+  if (warnings.length > 0) {
+    const summary = warnings.map((warning, index) => `${index + 1}. ${warning}`).join('\n');
+    console.warn(`Data integrity warnings detected:\n${summary}`);
+  }
+
+  if (issues.length > 0) {
+    const reportRelativePath = writeFailureReport({
+      issueList: issues,
+      counts: {
+        feelings: feelings.length,
+        needs: needs.length,
+        situations: situations.length,
+        strategies: strategies.length,
+        reverseEntries: reverseKeys.length,
+      },
+    });
+    const summary = issues.map((issue, index) => `${index + 1}. ${issue}`).join('\n');
+    failureMessage = `Data integrity check failed with ${issues.length} issue(s). Detailed report saved to ${reportRelativePath}.\n${summary}`;
+  } else {
+    clearFailureReport();
+    successMessage = `Data integrity check passed for ${feelings.length} feelings, ${needs.length} needs, ${situations.length} situations, ${strategies.length} strategies, and ${reverseKeys.length} reverse inference entries.`;
+  }
+} catch (error) {
+  unexpectedError = error;
 }
 
 const missingVocabularyRelativePath = writeMissingVocabularySpreadsheet({
@@ -385,173 +562,21 @@ const missingVocabularyRelativePath = writeMissingVocabularySpreadsheet({
   needReferences: alexithymiaNeedReferences,
 });
 
-if (alexithymiaFeelingReferences.size > 0 || alexithymiaNeedReferences.size > 0) {
-  console.log(`Missing vocabulary spreadsheet saved to ${missingVocabularyRelativePath}.`);
-}
-
-verifyDirectoryCoverage('feelings', feelingsBySlug, 'Feeling');
-verifyDirectoryCoverage('needs', needsBySlug, 'Need');
-verifyDirectoryCoverage('situations', situationsBySlug, 'Situation');
-
-feelings.forEach((feeling) => {
-  checkReferenceList({
-    sourceLabel: 'Feeling',
-    sourceItem: feeling,
-    listKey: 'needs',
-    targetLabel: 'Need',
-    targetMap: needsBySlug,
-    targetTitleIndex: needsByTitle,
-  });
-  checkReferenceList({
-    sourceLabel: 'Feeling',
-    sourceItem: feeling,
-    listKey: 'situations',
-    targetLabel: 'Situation',
-    targetMap: situationsBySlug,
-    targetTitleIndex: situationsByTitle,
-  });
-  checkBodySignals(feeling);
-});
-
-needs.forEach((need) => {
-  checkReferenceList({
-    sourceLabel: 'Need',
-    sourceItem: need,
-    listKey: 'strategies',
-    targetLabel: 'Strategy',
-    targetMap: strategiesBySlug,
-    targetTitleIndex: strategiesByTitle,
-  });
-  checkReferenceList({
-    sourceLabel: 'Need',
-    sourceItem: need,
-    listKey: 'situations',
-    targetLabel: 'Situation',
-    targetMap: situationsBySlug,
-    targetTitleIndex: situationsByTitle,
-  });
-  checkReferenceList({
-    sourceLabel: 'Need',
-    sourceItem: need,
-    listKey: 'feelings',
-    targetLabel: 'Feeling',
-    targetMap: feelingsBySlug,
-    targetTitleIndex: feelingsByTitle,
-  });
-});
-
-situations.forEach((situation) => {
-  checkReferenceList({
-    sourceLabel: 'Situation',
-    sourceItem: situation,
-    listKey: 'feelings',
-    targetLabel: 'Feeling',
-    targetMap: feelingsBySlug,
-    targetTitleIndex: feelingsByTitle,
-  });
-  checkReferenceList({
-    sourceLabel: 'Situation',
-    sourceItem: situation,
-    listKey: 'needs',
-    targetLabel: 'Need',
-    targetMap: needsBySlug,
-    targetTitleIndex: needsByTitle,
-  });
-});
-
-strategies.forEach((strategy) => {
-  checkReferenceList({
-    sourceLabel: 'Strategy',
-    sourceItem: strategy,
-    listKey: 'needs',
-    targetLabel: 'Need',
-    targetMap: needsBySlug,
-    targetTitleIndex: needsByTitle,
-  });
-});
-
-const slugMap = reverseIndex?._meta?.slugMap;
-if (!slugMap || typeof slugMap !== 'object') {
-  issues.push('Reverse inference slug map is missing.');
-}
-
-const reverseKeys = Object.keys(reverseIndex).filter((key) => key !== '_meta');
-reverseKeys.forEach((key) => {
-  const entry = reverseIndex[key];
-  if (!entry || typeof entry !== 'object') {
-    issues.push(`Reverse inference entry "${key}" is not an object.`);
-    return;
-  }
-
-  const nvcList = entry.needsHypotheses?.nvc;
-  if (nvcList !== undefined) {
-    if (!Array.isArray(nvcList)) {
-      issues.push(`Reverse inference entry "${key}" has a non-array needsHypotheses.nvc list.`);
-    } else {
-      nvcList.forEach((need, index) => {
-        const slug = typeof need?.slug === 'string' ? need.slug.trim() : '';
-        const title = typeof need?.title === 'string' ? need.title.trim() : '';
-        if (!slug) {
-          issues.push(
-            `Reverse inference entry "${key}" has a needs hypothesis without a slug${
-              title ? ` (title "${title}")` : ''
-            } at position ${index}.`,
-          );
-          return;
-        }
-        if (!needsBySlug.has(slug)) {
-          issues.push(
-            `Reverse inference entry "${key}" references missing need slug "${slug}"${
-              title ? ` (title "${title}")` : ''
-            }.`,
-          );
-        }
-      });
-    }
-  }
-});
-
-if (slugMap && typeof slugMap === 'object') {
-  Object.entries(slugMap).forEach(([slug, feelingKey]) => {
-    if (typeof feelingKey !== 'string' || !feelingKey.trim()) {
-      issues.push(`Reverse inference slug map entry for "${slug}" is invalid.`);
-      return;
-    }
-    if (!reverseIndex[feelingKey]) {
-      if (KNOWN_INFERENCE_GAPS.has(feelingKey)) {
-        return;
-      }
-      issues.push(
-        `Reverse inference slug map points slug "${slug}" to missing entry "${feelingKey}".`,
-      );
-    }
-  });
-}
-
-if (warnings.length > 0) {
-  const summary = warnings.map((warning, index) => `${index + 1}. ${warning}`).join('\n');
-  console.warn(`Data integrity warnings detected:\n${summary}`);
-}
-
-if (issues.length > 0) {
-  const reportRelativePath = writeFailureReport({
-    issueList: issues,
-    counts: {
-      feelings: feelings.length,
-      needs: needs.length,
-      situations: situations.length,
-      strategies: strategies.length,
-      reverseEntries: reverseKeys.length,
-    },
-  });
-  const summary = issues.map((issue, index) => `${index + 1}. ${issue}`).join('\n');
-  throw new Error(
-    `Data integrity check failed with ${issues.length} issue(s). Detailed report saved to ${reportRelativePath}.\n${summary}`,
-  );
-}
-
-clearFailureReport();
-
+const missingWordCount = alexithymiaFeelingReferences.size + alexithymiaNeedReferences.size;
+const rowDescriptor = missingWordCount === 1 ? 'entry' : 'entries';
 console.log(
-  `Data integrity check passed for ${feelings.length} feelings, ${needs.length} needs, ${situations.length} situations, ${strategies.length} strategies, and ${reverseKeys.length} reverse inference entries.`,
+  `Missing vocabulary spreadsheet saved to ${missingVocabularyRelativePath} with ${missingWordCount} ${rowDescriptor}.`,
 );
+
+if (failureMessage) {
+  throw new Error(`${failureMessage}\nMissing vocabulary spreadsheet saved to ${missingVocabularyRelativePath}.`);
+}
+
+if (unexpectedError) {
+  unexpectedError.message = `${unexpectedError.message}\nMissing vocabulary spreadsheet saved to ${missingVocabularyRelativePath}.`;
+  throw unexpectedError;
+}
+
+if (successMessage) {
+  console.log(successMessage);
+}
