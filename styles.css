@@ -2118,8 +2118,19 @@ body.has-support-journal-open {
   gap: 0.75rem;
 }
 
+.magnet-search__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
 .magnet-search__label {
   font-weight: 600;
+}
+
+.magnet-search__field {
+  flex: 1 1 auto;
 }
 
 .magnet-search__input {
@@ -2137,6 +2148,36 @@ body.has-support-journal-open {
   outline-offset: 4px;
   box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 35%, transparent);
   transform: translateY(-2px);
+}
+
+.magnet-search__alt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-md-plus);
+  border: 3px solid var(--outline);
+  background: color-mix(in srgb, var(--mint) 55%, #fff 45%);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.magnet-search__alt:hover,
+.magnet-search__alt:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+}
+
+.magnet-search__alt:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
 }
 
 .magnet-search__results {
@@ -2177,6 +2218,18 @@ body.has-support-journal-open {
   text-align: center;
   text-decoration: none;
   width: 100%;
+}
+
+@media (min-width: 720px) {
+  .magnet-search__controls {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .magnet-search__alt {
+    align-self: stretch;
+    padding-inline: 1.35rem;
+  }
 }
 
 .magnet-search__link:hover,
@@ -2355,6 +2408,316 @@ body.has-support-journal-open {
 .magnet-board[data-ready='1'] .pill:hover,
 .magnet-board[data-ready='1'] .pill:focus-visible {
   transform: none;
+}
+
+.body-cues-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.body-cues-tool {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: clamp(1.25rem, 2vw, 2rem);
+  border-radius: var(--radius-3xl);
+  border: 3px solid var(--outline);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent),
+    0 18px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.body-cues-tool__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.body-cues-tool__intro p {
+  margin: 0;
+  max-width: 65ch;
+}
+
+.body-cues-tool__reset {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-md-plus);
+  border: 3px solid var(--outline);
+  background: color-mix(in srgb, var(--mint) 55%, #fff 45%);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.body-cues-tool__reset:hover,
+.body-cues-tool__reset:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+}
+
+.body-cues-tool__reset:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.body-cues-tool__magnets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.body-cues-tool__magnet-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+}
+
+.body-cues-tool__magnet-header h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+}
+
+.body-cues-tool__magnet-subtitle {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.body-cues-tool__magnet-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  min-height: 3.25rem;
+}
+
+.body-cues-tool__magnet-container[data-empty='true']::before {
+  content: 'Magnets will appear here as you adjust sliders.';
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.body-cues-tool__magnet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--outline);
+  background: color-mix(in srgb, var(--chip-bg) 55%, #fff 45%);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: default;
+}
+
+.body-cues-tool__magnet[role='link'] {
+  cursor: pointer;
+}
+
+.body-cues-tool__magnet[role='link']:hover,
+.body-cues-tool__magnet[role='link']:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+}
+
+.body-cues-tool__magnet[role='link']:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.body-cues-tool__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.body-cues-tool__region {
+  padding: clamp(1rem, 2vw, 1.4rem);
+  border-radius: var(--radius-2xl);
+  border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
+  background: color-mix(in srgb, #fff 88%, var(--sky) 12%);
+  box-shadow: inset 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.body-cues-tool__region-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.body-cues-tool__region-title {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+}
+
+.body-cues-tool__region-prompt {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.body-cues-tool__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.body-cues-tool__option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.body-cues-tool__option-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.body-cues-tool__option-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.body-cues-tool__option-value {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.body-cues-tool__option-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.body-cues-tool__slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.body-cues-tool__slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 0.9rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--mint) 0%, var(--rose) 100%);
+  border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.body-cues-tool__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--outline);
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 30%, transparent);
+  cursor: pointer;
+}
+
+.body-cues-tool__slider::-moz-range-thumb {
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--outline);
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 30%, transparent);
+  cursor: pointer;
+}
+
+.body-cues-tool__slider:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.body-cues-tool__slider-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.body-cues-tool__empty,
+.body-cues-tool__error {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.body-cues-tool__empty {
+  max-width: 42ch;
+}
+
+.body-cues-tool__error {
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .body-cues-tool {
+    gap: 1.6rem;
+    padding: clamp(1rem, 5vw, 1.5rem);
+  }
+
+  .body-cues-tool__magnets {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: clamp(0.75rem, 4vw, 1.1rem) clamp(0.5rem, 5vw, 1.2rem);
+    margin-block: 0 0.75rem;
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #fff 86%, var(--sky) 14%);
+    box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--outline) 32%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .body-cues-tool__magnet-container {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.75rem;
+    padding-bottom: 0.35rem;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .body-cues-tool__magnet {
+    flex: 0 0 auto;
+    min-width: min(16rem, 80vw);
+    scroll-snap-align: start;
+  }
+
+  .body-cues-tool__empty {
+    padding-right: 0.5rem;
+  }
+
+  .body-cues-tool__controls {
+    gap: 1rem;
+  }
+
+  .body-cues-tool__region {
+    padding: clamp(0.75rem, 5vw, 1.1rem);
+  }
+
+  .body-cues-tool__option {
+    padding: 0.65rem 0.75rem;
+  }
 }
 
 .pill {

@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Situations • NeedShare Explorer</title>
-    <meta name="description" content="Map situations, feelings, and needs with retro magnet play, journaling tools, and a shareable strategy inventory inspired by NeedShare." />
-    <link rel="icon" type="image/svg+xml" href="../icons/main.svg" />
-    <meta property="og:image" content="../icons/main.svg" />
-    <meta name="twitter:image" content="../icons/main.svg" />
-        <script src="../assets/js/ui/contrast.js"></script>
+    <title>Body Cues explorer • NeedShare Explorer</title>
+    <meta name="description" content="Describe the body sensations you notice and see which feelings might align with them." />
+    <link rel="icon" type="image/svg+xml" href="../../icons/main.svg" />
+    <meta property="og:image" content="../../icons/main.svg" />
+    <meta name="twitter:image" content="../../icons/main.svg" />
+        <script src="../../assets/js/ui/contrast.js"></script>
     <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
@@ -212,17 +212,17 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../../styles.css" />
   </head>
-  <body data-base-path="../">
+  <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
       <nav class="site-nav" aria-label="Primary">
         <div class="site-nav__row site-nav__row--primary">
-          <a class="site-nav__link site-nav__link--home" href="../">
+          <a class="site-nav__link site-nav__link--home" href="../../">
             <img
               class="site-nav__icon"
-              src="../icons/home-8bit.svg"
+              src="../../icons/home-8bit.svg"
               alt=""
               aria-hidden="true"
             />
@@ -286,71 +286,61 @@
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="../inventory/">
+          <a class="site-nav__link site-nav__link--inventory" href="../../inventory/">
             Inventory
             <span class="site-nav__count" data-inventory-count hidden></span>
           </a>
         </div>
         <div class="site-nav__row site-nav__row--secondary">
-          <a class="site-nav__link" href="../situations/" aria-current="page">Situations</a>
-          <a class="site-nav__link" href="../feelings/">Feelings</a>
-          <a class="site-nav__link" href="../needs/">Needs</a>
+          <a class="site-nav__link" href="../../situations/">Situations</a>
+          <a class="site-nav__link" href="../../feelings/">Feelings</a>
+          <a class="site-nav__link" href="../../feelings/body-cues/" aria-current="page">Feelings &gt; Body Cues</a>
+          <a class="site-nav__link" href="../../needs/">Needs</a>
         </div>
       </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../">Home</a></li><li aria-current="page">Situations</li>
+          <li><a href="../../">Home</a></li><li><a href="../">Feelings</a></li><li aria-current="page">Body Cues</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page body-cues-page" role="main">
         
       <header class="page-header">
-        <h1 class="page-title">Situations</h1>
-        <p class="page-description">Situations (sometimes called evaluations or faux-feelings) are often the first stories that surface. Follow them to the feelings and needs underneath.</p>
+        <h1 class="page-title">Body Cues explorer</h1>
+        <p class="page-description">
+          Move the sliders to describe what your body is doing. We will surface feelings that often ride along with
+          those cues so you can follow your curiosity instead of guessing in the dark.
+        </p>
       </header>
-      <section aria-labelledby="situations-list" class="pill-section magnet-section" data-magnet-root>
-        <div class="magnet-section__header">
-          <h2 id="situations-list" class="section-title">Situations directory</h2>
-          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+
+      <section class="body-cues-tool" data-body-cues-root>
+        <div class="body-cues-tool__intro">
+          <p>
+            Start with one or two sensations that stand out. You can always add more later. Matches update as you go so
+            you can see how the story shifts.
+          </p>
+          <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
         </div>
-        <div class="magnet-search" data-magnet-search>
-          <div class="magnet-search__controls">
-            <label class="magnet-search__field">
-              <span class="magnet-search__label visually-hidden">Search situations</span>
-              <input
-                type="search"
-                name="situations-search"
-                class="magnet-search__input"
-                placeholder="Search situations"
-                autocomplete="off"
-                data-magnet-search-input
-              >
-            </label>
-            
+        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
+          <div class="body-cues-tool__magnet-header">
+            <h2 id="body-cues-magnets-heading">Matching magnets</h2>
+            <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
           </div>
-          <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
-            <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
-            <div class="magnet-search__list" data-magnet-search-list></div>
-          </div>
-        </div>
-        <div class="magnet-board-wrapper">
-          <div class="pill-grid magnet-board" data-magnet-board>
-            <a class="pill magnet" data-magnet-id="situations-abandoned" href="abandoned/">Abandoned</a><a class="pill magnet" data-magnet-id="situations-abused" href="abused/">Abused</a><a class="pill magnet" data-magnet-id="situations-attacked" href="attacked/">Attacked</a><a class="pill magnet" data-magnet-id="situations-not-accepted" href="not-accepted/">(Not) Accepted</a><a class="pill magnet" data-magnet-id="situations-belittled" href="belittled/">Belittled</a><a class="pill magnet" data-magnet-id="situations-betrayed" href="betrayed/">Betrayed</a><a class="pill magnet" data-magnet-id="situations-blamed" href="blamed/">Blamed</a><a class="pill magnet" data-magnet-id="situations-bullied" href="bullied/">Bullied</a><a class="pill magnet" data-magnet-id="situations-caged-boxed-in" href="caged-boxed-in/">Caged/Boxed-in</a><a class="pill magnet" data-magnet-id="situations-cheated" href="cheated/">Cheated</a><a class="pill magnet" data-magnet-id="situations-coerced" href="coerced/">Coerced</a><a class="pill magnet" data-magnet-id="situations-cornered" href="cornered/">Cornered</a><a class="pill magnet" data-magnet-id="situations-criticized" href="criticized/">Criticized</a><a class="pill magnet" data-magnet-id="situations-discounted-diminished" href="discounted-diminished/">Discounted/Diminished</a><a class="pill magnet" data-magnet-id="situations-disliked" href="disliked/">Disliked</a><a class="pill magnet" data-magnet-id="situations-distrusted" href="distrusted/">Distrusted</a><a class="pill magnet" data-magnet-id="situations-dumped-on" href="dumped-on/">Dumped on</a><a class="pill magnet" data-magnet-id="situations-harassed" href="harassed/">Harassed</a><a class="pill magnet" data-magnet-id="situations-hassled" href="hassled/">Hassled</a><a class="pill magnet" data-magnet-id="situations-ignored" href="ignored/">Ignored</a><a class="pill magnet" data-magnet-id="situations-insulted" href="insulted/">Insulted</a><a class="pill magnet" data-magnet-id="situations-interrupted" href="interrupted/">Interrupted</a><a class="pill magnet" data-magnet-id="situations-intimidated" href="intimidated/">Intimidated</a><a class="pill magnet" data-magnet-id="situations-invalidated" href="invalidated/">Invalidated</a><a class="pill magnet" data-magnet-id="situations-invisible" href="invisible/">Invisible</a><a class="pill magnet" data-magnet-id="situations-isolated" href="isolated/">Isolated</a><a class="pill magnet" data-magnet-id="situations-left-out" href="left-out/">Left out</a><a class="pill magnet" data-magnet-id="situations-let-down" href="let-down/">Let down</a><a class="pill magnet" data-magnet-id="situations-manipulated" href="manipulated/">Manipulated</a><a class="pill magnet" data-magnet-id="situations-mistrusted" href="mistrusted/">Mistrusted</a><a class="pill magnet" data-magnet-id="situations-misunderstood" href="misunderstood/">Misunderstood</a><a class="pill magnet" data-magnet-id="situations-neglected" href="neglected/">Neglected</a><a class="pill magnet" data-magnet-id="situations-overpowered" href="overpowered/">Overpowered</a><a class="pill magnet" data-magnet-id="situations-overworked" href="overworked/">Overworked</a><a class="pill magnet" data-magnet-id="situations-patronized" href="patronized/">Patronized</a><a class="pill magnet" data-magnet-id="situations-pressured" href="pressured/">Pressured</a><a class="pill magnet" data-magnet-id="situations-provoked" href="provoked/">Provoked</a><a class="pill magnet" data-magnet-id="situations-put-down" href="put-down/">Put down</a><a class="pill magnet" data-magnet-id="situations-rejected" href="rejected/">Rejected</a><a class="pill magnet" data-magnet-id="situations-ripped-off-screwed" href="ripped-off-screwed/">Ripped off / Screwed</a><a class="pill magnet" data-magnet-id="situations-smothered-suffocated" href="smothered-suffocated/">Smothered/Suffocated</a><a class="pill magnet" data-magnet-id="situations-taken-for-granted" href="taken-for-granted/">Taken for granted</a><a class="pill magnet" data-magnet-id="situations-threatened" href="threatened/">Threatened</a><a class="pill magnet" data-magnet-id="situations-trampled" href="trampled/">Trampled</a><a class="pill magnet" data-magnet-id="situations-tricked" href="tricked/">Tricked</a><a class="pill magnet" data-magnet-id="situations-unappreciated" href="unappreciated/">Unappreciated</a><a class="pill magnet" data-magnet-id="situations-unheard" href="unheard/">Unheard</a><a class="pill magnet" data-magnet-id="situations-unloved" href="unloved/">Unloved</a><a class="pill magnet" data-magnet-id="situations-unseen" href="unseen/">Unseen</a><a class="pill magnet" data-magnet-id="situations-unsupported" href="unsupported/">Unsupported</a><a class="pill magnet" data-magnet-id="situations-unwanted" href="unwanted/">Unwanted</a><a class="pill magnet" data-magnet-id="situations-used" href="used/">Used</a><a class="pill magnet" data-magnet-id="situations-victimized" href="victimized/">Victimized</a><a class="pill magnet" data-magnet-id="situations-violated" href="violated/">Violated</a><a class="pill magnet" data-magnet-id="situations-wronged" href="wronged/">Wronged</a>
-          </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
-          </label>
-        </div>
+          <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite"></div>
+          <p class="body-cues-tool__empty" data-body-cues-empty>
+            Adjust the sliders to describe what your body is doing. We'll show feelings that often travel with that mix.
+          </p>
+          <p class="body-cues-tool__error" data-body-cues-error hidden>
+            We couldn't load the body cues data. Check your connection and try again.
+          </p>
+        </section>
+        <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
       </section>
     
       </main>
     </div>
-    <script src="../assets/js/journal/store.js" type="module"></script>
-    <script src="../scripts/inventory.js" defer></script>
-    <script src="../scripts/magnets.js" type="module"></script>
+    <script src="../../assets/js/journal/store.js" type="module"></script>
+    <script src="../../scripts/inventory.js" defer></script>
+    <script src="../../scripts/body-cues-tool.js" type="module"></script>
   </body>
 </html>
