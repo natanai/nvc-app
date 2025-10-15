@@ -1,10 +1,7 @@
 name: Data Integrity
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   data-integrity:
@@ -28,10 +25,18 @@ jobs:
       - name: Run data integrity checks
         run: npm run test:data-integrity
 
+      - name: Upload missing vocabulary spreadsheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: missing-vocabulary
+          path: data/reports/missing-vocabulary.csv
+          if-no-files-found: warn
+
       - name: Upload data integrity report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: data-integrity-report
-          path: reports/data-integrity-report.md
+          path: data/reports/data-integrity-report.md
           if-no-files-found: warn

@@ -4,12 +4,21 @@ import { join, relative } from 'path';
 const rootDir = process.cwd();
 const issues = [];
 const warnings = [];
-const reportDirectory = join(rootDir, 'reports');
+const reportDirectory = join(rootDir, 'data', 'reports');
 const reportPath = join(reportDirectory, 'data-integrity-report.md');
+const missingVocabularySpreadsheetPath = join(reportDirectory, 'missing-vocabulary.csv');
 
 function clearFailureReport() {
   try {
     rmSync(reportPath, { force: true });
+  } catch (error) {
+    // Ignore errors when attempting to clear previous reports; they should not block the check.
+  }
+}
+
+function clearMissingVocabularySpreadsheet() {
+  try {
+    rmSync(missingVocabularySpreadsheetPath, { force: true });
   } catch (error) {
     // Ignore errors when attempting to clear previous reports; they should not block the check.
   }
@@ -33,6 +42,37 @@ function writeFailureReport({ issueList, counts }) {
 
   writeFileSync(reportPath, reportContents, 'utf8');
   return relative(rootDir, reportPath);
+}
+
+function formatCsvValue(value) {
+  const normalized = value === undefined || value === null ? '' : String(value);
+  return /[",\n]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+}
+
+function writeMissingVocabularySpreadsheet({ feelingReferences, needReferences }) {
+  mkdirSync(reportDirectory, { recursive: true });
+
+  const rows = [['Type', 'Word', 'Contexts']];
+
+  function appendRows(type, referenceMap) {
+    const sortedWords = Array.from(referenceMap.keys()).sort((a, b) =>
+      a.localeCompare(b, 'en', { sensitivity: 'base' }),
+    );
+
+    sortedWords.forEach((word) => {
+      const contexts = Array.from(referenceMap.get(word) ?? [])
+        .sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }))
+        .join('; ');
+      rows.push([type, word, contexts]);
+    });
+  }
+
+  appendRows('Feeling', feelingReferences);
+  appendRows('Need', needReferences);
+
+  const csvContents = rows.map((row) => row.map(formatCsvValue).join(',')).join('\n');
+  writeFileSync(missingVocabularySpreadsheetPath, csvContents, 'utf8');
+  return relative(rootDir, missingVocabularySpreadsheetPath);
 }
 
 function readJsonFile(relativePath) {
@@ -235,6 +275,8 @@ function checkBodySignals(feeling) {
 // continue catching unexpected omissions if new feelings point to missing data.
 const KNOWN_INFERENCE_GAPS = new Set(['uncertain']);
 
+clearMissingVocabularySpreadsheet();
+
 const dataset = readJsonFile('data/index.json');
 const reverseIndex = readJsonFile('data/reverse-inference.json');
 
@@ -336,6 +378,15 @@ if (alexithymiaNeedReferences.size > 0) {
       `Alexithymia data references need "${word}" (${contextList}) but the site has no matching need page.`,
     );
   });
+}
+
+const missingVocabularyRelativePath = writeMissingVocabularySpreadsheet({
+  feelingReferences: alexithymiaFeelingReferences,
+  needReferences: alexithymiaNeedReferences,
+});
+
+if (alexithymiaFeelingReferences.size > 0 || alexithymiaNeedReferences.size > 0) {
+  console.log(`Missing vocabulary spreadsheet saved to ${missingVocabularyRelativePath}.`);
 }
 
 verifyDirectoryCoverage('feelings', feelingsBySlug, 'Feeling');
