@@ -271,6 +271,8 @@ function htmlPage({
   scripts = [],
   mainAttributes = '',
   activeNav,
+  mainClass = 'page',
+  navOptions = undefined,
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
@@ -323,8 +325,9 @@ function htmlPage({
       return `    <script ${attrs.join(' ')}></script>`;
     })
     .join('\n');
-  const navHtml = renderNav(basePath, activeNav);
-  const mainAttrs = mainAttributes ? ` ${mainAttributes}` : '';
+  const navHtml = renderNav(basePath, activeNav, navOptions);
+  const normalizedMainAttrs = mainAttributes ? ` ${mainAttributes.trim()}` : '';
+  const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -344,7 +347,7 @@ function htmlPage({
     <div class="page-wrapper">
       ${navHtml}
       ${breadcrumbHtml}
-      <main id="main" class="page" role="main"${mainAttrs}>
+      <main id="main"${mainClassAttr} role="main"${normalizedMainAttrs}>
         ${main}
       </main>
     </div>
@@ -353,9 +356,44 @@ ${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
 `;
 }
 
-function renderNav(basePath, activeNav) {
+function renderNav(basePath, activeNav, options = {}) {
+  const config = options || {};
   const activeAttr = (key) => (activeNav === key ? ' aria-current="page"' : '');
   const homeHref = basePath || './';
+
+  const resolveHref = (href) => {
+    if (!href) {
+      return basePath;
+    }
+    if (/^(?:[a-z]+:)?\/\//i.test(href) || href.startsWith('#')) {
+      return href;
+    }
+    if (href.startsWith('/') || href.startsWith('./') || href.startsWith('../')) {
+      return href;
+    }
+    return `${basePath}${href}`;
+  };
+
+  const defaultSecondaryLinks = [
+    { key: 'situations', href: 'situations/', label: 'Situations' },
+    { key: 'feelings', href: 'feelings/', label: 'Feelings' },
+    { key: 'needs', href: 'needs/', label: 'Needs' },
+  ];
+
+  const secondaryLinks = (config.secondaryLinks ?? defaultSecondaryLinks)
+    .map((link) => {
+      const href = resolveHref(link.href);
+      const label = link.html ? link.html : escapeHtml(link.label ?? '');
+      const ariaAttr = link.key ? activeAttr(link.key).trim() : '';
+      const attrs = [
+        'class="site-nav__link"',
+        `href="${href}"`,
+        ariaAttr,
+      ].filter(Boolean);
+      return `          <a ${attrs.join(' ')}>${label}</a>`;
+    })
+    .join('\n');
+
   return `<nav class="site-nav" aria-label="Primary">
         <div class="site-nav__row site-nav__row--primary">
           <a class="site-nav__link site-nav__link--home" href="${homeHref}"${activeAttr('home')}>
@@ -431,9 +469,7 @@ function renderNav(basePath, activeNav) {
           </a>
         </div>
         <div class="site-nav__row site-nav__row--secondary">
-          <a class="site-nav__link" href="${basePath}situations/"${activeAttr('situations')}>Situations</a>
-          <a class="site-nav__link" href="${basePath}feelings/"${activeAttr('feelings')}>Feelings</a>
-          <a class="site-nav__link" href="${basePath}needs/"${activeAttr('needs')}>Needs</a>
+${secondaryLinks}
         </div>
       </nav>`;
 }
@@ -637,7 +673,7 @@ function renderCategory(type, items) {
 
   const supportLinks =
     type === 'feelings'
-      ? `<div class="support-actions">
+      ? `<div class="support-actions support-actions--muted">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
           <a class="support-button support-button--ghost" href="../inventory/#journal-dashboard">Visit your journal dashboard</a>
         </div>`
@@ -652,6 +688,27 @@ function renderCategory(type, items) {
     )
     .join('');
 
+  const searchAltLink =
+    type === 'feelings'
+      ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
+      : null;
+
+  const searchInputMarkup = `<label class="magnet-search__field">
+                <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
+                <input
+                  type="search"
+                  name="${type}-search"
+                  class="magnet-search__input"
+                  placeholder="Search ${lowerTitle}"
+                  autocomplete="off"
+                  data-magnet-search-input
+                >
+              </label>`;
+
+  const searchControlsMarkup = [searchAltLink, searchInputMarkup]
+    .filter(Boolean)
+    .join('\n              ');
+
   const main = `
       <header class="page-header">
         <h1 class="page-title">${escapedTitle}</h1>
@@ -662,20 +719,14 @@ function renderCategory(type, items) {
       <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
           <h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>
-          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
         </div>
         <div class="magnet-search" data-magnet-search>
-          <label class="magnet-search__field">
-            <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
-            <input
-              type="search"
-              name="${type}-search"
-              class="magnet-search__input"
-              placeholder="Search ${lowerTitle}"
-              autocomplete="off"
-              data-magnet-search-input
-            >
-          </label>
+          <div class="magnet-search__toolbar">
+            <div class="magnet-search__controls">
+              ${searchControlsMarkup}
+            </div>
+            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
+          </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
             <div class="magnet-search__list" data-magnet-search-list></div>
@@ -709,6 +760,53 @@ function renderCategory(type, items) {
   });
 
   writePage(`${type}/index.html`, html);
+}
+
+function renderBodyCuesPage() {
+  const main = `
+      <section class="body-cues-tool" data-body-cues-root>
+        <h1 class="visually-hidden">Body Cues explorer</h1>
+        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
+          <div class="magnet-search__results body-cues-tool__magnet-panel">
+            <div class="body-cues-tool__magnet-header">
+              <h2 id="body-cues-magnets-heading">Matching magnets</h2>
+              <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
+            </div>
+            <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite">
+              <p class="body-cues-tool__empty" data-body-cues-empty>
+                Slide any cues that feel relevant—the magnets here update instantly with feelings that often travel with that mix.
+              </p>
+            </div>
+          </div>
+          <p class="body-cues-tool__error" data-body-cues-error hidden>
+            We couldn't load the body cues data. Check your connection and try again.
+          </p>
+        </section>
+        <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
+        <p class="body-cues-tool__scroll-hint">
+          <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
+          <span>Scroll through the body cues list below to explore more sliders.</span>
+        </p>
+        <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+      </section>
+    `;
+
+  const html = htmlPage({
+    title: 'Body Cues explorer',
+    depth: 2,
+    description: 'Describe the body sensations you notice and see which feelings might align with them.',
+    breadcrumbs: [
+      { label: 'Home', href: '../../' },
+      { label: 'Feelings', href: '../' },
+      { label: 'Body Cues' },
+    ],
+    main,
+    scripts: [{ src: 'scripts/body-cues-tool.js', type: 'module' }],
+    activeNav: 'feelings',
+    mainClass: 'page body-cues-page',
+  });
+
+  writePage('feelings/body-cues/index.html', html);
 }
 
 function renderSituation(item) {
@@ -1267,6 +1365,7 @@ function build() {
   renderHome();
   renderCategory('situations', data.situations);
   renderCategory('feelings', data.feelings);
+  renderBodyCuesPage();
   renderCategory('needs', data.needs);
   renderInventoryPage();
   renderInventoryJournalPage(data.needs);

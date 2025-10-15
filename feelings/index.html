@@ -307,7 +307,7 @@
       <header class="page-header">
         <h1 class="page-title">Feelings</h1>
         <p class="page-description">Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.</p>
-        <div class="support-actions">
+        <div class="support-actions support-actions--muted">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
           <a class="support-button support-button--ghost" href="../inventory/#journal-dashboard">Visit your journal dashboard</a>
         </div>
@@ -315,20 +315,25 @@
       <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
           <h2 id="feelings-list" class="section-title">Feelings directory</h2>
-          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
         </div>
         <div class="magnet-search" data-magnet-search>
-          <label class="magnet-search__field">
-            <span class="magnet-search__label visually-hidden">Search feelings</span>
-            <input
-              type="search"
-              name="feelings-search"
-              class="magnet-search__input"
-              placeholder="Search feelings"
-              autocomplete="off"
-              data-magnet-search-input
-            >
-          </label>
+          <div class="magnet-search__toolbar">
+            <div class="magnet-search__controls">
+              <a class="magnet-search__alt" href="body-cues/">Search by body cues</a>
+              <label class="magnet-search__field">
+                <span class="magnet-search__label visually-hidden">Search feelings</span>
+                <input
+                  type="search"
+                  name="feelings-search"
+                  class="magnet-search__input"
+                  placeholder="Search feelings"
+                  autocomplete="off"
+                  data-magnet-search-input
+                >
+              </label>
+            </div>
+            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
+          </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
             <div class="magnet-search__list" data-magnet-search-list></div>
