@@ -1,2 +1,16 @@
 Type,Word,Slug,References
-info,,,No missing landing pages detected.
+feeling,Anticipation,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Bored,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Calm,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Contentment,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Curiosity,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Excitement,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Focused,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Gratitude,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Grief,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Guilt,guilt,data/reverse-inference.json → _meta.slugMap | scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Hope,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Joy,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Pride,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Relief,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY
+feeling,Thoughtful,,scripts/alexithymia-support-data.js → EMOTION_LIBRARY

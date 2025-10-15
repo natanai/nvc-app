@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parent.parent
 FEELINGS_DIR = ROOT / "feelings"
 NEEDS_DIR = ROOT / "needs"
 REPORT_PATH = ROOT / "data" / "reports" / "missing-landing-pages.csv"
+ALEXITHYMIA_DATA_PATH = ROOT / "scripts" / "alexithymia-support-data.js"
+REVERSE_INFERENCE_PATH = ROOT / "data" / "reverse-inference.json"
 
 
 def load_csv(path: Path) -> List[Dict[str, str]]:
@@ -53,6 +55,49 @@ def add_reference(
 ) -> None:
     key = (kind, word or "", slug or "")
     bucket[key].add(reference)
+
+
+def extract_js_object_block(text: str, export_name: str) -> str:
+    pattern = re.compile(
+        rf"export const {re.escape(export_name)}\s*=\s*\{{(.*?)\n\}};",
+        re.DOTALL,
+    )
+    match = pattern.search(text)
+    return match.group(1) if match else ""
+
+
+def parse_emotion_library_keys(text: str) -> Set[str]:
+    block = extract_js_object_block(text, "EMOTION_LIBRARY")
+    if not block:
+        return set()
+    return {
+        match.group(1)
+        for match in re.finditer(r"^\s*([a-z0-9_-]+):\s*\{", block, flags=re.MULTILINE)
+    }
+
+
+def parse_feeling_slug_aliases(text: str) -> Dict[str, str]:
+    block = extract_js_object_block(text, "FEELING_SLUG_ALIASES")
+    if not block:
+        return {}
+    return {
+        slug: canonical
+        for slug, canonical in re.findall(r'"([^"\\]+)":\s*"([^"\\]+)"', block)
+    }
+
+
+def load_slug_map_from_reverse_inference(path: Path) -> Dict[str, str]:
+    if not path.exists():
+        return {}
+    data = load_json(path)
+    meta = data.get("_meta", {}) if isinstance(data, dict) else {}
+    slug_map = meta.get("slugMap", {})
+    return {str(slug): str(canonical) for slug, canonical in slug_map.items()}
+
+
+def canonical_to_word(value: str) -> str:
+    normalized = (value or "").replace("_", " ").replace("-", " ")
+    return normalized.strip().title() if normalized.strip() else ""
 
 
 def main() -> None:
@@ -159,6 +204,57 @@ def main() -> None:
                     slug=slug,
                     reference="data/index.json → strategies",
                 )
+
+    # Check alexithymia support resources for additional feelings
+    alexithymia_text = (
+        ALEXITHYMIA_DATA_PATH.read_text(encoding="utf-8")
+        if ALEXITHYMIA_DATA_PATH.exists()
+        else ""
+    )
+    emotion_keys = parse_emotion_library_keys(alexithymia_text)
+    alias_map = parse_feeling_slug_aliases(alexithymia_text)
+    reverse_slug_map = load_slug_map_from_reverse_inference(REVERSE_INFERENCE_PATH)
+
+    combined_slug_map: Dict[str, str] = {}
+    slug_sources: Dict[str, str] = {}
+    for slug, canonical in reverse_slug_map.items():
+        if slug not in combined_slug_map:
+            combined_slug_map[slug] = canonical
+            slug_sources[slug] = "data/reverse-inference.json → _meta.slugMap"
+    for slug, canonical in alias_map.items():
+        if slug not in combined_slug_map:
+            combined_slug_map[slug] = canonical
+            slug_sources[slug] = "scripts/alexithymia-support-data.js → FEELING_SLUG_ALIASES"
+
+    canonical_to_slug: Dict[str, str] = {}
+    for slug, canonical in combined_slug_map.items():
+        if slug in feeling_slugs:
+            canonical_to_slug.setdefault(canonical, slug)
+    for slug, canonical in combined_slug_map.items():
+        canonical_to_slug.setdefault(canonical, slug)
+
+    for canonical, slug in canonical_to_slug.items():
+        if not slug or slug in feeling_slugs:
+            continue
+        add_reference(
+            missing,
+            kind="feeling",
+            word=canonical_to_word(canonical),
+            slug=slug,
+            reference=slug_sources.get(slug, "scripts/alexithymia-support-data.js → FEELING_SLUG_ALIASES"),
+        )
+
+    for canonical in emotion_keys:
+        slug = canonical_to_slug.get(canonical, "")
+        if slug and slug in feeling_slugs:
+            continue
+        add_reference(
+            missing,
+            kind="feeling",
+            word=canonical_to_word(canonical),
+            slug=slug,
+            reference="scripts/alexithymia-support-data.js → EMOTION_LIBRARY",
+        )
 
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with REPORT_PATH.open("w", newline="", encoding="utf-8") as report:
