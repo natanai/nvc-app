@@ -1,6 +1,6 @@
 {
-  "name": "AllNeeds.app",
-  "short_name": "AllNeeds",
+  "name": "allneeds.app",
+  "short_name": "allneeds.app",
   "description": "Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.",
   "start_url": "./",
   "display": "standalone",

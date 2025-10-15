@@ -6,7 +6,7 @@ const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 
-const BRAND_NAME = 'AllNeeds.app';
+const BRAND_NAME = 'allneeds.app';
 const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
 
