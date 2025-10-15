@@ -8,7 +8,9 @@ const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 
 const themePreloadScript = (basePath) => {
   const contrastSrc = `${basePath}assets/js/ui/contrast.js`;
+  const navSwipeSrc = `${basePath}assets/js/ui/nav-swipe.js`;
   return String.raw`    <script src="${contrastSrc}"></script>
+    <script src="${navSwipeSrc}" defer></script>
     <script>
       (function() {
         const STORAGE_KEY = 'nvcApp.theme';
@@ -376,7 +378,12 @@ function renderNav(basePath, activeNav, options = {}) {
 
   const defaultSecondaryLinks = [
     { key: 'situations', href: 'situations/', label: 'Situations' },
-    { key: 'feelings', href: 'feelings/', label: 'Feelings' },
+    {
+      key: 'feelings',
+      href: 'feelings/',
+      label: 'Feelings',
+      swipeReveal: { href: 'feelings/body-cues/', label: 'Body cues' },
+    },
     { key: 'needs', href: 'needs/', label: 'Needs' },
   ];
 
@@ -385,6 +392,24 @@ function renderNav(basePath, activeNav, options = {}) {
       const href = resolveHref(link.href);
       const label = link.html ? link.html : escapeHtml(link.label ?? '');
       const ariaAttr = link.key ? activeAttr(link.key).trim() : '';
+
+      if (link.swipeReveal) {
+        const revealHref = resolveHref(link.swipeReveal.href);
+        const revealLabel = link.swipeReveal.html
+          ? link.swipeReveal.html
+          : escapeHtml(link.swipeReveal.label ?? '');
+        return `          <div class="site-nav__swipe" data-nav-blade="${
+          link.key || 'secondary'
+        }" data-blade-state="closed" data-swipe-direction="right">
+            <a class="site-nav__link site-nav__blade" href="${href}"${ariaAttr ? ` ${ariaAttr}` : ''} data-nav-blade-front>
+              ${label}
+            </a>
+            <a class="site-nav__link site-nav__blade-reveal" href="${revealHref}" data-nav-blade-reveal>
+              ${revealLabel}
+            </a>
+          </div>`;
+      }
+
       const attrs = [
         'class="site-nav__link"',
         `href="${href}"`,
@@ -463,10 +488,23 @@ function renderNav(basePath, activeNav, options = {}) {
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
-            Inventory
-            <span class="site-nav__count" data-inventory-count hidden></span>
-          </a>
+          <div class="site-nav__swipe site-nav__swipe--primary" data-nav-blade="inventory" data-blade-state="closed" data-swipe-direction="right">
+            <a
+              class="site-nav__link site-nav__link--inventory site-nav__blade"
+              href="${basePath}inventory/"${activeAttr('inventory')}
+              data-nav-blade-front
+            >
+              Inventory
+              <span class="site-nav__count" data-inventory-count hidden></span>
+            </a>
+            <a
+              class="site-nav__link site-nav__blade-reveal"
+              href="${basePath}inventory/journal/"
+              data-nav-blade-reveal
+            >
+              Journal
+            </a>
+          </div>
         </div>
         <div class="site-nav__row site-nav__row--secondary">
 ${secondaryLinks}
