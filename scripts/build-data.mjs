@@ -228,12 +228,8 @@ const dataset = { feelings, needs, situations, strategies };
 
 writeFileSync(join(DATA_DIR, 'index.json'), JSON.stringify(dataset, null, 2));
 writeFileSync(join(DATA_DIR, 'body-regions.json'), `${JSON.stringify(bodyRegions, null, 2)}\n`);
-writeFileSync(
-  join(DATA_DIR, 'body-regions.js'),
-  `export default ${JSON.stringify(bodyRegions, null, 2)};\n`,
-);
 
 const reverseIndex = buildReverseInferenceIndex({ needs, feelings, bodyRegions });
 writeFileSync(join(DATA_DIR, 'reverse-inference.json'), `${JSON.stringify(reverseIndex, null, 2)}\n`);
 
-console.log('Wrote data/index.json, data/body-regions.json, data/body-regions.js, and data/reverse-inference.json');
+console.log('Wrote data/index.json, data/body-regions.json, and data/reverse-inference.json');
