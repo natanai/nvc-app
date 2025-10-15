@@ -224,6 +224,72 @@ const paletteState = {
   swatchDrag: null,
 };
 
+const NAV_SETTINGS_STORAGE_KEY = 'nvcApp.navSettings';
+
+const NAV_ITEM_DEFINITIONS = [
+  {
+    id: 'home',
+    label: 'Home button',
+    defaultEnabled: true,
+    getElement: (nav) => nav?.querySelector('.site-nav__link--home') || null,
+  },
+  {
+    id: 'customizer',
+    label: 'Customizer button',
+    defaultEnabled: true,
+    getElement: (nav, toggle) => toggle || nav?.querySelector('.site-nav__link--customizer[data-palette-toggle]') || null,
+  },
+  {
+    id: 'journal',
+    label: 'Journal button',
+    defaultEnabled: true,
+    getElement: (nav) => nav?.querySelector('.site-nav__journal') || null,
+  },
+  {
+    id: 'inventory',
+    label: 'Inventory button',
+    defaultEnabled: true,
+    getElement: (nav) => nav?.querySelector('.site-nav__link--inventory') || null,
+  },
+  {
+    id: 'bodyCues',
+    label: 'Body cues button',
+    defaultEnabled: false,
+    createElement: () => {
+      const link = document.createElement('a');
+      link.className = 'site-nav__link site-nav__link--body-cues';
+      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
+      link.href = `${basePath}feelings/body-cues/`;
+      link.textContent = 'Body cues';
+      link.dataset.navDynamic = 'true';
+      return link;
+    },
+  },
+  {
+    id: 'journalDashboard',
+    label: 'Journal dashboard button',
+    defaultEnabled: false,
+    createElement: () => {
+      const link = document.createElement('a');
+      link.className = 'site-nav__link site-nav__link--journal-dashboard';
+      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
+      link.href = `${basePath}inventory/#journal-dashboard`;
+      link.textContent = 'Journal dashboard';
+      link.dataset.navDynamic = 'true';
+      return link;
+    },
+  },
+];
+
+const navState = {
+  initialized: false,
+  nav: null,
+  primaryRow: null,
+  items: new Map(),
+  settings: null,
+  listEl: null,
+};
+
 const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
 ]);
@@ -545,6 +611,295 @@ function resolveAssetPath(path) {
     console.warn('Unable to resolve asset path', error);
     return path;
   }
+}
+
+function getDefaultNavSettings() {
+  const order = NAV_ITEM_DEFINITIONS.map((item) => item.id);
+  const enabled = {};
+  NAV_ITEM_DEFINITIONS.forEach((item) => {
+    enabled[item.id] = item.defaultEnabled !== false;
+  });
+  return { order, enabled };
+}
+
+function normalizeNavSettings(raw) {
+  const defaults = getDefaultNavSettings();
+  if (!raw || typeof raw !== 'object') {
+    return defaults;
+  }
+
+  const knownIds = new Set(NAV_ITEM_DEFINITIONS.map((item) => item.id));
+  const seen = new Set();
+  const order = [];
+
+  if (Array.isArray(raw.order)) {
+    raw.order.forEach((id) => {
+      if (typeof id !== 'string' || !knownIds.has(id) || seen.has(id)) {
+        return;
+      }
+      seen.add(id);
+      order.push(id);
+    });
+  }
+
+  defaults.order.forEach((id) => {
+    if (!seen.has(id)) {
+      seen.add(id);
+      order.push(id);
+    }
+  });
+
+  const enabled = { ...defaults.enabled };
+  if (raw.enabled && typeof raw.enabled === 'object') {
+    for (const [id, value] of Object.entries(raw.enabled)) {
+      if (!knownIds.has(id)) {
+        continue;
+      }
+      enabled[id] = value !== false;
+    }
+  }
+
+  return { order, enabled };
+}
+
+function loadNavSettings() {
+  try {
+    const { value } = storageGetItem(NAV_SETTINGS_STORAGE_KEY);
+    if (!value) {
+      return getDefaultNavSettings();
+    }
+    const parsed = JSON.parse(value);
+    return normalizeNavSettings(parsed);
+  } catch (error) {
+    console.warn('Unable to read navigation settings', error);
+    return getDefaultNavSettings();
+  }
+}
+
+function saveNavSettings(settings) {
+  try {
+    const serialized = JSON.stringify(settings);
+    const { success, error } = storageSetItem(NAV_SETTINGS_STORAGE_KEY, serialized);
+    if (!success && error) {
+      console.warn('Unable to persist navigation settings', error);
+    }
+  } catch (error) {
+    console.warn('Unable to serialize navigation settings', error);
+  }
+}
+
+function ensureNavItemElement(id) {
+  const item = navState.items.get(id);
+  if (!item) {
+    return null;
+  }
+
+  if (item.element instanceof HTMLElement) {
+    return item.element;
+  }
+
+  let element = null;
+  if (typeof item.getElement === 'function') {
+    element = item.getElement(navState.nav, navState.items.get('customizer')?.element || null);
+  }
+  if (!(element instanceof HTMLElement) && typeof item.createElement === 'function') {
+    element = item.createElement();
+  }
+
+  if (element instanceof HTMLElement) {
+    item.element = element;
+    element.dataset.navItemId = id;
+    return element;
+  }
+
+  return null;
+}
+
+function applyNavSettings() {
+  if (!navState.primaryRow || !navState.settings) {
+    return;
+  }
+
+  const { order, enabled } = navState.settings;
+
+  // Remove any existing nav items so we can reinsert in the saved order.
+  NAV_ITEM_DEFINITIONS.forEach((definition) => {
+    const existing = ensureNavItemElement(definition.id);
+    if (existing?.parentNode === navState.primaryRow) {
+      navState.primaryRow.removeChild(existing);
+    }
+  });
+
+  order.forEach((id) => {
+    const element = ensureNavItemElement(id);
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+    const isEnabled = enabled[id] !== false;
+    element.hidden = !isEnabled;
+    if (!isEnabled) {
+      return;
+    }
+    navState.primaryRow.appendChild(element);
+  });
+
+  if (typeof highlightNavigation === 'function') {
+    highlightNavigation();
+  }
+
+  updateNavControlStates();
+}
+
+function moveNavItem(id, delta) {
+  if (!navState.settings) {
+    return;
+  }
+  const order = [...navState.settings.order];
+  const index = order.indexOf(id);
+  if (index === -1) {
+    return;
+  }
+  const nextIndex = index + delta;
+  if (nextIndex < 0 || nextIndex >= order.length) {
+    return;
+  }
+  order.splice(index, 1);
+  order.splice(nextIndex, 0, id);
+  navState.settings = { ...navState.settings, order };
+  saveNavSettings(navState.settings);
+  applyNavSettings();
+  renderNavCustomizerControls();
+}
+
+function toggleNavItem(id) {
+  if (!navState.settings) {
+    return;
+  }
+  const current = navState.settings.enabled[id] !== false;
+  const enabled = { ...navState.settings.enabled, [id]: !current };
+  navState.settings = { ...navState.settings, enabled };
+  saveNavSettings(navState.settings);
+  applyNavSettings();
+  renderNavCustomizerControls();
+}
+
+function setupNavState(nav, toggle) {
+  if (!nav || !(nav instanceof HTMLElement)) {
+    return;
+  }
+
+  navState.nav = nav;
+  navState.primaryRow = nav.querySelector('.site-nav__row--primary');
+  navState.items.clear();
+
+  NAV_ITEM_DEFINITIONS.forEach((definition) => {
+    let element = null;
+    if (typeof definition.getElement === 'function') {
+      element = definition.getElement(nav, toggle);
+    }
+    if (element instanceof HTMLElement) {
+      element.dataset.navItemId = definition.id;
+    }
+    navState.items.set(definition.id, { ...definition, element: element instanceof HTMLElement ? element : null });
+  });
+
+  navState.settings = loadNavSettings();
+  applyNavSettings();
+  navState.initialized = true;
+}
+
+function renderNavCustomizerControls() {
+  if (!navState.listEl) {
+    return;
+  }
+  const list = navState.listEl;
+  list.innerHTML = '';
+
+  if (!navState.settings) {
+    return;
+  }
+
+  navState.settings.order.forEach((id) => {
+    const definition = NAV_ITEM_DEFINITIONS.find((item) => item.id === id);
+    const labelText = definition?.label || id;
+    const item = document.createElement('li');
+    item.className = 'palette-nav-item';
+    item.dataset.navItem = id;
+
+    const label = document.createElement('span');
+    label.className = 'palette-nav-item__label';
+    label.textContent = labelText;
+
+    const actions = document.createElement('div');
+    actions.className = 'palette-nav-item__actions';
+
+    const upButton = document.createElement('button');
+    upButton.type = 'button';
+    upButton.className = 'palette-nav-item__button palette-nav-item__button--move';
+    upButton.textContent = '↑';
+    upButton.setAttribute('aria-label', `Move ${labelText} earlier`);
+    upButton.addEventListener('click', () => moveNavItem(id, -1));
+
+    const downButton = document.createElement('button');
+    downButton.type = 'button';
+    downButton.className = 'palette-nav-item__button palette-nav-item__button--move';
+    downButton.textContent = '↓';
+    downButton.setAttribute('aria-label', `Move ${labelText} later`);
+    downButton.addEventListener('click', () => moveNavItem(id, 1));
+
+    const toggleButton = document.createElement('button');
+    toggleButton.type = 'button';
+    toggleButton.className = 'palette-nav-item__button palette-nav-item__button--toggle';
+    toggleButton.addEventListener('click', () => toggleNavItem(id));
+
+    actions.append(upButton, downButton, toggleButton);
+    item.append(label, actions);
+    list.appendChild(item);
+  });
+
+  updateNavControlStates();
+}
+
+function updateNavControlStates() {
+  if (!navState.listEl || !navState.settings) {
+    return;
+  }
+
+  const { order, enabled } = navState.settings;
+
+  order.forEach((id, index) => {
+    const escapedId =
+      typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(id) : id.replace(/"/g, '\\"');
+    const item = navState.listEl.querySelector(`.palette-nav-item[data-nav-item="${escapedId}"]`);
+    if (!item) {
+      return;
+    }
+    const [label, actions] = item.children;
+    if (!(actions instanceof HTMLElement)) {
+      return;
+    }
+    const buttons = actions.querySelectorAll('button');
+    const isEnabled = enabled[id] !== false;
+    buttons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+      if (button.classList.contains('palette-nav-item__button--move')) {
+        if (button.textContent === '↑') {
+          button.disabled = index === 0;
+        }
+        if (button.textContent === '↓') {
+          button.disabled = index === order.length - 1;
+        }
+      }
+      if (button.classList.contains('palette-nav-item__button--toggle')) {
+        button.setAttribute('aria-pressed', isEnabled ? 'true' : 'false');
+        button.textContent = isEnabled ? 'Shown' : 'Hidden';
+        const labelText = label?.textContent || id;
+        button.setAttribute('aria-label', `${isEnabled ? 'Hide' : 'Show'} ${labelText}`);
+      }
+    });
+  });
 }
 
 function isJournalModuleReady() {
@@ -1395,11 +1750,6 @@ function highlightNavigation() {
     return;
   }
 
-  const hasPreRenderedHighlight = navLinks.some((link) => link.hasAttribute('aria-current'));
-  if (hasPreRenderedHighlight) {
-    return;
-  }
-
   const currentPath = normalizePath(window.location.pathname);
   const aliasPath = resolveSectionAlias(currentPath);
   const candidatePaths = aliasPath ? [currentPath, aliasPath] : [currentPath];
@@ -1445,7 +1795,13 @@ function highlightNavigation() {
   });
 
   if (activeLink) {
-    activeLink.setAttribute('aria-current', 'page');
+    navLinks.forEach((link) => {
+      if (link === activeLink) {
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
   }
 }
 
@@ -1607,6 +1963,10 @@ function buildPaletteUi() {
   const nav = document.querySelector('.site-nav');
   const mobileToggle = resolveNavCustomizerToggle(nav);
 
+  if (!navState.initialized) {
+    setupNavState(nav, mobileToggle);
+  }
+
   toggle.setAttribute('aria-expanded', 'false');
   if (mobileToggle) {
     mobileToggle.setAttribute('aria-expanded', 'false');
@@ -1715,6 +2075,26 @@ function buildPaletteUi() {
   paletteState.cornerSlider = roundnessSlider;
   paletteState.cornerValue = roundnessValue;
   updateRoundnessDisplay(paletteState.cornerRoundness);
+
+  const navField = document.createElement('div');
+  navField.className = 'palette-form__field palette-form__field--nav';
+
+  const navLabel = document.createElement('span');
+  navLabel.className = 'palette-form__label';
+  navLabel.textContent = 'Top navigation buttons';
+
+  const navDescription = document.createElement('span');
+  navDescription.className = 'palette-form__description';
+  navDescription.textContent = 'Show, hide, and reorder the buttons in the first navigation row.';
+
+  const navList = document.createElement('ol');
+  navList.className = 'palette-nav-list';
+
+  navField.append(navLabel, navDescription, navList);
+  form.appendChild(navField);
+
+  navState.listEl = navList;
+  renderNavCustomizerControls();
 
   const grid = document.createElement('div');
   grid.className = 'palette-form__grid';
