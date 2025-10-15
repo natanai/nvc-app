@@ -2618,23 +2618,13 @@ body.has-support-journal-open {
   box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 12%, transparent);
   color: color-mix(in srgb, var(--ink) 72%, transparent);
   cursor: not-allowed;
+  transition: none;
 }
 
-.body-cues-tool__magnet-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: var(--radius-md);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: color-mix(in srgb, var(--outline) 12%, transparent);
-  color: color-mix(in srgb, var(--ink) 60%, transparent);
-}
-
-.body-cues-tool__magnet--inactive .body-cues-tool__magnet-status::before {
-  content: '⏳';
+.body-cues-tool__magnet--inactive:hover,
+.body-cues-tool__magnet--inactive:focus-visible {
+  transform: none;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 12%, transparent);
 }
 
 .body-cues-tool__controls {
@@ -2838,6 +2828,13 @@ body.has-support-journal-open {
 .pill.body-cues-tool__magnet--inactive {
   background: rgba(255, 255, 255, 0.9);
   border-style: dashed;
+  box-shadow: none;
+  transition: none;
+}
+
+.pill.body-cues-tool__magnet--inactive:hover,
+.pill.body-cues-tool__magnet--inactive:focus-visible {
+  transform: none;
   box-shadow: none;
 }
 
