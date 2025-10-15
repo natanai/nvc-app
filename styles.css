@@ -2516,7 +2516,11 @@ body.has-support-journal-open {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  flex: 1 1 22rem;
+}
+
+.body-cues-tool__magnet-panel {
+  gap: 0.6rem;
+  width: 100%;
 }
 
 .body-cues-tool__scroll-hint {
@@ -2761,8 +2765,7 @@ body.has-support-journal-open {
   }
 
   .body-cues-tool__magnets {
-    padding-block: clamp(0.35rem, 3vw, 0.75rem);
-    padding-inline: clamp(0.25rem, 3vw, 0.6rem);
+    padding: 0;
   }
 
   .body-cues-tool__scroll-hint {
