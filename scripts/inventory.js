@@ -279,7 +279,7 @@ const NAV_ITEM_DEFINITIONS = [
       const link = document.createElement('a');
       link.className = 'site-nav__link site-nav__link--journal-dashboard';
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      link.href = `${basePath}inventory/#journal-dashboard`;
+      link.href = `${basePath}inventory/journal/`;
       link.textContent = 'Journal dashboard';
       link.dataset.navDynamic = 'true';
       return link;
