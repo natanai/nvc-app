@@ -206,14 +206,26 @@ function updateMagnets(results) {
   if (!state.magnetContainer) {
     return;
   }
-  state.magnetContainer.innerHTML = '';
+  const instructions = state.emptyState;
+  Array.from(state.magnetContainer.children).forEach((child) => {
+    if (!instructions || child !== instructions) {
+      state.magnetContainer.removeChild(child);
+    }
+  });
 
   if (!results.length) {
     state.magnetContainer.setAttribute('data-empty', 'true');
+    if (instructions) {
+      instructions.hidden = false;
+    }
     return;
   }
 
   state.magnetContainer.removeAttribute('data-empty');
+  if (instructions) {
+    instructions.hidden = true;
+  }
+
   const fragment = document.createDocumentFragment();
 
   results.slice(0, MAX_MAGNETS).forEach((result) => {
@@ -307,12 +319,9 @@ function computeMatches() {
 function updateMatches() {
   const matches = computeMatches();
   updateMagnets(matches);
-  if (state.emptyState) {
-    state.emptyState.hidden = matches.length > 0;
-  }
   if (state.headingLiveRegion) {
     if (!matches.length) {
-      state.headingLiveRegion.textContent = 'No matches yet.';
+      state.headingLiveRegion.textContent = '';
     } else {
       const top = matches[0];
       state.headingLiveRegion.textContent = `Top match: ${top.label} at ${formatPercent(top.percent)}`;
