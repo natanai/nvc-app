@@ -2835,6 +2835,12 @@ body.has-support-journal-open {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.pill.body-cues-tool__magnet--inactive {
+  background: rgba(255, 255, 255, 0.9);
+  border-style: dashed;
+  box-shadow: none;
+}
+
 .pill:hover {
   transform: translateY(-4px);
   box-shadow: 0 14px 0 var(--shadow);
