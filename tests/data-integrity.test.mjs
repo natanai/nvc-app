@@ -3,6 +3,7 @@ import { join, relative } from 'path';
 
 const rootDir = process.cwd();
 const issues = [];
+const warnings = [];
 const reportDirectory = join(rootDir, 'reports');
 const reportPath = join(reportDirectory, 'data-integrity-report.md');
 
@@ -237,6 +238,12 @@ const KNOWN_INFERENCE_GAPS = new Set(['uncertain']);
 const dataset = readJsonFile('data/index.json');
 const reverseIndex = readJsonFile('data/reverse-inference.json');
 
+const {
+  BODY_REGIONS,
+  QUADRANT_SUGGESTIONS,
+  EMOTION_LIBRARY,
+} = await import(new URL('../scripts/alexithymia-support-data.js', import.meta.url));
+
 const feelings = ensureArray(dataset.feelings, 'Feelings');
 const needs = ensureArray(dataset.needs, 'Needs');
 const situations = ensureArray(dataset.situations, 'Situations');
@@ -254,6 +261,82 @@ const needsByTitle = buildTitleIndex(needsBySlug);
 const feelingsByTitle = buildTitleIndex(feelingsBySlug);
 const situationsByTitle = buildTitleIndex(situationsBySlug);
 const strategiesByTitle = buildTitleIndex(strategiesBySlug);
+
+const alexithymiaFeelingReferences = new Map();
+const alexithymiaNeedReferences = new Map();
+
+function trackMissingReference(map, word, context) {
+  const normalized = typeof word === 'string' ? word.trim() : '';
+  if (!normalized) {
+    return;
+  }
+
+  const entry = map.get(normalized) ?? new Set();
+  entry.add(context);
+  map.set(normalized, entry);
+}
+
+function ensureFeelingWordHasPage(word, context) {
+  const normalized = typeof word === 'string' ? word.trim().toLowerCase() : '';
+  if (!normalized) {
+    return;
+  }
+
+  if (!feelingsByTitle.has(normalized)) {
+    trackMissingReference(alexithymiaFeelingReferences, word, context);
+  }
+}
+
+function ensureNeedWordHasPage(word, context) {
+  const normalized = typeof word === 'string' ? word.trim().toLowerCase() : '';
+  if (!normalized) {
+    return;
+  }
+
+  if (!needsByTitle.has(normalized)) {
+    trackMissingReference(alexithymiaNeedReferences, word, context);
+  }
+}
+
+BODY_REGIONS.forEach((region) => {
+  region?.options?.forEach((option) => {
+    const context = `alexithymia body option "${option?.id ?? 'unknown'}"`;
+    Object.keys(option?.emotions ?? {}).forEach((emotion) => {
+      ensureFeelingWordHasPage(emotion, context);
+    });
+  });
+});
+
+Object.entries(QUADRANT_SUGGESTIONS ?? {}).forEach(([quadrant, suggestion]) => {
+  suggestion?.emotions?.forEach((emotion) => {
+    ensureFeelingWordHasPage(emotion, `alexithymia quadrant "${quadrant}"`);
+  });
+});
+
+Object.entries(EMOTION_LIBRARY ?? {}).forEach(([emotionSlug, config]) => {
+  ensureFeelingWordHasPage(emotionSlug, `alexithymia emotion entry "${emotionSlug}"`);
+  config?.needs?.forEach((need) => {
+    ensureNeedWordHasPage(need, `alexithymia emotion "${emotionSlug}"`);
+  });
+});
+
+if (alexithymiaFeelingReferences.size > 0) {
+  alexithymiaFeelingReferences.forEach((contexts, word) => {
+    const contextList = Array.from(contexts).sort().join('; ');
+    warnings.push(
+      `Alexithymia data references feeling "${word}" (${contextList}) but the site has no matching feeling page.`,
+    );
+  });
+}
+
+if (alexithymiaNeedReferences.size > 0) {
+  alexithymiaNeedReferences.forEach((contexts, word) => {
+    const contextList = Array.from(contexts).sort().join('; ');
+    warnings.push(
+      `Alexithymia data references need "${word}" (${contextList}) but the site has no matching need page.`,
+    );
+  });
+}
 
 verifyDirectoryCoverage('feelings', feelingsBySlug, 'Feeling');
 verifyDirectoryCoverage('needs', needsBySlug, 'Need');
@@ -392,6 +475,11 @@ if (slugMap && typeof slugMap === 'object') {
       );
     }
   });
+}
+
+if (warnings.length > 0) {
+  const summary = warnings.map((warning, index) => `${index + 1}. ${warning}`).join('\n');
+  console.warn(`Data integrity warnings detected:\n${summary}`);
 }
 
 if (issues.length > 0) {
