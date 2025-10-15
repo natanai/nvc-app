@@ -285,6 +285,7 @@ function htmlPage({
   const escapedTitle = escapeHtml(title);
   const escapedBrand = escapeHtml(BRAND_NAME);
   const fullTitle = `${escapedTitle} • ${escapedBrand}`;
+  const tabTitle = fullTitle.toLowerCase();
 
   const breadcrumbHtml = breadcrumbs.length
     ? `<nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -340,16 +341,16 @@ function htmlPage({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${fullTitle}</title>
+    <title>${tabTitle}</title>
     <meta name="description" content="${escapedDescription}" />
     <link rel="icon" type="image/svg+xml" href="${basePath}icons/main.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${escapedBrand}" />
-    <meta property="og:title" content="${fullTitle}" />
+    <meta property="og:title" content="${tabTitle}" />
     <meta property="og:description" content="${escapedDescription}" />
     <meta property="og:image" content="${basePath}icons/main.svg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${fullTitle}" />
+    <meta name="twitter:title" content="${tabTitle}" />
     <meta name="twitter:description" content="${escapedDescription}" />
     <meta name="twitter:image" content="${basePath}icons/main.svg" />
         ${themePreloadScript(basePath)}
