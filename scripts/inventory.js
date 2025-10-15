@@ -205,6 +205,7 @@ const paletteState = {
   toggle: null,
   mobileToggle: null,
   panel: null,
+  panelScroll: null,
   presetSelect: null,
   inputs: new Map(),
   swatches: new Map(),
@@ -825,6 +826,18 @@ function toggleNavItem(id) {
   navState.settings = { ...navState.settings, enabled };
   saveNavSettings(navState.settings);
   applyNavSettings();
+}
+
+function resetNavSettings(options = {}) {
+  const { persist = true } = options;
+  const defaults = getDefaultNavSettings();
+  navState.settings = defaults;
+  navState.pendingFocusId = '';
+  if (persist) {
+    saveNavSettings(navState.settings);
+  }
+  applyNavSettings();
+  renderNavCustomizerControls();
 }
 
 function setupNavState(nav, toggle) {
@@ -2496,7 +2509,9 @@ function buildPaletteUi() {
   resetButton.setAttribute('data-palette-reset', '');
   resetButton.textContent = 'Reset to default';
   resetButton.addEventListener('click', () => {
+    suppressPaletteAutoClose();
     applyColors(paletteState.defaultColors, { presetName: '', replace: true });
+    resetNavSettings();
     setCornerRoundness(DEFAULT_ROUNDNESS);
   });
 
@@ -2508,7 +2523,11 @@ function buildPaletteUi() {
 
   form.append(actions, footer);
 
-  panel.appendChild(form);
+  const panelScroll = document.createElement('div');
+  panelScroll.className = 'palette-corner__panel-scroll';
+  panelScroll.appendChild(form);
+
+  panel.appendChild(panelScroll);
   container.append(toggle, panel);
   document.body.appendChild(container);
 
@@ -2566,6 +2585,7 @@ function buildPaletteUi() {
   paletteState.toggle = toggle;
   paletteState.mobileToggle = mobileToggle;
   paletteState.panel = panel;
+  paletteState.panelScroll = panelScroll;
   paletteState.presetSelect = presetSelect;
 
   updateTiltPermissionUI(typeof window !== 'undefined' ? window.NVCMagnetTiltState : null);
@@ -2580,7 +2600,11 @@ function openPalettePanel() {
   paletteState.container?.classList.add('is-open');
   paletteState.panel.hidden = false;
 
-  paletteState.panel.scrollTop = 0;
+  if (paletteState.panelScroll) {
+    paletteState.panelScroll.scrollTop = 0;
+  } else {
+    paletteState.panel.scrollTop = 0;
+  }
 
   const slider = paletteState.cornerSlider;
   const presetSelect = paletteState.presetSelect;

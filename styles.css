@@ -5054,18 +5054,27 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 
 .palette-corner__panel {
   width: min(320px, 88vw);
-  padding: 1.1rem 1.3rem 1.35rem;
+  padding: 0;
   border: 3px solid var(--outline);
   border-radius: var(--radius-3xl);
   background: color-mix(in srgb, var(--lavender) 92%, #fff 8%);
   box-shadow: -14px 22px 0 var(--shadow);
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
   backdrop-filter: blur(4px);
   max-height: min(540px, calc(100vh - clamp(5rem, 14vw, 7rem)));
+  overflow: hidden;
+  animation: palette-pop 0.22s ease-out;
+}
+
+.palette-corner__panel-scroll {
+  padding: 1.1rem 1.3rem 1.35rem;
+  flex: 1 1 auto;
+  display: grid;
+  gap: 1rem;
   overflow-y: auto;
   overscroll-behavior: contain;
-  animation: palette-pop 0.22s ease-out;
+  min-height: 0;
 }
 
 .palette-corner__panel[hidden] {
