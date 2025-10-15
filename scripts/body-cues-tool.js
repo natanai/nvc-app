@@ -254,7 +254,15 @@ function updateMagnets(results) {
     } else {
       magnet.classList.add('body-cues-tool__magnet--inactive');
       magnet.setAttribute('aria-disabled', 'true');
-      magnet.title = `${result.label} page unavailable`;
+      magnet.title = `${result.label} page coming soon`;
+      const status = createEl('span', 'body-cues-tool__magnet-status', 'Coming soon');
+      const srNotice = createEl(
+        'span',
+        'visually-hidden',
+        `${result.label} page coming soon`,
+      );
+      magnet.appendChild(status);
+      magnet.appendChild(srNotice);
     }
     fragment.appendChild(magnet);
   });

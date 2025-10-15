@@ -2614,10 +2614,27 @@ body.has-support-journal-open {
 
 .body-cues-tool__magnet--inactive {
   border-style: dashed;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: none;
+  background: color-mix(in srgb, var(--chip-bg) 35%, #fff 65%);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 12%, transparent);
   color: color-mix(in srgb, var(--ink) 72%, transparent);
   cursor: not-allowed;
+}
+
+.body-cues-tool__magnet-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-md);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--outline) 12%, transparent);
+  color: color-mix(in srgb, var(--ink) 60%, transparent);
+}
+
+.body-cues-tool__magnet--inactive .body-cues-tool__magnet-status::before {
+  content: '⏳';
 }
 
 .body-cues-tool__controls {
