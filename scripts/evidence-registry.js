@@ -6,7 +6,7 @@ const SOMATIC_SUPPORTS = [
   {
     label: 'Circumplex (valence × arousal)',
     ref: 'Posner & Russell 2005',
-    href: 'https://doi.org/10.1017/S0954579405050147',
+    href: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2840438/',
   },
   {
     label: 'Bodily maps arise from self-report topographies',
@@ -20,7 +20,7 @@ const ZONE_SUPPORTS = [
   {
     label: 'Core affect mapped by valence and arousal',
     ref: 'Barrett 2017',
-    href: 'https://doi.org/10.1177/0963721416687717',
+    href: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5641844/',
   },
   {
     label: 'Circumplex reliably clusters feeling families',
@@ -107,7 +107,7 @@ const EMOTION_EVIDENCE_GROUPS = {
       {
         label: 'Anxiety involves exaggerated threat appraisal',
         ref: 'Barlow 2002',
-        href: 'https://doi.org/10.1093/med:psych/9780195136822.001.0001',
+        href: 'https://www.guilford.com/books/Anxiety-and-Its-Disorders/David-H-Barlow/9781606234341',
       },
       {
         label: 'Uncertainty amplifies vigilance and worry',
