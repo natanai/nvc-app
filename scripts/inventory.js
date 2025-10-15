@@ -239,6 +239,7 @@ const NAV_ITEM_DEFINITIONS = [
     id: 'customizer',
     label: 'Customizer button',
     defaultEnabled: true,
+    alwaysEnabled: true,
     getElement: (nav, toggle) => toggle || nav?.querySelector('.site-nav__link--customizer[data-palette-toggle]') || null,
   },
   {
@@ -624,7 +625,7 @@ function getDefaultNavSettings() {
   const order = NAV_ITEM_DEFINITIONS.map((item) => item.id);
   const enabled = {};
   NAV_ITEM_DEFINITIONS.forEach((item) => {
-    enabled[item.id] = item.defaultEnabled !== false;
+    enabled[item.id] = item.alwaysEnabled ? true : item.defaultEnabled !== false;
   });
   return { order, enabled };
 }
@@ -636,6 +637,7 @@ function normalizeNavSettings(raw) {
   }
 
   const knownIds = new Set(NAV_ITEM_DEFINITIONS.map((item) => item.id));
+  const definitionMap = new Map(NAV_ITEM_DEFINITIONS.map((item) => [item.id, item]));
   const seen = new Set();
   const order = [];
 
@@ -662,9 +664,20 @@ function normalizeNavSettings(raw) {
       if (!knownIds.has(id)) {
         continue;
       }
+      const definition = definitionMap.get(id);
+      if (definition?.alwaysEnabled) {
+        enabled[id] = true;
+        continue;
+      }
       enabled[id] = value !== false;
     }
   }
+
+  definitionMap.forEach((definition, id) => {
+    if (definition?.alwaysEnabled) {
+      enabled[id] = true;
+    }
+  });
 
   return { order, enabled };
 }
@@ -749,7 +762,7 @@ function applyNavSettings() {
     if (!(element instanceof HTMLElement)) {
       return;
     }
-    const isEnabled = enabled[id] !== false;
+    const isEnabled = definition?.alwaysEnabled ? true : enabled[id] !== false;
     element.hidden = !isEnabled;
     if (!isEnabled) {
       return;
@@ -802,6 +815,10 @@ function toggleNavItem(id) {
   if (!navState.settings) {
     return;
   }
+  const definition = navState.items.get(id);
+  if (definition?.alwaysEnabled) {
+    return;
+  }
   suppressPaletteAutoClose();
   const current = navState.settings.enabled[id] !== false;
   const enabled = { ...navState.settings.enabled, [id]: !current };
@@ -852,57 +869,59 @@ function renderNavCustomizerControls() {
     const item = document.createElement('li');
     item.className = 'palette-nav-item';
     item.dataset.navItem = id;
+    item.setAttribute('aria-grabbed', 'false');
+    item.setAttribute('draggable', 'true');
+    item.tabIndex = 0;
+    item.addEventListener('dragstart', (event) => handleNavItemDragStart(event, item, id));
+    item.addEventListener('dragend', handleNavItemDragEnd);
+    item.addEventListener('keydown', (event) => handleNavItemKeydown(event, id));
+    item.addEventListener('dragover', handleNavItemDragOver);
+    item.addEventListener('drop', handleNavItemDrop);
 
-    const handle = document.createElement('button');
-    handle.type = 'button';
-    handle.className = 'palette-nav-item__handle';
-    handle.setAttribute('draggable', 'true');
-    handle.addEventListener('click', (event) => {
-      event.preventDefault();
-    });
-    handle.addEventListener('dragstart', (event) => handleNavItemDragStart(event, item, id));
-    handle.addEventListener('dragend', handleNavItemDragEnd);
-    handle.addEventListener('keydown', (event) => handleNavItemHandleKeydown(event, id));
-
-    const handleGlyph = document.createElement('span');
-    handleGlyph.className = 'palette-nav-item__handle-glyph';
-    handleGlyph.setAttribute('aria-hidden', 'true');
-    handleGlyph.textContent = '☰';
-
-    const handleLabel = document.createElement('span');
-    handleLabel.className = 'visually-hidden';
-    handleLabel.textContent = `Drag to reorder ${labelText}`;
-
-    handle.append(handleGlyph, handleLabel);
+    const dragHint = document.createElement('span');
+    dragHint.className = 'palette-nav-item__grip';
+    dragHint.setAttribute('aria-hidden', 'true');
+    dragHint.textContent = '☰';
 
     const label = document.createElement('span');
     label.className = 'palette-nav-item__label';
     label.textContent = labelText;
 
-    const actions = document.createElement('div');
-    actions.className = 'palette-nav-item__actions';
+    const assistiveLabel = document.createElement('span');
+    assistiveLabel.className = 'visually-hidden';
+    assistiveLabel.textContent = `Drag to reorder ${labelText}`;
 
-    const toggleButton = document.createElement('button');
-    toggleButton.type = 'button';
-    toggleButton.className = 'palette-nav-item__button palette-nav-item__button--toggle';
-    toggleButton.draggable = false;
-    toggleButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      toggleNavItem(id);
-    });
+    const canToggle = !definition?.alwaysEnabled;
 
-    actions.append(toggleButton);
-    item.append(handle, label, actions);
-    item.addEventListener('dragover', handleNavItemDragOver);
-    item.addEventListener('drop', handleNavItemDrop);
+    if (canToggle) {
+      const actions = document.createElement('div');
+      actions.className = 'palette-nav-item__actions';
+
+      const toggleButton = document.createElement('button');
+      toggleButton.type = 'button';
+      toggleButton.className = 'palette-nav-item__button palette-nav-item__button--toggle';
+      toggleButton.draggable = false;
+      toggleButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleNavItem(id);
+      });
+
+      actions.append(toggleButton);
+      item.append(dragHint, label, actions);
+    } else {
+      item.classList.add('palette-nav-item--locked');
+      item.append(dragHint, label);
+    }
+
+    item.appendChild(assistiveLabel);
     list.appendChild(item);
   });
 
   updateNavControlStates();
 
   if (navState.pendingFocusId) {
-    focusNavCustomizerHandle(navState.pendingFocusId);
+    focusNavCustomizerItem(navState.pendingFocusId);
     navState.pendingFocusId = '';
   }
 }
@@ -923,9 +942,10 @@ function updateNavControlStates() {
     }
     const label = item.querySelector('.palette-nav-item__label');
     const toggleButton = item.querySelector('.palette-nav-item__button--toggle');
-    const isEnabled = enabled[id] !== false;
+    const definition = navState.items.get(id);
+    const isEnabled = definition?.alwaysEnabled ? true : enabled[id] !== false;
     item.dataset.navEnabled = isEnabled ? 'true' : 'false';
-    item.classList.toggle('palette-nav-item--hidden', !isEnabled);
+    item.classList.toggle('palette-nav-item--hidden', !isEnabled && !definition?.alwaysEnabled);
     if (toggleButton instanceof HTMLButtonElement) {
       toggleButton.setAttribute('aria-pressed', isEnabled ? 'true' : 'false');
       toggleButton.textContent = isEnabled ? 'Shown' : 'Hidden';
@@ -935,18 +955,18 @@ function updateNavControlStates() {
   });
 }
 
-function focusNavCustomizerHandle(id) {
+function focusNavCustomizerItem(id) {
   if (!navState.listEl || !id) {
     return;
   }
   const escapedId = typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(id) : id.replace(/"/g, '\\"');
-  const handle = navState.listEl.querySelector(`.palette-nav-item[data-nav-item="${escapedId}"] .palette-nav-item__handle`);
-  if (handle instanceof HTMLElement) {
-    handle.focus();
+  const item = navState.listEl.querySelector(`.palette-nav-item[data-nav-item="${escapedId}"]`);
+  if (item instanceof HTMLElement) {
+    item.focus();
   }
 }
 
-function handleNavItemHandleKeydown(event, id) {
+function handleNavItemKeydown(event, id) {
   if (event.key === 'ArrowUp') {
     event.preventDefault();
     moveNavItem(id, -1);
@@ -971,6 +991,7 @@ function handleNavItemDragStart(event, item, id) {
   navState.draggingElement = item;
   navState.pendingFocusId = id;
   item.classList.add('is-dragging');
+  item.setAttribute('aria-grabbed', 'true');
   if (event?.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move';
     try {
@@ -1041,6 +1062,7 @@ function handleNavListDrop(event) {
 function handleNavItemDragEnd() {
   if (navState.draggingElement instanceof HTMLElement) {
     navState.draggingElement.classList.remove('is-dragging');
+    navState.draggingElement.setAttribute('aria-grabbed', 'false');
   }
   commitNavDragOrder();
 }
@@ -1059,6 +1081,7 @@ function commitNavDragOrder() {
 
   if (navState.draggingElement instanceof HTMLElement) {
     navState.draggingElement.classList.remove('is-dragging');
+    navState.draggingElement.setAttribute('aria-grabbed', 'false');
   }
 
   navState.draggingElement = null;
@@ -1067,7 +1090,7 @@ function commitNavDragOrder() {
   if (!newOrder.length || newOrder.length !== navState.settings.order.length) {
     if (focusId) {
       navState.pendingFocusId = focusId;
-      focusNavCustomizerHandle(focusId);
+      focusNavCustomizerItem(focusId);
       navState.pendingFocusId = '';
     }
     updateNavControlStates();
@@ -1077,7 +1100,7 @@ function commitNavDragOrder() {
   const unchanged = newOrder.every((value, index) => value === navState.settings.order[index]);
   if (unchanged) {
     if (focusId) {
-      focusNavCustomizerHandle(focusId);
+      focusNavCustomizerItem(focusId);
       navState.pendingFocusId = '';
     } else {
       updateNavControlStates();
@@ -2282,28 +2305,6 @@ function buildPaletteUi() {
   paletteState.cornerValue = roundnessValue;
   updateRoundnessDisplay(paletteState.cornerRoundness);
 
-  const navField = document.createElement('div');
-  navField.className = 'palette-form__field palette-form__field--nav';
-
-  const navLabel = document.createElement('span');
-  navLabel.className = 'palette-form__label';
-  navLabel.textContent = 'Top navigation buttons';
-
-  const navDescription = document.createElement('span');
-  navDescription.className = 'palette-form__description';
-  navDescription.textContent = 'Drag buttons to reorder them and choose which ones are shown in the first navigation row.';
-
-  const navList = document.createElement('ol');
-  navList.className = 'palette-nav-list';
-
-  navField.append(navLabel, navDescription, navList);
-  form.appendChild(navField);
-
-  navState.listEl = navList;
-  navList.addEventListener('dragover', handleNavListDragOver);
-  navList.addEventListener('drop', handleNavListDrop);
-  renderNavCustomizerControls();
-
   const grid = document.createElement('div');
   grid.className = 'palette-form__grid';
   form.appendChild(grid);
@@ -2360,6 +2361,29 @@ function buildPaletteUi() {
     paletteState.inputs.set(color.key, input);
     paletteState.swatches.set(color.key, swatch);
   });
+
+  const navField = document.createElement('div');
+  navField.className = 'palette-form__field palette-form__field--nav';
+
+  const navLabel = document.createElement('span');
+  navLabel.className = 'palette-form__label';
+  navLabel.textContent = 'Top navigation buttons';
+
+  const navDescription = document.createElement('span');
+  navDescription.className = 'palette-form__description';
+  navDescription.textContent =
+    'Drag buttons to reorder them and choose which ones are shown in the first navigation row. The Customizer button is always visible.';
+
+  const navList = document.createElement('ol');
+  navList.className = 'palette-nav-list';
+
+  navField.append(navLabel, navDescription, navList);
+  form.appendChild(navField);
+
+  navState.listEl = navList;
+  navList.addEventListener('dragover', handleNavListDragOver);
+  navList.addEventListener('drop', handleNavListDrop);
+  renderNavCustomizerControls();
 
   const tiltField = document.createElement('div');
   tiltField.className = 'palette-form__field palette-form__field--toggle';

@@ -5179,7 +5179,7 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 
 .palette-nav-item {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: min-content 1fr auto;
   align-items: center;
   gap: 0.6rem;
   padding: 0.45rem 0.6rem;
@@ -5187,63 +5187,48 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   border: 1px dashed color-mix(in srgb, var(--outline) 24%, transparent);
   background: color-mix(in srgb, var(--lavender) 78%, #fff 22%);
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  cursor: grab;
+  user-select: none;
 }
 
 .palette-nav-item.is-dragging {
   opacity: 0.8;
   border-style: solid;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--outline) 16%, transparent);
+  cursor: grabbing;
 }
 
 .palette-nav-item--hidden {
   opacity: 0.65;
 }
 
+.palette-nav-item--locked {
+  grid-template-columns: min-content 1fr;
+}
+
+.palette-nav-item:focus-visible {
+  outline: 2px dashed var(--outline);
+  outline-offset: 3px;
+}
+
 .palette-nav-item--hidden .palette-nav-item__label {
   color: color-mix(in srgb, var(--ink-soft) 70%, transparent);
+}
+
+.palette-nav-item__grip {
+  font-size: 0.9rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  pointer-events: none;
 }
 
 .palette-nav-item__label {
   font-weight: 600;
   font-size: 0.78rem;
   color: var(--ink);
-}
-
-.palette-nav-item__handle {
-  border: 2px solid color-mix(in srgb, var(--outline) 46%, transparent);
-  background: color-mix(in srgb, var(--sky) 65%, #fff 35%);
-  color: var(--ink);
-  border-radius: var(--radius-pill);
-  padding: 0.25rem 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  font-size: 0.75rem;
-  min-width: 2rem;
-  min-height: 2rem;
-  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-}
-
-.palette-nav-item__handle:focus-visible {
-  outline: 2px dashed var(--outline);
-  outline-offset: 3px;
-}
-
-.palette-nav-item__handle:hover,
-.palette-nav-item__handle:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-}
-
-.palette-nav-item__handle:active {
-  cursor: grabbing;
-}
-
-.palette-nav-item__handle-glyph {
-  font-size: 0.9rem;
-  line-height: 1;
 }
 
 .palette-nav-item__actions {
