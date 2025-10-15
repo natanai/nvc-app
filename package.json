@@ -1,7 +1,7 @@
 {
   "name": "nvc-app",
   "version": "1.0.0",
-  "description": "Retro Nonviolent Communication explorer with magnet play, journaling, and strategy inventory tools",
+  "description": "Retro Nonviolent Communication explorer with magnet play, journaling, and a localStorage-powered strategy inventory for AllNeeds.app",
   "type": "module",
   "scripts": {
     "build:data": "node scripts/build-data.mjs",

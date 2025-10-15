@@ -1,7 +1,7 @@
 {
-  "name": "NeedShare",
-  "short_name": "NeedShare",
-  "description": "Explore situations, feelings, and needs with NeedShare Explorer.",
+  "name": "AllNeeds.app",
+  "short_name": "AllNeeds",
+  "description": "Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#FBF7FF",

@@ -6,6 +6,10 @@ const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 
+const BRAND_NAME = 'AllNeeds.app';
+const DEFAULT_DESCRIPTION =
+  'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
+
 const themePreloadScript = (basePath) => {
   const contrastSrc = `${basePath}assets/js/ui/contrast.js`;
   return String.raw`    <script src="${contrastSrc}"></script>
@@ -276,9 +280,11 @@ function htmlPage({
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
-  const headDescription =
-    description ||
-    'Map situations, feelings, and needs with retro magnet play, journaling tools, and a shareable strategy inventory inspired by NeedShare.';
+  const headDescription = description || DEFAULT_DESCRIPTION;
+  const escapedDescription = escapeHtml(headDescription);
+  const escapedTitle = escapeHtml(title);
+  const escapedBrand = escapeHtml(BRAND_NAME);
+  const fullTitle = `${escapedTitle} • ${escapedBrand}`;
 
   const breadcrumbHtml = breadcrumbs.length
     ? `<nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -334,12 +340,19 @@ function htmlPage({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${escapeHtml(title)} • NeedShare Explorer</title>
-    <meta name="description" content="${escapeHtml(headDescription)}" />
+    <title>${fullTitle}</title>
+    <meta name="description" content="${escapedDescription}" />
     <link rel="icon" type="image/svg+xml" href="${basePath}icons/main.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="${escapedBrand}" />
+    <meta property="og:title" content="${fullTitle}" />
+    <meta property="og:description" content="${escapedDescription}" />
     <meta property="og:image" content="${basePath}icons/main.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${fullTitle}" />
+    <meta name="twitter:description" content="${escapedDescription}" />
     <meta name="twitter:image" content="${basePath}icons/main.svg" />
-    ${themePreloadScript(basePath)}
+        ${themePreloadScript(basePath)}
     <link rel="stylesheet" href="${cssHref}" />
   </head>
   <body data-base-path="${basePath}">
@@ -653,8 +666,6 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
-    description:
-      'Explore situations, feelings, and needs with cross-linked magnets, journal prompts, and strategy inventory tools inspired by NeedShare.',
     activeNav: 'home',
   });
 
@@ -794,7 +805,8 @@ function renderBodyCuesPage() {
   const html = htmlPage({
     title: 'Body Cues explorer',
     depth: 2,
-    description: 'Describe the body sensations you notice and see which feelings might align with them.',
+    description:
+      'Describe the body sensations you notice to surface likely feelings and save insights to your strategy inventory. Everything stays on your device in localStorage with import and export controls.',
     breadcrumbs: [
       { label: 'Home', href: '../../' },
       { label: 'Feelings', href: '../' },
@@ -1302,7 +1314,8 @@ function renderInventoryJournalPage(needsList = []) {
   const html = htmlPage({
     title: 'Journal',
     depth: 2,
-    description: 'Log feelings, needs, and reflections in a dedicated journal dashboard for your strategy inventory.',
+    description:
+      'Log feelings, needs, and reflections to extend your strategy inventory. Everything stays on your device in localStorage with import and export controls.',
     breadcrumbs: [
       { label: 'Home', href: '../../' },
       { label: 'Inventory', href: '../' },

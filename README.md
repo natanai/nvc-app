@@ -1,6 +1,6 @@
-# NeedShare Explorer
+# AllNeeds.app
 
-A retro-styled companion to [needshare.net](https://needshare.net/) that mirrors the Strategy Finder hierarchy. The site now uses classic multi-page navigation: a home page with category cards, hub pages for situations, feelings, and needs, and individual item pages that cross-link related entries or list strategies.
+A retro-styled companion to [AllNeeds.app](https://allneeds.app/) that mirrors the Strategy Finder hierarchy. The site now uses classic multi-page navigation: a home page with category cards, hub pages for situations, feelings, and needs, and individual item pages that cross-link related entries or list strategies. Build an inventory of strategies to tend to all your basic human needs while every entry, journal note, and preference remains on your device in localStorage with import and export controls.
 
 ## Getting started
 
