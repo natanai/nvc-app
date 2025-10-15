@@ -107,6 +107,62 @@ const rawFeelings = readCsv('data/Feelings.csv');
 const rawNeeds = readCsv('data/Needs.csv');
 const rawSituations = readCsv('data/Situations.csv');
 const rawStrategies = readCsv('data/Strategies.csv');
+const rawBodyCues = readCsv('data/BodyCues.csv');
+
+function buildBodyRegions(rows) {
+  const regions = [];
+  const regionIndex = new Map();
+
+  rows.forEach((row) => {
+    const regionId = row.regionId;
+    if (!regionId) return;
+
+    let region = regionIndex.get(regionId);
+    if (!region) {
+      region = {
+        id: regionId,
+        label: row.regionLabel || '',
+        prompt: row.prompt || '',
+        options: [],
+        _optionIndex: new Map(),
+      };
+      regionIndex.set(regionId, region);
+      regions.push(region);
+    }
+
+    const optionId = row.optionId;
+    if (!optionId) return;
+
+    let option = region._optionIndex.get(optionId);
+    if (!option) {
+      option = {
+        id: optionId,
+        title: row.optionTitle || '',
+        note: row.optionNote || '',
+        insight: row.optionInsight || '',
+        emotions: {},
+      };
+      region._optionIndex.set(optionId, option);
+      region.options.push(option);
+    }
+
+    const feelingKey = row.feelingKey;
+    const weight = Number(row.weight);
+    if (feelingKey && Number.isFinite(weight) && weight > 0) {
+      option.emotions[feelingKey] = weight;
+    }
+  });
+
+  return regions.map((region) => {
+    const { _optionIndex, ...rest } = region;
+    rest.options = region.options.map((option) => ({
+      ...option,
+    }));
+    return rest;
+  });
+}
+
+const bodyRegions = buildBodyRegions(rawBodyCues);
 
 const feelings = rawFeelings.map((row) => ({
   title: row.Title,
@@ -171,8 +227,13 @@ mkdirSync(DATA_DIR, { recursive: true });
 const dataset = { feelings, needs, situations, strategies };
 
 writeFileSync(join(DATA_DIR, 'index.json'), JSON.stringify(dataset, null, 2));
+writeFileSync(join(DATA_DIR, 'body-regions.json'), `${JSON.stringify(bodyRegions, null, 2)}\n`);
+writeFileSync(
+  join(DATA_DIR, 'body-regions.js'),
+  `export default ${JSON.stringify(bodyRegions, null, 2)};\n`,
+);
 
-const reverseIndex = buildReverseInferenceIndex({ needs, feelings });
+const reverseIndex = buildReverseInferenceIndex({ needs, feelings, bodyRegions });
 writeFileSync(join(DATA_DIR, 'reverse-inference.json'), `${JSON.stringify(reverseIndex, null, 2)}\n`);
 
-console.log('Wrote data/index.json and data/reverse-inference.json');
+console.log('Wrote data/index.json, data/body-regions.json, data/body-regions.js, and data/reverse-inference.json');

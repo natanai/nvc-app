@@ -75,7 +75,7 @@ function mapNeedToSdt(category) {
   return CATEGORY_TO_SDT.get(normalized) || null;
 }
 
-export function buildReverseInferenceIndex({ needs = [], feelings = [] } = {}) {
+export function buildReverseInferenceIndex({ needs = [], feelings = [], bodyRegions = BODY_REGIONS } = {}) {
   const needsByTitle = new Map();
   needs.forEach((need) => {
     const titleKey = need?.title?.toLowerCase();
@@ -87,7 +87,9 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [] } = {}) {
   const contributions = new Map();
   const totals = new Map();
 
-  BODY_REGIONS.forEach((region) => {
+  const regions = Array.isArray(bodyRegions) && bodyRegions.length ? bodyRegions : BODY_REGIONS;
+
+  regions.forEach((region) => {
     region.options.forEach((option) => {
       if (!option?.emotions) return;
       Object.entries(option.emotions).forEach(([feelingKey, rawWeight]) => {
