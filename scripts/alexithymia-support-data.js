@@ -1,37 +1,80 @@
 // Generated from alexithymia-support.js to share structured data.
 
-import bodyRegions from '../data/body-regions.js';
+async function loadBodyRegionsData() {
+  if (typeof window !== 'undefined' && typeof window.fetch === 'function') {
+    try {
+      const response = await fetch(new URL('../data/body-regions.json', import.meta.url));
+      if (!response.ok) {
+        throw new Error(`Failed to load body regions JSON (${response.status})`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.warn('[alexithymia-support-data] Unable to fetch body regions', error);
+      return [];
+    }
+  }
+
+  if (typeof process !== 'undefined' && process.versions?.node) {
+    const [{ readFileSync }, { fileURLToPath }, { dirname, join }] = await Promise.all([
+      import('node:fs'),
+      import('node:url'),
+      import('node:path'),
+    ]);
+    const filePath = join(dirname(fileURLToPath(import.meta.url)), '../data/body-regions.json');
+    try {
+      const raw = readFileSync(filePath, 'utf8');
+      return JSON.parse(raw);
+    } catch (error) {
+      console.warn('[alexithymia-support-data] Unable to read body regions from disk', filePath, error);
+      return [];
+    }
+  }
+
+  return [];
+}
+
+function cloneBodyRegions(regions) {
+  if (!Array.isArray(regions)) {
+    return [];
+  }
+
+  return regions.map((region) => {
+    const options = Array.isArray(region?.options)
+      ? region.options.map((option) => ({
+          ...option,
+          emotions: { ...(option?.emotions || {}) },
+        }))
+      : [];
+
+    return {
+      id: region?.id || '',
+      label: region?.label || '',
+      prompt: region?.prompt || '',
+      options,
+    };
+  });
+}
+
+function deriveBodyOptionIds(regions) {
+  const seen = new Set();
+  const ids = [];
+  regions.forEach((region) => {
+    region.options.forEach((option) => {
+      const id = option?.id;
+      if (typeof id === 'string' && id && !seen.has(id)) {
+        seen.add(id);
+        ids.push(id);
+      }
+    });
+  });
+  return ids;
+}
+
+const bodyRegionsRaw = await loadBodyRegionsData();
+const bodyRegions = cloneBodyRegions(bodyRegionsRaw);
 
 export const BODY_OPTION_IDS = [
-  'chest-tight',
-  'chest-pressure',
-  'chest-pounding',
-  'chest-open',
-  'gut-rolling',
-  'gut-nausea',
-  'gut-emptiness',
-  'gut-warm',
-  'throat-tight',
-  'throat-lump',
-  'throat-dry',
-  'jaw-clench',
-  'jaw-heat',
-  'jaw-tremble',
-  'head-pressure',
-  'head-buzzing',
-  'head-fog',
-  'shoulders-weighted',
-  'shoulders-braced',
-  'shoulders-droop',
-  'limbs-heavy',
-  'limbs-restless',
-  'limbs-tingly',
-  'temp-flush',
-  'temp-chill',
-  'temp-prickly',
-  'overall-numb',
-  'overall-floating',
-  'overall-calm',
+  ...deriveBodyOptionIds(bodyRegions),
 ];
 
 export const ZONE_COMBINATIONS = [
