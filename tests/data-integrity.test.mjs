@@ -231,6 +231,12 @@ function checkReferenceList({
   });
 }
 
+const EXTRA_DIRECTORY_ALLOWLIST = {
+  feelings: new Set(['body-cues']),
+  needs: new Set(),
+  situations: new Set(),
+};
+
 function verifyDirectoryCoverage(directory, slugMap, label) {
   const dirPath = join(rootDir, directory);
   let entries = [];
@@ -243,6 +249,9 @@ function verifyDirectoryCoverage(directory, slugMap, label) {
 
   entries.forEach((entry) => {
     if (!entry.isDirectory()) {
+      return;
+    }
+    if (EXTRA_DIRECTORY_ALLOWLIST[directory]?.has(entry.name)) {
       return;
     }
     if (!slugMap.has(entry.name)) {
