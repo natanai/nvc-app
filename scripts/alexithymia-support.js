@@ -44,6 +44,24 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
   const basePath = document.body?.dataset?.basePath || '';
 
+  function resolveAppHref(path) {
+    const target = typeof path === 'string' ? path.trim() : '';
+    if (!target) {
+      return '';
+    }
+
+    try {
+      const baseUrl = basePath ? new URL(basePath, window.location.href) : window.location.href;
+      const resolvedUrl = new URL(target, baseUrl);
+      if (resolvedUrl.origin === window.location.origin) {
+        return `${resolvedUrl.pathname}${resolvedUrl.search}${resolvedUrl.hash}`;
+      }
+      return resolvedUrl.href;
+    } catch (error) {
+      return `${basePath}${target}`;
+    }
+  }
+
   const SENSATION_DEFAULT_INTENSITY = 5;
   const EVIDENCE_MODE_ENABLED = window.NVC_FLAGS?.evidenceMode !== false;
   const EVIDENCE_NOTE_KEY = 'nvc_evidence_note_dismissed';
@@ -1704,7 +1722,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     if (!regulationCard) return;
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
     const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
-    const journalLink = `${basePath}inventory/journal/`;
+    const journalLink = resolveAppHref('inventory/journal/');
     const breathingRecommendation = getBreathingRecommendation();
     const breathingSection = `
       <div class="regulation-breathing">
@@ -2027,7 +2045,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     journalHistory.appendChild(list);
     const link = document.createElement('a');
     link.className = 'support-button support-button--link support-button--ghost';
-    link.href = `${basePath}inventory/journal/`;
+    link.href = resolveAppHref('inventory/journal/');
     link.textContent = 'Open full journal dashboard';
     journalHistory.appendChild(link);
   }
@@ -2151,7 +2169,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       return;
     }
     state.lastSavedEntryId = id;
-    supportJournalOpenLink.href = `${basePath}inventory/journal/?e=${encodeURIComponent(id)}#edit`;
+    supportJournalOpenLink.href = resolveAppHref(
+      `inventory/journal/?e=${encodeURIComponent(id)}#edit`,
+    );
     supportJournalOpenLink.hidden = false;
   }
 
