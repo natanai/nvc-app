@@ -230,7 +230,12 @@ function updateMagnets(results) {
 
   results.slice(0, MAX_MAGNETS).forEach((result) => {
     const magnet = createEl('span', 'pill body-cues-tool__magnet');
-    magnet.textContent = `${result.label} · ${formatPercent(result.percent)}`;
+    const label = createEl(
+      'span',
+      'body-cues-tool__magnet-text',
+      `${result.label} · ${formatPercent(result.percent)}`,
+    );
+    magnet.appendChild(label);
     const href = getFeelingHref(result.key);
     if (href) {
       magnet.setAttribute('data-href', href);
@@ -246,6 +251,18 @@ function updateMagnets(results) {
           window.location.assign(href);
         }
       });
+    } else {
+      magnet.classList.add('body-cues-tool__magnet--inactive');
+      magnet.setAttribute('aria-disabled', 'true');
+      magnet.title = `${result.label} page coming soon`;
+      const status = createEl('span', 'body-cues-tool__magnet-status', 'Coming soon');
+      const srNotice = createEl(
+        'span',
+        'visually-hidden',
+        `${result.label} page coming soon`,
+      );
+      magnet.appendChild(status);
+      magnet.appendChild(srNotice);
     }
     fragment.appendChild(magnet);
   });
