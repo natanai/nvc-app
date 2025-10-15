@@ -6,7 +6,7 @@ const SOMATIC_SUPPORTS = [
   {
     label: 'Circumplex (valence × arousal)',
     ref: 'Posner & Russell 2005',
-    href: 'https://doi.org/10.1017/S0954579405050147',
+    href: 'https://doi.org/10.1017/S0954579405050340',
   },
   {
     label: 'Bodily maps arise from self-report topographies',
@@ -19,8 +19,8 @@ const SOMATIC_LIMITATIONS = ['Somatic cues guide hypotheses but do not diagnose 
 const ZONE_SUPPORTS = [
   {
     label: 'Core affect mapped by valence and arousal',
-    ref: 'Barrett 2017',
-    href: 'https://doi.org/10.1177/0963721416687717',
+    ref: 'Russell & Barrett 1999',
+    href: 'https://doi.org/10.1037/0022-3514.76.5.805',
   },
   {
     label: 'Circumplex reliably clusters feeling families',
@@ -39,7 +39,7 @@ const LABELING_SUPPORTS = [
   {
     label: 'Naming feelings supports regulation in practice',
     ref: 'Kircanski et al. 2012',
-    href: 'https://doi.org/10.1016/j.brat.2012.10.004',
+    href: 'https://doi.org/10.1177/0956797612443830',
   },
 ];
 const LABELING_LIMITATIONS = ['Language access varies by culture and learning history.'];
@@ -47,13 +47,13 @@ const LABELING_LIMITATIONS = ['Language access varies by culture and learning hi
 const PHYSIOLOGICAL_SIGH_SUPPORTS = [
   {
     label: 'Double-inhale sigh lowers autonomic arousal',
-    ref: 'Balban et al. 2023',
-    href: 'https://doi.org/10.1016/j.cub.2022.12.041',
+    ref: 'Hubner et al. 2023',
+    href: 'https://doi.org/10.1016/j.xcrm.2022.100895',
   },
   {
     label: 'Slow exhalation improves state anxiety',
-    ref: 'Naveen et al. 2016',
-    href: 'https://doi.org/10.4103/0019-5545.183796',
+    ref: 'Iwabe et al. 2025',
+    href: 'https://doi.org/10.3389/fnhum.2025.1605862',
   },
 ];
 const BREATH_LIMITATIONS = ['Breathing practices may need adaptation for respiratory conditions.'];
@@ -62,7 +62,7 @@ const RESONANCE_SUPPORTS = [
   {
     label: 'Resonance breathing stabilises HRV',
     ref: 'Zaccaro et al. 2018',
-    href: 'https://doi.org/10.3389/fnhum.2018.00145',
+    href: 'https://doi.org/10.3389/fnhum.2018.00353',
   },
   {
     label: '6 bpm breathing aids emotion regulation',
@@ -75,12 +75,12 @@ const SLOW_446_SUPPORTS = [
   {
     label: 'Slow paced breathing steadies autonomic tone',
     ref: 'Brown & Gerbarg 2005',
-    href: 'https://doi.org/10.1080/03630260500229206',
+    href: 'https://doi.org/10.1089/acm.2005.11.189',
   },
   {
     label: 'Extended exhale promotes parasympathetic shift',
     ref: 'Strauss-Blasche et al. 2000',
-    href: 'https://doi.org/10.1016/S0167-8760(00)00117-3',
+    href: 'https://doi.org/10.1046/j.1440-1681.2000.03306.x',
   },
 ];
 
@@ -106,8 +106,8 @@ const EMOTION_EVIDENCE_GROUPS = {
     supports: [
       {
         label: 'Anxiety involves exaggerated threat appraisal',
-        ref: 'Barlow 2002',
-        href: 'https://doi.org/10.1093/med:psych/9780195136822.001.0001',
+        ref: 'Zorowitz et al. 2020',
+        href: 'https://doi.org/10.1162/cpsy_a_00026',
       },
       {
         label: 'Uncertainty amplifies vigilance and worry',
@@ -122,13 +122,13 @@ const EMOTION_EVIDENCE_GROUPS = {
     supports: [
       {
         label: 'Approach-related anger activates sympathetic arousal',
-        ref: 'Harmon-Jones et al. 2011',
-        href: 'https://doi.org/10.1111/j.1751-9004.2011.00334.x',
+        ref: 'Carver & Harmon-Jones 2009',
+        href: 'https://doi.org/10.1037/a0013965',
       },
       {
         label: 'Anger often defends threatened goals or boundaries',
         ref: 'Kassinove & Tafrate 2002',
-        href: 'https://doi.org/10.1037/10431-000',
+        href: null,
       },
     ],
     limitations: ['Anger can mask secondary emotions like hurt or fear.'],
@@ -160,7 +160,7 @@ const EMOTION_EVIDENCE_GROUPS = {
       {
         label: 'Self-conscious emotions rely on internal standards',
         ref: 'Leach & Cidam 2015',
-        href: 'https://doi.org/10.1037/pspa0000023',
+        href: 'https://doi.org/10.1037/pspa0000037',
       },
     ],
     limitations: ['Cultural norms shape how shame and guilt appear.'],
@@ -186,8 +186,8 @@ const EMOTION_EVIDENCE_GROUPS = {
     supports: [
       {
         label: 'Curiosity rises with manageable uncertainty',
-        ref: 'Kashdan et al. 2018',
-        href: 'https://doi.org/10.1037/pspp0000044',
+        ref: 'Kidd & Hayden 2015',
+        href: 'https://doi.org/10.1016/j.neuron.2015.05.005',
       },
       {
         label: 'Information gaps motivate exploration',
