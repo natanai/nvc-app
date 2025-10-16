@@ -84,6 +84,15 @@ export function updateBoardHeight(board, magnets) {
       return;
     }
     const style = getComputedStyle(element);
+    if (
+      element.hidden ||
+      element.getAttribute('aria-hidden') === 'true' ||
+      element.dataset.navHidden === 'true' ||
+      style.display === 'none' ||
+      style.visibility === 'hidden'
+    ) {
+      return;
+    }
     const { y } = parseMatrix(style.transform);
     const height = element.offsetHeight || Number.parseFloat(style.height || '0') || 0;
     bottom = Math.max(bottom, y + height);
