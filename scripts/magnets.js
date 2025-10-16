@@ -17,7 +17,7 @@ const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
-const BOARD_PADDING = 24;
+const BOARD_PADDING = 16;
 const RESIZE_HANDLE_MARGIN = 28;
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
@@ -595,7 +595,11 @@ const maybeStartBoardResize = (state, event) => {
   if (event.button != null && event.button !== 0) {
     return false;
   }
-  if (event.target !== state.board) {
+  const targetElement = event.target && typeof event.target.closest === 'function'
+    ? event.target
+    : null;
+  const handleElement = targetElement?.closest('[data-nav-resize-handle]');
+  if (targetElement !== state.board && !handleElement) {
     return false;
   }
   const rect = state.board.getBoundingClientRect();
@@ -611,16 +615,18 @@ const maybeStartBoardResize = (state, event) => {
     state.inactiveHeight = Math.max(state.inactiveHeight || 0, startHeight);
   }
   state.board.style.height = `${startHeight}px`;
+  const captureTarget = handleElement || state.board;
   state.resizeDrag = {
     pointerId: event.pointerId,
     startY: event.clientY,
     startHeight,
     minHeight,
+    captureTarget,
   };
   state.board.dataset.resizing = '1';
-  if (typeof state.board.setPointerCapture === 'function') {
+  if (captureTarget && typeof captureTarget.setPointerCapture === 'function') {
     try {
-      state.board.setPointerCapture(event.pointerId);
+      captureTarget.setPointerCapture(event.pointerId);
     } catch {
       // ignore capture errors
     }
@@ -650,7 +656,9 @@ const updateBoardResizeDrag = (state, event) => {
     state.inactiveHeight = nextHeight;
   }
   state.board.style.height = `${nextHeight}px`;
-  event.preventDefault();
+  if (event.cancelable) {
+    event.preventDefault();
+  }
 };
 
 const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
@@ -661,9 +669,12 @@ const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
   if (pointerId != null && drag.pointerId !== pointerId) {
     return;
   }
-  if (typeof state.board.releasePointerCapture === 'function' && drag.pointerId != null) {
+  const captureTarget = drag.captureTarget && typeof drag.captureTarget.releasePointerCapture === 'function'
+    ? drag.captureTarget
+    : state.board;
+  if (captureTarget && typeof captureTarget.releasePointerCapture === 'function' && drag.pointerId != null) {
     try {
-      state.board.releasePointerCapture(drag.pointerId);
+      captureTarget.releasePointerCapture(drag.pointerId);
     } catch {
       // ignore
     }
@@ -1238,6 +1249,17 @@ const initializeBoard = async (root, index) => {
 
   if (root?.dataset?.magnetKey === 'site-nav') {
     board.dataset.navResizable = '1';
+    let resizeHandle = board.querySelector('[data-nav-resize-handle]');
+    if (!resizeHandle) {
+      resizeHandle = document.createElement('div');
+      resizeHandle.className = 'site-nav__board-resize-handle';
+      resizeHandle.dataset.navResizeHandle = '1';
+      resizeHandle.setAttribute('aria-hidden', 'true');
+      resizeHandle.setAttribute('role', 'presentation');
+      resizeHandle.tabIndex = -1;
+      resizeHandle.style.height = `${RESIZE_HANDLE_MARGIN}px`;
+      board.appendChild(resizeHandle);
+    }
     const handleBoardPointerDown = (event) => {
       if (maybeStartBoardResize(state, event)) {
         event.preventDefault();
@@ -1260,6 +1282,9 @@ const initializeBoard = async (root, index) => {
     board.addEventListener('pointerup', handleBoardPointerUp);
     board.addEventListener('pointercancel', handleBoardPointerCancel);
     board.addEventListener('lostpointercapture', handleLostPointerCapture);
+    if (resizeHandle) {
+      resizeHandle.addEventListener('lostpointercapture', handleLostPointerCapture);
+    }
   }
 
   const sizeMap = new Map(state.magnets.map((magnet) => [magnet.id, { width: magnet.width, height: magnet.height }]));
