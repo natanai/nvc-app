@@ -230,6 +230,7 @@ function normalizeScripts(scripts) {
   const baseScripts = [
     { src: 'assets/js/journal/store.js', module: true },
     { src: 'scripts/inventory.js', defer: true },
+    { src: 'scripts/magnets.js', module: true },
   ];
   const entries = [...baseScripts, ...scripts];
   const seen = new Set();
@@ -388,6 +389,8 @@ function renderNav(basePath, activeNav, options = {}) {
     return `${basePath}${href}`;
   };
 
+  const navHeading = escapeHtml(config.heading ?? 'Site navigation');
+
   const defaultSecondaryLinks = [
     { key: 'situations', href: 'situations/', label: 'Situations' },
     { key: 'feelings', href: 'feelings/', label: 'Feelings' },
@@ -395,95 +398,112 @@ function renderNav(basePath, activeNav, options = {}) {
   ];
 
   const secondaryLinks = (config.secondaryLinks ?? defaultSecondaryLinks)
-    .map((link) => {
+    .map((link, index) => {
       const href = resolveHref(link.href);
-      const label = link.html ? link.html : escapeHtml(link.label ?? '');
+      const labelContent = link.html ? link.html : escapeHtml(link.label ?? '');
       const ariaAttr = link.key ? activeAttr(link.key).trim() : '';
+      const magnetId = escapeHtml(link.magnetId ?? (link.key ? `nav-${link.key}` : `nav-secondary-${index + 1}`));
+      const classNames = ['pill magnet site-nav__magnet'];
+      if (link.className) {
+        classNames.push(link.className);
+      }
       const attrs = [
-        'class="site-nav__link"',
+        `class="${classNames.join(' ')}"`,
+        `data-magnet-id="${magnetId}"`,
         `href="${href}"`,
         ariaAttr,
       ].filter(Boolean);
-      return `          <a ${attrs.join(' ')}>${label}</a>`;
+      return `            <a ${attrs.join(' ')}><span class="site-nav__magnet-label">${labelContent}</span></a>`;
     })
     .join('\n');
 
-  return `<nav class="site-nav" aria-label="Primary">
-        <div class="site-nav__row site-nav__row--primary">
-          <a class="site-nav__link site-nav__link--home" href="${homeHref}"${activeAttr('home')}>
-            <img
-              class="site-nav__icon"
-              src="${basePath}icons/home-8bit.svg"
-              alt=""
-              aria-hidden="true"
-            />
-            <span class="visually-hidden">Home</span>
-          </a>
-          <button
-            class="site-nav__link site-nav__link--customizer"
-            type="button"
-            data-palette-toggle
-            aria-haspopup="dialog"
-            aria-expanded="false"
-          >
-            <span class="site-nav__glyph" aria-hidden="true">+</span>
-            <span class="visually-hidden">Customizer</span>
-          </button>
-          <div class="site-nav__journal" data-support-journal data-journal-overlay>
+  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root>
+        <div class="magnet-section__header site-nav__header">
+          <h2 class="section-title site-nav__title">${navHeading}</h2>
+          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+        </div>
+        <div class="magnet-board-wrapper site-nav__board-wrapper">
+          <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
+              <img
+                class="site-nav__magnet-icon"
+                src="${basePath}icons/home-8bit.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span class="site-nav__magnet-label">Home</span>
+            </a>
             <button
-              class="site-nav__link site-nav__link--journal"
+              class="pill magnet site-nav__magnet site-nav__magnet--customizer"
+              data-magnet-id="nav-customizer"
+              type="button"
+              data-palette-toggle
+              aria-haspopup="dialog"
+              aria-expanded="false"
+            >
+              <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
+              <span class="site-nav__magnet-label">Customizer</span>
+            </button>
+            <button
+              class="pill magnet site-nav__magnet site-nav__magnet--journal"
+              data-magnet-id="nav-journal"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
             >
-              <span class="site-nav__icon site-nav__icon--journal" aria-hidden="true"></span>
-              <span class="site-nav__label">Journal</span>
+              <span class="site-nav__magnet-label">Journal</span>
             </button>
-            <div
-              id="global-support-journal-layer"
-              class="support-journal__layer"
-              data-support-journal-layer
-              data-state="closed"
-              aria-hidden="true"
-            >
-              <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
-                <header class="support-journal__header">
-                  <div class="support-journal__titles">
-                    <h3
-                      class="support-journal__heading"
-                      id="global-support-journal-heading"
-                      data-support-journal-heading
-                    >
-                      Journal
-                    </h3>
-                  </div>
-                  <button
-                    class="support-journal__close"
-                    type="button"
-                    data-support-journal-close
-                    aria-label="Close full screen journal"
+            <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
+              <span class="site-nav__magnet-label">Inventory</span>
+              <span class="site-nav__count" data-inventory-count hidden></span>
+            </a>
+${secondaryLinks ? `${secondaryLinks}\n` : ''}          </div>
+          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
+            <span class="magnet-play-toggle__track" aria-hidden="true">
+              <span class="magnet-play-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+          </label>
+        </div>
+        <div class="site-nav__journal" data-support-journal data-journal-overlay>
+          <div
+            id="global-support-journal-layer"
+            class="support-journal__layer"
+            data-support-journal-layer
+            data-state="closed"
+            aria-hidden="true"
+          >
+            <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
+              <header class="support-journal__header">
+                <div class="support-journal__titles">
+                  <h3
+                    class="support-journal__heading"
+                    id="global-support-journal-heading"
+                    data-support-journal-heading
                   >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </header>
-                <div class="support-journal__body">
-                  <div class="support-journal__content">
-                    <div data-journal-overlay-content></div>
-                    <div class="journal-history-wrapper" data-journal-overlay-history></div>
-                  </div>
+                    Journal
+                  </h3>
+                </div>
+                <button
+                  class="support-journal__close"
+                  type="button"
+                  data-support-journal-close
+                  aria-label="Close full screen journal"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </header>
+              <div class="support-journal__body">
+                <div class="support-journal__content">
+                  <div data-journal-overlay-content></div>
+                  <div class="journal-history-wrapper" data-journal-overlay-history></div>
                 </div>
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
-            Inventory
-            <span class="site-nav__count" data-inventory-count hidden></span>
-          </a>
-        </div>
-        <div class="site-nav__row site-nav__row--secondary">
-${secondaryLinks}
         </div>
       </nav>`;
 }
