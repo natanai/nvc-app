@@ -237,14 +237,6 @@ a:focus-visible {
   align-items: center;
 }
 
-.site-nav__controls {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.45rem;
-}
-
 .site-nav[data-magnet-root] .site-nav__row--primary {
   position: relative;
   display: block;
@@ -2401,16 +2393,6 @@ body.has-support-journal-open {
 .magnet-play-toggle:hover,
 .magnet-play-toggle:focus-within {
   transform: translateY(-2px);
-}
-
-.site-nav__controls .magnet-play-toggle {
-  position: static;
-  transform: none;
-}
-
-.site-nav__controls .magnet-play-toggle:hover,
-.site-nav__controls .magnet-play-toggle:focus-within {
-  transform: none;
 }
 
 .magnet-play-toggle__input {

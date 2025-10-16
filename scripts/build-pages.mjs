@@ -409,20 +409,6 @@ function renderNav(basePath, activeNav, options = {}) {
     .join('\n');
 
   return `<nav class="site-nav" aria-label="Primary" data-magnet-root data-magnet-default-state="off" data-magnet-storage="none" data-magnet-tilt="flat">
-        <div class="site-nav__controls">
-          <label class="magnet-play-toggle magnet-play-toggle--compact" data-magnet-toggle data-state="off">
-            <input
-              type="checkbox"
-              class="magnet-play-toggle__input"
-              role="switch"
-              aria-label="Enable magnet physics"
-            >
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
-          </label>
-        </div>
         <div class="site-nav__row site-nav__row--primary magnet-board magnet-board--nav" data-magnet-board>
           <a class="site-nav__link site-nav__link--home magnet" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
             <img
