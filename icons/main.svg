@@ -1,9 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-labelledby="title desc" role="img">
-  <title id="title">Three Doorways (Solid Tricolor)</title>
-  <desc id="desc">Three filled arched doorways in ink/rose/mint; transparent background.</desc>
-  <g>
-    <path d="M6 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#5f65b5"/>
-    <path d="M12 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#e19bd9"/>
-    <path d="M18 7a3 3 0 0 0-3 3v7h6v-7a3 3 0 0 0-3-3z" fill="#8fe1b5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 384" role="img" aria-labelledby="title desc">
+  <title id="title">allneeds.app icon</title>
+  <desc id="desc">Rounded square tile with three arched doorways in ink, rose, and mint hues.</desc>
+  <defs>
+    <linearGradient id="iconGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDF9FF" />
+      <stop offset="65%" stop-color="#F0E5FF" />
+      <stop offset="100%" stop-color="#E5F9F1" />
+    </linearGradient>
+    <linearGradient id="doorShine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.75" />
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="doorShadow" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#D4CCF9" stop-opacity="0.65" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="384" height="384" rx="88" fill="#FBF7FF" />
+  <rect width="384" height="384" rx="88" fill="url(#iconGradient)" />
+  <path d="M56 304c0 40.63 32.37 73 73 73h126c40.63 0 73-32.37 73-73v8c0 40.63-32.37 73-73 73H129c-40.63 0-73-32.37-73-73z" fill="url(#doorShadow)" />
+  <rect x="56" y="56" width="272" height="240" rx="76" fill="url(#doorShine)" />
+  <g stroke-linejoin="round">
+    <path d="M68 304V188a60 60 0 0 1 120 0v116H68z" fill="#5F65B5" />
+    <path d="M144 304V168a72 72 0 0 1 144 0v136H144z" fill="#E19BD9" />
+    <path d="M236 304V188a60 60 0 0 1 120 0v116H236z" fill="#8FE1B5" />
+  </g>
+  <g fill="none" stroke="#3B3569" stroke-opacity="0.22" stroke-width="10" stroke-linecap="round">
+    <path d="M84 196a44 44 0 0 1 88 0" />
+    <path d="M172 176a60 60 0 0 1 120 0" />
+    <path d="M252 196a44 44 0 0 1 88 0" />
   </g>
 </svg>
