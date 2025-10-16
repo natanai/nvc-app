@@ -243,6 +243,111 @@ function storageRemoveItem(key) {
   return { success, error: success ? null : errors[errors.length - 1] || null };
 }
 
+const MAGNET_POSITIONS_STORAGE_PREFIX = 'magnetPositions:';
+
+function normalizeMagnetStorageKey(key) {
+  if (typeof key !== 'string' || !key) {
+    return '';
+  }
+  return key.startsWith(MAGNET_POSITIONS_STORAGE_PREFIX)
+    ? key
+    : `${MAGNET_POSITIONS_STORAGE_PREFIX}${key}`;
+}
+
+function readStoredMagnetLayout(storageKey) {
+  if (typeof window === 'undefined' || !storageKey) {
+    return null;
+  }
+  try {
+    const key = normalizeMagnetStorageKey(storageKey);
+    const raw = window.localStorage?.getItem(key);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
+      return null;
+    }
+    return parsed.magnets;
+  } catch (error) {
+    console.warn('Unable to read stored magnet layout', error);
+    return null;
+  }
+}
+
+function preapplyStoredMagnetPositions(board, magnets, storageKey, boardSize) {
+  if (!(board instanceof HTMLElement) || !Array.isArray(magnets) || !magnets.length) {
+    return;
+  }
+
+  const stored = readStoredMagnetLayout(storageKey);
+  if (!stored) {
+    return;
+  }
+
+  const magnetSizes = new Map();
+  magnets.forEach((element) => {
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+    const id = element.dataset.magnetId || '';
+    if (!id) {
+      return;
+    }
+    const rect = element.getBoundingClientRect();
+    const computed = typeof window !== 'undefined' && typeof window.getComputedStyle === 'function'
+      ? window.getComputedStyle(element)
+      : null;
+    const width = rect.width || element.offsetWidth || Number.parseFloat(computed?.width || '0') || 0;
+    const height = rect.height || element.offsetHeight || Number.parseFloat(computed?.height || '0') || 0;
+    magnetSizes.set(id, { width, height });
+  });
+
+  const magnetMap = new Map();
+  magnets.forEach((element) => {
+    if (element instanceof HTMLElement && element.dataset.magnetId) {
+      magnetMap.set(element.dataset.magnetId, element);
+    }
+  });
+
+  let maxBottom = 0;
+  let applied = false;
+
+  Object.entries(stored).forEach(([id, value]) => {
+    const magnet = magnetMap.get(id);
+    if (!magnet || !value || typeof value !== 'object') {
+      return;
+    }
+    const xPct = Number.isFinite(value.xPct) ? value.xPct : 0;
+    const yPct = Number.isFinite(value.yPct) ? value.yPct : 0;
+    const size = magnetSizes.get(id) || { width: magnet.offsetWidth || 0, height: magnet.offsetHeight || 0 };
+    const maxX = Math.max(boardSize.width - size.width, 0);
+    const maxY = Math.max(boardSize.height - size.height, 0);
+    const x = clampNumber(xPct * boardSize.width, 0, maxX);
+    const y = clampNumber(yPct * boardSize.height, 0, maxY);
+    magnet.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+    applied = true;
+    maxBottom = Math.max(maxBottom, y + size.height);
+  });
+
+  if (!applied) {
+    return;
+  }
+
+  board.classList.add('no-transitions');
+  board.dataset.ready = board.dataset.ready || '1';
+  if (maxBottom > 0) {
+    board.style.height = `${Math.ceil(maxBottom + 24)}px`;
+  }
+  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(() => {
+      board.classList.remove('no-transitions');
+    });
+  } else {
+    board.classList.remove('no-transitions');
+  }
+}
+
 const paletteState = {
   container: null,
   toggle: null,
@@ -959,6 +1064,51 @@ function setupNavState(nav, toggle) {
   navState.initialized = true;
 }
 
+function resolveMagnetBoardStorageKey(index) {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+  const path = window.location?.pathname?.replace(/index\.html$/i, '') || '';
+  return `${path}:${index}`;
+}
+
+function preapplyNavigationMagnetPositions() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const nav = document.querySelector('.site-nav[data-magnet-root]');
+  if (!(nav instanceof HTMLElement)) {
+    return;
+  }
+
+  const board = nav.querySelector('[data-magnet-board]');
+  if (!(board instanceof HTMLElement)) {
+    return;
+  }
+
+  const magnets = Array.from(board.querySelectorAll('.magnet'));
+  if (!magnets.length) {
+    return;
+  }
+
+  const roots = Array.from(document.querySelectorAll('[data-magnet-root]'));
+  const index = roots.indexOf(nav);
+  if (index === -1) {
+    return;
+  }
+
+  const navRect = nav.getBoundingClientRect();
+  const boardRect = board.getBoundingClientRect();
+  const boardSize = {
+    width: Math.max(boardRect.width || board.clientWidth || navRect.width || 0, 1),
+    height: Math.max(boardRect.height || board.clientHeight || navRect.height || 0, 1),
+  };
+
+  const storageKey = resolveMagnetBoardStorageKey(index);
+  preapplyStoredMagnetPositions(board, magnets, storageKey, boardSize);
+}
+
 function preapplyNavigationSettings() {
   if (navState.initialized || typeof document === 'undefined') {
     return;
@@ -971,6 +1121,7 @@ function preapplyNavigationSettings() {
 
   const toggle = resolveNavCustomizerToggle(nav);
   setupNavState(nav, toggle);
+  preapplyNavigationMagnetPositions();
 }
 
 function renderNavCustomizerControls() {
