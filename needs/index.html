@@ -287,6 +287,50 @@
   overflow: hidden;
 }
 
+.site-nav__board[data-nav-resizable='1'] {
+  touch-action: none;
+}
+
+.site-nav__board[data-nav-resizable='1']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0.45rem;
+  width: 3rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--outline) 26%, transparent);
+  pointer-events: none;
+  transform: translateX(-50%);
+  opacity: 0.7;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.site-nav__board[data-nav-resizable='1']:hover::after,
+.site-nav__board[data-nav-resizable='1'][data-resizing='1']::after {
+  background: color-mix(in srgb, var(--outline) 40%, transparent);
+  opacity: 1;
+}
+
+.site-nav__board-resize-handle {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1.75rem;
+  cursor: ns-resize;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.site-nav__board[data-resizing='1'] {
+  cursor: ns-resize;
+}
+
 .site-nav[data-nav-expanded='true'] .site-nav__board {
   min-height: clamp(9rem, 26vw, 11.5rem);
   padding-block-end: 1.25rem;
@@ -313,7 +357,7 @@
   min-height: 44px;
   white-space: nowrap;
   position: relative;
-  filter: drop-shadow(0 10px 0 var(--shadow));
+  filter: drop-shadow(0 12px 0 var(--shadow));
   transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease, opacity 0.18s ease;
   --nav-active-bg: linear-gradient(
     180deg,
@@ -343,7 +387,7 @@
 .site-nav__magnet:hover,
 .site-nav__magnet:focus-visible {
   transform: translateY(-4px);
-  filter: drop-shadow(0 14px 0 var(--nav-hover-shadow));
+  filter: drop-shadow(0 12px 0 var(--nav-hover-shadow));
 }
 
 .site-nav__magnet[aria-current='page'] {
@@ -354,12 +398,12 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   transform: translateY(-4px);
-  filter: drop-shadow(0 16px 0 var(--nav-active-lift-shadow));
+  filter: drop-shadow(0 12px 0 var(--nav-active-lift-shadow));
 }
 
 .site-nav__magnet[aria-current='page']:hover,
 .site-nav__magnet[aria-current='page']:focus-visible {
-  filter: drop-shadow(0 18px 0 color-mix(in srgb, var(--outline) 66%, transparent));
+  filter: drop-shadow(0 12px 0 color-mix(in srgb, var(--outline) 66%, transparent));
 }
 
 .site-nav__magnet--inventory {
@@ -508,25 +552,8 @@ button.site-nav__magnet {
 }
 
 @media (max-width: 520px) {
-  .site-nav__magnet {
-    font-size: 0.76rem;
-    letter-spacing: 0.05em;
-    padding: 0.4rem 0.7rem;
-    min-height: 36px;
-    gap: 0.28rem;
-  }
-
   .site-nav__board {
-    min-height: clamp(5.5rem, 64vw, 7.5rem);
-  }
-
-  .site-nav__board-wrapper {
-    padding-top: 1.5rem;
-  }
-
-  .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(7.5rem, 82vw, 10rem);
-    padding-block-end: 0.85rem;
+    min-height: clamp(5.75rem, 50vw, 8rem);
   }
 }</style>
     <link rel="preload" href="../styles.css" as="style" />
@@ -541,18 +568,8 @@ button.site-nav__magnet {
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
 
-  <svg class="site-nav__magnet-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path
-      fill="currentColor"
-      d="M3 10.75V21c0 .55.45 1 1 1h5.5a.5.5 0 0 0 .5-.5V16h4v5.5a.5.5 0 0 0 .5.5H20c.55 0 1-.45 1-1v-10.2l-8.44-6.6a1 1 0 0 0-1.12 0L3 10.75z"
-    />
-    <path
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linejoin="round"
-      d="M2 11.2 12 3l10 8.2"
-    />
+  <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <use href="../icons/nav-sprite.svg#icon-home" />
   </svg>
               <span class="site-nav__magnet-label visually-hidden">Home</span>
             </a>
@@ -672,7 +689,23 @@ button.site-nav__magnet {
           }
           var boardRect = board.getBoundingClientRect();
           var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
-          var boardHeight = Math.max(boardRect.height || board.clientHeight || 1, 1);
+          var boardStyles = typeof window.getComputedStyle === 'function'
+            ? window.getComputedStyle(board)
+            : null;
+          var cssMinHeight = 0;
+          if (boardStyles && boardStyles.minHeight) {
+            var parsedMin = Number.parseFloat(boardStyles.minHeight);
+            cssMinHeight = Number.isFinite(parsedMin) && parsedMin > 0 ? parsedMin : 0;
+          }
+          var boardHeight = Math.max(
+            boardRect.height || board.clientHeight || cssMinHeight || 1,
+            cssMinHeight || 1
+          );
+          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
+            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
+            boardHeight = storedHeight;
+            board.style.height = storedHeight + 'px';
+          }
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
             return;

@@ -18,7 +18,7 @@ const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 16;
-const RESIZE_HANDLE_MARGIN = 28;
+const RESIZE_HANDLE_MARGIN = 64;
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
 const SHUFFLE_LABEL_BUSY = 'Shuffling…';
@@ -521,6 +521,15 @@ const createMagnetStates = (board, elements) => {
   });
 };
 
+const readBoardMinHeight = (board) => {
+  if (!board || typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+    return 0;
+  }
+  const styles = window.getComputedStyle(board);
+  const minHeight = parsePx(styles?.minHeight || '0');
+  return Number.isFinite(minHeight) && minHeight > 0 ? minHeight : 0;
+};
+
 const remeasureMagnets = (state) => {
   const boardRect = state.board.getBoundingClientRect();
   const updates = state.magnets.map((magnet) => {
@@ -550,10 +559,11 @@ const remeasureMagnets = (state) => {
   });
 
   const width = Math.max(boardRect.width || state.board.clientWidth || state.boardWidth || 1, 1);
-  const height = Math.max(boardRect.height || state.board.clientHeight || state.boardHeight || 1, 1);
+  const cssMinHeight = readBoardMinHeight(state.board);
+  const height = Math.max(boardRect.height || state.board.clientHeight || state.boardHeight || cssMinHeight || 1, 1);
   state.boardWidth = width;
   state.boardHeight = Math.max(state.boardHeight || 0, height);
-  state.minHeight = Math.max(state.minHeight || 0, height);
+  state.minHeight = cssMinHeight || state.minHeight || height;
   if (!state.playActive) {
     state.inactiveHeight = Math.max(state.inactiveHeight || 0, state.boardHeight);
   }
@@ -598,17 +608,20 @@ const maybeStartBoardResize = (state, event) => {
   const targetElement = event.target && typeof event.target.closest === 'function'
     ? event.target
     : null;
-  const handleElement = targetElement?.closest('[data-nav-resize-handle]');
-  if (targetElement !== state.board && !handleElement) {
+  const handleElement = targetElement.closest('[data-nav-resize-handle]');
+  if (!targetElement || (!state.board.contains(targetElement) && !handleElement)) {
     return false;
   }
   const rect = state.board.getBoundingClientRect();
   const offsetFromBottom = rect.bottom - event.clientY;
-  if (offsetFromBottom < 0 || offsetFromBottom > RESIZE_HANDLE_MARGIN) {
+  if (!handleElement && (offsetFromBottom < 0 || offsetFromBottom > RESIZE_HANDLE_MARGIN)) {
     return false;
   }
   const minHeight = Math.max(state.minHeight || 0, 1);
-  const measuredHeight = Math.max(rect.height || state.board.clientHeight || state.boardHeight || 0, 0);
+  const measuredHeight = Math.max(
+    rect.height || state.board.clientHeight || state.boardHeight || minHeight || 0,
+    minHeight,
+  );
   const startHeight = Math.max(measuredHeight, minHeight);
   state.boardHeight = startHeight;
   if (!state.playActive) {
@@ -622,8 +635,14 @@ const maybeStartBoardResize = (state, event) => {
     startHeight,
     minHeight,
     captureTarget,
+    handleElement,
+    hasHeightChanged: false,
+    lastHeight: startHeight,
   };
   state.board.dataset.resizing = '1';
+  if (handleElement) {
+    handleElement.dataset.active = '1';
+  }
   if (captureTarget && typeof captureTarget.setPointerCapture === 'function') {
     try {
       captureTarget.setPointerCapture(event.pointerId);
@@ -648,17 +667,21 @@ const updateBoardResizeDrag = (state, event) => {
   if (!Number.isFinite(nextHeight)) {
     return;
   }
-  if (Math.abs(nextHeight - (state.boardHeight || 0)) < 0.5) {
+  if (event.cancelable) {
+    event.preventDefault();
+  }
+  if (Math.abs(nextHeight - (drag.lastHeight || drag.startHeight || 0)) < 0.75) {
     return;
+  }
+  drag.lastHeight = nextHeight;
+  if (Math.abs(nextHeight - drag.startHeight) >= 1) {
+    drag.hasHeightChanged = true;
   }
   state.boardHeight = nextHeight;
   if (!state.playActive) {
     state.inactiveHeight = nextHeight;
   }
   state.board.style.height = `${nextHeight}px`;
-  if (event.cancelable) {
-    event.preventDefault();
-  }
 };
 
 const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
@@ -680,6 +703,9 @@ const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
     }
   }
   delete state.board.dataset.resizing;
+  if (drag.handleElement) {
+    delete drag.handleElement.dataset.active;
+  }
   state.resizeDrag = null;
 
   const minimumHeight = Math.max(drag.minHeight || 0, 1);
@@ -692,18 +718,24 @@ const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
     if (!state.playActive) {
       state.inactiveHeight = revertHeight;
     }
-    return;
+  } else {
+    state.boardHeight = currentHeight;
+    state.board.style.height = `${currentHeight}px`;
+    if (!state.playActive) {
+      state.inactiveHeight = currentHeight;
+    }
+
+    const changedEnough = drag.hasHeightChanged || Math.abs(currentHeight - drag.startHeight) >= 1;
+    if (changedEnough) {
+      updateLayout(state);
+      persistLayout(state, true);
+      state.lastLayoutType = 'manual';
+    }
   }
 
-  state.boardHeight = currentHeight;
-  state.board.style.height = `${currentHeight}px`;
-  if (!state.playActive) {
-    state.inactiveHeight = currentHeight;
-  }
-
-  if (Math.abs(currentHeight - drag.startHeight) > 0.5) {
-    updateLayout(state);
-    persistLayout(state, true);
+  if (state.pendingResponsiveResize && typeof state.scheduleResponsiveResize === 'function') {
+    state.pendingResponsiveResize = false;
+    state.scheduleResponsiveResize();
   }
 };
 
@@ -1181,6 +1213,12 @@ const initializeBoard = async (root, index) => {
   const customStorageKey = root.dataset.magnetKey;
   const resolvedStorageKey = customStorageKey || createStorageKey(index);
 
+  const cssMinHeight = readBoardMinHeight(board) || Math.max(boardRect.height || board.clientHeight || 1, 1);
+  const initialHeight = Math.max(
+    boardRect.height || board.clientHeight || cssMinHeight || 1,
+    cssMinHeight || 1,
+  );
+
   const state = {
     root,
     board,
@@ -1199,9 +1237,9 @@ const initializeBoard = async (root, index) => {
     layout: new Map(),
     physics: null,
     boardWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
-    boardHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
-    minHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
-    inactiveHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
+    boardHeight: initialHeight,
+    minHeight: cssMinHeight || initialHeight,
+    inactiveHeight: initialHeight,
     saveTimer: null,
     lastSaveTime: 0,
     resizeObserver: null,
@@ -1212,6 +1250,8 @@ const initializeBoard = async (root, index) => {
     lastSeedWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
     lastLayoutType: 'seed',
     resizeScheduled: false,
+    pendingResponsiveResize: false,
+    scheduleResponsiveResize: null,
     isShuffling: false,
     tiltPermissionState: globalTiltSource.tiltPermissionState,
     tiltPermissionRequest: globalTiltSource.tiltPermissionRequest,
@@ -1283,6 +1323,10 @@ const initializeBoard = async (root, index) => {
     board.addEventListener('pointercancel', handleBoardPointerCancel);
     board.addEventListener('lostpointercapture', handleLostPointerCapture);
     if (resizeHandle) {
+      resizeHandle.addEventListener('pointerdown', handleBoardPointerDown);
+      resizeHandle.addEventListener('pointermove', handleBoardPointerMove);
+      resizeHandle.addEventListener('pointerup', handleBoardPointerUp);
+      resizeHandle.addEventListener('pointercancel', handleBoardPointerCancel);
       resizeHandle.addEventListener('lostpointercapture', handleLostPointerCapture);
     }
   }
@@ -1382,6 +1426,10 @@ const initializeBoard = async (root, index) => {
   });
 
   const scheduleResponsiveResize = () => {
+    if (state.resizeDrag) {
+      state.pendingResponsiveResize = true;
+      return;
+    }
     if (state.resizeScheduled) {
       return;
     }
@@ -1392,6 +1440,7 @@ const initializeBoard = async (root, index) => {
       console.info('[magnets] resize ignored (toggling)');
       return;
     }
+    state.pendingResponsiveResize = false;
     state.resizeScheduled = true;
     Promise.resolve().then(async () => {
       if (state.isShuffling) {
@@ -1403,9 +1452,18 @@ const initializeBoard = async (root, index) => {
         console.info('[magnets] resize ignored (toggling)');
         return;
       }
+      if (state.resizeDrag) {
+        state.resizeScheduled = false;
+        state.pendingResponsiveResize = true;
+        return;
+      }
       state.resizeScheduled = false;
       const previousWidth = state.boardWidth;
       await waitForAnimationFrames(2);
+      if (state.resizeDrag) {
+        state.pendingResponsiveResize = true;
+        return;
+      }
       remeasureMagnets(state);
       const width = state.boardWidth;
       const widthChanged = Math.abs(width - previousWidth) > 0.5;
@@ -1440,6 +1498,8 @@ const initializeBoard = async (root, index) => {
       applyRowPackedLayout(state, state.magnets, { persist: true });
     }).catch(() => {});
   };
+
+  state.scheduleResponsiveResize = scheduleResponsiveResize;
 
   if (typeof ResizeObserver === 'function') {
     const observer = new ResizeObserver(() => {

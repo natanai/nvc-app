@@ -2133,9 +2133,12 @@ body.has-support-journal-open {
   z-index: 2;
 }
 
+.site-nav__board[data-nav-resizable='1'] {
+  touch-action: none;
+}
+
 .site-nav__board[data-resizing='1'] {
   cursor: ns-resize;
-  touch-action: none;
 }
 
 

@@ -8,20 +8,13 @@ const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
-const HOME_ICON_INLINE = `
-  <svg class="site-nav__magnet-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path
-      fill="currentColor"
-      d="M3 10.75V21c0 .55.45 1 1 1h5.5a.5.5 0 0 0 .5-.5V16h4v5.5a.5.5 0 0 0 .5.5H20c.55 0 1-.45 1-1v-10.2l-8.44-6.6a1 1 0 0 0-1.12 0L3 10.75z"
-    />
-    <path
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linejoin="round"
-      d="M2 11.2 12 3l10 8.2"
-    />
+const HOME_ICON_INLINE = (basePath = '') => {
+  const normalizedBase = basePath || '';
+  return `
+  <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <use href="${normalizedBase}icons/nav-sprite.svg#icon-home" />
   </svg>`;
+};
 
 const NAV_MAGNET_STORAGE_KEY = 'site-nav';
 
@@ -63,9 +56,20 @@ const navPrefillScript = () => String.raw`
           }
           var boardRect = board.getBoundingClientRect();
           var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
-          var boardHeight = Math.max(boardRect.height || board.clientHeight || 1, 1);
+          var boardStyles = typeof window.getComputedStyle === 'function'
+            ? window.getComputedStyle(board)
+            : null;
+          var cssMinHeight = 0;
+          if (boardStyles && boardStyles.minHeight) {
+            var parsedMin = Number.parseFloat(boardStyles.minHeight);
+            cssMinHeight = Number.isFinite(parsedMin) && parsedMin > 0 ? parsedMin : 0;
+          }
+          var boardHeight = Math.max(
+            boardRect.height || board.clientHeight || cssMinHeight || 1,
+            cssMinHeight || 1
+          );
           if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, boardHeight);
+            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
             boardHeight = storedHeight;
             board.style.height = storedHeight + 'px';
           }
@@ -676,7 +680,7 @@ function renderNav(basePath, activeNav, options = {}) {
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
-${HOME_ICON_INLINE}
+${HOME_ICON_INLINE(basePath)}
               <span class="site-nav__magnet-label visually-hidden">Home</span>
             </a>
             <button
