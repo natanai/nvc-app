@@ -289,6 +289,7 @@ function basePathFromDepth(depth) {
 function normalizeScripts(scripts) {
   const baseScripts = [
     { src: 'assets/js/journal/store.js', module: true },
+    { src: 'scripts/nav-magnets.js', module: true },
     { src: 'scripts/inventory.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
   ];
@@ -506,9 +507,9 @@ function renderNav(basePath, activeNav, options = {}) {
     })
     .join('\n');
 
-  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root>
-        <div class="magnet-board-wrapper site-nav__board-wrapper">
-          <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
+  return `<nav class="site-nav magnet-section" aria-label="Primary" data-nav-container>
+        <div class="site-nav__board-wrapper" data-nav-board-wrapper>
+          <div class="pill-grid site-nav__board" data-nav-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
               <img
                 class="site-nav__magnet-icon"
@@ -545,13 +546,19 @@ function renderNav(basePath, activeNav, options = {}) {
               <span class="site-nav__count" data-inventory-count hidden></span>
             </a>
 ${secondaryLinks ? `${secondaryLinks}\n` : ''}          </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="off">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
+          <label class="magnet-play-toggle" data-nav-play-toggle data-state="off">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics" />
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>
             <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
           </label>
+          <button
+            type="button"
+            class="site-nav__board-resize-handle"
+            data-nav-resize-handle
+            aria-label="Adjust magnet tray height"
+          ></button>
         </div>
         <div class="site-nav__journal" data-support-journal data-journal-overlay>
           <div

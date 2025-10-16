@@ -816,6 +816,9 @@ function ensureNavItemElement(id) {
     } else {
       delete element.dataset.navSupplemental;
     }
+    if (typeof window !== 'undefined' && window.NVCNavMagnets?.decorate) {
+      window.NVCNavMagnets.decorate(element);
+    }
     navState.items.set(id, hydrated);
     return element;
   }
@@ -894,6 +897,10 @@ function applyNavSettings() {
     }
   }
 
+  if (typeof window !== 'undefined' && window.NVCNavMagnets?.refresh) {
+    window.NVCNavMagnets.refresh(navState.nav || undefined);
+  }
+
   if (typeof highlightNavigation === 'function') {
     highlightNavigation();
   }
@@ -934,7 +941,10 @@ function setupNavState(nav, toggle) {
 
   navState.nav = nav;
   navState.board =
-    nav.querySelector('[data-magnet-board]') || nav.querySelector('.site-nav__row--primary') || nav;
+    nav.querySelector('[data-nav-board]')
+    || nav.querySelector('[data-magnet-board]')
+    || nav.querySelector('.site-nav__row--primary')
+    || nav;
   navState.items.clear();
 
   NAV_ITEM_DEFINITIONS.forEach((definition) => {

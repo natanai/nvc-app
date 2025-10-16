@@ -177,7 +177,15 @@ global.document = {
     return null;
   },
   querySelectorAll: (selector) => {
-    if (selector === '.site-nav__link[href]') {
+    const candidates = String(selector)
+      .split(',')
+      .map((part) => part.trim())
+      .filter(Boolean);
+    if (
+      candidates.some(
+        (value) => value === '.site-nav__link[href]' || value === '.site-nav__magnet[href]'
+      )
+    ) {
       return currentNavLinks;
     }
     return [];
