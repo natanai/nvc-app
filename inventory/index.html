@@ -353,28 +353,33 @@
         <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
           <div class="inventory-actions__header">
             <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
-            <p class="inventory-actions__hint">Export a CSV backup or import one you created earlier.</p>
+            <p class="inventory-actions__hint">
+              Create or restore a JSON backup of your inventory, journal, and customizer data stored in
+              localStorage.
+            </p>
           </div>
           <div class="inventory-actions__buttons">
             <button
               type="button"
               id="inventory-export"
               class="inventory-button inventory-button--compact"
-              aria-label="Export CSV"
+              aria-label="Download JSON backup"
+              data-action-hint="Download a JSON file containing localStorage data for inventory, journal, and customizer."
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export CSV</span>
+              <span class="inventory-button__text">Export backup</span>
             </button>
             <button
               type="button"
               id="inventory-import-trigger"
               class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Import CSV"
+              aria-label="Restore JSON backup"
+              data-action-hint="Load a JSON backup into localStorage for inventory, journal, and customizer data."
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import CSV</span>
+              <span class="inventory-button__text">Import backup</span>
             </button>
-            <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
+            <input type="file" id="inventory-import" accept=".json,application/json,.csv,text/csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
         </section>

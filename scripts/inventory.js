@@ -3,6 +3,7 @@ const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
 const LEGACY_JOURNAL_HASHES = new Set(['#journal-dashboard']);
+const DATA_EXPORT_VERSION = 1;
 
 function redirectLegacyJournalHash() {
   if (typeof window === 'undefined') {
@@ -5267,43 +5268,66 @@ function handleJournalFiltersReset() {
 }
 
 function handleJournalExport() {
-  const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
-  if (!entries.length) {
-    showJournalMessage('No journal entries to export yet.', 'warning');
-    return;
-  }
   try {
-    const payload = JSON.stringify(entries, null, 2);
+    const backup = buildDataBackup();
+    const payload = JSON.stringify(backup, null, 2);
     const blob = new Blob([payload], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     const dateStamp = new Date().toISOString().slice(0, 10);
     link.href = url;
-    link.download = `nvc-journal-${dateStamp}.json`;
+    link.download = `allneeds-backup-${dateStamp}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    showJournalMessage('Exported journal entries as JSON.', 'success');
+    showJournalMessage('Exported a JSON backup of your inventory, journal, and customizer settings.', 'success');
   } catch (error) {
-    console.warn('Unable to export journal entries', error);
+    console.warn('Unable to export data backup', error);
     showJournalMessage('Export failed. Try again.', 'error');
   }
 }
 
 async function handleJournalImport(file) {
   try {
+    const text = await file.text();
+    let parsedJson = null;
+    try {
+      parsedJson = JSON.parse(text);
+    } catch (error) {
+      parsedJson = null;
+    }
+
+    if (parsedJson && isValidDataBackup(parsedJson)) {
+      try {
+        const summary = applyDataBackup(parsedJson);
+        const journalLabel = `${summary.journalCount} ${summary.journalCount === 1 ? 'journal entry' : 'journal entries'}`;
+        const draftLabel = summary.journalDraftCount
+          ? ` and ${summary.journalDraftCount} ${summary.journalDraftCount === 1 ? 'draft' : 'drafts'}`
+          : '';
+        const inventoryLabel = `${summary.inventoryCount} ${summary.inventoryCount === 1 ? 'strategy' : 'strategies'}`;
+        showJournalStatus(`Imported ${journalLabel}${draftLabel}.`);
+        showJournalMessage('Import complete. Restored your inventory, journal, and customizer settings.', 'success');
+        showInventoryMessage(
+          `Import complete. Restored ${inventoryLabel} alongside your journal backup.`,
+          'success'
+        );
+      } catch (error) {
+        console.warn('Unable to import data backup', error);
+        showJournalMessage('Import failed. Make sure you selected a backup created by this app.', 'error');
+      }
+      return;
+    }
+
     const store = ensureJournalStore();
     if (!store) {
       showJournalMessage('Import unavailable right now. Reload and try again.', 'error');
       return;
     }
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    const list = Array.isArray(parsed)
-      ? parsed
-      : Array.isArray(parsed.entries)
-      ? parsed.entries
+    const list = Array.isArray(parsedJson)
+      ? parsedJson
+      : Array.isArray(parsedJson?.entries)
+      ? parsedJson.entries
       : [];
     if (!list.length) {
       showJournalMessage('No entries found in the import file.', 'warning');
@@ -5935,23 +5959,447 @@ function showFormMessage(element, message, type = 'success') {
   element.classList.add(className);
 }
 
-function handleExportInventory() {
-  if (!state.inventory.length) {
-    showInventoryMessage('No strategies to export yet. Add some to your inventory first.', 'warning');
-    return;
+function collectDraftSnapshots(storage) {
+  const drafts = {};
+  if (!storage) {
+    return drafts;
+  }
+  for (let i = 0; i < storage.length; i += 1) {
+    const key = storage.key(i);
+    if (!key || !key.startsWith('draft:')) {
+      continue;
+    }
+    const pathname = key.slice('draft:'.length);
+    if (!pathname) {
+      continue;
+    }
+    try {
+      const raw = storage.getItem(key);
+      if (typeof raw === 'string' && raw.trim()) {
+        drafts[pathname] = JSON.parse(raw);
+      }
+    } catch (error) {
+      console.warn('Unable to include draft in backup', key, error);
+    }
+  }
+  return drafts;
+}
+
+function readThemeSnapshotFromStorage(storageDump) {
+  const rawTheme = storageDump?.[THEME_STORAGE_KEY];
+  if (!rawTheme || typeof rawTheme !== 'string') {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(rawTheme);
+    const normalized = normalizeThemePayload(parsed);
+    if (!normalized) {
+      return null;
+    }
+    return {
+      values: normalized.values,
+      preset: normalized.preset,
+      roundness: normalized.roundness,
+      updatedAt:
+        typeof parsed.updatedAt === 'number' && Number.isFinite(parsed.updatedAt)
+          ? parsed.updatedAt
+          : null,
+    };
+  } catch (error) {
+    console.warn('Unable to read saved theme for backup', error);
+    return null;
+  }
+}
+
+function collectStorageDump() {
+  if (typeof window === 'undefined') {
+    return { storage: {}, drafts: {} };
+  }
+  try {
+    const storage = window.localStorage;
+    if (!storage) {
+      return { storage: {}, drafts: {} };
+    }
+    const dump = {};
+    for (let i = 0; i < storage.length; i += 1) {
+      const key = storage.key(i);
+      if (!key) {
+        continue;
+      }
+      try {
+        dump[key] = storage.getItem(key);
+      } catch (error) {
+        console.warn('Unable to read storage key for backup', key, error);
+      }
+    }
+    return { storage: dump, drafts: collectDraftSnapshots(storage) };
+  } catch (error) {
+    console.warn('Unable to inspect localStorage for backup', error);
+    return { storage: {}, drafts: {} };
+  }
+}
+
+function collectNavSettingsSnapshot(storageDump) {
+  let rawSettings = storageDump?.[NAV_SETTINGS_STORAGE_KEY];
+  if (rawSettings && typeof rawSettings !== 'string') {
+    rawSettings = null;
+  }
+  if (typeof rawSettings === 'string') {
+    try {
+      const parsed = JSON.parse(rawSettings);
+      return normalizeNavSettings(parsed);
+    } catch (error) {
+      console.warn('Unable to parse navigation settings for backup', error);
+    }
+  }
+  if (navState?.settings) {
+    return normalizeNavSettings(navState.settings);
+  }
+  return normalizeNavSettings(loadNavSettings());
+}
+
+function collectJournalEntriesForBackup(storageDump) {
+  let entries = [];
+  const store = ensureJournalStore();
+  if (store && typeof store.list === 'function') {
+    try {
+      entries = Array.isArray(store.list()) ? store.list() : [];
+    } catch (error) {
+      console.warn('Unable to read journal entries from store for backup', error);
+      entries = [];
+    }
+  }
+  if (entries.length) {
+    return entries;
+  }
+  const rawJournal = storageDump?.['journal:v2'];
+  if (typeof rawJournal !== 'string' || !rawJournal.trim()) {
+    return [];
+  }
+  try {
+    const parsed = JSON.parse(rawJournal);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn('Unable to parse stored journal entries for backup', error);
+    return [];
+  }
+}
+
+function buildDataBackup() {
+  const timestamp = new Date().toISOString();
+  const { storage, drafts } = collectStorageDump();
+  const theme = readThemeSnapshotFromStorage(storage) ||
+    (() => {
+      const savedTheme = loadSavedTheme();
+      return savedTheme ? { ...savedTheme, updatedAt: null } : null;
+    })();
+  const navSettings = collectNavSettingsSnapshot(storage);
+  const inventoryItems = loadInventory();
+  const journalEntries = collectJournalEntriesForBackup(storage);
+
+  return {
+    version: DATA_EXPORT_VERSION,
+    generatedAt: timestamp,
+    inventory: Array.isArray(inventoryItems) ? inventoryItems : [],
+    journal: {
+      entries: Array.isArray(journalEntries) ? journalEntries : [],
+      drafts,
+    },
+    customizer: {
+      theme,
+      navSettings,
+    },
+    storage,
+  };
+}
+
+function isValidDataBackup(candidate) {
+  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) {
+    return false;
+  }
+  if ('inventory' in candidate || 'journal' in candidate || 'customizer' in candidate) {
+    return true;
+  }
+  if ('storage' in candidate && typeof candidate.storage === 'object') {
+    return true;
+  }
+  return false;
+}
+
+function extractInventoryFromBackup(backup) {
+  if (Array.isArray(backup?.inventory)) {
+    return backup.inventory;
+  }
+  if (Array.isArray(backup?.data?.inventory?.items)) {
+    return backup.data.inventory.items;
+  }
+  const rawStorage = backup?.storage?.[STORAGE_KEY];
+  if (typeof rawStorage === 'string') {
+    try {
+      const parsed = JSON.parse(rawStorage);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.warn('Unable to parse inventory from backup storage', error);
+    }
+  }
+  return [];
+}
+
+function extractJournalEntriesFromBackup(backup) {
+  if (Array.isArray(backup?.journal?.entries)) {
+    return backup.journal.entries;
+  }
+  if (Array.isArray(backup?.entries)) {
+    return backup.entries;
+  }
+  if (Array.isArray(backup?.data?.journal?.entries)) {
+    return backup.data.journal.entries;
+  }
+  const rawStorage = backup?.storage?.['journal:v2'];
+  if (typeof rawStorage === 'string') {
+    try {
+      const parsed = JSON.parse(rawStorage);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.warn('Unable to parse journal entries from backup storage', error);
+    }
+  }
+  return [];
+}
+
+function extractDraftsFromBackup(backup) {
+  if (backup?.journal && typeof backup.journal === 'object' && backup.journal.drafts) {
+    return backup.journal.drafts;
+  }
+  if (backup?.data?.journal && typeof backup.data.journal === 'object' && backup.data.journal.drafts) {
+    return backup.data.journal.drafts;
+  }
+  return {};
+}
+
+function extractThemeFromBackup(backup) {
+  if (backup?.customizer && 'theme' in backup.customizer) {
+    return backup.customizer.theme;
+  }
+  if (backup?.data?.customizer && 'theme' in backup.data.customizer) {
+    return backup.data.customizer.theme;
+  }
+  return undefined;
+}
+
+function extractNavSettingsFromBackup(backup) {
+  if (backup?.customizer && 'navSettings' in backup.customizer) {
+    return backup.customizer.navSettings;
+  }
+  if (backup?.data?.customizer && 'navSettings' in backup.data.customizer) {
+    return backup.data.customizer.navSettings;
+  }
+  return undefined;
+}
+
+function applyDataBackup(backup) {
+  if (!isValidDataBackup(backup)) {
+    throw new Error('Invalid backup format');
+  }
+  if (typeof window === 'undefined' || !window.localStorage) {
+    throw new Error('localStorage is unavailable');
   }
 
-  const csv = inventoryToCsv(state.inventory);
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'nvc-strategy-inventory.csv';
-  document.body.append(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-  showInventoryMessage('Inventory exported as nvc-strategy-inventory.csv.', 'success');
+  const summary = {
+    inventoryCount: 0,
+    journalCount: 0,
+    journalDraftCount: 0,
+    themeApplied: false,
+    navSettingsApplied: false,
+  };
+
+  const storage = window.localStorage;
+
+  // Restore inventory
+  const inventoryItems = extractInventoryFromBackup(backup);
+  try {
+    if (Array.isArray(inventoryItems)) {
+      storage.setItem(STORAGE_KEY, JSON.stringify(inventoryItems));
+      summary.inventoryCount = inventoryItems.length;
+    } else {
+      storage.removeItem(STORAGE_KEY);
+    }
+  } catch (error) {
+    console.warn('Unable to restore inventory from backup', error);
+  }
+  state.inventory = loadInventory();
+  refreshSavedStrategyIndex();
+  renderInventoryViews();
+  updateInventoryCount();
+  updateStrategySaveButtonStates();
+
+  // Restore journal entries
+  const journalEntries = extractJournalEntriesFromBackup(backup);
+  const store = ensureJournalStore();
+  if (store && typeof store.list === 'function' && typeof store.remove === 'function' && typeof store.create === 'function') {
+    try {
+      const existingEntries = Array.isArray(store.list()) ? store.list() : [];
+      existingEntries.forEach((entry) => {
+        if (entry?.id) {
+          store.remove(entry.id);
+        }
+      });
+      if (Array.isArray(journalEntries)) {
+        journalEntries.forEach((entry) => {
+          store.create(entry);
+        });
+      }
+      summary.journalCount = Array.isArray(journalEntries) ? journalEntries.length : 0;
+    } catch (error) {
+      console.warn('Unable to restore journal entries using store API', error);
+      try {
+        storage.setItem('journal:v2', JSON.stringify(Array.isArray(journalEntries) ? journalEntries : []));
+        summary.journalCount = Array.isArray(journalEntries) ? journalEntries.length : 0;
+      } catch (storageError) {
+        console.warn('Unable to write journal entries directly to storage', storageError);
+      }
+    }
+  } else {
+    try {
+      storage.setItem('journal:v2', JSON.stringify(Array.isArray(journalEntries) ? journalEntries : []));
+      summary.journalCount = Array.isArray(journalEntries) ? journalEntries.length : 0;
+    } catch (error) {
+      console.warn('Unable to restore journal entries to storage', error);
+    }
+  }
+  updateJournalEntriesFromStore();
+  renderJournalViews();
+
+  // Restore drafts
+  try {
+    const existingDraftKeys = [];
+    for (let i = 0; i < storage.length; i += 1) {
+      const key = storage.key(i);
+      if (key && key.startsWith('draft:')) {
+        existingDraftKeys.push(key);
+      }
+    }
+    existingDraftKeys.forEach((key) => storage.removeItem(key));
+    const drafts = extractDraftsFromBackup(backup);
+    if (drafts && typeof drafts === 'object') {
+      Object.entries(drafts).forEach(([pathname, draft]) => {
+        if (!pathname) {
+          return;
+        }
+        try {
+          storage.setItem(`draft:${pathname}`, JSON.stringify(draft));
+          summary.journalDraftCount += 1;
+        } catch (error) {
+          console.warn('Unable to restore journal draft', pathname, error);
+        }
+      });
+    }
+  } catch (error) {
+    console.warn('Unable to restore journal drafts from backup', error);
+  }
+
+  // Restore theme
+  const themeSnapshot = extractThemeFromBackup(backup);
+  if (themeSnapshot !== undefined) {
+    if (themeSnapshot && typeof themeSnapshot === 'object') {
+      const normalizedTheme = normalizeThemePayload(themeSnapshot);
+      if (normalizedTheme) {
+        applyColors(normalizedTheme.values || {}, { presetName: normalizedTheme.preset || '', persist: false, replace: true });
+        if (normalizedTheme.roundness !== undefined) {
+          setCornerRoundness(normalizedTheme.roundness, { persist: false });
+        }
+        const serializedTheme = JSON.stringify({
+          values: paletteState.currentColors,
+          preset: paletteState.currentPreset,
+          roundness: paletteState.cornerRoundness,
+          updatedAt:
+            typeof themeSnapshot.updatedAt === 'number' && Number.isFinite(themeSnapshot.updatedAt)
+              ? themeSnapshot.updatedAt
+              : Date.now(),
+        });
+        const { success, error } = storageSetItem(THEME_STORAGE_KEY, serializedTheme);
+        if (!success && error) {
+          console.warn('Unable to persist restored theme', error);
+        } else {
+          summary.themeApplied = true;
+        }
+      } else {
+        clearSavedTheme();
+      }
+    } else {
+      clearSavedTheme();
+    }
+  }
+
+  // Restore nav settings
+  const navSnapshot = extractNavSettingsFromBackup(backup);
+  if (navSnapshot !== undefined) {
+    const normalizedNav = navSnapshot ? normalizeNavSettings(navSnapshot) : getDefaultNavSettings();
+    if (normalizedNav) {
+      try {
+        const serialized = JSON.stringify(normalizedNav);
+        const { success, error } = storageSetItem(NAV_SETTINGS_STORAGE_KEY, serialized);
+        if (!success && error) {
+          console.warn('Unable to persist restored navigation settings', error);
+        }
+      } catch (error) {
+        console.warn('Unable to serialize restored navigation settings', error);
+      }
+      navState.settings = normalizedNav;
+      applyNavSettings();
+      renderNavCustomizerControls();
+      summary.navSettingsApplied = true;
+    }
+  }
+
+  // Restore any additional keys captured in storage dump
+  if (backup?.storage && typeof backup.storage === 'object') {
+    const handledKeys = new Set([
+      STORAGE_KEY,
+      'journal:v2',
+      THEME_STORAGE_KEY,
+      NAV_SETTINGS_STORAGE_KEY,
+    ]);
+    Object.entries(backup.storage).forEach(([key, value]) => {
+      if (handledKeys.has(key) || key.startsWith('draft:')) {
+        return;
+      }
+      if (typeof value !== 'string') {
+        return;
+      }
+      try {
+        storage.setItem(key, value);
+      } catch (error) {
+        console.warn('Unable to restore stored value for key', key, error);
+      }
+    });
+  }
+
+  return summary;
+}
+
+function handleExportInventory() {
+  try {
+    const backup = buildDataBackup();
+    const payload = JSON.stringify(backup, null, 2);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const dateStamp = new Date().toISOString().slice(0, 10);
+    link.href = url;
+    link.download = `allneeds-backup-${dateStamp}.json`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    showInventoryMessage(
+      'Exported a JSON backup of your inventory, journal, and customizer settings.',
+      'success'
+    );
+  } catch (error) {
+    console.warn('Unable to export data backup', error);
+    showInventoryMessage('Export failed. Try again.', 'error');
+  }
 }
 
 function inventoryToCsv(items) {
@@ -6005,59 +6453,102 @@ function handleImportInventory(file) {
       return;
     }
 
-    const parsed = parseCsv(text);
-    if (!parsed.length) {
-      showInventoryMessage('No rows were found in that CSV file.', 'error');
+    let parsedJson = null;
+    try {
+      parsedJson = JSON.parse(text);
+    } catch (error) {
+      parsedJson = null;
+    }
+
+    if (parsedJson && isValidDataBackup(parsedJson)) {
+      try {
+        const summary = applyDataBackup(parsedJson);
+        const inventoryLabel = `${summary.inventoryCount} ${summary.inventoryCount === 1 ? 'strategy' : 'strategies'}`;
+        const journalLabel = `${summary.journalCount} ${summary.journalCount === 1 ? 'journal entry' : 'journal entries'}`;
+        const draftLabel = summary.journalDraftCount
+          ? ` and ${summary.journalDraftCount} ${summary.journalDraftCount === 1 ? 'draft' : 'drafts'}`
+          : '';
+        const customizerNote =
+          summary.themeApplied || summary.navSettingsApplied
+            ? ' Customizer settings restored.'
+            : '';
+        showInventoryMessage(
+          `Import complete. Restored ${inventoryLabel} and ${journalLabel}${draftLabel}.${customizerNote}`,
+          'success'
+        );
+        showJournalStatus(`Imported ${journalLabel}${draftLabel}.`);
+        showJournalMessage('Import complete. Restored your inventory, journal, and customizer settings.', 'success');
+      } catch (error) {
+        console.warn('Unable to import data backup', error);
+        showInventoryMessage('Import failed. Make sure you selected a backup created by this app.', 'error');
+      }
       return;
     }
 
-    const replace = window.confirm('Replace your current inventory with the imported file? Press “OK” to replace or “Cancel” to merge.');
-    const existing = replace ? [] : [...state.inventory];
-    const map = new Map(existing.map((item) => [item.id, item]));
-
-    parsed.forEach((item) => {
-      const id = item.id || generateId();
-      const importedNeedSlugs = normalizeNeedSlugList(item.needSlugs);
-      const initialNeedSlug = normalizeNeedSlugValue(item.needSlug || item.sourceNeedPage);
-      const resolvedNeedSlug =
-        initialNeedSlug || findNeedSlugByTitle(item.need) || importedNeedSlugs[0] || '';
-      const combinedNeedSlugs = normalizeNeedSlugList([importedNeedSlugs, resolvedNeedSlug]);
-      const tags = normalizeTagsList(item.tags);
-      combinedNeedSlugs.forEach((slug) => {
-        if (!tags.some((tag) => normalizeNeedSlugValue(tag) === slug)) {
-          tags.push(slug);
-        }
-      });
-
-      map.set(id, {
-        id,
-        title: item.title || 'Untitled strategy',
-        description: item.description || '',
-        need:
-          item.need ||
-          state.needsBySlug.get(combinedNeedSlugs[0] || resolvedNeedSlug)?.title ||
-          combinedNeedSlugs[0] ||
-          resolvedNeedSlug ||
-          '',
-        needSlug: combinedNeedSlugs[0] || resolvedNeedSlug || '',
-        needSlugs: combinedNeedSlugs,
-        tags,
-        personal: item.personal === true,
-        sourceNeedPage: item.sourceNeedPage || resolvedNeedSlug || '',
-        strategySlug: item.strategySlug || '',
-        firstName: sanitizeContributorName(item.firstName || ''),
-        location: sanitizeLocation(item.location || ''),
-        createdAt: item.createdAt || new Date().toISOString(),
-      });
-    });
-
-    const merged = Array.from(map.values());
-    persistInventory(merged, {
-      inventoryMessage: replace ? 'Inventory replaced from imported file.' : 'Inventory updated with imported strategies.',
-      openList: true,
-    });
+    importInventoryFromCsvText(text);
+  });
+  reader.addEventListener('error', () => {
+    showInventoryMessage('Unable to read that file. Please try again.', 'error');
   });
   reader.readAsText(file);
+}
+
+function importInventoryFromCsvText(text) {
+  const parsed = parseCsv(text);
+  if (!parsed.length) {
+    showInventoryMessage('No rows were found in that CSV file.', 'error');
+    return;
+  }
+
+  const replace = window.confirm(
+    'Replace your current inventory with the imported file? Press “OK” to replace or “Cancel” to merge.'
+  );
+  const existing = replace ? [] : [...state.inventory];
+  const map = new Map(existing.map((item) => [item.id, item]));
+
+  parsed.forEach((item) => {
+    const id = item.id || generateId();
+    const importedNeedSlugs = normalizeNeedSlugList(item.needSlugs);
+    const initialNeedSlug = normalizeNeedSlugValue(item.needSlug || item.sourceNeedPage);
+    const resolvedNeedSlug =
+      initialNeedSlug || findNeedSlugByTitle(item.need) || importedNeedSlugs[0] || '';
+    const combinedNeedSlugs = normalizeNeedSlugList([importedNeedSlugs, resolvedNeedSlug]);
+    const tags = normalizeTagsList(item.tags);
+    combinedNeedSlugs.forEach((slug) => {
+      if (!tags.some((tag) => normalizeNeedSlugValue(tag) === slug)) {
+        tags.push(slug);
+      }
+    });
+
+    map.set(id, {
+      id,
+      title: item.title || 'Untitled strategy',
+      description: item.description || '',
+      need:
+        item.need ||
+        state.needsBySlug.get(combinedNeedSlugs[0] || resolvedNeedSlug)?.title ||
+        combinedNeedSlugs[0] ||
+        resolvedNeedSlug ||
+        '',
+      needSlug: combinedNeedSlugs[0] || resolvedNeedSlug || '',
+      needSlugs: combinedNeedSlugs,
+      tags,
+      personal: item.personal === true,
+      sourceNeedPage: item.sourceNeedPage || resolvedNeedSlug || '',
+      strategySlug: item.strategySlug || '',
+      firstName: sanitizeContributorName(item.firstName || ''),
+      location: sanitizeLocation(item.location || ''),
+      createdAt: item.createdAt || new Date().toISOString(),
+    });
+  });
+
+  const merged = Array.from(map.values());
+  persistInventory(merged, {
+    inventoryMessage: replace
+      ? 'Inventory replaced from imported file.'
+      : 'Inventory updated with imported strategies.',
+    openList: true,
+  });
 }
 
 function parseCsv(text) {
