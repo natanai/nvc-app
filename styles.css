@@ -2390,6 +2390,18 @@ body.has-support-journal-open {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--mint) 45%, transparent);
 }
 
+@media (max-width: 640px) {
+  .magnet-board-wrapper .magnet-play-toggle {
+    top: 0.35rem;
+    right: 0.6rem;
+  }
+
+  .site-nav__board-wrapper .magnet-play-toggle {
+    top: -1.2rem;
+    right: 0.55rem;
+  }
+}
+
 
 
 
