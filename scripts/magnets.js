@@ -3,8 +3,6 @@ import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhys
 
 const NAV_STORAGE_KEY = 'site-nav';
 const ALLOWED_OVERLAP = 6;
-const INVALID_TOGGLE_MESSAGE = 'Please fix overlapping magnets before exiting play mode.';
-
 const DEFAULT_CONFIG = {
   drift: 1.5,
   damping: 0.975,
@@ -624,7 +622,6 @@ const updateLayoutValidity = (state) => {
   const hasOverlap = layoutHasOverlap(state);
   const hasOffBoard = state.magnets.some((magnet) => isMagnetOffBoard(state, magnet));
   const invalid = hasOverlap || hasOffBoard;
-  const disableToggle = invalid && state.playActive;
   if (state.root) {
     if (invalid) {
       state.root.dataset.layoutInvalid = '1';
@@ -632,30 +629,17 @@ const updateLayoutValidity = (state) => {
       delete state.root.dataset.layoutInvalid;
     }
   }
-  const toggleTarget = state.toggleInput || state.toggle;
   if (state.toggleInput) {
-    state.toggleInput.disabled = disableToggle;
-    if (disableToggle) {
-      state.toggleInput.setAttribute('title', INVALID_TOGGLE_MESSAGE);
-      state.toggleInput.setAttribute('aria-disabled', 'true');
-    } else {
-      state.toggleInput.removeAttribute('title');
-      state.toggleInput.removeAttribute('aria-disabled');
+    if (state.toggleInput.disabled) {
+      state.toggleInput.disabled = false;
     }
+    state.toggleInput.removeAttribute('aria-disabled');
+    state.toggleInput.removeAttribute('title');
   }
   if (state.toggle) {
-    if (disableToggle) {
-      state.toggle.setAttribute('aria-disabled', 'true');
-      state.toggle.setAttribute('title', INVALID_TOGGLE_MESSAGE);
-      state.toggle.dataset.layoutToggleDisabled = '1';
-    } else {
-      state.toggle.removeAttribute('aria-disabled');
-      state.toggle.removeAttribute('title');
-      delete state.toggle.dataset.layoutToggleDisabled;
-    }
-  }
-  if (toggleTarget && !disableToggle && toggleTarget.disabled) {
-    toggleTarget.disabled = false;
+    state.toggle.removeAttribute('aria-disabled');
+    state.toggle.removeAttribute('title');
+    delete state.toggle.dataset.layoutToggleDisabled;
   }
   state.layoutInvalid = invalid;
 };
@@ -1031,6 +1015,144 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   state.lastLayoutType = 'seed';
 };
 
+const clampMagnetToBoard = (state, magnet) => {
+  if (!magnet) {
+    return false;
+  }
+  const width = Math.max(state.boardWidth || 0, 0);
+  const height = Math.max(state.boardHeight || 0, 0);
+  if (width <= 0 || height <= 0) {
+    return false;
+  }
+  const bounds = getMagnetBounds(magnet);
+  let nextX = magnet.x;
+  let nextY = magnet.y;
+  if (bounds.left < 0) {
+    nextX += -bounds.left;
+  } else if (bounds.right > width) {
+    nextX -= (bounds.right - width);
+  }
+  if (bounds.top < 0) {
+    nextY += -bounds.top;
+  } else if (bounds.bottom > height) {
+    nextY -= (bounds.bottom - height);
+  }
+  if (nextX !== magnet.x || nextY !== magnet.y) {
+    magnet.x = nextX;
+    magnet.y = nextY;
+    return true;
+  }
+  return false;
+};
+
+const separateNavMagnets = (state, magnetA, magnetB) => {
+  if (!magnetA || !magnetB) {
+    return false;
+  }
+  const boundsA = getMagnetBounds(magnetA);
+  const boundsB = getMagnetBounds(magnetB);
+  const overlapLeft = Math.max(boundsA.left + ALLOWED_OVERLAP, boundsB.left + ALLOWED_OVERLAP);
+  const overlapRight = Math.min(boundsA.right - ALLOWED_OVERLAP, boundsB.right - ALLOWED_OVERLAP);
+  const overlapTop = Math.max(boundsA.top + ALLOWED_OVERLAP, boundsB.top + ALLOWED_OVERLAP);
+  const overlapBottom = Math.min(boundsA.bottom - ALLOWED_OVERLAP, boundsB.bottom - ALLOWED_OVERLAP);
+  const overlapX = overlapRight - overlapLeft;
+  const overlapY = overlapBottom - overlapTop;
+  if (overlapX <= 0 || overlapY <= 0) {
+    return false;
+  }
+
+  const moveHorizontal = overlapX <= overlapY;
+  if (moveHorizontal) {
+    const shift = overlapX / 2;
+    const centerA = (boundsA.left + boundsA.right) / 2;
+    const centerB = (boundsB.left + boundsB.right) / 2;
+    if (centerA <= centerB) {
+      magnetA.x -= shift;
+      magnetB.x += shift;
+    } else {
+      magnetA.x += shift;
+      magnetB.x -= shift;
+    }
+  } else {
+    const shift = overlapY / 2;
+    const centerA = (boundsA.top + boundsA.bottom) / 2;
+    const centerB = (boundsB.top + boundsB.bottom) / 2;
+    if (centerA <= centerB) {
+      magnetA.y -= shift;
+      magnetB.y += shift;
+    } else {
+      magnetA.y += shift;
+      magnetB.y -= shift;
+    }
+  }
+  return true;
+};
+
+const resolveNavLayoutToNearestValid = (state) => {
+  if (!isNavBoardState(state) || !state || !Array.isArray(state.magnets) || !state.magnets.length) {
+    return false;
+  }
+  const visibleMagnets = state.magnets.filter((magnet) => {
+    if (!magnet?.element) {
+      return false;
+    }
+    if (magnet.element.hidden) {
+      return false;
+    }
+    return magnet.element.offsetParent !== null;
+  });
+  const magnets = visibleMagnets.length ? visibleMagnets : state.magnets;
+  if (!magnets.length) {
+    return false;
+  }
+
+  let changed = false;
+  const clampAll = () => {
+    let clamped = false;
+    magnets.forEach((magnet) => {
+      if (clampMagnetToBoard(state, magnet)) {
+        clamped = true;
+        changed = true;
+      }
+    });
+    return clamped;
+  };
+
+  clampAll();
+  const maxIterations = 80;
+  for (let iteration = 0; iteration < maxIterations; iteration += 1) {
+    let resolvedAny = false;
+    for (let i = 0; i < magnets.length; i += 1) {
+      const magnetA = magnets[i];
+      for (let j = i + 1; j < magnets.length; j += 1) {
+        const magnetB = magnets[j];
+        if (separateNavMagnets(state, magnetA, magnetB)) {
+          resolvedAny = true;
+          changed = true;
+        }
+      }
+    }
+    if (!resolvedAny) {
+      break;
+    }
+    clampAll();
+  }
+
+  const stillInvalid = layoutHasOverlap(state) || magnets.some((magnet) => isMagnetOffBoard(state, magnet));
+  if (stillInvalid) {
+    applyRowPackedLayout(state, state.magnets, { persist: false });
+    state.inactiveHeight = state.boardHeight;
+    return true;
+  }
+
+  if (changed) {
+    magnets.forEach((magnet) => {
+      setMagnetTransform(magnet);
+    });
+  }
+  return changed;
+};
+
 const shuffleWithoutPhysics = (state) => {
   const order = state.magnets.slice();
   for (let i = order.length - 1; i > 0; i -= 1) {
@@ -1151,6 +1273,9 @@ const setPlayState = (state, active) => {
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
         }
+      }
+      if (isNavBoardState(state)) {
+        resolveNavLayoutToNearestValid(state);
       }
       updateLayout(state);
       persistLayout(state, true);
