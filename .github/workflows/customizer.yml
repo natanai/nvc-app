@@ -2,9 +2,9 @@ name: Customizer Quality Checks
 
 on:
   push:
-    branches: [main]
+    branches: [main, work]
   pull_request:
-    branches: [main]
+    branches: [main, work]
 
 jobs:
   customizer:
@@ -27,3 +27,6 @@ jobs:
 
       - name: Verify customizer preload
         run: npm run test:customizer
+
+      - name: Run flicker and jitter checker
+        run: npm run test:flicker-jitter
