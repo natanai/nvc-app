@@ -18,6 +18,7 @@ const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 24;
+const HEIGHT_STORAGE_PREFIX = 'magnetHeight:';
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
 const SHUFFLE_LABEL_BUSY = 'Shuffling…';
@@ -54,6 +55,43 @@ const clamp = (value, min, max) => {
   if (value < min) return min;
   if (value > max) return max;
   return value;
+};
+
+const getHeightStorageKey = (key) => {
+  if (!key) {
+    return '';
+  }
+  return `${HEIGHT_STORAGE_PREFIX}${key}`;
+};
+
+const readStoredHeight = (key) => {
+  if (!key || typeof window === 'undefined' || !window.localStorage) {
+    return null;
+  }
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) {
+      return null;
+    }
+    const parsed = Number.parseFloat(raw);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
+const writeStoredHeight = (key, value) => {
+  if (!key || typeof window === 'undefined' || !window.localStorage) {
+    return;
+  }
+  try {
+    window.localStorage.setItem(key, String(Math.round(value)));
+  } catch {
+    // Ignore write failures (quota, privacy modes, etc.).
+  }
 };
 
 const fontsReady = typeof document !== 'undefined' && document.fonts && document.fonts.ready
@@ -591,9 +629,10 @@ const updateBoardHeight = (state) => {
     const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
     maxBottom = Math.max(maxBottom, bottom);
   });
+  const manualHeight = Math.max(state.manualHeight || 0, state.initialMinHeight || 0);
   const baseHeight = state.playActive
-    ? (state.minHeight || 0)
-    : Math.max(state.minHeight || 0, state.inactiveHeight || 0);
+    ? Math.max(state.minHeight || 0, manualHeight)
+    : Math.max(state.minHeight || 0, state.inactiveHeight || 0, manualHeight);
   const height = Math.max(baseHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
   if (!state.playActive) {
@@ -645,6 +684,129 @@ const persistLayout = (state, immediate = false) => {
   state.saveTimer = window.setTimeout(() => {
     flush();
   }, delay);
+};
+
+const getResizeMinHeight = (state) => {
+  if (!state) {
+    return 0;
+  }
+  const base = Math.max(state.initialMinHeight || 0, 0);
+  let maxBottom = 0;
+  state.magnets.forEach((magnet) => {
+    const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
+    maxBottom = Math.max(maxBottom, bottom);
+  });
+  return Math.max(base, Math.ceil(maxBottom + BOARD_PADDING));
+};
+
+const attachResizeHandle = (state) => {
+  if (!state || state.resizeHandle || !state.root || !state.board || !state.boardWrapper) {
+    return;
+  }
+  if (!state.root.classList || !state.root.classList.contains('site-nav')) {
+    return;
+  }
+
+  const handle = document.createElement('div');
+  handle.className = 'site-nav__resize-handle';
+  handle.setAttribute('aria-hidden', 'true');
+  state.boardWrapper.appendChild(handle);
+  state.resizeHandle = handle;
+
+  const stopResize = () => {
+    if (state.resizePointerId == null) {
+      return;
+    }
+    const pointerId = state.resizePointerId;
+    state.resizePointerId = null;
+    state.resizeStartHeight = 0;
+    state.resizeStartY = 0;
+    state.boardWrapper?.removeAttribute('data-resizing');
+    if (state.resizeHandle && typeof state.resizeHandle.releasePointerCapture === 'function') {
+      try {
+        state.resizeHandle.releasePointerCapture(pointerId);
+      } catch {
+        // Ignore release failures.
+      }
+    }
+    requestAnimationFrame(() => {
+      state.board.classList.remove('no-transitions');
+    });
+    updateBoardHeight(state);
+    updateLayout(state);
+    persistLayout(state, true);
+    if (state.heightStorageKey && state.manualHeight) {
+      writeStoredHeight(state.heightStorageKey, state.manualHeight);
+    }
+    state.lastLayoutType = 'manual';
+  };
+
+  const handlePointerMove = (event) => {
+    if (state.resizePointerId == null || event.pointerId !== state.resizePointerId) {
+      return;
+    }
+    event.preventDefault();
+    const deltaY = event.clientY - state.resizeStartY;
+    const desired = Math.round(state.resizeStartHeight + deltaY);
+    const minHeight = getResizeMinHeight(state);
+    const newHeight = Math.max(desired, minHeight);
+    state.manualHeight = newHeight;
+    state.boardHeight = newHeight;
+    state.inactiveHeight = newHeight;
+    state.board.style.height = `${newHeight}px`;
+  };
+
+  const handlePointerDown = (event) => {
+    if (!event.isPrimary) {
+      return;
+    }
+    if (typeof event.button === 'number' && event.button !== 0 && event.pointerType !== 'touch') {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    state.manualHeight = Math.max(state.manualHeight || 0, state.boardHeight || 0);
+    state.manualHeightSetByUser = true;
+    state.resizePointerId = event.pointerId;
+    state.resizeStartY = event.clientY;
+    state.resizeStartHeight = state.boardHeight;
+    if (state.boardWrapper) {
+      state.boardWrapper.dataset.resizing = 'true';
+    }
+    state.board.classList.add('no-transitions');
+    if (typeof handle.setPointerCapture === 'function') {
+      try {
+        handle.setPointerCapture(event.pointerId);
+      } catch {
+        // Ignore pointer capture failures.
+      }
+    }
+  };
+
+  const handlePointerEnd = (event) => {
+    if (state.resizePointerId == null || event.pointerId !== state.resizePointerId) {
+      return;
+    }
+    event.preventDefault();
+    stopResize();
+  };
+
+  handle.addEventListener('pointerdown', handlePointerDown);
+  handle.addEventListener('pointermove', handlePointerMove);
+  handle.addEventListener('pointerup', handlePointerEnd);
+  handle.addEventListener('pointercancel', handlePointerEnd);
+
+  state.cleanupResizeHandle = () => {
+    handle.removeEventListener('pointerdown', handlePointerDown);
+    handle.removeEventListener('pointermove', handlePointerMove);
+    handle.removeEventListener('pointerup', handlePointerEnd);
+    handle.removeEventListener('pointercancel', handlePointerEnd);
+    if (handle.parentNode) {
+      handle.parentNode.removeChild(handle);
+    }
+    state.resizeHandle = null;
+    state.cleanupResizeHandle = null;
+  };
 };
 
 const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
@@ -713,9 +875,13 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
     setMagnetTransform(magnet);
   });
 
-  const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
+  const manualHeight = Math.max(state.manualHeight || 0, state.initialMinHeight || 0);
+  const height = Math.max(state.minHeight, manualHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
   state.board.style.height = `${height}px`;
+  if (!state.manualHeightSetByUser && manualHeight < height) {
+    state.manualHeight = height;
+  }
   updateLayout(state);
   if (persist) {
     persistLayout(state, true);
@@ -1048,6 +1214,8 @@ const initializeBoard = async (root, index) => {
   const customStorageKey = root.dataset.magnetKey;
   const resolvedStorageKey = customStorageKey || createStorageKey(index);
 
+  const initialHeight = Math.max(boardRect.height || board.clientHeight || 1, 1);
+
   const state = {
     root,
     board,
@@ -1066,9 +1234,13 @@ const initializeBoard = async (root, index) => {
     layout: new Map(),
     physics: null,
     boardWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
-    boardHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
-    minHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
-    inactiveHeight: Math.max(boardRect.height || board.clientHeight || 1, 1),
+    boardHeight: initialHeight,
+    minHeight: initialHeight,
+    inactiveHeight: initialHeight,
+    initialMinHeight: initialHeight,
+    manualHeight: initialHeight,
+    manualHeightSetByUser: false,
+    heightStorageKey: getHeightStorageKey(resolvedStorageKey),
     saveTimer: null,
     lastSaveTime: 0,
     resizeObserver: null,
@@ -1086,6 +1258,11 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    resizeHandle: null,
+    cleanupResizeHandle: null,
+    resizePointerId: null,
+    resizeStartY: 0,
+    resizeStartHeight: 0,
   };
 
   state.setClickSuppress = () => {
@@ -1094,6 +1271,18 @@ const initializeBoard = async (root, index) => {
 
   registerTiltSource(state);
   updateTiltRequestUI(state);
+
+  if (state.heightStorageKey) {
+    const storedHeight = readStoredHeight(state.heightStorageKey);
+    if (typeof storedHeight === 'number' && storedHeight > 0) {
+      const minAllowed = Math.max(state.initialMinHeight || 0, 1);
+      const resolvedHeight = Math.max(storedHeight, minAllowed);
+      state.manualHeight = resolvedHeight;
+      state.manualHeightSetByUser = true;
+      state.boardHeight = resolvedHeight;
+      state.inactiveHeight = Math.max(state.inactiveHeight || 0, resolvedHeight);
+    }
+  }
 
   board.addEventListener('click', (event) => {
     if (!state.playActive) {
@@ -1194,6 +1383,8 @@ const initializeBoard = async (root, index) => {
   requestAnimationFrame(() => {
     board.classList.remove('no-transitions');
   });
+
+  attachResizeHandle(state);
 
   const scheduleResponsiveResize = () => {
     if (state.resizeScheduled) {

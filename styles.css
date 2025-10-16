@@ -203,6 +203,47 @@ a:focus-visible {
 
 .site-nav__board-wrapper {
   padding-top: 0.75rem;
+  padding-bottom: 1.75rem;
+}
+
+.site-nav__resize-handle {
+  position: absolute;
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 0.35rem;
+  height: 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+  touch-action: none;
+  user-select: none;
+  pointer-events: auto;
+  z-index: 3;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.site-nav__resize-handle::before {
+  content: '';
+  width: min(3.25rem, 100%);
+  height: 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--outline) 42%, transparent);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--outline) 18%, transparent);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-nav__resize-handle:hover::before,
+.site-nav__board-wrapper[data-resizing='true'] .site-nav__resize-handle::before {
+  transform: scaleY(1.2);
+  background: color-mix(in srgb, var(--outline) 60%, transparent);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--outline) 24%, transparent);
+}
+
+.site-nav__resize-handle:hover,
+.site-nav__board-wrapper[data-resizing='true'] .site-nav__resize-handle {
+  opacity: 1;
 }
 
 .site-nav[data-nav-expanded='true'] .site-nav__board {
@@ -445,6 +486,14 @@ button.site-nav__magnet {
 
   .site-nav__board-wrapper {
     padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .site-nav__resize-handle {
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 0.25rem;
+    height: 1.2rem;
   }
 
   .site-nav[data-nav-expanded='true'] .site-nav__board {
