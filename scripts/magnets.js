@@ -1045,6 +1045,9 @@ const initializeBoard = async (root, index) => {
       magnet.href = '';
     }
   });
+  const customStorageKey = root.dataset.magnetKey;
+  const resolvedStorageKey = customStorageKey || createStorageKey(index);
+
   const state = {
     root,
     board,
@@ -1057,7 +1060,7 @@ const initializeBoard = async (root, index) => {
     searchResults,
     searchCount,
     searchList,
-    storageKey: createStorageKey(index),
+    storageKey: resolvedStorageKey,
     magnets: measured,
     magnetMap: new Map(),
     layout: new Map(),
@@ -1109,7 +1112,6 @@ const initializeBoard = async (root, index) => {
 
   board.style.height = `${state.boardHeight}px`;
   board.classList.add('no-transitions');
-  board.dataset.ready = '1';
 
   const sizeMap = new Map(state.magnets.map((magnet) => [magnet.id, { width: magnet.width, height: magnet.height }]));
   const stored = loadPositions(state.storageKey, { width: state.boardWidth, height: state.boardHeight }, sizeMap);
@@ -1118,21 +1120,65 @@ const initializeBoard = async (root, index) => {
   if (stored && stored.length) {
     shouldSeed = false;
     const storedById = new Map(stored.map((item) => [item.id, item]));
-    let missingMagnet = false;
+    const newMagnets = [];
+    let hasStoredPlacement = false;
+    let maxBottom = 0;
     state.magnets.forEach((magnet) => {
       const saved = storedById.get(magnet.id);
       if (saved) {
+        hasStoredPlacement = true;
         magnet.x = saved.x;
         magnet.y = saved.y;
+        setMagnetTransform(magnet);
+        const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
+        maxBottom = Math.max(maxBottom, bottom);
       } else {
-        missingMagnet = true;
+        newMagnets.push(magnet);
       }
-      setMagnetTransform(magnet);
     });
+
+    if (!hasStoredPlacement) {
+      shouldSeed = true;
+    } else if (newMagnets.length) {
+      const width = Math.max(state.boardWidth || 0, 1);
+      const startX = LAYOUT_GAP_X;
+      const startY = maxBottom ? maxBottom + LAYOUT_GAP_Y : LAYOUT_GAP_Y;
+      let cursorX = startX;
+      let cursorY = startY;
+      let rowHeight = 0;
+      newMagnets.forEach((magnet) => {
+        const marginLeft = magnet.marginLeft || 0;
+        const marginRight = magnet.marginRight || 0;
+        const marginTop = magnet.marginTop || 0;
+        const marginBottom = magnet.marginBottom || 0;
+        const footprintWidth = magnet.width + marginLeft + marginRight;
+        const footprintHeight = magnet.height + marginTop + marginBottom;
+        if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
+          cursorX = startX;
+          cursorY += rowHeight + LAYOUT_GAP_Y;
+          rowHeight = 0;
+        }
+        const maxX = Math.max(width - magnet.width, 0);
+        const x = clamp(cursorX + marginLeft, 0, maxX);
+        const y = cursorY + marginTop;
+        magnet.x = x;
+        magnet.y = y;
+        setMagnetTransform(magnet);
+        cursorX += footprintWidth + LAYOUT_GAP_X;
+        rowHeight = Math.max(rowHeight, footprintHeight);
+        const bottom = magnet.y + magnet.height + marginBottom;
+        maxBottom = Math.max(maxBottom, bottom);
+      });
+    } else {
+      state.magnets.forEach((magnet) => {
+        setMagnetTransform(magnet);
+      });
+    }
+
     updateBoardHeight(state);
     updateLayout(state);
     state.lastLayoutType = 'restored';
-    if (missingMagnet || layoutHasOverlap(state)) {
+    if (layoutHasOverlap(state)) {
       shouldSeed = true;
     }
   }
@@ -1142,6 +1188,8 @@ const initializeBoard = async (root, index) => {
   } else {
     state.board.style.height = `${state.boardHeight}px`;
   }
+
+  board.dataset.ready = '1';
 
   requestAnimationFrame(() => {
     board.classList.remove('no-transitions');
