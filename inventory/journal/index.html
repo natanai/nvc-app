@@ -368,13 +368,15 @@
         <div class="journal-overview-grid">
           <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
             <div class="journal-actions__header">
-              <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
-              <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
+              <h2 id="journal-actions-heading" class="section-title">Save your progress</h2>
+              <p class="journal-actions__hint">
+                Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
+              </p>
             </div>
             <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export journal</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
-              <input type="file" id="journal-import" accept="application/json,.json" hidden />
+              <button type="button" id="journal-export" class="inventory-button">Export localStorage</button>
+              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import localStorage</button>
+              <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
             </div>
             <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
           </section>
