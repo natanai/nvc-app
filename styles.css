@@ -205,8 +205,15 @@ a:focus-visible {
   padding-top: 0.75rem;
 }
 
+.site-nav[data-nav-expanded='true'] .site-nav__board {
+  min-height: clamp(9rem, 26vw, 11.5rem);
+  padding-block-end: 1.25rem;
+}
+
 .site-nav__board {
-  min-height: 11rem;
+  min-height: clamp(6.25rem, 20vw, 8.75rem);
+  padding-block-end: 0.5rem;
+  transition: min-height 0.25s ease, padding-block-end 0.25s ease;
 }
 
 .site-nav__magnet {
@@ -227,6 +234,10 @@ a:focus-visible {
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, opacity 0.18s ease;
   min-height: 44px;
   white-space: nowrap;
+  --nav-active-bg: color-mix(in srgb, var(--sky) 78%, #fff 22%);
+  --nav-active-border: color-mix(in srgb, var(--outline) 82%, transparent);
+  --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 32%, transparent);
+  --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 46%, transparent);
 }
 
 .site-nav__magnet-label {
@@ -253,56 +264,24 @@ a:focus-visible {
 }
 
 .site-nav__magnet[aria-current='page'] {
-  background: color-mix(in srgb, var(--sky) 85%, #fff 15%);
-  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 25%, transparent), 0 10px 0 var(--shadow);
-  transform: translateY(-1px);
+  background: var(--nav-active-bg);
+  border-color: var(--nav-active-border);
+  box-shadow: inset 0 -8px 0 var(--nav-active-inset-shadow), 0 14px 0 var(--nav-active-lift-shadow);
+  color: var(--outline);
+  transform: translateY(-3px);
 }
 
 .site-nav__magnet[aria-current='page']:hover,
 .site-nav__magnet[aria-current='page']:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 30%, transparent),
-    0 12px 0 color-mix(in srgb, var(--outline) 38%, transparent);
-}
-
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-home'],
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-feelings'],
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-situations'],
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-needs'] {
-  transform: translateY(-3px);
-  box-shadow: inset 0 -8px 0 color-mix(in srgb, var(--outline) 32%, transparent),
-    0 14px 0 color-mix(in srgb, var(--outline) 45%, transparent);
-  border-color: color-mix(in srgb, var(--outline) 88%, transparent);
-}
-
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-home'] {
-  background: color-mix(in srgb, var(--rose) 94%, #fff 6%);
-}
-
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-feelings'] {
-  background: color-mix(in srgb, var(--sky) 70%, var(--lavender) 30%);
-}
-
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-situations'] {
-  background: color-mix(in srgb, var(--gold) 85%, #fff 15%);
-}
-
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-needs'] {
-  background: color-mix(in srgb, var(--mint) 85%, #fff 15%);
-}
-
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-home']:is(:hover, :focus-visible),
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-feelings']:is(:hover, :focus-visible),
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-situations']:is(:hover, :focus-visible),
-.site-nav__magnet[aria-current='page'][data-magnet-id='nav-needs']:is(:hover, :focus-visible) {
-  transform: translateY(-3px);
   box-shadow: inset 0 -8px 0 color-mix(in srgb, var(--outline) 36%, transparent),
-    0 16px 0 color-mix(in srgb, var(--outline) 48%, transparent);
+    0 16px 0 color-mix(in srgb, var(--outline) 52%, transparent);
+  transform: translateY(-3px);
 }
 
-.site-nav__magnet--inventory[aria-current='page'] {
-  background: color-mix(in srgb, var(--mint) 70%, #fff 20%);
-  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 35%, transparent), 0 10px 0 var(--shadow);
+.site-nav__magnet--inventory {
+  --nav-active-bg: color-mix(in srgb, var(--mint) 72%, #fff 28%);
+  --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 35%, transparent);
+  --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 50%, transparent);
 }
 
 .site-nav__magnet[aria-disabled='true'] {
@@ -406,7 +385,12 @@ button.site-nav__magnet {
     gap: 0.32rem;
   }
 
+  .site-nav__board {
+    min-height: clamp(5.75rem, 40vw, 8rem);
+  }
+
   .site-nav[data-nav-expanded='true'] .site-nav__board {
+    min-height: clamp(8rem, 56vw, 10.5rem);
     padding-block-end: 0.75rem;
   }
 
@@ -447,15 +431,16 @@ button.site-nav__magnet {
   }
 
   .site-nav__board {
-    min-height: 12rem;
+    min-height: clamp(5.5rem, 64vw, 7.5rem);
   }
 
   .site-nav__board-wrapper {
-    padding-top: 1.75rem;
+    padding-top: 1.5rem;
   }
 
   .site-nav[data-nav-expanded='true'] .site-nav__board {
-    padding-block-end: 0.5rem;
+    min-height: clamp(7.5rem, 82vw, 10rem);
+    padding-block-end: 0.85rem;
   }
 }
 
