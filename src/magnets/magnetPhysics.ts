@@ -31,6 +31,11 @@ export interface StoredMagnetPercentages {
   yPct: number;
 }
 
+export interface StoredMagnetLayout {
+  magnets: MagnetSnapshot[];
+  boardHeight: number | null;
+}
+
 export interface StartPhysicsOptions {
   board: HTMLElement;
   magnets: HTMLElement[];
@@ -894,7 +899,7 @@ export function loadPositions(
   storageKey: string,
   boardSize: { width: number; height: number },
   magnetSizes: Map<string, { width: number; height: number }>,
-): MagnetSnapshot[] | null {
+): StoredMagnetLayout | null {
   if (!isStorageAvailable()) {
     return null;
   }
@@ -907,6 +912,17 @@ export function loadPositions(
     if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
       return null;
     }
+    const parsedLayout = parsed as { boardHeight?: unknown };
+    const storedHeightRaw = parsedLayout.boardHeight;
+    const storedHeight =
+      typeof storedHeightRaw === 'number' && Number.isFinite(storedHeightRaw) && storedHeightRaw > 0
+        ? storedHeightRaw
+        : null;
+
+    const effectiveWidth = Math.max(boardSize.width, 0);
+    const requestedHeight = Math.max(boardSize.height, 0);
+    const effectiveHeight = storedHeight != null ? Math.max(storedHeight, 0) : requestedHeight;
+
     const snapshots: MagnetSnapshot[] = [];
     for (const [id, value] of Object.entries(parsed.magnets as Record<string, unknown>)) {
       if (!value || typeof value !== 'object') {
@@ -915,15 +931,22 @@ export function loadPositions(
       const entry = value as { xPct?: unknown; yPct?: unknown };
       const width = magnetSizes.get(id)?.width ?? 0;
       const height = magnetSizes.get(id)?.height ?? 0;
-      const maxX = Math.max(boardSize.width - width, 0);
-      const maxY = Math.max(boardSize.height - height, 0);
+      const maxX = Math.max(effectiveWidth - width, 0);
+      const maxY = Math.max(effectiveHeight - height, 0);
       const xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
       const yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
-      const x = clamp(xPct * boardSize.width, 0, maxX);
-      const y = clamp(yPct * boardSize.height, 0, maxY);
+      const x = clamp(xPct * effectiveWidth, 0, maxX);
+      const y = clamp(yPct * effectiveHeight, 0, maxY);
       snapshots.push({ id, x, y, vx: 0, vy: 0, w: width, h: height });
     }
-    return snapshots.length ? snapshots : null;
+    if (!snapshots.length) {
+      return null;
+    }
+
+    return {
+      magnets: snapshots,
+      boardHeight: storedHeight != null ? Math.max(storedHeight, 0) : null,
+    };
   } catch {
     return null;
   }
@@ -937,7 +960,10 @@ export function savePositions(
   if (!isStorageAvailable()) {
     return;
   }
-  const payload: { magnets: Record<string, { xPct: number; yPct: number }> } = { magnets: {} };
+  const payload: {
+    magnets: Record<string, { xPct: number; yPct: number }>;
+    boardHeight?: number;
+  } = { magnets: {} };
   const width = boardSize.width || 1;
   const height = boardSize.height || 1;
   for (const magnet of magnets) {
@@ -947,6 +973,9 @@ export function savePositions(
       xPct: Number(xPct.toFixed(4)),
       yPct: Number(yPct.toFixed(4)),
     };
+  }
+  if (height > 0 && Number.isFinite(height)) {
+    payload.boardHeight = Number(Math.max(height, 0).toFixed(2));
   }
   try {
     window.localStorage.setItem(normalizeKey(storageKey), JSON.stringify(payload));
