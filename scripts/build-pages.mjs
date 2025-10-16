@@ -10,6 +10,66 @@ const BRAND_NAME = 'allneeds.app';
 const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
 
+const SITE_ORIGIN = 'https://allneeds.app';
+const FAVICON_SVG = 'icons/main.svg';
+const TOUCH_ICON_SRC = 'icons/allneeds-touch.svg';
+const MASK_ICON_SRC = 'icons/allneeds-touch.svg';
+const SOCIAL_CARD_SRC = 'icons/social-card.svg';
+const SOCIAL_CARD_WIDTH = 1200;
+const SOCIAL_CARD_HEIGHT = 630;
+
+function absoluteUrl(path = '') {
+  if (!path) {
+    return SITE_ORIGIN;
+  }
+
+  if (/^(?:[a-z]+:)?\/\//i.test(path)) {
+    return path;
+  }
+
+  const origin = SITE_ORIGIN.replace(/\/+$/, '');
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  return `${origin}${normalized}`;
+}
+
+function normalizeCanonicalPath(path = '') {
+  if (!path) {
+    return '/';
+  }
+  const trimmed = path.trim();
+  if (!trimmed) {
+    return '/';
+  }
+  if (trimmed === '/') {
+    return '/';
+  }
+  const prefixed = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  return prefixed.endsWith('/') ? prefixed : `${prefixed}/`;
+}
+
+function guessMimeType(path = '') {
+  if (!path) {
+    return 'image/svg+xml';
+  }
+  const normalized = path.toLowerCase();
+  if (normalized.endsWith('.svg')) {
+    return 'image/svg+xml';
+  }
+  if (normalized.endsWith('.png')) {
+    return 'image/png';
+  }
+  if (normalized.endsWith('.jpg') || normalized.endsWith('.jpeg')) {
+    return 'image/jpeg';
+  }
+  if (normalized.endsWith('.webp')) {
+    return 'image/webp';
+  }
+  if (normalized.endsWith('.avif')) {
+    return 'image/avif';
+  }
+  return 'image/png';
+}
+
 const themePreloadScript = (basePath) => {
   const contrastSrc = `${basePath}assets/js/ui/contrast.js`;
   return String.raw`    <script src="${contrastSrc}"></script>
@@ -278,6 +338,9 @@ function htmlPage({
   activeNav,
   mainClass = 'page',
   navOptions = undefined,
+  canonicalPath = '/',
+  socialImage = SOCIAL_CARD_SRC,
+  socialAlt = 'Three colorful doorways symbolizing allneeds.app',
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
@@ -287,6 +350,16 @@ function htmlPage({
   const escapedBrand = escapeHtml(BRAND_NAME);
   const fullTitle = `${escapedTitle} • ${escapedBrand}`;
   const tabTitle = fullTitle.toLowerCase();
+  const faviconHref = `${basePath}${FAVICON_SVG}`;
+  const manifestHref = `${basePath}site.webmanifest`;
+  const canonicalPathNormalized = normalizeCanonicalPath(canonicalPath);
+  const canonicalUrl = absoluteUrl(canonicalPathNormalized);
+  const appleTouchIconUrl = absoluteUrl(TOUCH_ICON_SRC);
+  const maskIconUrl = absoluteUrl(MASK_ICON_SRC);
+  const socialImagePath = socialImage || SOCIAL_CARD_SRC;
+  const socialImageUrl = absoluteUrl(socialImagePath);
+  const socialImageType = guessMimeType(socialImagePath);
+  const socialAltEscaped = escapeHtml(socialAlt || 'Three colorful doorways symbolizing allneeds.app');
 
   const breadcrumbHtml = breadcrumbs.length
     ? `<nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -344,16 +417,34 @@ function htmlPage({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${tabTitle}</title>
     <meta name="description" content="${escapedDescription}" />
-    <link rel="icon" type="image/svg+xml" href="${basePath}icons/main.svg" />
+    <link rel="icon" type="image/svg+xml" href="${faviconHref}" />
+    <link rel="manifest" href="${manifestHref}" />
+    <meta name="theme-color" content="#FBF7FF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12081F" media="(prefers-color-scheme: dark)" />
+    <meta name="application-name" content="${escapedBrand}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="${appleTouchIconUrl}" />
+    <link rel="apple-touch-icon" sizes="1024x1024" href="${appleTouchIconUrl}" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="${escapedBrand}" />
+    <link rel="mask-icon" href="${maskIconUrl}" color="#7E5CFF" />
+    <link rel="canonical" href="${canonicalUrl}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${escapedBrand}" />
+    <meta property="og:url" content="${canonicalUrl}" />
     <meta property="og:title" content="${tabTitle}" />
     <meta property="og:description" content="${escapedDescription}" />
-    <meta property="og:image" content="${basePath}icons/main.svg" />
+    <meta property="og:image" content="${socialImageUrl}" />
+    <meta property="og:image:secure_url" content="${socialImageUrl}" />
+    <meta property="og:image:type" content="${socialImageType}" />
+    <meta property="og:image:width" content="${SOCIAL_CARD_WIDTH}" />
+    <meta property="og:image:height" content="${SOCIAL_CARD_HEIGHT}" />
+    <meta property="og:image:alt" content="${socialAltEscaped}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${tabTitle}" />
     <meta name="twitter:description" content="${escapedDescription}" />
-    <meta name="twitter:image" content="${basePath}icons/main.svg" />
+    <meta name="twitter:url" content="${canonicalUrl}" />
+    <meta name="twitter:image" content="${socialImageUrl}" />
+    <meta name="twitter:image:alt" content="${socialAltEscaped}" />
         ${themePreloadScript(basePath)}
     <link rel="stylesheet" href="${cssHref}" />
   </head>
@@ -682,6 +773,7 @@ ${cards}
     depth: 0,
     main,
     activeNav: 'home',
+    canonicalPath: '/',
   });
 
   writePage('index.html', html);
@@ -783,6 +875,7 @@ function renderCategory(type, items) {
     main,
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
     activeNav: type,
+    canonicalPath: `${type}/`,
   });
 
   writePage(`${type}/index.html`, html);
@@ -831,6 +924,7 @@ function renderBodyCuesPage() {
     scripts: [{ src: 'scripts/body-cues-tool.js', type: 'module' }],
     activeNav: 'feelings',
     mainClass: 'page body-cues-page',
+    canonicalPath: 'feelings/body-cues/',
   });
 
   writePage('feelings/body-cues/index.html', html);
@@ -856,6 +950,7 @@ function renderSituation(item) {
     main,
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
     activeNav: 'situations',
+    canonicalPath: `situations/${item.slug}/`,
   });
 
   writePage(`situations/${item.slug}/index.html`, html);
@@ -900,6 +995,7 @@ function renderFeeling(item) {
     ],
     mainAttributes: ` data-feeling-slug="${escapeHtml(item.slug)}"`,
     activeNav: 'feelings',
+    canonicalPath: `feelings/${item.slug}/`,
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
@@ -1018,6 +1114,7 @@ function renderNeed(item, strategyLookup) {
     scripts: [],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
+    canonicalPath: `needs/${item.slug}/`,
   });
 
   writePage(`needs/${item.slug}/index.html`, html);
@@ -1201,6 +1298,7 @@ function renderInventoryPage() {
     ],
     main,
     activeNav: 'inventory',
+    canonicalPath: 'inventory/',
   });
 
   writePage('inventory/index.html', html);
@@ -1346,6 +1444,7 @@ function renderInventoryJournalPage(needsList = []) {
       { src: 'scripts/inventory.js', defer: true },
     ],
     activeNav: 'inventory',
+    canonicalPath: 'inventory/journal/',
   });
 
   writePage('inventory/journal/index.html', html);
