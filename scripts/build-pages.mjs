@@ -64,6 +64,11 @@ const navPrefillScript = () => String.raw`
           var boardRect = board.getBoundingClientRect();
           var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
           var boardHeight = Math.max(boardRect.height || board.clientHeight || 1, 1);
+          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
+            var storedHeight = Math.max(parsed.boardHeight, boardHeight);
+            boardHeight = storedHeight;
+            board.style.height = storedHeight + 'px';
+          }
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
             return;
