@@ -1178,28 +1178,30 @@ function renderInventoryPage() {
         <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
           <div class="inventory-actions__header">
             <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
-            <p class="inventory-actions__hint">Export a CSV backup or import one you created earlier.</p>
+            <p class="inventory-actions__hint">
+              Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
+            </p>
           </div>
           <div class="inventory-actions__buttons">
             <button
               type="button"
               id="inventory-export"
               class="inventory-button inventory-button--compact"
-              aria-label="Export CSV"
+              aria-label="Export localStorage JSON"
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export CSV</span>
+              <span class="inventory-button__text">Export localStorage</span>
             </button>
             <button
               type="button"
               id="inventory-import-trigger"
               class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Import CSV"
+              aria-label="Import localStorage JSON"
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import CSV</span>
+              <span class="inventory-button__text">Import localStorage</span>
             </button>
-            <input type="file" id="inventory-import" accept=".csv,text/csv" hidden />
+            <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
         </section>
@@ -1337,13 +1339,15 @@ function renderInventoryJournalPage(needsList = []) {
         <div class="journal-overview-grid">
           <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
             <div class="journal-actions__header">
-              <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
-              <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
+              <h2 id="journal-actions-heading" class="section-title">Save your progress</h2>
+              <p class="journal-actions__hint">
+                Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
+              </p>
             </div>
             <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export journal</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
-              <input type="file" id="journal-import" accept="application/json,.json" hidden />
+              <button type="button" id="journal-export" class="inventory-button">Export localStorage</button>
+              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import localStorage</button>
+              <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
             </div>
             <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
           </section>
