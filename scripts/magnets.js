@@ -17,9 +17,8 @@ const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
-const BOARD_PADDING = 24;
+const BOARD_PADDING = 16;
 const RESIZE_HANDLE_MARGIN = 28;
-const RESIZE_HANDLE_TOLERANCE = 12;
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
 const SHUFFLE_LABEL_BUSY = 'Shuffling…';
@@ -605,10 +604,7 @@ const maybeStartBoardResize = (state, event) => {
   }
   const rect = state.board.getBoundingClientRect();
   const offsetFromBottom = rect.bottom - event.clientY;
-  if (
-    offsetFromBottom < -RESIZE_HANDLE_TOLERANCE
-    || offsetFromBottom > RESIZE_HANDLE_MARGIN
-  ) {
+  if (offsetFromBottom < 0 || offsetFromBottom > RESIZE_HANDLE_MARGIN) {
     return false;
   }
   const minHeight = Math.max(state.minHeight || 0, 1);

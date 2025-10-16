@@ -2060,7 +2060,7 @@ body.has-support-journal-open {
 .magnet-board {
   position: relative;
   display: block;
-  padding: 1.25rem;
+  padding: 1.25rem 1.25rem 0.75rem;
   background: rgba(255, 255, 255, 0.85);
   border: 3px solid var(--outline);
   border-radius: var(--radius-2xl);
