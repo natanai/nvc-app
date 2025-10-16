@@ -471,8 +471,10 @@ if (typeof window !== 'undefined') {
   });
 }
 
-const waitForStableBoard = async (board) => {
-  await fontsReady;
+const waitForStableBoard = async (board, { fontsBarrier = true } = {}) => {
+  if (fontsBarrier) {
+    await fontsReady;
+  }
   let attempt = 0;
   // eslint-disable-next-line no-constant-condition
   while (true) {
@@ -1015,7 +1017,9 @@ const initializeBoard = async (root, index) => {
     return;
   }
 
-  await initMagnetBoard(board, magnetElements);
+  const fastInit = Boolean(root.dataset.magnetFastInit) || Boolean(root.dataset.magnetKey);
+
+  await initMagnetBoard(board, magnetElements, { fontsBarrier: !fastInit });
 
   magnetElements.forEach((element, magnetIndex) => {
     const id = element.dataset.magnetId || `${index}-${magnetIndex}`;
@@ -1023,7 +1027,7 @@ const initializeBoard = async (root, index) => {
     applyMagnetDecorations(element, magnetIndex);
   });
 
-  const boardRect = await waitForStableBoard(board);
+  const boardRect = await waitForStableBoard(board, { fontsBarrier: !fastInit });
   const measured = createMagnetStates(board, magnetElements);
   const boardWrapper = root.querySelector('.magnet-board-wrapper');
   const searchContainer = root.querySelector('[data-magnet-search]');
@@ -1323,7 +1327,6 @@ const setup = async () => {
   if (!roots.length) {
     return;
   }
-  await fontsReady;
   for (let index = 0; index < roots.length; index += 1) {
     await initializeBoard(roots[index], index);
   }

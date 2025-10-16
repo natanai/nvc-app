@@ -5,6 +5,95 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
+const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
+const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
+
+const HOME_ICON_INLINE = `
+  <svg class="site-nav__magnet-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path
+      fill="currentColor"
+      d="M3 10.75V21c0 .55.45 1 1 1h5.5a.5.5 0 0 0 .5-.5V16h4v5.5a.5.5 0 0 0 .5.5H20c.55 0 1-.45 1-1v-10.2l-8.44-6.6a1 1 0 0 0-1.12 0L3 10.75z"
+    />
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linejoin="round"
+      d="M2 11.2 12 3l10 8.2"
+    />
+  </svg>`;
+
+const NAV_MAGNET_STORAGE_KEY = 'site-nav';
+
+const navPrefillScript = () => String.raw`
+      <script>
+        (function() {
+          if (typeof window === 'undefined' || typeof document === 'undefined') {
+            return;
+          }
+          var root = document.querySelector('[data-magnet-root][data-magnet-key="${NAV_MAGNET_STORAGE_KEY}"]');
+          if (!root) {
+            return;
+          }
+          var board = root.querySelector('[data-magnet-board]');
+          if (!board) {
+            return;
+          }
+          var STORAGE_KEY = 'magnetPositions:${NAV_MAGNET_STORAGE_KEY}';
+          var raw;
+          try {
+            if (!('localStorage' in window)) {
+              return;
+            }
+            raw = window.localStorage.getItem(STORAGE_KEY);
+          } catch (error) {
+            return;
+          }
+          if (typeof raw !== 'string' || !raw) {
+            return;
+          }
+          var parsed;
+          try {
+            parsed = JSON.parse(raw);
+          } catch (error) {
+            return;
+          }
+          if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
+            return;
+          }
+          var boardRect = board.getBoundingClientRect();
+          var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
+          var boardHeight = Math.max(boardRect.height || board.clientHeight || 1, 1);
+          var magnets = board.querySelectorAll('[data-magnet-id]');
+          if (!magnets.length) {
+            return;
+          }
+          for (var i = 0; i < magnets.length; i += 1) {
+            var el = magnets[i];
+            if (!el || !el.dataset) {
+              continue;
+            }
+            var id = el.dataset.magnetId;
+            if (!id || !(id in parsed.magnets)) {
+              continue;
+            }
+            var entry = parsed.magnets[id];
+            if (!entry || typeof entry !== 'object') {
+              continue;
+            }
+            var rect = el.getBoundingClientRect();
+            var magnetWidth = rect.width || el.offsetWidth || 0;
+            var magnetHeight = rect.height || el.offsetHeight || 0;
+            var maxX = Math.max(boardWidth - magnetWidth, 0);
+            var maxY = Math.max(boardHeight - magnetHeight, 0);
+            var xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
+            var yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
+            var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
+            var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
+            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
+          }
+        })();
+      </script>`;
 
 const BRAND_NAME = 'allneeds.app';
 const DEFAULT_DESCRIPTION =
@@ -434,6 +523,7 @@ function htmlPage({
   const navHtml = renderNav(basePath, activeNav, navOptions);
   const normalizedMainAttrs = mainAttributes ? ` ${mainAttributes.trim()}` : '';
   const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
+  const criticalStyles = navCriticalCss ? `    <style>${navCriticalCss}</style>` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -475,7 +565,9 @@ function htmlPage({
     <meta name="twitter:image" content="${socialImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
         ${themePreloadScript(basePath)}
-    <link rel="stylesheet" href="${cssHref}" />
+${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
+    <link rel="stylesheet" href="${cssHref}" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="${cssHref}" /></noscript>
   </head>
   <body data-base-path="${basePath}">
     <a href="#main" class="skip-link">Skip to content</a>
@@ -573,16 +665,13 @@ function renderNav(basePath, activeNav, options = {}) {
     })
     .join('\n');
 
-  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
+  const prefill = navPrefillScript();
+
+  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="${NAV_MAGNET_STORAGE_KEY}">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
-              <img
-                class="site-nav__magnet-icon"
-                src="${basePath}icons/home-8bit.svg"
-                alt=""
-                aria-hidden="true"
-              />
+${HOME_ICON_INLINE}
               <span class="site-nav__magnet-label visually-hidden">Home</span>
             </a>
             <button
@@ -657,7 +746,8 @@ ${secondaryLinks ? `${secondaryLinks}\n` : ''}          </div>
             </div>
           </div>
         </div>
-      </nav>`;
+      </nav>
+${prefill}`;
 }
 
 function escapeHtml(value) {

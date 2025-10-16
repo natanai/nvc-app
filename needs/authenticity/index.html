@@ -241,21 +241,319 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="../../styles.css" />
+    <style>:root {
+  --plum: #74569b;
+  --lavender: #ede4ff;
+  --ink: #1f1230;
+  --ink-soft: #392351;
+  --rose: #ffb3cb;
+  --mint: #96fbc7;
+  --gold: #f7ffae;
+  --sky: #d3f1ff;
+  --peach: #ffdfc9;
+  --outline: #12081f;
+  --shadow: color-mix(in srgb, var(--outline) 55%, transparent);
+  --nav-hover-shadow: color-mix(in srgb, var(--outline) 45%, transparent);
+  --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
+  --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 62%, transparent);
+}
+
+.page-wrapper {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.site-nav {
+  display: grid;
+  gap: 1rem;
+}
+
+.site-nav__board-wrapper {
+  position: relative;
+  padding-top: 0.75rem;
+}
+
+.site-nav__board {
+  min-height: clamp(6.25rem, 20vw, 8.75rem);
+  padding: 1.25rem 1.25rem 0.5rem;
+  border-radius: clamp(1.5rem, 4vw, 2.75rem);
+  border: 3px solid var(--outline);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.site-nav[data-nav-expanded='true'] .site-nav__board {
+  min-height: clamp(9rem, 26vw, 11.5rem);
+  padding-block-end: 1.25rem;
+}
+
+.site-nav__board-wrapper .magnet-play-toggle {
+  top: -1.2rem;
+  right: 0.55rem;
+}
+
+.site-nav__magnet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: 3px solid var(--outline);
+  border-radius: clamp(2.5rem, 8vw, 3.75rem);
+  background: color-mix(in srgb, var(--lavender) 65%, #fff 35%);
+  font-family: 'Manrope', 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  min-height: 44px;
+  white-space: nowrap;
+  position: relative;
+  filter: drop-shadow(0 10px 0 var(--shadow));
+  transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+  --nav-active-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sky) 88%, #fff 12%) 0%,
+    color-mix(in srgb, var(--sky) 70%, var(--lavender) 30%) 100%
+  );
+  --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
+  --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+}
+
+.site-nav__magnet-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-nav__magnet-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: block;
+  flex-shrink: 0;
+}
+
+.site-nav__magnet:focus-visible {
+  outline: none;
+}
+
+.site-nav__magnet:hover,
+.site-nav__magnet:focus-visible {
+  transform: translateY(-4px);
+  filter: drop-shadow(0 14px 0 var(--nav-hover-shadow));
+}
+
+.site-nav__magnet[aria-current='page'] {
+  background: var(--nav-active-bg);
+  border-color: var(--nav-active-border);
+  box-shadow: inset 0 -10px 0 var(--nav-active-inset-shadow);
+  color: var(--nav-active-text, var(--outline));
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  transform: translateY(-4px);
+  filter: drop-shadow(0 16px 0 var(--nav-active-lift-shadow));
+}
+
+.site-nav__magnet[aria-current='page']:hover,
+.site-nav__magnet[aria-current='page']:focus-visible {
+  filter: drop-shadow(0 18px 0 color-mix(in srgb, var(--outline) 66%, transparent));
+}
+
+.site-nav__magnet--inventory {
+  --nav-active-bg: color-mix(in srgb, var(--mint) 78%, #fff 22%);
+  --nav-active-border: color-mix(in srgb, var(--outline) 94%, transparent);
+  --nav-active-text: color-mix(in srgb, var(--outline) 78%, var(--ink) 22%);
+  letter-spacing: 0.12em;
+  justify-content: center;
+}
+
+.site-nav__magnet--inventory .site-nav__count {
+  margin-left: 0.4rem;
+}
+
+.site-nav__magnet[aria-disabled='true'] {
+  pointer-events: none;
+}
+
+.site-nav__magnet[data-nav-hidden='true'] {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.site-nav__magnet[aria-expanded='true'] .site-nav__magnet-glyph {
+  transform: rotate(45deg);
+}
+
+button.site-nav__magnet {
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.site-nav__magnet-glyph {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Manrope', 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--outline);
+  text-shadow: 2px 2px 0 color-mix(in srgb, #ffffff 70%, transparent);
+  transition: transform 0.22s ease;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.site-nav__magnet--home,
+.site-nav__magnet--customizer {
+  padding: 0.45rem;
+  gap: 0;
+  justify-content: center;
+  min-width: 0;
+}
+
+.site-nav__magnet--home {
+  background: color-mix(in srgb, var(--rose) 78%, #fff 22%);
+}
+
+.site-nav__magnet--customizer {
+  background: color-mix(in srgb, var(--lavender) 70%, #fff 30%);
+}
+
+.site-nav__magnet--journal {
+  gap: 0.55rem;
+  background: color-mix(in srgb, var(--peach) 78%, #fff 22%);
+}
+
+.site-nav__magnet--journal::before {
+  content: '';
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--plum) 40%, var(--ink) 60%);
+  background: color-mix(in srgb, var(--peach) 70%, #ffffff 30%);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--plum) 18%, transparent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23462a4b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3H3v6M3 3l7 7M15 21h6v-6M21 21l-7-7M15 3h6v6M21 3l-7 7M9 21H3v-6M3 21l7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%;
+  flex-shrink: 0;
+}
+
+.site-nav__journal {
+  position: relative;
+}
+
+.site-nav__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 640px) {
+  .site-nav__magnet {
+    font-size: 0.8rem;
+    letter-spacing: 0.065em;
+    padding: 0.45rem 0.75rem;
+    min-height: 40px;
+    gap: 0.32rem;
+  }
+
+  .site-nav__board {
+    min-height: clamp(5.75rem, 40vw, 8rem);
+  }
+
+  .site-nav[data-nav-expanded='true'] .site-nav__board {
+    min-height: clamp(8rem, 56vw, 10.5rem);
+    padding-block-end: 0.75rem;
+  }
+
+  .site-nav__magnet-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .site-nav__magnet-glyph {
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: 1.5rem;
+  }
+
+  .site-nav__magnet--journal::before {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .site-nav__magnet--home,
+  .site-nav__magnet--customizer {
+    padding: 0.35rem;
+  }
+
+  .site-nav__magnet--inventory {
+    letter-spacing: 0.095em;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-nav__magnet {
+    font-size: 0.76rem;
+    letter-spacing: 0.05em;
+    padding: 0.4rem 0.7rem;
+    min-height: 36px;
+    gap: 0.28rem;
+  }
+
+  .site-nav__board {
+    min-height: clamp(5.5rem, 64vw, 7.5rem);
+  }
+
+  .site-nav__board-wrapper {
+    padding-top: 1.5rem;
+  }
+
+  .site-nav[data-nav-expanded='true'] .site-nav__board {
+    min-height: clamp(7.5rem, 82vw, 10rem);
+    padding-block-end: 0.85rem;
+  }
+}</style>
+    <link rel="preload" href="../../styles.css" as="style" />
+    <link rel="stylesheet" href="../../styles.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="../../styles.css" /></noscript>
   </head>
   <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
-      <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root>
+      <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
-              <img
-                class="site-nav__magnet-icon"
-                src="../../icons/home-8bit.svg"
-                alt=""
-                aria-hidden="true"
-              />
+
+  <svg class="site-nav__magnet-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path
+      fill="currentColor"
+      d="M3 10.75V21c0 .55.45 1 1 1h5.5a.5.5 0 0 0 .5-.5V16h4v5.5a.5.5 0 0 0 .5.5H20c.55 0 1-.45 1-1v-10.2l-8.44-6.6a1 1 0 0 0-1.12 0L3 10.75z"
+    />
+    <path
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linejoin="round"
+      d="M2 11.2 12 3l10 8.2"
+    />
+  </svg>
               <span class="site-nav__magnet-label visually-hidden">Home</span>
             </a>
             <button
@@ -336,6 +634,75 @@
           </div>
         </div>
       </nav>
+
+      <script>
+        (function() {
+          if (typeof window === 'undefined' || typeof document === 'undefined') {
+            return;
+          }
+          var root = document.querySelector('[data-magnet-root][data-magnet-key="site-nav"]');
+          if (!root) {
+            return;
+          }
+          var board = root.querySelector('[data-magnet-board]');
+          if (!board) {
+            return;
+          }
+          var STORAGE_KEY = 'magnetPositions:site-nav';
+          var raw;
+          try {
+            if (!('localStorage' in window)) {
+              return;
+            }
+            raw = window.localStorage.getItem(STORAGE_KEY);
+          } catch (error) {
+            return;
+          }
+          if (typeof raw !== 'string' || !raw) {
+            return;
+          }
+          var parsed;
+          try {
+            parsed = JSON.parse(raw);
+          } catch (error) {
+            return;
+          }
+          if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
+            return;
+          }
+          var boardRect = board.getBoundingClientRect();
+          var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
+          var boardHeight = Math.max(boardRect.height || board.clientHeight || 1, 1);
+          var magnets = board.querySelectorAll('[data-magnet-id]');
+          if (!magnets.length) {
+            return;
+          }
+          for (var i = 0; i < magnets.length; i += 1) {
+            var el = magnets[i];
+            if (!el || !el.dataset) {
+              continue;
+            }
+            var id = el.dataset.magnetId;
+            if (!id || !(id in parsed.magnets)) {
+              continue;
+            }
+            var entry = parsed.magnets[id];
+            if (!entry || typeof entry !== 'object') {
+              continue;
+            }
+            var rect = el.getBoundingClientRect();
+            var magnetWidth = rect.width || el.offsetWidth || 0;
+            var magnetHeight = rect.height || el.offsetHeight || 0;
+            var maxX = Math.max(boardWidth - magnetWidth, 0);
+            var maxY = Math.max(boardHeight - magnetHeight, 0);
+            var xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
+            var yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
+            var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
+            var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
+            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
+          }
+        })();
+      </script>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Authenticity</li>
