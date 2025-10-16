@@ -2,6 +2,49 @@ const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
+const LEGACY_JOURNAL_HASHES = new Set(['#journal-dashboard']);
+
+function redirectLegacyJournalHash() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const { hash = '', pathname = '', href = '' } = window.location || {};
+  if (!hash) {
+    return;
+  }
+
+  const normalizedHash = hash.trim().toLowerCase();
+  if (!LEGACY_JOURNAL_HASHES.has(normalizedHash)) {
+    return;
+  }
+
+  const normalizedPath = (pathname || '').toLowerCase();
+  if (!normalizedPath.includes('/inventory') || normalizedPath.includes('/inventory/journal')) {
+    return;
+  }
+
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const basePath = document.body?.dataset?.basePath || '';
+  let target = `${basePath}inventory/journal/`;
+
+  try {
+    target = new URL(target, href || window.location.href).href;
+  } catch (error) {
+    // Ignore resolution errors and rely on the relative URL fallback.
+  }
+
+  try {
+    window.location.replace(target);
+  } catch (error) {
+    window.location.href = target;
+  }
+}
+
+redirectLegacyJournalHash();
 
 const DEFAULT_PALETTE = {
   plum: '#74569B',
@@ -279,7 +322,7 @@ const NAV_ITEM_DEFINITIONS = [
       const link = document.createElement('a');
       link.className = 'site-nav__link site-nav__link--journal-dashboard';
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      link.href = `${basePath}inventory/#journal-dashboard`;
+      link.href = `${basePath}inventory/journal/`;
       link.textContent = 'Journal dashboard';
       link.dataset.navDynamic = 'true';
       return link;

@@ -687,7 +687,7 @@ function renderCategory(type, items) {
     type === 'feelings'
       ? `<div class="support-actions support-actions--muted">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="../inventory/#journal-dashboard">Visit your journal dashboard</a>
+          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your journal dashboard</a>
         </div>`
       : '';
 
