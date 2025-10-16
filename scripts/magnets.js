@@ -1002,7 +1002,8 @@ const attachSearch = (state) => {
   }
 };
 
-const initializeBoard = async (root, index) => {
+const initializeBoard = async (root, index, options = {}) => {
+  const { fontsBarrier = true } = options;
   const board = root.querySelector('[data-magnet-board]');
   if (!board) {
     return;
@@ -1015,7 +1016,7 @@ const initializeBoard = async (root, index) => {
     return;
   }
 
-  await initMagnetBoard(board, magnetElements);
+  await initMagnetBoard(board, magnetElements, { fontsBarrier });
 
   magnetElements.forEach((element, magnetIndex) => {
     const id = element.dataset.magnetId || `${index}-${magnetIndex}`;
@@ -1275,9 +1276,30 @@ const setup = async () => {
   if (!roots.length) {
     return;
   }
-  await fontsReady;
-  for (let index = 0; index < roots.length; index += 1) {
-    await initializeBoard(roots[index], index);
+
+  const entries = roots.map((root, index) => ({ root, index }));
+  const navEntries = [];
+  const otherEntries = [];
+
+  entries.forEach((entry) => {
+    if (entry.root.classList && entry.root.classList.contains('site-nav')) {
+      navEntries.push(entry);
+    } else {
+      otherEntries.push(entry);
+    }
+  });
+
+  if (navEntries.length) {
+    await Promise.all(navEntries.map((entry) => initializeBoard(entry.root, entry.index, { fontsBarrier: false })));
+  }
+
+  if (otherEntries.length) {
+    await fontsReady;
+    for (let i = 0; i < otherEntries.length; i += 1) {
+      const entry = otherEntries[i];
+      // eslint-disable-next-line no-await-in-loop
+      await initializeBoard(entry.root, entry.index);
+    }
   }
 };
 
