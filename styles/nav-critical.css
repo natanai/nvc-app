@@ -44,6 +44,20 @@
   overflow: hidden;
 }
 
+.site-nav[data-layout-invalid='1'] .site-nav__board {
+  border-style: dashed;
+  border-color: var(--rose);
+}
+
+.site-nav[data-magnet-active='1'][data-layout-invalid='1'] .magnet-play-toggle {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.site-nav[data-magnet-active='1'][data-layout-invalid='1'] .magnet-play-toggle__input {
+  pointer-events: none;
+}
+
 .site-nav__board[data-nav-resizable='1'] {
   touch-action: none;
 }
