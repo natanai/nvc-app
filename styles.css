@@ -359,7 +359,7 @@ button.site-nav__magnet {
 }
 
 .site-nav__magnet--inventory {
-  background: color-mix(in srgb, var(--mint) 80%, #fff 10%);
+  background: var(--mint);
   letter-spacing: 0.12em;
   justify-content: center;
 }
