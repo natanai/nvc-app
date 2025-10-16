@@ -147,6 +147,20 @@
       {
         "regionId": "jaw",
         "regionLabel": "Jaw, mouth, or fists",
+        "optionId": "jaw-clench",
+        "title": "Clenched or grinding",
+        "note": "Teeth locked, fists tight, rigid tongue",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "arousal": "high",
+        "relativeWeight": 0.1,
+        "evidenceKey": "jaw-clench"
+      },
+      {
+        "regionId": "jaw",
+        "regionLabel": "Jaw, mouth, or fists",
         "optionId": "jaw-tremble",
         "title": "Tremble or quiver",
         "note": "Jaw shaking, lips or hands quivering",
@@ -230,6 +244,7 @@
       "temp-prickly",
       "gut-nausea",
       "throat-dry",
+      "jaw-clench",
       "jaw-tremble",
       "overall-floating",
       "throat-tight"
@@ -251,7 +266,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.14,
+        "relativeWeight": 0.13,
         "evidenceKey": "temp-chill"
       },
       {
@@ -265,7 +280,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.13,
+        "relativeWeight": 0.12,
         "evidenceKey": "chest-tight"
       },
       {
@@ -279,7 +294,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.13,
+        "relativeWeight": 0.12,
         "evidenceKey": "chest-pounding"
       },
       {
@@ -293,7 +308,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.13,
+        "relativeWeight": 0.12,
         "evidenceKey": "gut-nausea"
       },
       {
@@ -307,7 +322,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.13,
+        "relativeWeight": 0.12,
         "evidenceKey": "jaw-tremble"
       },
       {
@@ -321,8 +336,22 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.12,
+        "relativeWeight": 0.11,
         "evidenceKey": "throat-dry"
+      },
+      {
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-prickly",
+        "title": "Prickly or sweaty skin",
+        "note": "Prickles, sudden sweat, tingling heat",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "arousal": "high",
+        "relativeWeight": 0.11,
+        "evidenceKey": "temp-prickly"
       },
       {
         "regionId": "shoulders",
@@ -335,7 +364,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.11,
+        "relativeWeight": 0.1,
         "evidenceKey": "shoulders-braced"
       },
       {
@@ -349,7 +378,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.11,
+        "relativeWeight": 0.1,
         "evidenceKey": "limbs-tingly"
       }
     ],
@@ -387,6 +416,7 @@
       "gut-nausea",
       "jaw-tremble",
       "throat-dry",
+      "temp-prickly",
       "shoulders-braced",
       "limbs-tingly"
     ]
@@ -407,7 +437,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.22,
+        "relativeWeight": 0.18,
         "evidenceKey": "jaw-clench"
       },
       {
@@ -421,7 +451,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.2,
+        "relativeWeight": 0.17,
         "evidenceKey": "temp-flush"
       },
       {
@@ -435,8 +465,22 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.19,
+        "relativeWeight": 0.15,
         "evidenceKey": "jaw-heat"
+      },
+      {
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "arousal": "high",
+        "relativeWeight": 0.14,
+        "evidenceKey": "chest-pounding"
       },
       {
         "regionId": "chest",
@@ -449,7 +493,7 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.15,
+        "relativeWeight": 0.13,
         "evidenceKey": "chest-tight"
       },
       {
@@ -463,22 +507,22 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.14,
+        "relativeWeight": 0.11,
         "evidenceKey": "shoulders-braced"
       },
       {
-        "regionId": "chest",
-        "regionLabel": "Chest or heart space",
-        "optionId": "chest-pounding",
-        "title": "Pounding or racing heartbeat",
-        "note": "Heart racing, flutter, sudden surges of beats",
+        "regionId": "limbs",
+        "regionLabel": "Arms, hands, or legs",
+        "optionId": "limbs-restless",
+        "title": "Restless or fidgety",
+        "note": "Urge to pace, bounce, or shake",
         "intensityBand": [
-          8,
+          7,
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.1,
-        "evidenceKey": "chest-pounding"
+        "relativeWeight": 0.11,
+        "evidenceKey": "limbs-restless"
       }
     ],
     "needsHypotheses": {
@@ -517,9 +561,10 @@
       "jaw-clench",
       "temp-flush",
       "jaw-heat",
+      "chest-pounding",
       "chest-tight",
       "shoulders-braced",
-      "chest-pounding"
+      "limbs-restless"
     ]
   },
   "overwhelm": {
