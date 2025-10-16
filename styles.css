@@ -2487,6 +2487,7 @@ body.has-support-journal-open {
   position: absolute;
   touch-action: none;
   transition: none;
+  visibility: hidden;
 }
 
 .magnet-board[data-active='1'] .magnet {

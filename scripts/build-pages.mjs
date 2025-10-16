@@ -573,7 +573,7 @@ function renderNav(basePath, activeNav, options = {}) {
     })
     .join('\n');
 
-  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root>
+  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
