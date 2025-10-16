@@ -16,6 +16,12 @@ const DEFAULT_CONFIG = {
   mouseStrength: 0.6,
 };
 
+const NAV_PHYSICS_CONFIG = {
+  drift: 0.06,
+  tiltStrength: 52,
+  tiltDriftScale: 0.2,
+};
+
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];
 const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 
@@ -1086,10 +1092,14 @@ const setPlayState = (state, active) => {
       magnet.element.setAttribute('draggable', 'false');
     });
     const magnetElements = state.magnets.map((magnet) => magnet.element);
+    const physicsConfig = isNavBoardState(state)
+      ? { ...DEFAULT_CONFIG, ...NAV_PHYSICS_CONFIG }
+      : { ...DEFAULT_CONFIG };
+
     state.physics = startPhysics({
       board: state.board,
       magnets: magnetElements,
-      config: DEFAULT_CONFIG,
+      config: physicsConfig,
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),

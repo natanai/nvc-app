@@ -45,8 +45,9 @@
 }
 
 .site-nav[data-layout-invalid='1'] .site-nav__board {
+  border-width: 1px;
   border-style: dashed;
-  border-color: var(--rose);
+  border-color: #000;
 }
 
 .site-nav[data-magnet-active='1'][data-layout-invalid='1'] .magnet-play-toggle {
