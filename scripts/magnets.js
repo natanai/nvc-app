@@ -2,7 +2,7 @@ import { initMagnetBoard, updateBoardHeight as syncBoardHeightFromDOM } from './
 import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhysics.js';
 
 const DEFAULT_CONFIG = {
-  drift: 3,
+  drift: 1.5,
   damping: 0.975,
   sepRadiusScale: 0.7,
   sepStrength: 18,
