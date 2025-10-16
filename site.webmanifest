@@ -8,8 +8,14 @@
   "theme_color": "#7E5CFF",
   "icons": [
     {
-      "src": "icons/main.svg",
-      "sizes": "384x384",
+      "src": "icons/meta-icons/app-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/meta-icons/touch-icon.svg",
+      "sizes": "1024x1024",
       "type": "image/svg+xml",
       "purpose": "any"
     },
@@ -18,12 +24,6 @@
       "sizes": "1024x1024",
       "type": "image/svg+xml",
       "purpose": "maskable"
-    },
-    {
-      "src": "icons/allneeds-touch.svg",
-      "sizes": "1024x1024",
-      "type": "image/svg+xml",
-      "purpose": "any"
     }
   ]
 }

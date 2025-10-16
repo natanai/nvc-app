@@ -12,11 +12,16 @@ const DEFAULT_DESCRIPTION =
 
 const SITE_ORIGIN = 'https://allneeds.app';
 const FAVICON_SVG = 'icons/main.svg';
-const TOUCH_ICON_SRC = 'icons/allneeds-touch.svg';
-const MASK_ICON_SRC = 'icons/app-icon-maskable.svg';
+const APP_ICON_SRC = 'icons/meta-icons/app-icon.svg';
+const TOUCH_ICON_SRC = 'icons/meta-icons/touch-icon.svg';
+const TOUCH_ICON_LARGE_SRC = TOUCH_ICON_SRC;
+const MASK_ICON_SRC = 'icons/meta-icons/safari-pinned-tab.svg';
+const TILE_IMAGE_SRC = APP_ICON_SRC;
+const BROWSER_CONFIG_SRC = 'icons/meta-icons/browserconfig.xml';
 const SOCIAL_CARD_SRC = 'icons/social-card.svg';
 const SOCIAL_CARD_WIDTH = 1200;
 const SOCIAL_CARD_HEIGHT = 630;
+const TILE_COLOR = '#7E5CFF';
 
 function absoluteUrl(path = '') {
   if (!path) {
@@ -68,6 +73,23 @@ function guessMimeType(path = '') {
     return 'image/avif';
   }
   return 'image/png';
+}
+
+function resolveHeadHref(basePath = '', target = '') {
+  if (!target) {
+    return '';
+  }
+  const trimmed = String(target).trim();
+  if (!trimmed) {
+    return '';
+  }
+  if (/^(?:data:|https?:|\/\/)/i.test(trimmed)) {
+    return trimmed;
+  }
+  if (trimmed.startsWith('/')) {
+    return trimmed;
+  }
+  return `${basePath}${trimmed}`;
 }
 
 const themePreloadScript = (basePath) => {
@@ -350,12 +372,15 @@ function htmlPage({
   const escapedBrand = escapeHtml(BRAND_NAME);
   const fullTitle = `${escapedTitle} • ${escapedBrand}`;
   const tabTitle = fullTitle.toLowerCase();
-  const faviconHref = `${basePath}${FAVICON_SVG}`;
-  const manifestHref = `${basePath}site.webmanifest`;
+  const faviconSvgHref = resolveHeadHref(basePath, FAVICON_SVG);
+  const manifestHref = resolveHeadHref(basePath, 'site.webmanifest');
   const canonicalPathNormalized = normalizeCanonicalPath(canonicalPath);
   const canonicalUrl = absoluteUrl(canonicalPathNormalized);
-  const appleTouchIconUrl = absoluteUrl(TOUCH_ICON_SRC);
-  const maskIconUrl = absoluteUrl(MASK_ICON_SRC);
+  const appleTouchIconHref = resolveHeadHref(basePath, TOUCH_ICON_SRC);
+  const appleTouchIconLargeHref = resolveHeadHref(basePath, TOUCH_ICON_LARGE_SRC);
+  const maskIconHref = resolveHeadHref(basePath, MASK_ICON_SRC);
+  const tileImageHref = resolveHeadHref(basePath, TILE_IMAGE_SRC);
+  const browserConfigHref = resolveHeadHref(basePath, BROWSER_CONFIG_SRC);
   const socialImagePath = socialImage || SOCIAL_CARD_SRC;
   const socialImageUrl = absoluteUrl(socialImagePath);
   const socialImageType = guessMimeType(socialImagePath);
@@ -417,16 +442,20 @@ function htmlPage({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${tabTitle}</title>
     <meta name="description" content="${escapedDescription}" />
-    <link rel="icon" type="image/svg+xml" href="${faviconHref}" />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="${faviconSvgHref}" />
+    <link rel="shortcut icon" type="image/svg+xml" href="${faviconSvgHref}" />
     <link rel="manifest" href="${manifestHref}" />
     <meta name="theme-color" content="#FBF7FF" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#12081F" media="(prefers-color-scheme: dark)" />
     <meta name="application-name" content="${escapedBrand}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="${appleTouchIconUrl}" />
-    <link rel="apple-touch-icon" sizes="1024x1024" href="${appleTouchIconUrl}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="${appleTouchIconHref}" />
+    <link rel="apple-touch-icon" sizes="1024x1024" href="${appleTouchIconLargeHref}" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="${escapedBrand}" />
-    <link rel="mask-icon" href="${maskIconUrl}" color="#7E5CFF" />
+    <link rel="mask-icon" href="${maskIconHref}" color="${TILE_COLOR}" />
+    <meta name="msapplication-TileColor" content="${TILE_COLOR}" />
+    <meta name="msapplication-TileImage" content="${tileImageHref}" />
+    <meta name="msapplication-config" content="${browserConfigHref}" />
     <link rel="canonical" href="${canonicalUrl}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${escapedBrand}" />
