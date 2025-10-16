@@ -959,6 +959,20 @@ function setupNavState(nav, toggle) {
   navState.initialized = true;
 }
 
+function preapplyNavigationSettings() {
+  if (navState.initialized || typeof document === 'undefined') {
+    return;
+  }
+
+  const nav = document.querySelector('.site-nav');
+  if (!nav) {
+    return;
+  }
+
+  const toggle = resolveNavCustomizerToggle(nav);
+  setupNavState(nav, toggle);
+}
+
 function renderNavCustomizerControls() {
   if (!navState.optionsEl) {
     return;
@@ -1405,6 +1419,13 @@ function setupScrollTopButton() {
     window.addEventListener('resize', fallbackResize);
     toggleForFallback();
   }
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', preapplyNavigationSettings, { once: true });
+  }
+  preapplyNavigationSettings();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -3323,40 +3344,62 @@ function captureNeedsFromForm() {
 }
 
 function loadJournalReferenceData() {
-  const loadNeeds = window.NVCJournal?.loadNeedsList;
-  const loadFeelings = window.NVCJournal?.loadFeelingsList;
-  if (typeof loadNeeds !== 'function' && typeof loadFeelings !== 'function') {
-    return;
+  const loadData = () => {
+    const loadNeeds = window.NVCJournal?.loadNeedsList;
+    const loadFeelings = window.NVCJournal?.loadFeelingsList;
+    if (typeof loadNeeds !== 'function' && typeof loadFeelings !== 'function') {
+      return;
+    }
+
+    const basePath = state.basePath;
+    const needsPromise = typeof loadNeeds === 'function' ? loadNeeds({ basePath }) : Promise.resolve([]);
+    const feelingsPromise = typeof loadFeelings === 'function' ? loadFeelings({ basePath }) : Promise.resolve([]);
+
+    Promise.all([
+      needsPromise.catch((error) => {
+        console.warn('Inventory: unable to load needs list', error);
+        return [];
+      }),
+      feelingsPromise.catch((error) => {
+        console.warn('Inventory: unable to load feelings list', error);
+        return [];
+      }),
+    ]).then(([needs, feelings]) => {
+      if (Array.isArray(needs) && needs.length) {
+        applyNeedsData(needs);
+        if (state.journalController && typeof state.journalController.setNeedsOptions === 'function') {
+          state.journalController.setNeedsOptions(needs);
+          state.journalNeedsSelect = state.journalController.needsSelect;
+        } else {
+          populateJournalNeedsOptions();
+        }
+      }
+      if (Array.isArray(feelings) && feelings.length) {
+        state.feelings = feelings;
+        if (state.journalController && typeof state.journalController.setEmotionOptions === 'function') {
+          state.journalController.setEmotionOptions(feelings);
+        }
+      }
+    });
+  };
+
+  try {
+    const readiness = ensureJournalModuleReady();
+    if (readiness && typeof readiness.then === 'function') {
+      readiness
+        .then(() => {
+          loadData();
+        })
+        .catch((error) => {
+          console.warn('Inventory: unable to prepare journal reference data', error);
+        });
+      return;
+    }
+  } catch (error) {
+    console.warn('Inventory: unable to prepare journal reference data', error);
   }
-  const basePath = state.basePath;
-  const needsPromise = typeof loadNeeds === 'function' ? loadNeeds({ basePath }) : Promise.resolve([]);
-  const feelingsPromise = typeof loadFeelings === 'function' ? loadFeelings({ basePath }) : Promise.resolve([]);
-  Promise.all([
-    needsPromise.catch((error) => {
-      console.warn('Inventory: unable to load needs list', error);
-      return [];
-    }),
-    feelingsPromise.catch((error) => {
-      console.warn('Inventory: unable to load feelings list', error);
-      return [];
-    }),
-  ]).then(([needs, feelings]) => {
-    if (Array.isArray(needs) && needs.length) {
-      applyNeedsData(needs);
-      if (state.journalController && typeof state.journalController.setNeedsOptions === 'function') {
-        state.journalController.setNeedsOptions(needs);
-        state.journalNeedsSelect = state.journalController.needsSelect;
-      } else {
-        populateJournalNeedsOptions();
-      }
-    }
-    if (Array.isArray(feelings) && feelings.length) {
-      state.feelings = feelings;
-      if (state.journalController && typeof state.journalController.setEmotionOptions === 'function') {
-        state.journalController.setEmotionOptions(feelings);
-      }
-    }
-  });
+
+  loadData();
 }
 
 function renderInventoryViews() {
