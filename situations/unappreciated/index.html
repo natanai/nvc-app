@@ -225,10 +225,6 @@
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root>
-        <div class="magnet-section__header site-nav__header">
-          <h2 class="section-title site-nav__title">Site navigation</h2>
-          <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
-        </div>
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
@@ -238,7 +234,7 @@
                 alt=""
                 aria-hidden="true"
               />
-              <span class="site-nav__magnet-label">Home</span>
+              <span class="site-nav__magnet-label visually-hidden">Home</span>
             </a>
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--customizer"
@@ -249,7 +245,7 @@
               aria-expanded="false"
             >
               <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
-              <span class="site-nav__magnet-label">Customizer</span>
+              <span class="site-nav__magnet-label visually-hidden">Customizer</span>
             </button>
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
@@ -270,12 +266,12 @@
             <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../../feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
             <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="../../needs/"><span class="site-nav__magnet-label">Needs</span></a>
           </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
+          <label class="magnet-play-toggle" data-magnet-toggle data-state="off">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
           </label>
         </div>
         <div class="site-nav__journal" data-support-journal data-journal-overlay>
@@ -335,13 +331,13 @@
         <div class="pill-grid magnet-board" data-magnet-board>
           <a class="pill magnet" data-magnet-id="feelings-sad" href="../../feelings/sad/">Sad</a><a class="pill magnet" data-magnet-id="feelings-angry" href="../../feelings/angry/">Angry</a><a class="pill magnet" data-magnet-id="feelings-hurt" href="../../feelings/hurt/">Hurt</a><a class="pill magnet" data-magnet-id="feelings-frustrated" href="../../feelings/frustrated/">Frustrated</a>
         </div>
-        <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-          <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
-          <span class="magnet-play-toggle__track" aria-hidden="true">
-            <span class="magnet-play-toggle__thumb"></span>
-          </span>
-          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
-        </label>
+          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
+            <span class="magnet-play-toggle__track" aria-hidden="true">
+              <span class="magnet-play-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+          </label>
       </div>
     </section>
       <section class="pill-section magnet-section" aria-labelledby="needs-heading" data-magnet-root>
@@ -353,13 +349,13 @@
         <div class="pill-grid magnet-board" data-magnet-board>
           <a class="pill magnet" data-magnet-id="needs-appreciation" href="../../needs/appreciation/">Appreciation</a><a class="pill magnet" data-magnet-id="needs-respect" href="../../needs/respect/">Respect</a><a class="pill magnet" data-magnet-id="needs-acknowledgement" href="../../needs/acknowledgement/">Acknowledgement</a><a class="pill magnet" data-magnet-id="needs-consideration" href="../../needs/consideration/">Consideration</a>
         </div>
-        <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-          <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
-          <span class="magnet-play-toggle__track" aria-hidden="true">
-            <span class="magnet-play-toggle__thumb"></span>
-          </span>
-          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
-        </label>
+          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
+            <span class="magnet-play-toggle__track" aria-hidden="true">
+              <span class="magnet-play-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+          </label>
       </div>
     </section>
     

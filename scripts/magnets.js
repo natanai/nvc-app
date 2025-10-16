@@ -1221,6 +1221,10 @@ const initializeBoard = async (root, index) => {
     state.cleanupResize = () => window.removeEventListener('resize', handleResize);
   }
 
+  const initialActive = state.toggleInput
+    ? state.toggleInput.checked
+    : toggle?.dataset.state !== 'off';
+
   if (state.toggleInput) {
     state.toggleInput.addEventListener('change', () => {
       setPlayState(state, state.toggleInput.checked);
@@ -1262,7 +1266,7 @@ const initializeBoard = async (root, index) => {
     });
   }
 
-  setPlayState(state, true);
+  setPlayState(state, initialActive);
   attachSearch(state);
 };
 
