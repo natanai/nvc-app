@@ -2846,12 +2846,15 @@ body.has-support-journal-open {
   display: inline-flex;
   align-items: center;
   padding: 0.45rem 1rem;
-  background: var(--sky);
   border: 3px solid var(--outline);
   border-radius: var(--radius-pill);
   font-weight: bold;
   box-shadow: 0 10px 0 var(--shadow);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pill:not(.site-nav__magnet) {
+  background: var(--sky);
 }
 
 .pill.body-cues-tool__magnet--inactive {
