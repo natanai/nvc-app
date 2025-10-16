@@ -205,8 +205,15 @@ a:focus-visible {
   padding-top: 0.75rem;
 }
 
+.site-nav[data-nav-expanded='true'] .site-nav__board {
+  min-height: clamp(9rem, 26vw, 11.5rem);
+  padding-block-end: 1.25rem;
+}
+
 .site-nav__board {
-  min-height: 11rem;
+  min-height: clamp(6.25rem, 20vw, 8.75rem);
+  padding-block-end: 0.5rem;
+  transition: min-height 0.25s ease, padding-block-end 0.25s ease;
 }
 
 .site-nav__magnet {
@@ -227,6 +234,15 @@ a:focus-visible {
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, opacity 0.18s ease;
   min-height: 44px;
   white-space: nowrap;
+  --nav-active-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sky) 88%, #fff 12%) 0%,
+    color-mix(in srgb, var(--sky) 70%, var(--lavender) 30%) 100%
+  );
+  --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
+  --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
+  --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 62%, transparent);
+  --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
 }
 
 .site-nav__magnet-label {
@@ -253,21 +269,28 @@ a:focus-visible {
 }
 
 .site-nav__magnet[aria-current='page'] {
-  background: color-mix(in srgb, var(--sky) 85%, #fff 15%);
-  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 25%, transparent), 0 10px 0 var(--shadow);
-  transform: translateY(-1px);
+  background: var(--nav-active-bg);
+  border-color: var(--nav-active-border);
+  box-shadow: inset 0 -10px 0 var(--nav-active-inset-shadow), 0 16px 0 var(--nav-active-lift-shadow);
+  color: var(--nav-active-text, var(--outline));
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  transform: translateY(-4px);
 }
 
 .site-nav__magnet[aria-current='page']:hover,
 .site-nav__magnet[aria-current='page']:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 30%, transparent),
-    0 12px 0 color-mix(in srgb, var(--outline) 38%, transparent);
+  box-shadow: inset 0 -10px 0 color-mix(in srgb, var(--outline) 48%, transparent),
+    0 18px 0 color-mix(in srgb, var(--outline) 66%, transparent);
+  transform: translateY(-4px);
 }
 
-.site-nav__magnet--inventory[aria-current='page'] {
-  background: color-mix(in srgb, var(--mint) 70%, #fff 20%);
-  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 35%, transparent), 0 10px 0 var(--shadow);
+.site-nav__magnet--inventory {
+  --nav-active-bg: color-mix(in srgb, var(--mint) 78%, #fff 22%);
+  --nav-active-border: color-mix(in srgb, var(--outline) 94%, transparent);
+  --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
+  --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 54%, transparent);
+  --nav-active-text: color-mix(in srgb, var(--outline) 78%, var(--ink) 22%);
 }
 
 .site-nav__magnet[aria-disabled='true'] {
@@ -344,7 +367,7 @@ button.site-nav__magnet {
 }
 
 .site-nav__magnet--inventory {
-  background: color-mix(in srgb, var(--mint) 80%, #fff 10%);
+  background: var(--mint);
   letter-spacing: 0.12em;
   justify-content: center;
 }
@@ -369,6 +392,15 @@ button.site-nav__magnet {
     padding: 0.45rem 0.75rem;
     min-height: 40px;
     gap: 0.32rem;
+  }
+
+  .site-nav__board {
+    min-height: clamp(5.75rem, 40vw, 8rem);
+  }
+
+  .site-nav[data-nav-expanded='true'] .site-nav__board {
+    min-height: clamp(8rem, 56vw, 10.5rem);
+    padding-block-end: 0.75rem;
   }
 
   .site-nav__magnet-icon {
@@ -408,11 +440,16 @@ button.site-nav__magnet {
   }
 
   .site-nav__board {
-    min-height: 12rem;
+    min-height: clamp(5.5rem, 64vw, 7.5rem);
   }
 
   .site-nav__board-wrapper {
-    padding-top: 1.75rem;
+    padding-top: 1.5rem;
+  }
+
+  .site-nav[data-nav-expanded='true'] .site-nav__board {
+    min-height: clamp(7.5rem, 82vw, 10rem);
+    padding-block-end: 0.85rem;
   }
 }
 
@@ -2821,12 +2858,15 @@ body.has-support-journal-open {
   display: inline-flex;
   align-items: center;
   padding: 0.45rem 1rem;
-  background: var(--sky);
   border: 3px solid var(--outline);
   border-radius: var(--radius-pill);
   font-weight: bold;
   box-shadow: 0 10px 0 var(--shadow);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pill:not(.site-nav__magnet) {
+  background: var(--sky);
 }
 
 .pill.body-cues-tool__magnet--inactive {
