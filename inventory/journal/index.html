@@ -339,11 +339,31 @@
           <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
             <div class="journal-actions__header">
               <h2 id="journal-actions-heading" class="section-title">Back up or restore your journal</h2>
-              <p class="journal-actions__hint">Export JSON to keep a private copy or import a file you previously saved.</p>
+              <p class="journal-actions__hint">
+                Create or restore a JSON backup of your inventory, journal, and customizer data stored in localStorage.
+              </p>
             </div>
             <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export journal</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import journal</button>
+              <button
+                type="button"
+                id="journal-export"
+                class="inventory-button inventory-button--compact"
+                aria-label="Download JSON backup"
+                data-action-hint="Download a JSON file containing localStorage data for inventory, journal, and customizer."
+              >
+                <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
+                <span class="inventory-button__text">Export backup</span>
+              </button>
+              <button
+                type="button"
+                id="journal-import-trigger"
+                class="inventory-button inventory-button--ghost inventory-button--compact"
+                aria-label="Restore JSON backup"
+                data-action-hint="Load a JSON backup into localStorage for inventory, journal, and customizer data."
+              >
+                <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
+                <span class="inventory-button__text">Import backup</span>
+              </button>
               <input type="file" id="journal-import" accept="application/json,.json" hidden />
             </div>
             <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
