@@ -23,6 +23,8 @@ const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
 const SHUFFLE_LABEL_BUSY = 'Shuffling…';
 const TOGGLE_GUARD_MS = 120;
 
+const rootStates = new WeakMap();
+
 let isToggling = false;
 let toggleGuardTimer = null;
 
@@ -68,6 +70,23 @@ const applyMagnetDecorations = (element, index) => {
   element.style.setProperty('--magnet-tilt', `${tilt}deg`);
   element.style.setProperty('--magnet-offset', `${offset}px`);
 };
+
+const ensureMagnetDecorated = (element, index) => {
+  if (!(element instanceof HTMLElement)) {
+    return;
+  }
+  if (!element.classList.contains('magnet')) {
+    applyMagnetDecorations(element, index);
+  }
+  if (element.closest('[data-magnet-tilt="flat"]')) {
+    element.style.setProperty('--magnet-tilt', '0deg');
+    element.style.setProperty('--magnet-offset', '0px');
+  }
+};
+
+const isMagnetVisible = (magnet) => magnet && magnet.element instanceof HTMLElement && !magnet.element.hidden;
+
+const getVisibleMagnets = (state) => state.magnets.filter((magnet) => isMagnetVisible(magnet));
 
 const setMagnetTransform = (magnet) => {
   magnet.element.style.transform =
@@ -587,7 +606,7 @@ const layoutHasOverlap = (state) => {
 
 const updateBoardHeight = (state) => {
   let maxBottom = 0;
-  state.magnets.forEach((magnet) => {
+  getVisibleMagnets(state).forEach((magnet) => {
     const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
     maxBottom = Math.max(maxBottom, bottom);
   });
@@ -606,7 +625,7 @@ const updateLayout = (state) => {
   const width = state.boardWidth || 1;
   const height = state.boardHeight || 1;
   state.layout.clear();
-  state.magnets.forEach((magnet) => {
+  getVisibleMagnets(state).forEach((magnet) => {
     const xPct = width ? clamp(magnet.x / width, 0, 1) : 0;
     const yPct = height ? clamp(magnet.y / height, 0, 1) : 0;
     state.layout.set(magnet.id, { xPct, yPct });
@@ -614,7 +633,7 @@ const updateLayout = (state) => {
 };
 
 const persistLayout = (state, immediate = false) => {
-  if (!state.storageKey) {
+  if (!state.persistEnabled || !state.storageKey) {
     return;
   }
   const flush = () => {
@@ -623,7 +642,7 @@ const persistLayout = (state, immediate = false) => {
     savePositions(
       state.storageKey,
       { width: Math.max(state.boardWidth || 0, 1), height: Math.max(state.boardHeight || 0, 1) },
-      state.magnets,
+      getVisibleMagnets(state),
     );
   };
 
@@ -651,7 +670,7 @@ const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
   console.info('[magnets] reseed CALLED', 'restoreLayoutFromPercentages');
   const width = Math.max(state.boardWidth || 0, 1);
   const height = Math.max(Math.max(state.boardHeight || 0, state.minHeight || 0), 1);
-  const placements = state.magnets.map((magnet) => {
+  const placements = getVisibleMagnets(state).map((magnet) => {
     const percentages = state.layout.get(magnet.id);
     if (!percentages) {
       return { magnet, x: magnet.x, y: magnet.y };
@@ -686,7 +705,9 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   let rowHeight = 0;
   let maxBottom = startY;
 
-  const placements = order.map((magnet) => {
+  const layoutOrder = order.filter((magnet) => isMagnetVisible(magnet));
+
+  const placements = layoutOrder.map((magnet) => {
     const marginLeft = magnet.marginLeft || 0;
     const marginRight = magnet.marginRight || 0;
     const marginTop = magnet.marginTop || 0;
@@ -725,7 +746,7 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
 };
 
 const shuffleWithoutPhysics = (state) => {
-  const order = state.magnets.slice();
+  const order = getVisibleMagnets(state).slice();
   for (let i = order.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
@@ -736,7 +757,7 @@ const shuffleWithoutPhysics = (state) => {
 const handlePositionsUpdate = (state, list) => {
   list.forEach((item) => {
     const magnet = state.magnetMap.get(item.id);
-    if (!magnet) {
+    if (!magnet || !isMagnetVisible(magnet)) {
       return;
     }
     magnet.x = item.x;
@@ -783,7 +804,7 @@ const setPlayState = (state, active) => {
     state.magnets.forEach((magnet) => {
       magnet.element.setAttribute('draggable', 'false');
     });
-    const magnetElements = state.magnets.map((magnet) => magnet.element);
+    const magnetElements = getVisibleMagnets(state).map((magnet) => magnet.element);
     state.physics = startPhysics({
       board: state.board,
       magnets: magnetElements,
@@ -819,7 +840,7 @@ const setPlayState = (state, active) => {
         state.inactiveHeight = state.boardHeight;
       }
       updateBoardHeight(state);
-      const magnetElements = state.magnets.map((magnet) => magnet.element);
+      const magnetElements = getVisibleMagnets(state).map((magnet) => magnet.element);
       const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
       if (typeof syncedHeight === 'number' && syncedHeight > 0) {
         const resolvedHeight = Math.max(syncedHeight, state.minHeight || 0, state.boardHeight || 0);
@@ -1020,7 +1041,7 @@ const initializeBoard = async (root, index) => {
   magnetElements.forEach((element, magnetIndex) => {
     const id = element.dataset.magnetId || `${index}-${magnetIndex}`;
     element.dataset.magnetId = id;
-    applyMagnetDecorations(element, magnetIndex);
+    ensureMagnetDecorated(element, magnetIndex);
   });
 
   const boardRect = await waitForStableBoard(board);
@@ -1045,6 +1066,11 @@ const initializeBoard = async (root, index) => {
       magnet.href = '';
     }
   });
+  const storageMode = root.getAttribute('data-magnet-storage') || 'persist';
+  const persistEnabled = storageMode !== 'none';
+  const defaultStateAttr = root.getAttribute('data-magnet-default-state')
+    || root.getAttribute('data-magnet-default-play');
+  const defaultPlayActive = defaultStateAttr === 'off' ? false : true;
   const state = {
     root,
     board,
@@ -1057,7 +1083,8 @@ const initializeBoard = async (root, index) => {
     searchResults,
     searchCount,
     searchList,
-    storageKey: createStorageKey(index),
+    storageKey: persistEnabled ? createStorageKey(index) : '',
+    persistEnabled,
     magnets: measured,
     magnetMap: new Map(),
     layout: new Map(),
@@ -1083,6 +1110,8 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    defaultPlayActive,
+    index,
   };
 
   state.setClickSuppress = () => {
@@ -1112,33 +1141,36 @@ const initializeBoard = async (root, index) => {
   board.dataset.ready = '1';
 
   const sizeMap = new Map(state.magnets.map((magnet) => [magnet.id, { width: magnet.width, height: magnet.height }]));
-  const stored = loadPositions(state.storageKey, { width: state.boardWidth, height: state.boardHeight }, sizeMap);
 
   let shouldSeed = true;
-  if (stored && stored.length) {
-    shouldSeed = false;
-    const storedById = new Map(stored.map((item) => [item.id, item]));
-    let missingMagnet = false;
-    state.magnets.forEach((magnet) => {
-      const saved = storedById.get(magnet.id);
-      if (saved) {
-        magnet.x = saved.x;
-        magnet.y = saved.y;
-      } else {
-        missingMagnet = true;
+  if (state.persistEnabled) {
+    const stored = loadPositions(state.storageKey, { width: state.boardWidth, height: state.boardHeight }, sizeMap);
+
+    if (stored && stored.length) {
+      shouldSeed = false;
+      const storedById = new Map(stored.map((item) => [item.id, item]));
+      let missingMagnet = false;
+      state.magnets.forEach((magnet) => {
+        const saved = storedById.get(magnet.id);
+        if (saved) {
+          magnet.x = saved.x;
+          magnet.y = saved.y;
+        } else {
+          missingMagnet = true;
+        }
+        setMagnetTransform(magnet);
+      });
+      updateBoardHeight(state);
+      updateLayout(state);
+      state.lastLayoutType = 'restored';
+      if (missingMagnet || layoutHasOverlap(state)) {
+        shouldSeed = true;
       }
-      setMagnetTransform(magnet);
-    });
-    updateBoardHeight(state);
-    updateLayout(state);
-    state.lastLayoutType = 'restored';
-    if (missingMagnet || layoutHasOverlap(state)) {
-      shouldSeed = true;
     }
   }
 
   if (shouldSeed) {
-    applyRowPackedLayout(state, state.magnets, { persist: true });
+    applyRowPackedLayout(state, state.magnets, { persist: state.persistEnabled });
   } else {
     state.board.style.height = `${state.boardHeight}px`;
   }
@@ -1262,8 +1294,65 @@ const initializeBoard = async (root, index) => {
     });
   }
 
-  setPlayState(state, true);
+  rootStates.set(root, state);
+  root.NVCMagnetState = {
+    get playActive() {
+      return state.playActive;
+    },
+    setPlayActive(active) {
+      setPlayState(state, !!active);
+    },
+    decorateElement(element) {
+      if (element instanceof HTMLElement) {
+        const indexForDecoration = state.magnets.length;
+        ensureMagnetDecorated(element, indexForDecoration);
+      }
+    },
+    syncFromDOM(options = {}) {
+      refreshFromDOM(state, options);
+    },
+  };
+
+  setPlayState(state, state.defaultPlayActive);
   attachSearch(state);
+};
+
+const refreshFromDOM = (state, { persist = false } = {}) => {
+  if (!state || !state.board) {
+    return;
+  }
+
+  const wasActive = state.playActive;
+  if (wasActive) {
+    setPlayState(state, false);
+  }
+
+  const elements = Array.from(state.board.children).filter((child) => child instanceof HTMLElement && !child.hidden);
+  elements.forEach((element, orderIndex) => {
+    ensureMagnetDecorated(element, orderIndex);
+    if (!element.dataset.magnetId) {
+      const fallbackId = element.id || element.textContent || `${state.index}-${orderIndex}`;
+      element.dataset.magnetId = fallbackId;
+    }
+  });
+
+  const measured = createMagnetStates(state.board, elements);
+  state.magnets = measured;
+  state.magnetMap.clear();
+  measured.forEach((magnet) => {
+    const magnetId = magnet.element.dataset.magnetId || magnet.id || `${state.index}-${state.magnetMap.size}`;
+    magnet.id = magnetId;
+    state.magnetMap.set(magnetId, magnet);
+  });
+
+  const rect = state.board.getBoundingClientRect();
+  state.boardWidth = Math.max(rect.width || state.board.clientWidth || state.boardWidth || 1, 1);
+
+  applyRowPackedLayout(state, state.magnets, { persist: persist && state.persistEnabled });
+
+  if (wasActive) {
+    setPlayState(state, true);
+  }
 };
 
 const setup = async () => {

@@ -408,9 +408,23 @@ function renderNav(basePath, activeNav, options = {}) {
     })
     .join('\n');
 
-  return `<nav class="site-nav" aria-label="Primary">
-        <div class="site-nav__row site-nav__row--primary">
-          <a class="site-nav__link site-nav__link--home" href="${homeHref}"${activeAttr('home')}>
+  return `<nav class="site-nav" aria-label="Primary" data-magnet-root data-magnet-default-state="off" data-magnet-storage="none" data-magnet-tilt="flat">
+        <div class="site-nav__controls">
+          <label class="magnet-play-toggle magnet-play-toggle--compact" data-magnet-toggle data-state="off">
+            <input
+              type="checkbox"
+              class="magnet-play-toggle__input"
+              role="switch"
+              aria-label="Enable magnet physics"
+            >
+            <span class="magnet-play-toggle__track" aria-hidden="true">
+              <span class="magnet-play-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
+          </label>
+        </div>
+        <div class="site-nav__row site-nav__row--primary magnet-board magnet-board--nav" data-magnet-board>
+          <a class="site-nav__link site-nav__link--home magnet" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
             <img
               class="site-nav__icon"
               src="${basePath}icons/home-8bit.svg"
@@ -420,16 +434,17 @@ function renderNav(basePath, activeNav, options = {}) {
             <span class="visually-hidden">Home</span>
           </a>
           <button
-            class="site-nav__link site-nav__link--customizer"
+            class="site-nav__link site-nav__link--customizer magnet"
             type="button"
             data-palette-toggle
+            data-magnet-id="nav-customizer"
             aria-haspopup="dialog"
             aria-expanded="false"
           >
             <span class="site-nav__glyph" aria-hidden="true">+</span>
             <span class="visually-hidden">Customizer</span>
           </button>
-          <div class="site-nav__journal" data-support-journal data-journal-overlay>
+          <div class="site-nav__journal magnet" data-magnet-id="nav-journal" data-support-journal data-journal-overlay>
             <button
               class="site-nav__link site-nav__link--journal"
               type="button"
@@ -477,7 +492,7 @@ function renderNav(basePath, activeNav, options = {}) {
               </div>
             </div>
           </div>
-          <a class="site-nav__link site-nav__link--inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
+          <a class="site-nav__link site-nav__link--inventory magnet" data-magnet-id="nav-inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
             Inventory
             <span class="site-nav__count" data-inventory-count hidden></span>
           </a>

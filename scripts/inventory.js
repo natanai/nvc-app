@@ -262,7 +262,7 @@ const NAV_ITEM_DEFINITIONS = [
     isSupplemental: true,
     createElement: () => {
       const link = document.createElement('a');
-      link.className = 'site-nav__link site-nav__link--body-cues';
+      link.className = 'site-nav__link site-nav__link--body-cues magnet';
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
       link.href = `${basePath}feelings/body-cues/`;
       link.textContent = 'Body cues';
@@ -277,7 +277,7 @@ const NAV_ITEM_DEFINITIONS = [
     isSupplemental: true,
     createElement: () => {
       const link = document.createElement('a');
-      link.className = 'site-nav__link site-nav__link--journal-dashboard';
+      link.className = 'site-nav__link site-nav__link--journal-dashboard magnet';
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
       link.href = `${basePath}inventory/#journal-dashboard`;
       link.textContent = 'Journal dashboard';
@@ -298,6 +298,40 @@ const navState = {
   draggingId: '',
   draggingElement: null,
 };
+
+function getNavMagnetId(id) {
+  return `nav-${id}`;
+}
+
+function decorateNavMagnetElement(element, id) {
+  if (!(element instanceof HTMLElement)) {
+    return;
+  }
+  if (id) {
+    element.dataset.magnetId = getNavMagnetId(id);
+  }
+  element.classList.add('magnet');
+  const controller = navState.nav?.NVCMagnetState;
+  if (controller?.decorateElement) {
+    controller.decorateElement(element);
+  }
+}
+
+function syncNavMagnetState(options = {}) {
+  const { persist = false, attempt = 0 } = options;
+  const nav = navState.nav;
+  if (!nav) {
+    return;
+  }
+  const controller = nav.NVCMagnetState;
+  if (controller?.syncFromDOM) {
+    controller.syncFromDOM({ persist });
+    return;
+  }
+  if (attempt < 6) {
+    window.requestAnimationFrame(() => syncNavMagnetState({ persist, attempt: attempt + 1 }));
+  }
+}
 
 const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
@@ -735,6 +769,7 @@ function ensureNavItemElement(id) {
     } else {
       delete element.dataset.navSupplemental;
     }
+    decorateNavMagnetElement(element, id);
     return element;
   }
 
@@ -787,6 +822,7 @@ function applyNavSettings() {
   }
 
   updateNavControlStates();
+  syncNavMagnetState({ persist: true });
 }
 
 function moveNavItem(id, delta) {
@@ -856,6 +892,7 @@ function setupNavState(nav, toggle) {
     }
     if (element instanceof HTMLElement) {
       element.dataset.navItemId = definition.id;
+      decorateNavMagnetElement(element, definition.id);
     }
     navState.items.set(definition.id, { ...definition, element: element instanceof HTMLElement ? element : null });
   });
@@ -863,6 +900,7 @@ function setupNavState(nav, toggle) {
   navState.settings = loadNavSettings();
   applyNavSettings();
   navState.initialized = true;
+  syncNavMagnetState({ persist: false });
 }
 
 function renderNavCustomizerControls() {
@@ -2146,6 +2184,7 @@ function resolveNavCustomizerToggle(nav) {
     if (!existingNavToggle.hasAttribute('data-palette-toggle')) {
       existingNavToggle.setAttribute('data-palette-toggle', '');
     }
+    decorateNavMagnetElement(existingNavToggle, 'customizer');
     return existingNavToggle;
   }
 
@@ -2154,6 +2193,7 @@ function resolveNavCustomizerToggle(nav) {
   mobileToggle.className = 'site-nav__link site-nav__link--customizer';
   mobileToggle.setAttribute('data-palette-toggle', '');
   mobileToggle.setAttribute('aria-haspopup', 'dialog');
+  decorateNavMagnetElement(mobileToggle, 'customizer');
 
   const mobileGlyph = document.createElement('span');
   mobileGlyph.className = 'site-nav__glyph';
