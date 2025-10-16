@@ -886,6 +886,15 @@ function applyNavSettings() {
 
   navState.board.appendChild(fragment);
 
+  if (typeof window !== 'undefined') {
+    const refreshDetail = { board: navState.board, root: navState.nav };
+    if (window.NVCMagnetBoards && typeof window.NVCMagnetBoards.refresh === 'function') {
+      window.NVCMagnetBoards.refresh(refreshDetail);
+    } else {
+      window.dispatchEvent(new CustomEvent('nvcmagnetrefresh', { detail: refreshDetail }));
+    }
+  }
+
   if (navState.nav) {
     if (hasSupplementalItems) {
       navState.nav.setAttribute('data-nav-expanded', 'true');

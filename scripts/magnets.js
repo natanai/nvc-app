@@ -1,6 +1,9 @@
 import { initMagnetBoard, updateBoardHeight as syncBoardHeightFromDOM } from './magnets/init.js';
 import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhysics.js';
 
+const boardStates = new WeakMap();
+const pendingBoardRefreshes = new Set();
+
 const DEFAULT_CONFIG = {
   drift: 1.5,
   damping: 0.975,
@@ -836,6 +839,170 @@ const setPlayState = (state, active) => {
   updateToggleLabel(state.toggle, active);
 };
 
+const resolveBoardElement = (target) => {
+  if (!target) {
+    return null;
+  }
+  if (target instanceof HTMLElement) {
+    if (target.hasAttribute && target.hasAttribute('data-magnet-board')) {
+      return target;
+    }
+    const nested = target.querySelector ? target.querySelector('[data-magnet-board]') : null;
+    if (nested instanceof HTMLElement) {
+      return nested;
+    }
+    return null;
+  }
+  if (target && target.board instanceof HTMLElement) {
+    return target.board;
+  }
+  if (target && target.root instanceof HTMLElement) {
+    const nested = target.root.querySelector('[data-magnet-board]');
+    if (nested instanceof HTMLElement) {
+      return nested;
+    }
+  }
+  return null;
+};
+
+const refreshBoardState = (board) => {
+  if (!(board instanceof HTMLElement)) {
+    return null;
+  }
+  const state = boardStates.get(board);
+  if (!state) {
+    return null;
+  }
+  if (!state.elementSet) {
+    state.elementSet = new WeakSet();
+    state.magnets.forEach((magnet) => {
+      if (magnet?.element instanceof HTMLElement) {
+        state.elementSet.add(magnet.element);
+      }
+    });
+  }
+
+  const magnetElements = Array.from(board.querySelectorAll('.magnet'));
+  const newElements = magnetElements.filter((element) => !state.elementSet.has(element));
+  if (!newElements.length) {
+    return state;
+  }
+
+  const wasActive = Boolean(state.physics) && state.playActive;
+  if (wasActive) {
+    stopPhysicsLoop(state);
+  }
+
+  const startIndex = state.magnets.length;
+  newElements.forEach((element, offset) => {
+    state.elementSet.add(element);
+    applyMagnetDecorations(element, startIndex + offset);
+  });
+
+  const newStates = createMagnetStates(board, newElements);
+
+  newStates.forEach((magnet, offset) => {
+    const fallbackId = `${state.index ?? 0}-${state.magnets.length + offset}`;
+    const assignedId = magnet.element.dataset.magnetId || magnet.id || fallbackId;
+    magnet.id = assignedId;
+    magnet.element.dataset.magnetId = assignedId;
+  });
+
+  const sizeMap = new Map();
+  state.magnets.forEach((magnet) => {
+    sizeMap.set(magnet.id, { width: magnet.width, height: magnet.height });
+  });
+  newStates.forEach((magnet) => {
+    sizeMap.set(magnet.id, { width: magnet.width, height: magnet.height });
+  });
+
+  const stored = state.storageKey
+    ? loadPositions(
+      state.storageKey,
+      {
+        width: Math.max(state.boardWidth || board.clientWidth || 1, 1),
+        height: Math.max(state.boardHeight || board.clientHeight || state.minHeight || 1, 1),
+      },
+      sizeMap,
+    )
+    : null;
+  const storedById = stored ? new Map(stored.map((item) => [item.id, item])) : null;
+
+  const boardWidth = Math.max(state.boardWidth || board.clientWidth || 1, 1);
+  const boardHeight = Math.max(state.boardHeight || board.clientHeight || state.minHeight || 1, 1);
+
+  newStates.forEach((magnet) => {
+    const label = (magnet.element.textContent || '').trim();
+    magnet.searchLabel = label;
+    magnet.searchValue = label.toLocaleLowerCase();
+    const hrefAttr = magnet.element.getAttribute ? magnet.element.getAttribute('href') : null;
+    if (hrefAttr) {
+      magnet.href = hrefAttr;
+    } else if (magnet.element instanceof HTMLAnchorElement && magnet.element.href) {
+      magnet.href = magnet.element.href;
+    } else {
+      magnet.href = '';
+    }
+    const saved = storedById?.get(magnet.id) || null;
+    if (saved) {
+      magnet.x = saved.x;
+      magnet.y = saved.y;
+    } else {
+      const maxX = Math.max(boardWidth - magnet.width, 0);
+      magnet.x = clamp((boardWidth - magnet.width) / 2, 0, maxX);
+      const maxY = Math.max(boardHeight - magnet.height, 0);
+      magnet.y = clamp(boardHeight - magnet.height - BOARD_PADDING, 0, maxY);
+    }
+    setMagnetTransform(magnet);
+  });
+
+  newStates.forEach((magnet) => {
+    state.magnets.push(magnet);
+    state.magnetMap.set(magnet.id, magnet);
+  });
+
+  remeasureMagnets(state);
+  updateBoardHeight(state);
+  updateLayout(state);
+  persistLayout(state, true);
+
+  if (wasActive) {
+    setPlayState(state, true);
+  }
+
+  return state;
+};
+
+const scheduleBoardRefresh = (target, detail = null) => {
+  const board = resolveBoardElement(detail?.board || target)
+    || resolveBoardElement(detail?.root);
+  if (!(board instanceof HTMLElement)) {
+    return null;
+  }
+  if (boardStates.has(board)) {
+    pendingBoardRefreshes.delete(board);
+    return refreshBoardState(board);
+  }
+  pendingBoardRefreshes.add(board);
+  return null;
+};
+
+export function refreshMagnetBoard(target, detail = null) {
+  return scheduleBoardRefresh(target, detail);
+}
+
+if (typeof window !== 'undefined') {
+  const registry = typeof window.NVCMagnetBoards === 'object' && window.NVCMagnetBoards
+    ? window.NVCMagnetBoards
+    : {};
+  registry.refresh = scheduleBoardRefresh;
+  registry.getState = (board) => (board instanceof HTMLElement ? boardStates.get(board) || null : null);
+  window.NVCMagnetBoards = registry;
+  window.addEventListener('nvcmagnetrefresh', (event) => {
+    scheduleBoardRefresh(event?.detail, event?.detail);
+  });
+}
+
 const enterSearchMode = (state) => {
   if (!state || state.searchActive) {
     return;
@@ -1085,6 +1252,16 @@ const initializeBoard = async (root, index) => {
     cleanupSearch: null,
   };
 
+  state.index = index;
+  state.elementSet = new WeakSet();
+  magnetElements.forEach((element) => {
+    if (element instanceof HTMLElement) {
+      state.elementSet.add(element);
+    }
+  });
+  boardStates.set(board, state);
+  const hadPendingRefresh = pendingBoardRefreshes.delete(board);
+
   state.setClickSuppress = () => {
     state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;
   };
@@ -1268,6 +1445,10 @@ const initializeBoard = async (root, index) => {
 
   setPlayState(state, initialActive);
   attachSearch(state);
+
+  if (hadPendingRefresh) {
+    refreshBoardState(board);
+  }
 };
 
 const setup = async () => {
