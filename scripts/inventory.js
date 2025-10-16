@@ -331,6 +331,7 @@ const NAV_ITEM_DEFINITIONS = [
     label: 'Body cues magnet',
     defaultEnabled: false,
     isSupplemental: true,
+    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-body-cues"]') || null,
     createElement: () => {
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
       const link = document.createElement('a');
@@ -351,6 +352,7 @@ const NAV_ITEM_DEFINITIONS = [
     label: 'Journal dashboard magnet',
     defaultEnabled: false,
     isSupplemental: true,
+    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal-dashboard"]') || null,
     createElement: () => {
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
       const link = document.createElement('a');

@@ -513,6 +513,32 @@ function renderNav(basePath, activeNav, options = {}) {
     { key: 'situations', href: 'situations/', label: 'Situations' },
     { key: 'feelings', href: 'feelings/', label: 'Feelings' },
     { key: 'needs', href: 'needs/', label: 'Needs' },
+    {
+      key: 'body-cues',
+      href: 'feelings/body-cues/',
+      label: 'Body cues',
+      magnetId: 'nav-body-cues',
+      className: 'site-nav__magnet--body-cues',
+      attributes: {
+        'data-nav-hidden': 'true',
+        'data-nav-supplemental': 'true',
+        'aria-hidden': 'true',
+        tabindex: '-1',
+      },
+    },
+    {
+      key: 'journal-dashboard',
+      href: 'inventory/journal/',
+      label: 'Journal dashboard',
+      magnetId: 'nav-journal-dashboard',
+      className: 'site-nav__magnet--journal-dashboard',
+      attributes: {
+        'data-nav-hidden': 'true',
+        'data-nav-supplemental': 'true',
+        'aria-hidden': 'true',
+        tabindex: '-1',
+      },
+    },
   ];
 
   const secondaryLinks = (config.secondaryLinks ?? defaultSecondaryLinks)
@@ -531,6 +557,18 @@ function renderNav(basePath, activeNav, options = {}) {
         `href="${href}"`,
         ariaAttr,
       ].filter(Boolean);
+      if (link.attributes && typeof link.attributes === 'object') {
+        for (const [attrName, attrValue] of Object.entries(link.attributes)) {
+          if (attrValue === null || typeof attrValue === 'undefined' || attrValue === false) {
+            continue;
+          }
+          if (attrValue === true) {
+            attrs.push(attrName);
+          } else {
+            attrs.push(`${attrName}="${escapeHtml(String(attrValue))}"`);
+          }
+        }
+      }
       return `            <a ${attrs.join(' ')}><span class="site-nav__magnet-label">${labelContent}</span></a>`;
     })
     .join('\n');
