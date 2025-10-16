@@ -12,6 +12,7 @@
     "test:customizer": "node tests/customizer-integrity.test.mjs",
     "test:data-integrity": "node tests/data-integrity.test.mjs",
     "test:obsolete": "node tests/obsolete-references.test.mjs",
-    "test:flicker-jitter": "node tests/navigation-highlight.test.mjs"
+    "test:flicker-jitter": "node tests/navigation-highlight.test.mjs",
+    "test:nav-magnets": "node tests/nav-magnet-coverage.test.mjs"
   }
 }
