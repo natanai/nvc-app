@@ -762,12 +762,32 @@ body.has-support-journal-open {
   .support-journal__dialog {
     width: min(92vh, 560px);
     max-width: min(92vh, 560px);
-    min-height: 100vh;
-    height: 100vh;
-    max-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    height: calc(var(--vh, 1vh) * 100);
+    max-height: calc(var(--vh, 1vh) * 100);
     margin: 0 auto;
     border-radius: var(--radius-3xl);
     box-shadow: 0 18px 36px color-mix(in srgb, var(--outline) 28%, transparent);
+  }
+
+  @supports (height: 100dvh) {
+    .support-journal__dialog {
+      min-height: 100dvh;
+      height: 100dvh;
+      max-height: 100dvh;
+      width: min(92dvh, 560px);
+      max-width: min(92dvh, 560px);
+    }
+  }
+
+  @supports (height: 100svh) {
+    .support-journal__dialog {
+      min-height: 100svh;
+      height: 100svh;
+      max-height: 100svh;
+      width: min(92svh, 560px);
+      max-width: min(92svh, 560px);
+    }
   }
 }
 
