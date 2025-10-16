@@ -255,6 +255,24 @@ a:focus-visible {
   box-shadow: none;
 }
 
+.site-nav[data-magnet-root] .magnet-board--nav:not([data-ready='1']) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 0;
+  padding: 0;
+}
+
+.site-nav[data-magnet-root] .magnet-board--nav:not([data-ready='1']) > .magnet {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none !important;
+  touch-action: manipulation;
+  transition: none;
+}
+
 .site-nav[data-magnet-root] .magnet {
   --magnet-tilt: 0deg;
   --magnet-offset: 0px;
