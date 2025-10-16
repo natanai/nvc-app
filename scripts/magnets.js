@@ -718,19 +718,24 @@ const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
     if (!state.playActive) {
       state.inactiveHeight = revertHeight;
     }
-    return;
+  } else {
+    state.boardHeight = currentHeight;
+    state.board.style.height = `${currentHeight}px`;
+    if (!state.playActive) {
+      state.inactiveHeight = currentHeight;
+    }
+
+    const changedEnough = drag.hasHeightChanged || Math.abs(currentHeight - drag.startHeight) >= 1;
+    if (changedEnough) {
+      updateLayout(state);
+      persistLayout(state, true);
+      state.lastLayoutType = 'manual';
+    }
   }
 
-  state.boardHeight = currentHeight;
-  state.board.style.height = `${currentHeight}px`;
-  if (!state.playActive) {
-    state.inactiveHeight = currentHeight;
-  }
-
-  const changedEnough = drag.hasHeightChanged || Math.abs(currentHeight - drag.startHeight) >= 1;
-  if (changedEnough) {
-    updateLayout(state);
-    persistLayout(state, true);
+  if (state.pendingResponsiveResize && typeof state.scheduleResponsiveResize === 'function') {
+    state.pendingResponsiveResize = false;
+    state.scheduleResponsiveResize();
   }
 };
 
@@ -1245,6 +1250,8 @@ const initializeBoard = async (root, index) => {
     lastSeedWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
     lastLayoutType: 'seed',
     resizeScheduled: false,
+    pendingResponsiveResize: false,
+    scheduleResponsiveResize: null,
     isShuffling: false,
     tiltPermissionState: globalTiltSource.tiltPermissionState,
     tiltPermissionRequest: globalTiltSource.tiltPermissionRequest,
@@ -1282,11 +1289,7 @@ const initializeBoard = async (root, index) => {
 
   if (root?.dataset?.magnetKey === 'site-nav') {
     board.dataset.navResizable = '1';
-    if (boardWrapper) {
-      boardWrapper.dataset.navResizable = '1';
-    }
-    const handleContainer = boardWrapper || board;
-    let resizeHandle = handleContainer.querySelector('[data-nav-resize-handle]');
+    let resizeHandle = board.querySelector('[data-nav-resize-handle]');
     if (!resizeHandle) {
       resizeHandle = document.createElement('div');
       resizeHandle.className = 'site-nav__board-resize-handle';
@@ -1294,7 +1297,8 @@ const initializeBoard = async (root, index) => {
       resizeHandle.setAttribute('aria-hidden', 'true');
       resizeHandle.setAttribute('role', 'presentation');
       resizeHandle.tabIndex = -1;
-      handleContainer.appendChild(resizeHandle);
+      resizeHandle.style.height = `${RESIZE_HANDLE_MARGIN}px`;
+      board.appendChild(resizeHandle);
     }
     const handleBoardPointerDown = (event) => {
       if (maybeStartBoardResize(state, event)) {
@@ -1422,6 +1426,10 @@ const initializeBoard = async (root, index) => {
   });
 
   const scheduleResponsiveResize = () => {
+    if (state.resizeDrag) {
+      state.pendingResponsiveResize = true;
+      return;
+    }
     if (state.resizeScheduled) {
       return;
     }
@@ -1432,6 +1440,7 @@ const initializeBoard = async (root, index) => {
       console.info('[magnets] resize ignored (toggling)');
       return;
     }
+    state.pendingResponsiveResize = false;
     state.resizeScheduled = true;
     Promise.resolve().then(async () => {
       if (state.isShuffling) {
@@ -1443,9 +1452,18 @@ const initializeBoard = async (root, index) => {
         console.info('[magnets] resize ignored (toggling)');
         return;
       }
+      if (state.resizeDrag) {
+        state.resizeScheduled = false;
+        state.pendingResponsiveResize = true;
+        return;
+      }
       state.resizeScheduled = false;
       const previousWidth = state.boardWidth;
       await waitForAnimationFrames(2);
+      if (state.resizeDrag) {
+        state.pendingResponsiveResize = true;
+        return;
+      }
       remeasureMagnets(state);
       const width = state.boardWidth;
       const widthChanged = Math.abs(width - previousWidth) > 0.5;
@@ -1480,6 +1498,8 @@ const initializeBoard = async (root, index) => {
       applyRowPackedLayout(state, state.magnets, { persist: true });
     }).catch(() => {});
   };
+
+  state.scheduleResponsiveResize = scheduleResponsiveResize;
 
   if (typeof ResizeObserver === 'function') {
     const observer = new ResizeObserver(() => {
