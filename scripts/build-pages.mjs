@@ -439,6 +439,7 @@ function normalizeScripts(scripts) {
     { src: 'assets/js/journal/store.js', module: true },
     { src: 'scripts/inventory.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
+    { src: 'scripts/spa-navigation.js', module: true },
   ];
   const entries = [...baseScripts, ...scripts];
   const seen = new Set();
