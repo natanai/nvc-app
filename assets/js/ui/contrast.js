@@ -1,6 +1,147 @@
 (function (global) {
   const namespace = global.NVCContrast || {};
 
+  const NAV_HEIGHT_STORAGE_KEY = 'magnetPositions:site-nav:heightPx';
+  const NAV_HEIGHT_STYLE_ID = 'nav-board-height-style';
+  const NAV_HEIGHT_VAR = '--nav-board-height';
+
+  let lastStoredNavHeight = 0;
+
+  function readStoredNavHeight() {
+    if (typeof window === 'undefined') {
+      return 0;
+    }
+
+    try {
+      const raw = window.localStorage && window.localStorage.getItem
+        ? window.localStorage.getItem(NAV_HEIGHT_STORAGE_KEY)
+        : null;
+      if (!raw) {
+        return 0;
+      }
+      const parsed = Number.parseFloat(raw);
+      if (!Number.isFinite(parsed) || parsed <= 0) {
+        return 0;
+      }
+      return parsed;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  function ensureNavHeightStyleElement() {
+    if (typeof document === 'undefined') {
+      return null;
+    }
+
+    let styleEl = document.getElementById(NAV_HEIGHT_STYLE_ID);
+    if (styleEl) {
+      return styleEl;
+    }
+
+    const head = document.head || document.getElementsByTagName('head')[0];
+    if (!head || !head.appendChild) {
+      return null;
+    }
+
+    styleEl = document.createElement('style');
+    styleEl.id = NAV_HEIGHT_STYLE_ID;
+    styleEl.textContent = `.site-nav__board{height:var(${NAV_HEIGHT_VAR}, auto);}`;
+
+    if (head.firstChild) {
+      head.insertBefore(styleEl, head.firstChild);
+    } else {
+      head.appendChild(styleEl);
+    }
+
+    return styleEl;
+  }
+
+  function applyNavHeightValue(height) {
+    if (typeof document === 'undefined') {
+      return false;
+    }
+
+    const root = document.documentElement;
+    if (!root || !root.style) {
+      return false;
+    }
+
+    if (!Number.isFinite(height) || height <= 0) {
+      root.style.removeProperty(NAV_HEIGHT_VAR);
+      return false;
+    }
+
+    ensureNavHeightStyleElement();
+    const resolved = Math.max(Math.round(height), 0);
+    root.style.setProperty(NAV_HEIGHT_VAR, `${resolved}px`);
+    return true;
+  }
+
+  function clearNavHeight() {
+    lastStoredNavHeight = 0;
+
+    if (typeof window !== 'undefined' && window.localStorage && window.localStorage.removeItem) {
+      try {
+        window.localStorage.removeItem(NAV_HEIGHT_STORAGE_KEY);
+      } catch (error) {
+        // Ignore storage errors (quota, private mode, etc.).
+      }
+    }
+
+    if (typeof document !== 'undefined' && document.documentElement && document.documentElement.style) {
+      document.documentElement.style.removeProperty(NAV_HEIGHT_VAR);
+    }
+  }
+
+  function storeNavHeight(height) {
+    if (!Number.isFinite(height) || height <= 0) {
+      clearNavHeight();
+      return false;
+    }
+
+    const resolved = Math.max(Math.round(height), 0);
+    if (resolved === lastStoredNavHeight) {
+      return applyNavHeightValue(resolved);
+    }
+
+    lastStoredNavHeight = resolved;
+
+    if (typeof window !== 'undefined' && window.localStorage && window.localStorage.setItem) {
+      try {
+        window.localStorage.setItem(NAV_HEIGHT_STORAGE_KEY, String(resolved));
+      } catch (error) {
+        // Ignore storage errors (quota, private mode, etc.).
+      }
+    }
+
+    return applyNavHeightValue(resolved);
+  }
+
+  function applyStoredNavHeight() {
+    const stored = readStoredNavHeight();
+    if (stored > 0) {
+      lastStoredNavHeight = Math.max(Math.round(stored), 0);
+      applyNavHeightValue(stored);
+      return stored;
+    }
+
+    clearNavHeight();
+    return 0;
+  }
+
+  const navHeightNamespace = {
+    readHeight: readStoredNavHeight,
+    storeHeight,
+    clearHeight: clearNavHeight,
+    applyStoredHeight: applyStoredNavHeight,
+  };
+
+  namespace.navHeight = navHeightNamespace;
+  global.NVCNavHeight = navHeightNamespace;
+
+  applyStoredNavHeight();
+
   function clamp(value, min, max) {
     if (Number.isNaN(value)) {
       return min;

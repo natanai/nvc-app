@@ -34,6 +34,103 @@ const TOGGLE_GUARD_MS = 120;
 
 const isNavBoardState = (state) => state?.storageKey === NAV_STORAGE_KEY;
 
+const NAV_HEIGHT_HINT_STORAGE_KEY = 'magnetPositions:site-nav:heightPx';
+
+const readStoredNavHeightHint = () => {
+  if (typeof window === 'undefined') {
+    return 0;
+  }
+  const navHeightApi = window.NVCNavHeight;
+  if (navHeightApi && typeof navHeightApi.readHeight === 'function') {
+    try {
+      const stored = navHeightApi.readHeight();
+      if (Number.isFinite(stored) && stored > 0) {
+        return Math.max(Math.round(stored), 0);
+      }
+    } catch {
+      // ignore read errors
+    }
+  }
+  try {
+    const raw = window.localStorage && window.localStorage.getItem
+      ? window.localStorage.getItem(NAV_HEIGHT_HINT_STORAGE_KEY)
+      : null;
+    if (!raw) {
+      return 0;
+    }
+    const parsed = Number.parseFloat(raw);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      return 0;
+    }
+    return Math.max(Math.round(parsed), 0);
+  } catch {
+    return 0;
+  }
+};
+
+let lastNavHeightHint = readStoredNavHeightHint();
+
+const updateNavHeightHint = (height) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const normalized = Number.isFinite(height) ? Math.max(Math.round(height), 0) : 0;
+  if (!normalized) {
+    if (lastNavHeightHint > 0) {
+      lastNavHeightHint = 0;
+      const navHeightApi = window.NVCNavHeight;
+      if (navHeightApi && typeof navHeightApi.clearHeight === 'function') {
+        try {
+          navHeightApi.clearHeight();
+          return;
+        } catch {
+          // ignore API errors
+        }
+      }
+      try {
+        if (window.localStorage && window.localStorage.removeItem) {
+          window.localStorage.removeItem(NAV_HEIGHT_HINT_STORAGE_KEY);
+        }
+      } catch {
+        // ignore storage errors
+      }
+      if (typeof document !== 'undefined' && document.documentElement && document.documentElement.style) {
+        document.documentElement.style.removeProperty('--nav-board-height');
+      }
+    }
+    return;
+  }
+
+  if (normalized === lastNavHeightHint) {
+    return;
+  }
+
+  lastNavHeightHint = normalized;
+
+  const navHeightApi = window.NVCNavHeight;
+  if (navHeightApi && typeof navHeightApi.storeHeight === 'function') {
+    try {
+      navHeightApi.storeHeight(normalized);
+      return;
+    } catch {
+      // ignore API errors and fall through to storage fallback
+    }
+  }
+
+  try {
+    if (window.localStorage && window.localStorage.setItem) {
+      window.localStorage.setItem(NAV_HEIGHT_HINT_STORAGE_KEY, String(normalized));
+    }
+  } catch {
+    // ignore storage errors
+  }
+
+  if (typeof document !== 'undefined' && document.documentElement && document.documentElement.style) {
+    document.documentElement.style.setProperty('--nav-board-height', `${normalized}px`);
+  }
+};
+
 let isToggling = false;
 let toggleGuardTimer = null;
 
@@ -825,11 +922,17 @@ const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
     if (!state.playActive) {
       state.inactiveHeight = revertHeight;
     }
+    if (isNavBoardState(state)) {
+      updateNavHeightHint(revertHeight);
+    }
   } else {
     state.boardHeight = currentHeight;
     state.board.style.height = `${currentHeight}px`;
     if (!state.playActive) {
       state.inactiveHeight = currentHeight;
+    }
+    if (isNavBoardState(state)) {
+      updateNavHeightHint(currentHeight);
     }
 
     const changedEnough = drag.hasHeightChanged || Math.abs(currentHeight - drag.startHeight) >= 1;
@@ -862,6 +965,7 @@ const updateBoardHeight = (state) => {
       state.inactiveHeight = height;
     }
     state.board.style.height = `${height}px`;
+    updateNavHeightHint(height);
     return;
   }
   let maxBottom = 0;
@@ -1025,6 +1129,9 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
   state.board.style.height = `${height}px`;
+  if (isNavBoardState(state)) {
+    updateNavHeightHint(height);
+  }
   updateLayout(state);
   if (persist) {
     persistLayout(state, true);
@@ -1292,11 +1399,14 @@ const setPlayState = (state, active) => {
           const resolvedHeight = Math.max(syncedHeight, minHeight);
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
+          updateNavHeightHint(resolvedHeight);
         } else {
           const resolvedHeight = Math.max(syncedHeight, state.minHeight || 0, state.boardHeight || 0);
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
         }
+      } else if (isNavBoardState(state)) {
+        updateNavHeightHint(state.boardHeight);
       }
       if (isNavBoardState(state)) {
         resolveNavLayoutToNearestValid(state);
@@ -1607,6 +1717,9 @@ const initializeBoard = async (root, index) => {
 
   board.style.height = `${state.boardHeight}px`;
   board.classList.add('no-transitions');
+  if (isNavBoardState(state)) {
+    updateNavHeightHint(state.boardHeight);
+  }
 
   if (root?.dataset?.magnetKey === NAV_STORAGE_KEY) {
     board.dataset.navResizable = '1';
@@ -1678,12 +1791,15 @@ const initializeBoard = async (root, index) => {
       state.boardHeight = resolvedHeight;
       state.inactiveHeight = resolvedHeight;
       state.board.style.height = `${resolvedHeight}px`;
+      updateNavHeightHint(resolvedHeight);
     } else {
       const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
       state.boardHeight = storedBoardHeight;
       state.inactiveHeight = storedBoardHeight;
       state.board.style.height = `${storedBoardHeight}px`;
     }
+  } else if (isNavBoardState(state)) {
+    updateNavHeightHint(state.boardHeight);
   }
 
   let shouldSeed = true;
@@ -1762,6 +1878,9 @@ const initializeBoard = async (root, index) => {
     applyRowPackedLayout(state, state.magnets, { persist: true });
   } else {
     state.board.style.height = `${state.boardHeight}px`;
+    if (isNavBoardState(state)) {
+      updateNavHeightHint(state.boardHeight);
+    }
   }
 
   board.dataset.ready = '1';
