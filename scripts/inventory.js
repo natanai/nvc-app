@@ -1891,9 +1891,10 @@ function setupInventoryPage() {
 }
 
 function highlightNavigation() {
-  const navLinks = Array.from(
-    document.querySelectorAll('.site-nav__link[href], .site-nav__magnet[href]')
-  );
+  const navLinks = [
+    ...document.querySelectorAll('.site-nav__link[href]'),
+    ...document.querySelectorAll('.site-nav__magnet[href]'),
+  ];
   if (!navLinks.length) {
     return;
   }
