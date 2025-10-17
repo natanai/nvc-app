@@ -13,6 +13,8 @@
   --nav-hover-shadow: color-mix(in srgb, var(--outline) 45%, transparent);
   --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
   --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 62%, transparent);
+  --nav-magnet-safe-height: clamp(6.25rem, 20vw, 8.75rem);
+  --nav-magnet-max-height: 720px;
 }
 
 .page-wrapper {
@@ -34,7 +36,9 @@
 }
 
 .site-nav__board {
-  min-height: clamp(6.25rem, 20vw, 8.75rem);
+  min-height: max(clamp(6.25rem, 20vw, 8.75rem), var(--nav-magnet-safe-height, 0px));
+  height: var(--nav-magnet-board-height, auto);
+  max-height: var(--nav-magnet-max-height, 720px);
   padding: 1.25rem 1.25rem 0.5rem;
   border-radius: clamp(1.5rem, 4vw, 2.75rem);
   border: 3px solid var(--outline);

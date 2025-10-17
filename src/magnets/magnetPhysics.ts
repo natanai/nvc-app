@@ -101,6 +101,30 @@ const BOARD_PADDING = 24;
 const SHUFFLE_DEBOUNCE_MS = 500;
 const TILT_RESPONSE_RATE = 10;
 const TILT_SETTLE_THRESHOLD = 0.01;
+const NAV_BOARD_MAX_HEIGHT = 720;
+
+const clampBoardHeight = (value: number): number => {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  return Math.min(Math.max(value, 0), NAV_BOARD_MAX_HEIGHT);
+};
+
+const syncBoardHeightVariables = (height: number | null | undefined): void => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const docEl = document.documentElement;
+  if (!docEl || !docEl.style) {
+    return;
+  }
+  docEl.style.setProperty('--nav-magnet-max-height', `${NAV_BOARD_MAX_HEIGHT}px`);
+  if (typeof height === 'number' && Number.isFinite(height) && height > 0) {
+    const clamped = clampBoardHeight(height);
+    docEl.style.setProperty('--nav-magnet-board-height', `${clamped}px`);
+    docEl.style.setProperty('--nav-magnet-safe-height', `${clamped}px`);
+  }
+};
 
 const clamp = (value: number, min: number, max: number) => {
   if (value < min) return min;
@@ -730,7 +754,8 @@ const shuffleMagnets = async (state: InternalState): Promise<void> => {
       });
 
       const baseHeight = state.baseHeight || height || 0;
-      const targetHeight = Math.max(baseHeight, maxBottom + BOARD_PADDING);
+      const targetHeightRaw = Math.max(baseHeight, maxBottom + BOARD_PADDING);
+      const targetHeight = clampBoardHeight(targetHeightRaw);
 
       placements.forEach(({ magnet, x, y }) => {
         magnet.x = x;
@@ -740,8 +765,11 @@ const shuffleMagnets = async (state: InternalState): Promise<void> => {
         applyTransform(magnet);
       });
 
-      state.baseHeight = Math.max(state.baseHeight || 0, targetHeight);
+      const nextBaseHeight = Math.max(state.baseHeight || 0, targetHeight);
+      state.baseHeight = Math.min(nextBaseHeight, NAV_BOARD_MAX_HEIGHT);
       state.board.style.height = `${targetHeight}px`;
+      state.board.style.maxHeight = `${NAV_BOARD_MAX_HEIGHT}px`;
+      syncBoardHeightVariables(targetHeight);
       notifyPositions(state);
 
       await waitForAnimationFrames(1);
@@ -802,13 +830,14 @@ export function startPhysics(options: StartPhysicsOptions): {
     isShuffling: false,
     shufflePromise: null,
     lastShuffleTime: 0,
-    baseHeight:
+    baseHeight: clampBoardHeight(
       Math.max(
         boardRect.height ||
           options.board.clientHeight ||
           parsePx((options.board instanceof HTMLElement ? getComputedStyle(options.board).height : '') || '0'),
         0,
       ) || 0,
+    ),
     tilt: {
       x: 0,
       y: 0,
@@ -818,6 +847,9 @@ export function startPhysics(options: StartPhysicsOptions): {
       baselineBeta: null,
     },
   };
+
+  syncBoardHeightVariables(state.baseHeight);
+  options.board.style.maxHeight = `${NAV_BOARD_MAX_HEIGHT}px`;
 
   const removePointerListeners = addPointerListeners(state);
   let removeTiltListener: (() => void) | null = null;
@@ -916,12 +948,12 @@ export function loadPositions(
     const storedHeightRaw = parsedLayout.boardHeight;
     const storedHeight =
       typeof storedHeightRaw === 'number' && Number.isFinite(storedHeightRaw) && storedHeightRaw > 0
-        ? storedHeightRaw
+        ? clampBoardHeight(storedHeightRaw)
         : null;
 
     const effectiveWidth = Math.max(boardSize.width, 0);
-    const requestedHeight = Math.max(boardSize.height, 0);
-    const effectiveHeight = storedHeight != null ? Math.max(storedHeight, 0) : requestedHeight;
+    const requestedHeight = clampBoardHeight(Math.max(boardSize.height, 0));
+    const effectiveHeight = storedHeight != null ? storedHeight : requestedHeight;
 
     const snapshots: MagnetSnapshot[] = [];
     for (const [id, value] of Object.entries(parsed.magnets as Record<string, unknown>)) {
@@ -945,7 +977,7 @@ export function loadPositions(
 
     return {
       magnets: snapshots,
-      boardHeight: storedHeight != null ? Math.max(storedHeight, 0) : null,
+      boardHeight: storedHeight != null ? storedHeight : null,
     };
   } catch {
     return null;
@@ -974,8 +1006,9 @@ export function savePositions(
       yPct: Number(yPct.toFixed(4)),
     };
   }
-  if (height > 0 && Number.isFinite(height)) {
-    payload.boardHeight = Number(Math.max(height, 0).toFixed(2));
+  const clampedBoardHeight = clampBoardHeight(height);
+  if (clampedBoardHeight > 0) {
+    payload.boardHeight = Number(clampedBoardHeight.toFixed(2));
   }
   try {
     window.localStorage.setItem(normalizeKey(storageKey), JSON.stringify(payload));

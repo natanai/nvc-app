@@ -1,4 +1,34 @@
+const NAV_BOARD_MAX_HEIGHT = 720;
 let initializedBoards;
+
+function clampBoardHeight(value) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  if (value < 0) {
+    return 0;
+  }
+  if (value > NAV_BOARD_MAX_HEIGHT) {
+    return NAV_BOARD_MAX_HEIGHT;
+  }
+  return value;
+}
+
+function syncBoardHeightVariables(height) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const docEl = document.documentElement;
+  if (!docEl || !docEl.style) {
+    return;
+  }
+  const clamped = clampBoardHeight(height);
+  docEl.style.setProperty('--nav-magnet-max-height', `${NAV_BOARD_MAX_HEIGHT}px`);
+  if (clamped > 0) {
+    docEl.style.setProperty('--nav-magnet-board-height', `${clamped}px`);
+    docEl.style.setProperty('--nav-magnet-safe-height', `${clamped}px`);
+  }
+}
 
 function getInitializedBoards() {
   if (!initializedBoards) {
@@ -97,8 +127,11 @@ export function updateBoardHeight(board, magnets) {
     const height = element.offsetHeight || Number.parseFloat(style.height || '0') || 0;
     bottom = Math.max(bottom, y + height);
   });
-  const height = Math.ceil(bottom + 24);
+  const rawHeight = Math.ceil(bottom + 24);
+  const height = clampBoardHeight(rawHeight);
   board.style.height = `${height}px`;
+  board.style.maxHeight = `${NAV_BOARD_MAX_HEIGHT}px`;
+  syncBoardHeightVariables(height);
   return height;
 }
 

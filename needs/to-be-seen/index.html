@@ -37,6 +37,44 @@
     <meta name="twitter:url" content="https://allneeds.app/needs/to-be-seen/" />
     <meta name="twitter:image" content="https://allneeds.app/icons/social-card.svg" />
     <meta name="twitter:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
+        
+    <script>
+      (function() {
+        if (typeof window === 'undefined' || typeof document === 'undefined') {
+          return;
+        }
+        var docEl = document.documentElement;
+        if (!docEl || !docEl.style) {
+          return;
+        }
+        var MAX_HEIGHT = 720;
+        var SAFE_HEIGHT = 680;
+        var resolvedHeight = null;
+        try {
+          if ('localStorage' in window) {
+            var raw = window.localStorage.getItem('magnetPositions:site-nav');
+            if (typeof raw === 'string' && raw) {
+              var parsed = JSON.parse(raw);
+              if (parsed && typeof parsed === 'object' && typeof parsed.boardHeight === 'number') {
+                var candidate = parsed.boardHeight;
+                if (Number.isFinite(candidate) && candidate > 0) {
+                  resolvedHeight = Math.min(Math.max(candidate, 0), MAX_HEIGHT);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          resolvedHeight = null;
+        }
+        docEl.style.setProperty('--nav-magnet-max-height', MAX_HEIGHT + 'px');
+        if (resolvedHeight != null) {
+          docEl.style.setProperty('--nav-magnet-board-height', resolvedHeight + 'px');
+          docEl.style.setProperty('--nav-magnet-safe-height', resolvedHeight + 'px');
+        } else {
+          docEl.style.setProperty('--nav-magnet-safe-height', Math.min(SAFE_HEIGHT, MAX_HEIGHT) + 'px');
+        }
+      })();
+    </script>
             <script src="../../assets/js/ui/contrast.js"></script>
     <script>
       (function() {
@@ -256,6 +294,8 @@
   --nav-hover-shadow: color-mix(in srgb, var(--outline) 45%, transparent);
   --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
   --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 62%, transparent);
+  --nav-magnet-safe-height: clamp(6.25rem, 20vw, 8.75rem);
+  --nav-magnet-max-height: 720px;
 }
 
 .page-wrapper {
@@ -277,7 +317,9 @@
 }
 
 .site-nav__board {
-  min-height: clamp(6.25rem, 20vw, 8.75rem);
+  min-height: max(clamp(6.25rem, 20vw, 8.75rem), var(--nav-magnet-safe-height, 0px));
+  height: var(--nav-magnet-board-height, auto);
+  max-height: var(--nav-magnet-max-height, 720px);
   padding: 1.25rem 1.25rem 0.5rem;
   border-radius: clamp(1.5rem, 4vw, 2.75rem);
   border: 3px solid var(--outline);
@@ -678,6 +720,12 @@ button.site-nav__magnet {
             return;
           }
           var STORAGE_KEY = 'magnetPositions:site-nav';
+          var docEl = document.documentElement;
+          var MAX_HEIGHT = 720;
+          var SAFE_HEIGHT = 680;
+          if (docEl && docEl.style) {
+            docEl.style.setProperty('--nav-magnet-max-height', MAX_HEIGHT + 'px');
+          }
           var raw;
           try {
             if (!('localStorage' in window)) {
@@ -713,11 +761,21 @@ button.site-nav__magnet {
             boardRect.height || board.clientHeight || cssMinHeight || 1,
             cssMinHeight || 1
           );
+          boardHeight = Math.min(Math.max(boardHeight, 0), MAX_HEIGHT);
           if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
             var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
+            storedHeight = Math.min(Math.max(storedHeight, 0), MAX_HEIGHT);
             boardHeight = storedHeight;
             board.style.height = storedHeight + 'px';
+            board.style.maxHeight = MAX_HEIGHT + 'px';
+            if (docEl && docEl.style) {
+              docEl.style.setProperty('--nav-magnet-board-height', storedHeight + 'px');
+              docEl.style.setProperty('--nav-magnet-safe-height', storedHeight + 'px');
+            }
+          } else if (docEl && docEl.style && !docEl.style.getPropertyValue('--nav-magnet-safe-height')) {
+            docEl.style.setProperty('--nav-magnet-safe-height', Math.min(SAFE_HEIGHT, MAX_HEIGHT) + 'px');
           }
+          board.style.maxHeight = MAX_HEIGHT + 'px';
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
             return;

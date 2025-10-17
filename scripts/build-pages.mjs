@@ -17,6 +17,47 @@ const HOME_ICON_INLINE = (basePath = '') => {
 };
 
 const NAV_MAGNET_STORAGE_KEY = 'site-nav';
+const NAV_MAX_HEIGHT_PX = 720;
+const NAV_SAFE_GUARD_PX = 680;
+
+const navPreloadHeadScript = () => String.raw`
+    <script>
+      (function() {
+        if (typeof window === 'undefined' || typeof document === 'undefined') {
+          return;
+        }
+        var docEl = document.documentElement;
+        if (!docEl || !docEl.style) {
+          return;
+        }
+        var MAX_HEIGHT = ${NAV_MAX_HEIGHT_PX};
+        var SAFE_HEIGHT = ${NAV_SAFE_GUARD_PX};
+        var resolvedHeight = null;
+        try {
+          if ('localStorage' in window) {
+            var raw = window.localStorage.getItem('magnetPositions:${NAV_MAGNET_STORAGE_KEY}');
+            if (typeof raw === 'string' && raw) {
+              var parsed = JSON.parse(raw);
+              if (parsed && typeof parsed === 'object' && typeof parsed.boardHeight === 'number') {
+                var candidate = parsed.boardHeight;
+                if (Number.isFinite(candidate) && candidate > 0) {
+                  resolvedHeight = Math.min(Math.max(candidate, 0), MAX_HEIGHT);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          resolvedHeight = null;
+        }
+        docEl.style.setProperty('--nav-magnet-max-height', MAX_HEIGHT + 'px');
+        if (resolvedHeight != null) {
+          docEl.style.setProperty('--nav-magnet-board-height', resolvedHeight + 'px');
+          docEl.style.setProperty('--nav-magnet-safe-height', resolvedHeight + 'px');
+        } else {
+          docEl.style.setProperty('--nav-magnet-safe-height', Math.min(SAFE_HEIGHT, MAX_HEIGHT) + 'px');
+        }
+      })();
+    </script>`;
 
 const navPrefillScript = () => String.raw`
       <script>
@@ -33,6 +74,12 @@ const navPrefillScript = () => String.raw`
             return;
           }
           var STORAGE_KEY = 'magnetPositions:${NAV_MAGNET_STORAGE_KEY}';
+          var docEl = document.documentElement;
+          var MAX_HEIGHT = ${NAV_MAX_HEIGHT_PX};
+          var SAFE_HEIGHT = ${NAV_SAFE_GUARD_PX};
+          if (docEl && docEl.style) {
+            docEl.style.setProperty('--nav-magnet-max-height', MAX_HEIGHT + 'px');
+          }
           var raw;
           try {
             if (!('localStorage' in window)) {
@@ -68,11 +115,21 @@ const navPrefillScript = () => String.raw`
             boardRect.height || board.clientHeight || cssMinHeight || 1,
             cssMinHeight || 1
           );
+          boardHeight = Math.min(Math.max(boardHeight, 0), MAX_HEIGHT);
           if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
             var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
+            storedHeight = Math.min(Math.max(storedHeight, 0), MAX_HEIGHT);
             boardHeight = storedHeight;
             board.style.height = storedHeight + 'px';
+            board.style.maxHeight = MAX_HEIGHT + 'px';
+            if (docEl && docEl.style) {
+              docEl.style.setProperty('--nav-magnet-board-height', storedHeight + 'px');
+              docEl.style.setProperty('--nav-magnet-safe-height', storedHeight + 'px');
+            }
+          } else if (docEl && docEl.style && !docEl.style.getPropertyValue('--nav-magnet-safe-height')) {
+            docEl.style.setProperty('--nav-magnet-safe-height', Math.min(SAFE_HEIGHT, MAX_HEIGHT) + 'px');
           }
+          board.style.maxHeight = MAX_HEIGHT + 'px';
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
             return;
@@ -601,6 +658,7 @@ function htmlPage({
     <meta name="twitter:url" content="${canonicalUrl}" />
     <meta name="twitter:image" content="${socialImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
+        ${navPreloadHeadScript()}
         ${themePreloadScript(basePath)}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
     <link rel="stylesheet" href="${cssHref}" media="print" onload="this.media='all'" />
