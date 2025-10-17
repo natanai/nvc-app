@@ -639,11 +639,24 @@ const updateLayoutValidity = (state) => {
   const hasOverlap = layoutHasOverlap(state);
   const hasOffBoard = state.magnets.some((magnet) => isMagnetOffBoard(state, magnet));
   const invalid = hasOverlap || hasOffBoard;
+  const reasons = [];
+  if (hasOverlap) {
+    reasons.push('overlap');
+  }
+  if (hasOffBoard) {
+    reasons.push('off-board');
+  }
   if (state.root) {
     if (invalid) {
       state.root.dataset.layoutInvalid = '1';
+      if (reasons.length) {
+        state.root.dataset.layoutInvalidReason = reasons.join(' ');
+      } else {
+        delete state.root.dataset.layoutInvalidReason;
+      }
     } else {
       delete state.root.dataset.layoutInvalid;
+      delete state.root.dataset.layoutInvalidReason;
     }
   }
   if (state.toggleInput) {
@@ -659,6 +672,7 @@ const updateLayoutValidity = (state) => {
     delete state.toggle.dataset.layoutToggleDisabled;
   }
   state.layoutInvalid = invalid;
+  state.layoutInvalidDetails = { overlap: hasOverlap, offBoard: hasOffBoard };
 };
 
 const layoutHasOverlap = (state) => {
@@ -796,42 +810,6 @@ const persistLayout = (state, immediate = false) => {
   state.saveTimer = window.setTimeout(() => {
     flush();
   }, delay);
-};
-
-const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
-  console.info('[magnets] reseed CALLED', 'restoreLayoutFromPercentages');
-  const width = Math.max(state.boardWidth || 0, 1);
-  const height = isNavBoardState(state)
-    ? Math.max(state.boardHeight || 0, 1)
-    : Math.max(Math.max(state.boardHeight || 0, state.minHeight || 0), 1);
-  const placements = state.magnets.map((magnet) => {
-    const percentages = state.layout.get(magnet.id);
-    if (!percentages) {
-      return { magnet, x: magnet.x, y: magnet.y };
-    }
-    if (isNavBoardState(state)) {
-      const x = (percentages.xPct || 0) * width;
-      const y = (percentages.yPct || 0) * height;
-      return { magnet, x, y };
-    }
-    const maxX = Math.max(width - magnet.width, 0);
-    const maxY = Math.max(height - magnet.height, 0);
-    const x = clamp((percentages.xPct || 0) * width, 0, maxX);
-    const y = clamp((percentages.yPct || 0) * height, 0, maxY);
-    return { magnet, x, y };
-  });
-
-  placements.forEach(({ magnet, x, y }) => {
-    magnet.x = x;
-    magnet.y = y;
-    setMagnetTransform(magnet);
-  });
-
-  updateBoardHeight(state);
-  if (persist) {
-    updateLayout(state);
-    persistLayout(state);
-  }
 };
 
 const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
@@ -1020,6 +998,62 @@ const resolveNavLayoutToNearestValid = (state) => {
   return changed;
 };
 
+const ensureNavLayoutValidity = (state, { persist = false, immediate = true } = {}) => {
+  if (!isNavBoardState(state) || !state) {
+    return false;
+  }
+  const wasInvalid = Boolean(state.layoutInvalid);
+  if (!wasInvalid) {
+    return false;
+  }
+  const changed = resolveNavLayoutToNearestValid(state);
+  if (changed) {
+    updateBoardHeight(state);
+  }
+  updateLayout(state);
+  if (persist) {
+    persistLayout(state, immediate);
+  }
+  return true;
+};
+
+const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
+  console.info('[magnets] reseed CALLED', 'restoreLayoutFromPercentages');
+  const width = Math.max(state.boardWidth || 0, 1);
+  const height = isNavBoardState(state)
+    ? Math.max(state.boardHeight || 0, 1)
+    : Math.max(Math.max(state.boardHeight || 0, state.minHeight || 0), 1);
+  const placements = state.magnets.map((magnet) => {
+    const percentages = state.layout.get(magnet.id);
+    if (!percentages) {
+      return { magnet, x: magnet.x, y: magnet.y };
+    }
+    if (isNavBoardState(state)) {
+      const x = (percentages.xPct || 0) * width;
+      const y = (percentages.yPct || 0) * height;
+      return { magnet, x, y };
+    }
+    const maxX = Math.max(width - magnet.width, 0);
+    const maxY = Math.max(height - magnet.height, 0);
+    const x = clamp((percentages.xPct || 0) * width, 0, maxX);
+    const y = clamp((percentages.yPct || 0) * height, 0, maxY);
+    return { magnet, x, y };
+  });
+
+  placements.forEach(({ magnet, x, y }) => {
+    magnet.x = x;
+    magnet.y = y;
+    setMagnetTransform(magnet);
+  });
+
+  updateBoardHeight(state);
+  updateLayout(state);
+  const handled = ensureNavLayoutValidity(state, { persist, immediate: false });
+  if (persist && !handled) {
+    persistLayout(state);
+  }
+};
+
 const shuffleWithoutPhysics = (state) => {
   const order = state.magnets.slice();
   for (let i = order.length - 1; i > 0; i -= 1) {
@@ -1040,6 +1074,12 @@ const handlePositionsUpdate = (state, list) => {
   });
   updateBoardHeight(state);
   updateLayout(state);
+  if (isNavBoardState(state)) {
+    const dragging = state?.board?.dataset?.dragging === '1';
+    if (!dragging && ensureNavLayoutValidity(state, { persist: true, immediate: true })) {
+      return;
+    }
+  }
   persistLayout(state);
 };
 
@@ -1101,7 +1141,10 @@ const setPlayState = (state, active) => {
     }
     if (isNavBoardState(state)) {
       updateLayout(state);
-      persistLayout(state, true);
+      const handled = ensureNavLayoutValidity(state, { persist: true, immediate: true });
+      if (!handled) {
+        persistLayout(state, true);
+      }
       persistedToggle = true;
     }
     isToggling = false;
@@ -1146,11 +1189,15 @@ const setPlayState = (state, active) => {
           state.inactiveHeight = resolvedHeight;
         }
       }
-      if (isNavBoardState(state)) {
-        resolveNavLayoutToNearestValid(state);
-      }
       updateLayout(state);
-      persistLayout(state, true);
+      if (isNavBoardState(state)) {
+        const handled = ensureNavLayoutValidity(state, { persist: true, immediate: true });
+        if (!handled) {
+          persistLayout(state, true);
+        }
+      } else {
+        persistLayout(state, true);
+      }
       persistedToggle = true;
       state.lastLayoutType = 'manual';
       beginToggleGuard();
@@ -1160,7 +1207,10 @@ const setPlayState = (state, active) => {
   updateToggleLabel(state.toggle, active);
   if (isNavBoardState(state) && !persistedToggle) {
     updateLayout(state);
-    persistLayout(state, true);
+    const handled = ensureNavLayoutValidity(state, { persist: true, immediate: true });
+    if (!handled) {
+      persistLayout(state, true);
+    }
   }
 };
 
@@ -1402,6 +1452,8 @@ const initializeBoard = async (root, index) => {
     magnets: measured,
     magnetMap: new Map(),
     layout: new Map(),
+    layoutInvalid: false,
+    layoutInvalidDetails: { overlap: false, offBoard: false },
     physics: null,
     boardWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
     boardHeight: initialHeight,
@@ -1548,6 +1600,9 @@ const initializeBoard = async (root, index) => {
     updateBoardHeight(state);
     updateLayout(state);
     state.lastLayoutType = 'restored';
+    if (isNavBoardState(state)) {
+      ensureNavLayoutValidity(state, { persist: true, immediate: true });
+    }
     if (!isNavBoardState(state) && layoutHasOverlap(state)) {
       shouldSeed = true;
     }
@@ -1597,6 +1652,9 @@ const initializeBoard = async (root, index) => {
       if (state.playActive) {
         updateBoardHeight(state);
         updateLayout(state);
+        if (isNavBoardState(state)) {
+          ensureNavLayoutValidity(state);
+        }
         return;
       }
 
@@ -1612,7 +1670,13 @@ const initializeBoard = async (root, index) => {
           updateBoardHeight(state);
         }
         updateLayout(state);
-        persistLayout(state, true);
+        let handled = false;
+        if (isNavBoardState(state)) {
+          handled = ensureNavLayoutValidity(state, { persist: true, immediate: true });
+        }
+        if (!handled) {
+          persistLayout(state, true);
+        }
         state.lastLayoutType = 'manual';
         return;
       }
@@ -1620,7 +1684,10 @@ const initializeBoard = async (root, index) => {
       if (isNavBoardState(state)) {
         updateBoardHeight(state);
         updateLayout(state);
-        persistLayout(state, true);
+        const handled = ensureNavLayoutValidity(state, { persist: true, immediate: true });
+        if (!handled) {
+          persistLayout(state, true);
+        }
         state.lastLayoutType = 'manual';
         return;
       }
