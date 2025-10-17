@@ -5126,65 +5126,6 @@ function handleJournalFiltersReset() {
   renderJournalHistory();
 }
 
-function handleJournalExport() {
-  const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
-  if (!entries.length) {
-    showJournalMessage('No journal entries to export yet.', 'warning');
-    return;
-  }
-  try {
-    const payload = JSON.stringify(entries, null, 2);
-    const blob = new Blob([payload], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    const dateStamp = new Date().toISOString().slice(0, 10);
-    link.href = url;
-    link.download = `nvc-journal-${dateStamp}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    showJournalMessage('Exported journal entries as JSON.', 'success');
-  } catch (error) {
-    console.warn('Unable to export journal entries', error);
-    showJournalMessage('Export failed. Try again.', 'error');
-  }
-}
-
-async function handleJournalImport(file) {
-  try {
-    const store = ensureJournalStore();
-    if (!store) {
-      showJournalMessage('Import unavailable right now. Reload and try again.', 'error');
-      return;
-    }
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    const list = Array.isArray(parsed)
-      ? parsed
-      : Array.isArray(parsed.entries)
-      ? parsed.entries
-      : [];
-    if (!list.length) {
-      showJournalMessage('No entries found in the import file.', 'warning');
-      return;
-    }
-    const result = store.importEntries(list);
-    if (!result.added && !result.updated) {
-      showJournalMessage('No new entries found to import.', 'warning');
-      return;
-    }
-    updateJournalEntriesFromStore();
-    renderJournalViews();
-    const total = result.added + result.updated;
-    showJournalStatus(`Imported ${total} ${total === 1 ? 'entry' : 'entries'}.`);
-    showJournalMessage('Import complete. Entries stay on this device unless you export them.', 'success');
-  } catch (error) {
-    console.warn('Unable to import journal entries', error);
-    showJournalMessage('Import failed. Make sure you selected a JSON export from this app.', 'error');
-  }
-}
-
 function capitalizeWord(value) {
   if (!value) {
     return '';
