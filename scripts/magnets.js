@@ -83,6 +83,9 @@ const updateNavHeightHint = (height) => {
       if (navHeightApi && typeof navHeightApi.clearHeight === 'function') {
         try {
           navHeightApi.clearHeight();
+          if (typeof navHeightApi.markReady === 'function') {
+            navHeightApi.markReady();
+          }
           return;
         } catch {
           // ignore API errors
@@ -98,6 +101,13 @@ const updateNavHeightHint = (height) => {
       if (typeof document !== 'undefined' && document.documentElement && document.documentElement.style) {
         document.documentElement.style.removeProperty('--nav-board-height');
       }
+      if (navHeightApi && typeof navHeightApi.markReady === 'function') {
+        try {
+          navHeightApi.markReady();
+        } catch {
+          // ignore readiness errors
+        }
+      }
     }
     return;
   }
@@ -112,6 +122,9 @@ const updateNavHeightHint = (height) => {
   if (navHeightApi && typeof navHeightApi.storeHeight === 'function') {
     try {
       navHeightApi.storeHeight(normalized);
+      if (typeof navHeightApi.markReady === 'function') {
+        navHeightApi.markReady();
+      }
       return;
     } catch {
       // ignore API errors and fall through to storage fallback
@@ -128,6 +141,13 @@ const updateNavHeightHint = (height) => {
 
   if (typeof document !== 'undefined' && document.documentElement && document.documentElement.style) {
     document.documentElement.style.setProperty('--nav-board-height', `${normalized}px`);
+  }
+  if (navHeightApi && typeof navHeightApi.markReady === 'function') {
+    try {
+      navHeightApi.markReady();
+    } catch {
+      // ignore readiness errors
+    }
   }
 };
 

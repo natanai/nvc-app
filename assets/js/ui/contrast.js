@@ -4,6 +4,77 @@
   const NAV_HEIGHT_STORAGE_KEY = 'magnetPositions:site-nav:heightPx';
   const NAV_HEIGHT_STYLE_ID = 'nav-board-height-style';
   const NAV_HEIGHT_VAR = '--nav-board-height';
+  const NAV_HEIGHT_STATE_ATTR = 'data-nav-height-state';
+  const NAV_HEIGHT_STATE_LOADING = 'loading';
+  const NAV_HEIGHT_STATE_READY = 'ready';
+  const NAV_HEIGHT_FALLBACK_DELAY_MS = 700;
+
+  let navHeightFallbackTimer = null;
+
+  function clearNavHeightFallbackTimer() {
+    if (navHeightFallbackTimer != null && typeof window !== 'undefined' && window.clearTimeout) {
+      window.clearTimeout(navHeightFallbackTimer);
+    }
+    navHeightFallbackTimer = null;
+  }
+
+  function scheduleNavHeightFallback() {
+    if (navHeightFallbackTimer != null || typeof window === 'undefined' || !window.setTimeout) {
+      return;
+    }
+
+    if (typeof document !== 'undefined' && document.documentElement) {
+      const state = document.documentElement.getAttribute(NAV_HEIGHT_STATE_ATTR);
+      if (state === NAV_HEIGHT_STATE_READY) {
+        return;
+      }
+    }
+
+    navHeightFallbackTimer = window.setTimeout(() => {
+      navHeightFallbackTimer = null;
+      if (typeof document === 'undefined' || !document.documentElement) {
+        return;
+      }
+      const root = document.documentElement;
+      if (root.getAttribute(NAV_HEIGHT_STATE_ATTR) === NAV_HEIGHT_STATE_LOADING) {
+        root.setAttribute(NAV_HEIGHT_STATE_ATTR, NAV_HEIGHT_STATE_READY);
+      }
+    }, NAV_HEIGHT_FALLBACK_DELAY_MS);
+  }
+
+  function setNavHeightState(state) {
+    if (typeof document === 'undefined' || !document.documentElement) {
+      return;
+    }
+
+    const root = document.documentElement;
+    const nextState = state === NAV_HEIGHT_STATE_READY
+      ? NAV_HEIGHT_STATE_READY
+      : NAV_HEIGHT_STATE_LOADING;
+
+    const currentState = root.getAttribute(NAV_HEIGHT_STATE_ATTR);
+    if (currentState === nextState) {
+      if (nextState === NAV_HEIGHT_STATE_READY) {
+        clearNavHeightFallbackTimer();
+      }
+      return;
+    }
+
+    root.setAttribute(NAV_HEIGHT_STATE_ATTR, nextState);
+    if (nextState === NAV_HEIGHT_STATE_READY) {
+      clearNavHeightFallbackTimer();
+    } else {
+      scheduleNavHeightFallback();
+    }
+  }
+
+  function markNavHeightLoading() {
+    setNavHeightState(NAV_HEIGHT_STATE_LOADING);
+  }
+
+  function markNavHeightReady() {
+    setNavHeightState(NAV_HEIGHT_STATE_READY);
+  }
 
   let lastStoredNavHeight = 0;
 
@@ -46,7 +117,10 @@
 
     styleEl = document.createElement('style');
     styleEl.id = NAV_HEIGHT_STYLE_ID;
-    styleEl.textContent = `.site-nav__board{height:var(${NAV_HEIGHT_VAR}, auto);}`;
+    styleEl.textContent = `:root[data-nav-height-state='${NAV_HEIGHT_STATE_LOADING}'] .page{opacity:0;visibility:hidden;}`
+      + `:root[data-nav-height-state='${NAV_HEIGHT_STATE_READY}'] .page{opacity:1;visibility:visible;}`
+      + `:root[data-nav-height-state] .page{transition:opacity 160ms ease-in;}`
+      + `.site-nav__board{height:var(${NAV_HEIGHT_VAR}, auto);}`;
 
     if (head.firstChild) {
       head.insertBefore(styleEl, head.firstChild);
@@ -75,6 +149,7 @@
     ensureNavHeightStyleElement();
     const resolved = Math.max(Math.round(height), 0);
     root.style.setProperty(NAV_HEIGHT_VAR, `${resolved}px`);
+    markNavHeightReady();
     return true;
   }
 
@@ -135,12 +210,17 @@
     storeHeight,
     clearHeight: clearNavHeight,
     applyStoredHeight: applyStoredNavHeight,
+    markReady: markNavHeightReady,
+    markLoading: markNavHeightLoading,
   };
 
   namespace.navHeight = navHeightNamespace;
   global.NVCNavHeight = navHeightNamespace;
 
+  markNavHeightLoading();
+  ensureNavHeightStyleElement();
   applyStoredNavHeight();
+  scheduleNavHeightFallback();
 
   function clamp(value, min, max) {
     if (Number.isNaN(value)) {
