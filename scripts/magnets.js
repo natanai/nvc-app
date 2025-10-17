@@ -10,6 +10,7 @@ const DEFAULT_CONFIG = {
   sepStrength: 18,
   dragSepMultiplier: 2,
   edgeBounce: 0.18,
+  edgeKick: 0,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
@@ -18,6 +19,7 @@ const NAV_PHYSICS_CONFIG = {
   drift: 0.06,
   tiltStrength: 52,
   tiltDriftScale: 0.2,
+  edgeKick: 8,
 };
 
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];

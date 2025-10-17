@@ -11,6 +11,7 @@ const DEFAULT_CONFIG = {
   sepStrength: 18,
   dragSepMultiplier: 2,
   edgeBounce: 0.18,
+  edgeKick: 0,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
@@ -488,6 +489,17 @@ const applySeparationForces = (state, dt) => {
         magnetB.vx += dirX * strength * multiplier;
         magnetB.vy += dirY * strength * multiplier;
       }
+      const correction = overlap / 2;
+      if (correction > 0) {
+        if (!magnetA.dragging) {
+          magnetA.x -= dirX * correction;
+          magnetA.y -= dirY * correction;
+        }
+        if (!magnetB.dragging) {
+          magnetB.x += dirX * correction;
+          magnetB.y += dirY * correction;
+        }
+      }
     }
   }
 };
@@ -521,6 +533,7 @@ const integrateMotion = (state, dt) => {
     drift,
     damping,
     edgeBounce,
+    edgeKick,
     tiltStrength = DEFAULT_CONFIG.tiltStrength,
     tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
   } = state.config;
@@ -547,19 +560,32 @@ const integrateMotion = (state, dt) => {
     }
     const maxX = Math.max(width - magnet.w, 0);
     const maxY = Math.max(height - magnet.h, 0);
+    const kick = Math.max(edgeKick || 0, 0);
     if (magnet.x < 0) {
       magnet.x = 0;
       magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      if (kick) {
+        magnet.x = Math.min(kick, maxX);
+      }
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
       magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      if (kick) {
+        magnet.x = Math.max(maxX - kick, 0);
+      }
     }
     if (magnet.y < 0) {
       magnet.y = 0;
       magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      if (kick) {
+        magnet.y = Math.min(kick, maxY);
+      }
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
       magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      if (kick) {
+        magnet.y = Math.max(maxY - kick, 0);
+      }
     }
     applyTransform(magnet);
   });
