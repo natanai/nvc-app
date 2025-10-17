@@ -548,13 +548,17 @@ button.site-nav__magnet {
               <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
               <span class="site-nav__magnet-label visually-hidden">Customizer</span>
             </button>
-            <a
+            <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
-              href="../inventory/journal/"
+              type="button"
+              data-support-journal-open
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="global-support-journal-layer"
             >
               <span class="site-nav__magnet-label">Journal</span>
-            </a>
+            </button>
             <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../inventory/">
               <span class="site-nav__magnet-label">Inventory</span>
               <span class="site-nav__count" data-inventory-count hidden></span>
@@ -598,6 +602,43 @@ button.site-nav__magnet {
             </span>
             <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
           </label>
+        </div>
+        <div class="site-nav__journal" data-support-journal data-journal-overlay>
+          <div
+            id="global-support-journal-layer"
+            class="support-journal__layer"
+            data-support-journal-layer
+            data-state="closed"
+            aria-hidden="true"
+          >
+            <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
+              <header class="support-journal__header">
+                <div class="support-journal__titles">
+                  <h3
+                    class="support-journal__heading"
+                    id="global-support-journal-heading"
+                    data-support-journal-heading
+                  >
+                    Journal
+                  </h3>
+                </div>
+                <button
+                  class="support-journal__close"
+                  type="button"
+                  data-support-journal-close
+                  aria-label="Close full screen journal"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </header>
+              <div class="support-journal__body">
+                <div class="support-journal__content">
+                  <div data-journal-overlay-content></div>
+                  <div class="journal-history-wrapper" data-journal-overlay-history></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -745,7 +786,14 @@ button.site-nav__magnet {
               reflections with the complete toolset.
             </p>
             <div class="support-actions">
-              <a class="support-button" href="../inventory/journal/">Open journal</a>
+              <button
+                class="support-button"
+                type="button"
+                data-support-journal-open
+                aria-describedby="support-journal-title"
+              >
+                Open journal
+              </button>
             </div>
             <p class="support-note">Your entries stay on this device until you export them.</p>
           </article>
