@@ -647,17 +647,19 @@ const updateLayoutValidity = (state) => {
       delete state.root.dataset.layoutInvalid;
     }
   }
-  if (state.toggleInput) {
-    if (state.toggleInput.disabled) {
-      state.toggleInput.disabled = false;
+  if (!invalid) {
+    if (state.toggleInput) {
+      if (state.toggleInput.disabled) {
+        state.toggleInput.disabled = false;
+      }
+      state.toggleInput.removeAttribute('aria-disabled');
+      state.toggleInput.removeAttribute('title');
     }
-    state.toggleInput.removeAttribute('aria-disabled');
-    state.toggleInput.removeAttribute('title');
-  }
-  if (state.toggle) {
-    state.toggle.removeAttribute('aria-disabled');
-    state.toggle.removeAttribute('title');
-    delete state.toggle.dataset.layoutToggleDisabled;
+    if (state.toggle) {
+      state.toggle.removeAttribute('aria-disabled');
+      state.toggle.removeAttribute('title');
+      delete state.toggle.dataset.layoutToggleDisabled;
+    }
   }
   state.layoutInvalid = invalid;
 };
