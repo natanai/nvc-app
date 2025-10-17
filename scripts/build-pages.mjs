@@ -77,6 +77,21 @@ const navPrefillScript = () => String.raw`
           if (!magnets.length) {
             return;
           }
+
+          var restoreTransitions = null;
+          if (
+            board.classList &&
+            !board.classList.contains('no-transitions') &&
+            typeof board.classList.add === 'function'
+          ) {
+            board.classList.add('no-transitions');
+            restoreTransitions = function() {
+              if (!board.classList || typeof board.classList.remove !== 'function') {
+                return;
+              }
+              board.classList.remove('no-transitions');
+            };
+          }
           for (var i = 0; i < magnets.length; i += 1) {
             var el = magnets[i];
             if (!el || !el.dataset) {
@@ -100,6 +115,19 @@ const navPrefillScript = () => String.raw`
             var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
             var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
+          }
+
+          if (restoreTransitions) {
+            var raf = typeof window.requestAnimationFrame === 'function'
+              ? window.requestAnimationFrame
+              : null;
+            if (raf) {
+              raf(function() {
+                raf(restoreTransitions);
+              });
+            } else {
+              window.setTimeout(restoreTransitions, 32);
+            }
           }
         })();
       </script>`;
