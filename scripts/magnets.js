@@ -709,6 +709,9 @@ const maybeStartBoardResize = (state, event) => {
   if (!state || !state.board || state.resizeDrag) {
     return false;
   }
+  if (isNavBoardState(state) && !state.playActive) {
+    return false;
+  }
   if (event.button != null && event.button !== 0) {
     return false;
   }
@@ -1201,6 +1204,13 @@ const stopPhysicsLoop = (state) => {
   }
 };
 
+const updateNavResizeHandleVisibility = (state) => {
+  if (!isNavBoardState(state) || !state || !state.resizeHandle) {
+    return;
+  }
+  state.resizeHandle.hidden = !state.playActive;
+};
+
 const setPlayState = (state, active) => {
   cancelBoardResize(state);
   let persistedToggle = false;
@@ -1309,6 +1319,7 @@ const setPlayState = (state, active) => {
     }
   }
   state.playActive = active;
+  updateNavResizeHandleVisibility(state);
   updateToggleLabel(state.toggle, active);
   if (isNavBoardState(state) && !persistedToggle) {
     updateLayout(state);
@@ -1581,6 +1592,7 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    resizeHandle: null,
   };
 
   state.setClickSuppress = () => {
@@ -1590,15 +1602,22 @@ const initializeBoard = async (root, index) => {
   registerTiltSource(state);
   updateTiltRequestUI(state);
 
-  board.addEventListener('click', (event) => {
+  const suppressBoardClickWhilePlaying = (event) => {
     if (!state.playActive) {
       return;
     }
-    if (getNow() < state.suppressUntil) {
+    if (isNavBoardState(state)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    if (event.type === 'click' && getNow() < state.suppressUntil) {
       event.preventDefault();
       event.stopImmediatePropagation();
     }
-  }, true);
+  };
+  board.addEventListener('click', suppressBoardClickWhilePlaying, true);
+  board.addEventListener('auxclick', suppressBoardClickWhilePlaying, true);
 
   measured.forEach((magnet) => {
     magnet.id = magnet.id || `${index}-${state.magnetMap.size}`;
@@ -1620,6 +1639,10 @@ const initializeBoard = async (root, index) => {
       resizeHandle.tabIndex = -1;
       resizeHandle.style.height = `${RESIZE_HANDLE_MARGIN}px`;
       board.appendChild(resizeHandle);
+    }
+    state.resizeHandle = resizeHandle;
+    if (state.resizeHandle) {
+      state.resizeHandle.hidden = true;
     }
     const handleBoardPointerDown = (event) => {
       if (maybeStartBoardResize(state, event)) {
