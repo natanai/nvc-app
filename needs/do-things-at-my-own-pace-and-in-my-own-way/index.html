@@ -271,40 +271,16 @@
   gap: 1rem;
 }
 
-.site-nav__board-wrapper {
-  position: relative;
-  padding-top: 0.75rem;
-}
-
-.site-nav__board {
-  min-height: clamp(14.5rem, 32vw, 15rem);
-  padding: 1.25rem 1.25rem 0.5rem;
+.site-nav__panel {
+  padding: 1.25rem 1.25rem 1rem;
   border-radius: clamp(1.5rem, 4vw, 2.75rem);
   border: 3px solid var(--outline);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent);
-  position: relative;
-  overflow: hidden;
-}
-
-.site-nav[data-layout-invalid='1'] .site-nav__board {
-  border-width: 1px;
-  border-style: dashed;
-  border-color: #000;
-}
-
-.site-nav[data-magnet-active='1'][data-layout-invalid='1'] .magnet-play-toggle {
-  opacity: 0.5;
-}
-
-.site-nav[data-nav-expanded='true'] .site-nav__board {
-  min-height: clamp(16rem, 38vw, 16.5rem);
-  padding-block-end: 1.25rem;
-}
-
-.site-nav__board-wrapper .magnet-play-toggle {
-  top: -1.2rem;
-  right: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.75rem, 4vw, 1.25rem);
 }
 
 .site-nav__magnet {
@@ -484,13 +460,9 @@ button.site-nav__magnet {
     gap: 0.32rem;
   }
 
-  .site-nav__board {
-    min-height: clamp(14.5rem, 52vw, 15rem);
-  }
-
-  .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(16rem, 60vw, 16rem);
-    padding-block-end: 0.75rem;
+  .site-nav__panel {
+    padding: 1rem 1rem 0.75rem;
+    gap: clamp(0.6rem, 6vw, 1rem);
   }
 
   .site-nav__magnet-icon {
@@ -520,8 +492,8 @@ button.site-nav__magnet {
 }
 
 @media (max-width: 520px) {
-  .site-nav__board {
-    min-height: clamp(14.5rem, 70vw, 15rem);
+  .site-nav__panel {
+    padding-inline: 0.85rem;
   }
 }</style>
     <link rel="preload" href="../../styles.css" as="style" />
@@ -531,55 +503,46 @@ button.site-nav__magnet {
   <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
-      <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
-        <div class="magnet-board-wrapper site-nav__board-wrapper">
-          <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
+      <nav class="site-nav" aria-label="Primary">
+        <div class="site-nav__panel">
+          <a class="pill site-nav__magnet site-nav__magnet--home" data-nav-key="home" href="../../">
 
   <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
     <use href="../../icons/nav-sprite.svg#icon-home" />
   </svg>
-              <span class="site-nav__magnet-label visually-hidden">Home</span>
-            </a>
-            <button
-              class="pill magnet site-nav__magnet site-nav__magnet--customizer"
-              data-magnet-id="nav-customizer"
-              type="button"
-              data-palette-toggle
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
-              <span class="site-nav__magnet-label visually-hidden">Customizer</span>
-            </button>
-            <button
-              class="pill magnet site-nav__magnet site-nav__magnet--journal"
-              data-magnet-id="nav-journal"
-              type="button"
-              data-support-journal-open
-              aria-haspopup="dialog"
-              aria-expanded="false"
-              aria-controls="global-support-journal-layer"
-            >
-              <span class="site-nav__magnet-label">Journal</span>
-            </button>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../../inventory/">
-              <span class="site-nav__magnet-label">Inventory</span>
-              <span class="site-nav__count" data-inventory-count hidden></span>
-            </a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-situations" href="../../situations/"><span class="site-nav__magnet-label">Situations</span></a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../../feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="../../needs/" aria-current="page"><span class="site-nav__magnet-label">Needs</span></a>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--body-cues" data-magnet-id="nav-body-cues" href="../../feelings/body-cues/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--journal-dashboard" data-magnet-id="nav-journal-dashboard" href="../../inventory/journal/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
-          </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="off">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
-          </label>
+            <span class="site-nav__magnet-label visually-hidden">Home</span>
+          </a>
+          <button
+            class="pill site-nav__magnet site-nav__magnet--customizer"
+            data-nav-key="customizer"
+            type="button"
+            data-palette-toggle
+            aria-haspopup="dialog"
+            aria-expanded="false"
+          >
+            <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
+            <span class="site-nav__magnet-label visually-hidden">Customizer</span>
+          </button>
+          <button
+            class="pill site-nav__magnet site-nav__magnet--journal"
+            data-nav-key="journal"
+            type="button"
+            data-support-journal-open
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="global-support-journal-layer"
+          >
+            <span class="site-nav__magnet-label">Journal</span>
+          </button>
+          <a class="pill site-nav__magnet site-nav__magnet--inventory" data-nav-key="inventory" href="../../inventory/">
+            <span class="site-nav__magnet-label">Inventory</span>
+            <span class="site-nav__count" data-inventory-count hidden></span>
+          </a>
+          <a class="pill site-nav__magnet" href="../../situations/" data-nav-key="situations"><span class="site-nav__magnet-label">Situations</span></a>
+          <a class="pill site-nav__magnet" href="../../feelings/" data-nav-key="feelings"><span class="site-nav__magnet-label">Feelings</span></a>
+          <a class="pill site-nav__magnet" href="../../needs/" aria-current="page" data-nav-key="needs"><span class="site-nav__magnet-label">Needs</span></a>
+          <a class="pill site-nav__magnet site-nav__magnet--body-cues" href="../../feelings/body-cues/" data-nav-key="body-cues" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
+          <a class="pill site-nav__magnet site-nav__magnet--journal-dashboard" href="../../inventory/journal/" data-nav-key="journal-dashboard" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
         </div>
         <div class="site-nav__journal" data-support-journal data-journal-overlay>
           <div
@@ -619,119 +582,6 @@ button.site-nav__magnet {
           </div>
         </div>
       </nav>
-
-      <script>
-        (function() {
-          if (typeof window === 'undefined' || typeof document === 'undefined') {
-            return;
-          }
-          var root = document.querySelector('[data-magnet-root][data-magnet-key="site-nav"]');
-          if (!root) {
-            return;
-          }
-          var board = root.querySelector('[data-magnet-board]');
-          if (!board) {
-            return;
-          }
-          var STORAGE_KEY = 'magnetPositions:site-nav';
-          var raw;
-          try {
-            if (!('localStorage' in window)) {
-              return;
-            }
-            raw = window.localStorage.getItem(STORAGE_KEY);
-          } catch (error) {
-            return;
-          }
-          if (typeof raw !== 'string' || !raw) {
-            return;
-          }
-          var parsed;
-          try {
-            parsed = JSON.parse(raw);
-          } catch (error) {
-            return;
-          }
-          if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
-            return;
-          }
-          var boardRect = board.getBoundingClientRect();
-          var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
-          var boardStyles = typeof window.getComputedStyle === 'function'
-            ? window.getComputedStyle(board)
-            : null;
-          var cssMinHeight = 0;
-          if (boardStyles && boardStyles.minHeight) {
-            var parsedMin = Number.parseFloat(boardStyles.minHeight);
-            cssMinHeight = Number.isFinite(parsedMin) && parsedMin > 0 ? parsedMin : 0;
-          }
-          var boardHeight = Math.max(
-            boardRect.height || board.clientHeight || cssMinHeight || 1,
-            cssMinHeight || 1
-          );
-          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
-            boardHeight = storedHeight;
-            board.style.height = storedHeight + 'px';
-          }
-          var magnets = board.querySelectorAll('[data-magnet-id]');
-          if (!magnets.length) {
-            return;
-          }
-
-          var restoreTransitions = null;
-          if (
-            board.classList &&
-            !board.classList.contains('no-transitions') &&
-            typeof board.classList.add === 'function'
-          ) {
-            board.classList.add('no-transitions');
-            restoreTransitions = function() {
-              if (!board.classList || typeof board.classList.remove !== 'function') {
-                return;
-              }
-              board.classList.remove('no-transitions');
-            };
-          }
-          for (var i = 0; i < magnets.length; i += 1) {
-            var el = magnets[i];
-            if (!el || !el.dataset) {
-              continue;
-            }
-            var id = el.dataset.magnetId;
-            if (!id || !(id in parsed.magnets)) {
-              continue;
-            }
-            var entry = parsed.magnets[id];
-            if (!entry || typeof entry !== 'object') {
-              continue;
-            }
-            var rect = el.getBoundingClientRect();
-            var magnetWidth = rect.width || el.offsetWidth || 0;
-            var magnetHeight = rect.height || el.offsetHeight || 0;
-            var maxX = Math.max(boardWidth - magnetWidth, 0);
-            var maxY = Math.max(boardHeight - magnetHeight, 0);
-            var xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
-            var yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
-            var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
-            var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
-            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
-          }
-
-          if (restoreTransitions) {
-            var raf = typeof window.requestAnimationFrame === 'function'
-              ? window.requestAnimationFrame
-              : null;
-            if (raf) {
-              raf(function() {
-                raf(restoreTransitions);
-              });
-            } else {
-              window.setTimeout(restoreTransitions, 32);
-            }
-          }
-        })();
-      </script>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li><a href="../../">Home</a></li><li><a href="../">Needs</a></li><li aria-current="page">Do things at my own pace and in my own way</li>

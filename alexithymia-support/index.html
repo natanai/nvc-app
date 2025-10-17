@@ -280,30 +280,16 @@
   gap: 1rem;
 }
 
-.site-nav__board-wrapper {
-  position: relative;
-  padding-top: 0.75rem;
-}
-
-.site-nav__board {
-  min-height: clamp(14.5rem, 32vw, 15rem);
-  padding: 1.25rem 1.25rem 0.5rem;
+.site-nav__panel {
+  padding: 1.25rem 1.25rem 1rem;
   border-radius: clamp(1.5rem, 4vw, 2.75rem);
   border: 3px solid var(--outline);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent);
-  position: relative;
-  overflow: hidden;
-}
-
-.site-nav[data-nav-expanded='true'] .site-nav__board {
-  min-height: clamp(16rem, 38vw, 16.5rem);
-  padding-block-end: 1.25rem;
-}
-
-.site-nav__board-wrapper .magnet-play-toggle {
-  top: -1.2rem;
-  right: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.75rem, 4vw, 1.25rem);
 }
 
 .site-nav__magnet {
@@ -322,6 +308,7 @@
   min-height: 44px;
   white-space: nowrap;
   position: relative;
+  box-shadow: none;
   filter: drop-shadow(0 12px 0 var(--shadow));
   transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease, opacity 0.18s ease;
   --nav-active-bg: linear-gradient(
@@ -352,6 +339,7 @@
 .site-nav__magnet:hover,
 .site-nav__magnet:focus-visible {
   transform: translateY(-4px);
+  box-shadow: none;
   filter: drop-shadow(0 12px 0 var(--nav-hover-shadow));
 }
 
@@ -481,13 +469,9 @@ button.site-nav__magnet {
     gap: 0.32rem;
   }
 
-  .site-nav__board {
-    min-height: clamp(14.5rem, 52vw, 15rem);
-  }
-
-  .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(16rem, 60vw, 16rem);
-    padding-block-end: 0.75rem;
+  .site-nav__panel {
+    padding: 1rem 1rem 0.75rem;
+    gap: clamp(0.6rem, 6vw, 1rem);
   }
 
   .site-nav__magnet-icon {
@@ -517,8 +501,8 @@ button.site-nav__magnet {
 }
 
 @media (max-width: 520px) {
-  .site-nav__board {
-    min-height: clamp(14.5rem, 70vw, 15rem);
+  .site-nav__panel {
+    padding-inline: 0.85rem;
   }
 }</style>
     <link rel="preload" href="../styles.css" as="style" />
@@ -528,80 +512,46 @@ button.site-nav__magnet {
   <body data-base-path="../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
-      <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
-        <div class="magnet-board-wrapper site-nav__board-wrapper">
-          <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
-              <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                <use href="../icons/nav-sprite.svg#icon-home"></use>
-              </svg>
-              <span class="site-nav__magnet-label visually-hidden">Home</span>
-            </a>
-            <button
-              class="pill magnet site-nav__magnet site-nav__magnet--customizer"
-              data-magnet-id="nav-customizer"
-              type="button"
-              data-palette-toggle
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
-              <span class="site-nav__magnet-label visually-hidden">Customizer</span>
-            </button>
-            <button
-              class="pill magnet site-nav__magnet site-nav__magnet--journal"
-              data-magnet-id="nav-journal"
-              type="button"
-              data-support-journal-open
-              aria-haspopup="dialog"
-              aria-expanded="false"
-              aria-controls="global-support-journal-layer"
-            >
-              <span class="site-nav__magnet-label">Journal</span>
-            </button>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../inventory/">
-              <span class="site-nav__magnet-label">Inventory</span>
-              <span class="site-nav__count" data-inventory-count hidden></span>
-            </a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-situations" href="../situations/">
-              <span class="site-nav__magnet-label">Situations</span>
-            </a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../feelings/" aria-current="page">
-              <span class="site-nav__magnet-label">Feelings</span>
-            </a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="../needs/">
-              <span class="site-nav__magnet-label">Needs</span>
-            </a>
-            <a
-              class="pill magnet site-nav__magnet site-nav__magnet--body-cues"
-              data-magnet-id="nav-body-cues"
-              data-nav-hidden="true"
-              data-nav-supplemental="true"
-              aria-hidden="true"
-              tabindex="-1"
-              href="../feelings/body-cues/"
-            >
-              <span class="site-nav__magnet-label">Body cues</span>
-            </a>
-            <a
-              class="pill magnet site-nav__magnet site-nav__magnet--journal-dashboard"
-              data-magnet-id="nav-journal-dashboard"
-              data-nav-hidden="true"
-              data-nav-supplemental="true"
-              aria-hidden="true"
-              tabindex="-1"
-              href="../inventory/journal/"
-            >
-              <span class="site-nav__magnet-label">Journal dashboard</span>
-            </a>
-          </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="off">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
-          </label>
+      <nav class="site-nav" aria-label="Primary">
+        <div class="site-nav__panel">
+          <a class="pill site-nav__magnet site-nav__magnet--home" data-nav-key="home" href="../">
+
+  <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <use href="../icons/nav-sprite.svg#icon-home" />
+  </svg>
+            <span class="site-nav__magnet-label visually-hidden">Home</span>
+          </a>
+          <button
+            class="pill site-nav__magnet site-nav__magnet--customizer"
+            data-nav-key="customizer"
+            type="button"
+            data-palette-toggle
+            aria-haspopup="dialog"
+            aria-expanded="false"
+          >
+            <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
+            <span class="site-nav__magnet-label visually-hidden">Customizer</span>
+          </button>
+          <button
+            class="pill site-nav__magnet site-nav__magnet--journal"
+            data-nav-key="journal"
+            type="button"
+            data-support-journal-open
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="global-support-journal-layer"
+          >
+            <span class="site-nav__magnet-label">Journal</span>
+          </button>
+          <a class="pill site-nav__magnet site-nav__magnet--inventory" data-nav-key="inventory" href="../inventory/">
+            <span class="site-nav__magnet-label">Inventory</span>
+            <span class="site-nav__count" data-inventory-count hidden></span>
+          </a>
+          <a class="pill site-nav__magnet" href="../situations/" data-nav-key="situations"><span class="site-nav__magnet-label">Situations</span></a>
+          <a class="pill site-nav__magnet" href="../feelings/" data-nav-key="feelings"><span class="site-nav__magnet-label">Feelings</span></a>
+          <a class="pill site-nav__magnet" href="../needs/" aria-current="page" data-nav-key="needs"><span class="site-nav__magnet-label">Needs</span></a>
+          <a class="pill site-nav__magnet site-nav__magnet--body-cues" href="../feelings/body-cues/" data-nav-key="body-cues" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
+          <a class="pill site-nav__magnet site-nav__magnet--journal-dashboard" href="../inventory/journal/" data-nav-key="journal-dashboard" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
         </div>
         <div class="site-nav__journal" data-support-journal data-journal-overlay>
           <div

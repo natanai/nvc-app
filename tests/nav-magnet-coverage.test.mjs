@@ -8,17 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
 
-const requiredMagnets = [
-  {
-    id: 'nav-body-cues',
-    label: 'Body cues magnet',
-  },
-  {
-    id: 'nav-journal-dashboard',
-    label: 'Journal dashboard magnet',
-  },
-];
-
 async function collectHtmlFiles(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   const files = [];
@@ -39,25 +28,24 @@ async function collectHtmlFiles(dir) {
   return files;
 }
 
-test('navigation pages include updated nav magnet definitions', async () => {
+test('navigation pages do not reference legacy nav magnet attributes', async () => {
   const htmlFiles = await collectHtmlFiles(repoRoot);
   const violations = [];
 
   for (const file of htmlFiles) {
     const contents = await fs.readFile(file, 'utf8');
-    if (!contents.includes('data-magnet-root')) {
-      continue;
-    }
-
-    for (const magnet of requiredMagnets) {
-      if (!contents.includes(`data-magnet-id="${magnet.id}"`)) {
-        const relative = path.relative(repoRoot, file);
-        violations.push(`${relative} is missing ${magnet.label} (${magnet.id})`);
-      }
+    if (
+      contents.includes('data-magnet-key="site-nav"') ||
+      contents.includes('data-magnet-id="nav-')
+    ) {
+      const relative = path.relative(repoRoot, file);
+      violations.push(relative);
     }
   }
 
   if (violations.length) {
-    assert.fail(`Missing navigation magnets:\n${violations.join('\n')}`);
+    assert.fail(
+      `Legacy nav magnet references detected:\n${violations.join('\n')}`,
+    );
   }
 });

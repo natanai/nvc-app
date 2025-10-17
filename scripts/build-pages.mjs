@@ -16,122 +16,6 @@ const HOME_ICON_INLINE = (basePath = '') => {
   </svg>`;
 };
 
-const NAV_MAGNET_STORAGE_KEY = 'site-nav';
-
-const navPrefillScript = () => String.raw`
-      <script>
-        (function() {
-          if (typeof window === 'undefined' || typeof document === 'undefined') {
-            return;
-          }
-          var root = document.querySelector('[data-magnet-root][data-magnet-key="${NAV_MAGNET_STORAGE_KEY}"]');
-          if (!root) {
-            return;
-          }
-          var board = root.querySelector('[data-magnet-board]');
-          if (!board) {
-            return;
-          }
-          var STORAGE_KEY = 'magnetPositions:${NAV_MAGNET_STORAGE_KEY}';
-          var raw;
-          try {
-            if (!('localStorage' in window)) {
-              return;
-            }
-            raw = window.localStorage.getItem(STORAGE_KEY);
-          } catch (error) {
-            return;
-          }
-          if (typeof raw !== 'string' || !raw) {
-            return;
-          }
-          var parsed;
-          try {
-            parsed = JSON.parse(raw);
-          } catch (error) {
-            return;
-          }
-          if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
-            return;
-          }
-          var boardRect = board.getBoundingClientRect();
-          var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
-          var boardStyles = typeof window.getComputedStyle === 'function'
-            ? window.getComputedStyle(board)
-            : null;
-          var cssMinHeight = 0;
-          if (boardStyles && boardStyles.minHeight) {
-            var parsedMin = Number.parseFloat(boardStyles.minHeight);
-            cssMinHeight = Number.isFinite(parsedMin) && parsedMin > 0 ? parsedMin : 0;
-          }
-          var boardHeight = Math.max(
-            boardRect.height || board.clientHeight || cssMinHeight || 1,
-            cssMinHeight || 1
-          );
-          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
-            boardHeight = storedHeight;
-            board.style.height = storedHeight + 'px';
-          }
-          var magnets = board.querySelectorAll('[data-magnet-id]');
-          if (!magnets.length) {
-            return;
-          }
-
-          var restoreTransitions = null;
-          if (
-            board.classList &&
-            !board.classList.contains('no-transitions') &&
-            typeof board.classList.add === 'function'
-          ) {
-            board.classList.add('no-transitions');
-            restoreTransitions = function() {
-              if (!board.classList || typeof board.classList.remove !== 'function') {
-                return;
-              }
-              board.classList.remove('no-transitions');
-            };
-          }
-          for (var i = 0; i < magnets.length; i += 1) {
-            var el = magnets[i];
-            if (!el || !el.dataset) {
-              continue;
-            }
-            var id = el.dataset.magnetId;
-            if (!id || !(id in parsed.magnets)) {
-              continue;
-            }
-            var entry = parsed.magnets[id];
-            if (!entry || typeof entry !== 'object') {
-              continue;
-            }
-            var rect = el.getBoundingClientRect();
-            var magnetWidth = rect.width || el.offsetWidth || 0;
-            var magnetHeight = rect.height || el.offsetHeight || 0;
-            var maxX = Math.max(boardWidth - magnetWidth, 0);
-            var maxY = Math.max(boardHeight - magnetHeight, 0);
-            var xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
-            var yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
-            var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
-            var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
-            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
-          }
-
-          if (restoreTransitions) {
-            var raf = typeof window.requestAnimationFrame === 'function'
-              ? window.requestAnimationFrame
-              : null;
-            if (raf) {
-              raf(function() {
-                raf(restoreTransitions);
-              });
-            } else {
-              window.setTimeout(restoreTransitions, 32);
-            }
-          }
-        })();
-      </script>`;
-
 const BRAND_NAME = 'allneeds.app';
 const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
@@ -646,7 +530,6 @@ function renderNav(basePath, activeNav, options = {}) {
       key: 'body-cues',
       href: 'feelings/body-cues/',
       label: 'Body cues',
-      magnetId: 'nav-body-cues',
       className: 'site-nav__magnet--body-cues',
       attributes: {
         'data-nav-hidden': 'true',
@@ -659,7 +542,6 @@ function renderNav(basePath, activeNav, options = {}) {
       key: 'journal-dashboard',
       href: 'inventory/journal/',
       label: 'Journal dashboard',
-      magnetId: 'nav-journal-dashboard',
       className: 'site-nav__magnet--journal-dashboard',
       attributes: {
         'data-nav-hidden': 'true',
@@ -675,17 +557,18 @@ function renderNav(basePath, activeNav, options = {}) {
       const href = resolveHref(link.href);
       const labelContent = link.html ? link.html : escapeHtml(link.label ?? '');
       const ariaAttr = link.key ? activeAttr(link.key).trim() : '';
-      const magnetId = escapeHtml(link.magnetId ?? (link.key ? `nav-${link.key}` : `nav-secondary-${index + 1}`));
-      const classNames = ['pill magnet site-nav__magnet'];
+      const classNames = ['pill site-nav__magnet'];
       if (link.className) {
         classNames.push(link.className);
       }
       const attrs = [
         `class="${classNames.join(' ')}"`,
-        `data-magnet-id="${magnetId}"`,
         `href="${href}"`,
         ariaAttr,
       ].filter(Boolean);
+      if (link.key) {
+        attrs.push(`data-nav-key="${escapeHtml(link.key)}"`);
+      }
       if (link.attributes && typeof link.attributes === 'object') {
         for (const [attrName, attrValue] of Object.entries(link.attributes)) {
           if (attrValue === null || typeof attrValue === 'undefined' || attrValue === false) {
@@ -698,54 +581,43 @@ function renderNav(basePath, activeNav, options = {}) {
           }
         }
       }
-      return `            <a ${attrs.join(' ')}><span class="site-nav__magnet-label">${labelContent}</span></a>`;
+      return `          <a ${attrs.join(' ')}><span class="site-nav__magnet-label">${labelContent}</span></a>`;
     })
     .join('\n');
 
-  const prefill = navPrefillScript();
-
-  return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="${NAV_MAGNET_STORAGE_KEY}">
-        <div class="magnet-board-wrapper site-nav__board-wrapper">
-          <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
+  return `<nav class="site-nav" aria-label="Primary">
+        <div class="site-nav__panel">
+          <a class="pill site-nav__magnet site-nav__magnet--home" data-nav-key="home" href="${homeHref}"${activeAttr('home')}>
 ${HOME_ICON_INLINE(basePath)}
-              <span class="site-nav__magnet-label visually-hidden">Home</span>
-            </a>
-            <button
-              class="pill magnet site-nav__magnet site-nav__magnet--customizer"
-              data-magnet-id="nav-customizer"
-              type="button"
-              data-palette-toggle
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
-              <span class="site-nav__magnet-label visually-hidden">Customizer</span>
-            </button>
-            <button
-              class="pill magnet site-nav__magnet site-nav__magnet--journal"
-              data-magnet-id="nav-journal"
-              type="button"
-              data-support-journal-open
-              aria-haspopup="dialog"
-              aria-expanded="false"
-              aria-controls="global-support-journal-layer"
-            >
-              <span class="site-nav__magnet-label">Journal</span>
-            </button>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
-              <span class="site-nav__magnet-label">Inventory</span>
-              <span class="site-nav__count" data-inventory-count hidden></span>
-            </a>
-${secondaryLinks ? `${secondaryLinks}\n` : ''}          </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="off">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
-          </label>
-        </div>
+            <span class="site-nav__magnet-label visually-hidden">Home</span>
+          </a>
+          <button
+            class="pill site-nav__magnet site-nav__magnet--customizer"
+            data-nav-key="customizer"
+            type="button"
+            data-palette-toggle
+            aria-haspopup="dialog"
+            aria-expanded="false"
+          >
+            <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
+            <span class="site-nav__magnet-label visually-hidden">Customizer</span>
+          </button>
+          <button
+            class="pill site-nav__magnet site-nav__magnet--journal"
+            data-nav-key="journal"
+            type="button"
+            data-support-journal-open
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="global-support-journal-layer"
+          >
+            <span class="site-nav__magnet-label">Journal</span>
+          </button>
+          <a class="pill site-nav__magnet site-nav__magnet--inventory" data-nav-key="inventory" href="${basePath}inventory/"${activeAttr('inventory')}>
+            <span class="site-nav__magnet-label">Inventory</span>
+            <span class="site-nav__count" data-inventory-count hidden></span>
+          </a>
+${secondaryLinks ? `${secondaryLinks}\n` : ''}        </div>
         <div class="site-nav__journal" data-support-journal data-journal-overlay>
           <div
             id="global-support-journal-layer"
@@ -783,8 +655,7 @@ ${secondaryLinks ? `${secondaryLinks}\n` : ''}          </div>
             </div>
           </div>
         </div>
-      </nav>
-${prefill}`;
+      </nav>`;
 }
 
 function escapeHtml(value) {

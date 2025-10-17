@@ -275,69 +275,69 @@ const NAV_SETTINGS_STORAGE_KEY = 'nvcApp.navSettings';
 const NAV_ITEM_DEFINITIONS = [
   {
     id: 'home',
-    magnetId: 'nav-home',
+    navKey: 'home',
     label: 'Home magnet',
     defaultEnabled: true,
     alwaysEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-home"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="home"]') || null,
   },
   {
     id: 'customizer',
-    magnetId: 'nav-customizer',
+    navKey: 'customizer',
     label: 'Customizer magnet',
     defaultEnabled: true,
     alwaysEnabled: true,
     getElement: (nav, toggle) =>
-      toggle || nav?.querySelector('[data-magnet-id="nav-customizer"][data-palette-toggle]') || null,
+      toggle || nav?.querySelector('[data-nav-key="customizer"][data-palette-toggle]') || null,
   },
   {
     id: 'journal',
-    magnetId: 'nav-journal',
+    navKey: 'journal',
     label: 'Journal magnet',
     defaultEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="journal"]') || null,
   },
   {
     id: 'inventory',
-    magnetId: 'nav-inventory',
+    navKey: 'inventory',
     label: 'Inventory magnet',
     defaultEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-inventory"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="inventory"]') || null,
   },
   {
     id: 'situations',
-    magnetId: 'nav-situations',
+    navKey: 'situations',
     label: 'Situations magnet',
     defaultEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-situations"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="situations"]') || null,
   },
   {
     id: 'feelings',
-    magnetId: 'nav-feelings',
+    navKey: 'feelings',
     label: 'Feelings magnet',
     defaultEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-feelings"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="feelings"]') || null,
   },
   {
     id: 'needs',
-    magnetId: 'nav-needs',
+    navKey: 'needs',
     label: 'Needs magnet',
     defaultEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-needs"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="needs"]') || null,
   },
   {
     id: 'bodyCues',
-    magnetId: 'nav-body-cues',
+    navKey: 'body-cues',
     label: 'Body cues magnet',
     defaultEnabled: false,
     isSupplemental: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-body-cues"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="body-cues"]') || null,
     createElement: () => {
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
       const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--body-cues';
+      link.className = 'pill site-nav__magnet site-nav__magnet--body-cues';
       link.href = `${basePath}feelings/body-cues/`;
-      link.dataset.magnetId = 'nav-body-cues';
+      link.dataset.navKey = 'body-cues';
       link.dataset.navDynamic = 'true';
       const label = document.createElement('span');
       label.className = 'site-nav__magnet-label';
@@ -348,17 +348,17 @@ const NAV_ITEM_DEFINITIONS = [
   },
   {
     id: 'journalDashboard',
-    magnetId: 'nav-journal-dashboard',
+    navKey: 'journal-dashboard',
     label: 'Journal dashboard magnet',
     defaultEnabled: false,
     isSupplemental: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal-dashboard"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-nav-key="journal-dashboard"]') || null,
     createElement: () => {
       const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
       const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--journal-dashboard';
+      link.className = 'pill site-nav__magnet site-nav__magnet--journal-dashboard';
       link.href = `${basePath}inventory/journal/`;
-      link.dataset.magnetId = 'nav-journal-dashboard';
+      link.dataset.navKey = 'journal-dashboard';
       link.dataset.navDynamic = 'true';
       const label = document.createElement('span');
       label.className = 'site-nav__magnet-label';
@@ -810,8 +810,8 @@ function ensureNavItemElement(id) {
   if (element instanceof HTMLElement) {
     const hydrated = { ...item, element };
     element.dataset.navItemId = id;
-    if (item.magnetId && !element.dataset.magnetId) {
-      element.dataset.magnetId = item.magnetId;
+    if (item.navKey && !element.dataset.navKey) {
+      element.dataset.navKey = item.navKey;
     }
     if (item.isSupplemental) {
       element.dataset.navSupplemental = 'true';
@@ -946,8 +946,8 @@ function setupNavState(nav, toggle) {
     }
     if (element instanceof HTMLElement) {
       element.dataset.navItemId = definition.id;
-      if (definition.magnetId && !element.dataset.magnetId) {
-        element.dataset.magnetId = definition.magnetId;
+      if (definition.navKey && !element.dataset.navKey) {
+        element.dataset.navKey = definition.navKey;
       }
       if (definition.isSupplemental) {
         element.dataset.navSupplemental = 'true';
