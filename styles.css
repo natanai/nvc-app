@@ -2663,6 +2663,15 @@ body.has-support-journal-open {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.pill.site-nav__magnet {
+  box-shadow: none;
+}
+
+.pill.site-nav__magnet:hover,
+.pill.site-nav__magnet:focus-visible {
+  box-shadow: none;
+}
+
 .pill:not(.site-nav__magnet) {
   background: var(--sky);
 }
