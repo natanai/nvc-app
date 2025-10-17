@@ -34,6 +34,96 @@ const TOGGLE_GUARD_MS = 120;
 
 const isNavBoardState = (state) => state?.storageKey === NAV_STORAGE_KEY;
 
+const disableNavMagnetInteractivity = (state) => {
+  if (!isNavBoardState(state)) {
+    return;
+  }
+  state.magnets.forEach((magnet) => {
+    const element = magnet?.element;
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+    if (element.dataset.navPlaySuppressed === '1') {
+      return;
+    }
+    const storedTabIndex = element.getAttribute('tabindex');
+    element.dataset.navPlayStoredTabIndex = storedTabIndex != null ? storedTabIndex : '';
+    element.setAttribute('tabindex', '-1');
+
+    const storedAriaDisabled = element.getAttribute('aria-disabled');
+    element.dataset.navPlayStoredAriaDisabled = storedAriaDisabled != null ? storedAriaDisabled : '';
+    element.setAttribute('aria-disabled', 'true');
+
+    if (element instanceof HTMLButtonElement) {
+      element.dataset.navPlayStoredDisabled = element.hasAttribute('disabled') ? '1' : '';
+      element.disabled = true;
+    }
+
+    element.dataset.navPlaySuppressed = '1';
+  });
+};
+
+const restoreNavMagnetInteractivity = (state) => {
+  if (!isNavBoardState(state)) {
+    return;
+  }
+  state.magnets.forEach((magnet) => {
+    const element = magnet?.element;
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+    if (element.dataset.navPlaySuppressed !== '1') {
+      return;
+    }
+    const storedTabIndex = element.dataset.navPlayStoredTabIndex;
+    if (storedTabIndex != null) {
+      if (storedTabIndex === '') {
+        element.removeAttribute('tabindex');
+      } else {
+        element.setAttribute('tabindex', storedTabIndex);
+      }
+      delete element.dataset.navPlayStoredTabIndex;
+    } else {
+      element.removeAttribute('tabindex');
+    }
+
+    const storedAriaDisabled = element.dataset.navPlayStoredAriaDisabled;
+    if (storedAriaDisabled != null) {
+      if (storedAriaDisabled === '') {
+        element.removeAttribute('aria-disabled');
+      } else {
+        element.setAttribute('aria-disabled', storedAriaDisabled);
+      }
+      delete element.dataset.navPlayStoredAriaDisabled;
+    } else {
+      element.removeAttribute('aria-disabled');
+    }
+
+    if (element instanceof HTMLButtonElement) {
+      if (element.dataset.navPlayStoredDisabled === '1') {
+        element.disabled = true;
+      } else {
+        element.disabled = false;
+        element.removeAttribute('disabled');
+      }
+      delete element.dataset.navPlayStoredDisabled;
+    }
+
+    delete element.dataset.navPlaySuppressed;
+  });
+};
+
+const updateNavMagnetInteractivity = (state) => {
+  if (!isNavBoardState(state)) {
+    return;
+  }
+  if (state.playActive) {
+    disableNavMagnetInteractivity(state);
+  } else {
+    restoreNavMagnetInteractivity(state);
+  }
+};
+
 let isToggling = false;
 let toggleGuardTimer = null;
 
@@ -709,6 +799,9 @@ const maybeStartBoardResize = (state, event) => {
   if (!state || !state.board || state.resizeDrag) {
     return false;
   }
+  if (isNavBoardState(state) && !state.playActive) {
+    return false;
+  }
   if (event.button != null && event.button !== 0) {
     return false;
   }
@@ -1022,7 +1115,8 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
     setMagnetTransform(magnet);
   });
 
-  const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
+  const extraPadding = isNavBoardState(state) ? 0 : BOARD_PADDING;
+  const height = Math.max(state.minHeight, maxBottom + extraPadding);
   state.boardHeight = height;
   state.board.style.height = `${height}px`;
   updateLayout(state);
@@ -1309,6 +1403,7 @@ const setPlayState = (state, active) => {
     }
   }
   state.playActive = active;
+  updateNavMagnetInteractivity(state);
   updateToggleLabel(state.toggle, active);
   if (isNavBoardState(state) && !persistedToggle) {
     updateLayout(state);
@@ -1594,6 +1689,11 @@ const initializeBoard = async (root, index) => {
     if (!state.playActive) {
       return;
     }
+    if (isNavBoardState(state)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
     if (getNow() < state.suppressUntil) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -1762,6 +1862,17 @@ const initializeBoard = async (root, index) => {
     applyRowPackedLayout(state, state.magnets, { persist: true });
   } else {
     state.board.style.height = `${state.boardHeight}px`;
+  }
+
+  if (isNavBoardState(state)) {
+    const resolvedLayout = resolveNavLayoutToNearestValid(state);
+    if (resolvedLayout) {
+      updateBoardHeight(state);
+      updateLayout(state);
+      persistLayout(state, true);
+    } else {
+      updateLayoutValidity(state);
+    }
   }
 
   board.dataset.ready = '1';
