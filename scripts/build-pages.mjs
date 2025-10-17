@@ -69,9 +69,16 @@ const navPrefillScript = () => String.raw`
             cssMinHeight || 1
           );
           if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
-            boardHeight = storedHeight;
-            board.style.height = storedHeight + 'px';
+            var storedHeight = parsed.boardHeight;
+            var baseHeight = Math.max(cssMinHeight || 0, boardHeight || 0, 1);
+            var resolvedHeight;
+            if (storedHeight > 0 && storedHeight <= 10) {
+              resolvedHeight = Math.max(storedHeight * baseHeight, cssMinHeight || 0, 1);
+            } else {
+              resolvedHeight = Math.max(storedHeight, cssMinHeight || 0, 1);
+            }
+            boardHeight = resolvedHeight;
+            board.style.height = resolvedHeight + 'px';
           }
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
