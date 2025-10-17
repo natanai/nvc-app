@@ -26,7 +26,6 @@ const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 16;
-const RESIZE_HANDLE_MARGIN = 64;
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
 const SHUFFLE_LABEL_BUSY = 'Shuffling…';
@@ -705,154 +704,6 @@ const layoutHasOverlap = (state) => {
   return false;
 };
 
-const maybeStartBoardResize = (state, event) => {
-  if (!state || !state.board || state.resizeDrag) {
-    return false;
-  }
-  if (event.button != null && event.button !== 0) {
-    return false;
-  }
-  const targetElement = event.target && typeof event.target.closest === 'function'
-    ? event.target
-    : null;
-  const handleElement = targetElement.closest('[data-nav-resize-handle]');
-  if (!targetElement || (!state.board.contains(targetElement) && !handleElement)) {
-    return false;
-  }
-  const rect = state.board.getBoundingClientRect();
-  const offsetFromBottom = rect.bottom - event.clientY;
-  if (!handleElement && (offsetFromBottom < 0 || offsetFromBottom > RESIZE_HANDLE_MARGIN)) {
-    return false;
-  }
-  const minHeight = Math.max(state.minHeight || 0, 1);
-  const measuredHeight = Math.max(
-    rect.height || state.board.clientHeight || state.boardHeight || minHeight || 0,
-    minHeight,
-  );
-  const startHeight = Math.max(measuredHeight, minHeight);
-  state.boardHeight = startHeight;
-  if (!state.playActive) {
-    state.inactiveHeight = Math.max(state.inactiveHeight || 0, startHeight);
-  }
-  state.board.style.height = `${startHeight}px`;
-  const captureTarget = handleElement || state.board;
-  state.resizeDrag = {
-    pointerId: event.pointerId,
-    startY: event.clientY,
-    startHeight,
-    minHeight,
-    captureTarget,
-    handleElement,
-    hasHeightChanged: false,
-    lastHeight: startHeight,
-  };
-  state.board.dataset.resizing = '1';
-  if (handleElement) {
-    handleElement.dataset.active = '1';
-  }
-  if (captureTarget && typeof captureTarget.setPointerCapture === 'function') {
-    try {
-      captureTarget.setPointerCapture(event.pointerId);
-    } catch {
-      // ignore capture errors
-    }
-  }
-  return true;
-};
-
-const updateBoardResizeDrag = (state, event) => {
-  if (!state || !state.board || !state.resizeDrag) {
-    return;
-  }
-  const drag = state.resizeDrag;
-  if (drag.pointerId !== event.pointerId) {
-    return;
-  }
-  const deltaY = event.clientY - drag.startY;
-  const proposed = Math.round(drag.startHeight + deltaY);
-  const nextHeight = Math.max(drag.minHeight, proposed || 0);
-  if (!Number.isFinite(nextHeight)) {
-    return;
-  }
-  if (event.cancelable) {
-    event.preventDefault();
-  }
-  if (Math.abs(nextHeight - (drag.lastHeight || drag.startHeight || 0)) < 0.75) {
-    return;
-  }
-  drag.lastHeight = nextHeight;
-  if (Math.abs(nextHeight - drag.startHeight) >= 1) {
-    drag.hasHeightChanged = true;
-  }
-  state.boardHeight = nextHeight;
-  if (!state.playActive) {
-    state.inactiveHeight = nextHeight;
-  }
-  state.board.style.height = `${nextHeight}px`;
-};
-
-const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
-  if (!state || !state.board || !state.resizeDrag) {
-    return;
-  }
-  const drag = state.resizeDrag;
-  if (pointerId != null && drag.pointerId !== pointerId) {
-    return;
-  }
-  const captureTarget = drag.captureTarget && typeof drag.captureTarget.releasePointerCapture === 'function'
-    ? drag.captureTarget
-    : state.board;
-  if (captureTarget && typeof captureTarget.releasePointerCapture === 'function' && drag.pointerId != null) {
-    try {
-      captureTarget.releasePointerCapture(drag.pointerId);
-    } catch {
-      // ignore
-    }
-  }
-  delete state.board.dataset.resizing;
-  if (drag.handleElement) {
-    delete drag.handleElement.dataset.active;
-  }
-  state.resizeDrag = null;
-
-  const minimumHeight = Math.max(drag.minHeight || 0, 1);
-  const currentHeight = Math.max(state.boardHeight || 0, minimumHeight);
-
-  if (cancel) {
-    const revertHeight = Math.max(drag.startHeight, minimumHeight);
-    state.boardHeight = revertHeight;
-    state.board.style.height = `${revertHeight}px`;
-    if (!state.playActive) {
-      state.inactiveHeight = revertHeight;
-    }
-  } else {
-    state.boardHeight = currentHeight;
-    state.board.style.height = `${currentHeight}px`;
-    if (!state.playActive) {
-      state.inactiveHeight = currentHeight;
-    }
-
-    const changedEnough = drag.hasHeightChanged || Math.abs(currentHeight - drag.startHeight) >= 1;
-    if (changedEnough) {
-      updateLayout(state);
-      persistLayout(state, true);
-      state.lastLayoutType = 'manual';
-    }
-  }
-
-  if (state.pendingResponsiveResize && typeof state.scheduleResponsiveResize === 'function') {
-    state.pendingResponsiveResize = false;
-    state.scheduleResponsiveResize();
-  }
-};
-
-const cancelBoardResize = (state) => {
-  if (!state || !state.resizeDrag) {
-    return;
-  }
-  finishBoardResize(state, { cancel: true });
-};
-
 const updateBoardHeight = (state) => {
   if (isNavBoardState(state)) {
     const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
@@ -906,18 +757,16 @@ const persistLayout = (state, immediate = false) => {
     if (isNavBoardState(state)) {
       const width = Math.max(state.boardWidth || 0, 1);
       const height = Math.max(state.boardHeight || 0, 1);
-      const baseHeight = Math.max(state.minHeight || height || 1, 1);
       const magnetsForSave = state.magnets.map((magnet) => ({
         id: magnet.id,
         x: typeof magnet.xPct === 'number' ? magnet.xPct : (width ? magnet.x / width : 0),
         y: typeof magnet.yPct === 'number' ? magnet.yPct : (height ? magnet.y / height : 0),
       }));
-      const heightRatio = baseHeight ? state.boardHeight / baseHeight : 1;
       savePositions(
         state.storageKey,
         { width: 1, height: 1 },
         magnetsForSave,
-        heightRatio,
+        null,
         { normalized: true, meta: { playActive: Boolean(state.playActive) } },
       );
       return;
@@ -1202,7 +1051,6 @@ const stopPhysicsLoop = (state) => {
 };
 
 const setPlayState = (state, active) => {
-  cancelBoardResize(state);
   let persistedToggle = false;
   if (!active && state.isShuffling) {
     state.isShuffling = false;
@@ -1320,7 +1168,6 @@ const enterSearchMode = (state) => {
   if (!state || state.searchActive) {
     return;
   }
-  cancelBoardResize(state);
   state.searchActive = true;
   state.searchWasPlaying = state.playActive;
   if (state.playActive) {
@@ -1565,13 +1412,11 @@ const initializeBoard = async (root, index) => {
     lastSaveTime: 0,
     resizeObserver: null,
     cleanupResize: null,
-    resizeDrag: null,
     playActive: false,
     suppressUntil: 0,
     lastSeedWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
     lastLayoutType: 'seed',
     resizeScheduled: false,
-    pendingResponsiveResize: false,
     scheduleResponsiveResize: null,
     isShuffling: false,
     tiltPermissionState: globalTiltSource.tiltPermissionState,
@@ -1608,49 +1453,7 @@ const initializeBoard = async (root, index) => {
   board.style.height = `${state.boardHeight}px`;
   board.classList.add('no-transitions');
 
-  if (root?.dataset?.magnetKey === NAV_STORAGE_KEY) {
-    board.dataset.navResizable = '1';
-    let resizeHandle = board.querySelector('[data-nav-resize-handle]');
-    if (!resizeHandle) {
-      resizeHandle = document.createElement('div');
-      resizeHandle.className = 'site-nav__board-resize-handle';
-      resizeHandle.dataset.navResizeHandle = '1';
-      resizeHandle.setAttribute('aria-hidden', 'true');
-      resizeHandle.setAttribute('role', 'presentation');
-      resizeHandle.tabIndex = -1;
-      resizeHandle.style.height = `${RESIZE_HANDLE_MARGIN}px`;
-      board.appendChild(resizeHandle);
-    }
-    const handleBoardPointerDown = (event) => {
-      if (maybeStartBoardResize(state, event)) {
-        event.preventDefault();
-      }
-    };
-    const handleBoardPointerMove = (event) => {
-      updateBoardResizeDrag(state, event);
-    };
-    const handleBoardPointerUp = (event) => {
-      finishBoardResize(state, { pointerId: event.pointerId });
-    };
-    const handleBoardPointerCancel = (event) => {
-      finishBoardResize(state, { pointerId: event.pointerId, cancel: true });
-    };
-    const handleLostPointerCapture = (event) => {
-      finishBoardResize(state, { pointerId: event.pointerId });
-    };
-    board.addEventListener('pointerdown', handleBoardPointerDown);
-    board.addEventListener('pointermove', handleBoardPointerMove);
-    board.addEventListener('pointerup', handleBoardPointerUp);
-    board.addEventListener('pointercancel', handleBoardPointerCancel);
-    board.addEventListener('lostpointercapture', handleLostPointerCapture);
-    if (resizeHandle) {
-      resizeHandle.addEventListener('pointerdown', handleBoardPointerDown);
-      resizeHandle.addEventListener('pointermove', handleBoardPointerMove);
-      resizeHandle.addEventListener('pointerup', handleBoardPointerUp);
-      resizeHandle.addEventListener('pointercancel', handleBoardPointerCancel);
-      resizeHandle.addEventListener('lostpointercapture', handleLostPointerCapture);
-    }
-  }
+
 
   const sizeMap = new Map(state.magnets.map((magnet) => [magnet.id, { width: magnet.width, height: magnet.height }]));
   const loadSize = isNavBoardState(state)
@@ -1671,19 +1474,11 @@ const initializeBoard = async (root, index) => {
   }
   const stored = storedResult?.magnets || null;
   const storedBoardHeightRaw = storedResult?.boardHeight;
-  if (typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
-    if (isNavBoardState(state)) {
-      const baseHeight = Math.max(state.minHeight || state.boardHeight || 1, 1);
-      const resolvedHeight = Math.max(storedBoardHeightRaw * baseHeight, state.cssMinHeight || 0);
-      state.boardHeight = resolvedHeight;
-      state.inactiveHeight = resolvedHeight;
-      state.board.style.height = `${resolvedHeight}px`;
-    } else {
-      const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
-      state.boardHeight = storedBoardHeight;
-      state.inactiveHeight = storedBoardHeight;
-      state.board.style.height = `${storedBoardHeight}px`;
-    }
+  if (!isNavBoardState(state) && typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
+    const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
+    state.boardHeight = storedBoardHeight;
+    state.inactiveHeight = storedBoardHeight;
+    state.board.style.height = `${storedBoardHeight}px`;
   }
 
   let shouldSeed = true;
@@ -1771,10 +1566,6 @@ const initializeBoard = async (root, index) => {
   });
 
   const scheduleResponsiveResize = () => {
-    if (state.resizeDrag) {
-      state.pendingResponsiveResize = true;
-      return;
-    }
     if (state.resizeScheduled) {
       return;
     }
@@ -1785,7 +1576,6 @@ const initializeBoard = async (root, index) => {
       console.info('[magnets] resize ignored (toggling)');
       return;
     }
-    state.pendingResponsiveResize = false;
     state.resizeScheduled = true;
     Promise.resolve().then(async () => {
       if (state.isShuffling) {
@@ -1797,18 +1587,9 @@ const initializeBoard = async (root, index) => {
         console.info('[magnets] resize ignored (toggling)');
         return;
       }
-      if (state.resizeDrag) {
-        state.resizeScheduled = false;
-        state.pendingResponsiveResize = true;
-        return;
-      }
       state.resizeScheduled = false;
       const previousWidth = state.boardWidth;
       await waitForAnimationFrames(2);
-      if (state.resizeDrag) {
-        state.pendingResponsiveResize = true;
-        return;
-      }
       remeasureMagnets(state);
       const width = state.boardWidth;
       const widthChanged = Math.abs(width - previousWidth) > 0.5;
