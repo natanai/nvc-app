@@ -548,17 +548,13 @@ button.site-nav__magnet {
               <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
               <span class="site-nav__magnet-label visually-hidden">Customizer</span>
             </button>
-            <button
+            <a
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
-              type="button"
-              data-support-journal-open
-              aria-haspopup="dialog"
-              aria-expanded="false"
-              aria-controls="global-support-journal-layer"
+              href="../inventory/journal/"
             >
               <span class="site-nav__magnet-label">Journal</span>
-            </button>
+            </a>
             <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../inventory/">
               <span class="site-nav__magnet-label">Inventory</span>
               <span class="site-nav__count" data-inventory-count hidden></span>
@@ -602,43 +598,6 @@ button.site-nav__magnet {
             </span>
             <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
           </label>
-        </div>
-        <div class="site-nav__journal" data-support-journal data-journal-overlay>
-          <div
-            id="global-support-journal-layer"
-            class="support-journal__layer"
-            data-support-journal-layer
-            data-state="closed"
-            aria-hidden="true"
-          >
-            <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
-              <header class="support-journal__header">
-                <div class="support-journal__titles">
-                  <h3
-                    class="support-journal__heading"
-                    id="global-support-journal-heading"
-                    data-support-journal-heading
-                  >
-                    Journal
-                  </h3>
-                </div>
-                <button
-                  class="support-journal__close"
-                  type="button"
-                  data-support-journal-close
-                  aria-label="Close full screen journal"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </header>
-              <div class="support-journal__body">
-                <div class="support-journal__content">
-                  <div data-journal-overlay-content></div>
-                  <div class="journal-history-wrapper" data-journal-overlay-history></div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </nav>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -782,60 +741,13 @@ button.site-nav__magnet {
           <article class="support-step support-step--has-next is-hidden" data-step="journal">
             <h3 id="support-journal-title" class="support-step__title">Step 4: Reflect and journal</h3>
             <p>
-              Linking a feeling to context strengthens emotional awareness. Use the prompts below as writing cues or simply sit
-              with them.
+              Linking a feeling to context strengthens emotional awareness. Open the full-screen journal to capture your
+              reflections with the complete toolset.
             </p>
-            <div class="support-journal" data-support-journal>
-              <button
-                class="support-button support-journal__open"
-                type="button"
-                data-support-journal-open
-                data-journal-overlay-ignore
-                aria-expanded="false"
-                aria-controls="support-journal-layer"
-              >
-                Open reflection journal
-              </button>
-              <div
-                id="support-journal-layer"
-                class="support-journal__layer"
-                data-support-journal-layer
-                data-state="closed"
-                aria-hidden="true"
-              >
-                <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
-                  <header class="support-journal__header">
-                    <div class="support-journal__titles" aria-hidden="true">
-                      <p class="support-journal__eyebrow">Support journal</p>
-                      <h3 class="support-journal__heading" data-support-journal-heading></h3>
-                    </div>
-                    <button
-                      class="support-journal__close"
-                      type="button"
-                      data-support-journal-close
-                      aria-label="Close journal"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </header>
-                  <div class="support-journal__body">
-                    <div class="support-journal__content">
-                      <div
-                        class="journal-module journal-module--support"
-                        data-journal-module
-                        data-journal-variant="support"
-                        data-journal-id-prefix="support-journal"
-                      >
-                        <noscript>
-                          <p class="support-note">Enable JavaScript to capture journal reflections.</p>
-                        </noscript>
-                      </div>
-                      <div class="journal-history-wrapper" data-journal-history></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="support-actions">
+              <a class="support-button" href="../inventory/journal/">Open journal</a>
             </div>
+            <p class="support-note">Your entries stay on this device until you export them.</p>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="regulation">
