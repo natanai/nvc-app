@@ -1274,27 +1274,17 @@ const setPlayState = (state, active) => {
       state.suppressUntil = 0;
       state.playActive = false;
       const measuredHeight = measureBoardHeight(state.board);
-      if (measuredHeight > 0) {
-        if (isNavBoardState(state)) {
-          const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
-          const resolvedHeight = Math.max(measuredHeight, minHeight);
-          state.boardHeight = resolvedHeight;
-          state.inactiveHeight = resolvedHeight;
-        } else {
-          state.boardHeight = Math.max(measuredHeight, state.boardHeight || 0, state.minHeight || 0);
-          state.inactiveHeight = state.boardHeight;
-        }
+      if (measuredHeight > 0 && !isNavBoardState(state)) {
+        state.boardHeight = Math.max(measuredHeight, state.boardHeight || 0, state.minHeight || 0);
+        state.inactiveHeight = state.boardHeight;
       }
-      updateBoardHeight(state);
+      if (!isNavBoardState(state)) {
+        updateBoardHeight(state);
+      }
       const magnetElements = state.magnets.map((magnet) => magnet.element);
-      const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
-      if (typeof syncedHeight === 'number' && syncedHeight > 0) {
-        if (isNavBoardState(state)) {
-          const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
-          const resolvedHeight = Math.max(syncedHeight, minHeight);
-          state.boardHeight = resolvedHeight;
-          state.inactiveHeight = resolvedHeight;
-        } else {
+      if (!isNavBoardState(state)) {
+        const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
+        if (typeof syncedHeight === 'number' && syncedHeight > 0) {
           const resolvedHeight = Math.max(syncedHeight, state.minHeight || 0, state.boardHeight || 0);
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
