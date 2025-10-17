@@ -4781,15 +4781,15 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   }
 
   .inventory-actions__buttons {
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
     gap: 0.4rem;
   }
 
   .inventory-actions__buttons .inventory-button {
-    flex: 1 1 0;
-    width: auto;
+    flex: 1 1 auto;
+    width: 100%;
     min-width: 0;
     padding: 0.45rem 0.6rem;
     font-size: 0.7rem;
