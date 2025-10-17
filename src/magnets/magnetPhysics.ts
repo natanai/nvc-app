@@ -13,6 +13,8 @@ export interface PhysicsConfig {
   edgeBounce: number;
   mouseRadius: number;
   mouseStrength: number;
+  preventInvalidPositions: boolean;
+  invalidOverlapPadding: number;
 }
 
 export interface MagnetSnapshot {
@@ -68,6 +70,7 @@ interface InternalState {
   shufflePromise: Promise<void> | null;
   lastShuffleTime: number;
   baseHeight: number;
+  lastValidSnapshot: Map<string, { x: number; y: number }>;
   tilt: {
     x: number;
     y: number;
@@ -93,6 +96,8 @@ const DEFAULT_CONFIG: PhysicsConfig = {
   edgeBounce: 0.18,
   mouseRadius: 140,
   mouseStrength: 0.6,
+  preventInvalidPositions: false,
+  invalidOverlapPadding: 0,
 };
 
 const LAYOUT_GAP_X = 12;
@@ -318,6 +323,100 @@ const notifyPositions = (state: InternalState) => {
   state.onPositions(payload);
 };
 
+const getMagnetBounds = (magnet: InternalMagnetState) => ({
+  left: magnet.x,
+  top: magnet.y,
+  right: magnet.x + magnet.w,
+  bottom: magnet.y + magnet.h,
+});
+
+const isMagnetOffBoard = (
+  state: InternalState,
+  magnet: InternalMagnetState,
+  tolerance = 0,
+) => {
+  const { width, height } = getBoardSize(state);
+  const bounds = getMagnetBounds(magnet);
+  return (
+    bounds.left < -tolerance
+    || bounds.top < -tolerance
+    || bounds.right > width + tolerance
+    || bounds.bottom > height + tolerance
+  );
+};
+
+const layoutHasOverlap = (state: InternalState, tolerance = 0) => {
+  for (let i = 0; i < state.magnets.length; i += 1) {
+    const a = state.magnets[i];
+    const boundsA = getMagnetBounds(a);
+    for (let j = i + 1; j < state.magnets.length; j += 1) {
+      const b = state.magnets[j];
+      const boundsB = getMagnetBounds(b);
+      if (
+        boundsA.left + tolerance < boundsB.right
+        && boundsA.right - tolerance > boundsB.left
+        && boundsA.top + tolerance < boundsB.bottom
+        && boundsA.bottom - tolerance > boundsB.top
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+const captureLayoutSnapshot = (state: InternalState) => {
+  if (!state.config.preventInvalidPositions) {
+    return;
+  }
+  state.lastValidSnapshot = new Map();
+  state.magnets.forEach((magnet) => {
+    state.lastValidSnapshot.set(magnet.id, { x: magnet.x, y: magnet.y });
+  });
+};
+
+const restoreLayoutSnapshot = (state: InternalState) => {
+  if (!state.config.preventInvalidPositions || !state.lastValidSnapshot?.size) {
+    return false;
+  }
+  let changed = false;
+  state.magnets.forEach((magnet) => {
+    const snapshot = state.lastValidSnapshot.get(magnet.id);
+    if (!snapshot) {
+      return;
+    }
+    if (magnet.x !== snapshot.x || magnet.y !== snapshot.y) {
+      magnet.x = snapshot.x;
+      magnet.y = snapshot.y;
+      magnet.vx = 0;
+      magnet.vy = 0;
+      applyTransform(magnet);
+      changed = true;
+    }
+  });
+  return changed;
+};
+
+const ensureLayoutValidity = (state: InternalState) => {
+  if (!state.config.preventInvalidPositions) {
+    return { valid: true, changed: false };
+  }
+  const tolerance = Number.isFinite(state.config.invalidOverlapPadding)
+    ? Math.max(state.config.invalidOverlapPadding, 0)
+    : 0;
+  const hasOffBoard = state.magnets.some((magnet) => isMagnetOffBoard(state, magnet, tolerance));
+  const hasOverlap = layoutHasOverlap(state, tolerance);
+  if (!hasOffBoard && !hasOverlap) {
+    captureLayoutSnapshot(state);
+    return { valid: true, changed: false };
+  }
+  const restored = restoreLayoutSnapshot(state);
+  if (!restored) {
+    captureLayoutSnapshot(state);
+  }
+  return { valid: false, changed: restored };
+};
+
 const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnetState => {
   const rect = element.getBoundingClientRect();
   const id = element.dataset.magnetId || element.id || element.textContent || '';
@@ -421,6 +520,7 @@ const addPointerListeners = (state: InternalState) => {
     magnetState.pointerId = null;
     state.dragging = null;
     delete state.board.dataset.dragging;
+    ensureLayoutValidity(state);
     notifyPositions(state);
   };
 
@@ -444,6 +544,7 @@ const addPointerListeners = (state: InternalState) => {
     magnetState.pointerId = null;
     state.dragging = null;
     delete state.board.dataset.dragging;
+    ensureLayoutValidity(state);
     notifyPositions(state);
   };
 
@@ -619,6 +720,7 @@ const frameStep = (state: InternalState, timestamp: number) => {
     integrateMotion(state, dt);
   }
   state.lastTimestamp = timestamp;
+  ensureLayoutValidity(state);
   notifyPositions(state);
   state.animationFrame = window.requestAnimationFrame((next) => frameStep(state, next));
 };
@@ -742,6 +844,7 @@ const shuffleMagnets = async (state: InternalState): Promise<void> => {
 
       state.baseHeight = Math.max(state.baseHeight || 0, targetHeight);
       state.board.style.height = `${targetHeight}px`;
+      ensureLayoutValidity(state);
       notifyPositions(state);
 
       await waitForAnimationFrames(1);
@@ -809,6 +912,7 @@ export function startPhysics(options: StartPhysicsOptions): {
           parsePx((options.board instanceof HTMLElement ? getComputedStyle(options.board).height : '') || '0'),
         0,
       ) || 0,
+    lastValidSnapshot: new Map(),
     tilt: {
       x: 0,
       y: 0,
@@ -818,6 +922,8 @@ export function startPhysics(options: StartPhysicsOptions): {
       baselineBeta: null,
     },
   };
+
+  captureLayoutSnapshot(state);
 
   const removePointerListeners = addPointerListeners(state);
   let removeTiltListener: (() => void) | null = null;

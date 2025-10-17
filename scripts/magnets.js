@@ -15,9 +15,11 @@ const DEFAULT_CONFIG = {
 };
 
 const NAV_PHYSICS_CONFIG = {
-  drift: 0.06,
-  tiltStrength: 52,
-  tiltDriftScale: 0.2,
+  drift: 0,
+  tiltStrength: 0,
+  tiltDriftScale: 0,
+  preventInvalidPositions: true,
+  invalidOverlapPadding: ALLOWED_OVERLAP,
 };
 
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];
