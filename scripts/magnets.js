@@ -634,7 +634,11 @@ const isMagnetOffBoard = (state, magnet) => {
 };
 
 const updateLayoutValidity = (state) => {
-  if (!isNavBoardState(state)) {
+  if (isNavBoardState(state)) {
+    if (state.root) {
+      delete state.root.dataset.layoutInvalid;
+    }
+    state.layoutInvalid = false;
     return;
   }
   const hasOverlap = layoutHasOverlap(state);
@@ -724,7 +728,9 @@ const maybeStartBoardResize = (state, event) => {
   if (!handleElement && (offsetFromBottom < 0 || offsetFromBottom > RESIZE_HANDLE_MARGIN)) {
     return false;
   }
-  const minHeight = Math.max(state.minHeight || 0, 1);
+  const minHeight = isNavBoardState(state)
+    ? 1
+    : Math.max(state.minHeight || 0, 1);
   const measuredHeight = Math.max(
     rect.height || state.board.clientHeight || state.boardHeight || minHeight || 0,
     minHeight,
@@ -815,11 +821,16 @@ const finishBoardResize = (state, { pointerId, cancel = false } = {}) => {
   }
   state.resizeDrag = null;
 
-  const minimumHeight = Math.max(drag.minHeight || 0, 1);
-  const currentHeight = Math.max(state.boardHeight || 0, minimumHeight);
+  const navBoard = isNavBoardState(state);
+  const minimumHeight = navBoard ? 0 : Math.max(drag.minHeight || 0, 1);
+  const currentHeight = navBoard
+    ? Math.max(state.boardHeight || 0, 0)
+    : Math.max(state.boardHeight || 0, minimumHeight);
 
   if (cancel) {
-    const revertHeight = Math.max(drag.startHeight, minimumHeight);
+    const revertHeight = navBoard
+      ? Math.max(drag.startHeight || 0, 0)
+      : Math.max(drag.startHeight, minimumHeight);
     state.boardHeight = revertHeight;
     state.board.style.height = `${revertHeight}px`;
     if (!state.playActive) {
@@ -855,8 +866,7 @@ const cancelBoardResize = (state) => {
 
 const updateBoardHeight = (state) => {
   if (isNavBoardState(state)) {
-    const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
-    const height = Math.max(state.boardHeight || 0, minHeight);
+    const height = state.boardHeight || 0;
     state.boardHeight = height;
     if (!state.playActive) {
       state.inactiveHeight = height;
@@ -893,7 +903,24 @@ const updateLayout = (state) => {
     magnet.yPct = yPct;
     state.layout.set(magnet.id, { xPct, yPct });
   });
-  updateLayoutValidity(state);
+  if (!isNavBoardState(state)) {
+    updateLayoutValidity(state);
+  } else {
+    if (state.root) {
+      delete state.root.dataset.layoutInvalid;
+    }
+    if (state.toggleInput) {
+      state.toggleInput.disabled = false;
+      state.toggleInput.removeAttribute('aria-disabled');
+      state.toggleInput.removeAttribute('title');
+    }
+    if (state.toggle) {
+      state.toggle.removeAttribute('aria-disabled');
+      state.toggle.removeAttribute('title');
+      delete state.toggle.dataset.layoutToggleDisabled;
+    }
+    state.layoutInvalid = false;
+  }
 };
 
 const persistLayout = (state, immediate = false) => {
@@ -906,18 +933,16 @@ const persistLayout = (state, immediate = false) => {
     if (isNavBoardState(state)) {
       const width = Math.max(state.boardWidth || 0, 1);
       const height = Math.max(state.boardHeight || 0, 1);
-      const baseHeight = Math.max(state.minHeight || height || 1, 1);
       const magnetsForSave = state.magnets.map((magnet) => ({
         id: magnet.id,
         x: typeof magnet.xPct === 'number' ? magnet.xPct : (width ? magnet.x / width : 0),
         y: typeof magnet.yPct === 'number' ? magnet.yPct : (height ? magnet.y / height : 0),
       }));
-      const heightRatio = baseHeight ? state.boardHeight / baseHeight : 1;
       savePositions(
         state.storageKey,
         { width: 1, height: 1 },
         magnetsForSave,
-        heightRatio,
+        state.boardHeight,
         { normalized: true, meta: { playActive: Boolean(state.playActive) } },
       );
       return;
@@ -1232,6 +1257,11 @@ const setPlayState = (state, active) => {
     state.magnets.forEach((magnet) => {
       magnet.element.setAttribute('draggable', 'false');
     });
+    if (isNavBoardState(state)) {
+      state.magnets.forEach((magnet) => {
+        magnet.element.style.pointerEvents = '';
+      });
+    }
     const magnetElements = state.magnets.map((magnet) => magnet.element);
     const physicsConfig = isNavBoardState(state)
       ? { ...DEFAULT_CONFIG, ...NAV_PHYSICS_CONFIG }
@@ -1274,8 +1304,7 @@ const setPlayState = (state, active) => {
       const measuredHeight = measureBoardHeight(state.board);
       if (measuredHeight > 0) {
         if (isNavBoardState(state)) {
-          const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
-          const resolvedHeight = Math.max(measuredHeight, minHeight);
+          const resolvedHeight = Math.max(measuredHeight, 0);
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
         } else {
@@ -1288,8 +1317,7 @@ const setPlayState = (state, active) => {
       const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
       if (typeof syncedHeight === 'number' && syncedHeight > 0) {
         if (isNavBoardState(state)) {
-          const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
-          const resolvedHeight = Math.max(syncedHeight, minHeight);
+          const resolvedHeight = Math.max(syncedHeight, 0);
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
         } else {
@@ -1310,9 +1338,20 @@ const setPlayState = (state, active) => {
   }
   state.playActive = active;
   updateToggleLabel(state.toggle, active);
-  if (isNavBoardState(state) && !persistedToggle) {
-    updateLayout(state);
-    persistLayout(state, true);
+  if (isNavBoardState(state)) {
+    if (!active) {
+      state.magnets.forEach((magnet) => {
+        magnet.element.style.pointerEvents = 'none';
+      });
+    } else {
+      state.magnets.forEach((magnet) => {
+        magnet.element.style.pointerEvents = '';
+      });
+    }
+    if (!persistedToggle) {
+      updateLayout(state);
+      persistLayout(state, true);
+    }
   }
 };
 
@@ -1673,11 +1712,9 @@ const initializeBoard = async (root, index) => {
   const storedBoardHeightRaw = storedResult?.boardHeight;
   if (typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
     if (isNavBoardState(state)) {
-      const baseHeight = Math.max(state.minHeight || state.boardHeight || 1, 1);
-      const resolvedHeight = Math.max(storedBoardHeightRaw * baseHeight, state.cssMinHeight || 0);
-      state.boardHeight = resolvedHeight;
-      state.inactiveHeight = resolvedHeight;
-      state.board.style.height = `${resolvedHeight}px`;
+      state.boardHeight = storedBoardHeightRaw;
+      state.inactiveHeight = storedBoardHeightRaw;
+      state.board.style.height = `${storedBoardHeightRaw}px`;
     } else {
       const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
       state.boardHeight = storedBoardHeight;
