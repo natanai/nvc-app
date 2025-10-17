@@ -890,6 +890,8 @@ export function loadPositions(storageKey, boardSize, magnetSizes, options = {}) 
       return null;
     }
     const parsedLayout = parsed;
+    const parsedMeta = parsedLayout.meta;
+    const meta = parsedMeta && typeof parsedMeta === 'object' ? { ...parsedMeta } : null;
     const storedHeightRaw = parsedLayout.boardHeight;
     const storedHeight =
       typeof storedHeightRaw === 'number' && Number.isFinite(storedHeightRaw) && storedHeightRaw > 0
@@ -931,6 +933,7 @@ export function loadPositions(storageKey, boardSize, magnetSizes, options = {}) 
       boardHeight: storedHeight != null
         ? (normalized ? Math.max(storedHeight, 0) : Math.max(storedHeight, 0))
         : null,
+      meta,
     };
   } catch {
     return null;
@@ -943,6 +946,7 @@ export function savePositions(storageKey, boardSize, magnets, boardHeightOverrid
   }
   const {
     normalized = false,
+    meta = null,
   } = options ?? {};
   const payload = { magnets: {} };
   const width = boardSize.width || 1;
@@ -961,6 +965,12 @@ export function savePositions(storageKey, boardSize, magnets, boardHeightOverrid
   if (Number.isFinite(boardHeightValue) && boardHeightValue > 0) {
     const precision = normalized ? 4 : 2;
     payload.boardHeight = Number(Math.max(boardHeightValue, 0).toFixed(precision));
+  }
+  if (meta && typeof meta === 'object') {
+    const metaForSave = { ...meta };
+    if (Object.keys(metaForSave).length > 0) {
+      payload.meta = metaForSave;
+    }
   }
   try {
     window.localStorage.setItem(normalizeKey(storageKey), JSON.stringify(payload));

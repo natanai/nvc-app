@@ -117,6 +117,24 @@ const parsePx = (value) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const parseStoredPlayPreference = (meta) => {
+  if (!meta || typeof meta !== 'object') {
+    return null;
+  }
+  if (typeof meta.playActive === 'boolean') {
+    return meta.playActive;
+  }
+  if (typeof meta.playState === 'string') {
+    if (meta.playState === 'on') {
+      return true;
+    }
+    if (meta.playState === 'off') {
+      return false;
+    }
+  }
+  return null;
+};
+
 const measureBoardHeight = (board) => {
   if (!board) {
     return 0;
@@ -900,7 +918,7 @@ const persistLayout = (state, immediate = false) => {
         { width: 1, height: 1 },
         magnetsForSave,
         heightRatio,
-        { normalized: true },
+        { normalized: true, meta: { playActive: Boolean(state.playActive) } },
       );
       return;
     }
@@ -1185,6 +1203,7 @@ const stopPhysicsLoop = (state) => {
 
 const setPlayState = (state, active) => {
   cancelBoardResize(state);
+  let persistedToggle = false;
   if (!active && state.isShuffling) {
     state.isShuffling = false;
     if (state.shuffleButton) {
@@ -1231,6 +1250,11 @@ const setPlayState = (state, active) => {
       enableTiltForState(state);
     } else if (state.tiltPermissionRequest) {
       enableTiltForState(state, state.tiltPermissionRequest);
+    }
+    if (isNavBoardState(state)) {
+      updateLayout(state);
+      persistLayout(state, true);
+      persistedToggle = true;
     }
     isToggling = false;
     console.info('[magnets] enterPlay: done');
@@ -1279,12 +1303,17 @@ const setPlayState = (state, active) => {
       }
       updateLayout(state);
       persistLayout(state, true);
+      persistedToggle = true;
       state.lastLayoutType = 'manual';
       beginToggleGuard();
     }
   }
   state.playActive = active;
   updateToggleLabel(state.toggle, active);
+  if (isNavBoardState(state) && !persistedToggle) {
+    updateLayout(state);
+    persistLayout(state, true);
+  }
 };
 
 const enterSearchMode = (state) => {
@@ -1508,6 +1537,8 @@ const initializeBoard = async (root, index) => {
     cssMinHeight || 1,
   );
 
+  let storedPlayPreference = null;
+
   const state = {
     root,
     board,
@@ -1632,6 +1663,12 @@ const initializeBoard = async (root, index) => {
     sizeMap,
     loadOptions,
   );
+  if (isNavBoardState(state)) {
+    const preferredPlay = parseStoredPlayPreference(storedResult?.meta);
+    if (preferredPlay != null) {
+      storedPlayPreference = preferredPlay;
+    }
+  }
   const stored = storedResult?.magnets || null;
   const storedBoardHeightRaw = storedResult?.boardHeight;
   if (typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
@@ -1827,9 +1864,11 @@ const initializeBoard = async (root, index) => {
     state.cleanupResize = () => window.removeEventListener('resize', handleResize);
   }
 
-  const initialActive = state.toggleInput
-    ? state.toggleInput.checked
-    : toggle?.dataset.state !== 'off';
+  const initialActive = storedPlayPreference != null
+    ? storedPlayPreference
+    : (state.toggleInput
+      ? state.toggleInput.checked
+      : toggle?.dataset.state !== 'off');
 
   if (state.toggleInput) {
     state.toggleInput.addEventListener('change', () => {
