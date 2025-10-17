@@ -11,6 +11,7 @@ export interface PhysicsConfig {
   sepStrength: number;
   dragSepMultiplier: number;
   edgeBounce: number;
+  edgeBounceKick: number;
   mouseRadius: number;
   mouseStrength: number;
 }
@@ -91,6 +92,7 @@ const DEFAULT_CONFIG: PhysicsConfig = {
   sepStrength: 18,
   dragSepMultiplier: 2,
   edgeBounce: 0.18,
+  edgeBounceKick: 40,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
@@ -487,6 +489,7 @@ const addPointerListeners = (state: InternalState) => {
 
 const applySeparationForces = (state: InternalState, dt: number) => {
   const { sepRadiusScale, sepStrength, dragSepMultiplier } = state.config;
+  const { width: boardWidth, height: boardHeight } = getBoardSize(state);
   for (let i = 0; i < state.magnets.length; i += 1) {
     const magnetA = state.magnets[i];
     for (let j = i + 1; j < state.magnets.length; j += 1) {
@@ -516,6 +519,24 @@ const applySeparationForces = (state: InternalState, dt: number) => {
       if (!magnetB.dragging) {
         magnetB.vx += dirX * strength * multiplier;
         magnetB.vy += dirY * strength * multiplier;
+      }
+
+      const movableCount = (magnetA.dragging ? 0 : 1) + (magnetB.dragging ? 0 : 1);
+      if (movableCount > 0) {
+        const resolutionFraction = 0.6;
+        const maxAX = Math.max(boardWidth - magnetA.w, 0);
+        const maxAY = Math.max(boardHeight - magnetA.h, 0);
+        const maxBX = Math.max(boardWidth - magnetB.w, 0);
+        const maxBY = Math.max(boardHeight - magnetB.h, 0);
+        const correction = (overlap / movableCount) * resolutionFraction;
+        if (!magnetA.dragging) {
+          magnetA.x = clamp(magnetA.x - dirX * correction, 0, maxAX);
+          magnetA.y = clamp(magnetA.y - dirY * correction, 0, maxAY);
+        }
+        if (!magnetB.dragging) {
+          magnetB.x = clamp(magnetB.x + dirX * correction, 0, maxBX);
+          magnetB.y = clamp(magnetB.y + dirY * correction, 0, maxBY);
+        }
       }
     }
   }
@@ -550,6 +571,7 @@ const integrateMotion = (state: InternalState, dt: number) => {
     drift,
     damping,
     edgeBounce,
+    edgeBounceKick,
     tiltStrength = DEFAULT_CONFIG.tiltStrength,
     tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
   } = state.config;
@@ -559,6 +581,7 @@ const integrateMotion = (state: InternalState, dt: number) => {
     0,
     1,
   );
+  const minBounceSpeed = Math.max(edgeBounceKick, 0);
   const tiltX = state.tilt?.x ?? 0;
   const tiltY = state.tilt?.y ?? 0;
   const tiltAbsX = Math.min(Math.abs(tiltX), 1);
@@ -582,17 +605,21 @@ const integrateMotion = (state: InternalState, dt: number) => {
     const maxY = Math.max(height - magnet.h, 0);
     if (magnet.x < 0) {
       magnet.x = 0;
-      magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      const bounceSpeed = Math.max(Math.abs(magnet.vx) * edgeBounce, minBounceSpeed);
+      magnet.vx = bounceSpeed;
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
-      magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      const bounceSpeed = Math.max(Math.abs(magnet.vx) * edgeBounce, minBounceSpeed);
+      magnet.vx = -bounceSpeed;
     }
     if (magnet.y < 0) {
       magnet.y = 0;
-      magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      const bounceSpeed = Math.max(Math.abs(magnet.vy) * edgeBounce, minBounceSpeed);
+      magnet.vy = bounceSpeed;
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
-      magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      const bounceSpeed = Math.max(Math.abs(magnet.vy) * edgeBounce, minBounceSpeed);
+      magnet.vy = -bounceSpeed;
     }
     applyTransform(magnet);
   });
