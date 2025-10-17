@@ -873,10 +873,13 @@ const normalizeKey = (key) => {
   return `${STORAGE_PREFIX}${key}`;
 };
 
-export function loadPositions(storageKey, boardSize, magnetSizes) {
+export function loadPositions(storageKey, boardSize, magnetSizes, options = {}) {
   if (!isStorageAvailable()) {
     return null;
   }
+  const {
+    normalized = false,
+  } = options ?? {};
   try {
     const raw = window.localStorage.getItem(normalizeKey(storageKey));
     if (!raw) {
@@ -887,14 +890,18 @@ export function loadPositions(storageKey, boardSize, magnetSizes) {
       return null;
     }
     const parsedLayout = parsed;
+    const parsedMeta = parsedLayout.meta;
+    const meta = parsedMeta && typeof parsedMeta === 'object' ? { ...parsedMeta } : null;
     const storedHeightRaw = parsedLayout.boardHeight;
     const storedHeight =
       typeof storedHeightRaw === 'number' && Number.isFinite(storedHeightRaw) && storedHeightRaw > 0
         ? storedHeightRaw
         : null;
-    const effectiveWidth = Math.max(boardSize.width, 0);
-    const requestedHeight = Math.max(boardSize.height, 0);
-    const effectiveHeight = storedHeight != null ? Math.max(storedHeight, 0) : requestedHeight;
+    const effectiveWidth = normalized ? 1 : Math.max(boardSize.width, 0);
+    const requestedHeight = normalized ? 1 : Math.max(boardSize.height, 0);
+    const effectiveHeight = storedHeight != null
+      ? Math.max(storedHeight, 0)
+      : requestedHeight;
     const snapshots = [];
     for (const [id, value] of Object.entries(parsed.magnets)) {
       if (!value || typeof value !== 'object') {
@@ -903,12 +910,19 @@ export function loadPositions(storageKey, boardSize, magnetSizes) {
       const entry = value;
       const width = magnetSizes.get(id)?.width ?? 0;
       const height = magnetSizes.get(id)?.height ?? 0;
-      const maxX = Math.max(effectiveWidth - width, 0);
-      const maxY = Math.max(effectiveHeight - height, 0);
       const xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
       const yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
-      const x = clamp(xPct * effectiveWidth, 0, maxX);
-      const y = clamp(yPct * effectiveHeight, 0, maxY);
+      let x;
+      let y;
+      if (normalized) {
+        x = clamp(xPct, -2, 3);
+        y = clamp(yPct, -2, 3);
+      } else {
+        const maxX = Math.max(effectiveWidth - width, 0);
+        const maxY = Math.max(effectiveHeight - height, 0);
+        x = clamp(xPct * effectiveWidth, 0, maxX);
+        y = clamp(yPct * effectiveHeight, 0, maxY);
+      }
       snapshots.push({ id, x, y, vx: 0, vy: 0, w: width, h: height });
     }
     if (!snapshots.length) {
@@ -916,30 +930,47 @@ export function loadPositions(storageKey, boardSize, magnetSizes) {
     }
     return {
       magnets: snapshots,
-      boardHeight: storedHeight != null ? Math.max(storedHeight, 0) : null,
+      boardHeight: storedHeight != null
+        ? (normalized ? Math.max(storedHeight, 0) : Math.max(storedHeight, 0))
+        : null,
+      meta,
     };
   } catch {
     return null;
   }
 }
 
-export function savePositions(storageKey, boardSize, magnets) {
+export function savePositions(storageKey, boardSize, magnets, boardHeightOverride = null, options = {}) {
   if (!isStorageAvailable()) {
     return;
   }
+  const {
+    normalized = false,
+    meta = null,
+  } = options ?? {};
   const payload = { magnets: {} };
   const width = boardSize.width || 1;
   const height = boardSize.height || 1;
   for (const magnet of magnets) {
-    const xPct = width ? clamp(magnet.x / width, 0, 1) : 0;
-    const yPct = height ? clamp(magnet.y / height, 0, 1) : 0;
+    const rawXPct = width ? magnet.x / width : 0;
+    const rawYPct = height ? magnet.y / height : 0;
+    const xPct = normalized ? rawXPct : clamp(rawXPct, 0, 1);
+    const yPct = normalized ? rawYPct : clamp(rawYPct, 0, 1);
     payload.magnets[magnet.id] = {
       xPct: Number(xPct.toFixed(4)),
       yPct: Number(yPct.toFixed(4)),
     };
   }
-  if (height > 0 && Number.isFinite(height)) {
-    payload.boardHeight = Number(Math.max(height, 0).toFixed(2));
+  const boardHeightValue = boardHeightOverride != null ? boardHeightOverride : height;
+  if (Number.isFinite(boardHeightValue) && boardHeightValue > 0) {
+    const precision = normalized ? 4 : 2;
+    payload.boardHeight = Number(Math.max(boardHeightValue, 0).toFixed(precision));
+  }
+  if (meta && typeof meta === 'object') {
+    const metaForSave = { ...meta };
+    if (Object.keys(metaForSave).length > 0) {
+      payload.meta = metaForSave;
+    }
   }
   try {
     window.localStorage.setItem(normalizeKey(storageKey), JSON.stringify(payload));
