@@ -223,12 +223,65 @@ const applyTransform = (magnet) => {
     `translate3d(${magnet.x}px, ${magnet.y}px, 0) translateY(calc(var(--magnet-offset, 0px) + var(--magnet-hover-offset, 0px))) rotate(var(--magnet-tilt, 0))`;
 };
 
+const applyExternalCorrections = (state, corrections) => {
+  if (!Array.isArray(corrections) || corrections.length === 0) {
+    return;
+  }
+
+  const map = new Map();
+  corrections.forEach((entry) => {
+    if (!entry || typeof entry !== 'object') {
+      return;
+    }
+    const { id } = entry;
+    if (typeof id !== 'string') {
+      return;
+    }
+    const x = Number.isFinite(entry.x) ? Number(entry.x) : undefined;
+    const y = Number.isFinite(entry.y) ? Number(entry.y) : undefined;
+    if (x == null && y == null) {
+      return;
+    }
+    map.set(id, { x, y });
+  });
+
+  if (!map.size) {
+    return;
+  }
+
+  let changed = false;
+  state.magnets.forEach((magnet) => {
+    const update = map.get(magnet.id);
+    if (!update) {
+      return;
+    }
+    const nextX = update.x != null && Number.isFinite(update.x) ? update.x : magnet.x;
+    const nextY = update.y != null && Number.isFinite(update.y) ? update.y : magnet.y;
+    if (nextX !== magnet.x || nextY !== magnet.y) {
+      magnet.x = nextX;
+      magnet.y = nextY;
+      magnet.vx = 0;
+      magnet.vy = 0;
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    state.magnets.forEach((magnet) => {
+      applyTransform(magnet);
+    });
+  }
+};
+
 const notifyPositions = (state) => {
   if (!state.onPositions) {
     return;
   }
   const payload = state.magnets.map(({ id, x, y }) => ({ id, x, y }));
-  state.onPositions(payload);
+  const response = state.onPositions(payload);
+  if (Array.isArray(response)) {
+    applyExternalCorrections(state, response);
+  }
 };
 
 const measureMagnet = (boardRect, element) => {

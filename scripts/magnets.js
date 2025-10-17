@@ -1029,6 +1029,12 @@ const shuffleWithoutPhysics = (state) => {
   applyRowPackedLayout(state, order, { persist: true });
 };
 
+const snapshotMagnetPositions = (magnets) => magnets.map((magnet) => ({
+  id: magnet.id,
+  x: magnet.x,
+  y: magnet.y,
+}));
+
 const handlePositionsUpdate = (state, list) => {
   list.forEach((item) => {
     const magnet = state.magnetMap.get(item.id);
@@ -1038,9 +1044,21 @@ const handlePositionsUpdate = (state, list) => {
     magnet.x = item.x;
     magnet.y = item.y;
   });
+  let corrections;
+  if (isNavBoardState(state) && state.playActive) {
+    const hasOverlap = layoutHasOverlap(state);
+    const hasOffBoard = state.magnets.some((magnet) => isMagnetOffBoard(state, magnet));
+    if (hasOverlap || hasOffBoard) {
+      const resolved = resolveNavLayoutToNearestValid(state);
+      if (resolved || hasOverlap || hasOffBoard) {
+        corrections = snapshotMagnetPositions(state.magnets);
+      }
+    }
+  }
   updateBoardHeight(state);
   updateLayout(state);
   persistLayout(state);
+  return corrections;
 };
 
 const stopPhysicsLoop = (state) => {
