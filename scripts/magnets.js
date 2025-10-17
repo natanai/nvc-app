@@ -724,7 +724,9 @@ const maybeStartBoardResize = (state, event) => {
   if (!handleElement && (offsetFromBottom < 0 || offsetFromBottom > RESIZE_HANDLE_MARGIN)) {
     return false;
   }
-  const minHeight = Math.max(state.minHeight || 0, 1);
+  const minHeight = isNavBoardState(state)
+    ? 1
+    : Math.max(state.minHeight || 0, 1);
   const measuredHeight = Math.max(
     rect.height || state.board.clientHeight || state.boardHeight || minHeight || 0,
     minHeight,
@@ -855,8 +857,7 @@ const cancelBoardResize = (state) => {
 
 const updateBoardHeight = (state) => {
   if (isNavBoardState(state)) {
-    const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
-    const height = Math.max(state.boardHeight || 0, minHeight);
+    const height = Number.isFinite(state.boardHeight) ? state.boardHeight : 0;
     state.boardHeight = height;
     if (!state.playActive) {
       state.inactiveHeight = height;
@@ -906,18 +907,17 @@ const persistLayout = (state, immediate = false) => {
     if (isNavBoardState(state)) {
       const width = Math.max(state.boardWidth || 0, 1);
       const height = Math.max(state.boardHeight || 0, 1);
-      const baseHeight = Math.max(state.minHeight || height || 1, 1);
       const magnetsForSave = state.magnets.map((magnet) => ({
         id: magnet.id,
         x: typeof magnet.xPct === 'number' ? magnet.xPct : (width ? magnet.x / width : 0),
         y: typeof magnet.yPct === 'number' ? magnet.yPct : (height ? magnet.y / height : 0),
       }));
-      const heightRatio = baseHeight ? state.boardHeight / baseHeight : 1;
+      const storedHeight = Number.isFinite(state.boardHeight) ? state.boardHeight : 0;
       savePositions(
         state.storageKey,
         { width: 1, height: 1 },
         magnetsForSave,
-        heightRatio,
+        storedHeight,
         { normalized: true, meta: { playActive: Boolean(state.playActive) } },
       );
       return;
@@ -1673,11 +1673,9 @@ const initializeBoard = async (root, index) => {
   const storedBoardHeightRaw = storedResult?.boardHeight;
   if (typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
     if (isNavBoardState(state)) {
-      const baseHeight = Math.max(state.minHeight || state.boardHeight || 1, 1);
-      const resolvedHeight = Math.max(storedBoardHeightRaw * baseHeight, state.cssMinHeight || 0);
-      state.boardHeight = resolvedHeight;
-      state.inactiveHeight = resolvedHeight;
-      state.board.style.height = `${resolvedHeight}px`;
+      state.boardHeight = storedBoardHeightRaw;
+      state.inactiveHeight = storedBoardHeightRaw;
+      state.board.style.height = `${storedBoardHeightRaw}px`;
     } else {
       const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
       state.boardHeight = storedBoardHeight;
