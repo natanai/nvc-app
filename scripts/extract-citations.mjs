@@ -1,7 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 
-const ROOT = process.cwd();
+const REPO_ROOT = process.cwd();
+const TARGET_DIRS = [path.join(REPO_ROOT, "needs")];
 
 const EXTS = [".md", ".mdx", ".html", ".htm", ".js", ".jsx", ".ts", ".tsx", ".json"];
 const IGNORE_DIRS = new Set([".git", "node_modules", "dist", "build", ".next", "out", ".cache", "coverage"]);
@@ -166,11 +167,34 @@ async function processFile(file) {
   return records;
 }
 
+async function pathExists(p) {
+  try {
+    await fs.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function main() {
   const all = [];
-  for await (const file of walk(ROOT)) {
-    const recs = await processFile(file);
-    all.push(...recs);
+  const searchRoots = [];
+
+  for (const dir of TARGET_DIRS) {
+    if (await pathExists(dir)) {
+      searchRoots.push(dir);
+    }
+  }
+
+  if (searchRoots.length === 0) {
+    console.warn("No needs directories found – nothing to scan.");
+  }
+
+  for (const root of searchRoots) {
+    for await (const file of walk(root)) {
+      const recs = await processFile(file);
+      all.push(...recs);
+    }
   }
 
   // De-dup (file,line,url,how)
