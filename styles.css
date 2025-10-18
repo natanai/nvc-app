@@ -55,6 +55,15 @@ body {
   font-family: var(--font-body);
 }
 
+a,
+button,
+[role='button'],
+.chip,
+.segmented > button {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
 .control,
 button,
 .chip,
