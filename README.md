@@ -43,6 +43,17 @@ A retro-styled companion to [allneeds.app](https://allneeds.app/) that mirrors t
   interstitials. Prefer citing open-access material whenever possible so readers can verify the evidence without subscription
   barriers.
 
+- **Maintain supporting sources evidence:**
+  1. Extract the current citations into `_evidence/citations.csv` for review:
+     ```bash
+     npm run extract:citations
+     ```
+  2. After editing `_evidence/citations.csv`, push the updates back into the generated need pages and `data/Needs.csv`:
+     ```bash
+     npm run replace:needs-sources
+     ```
+     The replacer also regenerates `_evidence/citations.json` so both evidence exports stay in sync.
+
 - **Run the Playwright smoke tests:**
   ```bash
   npm test
