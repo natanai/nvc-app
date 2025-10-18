@@ -79,6 +79,18 @@ function parseSupportingSources(value) {
     .map((entry) => entry.replace(/^[-•]\s*/, '').trim())
     .filter(Boolean)
     .map((entry) => {
+      const pipeSegments = entry
+        .split('|')
+        .map((segment) => segment.trim())
+        .filter(Boolean);
+
+      if (pipeSegments.length >= 2 && /^https?:\/\/\S+$/i.test(pipeSegments[0])) {
+        return {
+          url: pipeSegments[0],
+          description: pipeSegments.slice(1).join(' | ').trim(),
+        };
+      }
+
       const match = entry.match(/^(https?:\/\/\S+)(?:\s+\((.+)\))?$/i);
       if (match) {
         return {
