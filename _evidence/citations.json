@@ -1173,11 +1173,11 @@
     "file": "/workspace/nvc-app/needs/to-be-heard/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks",
-    "url": "https://doi.org/10.1080/10904018.2014.976311",
+    "label": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504783/",
     "domain": "doi.org",
     "label_domain_hint": "",
-    "context": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks"
+    "context": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later"
   },
   {
     "file": "/workspace/nvc-app/needs/to-be-heard/index.html",
@@ -1193,28 +1193,28 @@
     "file": "/workspace/nvc-app/needs/to-be-seen/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "research showing that being recognized by peers strengthens belonging, visibility, and clarity about one’s role",
-    "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2021.611146/full",
+    "label": "research showing that high-quality leader feedback increases teleworkers’ sense of belongingness",
+    "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.806443/full",
     "domain": "www.frontiersin.org",
     "label_domain_hint": "",
-    "context": "research showing that being recognized by peers strengthens belonging, visibility, and clarity about one’s role"
+    "context": "research showing that high-quality leader feedback increases teleworkers’ sense of belongingness"
   },
   {
     "file": "/workspace/nvc-app/needs/to-be-seen/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification",
-    "url": "https://psycnet.apa.org/record/2009-04350-005",
+    "label": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19785483/",
     "domain": "psycnet.apa.org",
     "label_domain_hint": "",
-    "context": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification"
+    "context": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress"
   },
   {
     "file": "/workspace/nvc-app/needs/trust/index.html",
     "line": 750,
     "how": "html_anchor",
     "label": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance",
-    "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
+    "url": "https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806",
     "domain": "journals.sagepub.com",
     "label_domain_hint": "",
     "context": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
@@ -1244,7 +1244,7 @@
     "line": 750,
     "how": "html_anchor",
     "label": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction",
-    "url": "https://psycnet.apa.org/record/2014-15617-006",
+    "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614",
     "domain": "psycnet.apa.org",
     "label_domain_hint": "",
     "context": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
