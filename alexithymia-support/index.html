@@ -697,10 +697,58 @@ button.site-nav__magnet {
               <button class="support-button support-button--ghost" type="button" data-action="scan-start">
                 Guide me through a full body scan
               </button>
+              <fieldset class="sensation-scan__pace" data-scan-pace-group>
+                <legend class="sensation-scan__pace-legend">How quickly should we move?</legend>
+                <div class="sensation-scan__pace-options">
+                  <button
+                    class="chip chip--stacked sensation-scan__pace-button"
+                    type="button"
+                    data-scan-pace="gentle"
+                    aria-pressed="false"
+                  >
+                    <span class="chip__title">Gentle</span>
+                    <span class="chip__note">~45 seconds per area</span>
+                  </button>
+                  <button
+                    class="chip chip--stacked sensation-scan__pace-button"
+                    type="button"
+                    data-scan-pace="standard"
+                    aria-pressed="true"
+                  >
+                    <span class="chip__title">Steady</span>
+                    <span class="chip__note">~25 seconds per area</span>
+                  </button>
+                  <button
+                    class="chip chip--stacked sensation-scan__pace-button"
+                    type="button"
+                    data-scan-pace="brisk"
+                    aria-pressed="false"
+                  >
+                    <span class="chip__title">Brisk</span>
+                    <span class="chip__note">~12 seconds per area</span>
+                  </button>
+                </div>
+                <p class="support-note sensation-scan__pace-note">
+                  Change the tempo anytime—each shift resets the timer for the current area.
+                </p>
+              </fieldset>
               <p class="support-note">Prefer to explore solo? Tap any region below in any order.</p>
               <div class="sensation-scan__controls is-hidden" data-scan-controls>
                 <p class="support-note sensation-scan__status" data-scan-status aria-live="polite"></p>
                 <p class="sensation-scan__prompt" data-scan-prompt></p>
+                <div class="sensation-scan__timer-row">
+                  <p class="support-note sensation-scan__timer" data-scan-timer>
+                    Timer ready — choose a pace that feels kind.
+                  </p>
+                  <button
+                    class="support-button support-button--ghost support-button--compact"
+                    type="button"
+                    data-action="scan-pause"
+                    aria-pressed="false"
+                  >
+                    Pause timer
+                  </button>
+                </div>
                 <div class="sensation-scan__actions">
                   <button class="support-button support-button--ghost" type="button" data-action="scan-back">Back</button>
                   <button class="support-button" type="button" data-action="scan-next">Next area</button>

@@ -45,6 +45,11 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const basePath = document.body?.dataset?.basePath || '';
 
   const SENSATION_DEFAULT_INTENSITY = 5;
+  const SCAN_PACE_OPTIONS = {
+    gentle: { label: 'Gentle', duration: 45_000 },
+    standard: { label: 'Steady', duration: 25_000 },
+    brisk: { label: 'Brisk', duration: 12_000 },
+  };
   const EVIDENCE_MODE_ENABLED = window.NVC_FLAGS?.evidenceMode !== false;
   const EVIDENCE_NOTE_KEY = 'nvc_evidence_note_dismissed';
   const REJECTION_KEY = 'nvc_rejected_emotions';
@@ -91,6 +96,11 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     guidedScanActive: false,
     guidedScanIndex: -1,
     guidedScanStarted: false,
+    guidedScanTimerId: null,
+    guidedScanDurationMs: 0,
+    guidedScanRemainingMs: 0,
+    guidedScanPaused: false,
+    guidedScanPace: 'standard',
     draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
     draftTimer: null,
     savedFeedbackTimer: null,
@@ -125,6 +135,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const scanBackButton = bodyScanPanel?.querySelector('[data-action="scan-back"]');
   const scanNextButton = bodyScanPanel?.querySelector('[data-action="scan-next"]');
   const scanFinishButton = bodyScanPanel?.querySelector('[data-action="scan-finish"]');
+  const scanTimerDisplay = bodyScanPanel?.querySelector('[data-scan-timer]');
+  const scanPauseButton = bodyScanPanel?.querySelector('[data-action="scan-pause"]');
+  const scanPaceButtons = bodyScanPanel?.querySelectorAll('[data-scan-pace]');
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
 
@@ -1377,11 +1390,155 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
   }
 
+  function getScanPaceOption(paceId) {
+    return SCAN_PACE_OPTIONS[paceId] || SCAN_PACE_OPTIONS.standard;
+  }
+
+  function describeScanPace(pace) {
+    if (!pace || typeof pace.duration !== 'number') {
+      return '';
+    }
+    const seconds = Math.round(pace.duration / 1000);
+    const label = pace.label || 'Steady';
+    return seconds > 0 ? `${label} pace (~${seconds}s per area)` : `${label} pace`;
+  }
+
+  function updateScanTimerDisplay({ completed = false } = {}) {
+    if (!scanTimerDisplay) {
+      return;
+    }
+    if (completed) {
+      scanTimerDisplay.textContent = 'Scan complete. Restart when you want another guided pass.';
+      return;
+    }
+    const pace = getScanPaceOption(state.guidedScanPace);
+    if (!state.guidedScanActive) {
+      const descriptor = describeScanPace(pace);
+      scanTimerDisplay.textContent = descriptor ? `${descriptor} ready.` : 'Timer ready.';
+      return;
+    }
+    const descriptor = describeScanPace(pace);
+    const seconds = Math.max(0, Math.ceil(state.guidedScanRemainingMs / 1000));
+    if (state.guidedScanPaused) {
+      scanTimerDisplay.textContent = descriptor
+        ? `${seconds}s remaining · ${descriptor} (paused)`
+        : `${seconds}s remaining (paused)`;
+      return;
+    }
+    scanTimerDisplay.textContent = descriptor
+      ? `${seconds}s remaining · ${descriptor}`
+      : `${seconds}s remaining`;
+  }
+
+  function stopScanTimer() {
+    if (state.guidedScanTimerId && typeof window !== 'undefined' && typeof window.clearInterval === 'function') {
+      window.clearInterval(state.guidedScanTimerId);
+    }
+    state.guidedScanTimerId = null;
+  }
+
+  function restartScanTimer({ reset = true } = {}) {
+    if (!scanTimerDisplay) {
+      return;
+    }
+    stopScanTimer();
+    const pace = getScanPaceOption(state.guidedScanPace);
+    state.guidedScanDurationMs = pace.duration;
+    if (!state.guidedScanActive) {
+      state.guidedScanRemainingMs = pace.duration;
+      state.guidedScanPaused = false;
+      if (scanPauseButton) {
+        scanPauseButton.disabled = true;
+        scanPauseButton.textContent = 'Pause timer';
+        scanPauseButton.setAttribute('aria-pressed', 'false');
+      }
+      updateScanTimerDisplay();
+      return;
+    }
+    const needsReset =
+      reset ||
+      !Number.isFinite(state.guidedScanRemainingMs) ||
+      state.guidedScanRemainingMs <= 0 ||
+      state.guidedScanRemainingMs > state.guidedScanDurationMs;
+    if (needsReset) {
+      state.guidedScanRemainingMs = state.guidedScanDurationMs;
+    }
+    state.guidedScanPaused = false;
+    if (scanPauseButton) {
+      scanPauseButton.disabled = false;
+      scanPauseButton.textContent = 'Pause timer';
+      scanPauseButton.setAttribute('aria-pressed', 'false');
+    }
+    updateScanTimerDisplay();
+    if (typeof window !== 'undefined' && typeof window.setInterval === 'function') {
+      state.guidedScanTimerId = window.setInterval(tickGuidedScanTimer, 250);
+    }
+  }
+
+  function tickGuidedScanTimer() {
+    if (!state.guidedScanActive || state.guidedScanPaused) {
+      return;
+    }
+    state.guidedScanRemainingMs = Math.max(0, state.guidedScanRemainingMs - 250);
+    if (state.guidedScanRemainingMs <= 0) {
+      updateScanTimerDisplay();
+      stopScanTimer();
+      if (state.guidedScanIndex >= BODY_SCAN_SEQUENCE.length - 1) {
+        finishGuidedScan({ completed: true });
+      } else {
+        moveGuidedScan(1);
+      }
+      return;
+    }
+    updateScanTimerDisplay();
+  }
+
+  function applyScanPace(paceId) {
+    const paceKey = SCAN_PACE_OPTIONS[paceId] ? paceId : 'standard';
+    state.guidedScanPace = paceKey;
+    Array.from(scanPaceButtons || []).forEach((button) => {
+      const isActive = button?.dataset?.scanPace === paceKey;
+      button?.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    if (!state.guidedScanActive) {
+      const pace = getScanPaceOption(paceKey);
+      state.guidedScanDurationMs = pace.duration;
+      state.guidedScanRemainingMs = pace.duration;
+      updateScanTimerDisplay();
+      return;
+    }
+    restartScanTimer({ reset: true });
+  }
+
+  function handleScanPaceChange(event) {
+    const paceId = event?.currentTarget?.dataset?.scanPace;
+    if (!paceId) {
+      return;
+    }
+    applyScanPace(paceId);
+  }
+
+  function handleScanPauseToggle() {
+    if (!state.guidedScanActive) {
+      return;
+    }
+    state.guidedScanPaused = !state.guidedScanPaused;
+    if (scanPauseButton) {
+      scanPauseButton.textContent = state.guidedScanPaused ? 'Resume timer' : 'Pause timer';
+      scanPauseButton.setAttribute('aria-pressed', state.guidedScanPaused ? 'true' : 'false');
+    }
+    updateScanTimerDisplay();
+    if (!state.guidedScanPaused && !state.guidedScanTimerId) {
+      restartScanTimer({ reset: false });
+    }
+  }
+
   function updateScanUi() {
     if (!scanControls) return;
     if (!state.guidedScanActive) {
       scanControls.classList.add('is-hidden');
       clearScanHighlights();
+      updateScanTimerDisplay();
       return;
     }
 
@@ -1415,6 +1572,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     if (scanNextButton) {
       scanNextButton.textContent = state.guidedScanIndex >= total - 1 ? 'Finish scan' : 'Next area';
     }
+    restartScanTimer({ reset: true });
   }
 
   function startGuidedScan() {
@@ -1438,6 +1596,15 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
     state.guidedScanActive = false;
     state.guidedScanIndex = -1;
+    state.guidedScanPaused = false;
+    stopScanTimer();
+    state.guidedScanRemainingMs = state.guidedScanDurationMs;
+    updateScanTimerDisplay({ completed });
+    if (scanPauseButton) {
+      scanPauseButton.disabled = true;
+      scanPauseButton.textContent = 'Pause timer';
+      scanPauseButton.setAttribute('aria-pressed', 'false');
+    }
     clearScanHighlights();
     if (scanControls) {
       scanControls.classList.add('is-hidden');
@@ -2547,6 +2714,14 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     scanBackButton?.addEventListener('click', handleScanBack);
     scanNextButton?.addEventListener('click', handleScanNext);
     scanFinishButton?.addEventListener('click', handleScanFinish);
+    Array.from(scanPaceButtons || []).forEach((button) => {
+      button.addEventListener('click', handleScanPaceChange);
+    });
+    if (scanPauseButton) {
+      scanPauseButton.addEventListener('click', handleScanPauseToggle);
+      scanPauseButton.disabled = true;
+    }
+    applyScanPace(state.guidedScanPace);
 
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 

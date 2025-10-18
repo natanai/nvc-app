@@ -942,6 +942,35 @@ body.has-support-journal-open {
   gap: 0.75rem;
 }
 
+.sensation-scan__pace {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  border: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sensation-scan__pace-legend {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.sensation-scan__pace-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sensation-scan__pace-options .chip--stacked {
+  flex: 1 1 220px;
+  width: min(100%, 280px);
+}
+
+.sensation-scan__pace-note {
+  margin: 0;
+}
+
 .sensation-scan__controls {
   display: grid;
   gap: 0.75rem;
@@ -953,6 +982,18 @@ body.has-support-journal-open {
 
 .sensation-scan__controls.is-hidden {
   display: none;
+}
+
+.sensation-scan__timer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sensation-scan__timer {
+  margin: 0;
+  flex: 1 1 200px;
 }
 
 .sensation-scan__status {
@@ -969,6 +1010,12 @@ body.has-support-journal-open {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.support-button--compact {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.2;
 }
 
 .sensation-region-list {
