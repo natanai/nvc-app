@@ -873,21 +873,21 @@
     "file": "/workspace/nvc-app/needs/order/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "study: organized workspaces and structured information reduce mistakes and mental overload",
-    "url": "https://www.sciencedirect.com/science/article/pii/S0003687012000588",
-    "domain": "www.sciencedirect.com",
+    "label": "Chandler & Sweller (1992) split-attention principle: integrating structured information lowers extraneous cognitive load and errors",
+    "url": "https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.2044-8279.1992.tb01017.x",
+    "domain": "onlinelibrary.wiley.com",
     "label_domain_hint": "",
-    "context": "study: organized workspaces and structured information reduce mistakes and mental overload"
+    "context": "Chandler & Sweller (1992) split-attention principle: integrating structured information lowers extraneous cognitive load and errors"
   },
   {
     "file": "/workspace/nvc-app/needs/order/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "research showing that induced physical order (tidiness) can improve people’s executive function and decision-making, presumably by lowering distraction",
-    "url": "https://doi.org/10.1016/j.brat.2016.05.011",
-    "domain": "doi.org",
+    "label": "Vohs et al. (2013) Psychological Science: orderly environments shift choices toward healthier, more conventional decisions",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/23907542/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "research showing that induced physical order (tidiness) can improve people’s executive function and decision-making, presumably by lowering distraction"
+    "context": "Vohs et al. (2013) Psychological Science: orderly environments shift choices toward healthier, more conventional decisions"
   },
   {
     "file": "/workspace/nvc-app/needs/participation/index.html",
