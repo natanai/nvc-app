@@ -3292,12 +3292,20 @@
       "rewrittenClaim": "Humans need to love and be loved – enduring bonds of affection and care are a major source of emotional nourishment and resilience throughout life. From infancy (where a caregiver’s love aids healthy brain and emotional development) to old age (where close loved ones buffer stress and give meaning), caring relationships consistently benefit our well-being. This need for love and caring drives behaviors like warmth (showing affection and kindness), protection (keeping loved ones safe), responsive listening and comfort, and acts of generosity toward those we care about. Studies have repeatedly shown that people embedded in reliable, loving relationships tend to recover faster from illness or stress and often live longer, happier lives than those who lack such bonds. In essence, caring relationships – whether with family, friends, or romantic partners – provide a lifelong foundation for health, stress relief, and a sense of meaning or purpose.",
       "supportingSources": [
         {
-          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6318977/",
-          "description": "developmental psychology review: consistent loving caregiving in childhood improves emotional and physiological regulation into adulthood"
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16903808/",
+          "description": "Annual Review of Psychology: Gunnar & Quevedo (2007) on sensitive caregiving calibrating stress physiology and emotion regulation"
         },
         {
-          "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
-          "description": "Stanford Center on Longevity: strong loving relationships correlate with better health outcomes, stress reduction, and life satisfaction"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7945765/",
+          "description": "Gee (2020) review detailing how supportive caregiving shapes corticolimbic development and emotion regulation"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3869040/",
+          "description": "Doom & Gunnar (2013) review linking caregiving quality with HPA axis and vagal regulation"
+        },
+        {
+          "url": "https://longevity.stanford.edu/sightlines-project-social-engagement-special-report/",
+          "description": "Stanford Center on Longevity Sightlines report summarizing health, stress, and life satisfaction benefits of strong social ties"
         }
       ]
     },
