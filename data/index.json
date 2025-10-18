@@ -4964,12 +4964,12 @@
       "rewrittenClaim": "Beyond just hearing our words, there’s a human need to be seen by others – meaning others acknowledge our presence, recognize who we are, and validate our role in the group. Social visibility – when your peers or community notice you and treat you as a distinct person – helps solidify your sense of identity (“I am here and I matter in this group”). This need leads people to present themselves genuinely (so that what others see is one’s real self) and to seek forms of acknowledgment (a greeting, a nod to one’s contributions, etc.). Being seen is closely tied to feeling one belongs: studies indicate that when individuals feel “invisible” or overlooked in a group, it undermines their well-being and commitment, whereas being recognized and visible boosts their sense of belonging and self-esteem. In practice, small acts like using someone’s name, noticing their efforts, or giving them the spotlight can fulfill this need. When people are seen in these ways, it reinforces their membership in the community and “anchors” their identity as part of that social world.",
       "supportingSources": [
         {
-          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2021.611146/full",
-          "description": "research showing that being recognized by peers strengthens belonging, visibility, and clarity about one’s role"
+          "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.806443/full",
+          "description": "research showing that high-quality leader feedback increases teleworkers’ sense of belongingness"
         },
         {
-          "url": "https://psycnet.apa.org/record/2009-04350-005",
-          "description": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification"
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19785483/",
+          "description": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress"
         }
       ]
     },
@@ -5364,7 +5364,7 @@
       "rewrittenClaim": "Trust is the belief that others have good intentions and are capable in their role – and it’s essential for smooth cooperation. When trust is present in a relationship or team, people don’t need to waste energy constantly watching their backs or double-checking everything, which lowers stress and “transaction costs” (the extra effort of dealing with doubt or verification). The need for trust drives behaviors like being open and transparent (so others know they’re not being deceived), being dependable (so others learn they can count on you), and gradually extending trust to others by taking small risks – for example, delegating a task and seeing it through. Research shows that in high-trust environments, groups can undertake more ambitious projects and adapt faster, because members willingly share information and responsibilities without fear. In essence, trust expands the scope of what people can achieve together: it’s like social glue that enables complex teamwork, innovation, and supportive relationships that would collapse if everyone was suspicious. Thus, nurturing trust by consistent honest behavior and mutual respect allows teams and communities to reach higher levels of collaboration with less friction.",
       "supportingSources": [
         {
-          "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
+          "url": "https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806",
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
@@ -6611,7 +6611,7 @@
           "description": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves"
         },
         {
-          "url": "https://psycnet.apa.org/record/2014-15617-006",
+          "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614",
           "description": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
         }
       ]
@@ -7447,8 +7447,8 @@
       "rewrittenClaim": "People have a deep need for their voice to matter – that is, when they express themselves, they need others to truly listen and understand. When someone feels heard, it dramatically improves their emotional state (it’s calming and validating) and makes working together much easier (because misunderstandings are reduced). This need to be heard drives us to communicate as clearly as we can and also to set up norms of good listening in our relationships or teams (for example, not interrupting, reflecting back what was said). Research shows that in couples, teams, or negotiations, if each party feels the other genuinely understands their point of view, they reach solutions faster and with more goodwill. In practical terms: ensuring people are heard – perhaps by repeating their points for clarity or giving everyone the floor in meetings – boosts collaboration, as individuals no longer need to fight for acknowledgment and instead focus on problem-solving. In short, being heard makes people more willing to contribute and cooperate, as they know their input isn’t falling on deaf ears.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1080/10904018.2014.976311",
-          "description": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504783/",
+          "description": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later"
         },
         {
           "url": "https://hbr.org/2016/07/what-great-listeners-actually-do",
@@ -10564,8 +10564,8 @@
           "description": "study on social recognition: being “seen” or recognized in a group setting enhanced participants’ sense of belonging and role clarity"
         },
         {
-          "url": "https://psycnet.apa.org/record/2009-04350-005",
-          "description": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification"
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19785483/",
+          "description": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress"
         }
       ]
     },
@@ -10960,7 +10960,7 @@
       "rewrittenClaim": "Trust is the belief that others have good intentions and are capable in their role – and it’s essential for smooth cooperation. When trust is present in a relationship or team, people don’t need to waste energy constantly watching their backs or double-checking everything, which lowers stress and “transaction costs” (the extra effort of dealing with doubt or verification). The need for trust drives behaviors like being open and transparent (so others know they’re not being deceived), being dependable (so others learn they can count on you), and gradually extending trust to others by taking small risks – for example, delegating a task and seeing it through. Research shows that in high-trust environments, groups can undertake more ambitious projects and adapt faster, because members willingly share information and responsibilities without fear. In essence, trust expands the scope of what people can achieve together: it’s like social glue that enables complex teamwork, innovation, and supportive relationships that would collapse if everyone was suspicious. Thus, nurturing trust by consistent honest behavior and mutual respect allows teams and communities to reach higher levels of collaboration with less friction.",
       "supportingSources": [
         {
-          "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
+          "url": "https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806",
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
@@ -12207,7 +12207,7 @@
           "description": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves"
         },
         {
-          "url": "https://psycnet.apa.org/record/2014-15617-006",
+          "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614",
           "description": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
         }
       ]
@@ -13043,8 +13043,8 @@
       "rewrittenClaim": "People have a deep need for their voice to matter – that is, when they express themselves, they need others to truly listen and understand. When someone feels heard, it dramatically improves their emotional state (it’s calming and validating) and makes working together much easier (because misunderstandings are reduced). This need to be heard drives us to communicate as clearly as we can and also to set up norms of good listening in our relationships or teams (for example, not interrupting, reflecting back what was said). Research shows that in couples, teams, or negotiations, if each party feels the other genuinely understands their point of view, they reach solutions faster and with more goodwill. In practical terms: ensuring people are heard – perhaps by repeating their points for clarity or giving everyone the floor in meetings – boosts collaboration, as individuals no longer need to fight for acknowledgment and instead focus on problem-solving. In short, being heard makes people more willing to contribute and cooperate, as they know their input isn’t falling on deaf ears.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1080/10904018.2014.976311",
-          "description": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504783/",
+          "description": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later"
         },
         {
           "url": "https://hbr.org/2016/07/what-great-listeners-actually-do",
@@ -16160,8 +16160,8 @@
           "description": "study on social recognition: being “seen” or recognized in a group setting enhanced participants’ sense of belonging and role clarity"
         },
         {
-          "url": "https://psycnet.apa.org/record/2009-04350-005",
-          "description": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification"
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19785483/",
+          "description": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress"
         }
       ]
     },
@@ -16556,7 +16556,7 @@
       "rewrittenClaim": "Trust is the belief that others have good intentions and are capable in their role – and it’s essential for smooth cooperation. When trust is present in a relationship or team, people don’t need to waste energy constantly watching their backs or double-checking everything, which lowers stress and “transaction costs” (the extra effort of dealing with doubt or verification). The need for trust drives behaviors like being open and transparent (so others know they’re not being deceived), being dependable (so others learn they can count on you), and gradually extending trust to others by taking small risks – for example, delegating a task and seeing it through. Research shows that in high-trust environments, groups can undertake more ambitious projects and adapt faster, because members willingly share information and responsibilities without fear. In essence, trust expands the scope of what people can achieve together: it’s like social glue that enables complex teamwork, innovation, and supportive relationships that would collapse if everyone was suspicious. Thus, nurturing trust by consistent honest behavior and mutual respect allows teams and communities to reach higher levels of collaboration with less friction.",
       "supportingSources": [
         {
-          "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
+          "url": "https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806",
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
@@ -17803,7 +17803,7 @@
           "description": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves"
         },
         {
-          "url": "https://psycnet.apa.org/record/2014-15617-006",
+          "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614",
           "description": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
         }
       ]
@@ -18639,8 +18639,8 @@
       "rewrittenClaim": "People have a deep need for their voice to matter – that is, when they express themselves, they need others to truly listen and understand. When someone feels heard, it dramatically improves their emotional state (it’s calming and validating) and makes working together much easier (because misunderstandings are reduced). This need to be heard drives us to communicate as clearly as we can and also to set up norms of good listening in our relationships or teams (for example, not interrupting, reflecting back what was said). Research shows that in couples, teams, or negotiations, if each party feels the other genuinely understands their point of view, they reach solutions faster and with more goodwill. In practical terms: ensuring people are heard – perhaps by repeating their points for clarity or giving everyone the floor in meetings – boosts collaboration, as individuals no longer need to fight for acknowledgment and instead focus on problem-solving. In short, being heard makes people more willing to contribute and cooperate, as they know their input isn’t falling on deaf ears.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1080/10904018.2014.976311",
-          "description": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504783/",
+          "description": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later"
         },
         {
           "url": "https://hbr.org/2016/07/what-great-listeners-actually-do",
