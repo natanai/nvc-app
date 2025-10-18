@@ -5368,8 +5368,12 @@
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
-          "url": "https://www.apa.org/science/about/psa/2019/11/trust",
-          "description": "APA Science brief: trust in others reduces stress responses in cooperative tasks and allows for greater risk-sharing leading to innovation"
+          "url": "https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being",
+          "description": "press release summarizing global meta-analysis linking trust with subjective well-being"
+        },
+        {
+          "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf",
+          "description": "Psychological Bulletin meta-analysis: 991 effects show bidirectional trust↔well-being links across ~2.5M participants"
         }
       ]
     },
@@ -5576,12 +5580,12 @@
       "rewrittenClaim": "Honor involves living up to ethical principles and norms – essentially, it’s about having integrity that others recognize. This strengthens one’s reputation for being upright and fosters trust within the group. The need for honor drives individuals to make choices that are consistent with their professed values, to exercise restraint from unethical temptations, and to make amends if they do something that violates the moral code. By behaving honorably, a person aligns their personal integrity with what their community expects ethically. Research in social psychology suggests that when people consistently act according to moral standards, they earn trust and esteem from others. Conversely, dishonorable actions (lies, cheating) can damage one’s reputation and erode group trust. In short, honor acts as a bridge between the individual and the community: it ensures that personal behavior upholds communal ethical expectations, thereby protecting both the individual’s good name and the group’s mutual trust.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1017/9781108573100",
-          "description": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
+          "url": "https://www.nature.com/articles/s41562-025-02308-0",
+          "description": "cross-cultural evidence that honour values boost cooperative, trust-reinforcing behavior across societies"
         },
         {
-          "url": "https://www.apa.org/pubs/journals/releases/psp-pspi0000178.pdf",
-          "description": "review on moral reputation: upholding moral standards maintains trust in groups"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8487732/",
+          "description": "review: reputation-based cooperation shows moral reputation sustains trust within groups"
         }
       ]
     },
@@ -6128,8 +6132,8 @@
       "rewrittenClaim": "A sense of justice is fundamental for keeping society stable and cooperative: people need to see that wrongs are addressed and exploitation is kept in check. This need for justice spurs us to take action when someone is harmed or cheated – for instance, by advocating for victims, setting up fair accountability and legal processes, and implementing policies that protect the vulnerable or make amends for wrongdoing. When justice is served (meaning harms are corrected and unfair advantages removed), it upholds public trust in the community or system. For example, if citizens believe their justice system holds everyone accountable fairly, they are more likely to trust authorities and follow the law. On the other hand, a perception of rampant injustice erodes trust and social cohesion. Thus, pursuing justice – whether through courts, community norms, or organizational policy – is crucial not just ethically but also for maintaining collective trust and order.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/pubs/journals/releases/law-law0000197.pdf",
-          "description": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance"
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev.psych.57.102904.190038",
+          "description": "classic review: procedural justice fosters legitimacy and voluntary compliance"
         },
         {
           "url": "https://academic.oup.com/psychsocgerontology/article/71/1/229/2605306",
@@ -7791,12 +7795,12 @@
       "rewrittenClaim": "Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1023/B:SOIN.0000017723.84078.9f",
-          "description": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement"
+          "url": "https://www.tandfonline.com/doi/pdf/10.1080/13576500444000119",
+          "description": "Self & Identity validation of the mattering construct with links to well-being"
         },
         {
-          "url": "https://doi.org/10.1021/acs.chemrev.6b00064",
-          "description": "study: higher sense of mattering to family or community correlates with better well-being and motivation"
+          "url": "https://link.springer.com/article/10.1007/s10902-024-00720-3",
+          "description": "2024 meta-analysis: mattering shows robust associations with well-being and motivation"
         }
       ]
     },
@@ -8223,12 +8227,12 @@
       "rewrittenClaim": "Integrity means living by your principles – making sure that what you do reflects what you deeply believe is right. When people have integrity, they experience less inner turmoil (because they aren’t betraying their own values) and they avoid confusing those around them (because their behavior consistently matches their stated ideals). The need for integrity drives individuals to align their decisions and actions with their core values, to maintain personal boundaries that prevent compromising those values, and to stick to ethics even when under pressure to do otherwise. This consistency supports self-respect (you can feel at peace with yourself) and makes one’s behavior more predictable and trustworthy to others. For example, a leader with integrity will act according to their professed mission and moral standards even in tough situations, which earns them respect and makes it easier for others to anticipate their actions. In short, integrity is about wholeness of character – it ensures we are the same person in principle and practice, benefiting both our inner well-being and our relationships.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/ethics/moral-integrity",
-          "description": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust"
+          "url": "https://doi.org/10.1521/jscp.2008.27.10.1078",
+          "description": "peer-reviewed articulation of integrity as principled consistency tied to prosocial action"
         },
         {
-          "url": "https://link.springer.com/chapter/10.1007/978-3-319-70772-2_7",
-          "description": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8882060/",
+          "description": "ethical leadership research showing integrity builds follower trust, cohesion, and voice"
         }
       ]
     },
@@ -10982,8 +10986,12 @@
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
-          "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf",
-          "description": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking"
+          "url": "https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being",
+          "description": "press release summarizing global meta-analysis linking trust with subjective well-being"
+        },
+        {
+          "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf",
+          "description": "Psychological Bulletin meta-analysis: 991 effects show bidirectional trust↔well-being links across ~2.5M participants"
         }
       ]
     },
@@ -11190,12 +11198,12 @@
       "rewrittenClaim": "Honor involves living up to ethical principles and norms – essentially, it’s about having integrity that others recognize. This strengthens one’s reputation for being upright and fosters trust within the group. The need for honor drives individuals to make choices that are consistent with their professed values, to exercise restraint from unethical temptations, and to make amends if they do something that violates the moral code. By behaving honorably, a person aligns their personal integrity with what their community expects ethically. Research in social psychology suggests that when people consistently act according to moral standards, they earn trust and esteem from others. Conversely, dishonorable actions (lies, cheating) can damage one’s reputation and erode group trust. In short, honor acts as a bridge between the individual and the community: it ensures that personal behavior upholds communal ethical expectations, thereby protecting both the individual’s good name and the group’s mutual trust.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1017/9781108573100",
-          "description": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
+          "url": "https://www.nature.com/articles/s41562-025-02308-0",
+          "description": "cross-cultural evidence that honour values boost cooperative, trust-reinforcing behavior across societies"
         },
         {
-          "url": "https://www.apa.org/pubs/journals/releases/psp-pspi0000178.pdf",
-          "description": "review on moral reputation: upholding moral standards maintains trust in groups"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8487732/",
+          "description": "review: reputation-based cooperation shows moral reputation sustains trust within groups"
         }
       ]
     },
@@ -11742,8 +11750,8 @@
       "rewrittenClaim": "A sense of justice is fundamental for keeping society stable and cooperative: people need to see that wrongs are addressed and exploitation is kept in check. This need for justice spurs us to take action when someone is harmed or cheated – for instance, by advocating for victims, setting up fair accountability and legal processes, and implementing policies that protect the vulnerable or make amends for wrongdoing. When justice is served (meaning harms are corrected and unfair advantages removed), it upholds public trust in the community or system. For example, if citizens believe their justice system holds everyone accountable fairly, they are more likely to trust authorities and follow the law. On the other hand, a perception of rampant injustice erodes trust and social cohesion. Thus, pursuing justice – whether through courts, community norms, or organizational policy – is crucial not just ethically but also for maintaining collective trust and order.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/pubs/journals/releases/law-law0000197.pdf",
-          "description": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance"
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev.psych.57.102904.190038",
+          "description": "classic review: procedural justice fosters legitimacy and voluntary compliance"
         },
         {
           "url": "https://academic.oup.com/psychsocgerontology/article/71/1/229/2605306",
@@ -13405,12 +13413,12 @@
       "rewrittenClaim": "Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1023/B:SOIN.0000017723.84078.9f",
-          "description": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement"
+          "url": "https://www.tandfonline.com/doi/pdf/10.1080/13576500444000119",
+          "description": "Self & Identity validation of the mattering construct with links to well-being"
         },
         {
-          "url": "https://doi.org/10.1021/acs.chemrev.6b00064",
-          "description": "study: higher sense of mattering to family or community correlates with better well-being and motivation"
+          "url": "https://link.springer.com/article/10.1007/s10902-024-00720-3",
+          "description": "2024 meta-analysis: mattering shows robust associations with well-being and motivation"
         }
       ]
     },
@@ -13837,12 +13845,12 @@
       "rewrittenClaim": "Integrity means living by your principles – making sure that what you do reflects what you deeply believe is right. When people have integrity, they experience less inner turmoil (because they aren’t betraying their own values) and they avoid confusing those around them (because their behavior consistently matches their stated ideals). The need for integrity drives individuals to align their decisions and actions with their core values, to maintain personal boundaries that prevent compromising those values, and to stick to ethics even when under pressure to do otherwise. This consistency supports self-respect (you can feel at peace with yourself) and makes one’s behavior more predictable and trustworthy to others. For example, a leader with integrity will act according to their professed mission and moral standards even in tough situations, which earns them respect and makes it easier for others to anticipate their actions. In short, integrity is about wholeness of character – it ensures we are the same person in principle and practice, benefiting both our inner well-being and our relationships.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/ethics/moral-integrity",
-          "description": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust"
+          "url": "https://doi.org/10.1521/jscp.2008.27.10.1078",
+          "description": "peer-reviewed articulation of integrity as principled consistency tied to prosocial action"
         },
         {
-          "url": "https://link.springer.com/chapter/10.1007/978-3-319-70772-2_7",
-          "description": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8882060/",
+          "description": "ethical leadership research showing integrity builds follower trust, cohesion, and voice"
         }
       ]
     },
@@ -16590,8 +16598,12 @@
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
-          "url": "https://www.apa.org/science/about/psa/2019/11/trust",
-          "description": "APA Science brief: trust in others reduces stress responses in cooperative tasks and allows for greater risk-sharing leading to innovation"
+          "url": "https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being",
+          "description": "press release summarizing global meta-analysis linking trust with subjective well-being"
+        },
+        {
+          "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf",
+          "description": "Psychological Bulletin meta-analysis: 991 effects show bidirectional trust↔well-being links across ~2.5M participants"
         }
       ]
     },
@@ -16798,12 +16810,12 @@
       "rewrittenClaim": "Honor involves living up to ethical principles and norms – essentially, it’s about having integrity that others recognize. This strengthens one’s reputation for being upright and fosters trust within the group. The need for honor drives individuals to make choices that are consistent with their professed values, to exercise restraint from unethical temptations, and to make amends if they do something that violates the moral code. By behaving honorably, a person aligns their personal integrity with what their community expects ethically. Research in social psychology suggests that when people consistently act according to moral standards, they earn trust and esteem from others. Conversely, dishonorable actions (lies, cheating) can damage one’s reputation and erode group trust. In short, honor acts as a bridge between the individual and the community: it ensures that personal behavior upholds communal ethical expectations, thereby protecting both the individual’s good name and the group’s mutual trust.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1017/9781108573100",
-          "description": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
+          "url": "https://www.nature.com/articles/s41562-025-02308-0",
+          "description": "cross-cultural evidence that honour values boost cooperative, trust-reinforcing behavior across societies"
         },
         {
-          "url": "https://www.apa.org/pubs/journals/releases/psp-pspi0000178.pdf",
-          "description": "review on moral reputation: upholding moral standards maintains trust in groups"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8487732/",
+          "description": "review: reputation-based cooperation shows moral reputation sustains trust within groups"
         }
       ]
     },
@@ -17350,8 +17362,8 @@
       "rewrittenClaim": "A sense of justice is fundamental for keeping society stable and cooperative: people need to see that wrongs are addressed and exploitation is kept in check. This need for justice spurs us to take action when someone is harmed or cheated – for instance, by advocating for victims, setting up fair accountability and legal processes, and implementing policies that protect the vulnerable or make amends for wrongdoing. When justice is served (meaning harms are corrected and unfair advantages removed), it upholds public trust in the community or system. For example, if citizens believe their justice system holds everyone accountable fairly, they are more likely to trust authorities and follow the law. On the other hand, a perception of rampant injustice erodes trust and social cohesion. Thus, pursuing justice – whether through courts, community norms, or organizational policy – is crucial not just ethically but also for maintaining collective trust and order.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/pubs/journals/releases/law-law0000197.pdf",
-          "description": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance"
+          "url": "https://www.annualreviews.org/doi/10.1146/annurev.psych.57.102904.190038",
+          "description": "classic review: procedural justice fosters legitimacy and voluntary compliance"
         },
         {
           "url": "https://academic.oup.com/psychsocgerontology/article/71/1/229/2605306",
@@ -19013,12 +19025,12 @@
       "rewrittenClaim": "Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1023/B:SOIN.0000017723.84078.9f",
-          "description": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement"
+          "url": "https://www.tandfonline.com/doi/pdf/10.1080/13576500444000119",
+          "description": "Self & Identity validation of the mattering construct with links to well-being"
         },
         {
-          "url": "https://doi.org/10.1021/acs.chemrev.6b00064",
-          "description": "study: higher sense of mattering to family or community correlates with better well-being and motivation"
+          "url": "https://link.springer.com/article/10.1007/s10902-024-00720-3",
+          "description": "2024 meta-analysis: mattering shows robust associations with well-being and motivation"
         }
       ]
     },
@@ -19445,12 +19457,12 @@
       "rewrittenClaim": "Integrity means living by your principles – making sure that what you do reflects what you deeply believe is right. When people have integrity, they experience less inner turmoil (because they aren’t betraying their own values) and they avoid confusing those around them (because their behavior consistently matches their stated ideals). The need for integrity drives individuals to align their decisions and actions with their core values, to maintain personal boundaries that prevent compromising those values, and to stick to ethics even when under pressure to do otherwise. This consistency supports self-respect (you can feel at peace with yourself) and makes one’s behavior more predictable and trustworthy to others. For example, a leader with integrity will act according to their professed mission and moral standards even in tough situations, which earns them respect and makes it easier for others to anticipate their actions. In short, integrity is about wholeness of character – it ensures we are the same person in principle and practice, benefiting both our inner well-being and our relationships.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/ethics/moral-integrity",
-          "description": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust"
+          "url": "https://doi.org/10.1521/jscp.2008.27.10.1078",
+          "description": "peer-reviewed articulation of integrity as principled consistency tied to prosocial action"
         },
         {
-          "url": "https://link.springer.com/chapter/10.1007/978-3-319-70772-2_7",
-          "description": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8882060/",
+          "description": "ethical leadership research showing integrity builds follower trust, cohesion, and voice"
         }
       ]
     },
