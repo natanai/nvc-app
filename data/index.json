@@ -5353,15 +5353,11 @@
         }
       ],
       "originalClaim": "Confidence in others’ intentions and competence reduces transaction costs and stress. This need motivates transparency, reliability, and incremental risk-taking. Trust enlarges what groups can do together.",
-      "rewrittenClaim": "Trust is the belief that others have good intentions and are capable in their role – and it’s essential for smooth cooperation. When trust is present in a relationship or team, people don’t need to waste energy constantly watching their backs or double-checking everything, which lowers stress and “transaction costs” (the extra effort of dealing with doubt or verification). The need for trust drives behaviors like being open and transparent (so others know they’re not being deceived), being dependable (so others learn they can count on you), and gradually extending trust to others by taking small risks – for example, delegating a task and seeing it through. Research shows that in high-trust environments, groups can undertake more ambitious projects and adapt faster, because members willingly share information and responsibilities without fear. In essence, trust expands the scope of what people can achieve together: it’s like social glue that enables complex teamwork, innovation, and supportive relationships that would collapse if everyone was suspicious. Thus, nurturing trust by consistent honest behavior and mutual respect allows teams and communities to reach higher levels of collaboration with less friction.",
+      "rewrittenClaim": "Trust is the belief that others have good intentions and are capable in their role – and it’s essential for smooth cooperation. When trust is present, people can delegate and share information without constant verification, which lowers stress and the costs of monitoring each other. The need for trust motivates transparency, reliability, and gradually taking interpersonal risks that confirm partners will reciprocate. Research on workplace collaborations shows that when team members perceive one another as trustworthy, they spend less time policing compliance and more time on productive work, enabling groups to take on more ambitious goals together.",
       "supportingSources": [
         {
-          "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
-          "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
-        },
-        {
-          "url": "https://www.apa.org/science/about/psa/2019/11/trust",
-          "description": "APA Science brief: trust in others reduces stress responses in cooperative tasks and allows for greater risk-sharing leading to innovation"
+          "url": "http://hdl.handle.net/1721.1/95560",
+          "description": "MIT Sloan working paper on trust and performance: teams with higher interpersonal trust reduce monitoring costs and improve coordination"
         }
       ]
     },
