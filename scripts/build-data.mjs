@@ -211,7 +211,91 @@ const needs = rawNeeds.map((row) => ({
   originalClaim: row['Original Claim'] || '',
   rewrittenClaim: row['Rewritten Claim'] || '',
   supportingSources: parseSupportingSources(row['Supporting Sources']),
+  alternateClaim: row['Alternate Claim'] || '',
 }));
+
+function readNeedClaims() {
+  try {
+    const contents = readFileSync(join(ROOT, 'data', 'need-claims.json'), 'utf8');
+    const parsed = JSON.parse(contents);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function normalizeSupportingSource(entry) {
+  if (!entry) {
+    return null;
+  }
+  if (typeof entry === 'string') {
+    const trimmed = entry.trim();
+    return trimmed ? trimmed : null;
+  }
+
+  const url = typeof entry.url === 'string' ? entry.url.trim() : '';
+  const description = typeof entry.description === 'string' ? entry.description.trim() : '';
+
+  if (!url && !description) {
+    return null;
+  }
+
+  if (!url) {
+    return description;
+  }
+
+  return { url, description };
+}
+
+const needClaims = readNeedClaims();
+const needClaimsIndex = new Map();
+
+needClaims.forEach((entry) => {
+  if (!entry || typeof entry !== 'object') {
+    return;
+  }
+  const name = typeof entry.name === 'string' ? entry.name.trim() : '';
+  if (!name) {
+    return;
+  }
+  const key = name.toLowerCase();
+  if (!needClaimsIndex.has(key)) {
+    needClaimsIndex.set(key, entry);
+  }
+});
+
+needs.forEach((need) => {
+  const key = need.title ? need.title.trim().toLowerCase() : '';
+  const claim = key ? needClaimsIndex.get(key) : null;
+
+  if (claim && typeof claim === 'object') {
+    if (typeof claim.originalClaim === 'string' && claim.originalClaim.trim()) {
+      need.originalClaim = claim.originalClaim.trim();
+    }
+
+    if (typeof claim.rewrittenClaim === 'string' && claim.rewrittenClaim.trim()) {
+      need.rewrittenClaim = claim.rewrittenClaim.trim();
+    }
+
+    if (typeof claim.alternateClaim === 'string' && claim.alternateClaim.trim()) {
+      need.alternateClaim = claim.alternateClaim.trim();
+    }
+
+    if (Array.isArray(claim.supportingSources)) {
+      need.supportingSources = claim.supportingSources
+        .map(normalizeSupportingSource)
+        .filter(Boolean);
+    }
+  }
+
+  if (!Array.isArray(need.supportingSources)) {
+    need.supportingSources = [];
+  }
+
+  if (typeof need.alternateClaim !== 'string') {
+    need.alternateClaim = '';
+  }
+});
 
 const situations = rawSituations.map((row) => ({
   title: row.Title,

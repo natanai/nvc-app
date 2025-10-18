@@ -1,182 +1,1029 @@
 [
   {
     "name": "Acceptance",
-    "original_claim": "Humans have a fundamental need for acceptance, to feel welcomed and valued by others.",
-    "revised_claim": "The need for acceptance is a fundamental human motivation; lacking social acceptance can trigger distress responses akin to physical pain:contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}.",
-    "validation_summary": "Supported – Social neuroscience research confirms that social rejection activates pain-related brain regions and elevates stress hormones, validating the original claim:contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}.",
-    "bodily_cues": "Feelings of social rejection can produce bodily cues such as increased stress hormone (cortisol) levels and activation of pain centers in the brain:contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}. Physically, one might experience a 'hurt' feeling or heartache when lacking acceptance.",
-    "motivational_consequences": "The need for acceptance drives people to seek approval and avoid rejection. Individuals may alter their behavior to conform to group norms or seek companionship to restore a sense of belonging:contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}.",
-    "supporting_sources": [
-      "https://mindlabneuroscience.com/why-are-people-lonely-science-of-connection/",
-      "https://www.phillyvoice.com/brain-health-rejection-acceptance-social-connections/"
+    "originalClaim": "“In social species, inclusion confers safety and access to resources, so human attention is highly tuned to signals of being welcomed as we are. This need motivates seeking contexts where differences are received without correction, inviting feedback, and building norms that reduce social threat. Valuing acceptance sustains psychological security and strengthens long-term cooperation.”",
+    "rewrittenClaim": "Humans have evolved to seek acceptance because being included in a group historically offered protection and resource sharing (e.g. group living provided safety from predators and pooled resources)[1][2]. We are highly sensitive to cues of inclusion or rejection, which motivates us to find environments where we are genuinely welcomed without undue criticism. Fostering a climate of acceptance – where differences are respected and feedback is constructive – contributes to a sense of psychological security and promotes cooperation over the long term (see https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316 for survival benefits of social bonds). In short, valuing acceptance helps individuals feel safe and supports enduring collaborative relationships.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.researchgate.net/publication/237344651_Social_Inclusion_Facilitates_Interest_in_Mating",
+        "description": "evolutionary psychology study noting that social acceptance cues indicate safety and resource sharing"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2019/05/ce-corner-isolation",
+        "description": "APA article discussing the psychological and physiological costs of social exclusion"
+      }
+    ]
+  },
+  {
+    "name": "Accountability",
+    "originalClaim": "“Groups function best when intentions and actions align, making reliability a core social currency. This need motivates clarifying expectations, repairing misses, and creating follow-through systems. Consistent accountability stabilizes trust and turns shared aims into predictable outcomes.”",
+    "rewrittenClaim": "Effective groups rely on members doing what they say they will do – reliability acts like social “currency” that builds trust. The need for accountability drives people to set clear expectations, acknowledge and fix mistakes, and establish systems to ensure commitments are kept. Research in team dynamics shows that when individuals hold themselves accountable and align actions with intentions, mutual trust is strengthened and group goals become more attainable because everyone can predict and count on each other’s behavior (see Journal of Applied Psychology meta-analysis linking accountability and team performance: https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008). In essence, consistent accountability within a group creates stability and helps translate shared goals into reliable results.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7213777/",
+        "description": "theory of social safety emphasizing reliable social bonds and trust"
+      },
+      {
+        "url": "https://bmchealthservres.biomedcentral.com/articles/10.1186/s12913-020-05256-3",
+        "description": "discussion of accountability and trust in healthcare teams"
+      }
+    ]
+  },
+  {
+    "name": "Accomplishment",
+    "originalClaim": "“Mastery and efficacy are intrinsically rewarding and have clear adaptive value in variable environments. This need motivates goal formation, deliberate practice, and tracking progress. Honoring accomplishment channels effort into competence that benefits both the individual and the group.”",
+    "rewrittenClaim": "Humans are driven to achieve mastery in skills and tasks – accomplishing goals and feeling effective is inherently satisfying and also advantageous for survival in changing environments. This need for achievement leads people to set goals, engage in focused practice, and measure their progress. Psychological studies on intrinsic motivation confirm that developing competence (becoming skilled and effective) is rewarding in itself and encourages ongoing effort[3]. By pursuing and recognizing accomplishments, individuals build valuable skills that not only enhance their own capabilities but also contribute to group success (e.g., a well-practiced skill can be shared or used to aid the community). In short, valuing accomplishment helps channel effort into growing one’s competence, yielding benefits for both the person and those around them.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://psycnet.apa.org/fulltext/2014-37155-001.html",
+        "description": "Self-determination theory research: competence/mastery as a basic psychological need"
+      },
+      {
+        "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.00304/full",
+        "description": "review on intrinsic reward of mastery and skill development"
+      }
+    ]
+  },
+  {
+    "name": "Act Freely",
+    "originalClaim": "“Flexibility and voluntary action improve adaptation when conditions change. This need motivates proposing alternatives, selecting methods that fit one’s style, and declining unnecessary constraints. Supporting free action preserves creativity and responsible choice.”",
+    "rewrittenClaim": "Having the freedom to choose one’s actions and methods promotes better adaptation in the face of change. When people can be flexible – for example, by suggesting alternative approaches or working in a style that suits them – they tend to respond more creatively and effectively to new challenges. Research in organizational psychology shows that autonomy (voluntary, self-directed action) at work is associated with higher innovation and problem-solving capacity (e.g., giving teams freedom in how they achieve goals boosts creativity and motivation; see Harvard Business Review 1998, “How to Kill Creativity”). By avoiding unnecessary rules and constraints and allowing individuals some latitude, we preserve their intrinsic motivation and sense of responsibility. In essence, supporting the ability to act freely nurtures creativity and helps people adapt responsibly when conditions shift.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://hbr.org/1998/09/how-to-kill-creativity",
+        "description": "Harvard Business Review – Teresa Amabile – emphasizing that autonomy and freedom in how work is done fosters creativity and innovation"
+      },
+      {
+        "url": "https://www.tandfonline.com/doi/abs/10.1080/1359432X.2018.1532281",
+        "description": "organizational psychology research linking flexible, autonomous work environments to better adaptability and performance"
+      }
+    ]
+  },
+  {
+    "name": "Acknowledgement",
+    "originalClaim": "“Recognizing contribution reinforces cooperative behavior in human groups. This need motivates requesting or offering specific feedback and making results visible. Reliable acknowledgement sustains morale and signals that effort matters.”",
+    "rewrittenClaim": "Humans thrive on having their contributions noticed – acknowledging someone’s good work encourages them (and others) to keep cooperating. The need for acknowledgement drives people to seek and give meaningful feedback and to publicize achievements or results. Organizational studies find that when employees feel recognized for their efforts, their morale and engagement rise, which in turn reinforces cooperative behavior (see HBR, 2016: recognition boosts morale and performance). In practice, consistently acknowledging contributions shows individuals that their effort matters, thereby maintaining motivation and strengthening the group’s collaborative spirit.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://hbr.org/2016/05/why-recognizing-your-employees-is-the-easiest-way-to-boost-morale",
+        "description": "HBR article on the impact of recognition on morale and cooperation"
+      },
+      {
+        "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/job.2117",
+        "description": "research showing that acknowledgment and feedback increase teamwork and retention"
+      }
     ]
   },
   {
     "name": "Appreciation",
-    "original_claim": "People have a need to feel appreciated and acknowledged by others for their contributions and qualities.",
-    "revised_claim": "The need to feel appreciated (to be recognized and valued by others) is indeed a significant human motivation. Receiving genuine appreciation or praise activates reward circuitry in the brain and boosts emotional well-being:contentReference[oaicite:8]{index=8}:contentReference[oaicite:9]{index=9}.",
-    "validation_summary": "Supported – Psychological research indicates that humans crave appreciation. Recognition (like praise) engages brain reward centers and improves mood, confirming the original claim:contentReference[oaicite:10]{index=10}:contentReference[oaicite:11]{index=11}.",
-    "bodily_cues": "When a person feels unappreciated, they may experience emotional pain or emptiness:contentReference[oaicite:12]{index=12}. In contrast, being appreciated can trigger positive physiological responses (e.g. release of 'feel-good' neurotransmitters leading to a warm or satisfied feeling).",
-    "motivational_consequences": "The need for appreciation motivates individuals to seek validation and approval. People often strive to do well or get others’ attention (the “look at me” impulse) in order to feel appreciated:contentReference[oaicite:13]{index=13}. Sincere appreciation reinforces those behaviors, while lack of appreciation can demotivate.",
-    "supporting_sources": [
-      "https://thecreativemind.net/438/ben-kingsley-and-our-need-for-appreciation/",
-      "https://dornsife.usc.edu/news/stories/your-brain-learns-from-rejection-heres-how-it-becomes-your-compass-for-connection/"
+    "originalClaim": "“Gratitude strengthens social bonds and increases prosocial behavior across cultures. This need motivates noticing value, naming what worked, and reciprocating care. Practiced appreciation maintains trust and energizes ongoing collaboration.”",
+    "rewrittenClaim": "Expressing and receiving gratitude is a powerful social glue – research shows that feeling appreciated or thanking others strengthens relationships and encourages people to act kindly in return (these effects are observed in many cultures). The need for appreciation leads us to notice what is valuable in others’ actions, explicitly acknowledge what went well, and respond to kindness with kindness. By regularly practicing gratitude and appreciation, groups build greater mutual trust and goodwill[4][5]. In other words, showing appreciation not only affirms the recipient but also energizes ongoing cooperation, as people who feel valued are more likely to continue contributing positively.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://greatergood.berkeley.edu/article/item/why_gratitude_is_good",
+        "description": "summary of cross-cultural research on gratitude’s effects on relationships and prosocial behavior"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2012/01/happy",
+        "description": "APA Monitor – “The Gratitude Effect” – describing how expressing thanks improves trust and social ties"
+      }
+    ]
+  },
+  {
+    "name": "Authenticity",
+    "originalClaim": "“Congruence between inner experience and outer behavior supports clarity and reduces social ambiguity. This need motivates transparent communication and value-consistent choices. Respecting authenticity preserves self-coherence and dependable signaling in relationships.”",
+    "rewrittenClaim": "Living and interacting in a way that aligns with one’s true feelings and values (i.e. being authentic) provides clarity for oneself and others. When our outward behavior matches our inner experience, it minimizes confusion or mixed signals in social situations. This need for authenticity drives honest, transparent communication and decisions that reflect our core values. Psychological research suggests that people who act authentically tend to experience greater self-esteem and more satisfying relationships[6][7], likely because others can trust that their signals are genuine. In summary, honoring authenticity helps maintain personal integrity and ensures more dependable, clear interactions in relationships.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/abs/10.1080/15298868.2013.838904",
+        "description": "study finding authenticity is linked to higher self-esteem and better relationship satisfaction"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2006-06108-007",
+        "description": "research on how behaving in line with one’s true self reduces stress and confusion in social interactions"
+      }
     ]
   },
   {
     "name": "Autonomy",
-    "original_claim": "Humans need autonomy – the freedom to make their own choices and control their own lives.",
-    "revised_claim": "Autonomy is a basic psychological need. Having a sense of volition and choice in one’s actions is essential for mental health, whereas feeling controlled or without autonomy undermines well-being:contentReference[oaicite:14]{index=14}:contentReference[oaicite:15]{index=15}.",
-    "validation_summary": "Supported – Self-determination theory and extensive research show that autonomy is a universal human need. When autonomy is satisfied, it fosters motivation and well-being; when thwarted by external pressure, it leads to stress and poorer outcomes:contentReference[oaicite:16]{index=16}:contentReference[oaicite:17]{index=17}.",
-    "bodily_cues": "Lacking autonomy can create a sense of tension or pressure (the stress of being pushed in an unwanted direction):contentReference[oaicite:18]{index=18}. In contrast, experiencing autonomy often correlates with lower stress and a feeling of ease, as actions align with one’s authentic desires.",
-    "motivational_consequences": "The drive for autonomy makes people seek freedom, personal agency, and self-direction. Satisfying this need leads to greater intrinsic motivation and engagement in activities, whereas unmet autonomy (feeling coerced) can result in resistance, burnout, or disengagement:contentReference[oaicite:19]{index=19}:contentReference[oaicite:20]{index=20}.",
-    "supporting_sources": [
-      "https://selfdeterminationtheory.org/topics/basic-psychological-needs/",
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/"
+    "originalClaim": "“Robust evidence (e.g., self-determination theory) identifies autonomy as a universal psychological nutrient for motivation and well-being. This need motivates expressing preferences, making self-directed decisions, and setting boundaries. When autonomy is supported, persistence and quality of engagement typically increase.”",
+    "rewrittenClaim": "According to extensive research (for example, self-determination theory), autonomy – the sense of volition and choice in one’s actions – is a fundamental psychological need across cultures[8]. People are strongly motivated to voice their preferences, make their own decisions, and establish personal boundaries. Studies show that when individuals have autonomy support (e.g. freedom to make choices or control their work), they generally display greater persistence, better performance, and higher well-being (see Deci & Ryan 2000, American Psychologist, for evidence that autonomy enhances motivation and engagement). In short, autonomy acts like a psychological “nutrient”: supporting a person’s need for self-direction tends to boost their motivation and the quality of their participation in activities.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3602424/",
+        "description": "Self-Determination Theory review, highlighting autonomy as a basic need for well-being"
+      },
+      {
+        "url": "https://selfdeterminationtheory.org/SDT/documents/2000_RyanDeci_SDT.pdf",
+        "description": "Deci & Ryan, 2000 – seminal paper on autonomy’s role in motivation"
+      }
     ]
   },
   {
-    "name": "Belonging",
-    "original_claim": "Humans need a sense of belonging – to be part of a community or group where they feel accepted and supported.",
-    "revised_claim": "The need for belonging (social connection) is a fundamental human need. Strong social bonds and group belonging are associated with greater resilience, mental health, and even physical wellness:contentReference[oaicite:21]{index=21}:contentReference[oaicite:22]{index=22}.",
-    "validation_summary": "Supported – Psychological studies (e.g. Baumeister & Leary) establish that the need to belong is powerful and pervasive. Social belonging improves happiness and health, while social isolation or exclusion harms well-being:contentReference[oaicite:23]{index=23}:contentReference[oaicite:24]{index=24}.",
-    "bodily_cues": "When the need for belonging is unmet, people may experience loneliness and stress (elevated blood pressure, stress hormone levels) similar to other survival threats:contentReference[oaicite:25]{index=25}. Feeling securely included in a group, on the other hand, tends to promote calm and positive emotions (sometimes called the \"warmth\" of belonging).",
-    "motivational_consequences": "The need for belonging drives individuals to form friendships, join groups, and conform to social norms to gain acceptance:contentReference[oaicite:26]{index=26}. It underlies many social behaviors – people will seek companionship and even change their attitudes to avoid rejection and maintain group inclusion:contentReference[oaicite:27]{index=27}.",
-    "supporting_sources": [
-      "https://www.verywellmind.com/what-is-the-need-to-belong-2795393",
-      "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf"
+    "name": "Beauty",
+    "originalClaim": "“Humans are sensitive to pattern, harmony, and environmental cues associated with safety and resources. This need motivates attending to nature, art, and design that promote orientation and calm. Investing in beauty improves attention, mood, and restorative experience.”",
+    "rewrittenClaim": "Humans naturally respond to beauty – we’re attuned to patterns and harmony in our environment, which historically signaled things like safety or rich resources (for example, a lush, orderly landscape might promise food and shelter). As a result, we have a drive to seek out nature, art, and pleasing design that help us feel oriented and at ease. Psychology research confirms that exposure to beautiful natural settings can restore our ability to concentrate, lift our mood, and reduce stress hormones[9][10]. In practice, “investing in beauty” – whether by spending time in nature or creating aesthetically pleasing spaces – tends to improve mental focus, promote calmness, and provide a restorative experience for our minds.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://cpa.ca/psychology-works-fact-sheet-benefits-of-nature-exposure/",
+        "description": "Canadian Psychological Association – nature exposure improves attention, mood, and stress recovery"
+      },
+      {
+        "url": "https://journals.sagepub.com/doi/10.1177/0956797612464121",
+        "description": "study linking exposure to aesthetically pleasing natural environments with cognitive benefits and stress reduction"
+      }
     ]
   },
   {
-    "name": "Competence",
-    "original_claim": "Humans need to feel competent – to experience mastery and effectiveness in their actions.",
-    "revised_claim": "Competence (a sense of efficacy and mastery) is recognized as a basic psychological need. Achieving goals and building skills supports self-esteem and well-being, whereas prolonged failure or helplessness undermines mental health:contentReference[oaicite:28]{index=28}.",
-    "validation_summary": "Supported – Research in motivation science shows that feeling competent is essential for wellness. Satisfying this need (through success and growth) leads to positive emotions and motivation, while feeling ineffective leads to frustration and poor well-being:contentReference[oaicite:29]{index=29}:contentReference[oaicite:30]{index=30}.",
-    "bodily_cues": "When competence needs are frustrated, one might feel stress, fatigue, or demoralization (similar to \"giving up\" responses). Conversely, experiencing competence often comes with energizing feelings – confidence, excitement, and even physiological arousal (a \"rush\") upon success.",
-    "motivational_consequences": "The need for competence motivates learning, practice, and ambition. People will seek challenges that allow them to prove and improve their abilities. If this need is unmet (feeling incapable), it can lead to withdrawal or apathy, whereas fulfillment fosters persistence and enthusiasm:contentReference[oaicite:31]{index=31}:contentReference[oaicite:32]{index=32}.",
-    "supporting_sources": [
-      "https://selfdeterminationtheory.org/topics/basic-psychological-needs/",
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/"
+    "name": "Calm",
+    "originalClaim": "“Recovery states allow learning, immune function, and executive control to rebound after stress. This need motivates reducing stimulation, pacing demands, and building rhythmic routines. Restoring calm supports regulation and higher-order thinking.”",
+    "rewrittenClaim": "Periods of calm and recovery are essential for the brain and body to bounce back after stress. Research shows that during calm, low-arousal states, processes like memory consolidation, immune system activity, and top-down cognitive control (executive functions) get a chance to recuperate (see e.g. Frontiers in Psychology review on stress recovery and cognitive performance). The need for calm drives us to dial down excessive stimulation, manage our workload, and establish soothing routines or rhythms in daily life. By restoring a state of calm, we improve our emotional self-regulation and allow higher-order thinking (like problem-solving and impulse control) to function more effectively. In short, regularly seeking calm moments helps counteract stress and supports better learning and decision-making.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6438088/",
+        "description": "review on stress recovery and its effects on cognitive function and health"
+      },
+      {
+        "url": "https://www.apa.org/news/press/releases/2016/07/chronic-stress",
+        "description": "APA press release: chronic stress impairs executive function; recovery improves regulation"
+      }
     ]
   },
   {
-    "name": "Exercise (Movement)",
-    "original_claim": "Regular physical movement or exercise is a human need; without it, physical and mental health can deteriorate.",
-    "revised_claim": "Adequate physical activity is essential for health. Exercise supports nearly every system in the body, improving cardiovascular health, bone strength, mood, and cognitive function:contentReference[oaicite:33]{index=33}:contentReference[oaicite:34]{index=34}.",
-    "validation_summary": "Supported – Public health research overwhelmingly shows that regular exercise provides critical benefits and prevents disease. Inactivity is linked to higher risks of chronic illnesses, confirming the original claim’s emphasis on this need:contentReference[oaicite:35]{index=35}:contentReference[oaicite:36]{index=36}.",
-    "bodily_cues": "When one’s body needs movement, signs can include restlessness or low energy. Regular exercise tends to reduce stress hormones and release endorphins, leading to improved mood and relaxation. Lack of movement over time can cause stiffness, fatigue, and elevated stress levels.",
-    "motivational_consequences": "The need for movement drives people to stretch, walk, play sports, or otherwise be active. When satisfied, it typically results in greater energy and stress relief; when ignored, it can contribute to anxiety, depressed mood, or health complaints that motivate one to seek physical activity:contentReference[oaicite:37]{index=37}:contentReference[oaicite:38]{index=38}.",
-    "supporting_sources": [
-      "https://www.cdc.gov/physical-activity-basics/benefits/",
-      "https://www.nia.nih.gov/health/exercise-and-physical-activity/health-benefits-exercise-and-physical-activity"
+    "name": "Causality",
+    "originalClaim": "“Accurate mental models of ‘what leads to what’ reduce uncertainty and error. This need motivates investigation, testing assumptions, and building shared explanations. Clarity about causality improves prediction and effective action.”",
+    "rewrittenClaim": "People have a strong drive to understand cause-and-effect – having a correct idea of “what leads to what” helps us feel less uncertain and avoid mistakes. This need for causal understanding pushes us to investigate how things work, challenge our assumptions with experiments or questions, and develop explanations that we can share with others. Cognitive science indicates that when we grasp causality clearly, we can make better predictions about the future and take more effective actions (our brains are essentially prediction machines that crave reliable patterns; uncertainty triggers stress until explained)[11][12]. In summary, gaining clarity about causal relationships (whether in science, everyday problems, or interpersonal situations) improves our ability to anticipate outcomes and respond appropriately.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.nature.com/articles/s41562-019-0766-y",
+        "description": "research on how humans form causal models to reduce uncertainty and guide decisions"
+      },
+      {
+        "url": "https://hbr.org/2021/09/our-brains-were-not-built-for-this-much-uncertainty",
+        "description": "discussion on the brain’s drive to predict and the stress of uncertainty"
+      }
     ]
   },
   {
-    "name": "Food (Nutrition)",
-    "original_claim": "Food is a basic physiological need; humans require sufficient nutrition to survive and function optimally.",
-    "revised_claim": "Adequate food intake (nutrition) is absolutely required for human survival and health. Hunger signals arise to ensure we eat enough to meet energy and nutrient needs:contentReference[oaicite:39]{index=39}.",
-    "validation_summary": "Supported – It is a foundational biological fact that humans need regular nutrition. Without food, the body’s systems fail: extended food deprivation leads to severe health consequences and eventually death:contentReference[oaicite:40]{index=40}.",
-    "bodily_cues": "The body’s cues for this need include hunger pangs (a gnawing, empty stomach feeling, often with rumbling:contentReference[oaicite:41]{index=41}), weakness, lightheadedness, and irritability when fuel is low. These signals grow more intense the longer one goes without eating, compelling the individual to seek food.",
-    "motivational_consequences": "Hunger creates a powerful drive state that motivates eating behaviors:contentReference[oaicite:42]{index=42}. A hungry person will become increasingly focused on finding and consuming food, often experiencing urgency or cravings until the need is satisfied. This ensures that energy requirements are met for survival.",
-    "supporting_sources": [
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2467458/",
-      "https://www.medicalnewstoday.com/articles/321725"
+    "name": "Choice",
+    "originalClaim": "“Access to options enables better fit between values and behavior. This need motivates generating alternatives, evaluating trade-offs, and selecting a path. Supporting choice increases perceived control and adaptive responding.”",
+    "rewrittenClaim": "Being able to choose among different options helps people align their actions with their personal values or preferences. The need for choice makes us seek or create alternatives, weigh the pros and cons of each, and then commit to a course of action that feels right. Studies in behavioral psychology find that when individuals have meaningful choices (especially choices that reflect what they care about), they experience a greater sense of control and are more flexible and resilient in their responses (having options can buffer stress because it prevents feeling trapped)[13][14]. In practice, supporting an individual’s ability to make choices – rather than forcing a single path – tends to improve their engagement and adaptive problem-solving.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.jstor.org/stable/10.1086/421158",
+        "description": "research showing having choices that align with one’s values increases satisfaction and perceived autonomy"
+      },
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3267932/",
+        "description": "study on choice and perceived control contributing to stress reduction and flexibility"
+      }
     ]
   },
   {
-    "name": "Meaning (Purpose)",
-    "original_claim": "People need a sense of meaning or purpose in life – a feeling that their life has direction and significance.",
-    "revised_claim": "Having a life purpose is strongly beneficial to human well-being. Research links a higher sense of meaning with better mental health, greater resilience, and even reduced risk of premature death:contentReference[oaicite:43]{index=43}:contentReference[oaicite:44]{index=44}.",
-    "validation_summary": "Supported – Numerous studies show that a strong sense of purpose correlates with positive health outcomes (including longevity and lower disease risk):contentReference[oaicite:45]{index=45}:contentReference[oaicite:46]{index=46}. Lacking purpose, conversely, is associated with poorer mental health, so the original claim is affirmed by scientific evidence.",
-    "bodily_cues": "When someone lacks purpose, they may feel lethargic, chronically stressed, or prone to anxiety and depression. In contrast, feeling a clear purpose can lower the body’s stress response – people with purpose show less reactivity to stressors and recover faster, which can mean lower cortisol levels and inflammation:contentReference[oaicite:47]{index=47}.",
-    "motivational_consequences": "The need for meaning drives individuals to pursue goals, values, or roles that give them a sense of significance. This might manifest as career ambitions, creative projects, volunteering, or spirituality. Fulfillment of this need often leads to sustained motivation and resilience, whereas a void of purpose can lead to apathy or mental distress.",
-    "supporting_sources": [
-      "https://www.health.harvard.edu/blog/will-a-purpose-driven-life-help-you-live-longer-2019112818378",
-      "https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2734064"
+    "name": "Clarity",
+    "originalClaim": "“Clear information lowers cognitive load and prevents costly misunderstandings. This need motivates simplifying, summarizing, and verifying meanings. Reliable clarity enhances coordination and confidence.”",
+    "rewrittenClaim": "People function much better when information is clear – unambiguous communication reduces the mental effort (“cognitive load”) required to understand, and it helps avoid misunderstandings that can be costly. The need for clarity pushes us to simplify our messages, summarize key points, and double-check that everyone interprets things the same way. In education and work contexts, research shows that clarity in instructions or feedback lowers confusion and error rates[15][16]. A dramatic illustration comes from healthcare: about 80% of serious medical errors have been traced to communication failures (unclear or incomplete information) rather than lack of skill[17][18]. By ensuring reliable clarity – communicating in a straightforward, transparent manner – groups achieve better coordination, and individuals feel more confident in what they’re doing.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://educationendowmentfoundation.org.uk/news/clarity-is-king-reducing-extraneous-load",
+        "description": "discussion on how clarity reduces cognitive load and errors"
+      },
+      {
+        "url": "https://www.hipaajournal.com/effects-of-poor-communication-in-healthcare/",
+        "description": "healthcare data: 80% of serious errors result from miscommunication, illustrating the cost of lack of clarity"
+      }
     ]
   },
   {
-    "name": "Physical Touch",
-    "original_claim": "Humans need physical touch and affection from others; lack of touch can negatively affect mental and physical health.",
-    "revised_claim": "Healthy human development and well-being require a degree of physical touch (affectionate contact). Touch calms the nervous system – lowering heart rate, blood pressure, and stress hormones – and releases bonding hormones like oxytocin:contentReference[oaicite:48]{index=48}. Prolonged touch deprivation is harmful to health:contentReference[oaicite:49]{index=49}:contentReference[oaicite:50]{index=50}.",
-    "validation_summary": "Supported – Research on human infants, for example, shows that they cannot thrive without touch. Across ages, studies find that physical affection reduces anxiety and depression and even bolsters the immune system:contentReference[oaicite:51]{index=51}. The original claim is strongly backed by evidence on the essential role of touch for well-being.",
-    "bodily_cues": "In the absence of touch, people may experience elevated stress (e.g. higher cortisol) and feelings of loneliness or irritability. On the other hand, gentle touch or hugs often produce immediate bodily signs of relief: slowed heart rate, deeper relaxation, and a release of muscle tension:contentReference[oaicite:52]{index=52}. One might notice feeling warmer or comforted after a caring touch.",
-    "motivational_consequences": "The need for touch motivates people to seek physical closeness – hugging loved ones, cuddling, handshakes, or other forms of contact. When this need is unmet, individuals may subconsciously seek alternatives (such as touching a pet or using weighted blankets) to simulate contact:contentReference[oaicite:53]{index=53}. Fulfilled touch needs tend to increase feelings of safety and social bonding.",
-    "supporting_sources": [
-      "https://www.psychologytoday.com/us/blog/everyone-on-top/202108/the-vital-importance-human-touch",
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6075786/"
+    "name": "Closeness",
+    "originalClaim": "“Attachment theory and cross-cultural research identify emotionally attuned proximity as protective for development and stress recovery. This need motivates shared time, attentive presence, and mutual responsiveness. Closeness strengthens resilience through co-regulation and trust.”",
+    "rewrittenClaim": "Psychologists (starting with attachment theory) have found that having someone emotionally in-tune and physically or emotionally close is a powerful buffer for stress and a boon for healthy development. In other words, feeling closely connected – for example through shared quality time, attentive listening, and responsive care – protects people (especially children) by helping them regulate their emotions with support from another person (a process called co-regulation). This need for closeness drives us to seek warm, reliable relationships. Secure attachment in childhood is linked to better coping with fear and stress[19][20], and even in adults, social support from a loved one can calm the body’s stress responses. By cultivating closeness and trust, individuals become more resilient: they recover faster from adversity and gain confidence knowing someone “has their back.”",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://cpa.ca/attachment-in-children/",
+        "description": "Canadian Psychological Association – secure attachment helps children cope with stress and fosters healthy development"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2013/06/social-deception",
+        "description": "research on co-regulation: close relationships buffer stress responses"
+      }
     ]
   },
   {
-    "name": "Play (Fun)",
-    "original_claim": "Humans of all ages need play or fun activities. Playfulness relieves stress and is important for creativity and happiness.",
-    "revised_claim": "Engaging in play is a genuine human need that contributes to emotional and even physical health. Play and recreation have been shown to reduce stress, stimulate creativity, strengthen social bonds, and increase overall happiness:contentReference[oaicite:54]{index=54}.",
-    "validation_summary": "Supported – Psychological and behavioral research confirms the benefits of play in adults and children. Regular play or leisure activity is linked to lower stress levels, improved mood, and better social connection, which validates the original claim:contentReference[oaicite:55]{index=55}:contentReference[oaicite:56]{index=56}.",
-    "bodily_cues": "When deprived of fun or downtime, people often exhibit signs of stress overload (muscle tension, irritability, mental fatigue). In contrast, during enjoyable play, laughter and smiling occur – indicating lowered stress (since play can decrease cortisol) – and one might feel energized or \"light\" as endorphins release.",
-    "motivational_consequences": "The need for play drives people to seek out hobbies, games, humor, or creative activities purely for enjoyment. Satisfying this need can restore motivation and prevent burnout. If unmet, individuals may feel stagnant or overly serious, often eventually compelled to “take a break” and do something fun to recharge:contentReference[oaicite:57]{index=57}.",
-    "supporting_sources": [
-      "https://www.psychologytoday.com/us/blog/everyday-resilience/202408/creating-space-play-grown-ups-and-why-it-matters",
-      "https://www.helpguide.org/articles/mental-health/benefits-of-play-for-adults.htm"
+    "name": "Commitment",
+    "originalClaim": "“Stable investment in people and projects allows long-term goals to be realized. This need motivates planning, prioritizing, and sustaining effort across setbacks. Sound commitment breeds reliability and shared momentum.”",
+    "rewrittenClaim": "Achieving long-term goals – whether in relationships or projects – requires a steady commitment. We have a need to invest ourselves in people or endeavors we care about for the long haul. This need for commitment drives us to make plans, set priorities, and keep putting in effort even when there are obstacles or setbacks. Psychological studies on relationships and team performance show that strong commitment (e.g. deciding to stick together or persist toward a goal) fosters mutual trust and creates a sense of shared momentum[21][22]. When everyone is reliably “all in,” plans are more likely to come to fruition because each person can count on the others to stay the course. In summary, commitment provides a stable foundation that turns long-term aspirations into achieved outcomes through sustained, coordinated effort.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://psycnet.apa.org/record/1997-04604-006",
+        "description": "research on commitment in relationships and teams contributing to long-term success and trust"
+      },
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S0378512217301575",
+        "description": "study linking commitment to goals with improved goal achievement and group momentum"
+      }
     ]
   },
   {
-    "name": "Safety (Security)",
-    "original_claim": "Safety and security are basic needs – one must feel safe from physical harm and secure in order to thrive.",
-    "revised_claim": "Safety (personal security and stability) is a foundational human need. Constant threats to safety trigger chronic fear and stress responses, whereas feeling safe allows normal healthy functioning:contentReference[oaicite:58]{index=58}. In fact, a sense of safety is so crucial that it can dominate behavior until assured:contentReference[oaicite:59]{index=59}.",
-    "validation_summary": "Supported – From Maslow’s hierarchy to modern neuroscience, it is well-established that humans require safety. Insecure or dangerous conditions lead to anxiety and trauma (e.g. chronic fear can cause mental disorders):contentReference[oaicite:60]{index=60}, confirming the original claim. Only when basic safety is met can people focus on higher goals.",
-    "bodily_cues": "When safety is lacking, the body engages the \"fight or flight\" response: the amygdala and related brain regions activate, adrenaline and cortisol spike, heart rate increases:contentReference[oaicite:61]{index=61}. One may feel jittery, hyper-vigilant, or frightened. By contrast, a feeling of safety brings bodily calm – muscles relax and stress hormones decrease as the nervous system shifts out of survival mode.",
-    "motivational_consequences": "The need for safety drives avoidance of danger and seeking of shelter, stability, or protection. A person who feels unsafe will prioritize behaviors to secure safety (e.g. escaping threats, seeking help) even above other needs like hunger:contentReference[oaicite:62]{index=62}. Once safe, individuals are more free to pursue social, esteem, and growth motives.",
-    "supporting_sources": [
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/",
-      "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.00649/full"
+    "name": "Community",
+    "originalClaim": "“Cooperative groups have been the primary context of human survival and culture. This need motivates joining, contributing, and maintaining shared identity and mutual aid. Healthy community distributes risk and multiplies capacity.”",
+    "rewrittenClaim": "Throughout evolutionary history, humans survived and thrived by banding together in cooperative communities – living in a group afforded protection, division of labor, and cultural growth. Reflecting this legacy, people have a fundamental need for community: we’re driven to join with others, contribute to group efforts, and uphold a shared identity that fosters belonging. In a well-functioning community, members help each other, which spreads out risks (for example, if one person falters, others can support them) and vastly increases the group’s overall capabilities (many hands and minds working together can achieve more than one alone). Research in social and evolutionary psychology underscores that strong social networks and communal ties improve individuals’ health and resilience[23][24]. In short, a healthy community acts as a safety net and force multiplier, explaining why humans instinctively seek and value group belonging and mutual aid.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6232274/",
+        "description": "anthropological perspective on humans as ultra-social, surviving via community cooperation"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2020/05/cover-empathy",
+        "description": "APA article on how community and mutual aid improve resilience and well-being"
+      }
     ]
   },
   {
-    "name": "Sexual Expression",
-    "original_claim": "Sexual expression (sexual intimacy or release) is a human need, with both physical and emotional benefits when fulfilled.",
-    "revised_claim": "Healthy sexual expression is considered a basic physiological need (as per Maslow) and contributes to well-being. Satisfying sexual intimacy can relieve stress, boost immune function, improve mood, and strengthen pair bonds through oxytocin release:contentReference[oaicite:63]{index=63}:contentReference[oaicite:64]{index=64}.",
-    "validation_summary": "Supported – Medical and psychological research finds that a healthy sex life has numerous benefits (e.g. lowering blood pressure, improving mental health):contentReference[oaicite:65]{index=65}. While individuals vary, the underlying need for sexual expression is rooted in biology and its fulfillment is linked with positive health outcomes, affirming the original claim.",
-    "bodily_cues": "Unmet sexual needs can lead to physiological tension, heightened libido thoughts, and frustration. The body may show signs like sexual arousal seeking an outlet. During and after healthy sexual activity, bodily cues include release of tension, pleasurable sensations, and relaxation (due to endorphins and oxytocin, which also promote bonding):contentReference[oaicite:66]{index=66}.",
-    "motivational_consequences": "The sexual drive motivates individuals to seek partners or other means of sexual fulfillment. This need underlies behaviors related to finding intimacy or release. When satisfied in a positive way, it often increases emotional closeness and reduces stress; when persistently unsatisfied, it may result in distraction, irritability, or difficulties concentrating.",
-    "supporting_sources": [
-      "https://www.ohsu.edu/womens-health/benefits-healthy-sex-life",
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3780474/"
+    "name": "Consistency",
+    "originalClaim": "“Predictable patterns free attention for creativity and problem solving. This need motivates establishing routines, standards, and stable cues. Consistency provides a dependable platform for growth.”",
+    "rewrittenClaim": "When certain aspects of life or work are consistent and predictable, our minds are freed up to focus on higher-level tasks like creative thinking or complex problem-solving. This need for consistency leads people to create routines, set standards, and use stable signals or processes in their environment. For example, a consistent daily schedule or a standard method for tasks can reduce uncertainty and mental effort, leaving more brainpower for innovation. Psychological research supports this: having predictable frameworks (and fewer random surprises) lowers stress and mistakes, providing a solid platform from which individuals or teams can safely experiment and grow (see research on routine and creativity showing that structured time encourages more creative output once the basics are handled). In essence, consistency in key areas offers dependability, which then nurtures confidence to explore and develop in new areas.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/full/10.1080/1359432X.2018.1531670",
+        "description": "study showing that consistent routines reduce cognitive load and errors, enabling more creative work"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2002-15408-004",
+        "description": "research on how environmental consistency and predictable structure benefit learning and innovation"
+      }
     ]
   },
   {
-    "name": "Sleep (Rest)",
-    "original_claim": "Sleep is a fundamental physiological need – without sufficient rest, the human body and mind cannot function properly.",
-    "revised_claim": "Adequate sleep is absolutely essential for health. Sleep enables critical brain functions (memory consolidation, learning, mood regulation) and physical recovery; chronic sleep deprivation impairs cognition and elevates risk of serious health issues:contentReference[oaicite:67]{index=67}:contentReference[oaicite:68]{index=68}.",
-    "validation_summary": "Supported – Extensive evidence shows insufficient sleep leads to cognitive deficits, weakened immunity, and increased risk of conditions like cardiovascular disease and depression:contentReference[oaicite:69]{index=69}:contentReference[oaicite:70]{index=70}. The original claim is fully supported by medical research that identifies sleep as vital for survival (total prolonged deprivation can be fatal).",
-    "bodily_cues": "Signs of unmet sleep need include drowsiness, yawning, heavy eyelids, and difficulty concentrating. Physiologically, sleep-deprived bodies produce more stress hormones and may experience lowered coordination or micro-sleeps. By contrast, after fulfilling sleep, one’s body exhibits restored alertness, energy, and balanced mood.",
-    "motivational_consequences": "The drive for sleep becomes overwhelming when one is exhausted – motivation for any other activity dwindles as the body compels itself to rest. People will seek out opportunities to sleep (naps, earlier bedtime) when tired. Adequate sleep, once obtained, restores motivation and effective functioning across all other pursuits.",
-    "supporting_sources": [
-      "https://www.cdc.gov/sleep",
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4443337/"
+    "name": "Contribution",
+    "originalClaim": "“Contributing to something beyond oneself enhances purpose and cohesion. This need motivates service, knowledge-sharing, and creative work that benefits others. Channeling contribution converts personal energy into collective gains.”",
+    "rewrittenClaim": "People have a fundamental desire to contribute to causes or communities larger than themselves – doing so often gives a deep sense of purpose and strengthens social bonds. This need for contribution fuels activities like volunteering, sharing one’s knowledge or skills freely, or creating something for the common good. Studies find that engaging in prosocial service (e.g., helping others or one’s community) can improve one’s own wellbeing and instill a stronger sense of meaning in life[25][26]. Essentially, by channeling our time and energy into contributions that benefit others or society, we transform individual effort into collective good. This not only aids the group (collective gains) but also feeds back to the individual as feelings of fulfillment, belonging, and coherence with one’s values.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.apa.org/news/press/releases/2020/09/doing-good-boosts-health",
+        "description": "APA press release on how prosocial behavior and contributing to others increases sense of purpose and even health"
+      },
+      {
+        "url": "https://www.tandfonline.com/doi/full/10.1080/17439760.2014.910829",
+        "description": "study linking volunteerism and altruistic contribution to higher life satisfaction and sense of meaning"
+      }
+    ]
+  },
+  {
+    "name": "Control",
+    "originalClaim": "“Influence over conditions reduces threat and improves outcomes in uncertain environments. This need motivates setting parameters, using contingency plans, and shaping contexts. Appropriate control promotes safety and effective agency.”",
+    "rewrittenClaim": "Having some degree of control over our circumstances makes uncertainty less frightening and often leads to better results. We all have a need to feel we can influence what happens to us. This drives us to set limits or rules, prepare backup plans (“if X, then Y”), and actively shape our surroundings rather than be passive. Studies on “locus of control” show that when people feel they have control over a situation, they experience less stress and perform better, whereas a lack of control can trigger threat responses (learned helplessness, etc.)[11]. By exerting appropriate control – not in an overbearing way but enough to steer key factors – individuals create safer conditions and can act more effectively. In summary, some control over one’s environment or outcomes bolsters a sense of security and enables more confident, purposeful action.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.jstor.org/stable/20627226",
+        "description": "research on locus of control: having control or influence correlates with reduced stress and better task outcomes"
+      },
+      {
+        "url": "https://www.cdc.gov/violenceprevention/about/social-ecologicalmodel.html",
+        "description": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts"
+      }
+    ]
+  },
+  {
+    "name": "Dependability",
+    "originalClaim": "“Reliability reduces monitoring costs and enables complex cooperation. This need motivates keeping agreements, building robust processes, and choosing trustworthy partners. Dependability is the infrastructure of interpersonal and institutional trust.”",
+    "rewrittenClaim": "When individuals or systems are dependable – meaning they do what they promised, consistently – everyone saves time and energy that would otherwise go into double-checking or worrying. High reliability among members is what makes elaborate teamwork possible, because each person can focus on their role without constantly monitoring others. This need for dependability drives behaviors like honoring commitments, setting up sturdy procedures to prevent failures, and gravitating towards colleagues or partners known to be trustworthy. In fact, experiments show that we naturally trust and cooperate more with people who have proven to be consistently honest and reliable in their behavior[27][28]. In essence, dependability lays the groundwork for trust – it’s the invisible infrastructure that lets both interpersonal relationships and organizations function smoothly.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S0749597818301940",
+        "description": "study on how reliability of team members lowers the need for oversight and improves collective performance"
+      },
+      {
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31916837/",
+        "description": "research finding that people strongly prefer and trust those who are consistently honest/reliable"
+      }
+    ]
+  },
+  {
+    "name": "Do things at my own pace and in my own way",
+    "originalClaim": "“Individually tuned pacing supports learning, accuracy, and sustainability. This need motivates customizing timelines, sequencing tasks, and aligning methods with personal rhythms. Honoring pace preserves quality and reduces burnout.”",
+    "rewrittenClaim": "Do Things at My Own Pace and in My Own Way — Being able to set one’s own pace for work and learning is beneficial for both performance and health. Research on time pressure shows that when people are forced to rush, their performance suffers and stress rises. One study found that reducing available time for tasks significantly impaired individuals’ executive function and increased their stress levels, while giving more time restored performance (Sussman & Sekuler 2022 – https://pmc.ncbi.nlm.nih.gov/articles/PMC9506568/). In general, working under constant time pressure tends to increase speed at the expense of quality, leading to more errors and mental strain (Moore & Tenney 2012 – https://www.researchgate.net/publication/286319678_Time_Pressure_Performance_and_Productivity). By contrast, when people can proceed at a comfortable, self-determined pace, they often achieve better accuracy, retain information more effectively, and experience less burnout. This suggests that honoring an individual’s need to work at their own pace supports sustained learning and productivity while protecting their well-being.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
+        "description": "review of work environment factors: having control over work pace is linked to lower burnout and higher quality output – see job control “protects against” exhaustion"
+      },
+      {
+        "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008",
+        "description": "meta-analysis showing job control/autonomy, including pacing, buffers against burnout"
+      }
+    ]
+  },
+  {
+    "name": "Empathy",
+    "originalClaim": "“Accurately grasping another’s inner world improves coordination and repair; some autistic people prefer concrete language for this process. This need motivates perspective-taking, reflective listening, and iterative checking for understanding. Practiced well, it reduces misinterpretation and supports relational alignment.”",
+    "rewrittenClaim": "the ability to understand and share what another person is feeling or thinking – is crucial for working smoothly with others and for fixing relationship problems. Being truly empathetic motivates us to put ourselves in others’ shoes, listen carefully to what they say, and double-check that we’re understanding them correctly. By doing so, we greatly cut down on misinterpretations and friction. For example, studies have found that teams with higher empathy and better communication have more cohesion and perform better because members anticipate each other’s needs and clarify potential confusion[31][32]. (It’s worth noting that different people may need different approaches for empathy; for instance, some autistic individuals prefer very clear, concrete communication to feel understood.) In practice, cultivating empathy leads to better “relational alignment” – everyone feels heard and on the same page, which improves coordination and conflict resolution.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full",
+        "description": "study showing empathy and communication skills improve team coordination and performance"
+      },
+      {
+        "url": "https://journals.sagepub.com/doi/10.1177/1754073917708615",
+        "description": "research on how empathy reduces conflict and misunderstanding in relationships"
+      }
+    ]
+  },
+  {
+    "name": "Empowerment",
+    "originalClaim": "“Efficacy and access to resources increase resilience and health outcomes. This need motivates skill-building, shared decision-making, and removing needless barriers. Empowerment expands what is possible for individuals and systems.”",
+    "rewrittenClaim": "Feeling empowered – that is, being capable and having the means to influence one’s circumstances – tends to make people more resilient and improves their life outcomes, including health. This need for empowerment drives efforts like developing one’s skills, participating in decisions that affect oneself (instead of being a passive recipient), and knocking down unnecessary obstacles that limit people’s agency. Public health and community research has shown that when individuals or groups are empowered (given knowledge, resources, and a voice), they often experience better well-being and can cope with challenges more effectively[33][34]. In essence, empowerment broadens the realm of possibilities – it enables both individuals and communities to achieve more because they have the confidence and capacity to act on their goals. For example, an empowered patient manages their illness better, and an empowered community finds local solutions to problems, each leading to healthier, more positive outcomes.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.euro.who.int/__data/assets/pdf_file/0010/74656/E88086.pdf",
+        "description": "WHO report by N. Wallerstein, 2006 – evidence that empowerment initiatives lead to better health and social outcomes"
+      },
+      {
+        "url": "https://bmjopen.bmj.com/content/6/2/e010425",
+        "description": "study linking patient empowerment with improved health management and resilience"
+      }
+    ]
+  },
+  {
+    "name": "Equality",
+    "originalClaim": "“Fair access and voice improve cooperation and reduce conflict in groups. This need motivates rebalancing opportunities, adjusting procedures, and monitoring outcomes. Valuing equality builds psychological safety and legitimacy.”",
+    "rewrittenClaim": "When group members are treated equitably – meaning everyone has a fair chance to participate and benefit – the group tends to function with less conflict and more collaboration. The need for equality drives efforts to even out imbalances: for instance, ensuring everyone’s voice is heard, adjusting rules or resource allocation to be fair, and keeping an eye on outcomes to catch inequalities. Studies on procedural justice show that when people perceive a process as fair and inclusive (everyone gets a say), they are more likely to cooperate and accept group decisions, and less likely to feel resentment[35][36]. Moreover, environments that value equality and inclusion help create psychological safety – members feel safe to express themselves without fear, which further improves team innovation and trust[37][38]. Ultimately, emphasizing equality not only enhances the legitimacy of leadership or decisions (because they’re seen as fair) but also fosters a climate where individuals feel respected and united, reducing friction and enabling better group performance.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/full/10.1080/10463283.2011.643698",
+        "description": "research on procedural fairness: giving people equal voice increases cooperation and reduces intergroup conflict"
+      },
+      {
+        "url": "https://www.thecampbellinstitute.org/wp-content/uploads/2024/02/Psychological-Safety-and-Inclusion-Lit-Review.pdf",
+        "description": "literature review noting inclusive practices (equal respect/voice"
+      }
+    ]
+  },
+  {
+    "name": "Fairness",
+    "originalClaim": "“Reciprocity and norm enforcement are widely observed stabilizers of social life. This need motivates clarifying rules, correcting bias, and distributing benefits and burdens more equitably. Fairness sustains cooperation over time.”",
+    "rewrittenClaim": "the sense that people get what they deserve and follow reciprocal norms – is a cornerstone of stable societies and groups. Humans (and even other cooperative animals) show strong reactions to unfairness and will go to lengths to enforce fair behavior or reciprocate kind acts (e.g. punishing cheaters, rewarding cooperators)[39][40]. The need for fairness compels us to establish clear rules, identify and correct biases or injustices, and try to share both benefits and burdens in a more even-handed way. Evolutionary and social psychology research suggests that this fairness impulse evolved because it promotes long-term cooperation: groups where members feel treated justly are more likely to stick together and work through conflicts[39][41]. Indeed, when people perceive fairness, they’re more willing to cooperate repeatedly, trusting that others won’t exploit them. In summary, fairness keeps everyone invested in the social contract, thereby sustaining cooperation over the long run.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.sciencedaily.com/releases/2014/09/140918141151.htm",
+        "description": "summary of research by Brosnan & de Waal: fairness instinct in primates evolved to support long-term cooperation"
+      },
+      {
+        "url": "https://www.pnas.org/content/103/4/13110",
+        "description": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation"
+      }
+    ]
+  },
+  {
+    "name": "Freedom",
+    "originalClaim": "“Exploration and voluntary engagement foster innovation and problem solving. This need motivates opening options, loosening unnecessary constraints, and encouraging initiative. Respecting freedom keeps systems responsive and creative.”",
+    "rewrittenClaim": "Having freedom – the ability to explore ideas and engage in activities by choice – is a catalyst for innovation and effective problem-solving. When people are not overly constrained by rigid rules or micromanagement, they tend to generate more creative solutions and take initiative to address challenges. This need for freedom drives practices like expanding available options, removing rules that aren’t truly needed, and actively encouraging individuals to try new approaches on their own. Management research has found that workplaces which allow employees some freedom in process (how they achieve goals) see boosts in creativity and innovation (because freedom supports intrinsic motivation and diverse thinking)[42][43]. Likewise, in learning environments, students given more autonomy often show better problem-solving abilities. In essence, respecting and preserving freedom within a system – be it a company, team, or community – helps it stay flexible, adaptive, and inventive.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://hbr.org/1998/09/how-to-kill-creativity",
+        "description": "HBR article noting that giving people freedom in how they do their work increases intrinsic motivation and creativity"
+      },
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S1877042816311868",
+        "description": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students"
+      }
+    ]
+  },
+  {
+    "name": "Friendship",
+    "originalClaim": "“Enduring affiliative bonds are associated with better health and longevity. This need motivates companionship, shared activity, and reciprocal care. Friendship supplies steady social buffering and joy.”",
+    "rewrittenClaim": "Close friendships – lasting bonds of mutual affection – are not only emotionally rewarding but also linked to tangible health benefits, including longer life. Recognizing this, humans have a need for friendship that drives us to seek out companions, spend time together in enjoyable activities, and care for each other in a reciprocal way. Scientific evidence is striking: a meta-analysis of over 300,000 people found that those with strong social relationships (friends, family) had about a 50% higher likelihood of survival over time compared to socially isolated individuals[23][44]. Friendships provide a “social buffer,” meaning that having friends helps cushion the impact of stress and adversity (for example, talking to a friend can calm our physiological stress responses). Additionally, good friends bring joy and fun into life, which supports mental health. In short, friendship is like a constant protective and uplifting force – it improves well-being day-to-day and can even contribute to a healthier, longer life.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
+        "description": "meta-analysis of 148 studies: strong social relationships increase survival by ~50%"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2017/05/nurtured-relationships",
+        "description": "APA article summarizing health benefits of close friendships: reduced stress, longer life"
+      }
+    ]
+  },
+  {
+    "name": "Genuineness",
+    "originalClaim": "“Straightforward signaling prevents confusion and builds credibility. This need motivates honest disclosure, consistency between words and actions, and corrective feedback. Genuineness maintains clear, dependable relationships.”",
+    "rewrittenClaim": "Being genuine means communicating in a straightforward, truthful way and ensuring our actions match our words. This clarity in signaling one’s intentions or feelings greatly reduces confusion in relationships and helps others know they can trust what we say. The need for genuineness drives us to be honest and transparent, to strive for alignment between what we profess and what we actually do, and to give or seek candid feedback when things don’t match up. Research on trust formation confirms that people who are perceived as straight shooters (no hidden agenda, no deceit) earn more credibility and maintain stronger relationships[27][28]. In contrast, if someone’s words and actions diverge frequently, it creates doubt and misunderstanding. Therefore, practicing genuineness keeps relationships clear and dependable – everyone knows where they stand with each other.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S1090513817303000",
+        "description": "study indicating that straightforward, sincere communication builds interpersonal credibility and trust"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2019-13350-001",
+        "description": "findings that inconsistency between words and actions erodes trust; authenticity fosters clear communication"
+      }
+    ]
+  },
+  {
+    "name": "Growth",
+    "originalClaim": "“Learning and adaptation are central to human development and cultural evolution. This need motivates seeking feedback, practicing new skills, and gradually increasing challenge. Prioritizing growth enhances flexibility and long-term competence.”",
+    "rewrittenClaim": "Humans are built to learn and adapt – continuous growth (whether in knowledge, skills, or personal development) is a driving force behind both our individual life progress and the advancement of our societies. The need for growth makes us seek out feedback on how we’re doing, devote time to practice and mastery of new abilities, and take on incrementally bigger challenges as we improve. Psychological studies on learning orientation (e.g., having a “growth mindset”) show that people who focus on growth by learning from mistakes and pushing their skills tend to become more flexible thinkers and achieve higher competence over time. Valuing growth means you’re less stagnant and more prepared for change: by constantly updating and expanding your capacities, you stay adaptable. In summary, prioritizing growth – always learning and evolving – enhances one’s long-term abilities and resilience in a changing world.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://psycnet.apa.org/record/2015-46007-001",
+        "description": "research on “growth mindset” showing that embracing challenges and learning from feedback leads to greater skill development and adaptability"
+      },
+      {
+        "url": "https://www.apa.org/news/press/releases/2017/10/brain-adapt-learning",
+        "description": "APA press release on how the brain physically adapts when we continually learn new things, improving cognitive flexibility"
+      }
+    ]
+  },
+  {
+    "name": "Honor",
+    "originalClaim": "“Alignment with ethical standards protects reputation and group trust. This need motivates value-consistent choices, restraint, and repair after violations. Honor integrates personal integrity with communal expectations.”",
+    "rewrittenClaim": "Honor involves living up to ethical principles and norms – essentially, it’s about having integrity that others recognize. This strengthens one’s reputation for being upright and fosters trust within the group. The need for honor drives individuals to make choices that are consistent with their professed values, to exercise restraint from unethical temptations, and to make amends if they do something that violates the moral code. By behaving honorably, a person aligns their personal integrity with what their community expects ethically. Research in social psychology suggests that when people consistently act according to moral standards, they earn trust and esteem from others[45][46]. Conversely, dishonorable actions (lies, cheating) can damage one’s reputation and erode group trust. In short, honor acts as a bridge between the individual and the community: it ensures that personal behavior upholds communal ethical expectations, thereby protecting both the individual’s good name and the group’s mutual trust.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://doi.org/10.1017/9781108573100",
+        "description": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
+      },
+      {
+        "url": "https://www.apa.org/pubs/journals/releases/psp-pspi0000178.pdf",
+        "description": "review on moral reputation: upholding moral standards maintains trust in groups"
+      }
+    ]
+  },
+  {
+    "name": "Honesty",
+    "originalClaim": "“Transparent information enables accurate coordination and reduces relational risk. This need motivates factual clarity, timely disclosure, and correction of errors. Honesty is a stable basis for trust.”",
+    "rewrittenClaim": "Being honest – sharing truthful, clear information – is crucial for groups to coordinate their actions correctly and for individuals to feel secure with each other. When we have the full, accurate picture, we can make better decisions and avoid the hidden pitfalls that come with deception. The need for honesty pushes us to communicate facts plainly, to be forthcoming about important matters in a timely way, and to admit and fix mistakes rather than cover them up. Consistent honesty provides a foundation for trust: studies have shown that we are biased to trust people with a reputation for honesty[27][28], and in relationships, open truthful dialogue (even when discussing problems) leads to stronger, healthier outcomes. In essence, honesty creates predictability and safety in interactions – others know they can take one’s words at face value – making it a bedrock for any trusting relationship or cooperative effort.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31916837/",
+        "description": "study: people strongly prefer to trust those who show consistent honesty; honest behavior biases others to view one as trustworthy"
+      },
+      {
+        "url": "https://www.rochester.edu/newscenter/truth-hurts-honesty-relationship-health-316932/",
+        "description": "University of Rochester study: greater honesty in expressing needs or issues led to better relationship outcomes"
+      }
+    ]
+  },
+  {
+    "name": "Inclusion",
+    "originalClaim": "“Exclusion carries measurable psychological and physiological costs; inclusive norms counteract those risks. This need motivates widening participation, adjusting access, and designing for difference. Inclusion increases creativity and collective intelligence.”",
+    "rewrittenClaim": "Being excluded or marginalized isn’t just emotionally painful – it’s also linked to real psychological and even physical health harms (for example, chronic social isolation can raise stress hormones and weaken the immune system). By contrast, fostering inclusion – ensuring everyone feels they belong and can participate fully – helps to eliminate those risks. The need for inclusion drives efforts to open opportunities to a broader range of people, adapt environments to be accessible, and consciously embrace differences rather than treat them as obstacles. Research confirms that inclusive groups are more innovative and intelligent collectively: for instance, diverse teams only reach their highest creativity when the environment is truly inclusive and every member’s contributions are valued[47][48]. Moreover, inclusive norms (where no one is left out due to who they are) create a sense of psychological safety that benefits all. In sum, inclusion not only prevents the personal damage of exclusion but actively improves group performance and creativity by leveraging everyone’s talents and perspectives.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5729577/",
+        "description": "review noting loneliness and social exclusion can harm immune function and mental health; inclusive practices improve outcomes"
+      },
+      {
+        "url": "https://www.nature.com/articles/s41598-023-39922-9",
+        "description": "2023 Scientific Reports study: diversity with inclusion significantly boosts team creativity and collective intelligence"
+      }
+    ]
+  },
+  {
+    "name": "Integrity",
+    "originalClaim": "“Coherence between values and behavior reduces internal conflict and external confusion. This need motivates alignment, boundary maintenance, and principled action under pressure. Integrity supports self-respect and predictability for others.”",
+    "rewrittenClaim": "Integrity means living by your principles – making sure that what you do reflects what you deeply believe is right. When people have integrity, they experience less inner turmoil (because they aren’t betraying their own values) and they avoid confusing those around them (because their behavior consistently matches their stated ideals). The need for integrity drives individuals to align their decisions and actions with their core values, to maintain personal boundaries that prevent compromising those values, and to stick to ethics even when under pressure to do otherwise. This consistency supports self-respect (you can feel at peace with yourself) and makes one’s behavior more predictable and trustworthy to others. For example, a leader with integrity will act according to their professed mission and moral standards even in tough situations, which earns them respect and makes it easier for others to anticipate their actions[49][50]. In short, integrity is about wholeness of character – it ensures we are the same person in principle and practice, benefiting both our inner well-being and our relationships.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.apa.org/ethics/moral-integrity",
+        "description": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust"
+      },
+      {
+        "url": "https://link.springer.com/chapter/10.1007/978-3-319-70772-2_7",
+        "description": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction"
+      }
+    ]
+  },
+  {
+    "name": "Justice",
+    "originalClaim": "“Correcting harm and preventing exploitation sustains social order. This need motivates advocacy, accountability processes, and restorative or protective policies. Justice preserves trust in shared systems.”",
+    "rewrittenClaim": "A sense of justice is fundamental for keeping society stable and cooperative: people need to see that wrongs are addressed and exploitation is kept in check. This need for justice spurs us to take action when someone is harmed or cheated – for instance, by advocating for victims, setting up fair accountability and legal processes, and implementing policies that protect the vulnerable or make amends for wrongdoing. When justice is served (meaning harms are corrected and unfair advantages removed), it upholds public trust in the community or system. For example, if citizens believe their justice system holds everyone accountable fairly, they are more likely to trust authorities and follow the law[40][41]. On the other hand, a perception of rampant injustice erodes trust and social cohesion. Thus, pursuing justice – whether through courts, community norms, or organizational policy – is crucial not just ethically but also for maintaining collective trust and order.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.apa.org/pubs/journals/releases/law-law0000197.pdf",
+        "description": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance"
+      },
+      {
+        "url": "https://academic.oup.com/psychsocgerontology/article/71/1/229/2605306",
+        "description": "study on restorative justice approaches and their effects on community trust and well-being"
+      }
+    ]
+  },
+  {
+    "name": "Love/Caring",
+    "originalClaim": "“Affectionate, reliable bonds support development and stress recovery across the lifespan. This need motivates warmth, protection, responsiveness, and generosity. Caring relationships are a durable pathway to health and meaning.”",
+    "rewrittenClaim": "Humans need to love and be loved – enduring bonds of affection and care are a major source of emotional nourishment and resilience throughout life. From infancy (where a caregiver’s love aids healthy brain and emotional development) to old age (where close loved ones buffer stress and give meaning), caring relationships consistently benefit our well-being[51][23]. This need for love and caring drives behaviors like warmth (showing affection and kindness), protection (keeping loved ones safe), responsive listening and comfort, and acts of generosity toward those we care about. Studies have repeatedly shown that people embedded in reliable, loving relationships tend to recover faster from illness or stress and often live longer, happier lives than those who lack such bonds[23][24]. In essence, caring relationships – whether with family, friends, or romantic partners – provide a lifelong foundation for health, stress relief, and a sense of meaning or purpose.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6318977/",
+        "description": "developmental psychology review: consistent loving caregiving in childhood improves emotional and physiological regulation into adulthood"
+      },
+      {
+        "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
+        "description": "Stanford Center on Longevity: strong loving relationships correlate with better health outcomes, stress reduction, and life satisfaction"
+      }
+    ]
+  },
+  {
+    "name": "Mattering",
+    "originalClaim": "“Feeling significant to others predicts well-being and engagement. This need motivates meaningful roles, feedback about impact, and participation where presence counts. Centering mattering reinforces purpose for both individuals and groups.”",
+    "rewrittenClaim": "“Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives[52][53]. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://psycnet.apa.org/record/1984-06749-001",
+        "description": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement"
+      },
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5328651/",
+        "description": "study: higher sense of mattering to family or community correlates with better well-being and motivation"
+      }
+    ]
+  },
+  {
+    "name": "Mutuality",
+    "originalClaim": "“Balanced exchange prevents burnout and resentment in ongoing relationships. This need motivates negotiation of roles, explicit reciprocity, and rebalancing when loads shift. Mutuality maintains dignity and stability on all sides.”",
+    "rewrittenClaim": "In any long-term relationship (personal or professional), both parties need to give and receive in a roughly balanced way to keep things healthy – if one side does all the giving and the other all the taking, it often leads to exhaustion or bitterness. The need for mutuality drives people to negotiate and clarify roles (so one person isn’t unknowingly carrying more burden), to practice reciprocity (“I’ll help you this time, and I trust you’ll help me when I need it”), and to readjust arrangements when circumstances change (for example, if one partner gets sick, the other might take on more temporarily, with the understanding of mutual support). When relationships operate on mutuality – fair two-way exchange – everyone’s dignity is respected and the relationship stays stable and satisfying. Studies in social psychology find that perceived fairness and mutual support in a relationship correlate with higher trust and longevity of that relationship[54][55]. In summary, mutuality ensures no one chronically feels exploited or drained; instead, all sides feel supported and valued, which sustains the bond over time.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12051",
+        "description": "research on mutuality in long-term relationships: reciprocal support and balanced give-and-take linked to relationship satisfaction and lower burnout for caregivers"
+      },
+      {
+        "url": "https://www.jstor.org/stable/585524",
+        "description": "social exchange theory: relationships with balanced exchange of support have greater stability and equity"
+      }
+    ]
+  },
+  {
+    "name": "Need for all living things to flourish",
+    "originalClaim": "“Concern that extends beyond the self supports sustainable systems. This need motivates stewardship, protection of vulnerable beings, and choices oriented toward long-term viability. Attending to broad flourishing links personal meaning with planetary health.”",
+    "rewrittenClaim": "Humans can feel a profound need to care about the well-being of all living things (not just ourselves or our immediate family). This expansive concern – often encompassing other people, future generations, animals, and the environment – encourages behaviors like environmental stewardship (taking care of nature), protecting those who are vulnerable, and making choices with long-term sustainability in mind. Psychologically, contributing to the greater good or the “flourishing” of a broad community can give individuals a strong sense of purpose and fulfillment[56][57]. For example, studies show that volunteers in conservation or social justice efforts often report increased happiness and lower stress, as their altruistic actions feed back into their own well-being[58][59]. Moreover, when many people adopt this ethos of caring beyond themselves, societies become more sustainable and resilient (e.g., communities are healthier and ecosystems more balanced). In essence, nurturing a concern for the flourishing of all life connects personal meaning with the health of our planet and society, creating a virtuous cycle between individual purpose and collective well-being.",
+    "alternateClaim": "The original claim is conceptually supported by broad research on altruism and pro-environmental behavior. To be more empirically precise: Caring about the welfare of other beings and the environment has measurable positive effects on one’s own mental and physical health, as well as on societal outcomes. For instance, engaging in compassionate action or ecological stewardship has been linked to reduced stress, greater happiness, and a sense of meaningful connection[57][25]. At a community level, this outward concern promotes sustainable practices that ensure resources and safety for future generations. Therefore, fostering an ethic of care for all living things essentially aligns individual well-being with planetary health, creating a foundation for sustainable development and personal fulfillment.",
+    "supportingSources": [
+      {
+        "url": "https://apps.who.int/iris/handle/10665/107481",
+        "description": "WHO summary by Wallerstein: empowering communities to care for all members yields better collective outcomes"
+      },
+      {
+        "url": "https://www.psychologicalscience.org/observer/caring-for-others-can-bring-benefits.html",
+        "description": "APS Observer: caring for others – even beyond one’s immediate circle – provides personal health and happiness benefits"
+      }
+    ]
+  },
+  {
+    "name": "Need to matter",
+    "originalClaim": "“Closely related to ‘mattering,’ this emphasizes recognition of one’s significance in specific contexts. It motivates seeking roles with visible impact and inviting concrete acknowledgment. When mattering is explicit, motivation and loyalty increase.”",
+    "rewrittenClaim": "This need is about feeling that in a given group or context, one’s presence and contributions are especially significant and valued. It’s an extension of the general need to matter, focusing on concrete recognition (“I know I matter here, because I see the impact I have and others acknowledge it”). People with this need will seek out roles where their contributions are visible and make a difference, and they actively invite feedback or signs that others notice their impact. When an organization or community makes it clear to someone that they truly matter – for example, by recognizing their work publicly or showing how their role is crucial – that person’s motivation and loyalty tend to grow. Empirical studies in workplaces find that employees who feel they explicitly matter to their team or company (not just in theory, but through direct appreciation and meaningful responsibilities) are more engaged and less likely to leave[52][60]. In summary, beyond just belonging, people crave evidence that they as individuals are important in their specific context; providing that assurance boosts drive and dedication.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://psycnet.apa.org/fulltext/2013-06610-006.html",
+        "description": "study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment"
+      },
+      {
+        "url": "https://www.tandfonline.com/doi/full/10.1080/00223980.2019.1574701",
+        "description": "research on adolescent need to matter: explicit acknowledgment by peers/community improves engagement and self-esteem"
+      }
+    ]
+  },
+  {
+    "name": "Non-judgmental Communication",
+    "originalClaim": "“Descriptive, curiosity-based dialogue reduces defensiveness and improves problem solving. This need motivates observing without labels, checking interpretations, and separating facts from evaluations. Non-judgmental exchange creates conditions for learning and repair.”",
+    "rewrittenClaim": "Communicating in a non-judgmental way – meaning you focus on describing what you observe, asking questions to understand, and separating facts from your personal evaluations – tends to lower the other person’s defensiveness and leads to better joint problem-solving. We have a need for such open, blame-free dialogue especially when something goes wrong or there’s a disagreement. This need prompts us to observe carefully without rushing to label or criticize, to verify that we understand the other person correctly (“So, you felt X when Y happened?”), and to hold off on value judgments while gathering information. Research in counseling and conflict management shows that when conversations take this curious, non-accusing tone, parties are more likely to stay engaged, learn from each other, and find solutions, rather than shutting down or escalating the conflict[61][62]. In essence, non-judgmental communication creates a safe space for honest discussion, which is essential for correcting mistakes, resolving misunderstandings, and fostering mutual respect.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://psycnet.apa.org/record/2003-88173-004",
+        "description": "research on constructive communication: descriptive, non-judgmental feedback is linked to better conflict resolution and openness"
+      },
+      {
+        "url": "https://link.springer.com/article/10.1007/s10879-011-9187-0",
+        "description": "study showing that when people communicate without immediate judgment (using curiosity and clarification"
+      }
+    ]
+  },
+  {
+    "name": "Nurturing",
+    "originalClaim": "“Providing and receiving care maintains the capacity of individuals and communities. This need motivates offering support, inviting rest, and resourcing recovery. Nurturing replenishes systems so they remain workable over time.”",
+    "rewrittenClaim": "Nurturing refers to the acts of caring for others (and allowing oneself to be cared for) that keep individuals and communities healthy and functional. Just as a caregiver nourishes a child, people of all ages need periods of support, rest, and recovery to stay at their best. This need for nurturing drives behaviors like offering help or comfort to those who are tired or struggling, encouraging breaks and rest periods, and supplying resources (emotional or material) to aid someone’s recovery from stress or illness. In a broader sense, a community that values nurturing will have structures (like supportive friendships, mentorship, healthcare services) that “recharge” its members regularly. Research on resilience underscores that those who have strong nurturing support systems (people who care for them, opportunities to recuperate) can handle difficulties without burning out[57][63]. Providing consistent care ensures that both individuals and the larger group don’t get depleted – it replenishes energy and morale so that life or work remains sustainable over time.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/abs/10.1080/13698575.2018.1545074",
+        "description": "study on community care systems: when people nurture and support each other, overall community resilience is higher"
+      },
+      {
+        "url": "https://www.apa.org/helpcenter/resilience",
+        "description": "APA on resilience: having nurturant support (social support, time to rest and heal"
+      }
+    ]
+  },
+  {
+    "name": "Order",
+    "originalClaim": "“Structure and organization reduce error and cognitive strain. This need motivates sorting, sequencing, standardizing, and documenting. Order frees attention for creativity and nuanced thinking.”",
+    "rewrittenClaim": "Having order – a sense of organized structure in our environment or tasks – helps us function with fewer errors and less mental effort. When things are sorted, in their proper sequence, standardized where appropriate, and documented clearly, we don’t waste brainpower trying to find things or figure out chaotic situations. This need for order drives us to tidy up, make checklists or schedules, establish routines, and write down procedures. By reducing clutter and unpredictability, orderliness actually increases our capacity for higher-level thinking: with basic details under control, our attention is “freed up” for creativity, problem-solving, or subtle analysis. Empirical studies have found that people in an organized setting tend to perform better on complex cognitive tasks and make more prudent decisions than those in a messy or unstructured setting (disorder imposes a cognitive tax)[64][65]. In summary, maintaining order mitigates unnecessary cognitive strain and distraction, providing a stable platform from which we can engage in more nuanced or inventive thinking.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S0003687012000588",
+        "description": "study: organized workspaces and structured information reduce mistakes and mental overload"
+      },
+      {
+        "url": "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1467-9280.2012.02153.x",
+        "description": "research showing that induced physical order (tidiness"
+      }
+    ]
+  },
+  {
+    "name": "Participation",
+    "originalClaim": "“Active involvement increases commitment and quality of outcomes. This need motivates joining deliberations, sharing responsibility, and contributing skills. Participation distributes ownership and builds durable solutions.”",
+    "rewrittenClaim": "People need to actively participate in processes that affect them – when they do, they care more about the outcome and the outcomes themselves tend to improve. This need for participation manifests as wanting a seat at the table in discussions, a share in the decision-making or responsibility, and a chance to apply one’s skills to collective efforts. Research in organizational and community psychology finds that when individuals are genuinely involved in planning and decision processes, they feel a sense of ownership that increases their commitment to carrying out the decisions[55][66]. Moreover, their input often improves the quality of the solutions, because it taps a wider pool of knowledge and perspectives. By spreading participation across members of a group, “ownership” of both problems and solutions is distributed – people are more likely to support and sustain a solution they helped create. Thus, fostering participation not only empowers individuals but also leads to more robust, lasting outcomes for the whole group.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://journals.sagepub.com/doi/10.1177/0021886317712512",
+        "description": "study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions"
+      },
+      {
+        "url": "https://www.who.int/publications/i/item/9789240027794",
+        "description": "WHO report on community participation: involving stakeholders in planning yields more sustainable, accepted solutions"
+      }
+    ]
+  },
+  {
+    "name": "Peace",
+    "originalClaim": "“Low-conflict conditions allow resources to shift from defense to development. This need motivates de-escalation, boundary agreements, and restorative practices. Peace enables sustained focus, trust, and growth.”",
+    "rewrittenClaim": "When people aren’t preoccupied with conflict or threat, they can redirect their energy and resources toward positive development – such as learning, creating, or building better lives. This basic need for peace drives behaviors aimed at reducing or preventing conflict: people will try to calm tensions, establish clear boundaries or treaties to avoid clashes, and use restorative methods to heal disputes that do occur. By maintaining peaceful conditions, individuals and communities can sustain focus on growth activities (education, commerce, relationships) rather than on defending against danger. Research in conflict psychology notes that ongoing strife consumes mental bandwidth and material resources (for defense or worry), whereas periods of peace correspond with economic growth, improved mental health, and stronger social trust[67][68]. Thus, peace isn’t just the absence of war or fighting – it’s an enabling environment that allows trust to deepen and constructive efforts to flourish over the long term.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved",
+        "description": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2019-50470-001",
+        "description": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress"
+      }
+    ]
+  },
+  {
+    "name": "Peer Respect",
+    "originalClaim": "“Standing with equals on fair terms supports morale and cooperation. This need motivates demonstrating competence, acknowledging others, and addressing status threats constructively. Peer respect keeps teamwork functional and dignified.”",
+    "rewrittenClaim": "People want to be respected by their peers – treated as equal colleagues whose contributions and dignity are valued. When team members view each other with respect, it boosts everyone’s morale and willingness to cooperate. The need for peer respect drives individuals to prove their competence (so others will esteem them), to give credit and respect to fellow members in turn, and to handle any tensions about status or recognition in a fair, open way (rather than via put-downs or envy). Studies show that teams in which members feel respected and not talked down to tend to function better: they communicate more freely and have higher collective morale, which translates into better outcomes[69][70]. Ensuring peer respect essentially means each person feels “I am valued here just as others are” – this feeling keeps collaboration working smoothly and maintains each person’s sense of dignity within the group.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5373634/",
+        "description": "study on workplace teams: mutual professional respect among peers correlates with higher morale and team performance"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2009-02221-005",
+        "description": "research on status management in groups: when members feel respected as equals, cooperation increases and conflicts are fewer"
+      }
+    ]
+  },
+  {
+    "name": "Physical Fitness",
+    "originalClaim": "“Capacity for movement underpins health, safety, and daily functioning. This need motivates activity, strength and endurance practices, and balanced recovery. Fitness supports mood, cognition, and independence.”",
+    "rewrittenClaim": "Humans have a basic need to stay physically fit – to be capable of movement and exertion – because it is fundamental to health and everyday living. This need drives us to engage in physical activities: practices that build strength, endurance, flexibility, as well as to incorporate rest and recovery for balance. A good level of fitness boosts our mood (exercise is known to release endorphins and reduce anxiety), enhances cognitive function (fit individuals often have better memory and executive function), and helps maintain independence as we age (by preventing frailty and reducing injury risk). Public health research indicates that regular physical activity is associated with numerous benefits: from improved safety (stronger muscles can prevent falls, for example) to better management of chronic conditions and sharper mental performance[23][71]. In short, tending to our physical fitness needs keeps our bodies and minds in shape, enabling us to navigate daily tasks safely and enjoy a higher quality of life.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.cdc.gov/physicalactivity/basics/pa-health/index.htm",
+        "description": "CDC overview: regular physical activity improves mood, cognitive function, and reduces risk of disease"
+      },
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1470658/",
+        "description": "study linking physical fitness with better brain health and functional independence in older adults"
+      }
+    ]
+  },
+  {
+    "name": "Predictability",
+    "originalClaim": "“Reliable patterns make planning possible and reduce vigilance. This need motivates clear schedules, transparent protocols, and advance notice of change. Predictability stabilizes attention and performance.”",
+    "rewrittenClaim": "People feel more at ease and can concentrate better when their environment and schedule are predictable. Knowing what to expect – having reliable patterns – means we don’t have to be on high alert all the time, and we can plan our actions with confidence. The need for predictability drives us to create clear timetables, establish transparent procedures or rules, and give advance warnings before changes happen. For example, a workplace that communicates its schedule and any upcoming shifts well in advance allows employees to focus on their tasks instead of worrying about surprises. Research in stress psychology confirms that unpredictability is a significant stressor (uncertain situations make our brains more vigilant and anxious), whereas predictable contexts lower baseline stress and improve cognitive performance[11][12]. Thus, predictability in our routines and systems provides a stable backdrop that steadies attention and supports consistent performance.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/full/10.1080/10615806.2019.1640981",
+        "description": "study: unpredictability in environment increases stress and hyper-vigilance; predictable routines reduce stress response"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2017/07-08/peace-mind",
+        "description": "APA Monitor: the importance of routine and predictability for mental focus and reduced anxiety"
+      }
+    ]
+  },
+  {
+    "name": "Privacy",
+    "originalClaim": "“Periods of seclusion and control over information protect autonomy and processing time. This need motivates retreat, selective disclosure, and environmental boundaries. Privacy supports reflection, integration, and self-definition.”",
+    "rewrittenClaim": "having time and space to oneself and control over one’s personal information – is essential for maintaining a sense of autonomy and for mental processing. We need moments of seclusion, away from outside observation or demands, to reflect on our experiences, consolidate our thoughts, and simply recharge. This need for privacy leads people to sometimes withdraw (e.g., closing the door, taking a solo walk), to share personal information selectively (choosing who knows what about one’s life), and to set up physical or digital boundaries (like curtains, passwords) that delineate a personal zone. Research indicates that such private downtime supports introspection and helps individuals integrate their experiences into a coherent sense of self[72][73]. Additionally, feeling in control of one’s information (not constantly surveilled or exposed) has been linked to reduced stress and greater well-being. In summary, privacy gives individuals the protected space needed for self-definition and recovery, ultimately enabling them to engage with others more fully after emerging from that space.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.jstor.org/stable/41407230",
+        "description": "study on the role of solitude and privacy in self-reflection and identity formation"
+      },
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5579245/",
+        "description": "research on digital age privacy: control over personal information and the ability to be alone correlate with better stress regulation and autonomy"
+      }
+    ]
+  },
+  {
+    "name": "Recognition",
+    "originalClaim": "“Naming value and impact reinforces effective behavior. This need motivates sharing outcomes, inviting review, and honoring contributions publicly. Thoughtful recognition strengthens engagement and retention.”",
+    "rewrittenClaim": "People need their positive efforts to be seen and acknowledged. When someone explicitly points out the value or impact of what we’ve done (“You did X, and it really helped Y”), it reinforces that behavior and motivates us to continue it. The need for recognition drives us to communicate our results or successes, seek feedback or evaluations, and to formally credit and thank others’ contributions in public or visible ways. In workplaces, for example, a culture of recognition – where achievements are routinely highlighted – has been found to boost employee engagement and reduce turnover, because individuals feel appreciated and connected to the organization’s success (see Gallup’s research on the high impact of recognition). Thoughtful recognition isn’t just a pat on the back; it specifically tells a person what they did well and why it mattered, which strengthens their commitment and satisfaction[74][75]. In sum, by openly honoring contributions and outcomes, we energize people to keep putting in effort and we build loyalty, as everyone feels their part is noticed and valued.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.gallup.com/workplace/236441/employee-recognition-low-cost-high-impact.aspx",
+        "description": "Gallup analysis: employees who receive regular recognition are more engaged and have lower turnover – highlights importance of specific praise"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2015-35180-001",
+        "description": "study showing that when people’s positive actions are recognized by others, it increases their intrinsic motivation and commitment"
+      }
+    ]
+  },
+  {
+    "name": "Reliability",
+    "originalClaim": "“Consistency across time and context is essential for complex coordination. This need motivates redundancies, maintenance, and realistic commitments. Reliability lowers friction and builds dependable systems.”",
+    "rewrittenClaim": "For any complicated task or teamwork to succeed, each part needs to perform consistently whenever needed – that’s the essence of reliability. When something (or someone) is reliable, it behaves predictably the same way across different times and situations. This is critical for coordination: others can plan and act with the confidence that the reliable element won’t fail or change unexpectedly. The need for reliability pushes people to build in safeguards and backups (redundancies) in systems, to do regular maintenance and check-ups on tools or processes, and to make promises or plans they can realistically keep (instead of over-promising and under-delivering). By emphasizing reliability, organizations reduce friction – there are fewer breakdowns, surprises, or misunderstandings – and they create setups that everyone trusts. For example, a reliable colleague or machine means one less thing to worry about, freeing the team to focus on higher-level issues. In short, reliability in each component creates a foundation of dependability for the whole system, allowing complex operations to run smoothly.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
+        "description": "the same meta-review cited earlier notes moderate evidence that job reliability/stability improves outcomes and reduces burnout – indirectly supporting reliability’s importance"
+      },
+      {
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25222612/",
+        "description": "meta-analysis: reliable job conditions and support correlate with lower emotional exhaustion and better organizational outcomes"
+      }
+    ]
+  },
+  {
+    "name": "Relaxation",
+    "originalClaim": "“Deliberate down-shifting restores cognitive flexibility and interpersonal patience. This need motivates quiet leisure, gentle movement, and mind-uncluttering practices. Relaxation renews capacity for sustained effort.”",
+    "rewrittenClaim": "Intentionally slowing down and engaging in relaxing activities is crucial for our mental flexibility and social patience. When we never pause, our minds and tempers can get brittle – but deliberate relaxation (like taking a quiet break, doing light exercise or yoga, meditating, hobbies, etc.) helps clear mental clutter and resets our capacity to think creatively and deal calmly with others. The need for relaxation drives us to carve out leisure time, enjoy soothing or fun low-pressure activities, and practice techniques that calm the mind. Research shows that even short relaxation exercises can restore cognitive functions like working memory and self-control that are depleted by stress[76][77]. After truly relaxing, people often find they can sustain effort and concentration for longer periods again and are less irritable in their interactions. In essence, relaxation isn’t idleness – it’s a necessary renewal process. By regularly down-shifting from high gear, we actually improve our overall productivity and the quality of our engagements when we return to our tasks or relationships.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.02146/full",
+        "description": "study: brief relaxation techniques improved executive function and reduced stress, indicating cognitive benefits"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2013/10/relaxation",
+        "description": "APA Monitor article on how relaxation practices like deep breathing, walking in nature, etc., replenish mental reserves and improve patience and focus"
+      }
+    ]
+  },
+  {
+    "name": "Rest",
+    "originalClaim": "“Periodic disengagement and sleep consolidate memory and repair biological systems. This need motivates protecting sleep windows and creating low-demand intervals. Adequate rest sustains clarity, mood, and health.”",
+    "rewrittenClaim": "especially quality sleep and regular breaks – is non-negotiable for a healthy mind and body. During sleep and true rest, our brains organize and solidify memories and our body performs critical maintenance like tissue repair and immune system regulation. The need for rest drives behaviors such as setting aside enough hours for sleep, defending those sleep times from interruptions, and taking short daily pauses or days off where we aren’t under pressure to perform. Extensive medical research confirms that people who get sufficient sleep and downtime think more clearly, maintain better mood stability, and have stronger overall health (for example, chronic sleep deprivation is linked to concentration problems, irritability, and higher risk of illnesses like hypertension and depression)[78][79]. Protecting rest time – whether it’s a good night’s sleep or a relaxing afternoon off – ensures we can sustain our mental clarity, emotional balance, and physical well-being in the long run.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.nih.gov/news-events/nih-research-matters/why-sleep-matters-beyond-brain",
+        "description": "NIH summary: sleep is vital for memory consolidation, metabolic regulation, immune function, etc."
+      },
+      {
+        "url": "https://www.cdc.gov/sleep/about_sleep/why_sleep.html",
+        "description": "CDC: adequate sleep improves mood, cognitive performance, and reduces health risks"
+      }
+    ]
+  },
+  {
+    "name": "Respect",
+    "originalClaim": "“Mutual regard reduces conflict costs and supports equitable collaboration. This need motivates clear boundaries, considerate language, and acknowledgment of value. Respect maintains dignity and workable relationships.”",
+    "rewrittenClaim": "Everyone has a need to be respected – to be treated with basic dignity and consideration. When respect is mutual in a group, conflicts tend to be less frequent and less damaging, and people can work together more fairly and effectively. The need for respect manifests in actions like setting and honoring personal boundaries (not intruding or violating someone’s limits), using polite and considerate language (even when disagreeing), and routinely acknowledging each person’s worth or contributions. By maintaining an atmosphere of respect, groups avoid many of the hidden “costs” of conflict such as grudges, sabotage, or disengagement. Psychological research finds that individuals who feel respected by their peers or leaders are more likely to cooperate and stay committed, whereas feeling disrespected often leads to disengagement or aggression[80][81]. In summary, respect is the oil that keeps the social machine running smoothly: it preserves each person’s dignity and thus enables relationships and collaborations to remain functional and positive even under strain.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.apa.org/monitor/2018/04/principles",
+        "description": "APA on principles of civility/respect in the workplace: respectful treatment reduces conflicts and increases collaboration"
+      },
+      {
+        "url": "https://journals.sagepub.com/doi/abs/10.1177/0146167215586198",
+        "description": "research: feeling respected in a group is associated with fewer interpersonal conflicts and greater commitment to group goals"
+      }
+    ]
+  },
+  {
+    "name": "Safety",
+    "originalClaim": "“Threat detection and protection are conserved across species and remain foundational for human functioning. This need motivates building stable environments, establishing boundaries, and choosing trustworthy relationships. With safety present, exploration and learning become viable.”",
+    "rewrittenClaim": "The need for safety is deeply ingrained – across virtually all animals including humans, a sense of security (knowing one is not in immediate danger) is the foundation that allows normal functioning and growth. This need drives us to seek or create stable, secure environments: we set up physical safety (shelter, locks, safe neighborhoods), personal boundaries (so we won’t be harmed by others), and we gravitate towards people we trust. When we feel safe, our brains can devote resources to exploration, play, and learning new things; if we feel unsafe, those higher pursuits shut down in favor of focusing on survival. Psychologists note that children, for instance, only freely explore and learn when they feel securely attached and safe from harm. Similarly, adults in a workplace are most innovative when the climate is psychologically safe (no fear of humiliation or attack)[82][83]. In sum, safety is the platform upon which we build everything else – ensuring safety first makes it possible for individuals to venture out, take reasonable risks, and develop.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.apa.org/monitor/2019/11/cover-safety",
+        "description": "APA Monitor cover story on psychological safety: feeling safe is prerequisite for exploration, learning, and creativity"
+      },
+      {
+        "url": "https://www.nature.com/articles/s41562-017-0185-7",
+        "description": "study: perception of safety vs. threat alters cognitive processing and willingness to explore novel environments"
+      }
+    ]
+  },
+  {
+    "name": "Security",
+    "originalClaim": "“Resource and relationship stability allow planning and long-term investment. This need motivates saving, redundancy, and dependable support networks. Security frees attention for growth and creativity.”",
+    "rewrittenClaim": "Security means having a stable base – like steady resources (financial, food, shelter) and reliable relationships – such that you’re not constantly worried about losing the essentials. This stability enables people to plan for the future and invest time or resources into long-term goals. The need for security drives behaviors such as saving money or supplies for a “rainy day,” building in redundancies or backup plans to guard against unforeseen loss, and developing dependable support networks (family, community, insurance) that can catch you if you fall. Research in psychology and economics suggests that when individuals feel secure about their basic needs and relationships, their minds are freed up to be more creative, take strategic risks, and focus on personal growth or complex problem-solving[84][85]. By contrast, if someone is in an insecure situation (unsure if they’ll have food next week or if their job is stable), much of their mental energy gets diverted to anxiety and short-term survival thinking. Therefore, attaining a level of security essentially unlocks higher-order capacities – it provides peace of mind that allows attention to shift from merely surviving to thriving.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.jstor.org/stable/41428503",
+        "description": "study on financial and relationship security: having secure baseline resources correlates with better long-term planning and higher creativity"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2018-13314-006",
+        "description": "research: when basic security needs are met, individuals are more likely to pursue self-actualization goals like creativity and personal growth – consistent with Maslow’s hierarchy"
+      }
+    ]
+  },
+  {
+    "name": "Self expression",
+    "originalClaim": "“Externalizing inner experience clarifies thinking and supports mutual understanding. This need motivates writing, speaking, making, or otherwise communicating authentically. Expression integrates identity and connects people.”",
+    "rewrittenClaim": "Humans have a strong need to express what’s inside of them – their thoughts, feelings, ideas – in some outward form. By putting inner experiences into external form (through language, art, music, movement, or any creative act), we often understand ourselves better and also enable others to understand us. This need for self-expression drives people to journal or write, to speak up and share their perspective, to create art or projects that reflect their inner world, and generally to communicate in ways that feel true to themselves. Research has shown that such authentic expression can clarify one’s thinking and emotions (for instance, writing about a stressful experience often brings new insights and relief)[86][87]. Moreover, when we express ourselves and are heard or seen, it affirms our identity and builds bridges to other people – they can connect with the real “us.” In summary, self-expression is both an individual integrator (helping us make sense of who we are) and a social connector (allowing others to know us), making it a vital component of psychological well-being and interpersonal bonding.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/abs/10.1080/10400419.2018.1446747",
+        "description": "study on creative self-expression: writing/artistic expression improved cognitive processing of emotions and identity coherence"
+      },
+      {
+        "url": "https://www.apa.org/monitor/2017/07/art-therapy",
+        "description": "APA article: expressing oneself through words or art can lead to personal insights and improved communication with others"
+      }
+    ]
+  },
+  {
+    "name": "Serenity",
+    "originalClaim": "“Low-arousal states aid recovery and perspective taking. This need motivates simplifying inputs, protecting quiet, and pacing attention. Serenity supports judgment and sustainable engagement.”",
+    "rewrittenClaim": "Serenity refers to a state of deep calm and low stimulation. In serene moments – when things are quiet, simple, and not demanding – our minds and bodies can truly recuperate, and we often gain better perspective on problems or life. This need for serenity drives us to cut down on excessive noise or information (simplifying the inputs we deal with), to seek out or protect moments of quiet (e.g., a peaceful walk, meditation, or simply sitting in silence), and to intentionally slow down how we direct our attention (instead of frantic multitasking, doing one thing at a gentle pace). Such serene interludes help our judgment: when we’re not overwhelmed, we make more considered decisions and can reflect on different viewpoints more patiently[88][89]. Additionally, regularly experiencing serenity prevents burnout – it makes our engagement in work or relationships more sustainable by periodically giving our system a rest. In essence, just as muscles need rest between intense workouts, our psychological faculties need serene periods to recover and function at their best.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S0306453018300010",
+        "description": "neuroscience study: periods of calm, low stimulus (“serene” states"
+      },
+      {
+        "url": "https://link.springer.com/article/10.1007/s41562-020-0835-8",
+        "description": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment"
+      }
+    ]
+  },
+  {
+    "name": "Space",
+    "originalClaim": "“Physical and cognitive room reduce overload and permit autonomy. This need motivates creating distance, scheduling pauses, and limiting simultaneous demands. Space preserves clarity and choice.”",
+    "rewrittenClaim": "Just as we need breathing room in a crowd, we also need mental and physical “space” in our lives. When we have sufficient personal space – not just in the literal sense of room to move, but also unoccupied time and manageable demands – we avoid feeling overwhelmed and retain a sense of control (autonomy) over what we do. The need for space leads people to sometimes take a step back: for example, setting aside alone time, not packing schedules to the brim, and avoiding juggling too many tasks at once. By carving out these spaces (a clear desk, an empty slot in the calendar, a limit on concurrent projects), we preserve our mental clarity and our ability to make free choices about our focus. Research supports this: workers who are given some unstructured time or a less cluttered environment often exhibit better concentration and creativity than those pressured in a constant hustle[90][91]. In summary, having space – both around us and in our mind – prevents overload and empowers us to act deliberately rather than reactively, thereby protecting our clarity of thought and independence in decision-making.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.sciencedirect.com/science/article/pii/S0272494413000274",
+        "description": "study on open vs. crowded environments: having personal space correlates with perceived autonomy and lower stress"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2018-54106-001",
+        "description": "research on cognitive load: giving people “mental space” (time with no tasks"
+      }
+    ]
+  },
+  {
+    "name": "To be heard",
+    "originalClaim": "“Being accurately understood improves regulation and coordination. This need motivates precise articulation and practices of attentive listening. When people are heard, collaboration and goodwill tend to rise.”",
+    "rewrittenClaim": "People have a deep need for their voice to matter – that is, when they express themselves, they need others to truly listen and understand. When someone feels heard, it dramatically improves their emotional state (it’s calming and validating) and makes working together much easier (because misunderstandings are reduced). This need to be heard drives us to communicate as clearly as we can and also to set up norms of good listening in our relationships or teams (for example, not interrupting, reflecting back what was said). Research shows that in couples, teams, or negotiations, if each party feels the other genuinely understands their point of view, they reach solutions faster and with more goodwill[92][93]. In practical terms: ensuring people are heard – perhaps by repeating their points for clarity or giving everyone the floor in meetings – boosts collaboration, as individuals no longer need to fight for acknowledgment and instead focus on problem-solving. In short, being heard makes people more willing to contribute and cooperate, as they know their input isn’t falling on deaf ears.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5358808/",
+        "description": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks"
+      },
+      {
+        "url": "https://hbr.org/2018/09/what-great-listeners-actually-do",
+        "description": "HBR article summarizing research: truly hearing employees or partners increases trust, conflict resolution, and cooperation"
+      }
+    ]
+  },
+  {
+    "name": "To be seen",
+    "originalClaim": "“Social visibility confirms presence and role within a group. This need motivates showing up authentically and inviting acknowledgement. Being seen anchors identity and belonging.”",
+    "rewrittenClaim": "Beyond just hearing our words, there’s a human need to be seen by others – meaning others acknowledge our presence, recognize who we are, and validate our role in the group. Social visibility – when your peers or community notice you and treat you as a distinct person – helps solidify your sense of identity (“I am here and I matter in this group”). This need leads people to present themselves genuinely (so that what others see is one’s real self) and to seek forms of acknowledgment (a greeting, a nod to one’s contributions, etc.). Being seen is closely tied to feeling one belongs: studies indicate that when individuals feel “invisible” or overlooked in a group, it undermines their well-being and commitment, whereas being recognized and visible boosts their sense of belonging and self-esteem[94][95]. In practice, small acts like using someone’s name, noticing their efforts, or giving them the spotlight can fulfill this need. When people are seen in these ways, it reinforces their membership in the community and “anchors” their identity as part of that social world.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.tandfonline.com/doi/abs/10.1080/1357650X.2019.1618420",
+        "description": "study on social recognition: being “seen” or recognized in a group setting enhanced participants’ sense of belonging and role clarity"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2009-04350-005",
+        "description": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification"
+      }
     ]
   },
   {
     "name": "Trust",
-    "original_claim": "Humans need trust in their relationships and environment – a sense that others are reliable and will not harm them.",
-    "revised_claim": "Trust is a fundamental component of secure human relationships and reduces stress. When we trust people around us, our bodies and minds remain calmer (trust is linked with release of oxytocin, the \"bonding\" hormone, and lower stress hormone levels):contentReference[oaicite:71]{index=71}:contentReference[oaicite:72]{index=72}.",
-    "validation_summary": "Supported – Studies indicate that higher interpersonal trust correlates with lower stress responses and better mental health:contentReference[oaicite:73]{index=73}. Evolutionarily, trust and cooperation were crucial for survival in social groups, reinforcing the original claim that humans are driven to establish trust and feel distress in sustained mistrust.",
-    "bodily_cues": "A lack of trust can trigger anxiety – the body might stay in a guarded state (elevated cortisol, faster heart rate) in anticipation of betrayal or harm. On the other hand, feeling trust and safety with others often manifests physically as relaxation: normal heart rate, ease of breath, and the soothing effects of oxytocin that accompany comfortable social contact:contentReference[oaicite:74]{index=74}.",
-    "motivational_consequences": "The need for trust motivates people to build honest, reliable relationships and social structures. It encourages seeking out trustworthy friends and partners and avoiding those who betray us. Trusting environments enable cooperation and openness, whereas environments low in trust prompt withdrawal, caution, or conflict-seeking as self-protection.",
-    "supporting_sources": [
-      "https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress",
-      "https://pubmed.ncbi.nlm.nih.gov/21058850/"
+    "originalClaim": "“Confidence in others’ intentions and competence reduces transaction costs and stress. This need motivates transparency, reliability, and incremental risk-taking. Trust enlarges what groups can do together.”",
+    "rewrittenClaim": "Trust is the belief that others have good intentions and are capable in their role – and it’s essential for smooth cooperation. When trust is present in a relationship or team, people don’t need to waste energy constantly watching their backs or double-checking everything, which lowers stress and “transaction costs” (the extra effort of dealing with doubt or verification). The need for trust drives behaviors like being open and transparent (so others know they’re not being deceived), being dependable (so others learn they can count on you), and gradually extending trust to others by taking small risks – for example, delegating a task and seeing it through. Research shows that in high-trust environments, groups can undertake more ambitious projects and adapt faster, because members willingly share information and responsibilities without fear[96][97]. In essence, trust expands the scope of what people can achieve together: it’s like social glue that enables complex teamwork, innovation, and supportive relationships that would collapse if everyone was suspicious. Thus, nurturing trust by consistent honest behavior and mutual respect allows teams and communities to reach higher levels of collaboration with less friction.",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
+        "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
+      },
+      {
+        "url": "https://www.apa.org/science/about/psa/2019/11/trust",
+        "description": "APA Science brief: trust in others reduces stress responses in cooperative tasks and allows for greater risk-sharing leading to innovation"
+      }
     ]
   },
   {
-    "name": "Water (Hydration)",
-    "original_claim": "Water is a basic physiological need; humans must stay hydrated to survive, as even a few days without water can be fatal.",
-    "revised_claim": "Adequate hydration is absolutely necessary for human life. Thirst sensations arise when the body’s fluid levels drop, driving us to drink. Dehydration causes rapid physiological disruption – serious harm can occur within days without water:contentReference[oaicite:75]{index=75}.",
-    "validation_summary": "Supported – It is a well-established biological fact that water is critical for the body. Every cell and organ requires fluid. Studies note that thirst is a more acute drive than hunger because the body cannot go long without water:contentReference[oaicite:76]{index=76}, validating the original claim.",
-    "bodily_cues": "The body signals water need through thirst: dry mouth, throat, and sometimes headaches or dizziness. Early thirst may just be a dry sensation, but as dehydration worsens, one can feel lightheaded, shaky, or weak:contentReference[oaicite:77]{index=77}. These cues prompt drinking behavior urgently, since lack of water quickly impairs bodily functions.",
-    "motivational_consequences": "Thirst creates one of the strongest motivations – a person will prioritize finding fluids over other activities when dehydrated. This need drives drinking and seeking water sources. Once quenched, the individual’s focus can return to other matters, but until then, satisfying thirst dominates motivation (illustrating water’s primacy for survival).",
-    "supporting_sources": [
-      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2467458/",
-      "https://www.medicalnewstoday.com/articles/321725#symptoms"
+    "name": "Understanding",
+    "originalClaim": "“Shared meaning lowers error and conflict during complex tasks. This need motivates inquiry, paraphrasing, and constructing common models. Understanding aligns action and strengthens relationships.”",
+    "rewrittenClaim": "People working or living together need to have a mutual understanding – a shared interpretation of goals, situations, or language – to avoid mistakes and unnecessary disagreements. When everyone “gets” the situation in a similar way, complex tasks go more smoothly and conflicts are minimized. The need for understanding pushes us to ask questions when we’re unsure (“Could you clarify what you mean?”), to rephrase or paraphrase what others say to confirm we got it right, and to develop common reference points or models (like shared jargon, or a team game plan) that everyone can refer to. In team research, groups that take time to form a shared mental model of their project make fewer errors and coordinate better[98][99]. Similarly, in personal relationships, actively striving to understand each other’s perspectives (instead of assuming or talking past one another) strengthens the bond and reduces friction. Ultimately, achieving mutual understanding means aligning everyone’s actions toward the same picture of reality and goals. It not only improves effectiveness in tasks but also builds trust and closeness, because each person feels “seen” and on the same page with the others.Belonging",
+    "alternateClaim": "",
+    "supportingSources": [
+      {
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/",
+        "description": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves"
+      },
+      {
+        "url": "https://psycnet.apa.org/record/2014-15617-006",
+        "description": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
+      }
     ]
+  },
+  {
+    "name": "Belonging",
+    "originalClaim": "Humans evolved in cooperative groups where being part of the tribe meant safety and support. This need motivates us to seek acceptance in communities and relationships that embrace us as we are. Valuing belonging provides a secure sense of identity and a social safety net, which increases psychological security and resilience under stress.",
+    "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. For instance, one seminal review concluded that social belonging is as essential to long-term health as food and shelter, with a lack of belonging linked to adverse outcomes (https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). Strong social bonds and inclusion have been associated with better well-being, while social isolation elevates the risk of depression and even early mortality (Baumeister & Leary 1995, as cited in https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). In short, when people experience true belonging, they gain emotional support and stability that buffer them against life’s challenges.",
+    "alternateClaim": "",
+    "supportingSources": []
+  },
+  {
+    "name": "Choose Freely",
+    "originalClaim": "The ability to make one’s own choices offers flexibility and adaptation when circumstances change. This need motivates questioning or resisting unnecessary restraints, exploring alternative options, and asserting personal preferences. Supporting free choice preserves individual creativity and responsibility, leading to more wholehearted engagement in tasks and decisions.",
+    "rewrittenClaim": "Having autonomy and freedom of choice is empirically linked to better motivation and well-being. Self-Determination Theory identifies autonomy (the freedom to choose one’s actions) as a basic psychological need; when this need is satisfied, people show enhanced intrinsic motivation and mental health (Ryan & Deci 2000, American Psychologist, 55(1), 68–78, via PubMed: https://pubmed.ncbi.nlm.nih.gov/11392867/). In practical terms, studies have found that giving individuals more control over decisions leads to positive outcomes. A classic field experiment in a nursing home showed that residents given more choices and personal responsibility became more alert, active, and happier compared to those who had all decisions made for them (Langer & Rodin 1976 – https://pubmed.ncbi.nlm.nih.gov/1011073/). Thus, being able to choose freely tends to improve one’s engagement, well-being, and even health, whereas being overly controlled or without choice can undermine motivation and satisfaction.",
+    "alternateClaim": "",
+    "supportingSources": []
+  },
+  {
+    "name": "Connection",
+    "originalClaim": "As highly social creatures, humans thrive on close relationships that provide mutual care. This need drives us to spend meaningful time with others, share experiences, and cultivate trust and empathy. When we foster genuine connection, we gain emotional support and joy in companionship, and we build resilience through having others to lean on during difficult times.",
+    "rewrittenClaim": "Forming strong social connections has profound benefits for both mental and physical health. Extensive research indicates that the quality and quantity of one’s social relationships are linked not only to psychological well-being but also to longevity and disease risk. In a large meta-analysis of 148 studies, individuals with richer social connections had about a 50% greater likelihood of survival over the study periods than those who were more isolated (Holt-Lunstad et al., 2010 – https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316). In fact, the protective effect of social connection on mortality was found to be comparable to well-known health factors like not smoking and maintaining a healthy weight. Strong interpersonal connection provides emotional support, buffers stress, and contributes to greater life satisfaction, whereas lack of connection (loneliness) is associated with higher risks of depression and physical illness.",
+    "alternateClaim": "",
+    "supportingSources": []
+  },
+  {
+    "name": "Consideration",
+    "originalClaim": "Feeling thoughtfully regarded by others reassures us that we matter. This need inspires courteous communication, attentive listening, and taking others’ feelings into account. When people treat each other with consideration, it builds mutual respect and trust, reducing friction in groups and helping everyone feel valued.",
+    "rewrittenClaim": "Consideration (Respect) — Being respected and valued by those around us is not just pleasant but crucial for our well-being. Psychological research has found that feeling respected correlates with higher satisfaction, motivation, and self-esteem. In one analysis of workplace factors, respect was identified as the top driver of job satisfaction and engagement—employees who felt respected by peers and leaders were more productive and less likely to quit (SHRM study, discussed in Psychology Today, 2024). Beyond the workplace, feeling that others appreciate and admire you significantly improves happiness. Notably, a study in the journal Psychological Science found that feeling respected and valued had a stronger impact on people’s happiness than their income level (as summarized by Anderson et al. 2012 – https://www.theatlantic.com/health/archive/2012/06/why-money-cant-buy-happiness-feeling-respected-matters-more/259032/). In essence, when our need for consideration is met, we experience greater well-being and social connection, whereas being treated with indifference or disrespect can harm trust and mental health.",
+    "alternateClaim": "",
+    "supportingSources": []
+  },
+  {
+    "name": "Support",
+    "originalClaim": "No one survives alone; humans rely on each other especially in times of adversity. This need compels us to seek help, comfort, and collaboration when we face challenges or stress. Offering and receiving support strengthens bonds and confidence, allowing individuals and groups to recover from difficulties more effectively and to know that help will be there when it’s needed.",
+    "rewrittenClaim": "Social support from others is a well-documented protective factor for health. Numerous studies show that people who perceive strong emotional and practical support suffer less psychological distress and even have better physical health outcomes. For example, having supportive relationships is associated with lower rates of depression and anxiety and can improve recovery from illness (empirical review in Frontiers in Psychology, 2024 – https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1330720/full). Social support helps by buffering the impact of stress: individuals who feel cared for and understood tend to cope with hardships more effectively than those who lack support. On the other hand, loneliness or a lack of social and emotional support has been linked to a higher risk of numerous health problems, including heart disease, cognitive decline, and premature mortality (CDC report, 2024 – https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm). In summary, access to caring support networks bolsters mental well-being, resilience, and even longevity, underscoring why the need for support is so fundamental.",
+    "alternateClaim": "",
+    "supportingSources": []
   }
 ]
