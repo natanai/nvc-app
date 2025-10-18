@@ -103,6 +103,33 @@ function sanitizeLocation(value) {
   return value.trim();
 }
 
+const CITATION_PATTERN = /\[(\d+)\]/g;
+
+function extractCitationIds(text) {
+  if (!text) {
+    return [];
+  }
+
+  const matches = new Set();
+  const ids = [];
+  let match;
+
+  while ((match = CITATION_PATTERN.exec(text))) {
+    const parsed = Number.parseInt(match[1], 10);
+    if (!Number.isFinite(parsed)) {
+      continue;
+    }
+    const id = String(parsed);
+    if (matches.has(id)) {
+      continue;
+    }
+    matches.add(id);
+    ids.push(id);
+  }
+
+  return ids;
+}
+
 const rawFeelings = readCsv('data/Feelings.csv');
 const rawNeeds = readCsv('data/Needs.csv');
 const rawSituations = readCsv('data/Situations.csv');
@@ -178,6 +205,7 @@ const needs = rawNeeds.map((row) => ({
   slug: row.Slug || slugify(row.Title),
   category: row.Category || '',
   description: row.Description || '',
+  citations: extractCitationIds(row.Description || ''),
   strategies: uniqueByTitle(splitList(row.Strategies).map((title) => ({ title }))),
   situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
   feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),

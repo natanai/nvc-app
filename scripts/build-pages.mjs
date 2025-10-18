@@ -5,6 +5,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
+const citationsPath = join(rootDir, 'data', 'needs-citations.json');
+let citationData = {};
+try {
+  citationData = JSON.parse(readFileSync(citationsPath, 'utf8'));
+} catch (error) {
+  citationData = {};
+}
+const citationLookup = new Map(
+  Object.entries(citationData).map(([id, value]) => {
+    const parsed = Number.parseInt(id, 10);
+    const key = Number.isFinite(parsed) ? String(parsed) : String(id);
+    return [key, value];
+  }),
+);
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
@@ -796,6 +810,123 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+const CITATION_MARKER = /\[(\d+)\]/g;
+
+function normalizeCitationId(value) {
+  const parsed = Number.parseInt(String(value), 10);
+  return Number.isFinite(parsed) ? String(parsed) : null;
+}
+
+function extractCitationIdsFromText(text) {
+  if (!text) {
+    return [];
+  }
+
+  CITATION_MARKER.lastIndex = 0;
+  const seen = new Set();
+  const ids = [];
+  let match;
+
+  while ((match = CITATION_MARKER.exec(text))) {
+    const id = normalizeCitationId(match[1]);
+    if (!id || seen.has(id)) {
+      continue;
+    }
+    seen.add(id);
+    ids.push(id);
+  }
+
+  return ids;
+}
+
+function renderNeedDescription(description, citationIds = []) {
+  if (!description) {
+    return '';
+  }
+
+  CITATION_MARKER.lastIndex = 0;
+  const allowed = new Set((citationIds || []).map((value) => normalizeCitationId(value)).filter(Boolean));
+  const escaped = escapeHtml(description);
+
+  return escaped.replace(CITATION_MARKER, (fullMatch, rawId) => {
+    const id = normalizeCitationId(rawId);
+    if (!id || (allowed.size && !allowed.has(id)) || !citationLookup.has(id)) {
+      return fullMatch;
+    }
+
+    const safeId = escapeHtml(id);
+    const citation = citationLookup.get(id) || {};
+    const citationTitle = citation.title ? escapeHtml(citation.title) : '';
+    const ariaLabel = citationTitle ? ` aria-label="Source ${safeId}: ${citationTitle}"` : '';
+
+    return `<sup class="citation"><a href="#citation-${safeId}" class="citation__link" data-citation-ref${ariaLabel}>${safeId}</a></sup>`;
+  });
+}
+
+function renderNeedCitations(citationIds = []) {
+  if (!citationIds || !citationIds.length) {
+    return '';
+  }
+
+  const groups = [];
+  const groupIndex = new Map();
+
+  citationIds.forEach((raw, index) => {
+    const id = normalizeCitationId(raw);
+    if (!id || !citationLookup.has(id)) {
+      return;
+    }
+
+    const citation = citationLookup.get(id) || {};
+    const key = `${citation.title || ''}|||${citation.url || ''}`;
+
+    let group = groupIndex.get(key);
+    if (!group) {
+      group = { ids: [], citation, order: index };
+      groupIndex.set(key, group);
+      groups.push(group);
+    }
+
+    if (!group.ids.includes(id)) {
+      group.ids.push(id);
+    }
+  });
+
+  if (!groups.length) {
+    return '';
+  }
+
+  groups.sort((a, b) => a.order - b.order);
+
+  const items = groups.map((group) => {
+    const { ids, citation } = group;
+    const primaryId = ids[0];
+    const safePrimaryId = escapeHtml(primaryId);
+    const label = ids.map((value) => escapeHtml(value)).join(', ');
+    const title = citation.title ? escapeHtml(citation.title) : `Source ${safePrimaryId}`;
+    const url = citation.url ? escapeHtml(citation.url) : '';
+    const link = url
+      ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>`
+      : title;
+    const aliasAnchors = ids
+      .slice(1)
+      .map(
+        (value) =>
+          `<span id="citation-${escapeHtml(value)}" class="citation-list__alias" aria-hidden="true"></span>`,
+      )
+      .join('');
+
+    return `          <li id="citation-${safePrimaryId}" class="citation-list__item"><span class="citation-list__label">${label}.</span> ${link}${aliasAnchors}</li>`;
+  });
+
+  return `<section class="need-citations" aria-labelledby="need-citations-heading">
+        <h2 id="need-citations-heading" class="section-title">Sources</h2>
+        <ol class="citation-list">
+${items.join('\n')}
+        </ol>
+      </section>`;
+}
+
 function sanitizeContributorName(value) {
   if (!value) {
     return '';
@@ -1255,9 +1386,16 @@ function renderNeed(item, strategyLookup) {
           <p class="empty-state">Strategies for this need are coming soon.</p>
         </section>`;
 
+  const citationIds = Array.isArray(item.citations) && item.citations.length
+    ? item.citations.map((value) => normalizeCitationId(value)).filter(Boolean)
+    : extractCitationIdsFromText(item.description);
+
   const descriptionHtml = item.description
-    ? `<p class="page-description">${escapeHtml(item.description)}</p>`
+    ? `<p class="page-description">${renderNeedDescription(item.description, citationIds)}</p>`
     : '';
+
+  const citationsHtml = renderNeedCitations(citationIds);
+  const citationsSection = citationsHtml ? `\n      ${citationsHtml}` : '';
 
   const quickAddHtml = `
       <div class="strategy-quick-actions">
@@ -1287,7 +1425,7 @@ function renderNeed(item, strategyLookup) {
       <header class="page-header">
         <h1 class="page-title">${escapeHtml(fullTitle)}</h1>
         ${descriptionHtml}
-      </header>
+      </header>${citationsSection}
       ${quickAddHtml}
       ${strategiesHtml}
       <section class="suggestion" aria-labelledby="suggestion-heading">

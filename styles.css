@@ -5993,3 +5993,58 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   font-size: 1rem;
   font-weight: 600;
 }
+
+.need-citations {
+  margin: 2.5rem 0 1.5rem;
+}
+
+.citation-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.citation-list__item {
+  margin-bottom: 0.75rem;
+  word-break: break-word;
+  scroll-margin-top: 6rem;
+}
+
+.citation-list__item:last-child {
+  margin-bottom: 0;
+}
+
+.citation-list__item a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: color-mix(in srgb, var(--outline) 70%, transparent);
+}
+
+.citation-list__item a:hover,
+.citation-list__item a:focus-visible {
+  text-decoration-color: color-mix(in srgb, var(--mint) 65%, transparent);
+}
+
+.citation-list__label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.citation-list__alias {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.citation__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.citation__link:hover,
+.citation__link:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
