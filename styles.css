@@ -2762,6 +2762,8 @@ body.has-support-journal-open {
   border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
   border-radius: var(--radius-xl);
   background: color-mix(in srgb, #fff 70%, var(--lavender) 30%);
+  display: grid;
+  gap: clamp(0.5rem, 2vw, 0.75rem);
 }
 
 .need-evidence__rewrite-copy {
@@ -2770,7 +2772,16 @@ body.has-support-journal-open {
   gap: 0.35rem;
 }
 
-.need-evidence__rewrite-text {
+.need-evidence__rewrite-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+
+.need-evidence__rewrite-text,
+.need-evidence__alternate-text {
   color: var(--ink-soft);
 }
 

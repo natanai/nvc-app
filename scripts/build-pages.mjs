@@ -1331,6 +1331,7 @@ function renderNeed(item, strategyLookup) {
 function renderNeedEvidence(item) {
   const claim = (item.originalClaim || '').trim();
   const rewrittenClaim = (item.rewrittenClaim || '').trim();
+  const alternateClaim = (item.alternateClaim || '').trim();
   const sources = Array.isArray(item.supportingSources)
     ? item.supportingSources.filter((source) => {
         if (!source) return false;
@@ -1341,7 +1342,7 @@ function renderNeedEvidence(item) {
       })
     : [];
 
-  if (!claim && !sources.length && !rewrittenClaim) {
+  if (!claim && !sources.length && !rewrittenClaim && !alternateClaim) {
     return '';
   }
 
@@ -1349,8 +1350,22 @@ function renderNeedEvidence(item) {
     ? `<p class="need-evidence__claim"><span class="need-evidence__claim-text">${escapeHtml(claim)}</span></p>`
     : '';
 
-  const rewrittenHtml = rewrittenClaim
-    ? `<details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-text">${escapeHtml(rewrittenClaim)}</span></p></div></details>`
+  const detailSections = [];
+
+  if (rewrittenClaim) {
+    detailSections.push(
+      `<p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-label">Rewritten claim</span><span class="need-evidence__rewrite-text">${escapeHtml(rewrittenClaim)}</span></p>`,
+    );
+  }
+
+  if (alternateClaim) {
+    detailSections.push(
+      `<p class="need-evidence__rewrite-copy need-evidence__alternate-copy"><span class="need-evidence__rewrite-label">Alternate evidence-based claim</span><span class="need-evidence__alternate-text">${escapeHtml(alternateClaim)}</span></p>`,
+    );
+  }
+
+  const rewrittenHtml = detailSections.length
+    ? `<details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the evidence</span></summary><div class="need-evidence__rewrite">${detailSections.join('')}</div></details>`
     : '';
 
   let sourcesHtml = '';
