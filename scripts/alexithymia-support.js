@@ -50,6 +50,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     standard: { label: 'Steady', duration: 25_000 },
     brisk: { label: 'Brisk', duration: 12_000 },
   };
+  const SCAN_SCROLL_PADDING = 24;
   const EVIDENCE_MODE_ENABLED = window.NVC_FLAGS?.evidenceMode !== false;
   const EVIDENCE_NOTE_KEY = 'nvc_evidence_note_dismissed';
   const REJECTION_KEY = 'nvc_rejected_emotions';
@@ -61,6 +62,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const BODY_SCAN_SEQUENCE = [];
   const sensationOptionElements = new Map();
   const regionElements = new Map();
+
+  let scanScrollOffset = 0;
+  let pendingScanMeasurementFrame = null;
 
   BODY_REGIONS.forEach((region) => {
     BODY_SCAN_SEQUENCE.push(region.id);
@@ -1371,6 +1375,70 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     });
   }
 
+  function readPixelValue(value) {
+    if (typeof value !== 'string') {
+      return 0;
+    }
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  function calculateScanScrollOffset() {
+    if (!state.guidedScanActive || !bodyScanPanel) {
+      return 0;
+    }
+    if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+      return 0;
+    }
+    const rect = bodyScanPanel.getBoundingClientRect();
+    const computed = window.getComputedStyle(bodyScanPanel);
+    const top = readPixelValue(computed.top);
+    const marginBottom = readPixelValue(computed.marginBottom);
+    return Math.max(0, rect.height + top + marginBottom + SCAN_SCROLL_PADDING);
+  }
+
+  function setScanScrollOffset(value) {
+    const normalized = Math.max(0, Math.round(value));
+    if (normalized === scanScrollOffset) {
+      if (normalized === 0 && supportFlow) {
+        supportFlow.style.removeProperty('--scan-scroll-offset');
+      }
+      return;
+    }
+    scanScrollOffset = normalized;
+    if (normalized === 0 && pendingScanMeasurementFrame && typeof window !== 'undefined') {
+      window.cancelAnimationFrame(pendingScanMeasurementFrame);
+      pendingScanMeasurementFrame = null;
+    }
+    if (!supportFlow) {
+      return;
+    }
+    if (normalized > 0) {
+      supportFlow.style.setProperty('--scan-scroll-offset', `${normalized}px`);
+    } else {
+      supportFlow.style.removeProperty('--scan-scroll-offset');
+    }
+  }
+
+  function scheduleScanScrollMeasurement() {
+    if (typeof window === 'undefined' || typeof window.requestAnimationFrame !== 'function') {
+      setScanScrollOffset(calculateScanScrollOffset());
+      return;
+    }
+    if (pendingScanMeasurementFrame) {
+      window.cancelAnimationFrame(pendingScanMeasurementFrame);
+    }
+    pendingScanMeasurementFrame = window.requestAnimationFrame(() => {
+      pendingScanMeasurementFrame = null;
+      const offset = calculateScanScrollOffset();
+      setScanScrollOffset(offset);
+    });
+  }
+
+  function handleViewportResize() {
+    scheduleScanScrollMeasurement();
+  }
+
   function highlightScanRegion(regionId) {
     expandRegion(regionId, { focus: false, collapseOthers: true });
     let target = null;
@@ -1382,6 +1450,22 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       }
     });
     if (target) {
+      const offset = state.guidedScanActive ? calculateScanScrollOffset() : 0;
+      if (state.guidedScanActive) {
+        setScanScrollOffset(offset);
+      }
+      if (offset > 0 && typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+        const scrollElement = document.scrollingElement || document.documentElement || document.body;
+        const currentOffset = scrollElement ? scrollElement.scrollTop : window.pageYOffset || window.scrollY || 0;
+        const rect = target.getBoundingClientRect();
+        const destination = Math.max(0, currentOffset + rect.top - offset);
+        try {
+          window.scrollTo({ top: destination, behavior: 'smooth' });
+        } catch (error) {
+          window.scrollTo(0, destination);
+        }
+        return;
+      }
       try {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (error) {
@@ -1505,9 +1589,11 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       state.guidedScanDurationMs = pace.duration;
       state.guidedScanRemainingMs = pace.duration;
       updateScanTimerDisplay();
+      scheduleScanScrollMeasurement();
       return;
     }
     restartScanTimer({ reset: true });
+    scheduleScanScrollMeasurement();
   }
 
   function handleScanPaceChange(event) {
@@ -1528,6 +1614,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       scanPauseButton.setAttribute('aria-pressed', state.guidedScanPaused ? 'true' : 'false');
     }
     updateScanTimerDisplay();
+    scheduleScanScrollMeasurement();
     if (!state.guidedScanPaused && !state.guidedScanTimerId) {
       restartScanTimer({ reset: false });
     }
@@ -1536,11 +1623,16 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   function updateScanUi() {
     if (!scanControls) return;
     const isActive = !!state.guidedScanActive;
+    if (bodyScanPanel) {
+      bodyScanPanel.classList.toggle('is-pinned', isActive);
+    }
     scanControls.classList.toggle('is-floating', isActive);
     if (!isActive) {
       scanControls.classList.add('is-hidden');
       clearScanHighlights();
       updateScanTimerDisplay();
+      setScanScrollOffset(0);
+      scheduleScanScrollMeasurement();
       return;
     }
 
@@ -1575,6 +1667,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       scanNextButton.textContent = state.guidedScanIndex >= total - 1 ? 'Finish scan' : 'Next area';
     }
     restartScanTimer({ reset: true });
+    scheduleScanScrollMeasurement();
   }
 
   function startGuidedScan() {
@@ -1612,9 +1705,14 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       scanControls.classList.add('is-hidden');
       scanControls.classList.remove('is-floating');
     }
+    if (bodyScanPanel) {
+      bodyScanPanel.classList.remove('is-pinned');
+    }
+    setScanScrollOffset(0);
     if (scanPrompt) {
       scanPrompt.textContent = '';
     }
+    scheduleScanScrollMeasurement();
   }
 
   function moveGuidedScan(step) {
@@ -2730,6 +2828,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
     supportFlow?.addEventListener('click', handleStepCtaClick);
     supportFlow?.addEventListener('click', handleEvidenceClick);
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleViewportResize);
+    }
 
     bodySuggestions?.addEventListener('click', handleSuggestionClick);
     compassSuggestions?.addEventListener('click', handleSuggestionClick);

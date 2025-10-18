@@ -359,6 +359,7 @@ a:focus-visible {
   display: grid;
   gap: 1.75rem;
   padding-bottom: 6.5rem;
+  --scan-scroll-offset: 0px;
 }
 
 .support-step {
@@ -940,6 +941,19 @@ body.has-support-journal-open {
   margin: 1rem 0 1.5rem;
   display: grid;
   gap: 0.75rem;
+  position: relative;
+}
+
+.sensation-scan.is-pinned {
+  position: sticky;
+  top: clamp(0.75rem, 3vw, 1.75rem);
+  z-index: 6;
+  padding: clamp(0.65rem, 2.4vw, 1.1rem);
+  border-radius: var(--radius-2xl);
+  border: 1px solid color-mix(in srgb, var(--outline) 40%, transparent);
+  background: color-mix(in srgb, var(--mint) 12%, #ffffff 88%);
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--ink) 12%, transparent);
+  gap: clamp(0.6rem, 2.1vw, 0.9rem);
 }
 
 .sensation-scan__pace {
@@ -978,15 +992,26 @@ body.has-support-journal-open {
   border-radius: var(--radius-xl);
   border: 1px solid color-mix(in srgb, var(--outline) 28%, transparent);
   background: color-mix(in srgb, var(--mint) 18%, #ffffff 82%);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .sensation-scan__controls.is-floating {
-  position: sticky;
-  align-self: start;
-  top: clamp(0.75rem, 3vw, 1.75rem);
-  z-index: 4;
   box-shadow: 0 12px 32px color-mix(in srgb, var(--ink) 14%, transparent);
   border-color: color-mix(in srgb, var(--outline) 48%, transparent);
+}
+
+.sensation-scan.is-pinned .sensation-scan__controls.is-floating {
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--outline) 36%, transparent);
+}
+
+@supports not (position: sticky) {
+  .sensation-scan__controls.is-floating {
+    position: sticky;
+    align-self: start;
+    top: clamp(0.75rem, 3vw, 1.75rem);
+    z-index: 4;
+  }
 }
 
 .sensation-scan__controls.is-hidden {
@@ -1041,6 +1066,7 @@ body.has-support-journal-open {
   border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
   background: color-mix(in srgb, var(--lavender) 12%, #ffffff 88%);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  scroll-margin-top: calc(var(--scan-scroll-offset, 0px) + 1.5rem);
 }
 
 .sensation-region--scan-active {
