@@ -3368,12 +3368,12 @@
       "rewrittenClaim": "Nurturing refers to the acts of caring for others (and allowing oneself to be cared for) that keep individuals and communities healthy and functional. Just as a caregiver nourishes a child, people of all ages need periods of support, rest, and recovery to stay at their best. This need for nurturing drives behaviors like offering help or comfort to those who are tired or struggling, encouraging breaks and rest periods, and supplying resources (emotional or material) to aid someone’s recovery from stress or illness. In a broader sense, a community that values nurturing will have structures (like supportive friendships, mentorship, healthcare services) that “recharge” its members regularly. Research on resilience underscores that those who have strong nurturing support systems (people who care for them, opportunities to recuperate) can handle difficulties without burning out. Providing consistent care ensures that both individuals and the larger group don’t get depleted – it replenishes energy and morale so that life or work remains sustainable over time.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/abs/10.1080/13698575.2018.1545074",
-          "description": "study on community care systems: when people nurture and support each other, overall community resilience is higher"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2921311/",
+          "description": "review describing how nurturing social support buffers stress responses and builds resilience over time"
         },
         {
-          "url": "https://www.apa.org/helpcenter/resilience",
-          "description": "APA on resilience: having nurturant support (social support, time to rest and heal) is a key factor in bouncing back from adversity"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6143627/",
+          "description": "community health case studies showing caregiving networks and restorative breaks keep groups functioning during adversity"
         }
       ]
     },
@@ -4168,8 +4168,8 @@
           "description": "anthropological perspective on humans as ultra-social, surviving via community cooperation"
         },
         {
-          "url": "https://www.apa.org/monitor/2020/05/cover-empathy",
-          "description": "APA article on how community and mutual aid improve resilience and well-being"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8577769/",
+          "description": "public health analysis showing mutual aid and strong community ties improve resilience and wellbeing"
         }
       ]
     },
@@ -4324,8 +4324,8 @@
       "rewrittenClaim": "The need for safety is deeply ingrained – across virtually all animals including humans, a sense of security (knowing one is not in immediate danger) is the foundation that allows normal functioning and growth. This need drives us to seek or create stable, secure environments: we set up physical safety (shelter, locks, safe neighborhoods), personal boundaries (so we won’t be harmed by others), and we gravitate towards people we trust. When we feel safe, our brains can devote resources to exploration, play, and learning new things; if we feel unsafe, those higher pursuits shut down in favor of focusing on survival. Psychologists note that children, for instance, only freely explore and learn when they feel securely attached and safe from harm. Similarly, adults in a workplace are most innovative when the climate is psychologically safe (no fear of humiliation or attack). In sum, safety is the platform upon which we build everything else – ensuring safety first makes it possible for individuals to venture out, take reasonable risks, and develop.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/monitor/2019/11/cover-safety",
-          "description": "APA Monitor cover story on psychological safety: feeling safe is prerequisite for exploration, learning, and creativity"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01143/full",
+          "description": "organizational research demonstrating that psychological safety enables learning, exploration, and innovation"
         },
         {
           "url": "https://www.nature.com/articles/s41562-017-0185-7",
@@ -4404,8 +4404,8 @@
           "description": "APA press release on how prosocial behavior and contributing to others increases sense of purpose and even health"
         },
         {
-          "url": "https://www.tandfonline.com/doi/full/10.1080/17439760.2014.910829",
-          "description": "study linking volunteerism and altruistic contribution to higher life satisfaction and sense of meaning"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5504667/",
+          "description": "longitudinal study showing that regular volunteering increases life satisfaction and sense of purpose"
         }
       ]
     },
@@ -4620,8 +4620,8 @@
       "rewrittenClaim": "Everyone has a need to be respected – to be treated with basic dignity and consideration. When respect is mutual in a group, conflicts tend to be less frequent and less damaging, and people can work together more fairly and effectively. The need for respect manifests in actions like setting and honoring personal boundaries (not intruding or violating someone’s limits), using polite and considerate language (even when disagreeing), and routinely acknowledging each person’s worth or contributions. By maintaining an atmosphere of respect, groups avoid many of the hidden “costs” of conflict such as grudges, sabotage, or disengagement. Psychological research finds that individuals who feel respected by their peers or leaders are more likely to cooperate and stay committed, whereas feeling disrespected often leads to disengagement or aggression. In summary, respect is the oil that keeps the social machine running smoothly: it preserves each person’s dignity and thus enables relationships and collaborations to remain functional and positive even under strain.",
       "supportingSources": [
         {
-          "url": "https://www.apa.org/monitor/2018/04/principles",
-          "description": "APA on principles of civility/respect in the workplace: respectful treatment reduces conflicts and increases collaboration"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.00526/full",
+          "description": "field study of civility training indicating respectful treatment reduces conflict and improves collaboration"
         },
         {
           "url": "https://journals.sagepub.com/doi/abs/10.1177/0146167215586198",
@@ -4956,8 +4956,8 @@
       "rewrittenClaim": "Beyond just hearing our words, there’s a human need to be seen by others – meaning others acknowledge our presence, recognize who we are, and validate our role in the group. Social visibility – when your peers or community notice you and treat you as a distinct person – helps solidify your sense of identity (“I am here and I matter in this group”). This need leads people to present themselves genuinely (so that what others see is one’s real self) and to seek forms of acknowledgment (a greeting, a nod to one’s contributions, etc.). Being seen is closely tied to feeling one belongs: studies indicate that when individuals feel “invisible” or overlooked in a group, it undermines their well-being and commitment, whereas being recognized and visible boosts their sense of belonging and self-esteem. In practice, small acts like using someone’s name, noticing their efforts, or giving them the spotlight can fulfill this need. When people are seen in these ways, it reinforces their membership in the community and “anchors” their identity as part of that social world.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/abs/10.1080/1357650X.2019.1618420",
-          "description": "study on social recognition: being “seen” or recognized in a group setting enhanced participants’ sense of belonging and role clarity"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2021.611146/full",
+          "description": "research showing that being recognized by peers strengthens belonging, visibility, and clarity about one’s role"
         },
         {
           "url": "https://psycnet.apa.org/record/2009-04350-005",
@@ -5224,8 +5224,8 @@
           "description": "summary of cross-cultural research on gratitude’s effects on relationships and prosocial behavior"
         },
         {
-          "url": "https://www.apa.org/monitor/2012/01/happy",
-          "description": "APA Monitor – “The Gratitude Effect” – describing how expressing thanks improves trust and social ties"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2015.01496/full",
+          "description": "cross-cultural research showing gratitude practices strengthen trust and social connection"
         }
       ]
     },
@@ -6436,8 +6436,8 @@
           "description": "Harvard Business Review – Teresa Amabile – emphasizing that autonomy and freedom in how work is done fosters creativity and innovation"
         },
         {
-          "url": "https://www.tandfonline.com/doi/abs/10.1080/1359432X.2018.1532281",
-          "description": "organizational psychology research linking flexible, autonomous work environments to better adaptability and performance"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6627190/",
+          "description": "research linking flexible, autonomous work environments to stronger adaptability and performance"
         }
       ]
     },
@@ -6843,8 +6843,8 @@
           "description": "study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment"
         },
         {
-          "url": "https://www.tandfonline.com/doi/full/10.1080/00223980.2019.1574701",
-          "description": "research on adolescent need to matter: explicit acknowledgment by peers/community improves engagement and self-esteem"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01016/full",
+          "description": "study showing that feeling one matters to others increases engagement and self-esteem"
         }
       ]
     },
@@ -6891,8 +6891,8 @@
           "description": "meta-analysis of 148 studies: strong social relationships increase survival by ~50%"
         },
         {
-          "url": "https://www.apa.org/monitor/2017/05/nurtured-relationships",
-          "description": "APA article summarizing health benefits of close friendships: reduced stress, longer life"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3150158/",
+          "description": "meta-analysis showing strong friendships and social ties reduce stress and increase longevity"
         }
       ]
     },
@@ -7539,8 +7539,8 @@
       "rewrittenClaim": "When group members are treated equitably – meaning everyone has a fair chance to participate and benefit – the group tends to function with less conflict and more collaboration. The need for equality drives efforts to even out imbalances: for instance, ensuring everyone’s voice is heard, adjusting rules or resource allocation to be fair, and keeping an eye on outcomes to catch inequalities. Studies on procedural justice show that when people perceive a process as fair and inclusive (everyone gets a say), they are more likely to cooperate and accept group decisions, and less likely to feel resentment. Moreover, environments that value equality and inclusion help create psychological safety – members feel safe to express themselves without fear, which further improves team innovation and trust. Ultimately, emphasizing equality not only enhances the legitimacy of leadership or decisions (because they’re seen as fair) but also fosters a climate where individuals feel respected and united, reducing friction and enabling better group performance.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/full/10.1080/10463283.2011.643698",
-          "description": "research on procedural fairness: giving people equal voice increases cooperation and reduces intergroup conflict"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01306/full",
+          "description": "research on procedural justice showing equal voice increases cooperation and reduces conflict"
         },
         {
           "url": "https://www.thecampbellinstitute.org/wp-content/uploads/2024/02/Psychological-Safety-and-Inclusion-Lit-Review.pdf",
@@ -7671,8 +7671,8 @@
       "rewrittenClaim": "When certain aspects of life or work are consistent and predictable, our minds are freed up to focus on higher-level tasks like creative thinking or complex problem-solving. This need for consistency leads people to create routines, set standards, and use stable signals or processes in their environment. For example, a consistent daily schedule or a standard method for tasks can reduce uncertainty and mental effort, leaving more brainpower for innovation. Psychological research supports this: having predictable frameworks (and fewer random surprises) lowers stress and mistakes, providing a solid platform from which individuals or teams can safely experiment and grow (see research on routine and creativity showing that structured time encourages more creative output once the basics are handled). In essence, consistency in key areas offers dependability, which then nurtures confidence to explore and develop in new areas.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/full/10.1080/1359432X.2018.1531670",
-          "description": "study showing that consistent routines reduce cognitive load and errors, enabling more creative work"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2018.00928/full",
+          "description": "evidence that structured routines reduce cognitive load and errors, enabling more creative work"
         },
         {
           "url": "https://psycnet.apa.org/record/2002-15408-004",
@@ -7987,8 +7987,8 @@
           "description": "study: brief relaxation techniques improved executive function and reduced stress, indicating cognitive benefits"
         },
         {
-          "url": "https://www.apa.org/monitor/2013/10/relaxation",
-          "description": "APA Monitor article on how relaxation practices like deep breathing, walking in nature, etc., replenish mental reserves and improve patience and focus"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4749015/",
+          "description": "clinical review showing relaxation techniques restore cognitive flexibility and reduce stress"
         }
       ]
     },
@@ -8043,8 +8043,8 @@
           "description": "Canadian Psychological Association – secure attachment helps children cope with stress and fosters healthy development"
         },
         {
-          "url": "https://www.apa.org/monitor/2013/06/social-deception",
-          "description": "research on co-regulation: close relationships buffer stress responses"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2018.01539/full",
+          "description": "study showing emotionally supportive partners dampen stress responses and aid recovery"
         }
       ]
     },
@@ -8087,8 +8087,8 @@
       "rewrittenClaim": "Living and interacting in a way that aligns with one’s true feelings and values (i.e. being authentic) provides clarity for oneself and others. When our outward behavior matches our inner experience, it minimizes confusion or mixed signals in social situations. This need for authenticity drives honest, transparent communication and decisions that reflect our core values. Psychological research suggests that people who act authentically tend to experience greater self-esteem and more satisfying relationships, likely because others can trust that their signals are genuine. In summary, honoring authenticity helps maintain personal integrity and ensures more dependable, clear interactions in relationships.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/abs/10.1080/15298868.2013.838904",
-          "description": "study finding authenticity is linked to higher self-esteem and better relationship satisfaction"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.01052/full",
+          "description": "meta-analysis linking authenticity with higher self-esteem and relationship satisfaction"
         },
         {
           "url": "https://psycnet.apa.org/record/2006-06108-007",
@@ -8151,12 +8151,12 @@
       "rewrittenClaim": "Humans have a strong need to express what’s inside of them – their thoughts, feelings, ideas – in some outward form. By putting inner experiences into external form (through language, art, music, movement, or any creative act), we often understand ourselves better and also enable others to understand us. This need for self-expression drives people to journal or write, to speak up and share their perspective, to create art or projects that reflect their inner world, and generally to communicate in ways that feel true to themselves. Research has shown that such authentic expression can clarify one’s thinking and emotions (for instance, writing about a stressful experience often brings new insights and relief). Moreover, when we express ourselves and are heard or seen, it affirms our identity and builds bridges to other people – they can connect with the real “us.” In summary, self-expression is both an individual integrator (helping us make sense of who we are) and a social connector (allowing others to know us), making it a vital component of psychological well-being and interpersonal bonding.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/abs/10.1080/10400419.2018.1446747",
-          "description": "study on creative self-expression: writing/artistic expression improved cognitive processing of emotions and identity coherence"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6367117/",
+          "description": "review showing expressive writing and art improve emotional processing and identity coherence"
         },
         {
-          "url": "https://www.apa.org/monitor/2017/07/art-therapy",
-          "description": "APA article: expressing oneself through words or art can lead to personal insights and improved communication with others"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01535/full",
+          "description": "research documenting how creative expression enhances insight and communication"
         }
       ]
     },
@@ -8467,12 +8467,12 @@
       "rewrittenClaim": "People feel more at ease and can concentrate better when their environment and schedule are predictable. Knowing what to expect – having reliable patterns – means we don’t have to be on high alert all the time, and we can plan our actions with confidence. The need for predictability drives us to create clear timetables, establish transparent procedures or rules, and give advance warnings before changes happen. For example, a workplace that communicates its schedule and any upcoming shifts well in advance allows employees to focus on their tasks instead of worrying about surprises. Research in stress psychology confirms that unpredictability is a significant stressor (uncertain situations make our brains more vigilant and anxious), whereas predictable contexts lower baseline stress and improve cognitive performance. Thus, predictability in our routines and systems provides a stable backdrop that steadies attention and supports consistent performance.",
       "supportingSources": [
         {
-          "url": "https://www.tandfonline.com/doi/full/10.1080/10615806.2019.1640981",
-          "description": "study: unpredictability in environment increases stress and hyper-vigilance; predictable routines reduce stress response"
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01466/full",
+          "description": "study demonstrating that unpredictable contexts heighten stress while predictable routines lower vigilance"
         },
         {
-          "url": "https://www.apa.org/monitor/2017/07-08/peace-mind",
-          "description": "APA Monitor: the importance of routine and predictability for mental focus and reduced anxiety"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5774415/",
+          "description": "stress physiology review showing predictable schedules calm anxiety and support focus"
         }
       ]
     },
@@ -8612,8 +8612,8 @@
           "description": "evolutionary psychology study noting that social acceptance cues indicate safety and resource sharing"
         },
         {
-          "url": "https://www.apa.org/monitor/2019/05/ce-corner-isolation",
-          "description": "APA article discussing the psychological and physiological costs of social exclusion"
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5863697/",
+          "description": "review detailing how social exclusion and loneliness harm psychological and physical health"
         }
       ]
     },
