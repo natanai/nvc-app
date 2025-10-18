@@ -91,6 +91,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     guidedScanActive: false,
     guidedScanIndex: -1,
     guidedScanStarted: false,
+    guidedScanCompleted: false,
+    guidedScanVisited: new Set(),
+    guidedScanResumeIndex: 0,
     draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
     draftTimer: null,
     savedFeedbackTimer: null,
@@ -125,8 +128,11 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const scanBackButton = bodyScanPanel?.querySelector('[data-action="scan-back"]');
   const scanNextButton = bodyScanPanel?.querySelector('[data-action="scan-next"]');
   const scanFinishButton = bodyScanPanel?.querySelector('[data-action="scan-finish"]');
+  const scanProgress = bodyScanPanel?.querySelector('[data-scan-progress]');
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
+
+  const scanStartDefaultLabel = scanStartButton?.textContent?.trim() || 'Guide me through a full body scan';
 
   let journalForm = null;
   let journalStatus = null;
@@ -1408,6 +1414,78 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
   }
 
+  function setScanStartLabel(label) {
+    if (!scanStartButton) return;
+    if (typeof label === 'string' && label.trim()) {
+      scanStartButton.textContent = label;
+    } else {
+      scanStartButton.textContent = scanStartDefaultLabel;
+    }
+  }
+
+  function findNextIncompleteScanIndex() {
+    const total = BODY_SCAN_SEQUENCE.length;
+    if (!total) {
+      return -1;
+    }
+    for (let index = 0; index < total; index += 1) {
+      const regionId = BODY_SCAN_SEQUENCE[index];
+      if (!state.guidedScanVisited.has(regionId)) {
+        return index;
+      }
+    }
+    return total - 1;
+  }
+
+  function updateScanProgress() {
+    if (!scanProgress) return;
+    scanProgress.innerHTML = '';
+
+    const total = BODY_SCAN_SEQUENCE.length;
+    if (!total) {
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    BODY_SCAN_SEQUENCE.forEach((regionId, index) => {
+      const regionMeta = regionElements.get(regionId);
+      const label = regionMeta?.label || `Area ${index + 1}`;
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'sensation-scan__progress-item';
+      item.dataset.regionId = regionId;
+      item.setAttribute('role', 'listitem');
+      item.title = `Focus on ${label}`;
+      item.setAttribute('aria-label', `${label} (${index + 1} of ${total})`);
+
+      const isActive = state.guidedScanActive && state.guidedScanIndex === index;
+      const isVisited = state.guidedScanVisited.has(regionId);
+
+      if (isActive) {
+        item.classList.add('sensation-scan__progress-item--active');
+        item.disabled = true;
+        item.setAttribute('aria-current', 'step');
+      } else if (isVisited) {
+        item.classList.add('sensation-scan__progress-item--complete');
+      } else {
+        item.classList.add('sensation-scan__progress-item--pending');
+      }
+
+      const indexSpan = document.createElement('span');
+      indexSpan.className = 'sensation-scan__progress-index';
+      indexSpan.textContent = `${index + 1}`;
+
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'sensation-scan__progress-label';
+      labelSpan.textContent = label;
+
+      item.append(indexSpan, labelSpan);
+      fragment.appendChild(item);
+    });
+
+    scanProgress.appendChild(fragment);
+  }
+
   function highlightScanRegion(regionId) {
     expandRegion(regionId, { focus: false, collapseOthers: true });
     let target = null;
@@ -1418,6 +1496,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         target = region.element;
       }
     });
+    if (regionId) {
+      state.guidedScanVisited.add(regionId);
+    }
     scrollRegionIntoView(target);
   }
 
@@ -1427,6 +1508,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       scanControls.classList.add('is-hidden');
       bodyScanPanel?.classList.remove('sensation-scan--pinned');
       clearScanHighlights();
+      updateScanProgress();
       return;
     }
 
@@ -1445,11 +1527,26 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     bodyScanPanel?.classList.add('sensation-scan--pinned');
     const regionId = BODY_SCAN_SEQUENCE[state.guidedScanIndex];
     highlightScanRegion(regionId);
+    updateScanProgress();
+    state.guidedScanResumeIndex = findNextIncompleteScanIndex();
+    state.guidedScanCompleted = state.guidedScanVisited.size >= total;
 
     const regionMeta = regionElements.get(regionId);
     if (scanStatus) {
       const label = regionMeta?.label || 'this area';
-      scanStatus.textContent = `Focusing on ${label} (${state.guidedScanIndex + 1} of ${total}).`;
+      const stepNumber = state.guidedScanIndex + 1;
+      const remaining = Math.max(total - stepNumber, 0);
+      let suffix = '';
+      if (total === 1) {
+        suffix = ' This is the only area in the scan.';
+      } else if (remaining === 0) {
+        suffix = ' Final area.';
+      } else if (remaining === 1) {
+        suffix = ' 1 area left after this.';
+      } else {
+        suffix = ` ${remaining} areas left after this.`;
+      }
+      scanStatus.textContent = `Focusing on ${label} (${stepNumber} of ${total}).${suffix}`;
     }
     if (scanPrompt) {
       const prompt = BODY_REGIONS.find((item) => item.id === regionId)?.prompt || '';
@@ -1469,21 +1566,38 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
     state.guidedScanActive = true;
     state.guidedScanStarted = true;
+    state.guidedScanCompleted = false;
+    state.guidedScanVisited.clear();
     state.guidedScanIndex = 0;
-    if (scanStartButton) {
-      scanStartButton.textContent = 'Restart scan';
-    }
+    state.guidedScanResumeIndex = 0;
+    setScanStartLabel('Restart scan');
     updateScanUi();
   }
 
   function finishGuidedScan({ completed = false } = {}) {
     if (scanStatus) {
       scanStatus.textContent = completed
-        ? 'Scan complete. Choose any areas that still want attention.'
-        : 'Scan paused. Restart whenever you want more guidance.';
+        ? 'Scan complete. Revisit any area using the step chips above or start another pass whenever you like.'
+        : 'Scan paused. Use "Resume guided scan" or tap any step above when you want to continue.';
     }
     state.guidedScanActive = false;
-    state.guidedScanIndex = -1;
+    state.guidedScanCompleted = Boolean(completed);
+    if (completed) {
+      state.guidedScanIndex = -1;
+      state.guidedScanVisited.clear();
+      state.guidedScanStarted = false;
+      state.guidedScanResumeIndex = 0;
+      setScanStartLabel('Start another body scan');
+    } else {
+      const resumeIndex = findNextIncompleteScanIndex();
+      state.guidedScanResumeIndex = resumeIndex >= 0 ? resumeIndex : 0;
+      state.guidedScanIndex = state.guidedScanResumeIndex;
+      if (state.guidedScanVisited.size) {
+        setScanStartLabel('Resume guided scan');
+      } else {
+        setScanStartLabel();
+      }
+    }
     clearScanHighlights();
     if (scanControls) {
       scanControls.classList.add('is-hidden');
@@ -1492,6 +1606,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     if (scanPrompt) {
       scanPrompt.textContent = '';
     }
+    updateScanProgress();
   }
 
   function moveGuidedScan(step) {
@@ -1502,9 +1617,51 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     updateScanUi();
   }
 
+  function handleScanProgressClick(event) {
+    const target = event?.target;
+    if (!target || typeof target.closest !== 'function') {
+      return;
+    }
+    const button = target.closest('.sensation-scan__progress-item');
+    if (!button || button.disabled) {
+      return;
+    }
+    const regionId = button.dataset.regionId;
+    if (!regionId) {
+      return;
+    }
+    const index = BODY_SCAN_SEQUENCE.indexOf(regionId);
+    if (index < 0) {
+      return;
+    }
+    state.guidedScanStarted = true;
+    state.guidedScanActive = true;
+    state.guidedScanCompleted = false;
+    state.guidedScanIndex = index;
+    setScanStartLabel('Restart scan');
+    updateScanUi();
+  }
+
   function handleScanStart() {
     if (state.guidedScanActive) {
+      state.guidedScanVisited.clear();
       state.guidedScanIndex = 0;
+      state.guidedScanCompleted = false;
+      state.guidedScanResumeIndex = 0;
+      setScanStartLabel('Restart scan');
+      updateScanUi();
+      return;
+    }
+    if (state.guidedScanStarted && !state.guidedScanCompleted && state.guidedScanVisited.size) {
+      state.guidedScanActive = true;
+      const resumeIndex = state.guidedScanResumeIndex;
+      if (typeof resumeIndex === 'number' && resumeIndex >= 0 && resumeIndex < BODY_SCAN_SEQUENCE.length) {
+        state.guidedScanIndex = resumeIndex;
+      } else {
+        const fallback = findNextIncompleteScanIndex();
+        state.guidedScanIndex = fallback >= 0 ? fallback : 0;
+      }
+      setScanStartLabel('Restart scan');
       updateScanUi();
       return;
     }
@@ -2594,6 +2751,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     scanBackButton?.addEventListener('click', handleScanBack);
     scanNextButton?.addEventListener('click', handleScanNext);
     scanFinishButton?.addEventListener('click', handleScanFinish);
+    scanProgress?.addEventListener('click', handleScanProgressClick);
 
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 

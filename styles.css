@@ -963,6 +963,94 @@ body.has-support-journal-open {
   backdrop-filter: blur(8px);
 }
 
+.sensation-scan__progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: -0.25rem 0 0.2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sensation-scan__progress-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.65rem 0.4rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
+  background: color-mix(in srgb, var(--mint) 12%, #ffffff 88%);
+  color: color-mix(in srgb, var(--ink) 86%, var(--mint) 14%);
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+  position: relative;
+  min-width: 0;
+}
+
+.sensation-scan__progress-item:hover,
+.sensation-scan__progress-item:focus-visible {
+  background: color-mix(in srgb, var(--mint) 22%, #ffffff 78%);
+  border-color: color-mix(in srgb, var(--mint) 38%, transparent);
+  color: color-mix(in srgb, var(--ink) 78%, var(--mint) 22%);
+}
+
+.sensation-scan__progress-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mint) 38%, transparent);
+}
+
+.sensation-scan__progress-item[disabled] {
+  cursor: default;
+  box-shadow: none;
+}
+
+.sensation-scan__progress-item--pending {
+  opacity: 0.78;
+}
+
+.sensation-scan__progress-item--complete {
+  background: color-mix(in srgb, var(--mint) 26%, #ffffff 74%);
+  border-color: color-mix(in srgb, var(--mint) 36%, transparent);
+}
+
+.sensation-scan__progress-item--active {
+  background: color-mix(in srgb, var(--mint) 42%, #ffffff 58%);
+  border-color: color-mix(in srgb, var(--mint) 55%, transparent);
+  color: color-mix(in srgb, var(--ink) 72%, var(--mint) 28%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mint) 35%, transparent);
+}
+
+.sensation-scan__progress-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mint) 32%, #ffffff 68%);
+  font-weight: 600;
+  font-size: 0.74rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--ink) 78%, var(--mint) 22%);
+  flex-shrink: 0;
+}
+
+.sensation-scan__progress-item--active .sensation-scan__progress-index {
+  background: color-mix(in srgb, var(--mint) 55%, #ffffff 45%);
+  color: color-mix(in srgb, var(--ink) 68%, var(--mint) 32%);
+}
+
+.sensation-scan__progress-label {
+  display: inline-flex;
+  align-items: center;
+  white-space: normal;
+  text-align: left;
+}
+
 .sensation-scan__controls.is-hidden {
   display: none;
 }
