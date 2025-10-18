@@ -15,6 +15,7 @@
     "test:obsolete": "node tests/obsolete-references.test.mjs",
     "test:flicker-jitter": "node tests/navigation-highlight.test.mjs",
     "test:nav-magnets": "node tests/nav-magnet-coverage.test.mjs",
-    "extract:citations": "node scripts/extract-citations.mjs"
+    "extract:citations": "node scripts/extract-citations.mjs",
+    "replace:needs-sources": "node scripts/replace-needs-sources.mjs"
   }
 }
