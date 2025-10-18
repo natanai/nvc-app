@@ -524,7 +524,7 @@
     "line": 750,
     "how": "html_anchor",
     "label": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation",
-    "url": "https://www.pnas.org/content/103/4/13110",
+    "url": "https://www.pnas.org/doi/10.1073/pnas.1402280111",
     "domain": "www.pnas.org",
     "label_domain_hint": "",
     "context": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation"
@@ -544,7 +544,7 @@
     "line": 750,
     "how": "html_anchor",
     "label": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students",
-    "url": "https://www.sciencedirect.com/science/article/pii/S1877042816311868",
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S1871187125001026",
     "domain": "www.sciencedirect.com",
     "label_domain_hint": "",
     "context": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students"
@@ -1368,15 +1368,5 @@
     "domain": "pubmed.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
     "context": "Deci & Ryan (2000) self-determination theory review on autonomy"
-  },
-  {
-    "file": "/workspace/nvc-app/needs/empathy/index.html",
-    "line": 750,
-    "how": "html_anchor",
-    "label": "study linking mindfulness, cognitive empathy, and relationship quality among adolescents",
-    "url": "https://journals.sagepub.com/doi/10.1177/00332941221097951",
-    "domain": "journals.sagepub.com",
-    "label_domain_hint": "",
-    "context": "study linking mindfulness, cognitive empathy, and relationship quality among adolescents"
   }
 ]
