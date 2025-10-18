@@ -117,6 +117,10 @@ const navPrefillScript = () => String.raw`
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
+          if (board && board.setAttribute) {
+            board.setAttribute('data-ready', '1');
+          }
+
           if (restoreTransitions) {
             var raf = typeof window.requestAnimationFrame === 'function'
               ? window.requestAnimationFrame
