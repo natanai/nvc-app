@@ -34,12 +34,25 @@ A retro-styled companion to [allneeds.app](https://allneeds.app/) that mirrors t
   npm run lint
   ```
 
+- **Check supporting sources:**
+  ```bash
+  npm run lint:links
+  ```
+  This script validates every URL listed in `data/Needs.csv` under "Supporting Sources". It performs a HEAD/GET request with a
+  timeout, fails the build if a link returns a non-200 response, and flags redirects that land on common CAPTCHA or consent
+  interstitials. Prefer citing open-access material whenever possible so readers can verify the evidence without subscription
+  barriers.
+
 - **Run the Playwright smoke tests:**
   ```bash
   npm test
   ```
 
 The tests expect the generated pages to be present. Re-run `npm run build:pages` if you modify the data or templates.
+
+If a legitimate source is temporarily unavailable, update the entry in `data/Needs.csv` with a more reliable citation or add the
+URL to `scripts/link-suppressions.json`. Suppressions should be rare, include a justification in the commit message or review,
+and be removed once the source is reachable again.
 
 ## Stable local release snapshot
 
