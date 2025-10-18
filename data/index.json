@@ -5216,16 +5216,12 @@
           "slug": "anxious"
         }
       ],
-      "originalClaim": "Gratitude strengthens social bonds and increases prosocial behavior across cultures. This need motivates noticing value, naming what worked, and reciprocating care. Practiced appreciation maintains trust and energizes ongoing collaboration.",
-      "rewrittenClaim": "Expressing and receiving gratitude is a powerful social glue – research shows that feeling appreciated or thanking others strengthens relationships and encourages people to act kindly in return (these effects are observed in many cultures). The need for appreciation leads us to notice what is valuable in others’ actions, explicitly acknowledge what went well, and respond to kindness with kindness. By regularly practicing gratitude and appreciation, groups build greater mutual trust and goodwill. In other words, showing appreciation not only affirms the recipient but also energizes ongoing cooperation, as people who feel valued are more likely to continue contributing positively.",
+      "originalClaim": "Gratitude practices deepen trust and sustain cooperative motivation. This need motivates noticing value, naming what worked, and reciprocating care. Practiced appreciation maintains shared confidence and energizes ongoing collaboration.",
+      "rewrittenClaim": "Expressing and receiving gratitude is a powerful social glue – research shows that feeling appreciated or thanking others strengthens relationships and encourages people to act kindly in return. The need for appreciation leads us to notice what is valuable in others’ actions, explicitly acknowledge what went well, and respond to kindness with kindness. By regularly practicing gratitude and appreciation, groups build greater mutual trust and goodwill. In other words, showing appreciation not only affirms the recipient but also energizes ongoing cooperation, as people who feel valued are more likely to continue contributing positively.",
       "supportingSources": [
         {
-          "url": "https://greatergood.berkeley.edu/article/item/why_gratitude_is_good",
-          "description": "summary of cross-cultural research on gratitude’s effects on relationships and prosocial behavior"
-        },
-        {
-          "url": "https://www.apa.org/monitor/2012/01/happy",
-          "description": "APA Monitor – “The Gratitude Effect” – describing how expressing thanks improves trust and social ties"
+          "url": "https://doi.org/10.1186/s41155-024-00332-z",
+          "description": "peer-reviewed study: experimentally induced gratitude boosts interpersonal trust and willingness to help"
         }
       ]
     },
