@@ -1488,6 +1488,7 @@ const initializeBoard = async (root, index) => {
     const newMagnets = [];
     let hasStoredPlacement = false;
     let maxBottom = 0;
+    let navLayoutInvalid = false;
     state.magnets.forEach((magnet) => {
       const saved = storedById.get(magnet.id);
       if (saved) {
@@ -1502,10 +1503,17 @@ const initializeBoard = async (root, index) => {
         setMagnetTransform(magnet);
         const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
         maxBottom = Math.max(maxBottom, bottom);
+        if (isNavBoardState(state) && !navLayoutInvalid) {
+          navLayoutInvalid = isMagnetOffBoard(state, magnet);
+        }
       } else {
         newMagnets.push(magnet);
       }
     });
+
+    if (isNavBoardState(state) && !navLayoutInvalid) {
+      navLayoutInvalid = layoutHasOverlap(state);
+    }
 
     if (!hasStoredPlacement) {
       shouldSeed = true;
@@ -1545,11 +1553,25 @@ const initializeBoard = async (root, index) => {
       });
     }
 
-    updateBoardHeight(state);
-    updateLayout(state);
-    state.lastLayoutType = 'restored';
-    if (!isNavBoardState(state) && layoutHasOverlap(state)) {
-      shouldSeed = true;
+    if (isNavBoardState(state) && navLayoutInvalid) {
+      const resolved = resolveNavLayoutToNearestValid(state);
+      updateBoardHeight(state);
+      updateLayout(state);
+      const stillInvalid = layoutHasOverlap(state)
+        || state.magnets.some((magnet) => isMagnetOffBoard(state, magnet));
+      if (resolved && !stillInvalid) {
+        persistLayout(state, true);
+        state.lastLayoutType = 'manual';
+      } else {
+        applyRowPackedLayout(state, state.magnets, { persist: true });
+      }
+    } else {
+      updateBoardHeight(state);
+      updateLayout(state);
+      state.lastLayoutType = 'restored';
+      if (!isNavBoardState(state) && layoutHasOverlap(state)) {
+        shouldSeed = true;
+      }
     }
   }
 
