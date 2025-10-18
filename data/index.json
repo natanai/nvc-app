@@ -3197,7 +3197,7 @@
       "title": "Love/Caring",
       "slug": "love-caring",
       "category": "Love/Caring",
-      "description": "affection/warmth, beauty, closeness/touch, companionship, compassion, kindness, intimacy, mattering, importance, nurturing, sexual connection, respect, honoring, valuing/prizing",
+      "description": "",
       "strategies": [
         {
           "title": "Call a friend",
@@ -3296,7 +3296,7 @@
           "description": "developmental psychology review: consistent loving caregiving in childhood improves emotional and physiological regulation into adulthood"
         },
         {
-          "url": "https://longevity.stanford.edu/lifestyle-medicine-2-relationships/",
+          "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
           "description": "Stanford Center on Longevity: strong loving relationships correlate with better health outcomes, stress reduction, and life satisfaction"
         }
       ]
@@ -3305,7 +3305,7 @@
       "title": "Nurturing",
       "slug": "nurturing",
       "category": "Love/Caring",
-      "description": "The desire to see life prosper. It can bring up great pain when our need for nurturing is not being met. We might think somehow we are to blame. Sometimes when we see suffering in other living things we experience pain that they are not being cared for or nurtured well. We might also feel it in us when someone’s behavior did not meet our need to be nurtured and/or considered.",
+      "description": "",
       "strategies": [
         {
           "title": "Call a parent",
@@ -3381,7 +3381,7 @@
       "title": "Connection",
       "slug": "connection",
       "category": "Community/Belonging",
-      "description": "I find connection to be a kind of doorway into the experience of another. We want to make contact with what is most real in one another. How powerful it is to experience connection with another person and how surprising it can be to experience connection within oneself. I find sometimes that when I listen careful for what is alive in me, when I make contact with that need that so wants to be seen, I experience a kind of connection within myself. Depression is often a kind of isolation from one’s own needs. We often experience the same kind of pain when we find ourselves isolated from what is alive in another person. We so want to be let in, to be invited in.",
+      "description": "",
       "strategies": [
         {
           "title": "Call a friend",
@@ -3512,15 +3512,15 @@
           "slug": "overwhelmed"
         }
       ],
-      "originalClaim": "",
-      "rewrittenClaim": "",
+      "originalClaim": "Connection — As highly social creatures, humans thrive on close relationships that provide mutual care. This need drives us to spend meaningful time with others, share experiences, and cultivate trust and empathy. When we foster genuine connection, we gain emotional support and joy in companionship, and we build resilience through having others to lean on during difficult times.",
+      "rewrittenClaim": "Connection — Forming strong social connections has profound benefits for both mental and physical health. Extensive research indicates that the quality and quantity of one’s social relationships are linked not only to psychological well-being but also to longevity and disease risk. In a large meta-analysis of 148 studies, individuals with richer social connections had about a 50% greater likelihood of survival over the study periods than those who were more isolated (Holt-Lunstad et al., 2010 – https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316). In fact, the protective effect of social connection on mortality was found to be comparable to well-known health factors like not smoking and maintaining a healthy weight. Strong interpersonal connection provides emotional support, buffers stress, and contributes to greater life satisfaction, whereas lack of connection (loneliness) is associated with higher risks of depression and physical illness.",
       "supportingSources": []
     },
     {
       "title": "Belonging",
       "slug": "belonging",
       "category": "Community/Belonging",
-      "description": "What a profound experience it can be to have our need for belonging met and how profoundly painful it can be to have it going unmet. We so want to be known as we are, to be seen completely, and accepted. We want to know we have a place in this world. We want to know that we really do make life wonderful for others, for those we love and care for.",
+      "description": "",
       "strategies": [
         {
           "title": "Call a friend",
@@ -3639,15 +3639,15 @@
           "slug": "frustrated"
         }
       ],
-      "originalClaim": "",
-      "rewrittenClaim": "",
+      "originalClaim": "Belonging — Humans evolved in cooperative groups where being part of the tribe meant safety and support. This need motivates us to seek acceptance in communities and relationships that embrace us as we are. Valuing belonging provides a secure sense of identity and a social safety net, which increases psychological security and resilience under stress.",
+      "rewrittenClaim": "Belonging — Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. For instance, one seminal review concluded that social belonging is as essential to long-term health as food and shelter, with a lack of belonging linked to adverse outcomes (https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). Strong social bonds and inclusion have been associated with better well-being, while social isolation elevates the risk of depression and even early mortality (Baumeister & Leary 1995, as cited in https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). In short, when people experience true belonging, they gain emotional support and stability that buffer them against life’s challenges.",
       "supportingSources": []
     },
     {
       "title": "Support",
       "slug": "support",
       "category": "Sustenance/Health",
-      "description": "Somehow it is so much easier for us to experience support from others than it is to receive it from ourselves. Often it only takes a few encouraging words from a friend. We just want to hear that we are capable, and competent. We want to hear that others believe our goals are meaningful and deserve to be accomplished. It is striking how difficult it is to encourage oneself, to believe for ourself that our goals are attainable and deserve to be accomplished. Often others have skills that we think would help make our goals actualize and we believe that if our ideas really were good ones then others would want to lend their skills as well. It can be hard to give others space to have many possible needs that they are wanting to tend to, instead of letting our minds assume the worse, assuming that people cannot help us because they do not care or they do not believe in our vision.",
+      "description": "",
       "strategies": [
         {
           "title": "Call a friend",
@@ -3726,15 +3726,15 @@
           "slug": "resentful"
         }
       ],
-      "originalClaim": "",
-      "rewrittenClaim": "",
+      "originalClaim": "Support — No one survives alone; humans rely on each other especially in times of adversity. This need compels us to seek help, comfort, and collaboration when we face challenges or stress. Offering and receiving support strengthens bonds and confidence, allowing individuals and groups to recover from difficulties more effectively and to know that help will be there when it’s needed.",
+      "rewrittenClaim": "Support — Social support from others is a well-documented protective factor for health. Numerous studies show that people who perceive strong emotional and practical support suffer less psychological distress and even have better physical health outcomes. For example, having supportive relationships is associated with lower rates of depression and anxiety and can improve recovery from illness (empirical review in Frontiers in Psychology, 2024 – https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1330720/full). Social support helps by buffering the impact of stress: individuals who feel cared for and understood tend to cope with hardships more effectively than those who lack support. On the other hand, loneliness or a lack of social and emotional support has been linked to a higher risk of numerous health problems, including heart disease, cognitive decline, and premature mortality (CDC report, 2024 – https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm). In summary, access to caring support networks bolsters mental well-being, resilience, and even longevity, underscoring why the need for support is so fundamental.",
       "supportingSources": []
     },
     {
       "title": "Consideration",
       "slug": "consideration",
       "category": "Empathy/Understanding",
-      "description": "I experience this as a sort of social confusion around what one is needing. I sometimes think that others may be trying to make my life wonderful but they are doing it without first having made contact with what need is alive in me. So maybe they are trying to contribute to my need for support or accomplishment when really want I’m needing is connection or just to be heard. How I wish they had slowed down and given me room to share what I was needing. \nInterestingly I find that tending to the need for consideration in others sometimes is the most reliable strategy for me to tend to the very same need in me. Perhaps that experience is also indicative of the reality that we all share in the same Life -- such that serving life in anyone ultimately serves Life in all of us.",
+      "description": "",
       "strategies": [
         {
           "title": "Call a friend",
@@ -3893,15 +3893,15 @@
           "slug": "sad"
         }
       ],
-      "originalClaim": "",
-      "rewrittenClaim": "",
+      "originalClaim": "Consideration — Feeling thoughtfully regarded by others reassures us that we matter. This need inspires courteous communication, attentive listening, and taking others’ feelings into account. When people treat each other with consideration, it builds mutual respect and trust, reducing friction in groups and helping everyone feel valued.",
+      "rewrittenClaim": "Consideration (Respect) — Being respected and valued by those around us is not just pleasant but crucial for our well-being. Psychological research has found that feeling respected correlates with higher satisfaction, motivation, and self-esteem. In one analysis of workplace factors, respect was identified as the top driver of job satisfaction and engagement—employees who felt respected by peers and leaders were more productive and less likely to quit (SHRM study, discussed in Psychology Today, 2024). Beyond the workplace, feeling that others appreciate and admire you significantly improves happiness. Notably, a study in the journal Psychological Science found that feeling respected and valued had a stronger impact on people’s happiness than their income level (as summarized by Anderson et al. 2012 – https://www.theatlantic.com/health/archive/2012/06/why-money-cant-buy-happiness-feeling-respected-matters-more/259032/). In essence, when our need for consideration is met, we experience greater well-being and social connection, whereas being treated with indifference or disrespect can harm trust and mental health.",
       "supportingSources": []
     },
     {
       "title": "Need for all living things to flourish",
       "slug": "need-for-all-living-things-to-flourish",
       "category": "Meaning/Contribution",
-      "description": "It can bring up great pain when our need for nurturing is not being met. We might think somehow we are to blame. Sometimes when we see suffering in other living things we experience pain that they are not being cared for or nurtured well. We might also feel it in us when someone’s behavior did not meet our need to be nurtured and/or considered.",
+      "description": "",
       "strategies": [
         {
           "title": "Tend to a plant",
@@ -3936,7 +3936,7 @@
       "rewrittenClaim": "Humans can feel a profound need to care about the well-being of all living things (not just ourselves or our immediate family). This expansive concern – often encompassing other people, future generations, animals, and the environment – encourages behaviors like environmental stewardship (taking care of nature), protecting those who are vulnerable, and making choices with long-term sustainability in mind. Psychologically, contributing to the greater good or the “flourishing” of a broad community can give individuals a strong sense of purpose and fulfillment. For example, studies show that volunteers in conservation or social justice efforts often report increased happiness and lower stress, as their altruistic actions feed back into their own well-being. Moreover, when many people adopt this ethos of caring beyond themselves, societies become more sustainable and resilient (e.g., communities are healthier and ecosystems more balanced). In essence, nurturing a concern for the flourishing of all life connects personal meaning with the health of our planet and society, creating a virtuous cycle between individual purpose and collective well-being.",
       "supportingSources": [
         {
-          "url": "https://gsdrc.org/document-library/what-is-the-evidence-on-the-effectiveness-of-empowerment-to-improve-health/",
+          "url": "https://apps.who.int/iris/handle/10665/107481",
           "description": "WHO summary by Wallerstein: empowering communities to care for all members yields better collective outcomes"
         },
         {
@@ -3949,7 +3949,7 @@
       "title": "Inclusion",
       "slug": "inclusion",
       "category": "Community/Belonging",
-      "description": "What a profound experience it can be to have our need for inclusion met and how profoundly painful it can be to have it going unmet. We so want to be known as we are, to be seen completely, and accepted. We want to know we have a place in this world. We went to know that we really do make life wonderful for others and for those we love and care for.",
+      "description": "",
       "strategies": [
         {
           "title": "Try Meetup",
@@ -4069,7 +4069,7 @@
       "title": "Community",
       "slug": "community",
       "category": "Community/Belonging",
-      "description": "What a powerful experience it can be for us when our need for community is met. To experience inclusion, belonging, and often a sense of a purpose greater than any single person. There can be a lot of pain in even admitting to ourselves that we have this need for community that wants to be included in our strategies. It can be overwhelming to us. As if it is an insurmountable task to tend to this need.",
+      "description": "",
       "strategies": [
         {
           "title": "Try Meetup",
@@ -4177,7 +4177,7 @@
       "title": "Safety",
       "slug": "safety",
       "category": "Safety/Security",
-      "description": "The childhood instinct to hide under the covers or run to the arms of a caregiver are both manifestations of our basic need for safety. It also very naturally includes the needs of others in our life. Seeing someone else in an unsafe situation also does not meet our need for safety therefore motivating us to find ways to tend to them.",
+      "description": "",
       "strategies": [
         {
           "title": "Crunch the numbers",
@@ -4337,7 +4337,7 @@
       "title": "Contribution",
       "slug": "contribution",
       "category": "Meaning/Contribution",
-      "description": "I sometimes think of \"contribution\" as a bridge into the needs of others. We sometimes just genuinely wants to make life wonderful for others but we are terrified that we do not know how. What if we get it wrong? What if we try to make life wonderful for them but end up just making things worse? It can sometimes leave us paralyzed at the prospect. Nevertheless, our basic human need for contribution I find among the most obviously beautiful needs we have.",
+      "description": "",
       "strategies": [
         {
           "title": "Listen",
@@ -4633,7 +4633,7 @@
       "title": "Autonomy",
       "slug": "autonomy",
       "category": "Autonomy/Freedom",
-      "description": "Freedom to be oneself. Often we hope that others to give us this freedom but I find it’s also quite difficult to give this freedom to ourselves. It’s such a beautiful need when we see it in others so why is it so hard to see it’s beauty in us?",
+      "description": "",
       "strategies": [
         {
           "title": "Go on walk",
@@ -5369,7 +5369,7 @@
       "title": "Dependability",
       "slug": "dependability",
       "category": "Community/Belonging",
-      "description": "Defined as \"the quality of being trustworthy and reliable\" we ought to be careful to not mistake our evaluations of others as if they are our personal needs. Needs contain no reference to specific people taking specific action. Therefore a need like dependability is really rooted in concepts like predictability. We'd like to know that if we expect something to happen, that it will. When other's fail to do as they say they will do it therefore does not meet our needs. We don't have to level a new judgement of them in order to see that our own need was not met. Therefore, the tend to our need for dependability without reference to others may look something like making simple plans or creating a schedule. I could mean choosing a mindfulness meditation in which we allow ourselves to notice all the things that are predictable for us: like our breath, the rising and setting sun, our ability to lift our hand or blink our eyes when we choose to.",
+      "description": "",
       "strategies": [
         {
           "title": "Schedule your day",
@@ -5417,7 +5417,7 @@
         }
       ],
       "originalClaim": "Reliability reduces monitoring costs and enables complex cooperation. This need motivates keeping agreements, building robust processes, and choosing trustworthy partners. Dependability is the infrastructure of interpersonal and institutional trust.",
-      "rewrittenClaim": "Each person has an optimal pace and style for doing work or learning. When we can operate at a pace that suits us (rather than being rushed or held back too much), we tend to learn more effectively and make fewer errors, and we can keep going longer without exhaustion. This need to “do it my own way, in my own time” leads people to tailor their schedules and break tasks into sequences that fit their natural rhythm. Research on job design indicates that employees who have control over the timing and method of their work – for example, setting their own task pace – experience less burnout and maintain higher quality performance. By respecting individuals’ pacing needs, organizations and educators can preserve quality of output and protect people’s well-being over the long term, since working in sync with one’s personal tempo reduces chronic stress.",
+      "rewrittenClaim": "When individuals or systems are dependable – meaning they do what they promised, consistently – everyone saves time and energy that would otherwise go into double-checking or worrying. High reliability among members is what makes elaborate teamwork possible, because each person can focus on their role without constantly monitoring others. This need for dependability drives behaviors like honoring commitments, setting up sturdy procedures to prevent failures, and gravitating towards colleagues or partners known to be trustworthy. In fact, experiments show that we naturally trust and cooperate more with people who have proven to be consistently honest and reliable in their behavior. In essence, dependability lays the groundwork for trust – it’s the invisible infrastructure that lets both interpersonal relationships and organizations function smoothly.",
       "supportingSources": [
         {
           "url": "https://www.sciencedirect.com/science/article/pii/S0749597818301940",
@@ -5568,7 +5568,7 @@
       "rewrittenClaim": "Honor involves living up to ethical principles and norms – essentially, it’s about having integrity that others recognize. This strengthens one’s reputation for being upright and fosters trust within the group. The need for honor drives individuals to make choices that are consistent with their professed values, to exercise restraint from unethical temptations, and to make amends if they do something that violates the moral code. By behaving honorably, a person aligns their personal integrity with what their community expects ethically. Research in social psychology suggests that when people consistently act according to moral standards, they earn trust and esteem from others. Conversely, dishonorable actions (lies, cheating) can damage one’s reputation and erode group trust. In short, honor acts as a bridge between the individual and the community: it ensures that personal behavior upholds communal ethical expectations, thereby protecting both the individual’s good name and the group’s mutual trust.",
       "supportingSources": [
         {
-          "url": "https://www.cambridge.org/core/books/honor-and-moral-development",
+          "url": "https://doi.org/10.1017/9781108573100",
           "description": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
         },
         {
@@ -5581,7 +5581,7 @@
       "title": "Commitment",
       "slug": "commitment",
       "category": "Safety/Security",
-      "description": "Relationships are often the first things that come to mind when we notice our need for commitment isn't being met. Interestingly, however, we often fail to keep commitments to ourselves too. In this way making small attainable plans/commitments to ourselves can be a healthy way to tend to this need without references to others. During a meltdown I once committed to myself that I would flip my hand over on the count of three. In it's own tiny way I was able to prove to myself that I do have some control over myself and that I can predict the future even if it's just in this tiny way.",
+      "description": "",
       "strategies": [
         {
           "title": "Schedule your day",
@@ -6492,8 +6492,8 @@
           "slug": "powerless"
         }
       ],
-      "originalClaim": "",
-      "rewrittenClaim": "",
+      "originalClaim": "Choose Freely — The ability to make one’s own choices offers flexibility and adaptation when circumstances change. This need motivates questioning or resisting unnecessary restraints, exploring alternative options, and asserting personal preferences. Supporting free choice preserves individual creativity and responsibility, leading to more wholehearted engagement in tasks and decisions.",
+      "rewrittenClaim": "Choose Freely — Having autonomy and freedom of choice is empirically linked to better motivation and well-being. Self-Determination Theory identifies autonomy (the freedom to choose one’s actions) as a basic psychological need; when this need is satisfied, people show enhanced intrinsic motivation and mental health (Ryan & Deci 2000, American Psychologist, 55(1), 68–78, via PubMed: https://pubmed.ncbi.nlm.nih.gov/11392867/). In practical terms, studies have found that giving individuals more control over decisions leads to positive outcomes. A classic field experiment in a nursing home showed that residents given more choices and personal responsibility became more alert, active, and happier compared to those who had all decisions made for them (Langer & Rodin 1976 – https://pubmed.ncbi.nlm.nih.gov/1011073/). Thus, being able to choose freely tends to improve one’s engagement, well-being, and even health, whereas being overly controlled or without choice can undermine motivation and satisfaction.",
       "supportingSources": []
     },
     {
@@ -6596,7 +6596,7 @@
         }
       ],
       "originalClaim": "Shared meaning lowers error and conflict during complex tasks. This need motivates inquiry, paraphrasing, and constructing common models. Understanding aligns action and strengthens relationships.",
-      "rewrittenClaim": "People working or living together need to have a mutual understanding – a shared interpretation of goals, situations, or language – to avoid mistakes and unnecessary disagreements. When everyone “gets” the situation in a similar way, complex tasks go more smoothly and conflicts are minimized. The need for understanding pushes us to ask questions when we’re unsure (“Could you clarify what you mean?”), to rephrase or paraphrase what others say to confirm we got it right, and to develop common reference points or models (like shared jargon, or a team game plan) that everyone can refer to. In team research, groups that take time to form a shared mental model of their project make fewer errors and coordinate better. Similarly, in personal relationships, actively striving to understand each other’s perspectives (instead of assuming or talking past one another) strengthens the bond and reduces friction. Ultimately, achieving mutual understanding means aligning everyone’s actions toward the same picture of reality and goals. It not only improves effectiveness in tasks but also builds trust and closeness, because each person feels “seen” and on the same page with the others.",
+      "rewrittenClaim": "People working or living together need to have a mutual understanding – a shared interpretation of goals, situations, or language – to avoid mistakes and unnecessary disagreements. When everyone “gets” the situation in a similar way, complex tasks go more smoothly and conflicts are minimized. The need for understanding pushes us to ask questions when we’re unsure (“Could you clarify what you mean?”), to rephrase or paraphrase what others say to confirm we got it right, and to develop common reference points or models (like shared jargon, or a team game plan) that everyone can refer to. In team research, groups that take time to form a shared mental model of their project make fewer errors and coordinate better. Similarly, in personal relationships, actively striving to understand each other’s perspectives (instead of assuming or talking past one another) strengthens the bond and reduces friction. Ultimately, achieving mutual understanding means aligning everyone’s actions toward the same picture of reality and goals. It not only improves effectiveness in tasks but also builds trust and closeness, because each person feels “seen” and on the same page with the others. Belonging",
       "supportingSources": [
         {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/",
@@ -7216,7 +7216,7 @@
         }
       ],
       "originalClaim": "Individually tuned pacing supports learning, accuracy, and sustainability. This need motivates customizing timelines, sequencing tasks, and aligning methods with personal rhythms. Honoring pace preserves quality and reduces burnout.",
-      "rewrittenClaim": "",
+      "rewrittenClaim": "Do Things at My Own Pace and in My Own Way — Being able to set one’s own pace for work and learning is beneficial for both performance and health. Research on time pressure shows that when people are forced to rush, their performance suffers and stress rises. One study found that reducing available time for tasks significantly impaired individuals’ executive function and increased their stress levels, while giving more time restored performance (Sussman & Sekuler 2022 – https://pmc.ncbi.nlm.nih.gov/articles/PMC9506568/). In general, working under constant time pressure tends to increase speed at the expense of quality, leading to more errors and mental strain (Moore & Tenney 2012 – https://www.researchgate.net/publication/286319678_Time_Pressure_Performance_and_Productivity). By contrast, when people can proceed at a comfortable, self-determined pace, they often achieve better accuracy, retain information more effectively, and experience less burnout. This suggests that honoring an individual’s need to work at their own pace supports sustained learning and productivity while protecting their well-being.",
       "supportingSources": [
         {
           "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
@@ -7772,7 +7772,7 @@
         }
       ],
       "originalClaim": "Feeling significant to others predicts well-being and engagement. This need motivates meaningful roles, feedback about impact, and participation where presence counts. Centering mattering reinforces purpose for both individuals and groups.",
-      "rewrittenClaim": "“Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
+      "rewrittenClaim": "Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
       "supportingSources": [
         {
           "url": "https://psycnet.apa.org/record/1984-06749-001",
@@ -8036,7 +8036,7 @@
         }
       ],
       "originalClaim": "Attachment theory and cross-cultural research identify emotionally attuned proximity as protective for development and stress recovery. This need motivates shared time, attentive presence, and mutual responsiveness. Closeness strengthens resilience through co-regulation and trust.",
-      "rewrittenClaim": "Psychologists (starting with attachment theory) have found that having someone emotionally in-tune and physically or emotionally close is a powerful buffer for stress and a boon for healthy development. In other words, feeling closely connected – for example through shared quality time, attentive listening, and responsive care – protects people (especially children) by helping them regulate their emotions with support from another person (a process called co-regulation). This need for closeness drives us to seek warm, reliable relationships. Secure attachment in childhood is linked to better coping with fear and stress, and even in adults, social support from a loved one can calm the body’s stress responses. By cultivating closeness and trust, individuals become more resilient: they recover faster from adversity and gain confidence knowing someone “has their back.”",
+      "rewrittenClaim": "Psychologists (starting with attachment theory) have found that having someone emotionally in-tune and physically or emotionally close is a powerful buffer for stress and a boon for healthy development. In other words, feeling closely connected – for example through shared quality time, attentive listening, and responsive care – protects people (especially children) by helping them regulate their emotions with support from another person (a process called co-regulation). This need for closeness drives us to seek warm, reliable relationships. Secure attachment in childhood is linked to better coping with fear and stress, and even in adults, social support from a loved one can calm the body’s stress responses. By cultivating closeness and trust, individuals become more resilient: they recover faster from adversity and gain confidence knowing someone “has their back.",
       "supportingSources": [
         {
           "url": "https://cpa.ca/attachment-in-children/",
