@@ -33,6 +33,38 @@ const TOGGLE_GUARD_MS = 120;
 
 const isNavBoardState = (state) => state?.storageKey === NAV_STORAGE_KEY;
 
+const isMagnetHiddenForLayout = (element) => {
+  if (!element) {
+    return false;
+  }
+  if (typeof HTMLElement === 'function' && !(element instanceof HTMLElement)) {
+    return false;
+  }
+  if (element.hidden) {
+    return true;
+  }
+  if (typeof element.getAttribute === 'function' && element.getAttribute('aria-hidden') === 'true') {
+    return true;
+  }
+  if (element.dataset && element.dataset.navHidden === 'true') {
+    return true;
+  }
+  if (typeof window !== 'undefined' && typeof window.getComputedStyle === 'function') {
+    const styles = window.getComputedStyle(element);
+    if (styles.display === 'none' || styles.visibility === 'hidden') {
+      return true;
+    }
+  }
+  return false;
+};
+
+const getLayoutMagnets = (state) => {
+  if (!isNavBoardState(state)) {
+    return state.magnets;
+  }
+  return state.magnets.filter((magnet) => !magnet.layoutHidden);
+};
+
 let isToggling = false;
 let toggleGuardTimer = null;
 
@@ -523,6 +555,7 @@ const createMagnetStates = (board, elements) => {
   return elements.map((element) => {
     const rect = element.getBoundingClientRect();
     const styles = window.getComputedStyle(element);
+    const layoutHidden = isMagnetHiddenForLayout(element);
     const width = rect.width || element.offsetWidth || 0;
     const height = rect.height || element.offsetHeight || 0;
     const marginLeft = parsePx(styles.marginLeft);
@@ -532,6 +565,7 @@ const createMagnetStates = (board, elements) => {
     return {
       id: element.dataset.magnetId || element.id || element.textContent || '',
       element,
+      layoutHidden,
       width,
       height,
       marginLeft,
@@ -570,11 +604,12 @@ const remeasureMagnets = (state) => {
       marginRight: parsePx(styles.marginRight),
       marginTop: parsePx(styles.marginTop),
       marginBottom: parsePx(styles.marginBottom),
+      layoutHidden: isMagnetHiddenForLayout(magnet.element),
     };
   });
 
   updates.forEach((entry) => {
-    const { magnet, width, height, marginLeft, marginRight, marginTop, marginBottom } = entry;
+    const { magnet, width, height, marginLeft, marginRight, marginTop, marginBottom, layoutHidden } = entry;
     magnet.width = width;
     magnet.height = height;
     magnet.marginLeft = marginLeft;
@@ -583,6 +618,7 @@ const remeasureMagnets = (state) => {
     magnet.marginBottom = marginBottom;
     magnet.outerWidth = width + marginLeft + marginRight;
     magnet.outerHeight = height + marginTop + marginBottom;
+    magnet.layoutHidden = layoutHidden;
   });
 
   const width = Math.max(boardRect.width || state.board.clientWidth || state.boardWidth || 1, 1);
@@ -637,7 +673,7 @@ const updateLayoutValidity = (state) => {
     return;
   }
   const hasOverlap = layoutHasOverlap(state);
-  const hasOffBoard = state.magnets.some((magnet) => isMagnetOffBoard(state, magnet));
+  const hasOffBoard = getLayoutMagnets(state).some((magnet) => isMagnetOffBoard(state, magnet));
   const invalid = hasOverlap || hasOffBoard;
   if (state.root) {
     if (invalid) {
@@ -665,7 +701,10 @@ const layoutHasOverlap = (state) => {
   if (!state || !Array.isArray(state.magnets)) {
     return false;
   }
-  const magnets = state.magnets;
+  const magnets = getLayoutMagnets(state);
+  if (!magnets.length) {
+    return false;
+  }
   if (isNavBoardState(state)) {
     for (let i = 0; i < magnets.length; i += 1) {
       const a = magnets[i];
@@ -735,7 +774,16 @@ const updateLayout = (state) => {
   const width = Math.max(state.boardWidth || 0, 1);
   const height = Math.max(state.boardHeight || 0, 1);
   state.layout.clear();
-  state.magnets.forEach((magnet) => {
+  if (isNavBoardState(state)) {
+    state.magnets.forEach((magnet) => {
+      if (magnet.layoutHidden) {
+        magnet.xPct = undefined;
+        magnet.yPct = undefined;
+      }
+    });
+  }
+  const magnets = getLayoutMagnets(state);
+  magnets.forEach((magnet) => {
     const rawXPct = width ? magnet.x / width : 0;
     const rawYPct = height ? magnet.y / height : 0;
     const xPct = isNavBoardState(state) ? rawXPct : clamp(rawXPct, 0, 1);
@@ -757,7 +805,7 @@ const persistLayout = (state, immediate = false) => {
     if (isNavBoardState(state)) {
       const width = Math.max(state.boardWidth || 0, 1);
       const height = Math.max(state.boardHeight || 0, 1);
-      const magnetsForSave = state.magnets.map((magnet) => ({
+      const magnetsForSave = getLayoutMagnets(state).map((magnet) => ({
         id: magnet.id,
         x: typeof magnet.xPct === 'number' ? magnet.xPct : (width ? magnet.x / width : 0),
         y: typeof magnet.yPct === 'number' ? magnet.yPct : (height ? magnet.y / height : 0),
@@ -804,7 +852,8 @@ const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
   const height = isNavBoardState(state)
     ? Math.max(state.boardHeight || 0, 1)
     : Math.max(Math.max(state.boardHeight || 0, state.minHeight || 0), 1);
-  const placements = state.magnets.map((magnet) => {
+  const layoutMagnets = getLayoutMagnets(state);
+  const placements = layoutMagnets.map((magnet) => {
     const percentages = state.layout.get(magnet.id);
     if (!percentages) {
       return { magnet, x: magnet.x, y: magnet.y };
@@ -844,7 +893,11 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   let rowHeight = 0;
   let maxBottom = startY;
 
-  const placements = order.map((magnet) => {
+  const layoutOrder = isNavBoardState(state)
+    ? order.filter((magnet) => !magnet.layoutHidden)
+    : order;
+
+  const placements = layoutOrder.map((magnet) => {
     const marginLeft = magnet.marginLeft || 0;
     const marginRight = magnet.marginRight || 0;
     const marginTop = magnet.marginTop || 0;
@@ -959,16 +1012,7 @@ const resolveNavLayoutToNearestValid = (state) => {
   if (!isNavBoardState(state) || !state || !Array.isArray(state.magnets) || !state.magnets.length) {
     return false;
   }
-  const visibleMagnets = state.magnets.filter((magnet) => {
-    if (!magnet?.element) {
-      return false;
-    }
-    if (magnet.element.hidden) {
-      return false;
-    }
-    return magnet.element.offsetParent !== null;
-  });
-  const magnets = visibleMagnets.length ? visibleMagnets : state.magnets;
+  const magnets = getLayoutMagnets(state);
   if (!magnets.length) {
     return false;
   }
@@ -1021,7 +1065,7 @@ const resolveNavLayoutToNearestValid = (state) => {
 };
 
 const shuffleWithoutPhysics = (state) => {
-  const order = state.magnets.slice();
+  const order = getLayoutMagnets(state).slice();
   for (let i = order.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
@@ -1080,7 +1124,9 @@ const setPlayState = (state, active) => {
     state.magnets.forEach((magnet) => {
       magnet.element.setAttribute('draggable', 'false');
     });
-    const magnetElements = state.magnets.map((magnet) => magnet.element);
+    const magnetElements = isNavBoardState(state)
+      ? getLayoutMagnets(state).map((magnet) => magnet.element)
+      : state.magnets.map((magnet) => magnet.element);
     const physicsConfig = isNavBoardState(state)
       ? { ...DEFAULT_CONFIG, ...NAV_PHYSICS_CONFIG }
       : { ...DEFAULT_CONFIG };
@@ -1132,7 +1178,9 @@ const setPlayState = (state, active) => {
         }
       }
       updateBoardHeight(state);
-      const magnetElements = state.magnets.map((magnet) => magnet.element);
+      const magnetElements = isNavBoardState(state)
+        ? getLayoutMagnets(state).map((magnet) => magnet.element)
+        : state.magnets.map((magnet) => magnet.element);
       const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
       if (typeof syncedHeight === 'number' && syncedHeight > 0) {
         if (isNavBoardState(state)) {
@@ -1302,7 +1350,8 @@ const applySearchQuery = (state, queryRaw) => {
     return;
   }
   const normalized = query.toLocaleLowerCase();
-  const matches = state.magnets.filter((magnet) => {
+  const magnets = isNavBoardState(state) ? getLayoutMagnets(state) : state.magnets;
+  const matches = magnets.filter((magnet) => {
     if (!magnet || typeof magnet.searchValue !== 'string') {
       return false;
     }
@@ -1489,6 +1538,9 @@ const initializeBoard = async (root, index) => {
     let hasStoredPlacement = false;
     let maxBottom = 0;
     state.magnets.forEach((magnet) => {
+      if (isNavBoardState(state) && magnet.layoutHidden) {
+        return;
+      }
       const saved = storedById.get(magnet.id);
       if (saved) {
         hasStoredPlacement = true;
