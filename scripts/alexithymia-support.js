@@ -1358,6 +1358,56 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     });
   }
 
+  function getPinnedScanBounds() {
+    if (bodyScanPanel?.classList.contains('sensation-scan--pinned')) {
+      try {
+        return bodyScanPanel.getBoundingClientRect();
+      } catch (error) {
+        return null;
+      }
+    }
+    if (scanControls && !scanControls.classList.contains('is-hidden')) {
+      try {
+        return scanControls.getBoundingClientRect();
+      } catch (error) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  function scrollRegionIntoView(target) {
+    if (!target) return;
+
+    const targetRect = target.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement?.clientHeight || 0;
+    const pinnedBounds = getPinnedScanBounds();
+    const topBuffer = 16;
+    const bottomBuffer = 28;
+    const topLimit = (pinnedBounds ? pinnedBounds.bottom : 0) + topBuffer;
+    const bottomLimit = viewportHeight - bottomBuffer;
+
+    let delta = 0;
+    if (targetRect.top < topLimit) {
+      delta = targetRect.top - topLimit;
+    } else if (targetRect.bottom > bottomLimit) {
+      delta = targetRect.bottom - bottomLimit;
+    }
+
+    if (delta === 0) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    const behavior = prefersReducedMotion ? 'auto' : 'smooth';
+
+    try {
+      window.scrollBy({ top: delta, behavior });
+    } catch (error) {
+      window.scrollBy(0, delta);
+    }
+  }
+
   function highlightScanRegion(regionId) {
     expandRegion(regionId, { focus: false, collapseOthers: true });
     let target = null;
@@ -1368,19 +1418,14 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         target = region.element;
       }
     });
-    if (target) {
-      try {
-        target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } catch (error) {
-        // ignore scroll errors
-      }
-    }
+    scrollRegionIntoView(target);
   }
 
   function updateScanUi() {
     if (!scanControls) return;
     if (!state.guidedScanActive) {
       scanControls.classList.add('is-hidden');
+      bodyScanPanel?.classList.remove('sensation-scan--pinned');
       clearScanHighlights();
       return;
     }
@@ -1397,6 +1442,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
 
     scanControls.classList.remove('is-hidden');
+    bodyScanPanel?.classList.add('sensation-scan--pinned');
     const regionId = BODY_SCAN_SEQUENCE[state.guidedScanIndex];
     highlightScanRegion(regionId);
 
@@ -1442,6 +1488,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     if (scanControls) {
       scanControls.classList.add('is-hidden');
     }
+    bodyScanPanel?.classList.remove('sensation-scan--pinned');
     if (scanPrompt) {
       scanPrompt.textContent = '';
     }
