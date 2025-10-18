@@ -85,7 +85,6 @@ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6143627/
 https://www.sciencedirect.com/science/article/pii/S0003687012000588
 https://doi.org/10.1016/j.brat.2016.05.011
 https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true
-https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved
 https://psycnet.apa.org/record/2019-50470-001
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5373634/
 https://psycnet.apa.org/record/2009-02221-005
@@ -123,3 +122,6 @@ https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806
 https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/
 https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614
+https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/
+https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/
+https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext

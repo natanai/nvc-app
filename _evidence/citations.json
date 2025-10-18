@@ -873,11 +873,11 @@
     "file": "/workspace/nvc-app/needs/peace/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health",
-    "url": "https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved",
-    "domain": "www.un.org",
+    "label": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health"
+    "context": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/peace/index.html",
@@ -1248,5 +1248,25 @@
     "domain": "psycnet.apa.org",
     "label_domain_hint": "",
     "context": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/peace/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/peace/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict",
+    "url": "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext",
+    "domain": "www.thelancet.com",
+    "label_domain_hint": "",
+    "context": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict"
   }
 ]

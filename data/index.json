@@ -7123,12 +7123,20 @@
       "rewrittenClaim": "When people aren’t preoccupied with conflict or threat, they can redirect their energy and resources toward positive development – such as learning, creating, or building better lives. This basic need for peace drives behaviors aimed at reducing or preventing conflict: people will try to calm tensions, establish clear boundaries or treaties to avoid clashes, and use restorative methods to heal disputes that do occur. By maintaining peaceful conditions, individuals and communities can sustain focus on growth activities (education, commerce, relationships) rather than on defending against danger. Research in conflict psychology notes that ongoing strife consumes mental bandwidth and material resources (for defense or worry), whereas periods of peace correspond with economic growth, improved mental health, and stronger social trust. Thus, peace isn’t just the absence of war or fighting – it’s an enabling environment that allows trust to deepen and constructive efforts to flourish over the long term.",
       "supportingSources": [
         {
-          "url": "https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved",
-          "description": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/",
+          "description": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes"
         },
         {
           "url": "https://psycnet.apa.org/record/2019-50470-001",
           "description": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/",
+          "description": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts"
+        },
+        {
+          "url": "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext",
+          "description": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict"
         }
       ]
     },
@@ -12719,12 +12727,20 @@
       "rewrittenClaim": "When people aren’t preoccupied with conflict or threat, they can redirect their energy and resources toward positive development – such as learning, creating, or building better lives. This basic need for peace drives behaviors aimed at reducing or preventing conflict: people will try to calm tensions, establish clear boundaries or treaties to avoid clashes, and use restorative methods to heal disputes that do occur. By maintaining peaceful conditions, individuals and communities can sustain focus on growth activities (education, commerce, relationships) rather than on defending against danger. Research in conflict psychology notes that ongoing strife consumes mental bandwidth and material resources (for defense or worry), whereas periods of peace correspond with economic growth, improved mental health, and stronger social trust. Thus, peace isn’t just the absence of war or fighting – it’s an enabling environment that allows trust to deepen and constructive efforts to flourish over the long term.",
       "supportingSources": [
         {
-          "url": "https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved",
-          "description": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/",
+          "description": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes"
         },
         {
           "url": "https://psycnet.apa.org/record/2019-50470-001",
           "description": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/",
+          "description": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts"
+        },
+        {
+          "url": "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext",
+          "description": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict"
         }
       ]
     },
@@ -18315,12 +18331,20 @@
       "rewrittenClaim": "When people aren’t preoccupied with conflict or threat, they can redirect their energy and resources toward positive development – such as learning, creating, or building better lives. This basic need for peace drives behaviors aimed at reducing or preventing conflict: people will try to calm tensions, establish clear boundaries or treaties to avoid clashes, and use restorative methods to heal disputes that do occur. By maintaining peaceful conditions, individuals and communities can sustain focus on growth activities (education, commerce, relationships) rather than on defending against danger. Research in conflict psychology notes that ongoing strife consumes mental bandwidth and material resources (for defense or worry), whereas periods of peace correspond with economic growth, improved mental health, and stronger social trust. Thus, peace isn’t just the absence of war or fighting – it’s an enabling environment that allows trust to deepen and constructive efforts to flourish over the long term.",
       "supportingSources": [
         {
-          "url": "https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved",
-          "description": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/",
+          "description": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes"
         },
         {
           "url": "https://psycnet.apa.org/record/2019-50470-001",
           "description": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/",
+          "description": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts"
+        },
+        {
+          "url": "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext",
+          "description": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict"
         }
       ]
     },
