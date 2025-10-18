@@ -204,7 +204,7 @@
     "line": 750,
     "how": "html_anchor",
     "label": "research on how humans form causal models to reduce uncertainty and guide decisions",
-    "url": "https://www.nature.com/articles/s41562-019-0766-y",
+    "url": "https://www.nature.com/articles/s41562-019-0766-4",
     "domain": "www.nature.com",
     "label_domain_hint": "",
     "context": "research on how humans form causal models to reduce uncertainty and guide decisions"
@@ -1133,21 +1133,21 @@
     "file": "/workspace/nvc-app/needs/serenity/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "review: brief, quiet wakeful rest after learning facilitates memory consolidation",
+    "label": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7024394/",
     "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "review: brief, quiet wakeful rest after learning facilitates memory consolidation"
+    "context": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration"
   },
   {
     "file": "/workspace/nvc-app/needs/serenity/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "psychology study: exposure to natural environments improved directed attention and cognitive performance, supporting better decision-making",
+    "label": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment",
     "url": "https://pubmed.ncbi.nlm.nih.gov/19121124/",
     "domain": "pubmed.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "psychology study: exposure to natural environments improved directed attention and cognitive performance, supporting better decision-making"
+    "context": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment"
   },
   {
     "file": "/workspace/nvc-app/needs/space/index.html",
