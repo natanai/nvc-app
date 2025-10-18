@@ -137,17 +137,20 @@ const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
 
 const SITE_ORIGIN = 'https://allneeds.app';
-const FAVICON_SVG = 'icons/main.svg';
-const APP_ICON_SRC = 'icons/meta-icons/app-icon.svg';
-const TOUCH_ICON_SRC = 'icons/meta-icons/touch-icon.svg';
-const TOUCH_ICON_LARGE_SRC = TOUCH_ICON_SRC;
-const MASK_ICON_SRC = 'icons/meta-icons/safari-pinned-tab.svg';
-const TILE_IMAGE_SRC = APP_ICON_SRC;
-const BROWSER_CONFIG_SRC = 'icons/meta-icons/browserconfig.xml';
-const SOCIAL_CARD_SRC = 'icons/social-card.svg';
+const FAVICON_SVG = 'icons/favicon.svg';
+const FAVICON_PNG_32 = 'icons/favicon-32x32.png';
+const FAVICON_PNG_16 = 'icons/favicon-16x16.png';
+const TOUCH_ICON_SRC = 'icons/apple-touch-icon.png';
+const MASK_ICON_SRC = 'icons/safari-pinned-tab.svg';
+const TILE_IMAGE_SRC = 'icons/mstile-150x150.png';
+const BROWSER_CONFIG_SRC = 'browserconfig.xml';
+const SOCIAL_CARD_SRC = 'social/og-image-1200x630.png';
+const TWITTER_CARD_SRC = 'social/twitter-card-1200x630.png';
 const SOCIAL_CARD_WIDTH = 1200;
 const SOCIAL_CARD_HEIGHT = 630;
-const TILE_COLOR = '#7E5CFF';
+const TILE_COLOR = '#ffffff';
+const MASK_ICON_COLOR = '#000000';
+const THEME_COLOR = '#ffffff';
 
 function absoluteUrl(path = '') {
   if (!path) {
@@ -488,6 +491,7 @@ function htmlPage({
   navOptions = undefined,
   canonicalPath = '/',
   socialImage = SOCIAL_CARD_SRC,
+  twitterImage = TWITTER_CARD_SRC,
   socialAlt = 'Three colorful doorways symbolizing allneeds.app',
 }) {
   const basePath = basePathFromDepth(depth);
@@ -499,17 +503,20 @@ function htmlPage({
   const fullTitle = `${escapedTitle} • ${escapedBrand}`;
   const tabTitle = fullTitle.toLowerCase();
   const faviconSvgHref = resolveHeadHref(basePath, FAVICON_SVG);
+  const faviconPng32Href = resolveHeadHref(basePath, FAVICON_PNG_32);
+  const faviconPng16Href = resolveHeadHref(basePath, FAVICON_PNG_16);
   const manifestHref = resolveHeadHref(basePath, 'site.webmanifest');
   const canonicalPathNormalized = normalizeCanonicalPath(canonicalPath);
   const canonicalUrl = absoluteUrl(canonicalPathNormalized);
   const appleTouchIconHref = resolveHeadHref(basePath, TOUCH_ICON_SRC);
-  const appleTouchIconLargeHref = resolveHeadHref(basePath, TOUCH_ICON_LARGE_SRC);
   const maskIconHref = resolveHeadHref(basePath, MASK_ICON_SRC);
   const tileImageHref = resolveHeadHref(basePath, TILE_IMAGE_SRC);
   const browserConfigHref = resolveHeadHref(basePath, BROWSER_CONFIG_SRC);
   const socialImagePath = socialImage || SOCIAL_CARD_SRC;
   const socialImageUrl = absoluteUrl(socialImagePath);
   const socialImageType = guessMimeType(socialImagePath);
+  const twitterImagePath = twitterImage || TWITTER_CARD_SRC;
+  const twitterImageUrl = absoluteUrl(twitterImagePath);
   const socialAltEscaped = escapeHtml(socialAlt || 'Three colorful doorways symbolizing allneeds.app');
 
   const breadcrumbHtml = breadcrumbs.length
@@ -569,17 +576,16 @@ function htmlPage({
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${tabTitle}</title>
     <meta name="description" content="${escapedDescription}" />
-    <link rel="icon" type="image/svg+xml" sizes="any" href="${faviconSvgHref}" />
-    <link rel="shortcut icon" type="image/svg+xml" href="${faviconSvgHref}" />
+    <link rel="icon" type="image/svg+xml" href="${faviconSvgHref}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="${faviconPng32Href}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="${faviconPng16Href}" />
     <link rel="manifest" href="${manifestHref}" />
-    <meta name="theme-color" content="#FBF7FF" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#12081F" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="${THEME_COLOR}" />
     <meta name="application-name" content="${escapedBrand}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="${appleTouchIconHref}" />
-    <link rel="apple-touch-icon" sizes="1024x1024" href="${appleTouchIconLargeHref}" />
+    <link rel="apple-touch-icon" href="${appleTouchIconHref}" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="${escapedBrand}" />
-    <link rel="mask-icon" href="${maskIconHref}" color="${TILE_COLOR}" />
+    <link rel="mask-icon" href="${maskIconHref}" color="${MASK_ICON_COLOR}" />
     <meta name="msapplication-TileColor" content="${TILE_COLOR}" />
     <meta name="msapplication-TileImage" content="${tileImageHref}" />
     <meta name="msapplication-config" content="${browserConfigHref}" />
@@ -599,7 +605,7 @@ function htmlPage({
     <meta name="twitter:title" content="${tabTitle}" />
     <meta name="twitter:description" content="${escapedDescription}" />
     <meta name="twitter:url" content="${canonicalUrl}" />
-    <meta name="twitter:image" content="${socialImageUrl}" />
+    <meta name="twitter:image" content="${twitterImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
         ${themePreloadScript(basePath)}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
