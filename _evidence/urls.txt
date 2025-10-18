@@ -41,7 +41,7 @@ https://pubmed.ncbi.nlm.nih.gov/31916837/
 https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7
 https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008
 https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full
-https://journals.sagepub.com/doi/10.1177/1754073917708615
+https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/
 https://applications.emro.who.int/docs/Health-systems-governance-eng.pdf
 https://cdn.who.int/media/docs/default-source/universal-health-coverage/who-uhl-technical-brief-socialparticipation.pdf?download=true
 https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01306/full
@@ -88,11 +88,11 @@ https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=tru
 https://psycnet.apa.org/record/2019-50470-001
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5373634/
 https://psycnet.apa.org/record/2009-02221-005
-https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2299735
+https://pmc.ncbi.nlm.nih.gov/articles/PMC4451435/
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1470658/
 https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01466/full
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5774415/
-https://doi.org/10.1080/1369118X.2017.1281906
+https://journals.kmanpub.com/index.php/jarac/article/view/3914
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5579245/
 https://www.gallup.com/workplace/236441/employee-recognition-low-cost-high-impact.aspx
 https://psycnet.apa.org/record/2015-35180-001
@@ -125,3 +125,4 @@ https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614
 https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/
 https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/
 https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext
+https://journals.sagepub.com/doi/10.1177/00332941221097951
