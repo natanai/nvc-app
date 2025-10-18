@@ -60,6 +60,16 @@
     "context": "discussion of accountability and trust in healthcare teams"
   },
   {
+    "file": "/workspace/nvc-app/needs/accountability/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Journal of Applied Psychology meta-analysis connecting accountability and team performance",
+    "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008",
+    "domain": "onlinelibrary.wiley.com",
+    "label_domain_hint": "",
+    "context": "Journal of Applied Psychology meta-analysis connecting accountability and team performance"
+  },
+  {
     "file": "/workspace/nvc-app/needs/acknowledgement/index.html",
     "line": 750,
     "how": "html_anchor",
@@ -418,6 +428,26 @@
     "domain": "onlinelibrary.wiley.com",
     "label_domain_hint": "",
     "context": "meta-analysis showing job control/autonomy, including pacing, buffers against burnout"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/do-things-at-my-own-pace-and-in-my-own-way/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Sussman & Sekuler (2022) study: time pressure degrades executive function",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9506568/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Sussman & Sekuler (2022) study: time pressure degrades executive function"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/do-things-at-my-own-pace-and-in-my-own-way/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Moore & Tenney (2012) analysis: constant time pressure lowers quality and productivity",
+    "url": "https://www.researchgate.net/publication/286319678_Time_Pressure_Performance_and_Productivity",
+    "domain": "www.researchgate.net",
+    "label_domain_hint": "",
+    "context": "Moore & Tenney (2012) analysis: constant time pressure lowers quality and productivity"
   },
   {
     "file": "/workspace/nvc-app/needs/empathy/index.html",
@@ -1268,5 +1298,75 @@
     "domain": "www.thelancet.com",
     "label_domain_hint": "",
     "context": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/connection/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Holt-Lunstad et al. (2010) meta-analysis linking strong social connection to survival",
+    "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
+    "domain": "journals.plos.org",
+    "label_domain_hint": "",
+    "context": "Holt-Lunstad et al. (2010) meta-analysis linking strong social connection to survival"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/belonging/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Review summarizing belonging as vital for health and longevity",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Review summarizing belonging as vital for health and longevity"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/support/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "CDC 2024 report: loneliness and isolation elevate health risks",
+    "url": "https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm",
+    "domain": "www.cdc.gov",
+    "label_domain_hint": "",
+    "context": "CDC 2024 report: loneliness and isolation elevate health risks"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/support/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "2024 Frontiers in Psychology review: social support buffers stress and illness",
+    "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1330720/full",
+    "domain": "www.frontiersin.org",
+    "label_domain_hint": "",
+    "context": "2024 Frontiers in Psychology review: social support buffers stress and illness"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/consideration/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Psychological Science coverage: feeling respected boosts happiness more than income",
+    "url": "https://www.theatlantic.com/health/archive/2012/06/why-money-cant-buy-happiness-feeling-respected-matters-more/259032/",
+    "domain": "www.theatlantic.com",
+    "label_domain_hint": "",
+    "context": "Psychological Science coverage: feeling respected boosts happiness more than income"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/choose-freely/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Study linking meaningful choice opportunities with stronger motivation and well-being",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/1011073/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Study linking meaningful choice opportunities with stronger motivation and well-being"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/choose-freely/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Deci & Ryan (2000) self-determination theory review on autonomy",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/11392867/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Deci & Ryan (2000) self-determination theory review on autonomy"
   }
 ]
