@@ -158,7 +158,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const DRAFT_DEBOUNCE_MS = 1200;
 
   const journalStep = document.querySelector('[data-step="journal"]');
-  const journalMount = journalStep?.querySelector('[data-journal-module]') || journalStep;
+  const journalMount = journalStep?.querySelector('[data-journal-module]') || null;
   const renderJournalForm = window.NVCJournal?.renderForm;
   if (journalMount && typeof renderJournalForm === 'function') {
     try {
