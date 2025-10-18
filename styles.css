@@ -980,6 +980,15 @@ body.has-support-journal-open {
   background: color-mix(in srgb, var(--mint) 18%, #ffffff 82%);
 }
 
+.sensation-scan__controls.is-floating {
+  position: sticky;
+  align-self: start;
+  top: clamp(0.75rem, 3vw, 1.75rem);
+  z-index: 4;
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--ink) 14%, transparent);
+  border-color: color-mix(in srgb, var(--outline) 48%, transparent);
+}
+
 .sensation-scan__controls.is-hidden {
   display: none;
 }

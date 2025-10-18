@@ -1535,7 +1535,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
   function updateScanUi() {
     if (!scanControls) return;
-    if (!state.guidedScanActive) {
+    const isActive = !!state.guidedScanActive;
+    scanControls.classList.toggle('is-floating', isActive);
+    if (!isActive) {
       scanControls.classList.add('is-hidden');
       clearScanHighlights();
       updateScanTimerDisplay();
@@ -1608,6 +1610,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     clearScanHighlights();
     if (scanControls) {
       scanControls.classList.add('is-hidden');
+      scanControls.classList.remove('is-floating');
     }
     if (scanPrompt) {
       scanPrompt.textContent = '';
