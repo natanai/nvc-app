@@ -3365,7 +3365,7 @@
         }
       ],
       "originalClaim": "Providing and receiving care maintains the capacity of individuals and communities. This need motivates offering support, inviting rest, and resourcing recovery. Nurturing replenishes systems so they remain workable over time.",
-      "rewrittenClaim": "Nurturing refers to the acts of caring for others (and allowing oneself to be cared for) that keep individuals and communities healthy and functional. Just as a caregiver nourishes a child, people of all ages need periods of support, rest, and recovery to stay at their best. This need for nurturing drives behaviors like offering help or comfort to those who are tired or struggling, encouraging breaks and rest periods, and supplying resources (emotional or material) to aid someone’s recovery from stress or illness. In a broader sense, a community that values nurturing will have structures (like supportive friendships, mentorship, healthcare services) that “recharge” its members regularly. Research on resilience underscores that those who have strong nurturing support systems (people who care for them, opportunities to recuperate) can handle difficulties without burning out. Providing consistent care ensures that both individuals and the larger group don’t get depleted – it replenishes energy and morale so that life or work remains sustainable over time.",
+      "rewrittenClaim": "Nurturing refers to the acts of caring for others (and allowing oneself to be cared for) that keep individuals and communities healthy and functional. Just as a caregiver nourishes a child, people of all ages need periods of support, rest, and recovery to stay at their best. This need for nurturing drives behaviors like offering help or comfort to those who are tired or struggling, encouraging breaks and rest periods, and supplying resources (emotional or material) to aid someone’s recovery from stress or illness. In a broader sense, a community that values nurturing will have structures (like supportive friendships, mentorship, healthcare services) that “recharge” its members regularly. Research on resilience underscores that those who have strong nurturing support systems (people who care for them, opportunities to recuperate) can handle difficulties without burning out. Open-access health equity research has documented, for example, how Brazilian community health worker teams sustained services during COVID-19 when leaders prioritized emotional care, rest, and practical support. Providing consistent care ensures that both individuals and the larger group don’t get depleted – it replenishes energy and morale so that life or work remains sustainable over time.",
       "supportingSources": [
         {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2921311/",
@@ -5360,8 +5360,8 @@
           "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
         },
         {
-          "url": "https://www.apa.org/science/about/psa/2019/11/trust",
-          "description": "APA Science brief: trust in others reduces stress responses in cooperative tasks and allows for greater risk-sharing leading to innovation"
+          "url": "https://doi.org/10.3389/fpsyg.2020.554962",
+          "description": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking"
         }
       ]
     },
