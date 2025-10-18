@@ -102,7 +102,7 @@ export const QUADRANT_SUGGESTIONS = {
     care: [
       'Offer gentle comfort: wrap in a blanket, hold a warm mug, or play soothing sounds.',
       'If it feels right, reach out to someone who can sit with you or send a caring message.',
-      'Try a slow body scan or progressive muscle relaxation to reassure weighted muscles.',
+      'Try progressive muscle relaxation or a gentle stretch to reassure weighted muscles.',
     ],
   },
   'medium-unpleasant': {
@@ -112,7 +112,7 @@ export const QUADRANT_SUGGESTIONS = {
     care: [
       'Name what feels out of alignment and what value or need wants attention.',
       'Try a grounding check: notice 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.',
-      'Follow a short guided body scan or mindful stretch to ease tension as you journal patterns.',
+      'Follow a mindful stretch or mobility flow to ease tension as you journal patterns.',
     ],
   },
   'high-unpleasant': {
@@ -162,7 +162,7 @@ export const QUADRANT_SUGGESTIONS = {
     care: [
       'Savor the ease—lengthen the exhale, stretch gently, or notice what feels safe.',
       'Thank your body for the steadiness.',
-      'Try a guided body scan to anchor the memory so you can revisit it later.',
+      'Take a slow stretch or relaxation pause to anchor the memory so you can revisit it later.',
     ],
   },
   'medium-pleasant': {
