@@ -149,6 +149,13 @@ button,
   color: var(--ink-soft);
 }
 
+.local-storage-note {
+  margin: 0;
+  font-size: 0.7rem;
+  color: color-mix(in srgb, var(--ink-soft) 75%, #fff 25%);
+  max-width: 40ch;
+}
+
 .chip:hover,
 .chip:focus-visible {
   transform: translateY(-2px);
@@ -3014,6 +3021,17 @@ body.has-support-journal-open {
   justify-content: flex-end;
 }
 
+.strategy-card__actions--stacked {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.strategy-card__actions--stacked .local-storage-note,
+.strategy-card--form .local-storage-note {
+  text-align: right;
+}
+
 .strategy-card--form .strategy-card__actions {
   margin-top: 0.15rem;
 }
@@ -4167,6 +4185,11 @@ body.has-support-journal-open {
 .inventory-journal-form__actions {
   display: grid;
   gap: 0.75rem;
+}
+
+.journal-actions__note {
+  text-align: center;
+  justify-self: center;
 }
 
 .journal-form__actions .inventory-button,

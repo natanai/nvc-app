@@ -437,6 +437,9 @@ function basePathFromDepth(depth) {
   return depth === 0 ? '' : '../'.repeat(depth);
 }
 
+const localStorageReminderHtml =
+  '<p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>';
+
 function normalizeScripts(scripts) {
   const baseScripts = [
     { src: 'assets/js/journal/store.js', module: true },
@@ -837,6 +840,7 @@ function renderStrategyForm({
   includeContactFields = false,
   includeMessage = false,
   notice = '',
+  includeLocalStorageReminder = false,
 }) {
   const needOptions = data.needs
     .map(
@@ -894,6 +898,11 @@ function renderStrategyForm({
 
   const descriptionRequiredAttr = descriptionRequired ? ' required' : '';
 
+  const localStorageNote = includeLocalStorageReminder
+    ? `
+            ${localStorageReminderHtml}`
+    : '';
+
   return `
       <div class="strategy-form__container" data-strategy-form-container>
         <div class="strategy-card strategy-card--form">
@@ -912,9 +921,10 @@ function renderStrategyForm({
             </div>
             ${needField}
             ${contactFields}
-            <div class="strategy-card__actions strategy-form__actions">
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
             </div>
+            ${localStorageNote}
           </form>
         </div>
         ${noticeMarkup}
@@ -1215,9 +1225,12 @@ function renderNeed(item, strategyLookup) {
   const displayTitle = hasPrefix ? item.title.replace(/^Need for\s*/i, '') : item.title;
   const fullTitle = `Need for ${displayTitle}`;
 
+  const strategiesNote = `          ${localStorageReminderHtml}`;
+
   const strategiesHtml = strategies.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
+${strategiesNote}
           <div class="strategy-list">
             ${strategies
               .map((strategy) => {
@@ -1251,7 +1264,7 @@ function renderNeed(item, strategyLookup) {
                     <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                     <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
                     ${contributorHtml}
-                    <div class="strategy-card__actions">
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
@@ -1263,6 +1276,7 @@ function renderNeed(item, strategyLookup) {
         </section>`
     : `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
+${strategiesNote}
           <p class="empty-state">Strategies for this need are coming soon.</p>
         </section>`;
 
@@ -1405,6 +1419,7 @@ function renderInventoryPage() {
     includePlaceholderOption: true,
     needSelectMultiple: true,
     notice: inventoryFormNotice,
+    includeLocalStorageReminder: true,
   });
 
   const main = `

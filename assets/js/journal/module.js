@@ -5,6 +5,8 @@ const DEFAULT_INTENSITY = 5;
 const DEFAULT_TAG_LIMIT = 8;
 const MESSAGE_CLASSES = ['journal-message--success', 'journal-message--warning', 'journal-message--error'];
 const DRAFT_DELAY_MS = 900;
+const LOCAL_STORAGE_NOTE_TEXT =
+  'Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.';
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -213,6 +215,7 @@ const JOURNAL_BASE_CONFIG = {
     statusPlacement: 'inline',
     submitLabel: 'Save entry',
     clearLabel: 'Clear form',
+    noteClasses: ['journal-actions__note'],
     statusAttributes: { 'aria-live': 'polite' },
     classes: {
       container: ['journal-form__actions', 'inventory-journal-form__actions'],
@@ -382,6 +385,12 @@ const createElement = (tag, { classes = [], attrs = {}, dataset = {}, text, html
   }
   return element;
 };
+
+const createLocalStorageNote = (additionalClasses = []) =>
+  createElement('p', {
+    classes: ['local-storage-note', ...additionalClasses.filter((item) => typeof item === 'string' && item)],
+    text: LOCAL_STORAGE_NOTE_TEXT,
+  });
 
 const buildJournalField = ({
   config,
@@ -764,6 +773,11 @@ export function renderJournalForm(root, overrides = {}) {
   if (actionsContainer) {
     sidebarInner.append(actionsContainer);
   }
+
+  const noteClasses = Array.isArray(config.actions?.noteClasses)
+    ? config.actions.noteClasses
+    : [];
+  sidebarInner.append(createLocalStorageNote(noteClasses));
 
   if (sidebarInner.childElementCount > 0) {
     const sidebar = createElement('aside', { classes: config.classes.sidebar || [] });
