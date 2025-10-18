@@ -633,21 +633,21 @@
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "discussion of honor as adherence to ethical norms and its role in group trust and reputation",
-    "url": "https://doi.org/10.1017/9781108573100",
-    "domain": "doi.org",
+    "label": "cross-cultural study showing honor values predict cooperation and group trust across 13 societies",
+    "url": "https://www.nature.com/articles/s41562-025-02308-0",
+    "domain": "www.nature.com",
     "label_domain_hint": "",
-    "context": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
+    "context": "cross-cultural study showing honor values predict cooperation and group trust across 13 societies"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "review on moral reputation: upholding moral standards maintains trust in groups",
-    "url": "https://www.apa.org/pubs/journals/releases/psp-pspi0000178.pdf",
-    "domain": "www.apa.org",
+    "label": "review of reputation-based cooperation explaining how moral conduct sustains trust in groups",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8487732/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "review on moral reputation: upholding moral standards maintains trust in groups"
+    "context": "review of reputation-based cooperation explaining how moral conduct sustains trust in groups"
   },
   {
     "file": "/workspace/nvc-app/needs/inclusion/index.html",
@@ -673,31 +673,31 @@
     "file": "/workspace/nvc-app/needs/integrity/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust",
-    "url": "https://www.apa.org/ethics/moral-integrity",
-    "domain": "www.apa.org",
+    "label": "peer-reviewed analysis defining moral integrity as principled consistency linked to prosocial behavior",
+    "url": "https://doi.org/10.1521/jscp.2008.27.10.1078",
+    "domain": "doi.org",
     "label_domain_hint": "",
-    "context": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust"
+    "context": "peer-reviewed analysis defining moral integrity as principled consistency linked to prosocial behavior"
   },
   {
     "file": "/workspace/nvc-app/needs/integrity/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction",
-    "url": "https://link.springer.com/chapter/10.1007/978-3-319-70772-2_7",
-    "domain": "link.springer.com",
+    "label": "open-access study showing ethical leadership builds follower trust and cohesive, high-performing teams",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8882060/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction"
+    "context": "open-access study showing ethical leadership builds follower trust and cohesive, high-performing teams"
   },
   {
     "file": "/workspace/nvc-app/needs/justice/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance",
-    "url": "https://www.apa.org/pubs/journals/releases/law-law0000197.pdf",
-    "domain": "www.apa.org",
+    "label": "classic procedural justice review: fair processes build legitimacy and voluntary cooperation",
+    "url": "https://www.annualreviews.org/doi/10.1146/annurev.psych.57.102904.190038",
+    "domain": "www.annualreviews.org",
     "label_domain_hint": "",
-    "context": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance"
+    "context": "classic procedural justice review: fair processes build legitimacy and voluntary cooperation"
   },
   {
     "file": "/workspace/nvc-app/needs/justice/index.html",
@@ -753,21 +753,21 @@
     "file": "/workspace/nvc-app/needs/mattering/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement",
-    "url": "https://doi.org/10.1023/B:SOIN.0000017723.84078.9f",
-    "domain": "doi.org",
+    "label": "Self & Identity (2004) validation of the mattering construct linking perceived significance to mental health and engagement",
+    "url": "https://www.tandfonline.com/doi/pdf/10.1080/13576500444000119",
+    "domain": "www.tandfonline.com",
     "label_domain_hint": "",
-    "context": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement"
+    "context": "Self & Identity (2004) validation of the mattering construct linking perceived significance to mental health and engagement"
   },
   {
     "file": "/workspace/nvc-app/needs/mattering/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "study: higher sense of mattering to family or community correlates with better well-being and motivation",
-    "url": "https://doi.org/10.1021/acs.chemrev.6b00064",
-    "domain": "doi.org",
+    "label": "2024 meta-analysis showing stronger sense of mattering predicts higher well-being and motivation",
+    "url": "https://link.springer.com/article/10.1007/s10902-024-00720-3",
+    "domain": "link.springer.com",
     "label_domain_hint": "",
-    "context": "study: higher sense of mattering to family or community correlates with better well-being and motivation"
+    "context": "2024 meta-analysis showing stronger sense of mattering predicts higher well-being and motivation"
   },
   {
     "file": "/workspace/nvc-app/needs/mutuality/index.html",
@@ -1368,5 +1368,25 @@
     "domain": "pubmed.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
     "context": "Deci & Ryan (2000) self-determination theory review on autonomy"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/trust/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "APA press release summarizing new evidence that mutual trust boosts subjective well-being",
+    "url": "https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being",
+    "domain": "www.apa.org",
+    "label_domain_hint": "",
+    "context": "APA press release summarizing new evidence that mutual trust boosts subjective well-being"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/trust/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Psychological Bulletin meta-analysis of 991 effects showing bidirectional links between trust and subjective well-being",
+    "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf",
+    "domain": "www.apa.org",
+    "label_domain_hint": "",
+    "context": "Psychological Bulletin meta-analysis of 991 effects showing bidirectional links between trust and subjective well-being"
   }
 ]
