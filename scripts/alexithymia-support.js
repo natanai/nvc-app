@@ -53,12 +53,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
   const BODY_SENSATION_OPTIONS = new Map();
   const REGION_OPTION_IDS = new Map();
-  const BODY_SCAN_SEQUENCE = [];
   const sensationOptionElements = new Map();
   const regionElements = new Map();
 
   BODY_REGIONS.forEach((region) => {
-    BODY_SCAN_SEQUENCE.push(region.id);
     const ids = [];
     region.options.forEach((option) => {
       BODY_SENSATION_OPTIONS.set(option.id, {
@@ -88,9 +86,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     compassTouched: false,
     energyValue: 0,
     valenceValue: 0,
-    guidedScanActive: false,
-    guidedScanIndex: -1,
-    guidedScanStarted: false,
     draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
     draftTimer: null,
     savedFeedbackTimer: null,
@@ -117,14 +112,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const compassSuggestions = document.querySelector('[data-compass-suggestions]');
   const supportFlow = document.querySelector('.support-flow');
   const sensationRegionList = document.querySelector('[data-sensation-region-list]');
-  const bodyScanPanel = document.querySelector('[data-sensation-scan]');
-  const scanControls = bodyScanPanel?.querySelector('[data-scan-controls]');
-  const scanStatus = bodyScanPanel?.querySelector('[data-scan-status]');
-  const scanPrompt = bodyScanPanel?.querySelector('[data-scan-prompt]');
-  const scanStartButton = bodyScanPanel?.querySelector('[data-action="scan-start"]');
-  const scanBackButton = bodyScanPanel?.querySelector('[data-action="scan-back"]');
-  const scanNextButton = bodyScanPanel?.querySelector('[data-action="scan-next"]');
-  const scanFinishButton = bodyScanPanel?.querySelector('[data-action="scan-finish"]');
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
 
@@ -1304,7 +1291,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     const region = regionElements.get(regionId);
     if (!region) return;
     region.element?.classList.remove('sensation-region--open');
-    region.element?.classList.remove('sensation-region--scan-active');
     if (region.details) {
       region.details.hidden = true;
       region.details.setAttribute('aria-hidden', 'true');
@@ -1350,138 +1336,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         }
       }
     }
-  }
-
-  function clearScanHighlights() {
-    regionElements.forEach((region) => {
-      region.element.classList.remove('sensation-region--scan-active');
-    });
-  }
-
-  function highlightScanRegion(regionId) {
-    expandRegion(regionId, { focus: false, collapseOthers: true });
-    let target = null;
-    regionElements.forEach((region, id) => {
-      const isActive = id === regionId;
-      region.element.classList.toggle('sensation-region--scan-active', isActive);
-      if (isActive) {
-        target = region.element;
-      }
-    });
-    if (target) {
-      try {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (error) {
-        // ignore scroll errors
-      }
-    }
-  }
-
-  function updateScanUi() {
-    if (!scanControls) return;
-    if (!state.guidedScanActive) {
-      scanControls.classList.add('is-hidden');
-      clearScanHighlights();
-      return;
-    }
-
-    const total = BODY_SCAN_SEQUENCE.length;
-    if (!total) {
-      return;
-    }
-
-    if (state.guidedScanIndex < 0) {
-      state.guidedScanIndex = 0;
-    } else if (state.guidedScanIndex >= total) {
-      state.guidedScanIndex = total - 1;
-    }
-
-    scanControls.classList.remove('is-hidden');
-    const regionId = BODY_SCAN_SEQUENCE[state.guidedScanIndex];
-    highlightScanRegion(regionId);
-
-    const regionMeta = regionElements.get(regionId);
-    if (scanStatus) {
-      const label = regionMeta?.label || 'this area';
-      scanStatus.textContent = `Focusing on ${label} (${state.guidedScanIndex + 1} of ${total}).`;
-    }
-    if (scanPrompt) {
-      const prompt = BODY_REGIONS.find((item) => item.id === regionId)?.prompt || '';
-      scanPrompt.textContent = prompt;
-    }
-    if (scanBackButton) {
-      scanBackButton.disabled = state.guidedScanIndex <= 0;
-    }
-    if (scanNextButton) {
-      scanNextButton.textContent = state.guidedScanIndex >= total - 1 ? 'Finish scan' : 'Next area';
-    }
-  }
-
-  function startGuidedScan() {
-    if (!BODY_SCAN_SEQUENCE.length) {
-      return;
-    }
-    state.guidedScanActive = true;
-    state.guidedScanStarted = true;
-    state.guidedScanIndex = 0;
-    if (scanStartButton) {
-      scanStartButton.textContent = 'Restart scan';
-    }
-    updateScanUi();
-  }
-
-  function finishGuidedScan({ completed = false } = {}) {
-    if (scanStatus) {
-      scanStatus.textContent = completed
-        ? 'Scan complete. Choose any areas that still want attention.'
-        : 'Scan paused. Restart whenever you want more guidance.';
-    }
-    state.guidedScanActive = false;
-    state.guidedScanIndex = -1;
-    clearScanHighlights();
-    if (scanControls) {
-      scanControls.classList.add('is-hidden');
-    }
-    if (scanPrompt) {
-      scanPrompt.textContent = '';
-    }
-  }
-
-  function moveGuidedScan(step) {
-    if (!state.guidedScanActive) {
-      return;
-    }
-    state.guidedScanIndex += step;
-    updateScanUi();
-  }
-
-  function handleScanStart() {
-    if (state.guidedScanActive) {
-      state.guidedScanIndex = 0;
-      updateScanUi();
-      return;
-    }
-    startGuidedScan();
-  }
-
-  function handleScanBack() {
-    moveGuidedScan(-1);
-  }
-
-  function handleScanNext() {
-    if (!state.guidedScanActive) {
-      startGuidedScan();
-      return;
-    }
-    if (state.guidedScanIndex >= BODY_SCAN_SEQUENCE.length - 1) {
-      finishGuidedScan({ completed: true });
-    } else {
-      moveGuidedScan(1);
-    }
-  }
-
-  function handleScanFinish() {
-    finishGuidedScan({ completed: true });
   }
 
   function restoreSensationSelections(serialized) {
@@ -2542,11 +2396,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     sensationSubmit?.addEventListener('click', handleSensationSubmit);
     sensationClear?.addEventListener('click', handleSensationClear);
     sensationNext?.addEventListener('click', handleSensationSkip);
-
-    scanStartButton?.addEventListener('click', handleScanStart);
-    scanBackButton?.addEventListener('click', handleScanBack);
-    scanNextButton?.addEventListener('click', handleScanNext);
-    scanFinishButton?.addEventListener('click', handleScanFinish);
 
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 
