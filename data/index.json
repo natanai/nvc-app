@@ -3648,8 +3648,17 @@
         }
       ],
       "originalClaim": "Humans evolved in cooperative groups where being part of the tribe meant safety and support. This need motivates us to seek acceptance in communities and relationships that embrace us as we are. Valuing belonging provides a secure sense of identity and a social safety net, which increases psychological security and resilience under stress.",
-      "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. For instance, one seminal review concluded that social belonging is as essential to long-term health as food and shelter, with a lack of belonging linked to adverse outcomes (https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). Strong social bonds and inclusion have been associated with better well-being, while social isolation elevates the risk of depression and even early mortality (Baumeister & Leary 1995, as cited in https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). In short, when people experience true belonging, they gain emotional support and stability that buffer them against life’s challenges.",
-      "supportingSources": []
+      "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. One large review of social connection research concluded that belonging is as essential to long-term health as food and shelter, linking deficits in belonging with higher risks of depression and early mortality. Building on that synthesis, Baumeister and Leary’s classic 1995 paper argues that humans seek enduring attachments because belonging offers emotional support and stability that buffer life’s challenges.",
+      "supportingSources": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/",
+          "description": "Review summarizing belonging as vital for health and longevity"
+        },
+        {
+          "url": "https://doi.org/10.1037/0033-2909.117.3.497",
+          "description": "Baumeister & Leary (1995) on the need to belong as a fundamental human motivation"
+        }
+      ]
     },
     {
       "title": "Support",
@@ -9294,8 +9303,17 @@
         }
       ],
       "originalClaim": "Humans evolved in cooperative groups where being part of the tribe meant safety and support. This need motivates us to seek acceptance in communities and relationships that embrace us as we are. Valuing belonging provides a secure sense of identity and a social safety net, which increases psychological security and resilience under stress.",
-      "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. For instance, one seminal review concluded that social belonging is as essential to long-term health as food and shelter, with a lack of belonging linked to adverse outcomes (https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). Strong social bonds and inclusion have been associated with better well-being, while social isolation elevates the risk of depression and even early mortality (Baumeister & Leary 1995, as cited in https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). In short, when people experience true belonging, they gain emotional support and stability that buffer them against life’s challenges.",
-      "supportingSources": []
+      "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. One large review of social connection research concluded that belonging is as essential to long-term health as food and shelter, linking deficits in belonging with higher risks of depression and early mortality. Building on that synthesis, Baumeister and Leary’s classic 1995 paper argues that humans seek enduring attachments because belonging offers emotional support and stability that buffer life’s challenges.",
+      "supportingSources": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/",
+          "description": "Review summarizing belonging as vital for health and longevity"
+        },
+        {
+          "url": "https://doi.org/10.1037/0033-2909.117.3.497",
+          "description": "Baumeister & Leary (1995) on the need to belong as a fundamental human motivation"
+        }
+      ]
     },
     {
       "title": "Support",
@@ -14934,8 +14952,17 @@
         }
       ],
       "originalClaim": "Humans evolved in cooperative groups where being part of the tribe meant safety and support. This need motivates us to seek acceptance in communities and relationships that embrace us as we are. Valuing belonging provides a secure sense of identity and a social safety net, which increases psychological security and resilience under stress.",
-      "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. For instance, one seminal review concluded that social belonging is as essential to long-term health as food and shelter, with a lack of belonging linked to adverse outcomes (https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). Strong social bonds and inclusion have been associated with better well-being, while social isolation elevates the risk of depression and even early mortality (Baumeister & Leary 1995, as cited in https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/). In short, when people experience true belonging, they gain emotional support and stability that buffer them against life’s challenges.",
-      "supportingSources": []
+      "rewrittenClaim": "Psychologists consider the need to belong a fundamental human motivation. Research shows that feeling part of a group or community is critical for mental health and even physical survival. One large review of social connection research concluded that belonging is as essential to long-term health as food and shelter, linking deficits in belonging with higher risks of depression and early mortality. Building on that synthesis, Baumeister and Leary’s classic 1995 paper argues that humans seek enduring attachments because belonging offers emotional support and stability that buffer life’s challenges.",
+      "supportingSources": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/",
+          "description": "Review summarizing belonging as vital for health and longevity"
+        },
+        {
+          "url": "https://doi.org/10.1037/0033-2909.117.3.497",
+          "description": "Baumeister & Leary (1995) on the need to belong as a fundamental human motivation"
+        }
+      ]
     },
     {
       "title": "Support",
