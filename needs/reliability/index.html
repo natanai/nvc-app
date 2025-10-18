@@ -332,6 +332,8 @@
   );
   --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
   --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .site-nav__magnet-label {
@@ -714,6 +716,10 @@ button.site-nav__magnet {
             var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
             var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
+          }
+
+          if (board && board.setAttribute) {
+            board.setAttribute('data-ready', '1');
           }
 
           if (restoreTransitions) {

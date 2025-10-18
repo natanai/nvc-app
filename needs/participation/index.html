@@ -332,6 +332,8 @@
   );
   --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
   --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .site-nav__magnet-label {
@@ -716,6 +718,10 @@ button.site-nav__magnet {
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
+          if (board && board.setAttribute) {
+            board.setAttribute('data-ready', '1');
+          }
+
           if (restoreTransitions) {
             var raf = typeof window.requestAnimationFrame === 'function'
               ? window.requestAnimationFrame
@@ -746,7 +752,7 @@ button.site-nav__magnet {
         <h2 id="need-evidence-heading" class="section-title">Evidence</h2>
         <p class="need-evidence__claim"><span class="need-evidence__claim-text">Active involvement increases commitment and quality of outcomes. This need motivates joining deliberations, sharing responsibility, and contributing skills. Participation distributes ownership and builds durable solutions.</span></p>
         <details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-text">People need to actively participate in processes that affect them – when they do, they care more about the outcome and the outcomes themselves tend to improve. This need for participation manifests as wanting a seat at the table in discussions, a share in the decision-making or responsibility, and a chance to apply one’s skills to collective efforts. Research in organizational and community psychology finds that when individuals are genuinely involved in planning and decision processes, they feel a sense of ownership that increases their commitment to carrying out the decisions. Moreover, their input often improves the quality of the solutions, because it taps a wider pool of knowledge and perspectives. By spreading participation across members of a group, “ownership” of both problems and solutions is distributed – people are more likely to support and sustain a solution they helped create. Thus, fostering participation not only empowers individuals but also leads to more robust, lasting outcomes for the whole group.</span></p></div></details>
-        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true" target="_blank" rel="noreferrer noopener">study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions</a><span class="need-evidence__source-url"> (https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true)</span></li></ol></div>
+        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true" target="_blank" rel="noreferrer noopener">study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions</a><span class="need-evidence__source-url"> (https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true" target="_blank" rel="noreferrer noopener">WHO report on community participation: involving stakeholders in planning yields more sustainable, accepted solutions</a><span class="need-evidence__source-url"> (https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true)</span></li></ol></div>
       </section>
     
       

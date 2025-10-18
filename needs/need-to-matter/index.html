@@ -332,6 +332,8 @@
   );
   --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
   --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .site-nav__magnet-label {
@@ -716,6 +718,10 @@ button.site-nav__magnet {
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
+          if (board && board.setAttribute) {
+            board.setAttribute('data-ready', '1');
+          }
+
           if (restoreTransitions) {
             var raf = typeof window.requestAnimationFrame === 'function'
               ? window.requestAnimationFrame
@@ -746,7 +752,7 @@ button.site-nav__magnet {
         <h2 id="need-evidence-heading" class="section-title">Evidence</h2>
         <p class="need-evidence__claim"><span class="need-evidence__claim-text">Closely related to ‘mattering,’ this emphasizes recognition of one’s significance in specific contexts. It motivates seeking roles with visible impact and inviting concrete acknowledgment. When mattering is explicit, motivation and loyalty increase.</span></p>
         <details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-text">This need is about feeling that in a given group or context, one’s presence and contributions are especially significant and valued. It’s an extension of the general need to matter, focusing on concrete recognition (“I know I matter here, because I see the impact I have and others acknowledge it”). People with this need will seek out roles where their contributions are visible and make a difference, and they actively invite feedback or signs that others notice their impact. When an organization or community makes it clear to someone that they truly matter – for example, by recognizing their work publicly or showing how their role is crucial – that person’s motivation and loyalty tend to grow. Empirical studies in workplaces find that employees who feel they explicitly matter to their team or company (not just in theory, but through direct appreciation and meaningful responsibilities) are more engaged and less likely to leave. In summary, beyond just belonging, people crave evidence that they as individuals are important in their specific context; providing that assurance boosts drive and dedication.</span></p></div></details>
-        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://psycnet.apa.org/fulltext/2013-06610-006.html" target="_blank" rel="noreferrer noopener">study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment</a><span class="need-evidence__source-url"> (https://psycnet.apa.org/fulltext/2013-06610-006.html)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01016/full" target="_blank" rel="noreferrer noopener">study showing that feeling one matters to others increases engagement and self-esteem</a><span class="need-evidence__source-url"> (https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01016/full)</span></li></ol></div>
+        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://psycnet.apa.org/fulltext/2013-06610-006.html" target="_blank" rel="noreferrer noopener">study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment</a><span class="need-evidence__source-url"> (https://psycnet.apa.org/fulltext/2013-06610-006.html)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.tandfonline.com/doi/full/10.1080/00223980.2019.1574701" target="_blank" rel="noreferrer noopener">research on adolescent need to matter: explicit acknowledgment by peers/community improves engagement and self-esteem</a><span class="need-evidence__source-url"> (https://www.tandfonline.com/doi/full/10.1080/00223980.2019.1574701)</span></li></ol></div>
       </section>
     
       

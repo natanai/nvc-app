@@ -332,6 +332,8 @@
   );
   --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
   --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .site-nav__magnet-label {
@@ -716,6 +718,10 @@ button.site-nav__magnet {
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
+          if (board && board.setAttribute) {
+            board.setAttribute('data-ready', '1');
+          }
+
           if (restoreTransitions) {
             var raf = typeof window.requestAnimationFrame === 'function'
               ? window.requestAnimationFrame
@@ -746,7 +752,7 @@ button.site-nav__magnet {
         <h2 id="need-evidence-heading" class="section-title">Evidence</h2>
         <p class="need-evidence__claim"><span class="need-evidence__claim-text">Accurately grasping another’s inner world improves coordination and repair; some autistic people prefer concrete language for this process. This need motivates perspective-taking, reflective listening, and iterative checking for understanding. Practiced well, it reduces misinterpretation and supports relational alignment.</span></p>
         <details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-text">Empathy – the ability to understand and share what another person is feeling or thinking – is crucial for working smoothly with others and for fixing relationship problems. Being truly empathetic motivates us to put ourselves in others’ shoes, listen carefully to what they say, and double-check that we’re understanding them correctly. By doing so, we greatly cut down on misinterpretations and friction. For example, studies have found that teams with higher empathy and better communication have more cohesion and perform better because members anticipate each other’s needs and clarify potential confusion. (It’s worth noting that different people may need different approaches for empathy; for instance, some autistic individuals prefer very clear, concrete communication to feel understood.) In practice, cultivating empathy leads to better “relational alignment” – everyone feels heard and on the same page, which improves coordination and conflict resolution.</span></p></div></details>
-        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full" target="_blank" rel="noreferrer noopener">study showing empathy and communication skills improve team coordination and performance</a><span class="need-evidence__source-url"> (https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/" target="_blank" rel="noreferrer noopener">review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships</a><span class="need-evidence__source-url"> (https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/)</span></li></ol></div>
+        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full" target="_blank" rel="noreferrer noopener">study showing empathy and communication skills improve team coordination and performance</a><span class="need-evidence__source-url"> (https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/" target="_blank" rel="noreferrer noopener">review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships</a><span class="need-evidence__source-url"> (https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://journals.sagepub.com/doi/10.1177/00332941221097951" target="_blank" rel="noreferrer noopener">study linking mindfulness, cognitive empathy, and relationship quality among adolescents</a><span class="need-evidence__source-url"> (https://journals.sagepub.com/doi/10.1177/00332941221097951)</span></li></ol></div>
       </section>
     
       
