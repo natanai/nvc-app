@@ -1,0 +1,31 @@
+name: Link check (Lychee)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"  # Mondays 09:00 America/Chicago
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links with Lychee
+        uses: lycheeverse/lychee-action@v1
+        with:
+          # Check all files; restrict with --glob if needed
+          args: >
+            --verbose
+            --no-progress
+            --max-redirects 10
+            --timeout 20
+            --retry-wait-time 2
+            --retry-count 2
+            --accept 200,201,202,203,204,205,206,300,301,302,303,307,308
+            .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Lychee report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report
+          path: lychee/out.md
