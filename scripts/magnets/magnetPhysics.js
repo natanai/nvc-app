@@ -236,6 +236,8 @@ const measureMagnet = (boardRect, element) => {
   const id = element.dataset.magnetId || element.id || element.textContent || '';
   const width = rect.width || element.offsetWidth || 0;
   const height = rect.height || element.offsetHeight || 0;
+  const navHidden =
+    element.hidden || element.dataset.navHidden === 'true' || element.getAttribute('aria-hidden') === 'true';
   return {
     id: String(id),
     element,
@@ -245,6 +247,7 @@ const measureMagnet = (boardRect, element) => {
     vy: 0,
     w: width,
     h: height,
+    navHidden: Boolean(navHidden),
     dragging: false,
     pointerId: null,
     offsetX: 0,
@@ -460,8 +463,14 @@ const applySeparationForces = (state, dt) => {
   const { sepRadiusScale, sepStrength, dragSepMultiplier } = state.config;
   for (let i = 0; i < state.magnets.length; i += 1) {
     const magnetA = state.magnets[i];
+    if (magnetA.navHidden) {
+      continue;
+    }
     for (let j = i + 1; j < state.magnets.length; j += 1) {
       const magnetB = state.magnets[j];
+      if (magnetB.navHidden) {
+        continue;
+      }
       const centerAX = magnetA.x + magnetA.w / 2;
       const centerAY = magnetA.y + magnetA.h / 2;
       const centerBX = magnetB.x + magnetB.w / 2;
@@ -499,7 +508,7 @@ const applyPointerField = (state, dt) => {
   const { mouseRadius, mouseStrength } = state.config;
   const { x: cursorX, y: cursorY } = state.pointerField;
   state.magnets.forEach((magnet) => {
-    if (magnet.dragging) {
+    if (magnet.navHidden || magnet.dragging) {
       return;
     }
     const centerX = magnet.x + magnet.w / 2;
@@ -533,6 +542,11 @@ const integrateMotion = (state, dt) => {
   const jitterScaleX = clamp(1 - tiltAbsX * (1 - jitterFloor), 0, 1);
   const jitterScaleY = clamp(1 - tiltAbsY * (1 - jitterFloor), 0, 1);
   state.magnets.forEach((magnet) => {
+    if (magnet.navHidden) {
+      magnet.vx = 0;
+      magnet.vy = 0;
+      return;
+    }
     if (!magnet.dragging) {
       magnet.vx += (Math.random() * 2 - 1) * drift * jitterScaleX * dt;
       magnet.vy += (Math.random() * 2 - 1) * drift * jitterScaleY * dt;
@@ -668,7 +682,7 @@ const shuffleMagnets = async (state) => {
         height = state.board.clientHeight || computedHeight || state.baseHeight || 1;
       }
 
-      const order = state.magnets.slice();
+      const order = state.magnets.filter((magnet) => !magnet.navHidden);
       for (let i = order.length - 1; i > 0; i -= 1) {
         const j = Math.floor(Math.random() * (i + 1));
         [order[i], order[j]] = [order[j], order[i]];
@@ -923,7 +937,7 @@ export function loadPositions(storageKey, boardSize, magnetSizes, options = {}) 
         x = clamp(xPct * effectiveWidth, 0, maxX);
         y = clamp(yPct * effectiveHeight, 0, maxY);
       }
-      snapshots.push({ id, x, y, vx: 0, vy: 0, w: width, h: height });
+      snapshots.push({ id, x, y, vx: 0, vy: 0, w: width, h: height, navHidden: false });
     }
     if (!snapshots.length) {
       return null;
