@@ -90,6 +90,8 @@
   );
   --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
   --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .site-nav__magnet-label {
