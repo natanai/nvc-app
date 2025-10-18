@@ -2772,6 +2772,18 @@ body.has-support-journal-open {
   gap: 0.55rem;
 }
 
+.need-evidence__more {
+  margin: 0;
+  margin-top: 0.25rem;
+}
+
+.need-evidence__more-list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.35rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
 .need-evidence__item {
   color: var(--ink-soft);
   word-break: break-word;

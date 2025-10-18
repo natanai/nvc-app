@@ -8,6 +8,8 @@ const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
+const MAX_VISIBLE_SUPPORTING_SOURCES = 2;
+
 const HOME_ICON_INLINE = (basePath = '') => {
   const normalizedBase = basePath || '';
   return `
@@ -1376,29 +1378,38 @@ function renderNeedEvidence(item) {
 
   let sourcesHtml = '';
   if (sources.length) {
-    const listItems = sources
-      .map((source) => {
-        if (typeof source === 'string') {
-          return `<li class="need-evidence__item">${escapeHtml(source)}</li>`;
-        }
+    const sourceItems = sources.map((source) => {
+      if (typeof source === 'string') {
+        return `<li class="need-evidence__item">${escapeHtml(source)}</li>`;
+      }
 
-        const url = (source.url || '').trim();
-        const description = (source.description || '').trim();
-        const label = description || url;
-        const safeLabel = escapeHtml(label);
-        if (url) {
-          const safeUrl = escapeHtml(url);
-          const urlNote = description && url
-            ? `<span class="need-evidence__source-url"> (${escapeHtml(url)})</span>`
-            : '';
-          return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a>${urlNote}</li>`;
-        }
+      const url = (source.url || '').trim();
+      const description = (source.description || '').trim();
+      const label = description || url;
+      const safeLabel = escapeHtml(label);
+      if (url) {
+        const safeUrl = escapeHtml(url);
+        const urlNote = description && url
+          ? `<span class="need-evidence__source-url"> (${escapeHtml(url)})</span>`
+          : '';
+        return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a>${urlNote}</li>`;
+      }
 
-        return `<li class="need-evidence__item">${safeLabel}</li>`;
-      })
-      .join('');
+      return `<li class="need-evidence__item">${safeLabel}</li>`;
+    });
 
-    sourcesHtml = `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list">${listItems}</ol></div>`;
+    const visibleItems = sourceItems.slice(0, MAX_VISIBLE_SUPPORTING_SOURCES);
+    const additionalItems = sourceItems.slice(MAX_VISIBLE_SUPPORTING_SOURCES);
+
+    const visibleList = visibleItems.length
+      ? `<ol class="need-evidence__list">${visibleItems.join('')}</ol>`
+      : '';
+
+    const moreList = additionalItems.length
+      ? `<details class="need-evidence__more need-evidence__details"><summary class="need-evidence__details-toggle need-evidence__more-toggle">More sources</summary><ol class="need-evidence__more-list">${additionalItems.join('')}</ol></details>`
+      : '';
+
+    sourcesHtml = `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3>${visibleList}${moreList}</div>`;
   } else if (claim || rewrittenClaim) {
     sourcesHtml = '<p class="need-evidence__note">Supporting sources coming soon.</p>';
   }
