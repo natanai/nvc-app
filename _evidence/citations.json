@@ -1133,21 +1133,21 @@
     "file": "/workspace/nvc-app/needs/serenity/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration",
-    "url": "https://www.sciencedirect.com/science/article/pii/S0306453018300010",
-    "domain": "www.sciencedirect.com",
+    "label": "review: brief, quiet wakeful rest after learning facilitates memory consolidation",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7024394/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration"
+    "context": "review: brief, quiet wakeful rest after learning facilitates memory consolidation"
   },
   {
     "file": "/workspace/nvc-app/needs/serenity/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment",
-    "url": "https://link.springer.com/article/10.1007/s41562-020-0835-8",
-    "domain": "link.springer.com",
+    "label": "psychology study: exposure to natural environments improved directed attention and cognitive performance, supporting better decision-making",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19121124/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment"
+    "context": "psychology study: exposure to natural environments improved directed attention and cognitive performance, supporting better decision-making"
   },
   {
     "file": "/workspace/nvc-app/needs/space/index.html",
