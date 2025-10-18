@@ -1370,7 +1370,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     });
     if (target) {
       try {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       } catch (error) {
         // ignore scroll errors
       }

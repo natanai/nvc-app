@@ -949,6 +949,11 @@ body.has-support-journal-open {
   border-radius: var(--radius-xl);
   border: 1px solid color-mix(in srgb, var(--outline) 28%, transparent);
   background: color-mix(in srgb, var(--mint) 18%, #ffffff 82%);
+  position: sticky;
+  top: calc(var(--site-header-height, 0px) + 1.25rem);
+  z-index: 2;
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--outline) 18%, transparent);
+  backdrop-filter: blur(8px);
 }
 
 .sensation-scan__controls.is-hidden {
@@ -985,6 +990,7 @@ body.has-support-journal-open {
   border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
   background: color-mix(in srgb, var(--lavender) 12%, #ffffff 88%);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  scroll-margin-top: calc(var(--site-header-height, 0px) + 5.5rem);
 }
 
 .sensation-region--scan-active {
