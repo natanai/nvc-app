@@ -1,28 +1,35 @@
 {
   "name": "allneeds.app",
-  "short_name": "allneeds.app",
-  "description": "Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.",
-  "start_url": "./",
+  "short_name": "AllNeeds",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#FBF7FF",
-  "theme_color": "#7E5CFF",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "icons/meta-icons/app-icon.svg",
+      "src": "icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/meta-icons/touch-icon.svg",
-      "sizes": "1024x1024",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "src": "icons/android-chrome-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
-      "src": "icons/app-icon-maskable.svg",
-      "sizes": "1024x1024",
-      "type": "image/svg+xml",
+      "src": "icons/android-chrome-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]
