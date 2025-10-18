@@ -209,6 +209,7 @@ const needs = rawNeeds.map((row) => ({
   situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
   feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),
   originalClaim: row['Original Claim'] || '',
+  rewrittenClaim: row['Rewritten Claim'] || '',
   supportingSources: parseSupportingSources(row['Supporting Sources']),
 }));
 

@@ -1324,6 +1324,7 @@ function renderNeed(item, strategyLookup) {
 
 function renderNeedEvidence(item) {
   const claim = (item.originalClaim || '').trim();
+  const rewrittenClaim = (item.rewrittenClaim || '').trim();
   const sources = Array.isArray(item.supportingSources)
     ? item.supportingSources.filter((source) => {
         if (!source) return false;
@@ -1334,12 +1335,16 @@ function renderNeedEvidence(item) {
       })
     : [];
 
-  if (!claim && !sources.length) {
+  if (!claim && !sources.length && !rewrittenClaim) {
     return '';
   }
 
   const claimHtml = claim
     ? `<p class="need-evidence__claim"><span class="need-evidence__label">Original claim</span><span class="need-evidence__claim-text">${escapeHtml(claim)}</span></p>`
+    : '';
+
+  const rewrittenHtml = rewrittenClaim
+    ? `<details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__label">Rewritten claim</span><span class="need-evidence__rewrite-text">${escapeHtml(rewrittenClaim)}</span></p></div></details>`
     : '';
 
   let sourcesHtml = '';
@@ -1367,7 +1372,7 @@ function renderNeedEvidence(item) {
       .join('');
 
     sourcesHtml = `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list">${listItems}</ol></div>`;
-  } else if (claim) {
+  } else if (claim || rewrittenClaim) {
     sourcesHtml = '<p class="need-evidence__note">Supporting sources coming soon.</p>';
   }
 
@@ -1375,6 +1380,7 @@ function renderNeedEvidence(item) {
       <section class="need-evidence" aria-labelledby="need-evidence-heading">
         <h2 id="need-evidence-heading" class="section-title">Evidence</h2>
         ${claimHtml}
+        ${rewrittenHtml}
         ${sourcesHtml}
       </section>
     `;
