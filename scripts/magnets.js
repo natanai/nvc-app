@@ -532,6 +532,7 @@ const createMagnetStates = (board, elements) => {
     return {
       id: element.dataset.magnetId || element.id || element.textContent || '',
       element,
+      navHidden: element.dataset.navHidden === 'true',
       width,
       height,
       marginLeft,
@@ -570,11 +571,12 @@ const remeasureMagnets = (state) => {
       marginRight: parsePx(styles.marginRight),
       marginTop: parsePx(styles.marginTop),
       marginBottom: parsePx(styles.marginBottom),
+      navHidden: magnet.element.dataset.navHidden === 'true',
     };
   });
 
   updates.forEach((entry) => {
-    const { magnet, width, height, marginLeft, marginRight, marginTop, marginBottom } = entry;
+    const { magnet, width, height, marginLeft, marginRight, marginTop, marginBottom, navHidden } = entry;
     magnet.width = width;
     magnet.height = height;
     magnet.marginLeft = marginLeft;
@@ -583,6 +585,7 @@ const remeasureMagnets = (state) => {
     magnet.marginBottom = marginBottom;
     magnet.outerWidth = width + marginLeft + marginRight;
     magnet.outerHeight = height + marginTop + marginBottom;
+    magnet.navHidden = navHidden;
   });
 
   const width = Math.max(boardRect.width || state.board.clientWidth || state.boardWidth || 1, 1);
@@ -611,6 +614,9 @@ const remeasureMagnets = (state) => {
 };
 
 const getMagnetBounds = (magnet) => {
+  if (!magnet || magnet.navHidden) {
+    return null;
+  }
   const left = magnet.x - (magnet.marginLeft || 0);
   const top = magnet.y - (magnet.marginTop || 0);
   const right = left + magnet.width + (magnet.marginLeft || 0) + (magnet.marginRight || 0);
@@ -622,7 +628,13 @@ const isMagnetOffBoard = (state, magnet) => {
   if (!magnet) {
     return false;
   }
+  if (isNavBoardState(state) && magnet.navHidden) {
+    return false;
+  }
   const bounds = getMagnetBounds(magnet);
+  if (!bounds) {
+    return false;
+  }
   const width = Math.max(state.boardWidth || 0, 0);
   const height = Math.max(state.boardHeight || 0, 0);
   const tolerance = ALLOWED_OVERLAP;
@@ -669,10 +681,22 @@ const layoutHasOverlap = (state) => {
   if (isNavBoardState(state)) {
     for (let i = 0; i < magnets.length; i += 1) {
       const a = magnets[i];
+      if (a?.navHidden) {
+        continue;
+      }
       const boundsA = getMagnetBounds(a);
+      if (!boundsA) {
+        continue;
+      }
       for (let j = i + 1; j < magnets.length; j += 1) {
         const b = magnets[j];
+        if (b?.navHidden) {
+          continue;
+        }
         const boundsB = getMagnetBounds(b);
+        if (!boundsB) {
+          continue;
+        }
         if (
           boundsA.left + ALLOWED_OVERLAP < boundsB.right
           && boundsA.right - ALLOWED_OVERLAP > boundsB.left
@@ -688,9 +712,15 @@ const layoutHasOverlap = (state) => {
   for (let i = 0; i < magnets.length; i += 1) {
     const a = magnets[i];
     const boundsA = getMagnetBounds(a);
+    if (!boundsA) {
+      continue;
+    }
     for (let j = i + 1; j < magnets.length; j += 1) {
       const b = magnets[j];
       const boundsB = getMagnetBounds(b);
+      if (!boundsB) {
+        continue;
+      }
       if (
         boundsA.left < boundsB.right
         && boundsA.right > boundsB.left
@@ -844,7 +874,11 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   let rowHeight = 0;
   let maxBottom = startY;
 
-  const placements = order.map((magnet) => {
+  const activeOrder = isNavBoardState(state)
+    ? order.filter((magnet) => magnet && !magnet.navHidden)
+    : order;
+
+  const placements = activeOrder.map((magnet) => {
     const marginLeft = magnet.marginLeft || 0;
     const marginRight = magnet.marginRight || 0;
     const marginTop = magnet.marginTop || 0;
@@ -886,12 +920,18 @@ const clampMagnetToBoard = (state, magnet) => {
   if (!magnet) {
     return false;
   }
+  if (isNavBoardState(state) && magnet.navHidden) {
+    return false;
+  }
   const width = Math.max(state.boardWidth || 0, 0);
   const height = Math.max(state.boardHeight || 0, 0);
   if (width <= 0 || height <= 0) {
     return false;
   }
   const bounds = getMagnetBounds(magnet);
+  if (!bounds) {
+    return false;
+  }
   let nextX = magnet.x;
   let nextY = magnet.y;
   if (bounds.left < 0) {
@@ -916,8 +956,14 @@ const separateNavMagnets = (state, magnetA, magnetB) => {
   if (!magnetA || !magnetB) {
     return false;
   }
+  if ((magnetA.navHidden || magnetB.navHidden) && isNavBoardState(state)) {
+    return false;
+  }
   const boundsA = getMagnetBounds(magnetA);
   const boundsB = getMagnetBounds(magnetB);
+  if (!boundsA || !boundsB) {
+    return false;
+  }
   const overlapLeft = Math.max(boundsA.left + ALLOWED_OVERLAP, boundsB.left + ALLOWED_OVERLAP);
   const overlapRight = Math.min(boundsA.right - ALLOWED_OVERLAP, boundsB.right - ALLOWED_OVERLAP);
   const overlapTop = Math.max(boundsA.top + ALLOWED_OVERLAP, boundsB.top + ALLOWED_OVERLAP);
@@ -961,6 +1007,9 @@ const resolveNavLayoutToNearestValid = (state) => {
   }
   const visibleMagnets = state.magnets.filter((magnet) => {
     if (!magnet?.element) {
+      return false;
+    }
+    if (magnet.navHidden) {
       return false;
     }
     if (magnet.element.hidden) {
