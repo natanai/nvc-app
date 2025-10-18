@@ -255,6 +255,158 @@
   --nav-hover-shadow: color-mix(in srgb, var(--outline) 45%, transparent);
   --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
   --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 62%, transparent);
+  --btn-bg: #ffb3cb;
+  --btn-fg: #111111;
+  --chip-bg: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
+  --chip-fg: #111111;
+  --corner-scale: 1;
+  --radius-xs: calc(var(--corner-scale) * 8px);
+  --radius-sm: calc(var(--corner-scale) * 10px);
+  --radius-md: calc(var(--corner-scale) * 12px);
+  --radius-md-plus: calc(var(--corner-scale) * 14px);
+  --radius-lg: calc(var(--corner-scale) * 16px);
+  --radius-xl: calc(var(--corner-scale) * 18px);
+  --radius-2xl: calc(var(--corner-scale) * 20px);
+  --radius-3xl: calc(var(--corner-scale) * 24px);
+  --radius-4xl: calc(var(--corner-scale) * 26px);
+  --radius-pill: calc(var(--corner-scale) * 999px);
+  --radius-circle: calc(var(--corner-scale) * 50%);
+  --font-body: 'Atkinson Hyperlegible', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Manrope', 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+html {
+  scrollbar-gutter: stable;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--plum) 65%, #000 5%) 0%,
+      color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
+      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
+  background-attachment: fixed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left,
+      color-mix(in srgb, var(--lavender) 60%, transparent) 0 30%, transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--plum) 75%, #000 5%) 0%,
+      color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
+      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2.5rem);
+  font-family: var(--font-body);
+}
+
+a,
+button,
+[role='button'],
+.chip,
+.segmented > button {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+.control,
+button,
+.chip,
+.segmented,
+.segmented > button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--outline);
+  background: var(--chip-bg);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+}
+
+.segmented > button {
+  border: 2px solid transparent;
+  background: transparent;
+  color: var(--chip-fg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.segmented > button:hover {
+  background: color-mix(in srgb, var(--chip-bg) 72%, var(--mint) 28%);
+}
+
+.segmented > button[aria-checked='true'] {
+  background: color-mix(in srgb, var(--chip-bg) 45%, var(--mint) 55%);
+  border-color: var(--outline);
+  box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.segmented > button:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 2px;
+}
+
+.chip {
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-lg);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  padding: 0.65rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.chip--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.25rem;
+  width: min(100%, 320px);
+  flex: 1 1 260px;
+}
+
+.chip__title {
+  font-weight: 700;
+}
+
+.chip__note {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
 }
 
 .page-wrapper {
@@ -332,6 +484,8 @@
   );
   --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
   --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 .site-nav__magnet-label {
@@ -716,6 +870,14 @@ button.site-nav__magnet {
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
+          if (board && (board.dataset || typeof board.setAttribute === 'function')) {
+            if (board.dataset) {
+              board.dataset.ready = '1';
+            } else {
+              board.setAttribute('data-ready', '1');
+            }
+          }
+
           if (restoreTransitions) {
             var raf = typeof window.requestAnimationFrame === 'function'
               ? window.requestAnimationFrame
@@ -746,7 +908,7 @@ button.site-nav__magnet {
         <h2 id="need-evidence-heading" class="section-title">Evidence</h2>
         <p class="need-evidence__claim"><span class="need-evidence__claim-text">Externalizing inner experience clarifies thinking and supports mutual understanding. This need motivates writing, speaking, making, or otherwise communicating authentically. Expression integrates identity and connects people.</span></p>
         <details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-text">Humans have a strong need to express what’s inside of them – their thoughts, feelings, ideas – in some outward form. By putting inner experiences into external form (through language, art, music, movement, or any creative act), we often understand ourselves better and also enable others to understand us. This need for self-expression drives people to journal or write, to speak up and share their perspective, to create art or projects that reflect their inner world, and generally to communicate in ways that feel true to themselves. Research has shown that such authentic expression can clarify one’s thinking and emotions (for instance, writing about a stressful experience often brings new insights and relief). Moreover, when we express ourselves and are heard or seen, it affirms our identity and builds bridges to other people – they can connect with the real “us.” In summary, self-expression is both an individual integrator (helping us make sense of who we are) and a social connector (allowing others to know us), making it a vital component of psychological well-being and interpersonal bonding.</span></p></div></details>
-        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6367117/" target="_blank" rel="noreferrer noopener">review showing expressive writing and art improve emotional processing and identity coherence</a><span class="need-evidence__source-url"> (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6367117/)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.sciencedirect.com/science/article/pii/S2713374524000098" target="_blank" rel="noreferrer noopener">research documenting how creative expression enhances insight and communication</a><span class="need-evidence__source-url"> (https://www.sciencedirect.com/science/article/pii/S2713374524000098)</span></li></ol></div>
+        <div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list"><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.tandfonline.com/doi/abs/10.1080/10400419.2018.1446747" target="_blank" rel="noreferrer noopener">study on creative self-expression: writing/artistic expression improved cognitive processing of emotions and identity coherence</a><span class="need-evidence__source-url"> (https://www.tandfonline.com/doi/abs/10.1080/10400419.2018.1446747)</span></li><li class="need-evidence__item"><a class="need-evidence__link" href="https://www.apa.org/monitor/2017/07/art-therapy" target="_blank" rel="noreferrer noopener">APA article: expressing oneself through words or art can lead to personal insights and improved communication with others</a><span class="need-evidence__source-url"> (https://www.apa.org/monitor/2017/07/art-therapy)</span></li></ol></div>
       </section>
     
       

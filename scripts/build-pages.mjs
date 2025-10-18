@@ -117,6 +117,14 @@ const navPrefillScript = () => String.raw`
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
+          if (board && (board.dataset || typeof board.setAttribute === 'function')) {
+            if (board.dataset) {
+              board.dataset.ready = '1';
+            } else {
+              board.setAttribute('data-ready', '1');
+            }
+          }
+
           if (restoreTransitions) {
             var raf = typeof window.requestAnimationFrame === 'function'
               ? window.requestAnimationFrame
