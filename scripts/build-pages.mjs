@@ -1340,11 +1340,11 @@ function renderNeedEvidence(item) {
   }
 
   const claimHtml = claim
-    ? `<p class="need-evidence__claim"><span class="need-evidence__label">Original claim</span><span class="need-evidence__claim-text">${escapeHtml(claim)}</span></p>`
+    ? `<p class="need-evidence__claim"><span class="need-evidence__claim-text">${escapeHtml(claim)}</span></p>`
     : '';
 
   const rewrittenHtml = rewrittenClaim
-    ? `<details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__label">Rewritten claim</span><span class="need-evidence__rewrite-text">${escapeHtml(rewrittenClaim)}</span></p></div></details>`
+    ? `<details class="need-evidence__details"><summary class="need-evidence__details-toggle">Details<span class="visually-hidden"> about the rewritten claim</span></summary><div class="need-evidence__rewrite"><p class="need-evidence__rewrite-copy"><span class="need-evidence__rewrite-text">${escapeHtml(rewrittenClaim)}</span></p></div></details>`
     : '';
 
   let sourcesHtml = '';
