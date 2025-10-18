@@ -1165,10 +1165,14 @@ function renderFeeling(item) {
         </div>
       </section>`;
   const needsSection = renderPillGroup('Related needs', item.needs, 'needs');
+  const descriptionHtml = item.description
+    ? `\n        <p class="page-description page-description--feeling">${escapeHtml(item.description)}</p>`
+    : '';
 
   const main = `
       <header class="page-header">
         <h1 class="page-title">Feeling: ${escapeHtml(item.title)}</h1>
+        ${descriptionHtml}
       </header>
       ${inferenceSection}
       ${needsSection}
@@ -1190,6 +1194,7 @@ function renderFeeling(item) {
     mainAttributes: ` data-feeling-slug="${escapeHtml(item.slug)}"`,
     activeNav: 'feelings',
     canonicalPath: `feelings/${item.slug}/`,
+    description: item.description,
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
