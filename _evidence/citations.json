@@ -463,11 +463,11 @@
     "file": "/workspace/nvc-app/needs/empathy/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "research on how empathy reduces conflict and misunderstanding in relationships",
-    "url": "https://journals.sagepub.com/doi/10.1177/1754073917708615",
-    "domain": "journals.sagepub.com",
+    "label": "review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "research on how empathy reduces conflict and misunderstanding in relationships"
+    "context": "review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships"
   },
   {
     "file": "/workspace/nvc-app/needs/empowerment/index.html",
@@ -943,11 +943,11 @@
     "file": "/workspace/nvc-app/needs/physical-fitness/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "CDC overview: regular physical activity improves mood, cognitive function, and reduces risk of disease",
-    "url": "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2299735",
-    "domain": "jamanetwork.com",
+    "label": "large pooled analysis showing regular leisure-time physical activity lowers disease risk and supports overall health",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4451435/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "CDC overview: regular physical activity improves mood, cognitive function, and reduces risk of disease"
+    "context": "large pooled analysis showing regular leisure-time physical activity lowers disease risk and supports overall health"
   },
   {
     "file": "/workspace/nvc-app/needs/physical-fitness/index.html",
@@ -983,11 +983,11 @@
     "file": "/workspace/nvc-app/needs/privacy/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "study on the role of solitude and privacy in self-reflection and identity formation",
-    "url": "https://doi.org/10.1080/1369118X.2017.1281906",
-    "domain": "doi.org",
+    "label": "study showing solitude fosters self-reflection that supports identity development",
+    "url": "https://journals.kmanpub.com/index.php/jarac/article/view/3914",
+    "domain": "journals.kmanpub.com",
     "label_domain_hint": "",
-    "context": "study on the role of solitude and privacy in self-reflection and identity formation"
+    "context": "study showing solitude fosters self-reflection that supports identity development"
   },
   {
     "file": "/workspace/nvc-app/needs/privacy/index.html",
@@ -1368,5 +1368,15 @@
     "domain": "pubmed.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
     "context": "Deci & Ryan (2000) self-determination theory review on autonomy"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/empathy/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "study linking mindfulness, cognitive empathy, and relationship quality among adolescents",
+    "url": "https://journals.sagepub.com/doi/10.1177/00332941221097951",
+    "domain": "journals.sagepub.com",
+    "label_domain_hint": "",
+    "context": "study linking mindfulness, cognitive empathy, and relationship quality among adolescents"
   }
 ]
