@@ -803,11 +803,12 @@
     "file": "/workspace/nvc-app/needs/need-for-all-living-things-to-flourish/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "APS Observer: caring for others – even beyond one’s immediate circle – provides personal health and happiness benefits",
-    "url": "https://www.psychologicalscience.org/observer/caring-for-others-can-bring-benefits.html",
-    "domain": "www.psychologicalscience.org",
+    "label": "Hui et al. (2020), Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers’ well-being (American Psychological Association)",
+    "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf",
+    "domain": "www.apa.org",
     "label_domain_hint": "",
-    "context": "APS Observer: caring for others – even beyond one’s immediate circle – provides personal health and happiness benefits"
+    "context": "Hui et al. (2020), Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers’ well-being (American Psychological Association)",
+    "name": "Hui et al. (2020), Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers’ well-being (American Psychological Association)"
   },
   {
     "file": "/workspace/nvc-app/needs/need-to-matter/index.html",
@@ -833,21 +834,23 @@
     "file": "/workspace/nvc-app/needs/non-judgmental-communication/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "research on constructive communication: descriptive, non-judgmental feedback is linked to better conflict resolution and openness",
-    "url": "https://psycnet.apa.org/record/2003-88173-004",
-    "domain": "psycnet.apa.org",
+    "label": "Rogers & Feller (2018): I-language phrasing reduces defensiveness compared with you-language (PMC)",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "research on constructive communication: descriptive, non-judgmental feedback is linked to better conflict resolution and openness"
+    "context": "Rogers & Feller (2018): I-language phrasing reduces defensiveness compared with you-language (PMC)",
+    "name": "Rogers & Feller (2018): I-language phrasing reduces defensiveness compared with you-language (PMC)"
   },
   {
     "file": "/workspace/nvc-app/needs/non-judgmental-communication/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "study showing that when people communicate without immediate judgment (using curiosity and clarification), the other party is less defensive and outcomes improve",
-    "url": "https://link.springer.com/article/10.1007/s10879-011-9187-0",
-    "domain": "link.springer.com",
+    "label": "Weinstein (2022) Social and Personality Psychology Compass review: high-quality listening lowers defensiveness and opens dialogue",
+    "url": "https://compass.onlinelibrary.wiley.com/doi/full/10.1111/spc3.12651",
+    "domain": "compass.onlinelibrary.wiley.com",
     "label_domain_hint": "",
-    "context": "study showing that when people communicate without immediate judgment (using curiosity and clarification), the other party is less defensive and outcomes improve"
+    "context": "Weinstein (2022) Social and Personality Psychology Compass review: high-quality listening lowers defensiveness and opens dialogue",
+    "name": "Weinstein (2022) Social and Personality Psychology Compass review: high-quality listening lowers defensiveness and opens dialogue"
   },
   {
     "file": "/workspace/nvc-app/needs/nurturing/index.html",
@@ -863,11 +866,12 @@
     "file": "/workspace/nvc-app/needs/nurturing/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "community health case studies showing caregiving networks and restorative breaks keep groups functioning during adversity",
-    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6143627/",
-    "domain": "www.ncbi.nlm.nih.gov",
+    "label": "Lohr et al. (2021) Preventing Chronic Disease case study: community health workers linking care improve emotional well-being under strain (CDC)",
+    "url": "https://www.cdc.gov/pcd/issues/2021/21_0080.htm",
+    "domain": "www.cdc.gov",
     "label_domain_hint": "",
-    "context": "community health case studies showing caregiving networks and restorative breaks keep groups functioning during adversity"
+    "context": "Lohr et al. (2021) Preventing Chronic Disease case study: community health workers linking care improve emotional well-being under strain (CDC)",
+    "name": "Lohr et al. (2021) Preventing Chronic Disease case study: community health workers linking care improve emotional well-being under strain (CDC)"
   },
   {
     "file": "/workspace/nvc-app/needs/order/index.html",
@@ -1257,7 +1261,8 @@
     "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf",
     "domain": "www.apa.org",
     "label_domain_hint": "",
-    "context": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking"
+    "context": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking",
+    "name": "Hui et al. (2020), Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers’ well-being (American Psychological Association)"
   },
   {
     "file": "/workspace/nvc-app/needs/understanding/index.html",
