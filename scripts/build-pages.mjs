@@ -137,9 +137,9 @@ const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
 
 const SITE_ORIGIN = 'https://allneeds.app';
-const FAVICON_SVG = 'icons/favicon.svg';
-const FAVICON_PNG_32 = 'icons/favicon-32x32.png';
-const FAVICON_PNG_16 = 'icons/favicon-16x16.png';
+const FAVICON_SVG = 'icons/favicon-color.svg';
+const FAVICON_PNG_32 = 'icons/favicon-color-32x32.png';
+const FAVICON_PNG_16 = 'icons/favicon-color-16x16.png';
 const TOUCH_ICON_SRC = 'icons/apple-touch-icon.png';
 const MASK_ICON_SRC = 'icons/safari-pinned-tab.svg';
 const TILE_IMAGE_SRC = 'icons/mstile-150x150.png';
