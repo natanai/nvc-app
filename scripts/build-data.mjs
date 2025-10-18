@@ -142,8 +142,30 @@ function sanitizeLocation(value) {
   return value.trim();
 }
 
+function filterDuplicateNeeds(rows) {
+  const seen = new Set();
+  return rows.filter((row) => {
+    const title = (row.Title || '').trim();
+    if (!title || title.toLowerCase() === 'title') {
+      return false;
+    }
+
+    const slugSource = row.Slug && row.Slug.trim() ? row.Slug.trim() : slugify(title);
+    const slug = slugSource.toLowerCase();
+    if (!slug) {
+      return false;
+    }
+
+    if (seen.has(slug)) {
+      return false;
+    }
+    seen.add(slug);
+    return true;
+  });
+}
+
 const rawFeelings = readCsv('data/Feelings.csv');
-const rawNeeds = readCsv('data/Needs.csv');
+const rawNeeds = filterDuplicateNeeds(readCsv('data/Needs.csv'));
 const rawSituations = readCsv('data/Situations.csv');
 const rawStrategies = readCsv('data/Strategies.csv');
 const rawBodyCues = readCsv('data/BodyCues.csv');
