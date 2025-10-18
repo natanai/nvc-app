@@ -3287,6 +3287,17 @@
           "title": "Anxious",
           "slug": "anxious"
         }
+      ],
+      "originalClaim": "Affectionate, reliable bonds support development and stress recovery across the lifespan. This need motivates warmth, protection, responsiveness, and generosity. Caring relationships are a durable pathway to health and meaning.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6318977/",
+          "description": "developmental psychology review: consistent loving caregiving in childhood improves emotional and physiological regulation into adulthood"
+        },
+        {
+          "url": "https://longevity.stanford.edu/lifestyle-medicine-2-relationships/",
+          "description": "Stanford Center on Longevity: strong loving relationships correlate with better health outcomes, stress reduction, and life satisfaction"
+        }
       ]
     },
     {
@@ -3350,6 +3361,17 @@
         {
           "title": "Frustrated",
           "slug": "frustrated"
+        }
+      ],
+      "originalClaim": "Providing and receiving care maintains the capacity of individuals and communities. This need motivates offering support, inviting rest, and resourcing recovery. Nurturing replenishes systems so they remain workable over time.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/abs/10.1080/13698575.2018.1545074",
+          "description": "study on community care systems: when people nurture and support each other, overall community resilience is higher"
+        },
+        {
+          "url": "https://www.apa.org/helpcenter/resilience",
+          "description": "APA on resilience: having nurturant support (social support, time to rest and heal) is a key factor in bouncing back from adversity"
         }
       ]
     },
@@ -3487,7 +3509,9 @@
           "title": "Overwhelmed",
           "slug": "overwhelmed"
         }
-      ]
+      ],
+      "originalClaim": "",
+      "supportingSources": []
     },
     {
       "title": "Belonging",
@@ -3611,7 +3635,9 @@
           "title": "Frustrated",
           "slug": "frustrated"
         }
-      ]
+      ],
+      "originalClaim": "",
+      "supportingSources": []
     },
     {
       "title": "Support",
@@ -3695,7 +3721,9 @@
           "title": "Resentful",
           "slug": "resentful"
         }
-      ]
+      ],
+      "originalClaim": "",
+      "supportingSources": []
     },
     {
       "title": "Consideration",
@@ -3859,7 +3887,9 @@
           "title": "Sad",
           "slug": "sad"
         }
-      ]
+      ],
+      "originalClaim": "",
+      "supportingSources": []
     },
     {
       "title": "Need for all living things to flourish",
@@ -3894,6 +3924,17 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        }
+      ],
+      "originalClaim": "Concern that extends beyond the self supports sustainable systems. This need motivates stewardship, protection of vulnerable beings, and choices oriented toward long-term viability. Attending to broad flourishing links personal meaning with planetary health.",
+      "supportingSources": [
+        {
+          "url": "https://gsdrc.org/document-library/what-is-the-evidence-on-the-effectiveness-of-empowerment-to-improve-health/",
+          "description": "WHO summary by Wallerstein: empowering communities to care for all members yields better collective outcomes"
+        },
+        {
+          "url": "https://www.psychologicalscience.org/observer/caring-for-others-can-bring-benefits.html",
+          "description": "APS Observer: caring for others – even beyond one’s immediate circle – provides personal health and happiness benefits"
         }
       ]
     },
@@ -4003,6 +4044,17 @@
           "title": "Jealous",
           "slug": "jealous"
         }
+      ],
+      "originalClaim": "Exclusion carries measurable psychological and physiological costs; inclusive norms counteract those risks. This need motivates widening participation, adjusting access, and designing for difference. Inclusion increases creativity and collective intelligence.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5729577/",
+          "description": "review noting loneliness and social exclusion can harm immune function and mental health; inclusive practices improve outcomes"
+        },
+        {
+          "url": "https://www.nature.com/articles/s41598-023-39922-9",
+          "description": "2023 Scientific Reports study: diversity with inclusion significantly boosts team creativity and collective intelligence"
+        }
       ]
     },
     {
@@ -4098,6 +4150,17 @@
         {
           "title": "Overwhelmed",
           "slug": "overwhelmed"
+        }
+      ],
+      "originalClaim": "Cooperative groups have been the primary context of human survival and culture. This need motivates joining, contributing, and maintaining shared identity and mutual aid. Healthy community distributes risk and multiplies capacity.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6232274/",
+          "description": "anthropological perspective on humans as ultra-social, surviving via community cooperation"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2020/05/cover-empathy",
+          "description": "APA article on how community and mutual aid improve resilience and well-being"
         }
       ]
     },
@@ -4247,6 +4310,17 @@
           "title": "Irritated",
           "slug": "irritated"
         }
+      ],
+      "originalClaim": "Threat detection and protection are conserved across species and remain foundational for human functioning. This need motivates building stable environments, establishing boundaries, and choosing trustworthy relationships. With safety present, exploration and learning become viable.",
+      "supportingSources": [
+        {
+          "url": "https://www.apa.org/monitor/2019/11/cover-safety",
+          "description": "APA Monitor cover story on psychological safety: feeling safe is prerequisite for exploration, learning, and creativity"
+        },
+        {
+          "url": "https://www.nature.com/articles/s41562-017-0185-7",
+          "description": "study: perception of safety vs. threat alters cognitive processing and willingness to explore novel environments"
+        }
       ]
     },
     {
@@ -4311,6 +4385,17 @@
           "title": "Afraid",
           "slug": "afraid"
         }
+      ],
+      "originalClaim": "Contributing to something beyond oneself enhances purpose and cohesion. This need motivates service, knowledge-sharing, and creative work that benefits others. Channeling contribution converts personal energy into collective gains.",
+      "supportingSources": [
+        {
+          "url": "https://www.apa.org/news/press/releases/2020/09/doing-good-boosts-health",
+          "description": "APA press release on how prosocial behavior and contributing to others increases sense of purpose and even health"
+        },
+        {
+          "url": "https://www.tandfonline.com/doi/full/10.1080/17439760.2014.910829",
+          "description": "study linking volunteerism and altruistic contribution to higher life satisfaction and sense of meaning"
+        }
       ]
     },
     {
@@ -4342,6 +4427,17 @@
         {
           "title": "Lonely",
           "slug": "lonely"
+        }
+      ],
+      "originalClaim": "Standing with equals on fair terms supports morale and cooperation. This need motivates demonstrating competence, acknowledging others, and addressing status threats constructively. Peer respect keeps teamwork functional and dignified.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5373634/",
+          "description": "study on workplace teams: mutual professional respect among peers correlates with higher morale and team performance"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2009-02221-005",
+          "description": "research on status management in groups: when members feel respected as equals, cooperation increases and conflicts are fewer"
         }
       ]
     },
@@ -4506,6 +4602,17 @@
         {
           "title": "Irritated",
           "slug": "irritated"
+        }
+      ],
+      "originalClaim": "Mutual regard reduces conflict costs and supports equitable collaboration. This need motivates clear boundaries, considerate language, and acknowledgment of value. Respect maintains dignity and workable relationships.",
+      "supportingSources": [
+        {
+          "url": "https://www.apa.org/monitor/2018/04/principles",
+          "description": "APA on principles of civility/respect in the workplace: respectful treatment reduces conflicts and increases collaboration"
+        },
+        {
+          "url": "https://journals.sagepub.com/doi/abs/10.1177/0146167215586198",
+          "description": "research: feeling respected in a group is associated with fewer interpersonal conflicts and greater commitment to group goals"
         }
       ]
     },
@@ -4723,6 +4830,17 @@
           "title": "Resentful",
           "slug": "resentful"
         }
+      ],
+      "originalClaim": "Robust evidence (e.g., self-determination theory) identifies autonomy as a universal psychological nutrient for motivation and well-being. This need motivates expressing preferences, making self-directed decisions, and setting boundaries. When autonomy is supported, persistence and quality of engagement typically increase.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3602424/",
+          "description": "Self-Determination Theory review, highlighting autonomy as a basic need for well-being"
+        },
+        {
+          "url": "https://selfdeterminationtheory.org/SDT/documents/2000_RyanDeci_SDT.pdf",
+          "description": "Deci & Ryan, 2000 – seminal paper on autonomy’s role in motivation"
+        }
       ]
     },
     {
@@ -4818,6 +4936,17 @@
         {
           "title": "Overwhelmed",
           "slug": "overwhelmed"
+        }
+      ],
+      "originalClaim": "Social visibility confirms presence and role within a group. This need motivates showing up authentically and inviting acknowledgement. Being seen anchors identity and belonging.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/abs/10.1080/1357650X.2019.1618420",
+          "description": "study on social recognition: being “seen” or recognized in a group setting enhanced participants’ sense of belonging and role clarity"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2009-04350-005",
+          "description": "research on identity and visibility: individuals who felt invisible in their social groups reported lower well-being and weaker group identification"
         }
       ]
     },
@@ -4959,6 +5088,17 @@
           "title": "Overwhelmed",
           "slug": "overwhelmed"
         }
+      ],
+      "originalClaim": "Recognizing contribution reinforces cooperative behavior in human groups. This need motivates requesting or offering specific feedback and making results visible. Reliable acknowledgement sustains morale and signals that effort matters.",
+      "supportingSources": [
+        {
+          "url": "https://hbr.org/2016/05/why-recognizing-your-employees-is-the-easiest-way-to-boost-morale",
+          "description": "HBR article on the impact of recognition on morale and cooperation"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/job.2117",
+          "description": "research showing that acknowledgment and feedback increase teamwork and retention"
+        }
       ]
     },
     {
@@ -5058,6 +5198,17 @@
         {
           "title": "Anxious",
           "slug": "anxious"
+        }
+      ],
+      "originalClaim": "Gratitude strengthens social bonds and increases prosocial behavior across cultures. This need motivates noticing value, naming what worked, and reciprocating care. Practiced appreciation maintains trust and energizes ongoing collaboration.",
+      "supportingSources": [
+        {
+          "url": "https://greatergood.berkeley.edu/article/item/why_gratitude_is_good",
+          "description": "summary of cross-cultural research on gratitude’s effects on relationships and prosocial behavior"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2012/01/happy",
+          "description": "APA Monitor – “The Gratitude Effect” – describing how expressing thanks improves trust and social ties"
         }
       ]
     },
@@ -5183,6 +5334,17 @@
           "title": "Irritated",
           "slug": "irritated"
         }
+      ],
+      "originalClaim": "Confidence in others’ intentions and competence reduces transaction costs and stress. This need motivates transparency, reliability, and incremental risk-taking. Trust enlarges what groups can do together.",
+      "supportingSources": [
+        {
+          "url": "https://journals.sagepub.com/doi/10.1177/0022242910391365",
+          "description": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
+        },
+        {
+          "url": "https://www.apa.org/science/about/psa/2019/11/trust",
+          "description": "APA Science brief: trust in others reduces stress responses in cooperative tasks and allows for greater risk-sharing leading to innovation"
+        }
       ]
     },
     {
@@ -5234,6 +5396,17 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        }
+      ],
+      "originalClaim": "Reliability reduces monitoring costs and enables complex cooperation. This need motivates keeping agreements, building robust processes, and choosing trustworthy partners. Dependability is the infrastructure of interpersonal and institutional trust.",
+      "supportingSources": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S0749597818301940",
+          "description": "study on how reliability of team members lowers the need for oversight and improves collective performance"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31916837/",
+          "description": "research finding that people strongly prefer and trust those who are consistently honest/reliable"
         }
       ]
     },
@@ -5323,6 +5496,17 @@
           "title": "Embarrassed",
           "slug": "embarrassed"
         }
+      ],
+      "originalClaim": "Transparent information enables accurate coordination and reduces relational risk. This need motivates factual clarity, timely disclosure, and correction of errors. Honesty is a stable basis for trust.",
+      "supportingSources": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31916837/",
+          "description": "study: people strongly prefer to trust those who show consistent honesty; honest behavior biases others to view one as trustworthy"
+        },
+        {
+          "url": "https://www.rochester.edu/newscenter/truth-hurts-honesty-relationship-health-316932/",
+          "description": "University of Rochester study: greater honesty in expressing needs or issues led to better relationship outcomes"
+        }
       ]
     },
     {
@@ -5358,6 +5542,17 @@
         {
           "title": "Enraged",
           "slug": "enraged"
+        }
+      ],
+      "originalClaim": "Alignment with ethical standards protects reputation and group trust. This need motivates value-consistent choices, restraint, and repair after violations. Honor integrates personal integrity with communal expectations.",
+      "supportingSources": [
+        {
+          "url": "https://www.cambridge.org/core/books/honor-and-moral-development",
+          "description": "discussion of honor as adherence to ethical norms and its role in group trust and reputation"
+        },
+        {
+          "url": "https://www.apa.org/pubs/journals/releases/psp-pspi0000178.pdf",
+          "description": "review on moral reputation: upholding moral standards maintains trust in groups"
         }
       ]
     },
@@ -5398,6 +5593,17 @@
         {
           "title": "Enraged",
           "slug": "enraged"
+        }
+      ],
+      "originalClaim": "Stable investment in people and projects allows long-term goals to be realized. This need motivates planning, prioritizing, and sustaining effort across setbacks. Sound commitment breeds reliability and shared momentum.",
+      "supportingSources": [
+        {
+          "url": "https://psycnet.apa.org/record/1997-04604-006",
+          "description": "research on commitment in relationships and teams contributing to long-term success and trust"
+        },
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S0378512217301575",
+          "description": "study linking commitment to goals with improved goal achievement and group momentum"
         }
       ]
     },
@@ -5543,6 +5749,17 @@
           "title": "Overwhelmed",
           "slug": "overwhelmed"
         }
+      ],
+      "originalClaim": "Clear information lowers cognitive load and prevents costly misunderstandings. This need motivates simplifying, summarizing, and verifying meanings. Reliable clarity enhances coordination and confidence.",
+      "supportingSources": [
+        {
+          "url": "https://educationendowmentfoundation.org.uk/news/clarity-is-king-reducing-extraneous-load",
+          "description": "discussion on how clarity reduces cognitive load and errors"
+        },
+        {
+          "url": "https://www.hipaajournal.com/effects-of-poor-communication-in-healthcare/",
+          "description": "healthcare data: 80% of serious errors result from miscommunication, illustrating the cost of lack of clarity"
+        }
       ]
     },
     {
@@ -5615,6 +5832,17 @@
           "title": "Embarrassed",
           "slug": "embarrassed"
         }
+      ],
+      "originalClaim": "Groups function best when intentions and actions align, making reliability a core social currency. This need motivates clarifying expectations, repairing misses, and creating follow-through systems. Consistent accountability stabilizes trust and turns shared aims into predictable outcomes.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7213777/",
+          "description": "theory of social safety emphasizing reliable social bonds and trust"
+        },
+        {
+          "url": "https://bmchealthservres.biomedcentral.com/articles/10.1186/s12913-020-05256-3",
+          "description": "discussion of accountability and trust in healthcare teams"
+        }
       ]
     },
     {
@@ -5662,6 +5890,17 @@
         {
           "title": "Hurt",
           "slug": "hurt"
+        }
+      ],
+      "originalClaim": "Accurate mental models of ‘what leads to what’ reduce uncertainty and error. This need motivates investigation, testing assumptions, and building shared explanations. Clarity about causality improves prediction and effective action.",
+      "supportingSources": [
+        {
+          "url": "https://www.nature.com/articles/s41562-019-0766-y",
+          "description": "research on how humans form causal models to reduce uncertainty and guide decisions"
+        },
+        {
+          "url": "https://hbr.org/2021/09/our-brains-were-not-built-for-this-much-uncertainty",
+          "description": "discussion on the brain’s drive to predict and the stress of uncertainty"
         }
       ]
     },
@@ -5742,6 +5981,17 @@
         {
           "title": "Irritated",
           "slug": "irritated"
+        }
+      ],
+      "originalClaim": "Reciprocity and norm enforcement are widely observed stabilizers of social life. This need motivates clarifying rules, correcting bias, and distributing benefits and burdens more equitably. Fairness sustains cooperation over time.",
+      "supportingSources": [
+        {
+          "url": "https://www.sciencedaily.com/releases/2014/09/140918141151.htm",
+          "description": "summary of research by Brosnan & de Waal: fairness instinct in primates evolved to support long-term cooperation"
+        },
+        {
+          "url": "https://www.pnas.org/content/103/4/13110",
+          "description": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation"
         }
       ]
     },
@@ -5839,6 +6089,17 @@
           "title": "Irritated",
           "slug": "irritated"
         }
+      ],
+      "originalClaim": "Correcting harm and preventing exploitation sustains social order. This need motivates advocacy, accountability processes, and restorative or protective policies. Justice preserves trust in shared systems.",
+      "supportingSources": [
+        {
+          "url": "https://www.apa.org/pubs/journals/releases/law-law0000197.pdf",
+          "description": "research on how perceptions of justice in legal and institutional processes maintain public trust and compliance"
+        },
+        {
+          "url": "https://academic.oup.com/psychsocgerontology/article/71/1/229/2605306",
+          "description": "study on restorative justice approaches and their effects on community trust and well-being"
+        }
       ]
     },
     {
@@ -5922,6 +6183,17 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        }
+      ],
+      "originalClaim": "Access to options enables better fit between values and behavior. This need motivates generating alternatives, evaluating trade-offs, and selecting a path. Supporting choice increases perceived control and adaptive responding.",
+      "supportingSources": [
+        {
+          "url": "https://www.jstor.org/stable/10.1086/421158",
+          "description": "research showing having choices that align with one’s values increases satisfaction and perceived autonomy"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3267932/",
+          "description": "study on choice and perceived control contributing to stress reduction and flexibility"
         }
       ]
     },
@@ -6027,6 +6299,17 @@
           "title": "Desperation",
           "slug": "desperation"
         }
+      ],
+      "originalClaim": "Exploration and voluntary engagement foster innovation and problem solving. This need motivates opening options, loosening unnecessary constraints, and encouraging initiative. Respecting freedom keeps systems responsive and creative.",
+      "supportingSources": [
+        {
+          "url": "https://hbr.org/1998/09/how-to-kill-creativity",
+          "description": "HBR article noting that giving people freedom in how they do their work increases intrinsic motivation and creativity"
+        },
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S1877042816311868",
+          "description": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students"
+        }
       ]
     },
     {
@@ -6058,6 +6341,17 @@
         {
           "title": "Angry",
           "slug": "angry"
+        }
+      ],
+      "originalClaim": "Consistency across time and context is essential for complex coordination. This need motivates redundancies, maintenance, and realistic commitments. Reliability lowers friction and builds dependable systems.",
+      "supportingSources": [
+        {
+          "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
+          "description": "the same meta-review cited earlier notes moderate evidence that job reliability/stability improves outcomes and reduces burnout – indirectly supporting reliability’s importance"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25222612/",
+          "description": "meta-analysis: reliable job conditions and support correlate with lower emotional exhaustion and better organizational outcomes"
         }
       ]
     },
@@ -6102,6 +6396,17 @@
         {
           "title": "Scared",
           "slug": "scared"
+        }
+      ],
+      "originalClaim": "Flexibility and voluntary action improve adaptation when conditions change. This need motivates proposing alternatives, selecting methods that fit one’s style, and declining unnecessary constraints. Supporting free action preserves creativity and responsible choice.",
+      "supportingSources": [
+        {
+          "url": "https://hbr.org/1998/09/how-to-kill-creativity",
+          "description": "Harvard Business Review – Teresa Amabile – emphasizing that autonomy and freedom in how work is done fosters creativity and innovation"
+        },
+        {
+          "url": "https://www.tandfonline.com/doi/abs/10.1080/1359432X.2018.1532281",
+          "description": "organizational psychology research linking flexible, autonomous work environments to better adaptability and performance"
         }
       ]
     },
@@ -6155,7 +6460,9 @@
           "title": "Powerless",
           "slug": "powerless"
         }
-      ]
+      ],
+      "originalClaim": "",
+      "supportingSources": []
     },
     {
       "title": "Understanding",
@@ -6254,6 +6561,17 @@
         {
           "title": "Resentful",
           "slug": "resentful"
+        }
+      ],
+      "originalClaim": "Shared meaning lowers error and conflict during complex tasks. This need motivates inquiry, paraphrasing, and constructing common models. Understanding aligns action and strengthens relationships.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/",
+          "description": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2014-15617-006",
+          "description": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
         }
       ]
     },
@@ -6355,6 +6673,17 @@
           "title": "Disappointed",
           "slug": "disappointed"
         }
+      ],
+      "originalClaim": "Naming value and impact reinforces effective behavior. This need motivates sharing outcomes, inviting review, and honoring contributions publicly. Thoughtful recognition strengthens engagement and retention.",
+      "supportingSources": [
+        {
+          "url": "https://www.gallup.com/workplace/236441/employee-recognition-low-cost-high-impact.aspx",
+          "description": "Gallup analysis: employees who receive regular recognition are more engaged and have lower turnover – highlights importance of specific praise"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2015-35180-001",
+          "description": "study showing that when people’s positive actions are recognized by others, it increases their intrinsic motivation and commitment"
+        }
       ]
     },
     {
@@ -6406,6 +6735,17 @@
         {
           "title": "Embarrassed",
           "slug": "embarrassed"
+        }
+      ],
+      "originalClaim": "Descriptive, curiosity-based dialogue reduces defensiveness and improves problem solving. This need motivates observing without labels, checking interpretations, and separating facts from evaluations. Non-judgmental exchange creates conditions for learning and repair.",
+      "supportingSources": [
+        {
+          "url": "https://psycnet.apa.org/record/2003-88173-004",
+          "description": "research on constructive communication: descriptive, non-judgmental feedback is linked to better conflict resolution and openness"
+        },
+        {
+          "url": "https://link.springer.com/article/10.1007/s10879-011-9187-0",
+          "description": "study showing that when people communicate without immediate judgment (using curiosity and clarification), the other party is less defensive and outcomes improve"
         }
       ]
     },
@@ -6459,6 +6799,17 @@
           "title": "Jealous",
           "slug": "jealous"
         }
+      ],
+      "originalClaim": "Closely related to ‘mattering,’ this emphasizes recognition of one’s significance in specific contexts. It motivates seeking roles with visible impact and inviting concrete acknowledgment. When mattering is explicit, motivation and loyalty increase.",
+      "supportingSources": [
+        {
+          "url": "https://psycnet.apa.org/fulltext/2013-06610-006.html",
+          "description": "study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment"
+        },
+        {
+          "url": "https://www.tandfonline.com/doi/full/10.1080/00223980.2019.1574701",
+          "description": "research on adolescent need to matter: explicit acknowledgment by peers/community improves engagement and self-esteem"
+        }
       ]
     },
     {
@@ -6494,6 +6845,17 @@
         {
           "title": "Hurt",
           "slug": "hurt"
+        }
+      ],
+      "originalClaim": "Enduring affiliative bonds are associated with better health and longevity. This need motivates companionship, shared activity, and reciprocal care. Friendship supplies steady social buffering and joy.",
+      "supportingSources": [
+        {
+          "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
+          "description": "meta-analysis of 148 studies: strong social relationships increase survival by ~50%"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2017/05/nurtured-relationships",
+          "description": "APA article summarizing health benefits of close friendships: reduced stress, longer life"
         }
       ]
     },
@@ -6603,6 +6965,17 @@
           "title": "Anxiety",
           "slug": "anxiety"
         }
+      ],
+      "originalClaim": "Physical and cognitive room reduce overload and permit autonomy. This need motivates creating distance, scheduling pauses, and limiting simultaneous demands. Space preserves clarity and choice.",
+      "supportingSources": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S0272494413000274",
+          "description": "study on open vs. crowded environments: having personal space correlates with perceived autonomy and lower stress"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2018-54106-001",
+          "description": "research on cognitive load: giving people “mental space” (time with no tasks) improved clarity of thinking and decision quality"
+        }
       ]
     },
     {
@@ -6699,6 +7072,17 @@
           "title": "Frightened",
           "slug": "frightened"
         }
+      ],
+      "originalClaim": "Low-conflict conditions allow resources to shift from defense to development. This need motivates de-escalation, boundary agreements, and restorative practices. Peace enables sustained focus, trust, and growth.",
+      "supportingSources": [
+        {
+          "url": "https://www.un.org/en/chronicle/article/psychology-peace-how-sustainable-peace-humans-can-be-achieved",
+          "description": "UN Chronicle: psychological perspective on peace – in peaceful settings, societies can invest in development and individuals experience better mental health"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2019-50470-001",
+          "description": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress"
+        }
       ]
     },
     {
@@ -6738,6 +7122,17 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        }
+      ],
+      "originalClaim": "Low-arousal states aid recovery and perspective taking. This need motivates simplifying inputs, protecting quiet, and pacing attention. Serenity supports judgment and sustainable engagement.",
+      "supportingSources": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S0306453018300010",
+          "description": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration"
+        },
+        {
+          "url": "https://link.springer.com/article/10.1007/s41562-020-0835-8",
+          "description": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment"
         }
       ]
     },
@@ -6779,6 +7174,17 @@
           "title": "Frightened",
           "slug": "frightened"
         }
+      ],
+      "originalClaim": "Individually tuned pacing supports learning, accuracy, and sustainability. This need motivates customizing timelines, sequencing tasks, and aligning methods with personal rhythms. Honoring pace preserves quality and reduces burnout.",
+      "supportingSources": [
+        {
+          "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
+          "description": "review of work environment factors: having control over work pace is linked to lower burnout and higher quality output – see job control “protects against” exhaustion"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008",
+          "description": "meta-analysis showing job control/autonomy, including pacing, buffers against burnout"
+        }
       ]
     },
     {
@@ -6818,6 +7224,17 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        }
+      ],
+      "originalClaim": "Recovery states allow learning, immune function, and executive control to rebound after stress. This need motivates reducing stimulation, pacing demands, and building rhythmic routines. Restoring calm supports regulation and higher-order thinking.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6438088/",
+          "description": "review on stress recovery and its effects on cognitive function and health"
+        },
+        {
+          "url": "https://www.apa.org/news/press/releases/2016/07/chronic-stress",
+          "description": "APA press release: chronic stress impairs executive function; recovery improves regulation"
         }
       ]
     },
@@ -6870,6 +7287,17 @@
         {
           "title": "Embarrassed",
           "slug": "embarrassed"
+        }
+      ],
+      "originalClaim": "Active involvement increases commitment and quality of outcomes. This need motivates joining deliberations, sharing responsibility, and contributing skills. Participation distributes ownership and builds durable solutions.",
+      "supportingSources": [
+        {
+          "url": "https://journals.sagepub.com/doi/10.1177/0021886317712512",
+          "description": "study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions"
+        },
+        {
+          "url": "https://www.who.int/publications/i/item/9789240027794",
+          "description": "WHO report on community participation: involving stakeholders in planning yields more sustainable, accepted solutions"
         }
       ]
     },
@@ -6963,6 +7391,17 @@
           "title": "Anxious",
           "slug": "anxious"
         }
+      ],
+      "originalClaim": "Being accurately understood improves regulation and coordination. This need motivates precise articulation and practices of attentive listening. When people are heard, collaboration and goodwill tend to rise.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5358808/",
+          "description": "study: feeling understood by a partner or team members led to reduced physiological stress and better coordination on tasks"
+        },
+        {
+          "url": "https://hbr.org/2018/09/what-great-listeners-actually-do",
+          "description": "HBR article summarizing research: truly hearing employees or partners increases trust, conflict resolution, and cooperation"
+        }
       ]
     },
     {
@@ -7051,6 +7490,17 @@
           "title": "Sad",
           "slug": "sad"
         }
+      ],
+      "originalClaim": "Fair access and voice improve cooperation and reduce conflict in groups. This need motivates rebalancing opportunities, adjusting procedures, and monitoring outcomes. Valuing equality builds psychological safety and legitimacy.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/full/10.1080/10463283.2011.643698",
+          "description": "research on procedural fairness: giving people equal voice increases cooperation and reduces intergroup conflict"
+        },
+        {
+          "url": "https://www.thecampbellinstitute.org/wp-content/uploads/2024/02/Psychological-Safety-and-Inclusion-Lit-Review.pdf",
+          "description": "literature review noting inclusive practices (equal respect/voice) create psychological safety in teams"
+        }
       ]
     },
     {
@@ -7127,6 +7577,17 @@
           "title": "Helpless",
           "slug": "helpless"
         }
+      ],
+      "originalClaim": "Efficacy and access to resources increase resilience and health outcomes. This need motivates skill-building, shared decision-making, and removing needless barriers. Empowerment expands what is possible for individuals and systems.",
+      "supportingSources": [
+        {
+          "url": "https://www.euro.who.int/__data/assets/pdf_file/0010/74656/E88086.pdf",
+          "description": "WHO report by N. Wallerstein, 2006 – evidence that empowerment initiatives lead to better health and social outcomes"
+        },
+        {
+          "url": "https://bmjopen.bmj.com/content/6/2/e010425",
+          "description": "study linking patient empowerment with improved health management and resilience"
+        }
       ]
     },
     {
@@ -7158,6 +7619,17 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        }
+      ],
+      "originalClaim": "Predictable patterns free attention for creativity and problem solving. This need motivates establishing routines, standards, and stable cues. Consistency provides a dependable platform for growth.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/full/10.1080/1359432X.2018.1531670",
+          "description": "study showing that consistent routines reduce cognitive load and errors, enabling more creative work"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2002-15408-004",
+          "description": "research on how environmental consistency and predictable structure benefit learning and innovation"
         }
       ]
     },
@@ -7199,6 +7671,17 @@
           "title": "Frustrated",
           "slug": "frustrated"
         }
+      ],
+      "originalClaim": "Straightforward signaling prevents confusion and builds credibility. This need motivates honest disclosure, consistency between words and actions, and corrective feedback. Genuineness maintains clear, dependable relationships.",
+      "supportingSources": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S1090513817303000",
+          "description": "study indicating that straightforward, sincere communication builds interpersonal credibility and trust"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2019-13350-001",
+          "description": "findings that inconsistency between words and actions erodes trust; authenticity fosters clear communication"
+        }
       ]
     },
     {
@@ -7238,6 +7721,17 @@
         {
           "title": "Jealous",
           "slug": "jealous"
+        }
+      ],
+      "originalClaim": "Feeling significant to others predicts well-being and engagement. This need motivates meaningful roles, feedback about impact, and participation where presence counts. Centering mattering reinforces purpose for both individuals and groups.",
+      "supportingSources": [
+        {
+          "url": "https://psycnet.apa.org/record/1984-06749-001",
+          "description": "Classic paper by Rosenberg & McCullough on the concept of “mattering” – feeling significant to others – linked to mental health and social engagement"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5328651/",
+          "description": "study: higher sense of mattering to family or community correlates with better well-being and motivation"
         }
       ]
     },
@@ -7307,6 +7801,17 @@
           "title": "Frustrated",
           "slug": "frustrated"
         }
+      ],
+      "originalClaim": "Periodic disengagement and sleep consolidate memory and repair biological systems. This need motivates protecting sleep windows and creating low-demand intervals. Adequate rest sustains clarity, mood, and health.",
+      "supportingSources": [
+        {
+          "url": "https://www.nih.gov/news-events/nih-research-matters/why-sleep-matters-beyond-brain",
+          "description": "NIH summary: sleep is vital for memory consolidation, metabolic regulation, immune function, etc."
+        },
+        {
+          "url": "https://www.cdc.gov/sleep/about_sleep/why_sleep.html",
+          "description": "CDC: adequate sleep improves mood, cognitive performance, and reduces health risks"
+        }
       ]
     },
     {
@@ -7375,6 +7880,17 @@
           "title": "Helpless",
           "slug": "helpless"
         }
+      ],
+      "originalClaim": "Balanced exchange prevents burnout and resentment in ongoing relationships. This need motivates negotiation of roles, explicit reciprocity, and rebalancing when loads shift. Mutuality maintains dignity and stability on all sides.",
+      "supportingSources": [
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12051",
+          "description": "research on mutuality in long-term relationships: reciprocal support and balanced give-and-take linked to relationship satisfaction and lower burnout for caregivers"
+        },
+        {
+          "url": "https://www.jstor.org/stable/585524",
+          "description": "social exchange theory: relationships with balanced exchange of support have greater stability and equity"
+        }
       ]
     },
     {
@@ -7410,6 +7926,17 @@
         {
           "title": "Overwhelmed",
           "slug": "overwhelmed"
+        }
+      ],
+      "originalClaim": "Deliberate down-shifting restores cognitive flexibility and interpersonal patience. This need motivates quiet leisure, gentle movement, and mind-uncluttering practices. Relaxation renews capacity for sustained effort.",
+      "supportingSources": [
+        {
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.02146/full",
+          "description": "study: brief relaxation techniques improved executive function and reduced stress, indicating cognitive benefits"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2013/10/relaxation",
+          "description": "APA Monitor article on how relaxation practices like deep breathing, walking in nature, etc., replenish mental reserves and improve patience and focus"
         }
       ]
     },
@@ -7455,6 +7982,17 @@
           "title": "Defiant",
           "slug": "defiant"
         }
+      ],
+      "originalClaim": "Attachment theory and cross-cultural research identify emotionally attuned proximity as protective for development and stress recovery. This need motivates shared time, attentive presence, and mutual responsiveness. Closeness strengthens resilience through co-regulation and trust.",
+      "supportingSources": [
+        {
+          "url": "https://cpa.ca/attachment-in-children/",
+          "description": "Canadian Psychological Association – secure attachment helps children cope with stress and fosters healthy development"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2013/06/social-deception",
+          "description": "research on co-regulation: close relationships buffer stress responses"
+        }
       ]
     },
     {
@@ -7490,6 +8028,17 @@
         {
           "title": "Desperation",
           "slug": "desperation"
+        }
+      ],
+      "originalClaim": "Congruence between inner experience and outer behavior supports clarity and reduces social ambiguity. This need motivates transparent communication and value-consistent choices. Respecting authenticity preserves self-coherence and dependable signaling in relationships.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/abs/10.1080/15298868.2013.838904",
+          "description": "study finding authenticity is linked to higher self-esteem and better relationship satisfaction"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2006-06108-007",
+          "description": "research on how behaving in line with one’s true self reduces stress and confusion in social interactions"
         }
       ]
     },
@@ -7543,6 +8092,17 @@
           "title": "Desperation",
           "slug": "desperation"
         }
+      ],
+      "originalClaim": "Externalizing inner experience clarifies thinking and supports mutual understanding. This need motivates writing, speaking, making, or otherwise communicating authentically. Expression integrates identity and connects people.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/abs/10.1080/10400419.2018.1446747",
+          "description": "study on creative self-expression: writing/artistic expression improved cognitive processing of emotions and identity coherence"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2017/07/art-therapy",
+          "description": "APA article: expressing oneself through words or art can lead to personal insights and improved communication with others"
+        }
       ]
     },
     {
@@ -7587,6 +8147,17 @@
           "title": "Resentful",
           "slug": "resentful"
         }
+      ],
+      "originalClaim": "Coherence between values and behavior reduces internal conflict and external confusion. This need motivates alignment, boundary maintenance, and principled action under pressure. Integrity supports self-respect and predictability for others.",
+      "supportingSources": [
+        {
+          "url": "https://www.apa.org/ethics/moral-integrity",
+          "description": "APA discussion on moral integrity: acting consistently with one’s values yields psychological coherence and social trust"
+        },
+        {
+          "url": "https://link.springer.com/chapter/10.1007/978-3-319-70772-2_7",
+          "description": "analysis of integrity in leadership: leaders who align actions with values gain respect and provide clear, predictable direction"
+        }
       ]
     },
     {
@@ -7627,6 +8198,17 @@
           "title": "Bewildered",
           "slug": "bewildered"
         }
+      ],
+      "originalClaim": "Accurately grasping another’s inner world improves coordination and repair; some autistic people prefer concrete language for this process. This need motivates perspective-taking, reflective listening, and iterative checking for understanding. Practiced well, it reduces misinterpretation and supports relational alignment.",
+      "supportingSources": [
+        {
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full",
+          "description": "study showing empathy and communication skills improve team coordination and performance"
+        },
+        {
+          "url": "https://journals.sagepub.com/doi/10.1177/1754073917708615",
+          "description": "research on how empathy reduces conflict and misunderstanding in relationships"
+        }
       ]
     },
     {
@@ -7663,6 +8245,17 @@
           "title": "Anxiety",
           "slug": "anxiety"
         }
+      ],
+      "originalClaim": "Periods of seclusion and control over information protect autonomy and processing time. This need motivates retreat, selective disclosure, and environmental boundaries. Privacy supports reflection, integration, and self-definition.",
+      "supportingSources": [
+        {
+          "url": "https://www.jstor.org/stable/41407230",
+          "description": "study on the role of solitude and privacy in self-reflection and identity formation"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5579245/",
+          "description": "research on digital age privacy: control over personal information and the ability to be alone correlate with better stress regulation and autonomy"
+        }
       ]
     },
     {
@@ -7697,7 +8290,18 @@
         }
       ],
       "situations": [],
-      "feelings": []
+      "feelings": [],
+      "originalClaim": "Structure and organization reduce error and cognitive strain. This need motivates sorting, sequencing, standardizing, and documenting. Order frees attention for creativity and nuanced thinking.",
+      "supportingSources": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S0003687012000588",
+          "description": "study: organized workspaces and structured information reduce mistakes and mental overload"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1467-9280.2012.02153.x",
+          "description": "research showing that induced physical order (tidiness) can improve people’s executive function and decision-making, presumably by lowering distraction"
+        }
+      ]
     },
     {
       "title": "Beauty",
@@ -7731,7 +8335,18 @@
         }
       ],
       "situations": [],
-      "feelings": []
+      "feelings": [],
+      "originalClaim": "Humans are sensitive to pattern, harmony, and environmental cues associated with safety and resources. This need motivates attending to nature, art, and design that promote orientation and calm. Investing in beauty improves attention, mood, and restorative experience.",
+      "supportingSources": [
+        {
+          "url": "https://cpa.ca/psychology-works-fact-sheet-benefits-of-nature-exposure/",
+          "description": "Canadian Psychological Association – nature exposure improves attention, mood, and stress recovery"
+        },
+        {
+          "url": "https://journals.sagepub.com/doi/10.1177/0956797612464121",
+          "description": "study linking exposure to aesthetically pleasing natural environments with cognitive benefits and stress reduction"
+        }
+      ]
     },
     {
       "title": "Control",
@@ -7757,7 +8372,18 @@
         }
       ],
       "situations": [],
-      "feelings": []
+      "feelings": [],
+      "originalClaim": "Influence over conditions reduces threat and improves outcomes in uncertain environments. This need motivates setting parameters, using contingency plans, and shaping contexts. Appropriate control promotes safety and effective agency.",
+      "supportingSources": [
+        {
+          "url": "https://www.jstor.org/stable/20627226",
+          "description": "research on locus of control: having control or influence correlates with reduced stress and better task outcomes"
+        },
+        {
+          "url": "https://www.cdc.gov/violenceprevention/about/social-ecologicalmodel.html",
+          "description": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts"
+        }
+      ]
     },
     {
       "title": "Predictability",
@@ -7775,7 +8401,18 @@
         }
       ],
       "situations": [],
-      "feelings": []
+      "feelings": [],
+      "originalClaim": "Reliable patterns make planning possible and reduce vigilance. This need motivates clear schedules, transparent protocols, and advance notice of change. Predictability stabilizes attention and performance.",
+      "supportingSources": [
+        {
+          "url": "https://www.tandfonline.com/doi/full/10.1080/10615806.2019.1640981",
+          "description": "study: unpredictability in environment increases stress and hyper-vigilance; predictable routines reduce stress response"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2017/07-08/peace-mind",
+          "description": "APA Monitor: the importance of routine and predictability for mental focus and reduced anxiety"
+        }
+      ]
     },
     {
       "title": "Accomplishment",
@@ -7822,6 +8459,17 @@
           "title": "Powerless",
           "slug": "powerless"
         }
+      ],
+      "originalClaim": "Mastery and efficacy are intrinsically rewarding and have clear adaptive value in variable environments. This need motivates goal formation, deliberate practice, and tracking progress. Honoring accomplishment channels effort into competence that benefits both the individual and the group.",
+      "supportingSources": [
+        {
+          "url": "https://psycnet.apa.org/fulltext/2014-37155-001.html",
+          "description": "Self-determination theory research: competence/mastery as a basic psychological need"
+        },
+        {
+          "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.00304/full",
+          "description": "review on intrinsic reward of mastery and skill development"
+        }
       ]
     },
     {
@@ -7844,6 +8492,17 @@
         {
           "title": "Sad",
           "slug": "sad"
+        }
+      ],
+      "originalClaim": "Capacity for movement underpins health, safety, and daily functioning. This need motivates activity, strength and endurance practices, and balanced recovery. Fitness supports mood, cognition, and independence.",
+      "supportingSources": [
+        {
+          "url": "https://www.cdc.gov/physicalactivity/basics/pa-health/index.htm",
+          "description": "CDC overview: regular physical activity improves mood, cognitive function, and reduces risk of disease"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1470658/",
+          "description": "study linking physical fitness with better brain health and functional independence in older adults"
         }
       ]
     },
@@ -7880,7 +8539,18 @@
           "slug": "rejected"
         }
       ],
-      "feelings": []
+      "feelings": [],
+      "originalClaim": "In social species, inclusion confers safety and access to resources, so human attention is highly tuned to signals of being welcomed as we are. This need motivates seeking contexts where differences are received without correction, inviting feedback, and building norms that reduce social threat. Valuing acceptance sustains psychological security and strengthens long-term cooperation.",
+      "supportingSources": [
+        {
+          "url": "https://www.researchgate.net/publication/237344651_Social_Inclusion_Facilitates_Interest_in_Mating",
+          "description": "evolutionary psychology study noting that social acceptance cues indicate safety and resource sharing"
+        },
+        {
+          "url": "https://www.apa.org/monitor/2019/05/ce-corner-isolation",
+          "description": "APA article discussing the psychological and physiological costs of social exclusion"
+        }
+      ]
     },
     {
       "title": "Growth",
@@ -7936,6 +8606,17 @@
           "title": "Defiant",
           "slug": "defiant"
         }
+      ],
+      "originalClaim": "Learning and adaptation are central to human development and cultural evolution. This need motivates seeking feedback, practicing new skills, and gradually increasing challenge. Prioritizing growth enhances flexibility and long-term competence.",
+      "supportingSources": [
+        {
+          "url": "https://psycnet.apa.org/record/2015-46007-001",
+          "description": "research on “growth mindset” showing that embracing challenges and learning from feedback leads to greater skill development and adaptability"
+        },
+        {
+          "url": "https://www.apa.org/news/press/releases/2017/10/brain-adapt-learning",
+          "description": "APA press release on how the brain physically adapts when we continually learn new things, improving cognitive flexibility"
+        }
       ]
     },
     {
@@ -7987,6 +8668,17 @@
         {
           "title": "Lonely",
           "slug": "lonely"
+        }
+      ],
+      "originalClaim": "Resource and relationship stability allow planning and long-term investment. This need motivates saving, redundancy, and dependable support networks. Security frees attention for growth and creativity.",
+      "supportingSources": [
+        {
+          "url": "https://www.jstor.org/stable/41428503",
+          "description": "study on financial and relationship security: having secure baseline resources correlates with better long-term planning and higher creativity"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2018-13314-006",
+          "description": "research: when basic security needs are met, individuals are more likely to pursue self-actualization goals like creativity and personal growth – consistent with Maslow’s hierarchy"
         }
       ]
     }

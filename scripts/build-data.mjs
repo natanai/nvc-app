@@ -71,11 +71,38 @@ function splitList(value) {
     .filter(Boolean);
 }
 
+function splitMultiline(value) {
+  if (!value) return [];
+  return value
+    .split(/\r?\n+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
 function slugify(text) {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function parseSupportingSources(value) {
+  return splitMultiline(value)
+    .map((entry) => entry.replace(/^[-•]\s*/, '').trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const match = entry.match(/^(https?:\/\/\S+)(?:\s+\((.+)\))?$/i);
+      if (match) {
+        return {
+          url: match[1],
+          description: (match[2] || '').trim(),
+        };
+      }
+      return {
+        url: entry,
+        description: '',
+      };
+    });
 }
 
 function uniqueByTitle(items) {
@@ -181,6 +208,8 @@ const needs = rawNeeds.map((row) => ({
   strategies: uniqueByTitle(splitList(row.Strategies).map((title) => ({ title }))),
   situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
   feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),
+  originalClaim: row['Original Claim'] || '',
+  supportingSources: parseSupportingSources(row['Supporting Sources']),
 }));
 
 const situations = rawSituations.map((row) => ({

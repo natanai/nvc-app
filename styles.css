@@ -2669,6 +2669,85 @@ body.has-support-journal-open {
   gap: 1rem;
 }
 
+.need-evidence {
+  margin: 1.5rem 0 2rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, var(--lavender) 78%, #fff 22%);
+  box-shadow: 0 14px 0 var(--shadow);
+  display: grid;
+  gap: 0.9rem;
+}
+
+.need-evidence__claim {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.need-evidence__label {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+}
+
+.need-evidence__claim-text {
+  color: var(--ink-soft);
+}
+
+.need-evidence__sources {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.need-evidence__subheading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.need-evidence__list {
+  margin: 0;
+  padding-left: 1.35rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.need-evidence__item {
+  color: var(--ink-soft);
+  word-break: break-word;
+}
+
+.need-evidence__link {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.25em;
+}
+
+.need-evidence__link:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.need-evidence__source-url {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  word-break: break-word;
+}
+
+.need-evidence__note {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
 .strategy-quick-actions {
   display: flex;
   justify-content: flex-end;

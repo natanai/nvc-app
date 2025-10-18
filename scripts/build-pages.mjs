@@ -1264,6 +1264,8 @@ function renderNeed(item, strategyLookup) {
     ? `<p class="page-description">${escapeHtml(item.description)}</p>`
     : '';
 
+  const evidenceHtml = renderNeedEvidence(item);
+
   const quickAddHtml = `
       <div class="strategy-quick-actions">
         <a class="strategy-quick-actions__link" href="#suggestion-form">
@@ -1293,6 +1295,7 @@ function renderNeed(item, strategyLookup) {
         <h1 class="page-title">${escapeHtml(fullTitle)}</h1>
         ${descriptionHtml}
       </header>
+      ${evidenceHtml}
       ${quickAddHtml}
       ${strategiesHtml}
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1317,6 +1320,64 @@ function renderNeed(item, strategyLookup) {
   });
 
   writePage(`needs/${item.slug}/index.html`, html);
+}
+
+function renderNeedEvidence(item) {
+  const claim = (item.originalClaim || '').trim();
+  const sources = Array.isArray(item.supportingSources)
+    ? item.supportingSources.filter((source) => {
+        if (!source) return false;
+        if (typeof source === 'string') {
+          return source.trim().length > 0;
+        }
+        return Boolean((source.url && source.url.trim()) || (source.description && source.description.trim()));
+      })
+    : [];
+
+  if (!claim && !sources.length) {
+    return '';
+  }
+
+  const claimHtml = claim
+    ? `<p class="need-evidence__claim"><span class="need-evidence__label">Original claim</span><span class="need-evidence__claim-text">${escapeHtml(claim)}</span></p>`
+    : '';
+
+  let sourcesHtml = '';
+  if (sources.length) {
+    const listItems = sources
+      .map((source) => {
+        if (typeof source === 'string') {
+          return `<li class="need-evidence__item">${escapeHtml(source)}</li>`;
+        }
+
+        const url = (source.url || '').trim();
+        const description = (source.description || '').trim();
+        const label = description || url;
+        const safeLabel = escapeHtml(label);
+        if (url) {
+          const safeUrl = escapeHtml(url);
+          const urlNote = description && url
+            ? `<span class="need-evidence__source-url"> (${escapeHtml(url)})</span>`
+            : '';
+          return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a>${urlNote}</li>`;
+        }
+
+        return `<li class="need-evidence__item">${safeLabel}</li>`;
+      })
+      .join('');
+
+    sourcesHtml = `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><ol class="need-evidence__list">${listItems}</ol></div>`;
+  } else if (claim) {
+    sourcesHtml = '<p class="need-evidence__note">Supporting sources coming soon.</p>';
+  }
+
+  return `
+      <section class="need-evidence" aria-labelledby="need-evidence-heading">
+        <h2 id="need-evidence-heading" class="section-title">Evidence</h2>
+        ${claimHtml}
+        ${sourcesHtml}
+      </section>
+    `;
 }
 
 function renderInventoryPage() {
