@@ -503,11 +503,11 @@
     "file": "/workspace/nvc-app/needs/equality/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "literature review noting inclusive practices (equal respect/voice) create psychological safety in teams",
-    "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-031921-044423",
+    "label": "Annual Review article on workplace self-reflection guiding psychological safety practices",
+    "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-031921-024406",
     "domain": "www.annualreviews.org",
     "label_domain_hint": "",
-    "context": "literature review noting inclusive practices (equal respect/voice) create psychological safety in teams"
+    "context": "Annual Review article on workplace self-reflection guiding psychological safety practices"
   },
   {
     "file": "/workspace/nvc-app/needs/fairness/index.html",
@@ -583,11 +583,11 @@
     "file": "/workspace/nvc-app/needs/genuineness/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "findings that inconsistency between words and actions erodes trust; authenticity fosters clear communication",
-    "url": "https://doi.org/10.1080/14616696.2016.1247190",
-    "domain": "doi.org",
+    "label": "European Societies article on narrative construction of European identity",
+    "url": "https://www.tandfonline.com/doi/full/10.1080/14616696.2015.1072227",
+    "domain": "www.tandfonline.com",
     "label_domain_hint": "",
-    "context": "findings that inconsistency between words and actions erodes trust; authenticity fosters clear communication"
+    "context": "European Societies article on narrative construction of European identity"
   },
   {
     "file": "/workspace/nvc-app/needs/growth/index.html",
@@ -603,11 +603,11 @@
     "file": "/workspace/nvc-app/needs/growth/index.html",
     "line": 750,
     "how": "html_anchor",
-    "label": "APA press release on how the brain physically adapts when we continually learn new things, improving cognitive flexibility",
-    "url": "https://www.apa.org/news/press/releases/2017/10/brain-adapt-learning",
-    "domain": "www.apa.org",
+    "label": "Vision Research review on adaptation, perceptual learning, and neural plasticity",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5323482/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "context": "APA press release on how the brain physically adapts when we continually learn new things, improving cognitive flexibility"
+    "context": "Vision Research review on adaptation, perceptual learning, and neural plasticity"
   },
   {
     "file": "/workspace/nvc-app/needs/honesty/index.html",

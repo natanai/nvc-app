@@ -45,7 +45,7 @@ https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/
 https://applications.emro.who.int/docs/Health-systems-governance-eng.pdf
 https://cdn.who.int/media/docs/default-source/universal-health-coverage/who-uhl-technical-brief-socialparticipation.pdf?download=true
 https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01306/full
-https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-031921-044423
+https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-031921-024406
 https://www.sciencedaily.com/releases/2014/09/140918141151.htm
 https://www.pnas.org/content/103/4/13110
 https://hbr.org/1998/09/how-to-kill-creativity
@@ -53,9 +53,9 @@ https://www.sciencedirect.com/science/article/pii/S1877042816311868
 https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3150158/
 https://doi.org/10.1037/cou0000283
-https://doi.org/10.1080/14616696.2016.1247190
+https://www.tandfonline.com/doi/full/10.1080/14616696.2015.1072227
 https://psycnet.apa.org/record/2015-46007-001
-https://www.apa.org/news/press/releases/2017/10/brain-adapt-learning
+https://pmc.ncbi.nlm.nih.gov/articles/PMC5323482/
 https://pubmed.ncbi.nlm.nih.gov/31916837/
 https://doi.org/10.1037/pspi0000381
 https://doi.org/10.1017/9781108573100
