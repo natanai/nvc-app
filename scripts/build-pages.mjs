@@ -612,8 +612,7 @@ function htmlPage({
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
         ${themePreloadScript(basePath)}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
-    <link rel="stylesheet" href="${cssHref}" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="${cssHref}" /></noscript>
+    <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />
   </head>
   <body data-base-path="${basePath}">
     <a href="#main" class="skip-link">Skip to content</a>
