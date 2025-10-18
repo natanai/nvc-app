@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Acceptance",
+    "original_claim": "Humans have a fundamental need for acceptance, to feel welcomed and valued by others.",
+    "revised_claim": "The need for acceptance is a fundamental human motivation; lacking social acceptance can trigger distress responses akin to physical pain:contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}.",
+    "validation_summary": "Supported – Social neuroscience research confirms that social rejection activates pain-related brain regions and elevates stress hormones, validating the original claim:contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}.",
+    "bodily_cues": "Feelings of social rejection can produce bodily cues such as increased stress hormone (cortisol) levels and activation of pain centers in the brain:contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}. Physically, one might experience a 'hurt' feeling or heartache when lacking acceptance.",
+    "motivational_consequences": "The need for acceptance drives people to seek approval and avoid rejection. Individuals may alter their behavior to conform to group norms or seek companionship to restore a sense of belonging:contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}.",
+    "supporting_sources": [
+      "https://mindlabneuroscience.com/why-are-people-lonely-science-of-connection/",
+      "https://www.phillyvoice.com/brain-health-rejection-acceptance-social-connections/"
+    ]
+  },
+  {
+    "name": "Appreciation",
+    "original_claim": "People have a need to feel appreciated and acknowledged by others for their contributions and qualities.",
+    "revised_claim": "The need to feel appreciated (to be recognized and valued by others) is indeed a significant human motivation. Receiving genuine appreciation or praise activates reward circuitry in the brain and boosts emotional well-being:contentReference[oaicite:8]{index=8}:contentReference[oaicite:9]{index=9}.",
+    "validation_summary": "Supported – Psychological research indicates that humans crave appreciation. Recognition (like praise) engages brain reward centers and improves mood, confirming the original claim:contentReference[oaicite:10]{index=10}:contentReference[oaicite:11]{index=11}.",
+    "bodily_cues": "When a person feels unappreciated, they may experience emotional pain or emptiness:contentReference[oaicite:12]{index=12}. In contrast, being appreciated can trigger positive physiological responses (e.g. release of 'feel-good' neurotransmitters leading to a warm or satisfied feeling).",
+    "motivational_consequences": "The need for appreciation motivates individuals to seek validation and approval. People often strive to do well or get others’ attention (the “look at me” impulse) in order to feel appreciated:contentReference[oaicite:13]{index=13}. Sincere appreciation reinforces those behaviors, while lack of appreciation can demotivate.",
+    "supporting_sources": [
+      "https://thecreativemind.net/438/ben-kingsley-and-our-need-for-appreciation/",
+      "https://dornsife.usc.edu/news/stories/your-brain-learns-from-rejection-heres-how-it-becomes-your-compass-for-connection/"
+    ]
+  },
+  {
+    "name": "Autonomy",
+    "original_claim": "Humans need autonomy – the freedom to make their own choices and control their own lives.",
+    "revised_claim": "Autonomy is a basic psychological need. Having a sense of volition and choice in one’s actions is essential for mental health, whereas feeling controlled or without autonomy undermines well-being:contentReference[oaicite:14]{index=14}:contentReference[oaicite:15]{index=15}.",
+    "validation_summary": "Supported – Self-determination theory and extensive research show that autonomy is a universal human need. When autonomy is satisfied, it fosters motivation and well-being; when thwarted by external pressure, it leads to stress and poorer outcomes:contentReference[oaicite:16]{index=16}:contentReference[oaicite:17]{index=17}.",
+    "bodily_cues": "Lacking autonomy can create a sense of tension or pressure (the stress of being pushed in an unwanted direction):contentReference[oaicite:18]{index=18}. In contrast, experiencing autonomy often correlates with lower stress and a feeling of ease, as actions align with one’s authentic desires.",
+    "motivational_consequences": "The drive for autonomy makes people seek freedom, personal agency, and self-direction. Satisfying this need leads to greater intrinsic motivation and engagement in activities, whereas unmet autonomy (feeling coerced) can result in resistance, burnout, or disengagement:contentReference[oaicite:19]{index=19}:contentReference[oaicite:20]{index=20}.",
+    "supporting_sources": [
+      "https://selfdeterminationtheory.org/topics/basic-psychological-needs/",
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/"
+    ]
+  },
+  {
+    "name": "Belonging",
+    "original_claim": "Humans need a sense of belonging – to be part of a community or group where they feel accepted and supported.",
+    "revised_claim": "The need for belonging (social connection) is a fundamental human need. Strong social bonds and group belonging are associated with greater resilience, mental health, and even physical wellness:contentReference[oaicite:21]{index=21}:contentReference[oaicite:22]{index=22}.",
+    "validation_summary": "Supported – Psychological studies (e.g. Baumeister & Leary) establish that the need to belong is powerful and pervasive. Social belonging improves happiness and health, while social isolation or exclusion harms well-being:contentReference[oaicite:23]{index=23}:contentReference[oaicite:24]{index=24}.",
+    "bodily_cues": "When the need for belonging is unmet, people may experience loneliness and stress (elevated blood pressure, stress hormone levels) similar to other survival threats:contentReference[oaicite:25]{index=25}. Feeling securely included in a group, on the other hand, tends to promote calm and positive emotions (sometimes called the \"warmth\" of belonging).",
+    "motivational_consequences": "The need for belonging drives individuals to form friendships, join groups, and conform to social norms to gain acceptance:contentReference[oaicite:26]{index=26}. It underlies many social behaviors – people will seek companionship and even change their attitudes to avoid rejection and maintain group inclusion:contentReference[oaicite:27]{index=27}.",
+    "supporting_sources": [
+      "https://www.verywellmind.com/what-is-the-need-to-belong-2795393",
+      "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf"
+    ]
+  },
+  {
+    "name": "Competence",
+    "original_claim": "Humans need to feel competent – to experience mastery and effectiveness in their actions.",
+    "revised_claim": "Competence (a sense of efficacy and mastery) is recognized as a basic psychological need. Achieving goals and building skills supports self-esteem and well-being, whereas prolonged failure or helplessness undermines mental health:contentReference[oaicite:28]{index=28}.",
+    "validation_summary": "Supported – Research in motivation science shows that feeling competent is essential for wellness. Satisfying this need (through success and growth) leads to positive emotions and motivation, while feeling ineffective leads to frustration and poor well-being:contentReference[oaicite:29]{index=29}:contentReference[oaicite:30]{index=30}.",
+    "bodily_cues": "When competence needs are frustrated, one might feel stress, fatigue, or demoralization (similar to \"giving up\" responses). Conversely, experiencing competence often comes with energizing feelings – confidence, excitement, and even physiological arousal (a \"rush\") upon success.",
+    "motivational_consequences": "The need for competence motivates learning, practice, and ambition. People will seek challenges that allow them to prove and improve their abilities. If this need is unmet (feeling incapable), it can lead to withdrawal or apathy, whereas fulfillment fosters persistence and enthusiasm:contentReference[oaicite:31]{index=31}:contentReference[oaicite:32]{index=32}.",
+    "supporting_sources": [
+      "https://selfdeterminationtheory.org/topics/basic-psychological-needs/",
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/"
+    ]
+  },
+  {
+    "name": "Exercise (Movement)",
+    "original_claim": "Regular physical movement or exercise is a human need; without it, physical and mental health can deteriorate.",
+    "revised_claim": "Adequate physical activity is essential for health. Exercise supports nearly every system in the body, improving cardiovascular health, bone strength, mood, and cognitive function:contentReference[oaicite:33]{index=33}:contentReference[oaicite:34]{index=34}.",
+    "validation_summary": "Supported – Public health research overwhelmingly shows that regular exercise provides critical benefits and prevents disease. Inactivity is linked to higher risks of chronic illnesses, confirming the original claim’s emphasis on this need:contentReference[oaicite:35]{index=35}:contentReference[oaicite:36]{index=36}.",
+    "bodily_cues": "When one’s body needs movement, signs can include restlessness or low energy. Regular exercise tends to reduce stress hormones and release endorphins, leading to improved mood and relaxation. Lack of movement over time can cause stiffness, fatigue, and elevated stress levels.",
+    "motivational_consequences": "The need for movement drives people to stretch, walk, play sports, or otherwise be active. When satisfied, it typically results in greater energy and stress relief; when ignored, it can contribute to anxiety, depressed mood, or health complaints that motivate one to seek physical activity:contentReference[oaicite:37]{index=37}:contentReference[oaicite:38]{index=38}.",
+    "supporting_sources": [
+      "https://www.cdc.gov/physical-activity-basics/benefits/",
+      "https://www.nia.nih.gov/health/exercise-and-physical-activity/health-benefits-exercise-and-physical-activity"
+    ]
+  },
+  {
+    "name": "Food (Nutrition)",
+    "original_claim": "Food is a basic physiological need; humans require sufficient nutrition to survive and function optimally.",
+    "revised_claim": "Adequate food intake (nutrition) is absolutely required for human survival and health. Hunger signals arise to ensure we eat enough to meet energy and nutrient needs:contentReference[oaicite:39]{index=39}.",
+    "validation_summary": "Supported – It is a foundational biological fact that humans need regular nutrition. Without food, the body’s systems fail: extended food deprivation leads to severe health consequences and eventually death:contentReference[oaicite:40]{index=40}.",
+    "bodily_cues": "The body’s cues for this need include hunger pangs (a gnawing, empty stomach feeling, often with rumbling:contentReference[oaicite:41]{index=41}), weakness, lightheadedness, and irritability when fuel is low. These signals grow more intense the longer one goes without eating, compelling the individual to seek food.",
+    "motivational_consequences": "Hunger creates a powerful drive state that motivates eating behaviors:contentReference[oaicite:42]{index=42}. A hungry person will become increasingly focused on finding and consuming food, often experiencing urgency or cravings until the need is satisfied. This ensures that energy requirements are met for survival.",
+    "supporting_sources": [
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2467458/",
+      "https://www.medicalnewstoday.com/articles/321725"
+    ]
+  },
+  {
+    "name": "Meaning (Purpose)",
+    "original_claim": "People need a sense of meaning or purpose in life – a feeling that their life has direction and significance.",
+    "revised_claim": "Having a life purpose is strongly beneficial to human well-being. Research links a higher sense of meaning with better mental health, greater resilience, and even reduced risk of premature death:contentReference[oaicite:43]{index=43}:contentReference[oaicite:44]{index=44}.",
+    "validation_summary": "Supported – Numerous studies show that a strong sense of purpose correlates with positive health outcomes (including longevity and lower disease risk):contentReference[oaicite:45]{index=45}:contentReference[oaicite:46]{index=46}. Lacking purpose, conversely, is associated with poorer mental health, so the original claim is affirmed by scientific evidence.",
+    "bodily_cues": "When someone lacks purpose, they may feel lethargic, chronically stressed, or prone to anxiety and depression. In contrast, feeling a clear purpose can lower the body’s stress response – people with purpose show less reactivity to stressors and recover faster, which can mean lower cortisol levels and inflammation:contentReference[oaicite:47]{index=47}.",
+    "motivational_consequences": "The need for meaning drives individuals to pursue goals, values, or roles that give them a sense of significance. This might manifest as career ambitions, creative projects, volunteering, or spirituality. Fulfillment of this need often leads to sustained motivation and resilience, whereas a void of purpose can lead to apathy or mental distress.",
+    "supporting_sources": [
+      "https://www.health.harvard.edu/blog/will-a-purpose-driven-life-help-you-live-longer-2019112818378",
+      "https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2734064"
+    ]
+  },
+  {
+    "name": "Physical Touch",
+    "original_claim": "Humans need physical touch and affection from others; lack of touch can negatively affect mental and physical health.",
+    "revised_claim": "Healthy human development and well-being require a degree of physical touch (affectionate contact). Touch calms the nervous system – lowering heart rate, blood pressure, and stress hormones – and releases bonding hormones like oxytocin:contentReference[oaicite:48]{index=48}. Prolonged touch deprivation is harmful to health:contentReference[oaicite:49]{index=49}:contentReference[oaicite:50]{index=50}.",
+    "validation_summary": "Supported – Research on human infants, for example, shows that they cannot thrive without touch. Across ages, studies find that physical affection reduces anxiety and depression and even bolsters the immune system:contentReference[oaicite:51]{index=51}. The original claim is strongly backed by evidence on the essential role of touch for well-being.",
+    "bodily_cues": "In the absence of touch, people may experience elevated stress (e.g. higher cortisol) and feelings of loneliness or irritability. On the other hand, gentle touch or hugs often produce immediate bodily signs of relief: slowed heart rate, deeper relaxation, and a release of muscle tension:contentReference[oaicite:52]{index=52}. One might notice feeling warmer or comforted after a caring touch.",
+    "motivational_consequences": "The need for touch motivates people to seek physical closeness – hugging loved ones, cuddling, handshakes, or other forms of contact. When this need is unmet, individuals may subconsciously seek alternatives (such as touching a pet or using weighted blankets) to simulate contact:contentReference[oaicite:53]{index=53}. Fulfilled touch needs tend to increase feelings of safety and social bonding.",
+    "supporting_sources": [
+      "https://www.psychologytoday.com/us/blog/everyone-on-top/202108/the-vital-importance-human-touch",
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6075786/"
+    ]
+  },
+  {
+    "name": "Play (Fun)",
+    "original_claim": "Humans of all ages need play or fun activities. Playfulness relieves stress and is important for creativity and happiness.",
+    "revised_claim": "Engaging in play is a genuine human need that contributes to emotional and even physical health. Play and recreation have been shown to reduce stress, stimulate creativity, strengthen social bonds, and increase overall happiness:contentReference[oaicite:54]{index=54}.",
+    "validation_summary": "Supported – Psychological and behavioral research confirms the benefits of play in adults and children. Regular play or leisure activity is linked to lower stress levels, improved mood, and better social connection, which validates the original claim:contentReference[oaicite:55]{index=55}:contentReference[oaicite:56]{index=56}.",
+    "bodily_cues": "When deprived of fun or downtime, people often exhibit signs of stress overload (muscle tension, irritability, mental fatigue). In contrast, during enjoyable play, laughter and smiling occur – indicating lowered stress (since play can decrease cortisol) – and one might feel energized or \"light\" as endorphins release.",
+    "motivational_consequences": "The need for play drives people to seek out hobbies, games, humor, or creative activities purely for enjoyment. Satisfying this need can restore motivation and prevent burnout. If unmet, individuals may feel stagnant or overly serious, often eventually compelled to “take a break” and do something fun to recharge:contentReference[oaicite:57]{index=57}.",
+    "supporting_sources": [
+      "https://www.psychologytoday.com/us/blog/everyday-resilience/202408/creating-space-play-grown-ups-and-why-it-matters",
+      "https://www.helpguide.org/articles/mental-health/benefits-of-play-for-adults.htm"
+    ]
+  },
+  {
+    "name": "Safety (Security)",
+    "original_claim": "Safety and security are basic needs – one must feel safe from physical harm and secure in order to thrive.",
+    "revised_claim": "Safety (personal security and stability) is a foundational human need. Constant threats to safety trigger chronic fear and stress responses, whereas feeling safe allows normal healthy functioning:contentReference[oaicite:58]{index=58}. In fact, a sense of safety is so crucial that it can dominate behavior until assured:contentReference[oaicite:59]{index=59}.",
+    "validation_summary": "Supported – From Maslow’s hierarchy to modern neuroscience, it is well-established that humans require safety. Insecure or dangerous conditions lead to anxiety and trauma (e.g. chronic fear can cause mental disorders):contentReference[oaicite:60]{index=60}, confirming the original claim. Only when basic safety is met can people focus on higher goals.",
+    "bodily_cues": "When safety is lacking, the body engages the \"fight or flight\" response: the amygdala and related brain regions activate, adrenaline and cortisol spike, heart rate increases:contentReference[oaicite:61]{index=61}. One may feel jittery, hyper-vigilant, or frightened. By contrast, a feeling of safety brings bodily calm – muscles relax and stress hormones decrease as the nervous system shifts out of survival mode.",
+    "motivational_consequences": "The need for safety drives avoidance of danger and seeking of shelter, stability, or protection. A person who feels unsafe will prioritize behaviors to secure safety (e.g. escaping threats, seeking help) even above other needs like hunger:contentReference[oaicite:62]{index=62}. Once safe, individuals are more free to pursue social, esteem, and growth motives.",
+    "supporting_sources": [
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/",
+      "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.00649/full"
+    ]
+  },
+  {
+    "name": "Sexual Expression",
+    "original_claim": "Sexual expression (sexual intimacy or release) is a human need, with both physical and emotional benefits when fulfilled.",
+    "revised_claim": "Healthy sexual expression is considered a basic physiological need (as per Maslow) and contributes to well-being. Satisfying sexual intimacy can relieve stress, boost immune function, improve mood, and strengthen pair bonds through oxytocin release:contentReference[oaicite:63]{index=63}:contentReference[oaicite:64]{index=64}.",
+    "validation_summary": "Supported – Medical and psychological research finds that a healthy sex life has numerous benefits (e.g. lowering blood pressure, improving mental health):contentReference[oaicite:65]{index=65}. While individuals vary, the underlying need for sexual expression is rooted in biology and its fulfillment is linked with positive health outcomes, affirming the original claim.",
+    "bodily_cues": "Unmet sexual needs can lead to physiological tension, heightened libido thoughts, and frustration. The body may show signs like sexual arousal seeking an outlet. During and after healthy sexual activity, bodily cues include release of tension, pleasurable sensations, and relaxation (due to endorphins and oxytocin, which also promote bonding):contentReference[oaicite:66]{index=66}.",
+    "motivational_consequences": "The sexual drive motivates individuals to seek partners or other means of sexual fulfillment. This need underlies behaviors related to finding intimacy or release. When satisfied in a positive way, it often increases emotional closeness and reduces stress; when persistently unsatisfied, it may result in distraction, irritability, or difficulties concentrating.",
+    "supporting_sources": [
+      "https://www.ohsu.edu/womens-health/benefits-healthy-sex-life",
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3780474/"
+    ]
+  },
+  {
+    "name": "Sleep (Rest)",
+    "original_claim": "Sleep is a fundamental physiological need – without sufficient rest, the human body and mind cannot function properly.",
+    "revised_claim": "Adequate sleep is absolutely essential for health. Sleep enables critical brain functions (memory consolidation, learning, mood regulation) and physical recovery; chronic sleep deprivation impairs cognition and elevates risk of serious health issues:contentReference[oaicite:67]{index=67}:contentReference[oaicite:68]{index=68}.",
+    "validation_summary": "Supported – Extensive evidence shows insufficient sleep leads to cognitive deficits, weakened immunity, and increased risk of conditions like cardiovascular disease and depression:contentReference[oaicite:69]{index=69}:contentReference[oaicite:70]{index=70}. The original claim is fully supported by medical research that identifies sleep as vital for survival (total prolonged deprivation can be fatal).",
+    "bodily_cues": "Signs of unmet sleep need include drowsiness, yawning, heavy eyelids, and difficulty concentrating. Physiologically, sleep-deprived bodies produce more stress hormones and may experience lowered coordination or micro-sleeps. By contrast, after fulfilling sleep, one’s body exhibits restored alertness, energy, and balanced mood.",
+    "motivational_consequences": "The drive for sleep becomes overwhelming when one is exhausted – motivation for any other activity dwindles as the body compels itself to rest. People will seek out opportunities to sleep (naps, earlier bedtime) when tired. Adequate sleep, once obtained, restores motivation and effective functioning across all other pursuits.",
+    "supporting_sources": [
+      "https://www.cdc.gov/sleep",
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4443337/"
+    ]
+  },
+  {
+    "name": "Trust",
+    "original_claim": "Humans need trust in their relationships and environment – a sense that others are reliable and will not harm them.",
+    "revised_claim": "Trust is a fundamental component of secure human relationships and reduces stress. When we trust people around us, our bodies and minds remain calmer (trust is linked with release of oxytocin, the \"bonding\" hormone, and lower stress hormone levels):contentReference[oaicite:71]{index=71}:contentReference[oaicite:72]{index=72}.",
+    "validation_summary": "Supported – Studies indicate that higher interpersonal trust correlates with lower stress responses and better mental health:contentReference[oaicite:73]{index=73}. Evolutionarily, trust and cooperation were crucial for survival in social groups, reinforcing the original claim that humans are driven to establish trust and feel distress in sustained mistrust.",
+    "bodily_cues": "A lack of trust can trigger anxiety – the body might stay in a guarded state (elevated cortisol, faster heart rate) in anticipation of betrayal or harm. On the other hand, feeling trust and safety with others often manifests physically as relaxation: normal heart rate, ease of breath, and the soothing effects of oxytocin that accompany comfortable social contact:contentReference[oaicite:74]{index=74}.",
+    "motivational_consequences": "The need for trust motivates people to build honest, reliable relationships and social structures. It encourages seeking out trustworthy friends and partners and avoiding those who betray us. Trusting environments enable cooperation and openness, whereas environments low in trust prompt withdrawal, caution, or conflict-seeking as self-protection.",
+    "supporting_sources": [
+      "https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress",
+      "https://pubmed.ncbi.nlm.nih.gov/21058850/"
+    ]
+  },
+  {
+    "name": "Water (Hydration)",
+    "original_claim": "Water is a basic physiological need; humans must stay hydrated to survive, as even a few days without water can be fatal.",
+    "revised_claim": "Adequate hydration is absolutely necessary for human life. Thirst sensations arise when the body’s fluid levels drop, driving us to drink. Dehydration causes rapid physiological disruption – serious harm can occur within days without water:contentReference[oaicite:75]{index=75}.",
+    "validation_summary": "Supported – It is a well-established biological fact that water is critical for the body. Every cell and organ requires fluid. Studies note that thirst is a more acute drive than hunger because the body cannot go long without water:contentReference[oaicite:76]{index=76}, validating the original claim.",
+    "bodily_cues": "The body signals water need through thirst: dry mouth, throat, and sometimes headaches or dizziness. Early thirst may just be a dry sensation, but as dehydration worsens, one can feel lightheaded, shaky, or weak:contentReference[oaicite:77]{index=77}. These cues prompt drinking behavior urgently, since lack of water quickly impairs bodily functions.",
+    "motivational_consequences": "Thirst creates one of the strongest motivations – a person will prioritize finding fluids over other activities when dehydrated. This need drives drinking and seeking water sources. Once quenched, the individual’s focus can return to other matters, but until then, satisfying thirst dominates motivation (illustrating water’s primacy for survival).",
+    "supporting_sources": [
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2467458/",
+      "https://www.medicalnewstoday.com/articles/321725#symptoms"
+    ]
+  }
+]
