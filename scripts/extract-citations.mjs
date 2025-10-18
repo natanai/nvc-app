@@ -8,7 +8,8 @@ const EXTS = [".md", ".mdx", ".html", ".htm", ".js", ".jsx", ".ts", ".tsx", ".js
 const IGNORE_DIRS = new Set([".git", "node_modules", "dist", "build", ".next", "out", ".cache", "coverage"]);
 
 // URL detection (keeps trailing )] out; tolerates query/anchors)
-const URL_RE = /(https?:\/\/[^\s)\]}>"]+)/g;
+const URL_RE = /(https?:\/\/[^\s)\]}>"]]+)/g;
+const HTML_ANCHOR_RE = /<a\b[^>]*?href\s*=\s*("|')(https?:\/\/[^"'>\s]+)\1[^>]*>([\s\S]*?)<\/a>/gi;
 
 // Markdown [label](url)
 const MD_LINK_RE = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
@@ -56,10 +57,93 @@ function pushRecord(records, rec) {
   records.push(rec);
 }
 
+function buildLineIndex(text) {
+  const offsets = [0];
+  for (let i = 0; i < text.length; i++) {
+    if (text.charCodeAt(i) === 10) {
+      offsets.push(i + 1);
+    }
+  }
+  return offsets;
+}
+
+function lineNumberFromIndex(index, lineOffsets) {
+  let low = 0;
+  let high = lineOffsets.length - 1;
+  while (low <= high) {
+    const mid = (low + high) >> 1;
+    if (lineOffsets[mid] <= index) {
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+  return Math.max(1, high + 1);
+}
+
+function stripTags(html) {
+  return html.replace(/<[^>]*>/g, " ");
+}
+
+function decodeHtmlEntities(str) {
+  return str
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+}
+
+function extractAnchorLabel(match, innerHtml) {
+  const stripped = decodeHtmlEntities(stripTags(innerHtml)).replace(/\s+/g, " ").trim();
+  if (stripped) {
+    return stripped;
+  }
+  const titleMatch = match.match(/\btitle\s*=\s*("([^"]*)"|'([^']*)')/i);
+  if (titleMatch) {
+    return decodeHtmlEntities((titleMatch[2] ?? titleMatch[3] ?? "").trim());
+  }
+  const ariaMatch = match.match(/\baria-label\s*=\s*("([^"]*)"|'([^']*)')/i);
+  if (ariaMatch) {
+    return decodeHtmlEntities((ariaMatch[2] ?? ariaMatch[3] ?? "").trim());
+  }
+  return "";
+}
+
+function extractHtmlAnchors(file, text, lineOffsets, records) {
+  let m;
+  while ((m = HTML_ANCHOR_RE.exec(text)) !== null) {
+    const fullMatch = m[0];
+    const url = m[2];
+    if (!url) {
+      continue;
+    }
+    const innerHtml = m[3] ?? "";
+    const label = extractAnchorLabel(fullMatch, innerHtml);
+    const context = decodeHtmlEntities(stripTags(fullMatch)).replace(/\s+/g, " ").trim().slice(0, 400);
+    const line = lineNumberFromIndex(m.index, lineOffsets);
+    pushRecord(records, {
+      file,
+      line,
+      label,
+      url,
+      how: "html_anchor",
+      context
+    });
+  }
+}
+
 async function processFile(file) {
   const text = await fs.readFile(file, "utf8");
   const lines = text.split(/\r?\n/);
   const records = [];
+  const lineOffsets = buildLineIndex(text);
+  const ext = path.extname(file).toLowerCase();
+
+  if (ext === ".html" || ext === ".htm") {
+    extractHtmlAnchors(file, text, lineOffsets, records);
+  }
 
   // Pass A: strict Markdown [label](url)
   for (let i = 0; i < lines.length; i++) {
@@ -197,11 +281,11 @@ async function main() {
     }
   }
 
-  // De-dup (file,line,url,how)
+  // De-dup (file,line,url)
   const seen = new Set();
   const deduped = [];
   for (const r of all) {
-    const key = `${r.file}|${r.line}|${r.url}|${r.how}`;
+    const key = `${r.file}|${r.line}|${r.url}`;
     if (seen.has(key)) continue;
     seen.add(key);
     deduped.push(r);
