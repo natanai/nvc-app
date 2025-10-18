@@ -4855,7 +4855,8 @@ function renderJournalOverlayHistory() {
   container.appendChild(list);
   const link = document.createElement('a');
   link.className = 'support-button support-button--link support-button--ghost';
-  link.href = '#journal-history-heading';
+  const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
+  link.href = `${basePath}inventory/journal/#journal-history-heading`;
   link.textContent = 'Jump to journal history';
   container.appendChild(link);
 }
