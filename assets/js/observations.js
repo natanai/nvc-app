@@ -80,12 +80,12 @@ function buildPreview() {
 
 function render() {
   const preview = buildPreview();
-  const previewEl = $('#obs-preview');
+  const previewEl = $('#free-obs-preview');
   if (previewEl) previewEl.textContent = preview || 'Your observation will preview here…';
 
   const lint = lintObservation([state.whenWhere, state.whatSawHeard, state.gap].join(' '));
-  const lintBox = $('#lint-box');
-  const lintMsg = $('#lint-msg');
+  const lintBox = $('#free-lint-box');
+  const lintMsg = $('#free-lint-msg');
   if (lintBox && lintMsg) {
     if (!lint.ok) {
       lintBox.classList.remove('hidden');
@@ -98,9 +98,9 @@ function render() {
   const { feelings, needs, why } = suggestFromObservation(preview, state.cues);
   const feelingSlugs = feelings.filter(slug => state.catalog.feelings.has(slug));
   const needSlugs = needs.filter(slug => state.catalog.needs.has(slug));
-  renderChips($('#suggest-feelings'), feelingSlugs, '/feelings/', state.catalog.feelings);
-  renderChips($('#suggest-needs'), needSlugs, '/needs/', state.catalog.needs);
-  const whyEl = $('#suggest-why');
+  renderChips($('#free-suggest-feelings'), feelingSlugs, '/feelings/', state.catalog.feelings);
+  renderChips($('#free-suggest-needs'), needSlugs, '/needs/', state.catalog.needs);
+  const whyEl = $('#free-suggest-why');
   if (whyEl) {
     const cueList = [...new Set(why)];
     const reasonText = cueList.length
@@ -112,8 +112,8 @@ function render() {
   }
 
   const situations = deriveSituations(feelingSlugs, needSlugs);
-  renderChips($('#suggest-situations'), situations, '/situations/', state.catalog.situations);
-  const situationsHint = $('#suggest-situations-hint');
+  renderChips($('#free-suggest-situations'), situations, '/situations/', state.catalog.situations);
+  const situationsHint = $('#free-suggest-situations-hint');
   if (situationsHint) {
     situationsHint.textContent = situations.length
       ? 'Linked from the current feeling and need matches.'
@@ -150,6 +150,9 @@ function setObservationExample(when, what, gap = '') {
   state.gap = gap || '';
   syncInputs();
   render();
+  if (typeof window.activateObservationTab === 'function') {
+    window.activateObservationTab('free');
+  }
 }
 
 window.setObservationExample = setObservationExample;

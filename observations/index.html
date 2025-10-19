@@ -8,22 +8,34 @@
   <link rel="stylesheet" href="/styles.css" />
   <style>
     .container{max-width:960px;margin:0 auto;padding:1rem;}
+    .tab-nav{display:flex;gap:.5rem;margin:1.5rem 0 1rem;}
+    .tab-button{padding:.5rem 1rem;border-radius:999px;border:1px solid var(--outline,#d1d5db);background:#f9fafb;font-weight:600;cursor:pointer;transition:background .15s ease,color .15s ease;}
+    .tab-button--active{background:#111827;color:#fff;border-color:#111827;}
+    .tab-button:focus-visible{outline:2px solid #111827;outline-offset:2px;}
+    .tab-panel{display:block;}
+    .hidden{display:none;}
     .grid{display:grid;gap:1rem;grid-template-columns:1fr;}
     @media(min-width:900px){.grid{grid-template-columns:1fr 1fr;}}
-    .card{border:1px solid var(--outline,#ddd);border-radius:12px;padding:1rem;}
+    .card{border:1px solid var(--outline,#ddd);border-radius:12px;padding:1rem;background:#fff;}
     .muted{opacity:.8}
-    .hidden{display:none}
-    .chip{display:inline-block;margin:.25rem .25rem 0 0;padding:.35rem .6rem;border-radius:999px;border:1px solid var(--outline,#ddd);text-decoration:none}
-    .chip--ghost{opacity:.6;border-style:dashed}
-    .banner{background:#fff8e1;border:1px solid #ffecb3;border-radius:10px;padding:.5rem .75rem;margin:.5rem 0}
-    .preview{font-family:ui-sans-serif, system-ui; background:#f9fafb;border:1px dashed #e5e7eb;border-radius:10px;padding:.75rem}
+    .chip{display:inline-flex;align-items:center;justify-content:center;margin:.25rem .25rem 0 0;padding:.35rem .75rem;border-radius:999px;border:1px solid var(--outline,#ddd);background:#fff;color:inherit;text-decoration:none;cursor:pointer;}
+    .chip--ghost{opacity:.6;border-style:dashed;cursor:default;}
+    .chip--active{background:#111827;color:#fff;border-color:#111827;}
+    .banner{background:#fff8e1;border:1px solid #ffecb3;border-radius:10px;padding:.5rem .75rem;margin:.5rem 0;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;}
+    .preview{font-family:ui-sans-serif, system-ui;background:#f9fafb;border:1px dashed #e5e7eb;border-radius:10px;padding:.75rem;}
     .label{font-weight:600;margin-top:.5rem}
     .hint{font-size:.9rem;opacity:.75}
     .h1{font-size:1.6rem;font-weight:700;margin:.25rem 0 .5rem}
     .h2{font-size:1.1rem;font-weight:700;margin-top:.25rem}
     input, textarea{width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:10px}
+    textarea{min-height:7rem}
     button{border-radius:8px;border:1px solid #d97706;background:#f59e0b;color:#fff;padding:.4rem .8rem;cursor:pointer}
+    button.tab-button{border-radius:999px;border:1px solid var(--outline,#d1d5db);background:#f9fafb;color:inherit;padding:.5rem 1rem;font-weight:600;}
+    button.tab-button.tab-button--active{background:#111827;color:#fff;border-color:#111827;}
     button:disabled{opacity:.6;cursor:not-allowed}
+    .list-item{display:block;width:100%;text-align:left;margin:.35rem 0;padding:.65rem .75rem;border-radius:10px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;transition:background .15s ease,color .15s ease,border-color .15s ease;}
+    .list-item--active{background:#111827;color:#fff;border-color:#111827;}
+    .list-item:focus-visible{outline:2px solid #111827;outline-offset:2px;}
     ul.example-list{list-style:disc;padding-left:1.25rem;}
     ul.example-list li{cursor:pointer;margin-bottom:.5rem;}
   </style>
@@ -32,58 +44,94 @@
   <main class="container">
     <header>
       <div class="h1">Start with an Observation</div>
-      <p class="muted">Write what a camera could record—no opinions or blame. We’ll suggest feelings &amp; needs you might explore. You choose what fits.</p>
+      <p class="muted">Choose the guided wizard to click through situations and instantly surface feelings and needs, or switch to free-text if you already have wording you want to lint.</p>
     </header>
 
-    <section class="grid">
-      <div class="card">
-        <div class="label">When/where? <span class="hint">(optional)</span></div>
-        <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
+    <nav class="tab-nav" role="tablist">
+      <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
+      <button id="tab-free-button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-free" data-tab-target="free">Free-text</button>
+    </nav>
 
-        <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
-        <textarea id="obs-what" rows="3" placeholder="While I was speaking, Casey said “This is a waste of time” and spoke over me."></textarea>
-
-        <div class="label">Expectation gap <span class="hint">(optional)</span></div>
-        <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
-
-        <div id="lint-box" class="banner hidden">
-          <span id="lint-msg"></span>
-          <button id="rewrite-btn" style="margin-left:.5rem">Help me rewrite</button>
+    <section id="tab-guided" class="tab-panel" role="tabpanel" aria-labelledby="tab-guided-button">
+      <div class="grid">
+        <div class="card">
+          <div class="h2">1. What best describes the situation?</div>
+          <p class="hint">Pick a category to see matching patterns.</p>
+          <div id="families"></div>
         </div>
-
-        <div class="label">Preview</div>
-        <div class="preview" id="obs-preview">Your observation will preview here…</div>
+        <div class="card">
+          <div class="h2">2. Which pattern fits?</div>
+          <p class="hint">Every option below expands into an observation example plus feelings &amp; needs.</p>
+          <div id="patterns"></div>
+        </div>
       </div>
 
-      <div class="card">
-        <div class="h2">Feelings to consider</div>
+      <section class="card" style="margin-top:1rem">
+        <div class="h2">Observation example</div>
+        <div class="preview" id="obs-example">Your observation will preview here…</div>
+
+        <div class="h2" style="margin-top:.75rem">Feelings to explore</div>
         <div id="suggest-feelings"></div>
 
-        <div class="h2" style="margin-top:.75rem">Needs that might be alive</div>
+        <div class="h2" style="margin-top:.75rem">Needs to consider</div>
         <div id="suggest-needs"></div>
 
-        <div class="h2" style="margin-top:.75rem">Situations to explore</div>
-        <div id="suggest-situations"></div>
-
-        <div class="hint" id="suggest-why" style="margin-top:.5rem">No cues detected yet — add what was seen/heard.</div>
-        <div class="hint" id="suggest-situations-hint" style="margin-top:.25rem">Add more detail to surface related situations.</div>
-
-        <hr style="margin:1rem 0;opacity:.25"/>
-
-        <div class="hint">Prefer to start from a story word like “ignored” or “disrespected”? Try <a href="/stories/">Story words</a>.</div>
-      </div>
+        <div class="hint" id="why" style="margin-top:.5rem">Pick a pattern to see suggestions.</div>
+      </section>
     </section>
 
-    <section class="card" style="margin-top:1rem">
-      <div class="h2">Examples (click to copy)</div>
-      <ul class="example-list">
-        <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
-        <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they began speaking and my sentence stopped mid-word.');">Spoke over me while I was speaking</li>
-        <li onclick="window.setObservationExample('Yesterday','They changed the plan and said, “You’ll do it this way,” without asking.');">Plan changed without asking</li>
-      </ul>
+    <section id="tab-free" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-free-button">
+      <section class="grid">
+        <div class="card">
+          <div class="label">When/where? <span class="hint">(optional)</span></div>
+          <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
+
+          <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
+          <textarea id="obs-what" placeholder="While I was speaking, Casey said “This is a waste of time” and spoke over me."></textarea>
+
+          <div class="label">Expectation gap <span class="hint">(optional)</span></div>
+          <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
+
+          <div id="free-lint-box" class="banner hidden">
+            <span id="free-lint-msg"></span>
+            <button id="rewrite-btn">Help me rewrite</button>
+          </div>
+
+          <div class="label">Preview</div>
+          <div class="preview" id="free-obs-preview">Your observation will preview here…</div>
+        </div>
+
+        <div class="card">
+          <div class="h2">Feelings to consider</div>
+          <div id="free-suggest-feelings"></div>
+
+          <div class="h2" style="margin-top:.75rem">Needs that might be alive</div>
+          <div id="free-suggest-needs"></div>
+
+          <div class="h2" style="margin-top:.75rem">Situations to explore</div>
+          <div id="free-suggest-situations"></div>
+
+          <div class="hint" id="free-suggest-why" style="margin-top:.5rem">No cues detected yet — add what was seen/heard.</div>
+          <div class="hint" id="free-suggest-situations-hint" style="margin-top:.25rem">Add more detail to surface related situations.</div>
+
+          <hr style="margin:1rem 0;opacity:.25"/>
+
+          <div class="hint">Prefer to start from a story word like “ignored” or “disrespected”? Try <a href="/stories/">Story words</a>.</div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:1rem">
+        <div class="h2">Examples (click to copy)</div>
+        <ul class="example-list">
+          <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
+          <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they began speaking and my sentence stopped mid-word.');">Spoke over me while I was speaking</li>
+          <li onclick="window.setObservationExample('Yesterday','They changed the plan and said, “You’ll do it this way,” without asking.');">Plan changed without asking</li>
+        </ul>
+      </section>
     </section>
   </main>
 
+  <script type="module" src="/assets/js/observations-wizard.js"></script>
   <script type="module" src="/assets/js/observations.js"></script>
 </body>
 </html>
