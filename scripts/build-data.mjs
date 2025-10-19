@@ -279,23 +279,29 @@ const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slu
 const situationsMap = new Map(situations.map((item) => [item.title.toLowerCase(), item.slug]));
 const strategiesMap = new Map(strategies.map((item) => [item.title.toLowerCase(), item.slug]));
 
-function attachSlugs(collection, listKey, slugMap) {
+function attachRelationshipSlugs(collection, listKey, slugMap) {
   collection.forEach((item) => {
-    item[listKey] = item[listKey].map(({ title }) => ({
-      title,
-      slug: slugMap.get(title.toLowerCase()) || null,
-    }));
+    item[listKey] = item[listKey].map(({ title }) => {
+      const slug = slugMap.get(title.toLowerCase());
+      if (!slug) {
+        throw new Error(
+          `Missing relationship "${title}" referenced by "${item.title}" (${listKey})`
+        );
+      }
+
+      return { title, slug };
+    });
   });
 }
 
-attachSlugs(feelings, 'needs', needsMap);
-attachSlugs(feelings, 'situations', situationsMap);
-attachSlugs(needs, 'strategies', strategiesMap);
-attachSlugs(needs, 'situations', situationsMap);
-attachSlugs(needs, 'feelings', feelingsMap);
-attachSlugs(situations, 'feelings', feelingsMap);
-attachSlugs(situations, 'needs', needsMap);
-attachSlugs(strategies, 'needs', needsMap);
+attachRelationshipSlugs(feelings, 'needs', needsMap);
+attachRelationshipSlugs(feelings, 'situations', situationsMap);
+attachRelationshipSlugs(needs, 'strategies', strategiesMap);
+attachRelationshipSlugs(needs, 'situations', situationsMap);
+attachRelationshipSlugs(needs, 'feelings', feelingsMap);
+attachRelationshipSlugs(situations, 'feelings', feelingsMap);
+attachRelationshipSlugs(situations, 'needs', needsMap);
+attachRelationshipSlugs(strategies, 'needs', needsMap);
 
 mkdirSync(DATA_DIR, { recursive: true });
 

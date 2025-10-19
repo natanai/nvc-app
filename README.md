@@ -13,7 +13,7 @@ A retro Nonviolent Communication explorer that keeps every tool on-device. Build
    ```bash
    npm run build:data
    ```
-   This command parses the CSV exports into `data/index.json`, which the page generator consumes.
+   This command parses the CSV exports into `data/index.json`, which the page generator consumes. If any relationship cell points to a title that does not exist in the corresponding spreadsheet, the build stops with an error that calls out both the referenced and parent titles so typos are easy to spot.
 
 2. Build the static pages:
    ```bash
