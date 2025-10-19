@@ -1768,6 +1768,10 @@ body.has-support-journal-open {
   box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 32%, transparent);
 }
 
+.door-card--observations {
+  --door-fill: #2b8f8a;
+}
+
 .door-card--faux-feelings {
   --door-fill: #5f65b5;
 }
@@ -2595,6 +2599,12 @@ body.has-support-journal-open {
 .pill.site-nav__magnet:hover,
 .pill.site-nav__magnet:focus-visible {
   box-shadow: none;
+}
+
+.nav-magnets a.active,
+.site-nav__magnet.active {
+  outline: 2px solid currentColor;
+  border-radius: 999px;
 }
 
 .pill:not(.site-nav__magnet) {

@@ -40,98 +40,194 @@
     ul.example-list li{cursor:pointer;margin-bottom:.5rem;}
   </style>
 </head>
-<body>
-  <main class="container">
-    <header>
-      <div class="h1">Start with an Observation</div>
-      <p class="muted">Choose the guided wizard to click through faux feelings and instantly surface feelings and needs, or switch to free-text if you already have wording you want to lint.</p>
-    </header>
+<body data-base-path="../">
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="page-wrapper">
+    <nav class="site-nav magnet-section nav-magnets" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
+      <div class="magnet-board-wrapper site-nav__board-wrapper">
+        <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
+          <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
 
-    <nav class="tab-nav" role="tablist">
-      <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
-      <button id="tab-free-button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-free" data-tab-target="free">Free-text</button>
-    </nav>
-
-    <section id="tab-guided" class="tab-panel" role="tabpanel" aria-labelledby="tab-guided-button">
-      <div class="grid">
-        <div class="card">
-          <div class="h2">1. What best describes the situation?</div>
-          <p class="hint">Pick a category to see matching patterns.</p>
-          <input id="search" type="search" placeholder="Search patterns (e.g., pronouns, cancel, privacy)…" />
-          <div id="families"></div>
+  <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <use href="../icons/nav-sprite.svg#icon-home" />
+  </svg>
+            <span class="site-nav__magnet-label visually-hidden">Home</span>
+          </a>
+          <button
+            class="pill magnet site-nav__magnet site-nav__magnet--customizer"
+            data-magnet-id="nav-customizer"
+            type="button"
+            data-palette-toggle
+            aria-haspopup="dialog"
+            aria-expanded="false"
+          >
+            <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
+            <span class="site-nav__magnet-label visually-hidden">Customizer</span>
+          </button>
+          <button
+            class="pill magnet site-nav__magnet site-nav__magnet--journal"
+            data-magnet-id="nav-journal"
+            type="button"
+            data-support-journal-open
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="global-support-journal-layer"
+          >
+            <span class="site-nav__magnet-label">Journal</span>
+          </button>
+          <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../inventory/">
+            <span class="site-nav__magnet-label">Inventory</span>
+            <span class="site-nav__count" data-inventory-count hidden></span>
+          </a>
+          <a class="pill magnet site-nav__magnet" data-magnet-id="nav-faux-feelings" href="../faux-feelings/"><span class="site-nav__magnet-label">Faux feelings</span></a>
+          <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
+          <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="../needs/"><span class="site-nav__magnet-label">Needs</span></a>
+          <a class="pill magnet site-nav__magnet site-nav__magnet--body-cues" data-magnet-id="nav-body-cues" href="../feelings/body-cues/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
+          <a class="pill magnet site-nav__magnet site-nav__magnet--journal-dashboard" data-magnet-id="nav-journal-dashboard" href="../inventory/journal/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
         </div>
-        <div class="card">
-          <div class="h2">2. Which pattern fits?</div>
-          <p class="hint">Every option below expands into an observation example plus feelings &amp; needs.</p>
-          <div id="patterns"></div>
+        <label class="magnet-play-toggle" data-magnet-toggle data-state="off">
+          <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
+          <span class="magnet-play-toggle__track" aria-hidden="true">
+            <span class="magnet-play-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
+        </label>
+      </div>
+      <div class="site-nav__journal" data-support-journal data-journal-overlay>
+        <div
+          id="global-support-journal-layer"
+          class="support-journal__layer"
+          data-support-journal-layer
+          data-state="closed"
+          aria-hidden="true"
+        >
+          <div class="support-journal__dialog" data-support-journal-dialog tabindex="-1">
+            <header class="support-journal__header">
+              <div class="support-journal__titles">
+                <h3
+                  class="support-journal__heading"
+                  id="global-support-journal-heading"
+                  data-support-journal-heading
+                >
+                  Journal
+                </h3>
+              </div>
+              <button
+                class="support-journal__close"
+                type="button"
+                data-support-journal-close
+                aria-label="Close full screen journal"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </header>
+            <div class="support-journal__content" data-support-journal-content></div>
+          </div>
         </div>
       </div>
+    </nav>
 
-      <section class="card" style="margin-top:1rem">
-        <div class="h2">Observation example</div>
-        <div class="preview" id="obs-example">Your observation will preview here…</div>
+    <main id="main" class="page" role="main">
+      <div class="container">
+        <header>
+          <div class="h1">Start with an Observation</div>
+          <p class="muted">Choose the guided wizard to click through faux feelings and instantly surface feelings and needs, or switch to free-text if you already have wording you want to lint.</p>
+          <p class="hint">
+            Prefer to start from a story word like “ignored” or “disrespected”? Try
+            <a href="/situations/">Faux feelings</a>.
+          </p>
+        </header>
 
-        <div class="h2" style="margin-top:.75rem">Feelings to explore</div>
-        <div id="suggest-feelings"></div>
+        <nav class="tab-nav" role="tablist">
+          <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
+          <button id="tab-free-button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-free" data-tab-target="free">Free-text</button>
+        </nav>
 
-        <div class="h2" style="margin-top:.75rem">Needs to consider</div>
-        <div id="suggest-needs"></div>
-
-        <div class="hint" id="why" style="margin-top:.5rem">Pick a pattern to see suggestions.</div>
-      </section>
-    </section>
-
-    <section id="tab-free" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-free-button">
-      <section class="grid">
-        <div class="card">
-          <div class="label">When/where? <span class="hint">(optional)</span></div>
-          <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
-
-          <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
-          <textarea id="obs-what" placeholder="While I was speaking, Casey said “This is a waste of time” and spoke over me."></textarea>
-
-          <div class="label">Expectation gap <span class="hint">(optional)</span></div>
-          <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
-
-          <div id="free-lint-box" class="banner hidden">
-            <span id="free-lint-msg"></span>
-            <button id="rewrite-btn">Help me rewrite</button>
+        <section id="tab-guided" class="tab-panel" role="tabpanel" aria-labelledby="tab-guided-button">
+          <div class="grid">
+            <div class="card">
+              <div class="h2">1. What best describes the situation?</div>
+              <p class="hint">Pick a category to see matching patterns.</p>
+              <input id="search" type="search" placeholder="Search patterns (e.g., pronouns, cancel, privacy)…" />
+              <div id="families"></div>
+            </div>
+            <div class="card">
+              <div class="h2">2. Which pattern fits?</div>
+              <p class="hint">Every option below expands into an observation example plus feelings &amp; needs.</p>
+              <div id="patterns"></div>
+            </div>
           </div>
 
-          <div class="label">Preview</div>
-          <div class="preview" id="free-obs-preview">Your observation will preview here…</div>
-        </div>
+          <section class="card" style="margin-top:1rem">
+            <div class="h2">Observation example</div>
+            <div class="preview" id="obs-example">Your observation will preview here…</div>
 
-        <div class="card">
-          <div class="h2">Feelings to consider</div>
-          <div id="free-suggest-feelings"></div>
+            <div class="h2" style="margin-top:.75rem">Feelings to explore</div>
+            <div id="suggest-feelings"></div>
 
-          <div class="h2" style="margin-top:.75rem">Needs that might be alive</div>
-          <div id="free-suggest-needs"></div>
+            <div class="h2" style="margin-top:.75rem">Needs to consider</div>
+            <div id="suggest-needs"></div>
 
-          <div class="h2" style="margin-top:.75rem">Faux feelings to explore</div>
-          <div id="free-suggest-faux-feelings"></div>
+            <div class="hint" id="why" style="margin-top:.5rem">Pick a pattern to see suggestions.</div>
+          </section>
+        </section>
 
-          <div class="hint" id="free-suggest-why" style="margin-top:.5rem">No cues detected yet — add what was seen/heard.</div>
-          <div class="hint" id="free-suggest-faux-feelings-hint" style="margin-top:.25rem">Add more detail to surface related faux feelings.</div>
+        <section id="tab-free" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-free-button">
+          <section class="grid">
+            <div class="card">
+              <div class="label">When/where? <span class="hint">(optional)</span></div>
+              <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
 
-          <hr style="margin:1rem 0;opacity:.25"/>
+              <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
+              <textarea id="obs-what" placeholder="While I was speaking, Casey said “This is a waste of time” and spoke over me."></textarea>
 
-          <div class="hint">Prefer to start from a story word like “ignored” or “disrespected”? Try <a href="/stories/">Story words</a>.</div>
-        </div>
-      </section>
+              <div class="label">Expectation gap <span class="hint">(optional)</span></div>
+              <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
 
-      <section class="card" style="margin-top:1rem">
-        <div class="h2">Examples (click to copy)</div>
-        <ul class="example-list">
-          <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
-          <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they began speaking and my sentence stopped mid-word.');">Spoke over me while I was speaking</li>
-          <li onclick="window.setObservationExample('Yesterday','They changed the plan and said, “You’ll do it this way,” without asking.');">Plan changed without asking</li>
-        </ul>
-      </section>
-    </section>
-  </main>
+              <div id="free-lint-box" class="banner hidden">
+                <span id="free-lint-msg"></span>
+                <button id="rewrite-btn">Help me rewrite</button>
+              </div>
 
+              <div class="label">Preview</div>
+              <div class="preview" id="free-obs-preview">Your observation will preview here…</div>
+            </div>
+
+            <div class="card">
+              <div class="h2">Feelings to consider</div>
+              <div id="free-suggest-feelings"></div>
+
+              <div class="h2" style="margin-top:.75rem">Needs that might be alive</div>
+              <div id="free-suggest-needs"></div>
+
+              <div class="h2" style="margin-top:.75rem">Faux feelings to explore</div>
+              <div id="free-suggest-faux-feelings"></div>
+
+              <div class="hint" id="free-suggest-why" style="margin-top:.5rem">No cues detected yet — add what was seen/heard.</div>
+              <div class="hint" id="free-suggest-faux-feelings-hint" style="margin-top:.25rem">Add more detail to surface related faux feelings.</div>
+
+              <hr style="margin:1rem 0;opacity:.25"/>
+
+              <div class="hint">Prefer to start from a story word like “ignored” or “disrespected”? Try <a href="/situations/">Faux feelings</a>.</div>
+            </div>
+          </section>
+
+          <section class="card" style="margin-top:1rem">
+            <div class="h2">Examples (click to copy)</div>
+            <ul class="example-list">
+              <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
+              <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they began speaking and my sentence stopped mid-word.');">Spoke over me while I was speaking</li>
+              <li onclick="window.setObservationExample('Yesterday','They changed the plan and said, “You’ll do it this way,” without asking.');">Plan changed without asking</li>
+            </ul>
+          </section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/journal/store.js" type="module"></script>
+  <script src="../scripts/inventory.js" defer></script>
+  <script src="../scripts/magnets.js" type="module"></script>
   <script type="module" src="/assets/js/observations-wizard.js"></script>
   <script type="module" src="/assets/js/observations.js"></script>
 </body>
