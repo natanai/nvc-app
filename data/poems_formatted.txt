@@ -10,6 +10,8 @@ ignoring it..."
 -Craig Arnold  
 https://www.poetryfoundation.org/poems/52207/bird-understander  
 
+-
+
 Terrified
 "My soul leaps up at the sound.
 What is the question I cannot answer,
@@ -18,10 +20,14 @@ What is the blank face I must fill in with features?"
 - Evelyn Scott
 https://www.poetryfoundation.org/poetrymagazine/browse?volume=15&issue=2&page=18
 
+-
+
 Bewildered
 "Those nights when nothing catches, nothing also is artless." 
 - Joanna Kirk
 https://poets.org/poem/3-bewildered-landscapes
+
+-
 
 Sad
 "Someone was saying
@@ -31,6 +37,8 @@ and the morning goes."
 -Mark Strand
 https://poets.org/poem/long-sad-party
 
+-
+
 Frightened
 "My fingers grow numb and I fumble. Let me fumble with
 The miracle. I will doubt
@@ -38,15 +46,17 @@ That anything will come of it."
 - M.F. Dodson
 https://allneeds.app/feelings/frightened/
 
+-
+
 Lonely
 "a variation in the season,
 or giving friends the room
 next door, in stubborn panic
 to fix this happiness in place
 by escaping from it." - Nate Klug
-
 https://poets.org/poem/lonely-planet
 
+-
 
 Angry
 “Spray down the perimeter
@@ -57,10 +67,9 @@ to keep the deer away.”
               certainly relate
               on an emotional level.
 -Sean Singer
-
 https://www.poetryfoundation.org/poetrymagazine/poems/1710597/poem
 
-
+-
 
 Frustrated
 "...it’s clear then
@@ -72,7 +81,7 @@ to touch their sinuosity
 -Ted Mathys
 https://poets.org/poem/let-muddy-water-sit-and-it-grows-clear
 
-
+-
 
 Scared
 "That would eclipse this 
@@ -85,21 +94,27 @@ Of being scared she asks"
 - Noah Eli Gordon
 https://poets.org/poem/vesuvius
 
+-
 
 Upset
 "Besides, everything is better now. Not us
 but implants, blenders, children, heart attacks.
 There’s never been a better time to be alive
-than when you are. If you are." - D. A. Powell
+than when you are. If you are." 
+- D. A. Powell
 https://www.poetryfoundation.org/poetrymagazine/poems/161692/positivity
 
+-
 
 Tense
 "A window, but it’s closed
 A mirror, but it's fogged
 A mind full of thoughts
-A heart of love that feels clogged" - Johnny
+A heart of love that feels clogged" 
+- Johnny
 https://poets.org/poem/cell
+
+-
 
 Distressed
 "We are a journey of distressed shapes,
@@ -107,6 +122,7 @@ red essence on parchment, occupying a life."
 -Lois Red Elk 
 https://www.poetryfoundation.org/poems/149801/game-5cb7792a41b36
 
+-
 
 Disappointed
 "Each time I hear that word
@@ -116,3 +132,13 @@ the children who don’t return,
 the ailments that are never cured..."
 -Maya Abu Al-Hayyat
 https://poets.org/poem/i-suffer-phobia-called-hope
+
+-
+
+Enraged
+"The enraged swimmer
+Wet from a hundred waves and the tails of fishes,
+Finds his eyes like a sea-beat,
+His shoulders everywhere..."
+-Marie Graybeal
+https://www.poetryfoundation.org/poetrymagazine/browse?volume=93&issue=2&page=12
