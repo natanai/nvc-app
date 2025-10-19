@@ -1028,6 +1028,14 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function formatMultilineText(value) {
+  if (!value) {
+    return '';
+  }
+
+  return escapeHtml(value).replace(/\r?\n/g, '<br />');
+}
+
 function sanitizeContributorName(value) {
   if (!value) {
     return '';
@@ -1407,12 +1415,27 @@ function renderFeeling(item) {
   const descriptionHtml = item.description
     ? `\n        <p class="page-description page-description--feeling">${escapeHtml(item.description)}</p>`
     : '';
+  const poemQuote = typeof item.poemQuote === 'string' ? item.poemQuote.trim() : '';
+  const poemUrl = typeof item.poemUrl === 'string' ? item.poemUrl.trim() : '';
+  const poemHeadingId = `poem-heading-${slugify(item.slug)}`;
+  const poemEntries = [];
+  if (poemQuote) {
+    poemEntries.push(`<blockquote class="feeling-poem__quote">${formatMultilineText(poemQuote)}</blockquote>`);
+  }
+  if (poemUrl) {
+    poemEntries.push(
+      `<figcaption class="feeling-poem__cta"><a class="feeling-poem__link" href="${escapeHtml(poemUrl)}" target="_blank" rel="noopener noreferrer">Continue reading the poem</a></figcaption>`,
+    );
+  }
+  const poemSection = poemEntries.length
+    ? `\n      <section class="feeling-poem" aria-labelledby="${poemHeadingId}">\n        <h2 id="${poemHeadingId}" class="section-title">Poem reflection</h2>\n        <figure class="feeling-poem__figure">\n          ${poemEntries.join('\n          ')}\n        </figure>\n      </section>`
+    : '';
 
   const main = `
       <header class="page-header">
         <h1 class="page-title">Feeling: ${escapeHtml(item.title)}</h1>
         ${descriptionHtml}
-      </header>
+      </header>${poemSection}
       ${inferenceSection}
       ${needsSection}
     `;
