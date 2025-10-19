@@ -737,6 +737,16 @@ const updateBoardHeight = (state) => {
     state.board.style.height = `${height}px`;
     return;
   }
+  if (state.playActive) {
+    const lockedHeight = Math.max(
+      state.minHeight || 0,
+      state.inactiveHeight || 0,
+      state.boardHeight || 0,
+    );
+    state.boardHeight = lockedHeight;
+    state.board.style.height = `${lockedHeight}px`;
+    return;
+  }
   let maxBottom = 0;
   state.magnets.forEach((magnet) => {
     if (magnet?.navHidden) {
@@ -745,14 +755,10 @@ const updateBoardHeight = (state) => {
     const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
     maxBottom = Math.max(maxBottom, bottom);
   });
-  const baseHeight = state.playActive
-    ? (state.minHeight || 0)
-    : Math.max(state.minHeight || 0, state.inactiveHeight || 0);
+  const baseHeight = Math.max(state.minHeight || 0, state.inactiveHeight || 0);
   const height = Math.max(baseHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
-  if (!state.playActive) {
-    state.inactiveHeight = height;
-  }
+  state.inactiveHeight = height;
   state.board.style.height = `${height}px`;
 };
 
