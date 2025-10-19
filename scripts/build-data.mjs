@@ -177,6 +177,83 @@ function filterDuplicateNeeds(rows) {
 }
 
 const rawFeelingsSheet = readCsv('data/Feelings.csv');
+const rawPoemText = readFileSync(join(ROOT, 'data', 'poems_formatted.txt'), 'utf8').replace(/\ufeff/g, '');
+
+function parseFormattedPoems(text) {
+  const lines = text.split(/\r?\n/);
+  const entries = [];
+
+  let current = null;
+
+  const finishCurrent = () => {
+    if (!current) {
+      return;
+    }
+
+    const rawQuote = current.lines.join('\n').replace(/[\s\u00A0]+$/u, '');
+    entries.push({
+      title: current.title.trim(),
+      poemQuote: rawQuote,
+      poemUrl: current.url.trim(),
+    });
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (!current) {
+      if (!trimmed) {
+        continue;
+      }
+      current = {
+        title: trimmed,
+        lines: [],
+        url: '',
+      };
+      continue;
+    }
+
+    if (!trimmed && !current.url) {
+      current.lines.push('');
+      continue;
+    }
+
+    if (!trimmed && current.url) {
+      continue;
+    }
+
+    if (trimmed === '-') {
+      finishCurrent();
+      continue;
+    }
+
+    if (!current.url && /^https?:\/\//i.test(trimmed)) {
+      current.url = trimmed;
+      continue;
+    }
+
+    current.lines.push(line.replace(/\r$/, ''));
+  }
+
+  finishCurrent();
+
+  return entries;
+}
+
+const formattedPoems = parseFormattedPoems(rawPoemText);
+const poemLookup = new Map();
+
+for (const entry of formattedPoems) {
+  const slug = slugify(entry.title);
+  if (!slug) {
+    continue;
+  }
+  poemLookup.set(slug, {
+    poemQuote: entry.poemQuote,
+    poemUrl: entry.poemUrl,
+  });
+}
 const rawNeeds = filterDuplicateNeeds(readCsv('data/Needs.csv'));
 const rawSituations = readCsv('data/Situations.csv');
 const rawStrategies = readCsv('data/Strategies.csv');
@@ -256,16 +333,24 @@ function buildBodyRegions(rows) {
 
 const bodyRegions = buildBodyRegions(rawCueRows);
 
-const feelings = rawFeelings.map((row) => ({
-  title: row['Feeling Title'],
-  slug: row['Slug Override'] || slugify(row['Feeling Title']),
-  description: row['Page Summary'] || '',
-  situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
-  needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
-  bodySignals: splitList(row['Body Signal Notes']),
-  poemQuote: (row['Poem Quotation'] || '').trim(),
-  poemUrl: (row['Poem URL'] || '').trim(),
-}));
+const feelings = rawFeelings.map((row) => {
+  const title = row['Feeling Title'];
+  const baseSlug = slugify(title);
+  const slugOverride = (row['Slug Override'] || '').trim();
+  const slug = slugOverride || baseSlug;
+  const poemEntry = poemLookup.get(slug) || poemLookup.get(baseSlug) || { poemQuote: '', poemUrl: '' };
+
+  return {
+    title,
+    slug,
+    description: row['Page Summary'] || '',
+    situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
+    needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
+    bodySignals: splitList(row['Body Signal Notes']),
+    poemQuote: poemEntry.poemQuote,
+    poemUrl: poemEntry.poemUrl,
+  };
+});
 
 const needs = rawNeeds.map((row) => ({
   title: row['Need Title'],
