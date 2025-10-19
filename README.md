@@ -95,6 +95,30 @@ custom directory as the first argument to store the archive elsewhere.
     └── build-pages.mjs       # static page generator
 ```
 
+### Spreadsheet columns
+
+The three primary spreadsheets (`Feelings.csv`, `Needs.csv`, and `Situations.csv`) now
+own all of the relationships and reverse-inference cues used across the site.
+
+- **Feelings.csv** – each feeling row uses `Row Type = feeling` with fields for
+  `Feeling Title`, `Page Summary`, `Related Situations`, `Related Needs`,
+  `Body Signal Notes`, and optional `Slug Override`. Additional rows with
+  `Row Type = cue` capture reverse-inference body cues through the
+  `Cue Region *` and `Cue Option *` columns so no extra CSV is needed for
+  body-region data.
+- **Needs.csv** – the need copy is organised into `Need Title`, `Category Label`,
+  `Page Summary`, `Related Strategies`, `Related Situations`, `Related Feelings`,
+  and the claim text pair (`Claim Summary`, `Claim Narrative`). Evidence links now
+  live under the `Source Links` column.
+- **Situations.csv** – situations list their relationships via `Related Feelings`
+  and `Related Needs`, with an optional `Slug Override` to customise URLs.
+- **Strategies.csv** – the contributor details stay inline alongside each
+  strategy (`Contributor Name`, `Contributor Location`) so additions can be made
+  directly in the sheet.
+
+Run `npm run build:data` after editing any of these spreadsheets to regenerate
+the JSON dataset and static pages.
+
 ## Layout highlights
 
 - **Magnet play:** category, situation, and feeling pages present their entries as draggable magnets with a shuffle button for delightful re-arranging.

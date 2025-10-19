@@ -216,14 +216,14 @@ async function main() {
   const urls = new Map();
 
   for (const row of rows) {
-    const sources = parseSupportingSources(row['Supporting Sources']);
+    const sources = parseSupportingSources(row['Source Links']);
     for (const source of sources) {
       const normalized = source.url.trim();
       if (!normalized) continue;
       if (!urls.has(normalized)) {
         urls.set(normalized, []);
       }
-      urls.get(normalized).push(row.Title || row.Slug || '');
+      urls.get(normalized).push(row['Need Title'] || row['Slug Override'] || '');
     }
   }
 

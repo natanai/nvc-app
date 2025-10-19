@@ -1244,8 +1244,9 @@ ${strategiesNote}
             ${strategies
               .map((strategy) => {
                 const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
-                const firstName = sanitizeContributorName(strategy.firstName);
-                const location = sanitizeLocation(strategy.location);
+                const contributor = strategy.contributor || {};
+                const firstName = sanitizeContributorName(contributor.name);
+                const location = sanitizeLocation(contributor.location);
                 const contributorParts = [];
                 if (firstName) {
                   contributorParts.push(firstName);
