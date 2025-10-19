@@ -2757,7 +2757,9 @@
       "impotent": "numb",
       "desperation": "overwhelm",
       "jealous": "worry",
-      "tired": "tired"
+      "tired": "tired",
+      "calm": "calm",
+      "numb": "numb"
     }
   }
 }

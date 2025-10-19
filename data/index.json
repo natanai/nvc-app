@@ -3190,6 +3190,1040 @@
       "bodySignals": [
         "Chest tightening with a pinch in the heart area; Eyes narrowing while tracking the rival; Hands clenching subtly as thoughts churn"
       ]
+    },
+    {
+      "title": "Grateful",
+      "slug": "grateful",
+      "description": "Warm, prosocial ease centered in the mid-chest; breathing steady and unforced; shoulders released.",
+      "situations": [
+        {
+          "title": "(Not) Accepted",
+          "slug": "not-accepted"
+        },
+        {
+          "title": "Unheard",
+          "slug": "unheard"
+        },
+        {
+          "title": "Unappreciated",
+          "slug": "unappreciated"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        },
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "To be seen",
+          "slug": "to-be-seen"
+        },
+        {
+          "title": "Closeness",
+          "slug": "closeness"
+        }
+      ],
+      "bodySignals": [
+        "Soft warmth across the sternum; shoulders drop; longer",
+        "smoother exhale; face softens; gentle impulse to approach or thank someone"
+      ]
+    },
+    {
+      "title": "Joyful",
+      "slug": "joyful",
+      "description": "Light, buoyant activation with free facial expressivity; breath springy and regular. “I happy am; / Joy is my name.” —William Blake, *Infant Joy*",
+      "situations": [
+        {
+          "title": "(Not) Accepted",
+          "slug": "not-accepted"
+        },
+        {
+          "title": "Left out",
+          "slug": "left-out"
+        },
+        {
+          "title": "Ignored",
+          "slug": "ignored"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Inclusion",
+          "slug": "inclusion"
+        },
+        {
+          "title": "Community",
+          "slug": "community"
+        },
+        {
+          "title": "Closeness",
+          "slug": "closeness"
+        },
+        {
+          "title": "Participation",
+          "slug": "participation"
+        }
+      ],
+      "bodySignals": [
+        "Spontaneous (Duchenne) smiling; eyes bright; light bounce in hands/feet; chest and arms feel lively; urge to move or share"
+      ]
+    },
+    {
+      "title": "Relaxed",
+      "slug": "relaxed",
+      "description": "Parasympathetic settling with lengthened exhale; muscles ungrip; body weight rests into support.",
+      "situations": [
+        {
+          "title": "Harassed",
+          "slug": "harassed"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
+        },
+        {
+          "title": "Overworked",
+          "slug": "overworked"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        }
+      ],
+      "bodySignals": [
+        "Shoulders drop; belly soft; jaw unhooks; exhalations lengthen; movements unhurried and smooth"
+      ]
+    },
+    {
+      "title": "Relieved",
+      "slug": "relieved",
+      "description": "Protective tension lets go; a reflexive deep sigh or long exhale; chest and throat open.",
+      "situations": [
+        {
+          "title": "Threatened",
+          "slug": "threatened"
+        },
+        {
+          "title": "Intimidated",
+          "slug": "intimidated"
+        },
+        {
+          "title": "Violated",
+          "slug": "violated"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        }
+      ],
+      "bodySignals": [
+        "Audible or felt sigh; jaw unclenches; chest feels roomier; eyes and brow soften; posture de-armors after a stressor passes"
+      ]
+    },
+    {
+      "title": "Peaceful",
+      "slug": "peaceful",
+      "description": "Even, unhurried breath with quiet muscles and steady presence. “And I shall have some peace there, for peace comes dropping slow.” —W.B. Yeats, *The Lake Isle of Innisfree*",
+      "situations": [
+        {
+          "title": "Hassled",
+          "slug": "hassled"
+        },
+        {
+          "title": "Provoked",
+          "slug": "provoked"
+        },
+        {
+          "title": "Smothered/Suffocated",
+          "slug": "smothered-suffocated"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Do things at my own pace and in my own way",
+          "slug": "do-things-at-my-own-pace-and-in-my-own-way"
+        }
+      ],
+      "bodySignals": [
+        "Breath unforced and rhythmic; subtle warmth near the heart; body weight settles evenly; gaze soft and panoramic"
+      ]
+    },
+    {
+      "title": "Contented",
+      "slug": "contented",
+      "description": "Low-arousal positive ease; posture unforced; gentle warmth through torso.",
+      "situations": [
+        {
+          "title": "Taken for granted",
+          "slug": "taken-for-granted"
+        },
+        {
+          "title": "Unappreciated",
+          "slug": "unappreciated"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        },
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        }
+      ],
+      "bodySignals": [
+        "Small satisfied smile; brow smooth; belly comfortable; natural pauses in breath on the exhale; no urgency to act"
+      ]
+    },
+    {
+      "title": "Proud",
+      "slug": "proud",
+      "description": "Expanded, uplifted posture (sternum open, chin slightly raised); grounded, steady energy.",
+      "situations": [
+        {
+          "title": "Discounted/Diminished",
+          "slug": "discounted-diminished"
+        },
+        {
+          "title": "Put down",
+          "slug": "put-down"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        },
+        {
+          "title": "Accomplishment",
+          "slug": "accomplishment"
+        },
+        {
+          "title": "Genuineness",
+          "slug": "genuineness"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        }
+      ],
+      "bodySignals": [
+        "Chest rises and widens; spine lengthens; head and gaze elevate; stance feels stable; arms may lift or rest akimbo"
+      ]
+    },
+    {
+      "title": "Hopeful",
+      "slug": "hopeful",
+      "description": "Subtle upward lift in sternum and gaze; inhalation feels easier; orienting toward possibility. “‘Hope’ is the thing with feathers— / That perches in the soul—” —Emily Dickinson",
+      "situations": [
+        {
+          "title": "Let down",
+          "slug": "let-down"
+        },
+        {
+          "title": "Rejected",
+          "slug": "rejected"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Choice",
+          "slug": "choice"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        }
+      ],
+      "bodySignals": [
+        "Lightness behind the breastbone; eyes seek brightness/distance; breath opens the upper chest; small forward-leaning posture"
+      ]
+    },
+    {
+      "title": "Calm",
+      "slug": "calm",
+      "description": "Low activation with steady, even breath; jaw and shoulders released; alert but unhurried.",
+      "situations": [
+        {
+          "title": "Hassled",
+          "slug": "hassled"
+        },
+        {
+          "title": "Overworked",
+          "slug": "overworked"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        }
+      ],
+      "bodySignals": [
+        "Comfortable nasal breathing; slow head and eye movements; hands still or loosely resting; easy posture transitions"
+      ]
+    },
+    {
+      "title": "Playful",
+      "slug": "playful",
+      "description": "Quick, light positive activation; eyes bright; readiness to smile or laugh.",
+      "situations": [
+        {
+          "title": "Unheard",
+          "slug": "unheard"
+        },
+        {
+          "title": "Invisible",
+          "slug": "invisible"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Closeness",
+          "slug": "closeness"
+        },
+        {
+          "title": "Participation",
+          "slug": "participation"
+        },
+        {
+          "title": "To be heard",
+          "slug": "to-be-heard"
+        },
+        {
+          "title": "Community",
+          "slug": "community"
+        }
+      ],
+      "bodySignals": [
+        "Lilt in voice; eyebrows lift; small bouncing or swaying; gestures become broad and exploratory; laughter starts easily"
+      ]
+    },
+    {
+      "title": "Inspired",
+      "slug": "inspired",
+      "description": "Tingling “chills” or goosebumps possible; fuller inhale; oriented to create or act. “My heart leaps up when I behold / A rainbow in the sky.” —William Wordsworth",
+      "situations": [
+        {
+          "title": "Ignored",
+          "slug": "ignored"
+        },
+        {
+          "title": "Discounted/Diminished",
+          "slug": "discounted-diminished"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Contribution",
+          "slug": "contribution"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Genuineness",
+          "slug": "genuineness"
+        },
+        {
+          "title": "Authenticity",
+          "slug": "authenticity"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        },
+        {
+          "title": "Community",
+          "slug": "community"
+        }
+      ],
+      "bodySignals": [
+        "Goosebumps along arms/neck; fuller inhalation; brief stillness followed by purposeful movement; fingers “itch” to begin"
+      ]
+    },
+    {
+      "title": "Rejuvenated",
+      "slug": "rejuvenated",
+      "description": "Fresh vigor through limbs; posture naturally upright; complexion brighter. “And then my heart with pleasure fills, / And dances with the daffodils.” —William Wordsworth",
+      "situations": [
+        {
+          "title": "Overworked",
+          "slug": "overworked"
+        },
+        {
+          "title": "Dumped on",
+          "slug": "dumped-on"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Physical Fitness",
+          "slug": "physical-fitness"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        }
+      ],
+      "bodySignals": [
+        "Springy step; arms feel light and ready; face bright; breathing feels efficient and comfortable"
+      ]
+    },
+    {
+      "title": "Weary",
+      "slug": "weary",
+      "description": "Low, heavy tone in limbs; eyelids droop; breaths shallow or sighing.",
+      "situations": [
+        {
+          "title": "Overworked",
+          "slug": "overworked"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Respect",
+          "slug": "respect"
+        }
+      ],
+      "bodySignals": [
+        "Dense",
+        "effortful movements; frequent small sighs; head tilts forward; reduced facial expressivity"
+      ]
+    },
+    {
+      "title": "Restless",
+      "slug": "restless",
+      "description": "Fine, fidgety energy that resists stillness; breath quickens high in the chest.",
+      "situations": [
+        {
+          "title": "Hassled",
+          "slug": "hassled"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        },
+        {
+          "title": "Act Freely",
+          "slug": "act-freely"
+        },
+        {
+          "title": "Choose Freely",
+          "slug": "choose-freely"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        }
+      ],
+      "bodySignals": [
+        "Feet/legs twitch or pace; fingers tap; shallow",
+        "frequent breaths; urge to change position or task"
+      ]
+    },
+    {
+      "title": "Nervous",
+      "slug": "nervous",
+      "description": "Buzzing in gut or hands; breathing held high or uneven; voice or hands may tremble.",
+      "situations": [
+        {
+          "title": "Threatened",
+          "slug": "threatened"
+        },
+        {
+          "title": "Intimidated",
+          "slug": "intimidated"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "To be heard",
+          "slug": "to-be-heard"
+        }
+      ],
+      "bodySignals": [
+        "Butterflies or queasiness; chest tight; slight hand tremor; voice wavers; startle more easily to noises"
+      ]
+    },
+    {
+      "title": "Jittery",
+      "slug": "jittery",
+      "description": "Rapid micro-tremors with jumpy attention; stillness difficult; breathing quick and uneven.",
+      "situations": [
+        {
+          "title": "Pressured",
+          "slug": "pressured"
+        },
+        {
+          "title": "Cornered",
+          "slug": "cornered"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        }
+      ],
+      "bodySignals": [
+        "Bouncing knee; shaky hands; scattered saccades; brief",
+        "shallow breaths; urge to discharge energy"
+      ]
+    },
+    {
+      "title": "Frazzled",
+      "slug": "frazzled",
+      "description": "Frayed, overstimulated tone; head/neck tension; startle easily under load.",
+      "situations": [
+        {
+          "title": "Hassled",
+          "slug": "hassled"
+        },
+        {
+          "title": "Dumped on",
+          "slug": "dumped-on"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        }
+      ],
+      "bodySignals": [
+        "Tight scalp/forehead; shoulders creep upward; flinching to small sounds; thoughts feel noisy; breath gets choppy"
+      ]
+    },
+    {
+      "title": "Discouraged",
+      "slug": "discouraged",
+      "description": "Subtle collapse through chest/shoulders; energy slow to mobilize; gaze lowers.",
+      "situations": [
+        {
+          "title": "Let down",
+          "slug": "let-down"
+        },
+        {
+          "title": "Rejected",
+          "slug": "rejected"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "Consistency",
+          "slug": "consistency"
+        }
+      ],
+      "bodySignals": [
+        "Rounded shoulders; longer",
+        "low-energy exhale; quieter voice; reduced initiation; eyes downcast"
+      ]
+    },
+    {
+      "title": "Heartbroken",
+      "slug": "heartbroken",
+      "description": "Aching center near the heart; waves of tenderness and emptiness; energy drains from limbs.",
+      "situations": [
+        {
+          "title": "Abandoned",
+          "slug": "abandoned"
+        },
+        {
+          "title": "Betrayed",
+          "slug": "betrayed"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Love/Caring",
+          "slug": "love-caring"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Closeness",
+          "slug": "closeness"
+        },
+        {
+          "title": "To be seen",
+          "slug": "to-be-seen"
+        },
+        {
+          "title": "To be heard",
+          "slug": "to-be-heard"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        }
+      ],
+      "bodySignals": [
+        "Tight ache behind sternum; tears arrive in pulses; torso curls inward; limbs feel heavy or cold"
+      ]
+    },
+    {
+      "title": "Remorseful",
+      "slug": "remorseful",
+      "description": "Heavy pull in chest or belly with heat in the face; impulse to repair or confess. “Remorse—is Memory—awake—” —Emily Dickinson",
+      "situations": [
+        {
+          "title": "Wronged",
+          "slug": "wronged"
+        },
+        {
+          "title": "Blamed",
+          "slug": "blamed"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Accountability",
+          "slug": "accountability"
+        },
+        {
+          "title": "Honesty",
+          "slug": "honesty"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        }
+      ],
+      "bodySignals": [
+        "Weighted chest/stomach; cheeks flush; eyes avert; hands move toward heart or mouth; urge to apologize or amend"
+      ]
+    },
+    {
+      "title": "Regretful",
+      "slug": "regretful",
+      "description": "Hollow, wistful tone; stomach sinks; breath slows into small sighs.",
+      "situations": [
+        {
+          "title": "Wronged",
+          "slug": "wronged"
+        },
+        {
+          "title": "Blamed",
+          "slug": "blamed"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Accountability",
+          "slug": "accountability"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        },
+        {
+          "title": "Consistency",
+          "slug": "consistency"
+        }
+      ],
+      "bodySignals": [
+        "Sinking sensation in belly; repeated soft exhales; gaze sideways or downward; shoulder roll inward"
+      ]
+    },
+    {
+      "title": "Impatient",
+      "slug": "impatient",
+      "description": "Compressed pacing; forward-leaning set; breath pushes at the nose.",
+      "situations": [
+        {
+          "title": "Hassled",
+          "slug": "hassled"
+        },
+        {
+          "title": "Interrupted",
+          "slug": "interrupted"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Do things at my own pace and in my own way",
+          "slug": "do-things-at-my-own-pace-and-in-my-own-way"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Choice",
+          "slug": "choice"
+        },
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        }
+      ],
+      "bodySignals": [
+        "Feet tap; jaw presses; quick head turns toward obstacles; urge to interrupt or take over"
+      ]
+    },
+    {
+      "title": "Edgy",
+      "slug": "edgy",
+      "description": "Prickly surface tension with shoulders lifted; heightened startle readiness.",
+      "situations": [
+        {
+          "title": "Provoked",
+          "slug": "provoked"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        }
+      ],
+      "bodySignals": [
+        "Skin prickling or sweaty; neck tight; rapid orienting to small sounds/movements; breath sits high"
+      ]
+    },
+    {
+      "title": "Numb",
+      "slug": "numb",
+      "description": "Muted or distant internal sensation; movement feels mechanical; breath quiet and shallow.",
+      "situations": [
+        {
+          "title": "Victimized",
+          "slug": "victimized"
+        },
+        {
+          "title": "Overpowered",
+          "slug": "overpowered"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Security",
+          "slug": "security"
+        }
+      ],
+      "bodySignals": [
+        "Low or absent interoceptive cues; flat affect; slowed responses; minimal spontaneous movement"
+      ]
+    },
+    {
+      "title": "Uneasy",
+      "slug": "uneasy",
+      "description": "Cool tightening in the belly; chest holds back a full breath; scanning for what’s off.",
+      "situations": [
+        {
+          "title": "Mistrusted",
+          "slug": "mistrusted"
+        },
+        {
+          "title": "Manipulated",
+          "slug": "manipulated"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        }
+      ],
+      "bodySignals": [
+        "Subtle abdominal clench; incomplete inhale; eyes check room edges/exits; small",
+        "frequent postural shifts"
+      ]
     }
   ],
   "needs": [
