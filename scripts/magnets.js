@@ -7,7 +7,7 @@ const DEFAULT_CONFIG = {
   drift: 1.5,
   damping: 0.975,
   sepRadiusScale: 0.7,
-  sepStrength: 18,
+  sepStrength: 4,
   dragSepMultiplier: 2,
   edgeBounce: 0.45,
   edgeBounceMin: 36,
