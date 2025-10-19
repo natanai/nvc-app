@@ -31,7 +31,7 @@ function writeFailureReport({ issueList, counts }) {
   const datasetSummary = [
     `- Feelings: ${counts.feelings}`,
     `- Needs: ${counts.needs}`,
-    `- Situations: ${counts.situations}`,
+    `- Faux feelings: ${counts.fauxFeelings}`,
     `- Strategies: ${counts.strategies}`,
     `- Reverse inference entries: ${counts.reverseEntries}`,
   ].join('\n');
@@ -234,7 +234,7 @@ function checkReferenceList({
 const EXTRA_DIRECTORY_ALLOWLIST = {
   feelings: new Set(['body-cues']),
   needs: new Set(),
-  situations: new Set(),
+  'faux-feelings': new Set(),
 };
 
 function verifyDirectoryCoverage(directory, slugMap, label) {
@@ -293,7 +293,7 @@ let dataset;
 let reverseIndex;
 let feelings = [];
 let needs = [];
-let situations = [];
+let fauxFeelings = [];
 let strategies = [];
 let reverseKeys = [];
 let successMessage = '';
@@ -312,20 +312,20 @@ try {
 
   feelings = ensureArray(dataset.feelings, 'Feelings');
   needs = ensureArray(dataset.needs, 'Needs');
-  situations = ensureArray(dataset.situations, 'Situations');
+  fauxFeelings = ensureArray(dataset.fauxFeelings, 'Faux feelings');
   strategies = ensureArray(dataset.strategies, 'Strategies');
 
   const feelingsBySlug = createSlugIndex(feelings, { label: 'Feeling', directory: 'feelings' });
   const needsBySlug = createSlugIndex(needs, { label: 'Need', directory: 'needs' });
-  const situationsBySlug = createSlugIndex(situations, {
-    label: 'Situation',
-    directory: 'situations',
+  const fauxFeelingsBySlug = createSlugIndex(fauxFeelings, {
+    label: 'Faux feeling',
+    directory: 'faux-feelings',
   });
   const strategiesBySlug = createSlugIndex(strategies, { label: 'Strategy' });
 
   const needsByTitle = buildTitleIndex(needsBySlug);
   const feelingsByTitle = buildTitleIndex(feelingsBySlug);
-  const situationsByTitle = buildTitleIndex(situationsBySlug);
+  const fauxFeelingsByTitle = buildTitleIndex(fauxFeelingsBySlug);
   const strategiesByTitle = buildTitleIndex(strategiesBySlug);
 
 function trackMissingReference(map, word, context) {
@@ -403,7 +403,7 @@ function ensureNeedWordHasPage(word, context) {
 
   verifyDirectoryCoverage('feelings', feelingsBySlug, 'Feeling');
   verifyDirectoryCoverage('needs', needsBySlug, 'Need');
-  verifyDirectoryCoverage('situations', situationsBySlug, 'Situation');
+  verifyDirectoryCoverage('faux-feelings', fauxFeelingsBySlug, 'Faux feeling');
 
   feelings.forEach((feeling) => {
     checkReferenceList({
@@ -417,10 +417,10 @@ function ensureNeedWordHasPage(word, context) {
     checkReferenceList({
       sourceLabel: 'Feeling',
       sourceItem: feeling,
-      listKey: 'situations',
-      targetLabel: 'Situation',
-      targetMap: situationsBySlug,
-      targetTitleIndex: situationsByTitle,
+      listKey: 'fauxFeelings',
+      targetLabel: 'Faux feeling',
+      targetMap: fauxFeelingsBySlug,
+      targetTitleIndex: fauxFeelingsByTitle,
     });
     checkBodySignals(feeling);
   });
@@ -437,10 +437,10 @@ function ensureNeedWordHasPage(word, context) {
     checkReferenceList({
       sourceLabel: 'Need',
       sourceItem: need,
-      listKey: 'situations',
-      targetLabel: 'Situation',
-      targetMap: situationsBySlug,
-      targetTitleIndex: situationsByTitle,
+      listKey: 'fauxFeelings',
+      targetLabel: 'Faux feeling',
+      targetMap: fauxFeelingsBySlug,
+      targetTitleIndex: fauxFeelingsByTitle,
     });
     checkReferenceList({
       sourceLabel: 'Need',
@@ -452,18 +452,18 @@ function ensureNeedWordHasPage(word, context) {
     });
   });
 
-  situations.forEach((situation) => {
+  fauxFeelings.forEach((fauxFeeling) => {
     checkReferenceList({
-      sourceLabel: 'Situation',
-      sourceItem: situation,
+      sourceLabel: 'Faux feeling',
+      sourceItem: fauxFeeling,
       listKey: 'feelings',
       targetLabel: 'Feeling',
       targetMap: feelingsBySlug,
       targetTitleIndex: feelingsByTitle,
     });
     checkReferenceList({
-      sourceLabel: 'Situation',
-      sourceItem: situation,
+      sourceLabel: 'Faux feeling',
+      sourceItem: fauxFeeling,
       listKey: 'needs',
       targetLabel: 'Need',
       targetMap: needsBySlug,
@@ -551,7 +551,7 @@ function ensureNeedWordHasPage(word, context) {
       counts: {
         feelings: feelings.length,
         needs: needs.length,
-        situations: situations.length,
+        fauxFeelings: fauxFeelings.length,
         strategies: strategies.length,
         reverseEntries: reverseKeys.length,
       },
@@ -560,7 +560,7 @@ function ensureNeedWordHasPage(word, context) {
     failureMessage = `Data integrity check failed with ${issues.length} issue(s). Detailed report saved to ${reportRelativePath}.\n${summary}`;
   } else {
     clearFailureReport();
-    successMessage = `Data integrity check passed for ${feelings.length} feelings, ${needs.length} needs, ${situations.length} situations, ${strategies.length} strategies, and ${reverseKeys.length} reverse inference entries.`;
+    successMessage = `Data integrity check passed for ${feelings.length} feelings, ${needs.length} needs, ${fauxFeelings.length} faux feelings, ${strategies.length} strategies, and ${reverseKeys.length} reverse inference entries.`;
   }
 } catch (error) {
   unexpectedError = error;

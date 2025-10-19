@@ -250,16 +250,16 @@ test('highlightNavigation prefers the most specific matching link', () => {
 });
 
 test('highlightNavigation falls back to alias when needed', () => {
-  const situationsLink = makeLink('../situations/');
+  const fauxFeelingsLink = makeLink('../faux-feelings/');
   const feelingsLink = makeLink('../feelings/');
-  currentNavLinks = [situationsLink, feelingsLink];
+  currentNavLinks = [fauxFeelingsLink, feelingsLink];
   window.location.pathname = '/alexithymia-support/';
   window.location.href = 'https://example.com/alexithymia-support/';
 
   highlightNavigation();
 
   assert.equal(feelingsLink.getAttribute('aria-current'), 'page');
-  assert.equal(situationsLink.hasAttribute('aria-current'), false);
+  assert.equal(fauxFeelingsLink.hasAttribute('aria-current'), false);
 });
 
 test('highlightNavigation activates direct path when aria-current missing', () => {

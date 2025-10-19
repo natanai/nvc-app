@@ -1,6 +1,6 @@
 # Magnet directory search
 
-The magnet directory pages (Feelings, Needs, and Situations) share a common
+The magnet directory pages (Feelings, Needs, and Faux feelings) share a common
 search workflow that is orchestrated by `scripts/magnets.js`.
 
 ## UI elements

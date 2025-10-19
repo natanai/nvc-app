@@ -111,13 +111,13 @@ function render() {
       : 'No cues detected yet — add what was seen/heard.';
   }
 
-  const situations = deriveSituations(feelingSlugs, needSlugs);
-  renderChips($('#free-suggest-situations'), situations, '/situations/', state.catalog.situations);
-  const situationsHint = $('#free-suggest-situations-hint');
-  if (situationsHint) {
-    situationsHint.textContent = situations.length
+  const fauxFeelings = deriveFauxFeelings(feelingSlugs, needSlugs);
+  renderChips($('#free-suggest-faux-feelings'), fauxFeelings, '/faux-feelings/', state.catalog.fauxFeelings);
+  const fauxFeelingsHint = $('#free-suggest-faux-feelings-hint');
+  if (fauxFeelingsHint) {
+    fauxFeelingsHint.textContent = fauxFeelings.length
       ? 'Linked from the current feeling and need matches.'
-      : 'Add more detail to surface related situations.';
+      : 'Add more detail to surface related faux feelings.';
   }
 
   const rewriteBtn = $('#rewrite-btn');
@@ -161,7 +161,7 @@ function createEmptyCatalog() {
   return {
     feelings: new Map(),
     needs: new Map(),
-    situations: new Map(),
+    fauxFeelings: new Map(),
   };
 }
 
@@ -180,7 +180,7 @@ async function loadCatalog(url) {
 function buildCatalog(data) {
   const feelings = new Map();
   const needs = new Map();
-  const situations = new Map();
+  const fauxFeelings = new Map();
 
   if (Array.isArray(data?.feelings)) {
     data.feelings.forEach(item => {
@@ -188,7 +188,7 @@ function buildCatalog(data) {
         feelings.set(item.slug, {
           title: item.title || item.slug,
           slug: item.slug,
-          situations: Array.isArray(item.situations) ? item.situations.map(s => s.slug).filter(Boolean) : [],
+          fauxFeelings: Array.isArray(item.fauxFeelings) ? item.fauxFeelings.map(s => s.slug).filter(Boolean) : [],
         });
       }
     });
@@ -205,10 +205,10 @@ function buildCatalog(data) {
     });
   }
 
-  if (Array.isArray(data?.situations)) {
-    data.situations.forEach(item => {
+  if (Array.isArray(data?.fauxFeelings)) {
+    data.fauxFeelings.forEach(item => {
       if (item?.slug) {
-        situations.set(item.slug, {
+        fauxFeelings.set(item.slug, {
           title: item.title || item.slug,
           slug: item.slug,
           feelings: Array.isArray(item.feelings) ? item.feelings.map(f => f.slug).filter(Boolean) : [],
@@ -218,7 +218,7 @@ function buildCatalog(data) {
     });
   }
 
-  return { feelings, needs, situations };
+  return { feelings, needs, fauxFeelings };
 }
 
 function sanitizeCues(cues, catalog) {
@@ -230,14 +230,14 @@ function sanitizeCues(cues, catalog) {
   }));
 }
 
-function deriveSituations(feelingSlugs, needSlugs) {
+function deriveFauxFeelings(feelingSlugs, needSlugs) {
   if (!state.catalog) return [];
   const fSet = new Set(feelingSlugs || []);
   const nSet = new Set(needSlugs || []);
   if (!fSet.size && !nSet.size) return [];
 
   const matches = [];
-  state.catalog.situations.forEach((value, slug) => {
+  state.catalog.fauxFeelings.forEach((value, slug) => {
     const hasFeeling = value.feelings?.some(f => fSet.has(f));
     const hasNeed = value.needs?.some(n => nSet.has(n));
     if (hasFeeling || hasNeed) {

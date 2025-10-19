@@ -4,7 +4,7 @@
       "title": "Hurt",
       "slug": "hurt",
       "description": "You may feel sharp, throbbing, or dull sensations signaling that a part of you needs care. Pain focuses attention where healing or rest is required. The capacity to feel physical pain is a universal adaptation protecting organisms from further harm.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -198,7 +198,7 @@
       "title": "Terrified",
       "slug": "terrified",
       "description": "You might freeze completely, feel your heart pounding, or lose awareness of your surroundings. This feeling arises when fear overwhelms capacity to act. Evolutionarily, the freeze response can reduce detection by predators and conserve energy.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -237,7 +237,7 @@
       "title": "Bewildered",
       "slug": "bewildered",
       "description": "Your eyes may widen, your forehead wrinkle, and your mind pause as it struggles to make sense of conflicting signals. This feeling can arise when the world suddenly seems unfamiliar. Cognitive scientists suggest confusion encourages humans to slow down and seek new understanding.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -307,7 +307,7 @@
       "title": "Sad",
       "slug": "sad",
       "description": "You might feel tears welling, shoulders drooping, and energy drawing inward. Sadness appears when something meaningful feels lost. Scientists widely agree it evolved to slow us down and invite reflection or social comfort.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -514,7 +514,7 @@
       "title": "Frightened",
       "slug": "frightened",
       "description": "You may feel frozen, breathless, or small in your body. This state arises when a danger feels overwhelming. The freeze response is an ancient mammalian defense meant to increase survival when escape seems impossible.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -665,7 +665,7 @@
       "title": "Lonely",
       "slug": "lonely",
       "description": "Your body may ache for touch or warmth, your chest feel hollow, and your mind turn toward memories of connection. This feeling appears when social bonds feel absent. Research shows loneliness evolved as a signal motivating humans to reconnect with others for mutual survival.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -787,7 +787,7 @@
       "title": "Angry",
       "slug": "angry",
       "description": "Heat might rise in your chest or face, your jaw may tighten, and you may feel energy building to act. Anger often appears when you perceive an obstacle to something deeply important or when a boundary feels crossed. Biologists view anger as an evolved signal to mobilize energy toward defending fairness or protection.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abused",
           "slug": "abused"
@@ -1137,7 +1137,7 @@
       "title": "Frustrated",
       "slug": "frustrated",
       "description": "Your jaw may tighten, brows knit, and energy surge as effort meets resistance. Frustration often arrives when repeated attempts don't land the outcome you imagined. Researchers view it as a signal to pause, adjust strategy, or seek collaboration before energy is depleted.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abused",
           "slug": "abused"
@@ -1387,7 +1387,7 @@
       "title": "Scared",
       "slug": "scared",
       "description": "Your breath may quicken, your muscles tense, and you may instinctively seek closeness or escape. This feeling arises when danger feels near. It is part of a deeply conserved biological system designed to protect from harm.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Attacked",
           "slug": "attacked"
@@ -1593,7 +1593,7 @@
       "title": "Upset",
       "slug": "upset",
       "description": "You might feel an unsettled stomach, tight chest, or sudden tears. This feeling emerges when emotions conflict or expectations clash with reality. It reflects the body’s signal that care and recalibration are needed.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "(Not) Accepted",
           "slug": "not-accepted"
@@ -1651,7 +1651,7 @@
       "title": "Tense",
       "slug": "tense",
       "description": "You may feel your neck or back tighten, jaw clench, and breath stay shallow. Tension shows the body’s effort to hold itself ready under stress. Physiology suggests it’s a short-term survival mechanism that becomes uncomfortable when prolonged.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -1697,7 +1697,7 @@
       "title": "Distressed",
       "slug": "distressed",
       "description": "Your breathing may quicken, your face tighten, or your chest feel heavy. This feeling can arise when multiple needs compete or when uncertainty feels unmanageable. The human stress response evolved to mobilize resources for coping or seeking support.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -1763,7 +1763,7 @@
       "title": "Disappointed",
       "slug": "disappointed",
       "description": "Your shoulders might drop, your face soften, and energy leave your body. This feeling visits when hopes or expectations go unmet. Scientists suggest it evolved to help people pause and reassess goals after unmet outcomes.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -1850,7 +1850,7 @@
       "title": "Enraged",
       "slug": "enraged",
       "description": "You might feel heat surge, muscles clench, and vision narrow. This intense state often follows perceived injustice or harm. From an evolutionary view, rage focuses all energy on removing immediate threats or restoring violated boundaries.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -1892,7 +1892,7 @@
       "title": "Confused",
       "slug": "confused",
       "description": "Your thoughts may feel cloudy or circular, and your body may grow still as your mind tries to orient. Confusion can appear when information conflicts or when expectations aren’t met. It evolved to prompt re-evaluation, allowing flexible problem-solving.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -1942,7 +1942,7 @@
       "title": "Antagonistic",
       "slug": "antagonistic",
       "description": "You might feel your chest puff or muscles stiffen as your body prepares to assert itself. This feeling arises when you sense opposition or threat to your viewpoint or values. Researchers link such states to dominance and defense systems meant to establish boundaries within social groups.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -1988,7 +1988,7 @@
       "title": "Hostile",
       "slug": "hostile",
       "description": "You might sense tension in your jaw or shoulders, with thoughts focused on opposition. This feeling surfaces when you perceive someone as adversarial or unsafe. It evolved to protect social standing and resources within groups.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -2047,7 +2047,7 @@
       "title": "Pressured",
       "slug": "pressured",
       "description": "Your neck or shoulders may tense, your breath shorten, and time may feel scarce. This state arises when external expectations exceed your current capacity. Pressure activates stress systems evolved to prioritize urgent tasks but can overwhelm if prolonged.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Bullied",
           "slug": "bullied"
@@ -2097,7 +2097,7 @@
       "title": "Thwarted",
       "slug": "thwarted",
       "description": "Your body may lurch forward while something blocks progress, leaving lingering agitation. This feeling comes when effort meets resistance. It evolved to motivate persistence or creative problem-solving until the goal is met.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Caged/Boxed-in",
           "slug": "caged-boxed-in"
@@ -2167,7 +2167,7 @@
       "title": "Anxious",
       "slug": "anxious",
       "description": "You may notice tightness in your shoulders, a quickened pulse, or restlessness in your legs. This feeling often visits when uncertainty combines with concern about outcomes. It reflects the brain’s vigilance system — a useful adaptation that once helped early humans stay safe from unseen dangers.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Caged/Boxed-in",
           "slug": "caged-boxed-in"
@@ -2290,7 +2290,7 @@
       "title": "Resentful",
       "slug": "resentful",
       "description": "You may feel tightness in your chest and replay thoughts of unfairness. This feeling often builds when past actions still feel unresolved. Researchers view resentment as an emotional reminder to address unmet needs for fairness or acknowledgment.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Cheated",
           "slug": "cheated"
@@ -2428,7 +2428,7 @@
       "title": "In pain",
       "slug": "in-pain",
       "description": "Your body’s nerve signals draw focus to a specific spot that needs attention or healing. Pain may bring tears, tension, or stillness. Universally, it evolved to protect the body from further harm and prompt restoration.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Criticized",
           "slug": "criticized"
@@ -2466,7 +2466,7 @@
       "title": "Humiliated",
       "slug": "humiliated",
       "description": "Your face may burn, your chest constrict, and you may wish to disappear. This feeling arises when you perceive a deep loss of respect or dignity. Anthropologists note humiliation likely evolved as a social alarm that helps maintain status and cooperation.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Criticized",
           "slug": "criticized"
@@ -2504,7 +2504,7 @@
       "title": "Embarrassed",
       "slug": "embarrassed",
       "description": "You may feel warmth rise to your face, look down, or avoid eye contact. This feeling occurs when you believe others see you in a way you didn’t intend. Social scientists find embarrassment evolved to repair trust by signaling awareness of social norms.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Criticized",
           "slug": "criticized"
@@ -2606,7 +2606,7 @@
       "title": "Overwhelmed",
       "slug": "overwhelmed",
       "description": "You may notice shallow breathing, mental fog, or the impulse to withdraw. This feeling arises when demands exceed what your system can process. It evolved as a signal to pause, rest, or seek help before depletion.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Dumped on",
           "slug": "dumped-on"
@@ -2676,7 +2676,7 @@
       "title": "Irritated",
       "slug": "irritated",
       "description": "You might feel heat behind your eyes or tension around your mouth. Irritation tends to arise from repeated small frustrations or overstimulation. Scientists view it as a mild activation of the same defensive systems that produce anger.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Hassled",
           "slug": "hassled"
@@ -2738,7 +2738,7 @@
       "title": "Anxiety",
       "slug": "anxiety",
       "description": "Your stomach may flutter, muscles tense, and thoughts race through possible futures. Anxiety can surface when the unknown feels risky or when you sense you must stay alert. Scientists believe it evolved to help anticipate and prevent harm before it happens.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Intimidated",
           "slug": "intimidated"
@@ -2788,7 +2788,7 @@
       "title": "Afraid",
       "slug": "afraid",
       "description": "Your body may tighten, your pupils widen, and your heart race as adrenaline prepares you for protection or escape. This feeling can arise when something seems uncertain or unsafe. Scientists widely agree fear evolved to help humans detect and respond quickly to danger.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Isolated",
           "slug": "isolated"
@@ -2822,7 +2822,7 @@
       "title": "Powerless",
       "slug": "powerless",
       "description": "You might feel tension drain from your muscles and a sense of collapse in your posture. This feeling comes when outcomes seem beyond your control. Scientists suggest it evolved to prevent futile effort and redirect focus toward achievable goals.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Manipulated",
           "slug": "manipulated"
@@ -2876,7 +2876,7 @@
       "title": "Impotent",
       "slug": "impotent",
       "description": "You may feel your limbs heavy, your chest sunken, and energy withdrawn inward. This feeling appears when you sense no power to influence events. It may have evolved to conserve resources when immediate action cannot change the outcome.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Overpowered",
           "slug": "overpowered"
@@ -2911,7 +2911,7 @@
       "title": "Helpless",
       "slug": "helpless",
       "description": "Your body may feel heavy, your movements slow, and your energy drained. This feeling often comes when repeated effort fails to bring change. Researchers see helplessness as a signal to conserve energy until new strategies or support appear.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Overpowered",
           "slug": "overpowered"
@@ -2965,7 +2965,7 @@
       "title": "Tired",
       "slug": "tired",
       "description": "You may feel heaviness in your eyelids, slower thoughts, or a pull toward stillness. Fatigue arises when energy stores are low or overstimulation persists. Rest and sleep needs evolved to maintain cellular repair and cognitive clarity.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Overworked",
           "slug": "overworked"
@@ -2999,7 +2999,7 @@
       "title": "Defiant",
       "slug": "defiant",
       "description": "Your spine may straighten and your chest expand as energy gathers to resist control. This feeling appears when autonomy or dignity feels threatened. Psychologists view defiance as an adaptive impulse to preserve agency and self-direction.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Rejected",
           "slug": "rejected"
@@ -3057,7 +3057,7 @@
       "title": "Fear",
       "slug": "fear",
       "description": "Your heartbeat accelerates, palms sweat, and you may instinctively scan your surroundings. This feeling surfaces when safety seems at risk. Evolutionarily, fear’s quick activation of the fight–flight system has been essential for survival.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Smothered/Suffocated",
           "slug": "smothered-suffocated"
@@ -3095,7 +3095,7 @@
       "title": "Desperation",
       "slug": "desperation",
       "description": "You may notice shallow breathing, trembling, or frantic energy as your body seeks a way out. This feeling can arise when options seem few and survival feels uncertain. Biologically, such intensity pushes organisms to take immediate action to restore safety.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Smothered/Suffocated",
           "slug": "smothered-suffocated"
@@ -3133,7 +3133,7 @@
       "title": "Alarmed",
       "slug": "alarmed",
       "description": "Your heartbeat may spike suddenly, your breath catch, and your body freeze before deciding whether to flee or fight. This feeling often appears when something unexpected challenges your sense of safety. Evolutionarily, this rapid response helps orient attention toward immediate threats.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Threatened",
           "slug": "threatened"
@@ -3159,7 +3159,7 @@
       "title": "Agitated",
       "slug": "agitated",
       "description": "You might feel restless energy in your limbs, shallow breathing, or an urge to move. This state often appears when your mind or environment feels unsettled. It may have evolved to signal the body to prepare for action or to restore balance.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Threatened",
           "slug": "threatened"
@@ -3205,7 +3205,7 @@
       "title": "Jealous",
       "slug": "jealous",
       "description": "You may feel tightness in the chest or stomach, and your attention may fixate on a valued bond or resource. This feeling surfaces when something precious feels threatened by loss to another. Evolutionary psychologists see jealousy as a mechanism to protect attachment and investment in relationships.",
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Left out",
           "slug": "left-out"
@@ -3256,7 +3256,7 @@
           "slug": "self-holding"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -3368,7 +3368,7 @@
           "slug": "tend-to-a-plant"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -3452,7 +3452,7 @@
           "slug": "specific-thank-you"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -3600,7 +3600,7 @@
           "slug": "read-a-poem-you-like-aloud"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -3732,7 +3732,7 @@
           "slug": "name-one-help-to-ask"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abandoned",
           "slug": "abandoned"
@@ -3824,7 +3824,7 @@
           "slug": "three-breaths-before-reply"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abused",
           "slug": "abused"
@@ -3980,7 +3980,7 @@
           "slug": "share-your-strategies"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Abused",
           "slug": "abused"
@@ -4028,7 +4028,7 @@
           "slug": "play-a-video-game"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "(Not) Accepted",
           "slug": "not-accepted"
@@ -4152,7 +4152,7 @@
           "slug": "kind-comment-online"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "(Not) Accepted",
           "slug": "not-accepted"
@@ -4304,7 +4304,7 @@
           "slug": "name-support-options"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Attacked",
           "slug": "attacked"
@@ -4436,7 +4436,7 @@
           "slug": "name-one-help-to-ask"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "(Not) Accepted",
           "slug": "not-accepted"
@@ -4488,7 +4488,7 @@
           "slug": "call-a-friend"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "(Not) Accepted",
           "slug": "not-accepted"
@@ -4552,7 +4552,7 @@
           "slug": "micro-boundary"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -4780,7 +4780,7 @@
           "slug": "name-a-want-a-don-t"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -4960,7 +4960,7 @@
           "slug": "read-a-poem-you-like-aloud"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -5048,7 +5048,7 @@
           "slug": "read-a-poem-you-like-aloud"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -5204,7 +5204,7 @@
           "slug": "five-gratitudes-by-need"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Belittled",
           "slug": "belittled"
@@ -5308,7 +5308,7 @@
           "slug": "schedule-your-day"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -5448,7 +5448,7 @@
           "slug": "mindfulness-trust"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -5532,7 +5532,7 @@
           "slug": "name-a-want-a-don-t"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -5608,7 +5608,7 @@
           "slug": "honor-reflection-meditation"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -5684,7 +5684,7 @@
           "slug": "crunch-the-numbers"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -5812,7 +5812,7 @@
           "slug": "name-a-want-a-don-t"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Betrayed",
           "slug": "betrayed"
@@ -5888,7 +5888,7 @@
           "slug": "schedule-your-day"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -5976,7 +5976,7 @@
           "slug": "play-a-video-game"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -6013,7 +6013,7 @@
         }
       ],
       "originalClaim": "Accurate mental models of ‘what leads to what’ reduce uncertainty and error. This need motivates investigation, testing assumptions, and building shared explanations. Clarity about causality improves prediction and effective action.",
-      "rewrittenClaim": "People have a strong drive to understand cause-and-effect – having a correct idea of “what leads to what” helps us feel less uncertain and avoid mistakes. This need for causal understanding pushes us to investigate how things work, challenge our assumptions with experiments or questions, and develop explanations that we can share with others. Cognitive science indicates that when we grasp causality clearly, we can make better predictions about the future and take more effective actions (our brains are essentially prediction machines that crave reliable patterns; uncertainty triggers stress until explained). In summary, gaining clarity about causal relationships (whether in science, everyday problems, or interpersonal situations) improves our ability to anticipate outcomes and respond appropriately.",
+      "rewrittenClaim": "People have a strong drive to understand cause-and-effect – having a correct idea of “what leads to what” helps us feel less uncertain and avoid mistakes. This need for causal understanding pushes us to investigate how things work, challenge our assumptions with experiments or questions, and develop explanations that we can share with others. Cognitive science indicates that when we grasp causality clearly, we can make better predictions about the future and take more effective actions (our brains are essentially prediction machines that crave reliable patterns; uncertainty triggers stress until explained). In summary, gaining clarity about causal relationships (whether in science, everyday problems, or interpersonal faux feelings) improves our ability to anticipate outcomes and respond appropriately.",
       "supportingSources": [
         {
           "url": "https://www.nature.com/articles/s41562-019-0766-4",
@@ -6040,7 +6040,7 @@
           "slug": "compassionate-meditation"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -6124,7 +6124,7 @@
           "slug": "write-a-letter"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Blamed",
           "slug": "blamed"
@@ -6256,7 +6256,7 @@
           "slug": "name-support-options"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Bullied",
           "slug": "bullied"
@@ -6340,7 +6340,7 @@
           "slug": "shake-for-30-seconds"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Caged/Boxed-in",
           "slug": "caged-boxed-in"
@@ -6440,7 +6440,7 @@
           "slug": "schedule-your-day"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Cheated",
           "slug": "cheated"
@@ -6461,7 +6461,7 @@
         }
       ],
       "originalClaim": "Consistency across time and context is essential for complex coordination. This need motivates redundancies, maintenance, and realistic commitments. Reliability lowers friction and builds dependable systems.",
-      "rewrittenClaim": "For any complicated task or teamwork to succeed, each part needs to perform consistently whenever needed – that’s the essence of reliability. When something (or someone) is reliable, it behaves predictably the same way across different times and situations. This is critical for coordination: others can plan and act with the confidence that the reliable element won’t fail or change unexpectedly. The need for reliability pushes people to build in safeguards and backups (redundancies) in systems, to do regular maintenance and check-ups on tools or processes, and to make promises or plans they can realistically keep (instead of over-promising and under-delivering). By emphasizing reliability, organizations reduce friction – there are fewer breakdowns, surprises, or misunderstandings – and they create setups that everyone trusts. For example, a reliable colleague or machine means one less thing to worry about, freeing the team to focus on higher-level issues. In short, reliability in each component creates a foundation of dependability for the whole system, allowing complex operations to run smoothly.",
+      "rewrittenClaim": "For any complicated task or teamwork to succeed, each part needs to perform consistently whenever needed – that’s the essence of reliability. When something (or someone) is reliable, it behaves predictably the same way across different times and faux feelings. This is critical for coordination: others can plan and act with the confidence that the reliable element won’t fail or change unexpectedly. The need for reliability pushes people to build in safeguards and backups (redundancies) in systems, to do regular maintenance and check-ups on tools or processes, and to make promises or plans they can realistically keep (instead of over-promising and under-delivering). By emphasizing reliability, organizations reduce friction – there are fewer breakdowns, surprises, or misunderstandings – and they create setups that everyone trusts. For example, a reliable colleague or machine means one less thing to worry about, freeing the team to focus on higher-level issues. In short, reliability in each component creates a foundation of dependability for the whole system, allowing complex operations to run smoothly.",
       "supportingSources": [
         {
           "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
@@ -6488,7 +6488,7 @@
           "slug": "road-trip"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Coerced",
           "slug": "coerced"
@@ -6544,7 +6544,7 @@
           "slug": "make-a-request-in-conversation"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Coerced",
           "slug": "coerced"
@@ -6612,7 +6612,7 @@
           "slug": "listen-to-music"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Criticized",
           "slug": "criticized"
@@ -6693,7 +6693,7 @@
         }
       ],
       "originalClaim": "Shared meaning lowers error and conflict during complex tasks. This need motivates inquiry, paraphrasing, and constructing common models. Understanding aligns action and strengthens relationships.",
-      "rewrittenClaim": "People working or living together need to have a mutual understanding – a shared interpretation of goals, situations, or language – to avoid mistakes and unnecessary disagreements. When everyone “gets” the situation in a similar way, complex tasks go more smoothly and conflicts are minimized. The need for understanding pushes us to ask questions when we’re unsure (“Could you clarify what you mean?”), to rephrase or paraphrase what others say to confirm we got it right, and to develop common reference points or models (like shared jargon, or a team game plan) that everyone can refer to. In team research, groups that take time to form a shared mental model of their project make fewer errors and coordinate better. Similarly, in personal relationships, actively striving to understand each other’s perspectives (instead of assuming or talking past one another) strengthens the bond and reduces friction. Ultimately, achieving mutual understanding means aligning everyone’s actions toward the same picture of reality and goals. It not only improves effectiveness in tasks but also builds trust and closeness, because each person feels “seen” and on the same page with the others. Belonging",
+      "rewrittenClaim": "People working or living together need to have a mutual understanding – a shared interpretation of goals, faux feelings, or language – to avoid mistakes and unnecessary disagreements. When everyone “gets” the situation in a similar way, complex tasks go more smoothly and conflicts are minimized. The need for understanding pushes us to ask questions when we’re unsure (“Could you clarify what you mean?”), to rephrase or paraphrase what others say to confirm we got it right, and to develop common reference points or models (like shared jargon, or a team game plan) that everyone can refer to. In team research, groups that take time to form a shared mental model of their project make fewer errors and coordinate better. Similarly, in personal relationships, actively striving to understand each other’s perspectives (instead of assuming or talking past one another) strengthens the bond and reduces friction. Ultimately, achieving mutual understanding means aligning everyone’s actions toward the same picture of reality and goals. It not only improves effectiveness in tasks but also builds trust and closeness, because each person feels “seen” and on the same page with the others. Belonging",
       "supportingSources": [
         {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/",
@@ -6732,7 +6732,7 @@
           "slug": "micro-celebration"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Criticized",
           "slug": "criticized"
@@ -6832,7 +6832,7 @@
           "slug": "call-a-parent"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Criticized",
           "slug": "criticized"
@@ -6904,7 +6904,7 @@
           "slug": "read-a-poem-you-like-aloud"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Discounted/Diminished",
           "slug": "discounted-diminished"
@@ -6960,7 +6960,7 @@
           "slug": "play-a-video-game"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Disliked",
           "slug": "disliked"
@@ -7020,7 +7020,7 @@
           "slug": "phone-face-down"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Harassed",
           "slug": "harassed"
@@ -7184,7 +7184,7 @@
           "slug": "three-breaths-before-reply"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Harassed",
           "slug": "harassed"
@@ -7244,7 +7244,7 @@
           "slug": "read-a-poem-you-like-aloud"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Hassled",
           "slug": "hassled"
@@ -7296,7 +7296,7 @@
           "slug": "road-trip"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Hassled",
           "slug": "hassled"
@@ -7356,7 +7356,7 @@
           "slug": "listen-to-music"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Hassled",
           "slug": "hassled"
@@ -7412,7 +7412,7 @@
           "slug": "try-meetup"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Ignored",
           "slug": "ignored"
@@ -7488,7 +7488,7 @@
           "slug": "read-a-poem-you-like-aloud"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Interrupted",
           "slug": "interrupted"
@@ -7568,7 +7568,7 @@
           "slug": "write-a-letter"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Intimidated",
           "slug": "intimidated"
@@ -7676,7 +7676,7 @@
           "slug": "stand-largely"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Intimidated",
           "slug": "intimidated"
@@ -7756,7 +7756,7 @@
           "slug": "schedule-your-day"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Let down",
           "slug": "let-down"
@@ -7800,7 +7800,7 @@
           "slug": "listen-to-music"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Manipulated",
           "slug": "manipulated"
@@ -7860,7 +7860,7 @@
           "slug": "sing"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Neglected",
           "slug": "neglected"
@@ -7881,7 +7881,7 @@
         }
       ],
       "originalClaim": "Feeling significant to others predicts well-being and engagement. This need motivates meaningful roles, feedback about impact, and participation where presence counts. Centering mattering reinforces purpose for both individuals and groups.",
-      "rewrittenClaim": "Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in situations where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
+      "rewrittenClaim": "Mattering” refers to feeling that you truly matter to other people – that you are noticed, cared about, and valued by them. Research indicates that when individuals feel they matter to others, they experience better mental health and are more engaged and motivated in their daily lives. This need to feel significant drives people to seek roles or tasks that are meaningful and valued by their group, to look for feedback that their contributions have an impact, and to get involved in faux feelings where their presence makes a difference. In environments (workplaces, schools, families) that consciously affirm each person’s significance, both the individual and the group benefit: individuals gain a sense of purpose and commitment, and groups enjoy higher participation and loyalty. In summary, making sure people know they matter – that their existence and input are important – reinforces a shared sense of purpose and boosts overall well-being and engagement.",
       "supportingSources": [
         {
           "url": "https://www.tandfonline.com/doi/pdf/10.1080/13576500444000119",
@@ -7940,7 +7940,7 @@
           "slug": "pillow-nest"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Overworked",
           "slug": "overworked"
@@ -8000,7 +8000,7 @@
           "slug": "name-one-help-to-ask"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Patronized",
           "slug": "patronized"
@@ -8068,7 +8068,7 @@
           "slug": "no-man-s-sky"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Pressured",
           "slug": "pressured"
@@ -8120,7 +8120,7 @@
           "slug": "call-a-parent"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Rejected",
           "slug": "rejected"
@@ -8172,7 +8172,7 @@
           "slug": "write"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Smothered/Suffocated",
           "slug": "smothered-suffocated"
@@ -8193,7 +8193,7 @@
         }
       ],
       "originalClaim": "Congruence between inner experience and outer behavior supports clarity and reduces social ambiguity. This need motivates transparent communication and value-consistent choices. Respecting authenticity preserves self-coherence and dependable signaling in relationships.",
-      "rewrittenClaim": "Living and interacting in a way that aligns with one’s true feelings and values (i.e. being authentic) provides clarity for oneself and others. When our outward behavior matches our inner experience, it minimizes confusion or mixed signals in social situations. This need for authenticity drives honest, transparent communication and decisions that reflect our core values. Psychological research suggests that people who act authentically tend to experience greater self-esteem and more satisfying relationships, likely because others can trust that their signals are genuine. In summary, honoring authenticity helps maintain personal integrity and ensures more dependable, clear interactions in relationships.",
+      "rewrittenClaim": "Living and interacting in a way that aligns with one’s true feelings and values (i.e. being authentic) provides clarity for oneself and others. When our outward behavior matches our inner experience, it minimizes confusion or mixed signals in social faux feelings. This need for authenticity drives honest, transparent communication and decisions that reflect our core values. Psychological research suggests that people who act authentically tend to experience greater self-esteem and more satisfying relationships, likely because others can trust that their signals are genuine. In summary, honoring authenticity helps maintain personal integrity and ensures more dependable, clear interactions in relationships.",
       "supportingSources": [
         {
           "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.01052/full",
@@ -8236,7 +8236,7 @@
           "slug": "sing"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Smothered/Suffocated",
           "slug": "smothered-suffocated"
@@ -8292,7 +8292,7 @@
           "slug": "value-compass-card"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Tricked",
           "slug": "tricked"
@@ -8313,7 +8313,7 @@
         }
       ],
       "originalClaim": "Coherence between values and behavior reduces internal conflict and external confusion. This need motivates alignment, boundary maintenance, and principled action under pressure. Integrity supports self-respect and predictability for others.",
-      "rewrittenClaim": "Integrity means living by your principles – making sure that what you do reflects what you deeply believe is right. When people have integrity, they experience less inner turmoil (because they aren’t betraying their own values) and they avoid confusing those around them (because their behavior consistently matches their stated ideals). The need for integrity drives individuals to align their decisions and actions with their core values, to maintain personal boundaries that prevent compromising those values, and to stick to ethics even when under pressure to do otherwise. This consistency supports self-respect (you can feel at peace with yourself) and makes one’s behavior more predictable and trustworthy to others. For example, a leader with integrity will act according to their professed mission and moral standards even in tough situations, which earns them respect and makes it easier for others to anticipate their actions. In short, integrity is about wholeness of character – it ensures we are the same person in principle and practice, benefiting both our inner well-being and our relationships.",
+      "rewrittenClaim": "Integrity means living by your principles – making sure that what you do reflects what you deeply believe is right. When people have integrity, they experience less inner turmoil (because they aren’t betraying their own values) and they avoid confusing those around them (because their behavior consistently matches their stated ideals). The need for integrity drives individuals to align their decisions and actions with their core values, to maintain personal boundaries that prevent compromising those values, and to stick to ethics even when under pressure to do otherwise. This consistency supports self-respect (you can feel at peace with yourself) and makes one’s behavior more predictable and trustworthy to others. For example, a leader with integrity will act according to their professed mission and moral standards even in tough faux feelings, which earns them respect and makes it easier for others to anticipate their actions. In short, integrity is about wholeness of character – it ensures we are the same person in principle and practice, benefiting both our inner well-being and our relationships.",
       "supportingSources": [
         {
           "url": "https://doi.org/10.1521/jscp.2008.27.10.1078",
@@ -8336,7 +8336,7 @@
           "slug": "view-previous-things-you-ve-written-or-made"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Unheard",
           "slug": "unheard"
@@ -8392,7 +8392,7 @@
           "slug": "road-trip"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Violated",
           "slug": "violated"
@@ -8460,10 +8460,10 @@
           "slug": "put-it-on-paper"
         }
       ],
-      "situations": [],
+      "fauxFeelings": [],
       "feelings": [],
       "originalClaim": "Structure and organization reduce error and cognitive strain. This need motivates sorting, sequencing, standardizing, and documenting. Order frees attention for creativity and nuanced thinking.",
-      "rewrittenClaim": "Having order – a sense of organized structure in our environment or tasks – helps us function with fewer errors and less mental effort. When things are sorted, in their proper sequence, standardized where appropriate, and documented clearly, we don’t waste brainpower trying to find things or figure out chaotic situations. This need for order drives us to tidy up, make checklists or schedules, establish routines, and write down procedures. By reducing clutter and unpredictability, orderliness actually increases our capacity for higher-level thinking: with basic details under control, our attention is “freed up” for creativity, problem-solving, or subtle analysis. Empirical studies have found that people in an organized setting tend to perform better on complex cognitive tasks and make more prudent decisions than those in a messy or unstructured setting (disorder imposes a cognitive tax). In summary, maintaining order mitigates unnecessary cognitive strain and distraction, providing a stable platform from which we can engage in more nuanced or inventive thinking.",
+      "rewrittenClaim": "Having order – a sense of organized structure in our environment or tasks – helps us function with fewer errors and less mental effort. When things are sorted, in their proper sequence, standardized where appropriate, and documented clearly, we don’t waste brainpower trying to find things or figure out chaotic faux feelings. This need for order drives us to tidy up, make checklists or schedules, establish routines, and write down procedures. By reducing clutter and unpredictability, orderliness actually increases our capacity for higher-level thinking: with basic details under control, our attention is “freed up” for creativity, problem-solving, or subtle analysis. Empirical studies have found that people in an organized setting tend to perform better on complex cognitive tasks and make more prudent decisions than those in a messy or unstructured setting (disorder imposes a cognitive tax). In summary, maintaining order mitigates unnecessary cognitive strain and distraction, providing a stable platform from which we can engage in more nuanced or inventive thinking.",
       "supportingSources": [
         {
           "url": "https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.2044-8279.1992.tb01017.x",
@@ -8506,7 +8506,7 @@
           "slug": "open-the-blinds"
         }
       ],
-      "situations": [],
+      "fauxFeelings": [],
       "feelings": [],
       "originalClaim": "Humans are sensitive to pattern, harmony, and environmental cues associated with safety and resources. This need motivates attending to nature, art, and design that promote orientation and calm. Investing in beauty improves attention, mood, and restorative experience.",
       "rewrittenClaim": "Humans naturally respond to beauty – we’re attuned to patterns and harmony in our environment, which historically signaled things like safety or rich resources (for example, a lush, orderly landscape might promise food and shelter). As a result, we have a drive to seek out nature, art, and pleasing design that help us feel oriented and at ease. Psychology research confirms that exposure to beautiful natural settings can restore our ability to concentrate, lift our mood, and reduce stress hormones. In practice, “investing in beauty” – whether by spending time in nature or creating aesthetically pleasing spaces – tends to improve mental focus, promote calmness, and provide a restorative experience for our minds.",
@@ -8544,7 +8544,7 @@
           "slug": "sing"
         }
       ],
-      "situations": [],
+      "fauxFeelings": [],
       "feelings": [],
       "originalClaim": "Influence over conditions reduces threat and improves outcomes in uncertain environments. This need motivates setting parameters, using contingency plans, and shaping contexts. Appropriate control promotes safety and effective agency.",
       "rewrittenClaim": "Having some degree of control over our circumstances makes uncertainty less frightening and often leads to better results. We all have a need to feel we can influence what happens to us. This drives us to set limits or rules, prepare backup plans (“if X, then Y”), and actively shape our surroundings rather than be passive. Studies on “locus of control” show that when people feel they have control over a situation, they experience less stress and perform better, whereas a lack of control can trigger threat responses (learned helplessness, etc.). By exerting appropriate control – not in an overbearing way but enough to steer key factors – individuals create safer conditions and can act more effectively. In summary, some control over one’s environment or outcomes bolsters a sense of security and enables more confident, purposeful action.",
@@ -8574,10 +8574,10 @@
           "slug": "calendar-one-thing"
         }
       ],
-      "situations": [],
+      "fauxFeelings": [],
       "feelings": [],
       "originalClaim": "Reliable patterns make planning possible and reduce vigilance. This need motivates clear schedules, transparent protocols, and advance notice of change. Predictability stabilizes attention and performance.",
-      "rewrittenClaim": "People feel more at ease and can concentrate better when their environment and schedule are predictable. Knowing what to expect – having reliable patterns – means we don’t have to be on high alert all the time, and we can plan our actions with confidence. The need for predictability drives us to create clear timetables, establish transparent procedures or rules, and give advance warnings before changes happen. For example, a workplace that communicates its schedule and any upcoming shifts well in advance allows employees to focus on their tasks instead of worrying about surprises. Research in stress psychology confirms that unpredictability is a significant stressor (uncertain situations make our brains more vigilant and anxious), whereas predictable contexts lower baseline stress and improve cognitive performance. Thus, predictability in our routines and systems provides a stable backdrop that steadies attention and supports consistent performance.",
+      "rewrittenClaim": "People feel more at ease and can concentrate better when their environment and schedule are predictable. Knowing what to expect – having reliable patterns – means we don’t have to be on high alert all the time, and we can plan our actions with confidence. The need for predictability drives us to create clear timetables, establish transparent procedures or rules, and give advance warnings before changes happen. For example, a workplace that communicates its schedule and any upcoming shifts well in advance allows employees to focus on their tasks instead of worrying about surprises. Research in stress psychology confirms that unpredictability is a significant stressor (uncertain faux feelings make our brains more vigilant and anxious), whereas predictable contexts lower baseline stress and improve cognitive performance. Thus, predictability in our routines and systems provides a stable backdrop that steadies attention and supports consistent performance.",
       "supportingSources": [
         {
           "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01466/full",
@@ -8616,7 +8616,7 @@
           "slug": "make-a-list-and-check-things-off"
         }
       ],
-      "situations": [],
+      "fauxFeelings": [],
       "feelings": [
         {
           "title": "Frustrated",
@@ -8659,7 +8659,7 @@
           "slug": "reduce-mental-tasks"
         }
       ],
-      "situations": [],
+      "fauxFeelings": [],
       "feelings": [
         {
           "title": "Distressed",
@@ -8710,7 +8710,7 @@
           "slug": "name-what-s-outside-control"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Rejected",
           "slug": "rejected"
@@ -8757,7 +8757,7 @@
           "slug": "read-one-paragraph"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Invisible",
           "slug": "invisible"
@@ -8813,7 +8813,7 @@
           "slug": "crunch-the-numbers"
         }
       ],
-      "situations": [
+      "fauxFeelings": [
         {
           "title": "Tricked",
           "slug": "tricked"
@@ -8863,7 +8863,7 @@
       ]
     }
   ],
-  "situations": [
+  "fauxFeelings": [
     {
       "title": "Abandoned",
       "slug": "abandoned",

@@ -305,11 +305,11 @@ const NAV_ITEM_DEFINITIONS = [
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-inventory"]') || null,
   },
   {
-    id: 'situations',
-    magnetId: 'nav-situations',
-    label: 'Situations magnet',
+    id: 'fauxFeelings',
+    magnetId: 'nav-faux-feelings',
+    label: 'Faux feelings magnet',
     defaultEnabled: true,
-    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-situations"]') || null,
+    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-faux-feelings"]') || null,
   },
   {
     id: 'feelings',

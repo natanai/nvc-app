@@ -210,7 +210,7 @@ const navVisibilityBootstrapScript = () => String.raw`
             customizer: true,
             journal: true,
             inventory: true,
-            situations: true,
+            fauxFeelings: true,
             feelings: true,
             needs: true,
             bodyCues: false,
@@ -253,7 +253,7 @@ const navVisibilityBootstrapScript = () => String.raw`
             customizer: 'nav-customizer',
             journal: 'nav-journal',
             inventory: 'nav-inventory',
-            situations: 'nav-situations',
+            fauxFeelings: 'nav-faux-feelings',
             feelings: 'nav-feelings',
             needs: 'nav-needs',
             bodyCues: 'nav-body-cues',
@@ -650,7 +650,7 @@ const themePreloadScript = (basePath) => {
       })();
     </script>`;
 };
-const directoriesToReset = ['situations', 'feelings', 'needs', 'inventory'];
+const directoriesToReset = ['faux-feelings', 'feelings', 'needs', 'inventory'];
 for (const dir of directoriesToReset) {
   rmSync(join(rootDir, dir), { recursive: true, force: true });
 }
@@ -869,7 +869,7 @@ function renderNav(basePath, activeNav, options = {}) {
   };
 
   const defaultSecondaryLinks = [
-    { key: 'situations', href: 'situations/', label: 'Situations' },
+    { key: 'faux-feelings', href: 'faux-feelings/', label: 'Faux feelings' },
     { key: 'feelings', href: 'feelings/', label: 'Feelings' },
     { key: 'needs', href: 'needs/', label: 'Needs' },
     {
@@ -1166,13 +1166,15 @@ function renderStrategyForm({
 function renderHome() {
   const basePath = basePathFromDepth(0);
   const iconMap = {
-    situations: `${basePath}icons/door-situations.svg`,
+    'faux-feelings': `${basePath}icons/door-faux-feelings.svg`,
     feelings: `${basePath}icons/door-feelings.svg`,
     needs: `${basePath}icons/door-needs.svg`,
   };
-  const cards = ['situations', 'feelings', 'needs']
+  const cards = ['faux-feelings', 'feelings', 'needs']
     .map((type) => {
-      const label = type.charAt(0).toUpperCase() + type.slice(1);
+      const label = type
+        .replace(/-/g, ' ')
+        .replace(/\b([a-z])/g, (match, char) => char.toUpperCase());
       const icon = iconMap[type]
         ? `                <img class="door-card__icon" src="${iconMap[type]}" alt="" aria-hidden="true" loading="lazy" />\n`
         : '';
@@ -1221,11 +1223,13 @@ ${cards}
 }
 
 function renderCategory(type, items) {
-  const title = type.charAt(0).toUpperCase() + type.slice(1);
+  const title = type
+    .replace(/-/g, ' ')
+    .replace(/\b([a-z])/g, (match, char) => char.toUpperCase());
   const escapedTitle = escapeHtml(title);
   const lowerTitle = escapeHtml(title.toLowerCase());
-  const description = type === 'situations'
-    ? 'Situations (sometimes called evaluations or faux-feelings) are often the first stories that surface. Follow them to the feelings and needs underneath.'
+  const description = type === 'faux-feelings'
+    ? 'Faux feelings (sometimes called evaluations) are often the first stories that surface. Follow them to the feelings and needs underneath.'
     : type === 'feelings'
     ? 'Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.'
     : '';
@@ -1371,30 +1375,30 @@ function renderBodyCuesPage() {
   writePage('feelings/body-cues/index.html', html);
 }
 
-function renderSituation(item) {
+function renderFauxFeeling(item) {
   const main = `
       <header class="page-header">
-        <h1 class="page-title">Situation: ${escapeHtml(item.title)}</h1>
+        <h1 class="page-title">Faux feeling: ${escapeHtml(item.title)}</h1>
       </header>
       ${renderPillGroup('Feelings', item.feelings, 'feelings')}
       ${renderPillGroup('Needs', item.needs, 'needs')}
     `;
 
   const html = htmlPage({
-    title: `Situation: ${item.title}`,
+    title: `Faux feeling: ${item.title}`,
     depth: 2,
     breadcrumbs: [
       { label: 'Home', href: '../../' },
-      { label: 'Situations', href: '../' },
+      { label: 'Faux feelings', href: '../' },
       { label: item.title }
     ],
     main,
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
-    activeNav: 'situations',
-    canonicalPath: `situations/${item.slug}/`,
+    activeNav: 'faux-feelings',
+    canonicalPath: `faux-feelings/${item.slug}/`,
   });
 
-  writePage(`situations/${item.slug}/index.html`, html);
+  writePage(`faux-feelings/${item.slug}/index.html`, html);
 }
 
 function renderFeeling(item) {
@@ -2037,7 +2041,7 @@ function slugify(value) {
 
 function build() {
   renderHome();
-  renderCategory('situations', data.situations);
+  renderCategory('faux-feelings', data.fauxFeelings);
   renderCategory('feelings', data.feelings);
   renderBodyCuesPage();
   renderCategory('needs', data.needs);
@@ -2046,8 +2050,8 @@ function build() {
 
   const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
 
-  for (const situation of data.situations) {
-    renderSituation(situation);
+  for (const fauxFeeling of data.fauxFeelings) {
+    renderFauxFeeling(fauxFeeling);
   }
 
   for (const feeling of data.feelings) {

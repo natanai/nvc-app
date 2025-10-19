@@ -1,6 +1,6 @@
 # allneeds.app
 
-A retro Nonviolent Communication explorer that keeps every tool on-device. Build an inventory of strategies to tend to your basic human needs, journal through situations and feelings, and explore hubs for each category with playful magnet interactions. The static site runs entirely in the browser, stores preferences and notes in localStorage with import/export controls, and ships with installable PWA metadata for offline use.
+A retro Nonviolent Communication explorer that keeps every tool on-device. Build an inventory of strategies to tend to your basic human needs, journal through faux feelings and feelings, and explore hubs for each category with playful magnet interactions. The static site runs entirely in the browser, stores preferences and notes in localStorage with import/export controls, and ships with installable PWA metadata for offline use.
 
 ## Getting started
 
@@ -19,7 +19,7 @@ A retro Nonviolent Communication explorer that keeps every tool on-device. Build
    ```bash
    npm run build:pages
    ```
-   The script produces `index.html`, category hubs, and an `index.html` for each item at `situations/<slug>/`, `feelings/<slug>/`, and `needs/<slug>/`.
+   The script produces `index.html`, category hubs, and an `index.html` for each item at `faux feelings/<slug>/`, `feelings/<slug>/`, and `needs/<slug>/`.
 
 3. Serve the repository root with any static file server. For example:
    ```bash
@@ -82,12 +82,12 @@ custom directory as the first argument to store the archive elsewhere.
 ├── index.html                 # generated home page
 ├── feelings/                  # generated feeling hub + individual pages
 ├── needs/                     # generated need hub + individual pages
-├── situations/                # generated situation hub + individual pages
+├── faux feelings/                # generated situation hub + individual pages
 ├── styles.css                 # shared retro aesthetic
 ├── data/
 │   ├── Feelings.csv
 │   ├── Needs.csv
-│   ├── Situations.csv
+│   ├── Faux feelings.csv
 │   ├── Strategies.csv
 │   └── index.json            # generated dataset
 └── scripts/
@@ -97,20 +97,20 @@ custom directory as the first argument to store the archive elsewhere.
 
 ### Spreadsheet columns
 
-The three primary spreadsheets (`Feelings.csv`, `Needs.csv`, and `Situations.csv`) now
+The three primary spreadsheets (`Feelings.csv`, `Needs.csv`, and `Faux feelings.csv`) now
 own all of the relationships and reverse-inference cues used across the site.
 
 - **Feelings.csv** – each feeling row uses `Row Type = feeling` with fields for
-  `Feeling Title`, `Page Summary`, `Related Situations`, `Related Needs`,
+  `Feeling Title`, `Page Summary`, `Related Faux feelings`, `Related Needs`,
   `Body Signal Notes`, and optional `Slug Override`. Additional rows with
   `Row Type = cue` capture reverse-inference body cues through the
   `Cue Region *` and `Cue Option *` columns so no extra CSV is needed for
   body-region data.
 - **Needs.csv** – the need copy is organised into `Need Title`, `Category Label`,
-  `Page Summary`, `Related Strategies`, `Related Situations`, `Related Feelings`,
+  `Page Summary`, `Related Strategies`, `Related Faux feelings`, `Related Feelings`,
   and the claim text pair (`Claim Summary`, `Claim Narrative`). Evidence links now
   live under the `Source Links` column.
-- **Situations.csv** – situations list their relationships via `Related Feelings`
+- **Faux feelings.csv** – faux feelings list their relationships via `Related Feelings`
   and `Related Needs`, with an optional `Slug Override` to customise URLs.
 - **Strategies.csv** – each row keeps the contributor details inline and now
   offers an optional `Slug Override` column alongside `Strategy Summary`,
@@ -130,4 +130,4 @@ the JSON dataset and static pages.
 - **Magnet play:** category, situation, and feeling pages present their entries as draggable magnets with a shuffle button for delightful re-arranging.
 - **Category hubs:** each hub displays a grid of clickable entries that navigate to item pages with rich descriptions and related magnets.
 - **Cross-linking:** situation and feeling pages list their related magnets in labelled panels, while need pages highlight strategies and include the share-a-strategy form.
-- **Responsive retro styling:** keeps the playful palette and pixel fonts while threading feelings, needs, situations, and strategies through the same hierarchy.
+- **Responsive retro styling:** keeps the playful palette and pixel fonts while threading feelings, needs, faux feelings, and strategies through the same hierarchy.

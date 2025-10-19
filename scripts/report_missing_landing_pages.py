@@ -127,9 +127,9 @@ def main() -> None:
     missing: Dict[Tuple[str, str, str], Set[str]] = defaultdict(set)
 
     # Check textual references in CSV sources
-    situations_rows = load_csv(ROOT / "data" / "Situations.csv")
-    for row in situations_rows:
-        situation = row.get("Situation Title", "").strip() or "(untitled situation)"
+    faux_feelings_rows = load_csv(ROOT / "data" / "Faux Feelings.csv")
+    for row in faux_feelings_rows:
+        faux_feeling = row.get("Faux Feeling Title", "").strip() or "(untitled faux feeling)"
         for word in filter(
             None, (w.strip() for w in row.get("Related Feelings", "").split(","))
         ):
@@ -142,7 +142,7 @@ def main() -> None:
                 kind="feeling",
                 word=word,
                 slug=slug,
-                reference=f"data/Situations.csv → {situation}",
+                reference=f"data/Faux Feelings.csv → {faux_feeling}",
             )
         for word in filter(
             None, (w.strip() for w in row.get("Related Needs", "").split(","))
@@ -156,7 +156,7 @@ def main() -> None:
                 kind="need",
                 word=word,
                 slug=slug,
-                reference=f"data/Situations.csv → {situation}",
+                reference=f"data/Faux Feelings.csv → {faux_feeling}",
             )
 
     strategies_rows = load_csv(ROOT / "data" / "Strategies.csv")
