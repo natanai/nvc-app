@@ -1411,7 +1411,10 @@ function renderFeeling(item) {
           <section class="feeling-inference" data-reverse-inference hidden></section>
         </div>
       </section>`;
-  const needsSection = renderPillGroup('Related needs', item.needs, 'needs');
+  const needsSection = renderPillGroup('Related needs', item.needs, 'needs', {
+    lockHeight: true,
+    extraPadding: 48,
+  });
   const descriptionHtml = item.description
     ? `\n        <p class="page-description page-description--feeling">${escapeHtml(item.description)}</p>`
     : '';
@@ -1997,10 +2000,12 @@ function renderInventoryJournalPage(needsList = []) {
   writePage('inventory/journal/index.html', html);
 }
 
-function renderPillGroup(label, items, type) {
+function renderPillGroup(label, items, type, options = {}) {
   if (!items || items.length === 0) {
     return '';
   }
+
+  const { lockHeight = false, extraPadding = 0 } = options;
 
   const magnets = items
     .map(
@@ -2011,7 +2016,25 @@ function renderPillGroup(label, items, type) {
     )
     .join('');
 
-  return `<section class="pill-section magnet-section" aria-labelledby="${slugify(label)}-heading" data-magnet-root>
+  const rootAttributes = [
+    'class="pill-section magnet-section"',
+    `aria-labelledby="${slugify(label)}-heading"`,
+    'data-magnet-root',
+  ];
+
+  if (lockHeight) {
+    rootAttributes.push('data-magnet-lock-height="true"');
+  }
+
+  if (typeof extraPadding === 'number' && Number.isFinite(extraPadding) && extraPadding > 0) {
+    const paddingValue = extraPadding;
+    rootAttributes.push(`data-magnet-extra-padding="${paddingValue}"`);
+    rootAttributes.push(`style="--magnet-board-extra-padding: ${paddingValue}px;"`);
+  }
+
+  const sectionOpenTag = `<section ${rootAttributes.join(' ')}>`;
+
+  return `${sectionOpenTag}
       <div class="magnet-section__header">
         <h2 id="${slugify(label)}-heading" class="section-title">${escapeHtml(label)}</h2>
         <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>

@@ -7,9 +7,10 @@ const DEFAULT_CONFIG = {
   drift: 1.5,
   damping: 0.975,
   sepRadiusScale: 0.7,
-  sepStrength: 18,
+  sepStrength: 4,
   dragSepMultiplier: 2,
-  edgeBounce: 0.18,
+  edgeBounce: 0.45,
+  edgeBounceMin: 36,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
@@ -737,6 +738,16 @@ const updateBoardHeight = (state) => {
     state.board.style.height = `${height}px`;
     return;
   }
+  if (state.lockHeight && state.playActive) {
+    const lockedHeight = Math.max(
+      state.lockedHeight || 0,
+      state.boardHeight || 0,
+      state.minHeight || 0,
+    );
+    state.boardHeight = lockedHeight;
+    state.board.style.height = `${lockedHeight}px`;
+    return;
+  }
   let maxBottom = 0;
   state.magnets.forEach((magnet) => {
     if (magnet?.navHidden) {
@@ -748,12 +759,34 @@ const updateBoardHeight = (state) => {
   const baseHeight = state.playActive
     ? (state.minHeight || 0)
     : Math.max(state.minHeight || 0, state.inactiveHeight || 0);
-  const height = Math.max(baseHeight, maxBottom + BOARD_PADDING);
-  state.boardHeight = height;
+  const extraPadding = state.extraBottomPadding || 0;
+  let height = Math.max(baseHeight, maxBottom + BOARD_PADDING + extraPadding);
   if (!state.playActive) {
+    if (state.lockHeight) {
+      const widthChanged = state.lockWidth == null
+        || Math.abs((state.boardWidth || 0) - state.lockWidth) > 0.5;
+      if (widthChanged) {
+        state.lockWidth = state.boardWidth;
+        state.lockedHeight = Math.max(height, state.minHeight || 0);
+        height = state.lockedHeight;
+      } else if (!state.lockedHeight) {
+        state.lockedHeight = Math.max(height, state.minHeight || 0);
+        height = state.lockedHeight;
+      } else if (height > state.lockedHeight) {
+        height = state.lockedHeight;
+      } else if (height < state.lockedHeight) {
+        state.lockedHeight = Math.max(height, state.minHeight || 0);
+      }
+    }
+    state.boardHeight = height;
     state.inactiveHeight = height;
+  } else {
+    state.boardHeight = height;
   }
-  state.board.style.height = `${height}px`;
+  if (state.lockHeight && state.playActive && !state.lockedHeight) {
+    state.lockedHeight = state.boardHeight;
+  }
+  state.board.style.height = `${state.boardHeight}px`;
 };
 
 const updateLayout = (state) => {
@@ -1099,6 +1132,13 @@ const setPlayState = (state, active) => {
     console.info('[magnets] enterPlay: begin');
     isToggling = true;
     state.playActive = true;
+    if (state.lockHeight) {
+      state.lockedHeight = Math.max(
+        state.lockedHeight || 0,
+        state.boardHeight || 0,
+        state.minHeight || 0,
+      );
+    }
     if (state.shuffleButton) {
       state.shuffleButton.disabled = false;
       state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || state.shuffleButton.textContent;
@@ -1413,6 +1453,11 @@ const initializeBoard = async (root, index) => {
     boardRect.height || board.clientHeight || cssMinHeight || 1,
     cssMinHeight || 1,
   );
+  const lockHeight = root.dataset.magnetLockHeight === 'true';
+  const extraPadding = Math.max(parsePx(root.dataset.magnetExtraPadding || '0'), 0);
+  const initialHeightWithPadding = lockHeight
+    ? Math.max(initialHeight + extraPadding, cssMinHeight || 0, 1)
+    : initialHeight;
 
   let storedPlayPreference = null;
 
@@ -1434,10 +1479,10 @@ const initializeBoard = async (root, index) => {
     layout: new Map(),
     physics: null,
     boardWidth: Math.max(boardRect.width || board.clientWidth || 1, 1),
-    boardHeight: initialHeight,
-    minHeight: cssMinHeight || initialHeight,
+    boardHeight: initialHeightWithPadding,
+    minHeight: Math.max(cssMinHeight || 0, initialHeightWithPadding),
     cssMinHeight: cssMinHeight || 0,
-    inactiveHeight: initialHeight,
+    inactiveHeight: initialHeightWithPadding,
     saveTimer: null,
     lastSaveTime: 0,
     resizeObserver: null,
@@ -1456,6 +1501,10 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    lockHeight,
+    extraBottomPadding: lockHeight ? extraPadding : 0,
+    lockedHeight: lockHeight ? initialHeightWithPadding : 0,
+    lockWidth: lockHeight ? Math.max(boardRect.width || board.clientWidth || 1, 1) : null,
   };
 
   state.setClickSuppress = () => {
@@ -1508,6 +1557,9 @@ const initializeBoard = async (root, index) => {
     const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
     state.boardHeight = storedBoardHeight;
     state.inactiveHeight = storedBoardHeight;
+    if (state.lockHeight) {
+      state.lockedHeight = storedBoardHeight;
+    }
     state.board.style.height = `${storedBoardHeight}px`;
   }
 

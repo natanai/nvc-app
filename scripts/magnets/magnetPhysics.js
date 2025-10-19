@@ -8,9 +8,10 @@ const DEFAULT_CONFIG = {
   tiltBetaUprightOffset: 90,
   damping: 0.975,
   sepRadiusScale: 0.7,
-  sepStrength: 18,
+  sepStrength: 4,
   dragSepMultiplier: 2,
-  edgeBounce: 0.18,
+  edgeBounce: 0.45,
+  edgeBounceMin: 36,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
@@ -460,7 +461,7 @@ const addPointerListeners = (state) => {
 };
 
 const applySeparationForces = (state, dt) => {
-  const { sepRadiusScale, sepStrength, dragSepMultiplier } = state.config;
+  const { sepStrength, dragSepMultiplier } = state.config;
   for (let i = 0; i < state.magnets.length; i += 1) {
     const magnetA = state.magnets[i];
     if (magnetA.navHidden) {
@@ -471,6 +472,14 @@ const applySeparationForces = (state, dt) => {
       if (magnetB.navHidden) {
         continue;
       }
+      const overlapX = Math.min(magnetA.x + magnetA.w, magnetB.x + magnetB.w) - Math.max(magnetA.x, magnetB.x);
+      if (overlapX <= 0) {
+        continue;
+      }
+      const overlapY = Math.min(magnetA.y + magnetA.h, magnetB.y + magnetB.h) - Math.max(magnetA.y, magnetB.y);
+      if (overlapY <= 0) {
+        continue;
+      }
       const centerAX = magnetA.x + magnetA.w / 2;
       const centerAY = magnetA.y + magnetA.h / 2;
       const centerBX = magnetB.x + magnetB.w / 2;
@@ -478,14 +487,10 @@ const applySeparationForces = (state, dt) => {
       const diffX = centerBX - centerAX;
       const diffY = centerBY - centerAY;
       const distance = Math.hypot(diffX, diffY) || 0.0001;
-      const radiusA = Math.hypot(magnetA.w, magnetA.h) * sepRadiusScale;
-      const radiusB = Math.hypot(magnetB.w, magnetB.h) * sepRadiusScale;
-      const minDistance = radiusA + radiusB;
-      if (distance >= minDistance) {
-        continue;
-      }
-      const overlap = minDistance - distance;
-      const strength = (sepStrength * (overlap / minDistance)) * dt;
+      const normalizedOverlapX = overlapX / Math.min(magnetA.w, magnetB.w);
+      const normalizedOverlapY = overlapY / Math.min(magnetA.h, magnetB.h);
+      const overlapRatio = Math.min(1, Math.min(normalizedOverlapX, normalizedOverlapY));
+      const strength = sepStrength * overlapRatio * dt;
       const dirX = diffX / distance;
       const dirY = diffY / distance;
       const multiplier = magnetA.dragging || magnetB.dragging ? dragSepMultiplier : 1;
@@ -530,6 +535,7 @@ const integrateMotion = (state, dt) => {
     drift,
     damping,
     edgeBounce,
+    edgeBounceMin = DEFAULT_CONFIG.edgeBounceMin,
     tiltStrength = DEFAULT_CONFIG.tiltStrength,
     tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
   } = state.config;
@@ -563,17 +569,21 @@ const integrateMotion = (state, dt) => {
     const maxY = Math.max(height - magnet.h, 0);
     if (magnet.x < 0) {
       magnet.x = 0;
-      magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vx) * edgeBounce, edgeBounceMin);
+      magnet.vx = bounce;
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
-      magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vx) * edgeBounce, edgeBounceMin);
+      magnet.vx = -bounce;
     }
     if (magnet.y < 0) {
       magnet.y = 0;
-      magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vy) * edgeBounce, edgeBounceMin);
+      magnet.vy = bounce;
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
-      magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vy) * edgeBounce, edgeBounceMin);
+      magnet.vy = -bounce;
     }
     applyTransform(magnet);
   });
