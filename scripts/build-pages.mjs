@@ -210,7 +210,8 @@ const navVisibilityBootstrapScript = () => String.raw`
             customizer: true,
             journal: true,
             inventory: true,
-            fauxFeelings: true,
+            observations: true,
+            fauxFeelings: false,
             feelings: true,
             needs: true,
             bodyCues: false,
@@ -253,6 +254,7 @@ const navVisibilityBootstrapScript = () => String.raw`
             customizer: 'nav-customizer',
             journal: 'nav-journal',
             inventory: 'nav-inventory',
+            observations: 'nav-observations',
             fauxFeelings: 'nav-faux-feelings',
             feelings: 'nav-feelings',
             needs: 'nav-needs',
@@ -869,6 +871,7 @@ function renderNav(basePath, activeNav, options = {}) {
   };
 
   const defaultSecondaryLinks = [
+    { key: 'observations', href: 'observations/', label: 'Observations' },
     { key: 'faux-feelings', href: 'faux-feelings/', label: 'Faux feelings' },
     { key: 'feelings', href: 'feelings/', label: 'Feelings' },
     { key: 'needs', href: 'needs/', label: 'Needs' },
