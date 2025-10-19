@@ -22,6 +22,12 @@ const NAV_PHYSICS_CONFIG = {
 
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];
 const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
+const FEELING_SCROLL_HINT_CLASS = 'feeling-scroll-hint';
+const FEELING_SCROLL_HINT_STREAM_CLASS = 'feeling-scroll-hint__stream';
+const FEELING_SCROLL_HINT_ARROW_CLASS = 'feeling-scroll-hint__arrow';
+const FEELING_SCROLL_HINT_DATASET_KEY = 'feelingScrollHint';
+const FEELING_SCROLL_HINT_MEDIA = '(max-width: 720px)';
+const FEELING_MAGNET_SECTION_SELECTOR = '.page[data-feeling-slug] > .pill-section[data-magnet-root]';
 
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
@@ -1736,11 +1742,165 @@ const setup = async () => {
   }
 };
 
+const setFeelingScrollHintState = (state) => {
+  if (typeof document === 'undefined' || !document.body) {
+    return;
+  }
+  if (!state) {
+    delete document.body.dataset[FEELING_SCROLL_HINT_DATASET_KEY];
+    return;
+  }
+  document.body.dataset[FEELING_SCROLL_HINT_DATASET_KEY] = state;
+};
+
+const ensureFeelingScrollHintHost = () => {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+  let host = document.querySelector(`.${FEELING_SCROLL_HINT_CLASS}`);
+  if (host) {
+    return host;
+  }
+  host = document.createElement('div');
+  host.className = FEELING_SCROLL_HINT_CLASS;
+  host.setAttribute('aria-hidden', 'true');
+
+  const left = document.createElement('span');
+  left.className = `${FEELING_SCROLL_HINT_STREAM_CLASS} ${FEELING_SCROLL_HINT_STREAM_CLASS}--left`;
+
+  const arrow = document.createElement('span');
+  arrow.className = FEELING_SCROLL_HINT_ARROW_CLASS;
+
+  const right = document.createElement('span');
+  right.className = `${FEELING_SCROLL_HINT_STREAM_CLASS} ${FEELING_SCROLL_HINT_STREAM_CLASS}--right`;
+
+  host.append(left, arrow, right);
+  document.body.append(host);
+  return host;
+};
+
+const removeFeelingScrollHintHost = () => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const host = document.querySelector(`.${FEELING_SCROLL_HINT_CLASS}`);
+  if (host && host.parentNode) {
+    host.parentNode.removeChild(host);
+  }
+};
+
+const isFeelingsPath = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  const path = (window.location && typeof window.location.pathname === 'string')
+    ? window.location.pathname.toLowerCase()
+    : '';
+  return path.includes('/feelings');
+};
+
+const initFeelingsScrollHint = () => {
+  if (!isFeelingsPath() || typeof document === 'undefined' || typeof window === 'undefined') {
+    return;
+  }
+
+  const magnetSection = document.querySelector(FEELING_MAGNET_SECTION_SELECTOR);
+  if (!magnetSection || typeof window.matchMedia !== 'function') {
+    return;
+  }
+
+  const mediaQuery = window.matchMedia(FEELING_SCROLL_HINT_MEDIA);
+  let observer = null;
+
+  const detachObserver = () => {
+    if (observer) {
+      observer.disconnect();
+      observer = null;
+    }
+  };
+
+  const ensureObserver = () => {
+    if (observer || typeof IntersectionObserver !== 'function') {
+      return;
+    }
+    observer = new IntersectionObserver((entries) => {
+      const isVisible = entries.some((entry) => entry.isIntersecting && entry.intersectionRatio > 0);
+      if (!mediaQuery.matches) {
+        return;
+      }
+      setFeelingScrollHintState(isVisible ? 'hidden' : 'visible');
+    }, {
+      rootMargin: '0px 0px -45% 0px',
+      threshold: [0, 0.05, 0.15],
+    });
+    observer.observe(magnetSection);
+  };
+
+  const removeHint = () => {
+    detachObserver();
+    removeFeelingScrollHintHost();
+    setFeelingScrollHintState(null);
+  };
+
+  const activateHint = () => {
+    const host = ensureFeelingScrollHintHost();
+    if (!host) {
+      return;
+    }
+    setFeelingScrollHintState('visible');
+    ensureObserver();
+  };
+
+  const evaluate = (matches) => {
+    if (matches) {
+      activateHint();
+    } else {
+      removeHint();
+    }
+  };
+
+  evaluate(mediaQuery.matches);
+
+  const handleMediaChange = (event) => {
+    evaluate(event.matches);
+  };
+
+  if (typeof mediaQuery.addEventListener === 'function') {
+    mediaQuery.addEventListener('change', handleMediaChange);
+  } else if (typeof mediaQuery.addListener === 'function') {
+    mediaQuery.addListener(handleMediaChange);
+  }
+
+  window.addEventListener('pagehide', () => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+    } else if (typeof mediaQuery.removeListener === 'function') {
+      mediaQuery.removeListener(handleMediaChange);
+    }
+    detachObserver();
+  }, { once: true });
+};
+
+const highlightNeedsMagnetFromFeelings = () => {
+  if (!isFeelingsPath() || typeof document === 'undefined') {
+    return;
+  }
+  const navNeeds = document.querySelector('[data-magnet-id="nav-needs"]');
+  if (!navNeeds) {
+    return;
+  }
+  navNeeds.dataset.magnetHighlight = 'needs';
+};
+
+const boot = () => {
+  Promise.resolve(setup()).catch(() => {});
+  highlightNeedsMagnetFromFeelings();
+  initFeelingsScrollHint();
+};
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    setup();
-  });
+  document.addEventListener('DOMContentLoaded', boot);
 } else {
-  setup();
+  boot();
 }
 

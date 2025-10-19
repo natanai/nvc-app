@@ -2597,6 +2597,36 @@ body.has-support-journal-open {
   box-shadow: none;
 }
 
+.site-nav__magnet[data-magnet-highlight='needs'] {
+  position: relative;
+  background: color-mix(in srgb, var(--mint) 22%, white 78%);
+  border-color: color-mix(in srgb, var(--mint) 60%, var(--outline) 40%);
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--mint) 24%, transparent);
+  color: color-mix(in srgb, var(--ink) 82%, var(--ink-soft) 18%);
+}
+
+.site-nav__magnet[data-magnet-highlight='needs']::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: var(--radius-pill);
+  border: 2px dashed color-mix(in srgb, var(--mint) 55%, transparent);
+  animation: magnetHighlightPulse 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes magnetHighlightPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
 .pill:not(.site-nav__magnet) {
   background: var(--sky);
 }
@@ -5679,6 +5709,254 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   margin-top: 0.75rem;
   max-width: 60ch;
   color: color-mix(in srgb, var(--ink) 75%, transparent);
+}
+
+.page[data-feeling-slug] {
+  gap: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] {
+  position: relative;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  border-radius: calc(28px * var(--corner-scale, 1));
+  border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
+  background: color-mix(in srgb, var(--mint) 18%, white 82%);
+  box-shadow:
+    0 18px 0 color-mix(in srgb, var(--outline) 16%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--outline) 12%, transparent) inset;
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] .magnet-section__header {
+  padding-block-end: 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--outline) 28%, transparent);
+  margin-block-end: clamp(0.65rem, 2vw, 0.9rem);
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] #related-needs-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] #related-needs-heading::after {
+  content: '';
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: linear-gradient(130deg, color-mix(in srgb, var(--mint) 85%, white 15%), color-mix(in srgb, var(--sky) 65%, white 35%));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mint) 35%, transparent);
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] .shuffle-button {
+  margin-left: auto;
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] .magnet-board-wrapper {
+  position: relative;
+  padding: clamp(0.4rem, 1.8vw, 0.6rem);
+  border-radius: calc(22px * var(--corner-scale, 1));
+  background: color-mix(in srgb, var(--lavender) 18%, white 82%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 10%, transparent);
+}
+
+.page[data-feeling-slug] > .pill-section[data-magnet-root] .magnet-play-toggle {
+  position: sticky;
+  bottom: 0.35rem;
+  margin-top: clamp(0.75rem, 3vw, 1rem);
+  display: inline-flex;
+}
+
+@media (min-width: 960px) {
+  .page[data-feeling-slug] {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+    align-items: start;
+  }
+
+  .page[data-feeling-slug] > .page-header,
+  .page[data-feeling-slug] > .feeling-poem,
+  .page[data-feeling-slug] > .feeling-inference-wrapper {
+    grid-column: 1;
+  }
+
+  .page[data-feeling-slug] > .pill-section[data-magnet-root] {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    position: sticky;
+    top: clamp(1.25rem, 4vw, 2.5rem);
+    align-self: start;
+  }
+
+  .page[data-feeling-slug] > .pill-section[data-magnet-root] .magnet-board-wrapper {
+    padding: clamp(0.6rem, 2.4vw, 1rem);
+  }
+}
+
+@media (max-width: 720px) {
+  .page[data-feeling-slug] > .pill-section[data-magnet-root] {
+    padding: clamp(0.9rem, 4vw, 1.2rem);
+  }
+
+  .page[data-feeling-slug] > .pill-section[data-magnet-root] .magnet-board-wrapper {
+    padding: clamp(0.25rem, 3vw, 0.45rem);
+  }
+}
+
+@media (max-width: 720px) {
+  .feeling-scroll-hint {
+    position: fixed;
+    left: clamp(0.35rem, 3vw, 1.2rem);
+    right: clamp(0.35rem, 3vw, 1.2rem);
+    top: clamp(18vh, 24vh, 28vh);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(2.2rem, 22vw, 5rem);
+    height: clamp(5.5rem, 28vh, 8.75rem);
+    pointer-events: none;
+    z-index: 90;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  body[data-feeling-scroll-hint='visible'] .feeling-scroll-hint {
+    opacity: 0.85;
+    transform: translateY(0);
+  }
+
+  body[data-feeling-scroll-hint='hidden'] .feeling-scroll-hint {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .feeling-scroll-hint__stream {
+    position: relative;
+    flex: 0 0 clamp(0.7rem, 5vw, 1.35rem);
+    height: 100%;
+    border-radius: 999px;
+    overflow: hidden;
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--mint) 22%, transparent) 0%,
+      color-mix(in srgb, var(--sky) 24%, transparent) 25%,
+      transparent 100%
+    );
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 14%, transparent);
+  }
+
+  .feeling-scroll-hint__stream::after {
+    content: '';
+    position: absolute;
+    inset: -140% 0 0 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--mint) 80%, white 20%) 0%,
+      color-mix(in srgb, var(--mint) 55%, transparent) 14%,
+      transparent 22%,
+      transparent 32%
+    );
+    opacity: 0.85;
+    animation: feeling-scroll-hint-stream 4.6s linear infinite;
+  }
+
+  .feeling-scroll-hint__stream--right {
+    transform: scaleX(-1);
+  }
+
+  .feeling-scroll-hint__arrow {
+    position: relative;
+    flex: 0 0 clamp(1.8rem, 12vw, 3.4rem);
+    height: clamp(3.2rem, 20vh, 4.8rem);
+    display: block;
+  }
+
+  .feeling-scroll-hint__arrow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: clamp(0.22rem, 1.8vw, 0.38rem);
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--sky) 35%, transparent) 18%,
+      color-mix(in srgb, var(--mint) 60%, transparent) 65%,
+      transparent 100%
+    );
+    transform: translateX(-50%);
+    animation: feeling-scroll-hint-arrow-line 3s ease-in-out infinite;
+  }
+
+  .feeling-scroll-hint__arrow::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: clamp(-0.35rem, -1vw, -0.1rem);
+    width: clamp(1.45rem, 10vw, 2.6rem);
+    height: clamp(1.45rem, 10vw, 2.6rem);
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--mint) 85%, white 15%) 0%,
+      color-mix(in srgb, var(--sky) 65%, white 15%) 100%
+    );
+    clip-path: polygon(50% 100%, 5% 28%, 32% 34%, 32% 0, 68% 0, 68% 34%, 95% 28%);
+    transform: translate(-50%, 0);
+    box-shadow: 0 6px 12px color-mix(in srgb, var(--ink) 14%, transparent);
+    animation: feeling-scroll-hint-arrow-head 3s ease-in-out infinite;
+  }
+}
+
+@keyframes feeling-scroll-hint-stream {
+  0% {
+    transform: translateY(-20%);
+  }
+  100% {
+    transform: translateY(95%);
+  }
+}
+
+@keyframes feeling-scroll-hint-arrow-line {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -16%);
+  }
+  20% {
+    opacity: 0.85;
+  }
+  70% {
+    transform: translate(-50%, 14%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 32%);
+  }
+}
+
+@keyframes feeling-scroll-hint-arrow-head {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -35%) scale(0.92);
+  }
+  20% {
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate(-50%, 12%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 32%) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feeling-scroll-hint,
+  .feeling-scroll-hint__stream::after,
+  .feeling-scroll-hint__arrow::before,
+  .feeling-scroll-hint__arrow::after {
+    animation: none !important;
+  }
 }
 
 .feeling-poem {
