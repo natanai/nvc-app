@@ -87,7 +87,18 @@ function slugify(text) {
 }
 
 function parseSupportingSources(value) {
+  const bulletRegex = /(?:[-•]\s*)?https?:\/\/\S+(?:[^-•]|-(?!\s*https?:\/\/))*/g;
+
   return splitMultiline(value)
+    .flatMap((rawEntry) => {
+      const entry = rawEntry.trim();
+      if (!entry) return [];
+      const matches = entry.match(bulletRegex);
+      if (matches && matches.length > 0) {
+        return matches.map((match) => match.trim());
+      }
+      return [entry];
+    })
     .map((entry) => entry.replace(/^[-•]\s*/, '').trim())
     .filter(Boolean)
     .map((entry) => {
