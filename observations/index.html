@@ -678,7 +678,89 @@ button.site-nav__magnet {
   }
 }
   .observations-page {
-    --observations-card-bg: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
+    --observations-card-bg: color-mix(in srgb, #ffffff 82%, var(--gold) 18%);
+    --observations-scrap-shadow: color-mix(in srgb, var(--outline) 18%, transparent);
+  }
+
+  .observations-page .observation-collage {
+    display: grid;
+    gap: clamp(0.85rem, 3vw, 1.75rem);
+    margin: clamp(1.35rem, 4vw, 2.75rem) 0 clamp(1.35rem, 4vw, 2.5rem);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .observations-page .scrap-paper {
+    position: relative;
+    padding: clamp(1.25rem, 3vw, 2rem) clamp(1.4rem, 4vw, 2.6rem);
+    border-radius: var(--radius-4xl) var(--radius-xl) var(--radius-3xl) var(--radius-lg);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.68) 40%, rgba(255, 249, 228, 0.92) 100%);
+    border: 2px dashed color-mix(in srgb, var(--outline) 35%, transparent);
+    box-shadow: 0 18px 0 var(--observations-scrap-shadow);
+    transform: rotate(-0.7deg);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .observations-page .scrap-paper::before {
+    content: '';
+    position: absolute;
+    inset: -18px -20px auto;
+    height: 32px;
+    background: repeating-linear-gradient(
+      135deg,
+      transparent 0 14px,
+      color-mix(in srgb, var(--outline) 26%, transparent) 14px 16px
+    );
+    opacity: 0.28;
+    transform: rotate(-2deg);
+    pointer-events: none;
+  }
+
+  .observations-page .scrap-paper::after {
+    content: '';
+    position: absolute;
+    inset: auto -18px -18px;
+    height: 28px;
+    background: repeating-linear-gradient(
+      -155deg,
+      transparent 0 12px,
+      color-mix(in srgb, var(--outline) 22%, transparent) 12px 13px
+    );
+    opacity: 0.22;
+    transform: rotate(1.2deg);
+    pointer-events: none;
+  }
+
+  .observations-page .scrap-paper--secondary {
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 255, 249, 0.95) 65%, rgba(255, 255, 255, 0.86) 100%);
+    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+    border-style: solid;
+    transform: rotate(0.8deg);
+  }
+
+  .observations-page .scrap-paper__title {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: clamp(0.85rem, 0.9vw + 0.75rem, 1rem);
+    color: color-mix(in srgb, var(--ink) 80%, #ffffff 20%);
+  }
+
+  .observations-page .scrap-paper__body {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.25vw, 1.4rem);
+    letter-spacing: 0.015em;
+    line-height: 1.6;
+    min-height: 3.5rem;
+  }
+
+  .observations-page .scrap-note {
+    margin: 0;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
+    max-width: 64ch;
   }
 
   .observations-page .observations-body {
@@ -745,18 +827,54 @@ button.site-nav__magnet {
   }
 
   .observations-page .card {
-    border: 3px solid var(--outline);
-    border-radius: var(--radius-2xl);
-    background: var(--observations-card-bg);
-    padding: clamp(1rem, 2.5vw, 1.5rem);
-    box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 26%, transparent);
+    position: relative;
+    border: 0;
+    border-radius: var(--radius-3xl);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.94) 0%,
+      color-mix(in srgb, #ffffff 82%, var(--observations-card-bg) 18%) 100%
+    );
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    box-shadow: 0 16px 0 var(--observations-scrap-shadow);
     display: flex;
     flex-direction: column;
-    gap: clamp(0.6rem, 2vw, 0.9rem);
+    gap: clamp(0.6rem, 2vw, 0.95rem);
+    isolation: isolate;
   }
 
-  .observations-page .card .card {
-    box-shadow: none;
+  .observations-page .card::before {
+    content: '';
+    position: absolute;
+    top: clamp(0.45rem, 3vw, 0.75rem);
+    right: clamp(0.6rem, 4vw, 1rem);
+    width: clamp(2.5rem, 10vw, 3.75rem);
+    height: clamp(0.65rem, 3vw, 0.9rem);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+    border-radius: 4px;
+    border: 1px solid color-mix(in srgb, var(--outline) 30%, transparent);
+    box-shadow: 0 6px 10px color-mix(in srgb, var(--outline) 18%, transparent);
+    transform: rotate(4deg);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .observations-page .card::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: clamp(0.75rem, 3vw, 1.25rem);
+    width: calc(100% - clamp(1.5rem, 6vw, 2.5rem));
+    height: 12px;
+    background: radial-gradient(circle at top, color-mix(in srgb, var(--outline) 25%, transparent), transparent 70%);
+    opacity: 0.35;
+    filter: blur(0.6px);
+    pointer-events: none;
+  }
+
+  .observations-page .card .card::before,
+  .observations-page .card .card::after {
+    content: none;
   }
 
   .observations-page .h2 {
@@ -783,9 +901,10 @@ button.site-nav__magnet {
   .observations-page textarea {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 3px solid color-mix(in srgb, var(--outline) 80%, transparent);
+    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
     border-radius: var(--radius-xl);
-    background: #fff;
+    background: color-mix(in srgb, #ffffff 94%, var(--observations-card-bg) 6%);
+    box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--outline) 10%, transparent);
     font: inherit;
     color: inherit;
   }
@@ -795,55 +914,169 @@ button.site-nav__magnet {
     resize: vertical;
   }
 
-  .observations-page button:not(.tab-button) {
-    border-radius: var(--radius-lg);
-    border: 3px solid var(--outline);
-    background: color-mix(in srgb, var(--mint) 60%, #ffffff 40%);
-    color: var(--ink);
-    font: inherit;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 0.45rem 1rem;
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.2s ease;
+  .observations-page .observation-collage__preview {
+    display: grid;
+    gap: clamp(0.6rem, 2vw, 1rem);
   }
 
-  .observations-page button:not(.tab-button):hover {
-    background: color-mix(in srgb, var(--mint) 75%, #ffffff 25%);
-    transform: translateY(-1px);
+  .observations-page .observation-panel {
+    padding: clamp(1.1rem, 3vw, 1.75rem);
+    border-radius: var(--radius-3xl);
+    border: 3px solid color-mix(in srgb, var(--outline) 80%, transparent);
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 64%, var(--observations-card-bg) 36%);
+    box-shadow: 0 20px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.35rem);
   }
 
-  .observations-page button:not(.tab-button):disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
+  .observations-page .observation-panel__empty {
+    margin: 0;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--ink-soft) 80%, #ffffff 20%);
   }
 
-  .observations-page .chip {
+  .observations-page .observation-panel__content {
+    display: grid;
+    gap: clamp(0.85rem, 2vw, 1.2rem);
+  }
+
+  .observations-page .observation-panel__content[hidden] {
+    display: none;
+  }
+
+  .observations-page .observation-panel__group {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .observations-page .observation-panel__heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 1.1vw + 0.75rem, 1.15rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--ink) 75%, #ffffff 25%);
+  }
+
+  .observations-page .observation-panel__why {
+    margin: 0;
+    color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
+  }
+
+  .observations-page .observation-panel__placeholder {
+    margin: 0;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
+  }
+
+  .observations-page .observation-magnet-shelf {
+    padding: clamp(0.75rem, 2vw, 1.2rem);
+    border-radius: var(--radius-3xl);
+    border: 3px solid color-mix(in srgb, var(--outline) 75%, transparent);
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 68%, var(--observations-card-bg) 32%);
+    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .observations-page .observation-magnet-shelf--families {
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, var(--sky) 30%);
+  }
+
+  .observations-page .observation-magnet-shelf--patterns {
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 66%, var(--plum) 34%);
+  }
+
+  .observations-page .observation-magnet-shelf--feelings {
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 72%, var(--rose) 28%);
+  }
+
+  .observations-page .observation-magnet-shelf--needs {
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, var(--mint) 30%);
+  }
+
+  .observations-page .observation-magnet-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .observations-page .observation-magnet-grid--families {
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  }
+
+  .observations-page .observation-magnet-grid--patterns {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+
+  .observations-page .observation-magnet-grid--suggestions {
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  }
+
+  .observations-page .observation-magnet {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 0.25rem 0.25rem 0 0;
-    padding: 0.35rem 0.85rem;
+    width: 100%;
+    min-height: 2.6rem;
+    padding: 0.55rem 1.1rem;
     border-radius: var(--radius-pill);
-    border: 2px dashed color-mix(in srgb, var(--outline) 80%, transparent);
-    background: rgba(255, 255, 255, 0.85);
-    color: var(--ink);
+    border: 3px solid color-mix(in srgb, var(--outline) 92%, transparent);
+    background: color-mix(in srgb, #ffffff 40%, var(--ink-soft) 60%);
+    color: color-mix(in srgb, var(--ink) 90%, #ffffff 10%);
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: 0.015em;
     text-decoration: none;
+    box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+    transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
     cursor: pointer;
-    font-size: 0.95rem;
   }
 
-  .observations-page .chip--active {
-    border-style: solid;
-    border-color: var(--ink);
-    background: var(--ink);
-    color: #fff;
+  .observations-page .observation-magnet--family {
+    justify-content: center;
+    text-align: center;
   }
 
-  .observations-page .chip--ghost {
-    cursor: default;
-    opacity: 0.6;
+  .observations-page .observation-magnet--pattern {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .observations-page .observation-magnet--suggestion {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    background: color-mix(in srgb, #ffffff 65%, var(--lavender) 35%);
+  }
+
+  .observations-page .observation-magnet:hover:not(.observation-magnet--active),
+  .observations-page .observation-magnet:focus-visible:not(.observation-magnet--active) {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  }
+
+  .observations-page .observation-magnet:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 4px;
+  }
+
+  .observations-page .observation-magnet--active {
+    background: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
+    color: #ffffff;
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 40%, transparent);
+    transform: translateY(4px);
+  }
+
+  .observations-page .observation-magnet--active:focus-visible {
+    outline-color: color-mix(in srgb, #ffffff 70%, var(--outline) 30%);
+  }
+
+  @media (min-width: 960px) {
+    .observations-page .observation-collage {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    }
+
+    .observations-page .observation-panel {
+      min-height: 100%;
+    }
   }
 
   .observations-page .banner {
@@ -858,12 +1091,19 @@ button.site-nav__magnet {
   }
 
   .observations-page .preview {
-    border: 3px dashed color-mix(in srgb, var(--outline) 75%, transparent);
-    border-radius: var(--radius-xl);
-    background: rgba(255, 255, 255, 0.7);
-    padding: 0.85rem;
-    font-family: var(--font-body);
-    line-height: 1.5;
+    border: 0;
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 88%, var(--observations-card-bg) 12%);
+    padding: 0.85rem 1rem;
+    font-family: var(--font-display);
+    line-height: 1.6;
+    box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 10%, transparent);
+  }
+
+  .observations-page .preview--scrap {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
   }
 
   .observations-page .list-item {
@@ -873,17 +1113,19 @@ button.site-nav__magnet {
     margin: 0.35rem 0;
     padding: 0.7rem 0.85rem;
     border-radius: var(--radius-xl);
-    border: 3px solid color-mix(in srgb, var(--outline) 80%, transparent);
-    background: rgba(255, 255, 255, 0.9);
+    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
+    background: color-mix(in srgb, #ffffff 92%, var(--observations-card-bg) 8%);
+    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 16%, transparent);
     color: var(--ink);
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
   .observations-page .list-item--active {
-    background: var(--ink);
+    background: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
     color: #fff;
     border-color: var(--ink);
+    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 24%, transparent);
   }
 
   .observations-page .list-item:focus-visible {
@@ -1347,6 +1589,44 @@ button.site-nav__magnet {
           <p class="page-description observations-description">Choose the guided wizard to click through faux feelings and instantly surface feelings and needs, or switch to free-text if you already have wording you want to lint.</p>
         </header>
 
+        <section class="observation-collage" aria-label="Observation idea preview">
+          <div class="observation-collage__preview">
+            <div class="scrap-paper" data-preview-board>
+              <p class="scrap-paper__title">Observation idea</p>
+              <div class="scrap-paper__body preview preview--scrap" id="obs-example" role="status" aria-live="polite">Select a pattern below to start building your observation.</div>
+            </div>
+            <p class="scrap-note">Marshall Rosenberg invited us to describe only what a camera could capture. As you click magnets below, this scrap fills in with a clear observational sentence.</p>
+          </div>
+          <div class="observation-panel" id="observation-panel" role="region" aria-label="Suggested feelings and needs">
+            <p class="observation-panel__empty" id="observation-panel-empty">Pick a pattern to surface feelings and needs magnets that might support your wording.</p>
+            <div class="observation-panel__content" id="observation-panel-content" hidden>
+              <div class="observation-panel__group">
+                <p class="observation-panel__heading">Feelings to explore</p>
+                <div class="observation-magnet-shelf observation-magnet-shelf--feelings">
+                  <div
+                    class="observation-magnet-grid observation-magnet-grid--suggestions"
+                    id="suggest-feelings"
+                    role="group"
+                    aria-label="Suggested feelings"
+                  ></div>
+                </div>
+              </div>
+              <div class="observation-panel__group">
+                <p class="observation-panel__heading">Needs to consider</p>
+                <div class="observation-magnet-shelf observation-magnet-shelf--needs">
+                  <div
+                    class="observation-magnet-grid observation-magnet-grid--suggestions"
+                    id="suggest-needs"
+                    role="group"
+                    aria-label="Suggested needs"
+                  ></div>
+                </div>
+              </div>
+              <p class="hint observation-panel__why" id="why"></p>
+            </div>
+          </div>
+        </section>
+
         <div class="observations-body">
           <nav class="tab-nav" role="tablist">
             <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
@@ -1359,27 +1639,28 @@ button.site-nav__magnet {
                 <div class="h2">1. What best describes the situation?</div>
                 <p class="hint">Pick a category to see matching patterns.</p>
                 <input id="search" type="search" placeholder="Search patterns (e.g., pronouns, cancel, privacy)…" />
-                <div id="families"></div>
+                <div class="observation-magnet-shelf observation-magnet-shelf--families">
+                  <div
+                    id="families"
+                    class="observation-magnet-grid observation-magnet-grid--families"
+                    role="group"
+                    aria-label="Observation categories"
+                  ></div>
+                </div>
               </div>
               <div class="card">
                 <div class="h2">2. Which pattern fits?</div>
                 <p class="hint">Every option below expands into an observation example plus feelings &amp; needs.</p>
-                <div id="patterns"></div>
+                <div class="observation-magnet-shelf observation-magnet-shelf--patterns">
+                  <div
+                    id="patterns"
+                    class="observation-magnet-grid observation-magnet-grid--patterns"
+                    role="group"
+                    aria-label="Observation patterns"
+                  ></div>
+                </div>
               </div>
             </div>
-
-            <section class="card" style="margin-top:1rem">
-              <div class="h2">Observation example</div>
-              <div class="preview" id="obs-example">Your observation will preview here…</div>
-
-              <div class="h2" style="margin-top:.75rem">Feelings to explore</div>
-              <div id="suggest-feelings"></div>
-
-              <div class="h2" style="margin-top:.75rem">Needs to consider</div>
-              <div id="suggest-needs"></div>
-
-              <div class="hint" id="why" style="margin-top:.5rem">Pick a pattern to see suggestions.</div>
-            </section>
           </section>
 
           <section id="tab-free" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-free-button">
@@ -1400,7 +1681,10 @@ button.site-nav__magnet {
                 </div>
 
                 <div class="label">Preview</div>
-                <div class="preview" id="free-obs-preview">Your observation will preview here…</div>
+                <div class="scrap-paper scrap-paper--secondary">
+                  <p class="scrap-paper__title">Possible observational sentence</p>
+                  <div class="scrap-paper__body preview preview--scrap" id="free-obs-preview" role="status" aria-live="polite">Your observation will preview here…</div>
+                </div>
               </div>
 
               <div class="card">
@@ -1423,7 +1707,7 @@ button.site-nav__magnet {
             </section>
 
             <section class="card" style="margin-top:1rem">
-              <div class="h2">Examples (click to copy)</div>
+              <div class="h2">Observation idea starters (click to copy)</div>
               <ul class="example-list">
                 <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
                 <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they began speaking and my sentence stopped mid-word.');">Spoke over me while I was speaking</li>

@@ -77,8 +77,10 @@ function ensureSelection() {
     state.patternId = null;
     return;
   }
-  const currentPattern = patterns.find(p => p.id === state.patternId) || patterns[0];
-  state.patternId = currentPattern?.id || null;
+  if (state.patternId && patterns.some(p => p.id === state.patternId)) {
+    return;
+  }
+  state.patternId = null;
 }
 
 function getFamily() {
@@ -98,15 +100,17 @@ function renderFamilies() {
   const families = getVisibleFamilies();
   if (!families.length) {
     const msg = SEARCH ? 'No matches. Try a different search.' : 'No categories available.';
-    host.appendChild(h('div', 'hint', msg));
+    host.appendChild(h('p', 'hint', msg));
     return;
   }
   families.forEach(f => {
-    const btn = h('button', 'chip', f.label);
+    const btn = h('button', 'observation-magnet observation-magnet--family', f.label);
     btn.type = 'button';
-    if (state.familyId === f.id) {
-      btn.classList.add('chip--active');
+    const isActive = state.familyId === f.id;
+    if (isActive) {
+      btn.classList.add('observation-magnet--active');
     }
+    btn.setAttribute('aria-pressed', String(isActive));
     btn.addEventListener('click', () => {
       state.familyId = f.id;
       state.patternId = null;
@@ -137,11 +141,13 @@ function renderPatterns() {
     return;
   }
   patterns.forEach(p => {
-    const btn = h('button', 'list-item', p.label);
+    const btn = h('button', 'observation-magnet observation-magnet--pattern', p.label);
     btn.type = 'button';
-    if (state.patternId === p.id) {
-      btn.classList.add('list-item--active');
+    const isActive = state.patternId === p.id;
+    if (isActive) {
+      btn.classList.add('observation-magnet--active');
     }
+    btn.setAttribute('aria-pressed', String(isActive));
     btn.addEventListener('click', () => {
       state.patternId = p.id;
       renderSuggestions();
@@ -157,47 +163,60 @@ function renderSuggestions() {
   const fHost = $('#suggest-feelings');
   const nHost = $('#suggest-needs');
   const why = $('#why');
+  const panelEmpty = $('#observation-panel-empty');
+  const panelContent = $('#observation-panel-content');
 
-  if (!obs || !fHost || !nHost || !why) return;
+  if (!obs || !fHost || !nHost || !why || !panelEmpty || !panelContent) return;
+
+  const defaultMessage = 'Select a pattern below to start building your observation.';
 
   if (!pat) {
-    obs.textContent = 'Your observation will preview here…';
-    renderChipSet(fHost, []);
-    renderChipSet(nHost, []);
-    why.textContent = 'Pick a pattern to see suggestions.';
+    obs.textContent = defaultMessage;
+    fHost.innerHTML = '';
+    nHost.innerHTML = '';
+    panelContent.hidden = true;
+    panelEmpty.hidden = false;
+    why.textContent = '';
+    why.hidden = true;
     return;
   }
 
-  obs.textContent = pat.example || 'Your observation will preview here…';
-  renderChipSet(fHost, pat.feelings || [], '/feelings/');
-  renderChipSet(nHost, pat.needs || [], '/needs/');
+  panelEmpty.hidden = true;
+  panelContent.hidden = false;
+
+  obs.textContent = pat.example || defaultMessage;
+  renderChipSet(fHost, pat.feelings || [], '/feelings/', 'No feelings surfaced yet.');
+  renderChipSet(nHost, pat.needs || [], '/needs/', 'No needs surfaced yet.');
   const family = getFamily();
+  why.hidden = false;
   if (family) {
     why.textContent = `Why these: ${family.label} → ${pat.label}`;
   } else {
-    why.textContent = 'Pick a pattern to see suggestions.';
+    why.textContent = 'Pattern magnets highlight related feelings and needs.';
   }
 }
 
-function renderChipSet(host, items, baseHref) {
+function renderChipSet(host, items, baseHref, emptyLabel) {
   host.innerHTML = '';
   const list = Array.isArray(items) ? items.filter(Boolean) : [];
   if (!list.length) {
-    const ghost = h('span', 'chip chip--ghost', '—');
-    host.appendChild(ghost);
-    return;
+    if (emptyLabel) {
+      host.appendChild(h('p', 'observation-panel__placeholder', emptyLabel));
+    }
+    return false;
   }
   list.forEach(label => {
-    const a = document.createElement('a');
-    a.className = 'chip';
+    const el = baseHref ? document.createElement('a') : document.createElement('span');
+    el.className = 'observation-magnet observation-magnet--suggestion';
     const slug = slugify(label);
     if (baseHref) {
-      a.href = `${baseHref}${encodeURIComponent(slug)}/`;
+      el.href = `${baseHref}${encodeURIComponent(slug)}/`;
     }
-    a.textContent = label;
-    a.setAttribute('data-slug', slug);
-    host.appendChild(a);
+    el.textContent = label;
+    el.setAttribute('data-slug', slug);
+    host.appendChild(el);
   });
+  return true;
 }
 
 function render() {
