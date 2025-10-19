@@ -59,6 +59,23 @@ const delay = (ms) => new Promise((resolve) => {
   window.setTimeout(resolve, ms);
 });
 
+const MIN_DRIFT_MAGNITUDE = 0.35;
+
+const randomDriftComponent = (preferredSign = 0) => {
+  const magnitude = MIN_DRIFT_MAGNITUDE + Math.random() * 0.65;
+  const sign = preferredSign ? (preferredSign >= 0 ? 1 : -1) : (Math.random() < 0.5 ? -1 : 1);
+  return magnitude * sign;
+};
+
+const resolveDrift = (value, preferredSign = 0) => {
+  if (!Number.isFinite(value) || Math.abs(value) < MIN_DRIFT_MAGNITUDE) {
+    return randomDriftComponent(preferredSign);
+  }
+  const magnitude = Math.max(Math.abs(value), MIN_DRIFT_MAGNITUDE);
+  const sign = Math.sign(value) || (preferredSign >= 0 ? 1 : -1);
+  return magnitude * sign;
+};
+
 const supportsDeviceOrientation = () => typeof window !== 'undefined' && 'DeviceOrientationEvent' in window;
 
 const hasDeviceOrientationPermissionAPI = () =>
@@ -206,7 +223,11 @@ const getBoardSize = (state) => {
   if (state.getBoardSize) {
     const size = state.getBoardSize();
     if (size && Number.isFinite(size.width) && Number.isFinite(size.height)) {
-      return { width: Math.max(size.width, 0), height: Math.max(size.height, 0) };
+      const width = Math.max(size.width, 0);
+      const height = state.fixedHeight && state.fixedBoardHeight != null
+        ? Math.max(state.fixedBoardHeight, 0)
+        : Math.max(size.height, 0);
+      return { width, height };
     }
   }
   const rect = state.board.getBoundingClientRect();
@@ -215,7 +236,10 @@ const getBoardSize = (state) => {
     rect.height ||
     state.board.clientHeight ||
     parseFloat((state.board instanceof HTMLElement ? getComputedStyle(state.board).height : '') || '0');
-  return { width: Math.max(width, 0), height: Math.max(height, 0) };
+  const resolvedHeight = state.fixedHeight && state.fixedBoardHeight != null
+    ? Math.max(state.fixedBoardHeight, 0)
+    : Math.max(height, 0);
+  return { width: Math.max(width, 0), height: resolvedHeight };
 };
 
 const applyTransform = (magnet) => {
@@ -252,6 +276,8 @@ const measureMagnet = (boardRect, element) => {
     pointerId: null,
     offsetX: 0,
     offsetY: 0,
+    driftX: navHidden ? 0 : randomDriftComponent(),
+    driftY: navHidden ? 0 : randomDriftComponent(),
   };
 };
 
@@ -548,8 +574,12 @@ const integrateMotion = (state, dt) => {
       return;
     }
     if (!magnet.dragging) {
-      magnet.vx += (Math.random() * 2 - 1) * drift * jitterScaleX * dt;
-      magnet.vy += (Math.random() * 2 - 1) * drift * jitterScaleY * dt;
+      magnet.driftX = resolveDrift(magnet.driftX);
+      magnet.driftY = resolveDrift(magnet.driftY);
+      magnet.vx += magnet.driftX * drift * jitterScaleX * dt;
+      magnet.vy += magnet.driftY * drift * jitterScaleY * dt;
+      magnet.vx += (Math.random() * 2 - 1) * drift * 0.25 * jitterScaleX * dt;
+      magnet.vy += (Math.random() * 2 - 1) * drift * 0.25 * jitterScaleY * dt;
       magnet.vx += tiltStrength * tiltX * dt;
       magnet.vy += tiltStrength * tiltY * dt;
     }
@@ -564,16 +594,20 @@ const integrateMotion = (state, dt) => {
     if (magnet.x < 0) {
       magnet.x = 0;
       magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      magnet.driftX = Math.abs(resolveDrift(magnet.driftX, 1));
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
       magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      magnet.driftX = -Math.abs(resolveDrift(magnet.driftX, -1));
     }
     if (magnet.y < 0) {
       magnet.y = 0;
       magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      magnet.driftY = Math.abs(resolveDrift(magnet.driftY, 1));
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
       magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      magnet.driftY = -Math.abs(resolveDrift(magnet.driftY, -1));
     }
     applyTransform(magnet);
   });
@@ -719,6 +753,9 @@ const shuffleMagnets = async (state) => {
 
       const baseHeight = state.baseHeight || height || 0;
       const targetHeight = Math.max(baseHeight, maxBottom + BOARD_PADDING);
+      const appliedHeight = state.fixedHeight
+        ? Math.max(state.fixedBoardHeight ?? baseHeight, baseHeight)
+        : targetHeight;
 
       placements.forEach(({ magnet, x, y }) => {
         magnet.x = x;
@@ -728,8 +765,17 @@ const shuffleMagnets = async (state) => {
         applyTransform(magnet);
       });
 
-      state.baseHeight = Math.max(state.baseHeight || 0, targetHeight);
-      state.board.style.height = `${targetHeight}px`;
+      if (state.fixedHeight) {
+        state.baseHeight = Math.max(state.baseHeight || 0, appliedHeight);
+        if (state.fixedBoardHeight != null) {
+          state.board.style.height = `${Math.max(state.fixedBoardHeight, baseHeight)}px`;
+        } else {
+          state.board.style.height = `${appliedHeight}px`;
+        }
+      } else {
+        state.baseHeight = Math.max(state.baseHeight || 0, targetHeight);
+        state.board.style.height = `${appliedHeight}px`;
+      }
       notifyPositions(state);
 
       await waitForAnimationFrames(1);
@@ -769,6 +815,19 @@ export function startPhysics(options) {
   const boardRect = options.board.getBoundingClientRect();
   const magnetStates = options.magnets.map((element) => measureMagnet(boardRect, element));
   const config = { ...DEFAULT_CONFIG, ...options.config };
+  const fixedHeight = Boolean(options.fixedHeight);
+  const fixedBoardHeight = Number.isFinite(options.fixedBoardHeight)
+    ? Math.max(options.fixedBoardHeight, 0)
+    : null;
+  const initialBaseHeight = fixedHeight && fixedBoardHeight != null
+    ? fixedBoardHeight
+    : Math.max(
+      boardRect.height ||
+        options.board.clientHeight ||
+        parsePx((options.board instanceof HTMLElement ? getComputedStyle(options.board).height : '') || '0') ||
+        0,
+      0,
+    );
   const state = {
     board: options.board,
     magnets: magnetStates,
@@ -783,13 +842,9 @@ export function startPhysics(options) {
     isShuffling: false,
     shufflePromise: null,
     lastShuffleTime: 0,
-    baseHeight: Math.max(
-      boardRect.height ||
-        options.board.clientHeight ||
-        parsePx((options.board instanceof HTMLElement ? getComputedStyle(options.board).height : '') || '0') ||
-        0,
-      0,
-    ),
+    baseHeight: initialBaseHeight,
+    fixedHeight,
+    fixedBoardHeight,
     dragIntent: {
       pointerId: null,
       pointerType: '',
