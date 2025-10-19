@@ -20,7 +20,6 @@ function h(tag, cls, text) {
 
 async function init() {
   await loadTaxonomy();
-  ensureSelection();
   render();
 }
 
@@ -67,18 +66,29 @@ function ensureSelection() {
     state.patternId = null;
     return;
   }
-  let family = families.find(f => f.id === state.familyId && getVisiblePatterns(f).length);
+  const family = state.familyId
+    ? families.find(f => f.id === state.familyId)
+    : null;
+
   if (!family) {
-    family = families.find(f => getVisiblePatterns(f).length) || families[0];
+    state.familyId = null;
+    state.patternId = null;
+    return;
   }
-  state.familyId = family?.id || null;
+
   const patterns = getVisiblePatterns(family);
   if (!patterns.length) {
     state.patternId = null;
     return;
   }
-  const currentPattern = patterns.find(p => p.id === state.patternId) || patterns[0];
-  state.patternId = currentPattern?.id || null;
+
+  const match = state.patternId
+    ? patterns.find(p => p.id === state.patternId)
+    : null;
+
+  if (!match) {
+    state.patternId = null;
+  }
 }
 
 function getFamily() {
@@ -159,25 +169,31 @@ function renderSuggestions() {
   const fHost = $('#suggest-feelings');
   const nHost = $('#suggest-needs');
   const why = $('#why');
+  const previewCard = document.querySelector('.observation-preview-card');
 
-  if (!obs || !fHost || !nHost || !why) return;
+  if (!obs || !fHost || !nHost || !why || !previewCard) return;
 
   if (!pat) {
-    obs.textContent = 'Your observation will preview here…';
+    obs.textContent = '';
+    previewCard.setAttribute('data-has-selection', 'false');
     renderChipSet(fHost, []);
     renderChipSet(nHost, []);
-    why.textContent = 'Pick a pattern to see suggestions.';
+    why.textContent = '';
+    why.classList.add('hidden');
     return;
   }
 
-  obs.textContent = pat.example || 'Your observation will preview here…';
+  obs.textContent = pat.example || '';
+  previewCard.setAttribute('data-has-selection', 'true');
   renderChipSet(fHost, pat.feelings || [], '/feelings/');
   renderChipSet(nHost, pat.needs || [], '/needs/');
   const family = getFamily();
   if (family) {
     why.textContent = `Why these: ${family.label} → ${pat.label}`;
+    why.classList.remove('hidden');
   } else {
-    why.textContent = 'Pick a pattern to see suggestions.';
+    why.textContent = '';
+    why.classList.add('hidden');
   }
 }
 
@@ -185,10 +201,10 @@ function renderChipSet(host, items, baseHref) {
   host.innerHTML = '';
   const list = Array.isArray(items) ? items.filter(Boolean) : [];
   if (!list.length) {
-    const ghost = h('span', 'chip chip--ghost', '—');
-    host.appendChild(ghost);
+    host.dataset.empty = 'true';
     return;
   }
+  delete host.dataset.empty;
   list.forEach(label => {
     const a = document.createElement('a');
     a.className = 'chip';

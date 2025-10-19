@@ -1395,9 +1395,9 @@ button.site-nav__magnet {
           </nav>
 
           <section id="tab-guided" class="tab-panel" role="tabpanel" aria-labelledby="tab-guided-button">
-            <section class="card observation-preview-card">
+            <section class="card observation-preview-card" data-has-selection="false">
               <div class="h2">Observation example</div>
-              <div class="preview" id="obs-example">Your observation will preview here…</div>
+              <div class="preview" id="obs-example"></div>
 
               <div class="h2" style="margin-top:.75rem">Feelings to explore</div>
               <div id="suggest-feelings"></div>
@@ -1405,7 +1405,7 @@ button.site-nav__magnet {
               <div class="h2" style="margin-top:.75rem">Needs to consider</div>
               <div id="suggest-needs"></div>
 
-              <div class="hint" id="why" style="margin-top:.5rem">Pick a pattern to see suggestions.</div>
+              <div class="hint hidden" id="why" style="margin-top:.5rem"></div>
             </section>
 
             <div class="grid">
