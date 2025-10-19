@@ -5691,6 +5691,17 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 14%, transparent);
 }
 
+@media (max-width: 40rem) {
+  .feeling-poem {
+    max-width: none;
+    padding: clamp(0.9rem, 4vw, 1.2rem) clamp(0.6rem, 5vw, 1rem);
+    border-radius: calc(18px * var(--corner-scale, 1));
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    background: color-mix(in srgb, var(--lavender) 12%, white 88%);
+    box-shadow: none;
+  }
+}
+
 .feeling-poem__figure {
   margin: 0;
   display: grid;
@@ -5703,6 +5714,8 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   font-size: clamp(1rem, 2.5vw, 1.15rem);
   line-height: 1.6;
   color: color-mix(in srgb, var(--ink) 82%, var(--ink-soft) 18%);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .feeling-poem__cta {
