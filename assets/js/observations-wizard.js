@@ -1,6 +1,7 @@
 import { slugify } from '/lib/slugify.js';
 
 let TAXO = { families: [] };
+let SEARCH = '';
 const state = {
   familyId: null,
   patternId: null,
@@ -35,16 +36,47 @@ async function loadTaxonomy() {
   }
 }
 
+function matchesSearchPattern(pattern) {
+  if (!SEARCH) return true;
+  const label = String(pattern?.label || '').toLowerCase();
+  const example = String(pattern?.example || '').toLowerCase();
+  return label.includes(SEARCH) || example.includes(SEARCH);
+}
+
+function matchesSearchFamily(family) {
+  if (!SEARCH) return true;
+  const label = String(family?.label || '').toLowerCase();
+  const id = String(family?.id || '').toLowerCase();
+  const inPatterns = (family?.patterns || []).some(matchesSearchPattern);
+  return label.includes(SEARCH) || id.includes(SEARCH) || inPatterns;
+}
+
+function getVisibleFamilies() {
+  return Array.isArray(TAXO.families) ? TAXO.families.filter(matchesSearchFamily) : [];
+}
+
+function getVisiblePatterns(family) {
+  if (!family) return [];
+  return Array.isArray(family.patterns) ? family.patterns.filter(matchesSearchPattern) : [];
+}
+
 function ensureSelection() {
-  const families = TAXO.families || [];
+  const families = getVisibleFamilies();
   if (!families.length) {
     state.familyId = null;
     state.patternId = null;
     return;
   }
-  const currentFamily = families.find(f => f.id === state.familyId) || families[0];
-  state.familyId = currentFamily?.id || null;
-  const patterns = currentFamily?.patterns || [];
+  let family = families.find(f => f.id === state.familyId && getVisiblePatterns(f).length);
+  if (!family) {
+    family = families.find(f => getVisiblePatterns(f).length) || families[0];
+  }
+  state.familyId = family?.id || null;
+  const patterns = getVisiblePatterns(family);
+  if (!patterns.length) {
+    state.patternId = null;
+    return;
+  }
   const currentPattern = patterns.find(p => p.id === state.patternId) || patterns[0];
   state.patternId = currentPattern?.id || null;
 }
@@ -63,11 +95,13 @@ function renderFamilies() {
   const host = $('#families');
   if (!host) return;
   host.innerHTML = '';
-  if (!Array.isArray(TAXO.families) || !TAXO.families.length) {
-    host.appendChild(h('div', 'hint', 'No categories available.'));
+  const families = getVisibleFamilies();
+  if (!families.length) {
+    const msg = SEARCH ? 'No matches. Try a different search.' : 'No categories available.';
+    host.appendChild(h('div', 'hint', msg));
     return;
   }
-  TAXO.families.forEach(f => {
+  families.forEach(f => {
     const btn = h('button', 'chip', f.label);
     btn.type = 'button';
     if (state.familyId === f.id) {
@@ -76,7 +110,6 @@ function renderFamilies() {
     btn.addEventListener('click', () => {
       state.familyId = f.id;
       state.patternId = null;
-      ensureSelection();
       render();
     });
     host.appendChild(btn);
@@ -87,16 +120,23 @@ function renderPatterns() {
   const host = $('#patterns');
   if (!host) return;
   host.innerHTML = '';
+  const visibleFamilies = getVisibleFamilies();
+  if (!visibleFamilies.length) {
+    const msg = SEARCH ? 'No matches. Try a different search.' : 'No categories available.';
+    host.appendChild(h('div', 'hint', msg));
+    return;
+  }
   const family = getFamily();
   if (!family) {
     host.appendChild(h('div', 'hint', 'Choose a category to continue.'));
     return;
   }
-  if (!Array.isArray(family.patterns) || !family.patterns.length) {
-    host.appendChild(h('div', 'hint', 'No patterns available for this category.'));
+  const patterns = getVisiblePatterns(family);
+  if (!patterns.length) {
+    host.appendChild(h('div', 'hint', 'No pattern matches in this category.'));
     return;
   }
-  family.patterns.forEach(p => {
+  patterns.forEach(p => {
     const btn = h('button', 'list-item', p.label);
     btn.type = 'button';
     if (state.patternId === p.id) {
@@ -194,4 +234,11 @@ function setupTabs() {
 document.addEventListener('DOMContentLoaded', () => {
   setupTabs();
   init();
+});
+
+document.addEventListener('input', event => {
+  if (event.target && event.target.id === 'search') {
+    SEARCH = String(event.target.value || '').toLowerCase().trim();
+    render();
+  }
 });
