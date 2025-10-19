@@ -11,6 +11,7 @@ export interface PhysicsConfig {
   sepStrength: number;
   dragSepMultiplier: number;
   edgeBounce: number;
+  edgeBounceMin: number;
   mouseRadius: number;
   mouseStrength: number;
 }
@@ -91,7 +92,8 @@ const DEFAULT_CONFIG: PhysicsConfig = {
   sepRadiusScale: 0.7,
   sepStrength: 18,
   dragSepMultiplier: 2,
-  edgeBounce: 0.18,
+  edgeBounce: 0.45,
+  edgeBounceMin: 36,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
@@ -562,6 +564,7 @@ const integrateMotion = (state: InternalState, dt: number) => {
     drift,
     damping,
     edgeBounce,
+    edgeBounceMin = DEFAULT_CONFIG.edgeBounceMin,
     tiltStrength = DEFAULT_CONFIG.tiltStrength,
     tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
   } = state.config;
@@ -599,17 +602,21 @@ const integrateMotion = (state: InternalState, dt: number) => {
     const maxY = Math.max(height - magnet.h, 0);
     if (magnet.x < 0) {
       magnet.x = 0;
-      magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vx) * edgeBounce, edgeBounceMin);
+      magnet.vx = bounce;
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
-      magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vx) * edgeBounce, edgeBounceMin);
+      magnet.vx = -bounce;
     }
     if (magnet.y < 0) {
       magnet.y = 0;
-      magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vy) * edgeBounce, edgeBounceMin);
+      magnet.vy = bounce;
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
-      magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      const bounce = Math.max(Math.abs(magnet.vy) * edgeBounce, edgeBounceMin);
+      magnet.vy = -bounce;
     }
     applyTransform(magnet);
   });

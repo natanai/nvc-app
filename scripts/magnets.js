@@ -9,7 +9,8 @@ const DEFAULT_CONFIG = {
   sepRadiusScale: 0.7,
   sepStrength: 18,
   dragSepMultiplier: 2,
-  edgeBounce: 0.28,
+  edgeBounce: 0.45,
+  edgeBounceMin: 36,
   mouseRadius: 140,
   mouseStrength: 0.6,
 };
