@@ -1,0 +1,480 @@
+{
+  "families": [
+    {
+      "id": "no-reply",
+      "label": "No reply / Ghosted",
+      "patterns": [
+        {
+          "id": "read-no-reply",
+          "label": "Read receipts, no reply (24–72h)",
+          "example": "Two messages were read (check marks) with no reply for 48 hours.",
+          "feelings": ["Sad", "Lonely", "Hurt", "Anxious"],
+          "needs": ["To be seen", "Connection", "Belonging", "Consideration"]
+        },
+        {
+          "id": "stopped-replying",
+          "label": "Stopped replying for a week+",
+          "example": "No response to three messages over two weeks.",
+          "feelings": ["Sad", "Anxious", "Hurt", "Disappointed"],
+          "needs": ["Connection", "Security", "Consideration", "To be seen"]
+        }
+      ]
+    },
+    {
+      "id": "interruption",
+      "label": "Interrupted while speaking",
+      "patterns": [
+        {
+          "id": "spoke-over",
+          "label": "Spoke over me mid-sentence",
+          "example": "While I was speaking, they began speaking and my sentence stopped mid-word.",
+          "feelings": ["Angry", "Hurt", "Tense", "Frustrated"],
+          "needs": ["Respect", "To be heard", "Consideration", "Fairness"]
+        },
+        {
+          "id": "monopolized",
+          "label": "One person monopolized the meeting",
+          "example": "One person spoke for most of the meeting time.",
+          "feelings": ["Frustrated", "Lonely", "Tired", "Tense"],
+          "needs": ["To be heard", "Respect", "Mutuality", "Consideration"]
+        },
+        {
+          "id": "cross-talk",
+          "label": "Cross-talk (multiple people at once)",
+          "example": "Three people spoke at once; I couldn’t get a word in.",
+          "feelings": ["Overwhelmed", "Tense", "Anxious", "Irritated"],
+          "needs": ["Clarity", "Order", "To be heard", "Inclusion"]
+        }
+      ]
+    },
+    {
+      "id": "plan-control",
+      "label": "Plan changed / Control without input",
+      "patterns": [
+        {
+          "id": "changed-without-asking",
+          "label": "Plan changed without asking",
+          "example": "They changed the plan and said, “You’ll do it this way.”",
+          "feelings": ["Frustrated", "Tense", "Resentful", "Anxious"],
+          "needs": ["Autonomy", "Choice", "Freedom", "Mutuality"]
+        },
+        {
+          "id": "overruled",
+          "label": "Decision made without my input",
+          "example": "The decision was announced after I asked to contribute.",
+          "feelings": ["Disappointed", "Resentful", "Tense", "Lonely"],
+          "needs": ["Autonomy", "Empowerment", "To be heard", "Mutuality"]
+        },
+        {
+          "id": "moving-goalposts",
+          "label": "Criteria changed after I delivered",
+          "example": "After I finished, new requirements were added.",
+          "feelings": ["Frustrated", "Tired", "Anxious", "Resentful"],
+          "needs": ["Fairness", "Clarity", "Predictability", "Respect"]
+        }
+      ]
+    },
+    {
+      "id": "tone-volume",
+      "label": "Raised voice / Tone shift",
+      "patterns": [
+        {
+          "id": "raised-voice",
+          "label": "Voice got louder or yelling",
+          "example": "Their voice volume increased during our talk.",
+          "feelings": ["Alarmed", "Scared", "Tense", "Angry"],
+          "needs": ["Safety", "Calm", "Respect", "Love/Caring"]
+        },
+        {
+          "id": "door-slam",
+          "label": "Door slam / loud exit",
+          "example": "The door closed loudly during the conversation.",
+          "feelings": ["Alarmed", "Frightened", "Tense", "Angry"],
+          "needs": ["Safety", "Calm", "Respect", "Love/Caring"]
+        },
+        {
+          "id": "sarcasm",
+          "label": "Mocking / sarcastic tone",
+          "example": "They imitated my voice after my question.",
+          "feelings": ["Hurt", "Angry", "Tense", "Embarrassed"],
+          "needs": ["Respect", "Honor", "Love/Caring", "Consideration"]
+        }
+      ]
+    },
+    {
+      "id": "timeliness",
+      "label": "Late / Canceled",
+      "patterns": [
+        {
+          "id": "late-20",
+          "label": "Arrived 15–30 minutes late",
+          "example": "We agreed on 2:00; they arrived at 2:20 without a message.",
+          "feelings": ["Disappointed", "Irritated", "Anxious", "Hurt"],
+          "needs": ["Reliability", "Consideration", "Respect", "Predictability"]
+        },
+        {
+          "id": "cancel-short",
+          "label": "Canceled at short notice",
+          "example": "They canceled 30 minutes before our meeting.",
+          "feelings": ["Disappointed", "Pressured", "Frustrated", "Sad"],
+          "needs": ["Reliability", "Support", "Consideration", "Security"]
+        }
+      ]
+    },
+    {
+      "id": "attention",
+      "label": "Divided attention while I spoke",
+      "patterns": [
+        {
+          "id": "phone-during-talk",
+          "label": "Looked at phone / kept typing",
+          "example": "They looked at their phone while I was talking.",
+          "feelings": ["Hurt", "Lonely", "Anxious", "Tense"],
+          "needs": ["To be seen", "Consideration", "Connection", "Respect"]
+        },
+        {
+          "id": "no-eye-contact",
+          "label": "No eye contact / distracted",
+          "example": "They kept typing without looking up.",
+          "feelings": ["Hurt", "Tense", "Lonely", "Irritated"],
+          "needs": ["To be seen", "Respect", "Consideration", "Connection"]
+        }
+      ]
+    },
+    {
+      "id": "boundaries",
+      "label": "Boundaries / Consent / Privacy",
+      "patterns": [
+        {
+          "id": "touched-without-asking",
+          "label": "Touched / hugged without asking",
+          "example": "They put a hand on my shoulder without asking.",
+          "feelings": ["Tense", "Alarmed", "Angry", "Scared"],
+          "needs": ["Autonomy", "Space", "Safety", "Respect"]
+        },
+        {
+          "id": "privacy-invaded",
+          "label": "Shared or showed private info",
+          "example": "They screen-shared a direct message I sent.",
+          "feelings": ["Humiliated", "Anxious", "Angry", "Hurt"],
+          "needs": ["Privacy", "Autonomy", "Trust", "Respect"]
+        },
+        {
+          "id": "entered-room",
+          "label": "Entered my space without knocking",
+          "example": "They entered my room without knocking.",
+          "feelings": ["Alarmed", "Tense", "Angry", "Anxious"],
+          "needs": ["Space", "Privacy", "Safety", "Respect"]
+        },
+        {
+          "id": "space-encroached",
+          "label": "Stood too close in public",
+          "example": "They stood close enough that our shoulders touched.",
+          "feelings": ["Tense", "Alarmed", "Anxious", "Agitated"],
+          "needs": ["Space", "Safety", "Serenity", "Calm"]
+        }
+      ]
+    },
+    {
+      "id": "property",
+      "label": "Property / Credit",
+      "patterns": [
+        {
+          "id": "took-without-ask",
+          "label": "Used my things without asking",
+          "example": "They used my laptop account without asking.",
+          "feelings": ["Angry", "Irritated", "Anxious", "Hurt"],
+          "needs": ["Respect", "Control", "Clarity", "Trust"]
+        },
+        {
+          "id": "broke-item",
+          "label": "Damaged my property",
+          "example": "They dropped my tablet; the screen cracked.",
+          "feelings": ["Sad", "Irritated", "Tense", "Anxious"],
+          "needs": ["Love/Caring", "Trust", "Consideration", "Acknowledgement"]
+        },
+        {
+          "id": "no-credit",
+          "label": "No credit / credit taken",
+          "example": "My contribution was used without my name.",
+          "feelings": ["Hurt", "Disappointed", "Sad", "Irritated"],
+          "needs": ["Acknowledgement", "Recognition", "Fairness", "Respect"]
+        }
+      ]
+    },
+    {
+      "id": "public-remark",
+      "label": "Public criticism / Micro-remark",
+      "patterns": [
+        {
+          "id": "negative-public-remark",
+          "label": "Negative remark in public",
+          "example": "They said 'This is a waste of time' while I spoke.",
+          "feelings": ["Hurt", "Humiliated", "Anxious", "Angry"],
+          "needs": ["Respect", "To be heard", "Honor", "Belonging"]
+        },
+        {
+          "id": "micro-remark",
+          "label": "“Where are you really from?” etc.",
+          "example": "They asked 'Where are you really from?' in the meeting.",
+          "feelings": ["Hurt", "Tense", "Anxious", "Angry"],
+          "needs": ["Honor", "Inclusion", "Respect", "Belonging"]
+        },
+        {
+          "id": "comparison",
+          "label": "Unfavorable comparison",
+          "example": "“Unlike Alex, you don’t follow through.”",
+          "feelings": ["Powerless", "Hurt", "Angry", "Humiliated"],
+          "needs": ["To be seen", "Fairness", "Acknowledgement", "Respect"]
+        }
+      ]
+    },
+    {
+      "id": "info-load",
+      "label": "Info withheld / Deadlines / Pressure",
+      "patterns": [
+        {
+          "id": "withheld-info",
+          "label": "Key info omitted",
+          "example": "I learned a requirement after submission closed.",
+          "feelings": ["Confused", "Pressured", "Anxious", "Frustrated"],
+          "needs": ["Clarity", "Honesty", "Support", "Fairness"]
+        },
+        {
+          "id": "deadline-pressure",
+          "label": "Late-night urgent pings / early deadline",
+          "example": "Three pings after 10pm for a 7am turnaround.",
+          "feelings": ["Pressured", "Overwhelmed", "Tense", "Anxious"],
+          "needs": ["Support", "Clarity", "Do things at my own pace and in my own way", "Consideration"]
+        }
+      ]
+    },
+    {
+      "id": "environment",
+      "label": "Noise / Mess / Queue",
+      "patterns": [
+        {
+          "id": "noise-overwhelm",
+          "label": "Loud / repeated noise",
+          "example": "Alarms sounded repeatedly for 20 minutes.",
+          "feelings": ["Overwhelmed", "Tense", "Irritated", "Tired"],
+          "needs": ["Calm", "Peace", "Rest", "Clarity"]
+        },
+        {
+          "id": "mess-left",
+          "label": "Shared space left messy",
+          "example": "Shared sink full after agreed chore time.",
+          "feelings": ["Irritated", "Tired", "Tense", "Frustrated"],
+          "needs": ["Consideration", "Support", "Order", "Mutuality"]
+        },
+        {
+          "id": "queue-cut",
+          "label": "Someone cut in line",
+          "example": "They stepped ahead of me at checkout.",
+          "feelings": ["Irritated", "Angry", "Tense", "Frustrated"],
+          "needs": ["Fairness", "Order", "Respect", "Consideration"]
+        }
+      ]
+    },
+    {
+      "id": "money-safety",
+      "label": "Charges / Driving",
+      "patterns": [
+        {
+          "id": "unexpected-charge",
+          "label": "Unexpected fee / higher price",
+          "example": "Final bill had fees not in the quote.",
+          "feelings": ["Bewildered", "Tense", "Anxious", "Irritated"],
+          "needs": ["Clarity", "Fairness", "Trust", "Honesty"]
+        },
+        {
+          "id": "unsafe-driving",
+          "label": "Texting / unsafe driving",
+          "example": "They looked at their phone on the highway.",
+          "feelings": ["Scared", "Tense", "Alarmed", "Anxious"],
+          "needs": ["Safety", "Love/Caring", "Predictability", "Trust"]
+        }
+      ]
+    },
+    {
+      "id": "pronouns-names",
+      "label": "Names / Pronouns",
+      "patterns": [
+        {
+          "id": "mispronoun",
+          "label": "Used the wrong pronouns after reminders",
+          "example": "After I shared my pronouns, they used different pronouns in the meeting.",
+          "feelings": ["Hurt", "Sad", "Angry", "Tense"],
+          "needs": ["Respect", "Recognition", "Belonging", "To be seen"]
+        },
+        {
+          "id": "deadnaming",
+          "label": "Used my old name (deadnaming)",
+          "example": "They introduced me using a name I no longer use.",
+          "feelings": ["Hurt", "Humiliated", "Angry", "Embarrassed"],
+          "needs": ["Respect", "Recognition", "Honor", "To be seen"]
+        }
+      ]
+    },
+    {
+      "id": "caregiving",
+      "label": "Caregiving / Shared Duties",
+      "patterns": [
+        {
+          "id": "pickup-missed",
+          "label": "Didn’t do agreed pickup/childcare",
+          "example": "They didn’t arrive for pickup at the agreed time.",
+          "feelings": ["Tense", "Disappointed", "Anxious", "Tired"],
+          "needs": ["Reliability", "Support", "Predictability", "Consideration"]
+        },
+        {
+          "id": "night-shift-imbalance",
+          "label": "Night duties falling mostly to me",
+          "example": "I handled the child wake-ups three nights in a row.",
+          "feelings": ["Tired", "Resentful", "Overwhelmed", "Lonely"],
+          "needs": ["Rest", "Mutuality", "Fairness", "Acknowledgement"]
+        }
+      ]
+    },
+    {
+      "id": "school-classroom",
+      "label": "School / Classroom",
+      "patterns": [
+        {
+          "id": "classroom-overstimulation",
+          "label": "Loud, chaotic environment",
+          "example": "Multiple centers ran loud activities for 20+ minutes.",
+          "feelings": ["Overwhelmed", "Tense", "Tired", "Irritated"],
+          "needs": ["Calm", "Peace", "Order", "Clarity"]
+        },
+        {
+          "id": "materials-not-ready",
+          "label": "Materials not prepared as agreed",
+          "example": "Planned materials weren’t set out by start time.",
+          "feelings": ["Tense", "Disappointed", "Anxious", "Frustrated"],
+          "needs": ["Support", "Clarity", "Predictability", "Reliability"]
+        }
+      ]
+    },
+    {
+      "id": "healthcare",
+      "label": "Healthcare / Support",
+      "patterns": [
+        {
+          "id": "symptoms-dismissed",
+          "label": "Symptoms dismissed without inquiry",
+          "example": "I shared symptoms; the provider said 'it’s probably nothing' and changed topic.",
+          "feelings": ["Hurt", "Anxious", "Tense", "Distressed"],
+          "needs": ["To be heard", "Support", "Love/Caring", "Consideration"]
+        },
+        {
+          "id": "touch-no-consent",
+          "label": "Exam touch without consent explanation",
+          "example": "They began the exam without explaining or asking consent.",
+          "feelings": ["Alarmed", "Tense", "Angry", "Scared"],
+          "needs": ["Autonomy", "Choice", "Safety", "Respect"]
+        }
+      ]
+    },
+    {
+      "id": "money-boundaries",
+      "label": "Money / Agreements",
+      "patterns": [
+        {
+          "id": "borrow-not-returned",
+          "label": "Borrowed money not repaid as agreed",
+          "example": "The agreed repayment date passed with no message.",
+          "feelings": ["Anxious", "Irritated", "Tense", "Resentful"],
+          "needs": ["Reliability", "Clarity", "Trust", "Fairness"]
+        },
+        {
+          "id": "split-uneven",
+          "label": "Costs split unevenly without consent",
+          "example": "Shared bill was assigned to me without prior agreement.",
+          "feelings": ["Frustrated", "Tense", "Irritated", "Hurt"],
+          "needs": ["Fairness", "Clarity", "Autonomy", "Respect"]
+        }
+      ]
+    },
+    {
+      "id": "digital-boundaries",
+      "label": "Digital / Online",
+      "patterns": [
+        {
+          "id": "location-shared",
+          "label": "Shared my location/screenshot without asking",
+          "example": "They shared my location or a screenshot with others without checking.",
+          "feelings": ["Distressed", "Anxious", "Angry", "Tense"],
+          "needs": ["Privacy", "Autonomy", "Trust", "Respect"]
+        },
+        {
+          "id": "group-added",
+          "label": "Added to group chat without consent",
+          "example": "I was added to a group thread with unknown people.",
+          "feelings": ["Overwhelmed", "Tense", "Irritated", "Anxious"],
+          "needs": ["Autonomy", "Choice", "Privacy", "Calm"]
+        }
+      ]
+    },
+    {
+      "id": "space-shared",
+      "label": "Shared Home / Roommates",
+      "patterns": [
+        {
+          "id": "quiet-hours-ignored",
+          "label": "Quiet hours disregarded",
+          "example": "Loud music played past the agreed quiet hours.",
+          "feelings": ["Tense", "Tired", "Irritated", "Overwhelmed"],
+          "needs": ["Rest", "Calm", "Respect", "Consideration"]
+        },
+        {
+          "id": "food-taken",
+          "label": "Ate food labeled as mine",
+          "example": "A labeled container was empty without a note.",
+          "feelings": ["Irritated", "Hurt", "Anxious", "Resentful"],
+          "needs": ["Respect", "Trust", "Clarity", "Consideration"]
+        }
+      ]
+    },
+    {
+      "id": "conflict-process",
+      "label": "Conflict Process",
+      "patterns": [
+        {
+          "id": "name-calling",
+          "label": "Called me a name during conflict",
+          "example": "They used a derogatory label while arguing.",
+          "feelings": ["Hurt", "Angry", "Humiliated", "Tense"],
+          "needs": ["Honor", "Respect", "Love/Caring", "To be heard"]
+        },
+        {
+          "id": "threat-to-leave",
+          "label": "Threatened to leave/end relationship mid-conflict",
+          "example": "They said 'I’ll just leave' and walked toward the door.",
+          "feelings": ["Scared", "Sad", "Anxious", "Tense"],
+          "needs": ["Security", "Support", "Love/Caring", "Safety"]
+        }
+      ]
+    },
+    {
+      "id": "work-collab",
+      "label": "Work / Collaboration",
+      "patterns": [
+        {
+          "id": "meeting-overbook",
+          "label": "Booked over prior commitment without asking",
+          "example": "A meeting invite overlapped a blocked time without checking.",
+          "feelings": ["Pressured", "Tense", "Resentful", "Frustrated"],
+          "needs": ["Autonomy", "Respect", "Clarity", "Choice"]
+        },
+        {
+          "id": "feedback-public",
+          "label": "Critical feedback given in public",
+          "example": "They gave critical feedback during a group call.",
+          "feelings": ["Humiliated", "Anxious", "Hurt", "Angry"],
+          "needs": ["Honor", "To be heard", "Respect", "Consideration"]
+        }
+      ]
+    }
+  ]
+}
