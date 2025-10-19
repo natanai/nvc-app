@@ -2050,6 +2050,20 @@ body.has-support-journal-open {
   padding-top: 0.75rem;
 }
 
+.magnet-board-wrapper--floating {
+  padding-top: 0;
+  height: 0;
+}
+
+.magnet-board-wrapper--floating .magnet-board {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--magnet-floating-offset, 0px);
+  margin: 0;
+  z-index: 1;
+}
+
 .magnet-board {
   position: relative;
   display: block;
@@ -2060,6 +2074,66 @@ body.has-support-journal-open {
   box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent);
   overflow: hidden;
   overscroll-behavior: contain;
+}
+
+.magnet-board[data-floating='1'] {
+  position: absolute;
+}
+
+.magnet-board__drag-handle {
+  position: absolute;
+  top: -2.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 2.4rem;
+  padding: 0.35rem 0.85rem;
+  background: color-mix(in srgb, var(--outline) 15%, rgba(255, 255, 255, 0.78));
+  border: 2px solid color-mix(in srgb, var(--outline) 40%, transparent);
+  border-radius: 999px;
+  color: inherit;
+  font: inherit;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  z-index: 3;
+}
+
+.magnet-board__drag-handle:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--outline) 60%, transparent);
+  outline-offset: 3px;
+}
+
+.magnet-board__drag-handle:hover {
+  background: color-mix(in srgb, var(--outline) 22%, rgba(255, 255, 255, 0.85));
+}
+
+.magnet-board__drag-handle[data-dragging='1'] {
+  cursor: grabbing;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.magnet-board__drag-handle-bars,
+.magnet-board__drag-handle-bars::before,
+.magnet-board__drag-handle-bars::after {
+  display: block;
+  width: 1.4rem;
+  height: 0.22rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--outline) 70%, transparent);
+  content: '';
+}
+
+.magnet-board__drag-handle-bars::before {
+  transform: translateY(-0.32rem);
+}
+
+.magnet-board__drag-handle-bars::after {
+  transform: translateY(0.32rem);
 }
 
 .magnet-board[data-active='1'] {
