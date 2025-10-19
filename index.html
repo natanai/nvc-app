@@ -719,9 +719,9 @@ button.site-nav__magnet {
               <span class="site-nav__magnet-label">Inventory</span>
               <span class="site-nav__count" data-inventory-count hidden></span>
             </a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-faux-feelings" href="faux-feelings/"><span class="site-nav__magnet-label">Faux feelings</span></a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="needs/"><span class="site-nav__magnet-label">Needs</span></a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-observations" href="/observations/"><span class="site-nav__magnet-label">Observations</span></a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="/feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="/needs/"><span class="site-nav__magnet-label">Needs</span></a>
             <a class="pill magnet site-nav__magnet site-nav__magnet--body-cues" data-magnet-id="nav-body-cues" href="feelings/body-cues/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
             <a class="pill magnet site-nav__magnet site-nav__magnet--journal-dashboard" data-magnet-id="nav-journal-dashboard" href="inventory/journal/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
           </div>
@@ -1109,17 +1109,17 @@ button.site-nav__magnet {
       <section class="home-doorways" aria-labelledby="doorwaysTitle">
         <h1 id="doorwaysTitle" class="visually-hidden">Choose a doorway</h1>
         <p class="home-doorways__prompt">Step through a doorway to begin exploring.</p>
-        <div class="door-grid">
-          <div class="door-card door-card--faux-feelings">
-            <a class="door-card__link" href="faux-feelings/">
+        <div class="door-grid" data-door-grid>
+          <div class="door-card door-card--observations">
+            <a class="door-card__link" href="/observations/">
               <span class="door-card__door" aria-hidden="true">
-                <img class="door-card__icon" src="icons/door-faux-feelings.svg" alt="" aria-hidden="true" loading="lazy" />
+                <img class="door-card__icon" src="icons/door-observations.svg" alt="" aria-hidden="true" loading="lazy" />
               </span>
-              <span class="door-card__label">Faux Feelings</span>
+              <span class="door-card__label">Observations</span>
             </a>
           </div>
           <div class="door-card door-card--feelings">
-            <a class="door-card__link" href="feelings/">
+            <a class="door-card__link" href="/feelings/">
               <span class="door-card__door" aria-hidden="true">
                 <img class="door-card__icon" src="icons/door-feelings.svg" alt="" aria-hidden="true" loading="lazy" />
               </span>
@@ -1128,7 +1128,7 @@ button.site-nav__magnet {
             <a class="door-card__support" href="alexithymia-support/">Alexithymia support</a>
           </div>
           <div class="door-card door-card--needs">
-            <a class="door-card__link" href="needs/">
+            <a class="door-card__link" href="/needs/">
               <span class="door-card__door" aria-hidden="true">
                 <img class="door-card__icon" src="icons/door-needs.svg" alt="" aria-hidden="true" loading="lazy" />
               </span>
@@ -1146,5 +1146,6 @@ button.site-nav__magnet {
     <script src="assets/js/journal/store.js" type="module"></script>
     <script src="scripts/inventory.js" defer></script>
     <script src="scripts/magnets.js" type="module"></script>
+    <script src="assets/js/ui/home-doorways.js" type="module"></script>
   </body>
 </html>

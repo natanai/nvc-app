@@ -45,7 +45,13 @@
     <header>
       <div class="h1">Start with an Observation</div>
       <p class="muted">Choose the guided wizard to click through faux feelings and instantly surface feelings and needs, or switch to free-text if you already have wording you want to lint.</p>
+      <p class="hint">
+        Prefer starting from a story word like “ignored” or “disrespected”? Try
+        <a id="faux-link" href="/faux-feelings/">Faux feelings</a>.
+      </p>
     </header>
+
+    <nav class="nav-magnets" aria-label="Primary doorways" data-nav-magnets></nav>
 
     <nav class="tab-nav" role="tablist">
       <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
@@ -132,6 +138,7 @@
     </section>
   </main>
 
+  <script type="module" src="/assets/js/ui/nav-magnets.js"></script>
   <script type="module" src="/assets/js/observations-wizard.js"></script>
   <script type="module" src="/assets/js/observations.js"></script>
 </body>

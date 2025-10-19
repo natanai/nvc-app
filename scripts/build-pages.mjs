@@ -5,6 +5,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
 const data = JSON.parse(readFileSync(dataPath, 'utf8'));
+const mainDoorsPath = join(rootDir, 'data', 'doors_main.json');
+const mainDoors = JSON.parse(readFileSync(mainDoorsPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
@@ -868,10 +870,17 @@ function renderNav(basePath, activeNav, options = {}) {
     return `${basePath}${href}`;
   };
 
+  const doorLinks = mainDoors
+    .filter((door) => door && typeof door === 'object' && door.id && door.href)
+    .map((door) => ({
+      key: door.id,
+      href: door.href,
+      label: door.label ?? door.id,
+      magnetId: `nav-${door.id}`,
+    }));
+
   const defaultSecondaryLinks = [
-    { key: 'faux-feelings', href: 'faux-feelings/', label: 'Faux feelings' },
-    { key: 'feelings', href: 'feelings/', label: 'Feelings' },
-    { key: 'needs', href: 'needs/', label: 'Needs' },
+    ...doorLinks,
     {
       key: 'body-cues',
       href: 'feelings/body-cues/',
@@ -1166,32 +1175,48 @@ function renderStrategyForm({
 function renderHome() {
   const basePath = basePathFromDepth(0);
   const iconMap = {
-    'faux-feelings': `${basePath}icons/door-faux-feelings.svg`,
+    observations: `${basePath}icons/door-observations.svg`,
     feelings: `${basePath}icons/door-feelings.svg`,
     needs: `${basePath}icons/door-needs.svg`,
   };
-  const cards = ['faux-feelings', 'feelings', 'needs']
-    .map((type) => {
-      const label = type
-        .replace(/-/g, ' ')
-        .replace(/\b([a-z])/g, (match, char) => char.toUpperCase());
-      const icon = iconMap[type]
-        ? `                <img class="door-card__icon" src="${iconMap[type]}" alt="" aria-hidden="true" loading="lazy" />\n`
+
+  const resolveDoorHref = (href) => {
+    if (!href) {
+      return basePath;
+    }
+    if (/^(?:[a-z]+:)?\/\//i.test(href) || href.startsWith('#')) {
+      return href;
+    }
+    if (href.startsWith('/')) {
+      return href;
+    }
+    return `${basePath}${href}`;
+  };
+
+  const cards = mainDoors
+    .filter((door) => door && typeof door === 'object' && door.id && door.href)
+    .map((door) => {
+      const id = door.id;
+      const label = escapeHtml(door.label ?? door.id);
+      const iconSrc = iconMap[id] ?? '';
+      const icon = iconSrc
+        ? `                <img class="door-card__icon" src="${iconSrc}" alt="" aria-hidden="true" loading="lazy" />\n`
         : '';
+      const href = resolveDoorHref(door.href);
       const doorMarkup = `              <span class="door-card__door" aria-hidden="true">\n${icon}              </span>\n              <span class="door-card__label">${label}</span>`;
 
-      if (type === 'feelings') {
+      if (id === 'feelings') {
         const supportHref = `${basePath}alexithymia-support/`;
-        return `          <div class="door-card door-card--${type}">
-            <a class="door-card__link" href="${type}/">
+        return `          <div class="door-card door-card--${id}">
+            <a class="door-card__link" href="${href}">
 ${doorMarkup}
             </a>
             <a class="door-card__support" href="${supportHref}">Alexithymia support</a>
           </div>`;
       }
 
-      return `          <div class="door-card door-card--${type}">
-            <a class="door-card__link" href="${type}/">
+      return `          <div class="door-card door-card--${id}">
+            <a class="door-card__link" href="${href}">
 ${doorMarkup}
             </a>
           </div>`;
@@ -1202,7 +1227,7 @@ ${doorMarkup}
       <section class="home-doorways" aria-labelledby="doorwaysTitle">
         <h1 id="doorwaysTitle" class="visually-hidden">Choose a doorway</h1>
         <p class="home-doorways__prompt">Step through a doorway to begin exploring.</p>
-        <div class="door-grid">
+        <div class="door-grid" data-door-grid>
 ${cards}
         </div>
         <p class="home-doorways__support-note">
@@ -1215,6 +1240,7 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
+    scripts: [{ src: 'assets/js/ui/home-doorways.js', module: true }],
     activeNav: 'home',
     canonicalPath: '/',
   });

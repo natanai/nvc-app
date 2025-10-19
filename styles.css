@@ -1772,12 +1772,52 @@ body.has-support-journal-open {
   --door-fill: #5f65b5;
 }
 
+.door-card--observations {
+  --door-fill: #6fa8ff;
+}
+
 .door-card--feelings {
   --door-fill: #e19bd9;
 }
 
 .door-card--needs {
   --door-fill: #8fe1b5;
+}
+
+.nav-magnets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.nav-magnets__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--outline) 55%, transparent);
+  background: color-mix(in srgb, var(--outline) 8%, transparent);
+  color: inherit;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.nav-magnets__link:hover,
+.nav-magnets__link:focus-visible {
+  border-color: color-mix(in srgb, var(--outline) 80%, transparent);
+  background: color-mix(in srgb, var(--outline) 16%, transparent);
+}
+
+.nav-magnets__link.active {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 999px;
 }
 
 @media (max-width: 640px) {
