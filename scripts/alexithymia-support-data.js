@@ -532,7 +532,6 @@ export const FEELING_SLUG_ALIASES = {
   "antagonistic": "anger",
   "hostile": "anger",
   "resentful": "anger",
-  "resentment": "anger",
   "irritated": "frustration",
   "frustrated": "frustration",
   "thwarted": "frustration",
