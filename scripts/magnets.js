@@ -613,6 +613,15 @@ const remeasureMagnets = (state) => {
     return;
   }
   const height = Math.max(measuredHeight, state.boardHeight || 0, 1);
+  if (state.fixedHeight) {
+    state.minHeight = state.minHeight || cssMinHeight || height;
+    if (!state.playActive && state.fixedBoardHeight != null) {
+      const resolved = Math.max(state.fixedBoardHeight, state.minHeight || 0, 1);
+      state.boardHeight = resolved;
+      state.inactiveHeight = resolved;
+    }
+    return;
+  }
   state.boardHeight = Math.max(state.boardHeight || 0, height);
   state.minHeight = cssMinHeight || state.minHeight || height;
   if (!state.playActive) {
@@ -735,6 +744,18 @@ const updateBoardHeight = (state) => {
       state.inactiveHeight = height;
     }
     state.board.style.height = `${height}px`;
+    return;
+  }
+  if (state.fixedHeight) {
+    const minHeight = Math.max(state.minHeight || 0, 0);
+    const fixedHeight = state.fixedBoardHeight != null
+      ? Math.max(state.fixedBoardHeight, minHeight)
+      : minHeight;
+    state.boardHeight = fixedHeight;
+    if (!state.playActive) {
+      state.inactiveHeight = fixedHeight;
+    }
+    state.board.style.height = `${fixedHeight}px`;
     return;
   }
   let maxBottom = 0;
@@ -897,9 +918,14 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
     setMagnetTransform(magnet);
   });
 
-  const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
+  const height = state.fixedHeight
+    ? Math.max(state.fixedBoardHeight ?? state.boardHeight ?? state.minHeight, state.minHeight)
+    : Math.max(state.minHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
-  state.board.style.height = `${height}px`;
+  if (state.fixedHeight && state.fixedBoardHeight != null) {
+    state.boardHeight = Math.max(state.fixedBoardHeight, state.minHeight || 0);
+  }
+  state.board.style.height = `${state.boardHeight}px`;
   updateLayout(state);
   if (persist) {
     persistLayout(state, true);
@@ -1119,6 +1145,8 @@ const setPlayState = (state, active) => {
       board: state.board,
       magnets: magnetElements,
       config: physicsConfig,
+      fixedHeight: state.fixedHeight,
+      fixedBoardHeight: state.fixedBoardHeight ?? state.boardHeight,
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),
@@ -1149,22 +1177,29 @@ const setPlayState = (state, active) => {
       });
       state.suppressUntil = 0;
       state.playActive = false;
-      const measuredHeight = measureBoardHeight(state.board);
+      const measuredHeight = state.fixedHeight ? (state.fixedBoardHeight ?? state.boardHeight) : measureBoardHeight(state.board);
       if (measuredHeight > 0) {
         if (isNavBoardState(state)) {
           const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
           const resolvedHeight = Math.max(measuredHeight, minHeight);
           state.boardHeight = resolvedHeight;
           state.inactiveHeight = resolvedHeight;
-        } else {
+        } else if (!state.fixedHeight) {
           state.boardHeight = Math.max(measuredHeight, state.boardHeight || 0, state.minHeight || 0);
           state.inactiveHeight = state.boardHeight;
+        } else {
+          const resolvedHeight = Math.max(
+            state.fixedBoardHeight ?? measuredHeight,
+            state.minHeight || 0,
+          );
+          state.boardHeight = resolvedHeight;
+          state.inactiveHeight = resolvedHeight;
         }
       }
       updateBoardHeight(state);
       const magnetElements = state.magnets.map((magnet) => magnet.element);
       const syncedHeight = syncBoardHeightFromDOM(state.board, magnetElements);
-      if (typeof syncedHeight === 'number' && syncedHeight > 0) {
+      if (!state.fixedHeight && typeof syncedHeight === 'number' && syncedHeight > 0) {
         if (isNavBoardState(state)) {
           const minHeight = Math.max(state.cssMinHeight || state.minHeight || 0, 0);
           const resolvedHeight = Math.max(syncedHeight, minHeight);
@@ -1413,6 +1448,9 @@ const initializeBoard = async (root, index) => {
     boardRect.height || board.clientHeight || cssMinHeight || 1,
     cssMinHeight || 1,
   );
+  const hasFixedHeightAttr = root.hasAttribute('data-magnet-fixed-height')
+    || root.dataset.magnetFixedHeight === 'true';
+  const fixedBoardHeight = hasFixedHeightAttr ? initialHeight : null;
 
   let storedPlayPreference = null;
 
@@ -1438,6 +1476,8 @@ const initializeBoard = async (root, index) => {
     minHeight: cssMinHeight || initialHeight,
     cssMinHeight: cssMinHeight || 0,
     inactiveHeight: initialHeight,
+    fixedHeight: hasFixedHeightAttr,
+    fixedBoardHeight,
     saveTimer: null,
     lastSaveTime: 0,
     resizeObserver: null,
@@ -1457,6 +1497,12 @@ const initializeBoard = async (root, index) => {
     searchWasPlaying: false,
     cleanupSearch: null,
   };
+
+  if (state.fixedHeight && state.fixedBoardHeight != null) {
+    const resolved = Math.max(state.fixedBoardHeight, state.minHeight || 0);
+    state.boardHeight = resolved;
+    state.inactiveHeight = resolved;
+  }
 
   state.setClickSuppress = () => {
     state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;
@@ -1504,7 +1550,7 @@ const initializeBoard = async (root, index) => {
   }
   const stored = storedResult?.magnets || null;
   const storedBoardHeightRaw = storedResult?.boardHeight;
-  if (!isNavBoardState(state) && typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
+  if (!isNavBoardState(state) && !state.fixedHeight && typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
     const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
     state.boardHeight = storedBoardHeight;
     state.inactiveHeight = storedBoardHeight;
