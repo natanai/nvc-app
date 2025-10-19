@@ -142,6 +142,218 @@ const navPrefillScript = () => String.raw`
         })();
       </script>`;
 
+const navVisibilityBootstrapScript = () => String.raw`
+      <script>
+        (function() {
+          if (typeof window === 'undefined' || typeof document === 'undefined') {
+            return;
+          }
+
+          var nav = document.querySelector('[data-magnet-root][data-magnet-key="${NAV_MAGNET_STORAGE_KEY}"]');
+          if (!nav || typeof nav.querySelectorAll !== 'function') {
+            return;
+          }
+
+          var storageKey = 'nvcApp.navSettings';
+          var storages = [];
+
+          try {
+            if (Object.prototype.hasOwnProperty.call(window, 'localStorage') && window.localStorage) {
+              storages.push(window.localStorage);
+            }
+          } catch (error) {
+            return;
+          }
+
+          try {
+            if (Object.prototype.hasOwnProperty.call(window, 'sessionStorage') && window.sessionStorage) {
+              storages.push(window.sessionStorage);
+            }
+          } catch (error) {
+            return;
+          }
+
+          var raw = '';
+          for (var i = 0; i < storages.length; i += 1) {
+            var storage = storages[i];
+            if (!storage || typeof storage.getItem !== 'function') {
+              continue;
+            }
+            try {
+              var candidate = storage.getItem(storageKey);
+              if (typeof candidate === 'string' && candidate.trim()) {
+                raw = candidate.trim();
+                break;
+              }
+            } catch (error) {
+              return;
+            }
+          }
+
+          if (!raw) {
+            return;
+          }
+
+          var parsed;
+          try {
+            parsed = JSON.parse(raw);
+          } catch (error) {
+            return;
+          }
+
+          if (!parsed || typeof parsed !== 'object') {
+            return;
+          }
+
+          var defaults = {
+            home: true,
+            customizer: true,
+            journal: true,
+            inventory: true,
+            situations: true,
+            feelings: true,
+            needs: true,
+            bodyCues: false,
+            journalDashboard: false,
+          };
+
+          var alwaysEnabled = {
+            home: true,
+            customizer: true,
+          };
+
+          var enabledNavIds = {};
+          for (var key in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, key)) {
+              enabledNavIds[key] = defaults[key];
+            }
+          }
+
+          if (parsed.enabled && typeof parsed.enabled === 'object') {
+            for (var id in parsed.enabled) {
+              if (!Object.prototype.hasOwnProperty.call(parsed.enabled, id)) {
+                continue;
+              }
+              if (Object.prototype.hasOwnProperty.call(alwaysEnabled, id)) {
+                enabledNavIds[id] = true;
+                continue;
+              }
+              enabledNavIds[id] = parsed.enabled[id] !== false;
+            }
+          }
+
+          for (var required in alwaysEnabled) {
+            if (Object.prototype.hasOwnProperty.call(alwaysEnabled, required)) {
+              enabledNavIds[required] = true;
+            }
+          }
+
+          var magnetMap = {
+            home: 'nav-home',
+            customizer: 'nav-customizer',
+            journal: 'nav-journal',
+            inventory: 'nav-inventory',
+            situations: 'nav-situations',
+            feelings: 'nav-feelings',
+            needs: 'nav-needs',
+            bodyCues: 'nav-body-cues',
+            journalDashboard: 'nav-journal-dashboard',
+          };
+
+          var magnetEnabled = {};
+          for (var navId in magnetMap) {
+            if (!Object.prototype.hasOwnProperty.call(magnetMap, navId)) {
+              continue;
+            }
+            var magnetId = magnetMap[navId];
+            var isEnabled = Object.prototype.hasOwnProperty.call(enabledNavIds, navId)
+              ? !!enabledNavIds[navId]
+              : true;
+            magnetEnabled[magnetId] = isEnabled;
+          }
+
+          var magnets = nav.querySelectorAll('[data-magnet-id]');
+          if (!magnets || !magnets.length) {
+            return;
+          }
+
+          var supplementalEnabled = false;
+
+          for (var j = 0; j < magnets.length; j += 1) {
+            var el = magnets[j];
+            if (!el || typeof el.getAttribute !== 'function') {
+              continue;
+            }
+
+            var magnetId = el.getAttribute('data-magnet-id');
+            if (!magnetId) {
+              continue;
+            }
+
+            var shouldEnable = Object.prototype.hasOwnProperty.call(magnetEnabled, magnetId)
+              ? magnetEnabled[magnetId]
+              : !(typeof el.hasAttribute === 'function' && el.hasAttribute('data-nav-hidden'));
+
+            if (shouldEnable) {
+              if (el.dataset && Object.prototype.hasOwnProperty.call(el.dataset, 'navStoredTabIndex')) {
+                var stored = el.dataset.navStoredTabIndex;
+                if (stored) {
+                  el.setAttribute('tabindex', stored);
+                } else if (typeof el.removeAttribute === 'function') {
+                  el.removeAttribute('tabindex');
+                }
+                delete el.dataset.navStoredTabIndex;
+              } else if (typeof el.removeAttribute === 'function') {
+                el.removeAttribute('tabindex');
+              }
+
+              if (typeof el.removeAttribute === 'function') {
+                el.removeAttribute('data-nav-hidden');
+                el.removeAttribute('aria-hidden');
+              }
+
+              var isSupplemental = false;
+              if (el.dataset && el.dataset.navSupplemental === 'true') {
+                isSupplemental = true;
+              } else if (typeof el.getAttribute === 'function' && el.getAttribute('data-nav-supplemental') === 'true') {
+                isSupplemental = true;
+              }
+
+              if (isSupplemental) {
+                supplementalEnabled = true;
+              }
+            } else {
+              if (
+                el.dataset &&
+                !Object.prototype.hasOwnProperty.call(el.dataset, 'navStoredTabIndex') &&
+                typeof el.getAttribute === 'function'
+              ) {
+                var existing = el.getAttribute('tabindex');
+                if (existing != null) {
+                  el.dataset.navStoredTabIndex = existing;
+                } else {
+                  el.dataset.navStoredTabIndex = '';
+                }
+              }
+
+              if (typeof el.setAttribute === 'function') {
+                el.setAttribute('tabindex', '-1');
+                el.setAttribute('data-nav-hidden', 'true');
+                el.setAttribute('aria-hidden', 'true');
+              }
+            }
+          }
+
+          if (typeof nav.setAttribute === 'function' && typeof nav.removeAttribute === 'function') {
+            if (supplementalEnabled) {
+              nav.setAttribute('data-nav-expanded', 'true');
+            } else {
+              nav.removeAttribute('data-nav-expanded');
+            }
+          }
+        })();
+      </script>`;
+
 const BRAND_NAME = 'allneeds.app';
 const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
@@ -720,6 +932,7 @@ function renderNav(basePath, activeNav, options = {}) {
     })
     .join('\n');
 
+  const navVisibilityBootstrap = navVisibilityBootstrapScript();
   const prefill = navPrefillScript();
 
   return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="${NAV_MAGNET_STORAGE_KEY}">
@@ -802,6 +1015,7 @@ ${secondaryLinks ? `${secondaryLinks}\n` : ''}          </div>
           </div>
         </div>
       </nav>
+${navVisibilityBootstrap}
 ${prefill}`;
 }
 
