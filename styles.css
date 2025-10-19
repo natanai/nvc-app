@@ -5718,6 +5718,11 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   overflow-wrap: anywhere;
 }
 
+.feeling-poem__indent {
+  display: inline-block;
+  padding-left: clamp(2ch, 5vw, 10ch);
+}
+
 .feeling-poem__cta {
   margin: 0;
 }
