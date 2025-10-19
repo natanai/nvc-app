@@ -255,7 +255,7 @@ for (const entry of formattedPoems) {
   });
 }
 const rawNeeds = filterDuplicateNeeds(readCsv('data/Needs.csv'));
-const rawSituations = readCsv('data/Situations.csv');
+const rawFauxFeelings = readCsv('data/Faux Feelings.csv');
 const rawStrategies = readCsv('data/Strategies.csv');
 
 function partitionFeelingsSheet(rows) {
@@ -344,7 +344,7 @@ const feelings = rawFeelings.map((row) => {
     title,
     slug,
     description: row['Page Summary'] || '',
-    situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
+    fauxFeelings: uniqueByTitle(splitList(row['Related Faux Feelings']).map((title) => ({ title }))),
     needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
     bodySignals: splitList(row['Body Signal Notes']),
     poemQuote: poemEntry.poemQuote,
@@ -358,16 +358,16 @@ const needs = rawNeeds.map((row) => ({
   category: row['Category Label'] || '',
   description: row['Page Summary'] || '',
   strategies: uniqueByTitle(splitList(row['Related Strategies']).map((title) => ({ title }))),
-  situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
+  fauxFeelings: uniqueByTitle(splitList(row['Related Faux Feelings']).map((title) => ({ title }))),
   feelings: uniqueByTitle(splitList(row['Related Feelings']).map((title) => ({ title }))),
   originalClaim: row['Claim Summary'] || '',
   rewrittenClaim: row['Claim Narrative'] || '',
   supportingSources: parseSupportingSources(row['Source Links']),
 }));
 
-const situations = rawSituations.map((row) => ({
-  title: row['Situation Title'],
-  slug: row['Slug Override'] || slugify(row['Situation Title']),
+const fauxFeelings = rawFauxFeelings.map((row) => ({
+  title: row['Faux Feeling Title'],
+  slug: row['Slug Override'] || slugify(row['Faux Feeling Title']),
   feelings: uniqueByTitle(splitList(row['Related Feelings']).map((title) => ({ title }))),
   needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
 }));
@@ -416,7 +416,7 @@ const strategies = rawStrategies.map((row, index) => {
 
 const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), item.slug]));
 const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slug]));
-const situationsMap = new Map(situations.map((item) => [item.title.toLowerCase(), item.slug]));
+const fauxFeelingsMap = new Map(fauxFeelings.map((item) => [item.title.toLowerCase(), item.slug]));
 const strategiesMap = new Map(strategies.map((item) => [item.title.toLowerCase(), item.slug]));
 
 function attachRelationshipSlugs(collection, listKey, slugMap, { parentType, relatedType }) {
@@ -434,17 +434,29 @@ function attachRelationshipSlugs(collection, listKey, slugMap, { parentType, rel
 }
 
 attachRelationshipSlugs(feelings, 'needs', needsMap, { parentType: 'Feeling', relatedType: 'Need' });
-attachRelationshipSlugs(feelings, 'situations', situationsMap, { parentType: 'Feeling', relatedType: 'Situation' });
+attachRelationshipSlugs(feelings, 'fauxFeelings', fauxFeelingsMap, {
+  parentType: 'Feeling',
+  relatedType: 'Faux Feeling',
+});
 attachRelationshipSlugs(needs, 'strategies', strategiesMap, { parentType: 'Need', relatedType: 'Strategy' });
-attachRelationshipSlugs(needs, 'situations', situationsMap, { parentType: 'Need', relatedType: 'Situation' });
+attachRelationshipSlugs(needs, 'fauxFeelings', fauxFeelingsMap, {
+  parentType: 'Need',
+  relatedType: 'Faux Feeling',
+});
 attachRelationshipSlugs(needs, 'feelings', feelingsMap, { parentType: 'Need', relatedType: 'Feeling' });
-attachRelationshipSlugs(situations, 'feelings', feelingsMap, { parentType: 'Situation', relatedType: 'Feeling' });
-attachRelationshipSlugs(situations, 'needs', needsMap, { parentType: 'Situation', relatedType: 'Need' });
+attachRelationshipSlugs(fauxFeelings, 'feelings', feelingsMap, {
+  parentType: 'Faux Feeling',
+  relatedType: 'Feeling',
+});
+attachRelationshipSlugs(fauxFeelings, 'needs', needsMap, {
+  parentType: 'Faux Feeling',
+  relatedType: 'Need',
+});
 attachRelationshipSlugs(strategies, 'needs', needsMap, { parentType: 'Strategy', relatedType: 'Need' });
 
 mkdirSync(DATA_DIR, { recursive: true });
 
-const dataset = { feelings, needs, situations, strategies };
+const dataset = { feelings, needs, fauxFeelings, strategies };
 
 writeFileSync(join(DATA_DIR, 'index.json'), JSON.stringify(dataset, null, 2));
 writeFileSync(join(DATA_DIR, 'body-regions.json'), `${JSON.stringify(bodyRegions, null, 2)}\n`);
