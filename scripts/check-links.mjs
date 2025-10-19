@@ -216,14 +216,16 @@ async function main() {
   const urls = new Map();
 
   for (const row of rows) {
-    const sources = parseSupportingSources(row['Supporting Sources']);
+    const sources = parseSupportingSources(row['Evidence sources']);
+    const title = row['Need name'] || row.Title || '';
+    const slug = row['Slug override'] || row.Slug || '';
     for (const source of sources) {
       const normalized = source.url.trim();
       if (!normalized) continue;
       if (!urls.has(normalized)) {
         urls.set(normalized, []);
       }
-      urls.get(normalized).push(row.Title || row.Slug || '');
+      urls.get(normalized).push(title || slug);
     }
   }
 

@@ -38,7 +38,7 @@ A retro-styled companion to [allneeds.app](https://allneeds.app/) that mirrors t
   ```bash
   npm run lint:links
   ```
-  This script validates every URL listed in `data/Needs.csv` under "Supporting Sources". It performs a HEAD/GET request with a
+  This script validates every URL listed in `data/Needs.csv` under "Evidence sources". It performs a HEAD/GET request with a
   timeout, fails the build if a link returns a non-200 response, and flags redirects that land on common CAPTCHA or consent
   interstitials. Prefer citing open-access material whenever possible so readers can verify the evidence without subscription
   barriers.
@@ -88,7 +88,6 @@ custom directory as the first argument to store the archive elsewhere.
 │   ├── Feelings.csv
 │   ├── Needs.csv
 │   ├── Situations.csv
-│   ├── Strategies.csv
 │   └── index.json            # generated dataset
 └── scripts/
     ├── build-data.mjs        # CSV → JSON converter

@@ -5,27 +5,27 @@
     "prompt": "Rest your attention on your chest or heart space. Notice breath depth, expansion, or pulsing.",
     "options": [
       {
-        "id": "chest-tight",
-        "title": "Tight or constricted",
-        "note": "Band squeezing, armor, or breath held high",
-        "insight": "Tightness across the chest can accompany your system bracing for threat or overwhelm.",
-        "emotions": {
-          "anxiety": 1.4,
-          "fear": 1.1,
-          "anger": 0.9,
-          "overwhelm": 1.1
-        }
-      },
-      {
         "id": "chest-pressure",
         "title": "Weighted or pressured",
         "note": "Heavy stone, shoulders collapsing inward",
         "insight": "Weight or pressure here can reflect grief, sadness, or responsibility carried for others.",
         "emotions": {
           "sadness": 1.1,
-          "grief": 1.2,
           "stress": 1,
+          "grief": 1.2,
           "guilt": 0.9
+        }
+      },
+      {
+        "id": "chest-tight",
+        "title": "Tight or constricted",
+        "note": "Band squeezing, armor, or breath held high",
+        "insight": "Tightness across the chest can accompany your system bracing for threat or overwhelm.",
+        "emotions": {
+          "fear": 1.1,
+          "anger": 0.9,
+          "anxiety": 1.4,
+          "overwhelm": 1.1
         }
       },
       {
@@ -34,11 +34,11 @@
         "note": "Heart racing, flutter, sudden surges of beats",
         "insight": "A pounding heart can point to activation—anxiety, fear, anger, or eager anticipation.",
         "emotions": {
-          "anxiety": 1.2,
           "fear": 1.1,
-          "excitement": 1,
+          "anger": 1,
+          "anxiety": 1.2,
           "anticipation": 1,
-          "anger": 1
+          "excitement": 1
         }
       },
       {
@@ -48,10 +48,10 @@
         "insight": "An open chest can accompany calm, relief, or joyful connection.",
         "emotions": {
           "calm": 1.2,
-          "relief": 1.1,
-          "joy": 0.8,
           "gratitude": 0.9,
-          "love": 1.1
+          "joy": 0.8,
+          "love": 1.1,
+          "relief": 1.1
         }
       }
     ]
@@ -62,15 +62,15 @@
     "prompt": "Soften awareness into your belly. Notice flips, hollowness, or steadiness.",
     "options": [
       {
-        "id": "gut-rolling",
-        "title": "Rolling or fluttering",
-        "note": "Butterflies, swirls, churning movement",
-        "insight": "Rolling sensations can blend anxious worry with hopeful excitement about what is next.",
+        "id": "gut-emptiness",
+        "title": "Hollow or empty",
+        "note": "Sinking, dropping, missing center",
+        "insight": "Emptiness in the gut can flag sadness, loneliness, or grief.",
         "emotions": {
-          "anxiety": 1.1,
-          "worry": 1,
-          "excitement": 0.9,
-          "anticipation": 1
+          "sadness": 1.2,
+          "lonely": 1,
+          "numb": 0.8,
+          "grief": 1.2
         }
       },
       {
@@ -79,23 +79,23 @@
         "note": "Churned up, unsettled, urge to vomit",
         "insight": "Nausea can show up when something feels unsafe, overwhelming, or not right.",
         "emotions": {
-          "anxiety": 1,
           "fear": 1.1,
           "stress": 0.9,
+          "anxiety": 1,
           "overwhelm": 0.9,
           "disgust": 1.2
         }
       },
       {
-        "id": "gut-emptiness",
-        "title": "Hollow or empty",
-        "note": "Sinking, dropping, missing center",
-        "insight": "Emptiness in the gut can flag sadness, loneliness, or grief.",
+        "id": "gut-rolling",
+        "title": "Rolling or fluttering",
+        "note": "Butterflies, swirls, churning movement",
+        "insight": "Rolling sensations can blend anxious worry with hopeful excitement about what is next.",
         "emotions": {
-          "sadness": 1.2,
-          "grief": 1.2,
-          "lonely": 1,
-          "numb": 0.8
+          "anxiety": 1.1,
+          "worry": 1,
+          "anticipation": 1,
+          "excitement": 0.9
         }
       },
       {
@@ -104,10 +104,10 @@
         "note": "Grounded fullness, gentle ease",
         "insight": "Warmth in the belly can match calm confidence or gentle hope.",
         "emotions": {
-          "hope": 1,
-          "contentment": 1,
           "calm": 1,
-          "gratitude": 0.9
+          "contentment": 1,
+          "gratitude": 0.9,
+          "hope": 1
         }
       }
     ]
@@ -124,9 +124,9 @@
         "insight": "A tight throat can appear when sadness, anxiety, or shame holds words back.",
         "emotions": {
           "sadness": 1,
-          "grief": 1,
+          "anxiety": 0.8,
           "shame": 0.9,
-          "anxiety": 0.8
+          "grief": 1
         }
       },
       {
@@ -135,10 +135,10 @@
         "note": "Tears hovering, voice shaking, lump rising",
         "insight": "A lump in the throat can pair with grief, loneliness, or tenderness seeking expression.",
         "emotions": {
-          "grief": 1.2,
-          "lonely": 1,
           "sadness": 1.1,
-          "overwhelm": 0.8
+          "lonely": 1,
+          "overwhelm": 0.8,
+          "grief": 1.2
         }
       },
       {
@@ -149,8 +149,8 @@
         "emotions": {
           "fear": 1,
           "anxiety": 1,
-          "anticipation": 0.8,
-          "shame": 0.7
+          "shame": 0.7,
+          "anticipation": 0.8
         }
       },
       {
@@ -170,6 +170,18 @@
     "prompt": "Notice your jaw, tongue, and hands. Are they loose, braced, or buzzing?",
     "options": [
       {
+        "id": "jaw-tremble",
+        "title": "Tremble or quiver",
+        "note": "Jaw shaking, lips or hands quivering",
+        "insight": "Trembling around the mouth can accompany fear, overwhelm, or sadness releasing.",
+        "emotions": {
+          "sadness": 0.9,
+          "fear": 1.1,
+          "anxiety": 1,
+          "overwhelm": 1
+        }
+      },
+      {
         "id": "jaw-clench",
         "title": "Clenched or grinding",
         "note": "Teeth locked, fists tight, rigid tongue",
@@ -177,9 +189,9 @@
         "emotions": {
           "anger": 1.3,
           "frustration": 1.2,
-          "determined": 1,
           "stress": 0.9,
-          "anxiety": 1
+          "anxiety": 1,
+          "determined": 1
         }
       },
       {
@@ -189,21 +201,9 @@
         "insight": "Heat in the jaw can mark anger, shame, or a boundary flare.",
         "emotions": {
           "anger": 1.1,
-          "shame": 1,
           "frustration": 0.8,
+          "shame": 1,
           "guilt": 0.7
-        }
-      },
-      {
-        "id": "jaw-tremble",
-        "title": "Tremble or quiver",
-        "note": "Jaw shaking, lips or hands quivering",
-        "insight": "Trembling around the mouth can accompany fear, overwhelm, or sadness releasing.",
-        "emotions": {
-          "fear": 1.1,
-          "anxiety": 1,
-          "sadness": 0.9,
-          "overwhelm": 1
         }
       }
     ]
@@ -214,13 +214,25 @@
     "prompt": "Check your forehead, temples, and behind the eyes. Notice pressure, buzzing, or fog.",
     "options": [
       {
+        "id": "head-fog",
+        "title": "Foggy or heavy",
+        "note": "Hard to focus, thick clouded feeling",
+        "insight": "Fog can appear with exhaustion, low mood, or protective numbness.",
+        "emotions": {
+          "sadness": 0.8,
+          "overwhelm": 0.9,
+          "numb": 1,
+          "tired": 1.1
+        }
+      },
+      {
         "id": "head-pressure",
         "title": "Pressure or band",
         "note": "Helmet feeling, squeezing temples",
         "insight": "Head pressure can signal mental load, stress, or overwhelm asking for relief.",
         "emotions": {
-          "overwhelm": 1.3,
           "stress": 1.1,
+          "overwhelm": 1.3,
           "worry": 1
         }
       },
@@ -231,21 +243,9 @@
         "insight": "Buzzing in the head can come with anxious energy or excited anticipation.",
         "emotions": {
           "anxiety": 1.1,
-          "excitement": 0.9,
+          "overwhelm": 0.8,
           "anticipation": 0.9,
-          "overwhelm": 0.8
-        }
-      },
-      {
-        "id": "head-fog",
-        "title": "Foggy or heavy",
-        "note": "Hard to focus, thick clouded feeling",
-        "insight": "Fog can appear with exhaustion, low mood, or protective numbness.",
-        "emotions": {
-          "tired": 1.1,
-          "numb": 1,
-          "sadness": 0.8,
-          "overwhelm": 0.9
+          "excitement": 0.9
         }
       }
     ]
@@ -261,22 +261,10 @@
         "note": "Heavy load, sagging posture, tight knots",
         "insight": "Weighted shoulders can align with stress, guilt, or sadness about responsibility.",
         "emotions": {
-          "stress": 1.2,
-          "guilt": 1.1,
           "sadness": 1,
-          "overwhelm": 1
-        }
-      },
-      {
-        "id": "shoulders-braced",
-        "title": "Lifted or braced",
-        "note": "Raised, ready to act, armor-like",
-        "insight": "Braced shoulders can show your body gearing up—anxiety, determination, or anger.",
-        "emotions": {
-          "anxiety": 1.1,
-          "determined": 1,
-          "anger": 0.8,
-          "fear": 0.9
+          "stress": 1.2,
+          "overwhelm": 1,
+          "guilt": 1.1
         }
       },
       {
@@ -285,10 +273,22 @@
         "note": "Slumped, no lift, giving way",
         "insight": "Drooping shoulders can reflect fatigue, discouragement, or grief.",
         "emotions": {
-          "tired": 1.1,
           "sadness": 1,
-          "grief": 0.9,
-          "numb": 0.9
+          "numb": 0.9,
+          "tired": 1.1,
+          "grief": 0.9
+        }
+      },
+      {
+        "id": "shoulders-braced",
+        "title": "Lifted or braced",
+        "note": "Raised, ready to act, armor-like",
+        "insight": "Braced shoulders can show your body gearing up—anxiety, determination, or anger.",
+        "emotions": {
+          "fear": 0.9,
+          "anger": 0.8,
+          "anxiety": 1.1,
+          "determined": 1
         }
       }
     ]
@@ -304,23 +304,10 @@
         "note": "Hard to move, sluggish, weighted",
         "insight": "Heavy limbs can show tiredness, sadness, or numb shutdown.",
         "emotions": {
-          "tired": 1.3,
           "sadness": 1,
+          "overwhelm": 0.8,
           "numb": 1.1,
-          "overwhelm": 0.8
-        }
-      },
-      {
-        "id": "limbs-restless",
-        "title": "Restless or fidgety",
-        "note": "Urge to pace, bounce, or shake",
-        "insight": "Restless limbs can signal pent-up energy linked to anxiety, anticipation, or frustration.",
-        "emotions": {
-          "anxiety": 1.2,
-          "anticipation": 1.1,
-          "excitement": 1,
-          "frustration": 0.9,
-          "anger": 0.8
+          "tired": 1.3
         }
       },
       {
@@ -329,10 +316,23 @@
         "note": "Buzzing skin, energetic tingles",
         "insight": "Tingles can mean excited anticipation or anxious vigilance.",
         "emotions": {
+          "fear": 0.9,
           "anticipation": 1.2,
           "excitement": 1.1,
-          "fear": 0.9,
           "joy": 0.8
+        }
+      },
+      {
+        "id": "limbs-restless",
+        "title": "Restless or fidgety",
+        "note": "Urge to pace, bounce, or shake",
+        "insight": "Restless pacing can accompany anger as energy mobilizes for action.",
+        "emotions": {
+          "anger": 0.8,
+          "frustration": 0.9,
+          "anxiety": 1.2,
+          "anticipation": 1.1,
+          "excitement": 1
         }
       }
     ]
@@ -343,26 +343,14 @@
     "prompt": "Notice any sudden changes in temperature or skin sensation.",
     "options": [
       {
-        "id": "temp-flush",
-        "title": "Flush of heat",
-        "note": "Cheeks glowing, warmth rushing outward",
-        "insight": "Heat waves can pair with anger, excitement, or shame.",
-        "emotions": {
-          "anger": 1.2,
-          "excitement": 1,
-          "shame": 1,
-          "pride": 0.6
-        }
-      },
-      {
         "id": "temp-chill",
         "title": "Chill or cold rush",
         "note": "Goosebumps, cold core, shivers",
         "insight": "Chills may signal fear, anxiety, or grief moving through.",
         "emotions": {
+          "sadness": 0.8,
           "fear": 1.2,
           "anxiety": 1.1,
-          "sadness": 0.8,
           "overwhelm": 0.9
         }
       },
@@ -370,13 +358,25 @@
         "id": "temp-prickly",
         "title": "Prickly or sweaty skin",
         "note": "Prickles, sudden sweat, tingling heat",
-        "insight": "Prickly sensations can show adrenaline—anxiety, anticipation, or overwhelm.",
+        "insight": "Adrenaline in fear can produce cold sweat and skin prickles.",
         "emotions": {
+          "fear": 1,
+          "stress": 0.8,
           "anxiety": 1.1,
           "anticipation": 1,
-          "excitement": 0.9,
-          "stress": 0.8,
-          "fear": 1
+          "excitement": 0.9
+        }
+      },
+      {
+        "id": "temp-flush",
+        "title": "Flush of heat",
+        "note": "Cheeks glowing, warmth rushing outward",
+        "insight": "Heat waves can pair with anger, excitement, or shame.",
+        "emotions": {
+          "anger": 1.2,
+          "shame": 1,
+          "excitement": 1,
+          "pride": 0.6
         }
       }
     ]
@@ -387,27 +387,27 @@
     "prompt": "Step back and notice the overall tone of your body right now.",
     "options": [
       {
-        "id": "overall-numb",
-        "title": "Muted or numb",
-        "note": "Blank, disconnected, hard to feel",
-        "insight": "Numbness can be protective when overwhelm maxes out.",
-        "emotions": {
-          "numb": 1.4,
-          "bored": 1.1,
-          "overwhelm": 0.9,
-          "tired": 0.9
-        }
-      },
-      {
         "id": "overall-floating",
         "title": "Floating or unreal",
         "note": "Drifting, spaced out, not quite here",
         "insight": "Floating sensations can hint at overwhelm or anxiety pulling you away from the moment.",
         "emotions": {
-          "overwhelm": 1.1,
+          "sadness": 0.7,
           "anxiety": 1,
-          "numb": 0.9,
-          "sadness": 0.7
+          "overwhelm": 1.1,
+          "numb": 0.9
+        }
+      },
+      {
+        "id": "overall-numb",
+        "title": "Muted or numb",
+        "note": "Blank, disconnected, hard to feel",
+        "insight": "Numbness can be protective when overwhelm maxes out.",
+        "emotions": {
+          "overwhelm": 0.9,
+          "numb": 1.4,
+          "tired": 0.9,
+          "bored": 1.1
         }
       },
       {
@@ -417,9 +417,9 @@
         "insight": "Steady calm can mean needs feel met—contentment, gratitude, or relief.",
         "emotions": {
           "calm": 1.3,
-          "relief": 1.1,
           "contentment": 1.1,
-          "gratitude": 1
+          "gratitude": 1,
+          "relief": 1.1
         }
       }
     ]

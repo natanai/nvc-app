@@ -229,11 +229,11 @@ async function updateNeedsSpreadsheet(slugMap) {
 
   const rows = parseCsv(csvText);
   const header = rows[0] ?? [];
-  const slugIndex = header.findIndex((name) => name.replace(/^\ufeff/, "") === "Slug");
-  const sourcesIndex = header.findIndex((name) => name.replace(/^\ufeff/, "") === "Supporting Sources");
+  const slugIndex = header.findIndex((name) => name.replace(/^\ufeff/, '') === 'Slug override');
+  const sourcesIndex = header.findIndex((name) => name.replace(/^\ufeff/, '') === 'Evidence sources');
 
   if (slugIndex === -1 || sourcesIndex === -1) {
-    console.warn("Needs.csv missing expected columns (Slug, Supporting Sources)");
+    console.warn('Needs.csv missing expected columns (Slug override, Evidence sources)');
     return false;
   }
 
@@ -300,9 +300,9 @@ async function main() {
 
   console.log(`Updated ${htmlUpdated} needs page${htmlUpdated === 1 ? "" : "s"}.`);
   if (spreadsheetUpdated) {
-    console.log("Updated data/Needs.csv supporting sources.");
+    console.log('Updated data/Needs.csv evidence sources.');
   } else {
-    console.log("No changes applied to data/Needs.csv.");
+    console.log('No changes applied to data/Needs.csv.');
   }
   console.log("Wrote _evidence/citations.json from citations.csv.");
 }

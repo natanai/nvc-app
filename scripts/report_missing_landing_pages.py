@@ -35,11 +35,26 @@ def existing_slugs(directory: Path) -> Set[str]:
     return slugs
 
 
-def build_title_to_slug(rows: Iterable[Dict[str, str]]) -> Dict[str, str]:
+def build_title_to_slug(
+    rows: Iterable[Dict[str, str]],
+    *,
+    title_fields: Iterable[str],
+    slug_fields: Iterable[str],
+) -> Dict[str, str]:
     mapping: Dict[str, str] = {}
     for row in rows:
-        title = row.get("Title", "").strip().lower()
-        slug = row.get("Slug", "").strip()
+        title = ""
+        for field in title_fields:
+            value = row.get(field, "").strip()
+            if value:
+                title = value.lower()
+                break
+        slug = ""
+        for field in slug_fields:
+            value = row.get(field, "").strip()
+            if value:
+                slug = value
+                break
         if title and slug:
             mapping[title] = slug
     return mapping
@@ -100,6 +115,14 @@ def canonical_to_word(value: str) -> str:
     return normalized.strip().title() if normalized.strip() else ""
 
 
+def first_value(row: Dict[str, str], *keys: str) -> str:
+    for key in keys:
+        value = row.get(key, "").strip()
+        if value:
+            return value
+    return ""
+
+
 def main() -> None:
     feelings_rows = load_csv(ROOT / "data" / "Feelings.csv")
     needs_rows = load_csv(ROOT / "data" / "Needs.csv")
@@ -107,16 +130,25 @@ def main() -> None:
     feeling_slugs = existing_slugs(FEELINGS_DIR)
     need_slugs = existing_slugs(NEEDS_DIR)
 
-    title_to_feeling = build_title_to_slug(feelings_rows)
-    title_to_need = build_title_to_slug(needs_rows)
+    title_to_feeling = build_title_to_slug(
+        feelings_rows,
+        title_fields=["Feeling name", "Title"],
+        slug_fields=["Slug override", "Slug"],
+    )
+    title_to_need = build_title_to_slug(
+        needs_rows,
+        title_fields=["Need name", "Title"],
+        slug_fields=["Slug override", "Slug"],
+    )
 
     missing: Dict[Tuple[str, str, str], Set[str]] = defaultdict(set)
 
     # Check textual references in CSV sources
     situations_rows = load_csv(ROOT / "data" / "Situations.csv")
     for row in situations_rows:
-        situation = row.get("Title", "").strip() or "(untitled situation)"
-        for word in filter(None, (w.strip() for w in row.get("Feelings", "").split(","))):
+        situation = first_value(row, "Situation name", "Title") or "(untitled situation)"
+        feelings_cell = first_value(row, "Feeling magnets", "Feelings")
+        for word in filter(None, (w.strip() for w in re.split(r",|\n", feelings_cell))):
             key = word.lower()
             slug = title_to_feeling.get(key, "")
             if slug and slug in feeling_slugs:
@@ -128,7 +160,8 @@ def main() -> None:
                 slug=slug,
                 reference=f"data/Situations.csv → {situation}",
             )
-        for word in filter(None, (w.strip() for w in row.get("Needs", "").split(","))):
+        needs_cell = first_value(row, "Need magnets", "Needs")
+        for word in filter(None, (w.strip() for w in re.split(r",|\n", needs_cell))):
             key = word.lower()
             slug = title_to_need.get(key, "")
             if slug and slug in need_slugs:
@@ -141,21 +174,30 @@ def main() -> None:
                 reference=f"data/Situations.csv → {situation}",
             )
 
-    strategies_rows = load_csv(ROOT / "data" / "Strategies.csv")
-    for row in strategies_rows:
-        strategy = row.get("Title", "").strip() or "(untitled strategy)"
-        for word in filter(None, (w.strip() for w in row.get("Needs", "").split(","))):
-            key = word.lower()
-            slug = title_to_need.get(key, "")
-            if slug and slug in need_slugs:
-                continue
-            add_reference(
-                missing,
-                kind="need",
-                word=word,
-                slug=slug,
-                reference=f"data/Strategies.csv → {strategy}",
-            )
+    for row in needs_rows:
+        need_title = first_value(row, "Need name", "Title") or "(untitled need)"
+        strategy_cells = row.get("Strategy cards", "")
+        for line in filter(None, (entry.strip() for entry in strategy_cells.splitlines())):
+            parts = [segment.strip() for segment in line.split("|")]
+            while len(parts) < 5:
+                parts.append("")
+            strategy_title = parts[0] or "(untitled strategy)"
+            extra_needs_field = parts[4]
+            for word in filter(
+                None,
+                (w.strip() for w in re.split(r"[,;]", extra_needs_field)),
+            ):
+                key = word.lower()
+                slug = title_to_need.get(key, "")
+                if slug and slug in need_slugs:
+                    continue
+                add_reference(
+                    missing,
+                    kind="need",
+                    word=word,
+                    slug=slug,
+                    reference=f"data/Needs.csv → {need_title} → {strategy_title}",
+                )
 
     # Check slug references in generated HTML
     html_files = list(ROOT.rglob("*.html"))

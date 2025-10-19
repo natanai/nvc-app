@@ -71,12 +71,93 @@ function splitList(value) {
     .filter(Boolean);
 }
 
+function splitFlexibleList(value) {
+  if (!value) return [];
+  return value
+    .split(/[,;]+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
 function splitMultiline(value) {
   if (!value) return [];
   return value
     .split(/\r?\n+/)
     .map((entry) => entry.trim())
     .filter(Boolean);
+}
+
+function splitBodySignals(value) {
+  if (!value) return [];
+  return value
+    .split(/\r?\n+|\s*;\s*/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function splitMagnets(value) {
+  if (!value) return [];
+  return value
+    .split(/,|\r?\n+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function parseStrategyCards(value, primaryNeed) {
+  const entries = [];
+  splitMultiline(value).forEach((line) => {
+    const parts = line
+      .split('|')
+      .map((part) => part.trim());
+    if (!parts.length || !parts[0]) {
+      return;
+    }
+    while (parts.length < 5) {
+      parts.push('');
+    }
+    const [title, description, firstName, location, extraNeedsRaw] = parts;
+    const needs = new Set();
+    if (primaryNeed) {
+      needs.add(primaryNeed);
+    }
+    splitFlexibleList(extraNeedsRaw).forEach((need) => needs.add(need));
+    entries.push({
+      title,
+      description,
+      firstName,
+      location,
+      needs: Array.from(needs),
+    });
+  });
+  return entries;
+}
+
+function parseReverseInferenceCues(value, feelingKey) {
+  const rows = [];
+  splitMultiline(value).forEach((line) => {
+    const parts = line
+      .split('|')
+      .map((part) => part.trim());
+    if (!parts.length || !parts[0] || !parts[3]) {
+      return;
+    }
+    while (parts.length < 8) {
+      parts.push('');
+    }
+    const [regionId, regionLabel, prompt, optionId, optionTitle, optionNote, optionInsight, weight] = parts;
+    rows.push({
+      regionId,
+      regionLabel,
+      prompt,
+      optionId,
+      optionTitle,
+      optionNote,
+      optionInsight,
+      weight,
+      feelingKey,
+    });
+  });
+  return rows;
 }
 
 function slugify(text) {
@@ -145,8 +226,6 @@ function sanitizeLocation(value) {
 const rawFeelings = readCsv('data/Feelings.csv');
 const rawNeeds = readCsv('data/Needs.csv');
 const rawSituations = readCsv('data/Situations.csv');
-const rawStrategies = readCsv('data/Strategies.csv');
-const rawBodyCues = readCsv('data/BodyCues.csv');
 
 function buildBodyRegions(rows) {
   const regions = [];
@@ -201,45 +280,113 @@ function buildBodyRegions(rows) {
   });
 }
 
-const bodyRegions = buildBodyRegions(rawBodyCues);
+const strategyRecords = [];
+const bodyCueRows = [];
 
-const feelings = rawFeelings.map((row) => ({
-  title: row.Title,
-  slug: row.Slug || slugify(row.Title),
-  description: row.Description || '',
-  situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
-  needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
-  bodySignals: splitList(row.Body),
+const feelings = rawFeelings
+  .map((row) => {
+    const title = (row['Feeling name'] || '').trim();
+    const slugOverride = (row['Slug override'] || '').trim();
+    const slug = slugOverride || slugify(title);
+    const inferenceKey = (row['Reverse inference key'] || slug)
+      .toString()
+      .trim()
+      .toLowerCase();
+    const cues = parseReverseInferenceCues(row['Reverse inference cues'], inferenceKey);
+    bodyCueRows.push(...cues);
+    if (!title) {
+      return null;
+    }
+    return {
+      title,
+      slug,
+      description: row['Intro paragraph'] || '',
+      situations: uniqueByTitle(splitMagnets(row['Situation magnets']).map((entry) => ({ title: entry }))),
+      needs: uniqueByTitle(splitMagnets(row['Need magnets']).map((entry) => ({ title: entry }))),
+      bodySignals: splitBodySignals(row['Body signal list']),
+    };
+  })
+  .filter(Boolean);
+
+const needs = rawNeeds.map((row) => {
+  const title = row['Need name'] || '';
+  const slug = row['Slug override'] || slugify(title);
+  const strategiesForNeed = parseStrategyCards(row['Strategy cards'], title);
+  strategyRecords.push(...strategiesForNeed);
+  return {
+    title,
+    slug,
+    category: row['Category label'] || '',
+    description: row['Intro paragraph'] || '',
+    strategies: uniqueByTitle(strategiesForNeed.map((entry) => ({ title: entry.title }))),
+    situations: uniqueByTitle(splitMagnets(row['Situation magnets']).map((entry) => ({ title: entry }))),
+    feelings: uniqueByTitle(splitMagnets(row['Feeling magnets']).map((entry) => ({ title: entry }))),
+    originalClaim: row['Evidence claim'] || '',
+    rewrittenClaim: row['Plain language summary'] || '',
+    supportingSources: parseSupportingSources(row['Evidence sources']),
+  };
+});
+
+const situations = rawSituations.map((row) => {
+  const title = row['Situation name'] || '';
+  return {
+    title,
+    slug: slugify(title),
+    feelings: uniqueByTitle(splitMagnets(row['Feeling magnets']).map((entry) => ({ title: entry }))),
+    needs: uniqueByTitle(splitMagnets(row['Need magnets']).map((entry) => ({ title: entry }))),
+  };
+});
+
+const strategyMap = new Map();
+
+strategyRecords.forEach((record) => {
+  const title = record.title || '';
+  const slug = slugify(title);
+  if (!title || !slug) {
+    return;
+  }
+  let entry = strategyMap.get(slug);
+  if (!entry) {
+    entry = {
+      title,
+      slug,
+      description: record.description || '',
+      needs: [],
+      firstName: sanitizeContributorName(record.firstName),
+      location: sanitizeLocation(record.location),
+    };
+    strategyMap.set(slug, entry);
+  } else {
+    if (!entry.description && record.description) {
+      entry.description = record.description;
+    }
+    const normalizedFirst = sanitizeContributorName(record.firstName);
+    if (!entry.firstName && normalizedFirst) {
+      entry.firstName = normalizedFirst;
+    }
+    const normalizedLocation = sanitizeLocation(record.location);
+    if (!entry.location && normalizedLocation) {
+      entry.location = normalizedLocation;
+    }
+  }
+
+  record.needs.forEach((needTitle) => {
+    const normalized = needTitle ? needTitle.trim() : '';
+    if (!normalized) {
+      return;
+    }
+    if (!entry.needs.some((item) => item.title.toLowerCase() === normalized.toLowerCase())) {
+      entry.needs.push({ title: normalized });
+    }
+  });
+});
+
+const strategies = Array.from(strategyMap.values()).map((entry) => ({
+  ...entry,
+  needs: uniqueByTitle(entry.needs),
 }));
 
-const needs = rawNeeds.map((row) => ({
-  title: row.Title,
-  slug: row.Slug || slugify(row.Title),
-  category: row.Category || '',
-  description: row.Description || '',
-  strategies: uniqueByTitle(splitList(row.Strategies).map((title) => ({ title }))),
-  situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
-  feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),
-  originalClaim: row['Original Claim'] || '',
-  rewrittenClaim: row['Rewritten Claim'] || '',
-  supportingSources: parseSupportingSources(row['Supporting Sources']),
-}));
-
-const situations = rawSituations.map((row) => ({
-  title: row.Title,
-  slug: slugify(row.Title),
-  feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),
-  needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
-}));
-
-const strategies = rawStrategies.map((row) => ({
-  title: row.Title,
-  slug: slugify(row.Title),
-  description: row.Description || '',
-  needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
-  firstName: sanitizeContributorName(row['First Name']),
-  location: sanitizeLocation(row.Location),
-}));
+const bodyRegions = buildBodyRegions(bodyCueRows);
 
 const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), item.slug]));
 const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slug]));
