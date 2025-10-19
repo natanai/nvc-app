@@ -1033,7 +1033,9 @@ function formatMultilineText(value) {
     return '';
   }
 
-  return escapeHtml(value).replace(/\r?\n/g, '<br />');
+  const escaped = escapeHtml(value);
+  const preservedSpaces = escaped.replace(/ {2,}/g, (match) => '&nbsp;'.repeat(match.length));
+  return preservedSpaces.replace(/\r?\n/g, '<br />');
 }
 
 function sanitizeContributorName(value) {
