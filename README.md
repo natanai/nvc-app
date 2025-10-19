@@ -112,9 +112,14 @@ own all of the relationships and reverse-inference cues used across the site.
   live under the `Source Links` column.
 - **Situations.csv** – situations list their relationships via `Related Feelings`
   and `Related Needs`, with an optional `Slug Override` to customise URLs.
-- **Strategies.csv** – the contributor details stay inline alongside each
-  strategy (`Contributor Name`, `Contributor Location`) so additions can be made
-  directly in the sheet.
+- **Strategies.csv** – each row keeps the contributor details inline and now
+  offers an optional `Slug Override` column alongside `Strategy Summary`,
+  `Supports Needs`, `Contributor Name`, and `Contributor Location` so editors
+  can lock URLs before renaming a strategy.
+
+The data build now validates strategy slugs and relationship lookups, failing
+fast when a need references an unknown strategy or when two strategies share
+the same slug.
 
 Run `npm run build:data` after editing any of these spreadsheets to regenerate
 the JSON dataset and static pages.

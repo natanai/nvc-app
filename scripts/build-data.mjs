@@ -285,14 +285,41 @@ const situations = rawSituations.map((row) => ({
   needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
 }));
 
-const strategies = rawStrategies.map((row) => {
+const seenStrategySlugs = new Map();
+
+const strategies = rawStrategies.map((row, index) => {
   const name = sanitizeContributorName(row['Contributor Name']);
   const location = sanitizeLocation(row['Contributor Location']);
+  const title = (row['Strategy Title'] || '').trim();
+  const slugOverride = (row['Slug Override'] || '').trim();
+
+  if (!title) {
+    throw new Error(
+      `data/Strategies.csv row ${index + 2} must include a Strategy Title before it can be published.`,
+    );
+  }
+
+  const slug = slugOverride || slugify(title);
+
+  if (!slug) {
+    throw new Error(
+      `Strategy "${title}" resolved to an empty slug. Add a value to the "Slug Override" column to continue.`,
+    );
+  }
+
+  const existingOwner = seenStrategySlugs.get(slug);
+  if (existingOwner) {
+    throw new Error(
+      `Duplicate strategy slug "${slug}" found for "${existingOwner}" and "${title}". Supply a unique "Slug Override" to resolve the collision.`,
+    );
+  }
+  seenStrategySlugs.set(slug, title);
+
   const entry = {
-    title: row['Strategy Title'],
-    slug: slugify(row['Strategy Title']),
+    title,
+    slug,
     description: row['Strategy Summary'] || '',
-    needs: uniqueByTitle(splitList(row['Supports Needs']).map((title) => ({ title }))),
+    needs: uniqueByTitle(splitList(row['Supports Needs']).map((value) => ({ title: value }))),
   };
   if (name || location) {
     entry.contributor = { name, location };
@@ -304,6 +331,16 @@ const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), it
 const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slug]));
 const situationsMap = new Map(situations.map((item) => [item.title.toLowerCase(), item.slug]));
 const strategiesMap = new Map(strategies.map((item) => [item.title.toLowerCase(), item.slug]));
+
+needs.forEach((need) => {
+  need.strategies.forEach(({ title }) => {
+    if (!strategiesMap.has(title.toLowerCase())) {
+      throw new Error(
+        `Need "${need.title}" references unknown strategy "${title}". Add the strategy to data/Strategies.csv or fix the spelling.`,
+      );
+    }
+  });
+});
 
 function attachSlugs(collection, listKey, slugMap) {
   collection.forEach((item) => {

@@ -35,13 +35,23 @@ def existing_slugs(directory: Path) -> Set[str]:
     return slugs
 
 
-def build_title_to_slug(rows: Iterable[Dict[str, str]]) -> Dict[str, str]:
+def slugify(value: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
+    return slug
+
+
+def build_title_to_slug(
+    rows: Iterable[Dict[str, str]], *, title_key: str, slug_override_key: str
+) -> Dict[str, str]:
     mapping: Dict[str, str] = {}
     for row in rows:
-        title = row.get("Title", "").strip().lower()
-        slug = row.get("Slug", "").strip()
-        if title and slug:
-            mapping[title] = slug
+        title = (row.get(title_key, "") or "").strip()
+        if not title:
+            continue
+        slug_override = (row.get(slug_override_key, "") or "").strip()
+        slug = slug_override or slugify(title)
+        if slug:
+            mapping[title.lower()] = slug
     return mapping
 
 
@@ -107,16 +117,22 @@ def main() -> None:
     feeling_slugs = existing_slugs(FEELINGS_DIR)
     need_slugs = existing_slugs(NEEDS_DIR)
 
-    title_to_feeling = build_title_to_slug(feelings_rows)
-    title_to_need = build_title_to_slug(needs_rows)
+    title_to_feeling = build_title_to_slug(
+        feelings_rows, title_key="Feeling Title", slug_override_key="Slug Override"
+    )
+    title_to_need = build_title_to_slug(
+        needs_rows, title_key="Need Title", slug_override_key="Slug Override"
+    )
 
     missing: Dict[Tuple[str, str, str], Set[str]] = defaultdict(set)
 
     # Check textual references in CSV sources
     situations_rows = load_csv(ROOT / "data" / "Situations.csv")
     for row in situations_rows:
-        situation = row.get("Title", "").strip() or "(untitled situation)"
-        for word in filter(None, (w.strip() for w in row.get("Feelings", "").split(","))):
+        situation = row.get("Situation Title", "").strip() or "(untitled situation)"
+        for word in filter(
+            None, (w.strip() for w in row.get("Related Feelings", "").split(","))
+        ):
             key = word.lower()
             slug = title_to_feeling.get(key, "")
             if slug and slug in feeling_slugs:
@@ -128,7 +144,9 @@ def main() -> None:
                 slug=slug,
                 reference=f"data/Situations.csv → {situation}",
             )
-        for word in filter(None, (w.strip() for w in row.get("Needs", "").split(","))):
+        for word in filter(
+            None, (w.strip() for w in row.get("Related Needs", "").split(","))
+        ):
             key = word.lower()
             slug = title_to_need.get(key, "")
             if slug and slug in need_slugs:
@@ -143,8 +161,10 @@ def main() -> None:
 
     strategies_rows = load_csv(ROOT / "data" / "Strategies.csv")
     for row in strategies_rows:
-        strategy = row.get("Title", "").strip() or "(untitled strategy)"
-        for word in filter(None, (w.strip() for w in row.get("Needs", "").split(","))):
+        strategy = row.get("Strategy Title", "").strip() or "(untitled strategy)"
+        for word in filter(
+            None, (w.strip() for w in row.get("Supports Needs", "").split(","))
+        ):
             key = word.lower()
             slug = title_to_need.get(key, "")
             if slug and slug in need_slugs:
