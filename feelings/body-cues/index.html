@@ -438,6 +438,120 @@ button,
   overflow: hidden;
 }
 
+.page--feelings .site-nav__board-wrapper {
+  padding-bottom: clamp(2rem, 6vw, 2.85rem);
+}
+
+.page--feelings .site-nav__board::before,
+.page--feelings .site-nav__board::after {
+  content: '';
+  position: absolute;
+  inset: -38% -18%;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: 120% 280%;
+  background-position: 50% -40%;
+  mix-blend-mode: screen;
+  transform: translate3d(0, -32%, 0);
+  opacity: 0.22;
+}
+
+.page--feelings .site-nav__board::before {
+  background-image:
+    radial-gradient(ellipse at 12% 6%, color-mix(in srgb, var(--mint) 55%, transparent) 0%, transparent 72%),
+    radial-gradient(ellipse at 78% 2%, color-mix(in srgb, var(--sky) 60%, transparent) 0%, transparent 75%);
+  animation: feelingsBreezePrimary 18s ease-in-out infinite;
+}
+
+.page--feelings .site-nav__board::after {
+  background-image:
+    radial-gradient(ellipse at 24% 0%, color-mix(in srgb, var(--rose) 40%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse at 68% -6%, color-mix(in srgb, var(--gold) 34%, transparent) 0%, transparent 78%);
+  animation: feelingsBreezeSecondary 24s ease-in-out infinite;
+  animation-delay: -9s;
+  opacity: 0.16;
+}
+
+.page--feelings .site-nav__board-wrapper::after {
+  content: 'Follow the breeze ↓';
+  position: absolute;
+  bottom: 0.35rem;
+  left: 50%;
+  transform: translate(-50%, 12px);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--outline) 76%, rgba(255, 255, 255, 0.82) 24%);
+  pointer-events: none;
+  opacity: 0;
+  animation: feelingsHint 7s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+@keyframes feelingsBreezePrimary {
+  0% {
+    transform: translate3d(0, -42%, 0);
+    opacity: 0.14;
+  }
+  45% {
+    transform: translate3d(0, 6%, 0);
+    opacity: 0.46;
+  }
+  100% {
+    transform: translate3d(0, 38%, 0);
+    opacity: 0.14;
+  }
+}
+
+@keyframes feelingsBreezeSecondary {
+  0% {
+    transform: translate3d(0, -36%, 0);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate3d(0, 8%, 0);
+    opacity: 0.28;
+  }
+  100% {
+    transform: translate3d(0, 34%, 0);
+    opacity: 0.08;
+  }
+}
+
+@keyframes feelingsHint {
+  0%,
+  22% {
+    opacity: 0;
+    transform: translate(-50%, 16px);
+  }
+  38%,
+  64% {
+    opacity: 0.72;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page--feelings .site-nav__board::before,
+  .page--feelings .site-nav__board::after {
+    animation: none;
+    transform: translate3d(0, 0, 0);
+    opacity: 0.22;
+    mix-blend-mode: normal;
+  }
+
+  .page--feelings .site-nav__board-wrapper::after {
+    animation: none;
+    opacity: 0.72;
+    transform: translate(-50%, 0);
+  }
+}
+
 .site-nav[data-layout-invalid='1'] .site-nav__board {
   border-width: 1px;
   border-style: dashed;
@@ -680,7 +794,7 @@ button.site-nav__magnet {
     <link rel="preload" href="../../styles.css" as="style" />
     <link rel="stylesheet" href="../../styles.css" fetchpriority="high" />
   </head>
-  <body data-base-path="../../">
+  <body data-base-path="../../" class="page--feelings page--feelings-body-cues">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">

@@ -713,6 +713,7 @@ function htmlPage({
   mainAttributes = '',
   activeNav,
   mainClass = 'page',
+  bodyClass = '',
   navOptions = undefined,
   canonicalPath = '/',
   socialImage = SOCIAL_CARD_SRC,
@@ -793,6 +794,7 @@ function htmlPage({
   const normalizedMainAttrs = mainAttributes ? ` ${mainAttributes.trim()}` : '';
   const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
   const criticalStyles = navCriticalCss ? `    <style>${navCriticalCss}</style>` : '';
+  const bodyClassAttr = bodyClass ? ` class="${bodyClass}"` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -836,7 +838,7 @@ function htmlPage({
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
     <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />
   </head>
-  <body data-base-path="${basePath}">
+  <body data-base-path="${basePath}"${bodyClassAttr}>
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
       ${navHtml}
@@ -1317,6 +1319,7 @@ function renderCategory(type, items) {
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
     activeNav: type,
     canonicalPath: `${type}/`,
+    ...(type === 'feelings' ? { bodyClass: 'page--feelings page--feelings-directory' } : {}),
   });
 
   writePage(`${type}/index.html`, html);
@@ -1366,6 +1369,7 @@ function renderBodyCuesPage() {
     activeNav: 'feelings',
     mainClass: 'page body-cues-page',
     canonicalPath: 'feelings/body-cues/',
+    bodyClass: 'page--feelings page--feelings-body-cues',
   });
 
   writePage('feelings/body-cues/index.html', html);
@@ -1457,6 +1461,7 @@ function renderFeeling(item) {
     activeNav: 'feelings',
     canonicalPath: `feelings/${item.slug}/`,
     description: item.description,
+    bodyClass: 'page--feelings page--feeling-detail',
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
