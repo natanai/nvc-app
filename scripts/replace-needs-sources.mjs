@@ -229,11 +229,17 @@ async function updateNeedsSpreadsheet(slugMap) {
 
   const rows = parseCsv(csvText);
   const header = rows[0] ?? [];
-  const slugIndex = header.findIndex((name) => name.replace(/^\ufeff/, "") === "Slug");
-  const sourcesIndex = header.findIndex((name) => name.replace(/^\ufeff/, "") === "Supporting Sources");
+  const slugIndex = header.findIndex((name) => name.replace(/^\ufeff/, "") === "Slug Override");
+  const legacySlugIndex =
+    slugIndex === -1 ? header.findIndex((name) => name.replace(/^\ufeff/, "") === "Slug") : slugIndex;
+  const sourcesIndex = header.findIndex((name) => name.replace(/^\ufeff/, "") === "Source Links");
+  const legacySourcesIndex =
+    sourcesIndex === -1
+      ? header.findIndex((name) => name.replace(/^\ufeff/, "") === "Supporting Sources")
+      : sourcesIndex;
 
-  if (slugIndex === -1 || sourcesIndex === -1) {
-    console.warn("Needs.csv missing expected columns (Slug, Supporting Sources)");
+  if (legacySlugIndex === -1 || legacySourcesIndex === -1) {
+    console.warn("Needs.csv missing expected columns (Slug Override, Source Links)");
     return false;
   }
 
@@ -241,14 +247,14 @@ async function updateNeedsSpreadsheet(slugMap) {
 
   for (let i = 1; i < rows.length; i += 1) {
     const row = rows[i];
-    const slug = row[slugIndex];
+    const slug = row[legacySlugIndex];
     if (!slug || !slugMap.has(slug)) {
       continue;
     }
     const entries = slugMap.get(slug);
     const newValue = formatSupportingSources(entries);
-    if ((row[sourcesIndex] ?? "") !== newValue) {
-      row[sourcesIndex] = newValue;
+    if ((row[legacySourcesIndex] ?? "") !== newValue) {
+      row[legacySourcesIndex] = newValue;
       changed = true;
     }
   }

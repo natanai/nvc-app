@@ -588,8 +588,22 @@ function normalizeInventoryEntry(entry) {
     return null;
   }
   const normalized = { ...entry };
-  normalized.firstName = sanitizeContributorName(entry.firstName || '');
-  normalized.location = sanitizeLocation(entry.location || '');
+  const contributorSource = entry.contributor && typeof entry.contributor === 'object' ? entry.contributor : {};
+  const contributorName = sanitizeContributorName(contributorSource.name || entry.firstName || '');
+  const contributorLocation = sanitizeLocation(contributorSource.location || entry.location || '');
+  if (contributorName || contributorLocation) {
+    normalized.contributor = {};
+    if (contributorName) {
+      normalized.contributor.name = contributorName;
+    }
+    if (contributorLocation) {
+      normalized.contributor.location = contributorLocation;
+    }
+  } else {
+    delete normalized.contributor;
+  }
+  normalized.firstName = contributorName;
+  normalized.location = contributorLocation;
   normalized.need = typeof entry.need === 'string' ? entry.need.trim() : normalized.need || '';
   const normalizedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
   normalized.needSlug = normalizedSlug;
@@ -1590,10 +1604,19 @@ function setupNeedPage() {
         personal: false,
         sourceNeedPage: strategySlug ? needSlug : '',
         strategySlug,
-        firstName,
-        location,
         createdAt: new Date().toISOString(),
       };
+      if (firstName || location) {
+        entry.contributor = {};
+        if (firstName) {
+          entry.contributor.name = firstName;
+          entry.firstName = firstName;
+        }
+        if (location) {
+          entry.contributor.location = location;
+          entry.location = location;
+        }
+      }
 
       const duplicate = state.inventory.find(
         (item) =>
@@ -1689,10 +1712,19 @@ function setupNeedPage() {
         personal: true,
         sourceNeedPage: '',
         strategySlug: '',
-        firstName,
-        location,
         createdAt: new Date().toISOString(),
       };
+      if (firstName || location) {
+        entry.contributor = {};
+        if (firstName) {
+          entry.contributor.name = firstName;
+          entry.firstName = firstName;
+        }
+        if (location) {
+          entry.contributor.location = location;
+          entry.location = location;
+        }
+      }
 
       const duplicate = state.inventory.find(
         (item) =>
@@ -1795,10 +1827,19 @@ function setupInventoryPage() {
         personal: true,
         sourceNeedPage: '',
         strategySlug: '',
-        firstName,
-        location,
         createdAt: new Date().toISOString(),
       };
+      if (firstName || location) {
+        entry.contributor = {};
+        if (firstName) {
+          entry.contributor.name = firstName;
+          entry.firstName = firstName;
+        }
+        if (location) {
+          entry.contributor.location = location;
+          entry.location = location;
+        }
+      }
 
       const duplicate = state.inventory.find(
         (item) =>
@@ -5499,8 +5540,9 @@ function renderInventoryItem(entry, options = {}) {
   }
 
   const metaParts = [];
-  const firstName = sanitizeContributorName(entry.firstName || '');
-  const location = sanitizeLocation(entry.location || '');
+  const contributorSource = entry.contributor && typeof entry.contributor === 'object' ? entry.contributor : {};
+  const firstName = sanitizeContributorName(contributorSource.name || entry.firstName || '');
+  const location = sanitizeLocation(contributorSource.location || entry.location || '');
   if (firstName) {
     metaParts.push(firstName);
   }
@@ -6204,7 +6246,13 @@ function importInventoryCsvFromText(text) {
       }
     });
 
-    map.set(id, {
+    const contributorName = sanitizeContributorName(
+      (item.contributorName || item.firstName || '').toString()
+    );
+    const contributorLocation = sanitizeLocation(
+      (item.contributorLocation || item.location || '').toString()
+    );
+    const entry = {
       id,
       title: item.title || 'Untitled strategy',
       description: item.description || '',
@@ -6220,10 +6268,20 @@ function importInventoryCsvFromText(text) {
       personal: item.personal === true,
       sourceNeedPage: item.sourceNeedPage || resolvedNeedSlug || '',
       strategySlug: item.strategySlug || '',
-      firstName: sanitizeContributorName(item.firstName || ''),
-      location: sanitizeLocation(item.location || ''),
+      firstName: contributorName,
+      location: contributorLocation,
       createdAt: item.createdAt || new Date().toISOString(),
-    });
+    };
+    if (contributorName || contributorLocation) {
+      entry.contributor = {};
+      if (contributorName) {
+        entry.contributor.name = contributorName;
+      }
+      if (contributorLocation) {
+        entry.contributor.location = contributorLocation;
+      }
+    }
+    map.set(id, entry);
   });
 
   const merged = Array.from(map.values());

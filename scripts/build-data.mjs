@@ -156,12 +156,13 @@ function sanitizeLocation(value) {
 function filterDuplicateNeeds(rows) {
   const seen = new Set();
   return rows.filter((row) => {
-    const title = (row.Title || '').trim();
+    const title = (row['Need Title'] || '').trim();
     if (!title || title.toLowerCase() === 'title') {
       return false;
     }
 
-    const slugSource = row.Slug && row.Slug.trim() ? row.Slug.trim() : slugify(title);
+    const slugField = row['Slug Override'] && row['Slug Override'].trim() ? row['Slug Override'].trim() : '';
+    const slugSource = slugField || slugify(title);
     const slug = slugSource.toLowerCase();
     if (!slug) {
       return false;
@@ -175,26 +176,45 @@ function filterDuplicateNeeds(rows) {
   });
 }
 
-const rawFeelings = readCsv('data/Feelings.csv');
+const rawFeelingsSheet = readCsv('data/Feelings.csv');
 const rawNeeds = filterDuplicateNeeds(readCsv('data/Needs.csv'));
 const rawSituations = readCsv('data/Situations.csv');
 const rawStrategies = readCsv('data/Strategies.csv');
-const rawBodyCues = readCsv('data/BodyCues.csv');
+
+function partitionFeelingsSheet(rows) {
+  const feelingRows = [];
+  const cueRows = [];
+
+  rows.forEach((row) => {
+    const type = (row['Row Type'] || '').trim().toLowerCase();
+    if (type === 'cue') {
+      cueRows.push(row);
+      return;
+    }
+    if (!type || type === 'feeling') {
+      feelingRows.push(row);
+    }
+  });
+
+  return { feelingRows, cueRows };
+}
+
+const { feelingRows: rawFeelings, cueRows: rawCueRows } = partitionFeelingsSheet(rawFeelingsSheet);
 
 function buildBodyRegions(rows) {
   const regions = [];
   const regionIndex = new Map();
 
   rows.forEach((row) => {
-    const regionId = row.regionId;
+    const regionId = row['Cue Region ID'];
     if (!regionId) return;
 
     let region = regionIndex.get(regionId);
     if (!region) {
       region = {
         id: regionId,
-        label: row.regionLabel || '',
-        prompt: row.prompt || '',
+        label: row['Cue Region Label'] || '',
+        prompt: row['Cue Region Prompt'] || '',
         options: [],
         _optionIndex: new Map(),
       };
@@ -202,24 +222,24 @@ function buildBodyRegions(rows) {
       regions.push(region);
     }
 
-    const optionId = row.optionId;
+    const optionId = row['Cue Option ID'];
     if (!optionId) return;
 
     let option = region._optionIndex.get(optionId);
     if (!option) {
       option = {
         id: optionId,
-        title: row.optionTitle || '',
-        note: row.optionNote || '',
-        insight: row.optionInsight || '',
+        title: row['Cue Option Title'] || '',
+        note: row['Cue Option Note'] || '',
+        insight: row['Cue Option Insight'] || '',
         emotions: {},
       };
       region._optionIndex.set(optionId, option);
       region.options.push(option);
     }
 
-    const feelingKey = row.feelingKey;
-    const weight = Number(row.weight);
+    const feelingKey = row['Cue Feeling Key'];
+    const weight = Number(row['Cue Weight']);
     if (feelingKey && Number.isFinite(weight) && weight > 0) {
       option.emotions[feelingKey] = weight;
     }
@@ -234,50 +254,93 @@ function buildBodyRegions(rows) {
   });
 }
 
-const bodyRegions = buildBodyRegions(rawBodyCues);
+const bodyRegions = buildBodyRegions(rawCueRows);
 
 const feelings = rawFeelings.map((row) => ({
-  title: row.Title,
-  slug: row.Slug || slugify(row.Title),
-  description: row.Description || '',
-  situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
-  needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
-  bodySignals: splitList(row.Body),
+  title: row['Feeling Title'],
+  slug: row['Slug Override'] || slugify(row['Feeling Title']),
+  description: row['Page Summary'] || '',
+  situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
+  needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
+  bodySignals: splitList(row['Body Signal Notes']),
 }));
 
 const needs = rawNeeds.map((row) => ({
-  title: row.Title,
-  slug: row.Slug || slugify(row.Title),
-  category: row.Category || '',
-  description: row.Description || '',
-  strategies: uniqueByTitle(splitList(row.Strategies).map((title) => ({ title }))),
-  situations: uniqueByTitle(splitList(row.Situations).map((title) => ({ title }))),
-  feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),
-  originalClaim: row['Original Claim'] || '',
-  rewrittenClaim: row['Rewritten Claim'] || '',
-  supportingSources: parseSupportingSources(row['Supporting Sources']),
+  title: row['Need Title'],
+  slug: row['Slug Override'] || slugify(row['Need Title']),
+  category: row['Category Label'] || '',
+  description: row['Page Summary'] || '',
+  strategies: uniqueByTitle(splitList(row['Related Strategies']).map((title) => ({ title }))),
+  situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
+  feelings: uniqueByTitle(splitList(row['Related Feelings']).map((title) => ({ title }))),
+  originalClaim: row['Claim Summary'] || '',
+  rewrittenClaim: row['Claim Narrative'] || '',
+  supportingSources: parseSupportingSources(row['Source Links']),
 }));
 
 const situations = rawSituations.map((row) => ({
-  title: row.Title,
-  slug: slugify(row.Title),
-  feelings: uniqueByTitle(splitList(row.Feelings).map((title) => ({ title }))),
-  needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
+  title: row['Situation Title'],
+  slug: row['Slug Override'] || slugify(row['Situation Title']),
+  feelings: uniqueByTitle(splitList(row['Related Feelings']).map((title) => ({ title }))),
+  needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
 }));
 
-const strategies = rawStrategies.map((row) => ({
-  title: row.Title,
-  slug: slugify(row.Title),
-  description: row.Description || '',
-  needs: uniqueByTitle(splitList(row.Needs).map((title) => ({ title }))),
-  firstName: sanitizeContributorName(row['First Name']),
-  location: sanitizeLocation(row.Location),
-}));
+const seenStrategySlugs = new Map();
+
+const strategies = rawStrategies.map((row, index) => {
+  const name = sanitizeContributorName(row['Contributor Name']);
+  const location = sanitizeLocation(row['Contributor Location']);
+  const title = (row['Strategy Title'] || '').trim();
+  const slugOverride = (row['Slug Override'] || '').trim();
+
+  if (!title) {
+    throw new Error(
+      `data/Strategies.csv row ${index + 2} must include a Strategy Title before it can be published.`,
+    );
+  }
+
+  const slug = slugOverride || slugify(title);
+
+  if (!slug) {
+    throw new Error(
+      `Strategy "${title}" resolved to an empty slug. Add a value to the "Slug Override" column to continue.`,
+    );
+  }
+
+  const existingOwner = seenStrategySlugs.get(slug);
+  if (existingOwner) {
+    throw new Error(
+      `Duplicate strategy slug "${slug}" found for "${existingOwner}" and "${title}". Supply a unique "Slug Override" to resolve the collision.`,
+    );
+  }
+  seenStrategySlugs.set(slug, title);
+
+  const entry = {
+    title,
+    slug,
+    description: row['Strategy Summary'] || '',
+    needs: uniqueByTitle(splitList(row['Supports Needs']).map((value) => ({ title: value }))),
+  };
+  if (name || location) {
+    entry.contributor = { name, location };
+  }
+  return entry;
+});
 
 const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), item.slug]));
 const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slug]));
 const situationsMap = new Map(situations.map((item) => [item.title.toLowerCase(), item.slug]));
 const strategiesMap = new Map(strategies.map((item) => [item.title.toLowerCase(), item.slug]));
+
+needs.forEach((need) => {
+  need.strategies.forEach(({ title }) => {
+    if (!strategiesMap.has(title.toLowerCase())) {
+      throw new Error(
+        `Need "${need.title}" references unknown strategy "${title}". Add the strategy to data/Strategies.csv or fix the spelling.`,
+      );
+    }
+  });
+});
 
 function attachSlugs(collection, listKey, slugMap) {
   collection.forEach((item) => {
