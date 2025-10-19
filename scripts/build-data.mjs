@@ -332,33 +332,28 @@ const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slu
 const situationsMap = new Map(situations.map((item) => [item.title.toLowerCase(), item.slug]));
 const strategiesMap = new Map(strategies.map((item) => [item.title.toLowerCase(), item.slug]));
 
-needs.forEach((need) => {
-  need.strategies.forEach(({ title }) => {
-    if (!strategiesMap.has(title.toLowerCase())) {
-      throw new Error(
-        `Need "${need.title}" references unknown strategy "${title}". Add the strategy to data/Strategies.csv or fix the spelling.`,
-      );
-    }
-  });
-});
-
-function attachSlugs(collection, listKey, slugMap) {
+function attachRelationshipSlugs(collection, listKey, slugMap, { parentType, relatedType }) {
   collection.forEach((item) => {
-    item[listKey] = item[listKey].map(({ title }) => ({
-      title,
-      slug: slugMap.get(title.toLowerCase()) || null,
-    }));
+    item[listKey] = item[listKey].map(({ title }) => {
+      const slug = slugMap.get(title.toLowerCase());
+      if (!slug) {
+        throw new Error(
+          `${parentType} "${item.title}" references unknown ${relatedType} "${title}". Update the spreadsheet entry to continue.`,
+        );
+      }
+      return { title, slug };
+    });
   });
 }
 
-attachSlugs(feelings, 'needs', needsMap);
-attachSlugs(feelings, 'situations', situationsMap);
-attachSlugs(needs, 'strategies', strategiesMap);
-attachSlugs(needs, 'situations', situationsMap);
-attachSlugs(needs, 'feelings', feelingsMap);
-attachSlugs(situations, 'feelings', feelingsMap);
-attachSlugs(situations, 'needs', needsMap);
-attachSlugs(strategies, 'needs', needsMap);
+attachRelationshipSlugs(feelings, 'needs', needsMap, { parentType: 'Feeling', relatedType: 'Need' });
+attachRelationshipSlugs(feelings, 'situations', situationsMap, { parentType: 'Feeling', relatedType: 'Situation' });
+attachRelationshipSlugs(needs, 'strategies', strategiesMap, { parentType: 'Need', relatedType: 'Strategy' });
+attachRelationshipSlugs(needs, 'situations', situationsMap, { parentType: 'Need', relatedType: 'Situation' });
+attachRelationshipSlugs(needs, 'feelings', feelingsMap, { parentType: 'Need', relatedType: 'Feeling' });
+attachRelationshipSlugs(situations, 'feelings', feelingsMap, { parentType: 'Situation', relatedType: 'Feeling' });
+attachRelationshipSlugs(situations, 'needs', needsMap, { parentType: 'Situation', relatedType: 'Need' });
+attachRelationshipSlugs(strategies, 'needs', needsMap, { parentType: 'Strategy', relatedType: 'Need' });
 
 mkdirSync(DATA_DIR, { recursive: true });
 

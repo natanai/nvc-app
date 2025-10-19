@@ -117,9 +117,10 @@ own all of the relationships and reverse-inference cues used across the site.
   `Supports Needs`, `Contributor Name`, and `Contributor Location` so editors
   can lock URLs before renaming a strategy.
 
-The data build now validates strategy slugs and relationship lookups, failing
-fast when a need references an unknown strategy or when two strategies share
-the same slug.
+The data build now validates strategy slugs and every relationship lookup,
+failing fast when any row references an unknown related item or when two
+strategies share the same slug. Typos in the spreadsheets now cause
+`npm run build:data` to stop so they can be fixed before publishing.
 
 Run `npm run build:data` after editing any of these spreadsheets to regenerate
 the JSON dataset and static pages.
