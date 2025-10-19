@@ -1432,12 +1432,12 @@ function renderFeeling(item) {
     : '';
 
   const main = `
+      ${needsSection}
       <header class="page-header">
         <h1 class="page-title">Feeling: ${escapeHtml(item.title)}</h1>
         ${descriptionHtml}
       </header>${poemSection}
       ${inferenceSection}
-      ${needsSection}
     `;
 
   const html = htmlPage({
