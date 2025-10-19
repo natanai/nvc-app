@@ -263,6 +263,8 @@ const feelings = rawFeelings.map((row) => ({
   situations: uniqueByTitle(splitList(row['Related Situations']).map((title) => ({ title }))),
   needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
   bodySignals: splitList(row['Body Signal Notes']),
+  poemQuote: (row['Poem Quotation'] || '').trim(),
+  poemUrl: (row['Poem URL'] || '').trim(),
 }));
 
 const needs = rawNeeds.map((row) => ({
