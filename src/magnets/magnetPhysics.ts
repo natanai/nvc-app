@@ -802,6 +802,7 @@ export function startPhysics(options: StartPhysicsOptions): {
   stop: () => void;
   shuffle: () => Promise<void>;
   enableTilt: (permissionPromise?: Promise<unknown>) => void;
+  disableTilt: () => void;
 } {
   const boardRect = options.board.getBoundingClientRect();
   const magnetStates = options.magnets.map((element) => measureMagnet(boardRect, element));
@@ -839,8 +840,9 @@ export function startPhysics(options: StartPhysicsOptions): {
   const removePointerListeners = addPointerListeners(state);
   let removeTiltListener: (() => void) | null = null;
 
-  const enableTilt = (permissionPromise?: Promise<unknown>) => {
+  const disableTilt = () => {
     removeTiltListener?.();
+    removeTiltListener = null;
     if (state.tilt) {
       state.tilt.x = 0;
       state.tilt.y = 0;
@@ -849,6 +851,10 @@ export function startPhysics(options: StartPhysicsOptions): {
       state.tilt.baselineGamma = null;
       state.tilt.baselineBeta = null;
     }
+  };
+
+  const enableTilt = (permissionPromise?: Promise<unknown>) => {
+    disableTilt();
     const teardown = addTiltListener(state, {
       permissionPromise,
       onPermissionDenied: options.onTiltPermissionDenied,
@@ -860,8 +866,7 @@ export function startPhysics(options: StartPhysicsOptions): {
   return {
     stop: () => {
       removePointerListeners?.();
-      removeTiltListener?.();
-      removeTiltListener = null;
+      disableTilt();
       stopAnimation(state);
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
@@ -888,6 +893,9 @@ export function startPhysics(options: StartPhysicsOptions): {
     },
     enableTilt: (permissionPromise?: Promise<unknown>) => {
       enableTilt(permissionPromise);
+    },
+    disableTilt: () => {
+      disableTilt();
     },
   };
 }
