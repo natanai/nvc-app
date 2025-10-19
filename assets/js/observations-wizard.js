@@ -107,6 +107,7 @@ function renderFamilies() {
     if (state.familyId === f.id) {
       btn.classList.add('chip--active');
     }
+    btn.setAttribute('aria-pressed', state.familyId === f.id ? 'true' : 'false');
     btn.addEventListener('click', () => {
       state.familyId = f.id;
       state.patternId = null;
@@ -142,6 +143,7 @@ function renderPatterns() {
     if (state.patternId === p.id) {
       btn.classList.add('list-item--active');
     }
+    btn.setAttribute('aria-pressed', state.patternId === p.id ? 'true' : 'false');
     btn.addEventListener('click', () => {
       state.patternId = p.id;
       renderSuggestions();
