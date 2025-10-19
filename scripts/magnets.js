@@ -745,15 +745,20 @@ const updateBoardHeight = (state) => {
     const bottom = magnet.y + magnet.height + (magnet.marginBottom || 0);
     maxBottom = Math.max(maxBottom, bottom);
   });
+  const minHeight = state.minHeight || 0;
   const baseHeight = state.playActive
-    ? (state.minHeight || 0)
-    : Math.max(state.minHeight || 0, state.inactiveHeight || 0);
-  const height = Math.max(baseHeight, maxBottom + BOARD_PADDING);
-  state.boardHeight = height;
+    ? minHeight
+    : Math.max(minHeight, state.inactiveHeight || 0);
+  const previousHeight = Math.max(state.boardHeight || 0, baseHeight);
+  const paddedBottom = maxBottom + BOARD_PADDING;
+  const nextHeight = state.playActive
+    ? Math.max(previousHeight, paddedBottom)
+    : Math.max(baseHeight, paddedBottom);
+  state.boardHeight = nextHeight;
   if (!state.playActive) {
-    state.inactiveHeight = height;
+    state.inactiveHeight = nextHeight;
   }
-  state.board.style.height = `${height}px`;
+  state.board.style.height = `${nextHeight}px`;
 };
 
 const updateLayout = (state) => {
