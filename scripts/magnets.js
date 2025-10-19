@@ -66,6 +66,201 @@ const clamp = (value, min, max) => {
   return value;
 };
 
+const FLOATING_MIN_VISIBLE_HEIGHT = 120;
+
+const updateFloatingHandleAria = (state) => {
+  if (!state?.floatingBoardHandle) {
+    return;
+  }
+  const maxLift = Math.max(0, Math.abs(state?.floatingOffsetMin || 0));
+  const currentLift = Math.max(0, Math.abs(state?.floatingOffset || 0));
+  state.floatingBoardHandle.setAttribute('aria-valuemin', '0');
+  state.floatingBoardHandle.setAttribute('aria-valuemax', String(Math.round(maxLift)));
+  state.floatingBoardHandle.setAttribute('aria-valuenow', String(Math.round(currentLift)));
+  if (currentLift > 0) {
+    state.floatingBoardHandle.setAttribute('aria-valuetext', `${Math.round(currentLift)} pixels raised`);
+  } else {
+    state.floatingBoardHandle.setAttribute('aria-valuetext', 'Resting position');
+  }
+};
+
+const setFloatingBoardOffset = (state, offset) => {
+  if (!state?.floatingBoard || !state.board) {
+    return;
+  }
+  const minOffset = Number.isFinite(state.floatingOffsetMin) ? state.floatingOffsetMin : 0;
+  const maxOffset = Number.isFinite(state.floatingOffsetMax) ? state.floatingOffsetMax : 0;
+  const value = clamp(Number.isFinite(offset) ? offset : 0, minOffset, maxOffset);
+  state.floatingOffset = value;
+  state.board.style.setProperty('--magnet-floating-offset', `${value}px`);
+  state.board.dataset.floating = '1';
+  updateFloatingHandleAria(state);
+};
+
+const refreshFloatingBounds = (state) => {
+  if (!state?.floatingBoard) {
+    return;
+  }
+  const boardHeight = Math.max(state.boardHeight || 0, 0);
+  const minOffset = Math.min(0, FLOATING_MIN_VISIBLE_HEIGHT - boardHeight);
+  state.floatingOffsetMin = minOffset;
+  state.floatingOffsetMax = 0;
+  const current = Number.isFinite(state.floatingOffset) ? state.floatingOffset : 0;
+  setFloatingBoardOffset(state, clamp(current, minOffset, 0));
+};
+
+const beginFloatingDrag = (state, event) => {
+  if (!state?.floatingBoardHandle || !state.board) {
+    return;
+  }
+  if (event.button != null && event.button !== 0) {
+    return;
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  const pointerId = event.pointerId ?? `mouse-${Math.random()}`;
+  state.floatingDrag = {
+    pointerId,
+    startY: event.clientY,
+    startOffset: Number.isFinite(state.floatingOffset) ? state.floatingOffset : 0,
+  };
+  if (typeof state.floatingBoardHandle.focus === 'function') {
+    try {
+      state.floatingBoardHandle.focus({ preventScroll: true });
+    } catch (error) {
+      state.floatingBoardHandle.focus();
+    }
+  }
+  state.floatingBoardHandle.setPointerCapture(pointerId);
+  state.floatingBoardHandle.dataset.dragging = '1';
+};
+
+const updateFloatingDrag = (state, event) => {
+  const dragState = state?.floatingDrag;
+  if (!dragState || event.pointerId !== dragState.pointerId) {
+    return;
+  }
+  const delta = event.clientY - dragState.startY;
+  const nextOffset = clamp(
+    dragState.startOffset + delta,
+    Number.isFinite(state.floatingOffsetMin) ? state.floatingOffsetMin : 0,
+    Number.isFinite(state.floatingOffsetMax) ? state.floatingOffsetMax : 0,
+  );
+  if (nextOffset !== state.floatingOffset) {
+    setFloatingBoardOffset(state, nextOffset);
+  }
+  event.preventDefault();
+};
+
+const endFloatingDrag = (state, event) => {
+  const dragState = state?.floatingDrag;
+  if (!dragState) {
+    return;
+  }
+  if (event && event.pointerId != null && event.pointerId !== dragState.pointerId) {
+    return;
+  }
+  if (state.floatingBoardHandle && dragState.pointerId != null) {
+    state.floatingBoardHandle.releasePointerCapture(dragState.pointerId);
+    delete state.floatingBoardHandle.dataset.dragging;
+  }
+  state.floatingDrag = null;
+};
+
+const setupFloatingBoard = (state) => {
+  if (!state || isNavBoardState(state) || !state.board || !state.boardWrapper) {
+    return;
+  }
+  state.floatingBoard = true;
+  state.boardWrapper.classList.add('magnet-board-wrapper--floating');
+  state.board.dataset.floating = '1';
+  state.board.style.setProperty('--magnet-floating-offset', '0px');
+
+  let handle = state.board.querySelector('[data-magnet-board-handle]');
+  if (!handle) {
+    handle = document.createElement('div');
+    handle.className = 'magnet-board__drag-handle';
+    handle.setAttribute('data-magnet-board-handle', '');
+    handle.setAttribute('role', 'slider');
+    handle.setAttribute('tabindex', '0');
+    handle.setAttribute('aria-label', 'Raise or lower the magnet board');
+    handle.setAttribute('aria-orientation', 'vertical');
+    const bars = document.createElement('span');
+    bars.className = 'magnet-board__drag-handle-bars';
+    handle.appendChild(bars);
+    state.board.insertBefore(handle, state.board.firstChild);
+  }
+
+  const pointerDown = (event) => {
+    beginFloatingDrag(state, event);
+  };
+  const pointerMove = (event) => {
+    updateFloatingDrag(state, event);
+  };
+  const pointerUp = (event) => {
+    updateFloatingDrag(state, event);
+    endFloatingDrag(state, event);
+  };
+  const pointerCancel = (event) => {
+    endFloatingDrag(state, event);
+  };
+
+  handle.addEventListener('pointerdown', pointerDown);
+  handle.addEventListener('pointermove', pointerMove);
+  handle.addEventListener('pointerup', pointerUp);
+  handle.addEventListener('pointercancel', pointerCancel);
+
+  const handleKeydown = (event) => {
+    if (!state?.floatingBoard) {
+      return;
+    }
+    let delta = 0;
+    if (event.key === 'ArrowUp' || event.key === 'Up') {
+      delta = -16;
+    } else if (event.key === 'ArrowDown' || event.key === 'Down') {
+      delta = 16;
+    } else if (event.key === 'PageUp') {
+      delta = -64;
+    } else if (event.key === 'PageDown') {
+      delta = 64;
+    } else if (event.key === 'Home') {
+      setFloatingBoardOffset(state, state.floatingOffsetMin || 0);
+      event.preventDefault();
+      return;
+    } else if (event.key === 'End') {
+      setFloatingBoardOffset(state, 0);
+      event.preventDefault();
+      return;
+    } else if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar' || event.key === 'Space') {
+      setFloatingBoardOffset(state, 0);
+      event.preventDefault();
+      return;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    const next = clamp(
+      (Number.isFinite(state.floatingOffset) ? state.floatingOffset : 0) + delta,
+      Number.isFinite(state.floatingOffsetMin) ? state.floatingOffsetMin : 0,
+      Number.isFinite(state.floatingOffsetMax) ? state.floatingOffsetMax : 0,
+    );
+    setFloatingBoardOffset(state, next);
+  };
+
+  handle.addEventListener('keydown', handleKeydown);
+
+  state.floatingBoardHandle = handle;
+  state.cleanupFloatingBoard = () => {
+    handle.removeEventListener('pointerdown', pointerDown);
+    handle.removeEventListener('pointermove', pointerMove);
+    handle.removeEventListener('pointerup', pointerUp);
+    handle.removeEventListener('pointercancel', pointerCancel);
+    handle.removeEventListener('keydown', handleKeydown);
+  };
+
+  refreshFloatingBounds(state);
+};
+
 const fontsReady = typeof document !== 'undefined' && document.fonts && document.fonts.ready
   ? document.fonts.ready.catch(() => undefined)
   : Promise.resolve();
@@ -759,6 +954,7 @@ const updateBoardHeight = (state) => {
     state.inactiveHeight = nextHeight;
   }
   state.board.style.height = `${nextHeight}px`;
+  refreshFloatingBounds(state);
 };
 
 const updateLayout = (state) => {
@@ -905,6 +1101,7 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
   state.board.style.height = `${height}px`;
+  refreshFloatingBounds(state);
   updateLayout(state);
   if (persist) {
     persistLayout(state, true);
@@ -1461,6 +1658,13 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    floatingBoard: false,
+    floatingOffset: 0,
+    floatingOffsetMin: 0,
+    floatingOffsetMax: 0,
+    floatingBoardHandle: null,
+    floatingDrag: null,
+    cleanupFloatingBoard: null,
   };
 
   state.setClickSuppress = () => {
@@ -1488,6 +1692,10 @@ const initializeBoard = async (root, index) => {
   board.style.height = `${state.boardHeight}px`;
   board.classList.add('no-transitions');
 
+  if (!isNavBoardState(state)) {
+    setupFloatingBoard(state);
+  }
+
 
 
   const sizeMap = new Map(state.magnets.map((magnet) => [magnet.id, { width: magnet.width, height: magnet.height }]));
@@ -1514,6 +1722,7 @@ const initializeBoard = async (root, index) => {
     state.boardHeight = storedBoardHeight;
     state.inactiveHeight = storedBoardHeight;
     state.board.style.height = `${storedBoardHeight}px`;
+    refreshFloatingBounds(state);
   }
 
   let shouldSeed = true;
@@ -1592,6 +1801,7 @@ const initializeBoard = async (root, index) => {
     applyRowPackedLayout(state, state.magnets, { persist: true });
   } else {
     state.board.style.height = `${state.boardHeight}px`;
+    refreshFloatingBounds(state);
   }
 
   board.dataset.ready = '1';
