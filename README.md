@@ -1,6 +1,6 @@
 # allneeds.app
 
-A retro-styled companion to [allneeds.app](https://allneeds.app/) that mirrors the Strategy Finder hierarchy. The site now uses classic multi-page navigation: a home page with category cards, hub pages for situations, feelings, and needs, and individual item pages that cross-link related entries or list strategies. Build an inventory of strategies to tend to all your basic human needs while every entry, journal note, and preference remains on your device in localStorage with import and export controls.
+A retro Nonviolent Communication explorer that keeps every tool on-device. Build an inventory of strategies to tend to your basic human needs, journal through situations and feelings, and explore hubs for each category with playful magnet interactions. The static site runs entirely in the browser, stores preferences and notes in localStorage with import/export controls, and ships with installable PWA metadata for offline use.
 
 ## Getting started
 
@@ -97,7 +97,7 @@ custom directory as the first argument to store the archive elsewhere.
 
 ## Layout highlights
 
-- **Magnet play:** category, situation, and feeling pages present their pills as draggable magnets with a shuffle button for delightful re-arranging.
-- **Category hubs:** each category displays a grid of clickable entries that navigate to item pages.
-- **Cross-linking:** situation and feeling pages list their related items in labelled magnet panels, while need pages highlight strategies and a share-a-strategy form.
-- **Responsive retro styling:** keeps the playful palette and pixel fonts from the original magnet explorer while adopting the hierarchical flow of Site A.
+- **Magnet play:** category, situation, and feeling pages present their entries as draggable magnets with a shuffle button for delightful re-arranging.
+- **Category hubs:** each hub displays a grid of clickable entries that navigate to item pages with rich descriptions and related magnets.
+- **Cross-linking:** situation and feeling pages list their related magnets in labelled panels, while need pages highlight strategies and include the share-a-strategy form.
+- **Responsive retro styling:** keeps the playful palette and pixel fonts while threading feelings, needs, situations, and strategies through the same hierarchy.
