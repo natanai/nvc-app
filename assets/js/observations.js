@@ -77,6 +77,8 @@ const state = {
   catalog: createEmptyCatalog(),
 };
 
+let cueSuggestionMenuCounter = 0;
+
 function $(sel) {
   return document.querySelector(sel);
 }
@@ -329,43 +331,93 @@ function renderCueAutocomplete(text, cues, hits) {
     ghost.setAttribute('role', 'presentation');
     host.appendChild(ghost);
   } else {
-    info.items.forEach(item => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'chip chip--stacked observation-cue-suggestion';
-      if (item.active) {
-        button.classList.add('observation-cue-suggestion--active');
-        button.setAttribute('data-state', 'recognized');
-      } else {
-        button.setAttribute('data-state', 'suggested');
+    const inlineLimit = info.items.length > 1 ? 1 : info.items.length;
+    const inlineItems = info.items.slice(0, inlineLimit);
+    const dropdownItems = info.items.slice(inlineLimit);
+
+    inlineItems.forEach(item => {
+      const button = buildCueSuggestionButton(item);
+      if (button) {
+        host.appendChild(button);
       }
-      if (item.phrase) {
-        button.dataset.phrase = item.phrase;
-      }
-      button.dataset.cue = item.cue;
-      button.setAttribute('role', 'listitem');
-      button.setAttribute('aria-label', describeCueSuggestion(item));
-      const label = typeof item.label === 'string' && item.label.trim() ? item.label.trim() : item.cue;
-      const phrase = typeof item.phrase === 'string' && item.phrase.trim() ? item.phrase.trim() : label;
-      const note = item.active ? 'Recognized from what you typed' : 'Tap to paste this cue phrase';
-      const tooltipParts = [`“${phrase}”`];
-      if (label && label !== phrase) {
-        tooltipParts.push(label);
-      }
-      tooltipParts.push(note);
-      button.title = tooltipParts.join(' · ');
-      const title = document.createElement('span');
-      title.className = 'chip__title';
-      title.textContent = phrase;
-      button.appendChild(title);
-      if (label && label !== phrase) {
-        const chipNote = document.createElement('span');
-        chipNote.className = 'chip__note';
-        chipNote.textContent = label;
-        button.appendChild(chipNote);
-      }
-      host.appendChild(button);
     });
+
+    if (dropdownItems.length) {
+      const menuContainer = document.createElement('div');
+      menuContainer.className = 'observation-cue-suggestion-menu';
+      menuContainer.setAttribute('role', 'listitem');
+
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'chip chip--stacked observation-cue-suggestion-menu__toggle';
+      const remainingCount = dropdownItems.length;
+      const countLabel = remainingCount === 1 ? '1 more cue suggestion' : `${remainingCount} more cue suggestions`;
+      const toggleTitle = document.createElement('span');
+      toggleTitle.className = 'chip__title';
+      toggleTitle.textContent = countLabel;
+      toggle.appendChild(toggleTitle);
+      const toggleNote = document.createElement('span');
+      toggleNote.className = 'chip__note';
+      toggleNote.textContent = 'Tap to browse';
+      toggle.appendChild(toggleNote);
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-haspopup', 'true');
+      toggle.setAttribute('aria-label', `${countLabel}. Tap to browse additional cue suggestions.`);
+
+      const menuId = `cue-menu-${++cueSuggestionMenuCounter}`;
+
+      const list = document.createElement('div');
+      list.className = 'observation-cue-suggestion-menu__list';
+      list.id = menuId;
+      list.hidden = true;
+      list.setAttribute('role', 'list');
+      list.setAttribute('aria-label', 'Additional cue suggestions');
+
+      toggle.setAttribute('aria-controls', menuId);
+
+      dropdownItems.forEach(item => {
+        const button = buildCueSuggestionButton(item);
+        if (button) {
+          list.appendChild(button);
+        }
+      });
+
+      const collapseMenu = () => {
+        toggle.setAttribute('aria-expanded', 'false');
+        list.hidden = true;
+        menuContainer.classList.remove('observation-cue-suggestion-menu--open');
+      };
+
+      const expandMenu = () => {
+        toggle.setAttribute('aria-expanded', 'true');
+        list.hidden = false;
+        menuContainer.classList.add('observation-cue-suggestion-menu--open');
+        const firstOption = list.querySelector('button[data-phrase]');
+        if (firstOption) {
+          firstOption.focus();
+        }
+      };
+
+      toggle.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        if (expanded) {
+          collapseMenu();
+        } else {
+          expandMenu();
+        }
+      });
+
+      list.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          collapseMenu();
+          toggle.focus();
+        }
+      });
+
+      menuContainer.append(toggle, list);
+      host.appendChild(menuContainer);
+    }
   }
 
   const trimmed = typeof text === 'string' ? text.trim() : '';
@@ -378,6 +430,52 @@ function renderCueAutocomplete(text, cues, hits) {
   } else {
     host.setAttribute('data-state', 'no-results');
   }
+}
+
+function buildCueSuggestionButton(item) {
+  if (!item || typeof item.cue !== 'string') {
+    return null;
+  }
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'chip chip--stacked observation-cue-suggestion';
+  if (item.active) {
+    button.classList.add('observation-cue-suggestion--active');
+    button.setAttribute('data-state', 'recognized');
+  } else {
+    button.setAttribute('data-state', 'suggested');
+  }
+  if (item.phrase) {
+    button.dataset.phrase = item.phrase;
+  }
+  button.dataset.cue = item.cue;
+  button.setAttribute('role', 'listitem');
+  button.setAttribute('aria-label', describeCueSuggestion(item));
+
+  const label = typeof item.label === 'string' && item.label.trim() ? item.label.trim() : item.cue;
+  const phrase = typeof item.phrase === 'string' && item.phrase.trim() ? item.phrase.trim() : label;
+  const note = item.active ? 'Recognized from what you typed' : 'Tap to paste this cue phrase';
+  const tooltipParts = [`“${phrase}”`];
+  if (label && label !== phrase) {
+    tooltipParts.push(label);
+  }
+  tooltipParts.push(note);
+  button.title = tooltipParts.join(' · ');
+
+  const title = document.createElement('span');
+  title.className = 'chip__title';
+  title.textContent = phrase;
+  button.appendChild(title);
+
+  if (label && label !== phrase) {
+    const chipNote = document.createElement('span');
+    chipNote.className = 'chip__note';
+    chipNote.textContent = label;
+    button.appendChild(chipNote);
+  }
+
+  return button;
 }
 
 function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
