@@ -99,25 +99,43 @@ function render() {
   const directFauxFeelings = (lint.fauxFeelings || []).filter(slug => state.catalog.fauxFeelings.has(slug));
   const feelingSlugs = mergeUnique(directFeelingSlugs, feelings).filter(slug => state.catalog.feelings.has(slug));
   const needSlugs = mergeUnique(directNeedSlugs, needs).filter(slug => state.catalog.needs.has(slug));
-  renderChips($('#free-suggest-feelings'), feelingSlugs.slice(0, 6), '/feelings/', state.catalog.feelings);
-  renderChips($('#free-suggest-needs'), needSlugs.slice(0, 6), '/needs/', state.catalog.needs);
-  const whyEl = $('#free-suggest-why');
-  if (whyEl) {
-    const cueList = [...new Set(why)];
-    const reasons = [];
-    if (cueList.length) {
-      reasons.push(`Cue matches: ${cueList.map(slug => slug.replace(/-/g, ' ')).join(', ')}`);
-    }
-    const directReasons = [];
-    if (directFeelingSlugs.length) directReasons.push(directFeelingSlugs.length === 1 ? 'a feeling word' : 'feeling words');
-    if (directNeedSlugs.length) directReasons.push(directNeedSlugs.length === 1 ? 'a need word' : 'need words');
-    if (directFauxFeelings.length) directReasons.push(directFauxFeelings.length === 1 ? 'a faux feeling' : 'faux feelings');
-    if (directReasons.length) {
-      reasons.push(`Direct matches from your wording (${directReasons.join(', ')})`);
-    }
-    whyEl.textContent = reasons.length
-      ? reasons.join(' · ')
-      : 'No cues detected yet — add what was seen/heard.';
+  const feelingItems = buildSuggestionLinks(
+    feelingSlugs.slice(0, 6),
+    '/feelings/',
+    state.catalog.feelings,
+  );
+  const needItems = buildSuggestionLinks(
+    needSlugs.slice(0, 6),
+    '/needs/',
+    state.catalog.needs,
+  );
+  const cueList = [...new Set(why)];
+  const reasons = [];
+  if (cueList.length) {
+    reasons.push(`Cue matches: ${cueList.map(slug => slug.replace(/-/g, ' ')).join(', ')}`);
+  }
+  const directReasons = [];
+  if (directFeelingSlugs.length) directReasons.push(directFeelingSlugs.length === 1 ? 'a feeling word' : 'feeling words');
+  if (directNeedSlugs.length) directReasons.push(directNeedSlugs.length === 1 ? 'a need word' : 'need words');
+  if (directFauxFeelings.length) directReasons.push(directFauxFeelings.length === 1 ? 'a faux feeling' : 'faux feelings');
+  if (directReasons.length) {
+    reasons.push(`Direct matches from your wording (${directReasons.join(', ')})`);
+  }
+  const reasonsText = reasons.length
+    ? reasons.join(' · ')
+    : 'No cues detected yet — add what was seen/heard.';
+  const previewHasContent = preview.trim().length > 0;
+  const showPanel = previewHasContent || feelingItems.length > 0 || needItems.length > 0;
+  if (typeof window.setObservationSuggestions === 'function') {
+    window.setObservationSuggestions('free', {
+      showPanel,
+      feelings: feelingItems,
+      needs: needItems,
+      emptyMessage: 'Add what was seen/heard to surface related feelings and needs.',
+      feelingsEmptyMessage: 'No feelings surfaced yet.',
+      needsEmptyMessage: 'No needs surfaced yet.',
+      why: showPanel ? reasonsText : '',
+    });
   }
 
   const fauxFeelings = mergeUnique(directFauxFeelings, deriveFauxFeelings(feelingSlugs, needSlugs));
@@ -183,6 +201,26 @@ function renderChips(host, items, baseHref, labelMap) {
     a.setAttribute('role', 'listitem');
     host.appendChild(a);
   });
+}
+
+function buildSuggestionLinks(slugs, baseHref, labelMap) {
+  if (!Array.isArray(slugs)) {
+    return [];
+  }
+  return slugs
+    .map(slug => {
+      if (!slug) {
+        return null;
+      }
+      const info = labelMap && typeof labelMap.get === 'function' ? labelMap.get(slug) : null;
+      const label = info && info.title ? info.title : slug.replace(/-/g, ' ');
+      return {
+        slug,
+        label,
+        href: `${baseHref}${encodeURIComponent(slug)}/`,
+      };
+    })
+    .filter(Boolean);
 }
 
 function setObservationExample(when, what, gap = '') {
