@@ -1756,6 +1756,44 @@ button.site-nav__magnet {
     text-align: left;
   }
 
+  .observations-page .observation-cue-suggestion-menu {
+    position: relative;
+    flex: 0 1 auto;
+    max-width: min(100%, 260px);
+  }
+
+  .observations-page .observation-cue-suggestion-menu__toggle {
+    width: 100%;
+    text-align: left;
+  }
+
+  .observations-page .observation-cue-suggestion-menu__list {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-lg);
+    border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
+    background: color-mix(in srgb, var(--observations-card-bg) 88%, #fff 12%);
+    box-shadow: 0 18px 35px color-mix(in srgb, var(--ink) 20%, transparent);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 15;
+  }
+
+  .observations-page .observation-cue-suggestion-menu__list .observation-cue-suggestion {
+    width: 100%;
+    max-width: none;
+  }
+
+  .observations-page .observation-cue-suggestion-menu--open .observation-cue-suggestion-menu__toggle {
+    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 30%, transparent);
+  }
+
   .observations-page .observation-cue-suggestion .chip__title {
     font-size: 0.9rem;
   }
