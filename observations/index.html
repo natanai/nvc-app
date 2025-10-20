@@ -1030,7 +1030,7 @@ button.site-nav__magnet {
     max-height: min(22rem, 60vh);
     overflow-y: auto;
     padding: 0.35rem 0;
-    z-index: 5;
+    z-index: 15;
   }
 
   .observations-page .observation-family-picker__menu[hidden] {
@@ -1294,6 +1294,17 @@ button.site-nav__magnet {
 
   .observations-page .observation-magnet--active:focus-visible {
     outline-color: color-mix(in srgb, #ffffff 70%, var(--outline) 30%);
+  }
+
+  @media (max-width: 640px) {
+    .observations-page .observation-magnet-shelf {
+      padding: clamp(0.65rem, 2vw, 0.95rem);
+    }
+
+    .observations-page .observation-magnet-grid--families,
+    .observations-page .observation-magnet-grid--patterns {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   .observations-page .observation-free__suggest-hint {
