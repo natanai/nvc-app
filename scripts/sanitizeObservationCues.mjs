@@ -3,6 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { sanitizeObservationText } from '../lib/observationSanitize.js';
+import { slugify } from '../lib/slugify.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
@@ -28,6 +29,7 @@ export function sanitizeObservationCues({
   const sanitizedRows = [];
   let dropped = 0;
   let changed = 0;
+  let fauxFeelingDrops = 0;
 
   const exampleIndex = header.findIndex(col => col.toLowerCase().startsWith('example'));
   const cueIndex = header.findIndex(col => col.toLowerCase().startsWith('cue'));
@@ -35,6 +37,8 @@ export function sanitizeObservationCues({
   if (exampleIndex === -1) {
     throw new Error('Expected an "example" column in observation cues CSV.');
   }
+
+  const fauxFeelingMatchers = buildFauxFeelingMatchers(catalog.fauxFeelings);
 
   dataRows.forEach(row => {
     if (!Array.isArray(row)) {
@@ -47,6 +51,12 @@ export function sanitizeObservationCues({
 
     if (!sanitizedExample) {
       dropped += 1;
+      return;
+    }
+
+    if (containsFauxFeeling(row, fauxFeelingMatchers)) {
+      dropped += 1;
+      fauxFeelingDrops += 1;
       return;
     }
 
@@ -72,13 +82,16 @@ export function sanitizeObservationCues({
 
   writeFileSync(outputPath, csvOutput);
 
+  const fauxFeelingSummary =
+    fauxFeelingDrops > 0 ? `, removed ${fauxFeelingDrops} containing faux feelings` : '';
+
   if (logger && typeof logger.info === 'function') {
     logger.info(
-      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}, changed ${changed}).`,
+      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}${fauxFeelingSummary}, changed ${changed}).`,
     );
   } else if (logger && typeof logger.log === 'function') {
     logger.log(
-      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}, changed ${changed}).`,
+      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}${fauxFeelingSummary}, changed ${changed}).`,
     );
   }
 
@@ -87,6 +100,7 @@ export function sanitizeObservationCues({
     kept: sanitizedRows.length,
     dropped,
     changed,
+    droppedFauxFeelings: fauxFeelingDrops,
   };
 }
 
@@ -186,6 +200,56 @@ function buildCatalog(data) {
   }
 
   return { feelings, needs, fauxFeelings };
+}
+
+function buildFauxFeelingMatchers(fauxFeelings) {
+  if (!(fauxFeelings instanceof Map)) {
+    return [];
+  }
+
+  return [...fauxFeelings.values()]
+    .map(item => buildFauxFeelingMatcher(item?.slug, item?.title))
+    .filter(Boolean);
+}
+
+function buildFauxFeelingMatcher(slug, title) {
+  const baseSlug = typeof slug === 'string' && slug ? slug : slugify(title || '');
+  if (!baseSlug) {
+    return null;
+  }
+
+  const tokens = baseSlug
+    .split('-')
+    .map(token => token.trim())
+    .filter(Boolean)
+    .map(escapeRegExpLiteral);
+
+  if (!tokens.length) {
+    return null;
+  }
+
+  const pattern = tokens.join('(?:[-\s]+)');
+  return new RegExp(`\\b${pattern}\\b`, 'i');
+}
+
+function escapeRegExpLiteral(str) {
+  if (typeof str !== 'string') {
+    return '';
+  }
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function containsFauxFeeling(row, matchers) {
+  if (!Array.isArray(row) || !Array.isArray(matchers) || !matchers.length) {
+    return false;
+  }
+
+  return row.some(cell => {
+    if (typeof cell !== 'string' || !cell) {
+      return false;
+    }
+    return matchers.some(regex => regex.test(cell));
+  });
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
