@@ -161,9 +161,8 @@ function render() {
   renderObservationAnnotations(state.whatSawHeard, lint);
 
   const sanitizedTrimmed = sanitizedPreview.trim();
-  const suggestionPayload = sanitizedTrimmed.length > 0
-    ? suggestFromObservation(sanitizedTrimmed, state.cues)
-    : { feelings: [], needs: [], why: [], hits: [] };
+  const cueSearchText = selectCueSearchText(sanitizedPreview);
+  const suggestionPayload = suggestFromObservation(cueSearchText, state.cues) || { feelings: [], needs: [], why: [], hits: [] };
   renderCueAutocomplete(state.whatSawHeard, state.cues, suggestionPayload.hits || []);
   const canSuggest = sanitizedTrimmed.length > 0 && lint.ok;
   const directFeelingSlugs = (lint.feelings || []).filter(slug => state.catalog.feelings.has(slug));
@@ -286,6 +285,19 @@ function renderChips(host, items, baseHref, labelMap) {
     a.setAttribute('role', 'listitem');
     host.appendChild(a);
   });
+}
+
+function selectCueSearchText(sanitizedPreview) {
+  const previewTrimmed = typeof sanitizedPreview === 'string' ? sanitizedPreview.trim() : '';
+  if (previewTrimmed) {
+    return sanitizedPreview;
+  }
+  const sanitizedWhat = sanitizeObservationText(state.whatSawHeard, state.catalog);
+  const sanitizedWhatTrimmed = typeof sanitizedWhat === 'string' ? sanitizedWhat.trim() : '';
+  if (sanitizedWhatTrimmed) {
+    return sanitizedWhat;
+  }
+  return typeof state.whatSawHeard === 'string' ? state.whatSawHeard : '';
 }
 
 function renderCueAutocomplete(text, cues, hits) {
