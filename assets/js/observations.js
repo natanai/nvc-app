@@ -157,20 +157,30 @@ function updateSharedPreview(preview) {
 
 function renderChips(host, items, baseHref, labelMap) {
   if (!host) return;
-  host.innerHTML = '';
+  host.classList.add('chip-group');
+  host.setAttribute('role', 'list');
+  while (host.firstChild) {
+    host.removeChild(host.firstChild);
+  }
   const list = items && items.length ? items : [];
   if (!list.length) {
-    host.innerHTML = '<span class="chip chip--ghost">—</span>';
+    const ghost = document.createElement('span');
+    ghost.className = 'chip chip--ghost';
+    ghost.textContent = '—';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.setAttribute('role', 'presentation');
+    host.appendChild(ghost);
     return;
   }
   list.forEach(slug => {
     const a = document.createElement('a');
-    a.className = 'chip';
+    a.classList.add('chip');
     a.href = baseHref + encodeURIComponent(slug) + '/';
     const info = labelMap && typeof labelMap.get === 'function' ? labelMap.get(slug) : null;
     const label = info && info.title ? info.title : slug.replace(/-/g, ' ');
     a.textContent = label;
     a.setAttribute('data-slug', slug);
+    a.setAttribute('role', 'listitem');
     host.appendChild(a);
   });
 }
@@ -353,8 +363,18 @@ function createCatalogParagraph({ slugs, catalogMap, baseHref, singular, plural,
   const p = document.createElement('p');
   const label = slugs.length === 1 ? singular : plural;
   p.appendChild(document.createTextNode(`${label}: `));
-  const links = (slugs || []).map(slug => createCatalogLink(slug, baseHref, catalogMap));
-  appendLinkList(p, links.filter(Boolean));
+  const chipList = document.createElement('span');
+  chipList.className = 'chip-list';
+  chipList.setAttribute('role', 'list');
+  (slugs || []).forEach(slug => {
+    const link = createCatalogLink(slug, baseHref, catalogMap);
+    if (link) {
+      chipList.appendChild(link);
+    }
+  });
+  if (chipList.childElementCount) {
+    p.appendChild(chipList);
+  }
   if (cta) {
     p.appendChild(document.createTextNode(` ${cta}`));
   }
@@ -364,22 +384,14 @@ function createCatalogParagraph({ slugs, catalogMap, baseHref, singular, plural,
 function createCatalogLink(slug, baseHref, catalogMap) {
   if (!slug) return null;
   const a = document.createElement('a');
+  a.classList.add('chip');
   a.href = baseHref + encodeURIComponent(slug) + '/';
   const info = catalogMap && typeof catalogMap.get === 'function' ? catalogMap.get(slug) : null;
   const label = info?.title || slug.replace(/-/g, ' ');
   a.textContent = label;
+  a.setAttribute('data-slug', slug);
+  a.setAttribute('role', 'listitem');
   return a;
-}
-
-function appendLinkList(parent, nodes) {
-  const list = nodes.filter(Boolean);
-  list.forEach((node, index) => {
-    if (index > 0) {
-      const connector = index === list.length - 1 ? ' and ' : ', ';
-      parent.appendChild(document.createTextNode(connector));
-    }
-    parent.appendChild(node);
-  });
 }
 
 function mergeUnique(primary = [], secondary = []) {
