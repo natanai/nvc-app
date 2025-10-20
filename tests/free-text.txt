@@ -1,0 +1,25 @@
+Email sent Monday at 9am hasn't received a reply.
+Phone call went straight to voicemail without a return.
+Video meeting started fifteen minutes late today.
+Calendar invite arrived without a meeting link.
+Project plan changed from version 2 to version 3 yesterday.
+Budget spreadsheet shows the totals column missing.
+Access request returned a permission denied message.
+Support ticket was marked resolved without a note.
+Recording file disappeared from the shared folder.
+Weekly report listed my contribution without credit.
+Team chat muted the thread after the update.
+Reminder email arrived using the wrong pronouns.
+Name tag displayed the old nickname at the event.
+Notes from the session were not shared afterwards.
+Door sign listed "private" instead of "open".
+Shared document locked to view only during the review.
+Deployment log shows error 503 at 14:05.
+Meeting minutes skipped the decision about scope.
+Travel itinerary changed without notifying me.
+Volunteer roster posted with my shift removed.
+Security badge flashed red at the lab entrance.
+Class recording link led to a 404 page.
+Group message removed my comment overnight.
+Survey response was edited after submission.
+Outage notice went to the wrong mailing list.

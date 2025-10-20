@@ -36,13 +36,13 @@ Patterns that do not use any of the supported dialect tokens are escaped automat
 
 ### Regression coverage
 
-`scripts/pattern-contract.test.mjs` exercises the contract end-to-end: literal escaping, word boundaries, optional groups, escaped pipes, and invalid lookbehind all behave as expected.【F:scripts/pattern-contract.test.mjs†L1-L75】 The broader validator harness reports literal-versus-regex counts and surfaces any compile failures for the sanitized CSV.【F:scripts/validate-cues-patterns.mjs†L1-L141】
+`scripts/pattern-contract.test.mjs` exercises the contract end-to-end: literal escaping, word boundaries, optional groups, escaped pipes, and invalid lookbehind all behave as expected.【F:scripts/pattern-contract.test.mjs†L1-L75】 The broader validator harness reports literal-versus-regex counts, catalog mismatches, and faux-feeling hits for the sanitized CSV.【F:scripts/validate-cues-patterns.mjs†L1-L313】
 
-## How to run
+## How to validate & test locally
 
 ```bash
-node scripts/pattern-contract.test.mjs
-node scripts/validate-cues-patterns.mjs
+node scripts/validate-cues-patterns.mjs > scripts/out/validate-summary.json
+node scripts/test-coverage.mjs > scripts/out/coverage-summary.json
 ```
 
-The first script runs the regression checks above, and the second emits a JSON summary (plus a failure CSV if needed) after compiling every sanitized cue with the new contract.【F:scripts/pattern-contract.test.mjs†L1-L75】【F:scripts/validate-cues-patterns.mjs†L1-L141】
+The validator prints a JSON summary of pattern compilation, catalog checks, and faux-feeling scans while exporting failures to `scripts/out/validate-failures.csv` for review.【F:scripts/validate-cues-patterns.mjs†L18-L313】 The coverage harness loads the same compiled cues, evaluates every line in `tests/free-text.txt`, and writes match details to `scripts/out/coverage-detail.csv` alongside the JSON coverage summary.【F:scripts/test-coverage.mjs†L1-L100】【F:scripts/test-coverage.mjs†L102-L141】【F:tests/free-text.txt†L1-L25】
