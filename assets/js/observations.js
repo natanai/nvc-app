@@ -1,5 +1,6 @@
 import { lintObservation, scaffoldRewrite } from '/lib/nvcLint.js';
 import { loadCueRows, suggestFromObservation } from '/lib/observationSuggest.js';
+import { sanitizeObservationText } from '/lib/observationSanitize.js';
 
 const FREE_PREVIEW_FALLBACK = 'Your observation will preview here…';
 const FLAG_ADVICE_DEFAULT = 'Try swapping in a time/place anchor, a quote, a count or measure, or a link to an artifact.';
@@ -120,12 +121,13 @@ function buildPreview() {
 function render() {
   const preview = buildPreview();
   const lint = lintObservation([state.whenWhere, state.whatSawHeard, state.gap].join(' '), state.catalog);
-  const sanitizedPreview = sanitizeObservationPreview(preview, lint);
+  const sanitizedPreview = sanitizeObservationText(preview, state.catalog);
   updateSharedPreview(sanitizedPreview);
   renderLintFeedback(lint, state.catalog);
   renderObservationAnnotations(state.whatSawHeard, lint);
 
-  const { feelings, needs, why } = suggestFromObservation(preview, state.cues);
+  const suggestionSource = sanitizedPreview && sanitizedPreview.trim() ? sanitizedPreview : preview;
+  const { feelings, needs, why } = suggestFromObservation(suggestionSource, state.cues);
   const directFeelingSlugs = (lint.feelings || []).filter(slug => state.catalog.feelings.has(slug));
   const directNeedSlugs = (lint.needs || []).filter(slug => state.catalog.needs.has(slug));
   const directFauxFeelings = (lint.fauxFeelings || []).filter(slug => state.catalog.fauxFeelings.has(slug));
@@ -203,86 +205,6 @@ function updateSharedPreview(preview) {
     text: message,
     fallback: FREE_PREVIEW_FALLBACK,
   });
-}
-
-function sanitizeObservationPreview(text, lint) {
-  const source = typeof text === 'string' ? text : '';
-  const trimmed = source.trim();
-  if (!trimmed) {
-    return '';
-  }
-
-  const flaggedTokens = collectFlaggedTokens(lint);
-  if (!flaggedTokens.length) {
-    return trimmed;
-  }
-
-  let sanitized = trimmed;
-  flaggedTokens
-    .map(buildPreviewTokenRegex)
-    .filter(Boolean)
-    .forEach(regex => {
-      sanitized = sanitized.replace(regex, ' ');
-    });
-
-  sanitized = sanitized
-    .replace(/\s{2,}/g, ' ')
-    .replace(/\s+([,.!?;:])/g, '$1')
-    .replace(/([,.!?;:])(\s*[,.!?;:]+)/g, '$1')
-    .trim();
-
-  if (!/[\p{L}\p{N}]/u.test(sanitized)) {
-    return '';
-  }
-
-  return sanitized;
-}
-
-function collectFlaggedTokens(lint) {
-  if (!lint || typeof lint !== 'object') {
-    return [];
-  }
-
-  const matches = [];
-  const groups = Array.isArray(lint.flaggedGroups) ? lint.flaggedGroups : [];
-  groups.forEach(group => {
-    (group.matches || []).forEach(match => {
-      const token = typeof match === 'string' ? match.trim() : '';
-      if (token) {
-        matches.push(token);
-      }
-    });
-  });
-
-  const evaluations = uniqueStrings([...(lint.evaluationMarkers || []), ...(lint.agentiveMarkers || [])]);
-  evaluations.forEach(token => {
-    if (token) {
-      matches.push(token);
-    }
-  });
-
-  return uniqueStrings(matches);
-}
-
-function buildPreviewTokenRegex(token) {
-  const trimmed = typeof token === 'string' ? token.trim() : '';
-  if (!trimmed) {
-    return null;
-  }
-  const escaped = escapeRegExpLiteral(trimmed);
-  if (!escaped) {
-    return null;
-  }
-  const needsWordBoundary = /^[\w\s]+$/.test(trimmed);
-  const pattern = needsWordBoundary ? `\\b${escaped}\\b` : escaped;
-  return new RegExp(pattern, 'gi');
-}
-
-function escapeRegExpLiteral(str) {
-  if (typeof str !== 'string') {
-    return '';
-  }
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function renderChips(host, items, baseHref, labelMap) {
