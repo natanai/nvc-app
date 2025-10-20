@@ -828,6 +828,37 @@ button.site-nav__magnet {
     display: none;
   }
 
+  .observations-page .observation-panel__toggle-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  .observations-page .observation-panel__toggle-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.1rem;
+    padding: 0.1rem 0.5rem 0.2rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--rose) 75%, #ffffff 25%);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--rose) 30%, transparent);
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+
+  .observations-page .observation-panel__toggle-badge:not([hidden]) {
+    opacity: 1;
+    transform: scale(1);
+  }
+
   .observations-page .tab-nav {
     display: flex;
     flex-wrap: wrap;
@@ -1378,7 +1409,7 @@ button.site-nav__magnet {
       display: inline-flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.65rem;
+      gap: 0.75rem;
       border-radius: var(--radius-2xl);
       border: 2px solid color-mix(in srgb, var(--outline) 60%, transparent);
       background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 78%, var(--observations-card-bg) 22%);
@@ -1394,12 +1425,34 @@ button.site-nav__magnet {
     }
 
     .observations-page .observation-panel__toggle[data-panel-has-updates='true'] {
+      border-color: color-mix(in srgb, var(--rose) 55%, transparent);
       box-shadow: 0 10px 0 color-mix(in srgb, var(--rose) 34%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--rose) 30%);
     }
 
     .observations-page .observation-panel__toggle:focus-visible {
       outline: 3px dashed var(--outline);
       outline-offset: 3px;
+    }
+
+    .observations-page .observation-panel__toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--mint) 60%, rgba(255, 255, 255, 0.4) 40%);
+      font-size: 1.25rem;
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] .observation-panel__toggle-icon {
+      background: color-mix(in srgb, var(--rose) 70%, rgba(255, 255, 255, 0.3) 30%);
+      color: #ffffff;
+      animation: observation-panel-toggle-pulse 1.6s ease-in-out infinite;
     }
 
     .observations-page .observation-panel__toggle-label {
@@ -1414,6 +1467,11 @@ button.site-nav__magnet {
 
     .observations-page .observation-panel__toggle[data-panel-open='true'] .observation-panel__toggle-status {
       color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
+    }
+
+    .observations-page .observation-panel__toggle-meta {
+      min-width: max(5.25rem, 30%);
+      justify-content: flex-end;
     }
 
     .observations-page .observation-panel {
@@ -1494,6 +1552,8 @@ button.site-nav__magnet {
       grid-auto-columns: minmax(12rem, 72%);
       overflow-x: auto;
       overflow-y: hidden;
+      touch-action: pan-x;
+      overscroll-behavior-inline: contain;
       padding: 0.35rem 0.15rem 0.45rem;
       gap: 0.5rem;
       border-radius: var(--radius-2xl);
@@ -1501,6 +1561,27 @@ button.site-nav__magnet {
       min-height: 4.25rem;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
+      position: relative;
+      scroll-padding-inline: 0.75rem;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    }
+
+    .observations-page .observation-cue-builder__chips::after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      right: 0.05rem;
+      width: 2.25rem;
+      height: 100%;
+      border-radius: var(--radius-2xl);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        color-mix(in srgb, rgba(255, 255, 255, 0.92) 60%, var(--observations-card-bg) 40%) 65%,
+        color-mix(in srgb, rgba(255, 255, 255, 0.92) 92%, var(--outline) 8%) 100%
+      );
     }
 
     .observations-page .observation-cue-builder__chips .chip {
@@ -1522,6 +1603,24 @@ button.site-nav__magnet {
       min-width: auto;
       min-height: auto;
       padding: 0.2rem 0.4rem;
+    }
+  }
+
+  @keyframes observation-panel-toggle-pulse {
+    0%,
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--rose) 35%, transparent);
+    }
+    50% {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 color-mix(in srgb, var(--rose) 20%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] .observation-panel__toggle-icon {
+      animation: none;
     }
   }
 
@@ -2272,8 +2371,13 @@ button.site-nav__magnet {
             aria-controls="observation-panel"
             aria-expanded="false"
           >
+            <span class="observation-panel__toggle-icon" aria-hidden="true">✨</span>
             <span class="observation-panel__toggle-label">Feelings &amp; needs suggestions</span>
-            <span class="observation-panel__toggle-status" data-observation-panel-status>Hidden</span>
+            <span class="observation-panel__toggle-meta">
+              <span class="observation-panel__toggle-badge" data-observation-panel-badge hidden aria-hidden="true">New</span>
+              <span class="observation-panel__toggle-status" data-observation-panel-status>Hidden</span>
+            </span>
+            <span class="visually-hidden" aria-live="polite" data-observation-panel-announcer></span>
           </button>
           <nav class="tab-nav" role="tablist">
             <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>

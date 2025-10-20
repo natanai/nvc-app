@@ -23,6 +23,8 @@ const panelRefs = {
   root: null,
   toggle: null,
   status: null,
+  badge: null,
+  announce: null,
   close: null,
   scrim: null,
 };
@@ -31,6 +33,8 @@ const panelState = {
   media: null,
   isOpen: false,
   hasUnviewed: false,
+  hasAutoOpened: false,
+  lastAnnouncement: '',
 };
 
 function $(selector) {
@@ -48,8 +52,29 @@ function cachePanelRefs() {
   if (!panelRefs.root) panelRefs.root = $('#observation-panel');
   if (!panelRefs.toggle) panelRefs.toggle = document.querySelector('[data-observation-panel-toggle]');
   if (!panelRefs.status) panelRefs.status = document.querySelector('[data-observation-panel-status]');
+  if (!panelRefs.badge) panelRefs.badge = document.querySelector('[data-observation-panel-badge]');
+  if (!panelRefs.announce) panelRefs.announce = document.querySelector('[data-observation-panel-announcer]');
   if (!panelRefs.close) panelRefs.close = document.querySelector('[data-observation-panel-close]');
   if (!panelRefs.scrim) panelRefs.scrim = document.querySelector('[data-observation-panel-scrim]');
+}
+
+function announcePanelUpdate(message) {
+  cachePanelRefs();
+  const announce = panelRefs.announce;
+  if (!announce) {
+    return;
+  }
+  announce.textContent = '';
+  if (!message) {
+    return;
+  }
+  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(() => {
+      announce.textContent = message;
+    });
+  } else {
+    announce.textContent = message;
+  }
 }
 
 function ensurePanelMedia() {
@@ -77,6 +102,7 @@ function updatePanelUIVisibility() {
   const root = panelRefs.root;
   const toggle = panelRefs.toggle;
   const status = panelRefs.status;
+  const badge = panelRefs.badge;
   const scrim = panelRefs.scrim;
   const open = mobile ? panelState.isOpen : true;
 
@@ -106,6 +132,12 @@ function updatePanelUIVisibility() {
     toggle.setAttribute('data-panel-has-updates', panelState.hasUnviewed && mobile && !open ? 'true' : 'false');
   }
 
+  if (badge) {
+    const showBadge = panelState.hasUnviewed && mobile && !open;
+    badge.hidden = !showBadge;
+    badge.setAttribute('aria-hidden', showBadge ? 'false' : 'true');
+  }
+
   if (status) {
     let label = 'Showing';
     if (mobile) {
@@ -124,6 +156,11 @@ function updatePanelUIVisibility() {
     scrim.hidden = !mobile || !open;
   }
 
+  if (!mobile || open) {
+    panelState.lastAnnouncement = '';
+    announcePanelUpdate('');
+  }
+
   setBodyScrollLock(mobile && open);
 }
 
@@ -138,6 +175,8 @@ function setPanelOpen(open, { focusPanel = false } = {}) {
   panelState.isOpen = Boolean(open);
   if (panelState.isOpen) {
     panelState.hasUnviewed = false;
+    panelState.lastAnnouncement = '';
+    announcePanelUpdate('');
   }
   updatePanelUIVisibility();
   if (panelState.isOpen && focusPanel) {
@@ -160,8 +199,26 @@ function markPanelUnviewed(hasUnviewed) {
   const next = Boolean(hasUnviewed);
   if (panelState.hasUnviewed !== next) {
     panelState.hasUnviewed = next;
+    if (next) {
+      panelState.lastAnnouncement = 'New feelings and needs suggestions are ready to explore.';
+      announcePanelUpdate(panelState.lastAnnouncement);
+      if (!panelState.isOpen && !panelState.hasAutoOpened) {
+        panelState.hasAutoOpened = true;
+        if (typeof window !== 'undefined') {
+          window.setTimeout(() => {
+            if (!panelState.isOpen && isMobilePanelMode()) {
+              setPanelOpen(true);
+            }
+          }, 600);
+        }
+      }
+    } else {
+      panelState.lastAnnouncement = '';
+      announcePanelUpdate('');
+    }
     updatePanelUIVisibility();
   } else if (next) {
+    announcePanelUpdate(panelState.lastAnnouncement);
     updatePanelUIVisibility();
   }
 }
