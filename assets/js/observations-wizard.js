@@ -360,14 +360,6 @@ function renderPatterns() {
 
 function renderSuggestions() {
   const pat = getPattern();
-  const fHost = $('#suggest-feelings');
-  const nHost = $('#suggest-needs');
-  const why = $('#why');
-  const panelEmpty = $('#observation-panel-empty');
-  const panelContent = $('#observation-panel-content');
-
-  if (!fHost || !nHost || !why || !panelEmpty || !panelContent) return;
-
   const defaultMessage = PREVIEW_DEFAULT_GUIDED;
 
   if (!pat) {
@@ -376,56 +368,202 @@ function renderSuggestions() {
       text: '',
       fallback: defaultMessage,
     });
-    fHost.innerHTML = '';
-    nHost.innerHTML = '';
-    panelContent.hidden = true;
-    panelEmpty.hidden = false;
-    why.textContent = '';
-    why.hidden = true;
+    setSuggestionState('guided', {
+      showPanel: false,
+      feelings: [],
+      needs: [],
+      why: '',
+      emptyMessage: DEFAULT_EMPTY_MESSAGES.guided,
+      feelingsEmptyMessage: 'No feelings surfaced yet.',
+      needsEmptyMessage: 'No needs surfaced yet.',
+    });
     return;
   }
-
-  panelEmpty.hidden = true;
-  panelContent.hidden = false;
 
   updateSharedPreview({
     source: 'guided',
     text: pat.example || '',
     fallback: defaultMessage,
   });
-  renderChipSet(fHost, pat.feelings || [], '/feelings/', 'No feelings surfaced yet.');
-  renderChipSet(nHost, pat.needs || [], '/needs/', 'No needs surfaced yet.');
+  const feelings = (pat.feelings || [])
+    .map(label => createSuggestionItem(label, '/feelings/'))
+    .filter(Boolean);
+  const needs = (pat.needs || [])
+    .map(label => createSuggestionItem(label, '/needs/'))
+    .filter(Boolean);
   const family = getFamily();
-  why.hidden = false;
-  if (family) {
-    why.textContent = `Why these: ${family.label} → ${pat.label}`;
+  const whyMessage = family
+    ? `Why these: ${family.label} → ${pat.label}`
+    : 'Pattern magnets highlight related feelings and needs.';
+
+  setSuggestionState('guided', {
+    showPanel: true,
+    feelings,
+    needs,
+    why: whyMessage,
+    feelingsEmptyMessage: 'No feelings surfaced yet.',
+    needsEmptyMessage: 'No needs surfaced yet.',
+  });
+}
+
+const DEFAULT_EMPTY_MESSAGES = {
+  guided: 'Pick a pattern to surface feelings and needs magnets that might support your wording.',
+  free: 'Add what was seen/heard to surface related feelings and needs.',
+};
+
+const SUGGESTION_TILTS = [-3, -2, -1, 0, 1, 2, 3];
+const SUGGESTION_OFFSETS = [-3, -2, -1, 0, 1, 2, 3];
+
+function getSuggestionTilt(index) {
+  const tilt = SUGGESTION_TILTS[index % SUGGESTION_TILTS.length];
+  return Number.isFinite(tilt) ? tilt : 0;
+}
+
+function getSuggestionOffset(index) {
+  const offset = SUGGESTION_OFFSETS[index % SUGGESTION_OFFSETS.length];
+  return Number.isFinite(offset) ? offset : 0;
+}
+
+const suggestionState = {
+  guided: {
+    showPanel: false,
+    feelings: [],
+    needs: [],
+    feelingsEmptyMessage: 'No feelings surfaced yet.',
+    needsEmptyMessage: 'No needs surfaced yet.',
+    emptyMessage: DEFAULT_EMPTY_MESSAGES.guided,
+    why: '',
+  },
+  free: {
+    showPanel: false,
+    feelings: [],
+    needs: [],
+    feelingsEmptyMessage: 'No feelings surfaced yet.',
+    needsEmptyMessage: 'No needs surfaced yet.',
+    emptyMessage: DEFAULT_EMPTY_MESSAGES.free,
+    why: '',
+  },
+};
+
+function getActiveTabId() {
+  const activeButton = document.querySelector('.tab-button.tab-button--active');
+  const id = activeButton?.dataset?.tabTarget;
+  return id || 'guided';
+}
+
+function renderSuggestionList(host, items, emptyMessage) {
+  if (!host) return;
+  host.innerHTML = '';
+  const list = Array.isArray(items) ? items : [];
+  if (!list.length) {
+    if (emptyMessage) {
+      const placeholder = document.createElement('p');
+      placeholder.className = 'observation-panel__placeholder';
+      placeholder.textContent = emptyMessage;
+      host.appendChild(placeholder);
+    }
+    return;
+  }
+  list.forEach((item, index) => {
+    if (!item || typeof item.label !== 'string') return;
+    const link = document.createElement('a');
+    link.className = 'pill observation-panel__magnet';
+    if (item.href) {
+      link.href = item.href;
+    }
+    link.textContent = item.label;
+    if (item.slug) {
+      link.dataset.slug = item.slug;
+    }
+    link.setAttribute('role', 'listitem');
+    link.style.setProperty('--magnet-tilt', `${getSuggestionTilt(index)}deg`);
+    link.style.setProperty('--magnet-offset', `${getSuggestionOffset(index)}px`);
+    host.appendChild(link);
+  });
+}
+
+function createSuggestionItem(label, baseHref) {
+  if (!label) {
+    return null;
+  }
+  const text = String(label).trim();
+  if (!text) {
+    return null;
+  }
+  const slug = slugify(text);
+  const href = baseHref ? `${baseHref}${encodeURIComponent(slug)}/` : '';
+  return { label: text, slug, href };
+}
+
+function applySuggestionPanel() {
+  const activeId = getActiveTabId();
+  const data = suggestionState[activeId] || suggestionState.guided;
+  const panelEmpty = $('#observation-panel-empty');
+  const panelContent = $('#observation-panel-content');
+  const feelingsHost = $('#suggest-feelings');
+  const needsHost = $('#suggest-needs');
+  const whyEl = $('#why');
+  if (!panelEmpty || !panelContent || !feelingsHost || !needsHost || !whyEl) {
+    return;
+  }
+
+  if (data.showPanel) {
+    panelContent.hidden = false;
+    panelEmpty.hidden = true;
+    renderSuggestionList(feelingsHost, data.feelings, data.feelingsEmptyMessage);
+    renderSuggestionList(needsHost, data.needs, data.needsEmptyMessage);
   } else {
-    why.textContent = 'Pattern magnets highlight related feelings and needs.';
+    panelContent.hidden = true;
+    panelEmpty.hidden = false;
+    panelEmpty.textContent = data.emptyMessage || DEFAULT_EMPTY_MESSAGES[activeId] || DEFAULT_EMPTY_MESSAGES.guided;
+  }
+
+  if (data.why) {
+    whyEl.hidden = false;
+    whyEl.textContent = data.why;
+  } else {
+    whyEl.hidden = true;
+    whyEl.textContent = '';
   }
 }
 
-function renderChipSet(host, items, baseHref, emptyLabel) {
-  host.innerHTML = '';
-  const list = Array.isArray(items) ? items.filter(Boolean) : [];
-  if (!list.length) {
-    if (emptyLabel) {
-      host.appendChild(h('p', 'observation-panel__placeholder', emptyLabel));
-    }
-    return false;
+function setSuggestionState(source, payload = {}) {
+  if (!suggestionState[source]) {
+    return;
   }
-  list.forEach(label => {
-    const el = baseHref ? document.createElement('a') : document.createElement('span');
-    el.className = 'observation-magnet observation-magnet--suggestion';
-    const slug = slugify(label);
-    if (baseHref) {
-      el.href = `${baseHref}${encodeURIComponent(slug)}/`;
-    }
-    el.textContent = label;
-    el.setAttribute('data-slug', slug);
-    host.appendChild(el);
-  });
-  return true;
+  const next = {
+    ...suggestionState[source],
+    ...payload,
+    feelings: Array.isArray(payload.feelings) ? payload.feelings : [],
+    needs: Array.isArray(payload.needs) ? payload.needs : [],
+    feelingsEmptyMessage:
+      typeof payload.feelingsEmptyMessage === 'string'
+        ? payload.feelingsEmptyMessage
+        : suggestionState[source].feelingsEmptyMessage,
+    needsEmptyMessage:
+      typeof payload.needsEmptyMessage === 'string'
+        ? payload.needsEmptyMessage
+        : suggestionState[source].needsEmptyMessage,
+    emptyMessage:
+      typeof payload.emptyMessage === 'string'
+        ? payload.emptyMessage
+        : suggestionState[source].emptyMessage,
+    why: typeof payload.why === 'string' ? payload.why : '',
+    showPanel:
+      typeof payload.showPanel === 'boolean' ? payload.showPanel : suggestionState[source].showPanel,
+  };
+  suggestionState[source] = next;
+  if (getActiveTabId() === source) {
+    applySuggestionPanel();
+  }
 }
+
+window.setObservationSuggestions = function setObservationSuggestions(source, payload) {
+  if (source !== 'guided' && source !== 'free') {
+    return;
+  }
+  setSuggestionState(source, payload);
+};
 
 function render() {
   ensureSelection();
@@ -452,6 +590,7 @@ function activateTab(id) {
   if (id === 'guided') {
     renderSuggestions();
   }
+  applySuggestionPanel();
   document.dispatchEvent(
     new CustomEvent('observations:tab-change', {
       detail: { id },
