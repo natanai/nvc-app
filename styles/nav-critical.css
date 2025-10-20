@@ -241,7 +241,7 @@ button,
 }
 
 .site-nav__board {
-  min-height: clamp(10.875rem, 24vw, 11.25rem);
+  min-height: clamp(11.419rem, 25.2vw, 11.813rem);
   padding: 1.25rem 1.25rem 0.5rem;
   border-radius: clamp(1.5rem, 4vw, 2.75rem);
   border: 3px solid var(--outline);
@@ -262,7 +262,7 @@ button,
 }
 
 .site-nav[data-nav-expanded='true'] .site-nav__board {
-  min-height: clamp(12rem, 28.5vw, 12.375rem);
+  min-height: clamp(12.6rem, 29.925vw, 12.994rem);
   padding-block-end: 1.25rem;
 }
 
@@ -451,11 +451,11 @@ button.site-nav__magnet {
   }
 
   .site-nav__board {
-    min-height: clamp(10.875rem, 39vw, 11.25rem);
+    min-height: clamp(11.419rem, 40.95vw, 11.813rem);
   }
 
   .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(12rem, 45vw, 12rem);
+    min-height: clamp(12.6rem, 47.25vw, 12.6rem);
     padding-block-end: 0.75rem;
   }
 
@@ -487,6 +487,6 @@ button.site-nav__magnet {
 
 @media (max-width: 520px) {
   .site-nav__board {
-    min-height: clamp(10.875rem, 52.5vw, 11.25rem);
+    min-height: clamp(11.419rem, 55.125vw, 11.813rem);
   }
 }
