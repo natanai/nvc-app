@@ -1768,7 +1768,7 @@ body.has-support-journal-open {
   box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 32%, transparent);
 }
 
-.door-card--faux-feelings {
+.door-card--observations {
   --door-fill: #5f65b5;
 }
 
