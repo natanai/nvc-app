@@ -759,37 +759,60 @@ const shuffleMagnets = async (state: InternalState): Promise<void> => {
         [order[i], order[j]] = [order[j], order[i]];
       }
 
-      const startX = LAYOUT_GAP_X;
-      const startY = LAYOUT_GAP_Y;
-      let cursorX = startX;
-      let cursorY = startY;
+      const boardStyles = window.getComputedStyle(state.board);
+      const paddingLeft = parsePx(boardStyles.paddingLeft);
+      const paddingRight = parsePx(boardStyles.paddingRight);
+      const paddingTop = parsePx(boardStyles.paddingTop);
+      const paddingBottom = parsePx(boardStyles.paddingBottom);
+      const layoutWidth = Math.max(width - paddingLeft - paddingRight, 0);
+      let cursorX = 0;
+      let cursorY = 0;
       let rowHeight = 0;
-      let maxBottom = startY;
+      let maxBottom = paddingTop;
 
-      const placements = order.map((magnet) => {
-        const styles = window.getComputedStyle(magnet.element);
-        const marginLeft = parsePx(styles.marginLeft);
-        const marginRight = parsePx(styles.marginRight);
-        const marginTop = parsePx(styles.marginTop);
-        const marginBottom = parsePx(styles.marginBottom);
-        const footprintWidth = magnet.w + marginLeft + marginRight;
-        const footprintHeight = magnet.h + marginTop + marginBottom;
-        if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
-          cursorX = startX;
+      const pending = [...order];
+      const placements: { magnet: InternalMagnetState; x: number; y: number }[] = [];
+
+      while (pending.length) {
+        let placed = false;
+
+        for (let i = 0; i < pending.length; i += 1) {
+          const magnet = pending[i];
+          const styles = window.getComputedStyle(magnet.element);
+          const marginLeft = parsePx(styles.marginLeft);
+          const marginRight = parsePx(styles.marginRight);
+          const marginTop = parsePx(styles.marginTop);
+          const marginBottom = parsePx(styles.marginBottom);
+          const footprintWidth = magnet.w + marginLeft + marginRight;
+          const footprintHeight = magnet.h + marginTop + marginBottom;
+          const fitsInRow = cursorX === 0 || layoutWidth <= 0 || cursorX + footprintWidth <= layoutWidth;
+          if (!fitsInRow && cursorX > 0) {
+            continue;
+          }
+
+          const maxX = Math.max(width - magnet.w, 0);
+          const x = clamp(paddingLeft + cursorX + marginLeft, 0, maxX);
+          const y = paddingTop + cursorY + marginTop;
+
+          cursorX += footprintWidth + LAYOUT_GAP_X;
+          rowHeight = Math.max(rowHeight, footprintHeight);
+          maxBottom = Math.max(maxBottom, y + magnet.h + marginBottom);
+
+          placements.push({ magnet, x, y });
+          pending.splice(i, 1);
+          placed = true;
+          break;
+        }
+
+        if (!placed) {
+          cursorX = 0;
           cursorY += rowHeight + LAYOUT_GAP_Y;
           rowHeight = 0;
         }
-        const maxX = Math.max(width - magnet.w, 0);
-        const x = clamp(cursorX + marginLeft, 0, maxX);
-        const y = cursorY + marginTop;
-        cursorX += footprintWidth + LAYOUT_GAP_X;
-        rowHeight = Math.max(rowHeight, footprintHeight);
-        maxBottom = Math.max(maxBottom, y + magnet.h + marginBottom);
-        return { magnet, x, y };
-      });
+      }
 
       const baseHeight = state.baseHeight || height || 0;
-      const targetHeight = Math.max(baseHeight, maxBottom + BOARD_PADDING);
+      const targetHeight = Math.max(baseHeight, maxBottom + paddingBottom + BOARD_PADDING);
 
       placements.forEach(({ magnet, x, y }) => {
         magnet.x = x;
