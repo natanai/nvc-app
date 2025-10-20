@@ -1,0 +1,67 @@
+name: Observation Cue Sanitizer
+
+on:
+  workflow_dispatch:
+    inputs:
+      regenerate_index:
+        description: 'Rebuild data/index.json before sanitizing (requires latest CSV changes).'
+        required: false
+        default: 'false'
+
+jobs:
+  sanitize:
+    name: Sanitize observation cues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rebuild index dataset
+        if: ${{ github.event.inputs.regenerate_index == 'true' }}
+        run: npm run build:data
+
+      - name: Sanitize observation cues
+        id: sanitize
+        run: |
+          node --input-type=module <<'SCRIPT'
+          import { writeFileSync } from 'node:fs';
+          import { sanitizeObservationCues } from './scripts/sanitizeObservationCues.mjs';
+
+          const result = sanitizeObservationCues();
+          const summary = [
+            `Sanitized observation cues saved to ${result.outputPath}.`,
+            `Kept ${result.kept} rows.`,
+            `Dropped ${result.dropped} rows (faux feelings: ${result.droppedFauxFeelings}, duplicates: ${result.droppedDuplicates}).`,
+            `Changed ${result.changed} rows.`,
+          ].join('\n');
+
+          const summaryContent = `## Observation Cue Sanitizer\n\n${summary}\n`;
+          if (process.env.GITHUB_STEP_SUMMARY) {
+            writeFileSync(process.env.GITHUB_STEP_SUMMARY, summaryContent, { flag: 'a' });
+          }
+
+          if (process.env.GITHUB_OUTPUT) {
+            const outputs = Object.entries(result)
+              .map(([key, value]) => `${key}=${value}`)
+              .join('\n');
+            writeFileSync(process.env.GITHUB_OUTPUT, `${outputs}\n`, { flag: 'a' });
+          }
+
+          console.log(summary);
+          SCRIPT
+
+      - name: Upload sanitized cues
+        uses: actions/upload-artifact@v4
+        with:
+          name: observation-cues-sanitized
+          path: data/observation_cues.sanitized.csv
+          if-no-files-found: error
