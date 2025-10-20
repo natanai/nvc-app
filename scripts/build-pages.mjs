@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+
+import { sanitizeObservationCues } from './sanitizeObservationCues.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
@@ -2043,6 +2045,7 @@ function slugify(value) {
 }
 
 function build() {
+  sanitizeObservationCues();
   renderHome();
   renderCategory('faux-feelings', data.fauxFeelings);
   renderCategory('feelings', data.feelings);

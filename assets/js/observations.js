@@ -76,7 +76,7 @@ function $(sel) {
 async function init() {
   const [catalog, cueRows] = await Promise.all([
     loadCatalog('/data/index.json'),
-    loadCueRows('/data/observation_cues.csv').catch(e => {
+    loadCueRows('/data/observation_cues.sanitized.csv').catch(e => {
       console.error('Failed to load cue map', e);
       return [];
     }),
