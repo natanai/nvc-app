@@ -297,15 +297,29 @@ function renderLintFeedback(lint, catalog) {
   }
 
   const paragraphs = [];
+  const flaggedGroups = Array.isArray(lint.flaggedGroups) ? lint.flaggedGroups : [];
+  const flaggedTokenSet = new Set();
+  flaggedGroups.forEach(group => {
+    (group.matches || []).forEach(token => {
+      if (typeof token === 'string') {
+        flaggedTokenSet.add(token.toLowerCase());
+      }
+    });
+  });
   const evaluationTokens = uniqueStrings([
     ...(lint.evaluationMarkers || []),
     ...(lint.agentiveMarkers || []),
   ]);
-  if (evaluationTokens.length) {
+  const filteredEvaluationTokens = evaluationTokens.filter(token => !flaggedTokenSet.has(token.toLowerCase()));
+  if (filteredEvaluationTokens.length) {
     const p = document.createElement('p');
-    p.textContent = `This reads like an evaluation (${formatList(evaluationTokens)}). Want help rewriting as a camera-test observation?`;
+    p.textContent = `This reads like an evaluation (${formatList(filteredEvaluationTokens)}). Try swapping in a time/place anchor, a quote, a count or measure, or a link to an artifact. Want help rewriting as a camera-test observation?`;
     paragraphs.push(p);
   }
+
+  flaggedGroups.forEach(group => {
+    paragraphs.push(createFlagParagraph(group));
+  });
 
   if (lint.fauxFeelings && lint.fauxFeelings.length) {
     paragraphs.push(
@@ -315,7 +329,7 @@ function renderLintFeedback(lint, catalog) {
         baseHref: '/faux-feelings/',
         singular: 'Noticed faux feeling',
         plural: 'Noticed faux feelings',
-        cta: 'Jump straight to the faux feelings library?'
+        cta: 'Jump straight to the faux feelings library? Try swapping in a time/place anchor, a quote, a count or measure, or a link to an artifact.'
       }),
     );
   }
@@ -355,8 +369,26 @@ function renderLintFeedback(lint, catalog) {
 
   lintBox.classList.remove('hidden');
   lintMsg.replaceChildren(...paragraphs);
-  const showRewrite = evaluationTokens.length || (lint.feelings && lint.feelings.length) || (lint.needs && lint.needs.length);
+  const showRewrite =
+    filteredEvaluationTokens.length ||
+    (lint.feelings && lint.feelings.length) ||
+    (lint.needs && lint.needs.length) ||
+    flaggedGroups.length > 0;
   rewriteBtn.hidden = !showRewrite;
+}
+
+function createFlagParagraph(group) {
+  const p = document.createElement('p');
+  const matches = Array.isArray(group?.matches) ? group.matches : [];
+  const label = typeof group?.label === 'string' && group.label ? group.label : 'Flagged language';
+  const advice = typeof group?.advice === 'string' && group.advice ? group.advice : 'Try swapping in a time/place anchor, a quote, a count or measure, or a link to an artifact.';
+  if (!matches.length) {
+    p.textContent = `${label}: ${advice}`;
+    return p;
+  }
+
+  p.textContent = `Detected ${label.toLowerCase()} (${formatList(matches)}). ${advice}`;
+  return p;
 }
 
 function createCatalogParagraph({ slugs, catalogMap, baseHref, singular, plural, cta }) {
