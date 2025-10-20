@@ -1,4 +1,4 @@
-import { lintObservation, scaffoldRewrite } from '/lib/nvcLint.js';
+import { lintObservation, loadObservationFlags, scaffoldRewrite } from '/lib/nvcLint.js';
 import { loadCueRows, suggestFromObservation } from '/lib/observationSuggest.js';
 
 const FREE_PREVIEW_FALLBACK = 'Your observation will preview here…';
@@ -47,6 +47,7 @@ async function init() {
       console.error('Failed to load cue map', e);
       return [];
     }),
+    loadObservationFlags('/data/observation_flags.csv'),
   ]);
 
   state.catalog = catalog;
@@ -452,12 +453,18 @@ function createFlagParagraph(group) {
   const matches = Array.isArray(group?.matches) ? group.matches : [];
   const label = typeof group?.label === 'string' && group.label ? group.label : 'Flagged language';
   const advice = typeof group?.advice === 'string' && group.advice ? group.advice : FLAG_ADVICE_DEFAULT;
+  const why = typeof group?.why === 'string' ? group.why : '';
+  const summaryParts = [];
+  if (why) summaryParts.push(why);
+  if (advice) summaryParts.push(advice);
+  const summary = summaryParts.length ? summaryParts.join(' ') : advice;
   if (!matches.length) {
-    p.textContent = `${label}: ${advice}`;
+    p.textContent = summary ? `${label}: ${summary}` : label;
     return p;
   }
 
-  p.textContent = `Detected ${label.toLowerCase()} (${formatList(matches)}). ${advice}`;
+  const detail = summary ? ` ${summary}` : '';
+  p.textContent = `Detected ${label.toLowerCase()} (${formatList(matches)}).${detail}`;
   return p;
 }
 
@@ -590,18 +597,32 @@ function buildFlaggedDefinitions(lint) {
   const defs = [];
   const seen = new Set();
 
+  const evaluationReasons = lint.flagReasons?.evaluation || {};
+  const agentiveReasons = lint.flagReasons?.agentive || {};
   const groups = Array.isArray(lint.flaggedGroups) ? lint.flaggedGroups : [];
   groups.forEach(group => {
     const matches = Array.isArray(group?.matches) ? group.matches : [];
     const advice = typeof group?.advice === 'string' && group.advice ? group.advice : FLAG_ADVICE_DEFAULT;
     const label = typeof group?.label === 'string' && group.label ? group.label : 'Flagged language';
-    const reason = `${label}: ${advice}`;
     matches.forEach(match => {
       const token = typeof match === 'string' ? match.trim() : '';
       if (!token) return;
       const key = token.toLowerCase();
       if (seen.has(key)) return;
       seen.add(key);
+      const matchDetail = group.matchReasons?.[key] || {};
+      const reasonParts = [];
+      const groupWhy = typeof group?.why === 'string' ? group.why : '';
+      if (matchDetail.reason) {
+        reasonParts.push(matchDetail.reason);
+      } else if (groupWhy) {
+        reasonParts.push(groupWhy);
+      }
+      const matchAdvice = matchDetail.advice || advice;
+      if (matchAdvice) {
+        reasonParts.push(matchAdvice);
+      }
+      const reason = reasonParts.length ? reasonParts.join(' ') : advice;
       defs.push({ token, reason, className: 'flagged', priority: 2 });
     });
   });
@@ -612,9 +633,20 @@ function buildFlaggedDefinitions(lint) {
     const normalized = token.toLowerCase();
     if (seen.has(normalized)) return;
     seen.add(normalized);
+    const detail = evaluationReasons[normalized] || agentiveReasons[normalized] || {};
+    const reasonParts = [];
+    if (detail.reason) {
+      reasonParts.push(detail.reason);
+    } else {
+      reasonParts.push('Reads like an evaluation.');
+    }
+    const advice = detail.advice || FLAG_ADVICE_DEFAULT;
+    if (advice) {
+      reasonParts.push(advice);
+    }
     defs.push({
       token,
-      reason: `Reads like an evaluation. ${FLAG_ADVICE_DEFAULT}`,
+      reason: reasonParts.join(' '),
       className: 'flagged',
       priority: 2,
     });
