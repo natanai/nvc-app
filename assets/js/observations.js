@@ -387,10 +387,10 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
   activeRows.forEach(row => {
     const suggestion = createCueSuggestion(row, true);
     if (!suggestion) return;
-    const cueKey = suggestion.cue;
-    if (seen.has(cueKey)) return;
+    const key = getCueSuggestionKey(suggestion);
+    if (seen.has(key)) return;
     items.push(suggestion);
-    seen.add(cueKey);
+    seen.add(key);
   });
   const activeCount = items.length;
   if (!Array.isArray(cues) || items.length >= maxItems) {
@@ -399,9 +399,10 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
 
   if (!items.some(item => item.active)) {
     const partial = findPartialCueMatch(text, cues);
-    if (partial && !seen.has(partial.cue)) {
+    const key = getCueSuggestionKey(partial);
+    if (partial && !seen.has(key)) {
       items.unshift(partial);
-      seen.add(partial.cue);
+      seen.add(key);
     }
   }
 
@@ -416,14 +417,14 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
       if (items.length >= maxItems) break;
       const suggestion = createCueSuggestion(row);
       if (!suggestion) continue;
-      const cue = suggestion.cue;
-      if (seen.has(cue)) continue;
+      const key = getCueSuggestionKey(suggestion);
+      if (seen.has(key)) continue;
       const hints = getCuePatternHints(row).map(hint => hint.toLowerCase());
       if (!hints.length) continue;
       const matchesFragment = fragments.some(fragment => hints.some(hint => hint.includes(fragment)));
       if (matchesFragment) {
         items.push({ ...suggestion, active: false });
-        seen.add(cue);
+        seen.add(key);
       }
     }
   }
@@ -435,8 +436,8 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
         if (items.length >= maxItems) break;
         const suggestion = createCueSuggestion(row);
         if (!suggestion) continue;
-        const cue = suggestion.cue;
-        if (seen.has(cue)) continue;
+        const key = getCueSuggestionKey(suggestion);
+        if (seen.has(key)) continue;
         const hints = getCuePatternHints(row);
         if (!hints.length) continue;
         let hasOverlap = false;
@@ -452,13 +453,29 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
         }
         if (hasOverlap) {
           items.push({ ...suggestion, active: false });
-          seen.add(cue);
+          seen.add(key);
         }
       }
     }
   }
 
   return { items: items.slice(0, maxItems), activeCount };
+}
+
+function getCueSuggestionKey(suggestion) {
+  if (!suggestion) {
+    return '';
+  }
+  const phrase = typeof suggestion.phrase === 'string' ? suggestion.phrase.toLowerCase().replace(/\s+/g, ' ').trim() : '';
+  if (phrase) {
+    return `phrase:${phrase}`;
+  }
+  const label = typeof suggestion.label === 'string' ? suggestion.label.toLowerCase().replace(/\s+/g, ' ').trim() : '';
+  if (label) {
+    return `label:${label}`;
+  }
+  const cue = typeof suggestion.cue === 'string' ? suggestion.cue.toLowerCase().trim() : '';
+  return cue ? `cue:${cue}` : '';
 }
 
 function buildCueFragments(text) {
