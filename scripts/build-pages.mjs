@@ -874,7 +874,6 @@ function renderNav(basePath, activeNav, options = {}) {
 
   const defaultSecondaryLinks = [
     { key: 'observations', href: 'observations/', label: 'Observations' },
-    { key: 'faux-feelings', href: 'faux-feelings/', label: 'Faux feelings' },
     { key: 'feelings', href: 'feelings/', label: 'Feelings' },
     { key: 'needs', href: 'needs/', label: 'Needs' },
     {
