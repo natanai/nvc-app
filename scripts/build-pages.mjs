@@ -1170,11 +1170,11 @@ function renderStrategyForm({
 function renderHome() {
   const basePath = basePathFromDepth(0);
   const iconMap = {
-    'faux-feelings': `${basePath}icons/door-faux-feelings.svg`,
+    observations: `${basePath}icons/door-observations.svg`,
     feelings: `${basePath}icons/door-feelings.svg`,
     needs: `${basePath}icons/door-needs.svg`,
   };
-  const cards = ['faux-feelings', 'feelings', 'needs']
+  const cards = ['observations', 'feelings', 'needs']
     .map((type) => {
       const label = type
         .replace(/-/g, ' ')
