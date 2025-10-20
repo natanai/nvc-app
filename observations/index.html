@@ -240,1601 +240,272 @@
         }
       })();
     </script>
-    <style>:root {
-  --plum: #74569b;
-  --lavender: #ede4ff;
-  --ink: #1f1230;
-  --ink-soft: #392351;
-  --rose: #ffb3cb;
-  --mint: #96fbc7;
-  --gold: #f7ffae;
-  --sky: #d3f1ff;
-  --peach: #ffdfc9;
-  --outline: #12081f;
-  --shadow: color-mix(in srgb, var(--outline) 55%, transparent);
-  --nav-hover-shadow: color-mix(in srgb, var(--outline) 45%, transparent);
-  --nav-active-inset-shadow: color-mix(in srgb, var(--outline) 34%, transparent);
-  --nav-active-lift-shadow: color-mix(in srgb, var(--outline) 62%, transparent);
-  --btn-bg: #ffb3cb;
-  --btn-fg: #111111;
-  --chip-bg: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
-  --chip-fg: #111111;
-  --corner-scale: 1;
-  --radius-xs: calc(var(--corner-scale) * 8px);
-  --radius-sm: calc(var(--corner-scale) * 10px);
-  --radius-md: calc(var(--corner-scale) * 12px);
-  --radius-md-plus: calc(var(--corner-scale) * 14px);
-  --radius-lg: calc(var(--corner-scale) * 16px);
-  --radius-xl: calc(var(--corner-scale) * 18px);
-  --radius-2xl: calc(var(--corner-scale) * 20px);
-  --radius-3xl: calc(var(--corner-scale) * 24px);
-  --radius-4xl: calc(var(--corner-scale) * 26px);
-  --radius-pill: calc(var(--corner-scale) * 999px);
-  --radius-circle: calc(var(--corner-scale) * 50%);
-  --font-body: 'Atkinson Hyperlegible', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: 'Manrope', 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
-  font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 1.55;
-  color: var(--ink);
-}
-
-html {
-  scrollbar-gutter: stable;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--plum) 65%, #000 5%) 0%,
-      color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
-      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
-  background-attachment: fixed;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(circle at top left,
-      color-mix(in srgb, var(--lavender) 60%, transparent) 0 30%, transparent 60%),
-    linear-gradient(135deg, color-mix(in srgb, var(--plum) 75%, #000 5%) 0%,
-      color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
-      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
-  color: var(--ink);
-  display: flex;
-  justify-content: center;
-  padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2.5rem);
-  font-family: var(--font-body);
-}
-
-a,
-button,
-[role='button'],
-.chip,
-.segmented > button {
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-}
-
-.control,
-button,
-.chip,
-.segmented,
-.segmented > button {
-  min-width: 44px;
-  min-height: 44px;
-}
-
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 12px;
-}
-
-.segmented {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  padding: 0.4rem;
-  border-radius: var(--radius-pill);
-  border: 3px solid var(--outline);
-  background: var(--chip-bg);
-  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-}
-
-.segmented > button {
-  border: 2px solid transparent;
-  background: transparent;
-  color: var(--chip-fg);
-  font-family: var(--font-body);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 0.55rem 1.1rem;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  min-width: 44px;
-  min-height: 44px;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.segmented > button:hover {
-  background: color-mix(in srgb, var(--chip-bg) 72%, var(--mint) 28%);
-}
-
-.segmented > button[aria-checked='true'] {
-  background: color-mix(in srgb, var(--chip-bg) 45%, var(--mint) 55%);
-  border-color: var(--outline);
-  box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-}
-
-.segmented > button:focus-visible {
-  outline: 3px dashed var(--outline);
-  outline-offset: 2px;
-}
-
-.chip {
-  border: 3px solid var(--outline);
-  border-radius: var(--radius-pill);
-  background: var(--chip-bg);
-  color: var(--chip-fg);
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3;
-  padding: 0.55rem 1.1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-  min-width: 44px;
-  min-height: 44px;
-  gap: 0.35rem;
-}
-
-.chip:hover {
-  background: color-mix(in srgb, var(--chip-bg) 60%, var(--mint) 40%);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-}
-
-.chip:focus-visible {
-  outline: 3px dashed var(--outline);
-  outline-offset: 2px;
-}
-
-.chip:active {
-  transform: translateY(1px);
-  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-}
-
-.chip--ghost {
-  background: transparent;
-  border-style: dashed;
-  color: color-mix(in srgb, var(--chip-fg) 65%, transparent);
-  box-shadow: none;
-  cursor: default;
-}
-
-.chip--ghost:hover,
-.chip--ghost:focus-visible,
-.chip--ghost:active {
-  background: transparent;
-  transform: none;
-  box-shadow: none;
-  outline: none;
-}
-
-.chip-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: flex-start;
-  margin-top: 0.5rem;
-}
-
-.chip-group .chip--ghost {
-  pointer-events: none;
-}
-
-.chip-list {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  vertical-align: middle;
-}
-
-.chip--stacked {
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 0.25rem;
-  width: min(100%, 320px);
-  flex: 1 1 260px;
-}
-
-.chip__title {
-  font-weight: 700;
-}
-
-.chip__note {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-}
-
-.page-wrapper {
-  width: min(960px, 100%);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.site-nav {
-  display: grid;
-  gap: 1rem;
-}
-
-.site-nav__board-wrapper {
-  position: relative;
-  padding-top: 0.75rem;
-}
-
-.site-nav__board {
-  min-height: clamp(10.875rem, 24vw, 11.25rem);
-  padding: 1.25rem 1.25rem 0.5rem;
-  border-radius: clamp(1.5rem, 4vw, 2.75rem);
-  border: 3px solid var(--outline);
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent);
-  position: relative;
-  overflow: hidden;
-}
-
-.site-nav[data-layout-invalid='1'] .site-nav__board {
-  border-width: 1px;
-  border-style: dashed;
-  border-color: #000;
-}
-
-.site-nav[data-magnet-active='1'][data-layout-invalid='1'] .magnet-play-toggle {
-  opacity: 0.5;
-}
-
-.site-nav[data-nav-expanded='true'] .site-nav__board {
-  min-height: clamp(12rem, 28.5vw, 12.375rem);
-  padding-block-end: 1.25rem;
-}
-
-.site-nav__board-wrapper .magnet-play-toggle {
-  top: -1.2rem;
-  right: 0.55rem;
-}
-
-.site-nav__magnet {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1rem;
-  border: 3px solid var(--outline);
-  border-radius: clamp(2.5rem, 8vw, 3.75rem);
-  background: color-mix(in srgb, var(--lavender) 65%, #fff 35%);
-  font-family: 'Manrope', 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
-  font-size: 0.92rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink);
-  min-height: 44px;
-  white-space: nowrap;
-  position: relative;
-  box-shadow: none;
-  filter: drop-shadow(0 12px 0 var(--shadow));
-  transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease, opacity 0.18s ease;
-  --nav-active-bg: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--sky) 88%, #fff 12%) 0%,
-    color-mix(in srgb, var(--sky) 70%, var(--lavender) 30%) 100%
-  );
-  --nav-active-border: color-mix(in srgb, var(--outline) 92%, transparent);
-  --nav-active-text: color-mix(in srgb, var(--outline) 85%, var(--ink) 15%);
-  -webkit-tap-highlight-color: transparent;
-  tap-highlight-color: transparent;
-}
-
-.site-nav__magnet-label {
-  display: inline-flex;
-  align-items: center;
-}
-
-.site-nav__magnet-icon {
-  width: 1.4rem;
-  height: 1.4rem;
-  display: block;
-  flex-shrink: 0;
-}
-
-.site-nav__magnet:focus-visible {
-  outline: none;
-}
-
-.site-nav__magnet:hover,
-.site-nav__magnet:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: none;
-  filter: drop-shadow(0 12px 0 var(--nav-hover-shadow));
-}
-
-.site-nav__magnet[aria-current='page'] {
-  background: var(--nav-active-bg);
-  border-color: var(--nav-active-border);
-  box-shadow: inset 0 -10px 0 var(--nav-active-inset-shadow);
-  color: var(--nav-active-text, var(--outline));
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  transform: translateY(-4px);
-  filter: drop-shadow(0 12px 0 var(--nav-active-lift-shadow));
-}
-
-.site-nav__magnet[aria-current='page']:hover,
-.site-nav__magnet[aria-current='page']:focus-visible {
-  filter: drop-shadow(0 12px 0 color-mix(in srgb, var(--outline) 66%, transparent));
-}
-
-.site-nav__magnet--inventory {
-  --nav-active-bg: color-mix(in srgb, var(--mint) 78%, #fff 22%);
-  --nav-active-border: color-mix(in srgb, var(--outline) 94%, transparent);
-  --nav-active-text: color-mix(in srgb, var(--outline) 78%, var(--ink) 22%);
-  letter-spacing: 0.12em;
-  justify-content: center;
-}
-
-.site-nav__magnet--inventory .site-nav__count {
-  margin-left: 0.4rem;
-}
-
-.site-nav__magnet[aria-disabled='true'] {
-  pointer-events: none;
-}
-
-.site-nav__magnet[data-nav-hidden='true'] {
-  visibility: hidden;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.site-nav__magnet[aria-expanded='true'] .site-nav__magnet-glyph {
-  transform: rotate(45deg);
-}
-
-button.site-nav__magnet {
-  font: inherit;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.site-nav__magnet-glyph {
-  width: 1.4rem;
-  height: 1.4rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Manrope', 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
-  font-size: 1.7rem;
-  line-height: 1;
-  color: var(--outline);
-  text-shadow: 2px 2px 0 color-mix(in srgb, #ffffff 70%, transparent);
-  transition: transform 0.22s ease;
-  pointer-events: none;
-  flex-shrink: 0;
-}
-
-.site-nav__magnet--home,
-.site-nav__magnet--customizer {
-  padding: 0.45rem;
-  gap: 0;
-  justify-content: center;
-  min-width: 0;
-}
-
-.site-nav__magnet--home {
-  background: color-mix(in srgb, var(--rose) 78%, #fff 22%);
-}
-
-.site-nav__magnet--customizer {
-  background: color-mix(in srgb, var(--lavender) 70%, #fff 30%);
-}
-
-.site-nav__magnet--journal {
-  gap: 0.55rem;
-  background: color-mix(in srgb, var(--peach) 78%, #fff 22%);
-}
-
-.site-nav__magnet--journal::before {
-  content: '';
-  width: 1.6rem;
-  height: 1.6rem;
-  border-radius: 999px;
-  border: 2px solid color-mix(in srgb, var(--plum) 40%, var(--ink) 60%);
-  background: color-mix(in srgb, var(--peach) 70%, #ffffff 30%);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--plum) 18%, transparent);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23462a4b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3H3v6M3 3l7 7M15 21h6v-6M21 21l-7-7M15 3h6v6M21 3l-7 7M9 21H3v-6M3 21l7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 70%;
-  flex-shrink: 0;
-}
-
-.site-nav__journal {
-  position: relative;
-}
-
-.site-nav__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.5rem;
-  padding: 0.2rem 0.45rem;
-  border-radius: 999px;
-  background: var(--ink);
-  color: #fff;
-  font-size: 0.7rem;
-}
-
-@media (max-width: 640px) {
-  .site-nav__magnet {
-    font-size: 0.8rem;
-    letter-spacing: 0.065em;
-    padding: 0.45rem 0.75rem;
-    min-height: 40px;
-    gap: 0.32rem;
-  }
-
-  .site-nav__board {
-    min-height: clamp(10.875rem, 39vw, 11.25rem);
-  }
-
-  .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(12rem, 45vw, 12rem);
-    padding-block-end: 0.75rem;
-  }
-
-  .site-nav__magnet-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .site-nav__magnet-glyph {
-    width: 1.2rem;
-    height: 1.2rem;
-    font-size: 1.5rem;
-  }
-
-  .site-nav__magnet--journal::before {
-    width: 1.45rem;
-    height: 1.45rem;
-  }
-
-  .site-nav__magnet--home,
-  .site-nav__magnet--customizer {
-    padding: 0.35rem;
-  }
-
-  .site-nav__magnet--inventory {
-    letter-spacing: 0.095em;
-  }
-}
-
-@media (max-width: 520px) {
-  .site-nav__board {
-    min-height: clamp(10.875rem, 52.5vw, 11.25rem);
-  }
-}
-  .observations-page {
-    --observations-card-bg: color-mix(in srgb, #ffffff 82%, var(--gold) 18%);
-    --observations-scrap-shadow: color-mix(in srgb, var(--outline) 18%, transparent);
-  }
-
-  .observations-page .observation-collage {
-    display: grid;
-    gap: clamp(0.85rem, 3vw, 1.75rem);
-    margin: clamp(1.35rem, 4vw, 2.75rem) 0 clamp(1.35rem, 4vw, 2.5rem);
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
-  }
-
-  .observations-page .scrap-paper {
-    position: relative;
-    padding: clamp(1.25rem, 3vw, 2rem) clamp(1.4rem, 4vw, 2.6rem);
-    border-radius: var(--radius-4xl) var(--radius-xl) var(--radius-3xl) var(--radius-lg);
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.68) 40%, rgba(255, 249, 228, 0.92) 100%);
-    border: 2px dashed color-mix(in srgb, var(--outline) 35%, transparent);
-    box-shadow: 0 18px 0 var(--observations-scrap-shadow);
-    transform: rotate(-0.7deg);
-    isolation: isolate;
-    overflow: hidden;
-  }
-
-  .observations-page .scrap-paper::before {
-    content: '';
-    position: absolute;
-    inset: -18px -20px auto;
-    height: 32px;
-    background: repeating-linear-gradient(
-      135deg,
-      transparent 0 14px,
-      color-mix(in srgb, var(--outline) 26%, transparent) 14px 16px
-    );
-    opacity: 0.28;
-    transform: rotate(-2deg);
-    pointer-events: none;
-  }
-
-  .observations-page .scrap-paper::after {
-    content: '';
-    position: absolute;
-    inset: auto -18px -18px;
-    height: 28px;
-    background: repeating-linear-gradient(
-      -155deg,
-      transparent 0 12px,
-      color-mix(in srgb, var(--outline) 22%, transparent) 12px 13px
-    );
-    opacity: 0.22;
-    transform: rotate(1.2deg);
-    pointer-events: none;
-  }
-
-  .observations-page .scrap-paper--secondary {
-    background: linear-gradient(150deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 255, 249, 0.95) 65%, rgba(255, 255, 255, 0.86) 100%);
-    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-    border-style: solid;
-    transform: rotate(0.8deg);
-  }
-
-  .observations-page .scrap-paper__title {
-    margin: 0 0 0.35rem;
-    font-family: var(--font-display);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: clamp(0.85rem, 0.9vw + 0.75rem, 1rem);
-    color: color-mix(in srgb, var(--ink) 80%, #ffffff 20%);
-  }
-
-  .observations-page .scrap-paper__body {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 2.25vw, 1.4rem);
-    letter-spacing: 0.015em;
-    line-height: 1.6;
-    min-height: 3.5rem;
-  }
-
-  .observations-page .scrap-note {
-    margin: 0;
-    font-size: 0.95rem;
-    color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
-    max-width: 64ch;
-  }
-
-  .observations-page .observations-body {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(1rem, 3vw, 2rem);
-  }
-
-  .observations-page .observation-panel__toggle {
-    display: none;
-  }
-
-  .observations-page .observation-panel__toggle-meta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-left: auto;
-  }
-
-  .observations-page .observation-panel__toggle-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 2.1rem;
-    padding: 0.1rem 0.5rem 0.2rem;
-    border-radius: var(--radius-pill);
-    background: color-mix(in srgb, var(--rose) 75%, #ffffff 25%);
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    box-shadow: 0 6px 0 color-mix(in srgb, var(--rose) 30%, transparent);
-    transform: scale(0.8);
-    opacity: 0;
-    transition: transform 0.22s ease, opacity 0.22s ease;
-  }
-
-  .observations-page .observation-panel__toggle-badge:not([hidden]) {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .observations-page .tab-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
-    margin: 0;
-  }
-
-  .observations-page .tab-button {
-    border-radius: var(--radius-pill);
-    border: 3px solid var(--outline);
-    background: color-mix(in srgb, var(--observations-card-bg) 80%, var(--mint) 20%);
-    color: var(--ink);
-    font: inherit;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 0.55rem 1.3rem;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    min-height: 44px;
-  }
-
-  .observations-page .tab-button.tab-button--active {
-    background: var(--ink);
-    color: #ffffff;
-    border-color: var(--ink);
-    box-shadow: inset 0 -6px 0 color-mix(in srgb, #000 18%, transparent);
-  }
-
-  .observations-page .tab-button:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 3px;
-  }
-
-  .observations-page .hidden {
-    display: none !important;
-  }
-
-  .observations-page .tab-panel {
-    display: block;
-  }
-
-  .observations-page .tab-panel.hidden {
-    display: none;
-  }
-
-  .observations-page .grid {
-    display: grid;
-    gap: clamp(1rem, 3vw, 1.5rem);
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 900px) {
-    .observations-page .grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  .observations-page .card {
-    position: relative;
-    border: 0;
-    border-radius: var(--radius-3xl);
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.94) 0%,
-      color-mix(in srgb, #ffffff 82%, var(--observations-card-bg) 18%) 100%
-    );
-    padding: clamp(1rem, 2.5vw, 1.75rem);
-    box-shadow: 0 16px 0 var(--observations-scrap-shadow);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(0.6rem, 2vw, 0.95rem);
-    isolation: isolate;
-  }
-
-  .observations-page .card::before {
-    content: '';
-    position: absolute;
-    top: clamp(0.45rem, 3vw, 0.75rem);
-    right: clamp(0.6rem, 4vw, 1rem);
-    width: clamp(2.5rem, 10vw, 3.75rem);
-    height: clamp(0.65rem, 3vw, 0.9rem);
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
-    border-radius: 4px;
-    border: 1px solid color-mix(in srgb, var(--outline) 30%, transparent);
-    box-shadow: 0 6px 10px color-mix(in srgb, var(--outline) 18%, transparent);
-    transform: rotate(4deg);
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  .observations-page .card::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: clamp(0.75rem, 3vw, 1.25rem);
-    width: calc(100% - clamp(1.5rem, 6vw, 2.5rem));
-    height: 12px;
-    background: radial-gradient(circle at top, color-mix(in srgb, var(--outline) 25%, transparent), transparent 70%);
-    opacity: 0.35;
-    filter: blur(0.6px);
-    pointer-events: none;
-  }
-
-  .observations-page .card .card::before,
-  .observations-page .card .card::after {
-    content: none;
-  }
-
-  .observations-page .h2 {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-    font-weight: 700;
-    margin: 0;
-    letter-spacing: 0.01em;
-  }
-
-  .observations-page .label {
-    font-weight: 700;
-    letter-spacing: 0.015em;
-    margin-top: 0.25rem;
-  }
-
-  .observations-page .hint {
-    font-size: 0.95rem;
-    color: var(--ink-soft);
-    margin: 0;
-  }
-
-  .observations-page input,
-  .observations-page textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, #ffffff 94%, var(--observations-card-bg) 6%);
-    box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--outline) 10%, transparent);
-    font: inherit;
-    color: inherit;
-  }
-
-  .observations-page textarea {
-    min-height: 8rem;
-    resize: vertical;
-  }
-
-  .observations-page .observation-family-picker {
-    position: relative;
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .observations-page .observation-family-picker-card--open {
-    z-index: 25;
-  }
-
-  .observations-page .observation-family-picker__button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, #ffffff 94%, var(--observations-card-bg) 6%);
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-    color: inherit;
-    font: inherit;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    text-align: left;
-    appearance: none;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .observations-page .observation-family-picker__button:hover,
-  .observations-page .observation-family-picker__button:focus-visible {
-    background: color-mix(in srgb, var(--ink) 6%, #ffffff 94%);
-    border-color: color-mix(in srgb, var(--outline) 85%, transparent);
-  }
-
-  .observations-page .observation-family-picker__button:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 3px;
-  }
-
-  .observations-page .observation-family-picker__button[disabled] {
-    cursor: not-allowed;
-    opacity: 0.7;
-    box-shadow: none;
-  }
-
-  .observations-page .observation-family-picker__chevron {
-    font-size: 1.15em;
-    line-height: 1;
-  }
-
-  .observations-page .observation-family-picker__menu {
-    position: absolute;
-    top: calc(100% + 0.35rem);
-    left: 0;
-    right: 0;
-    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, #ffffff 94%, var(--observations-card-bg) 6%);
-    box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-    max-height: min(22rem, 60vh);
-    overflow-y: auto;
-    padding: 0.35rem 0;
-    z-index: 15;
-  }
-
-  .observations-page .observation-family-picker__menu[hidden] {
-    display: none;
-  }
-
-  .observations-page .observation-family-picker__options {
-    display: grid;
-    gap: 0.35rem;
-    padding: 0.4rem 0.65rem 0.75rem;
-  }
-
-  .observations-page .observation-family-picker__options .observation-magnet {
-    width: 100%;
-    text-align: left;
-  }
-
-  .observations-page .observation-family-picker__empty {
-    margin: 0;
-  }
-
-  .observations-page .observation-search__faux {
-    margin: -0.25rem 0 0;
-  }
-
-  .observations-page .observation-search__faux[hidden] {
-    display: none !important;
-  }
-
-  .observations-page .observation-search__faux-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    border: 2px solid color-mix(in srgb, var(--outline) 65%, transparent);
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--observations-card-bg) 30%);
-    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 15%, transparent);
-    font-weight: 650;
-    text-decoration: none;
-    color: color-mix(in srgb, var(--ink) 80%, #ffffff 20%);
-    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-    position: relative;
-    top: -0.05rem;
-  }
-
-  .observations-page .observation-search__faux-button:hover,
-  .observations-page .observation-search__faux-button:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 76%, var(--observations-card-bg) 24%);
-  }
-
-  .observations-page .observation-search__faux-button:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 3px;
-  }
-
-  .observations-page .observation-collage__preview {
-    display: grid;
-    gap: clamp(0.6rem, 2vw, 1rem);
-  }
-
-  .observations-page .observation-panel {
-    padding: clamp(1.1rem, 3vw, 1.75rem);
-    border-radius: var(--radius-3xl);
-    border: 3px solid color-mix(in srgb, var(--outline) 80%, transparent);
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 64%, var(--observations-card-bg) 36%);
-    box-shadow: 0 20px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-    display: grid;
-    gap: clamp(1rem, 2vw, 1.35rem);
-    position: relative;
-    z-index: 1;
-  }
-
-  .observations-page .observation-panel__mobile-header {
-    display: none;
-  }
-
-  .observations-page .observation-panel__close {
-    appearance: none;
-    border: 0;
-    background: transparent;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .observations-page .observation-panel__close:hover,
-  .observations-page .observation-panel__close:focus-visible {
-    color: color-mix(in srgb, var(--ink) 80%, var(--rose) 20%);
-  }
-
-  .observations-page .observation-panel__close:focus-visible {
-    outline: 3px dashed var(--outline);
-    border-radius: var(--radius-full, 999px);
-    outline-offset: 3px;
-  }
-
-  .observations-page .observation-panel__scrim {
-    position: fixed;
-    inset: 0;
-    background: color-mix(in srgb, var(--ink) 40%, transparent);
-    backdrop-filter: blur(2px);
-    z-index: 8;
-    cursor: pointer;
-  }
-
-  .observations-page .observation-panel__empty {
-    margin: 0;
-    font-size: 0.95rem;
-    color: color-mix(in srgb, var(--ink-soft) 80%, #ffffff 20%);
-  }
-
-  .observations-page .observation-panel__content {
-    display: grid;
-    gap: clamp(0.85rem, 2vw, 1.2rem);
-  }
-
-  .observations-page .observation-panel__content[hidden] {
-    display: none;
-  }
-
-  .observations-page .observation-panel__group {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .observations-page .observation-panel__heading {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(0.95rem, 1.1vw + 0.75rem, 1.15rem);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--ink) 75%, #ffffff 25%);
-  }
-
-  .observations-page .observation-panel__why {
-    margin: 0;
-    color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
-  }
-
-  .observations-page .observation-panel__placeholder {
-    margin: 0;
-    font-size: 0.95rem;
-    color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
-  }
-
-  .observations-page .observation-panel__group--magnet {
-    gap: 0.6rem;
-  }
-
-  .observations-page .observation-panel__magnet-wrapper {
-    position: relative;
-  }
-
-  .observations-page .observation-panel__magnet-board {
-    padding: clamp(0.85rem, 2vw, 1.25rem);
-    border-radius: var(--radius-3xl);
-    border: 3px solid color-mix(in srgb, var(--outline) 75%, transparent);
-    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, var(--sky) 30%);
-  }
-
-  .observations-page .observation-panel__magnet-board--feelings {
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 72%, var(--rose) 28%);
-  }
-
-  .observations-page .observation-panel__magnet-board--needs {
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, var(--mint) 30%);
-  }
-
-  .observations-page .observation-panel__magnet-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(0.55rem, 1.4vw, 0.85rem);
-  }
-
-  .observations-page .observation-panel__magnet-grid .observation-panel__placeholder {
-    flex: 1 1 100%;
-    text-align: center;
-  }
-
-  .observations-page .observation-panel__magnet {
-    justify-content: center;
-    text-align: center;
-    min-width: clamp(8.5rem, 18vw, 12.5rem);
-    background: color-mix(in srgb, #ffffff 72%, var(--lavender) 28%);
-    color: color-mix(in srgb, var(--ink) 85%, #ffffff 15%);
-    box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-    text-decoration: none;
-    transform: rotate(var(--magnet-tilt, 0deg)) translateY(var(--magnet-offset, 0px));
-    transition: transform 0.18s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .observations-page .observation-panel__magnet:hover,
-  .observations-page .observation-panel__magnet:focus-visible {
-    transform: rotate(var(--magnet-tilt, 0deg))
-      translateY(calc(var(--magnet-offset, 0px) - 6px));
-    box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 28%, transparent);
-  }
-
-  .observations-page .observation-panel__magnet:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 4px;
-  }
-
-  .observations-page .observation-collage__cta {
-    margin-top: clamp(0.75rem, 2vw, 1.25rem);
-    display: grid;
-    gap: 0.4rem;
-  }
-
-  .observations-page .observation-collage__cta .support-actions {
-    margin-top: 0.25rem;
-  }
-
-  .observations-page .observation-magnet-shelf {
-    padding: clamp(0.75rem, 2vw, 1.2rem);
-    border-radius: var(--radius-3xl);
-    border: 3px solid color-mix(in srgb, var(--outline) 75%, transparent);
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 68%, var(--observations-card-bg) 32%);
-    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-  }
-
-  .observations-page .observation-magnet-shelf--families {
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, var(--sky) 30%);
-  }
-
-  .observations-page .observation-magnet-shelf--patterns {
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 66%, var(--plum) 34%);
-  }
-
-  .observations-page .observation-magnet-grid {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .observations-page .observation-magnet-grid--families {
-    grid-template-columns: repeat(auto-fit, minmax(8.25rem, 1fr));
-  }
-
-  .observations-page .observation-magnet-grid--patterns {
-    grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
-  }
-
-  .observations-page .observation-magnet {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 2.3rem;
-    padding: 0.45rem 0.95rem;
-    border-radius: var(--radius-pill);
-    border: 2px solid color-mix(in srgb, var(--outline) 92%, transparent);
-    background: color-mix(in srgb, #ffffff 40%, var(--ink-soft) 60%);
-    color: color-mix(in srgb, var(--ink) 90%, #ffffff 10%);
-    font: inherit;
-    font-weight: 700;
-    letter-spacing: 0.015em;
-    text-decoration: none;
-    box-shadow: 0 9px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-    transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
-    cursor: pointer;
-  }
-
-  .observations-page .observation-magnet--family {
-    justify-content: center;
-    text-align: center;
-  }
-
-  .observations-page .observation-magnet--pattern {
-    justify-content: flex-start;
-    text-align: left;
-  }
-
-  .observations-page .observation-magnet:hover:not(.observation-magnet--active),
-  .observations-page .observation-magnet:focus-visible:not(.observation-magnet--active) {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-  }
-
-  .observations-page .observation-magnet:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 4px;
-  }
-
-  .observations-page .observation-magnet--active {
-    background: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
-    color: #ffffff;
-    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 40%, transparent);
-    transform: translateY(4px);
-  }
-
-  .observations-page .observation-magnet--active:focus-visible {
-    outline-color: color-mix(in srgb, #ffffff 70%, var(--outline) 30%);
-  }
-
-  @media (max-width: 640px) {
-    .observations-page .observation-magnet-shelf {
-      padding: clamp(0.65rem, 2vw, 0.95rem);
-    }
-
-    .observations-page .observation-magnet-grid--families,
-    .observations-page .observation-magnet-grid--patterns {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-
-  .observations-page .observation-free__suggest-hint {
-    margin: 0 0 0.75rem;
-    color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
-  }
-
-  @media (max-width: 820px) {
-    body.observation-panel-open {
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    .observations-page .observation-collage {
-      position: relative;
-      padding-bottom: 0.5rem;
-    }
-
-    .observations-page .observation-panel__scrim[hidden] {
-      display: none !important;
-    }
-
-    .observations-page .observation-panel__toggle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      border-radius: var(--radius-2xl);
-      border: 2px solid color-mix(in srgb, var(--outline) 60%, transparent);
-      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 78%, var(--observations-card-bg) 22%);
-      color: color-mix(in srgb, var(--ink) 85%, #fff 15%);
-      font: inherit;
-      font-weight: 600;
-      padding: 0.6rem 1rem;
-      cursor: pointer;
-      position: sticky;
-      top: -0.25rem;
-      z-index: 7;
-      box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-    }
-
-    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] {
-      border-color: color-mix(in srgb, var(--rose) 55%, transparent);
-      box-shadow: 0 10px 0 color-mix(in srgb, var(--rose) 34%, transparent);
-      background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--rose) 30%);
-    }
-
-    .observations-page .observation-panel__toggle:focus-visible {
-      outline: 3px dashed var(--outline);
-      outline-offset: 3px;
-    }
-
-    .observations-page .observation-panel__toggle-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.1rem;
-      height: 2.1rem;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--mint) 60%, rgba(255, 255, 255, 0.4) 40%);
-      font-size: 1.25rem;
-      box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-      flex-shrink: 0;
-      transition: transform 0.25s ease;
-    }
-
-    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] .observation-panel__toggle-icon {
-      background: color-mix(in srgb, var(--rose) 70%, rgba(255, 255, 255, 0.3) 30%);
-      color: #ffffff;
-      animation: observation-panel-toggle-pulse 1.6s ease-in-out infinite;
-    }
-
-    .observations-page .observation-panel__toggle-label {
-      font-size: 0.95rem;
-    }
-
-    .observations-page .observation-panel__toggle-status {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: color-mix(in srgb, var(--ink-soft) 80%, #fff 20%);
-    }
-
-    .observations-page .observation-panel__toggle[data-panel-open='true'] .observation-panel__toggle-status {
-      color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
-    }
-
-    .observations-page .observation-panel__toggle-meta {
-      min-width: max(5.25rem, 30%);
-      justify-content: flex-end;
-    }
-
-    .observations-page .observation-panel {
-      border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: 0;
-      max-height: min(80vh, 520px);
-      transform: translateY(calc(100% + 1.5rem));
-      opacity: 0;
-      pointer-events: none;
-      transition: transform 0.28s ease, opacity 0.28s ease;
-      z-index: 9;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-    }
-
-    .observations-page .observation-panel[data-mobile-open='true'] {
-      transform: translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .observations-page .observation-panel__mobile-header {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0.5rem;
-      align-items: center;
-      margin: -0.35rem -0.1rem 0.35rem;
-      padding: 0.35rem 0.1rem 0.35rem;
-    }
-
-    .observations-page .observation-panel__mobile-handle {
-      grid-column: 1 / -1;
-      justify-self: center;
-      width: 2.75rem;
-      height: 0.32rem;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--ink) 25%, transparent);
-      opacity: 0.65;
-    }
-
-    .observations-page .observation-panel__mobile-title {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      color: color-mix(in srgb, var(--ink) 85%, #fff 15%);
-    }
-
-    .observations-page .observation-panel__mobile-header .observation-panel__close {
-      justify-self: end;
-      font-size: 1.25rem;
-      line-height: 1;
-      padding: 0.2rem;
-    }
-
-    .observations-page .observation-panel__mobile-header .observation-panel__close span[aria-hidden='true'] {
-      display: inline-block;
-      transform: translateY(-1px);
-    }
-
-    .observations-page .observation-collage__preview {
-      order: -1;
-    }
-
-    .observations-page .observation-cue-builder {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.5rem;
-    }
-
-    .observations-page .observation-cue-builder__chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-      padding: 0.45rem 0.5rem 0.6rem;
-      border-radius: var(--radius-2xl);
-      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 68%, var(--observations-card-bg) 32%);
-      min-height: 4.25rem;
-      max-height: min(40vh, 13.5rem);
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-      touch-action: pan-y;
-      align-items: flex-start;
-      align-content: flex-start;
-      scrollbar-gutter: stable both-edges;
-    }
-
-    .observations-page .observation-cue-builder__chips .chip {
-      min-height: 3.1rem;
-      justify-content: flex-start;
-    }
-
-    .observations-page .observation-cue-builder__chips[data-state='empty'] {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
-      align-items: center;
-      min-height: 3rem;
-      background: transparent;
-      padding: 0.35rem 0.5rem;
-    }
-
-    .observations-page .observation-cue-builder__chips[data-state='empty'] .chip--ghost {
-      width: auto;
-      min-height: auto;
-      padding: 0.2rem 0.4rem;
-    }
-  }
-
-  @keyframes observation-panel-toggle-pulse {
-    0%,
-    100% {
-      transform: translateY(0);
-      box-shadow: 0 6px 0 color-mix(in srgb, var(--rose) 35%, transparent);
-    }
-    50% {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 0 color-mix(in srgb, var(--rose) 20%, transparent);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] .observation-panel__toggle-icon {
-      animation: none;
-    }
-  }
-
-  @media (min-width: 960px) {
-    .observations-page .observation-collage {
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    }
-
-    .observations-page .observation-panel {
-      min-height: 100%;
-    }
-  }
-
-  .observations-page .banner {
-    background: color-mix(in srgb, var(--gold) 25%, #fff 75%);
-    border: 3px solid color-mix(in srgb, var(--outline) 80%, transparent);
-    border-radius: var(--radius-xl);
-    padding: 0.65rem 0.85rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .observations-page #free-lint-msg {
-    flex: 1 1 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .observations-page #free-lint-msg p {
-    margin: 0;
-  }
-
-  .observations-page .observation-annotation {
-    margin-top: 0.75rem;
-    padding: 0.75rem 0.85rem;
-    border-radius: var(--radius-xl);
-    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
-    background: color-mix(in srgb, #ffffff 94%, var(--observations-card-bg) 6%);
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-
-  .observations-page .observation-annotation__label {
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--ink) 78%, #fff 22%);
-  }
-
-  .observations-page .observation-annotation__preview {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    min-height: 1.6rem;
-    word-break: break-word;
-  }
-
-  .observations-page .observation-annotation__token {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.05rem 0.25rem;
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .observations-page .observation-annotation__token:not(:last-child) {
-    margin-right: 0.05rem;
-  }
-
-  .observations-page .observation-annotation__token:focus-visible {
-    outline: 2px solid var(--outline);
-    outline-offset: 1px;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--outline) 20%, transparent);
-  }
-
-  .observations-page .observation-annotation__token--flagged {
-    background: color-mix(in srgb, var(--rose) 25%, #fff 75%);
-    color: color-mix(in srgb, var(--rose) 75%, var(--ink) 25%);
-    text-decoration: line-through;
-    text-decoration-thickness: 0.15em;
-  }
-
-  .observations-page .observation-annotation__token--celebrated {
-    background: color-mix(in srgb, var(--mint) 25%, #fff 75%);
-    color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
-    font-weight: 600;
-  }
-
-  .observations-page .observation-annotation__token:hover {
-    transform: translateY(-1px);
-  }
-
-  .observations-page .observation-annotation__message {
-    margin: 0;
-    font-size: 0.85rem;
-    color: color-mix(in srgb, var(--ink) 70%, #fff 30%);
-  }
-
-  .observations-page .observation-annotation__message[data-variant='flagged'] {
-    color: color-mix(in srgb, var(--rose) 70%, var(--ink) 30%);
-  }
-
-  .observations-page .observation-annotation__message[data-variant='celebrated'] {
-    color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
-  }
-
-  .observations-page .observation-annotation__message[data-variant='match'] {
-    color: color-mix(in srgb, var(--ink) 70%, var(--mint) 30%);
-  }
-
-  .observations-page .observation-cue-builder {
-    margin-top: 0.75rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 0.5rem;
-    align-items: center;
-  }
-
-  .observations-page .observation-cue-builder__label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--ink) 75%, #fff 25%);
-  }
-
-  .observations-page .observation-cue-builder__chips {
-    display: flex;
-    flex: 1 1 200px;
-    flex-wrap: wrap;
-    gap: 0.35rem 0.5rem;
-    align-items: flex-start;
-  }
-
-  .observations-page #obs-cue-suggestions .chip {
-    min-width: 0;
-    min-height: 0;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.82rem;
-    line-height: 1.2;
-    border-width: 2px;
-    box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-  }
-
-  .observations-page .observation-cue-suggestion {
-    width: auto;
-    max-width: min(100%, 260px);
-    flex: 0 1 auto;
-    text-align: left;
-  }
-
-  .observations-page .observation-cue-suggestion .chip__title {
-    font-size: 0.9rem;
-  }
-
-  .observations-page .observation-cue-suggestion .chip__note {
-    max-width: 100%;
-    text-align: left;
-    font-size: 0.72rem;
-  }
-
-  .observations-page .observation-cue-suggestion--active {
-    background: color-mix(in srgb, var(--chip-bg) 50%, var(--mint) 50%);
-    border-color: color-mix(in srgb, var(--outline) 80%, transparent);
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 30%, transparent);
-  }
-
-  .observations-page .observation-cue-suggestion--active .chip__note {
-    color: color-mix(in srgb, var(--ink-soft) 60%, #fff 40%);
-  }
-
-  .observations-page .preview {
-    border: 0;
-    border-radius: var(--radius-2xl);
-    background: color-mix(in srgb, #ffffff 88%, var(--observations-card-bg) 12%);
-    padding: 0.85rem 1rem;
-    font-family: var(--font-display);
-    line-height: 1.6;
-    box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 10%, transparent);
-  }
-
-  .observations-page .preview--scrap {
-    background: transparent;
-    padding: 0;
-    box-shadow: none;
-  }
-
-  .observations-page .list-item {
-    display: block;
-    width: 100%;
-    text-align: left;
-    margin: 0.35rem 0;
-    padding: 0.7rem 0.85rem;
-    border-radius: var(--radius-xl);
-    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
-    background: color-mix(in srgb, #ffffff 92%, var(--observations-card-bg) 8%);
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-    color: var(--ink);
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .observations-page .list-item--active {
-    background: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
-    color: #fff;
-    border-color: var(--ink);
-    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-  }
-
-  .observations-page .list-item:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 3px;
-  }
-
-  .observations-page .example-list {
-    margin: 0;
-    padding-left: 1.25rem;
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .observations-page .example-list li {
-    cursor: pointer;
-  }
-
-  .observations-page .observations-description {
-    max-width: 65ch;
-  }
-
-</style>
+        <style>
+      .observations-page {
+        width: min(100%, 920px);
+        margin: 0 auto clamp(2rem, 5vw, 3rem);
+        display: grid;
+        gap: clamp(1.5rem, 4vw, 2.5rem);
+      }
+
+      .observations-header {
+        display: grid;
+        gap: 0.75rem;
+        text-align: left;
+      }
+
+      .observations-description {
+        max-width: 65ch;
+        margin: 0;
+      }
+
+      .observation-editor__card {
+        background: color-mix(in srgb, #ffffff 82%, var(--gold) 18%);
+        border: 3px solid var(--outline);
+        border-radius: var(--radius-3xl);
+        box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+        display: grid;
+        gap: clamp(1.25rem, 3vw, 1.8rem);
+      }
+
+      .observation-editor__grid {
+        display: grid;
+        gap: clamp(1rem, 3vw, 1.5rem);
+      }
+
+      @media (min-width: 760px) {
+        .observation-editor__grid {
+          grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+          align-items: start;
+        }
+      }
+
+      .observation-editor__field {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .observation-editor__label {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .observation-editor__input {
+        width: 100%;
+        min-height: 9rem;
+        padding: 1rem;
+        border: 3px solid var(--outline);
+        border-radius: var(--radius-2xl);
+        background: color-mix(in srgb, #ffffff 90%, var(--sky) 10%);
+        font: inherit;
+        line-height: 1.6;
+        resize: vertical;
+        box-shadow: inset 0 -10px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      }
+
+      .observation-editor__input:focus {
+        outline: 3px dashed var(--outline);
+        outline-offset: 3px;
+        box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      .observation-editor__feedback {
+        margin: 0;
+        padding: 0.9rem 1rem;
+        border-radius: var(--radius-2xl);
+        background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+        box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--outline) 16%, transparent);
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .observation-editor__feedback[data-state='warn'] {
+        background: color-mix(in srgb, #ffffff 78%, var(--rose) 22%);
+        box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--outline) 20%, transparent);
+      }
+
+      .observation-editor__feedback[data-state='ok'] {
+        background: color-mix(in srgb, #ffffff 78%, var(--mint) 22%);
+        box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--outline) 12%, transparent);
+      }
+
+      .observation-editor__issues {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: grid;
+        gap: 0.4rem;
+        font-size: 0.95rem;
+      }
+
+      .observation-editor__issues[hidden] {
+        display: none;
+      }
+
+      .observation-editor__issues li::marker {
+        color: color-mix(in srgb, var(--outline) 70%, transparent);
+      }
+
+      .observation-editor__recipe {
+        display: grid;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border: 2px dashed color-mix(in srgb, var(--outline) 55%, transparent);
+        border-radius: var(--radius-2xl);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--gold) 30%);
+      }
+
+      .observation-editor__recipe-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .observation-editor__recipe-list {
+        margin: 0;
+        padding-left: 1.25rem;
+        display: grid;
+        gap: 0.45rem;
+      }
+
+      .observation-editor__recipe-list li strong {
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .observation-editor__recipe-note {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+      }
+
+      .observation-editor__submit {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .observation-editor__submit-button {
+        font-size: 1rem;
+      }
+
+      .observation-editor__status {
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: var(--radius-circle);
+        border: 3px solid color-mix(in srgb, var(--outline) 75%, transparent);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        background: color-mix(in srgb, #ffffff 85%, var(--lavender) 15%);
+        color: color-mix(in srgb, var(--outline) 65%, transparent);
+        transition: transform 0.25s ease, opacity 0.25s ease, background 0.25s ease;
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      .observation-editor__status[data-state='ready'] {
+        background: color-mix(in srgb, var(--mint) 78%, #fff 22%);
+        color: color-mix(in srgb, var(--outline) 80%, var(--ink) 20%);
+        box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .observation-suggestions {
+        background: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
+        border: 3px solid var(--outline);
+        border-radius: var(--radius-3xl);
+        box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+        padding: clamp(1.6rem, 4vw, 2.4rem);
+        display: grid;
+        gap: clamp(1.25rem, 3vw, 1.8rem);
+      }
+
+      .observation-suggestions__title {
+        margin: 0;
+        font-size: clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+      }
+
+      .observation-suggestions__preview {
+        margin: 0.35rem 0 0;
+        font-style: italic;
+        color: var(--ink-soft);
+      }
+
+      .observation-suggestions__grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 640px) {
+        .observation-suggestions__grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .observation-suggestions__group {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .observation-suggestions__group-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .observation-chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .observation-chip-list .chip {
+        box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      .observation-suggestions__empty {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+      }
+
+      .observation-suggestions__why {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+      }
+
+      .observation-suggestions__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .observation-suggestions__actions .support-button {
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 640px) {
+        .observation-suggestions__actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .observation-suggestions__actions .support-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
   </head>
@@ -2269,225 +940,91 @@ button.site-nav__magnet {
           <li><a href="../">Home</a></li><li aria-current="page">Observations</li>
         </ol>
       </nav>
-      <main id="main" class="page observations-page" role="main">
+            <main id="main" class="page observations-page" role="main">
         <header class="page-header observations-header">
-          <h1 class="page-title">Start with an Observation</h1>
-          <p class="page-description observations-description">Choose the guided wizard to surface feelings and needs from observational cues, or switch to free-text if you already have wording you want to lint.</p>
+          <h1 class="page-title">Start with what you saw</h1>
+          <p class="page-description observations-description">
+            Describe a single moment so we can surface feelings and needs once it’s purely observational.
+          </p>
         </header>
 
-        <section class="observation-collage" aria-label="Observation idea preview">
-          <div class="observation-collage__preview">
-            <div class="scrap-paper" data-preview-board>
-              <p class="scrap-paper__title">Observation idea</p>
-              <div class="scrap-paper__body preview preview--scrap" id="obs-example" role="status" aria-live="polite">Select a pattern below to start building your observation.</div>
-            </div>
-            <p class="scrap-note">Keep your wording to what a camera could capture. As you click magnets below, this scrap fills in with a clear observational sentence.</p>
-            <div class="observation-collage__cta">
-              <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
-              <div class="support-actions support-actions--muted">
-                <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
+        <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
+          <div class="observation-editor__card">
+            <div class="observation-editor__grid">
+              <div class="observation-editor__field">
+                <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                <textarea
+                  id="observation-text"
+                  class="observation-editor__input"
+                  rows="7"
+                  placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
+                  aria-describedby="observation-guidelines observation-feedback"
+                ></textarea>
+                <p id="observation-feedback" class="observation-editor__feedback" role="status" aria-live="polite">
+                  Start by anchoring your observation in time and place.
+                </p>
+                <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
               </div>
+              <aside class="observation-editor__recipe" id="observation-guidelines" aria-label="Observation recipe">
+                <h2 class="observation-editor__recipe-title">Observation recipe</h2>
+                <ol class="observation-editor__recipe-list">
+                  <li><strong>When &amp; where:</strong> Anchor the moment in time and place.</li>
+                  <li><strong>Sensory details:</strong> Quote what was said or describe what was seen.</li>
+                  <li><strong>Optional gap:</strong> Add what you expected or hoped for.</li>
+                </ol>
+                <p class="observation-editor__recipe-note">
+                  Stick with what a camera or microphone would record. Feelings and needs come after the observation.
+                </p>
+              </aside>
             </div>
-          </div>
-          <div
-            class="observation-panel"
-            id="observation-panel"
-            role="region"
-            aria-labelledby="observation-panel-title"
-            aria-label="Suggested feelings and needs"
-            tabindex="-1"
-          >
-            <header class="observation-panel__mobile-header">
-              <div class="observation-panel__mobile-handle" aria-hidden="true"></div>
-              <p class="observation-panel__mobile-title" id="observation-panel-title">Feelings &amp; needs suggestions</p>
+            <div class="observation-editor__submit">
               <button
-                class="observation-panel__close"
+                id="observation-submit"
+                class="support-button observation-editor__submit-button"
                 type="button"
-                data-observation-panel-close
+                disabled
               >
-                <span class="visually-hidden">Close suggestions</span>
-                <span aria-hidden="true">✕</span>
+                Submit
               </button>
-            </header>
-            <p class="observation-panel__empty" id="observation-panel-empty">Pick a pattern to surface feelings and needs magnets that might support your wording.</p>
-            <div class="observation-panel__content" id="observation-panel-content" hidden>
-              <div class="observation-panel__group observation-panel__group--magnet">
-                <p class="observation-panel__heading">Feelings to explore</p>
-                <div class="magnet-board-wrapper observation-panel__magnet-wrapper">
-                  <div class="magnet-board observation-panel__magnet-board observation-panel__magnet-board--feelings">
-                    <div
-                      class="observation-panel__magnet-grid"
-                      id="suggest-feelings"
-                      role="list"
-                      aria-label="Suggested feelings"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div class="observation-panel__group observation-panel__group--magnet">
-                <p class="observation-panel__heading">Needs to consider</p>
-                <div class="magnet-board-wrapper observation-panel__magnet-wrapper">
-                  <div class="magnet-board observation-panel__magnet-board observation-panel__magnet-board--needs">
-                    <div
-                      class="observation-panel__magnet-grid"
-                      id="suggest-needs"
-                      role="list"
-                      aria-label="Suggested needs"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <p class="hint observation-panel__why" id="why"></p>
+              <span id="observation-status" class="observation-editor__status" aria-hidden="true"></span>
             </div>
           </div>
         </section>
 
-        <div class="observation-panel__scrim" data-observation-panel-scrim hidden aria-hidden="true"></div>
-
-        <div class="observations-body">
-          <button
-            class="observation-panel__toggle"
-            type="button"
-            data-observation-panel-toggle
-            aria-controls="observation-panel"
-            aria-expanded="false"
-          >
-            <span class="observation-panel__toggle-icon" aria-hidden="true">✨</span>
-            <span class="observation-panel__toggle-label">Feelings &amp; needs suggestions</span>
-            <span class="observation-panel__toggle-meta">
-              <span class="observation-panel__toggle-badge" data-observation-panel-badge hidden aria-hidden="true">New</span>
-              <span class="observation-panel__toggle-status" data-observation-panel-status>Hidden</span>
-            </span>
-            <span class="visually-hidden" aria-live="polite" data-observation-panel-announcer></span>
-          </button>
-          <nav class="tab-nav" role="tablist">
-            <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
-            <button id="tab-free-button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-free" data-tab-target="free">Free-text</button>
-          </nav>
-
-          <section id="tab-guided" class="tab-panel" role="tabpanel" aria-labelledby="tab-guided-button">
-            <div class="grid">
-              <div class="card">
-                <div class="h2">1. What best describes the situation?</div>
-                <p class="hint">Pick a category to see matching patterns.</p>
-                <input id="search" type="search" placeholder="Search patterns (e.g., pronouns, cancel, privacy)…" />
-                <p class="hint observation-search__faux" id="search-faux-feeling-hint" hidden></p>
-                <div class="observation-magnet-shelf observation-magnet-shelf--families">
-                  <div id="family-picker" class="observation-family-picker">
-                    <button
-                      id="family-toggle"
-                      class="observation-family-picker__button"
-                      type="button"
-                      aria-haspopup="listbox"
-                      aria-expanded="false"
-                    >
-                      <span id="family-toggle-label">Browse categories</span>
-                      <span class="observation-family-picker__chevron" aria-hidden="true">▾</span>
-                    </button>
-                    <div
-                      id="family-menu"
-                      class="observation-family-picker__menu"
-                      role="listbox"
-                      aria-labelledby="family-toggle"
-                      hidden
-                    >
-                      <div id="families" class="observation-family-picker__options" role="presentation"></div>
-                    </div>
-                    <p id="family-empty" class="hint observation-family-picker__empty" hidden></p>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="h2">2. Which pattern fits?</div>
-                <p class="hint">Every option below expands into an observation example plus feelings &amp; needs.</p>
-                <div class="observation-magnet-shelf observation-magnet-shelf--patterns">
-                  <div
-                    id="patterns"
-                    class="observation-magnet-grid observation-magnet-grid--patterns"
-                    role="group"
-                    aria-label="Observation patterns"
-                  ></div>
-                </div>
-              </div>
+        <section id="observation-suggestions" class="observation-suggestions" hidden aria-live="polite">
+          <header class="observation-suggestions__header">
+            <h2 class="observation-suggestions__title">Feelings &amp; needs to explore</h2>
+            <p id="observation-preview" class="observation-suggestions__preview"></p>
+          </header>
+          <div class="observation-suggestions__grid">
+            <div class="observation-suggestions__group" aria-live="polite">
+              <h3 class="observation-suggestions__group-title">Possible feelings</h3>
+              <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
+              <p id="suggested-feelings-empty" class="observation-suggestions__empty" hidden>
+                No direct matches yet. Once your observation is specific, browse every feeling in the index below.
+              </p>
             </div>
-          </section>
-
-          <section id="tab-free" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-free-button">
-            <section class="grid">
-              <div class="card">
-                <div class="label">When/where? <span class="hint">(optional)</span></div>
-                <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
-
-                <div class="observation-cue-builder">
-                  <div class="observation-cue-builder__label">Cues:</div>
-                  <div
-                    id="obs-cue-suggestions"
-                    class="chip-group observation-cue-builder__chips"
-                    role="list"
-                    aria-label="Observation cue phrases"
-                    aria-live="polite"
-                  ></div>
-                </div>
-
-                <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
-                <textarea
-                  id="obs-what"
-                  placeholder="While I was speaking, Casey said “This is a waste of time” and also began speaking at a louder volume."
-                ></textarea>
-
-                <div class="observation-annotation" aria-live="polite">
-                  <div class="observation-annotation__label">Language check</div>
-                  <div id="obs-what-annotated" class="observation-annotation__preview"></div>
-                  <p
-                    id="obs-what-annotation-msg"
-                    class="observation-annotation__message"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    Start typing to surface highlights.
-                  </p>
-                </div>
-
-                <div class="label">Expectation gap <span class="hint">(optional)</span></div>
-                <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
-
-                <div id="free-lint-box" class="banner hidden">
-                  <div id="free-lint-msg" role="status" aria-live="polite"></div>
-                  <button id="rewrite-btn">Help me rewrite</button>
-                </div>
-
-                <p class="hint">Your observation idea updates in the preview panel above.</p>
-              </div>
-
-              <div class="card">
-                <p class="hint observation-free__suggest-hint">Feelings &amp; needs suggestions refresh in the shared panel above.</p>
-
-                <div class="h2" style="margin-top:.75rem">Faux feelings to explore</div>
-                <div id="free-suggest-faux-feelings"></div>
-
-                <div class="hint" id="free-suggest-faux-feelings-hint" style="margin-top:.25rem">Add more detail to surface related faux feelings.</div>
-
-                <hr style="margin:1rem 0;opacity:.25"/>
-              </div>
-            </section>
-
-            <section class="card" style="margin-top:1rem">
-              <div class="h2">Observation idea starters (click to copy)</div>
-              <ul class="example-list">
-                <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
-                <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they also began speaking and my sentence stopped mid-word.');">They also began speaking while I was mid-sentence</li>
-                <li onclick="window.setObservationExample('Yesterday','They changed the plan and said, “You’ll do it this way,” without asking.');">Plan changed without asking</li>
-              </ul>
-            </section>
-          </section>
-        </div>
+            <div class="observation-suggestions__group" aria-live="polite">
+              <h3 class="observation-suggestions__group-title">Possible needs</h3>
+              <div id="suggested-needs" class="observation-chip-list" role="list"></div>
+              <p id="suggested-needs-empty" class="observation-suggestions__empty" hidden>
+                No direct matches yet. Consider visiting the needs index for more language.
+              </p>
+            </div>
+          </div>
+          <p id="suggested-why" class="observation-suggestions__why"></p>
+          <div class="observation-suggestions__actions support-actions">
+            <button id="edit-again" class="support-button" type="button">Edit observation</button>
+            <a class="support-button support-button--ghost" href="../feelings/">Browse all feelings</a>
+            <a class="support-button support-button--ghost" href="../needs/">Browse all needs</a>
+          </div>
+        </section>
       </main>
 
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/magnets.js" type="module"></script>
-    <script type="module" src="../assets/js/observations-wizard.js"></script>
-    <script type="module" src="../assets/js/observations.js"></script>
+    <script type="module" src="../assets/js/observation-editor.js"></script>
   </body>
 </html>
