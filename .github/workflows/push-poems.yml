@@ -1,0 +1,68 @@
+name: Push Poems
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_build_pages:
+        description: 'Rebuild static pages after updating data'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write
+
+jobs:
+  push-poems:
+    name: Publish poems to site
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: ${{ github.ref_name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rebuild datasets
+        run: npm run build:data
+
+      - name: Rebuild static pages
+        if: ${{ github.event.inputs.run_build_pages != 'false' }}
+        run: npm run build:pages
+
+      - name: Commit and push updates
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+            echo "No changes detected after rebuild."
+            exit 0
+          fi
+          git add -A
+          git commit -m "Update poems from poems_formatted.txt"
+          git push origin "HEAD:$BRANCH"
+          echo "changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize updates
+        if: success()
+        run: |
+          if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
+            SUMMARY="Push Poems workflow committed updates to branch $BRANCH."
+          else
+            SUMMARY="Push Poems workflow completed. No changes were committed."
+          fi
+          if [ -n "${GITHUB_STEP_SUMMARY}" ]; then
+            echo "## Push Poems" >> "$GITHUB_STEP_SUMMARY"
+            echo "${SUMMARY}" >> "$GITHUB_STEP_SUMMARY"
+          fi
