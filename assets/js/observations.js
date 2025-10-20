@@ -27,7 +27,31 @@ const OBSERVATION_CELEBRATION_WORDS = [
   { token: 'noted', reason: 'Calling out what was noted keeps the focus on observable artifacts.' },
 ];
 
-const OBSERVATION_DEFAULT_HINT = 'Tap highlighted words to learn why they’re flagged or celebrated.';
+const OBSERVATION_DEFAULT_HINT = 'Tap highlights for coaching. Aim for: when/where + what a camera or mic captured + optional expectation gap.';
+const OBSERVATION_EMPTY_HINT = 'Observation recipe: start with when/where, describe what was seen or heard, then add what you hoped for if relevant.';
+const OBSERVATION_RECIPE_STEPS = [
+  'Start with when and where the moment happened.',
+  'Describe exactly what a camera or microphone would capture (quotes, actions, artifacts, counts).',
+  'Optionally add what you hoped for or didn’t see to mark the expectation gap.',
+];
+
+const FLAG_SUPPLEMENTAL_TIPS = {
+  traitLabels: 'Name the observable behavior or quote instead of the character label.',
+  comparisonStories: 'Anchor in one concrete moment — when, where, and what happened.',
+  moralizingLanguage: 'Swap the “should/shouldn’t” for the specific action you witnessed.',
+  mindReadingClaims: 'Stick with what you saw or heard rather than guessing motives.',
+  globalLanguage: 'Point to the single instance you observed, not the whole pattern.',
+  vagueQuantifiers: 'Replace vague amounts with counts, durations, or direct quotes.',
+  fauxFeelingStoryWords: 'Translate the story word into the action that led you to feel that way.',
+  idiomEvaluations: 'Describe the literal behavior instead of the idiom.',
+  pathologizingLabels: 'Describe the behavior you saw instead of using the diagnostic label.',
+  speculationLanguage: 'Share what was directly observable, not what might be true.',
+  predictionLanguage: 'Focus on what already happened; future worries belong in requests.',
+  thinkingLanguage: 'Keep the observation to what happened; thoughts fit better in reflection.',
+  blameLanguage: 'Name the concrete action without assigning fault or intent.',
+  absenceLanguage: 'Describe what you did see or hear that suggested a gap.',
+  thoughtsAsFeelings: 'Separate the observation from the interpretation — capture the quote or action.',
+};
 
 const state = {
   whenWhere: '',
@@ -397,9 +421,19 @@ function renderLintFeedback(lint, catalog) {
     ...(lint.agentiveMarkers || []),
   ]);
   const filteredEvaluationTokens = evaluationTokens.filter(token => !flaggedTokenSet.has(token.toLowerCase()));
+  const hasObservation = Boolean(
+    (state.whenWhere && state.whenWhere.trim()) ||
+    (state.whatSawHeard && state.whatSawHeard.trim()) ||
+    (state.gap && state.gap.trim()),
+  );
+
+  if (!lint.ok && hasObservation) {
+    paragraphs.push(createObservationRecipeBlock());
+  }
+
   if (filteredEvaluationTokens.length) {
     const p = document.createElement('p');
-    p.textContent = `This reads like an evaluation (${formatList(filteredEvaluationTokens)}). ${FLAG_ADVICE_DEFAULT} Want help rewriting as a camera-test observation?`;
+    p.textContent = `This reads like an evaluation (${formatList(filteredEvaluationTokens)}). Focus on what you noticed instead of judging it. ${FLAG_ADVICE_DEFAULT} Want help rewriting as a camera-test observation?`;
     paragraphs.push(p);
   }
 
@@ -447,6 +481,12 @@ function renderLintFeedback(lint, catalog) {
   }
 
   if (!paragraphs.length) {
+    if (lint.ok && hasObservation) {
+      lintBox.classList.remove('hidden');
+      lintMsg.replaceChildren(createObservationSuccessParagraph());
+      rewriteBtn.hidden = true;
+      return;
+    }
     lintBox.classList.add('hidden');
     lintMsg.replaceChildren();
     rewriteBtn.hidden = true;
@@ -468,12 +508,38 @@ function createFlagParagraph(group) {
   const matches = Array.isArray(group?.matches) ? group.matches : [];
   const label = typeof group?.label === 'string' && group.label ? group.label : 'Flagged language';
   const advice = typeof group?.advice === 'string' && group.advice ? group.advice : FLAG_ADVICE_DEFAULT;
+  const supplement = FLAG_SUPPLEMENTAL_TIPS[group?.key];
   if (!matches.length) {
-    p.textContent = `${label}: ${advice}`;
-    return p;
+    p.appendChild(document.createTextNode(`${label}: ${advice}`));
+  } else {
+    p.appendChild(document.createTextNode(`Detected ${label.toLowerCase()} (${formatList(matches)}). ${advice}`));
   }
+  if (supplement) {
+    p.appendChild(document.createTextNode(` Try this: ${supplement}`));
+  }
+  return p;
+}
 
-  p.textContent = `Detected ${label.toLowerCase()} (${formatList(matches)}). ${advice}`;
+function createObservationRecipeBlock() {
+  const container = document.createElement('div');
+  container.className = 'observation-feedback__recipe';
+  const intro = document.createElement('p');
+  intro.textContent = 'Observation recipe to try:';
+  container.appendChild(intro);
+  const list = document.createElement('ol');
+  list.className = 'observation-feedback__recipe-list';
+  OBSERVATION_RECIPE_STEPS.forEach(step => {
+    const item = document.createElement('li');
+    item.textContent = step;
+    list.appendChild(item);
+  });
+  container.appendChild(list);
+  return container;
+}
+
+function createObservationSuccessParagraph() {
+  const p = document.createElement('p');
+  p.textContent = 'Looks observational — the language reads like camera-test detail. Keep going with feelings, needs, or a request when you’re ready.';
   return p;
 }
 
@@ -557,8 +623,8 @@ function renderObservationAnnotations(text, lint) {
   host.replaceChildren();
 
   if (!trimmed) {
-    host.textContent = 'Your words will be annotated here.';
-    msg.textContent = 'Start typing to surface highlights.';
+    host.textContent = 'Your words will be annotated here with observation coaching.';
+    msg.textContent = OBSERVATION_EMPTY_HINT;
     delete msg.dataset.variant;
     return;
   }
