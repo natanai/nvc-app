@@ -1,6 +1,8 @@
 import { lintObservation, scaffoldRewrite } from '/lib/nvcLint.js';
 import { loadCueRows, suggestFromObservation } from '/lib/observationSuggest.js';
 
+const FREE_PREVIEW_FALLBACK = 'Your observation will preview here…';
+
 const state = {
   whenWhere: '',
   whatSawHeard: '',
@@ -57,6 +59,12 @@ function bind() {
       render();
     }
   });
+
+  document.addEventListener('observations:tab-change', event => {
+    if (event?.detail?.id === 'free') {
+      render();
+    }
+  });
 }
 
 function syncInputs() {
@@ -80,8 +88,7 @@ function buildPreview() {
 
 function render() {
   const preview = buildPreview();
-  const previewEl = $('#free-obs-preview');
-  if (previewEl) previewEl.textContent = preview || 'Your observation will preview here…';
+  updateSharedPreview(preview);
 
   const lint = lintObservation([state.whenWhere, state.whatSawHeard, state.gap].join(' '));
   const lintBox = $('#free-lint-box');
@@ -122,6 +129,19 @@ function render() {
 
   const rewriteBtn = $('#rewrite-btn');
   if (rewriteBtn) rewriteBtn.disabled = false;
+}
+
+function updateSharedPreview(preview) {
+  if (typeof window.setObservationPreview !== 'function') return;
+  const freePanel = $('#tab-free');
+  const freeActive = freePanel && !freePanel.classList.contains('hidden');
+  if (!freeActive) return;
+  const message = typeof preview === 'string' ? preview.trim() : '';
+  window.setObservationPreview({
+    source: 'free',
+    text: message,
+    fallback: FREE_PREVIEW_FALLBACK,
+  });
 }
 
 function renderChips(host, items, baseHref, labelMap) {

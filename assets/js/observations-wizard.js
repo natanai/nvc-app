@@ -1,6 +1,7 @@
 import { slugify } from '/lib/slugify.js';
 
 const FAMILY_PLACEHOLDER = 'Browse categories';
+const PREVIEW_DEFAULT_GUIDED = 'Select a pattern below to start building your observation.';
 let TAXO = { families: [] };
 let SEARCH = '';
 let FAUX_FEELINGS = [];
@@ -8,6 +9,12 @@ let familyMenuOpen = false;
 const state = {
   familyId: null,
   patternId: null,
+};
+
+const previewState = {
+  text: '',
+  fallback: PREVIEW_DEFAULT_GUIDED,
+  source: 'guided',
 };
 
 function $(selector) {
@@ -20,6 +27,38 @@ function h(tag, cls, text) {
   if (text) el.textContent = text;
   return el;
 }
+
+function applyPreviewState() {
+  const obs = $('#obs-example');
+  if (!obs) return;
+  const message = previewState.text?.trim()
+    ? previewState.text
+    : previewState.fallback || '';
+  obs.textContent = message;
+  if (previewState.source) {
+    obs.dataset.previewSource = previewState.source;
+  } else if (obs.dataset && 'previewSource' in obs.dataset) {
+    delete obs.dataset.previewSource;
+  }
+}
+
+function updateSharedPreview(options = {}) {
+  if (typeof options.source === 'string') {
+    previewState.source = options.source;
+  }
+  if (options.fallback !== undefined) {
+    previewState.fallback = typeof options.fallback === 'string' ? options.fallback : '';
+  }
+  if (options.text !== undefined) {
+    previewState.text = typeof options.text === 'string' ? options.text : '';
+  }
+  applyPreviewState();
+}
+
+window.setObservationPreview = updateSharedPreview;
+window.getObservationPreviewSource = function getObservationPreviewSource() {
+  return previewState.source;
+};
 
 async function init() {
   await Promise.all([loadTaxonomy(), loadFauxFeelings()]);
@@ -319,19 +358,22 @@ function renderPatterns() {
 
 function renderSuggestions() {
   const pat = getPattern();
-  const obs = $('#obs-example');
   const fHost = $('#suggest-feelings');
   const nHost = $('#suggest-needs');
   const why = $('#why');
   const panelEmpty = $('#observation-panel-empty');
   const panelContent = $('#observation-panel-content');
 
-  if (!obs || !fHost || !nHost || !why || !panelEmpty || !panelContent) return;
+  if (!fHost || !nHost || !why || !panelEmpty || !panelContent) return;
 
-  const defaultMessage = 'Select a pattern below to start building your observation.';
+  const defaultMessage = PREVIEW_DEFAULT_GUIDED;
 
   if (!pat) {
-    obs.textContent = defaultMessage;
+    updateSharedPreview({
+      source: 'guided',
+      text: '',
+      fallback: defaultMessage,
+    });
     fHost.innerHTML = '';
     nHost.innerHTML = '';
     panelContent.hidden = true;
@@ -344,7 +386,11 @@ function renderSuggestions() {
   panelEmpty.hidden = true;
   panelContent.hidden = false;
 
-  obs.textContent = pat.example || defaultMessage;
+  updateSharedPreview({
+    source: 'guided',
+    text: pat.example || '',
+    fallback: defaultMessage,
+  });
   renderChipSet(fHost, pat.feelings || [], '/feelings/', 'No feelings surfaced yet.');
   renderChipSet(nHost, pat.needs || [], '/needs/', 'No needs surfaced yet.');
   const family = getFamily();
@@ -401,6 +447,14 @@ function activateTab(id) {
     const match = panel.id === `tab-${id}`;
     panel.classList.toggle('hidden', !match);
   });
+  if (id === 'guided') {
+    renderSuggestions();
+  }
+  document.dispatchEvent(
+    new CustomEvent('observations:tab-change', {
+      detail: { id },
+    }),
+  );
 }
 
 function setupFamilyMenuControls() {
