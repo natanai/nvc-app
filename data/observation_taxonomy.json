@@ -43,7 +43,7 @@
           "label": "Reaction only, no message by cutoff",
           "example": "Message received a 👍 reaction with no text reply by end of day.",
           "feelings": [
-            "Unsure",
+            "Confused",
             "Lonely",
             "Frustrated",
             "Anxious"
@@ -77,7 +77,7 @@
           "label": "Missed call not returned within agreed window",
           "example": "I called at 3:10 pm and there was no call back within the agreed 2-hour window.",
           "feelings": [
-            "Concerned",
+            "Anxious",
             "Disappointed",
             "Anxious",
             "Irritated"
@@ -151,7 +151,7 @@
           "label": "Screen share took over while I was presenting",
           "example": "While I was speaking, another screen share started and replaced my slides.",
           "feelings": [
-            "Startled",
+            "Alarmed",
             "Irritated",
             "Hurt",
             "Tense"
@@ -185,7 +185,7 @@
           "label": "Microphone muted while I was speaking",
           "example": "My microphone was muted while I was speaking.",
           "feelings": [
-            "Startled",
+            "Alarmed",
             "Embarrassed",
             "Tense",
             "Angry"
@@ -259,7 +259,7 @@
           "label": "Meeting time changed without checking",
           "example": "The 2:00 pm meeting was moved to 3:00 pm without a message to check in first.",
           "feelings": [
-            "Unsettled",
+            "Anxious",
             "Irritated",
             "Anxious",
             "Frustrated"
@@ -279,7 +279,7 @@
             "Tense",
             "Overwhelmed",
             "Irritated",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Clarity",
@@ -293,10 +293,10 @@
           "label": "Task assigned without checking capacity",
           "example": "A task was assigned to me during standup without asking about my current load.",
           "feelings": [
-            "Stressed",
+            "Pressured",
             "Tense",
             "Irritated",
-            "Worried"
+            "Anxious"
           ],
           "needs": [
             "Consideration",
@@ -385,9 +385,9 @@
           "example": "While I was speaking there were several audible sighs.",
           "feelings": [
             "Hurt",
-            "Uneasy",
+            "Anxious",
             "Irritated",
-            "Self-conscious"
+            "Embarrassed"
           ],
           "needs": [
             "Respect",
@@ -401,7 +401,7 @@
           "label": "Profanity used in response",
           "example": "In the meeting they used profanity immediately after my comment.",
           "feelings": [
-            "Startled",
+            "Alarmed",
             "Hurt",
             "Tense",
             "Angry"
@@ -458,8 +458,8 @@
           "label": "Left before the end by minutes",
           "example": "They left the meeting 15 minutes before the scheduled end without a note.",
           "feelings": [
-            "Concerned",
-            "Annoyed",
+            "Anxious",
+            "Irritated",
             "Tense",
             "Disappointed"
           ],
@@ -532,7 +532,7 @@
           "label": "Typing while I was speaking",
           "example": "While I was speaking they typed on their keyboard continuously.",
           "feelings": [
-            "Distracted",
+            "Confused",
             "Hurt",
             "Irritated",
             "Tense"
@@ -549,10 +549,10 @@
           "label": "Camera off when called on",
           "example": "When their name was called to respond, the camera remained off.",
           "feelings": [
-            "Unsure",
-            "Disconnected",
+            "Confused",
+            "Lonely",
             "Anxious",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Connection",
@@ -640,7 +640,7 @@
           "label": "Shared my private message in a public channel",
           "example": "A private message I sent was posted in the group channel without asking.",
           "feelings": [
-            "Exposed",
+            "Embarrassed",
             "Anxious",
             "Hurt",
             "Angry"
@@ -657,7 +657,7 @@
           "label": "Shared my photo/video without asking",
           "example": "A video of me from the event was posted without checking with me first.",
           "feelings": [
-            "Uncomfortable",
+            "Tense",
             "Anxious",
             "Hurt",
             "Angry"
@@ -674,8 +674,8 @@
           "label": "Entered my space without knocking",
           "example": "They opened my closed door and walked in without knocking.",
           "feelings": [
-            "Startled",
-            "Uncomfortable",
+            "Alarmed",
+            "Tense",
             "Tense",
             "Irritated"
           ],
@@ -749,7 +749,7 @@
           "example": "Edits were made to my document without a prior check-in.",
           "feelings": [
             "Irritated",
-            "Guarded",
+            "Tense",
             "Anxious",
             "Hurt"
           ],
@@ -856,7 +856,7 @@
           "label": "Compared me to someone in front of others",
           "example": "They compared my output to another person during the meeting.",
           "feelings": [
-            "Deflated",
+            "Disappointed",
             "Hurt",
             "Anxious",
             "Irritated"
@@ -913,7 +913,7 @@
           "label": "New requirement added close to deadline",
           "example": "A new requirement was added two hours before the deadline.",
           "feelings": [
-            "Stressed",
+            "Pressured",
             "Overwhelmed",
             "Anxious",
             "Irritated"
@@ -933,7 +933,7 @@
             "Anxious",
             "Frustrated",
             "Tense",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Support",
@@ -1005,8 +1005,8 @@
           "example": "A strong fragrance filled the shared workspace for 30 minutes.",
           "feelings": [
             "Overwhelmed",
-            "Uncomfortable",
-            "Headachy",
+            "Tense",
+            "In pain",
             "Irritated"
           ],
           "needs": [
@@ -1021,7 +1021,7 @@
           "label": "Lights flickered repeatedly",
           "example": "The overhead lights flickered on and off several times during the meeting.",
           "feelings": [
-            "Distracted",
+            "Confused",
             "Tense",
             "Irritated",
             "Tired"
@@ -1038,8 +1038,8 @@
           "label": "Temperature changed sharply",
           "example": "The room temperature became much colder during the session.",
           "feelings": [
-            "Uncomfortable",
-            "Distracted",
+            "Tense",
+            "Confused",
             "Irritated",
             "Tired"
           ],
@@ -1095,8 +1095,8 @@
           "label": "Unexpected fee added at checkout",
           "example": "A service fee appeared on the bill that wasn’t shown on the menu.",
           "feelings": [
-            "Surprised",
-            "Concerned",
+            "Bewildered",
+            "Anxious",
             "Irritated",
             "Anxious"
           ],
@@ -1115,7 +1115,7 @@
             "Scared",
             "Alarmed",
             "Tense",
-            "Uneasy"
+            "Anxious"
           ],
           "needs": [
             "Safety",
@@ -1131,8 +1131,8 @@
           "feelings": [
             "Scared",
             "Tense",
-            "Alert",
-            "Uneasy"
+            "Alarmed",
+            "Anxious"
           ],
           "needs": [
             "Safety",
@@ -1203,9 +1203,9 @@
           "label": "Used a name I don’t use in email subject",
           "example": "An email about me used a name I don’t use in the subject line.",
           "feelings": [
-            "Deflated",
+            "Disappointed",
             "Hurt",
-            "Uncomfortable",
+            "Tense",
             "Anxious"
           ],
           "needs": [
@@ -1260,8 +1260,8 @@
           "label": "Shared chore not done by agreed time",
           "example": "Trash pickup day passed and the bins were not taken out as agreed.",
           "feelings": [
-            "Annoyed",
-            "Stressed",
+            "Irritated",
+            "Pressured",
             "Disappointed",
             "Tense"
           ],
@@ -1278,8 +1278,8 @@
           "example": "The last of the laundry detergent was used without leaving a note.",
           "feelings": [
             "Irritated",
-            "Concerned",
-            "Annoyed",
+            "Anxious",
+            "Irritated",
             "Tense"
           ],
           "needs": [
@@ -1351,7 +1351,7 @@
           "label": "Group project roles changed without checking",
           "example": "Roles for the group project were reassigned without asking.",
           "feelings": [
-            "Unsettled",
+            "Anxious",
             "Irritated",
             "Anxious",
             "Frustrated"
@@ -1411,7 +1411,7 @@
             "Anxious",
             "Tired",
             "Irritated",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Respect",
@@ -1425,9 +1425,9 @@
           "label": "Discussed my information within earshot of others",
           "example": "Personal details were discussed at the desk while others were in line.",
           "feelings": [
-            "Exposed",
+            "Embarrassed",
             "Anxious",
-            "Uncomfortable",
+            "Tense",
             "Hurt"
           ],
           "needs": [
@@ -1483,7 +1483,7 @@
           "example": "The agreed payback date passed without payment or message.",
           "feelings": [
             "Anxious",
-            "Concerned",
+            "Anxious",
             "Irritated",
             "Disappointed"
           ],
@@ -1499,10 +1499,10 @@
           "label": "Added item to split bill I didn’t order",
           "example": "The split included an item I didn’t order.",
           "feelings": [
-            "Uneasy",
+            "Anxious",
             "Irritated",
-            "Awkward",
-            "Concerned"
+            "Embarrassed",
+            "Anxious"
           ],
           "needs": [
             "Fairness",
@@ -1556,8 +1556,8 @@
           "label": "Added me to a group without asking",
           "example": "I was added to a group chat without being asked first.",
           "feelings": [
-            "Uneasy",
-            "Crowded",
+            "Anxious",
+            "Overwhelmed",
             "Irritated",
             "Tense"
           ],
@@ -1573,8 +1573,8 @@
           "label": "Tagged me in a photo without asking",
           "example": "My account was tagged in a photo without checking with me.",
           "feelings": [
-            "Uncomfortable",
-            "Exposed",
+            "Tense",
+            "Embarrassed",
             "Anxious",
             "Hurt"
           ],
@@ -1593,7 +1593,7 @@
             "Anxious",
             "Hurt",
             "Irritated",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Privacy",
@@ -1665,8 +1665,8 @@
           "example": "Items were placed on my shelf without checking with me.",
           "feelings": [
             "Irritated",
-            "Guarded",
-            "Uncomfortable",
+            "Tense",
+            "Tense",
             "Tense"
           ],
           "needs": [
@@ -1681,7 +1681,7 @@
           "label": "Dishes left in sink past agreed time",
           "example": "Dirty dishes remained in the sink the morning after the agreed cleanup time.",
           "feelings": [
-            "Annoyed",
+            "Irritated",
             "Tired",
             "Irritated",
             "Tense"
@@ -1738,7 +1738,7 @@
           "label": "Call ended abruptly",
           "example": "During our discussion the call ended without a closing.",
           "feelings": [
-            "Startled",
+            "Alarmed",
             "Hurt",
             "Angry",
             "Tense"
@@ -1829,7 +1829,7 @@
           "label": "Merged change without review",
           "example": "The pull request was merged without a reviewer.",
           "feelings": [
-            "Concerned",
+            "Anxious",
             "Irritated",
             "Anxious",
             "Tense"
@@ -1846,7 +1846,7 @@
           "label": "Reassigned ticket without a message",
           "example": "The issue was reassigned away from me without a note to check in.",
           "feelings": [
-            "Unsettled",
+            "Anxious",
             "Irritated",
             "Anxious",
             "Hurt"
