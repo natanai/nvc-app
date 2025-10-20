@@ -460,7 +460,7 @@ const addPointerListeners = (state) => {
 };
 
 const applySeparationForces = (state, dt) => {
-  const { sepRadiusScale, sepStrength, dragSepMultiplier } = state.config;
+  const { sepStrength, dragSepMultiplier } = state.config;
   for (let i = 0; i < state.magnets.length; i += 1) {
     const magnetA = state.magnets[i];
     if (magnetA.navHidden) {
@@ -471,31 +471,75 @@ const applySeparationForces = (state, dt) => {
       if (magnetB.navHidden) {
         continue;
       }
+      const overlapX =
+        Math.min(magnetA.x + magnetA.w, magnetB.x + magnetB.w) - Math.max(magnetA.x, magnetB.x);
+      const overlapY =
+        Math.min(magnetA.y + magnetA.h, magnetB.y + magnetB.h) - Math.max(magnetA.y, magnetB.y);
+      if (overlapX <= 0 || overlapY <= 0) {
+        continue;
+      }
       const centerAX = magnetA.x + magnetA.w / 2;
       const centerAY = magnetA.y + magnetA.h / 2;
       const centerBX = magnetB.x + magnetB.w / 2;
       const centerBY = magnetB.y + magnetB.h / 2;
-      const diffX = centerBX - centerAX;
-      const diffY = centerBY - centerAY;
-      const distance = Math.hypot(diffX, diffY) || 0.0001;
-      const radiusA = Math.hypot(magnetA.w, magnetA.h) * sepRadiusScale;
-      const radiusB = Math.hypot(magnetB.w, magnetB.h) * sepRadiusScale;
-      const minDistance = radiusA + radiusB;
-      if (distance >= minDistance) {
+      const resolveAlongX = overlapX < overlapY;
+      const penetration = resolveAlongX ? overlapX : overlapY;
+      const direction = resolveAlongX
+        ? centerAX <= centerBX
+          ? -1
+          : 1
+        : centerAY <= centerBY
+          ? -1
+          : 1;
+      const movableA = magnetA.dragging ? 0 : 1;
+      const movableB = magnetB.dragging ? 0 : 1;
+      const totalMovable = movableA + movableB;
+      if (totalMovable === 0) {
         continue;
       }
-      const overlap = minDistance - distance;
-      const strength = (sepStrength * (overlap / minDistance)) * dt;
-      const dirX = diffX / distance;
-      const dirY = diffY / distance;
       const multiplier = magnetA.dragging || magnetB.dragging ? dragSepMultiplier : 1;
+      const impulseBase = sepStrength * (penetration / Math.max(resolveAlongX
+        ? magnetA.w + magnetB.w
+        : magnetA.h + magnetB.h, 1)) * dt * multiplier;
+      const moveA = movableA ? (penetration * movableA) / totalMovable : 0;
+      const moveB = movableB ? (penetration * movableB) / totalMovable : 0;
       if (!magnetA.dragging) {
-        magnetA.vx -= dirX * strength * multiplier;
-        magnetA.vy -= dirY * strength * multiplier;
+        if (resolveAlongX) {
+          magnetA.x += direction * moveA;
+          magnetA.vx += direction * impulseBase;
+          if (magnetA.vx > 0 && direction < 0) {
+            magnetA.vx = Math.min(magnetA.vx, 0);
+          } else if (magnetA.vx < 0 && direction > 0) {
+            magnetA.vx = Math.max(magnetA.vx, 0);
+          }
+        } else {
+          magnetA.y += direction * moveA;
+          magnetA.vy += direction * impulseBase;
+          if (magnetA.vy > 0 && direction < 0) {
+            magnetA.vy = Math.min(magnetA.vy, 0);
+          } else if (magnetA.vy < 0 && direction > 0) {
+            magnetA.vy = Math.max(magnetA.vy, 0);
+          }
+        }
       }
       if (!magnetB.dragging) {
-        magnetB.vx += dirX * strength * multiplier;
-        magnetB.vy += dirY * strength * multiplier;
+        if (resolveAlongX) {
+          magnetB.x -= direction * moveB;
+          magnetB.vx -= direction * impulseBase;
+          if (magnetB.vx < 0 && direction < 0) {
+            magnetB.vx = Math.max(magnetB.vx, 0);
+          } else if (magnetB.vx > 0 && direction > 0) {
+            magnetB.vx = Math.min(magnetB.vx, 0);
+          }
+        } else {
+          magnetB.y -= direction * moveB;
+          magnetB.vy -= direction * impulseBase;
+          if (magnetB.vy < 0 && direction < 0) {
+            magnetB.vy = Math.max(magnetB.vy, 0);
+          } else if (magnetB.vy > 0 && direction > 0) {
+            magnetB.vy = Math.min(magnetB.vy, 0);
+          }
+        }
       }
     }
   }
