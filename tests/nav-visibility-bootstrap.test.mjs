@@ -192,40 +192,95 @@ function createDocument(nav) {
   };
 }
 
-async function loadNavMarkup() {
-  const htmlPath = path.join(repoRoot, 'index.html');
-  const html = await fs.readFile(htmlPath, 'utf8');
+async function loadHtml(filePath) {
+  const html = await fs.readFile(filePath, 'utf8');
+  return html;
+}
+
+function extractNavMarkup(html, sourcePath) {
   const navMatch = html.match(/<nav class="site-nav[\s\S]*?<\/nav>/);
-  assert.ok(navMatch, 'nav markup missing from index.html');
+  assert.ok(navMatch, `nav markup missing from ${sourcePath}`);
   return navMatch[0];
 }
 
-async function loadBootstrapScript() {
-  const htmlPath = path.join(repoRoot, 'index.html');
-  const html = await fs.readFile(htmlPath, 'utf8');
+function extractBootstrapScript(html, sourcePath) {
   const scriptMatches = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
   for (const match of scriptMatches) {
     if (match[1].includes('nvcApp.navSettings')) {
       return match[1];
     }
   }
-  assert.fail('bootstrap script missing from index.html');
+  assert.fail(`bootstrap script missing from ${sourcePath}`);
 }
 
-test('nav bootstrap reveals supplemental magnets before app boot', async () => {
-  const navMarkup = await loadNavMarkup();
-  const scriptBody = await loadBootstrapScript();
+function extractMagnetMap(scriptBody) {
+  const mapMatch = scriptBody.match(/var\s+magnetMap\s*=\s*\{([\s\S]*?)\};/);
+  assert.ok(mapMatch, 'magnet map missing from bootstrap script');
+  const mapBody = mapMatch[1];
+  const magnetIdToNavId = new Map();
+  const pairRegex = /([A-Za-z0-9_$]+)\s*:\s*'([^']+)'/g;
+  let match;
+  while ((match = pairRegex.exec(mapBody))) {
+    const navId = match[1];
+    const magnetId = match[2];
+    magnetIdToNavId.set(magnetId, navId);
+  }
+  return magnetIdToNavId;
+}
+
+async function listIndexFiles(rootDir) {
+  const entries = await fs.readdir(rootDir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    if (entry.name.startsWith('.')) {
+      continue;
+    }
+    const fullPath = path.join(rootDir, entry.name);
+    if (entry.isDirectory()) {
+      const childFiles = await listIndexFiles(fullPath);
+      files.push(...childFiles);
+    } else if (entry.isFile() && entry.name === 'index.html') {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+async function runBootstrapAssertions(htmlPath) {
+  const html = await loadHtml(htmlPath);
+  if (!html.includes('nvcApp.navSettings')) {
+    return;
+  }
+  const navMarkup = extractNavMarkup(html, htmlPath);
+  const scriptBody = extractBootstrapScript(html, htmlPath);
   const nav = buildNavFromMarkup(navMarkup);
+  const magnetIdToNavId = extractMagnetMap(scriptBody);
+
+  const supplementalMagnets = nav
+    .querySelectorAll('[data-magnet-id]')
+    .filter((magnet) =>
+      magnet.getAttribute('data-nav-supplemental') === 'true' ||
+      magnet.hasAttribute('data-nav-hidden'),
+    );
+
+  assert.ok(supplementalMagnets.length > 0, 'no supplemental magnets discovered');
+
+  const enabledNavIds = {};
+  for (const magnet of supplementalMagnets) {
+    const magnetId = magnet.getAttribute('data-magnet-id');
+    const navId = magnetIdToNavId.get(magnetId);
+    assert.ok(navId, `missing navId mapping for magnet ${magnetId}`);
+    enabledNavIds[navId] = true;
+  }
 
   const document = createDocument(nav);
-  const localStorage = new FakeStorage({
-    [NAV_STORAGE_KEY]: JSON.stringify({
-      enabled: {
-        bodyCues: true,
-        journalDashboard: true,
-      },
+  const localStorage = new FakeStorage();
+  localStorage.setItem(
+    NAV_STORAGE_KEY,
+    JSON.stringify({
+      enabled: enabledNavIds,
     }),
-  });
+  );
   const sessionStorage = new FakeStorage();
 
   const sandbox = {
@@ -243,18 +298,32 @@ test('nav bootstrap reveals supplemental magnets before app boot', async () => {
   vm.createContext(sandbox);
   vm.runInContext(scriptBody, sandbox);
 
-  const bodyCues = nav.querySelector('[data-magnet-id="nav-body-cues"]');
-  assert.ok(bodyCues, 'body cues magnet missing');
-  assert.equal(bodyCues.getAttribute('data-nav-hidden'), null);
-  assert.equal(bodyCues.getAttribute('aria-hidden'), null);
-  assert.equal(bodyCues.getAttribute('tabindex'), null);
-
-  const journalDashboard = nav.querySelector('[data-magnet-id="nav-journal-dashboard"]');
-  assert.ok(journalDashboard, 'journal dashboard magnet missing');
-  assert.equal(journalDashboard.getAttribute('data-nav-hidden'), null);
-  assert.equal(journalDashboard.getAttribute('aria-hidden'), null);
-  assert.equal(journalDashboard.getAttribute('tabindex'), null);
+  for (const magnet of supplementalMagnets) {
+    assert.equal(
+      magnet.getAttribute('data-nav-hidden'),
+      null,
+      `${magnet.getAttribute('data-magnet-id')} data-nav-hidden should be removed`,
+    );
+    assert.equal(
+      magnet.getAttribute('aria-hidden'),
+      null,
+      `${magnet.getAttribute('data-magnet-id')} aria-hidden should be removed`,
+    );
+    assert.equal(
+      magnet.getAttribute('tabindex'),
+      null,
+      `${magnet.getAttribute('data-magnet-id')} tabindex should not be forced`,
+    );
+  }
 
   const navExpanded = nav.getAttribute('data-nav-expanded');
-  assert.equal(navExpanded, 'true');
+  assert.equal(navExpanded, 'true', 'nav should be flagged as expanded');
+}
+
+test('nav bootstrap reveals supplemental magnets before app boot', async () => {
+  const htmlFiles = await listIndexFiles(repoRoot);
+  assert.ok(htmlFiles.length > 0, 'no index.html files found');
+  for (const file of htmlFiles) {
+    await runBootstrapAssertions(file);
+  }
 });
