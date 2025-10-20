@@ -1548,58 +1548,40 @@ button.site-nav__magnet {
 
     .observations-page .observation-cue-builder__chips {
       display: flex;
-      align-items: stretch;
-      gap: 0.5rem;
-      overflow-x: auto;
-      overflow-y: hidden;
-      touch-action: pan-x;
-      overscroll-behavior-inline: contain;
-      padding: 0.35rem 0.15rem 0.45rem;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding: 0.45rem 0.5rem 0.6rem;
       border-radius: var(--radius-2xl);
-      background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--observations-card-bg) 30%);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 68%, var(--observations-card-bg) 32%);
       min-height: 4.25rem;
-      scroll-snap-type: x mandatory;
+      max-height: min(40vh, 13.5rem);
+      overflow-y: auto;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      position: relative;
-      scroll-padding-inline: 0.75rem;
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
-      mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
-    }
-
-    .observations-page .observation-cue-builder__chips::after {
-      content: '';
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      right: 0.05rem;
-      width: 2.25rem;
-      height: 100%;
-      border-radius: var(--radius-2xl);
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        color-mix(in srgb, rgba(255, 255, 255, 0.92) 60%, var(--observations-card-bg) 40%) 65%,
-        color-mix(in srgb, rgba(255, 255, 255, 0.92) 92%, var(--outline) 8%) 100%
-      );
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      align-items: flex-start;
+      align-content: flex-start;
+      scrollbar-gutter: stable both-edges;
     }
 
     .observations-page .observation-cue-builder__chips .chip {
-      scroll-snap-align: start;
-      flex: 0 0 min(18rem, 82vw);
       min-height: 3.1rem;
       justify-content: flex-start;
     }
 
     .observations-page .observation-cue-builder__chips[data-state='empty'] {
+      display: flex;
+      flex-wrap: nowrap;
       justify-content: center;
-      min-height: 2.5rem;
+      align-items: center;
+      min-height: 3rem;
       background: transparent;
-      padding: 0;
+      padding: 0.35rem 0.5rem;
     }
 
     .observations-page .observation-cue-builder__chips[data-state='empty'] .chip--ghost {
-      flex: 0 1 auto;
-      min-width: auto;
+      width: auto;
       min-height: auto;
       padding: 0.2rem 0.4rem;
     }
