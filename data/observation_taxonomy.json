@@ -668,23 +668,6 @@
             "Safety",
             "Respect"
           ]
-        },
-        {
-          "id": "entered-room-without-knocking",
-          "label": "Entered my space without knocking",
-          "example": "They opened my closed door and walked in without knocking.",
-          "feelings": [
-            "Alarmed",
-            "Tense",
-            "Tense",
-            "Irritated"
-          ],
-          "needs": [
-            "Respect",
-            "Privacy",
-            "Safety",
-            "Consideration"
-          ]
         }
       ]
     },
@@ -1256,23 +1239,6 @@
           ]
         },
         {
-          "id": "missed-shared-chore",
-          "label": "Shared chore not done by agreed time",
-          "example": "Trash pickup day passed and the bins were not taken out as agreed.",
-          "feelings": [
-            "Irritated",
-            "Pressured",
-            "Disappointed",
-            "Tense"
-          ],
-          "needs": [
-            "Reliability",
-            "Support",
-            "Order",
-            "Consideration"
-          ]
-        },
-        {
           "id": "used-supplies-last",
           "label": "Used last of shared supplies without note",
           "example": "The last of the laundry detergent was used without leaving a note.",
@@ -1493,23 +1459,6 @@
             "Clarity",
             "Consideration"
           ]
-        },
-        {
-          "id": "split-bill-for-item",
-          "label": "Added item to split bill I didn’t order",
-          "example": "The split included an item I didn’t order.",
-          "feelings": [
-            "Anxious",
-            "Irritated",
-            "Embarrassed",
-            "Anxious"
-          ],
-          "needs": [
-            "Fairness",
-            "Clarity",
-            "Consideration",
-            "Choice"
-          ]
         }
       ]
     },
@@ -1548,23 +1497,6 @@
             "Autonomy",
             "Choice",
             "Privacy",
-            "Calm"
-          ]
-        },
-        {
-          "id": "added-to-group-without-asking",
-          "label": "Added me to a group without asking",
-          "example": "I was added to a group chat without being asked first.",
-          "feelings": [
-            "Anxious",
-            "Overwhelmed",
-            "Irritated",
-            "Tense"
-          ],
-          "needs": [
-            "Choice",
-            "Autonomy",
-            "Consideration",
             "Calm"
           ]
         },
@@ -1675,23 +1607,6 @@
             "Choice",
             "Space"
           ]
-        },
-        {
-          "id": "dishes-left",
-          "label": "Dishes left in sink past agreed time",
-          "example": "Dirty dishes remained in the sink the morning after the agreed cleanup time.",
-          "feelings": [
-            "Irritated",
-            "Tired",
-            "Irritated",
-            "Tense"
-          ],
-          "needs": [
-            "Order",
-            "Reliability",
-            "Consideration",
-            "Peace"
-          ]
         }
       ]
     },
@@ -1746,23 +1661,6 @@
           "needs": [
             "To be heard",
             "Respect",
-            "Safety",
-            "Love/Caring"
-          ]
-        },
-        {
-          "id": "walked-away",
-          "label": "Walked away while I was speaking",
-          "example": "During the conversation they turned and walked away while I was mid-sentence.",
-          "feelings": [
-            "Hurt",
-            "Angry",
-            "Tense",
-            "Alarmed"
-          ],
-          "needs": [
-            "Respect",
-            "To be heard",
             "Safety",
             "Love/Caring"
           ]
@@ -2142,23 +2040,6 @@
             "Respect",
             "Non-judgmental Communication"
           ]
-        },
-        {
-          "id": "entered-room-no-knock",
-          "label": "Entered my room without knocking",
-          "example": "The door opened and you walked in while it was closed.",
-          "feelings": [
-            "Startled",
-            "Uncomfortable",
-            "Irritated",
-            "Tense"
-          ],
-          "needs": [
-            "Space",
-            "Respect",
-            "Autonomy",
-            "Consideration"
-          ]
         }
       ]
     },
@@ -2281,23 +2162,6 @@
       "label": "Conflict style / Repair",
       "patterns": [
         {
-          "id": "raised-voice",
-          "label": "Voice got louder during disagreement",
-          "example": "In the discussion your voice became much louder after I spoke.",
-          "feelings": [
-            "Tense",
-            "Scared",
-            "Hurt",
-            "Anxious"
-          ],
-          "needs": [
-            "Peace",
-            "Calm",
-            "To be heard",
-            "Respect"
-          ]
-        },
-        {
           "id": "walked-away-mid-sentence",
           "label": "Walked away while I was mid-sentence",
           "example": "You turned and walked to the kitchen while I was talking.",
@@ -2337,23 +2201,6 @@
       "id": "criticism-sarcasm",
       "label": "Criticism / Sarcasm",
       "patterns": [
-        {
-          "id": "joke-at-expense",
-          "label": "Joke about me in front of others",
-          "example": "At dinner you joked about my habit and others laughed.",
-          "feelings": [
-            "Embarrassed",
-            "Hurt",
-            "Tense",
-            "Anxious"
-          ],
-          "needs": [
-            "Peer Respect",
-            "Respect",
-            "To be seen",
-            "Acknowledgement"
-          ]
-        },
         {
           "id": "always-never-quote",
           "label": "Used 'always/never' about me",
@@ -3053,23 +2900,6 @@
             "Participation",
             "To be seen",
             "Equality"
-          ]
-        },
-        {
-          "id": "decision-without-me",
-          "label": "Decision made without my input",
-          "example": "A decision affecting my work was made in a meeting I wasn’t invited to.",
-          "feelings": [
-            "Frustrated",
-            "Hurt",
-            "Tense",
-            "Concerned"
-          ],
-          "needs": [
-            "Participation",
-            "To be heard",
-            "Fairness",
-            "Respect"
           ]
         }
       ]
