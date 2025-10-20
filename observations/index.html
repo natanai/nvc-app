@@ -963,6 +963,19 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
   }
 
+  .observations-page .observation-panel__cta {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .observations-page .observation-panel__cta .support-actions {
+    margin-top: 0.25rem;
+  }
+
+  .observations-page .observation-panel__cta .support-button {
+    width: fit-content;
+  }
+
   .observations-page .observation-panel__placeholder {
     margin: 0;
     font-size: 0.95rem;
@@ -1623,6 +1636,12 @@ button.site-nav__magnet {
                 </div>
               </div>
               <p class="hint observation-panel__why" id="why"></p>
+              <div class="observation-panel__cta">
+                <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
+                <div class="support-actions support-actions--muted">
+                  <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
