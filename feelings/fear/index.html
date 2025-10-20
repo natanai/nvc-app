@@ -693,6 +693,24 @@ button.site-nav__magnet {
   }
 
   .site-nav__board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    justify-content: center;
+    align-content: start;
+  }
+
+  .site-nav__board .site-nav__magnet {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .site-nav__board .site-nav__magnet--home,
+  .site-nav__board .site-nav__magnet--customizer {
+    width: auto;
+    justify-self: center;
+  }
+
+  .site-nav__board {
     min-height: clamp(10.875rem, 39vw, 11.25rem);
   }
 
