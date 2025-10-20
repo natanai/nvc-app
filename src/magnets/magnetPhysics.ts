@@ -53,6 +53,8 @@ interface InternalMagnetState extends MagnetSnapshot {
   pointerId: number | null;
   offsetX: number;
   offsetY: number;
+  driftX: number;
+  driftY: number;
 }
 
 interface InternalState {
@@ -117,6 +119,17 @@ const getNow = () =>
 const parsePx = (value: string | null | undefined) => {
   const parsed = Number.parseFloat(value || '0');
   return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const createDriftVector = () => {
+  let x = 0;
+  let y = 0;
+  while (x === 0 && y === 0) {
+    x = Math.random() * 2 - 1;
+    y = Math.random() * 2 - 1;
+  }
+  const magnitude = Math.hypot(x, y) || 1;
+  return { x: x / magnitude, y: y / magnitude };
 };
 
 const waitForAnimationFrames = async (count = 1): Promise<void> => {
@@ -328,6 +341,7 @@ const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnet
     element.hidden ||
     element.dataset.navHidden === 'true' ||
     element.getAttribute('aria-hidden') === 'true';
+  const drift = createDriftVector();
   return {
     id: String(id),
     element,
@@ -342,6 +356,8 @@ const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnet
     pointerId: null,
     offsetX: 0,
     offsetY: 0,
+    driftX: drift.x,
+    driftY: drift.y,
   };
 };
 
@@ -584,8 +600,8 @@ const integrateMotion = (state: InternalState, dt: number) => {
       return;
     }
     if (!magnet.dragging) {
-      magnet.vx += (Math.random() * 2 - 1) * drift * jitterScaleX * dt;
-      magnet.vy += (Math.random() * 2 - 1) * drift * jitterScaleY * dt;
+      magnet.vx += magnet.driftX * drift * jitterScaleX * dt;
+      magnet.vy += magnet.driftY * drift * jitterScaleY * dt;
       magnet.vx += tiltStrength * tiltX * dt;
       magnet.vy += tiltStrength * tiltY * dt;
     }
@@ -600,16 +616,20 @@ const integrateMotion = (state: InternalState, dt: number) => {
     if (magnet.x < 0) {
       magnet.x = 0;
       magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      magnet.driftX = Math.abs(magnet.driftX);
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
       magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      magnet.driftX = -Math.abs(magnet.driftX);
     }
     if (magnet.y < 0) {
       magnet.y = 0;
       magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      magnet.driftY = Math.abs(magnet.driftY);
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
       magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      magnet.driftY = -Math.abs(magnet.driftY);
     }
     applyTransform(magnet);
   });
