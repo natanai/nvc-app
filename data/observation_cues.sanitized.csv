@@ -27,9 +27,9 @@ joke-at-expense,joked at my expense|made me the punchline|'just a joke' after in
 loss-of-pet,cat died|lost my dog|pet passed away,sad|lonely|hurt,support|connection|love-caring,My dog passed away last night.
 family-illness,serious diagnosis in family|bad medical news for family|parent diagnosed with serious illness,sad|anxious|tired,support|community,My mom was diagnosed with a serious condition.
 accident-witnessed,saw a crash|witnessed an accident|saw someone get hurt,alarmed|anxious|tense,safety|peace|support,I witnessed a crash at the intersection on my street.
-received-thanks,they thanked me|said thank you sincerely|expressed gratitude to me,nan,appreciation|acknowledgement|to-be-seen|connection,"After my help, they looked me in the eye and said thank you."
-kept-promise,kept their word|followed through as promised|did exactly what they said,nan,trust|reliability|commitment|dependability,They delivered the draft on the day they promised.
-invited-in,invited me to join|added me to the group|included me in the plan,nan,inclusion|belonging|to-be-seen|respect,They asked if I'd like to join the outing and saved me a seat.
+received-thanks,they thanked me|said thank you sincerely|expressed gratitude to me,,appreciation|acknowledgement|to-be-seen|connection,"After my help, they looked me in the eye and said thank you."
+kept-promise,kept their word|followed through as promised|did exactly what they said,,trust|reliability|commitment|dependability,They delivered the draft on the day they promised.
+invited-in,invited me to join|added me to the group|included me in the plan,,inclusion|belonging|to-be-seen|respect,They asked if I'd like to join the outing and saved me a seat.
 kept-waiting,waited minutes|left waiting for|kept me waiting minutes,irritated|anxious|tired,consideration|order|respect|predictability,I waited 40 minutes past the start time.
 repeated-cancellations,keeps canceling|canceled repeatedly|backed out multiple times,disappointed|sad|frustrated|hurt,trust|reliability|commitment|dependability,They canceled three weekends in a row.
 edited-message-after,post edited to remove context|changed message after I replied|edited message to change meaning,confused|anxious,clarity|honesty|trust|respect,"After I responded, the original message was edited to say something different."
@@ -44,14 +44,14 @@ seat-taken,reserved seat occupied|reservation not honored|seat taken though rese
 link-broken,broken link|link not working|404 page,confused|anxious,clarity|support|order|predictability,The shared link returned a 404 error.
 account-locked,account locked out|locked out of account|too many login attempts locked,anxious|frustrated,support|clarity,My account was locked after one failed attempt.
 twofactor-required-suddenly,new verification requirement|2FA required suddenly|two-factor turned on without notice,confused|anxious,clarity|predictability|support|security,Two‑factor login was enforced without prior notice.
-checked-pronouns,asked my pronouns respectfully|checked pronouns before introducing|confirmed how to address me,nan,respect|honor|belonging|to-be-seen,They asked how I want to be addressed before the meeting.
-credit-given,acknowledged my effort|named me as contributor|credited my work publicly,nan,acknowledgement|recognition|respect|honor,They thanked me by name in the meeting notes.
+checked-pronouns,asked my pronouns respectfully|checked pronouns before introducing|confirmed how to address me,,respect|honor|belonging|to-be-seen,They asked how I want to be addressed before the meeting.
+credit-given,acknowledged my effort|named me as contributor|credited my work publicly,,acknowledgement|recognition|respect|honor,They thanked me by name in the meeting notes.
 file-structure-changed,folder structure changed|paths changed without update|files reorganized without notice,confused|anxious,clarity|predictability|respect|consideration,Shared folders were reorganized and links broke.
 child-unsupervised,child left unsupervised|no supervision provided|child alone in room,alarmed|scared|tense|anxious,safety|predictability|trust,I found the child alone for several minutes in the hallway.
 door-propped-open,exit left open|door propped open|security door ajar,anxious|alarmed,security|safety|predictability,The exterior door was propped open overnight.
-feedback-specific-praise,named what worked|specific praise given|detailed appreciation shared,nan,acknowledgement|appreciation|to-be-seen|connection,They named exactly what they valued about my work.
-check-in-before-ask,checked capacity before asking|confirmed timing before request|asked if I had bandwidth,nan,consideration|respect|mutuality|support,They asked about my bandwidth before assigning the task.
-asked-consent,asked for consent|asked before sharing info|checked if touch is okay,nan,autonomy|privacy|respect|safety,They asked if a hug was okay first.
+feedback-specific-praise,named what worked|specific praise given|detailed appreciation shared,,acknowledgement|appreciation|to-be-seen|connection,They named exactly what they valued about my work.
+check-in-before-ask,checked capacity before asking|confirmed timing before request|asked if I had bandwidth,,consideration|respect|mutuality|support,They asked about my bandwidth before assigning the task.
+asked-consent,asked for consent|asked before sharing info|checked if touch is okay,,autonomy|privacy|respect|safety,They asked if a hug was okay first.
 doctor-late,doctor arrived late|appointment started late|long wait at clinic,tired|anxious|irritated,predictability|respect|consideration,The appointment started 45 minutes after the scheduled time.
 results-portal-no-update,portal not updated|no lab results posted|results missing in portal,confused|anxious,clarity|predictability|support|trust,The portal still shows 'pending' two weeks later.
 privacy-breached-clinic,privacy not maintained|discussed details within earshot|name called loudly in waiting room,anxious,privacy|respect|safety,Medical details were discussed at the desk within earshot of others.
@@ -65,8 +65,8 @@ lighting-harsh,flickering light|harsh fluorescent lights|lighting causing headac
 unmute-background-noise,unmuted background noise|noisy typing on mic|mic left on causing echo,overwhelmed|tense|irritated,clarity|consideration|respect,Typing sounds drowned out the speaker.
 screen-share-not-prepped,notifications visible on share|personal info shown on share|screen shared with private tabs,anxious,privacy|safety|respect|consideration,Personal messages popped up during screen share.
 recording-shared-public,meeting video shared broadly|link to recording made public|recording posted publicly without notice,anxious,privacy|trust|clarity|respect,The recording link was posted to a public channel.
-ride-waited-for-me,driver waited for me|waited instead of canceling|ride waited past pickup time,nan,consideration|support|reliability,They waited five minutes instead of canceling instantly.
-offered-seat,offered me their seat|gave up seat for me|stood so I could sit,nan,community|consideration|belonging,A stranger offered me their seat on the bus.
+ride-waited-for-me,driver waited for me|waited instead of canceling|ride waited past pickup time,,consideration|support|reliability,They waited five minutes instead of canceling instantly.
+offered-seat,offered me their seat|gave up seat for me|stood so I could sit,,community|consideration|belonging,A stranger offered me their seat on the bus.
 panic-episode,panic attack|felt panicky|heart racing episode,scared|alarmed|anxious|tired,safety|support|peace,I had a panic attack on the train.
 irritability-spike,snapped at people|irritability kept spiking|short fused all day,tense|tired|confused,support|rest|understanding,I snapped at a friend over something small.
 friend-yelled,yelled at me|shouted at me|my friend yelled at me|my friend shouted at me|raised their voice at me|my friend raised their voice at me,hurt|anxious|tense|angry,respect|to-be-heard|consideration|honor,My friend their voice got louder while speaking to me.
@@ -161,9 +161,9 @@ i-yelled,I yelled at them|I raised my voice|I shouted during the argument,anxiou
 i-broke-promise,I broke a promise|I failed to follow through|I didn't do what I said,sad|anxious|tense,accountability|integrity|honesty,I said I'd call and I didn't.
 i-forgot-important-date,I forgot their birthday|I forgot our anniversary|I missed an important date,sad|anxious,acknowledgement|respect|love-caring,I forgot their birthday.
 i-shared-without-consent,I shared their message without asking|I forwarded their email without consent|I posted their photo without permission,anxious|sad,privacy|respect|integrity,I posted a photo of them without checking first.
-stranger-kindness,stranger helped me|someone held the door|someone paid for my coffee,nan,community|connection|appreciation,A stranger paid for my coffee.
-nature-calm,listened to birds|watched the sunrise|saw a beautiful sky,nan,peace|serenity|rest|connection,I watched the sunrise before work.
-team-supported,team covered for me|coworker offered to help|manager protected my time,nan,support|consideration|trust,My teammate offered to take a task off my plate.
+stranger-kindness,stranger helped me|someone held the door|someone paid for my coffee,,community|connection|appreciation,A stranger paid for my coffee.
+nature-calm,listened to birds|watched the sunrise|saw a beautiful sky,,peace|serenity|rest|connection,I watched the sunrise before work.
+team-supported,team covered for me|coworker offered to help|manager protected my time,,support|consideration|trust,My teammate offered to take a task off my plate.
 feeling-agitated-work,feedback given in public|credit taken by someone else|deadline moved earlier without asking,agitated|anxious|hurt,accountability|justice|to-be-heard|peer-respect,Feedback about me was given publicly without any heads-up.
 feeling-agitated-relationship,stopped replying for days|canceled plans last minute|compared me to an ex,agitated|anxious|hurt,closeness|to-be-seen|love-caring|acceptance,They canceled our plan at the last minute and stopped replying.
 feeling-agitated-public,cut in line at checkout|someone shouted near my ear|crowded train pressed against me,agitated|anxious|hurt,equality|respect|safety|community,Someone cut in front of me in a long line at the store.
@@ -212,10 +212,10 @@ feeling-impotent-work,feedback given in public|credit taken by someone else|dead
 feeling-impotent-relationship,stopped replying for days|canceled plans last minute|compared me to an ex,impotent|anxious|hurt,closeness|to-be-seen|love-caring|acceptance,They canceled our plan at the last minute and stopped replying.
 feeling-impotent-public,cut in line at checkout|someone shouted near my ear|crowded train pressed against me,impotent|anxious|hurt,equality|respect|safety|community,Someone cut in front of me in a long line at the store.
 feeling-impotent-digital,forwarded my email to others|posted my photo without consent|tagged me publicly without context,impotent|anxious|hurt,privacy|to-be-seen|accountability|justice,A photo of me was posted publicly without asking first.
-feeling-in pain-work,feedback given in public|credit taken by someone else|deadline moved earlier without asking,in-pain|anxious|hurt,accountability|justice|to-be-heard|peer-respect,Feedback about me was given publicly without any heads-up.
-feeling-in pain-relationship,stopped replying for days|canceled plans last minute|compared me to an ex,in-pain|anxious|hurt,closeness|to-be-seen|love-caring|acceptance,They canceled our plan at the last minute and stopped replying.
-feeling-in pain-public,cut in line at checkout|someone shouted near my ear|crowded train pressed against me,in-pain|anxious|hurt,equality|respect|safety|community,Someone cut in front of me in a long line at the store.
-feeling-in pain-digital,forwarded my email to others|posted my photo without consent|tagged me publicly without context,in-pain|anxious|hurt,privacy|to-be-seen|accountability|justice,A photo of me was posted publicly without asking first.
+feeling-in-pain-work,feedback given in public|credit taken by someone else|deadline moved earlier without asking,in-pain|anxious|hurt,accountability|justice|to-be-heard|peer-respect,Feedback about me was given publicly without any heads-up.
+feeling-in-pain-relationship,stopped replying for days|canceled plans last minute|compared me to an ex,in-pain|anxious|hurt,closeness|to-be-seen|love-caring|acceptance,They canceled our plan at the last minute and stopped replying.
+feeling-in-pain-public,cut in line at checkout|someone shouted near my ear|crowded train pressed against me,in-pain|anxious|hurt,equality|respect|safety|community,Someone cut in front of me in a long line at the store.
+feeling-in-pain-digital,forwarded my email to others|posted my photo without consent|tagged me publicly without context,in-pain|anxious|hurt,privacy|to-be-seen|accountability|justice,A photo of me was posted publicly without asking first.
 feeling-jealous-work,feedback given in public|credit taken by someone else|deadline moved earlier without asking,jealous|anxious|hurt,accountability|justice|to-be-heard|peer-respect,Feedback about me was given publicly without any heads-up.
 feeling-jealous-relationship,stopped replying for days|canceled plans last minute|compared me to an ex,jealous|anxious|hurt,closeness|to-be-seen|love-caring|acceptance,They canceled our plan at the last minute and stopped replying.
 feeling-jealous-public,cut in line at checkout|someone shouted near my ear|crowded train pressed against me,jealous|anxious|hurt,equality|respect|safety|community,Someone cut in front of me in a long line at the store.
@@ -343,6 +343,7 @@ overruled,my suggestion not considered|decision made without my input,disappoint
 physical-queue-cut,cut in line|stepped ahead at checkout,irritated|angry|tense,fairness|order|respect|consideration,They stepped ahead of me in the line without asking.
 mess-left,left dishes|trash overflowed|didn't clean shared space,irritated|tired|tense,consideration|support|order,Shared sink was full of dishes after agreed chore time.
 volume-overlap,multiple people speaking|cross-talk prevented hearing,overwhelmed|tense|lonely|anxious,clarity|order|to-be-heard|inclusion,Three people spoke at once during the call; I couldn't get a word in.
+talked-over-general,they also began speaking|they began speaking while I was mid-sentence|my sentence stopped mid-word when they began speaking|they started talking while I was speaking,hurt|anxious|tense|angry,respect|to-be-heard|consideration|honor,"While I was speaking, they also began speaking and my sentence stopped mid-word."
 question-not-answered,didn't answer my question|did not answer my question|replied without addressing the question|changed the subject after I asked,confused|lonely|anxious|frustrated,clarity|to-be-heard|understanding|respect,I asked 'Can we review the budget?' and the topic switched without any answer.
 camera-off-midcall,turned off the camera|blank screen while I shared|camera went off while I spoke,lonely|anxious|confused|hurt,connection|to-be-seen|consideration|belonging,"While I spoke, their camera switched off and stayed blank."
 arrived-without-notice,showed up without warning|came by without texting first|arrived unannounced at my place,alarmed|tense|anxious|overwhelmed,privacy|space|predictability|safety,They knocked on my door late at night without sending a message beforehand.
