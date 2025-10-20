@@ -83,41 +83,52 @@ function render() {
   const previewEl = $('#free-obs-preview');
   if (previewEl) previewEl.textContent = preview || 'Your observation will preview here…';
 
-  const lint = lintObservation([state.whenWhere, state.whatSawHeard, state.gap].join(' '));
-  const lintBox = $('#free-lint-box');
-  const lintMsg = $('#free-lint-msg');
-  if (lintBox && lintMsg) {
-    if (!lint.ok) {
-      lintBox.classList.remove('hidden');
-      lintMsg.textContent = `This reads like an evaluation (${lint.hits.join(', ')}). Want help rewriting as a camera-test observation?`;
-    } else {
-      lintBox.classList.add('hidden');
-    }
-  }
+  const lint = lintObservation([state.whenWhere, state.whatSawHeard, state.gap].join(' '), state.catalog);
+  renderLintFeedback(lint, state.catalog);
 
   const { feelings, needs, why } = suggestFromObservation(preview, state.cues);
-  const feelingSlugs = feelings.filter(slug => state.catalog.feelings.has(slug));
-  const needSlugs = needs.filter(slug => state.catalog.needs.has(slug));
-  renderChips($('#free-suggest-feelings'), feelingSlugs, '/feelings/', state.catalog.feelings);
-  renderChips($('#free-suggest-needs'), needSlugs, '/needs/', state.catalog.needs);
+  const directFeelingSlugs = (lint.feelings || []).filter(slug => state.catalog.feelings.has(slug));
+  const directNeedSlugs = (lint.needs || []).filter(slug => state.catalog.needs.has(slug));
+  const directFauxFeelings = (lint.fauxFeelings || []).filter(slug => state.catalog.fauxFeelings.has(slug));
+  const feelingSlugs = mergeUnique(directFeelingSlugs, feelings).filter(slug => state.catalog.feelings.has(slug));
+  const needSlugs = mergeUnique(directNeedSlugs, needs).filter(slug => state.catalog.needs.has(slug));
+  renderChips($('#free-suggest-feelings'), feelingSlugs.slice(0, 6), '/feelings/', state.catalog.feelings);
+  renderChips($('#free-suggest-needs'), needSlugs.slice(0, 6), '/needs/', state.catalog.needs);
   const whyEl = $('#free-suggest-why');
   if (whyEl) {
     const cueList = [...new Set(why)];
-    const reasonText = cueList.length
-      ? cueList.map(slug => slug.replace(/-/g, ' ')).join(', ')
-      : '';
-    whyEl.textContent = reasonText
-      ? `Cue matches: ${reasonText}`
+    const reasons = [];
+    if (cueList.length) {
+      reasons.push(`Cue matches: ${cueList.map(slug => slug.replace(/-/g, ' ')).join(', ')}`);
+    }
+    const directReasons = [];
+    if (directFeelingSlugs.length) directReasons.push(directFeelingSlugs.length === 1 ? 'a feeling word' : 'feeling words');
+    if (directNeedSlugs.length) directReasons.push(directNeedSlugs.length === 1 ? 'a need word' : 'need words');
+    if (directFauxFeelings.length) directReasons.push(directFauxFeelings.length === 1 ? 'a faux feeling' : 'faux feelings');
+    if (directReasons.length) {
+      reasons.push(`Direct matches from your wording (${directReasons.join(', ')})`);
+    }
+    whyEl.textContent = reasons.length
+      ? reasons.join(' · ')
       : 'No cues detected yet — add what was seen/heard.';
   }
 
-  const fauxFeelings = deriveFauxFeelings(feelingSlugs, needSlugs);
-  renderChips($('#free-suggest-faux-feelings'), fauxFeelings, '/faux-feelings/', state.catalog.fauxFeelings);
+  const fauxFeelings = mergeUnique(directFauxFeelings, deriveFauxFeelings(feelingSlugs, needSlugs));
+  renderChips(
+    $('#free-suggest-faux-feelings'),
+    fauxFeelings.slice(0, 6),
+    '/faux-feelings/',
+    state.catalog.fauxFeelings,
+  );
   const fauxFeelingsHint = $('#free-suggest-faux-feelings-hint');
   if (fauxFeelingsHint) {
-    fauxFeelingsHint.textContent = fauxFeelings.length
-      ? 'Linked from the current feeling and need matches.'
-      : 'Add more detail to surface related faux feelings.';
+    if (directFauxFeelings.length) {
+      fauxFeelingsHint.textContent = 'These surfaced directly from what you typed.';
+    } else {
+      fauxFeelingsHint.textContent = fauxFeelings.length
+        ? 'Linked from the current feeling and need matches.'
+        : 'Add more detail to surface related faux feelings.';
+    }
   }
 
   const rewriteBtn = $('#rewrite-btn');
@@ -245,6 +256,144 @@ function deriveFauxFeelings(feelingSlugs, needSlugs) {
     }
   });
   return matches.slice(0, 6);
+}
+
+function renderLintFeedback(lint, catalog) {
+  const lintBox = $('#free-lint-box');
+  const lintMsg = $('#free-lint-msg');
+  const rewriteBtn = $('#rewrite-btn');
+  if (!lintBox || !lintMsg || !rewriteBtn) {
+    return;
+  }
+
+  const paragraphs = [];
+  const evaluationTokens = uniqueStrings([
+    ...(lint.evaluationMarkers || []),
+    ...(lint.agentiveMarkers || []),
+  ]);
+  if (evaluationTokens.length) {
+    const p = document.createElement('p');
+    p.textContent = `This reads like an evaluation (${formatList(evaluationTokens)}). Want help rewriting as a camera-test observation?`;
+    paragraphs.push(p);
+  }
+
+  if (lint.fauxFeelings && lint.fauxFeelings.length) {
+    paragraphs.push(
+      createCatalogParagraph({
+        slugs: lint.fauxFeelings,
+        catalogMap: catalog?.fauxFeelings,
+        baseHref: '/faux-feelings/',
+        singular: 'Noticed faux feeling',
+        plural: 'Noticed faux feelings',
+        cta: 'Jump straight to the faux feelings library?'
+      }),
+    );
+  }
+
+  if (lint.feelings && lint.feelings.length) {
+    paragraphs.push(
+      createCatalogParagraph({
+        slugs: lint.feelings,
+        catalogMap: catalog?.feelings,
+        baseHref: '/feelings/',
+        singular: 'Spotted feeling word',
+        plural: 'Spotted feeling words',
+        cta: 'Explore them on the feelings page.'
+      }),
+    );
+  }
+
+  if (lint.needs && lint.needs.length) {
+    paragraphs.push(
+      createCatalogParagraph({
+        slugs: lint.needs,
+        catalogMap: catalog?.needs,
+        baseHref: '/needs/',
+        singular: 'Spotted need word',
+        plural: 'Spotted need words',
+        cta: 'Would the needs inventory serve better right now?'
+      }),
+    );
+  }
+
+  if (!paragraphs.length) {
+    lintBox.classList.add('hidden');
+    lintMsg.replaceChildren();
+    rewriteBtn.hidden = true;
+    return;
+  }
+
+  lintBox.classList.remove('hidden');
+  lintMsg.replaceChildren(...paragraphs);
+  const showRewrite = evaluationTokens.length || (lint.feelings && lint.feelings.length) || (lint.needs && lint.needs.length);
+  rewriteBtn.hidden = !showRewrite;
+}
+
+function createCatalogParagraph({ slugs, catalogMap, baseHref, singular, plural, cta }) {
+  const p = document.createElement('p');
+  const label = slugs.length === 1 ? singular : plural;
+  p.appendChild(document.createTextNode(`${label}: `));
+  const links = (slugs || []).map(slug => createCatalogLink(slug, baseHref, catalogMap));
+  appendLinkList(p, links.filter(Boolean));
+  if (cta) {
+    p.appendChild(document.createTextNode(` ${cta}`));
+  }
+  return p;
+}
+
+function createCatalogLink(slug, baseHref, catalogMap) {
+  if (!slug) return null;
+  const a = document.createElement('a');
+  a.href = baseHref + encodeURIComponent(slug) + '/';
+  const info = catalogMap && typeof catalogMap.get === 'function' ? catalogMap.get(slug) : null;
+  const label = info?.title || slug.replace(/-/g, ' ');
+  a.textContent = label;
+  return a;
+}
+
+function appendLinkList(parent, nodes) {
+  const list = nodes.filter(Boolean);
+  list.forEach((node, index) => {
+    if (index > 0) {
+      const connector = index === list.length - 1 ? ' and ' : ', ';
+      parent.appendChild(document.createTextNode(connector));
+    }
+    parent.appendChild(node);
+  });
+}
+
+function mergeUnique(primary = [], secondary = []) {
+  const out = [];
+  const seen = new Set();
+  [primary, secondary].forEach(list => {
+    (list || []).forEach(item => {
+      if (!item || seen.has(item)) return;
+      seen.add(item);
+      out.push(item);
+    });
+  });
+  return out;
+}
+
+function formatList(items) {
+  if (!items || !items.length) return '';
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
+function uniqueStrings(items) {
+  if (!Array.isArray(items)) return [];
+  const out = [];
+  const seen = new Set();
+  items.forEach(item => {
+    if (!item) return;
+    const key = String(item).toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(item);
+  });
+  return out;
 }
 
 document.addEventListener('DOMContentLoaded', init);
