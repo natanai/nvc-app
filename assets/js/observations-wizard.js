@@ -17,6 +17,22 @@ const previewState = {
   source: 'guided',
 };
 
+const MOBILE_PANEL_QUERY = '(max-width: 820px)';
+
+const panelRefs = {
+  root: null,
+  toggle: null,
+  status: null,
+  close: null,
+  scrim: null,
+};
+
+const panelState = {
+  media: null,
+  isOpen: false,
+  hasUnviewed: false,
+};
+
 function $(selector) {
   return document.querySelector(selector);
 }
@@ -26,6 +42,199 @@ function h(tag, cls, text) {
   if (cls) el.className = cls;
   if (text) el.textContent = text;
   return el;
+}
+
+function cachePanelRefs() {
+  if (!panelRefs.root) panelRefs.root = $('#observation-panel');
+  if (!panelRefs.toggle) panelRefs.toggle = document.querySelector('[data-observation-panel-toggle]');
+  if (!panelRefs.status) panelRefs.status = document.querySelector('[data-observation-panel-status]');
+  if (!panelRefs.close) panelRefs.close = document.querySelector('[data-observation-panel-close]');
+  if (!panelRefs.scrim) panelRefs.scrim = document.querySelector('[data-observation-panel-scrim]');
+}
+
+function ensurePanelMedia() {
+  if (typeof window === 'undefined') return;
+  if (!panelState.media) {
+    panelState.media = window.matchMedia(MOBILE_PANEL_QUERY);
+  }
+}
+
+function isMobilePanelMode() {
+  ensurePanelMedia();
+  return Boolean(panelState.media && panelState.media.matches);
+}
+
+function setBodyScrollLock(active) {
+  if (typeof document === 'undefined') return;
+  const body = document.body;
+  if (!body) return;
+  body.classList.toggle('observation-panel-open', Boolean(active));
+}
+
+function updatePanelUIVisibility() {
+  cachePanelRefs();
+  const mobile = isMobilePanelMode();
+  const root = panelRefs.root;
+  const toggle = panelRefs.toggle;
+  const status = panelRefs.status;
+  const scrim = panelRefs.scrim;
+  const open = mobile ? panelState.isOpen : true;
+
+  if (root) {
+    if (mobile) {
+      root.dataset.mobileOpen = open ? 'true' : 'false';
+      if (open) {
+        root.removeAttribute('aria-hidden');
+        root.removeAttribute('inert');
+      } else {
+        root.setAttribute('aria-hidden', 'true');
+        root.setAttribute('inert', '');
+      }
+    } else {
+      root.removeAttribute('aria-hidden');
+      root.removeAttribute('inert');
+      if (root.dataset && 'mobileOpen' in root.dataset) {
+        delete root.dataset.mobileOpen;
+      }
+    }
+  }
+
+  if (toggle) {
+    toggle.hidden = !mobile;
+    toggle.setAttribute('aria-expanded', mobile && open ? 'true' : 'false');
+    toggle.setAttribute('data-panel-open', open ? 'true' : 'false');
+    toggle.setAttribute('data-panel-has-updates', panelState.hasUnviewed && mobile && !open ? 'true' : 'false');
+  }
+
+  if (status) {
+    let label = 'Showing';
+    if (mobile) {
+      if (open) {
+        label = 'Showing';
+      } else if (panelState.hasUnviewed) {
+        label = 'Updated';
+      } else {
+        label = 'Hidden';
+      }
+    }
+    status.textContent = label;
+  }
+
+  if (scrim) {
+    scrim.hidden = !mobile || !open;
+  }
+
+  setBodyScrollLock(mobile && open);
+}
+
+function setPanelOpen(open, { focusPanel = false } = {}) {
+  const mobile = isMobilePanelMode();
+  if (!mobile) {
+    panelState.isOpen = true;
+    panelState.hasUnviewed = false;
+    updatePanelUIVisibility();
+    return;
+  }
+  panelState.isOpen = Boolean(open);
+  if (panelState.isOpen) {
+    panelState.hasUnviewed = false;
+  }
+  updatePanelUIVisibility();
+  if (panelState.isOpen && focusPanel) {
+    cachePanelRefs();
+    if (panelRefs.root && typeof panelRefs.root.focus === 'function') {
+      panelRefs.root.focus();
+    }
+  }
+}
+
+function markPanelUnviewed(hasUnviewed) {
+  const mobile = isMobilePanelMode();
+  if (!mobile) {
+    if (panelState.hasUnviewed !== false) {
+      panelState.hasUnviewed = false;
+      updatePanelUIVisibility();
+    }
+    return;
+  }
+  const next = Boolean(hasUnviewed);
+  if (panelState.hasUnviewed !== next) {
+    panelState.hasUnviewed = next;
+    updatePanelUIVisibility();
+  } else if (next) {
+    updatePanelUIVisibility();
+  }
+}
+
+function setupPanelMobileControls() {
+  ensurePanelMedia();
+  cachePanelRefs();
+  const root = panelRefs.root;
+  if (!root) {
+    return;
+  }
+
+  const handleMediaChange = () => {
+    panelState.hasUnviewed = false;
+    if (isMobilePanelMode()) {
+      panelState.isOpen = false;
+    } else {
+      panelState.isOpen = true;
+    }
+    updatePanelUIVisibility();
+  };
+
+  if (panelState.media) {
+    if (typeof panelState.media.addEventListener === 'function') {
+      panelState.media.addEventListener('change', handleMediaChange);
+    } else if (typeof panelState.media.addListener === 'function') {
+      panelState.media.addListener(handleMediaChange);
+    }
+  }
+
+  const toggle = panelRefs.toggle;
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      if (!isMobilePanelMode()) return;
+      setPanelOpen(!panelState.isOpen, { focusPanel: true });
+    });
+  }
+
+  const close = panelRefs.close;
+  if (close) {
+    close.addEventListener('click', () => {
+      if (!isMobilePanelMode()) return;
+      setPanelOpen(false);
+    });
+  }
+
+  const scrim = panelRefs.scrim;
+  if (scrim) {
+    scrim.addEventListener('click', () => {
+      if (!isMobilePanelMode()) return;
+      setPanelOpen(false);
+    });
+  }
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && panelState.isOpen && isMobilePanelMode()) {
+      event.preventDefault();
+      setPanelOpen(false);
+    }
+  });
+
+  handleMediaChange();
+}
+
+function handleSuggestionPanelUpdate(data) {
+  const feelings = Array.isArray(data?.feelings) ? data.feelings : [];
+  const needs = Array.isArray(data?.needs) ? data.needs : [];
+  const hasContent = Boolean(data?.showPanel && (feelings.length || needs.length));
+  if (panelState.isOpen) {
+    markPanelUnviewed(false);
+  } else {
+    markPanelUnviewed(hasContent);
+  }
 }
 
 function applyPreviewState() {
@@ -64,6 +273,7 @@ async function init() {
   await Promise.all([loadTaxonomy(), loadFauxFeelings()]);
   ensureSelection();
   render();
+  setupPanelMobileControls();
 }
 
 async function loadTaxonomy() {
@@ -529,6 +739,8 @@ function applySuggestionPanel() {
     whyEl.hidden = true;
     whyEl.textContent = '';
   }
+
+  handleSuggestionPanelUpdate(data);
 }
 
 function setSuggestionState(source, payload = {}) {
@@ -577,6 +789,7 @@ function render() {
   updateFamilyToggleLabel();
   renderSearchHint();
   applyFamilyMenuState();
+  updatePanelUIVisibility();
 }
 
 function activateTab(id) {
@@ -595,6 +808,10 @@ function activateTab(id) {
     renderSuggestions();
   }
   applySuggestionPanel();
+  if (isMobilePanelMode()) {
+    setPanelOpen(false);
+    markPanelUnviewed(false);
+  }
   document.dispatchEvent(
     new CustomEvent('observations:tab-change', {
       detail: { id },
