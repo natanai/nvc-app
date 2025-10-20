@@ -16,11 +16,6 @@ function csvEscape(v) {
   return '"' + s.replace(/"/g,'""') + '"';
 }
 
-const REGEX_META = /[\\^$.|?*+()[\]{}]/g;
-function regexEscapeLiteral(text) {
-  return String(text).replace(REGEX_META, "\\$&");
-}
-
 function validatePatternDialect(pattern) {
   const errors = [];
   if (/\(\?<=/.test(pattern)) errors.push("Lookbehind is not allowed in the minimal dialect.");
@@ -125,6 +120,25 @@ function toSlug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
+function normalizeAdvisoryText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function parseDelimitedField(value) {
+  if (Array.isArray(value)) {
+    return value.map(v => String(v || "").trim()).filter(Boolean);
+  }
+  if (!value) return [];
+  return String(value)
+    .split("|")
+    .map(part => part.trim())
+    .filter(Boolean);
+}
+
 const CATALOG_DIRS = ["data", "data/catalogs", "docs"];
 
 function findCatalog(name) {
@@ -171,10 +185,11 @@ function loadFauxCatalog(filename) {
   const objects = rowsToObjects(rows);
   const items = [];
   for (const row of objects) {
-    const slug = toSlug(row["Slug Override"] || row["Faux Feeling Title"] || "");
+    const title = row["Faux Feeling Title"] || row["Slug Override"] || "";
+    const slug = toSlug(row["Slug Override"] || title || "");
     if (!slug) continue;
-    const pattern = new RegExp(`\\b${regexEscapeLiteral(slug).replace(/-/g, "[\\s-]")}\\b`, "i");
-    items.push({ slug, pattern });
+    const normalizedTitle = normalizeAdvisoryText(title);
+    items.push({ slug, normalizedTitle });
   }
   return items;
 }
@@ -191,6 +206,8 @@ function main() {
   const feelingsCatalog = loadCatalogSet("Feelings.csv", ["Slug Override"], ["Feeling Title"]);
   const needsCatalog = loadCatalogSet("Needs.csv", ["Slug Override"], ["Need Title"]);
   const fauxCatalog = loadFauxCatalog("Faux Feelings.csv") || [];
+  const fauxSlugSet = new Set(fauxCatalog.map(item => item.slug).filter(Boolean));
+  const fauxTitleSet = new Set(fauxCatalog.map(item => item.normalizedTitle).filter(Boolean));
 
   const failures = [];
   const stats = {
@@ -200,28 +217,50 @@ function main() {
     compile_errors: 0,
     unknown_feelings: 0,
     unknown_needs: 0,
+    faux_hits_feelings: 0,
+    faux_mentions_nonblocking: 0,
     faux_hits: 0
   };
 
   for (const cue of cues) {
     const patterns = cue.patterns || [];
-    const feelings = cue.feelings || [];
-    const needs = cue.needs || [];
-    const unknownFeelings = feelings.filter(f => feelingsCatalog && !feelingsCatalog.has(toSlug(f)));
-    const unknownNeeds = needs.filter(n => needsCatalog && !needsCatalog.has(toSlug(n)));
+    const feelingsList = parseDelimitedField(cue.feelings);
+    const needsList = parseDelimitedField(cue.needs);
+
+    const feelingsEntries = feelingsList.map(value => ({ value, slug: toSlug(value) }));
+    const feelingsSlugs = feelingsEntries.map(entry => entry.slug);
+
+    const unknownFeelings = feelingsEntries
+      .filter(entry => feelingsCatalog && !feelingsCatalog.has(entry.slug))
+      .map(entry => entry.value);
+    const unknownNeeds = needsList.filter(n => needsCatalog && !needsCatalog.has(toSlug(n)));
 
     if (unknownFeelings.length) stats.unknown_feelings += unknownFeelings.length;
     if (unknownNeeds.length) stats.unknown_needs += unknownNeeds.length;
 
-    const fauxMatches = [];
-    if (fauxCatalog.length) {
-      const scanText = [cue.cue, cue.example, patterns.join(" ")].join(" ").toLowerCase();
-      for (const faux of fauxCatalog) {
-        if (faux.pattern.test(scanText)) {
-          fauxMatches.push(faux.slug);
+    const fauxInFeelings = [...new Set(feelingsSlugs.filter(slug => fauxSlugSet.has(slug)))];
+    const hasBlockingFaux = fauxInFeelings.length > 0;
+    if (hasBlockingFaux) stats.faux_hits_feelings++;
+
+    if ((fauxSlugSet.size || fauxTitleSet.size) && (cue.example || patterns.length)) {
+      const scanParts = [];
+      if (cue.example) scanParts.push(String(cue.example));
+      if (patterns.length) {
+        for (const pattern of patterns) {
+          if (pattern != null) scanParts.push(String(pattern));
         }
       }
-      if (fauxMatches.length) stats.faux_hits += fauxMatches.length;
+      const joinedScan = scanParts.join(" ");
+      const scanLower = joinedScan.toLowerCase();
+      const scanNormalized = normalizeAdvisoryText(joinedScan);
+      const mentionTokens = new Set();
+      for (const slug of fauxSlugSet) {
+        if (slug && scanLower.includes(slug)) mentionTokens.add(slug);
+      }
+      for (const title of fauxTitleSet) {
+        if (title && scanNormalized.includes(title)) mentionTokens.add(title);
+      }
+      if (mentionTokens.size) stats.faux_mentions_nonblocking += mentionTokens.size;
     }
 
     let metadataLogged = false;
@@ -240,27 +279,27 @@ function main() {
         }
       }
 
-      if (dialectErrors.length || compileError || unknownFeelings.length || unknownNeeds.length || fauxMatches.length) {
+      if (dialectErrors.length || compileError || unknownFeelings.length || unknownNeeds.length || hasBlockingFaux) {
         failures.push({
           cue: cue.cue,
           pattern,
           error: [...dialectErrors, compileError].filter(Boolean).join("; "),
           unknown_feelings: unknownFeelings.join("|"),
           unknown_needs: unknownNeeds.join("|"),
-          faux_hit: fauxMatches.join("|")
+          faux_hit: fauxInFeelings.join("|")
         });
         metadataLogged = true;
       }
     }
 
-    if (!metadataLogged && (unknownFeelings.length || unknownNeeds.length || fauxMatches.length)) {
+    if (!metadataLogged && (unknownFeelings.length || unknownNeeds.length || hasBlockingFaux)) {
       failures.push({
         cue: cue.cue,
         pattern: "",
         error: "",
         unknown_feelings: unknownFeelings.join("|"),
         unknown_needs: unknownNeeds.join("|"),
-        faux_hit: fauxMatches.join("|")
+        faux_hit: fauxInFeelings.join("|")
       });
     }
   }
@@ -279,6 +318,7 @@ function main() {
   const csvOutput = lines.join("\n") + "\n";
   fs.writeFileSync(CSV_OUT, csvOutput, "utf8");
 
+  stats.faux_hits = stats.faux_hits_feelings;
   process.stdout.write(JSON.stringify(stats) + "\n");
 }
 

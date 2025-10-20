@@ -23,3 +23,7 @@ node scripts/next/build-cues.mjs
 node scripts/next/validate-cues.mjs
 node scripts/next/test-coverage.mjs
 ```
+
+### Validation
+
+> Faux-feelings enforcement applies **only** to FEELINGS slugs in generated cues. Mentions inside patterns or examples (e.g., verbs like “denied”, “rejected”) are allowed and logged as **non-blocking** advisory signals.
