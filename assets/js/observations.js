@@ -317,24 +317,24 @@ function renderCueAutocomplete(text, cues, hits) {
         button.classList.add('observation-cue-suggestion--active');
         button.setAttribute('data-state', 'recognized');
       }
-      button.dataset.example = item.example;
+      if (item.phrase) {
+        button.dataset.phrase = item.phrase;
+      }
       button.dataset.cue = item.cue;
       button.setAttribute('role', 'listitem');
       button.setAttribute(
         'aria-label',
-        item.active
-          ? `${item.cue}. Recognized cue phrase. Press to insert the sample wording.`
-          : `${item.cue}. Press to insert the sample wording.`
+        describeCueSuggestion(item)
       );
       button.title = item.active
-        ? `${item.cue} · Recognized from what you typed`
-        : `${item.cue} · Click to paste sample wording`;
+        ? `${item.label || item.cue} · Recognized from what you typed`
+        : `${item.label || item.cue} · Click to paste the cue phrase`;
       const title = document.createElement('span');
       title.className = 'chip__title';
-      title.textContent = item.cue;
+      title.textContent = item.label || item.cue;
       const note = document.createElement('span');
       note.className = 'chip__note';
-      note.textContent = formatCueExample(item.example);
+      note.textContent = formatCuePhrase(item.phrase);
       button.appendChild(title);
       button.appendChild(note);
       host.appendChild(button);
@@ -343,7 +343,7 @@ function renderCueAutocomplete(text, cues, hits) {
 
   const trimmed = typeof text === 'string' ? text.trim() : '';
   if (!trimmed) {
-    msg.textContent = 'Start typing to see cue phrases from the wizard catalog. Click a card to insert its sample wording.';
+    msg.textContent = 'Start typing to see cue phrases from the wizard catalog. Click a card to paste the cue phrase.';
     delete msg.dataset.variant;
     return;
   }
@@ -351,8 +351,8 @@ function renderCueAutocomplete(text, cues, hits) {
   if (info.activeCount > 0) {
     msg.textContent =
       info.activeCount === 1
-        ? 'Recognized 1 cue phrase. Click it to paste the matching sample wording.'
-        : `Recognized ${info.activeCount} cue phrases. Click a card to paste the matching sample wording.`;
+        ? 'Recognized 1 cue phrase. Click it to paste the matching cue phrase.'
+        : `Recognized ${info.activeCount} cue phrases. Click a card to paste the matching cue phrase.`;
     msg.dataset.variant = 'match';
     return;
   }
@@ -372,11 +372,12 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
   const seen = new Set();
   const activeRows = Array.isArray(hits) ? hits : [];
   activeRows.forEach(row => {
-    const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
-    const example = typeof row?.example === 'string' ? row.example.trim() : '';
-    if (!cue || !example || seen.has(cue)) return;
-    items.push({ cue, example, active: true });
-    seen.add(cue);
+    const suggestion = createCueSuggestion(row, true);
+    if (!suggestion) return;
+    const cueKey = suggestion.cue;
+    if (seen.has(cueKey)) return;
+    items.push(suggestion);
+    seen.add(cueKey);
   });
   const activeCount = items.length;
   if (!Array.isArray(cues) || items.length >= maxItems) {
@@ -392,14 +393,15 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
   if (fragments.length) {
     for (const row of cues) {
       if (items.length >= maxItems) break;
-      const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
-      const example = typeof row?.example === 'string' ? row.example.trim() : '';
-      if (!cue || !example || seen.has(cue)) continue;
+      const suggestion = createCueSuggestion(row);
+      if (!suggestion) continue;
+      const cue = suggestion.cue;
+      if (seen.has(cue)) continue;
       const cueLower = cue.toLowerCase();
-      const exampleLower = example.toLowerCase();
-      const matchesFragment = fragments.some(fragment => cueLower.includes(fragment) || exampleLower.includes(fragment));
+      const phraseLower = suggestion.phrase.toLowerCase();
+      const matchesFragment = fragments.some(fragment => cueLower.includes(fragment) || phraseLower.includes(fragment));
       if (matchesFragment) {
-        items.push({ cue, example, active: false });
+        items.push({ ...suggestion, active: false });
         seen.add(cue);
       }
     }
@@ -410,16 +412,17 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
     if (tokenSet.size) {
       for (const row of cues) {
         if (items.length >= maxItems) break;
-        const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
-        const example = typeof row?.example === 'string' ? row.example.trim() : '';
-        if (!cue || !example || seen.has(cue)) continue;
+        const suggestion = createCueSuggestion(row);
+        if (!suggestion) continue;
+        const cue = suggestion.cue;
+        if (seen.has(cue)) continue;
         const candidateTokens = [
           ...collectCueTokens(cue),
-          ...collectCueTokens(example),
+          ...collectCueTokens(suggestion.phrase),
         ];
         const hasOverlap = candidateTokens.some(token => tokenSet.has(token));
         if (hasOverlap) {
-          items.push({ cue, example, active: false });
+          items.push({ ...suggestion, active: false });
           seen.add(cue);
         }
       }
@@ -470,39 +473,90 @@ function collectCueTokens(text, minLength = 4, limit = 12) {
   return set;
 }
 
-function formatCueExample(example) {
-  const text = typeof example === 'string' ? example.trim() : '';
+function formatCuePhrase(phrase) {
+  const text = typeof phrase === 'string' ? phrase.trim() : '';
   if (!text) {
     return '—';
   }
-  if (text.length <= 120) {
-    return text;
+  return `“${text}”`;
+}
+
+function describeCueSuggestion(item) {
+  const label = typeof item?.label === 'string' && item.label.trim() ? item.label.trim() : item?.cue || '';
+  const phrase = typeof item?.phrase === 'string' ? item.phrase.trim() : '';
+  const phraseDescription = phrase ? `the cue phrase “${phrase}”` : 'the cue phrase';
+  if (!label) {
+    return item?.active
+      ? `Recognized cue phrase. Press to paste ${phraseDescription}.`
+      : `Press to paste ${phraseDescription}.`;
   }
-  return `${text.slice(0, 117)}…`;
+  if (item?.active) {
+    return `${label}. Recognized cue phrase. Press to paste ${phraseDescription}.`;
+  }
+  return `${label}. Press to paste ${phraseDescription}.`;
+}
+
+function createCueSuggestion(row, isActive = false) {
+  const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
+  if (!cue) {
+    return null;
+  }
+  const label = typeof row?.label === 'string' && row.label.trim()
+    ? row.label.trim()
+    : cue.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const phrase = getCuePhrase(row);
+  if (!phrase) {
+    return null;
+  }
+  return {
+    cue,
+    label,
+    phrase,
+    active: Boolean(isActive),
+  };
+}
+
+function getCuePhrase(row) {
+  const direct = typeof row?.phrase === 'string' ? row.phrase.trim() : '';
+  if (direct) {
+    return direct;
+  }
+  if (Array.isArray(row?.phrases)) {
+    const candidate = row.phrases.find(phrase => typeof phrase === 'string' && phrase.trim());
+    if (candidate) {
+      return candidate.trim();
+    }
+  }
+  const label = typeof row?.label === 'string' ? row.label.trim() : '';
+  if (label) {
+    return label;
+  }
+  const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
+  return cue.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function handleCueSuggestionClick(event) {
-  const button = event.target?.closest('button[data-example]');
+  const button = event.target?.closest('button[data-phrase]');
   if (!button) {
     return;
   }
   event.preventDefault();
-  const example = button.dataset.example || '';
-  if (!example) {
+  const phrase = button.dataset.phrase || '';
+  if (!phrase) {
     return;
   }
-  insertCueExample(example);
+  insertCuePhrase(phrase);
   if (typeof button.blur === 'function') {
     button.blur();
   }
 }
 
-function insertCueExample(example) {
+function insertCuePhrase(phrase) {
   const textarea = $('#obs-what');
   if (!textarea) {
     return;
   }
-  const snippet = typeof example === 'string' ? example.trim() : '';
+  const snippet = typeof phrase === 'string' ? phrase.trim() : '';
   if (!snippet) {
     return;
   }
@@ -630,11 +684,37 @@ function buildCatalog(data) {
 
 function sanitizeCues(cues, catalog) {
   if (!Array.isArray(cues)) return [];
-  return cues.map(row => ({
-    ...row,
-    feelings: Array.isArray(row.feelings) ? row.feelings.filter(slug => catalog.feelings.has(slug)) : [],
-    needs: Array.isArray(row.needs) ? row.needs.filter(slug => catalog.needs.has(slug)) : [],
-  }));
+  return cues.map(row => {
+    const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
+    const label = typeof row?.label === 'string' && row.label.trim()
+      ? row.label.trim()
+      : cue.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+    const phrases = Array.isArray(row?.phrases)
+      ? row.phrases.map(normalizeCuePhrase).filter(Boolean)
+      : [];
+    const phrase = normalizeCuePhrase(row?.phrase);
+    const snippet = phrase || phrases[0] || label || cue;
+    return {
+      ...row,
+      cue,
+      label,
+      phrases,
+      phrase: snippet,
+      feelings: Array.isArray(row.feelings) ? row.feelings.filter(slug => catalog.feelings.has(slug)) : [],
+      needs: Array.isArray(row.needs) ? row.needs.filter(slug => catalog.needs.has(slug)) : [],
+    };
+  });
+}
+
+function normalizeCuePhrase(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '';
+  }
+  return trimmed.replace(/\s+/g, ' ');
 }
 
 function deriveFauxFeelings(feelingSlugs, needSlugs) {
