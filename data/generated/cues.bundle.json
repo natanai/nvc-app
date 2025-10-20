@@ -1,6 +1,30 @@
 {
   "cues": [
     {
+      "cue": "arrived-late_next",
+      "patterns": [
+        "\\barrived\\s+late\\b",
+        "\\bshowed\\s+up\\s+late\\b|\\bcame\\s+late\\b",
+        "\\barrived\\b[^.!?]*\\bminutes?\\s+late\\b",
+        "\\barrived\\b[^.!?]*\\bafter\\s+(?:it|the\\s+(?:call|meeting|event))\\s+started\\b",
+        "\\bwas\\s+late\\b[^.!?]*\\bto\\s+(?:the\\s+)?(?:call|meeting|event)\\b",
+        "\\bpast\\s+the\\s+agreed\\s+time\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "irritated",
+        "anxious",
+        "hurt"
+      ],
+      "needs": [
+        "reliability",
+        "consideration",
+        "respect",
+        "predictability"
+      ],
+      "example": "We agreed on 2:00; they arrived late without a message."
+    },
+    {
       "cue": "no-reply_next",
       "patterns": [
         "\\b(?:no\\s+(?:reply|response)|didn[’']?t\\s+(?:reply|respond)|never\\s+(?:replied|responded))\\b",
