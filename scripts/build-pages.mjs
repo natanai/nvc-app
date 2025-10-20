@@ -160,22 +160,18 @@ const navVisibilityBootstrapScript = () => String.raw`
           var storages = [];
 
           try {
-            if (Object.prototype.hasOwnProperty.call(window, 'localStorage') && window.localStorage) {
+            if ('localStorage' in window && window.localStorage) {
               storages.push(window.localStorage);
             }
-          } catch (error) {
-            return;
-          }
+          } catch (error) {}
 
           try {
-            if (Object.prototype.hasOwnProperty.call(window, 'sessionStorage') && window.sessionStorage) {
+            if ('sessionStorage' in window && window.sessionStorage) {
               storages.push(window.sessionStorage);
             }
-          } catch (error) {
-            return;
-          }
+          } catch (error) {}
 
-          var raw = '';
+          var candidates = [];
           for (var i = 0; i < storages.length; i += 1) {
             var storage = storages[i];
             if (!storage || typeof storage.getItem !== 'function') {
@@ -183,22 +179,56 @@ const navVisibilityBootstrapScript = () => String.raw`
             }
             try {
               var candidate = storage.getItem(storageKey);
-              if (typeof candidate === 'string' && candidate.trim()) {
-                raw = candidate.trim();
-                break;
+              if (typeof candidate === 'string') {
+                var trimmed = candidate.trim();
+                if (trimmed) {
+                  candidates.push({ value: trimmed, index: i });
+                }
               }
-            } catch (error) {
-              return;
-            }
+            } catch (error) {}
           }
 
-          if (!raw) {
+          if (!candidates.length) {
             return;
+          }
+
+          var best = candidates[0];
+          var bestTimestamp = 0;
+          var bestIndex = typeof best.index === 'number' ? best.index : 0;
+
+          var parseUpdatedAt = function(raw) {
+            if (typeof raw !== 'string' || !raw) {
+              return 0;
+            }
+            if (raw.charAt(0) !== '{') {
+              return 0;
+            }
+            try {
+              var parsedTimestamp = JSON.parse(raw);
+              if (parsedTimestamp && typeof parsedTimestamp === 'object') {
+                var ts = parsedTimestamp.updatedAt;
+                return typeof ts === 'number' && isFinite(ts) ? ts : 0;
+              }
+            } catch (error) {}
+            return 0;
+          };
+
+          bestTimestamp = parseUpdatedAt(best.value);
+
+          for (var j = 1; j < candidates.length; j += 1) {
+            var candidate = candidates[j];
+            var timestamp = parseUpdatedAt(candidate.value);
+            var candidateIndex = typeof candidate.index === 'number' ? candidate.index : j;
+            if (timestamp > bestTimestamp || (timestamp === bestTimestamp && candidateIndex < bestIndex)) {
+              best = candidate;
+              bestTimestamp = timestamp;
+              bestIndex = candidateIndex;
+            }
           }
 
           var parsed;
           try {
-            parsed = JSON.parse(raw);
+            parsed = JSON.parse(best.value);
           } catch (error) {
             return;
           }
