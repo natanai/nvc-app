@@ -824,6 +824,41 @@ button.site-nav__magnet {
     gap: clamp(1rem, 3vw, 2rem);
   }
 
+  .observations-page .observation-panel__toggle {
+    display: none;
+  }
+
+  .observations-page .observation-panel__toggle-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  .observations-page .observation-panel__toggle-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.1rem;
+    padding: 0.1rem 0.5rem 0.2rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--rose) 75%, #ffffff 25%);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--rose) 30%, transparent);
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+
+  .observations-page .observation-panel__toggle-badge:not([hidden]) {
+    opacity: 1;
+    transform: scale(1);
+  }
+
   .observations-page .tab-nav {
     display: flex;
     flex-wrap: wrap;
@@ -1107,6 +1142,45 @@ button.site-nav__magnet {
     box-shadow: 0 20px 0 color-mix(in srgb, var(--outline) 18%, transparent);
     display: grid;
     gap: clamp(1rem, 2vw, 1.35rem);
+    position: relative;
+    z-index: 1;
+  }
+
+  .observations-page .observation-panel__mobile-header {
+    display: none;
+  }
+
+  .observations-page .observation-panel__close {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .observations-page .observation-panel__close:hover,
+  .observations-page .observation-panel__close:focus-visible {
+    color: color-mix(in srgb, var(--ink) 80%, var(--rose) 20%);
+  }
+
+  .observations-page .observation-panel__close:focus-visible {
+    outline: 3px dashed var(--outline);
+    border-radius: var(--radius-full, 999px);
+    outline-offset: 3px;
+  }
+
+  .observations-page .observation-panel__scrim {
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--ink) 40%, transparent);
+    backdrop-filter: blur(2px);
+    z-index: 8;
+    cursor: pointer;
   }
 
   .observations-page .observation-panel__empty {
@@ -1314,6 +1388,221 @@ button.site-nav__magnet {
   .observations-page .observation-free__suggest-hint {
     margin: 0 0 0.75rem;
     color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
+  }
+
+  @media (max-width: 820px) {
+    body.observation-panel-open {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .observations-page .observation-collage {
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .observations-page .observation-panel__scrim[hidden] {
+      display: none !important;
+    }
+
+    .observations-page .observation-panel__toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      border-radius: var(--radius-2xl);
+      border: 2px solid color-mix(in srgb, var(--outline) 60%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 78%, var(--observations-card-bg) 22%);
+      color: color-mix(in srgb, var(--ink) 85%, #fff 15%);
+      font: inherit;
+      font-weight: 600;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      position: sticky;
+      top: -0.25rem;
+      z-index: 7;
+      box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+    }
+
+    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] {
+      border-color: color-mix(in srgb, var(--rose) 55%, transparent);
+      box-shadow: 0 10px 0 color-mix(in srgb, var(--rose) 34%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--rose) 30%);
+    }
+
+    .observations-page .observation-panel__toggle:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 3px;
+    }
+
+    .observations-page .observation-panel__toggle-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--mint) 60%, rgba(255, 255, 255, 0.4) 40%);
+      font-size: 1.25rem;
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] .observation-panel__toggle-icon {
+      background: color-mix(in srgb, var(--rose) 70%, rgba(255, 255, 255, 0.3) 30%);
+      color: #ffffff;
+      animation: observation-panel-toggle-pulse 1.6s ease-in-out infinite;
+    }
+
+    .observations-page .observation-panel__toggle-label {
+      font-size: 0.95rem;
+    }
+
+    .observations-page .observation-panel__toggle-status {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: color-mix(in srgb, var(--ink-soft) 80%, #fff 20%);
+    }
+
+    .observations-page .observation-panel__toggle[data-panel-open='true'] .observation-panel__toggle-status {
+      color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
+    }
+
+    .observations-page .observation-panel__toggle-meta {
+      min-width: max(5.25rem, 30%);
+      justify-content: flex-end;
+    }
+
+    .observations-page .observation-panel {
+      border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      max-height: min(80vh, 520px);
+      transform: translateY(calc(100% + 1.5rem));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      z-index: 9;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .observations-page .observation-panel[data-mobile-open='true'] {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .observations-page .observation-panel__mobile-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem;
+      align-items: center;
+      margin: -0.35rem -0.1rem 0.35rem;
+      padding: 0.35rem 0.1rem 0.35rem;
+    }
+
+    .observations-page .observation-panel__mobile-handle {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: 2.75rem;
+      height: 0.32rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--ink) 25%, transparent);
+      opacity: 0.65;
+    }
+
+    .observations-page .observation-panel__mobile-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: color-mix(in srgb, var(--ink) 85%, #fff 15%);
+    }
+
+    .observations-page .observation-panel__mobile-header .observation-panel__close {
+      justify-self: end;
+      font-size: 1.25rem;
+      line-height: 1;
+      padding: 0.2rem;
+    }
+
+    .observations-page .observation-panel__mobile-header .observation-panel__close span[aria-hidden='true'] {
+      display: inline-block;
+      transform: translateY(-1px);
+    }
+
+    .observations-page .observation-collage__preview {
+      order: -1;
+    }
+
+    .observations-page .observation-cue-builder {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
+
+    .observations-page .observation-cue-builder__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding: 0.45rem 0.5rem 0.6rem;
+      border-radius: var(--radius-2xl);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 68%, var(--observations-card-bg) 32%);
+      min-height: 4.25rem;
+      max-height: min(40vh, 13.5rem);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      align-items: flex-start;
+      align-content: flex-start;
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .observations-page .observation-cue-builder__chips .chip {
+      min-height: 3.1rem;
+      justify-content: flex-start;
+    }
+
+    .observations-page .observation-cue-builder__chips[data-state='empty'] {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      min-height: 3rem;
+      background: transparent;
+      padding: 0.35rem 0.5rem;
+    }
+
+    .observations-page .observation-cue-builder__chips[data-state='empty'] .chip--ghost {
+      width: auto;
+      min-height: auto;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+
+  @keyframes observation-panel-toggle-pulse {
+    0%,
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--rose) 35%, transparent);
+    }
+    50% {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 color-mix(in srgb, var(--rose) 20%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .observations-page .observation-panel__toggle[data-panel-has-updates='true'] .observation-panel__toggle-icon {
+      animation: none;
+    }
   }
 
   @media (min-width: 960px) {
@@ -2000,7 +2289,26 @@ button.site-nav__magnet {
               </div>
             </div>
           </div>
-          <div class="observation-panel" id="observation-panel" role="region" aria-label="Suggested feelings and needs">
+          <div
+            class="observation-panel"
+            id="observation-panel"
+            role="region"
+            aria-labelledby="observation-panel-title"
+            aria-label="Suggested feelings and needs"
+            tabindex="-1"
+          >
+            <header class="observation-panel__mobile-header">
+              <div class="observation-panel__mobile-handle" aria-hidden="true"></div>
+              <p class="observation-panel__mobile-title" id="observation-panel-title">Feelings &amp; needs suggestions</p>
+              <button
+                class="observation-panel__close"
+                type="button"
+                data-observation-panel-close
+              >
+                <span class="visually-hidden">Close suggestions</span>
+                <span aria-hidden="true">✕</span>
+              </button>
+            </header>
             <p class="observation-panel__empty" id="observation-panel-empty">Pick a pattern to surface feelings and needs magnets that might support your wording.</p>
             <div class="observation-panel__content" id="observation-panel-content" hidden>
               <div class="observation-panel__group observation-panel__group--magnet">
@@ -2034,7 +2342,24 @@ button.site-nav__magnet {
           </div>
         </section>
 
+        <div class="observation-panel__scrim" data-observation-panel-scrim hidden aria-hidden="true"></div>
+
         <div class="observations-body">
+          <button
+            class="observation-panel__toggle"
+            type="button"
+            data-observation-panel-toggle
+            aria-controls="observation-panel"
+            aria-expanded="false"
+          >
+            <span class="observation-panel__toggle-icon" aria-hidden="true">✨</span>
+            <span class="observation-panel__toggle-label">Feelings &amp; needs suggestions</span>
+            <span class="observation-panel__toggle-meta">
+              <span class="observation-panel__toggle-badge" data-observation-panel-badge hidden aria-hidden="true">New</span>
+              <span class="observation-panel__toggle-status" data-observation-panel-status>Hidden</span>
+            </span>
+            <span class="visually-hidden" aria-live="polite" data-observation-panel-announcer></span>
+          </button>
           <nav class="tab-nav" role="tablist">
             <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
             <button id="tab-free-button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-free" data-tab-target="free">Free-text</button>
