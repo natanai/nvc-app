@@ -1467,6 +1467,9 @@ const initializeBoard = async (root, index) => {
     } else {
       magnet.href = '';
     }
+    if (isNavBoard) {
+      magnet.element.dataset.navRegistered = 'true';
+    }
   });
   const customStorageKey = root.dataset.magnetKey;
   const resolvedStorageKey = customStorageKey || createStorageKey(index);
@@ -1519,6 +1522,7 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    cleanupDynamicMagnets: null,
   };
 
   state.setClickSuppress = () => {
@@ -1723,6 +1727,194 @@ const initializeBoard = async (root, index) => {
   };
 
   state.scheduleResponsiveResize = scheduleResponsiveResize;
+
+  const syncMagnetOrderToDOM = () => {
+    if (!state.board || !state.magnetMap) {
+      return;
+    }
+    const orderedElements = Array.from(state.board.querySelectorAll('.magnet[data-magnet-id]'));
+    if (!orderedElements.length) {
+      return;
+    }
+    const orderedMagnets = [];
+    orderedElements.forEach((element) => {
+      const id = element.dataset.magnetId;
+      if (!id) {
+        return;
+      }
+      const magnet = state.magnetMap.get(id);
+      if (magnet) {
+        orderedMagnets.push(magnet);
+      }
+    });
+    if (!orderedMagnets.length || orderedMagnets.length !== state.magnets.length) {
+      return;
+    }
+    state.magnets.splice(0, state.magnets.length, ...orderedMagnets);
+  };
+
+  const registerNavMagnets = (candidates) => {
+    if (!isNavBoardState(state)) {
+      return;
+    }
+    const elements = Array.isArray(candidates) ? candidates : [candidates];
+    const filtered = elements
+      .filter((element) => element instanceof HTMLElement)
+      .flatMap((element) => {
+        const nodes = [element];
+        if (element.querySelectorAll) {
+          nodes.push(...element.querySelectorAll('.magnet[data-magnet-id]'));
+        }
+        return nodes;
+      })
+      .filter((element) => element instanceof HTMLElement && element.matches('.magnet[data-magnet-id]'));
+
+    if (!filtered.length) {
+      syncMagnetOrderToDOM();
+      return;
+    }
+
+    const seen = new Set();
+    const toProcess = [];
+    filtered.forEach((element) => {
+      const id = element.dataset.magnetId;
+      if (!id || seen.has(id)) {
+        return;
+      }
+      seen.add(id);
+      if (state.magnetMap.has(id)) {
+        element.dataset.navRegistered = 'true';
+        return;
+      }
+      toProcess.push(element);
+    });
+
+    if (!toProcess.length) {
+      syncMagnetOrderToDOM();
+      return;
+    }
+
+    const wasPlaying = state.playActive;
+    if (wasPlaying) {
+      setPlayState(state, false);
+    }
+
+    const newMagnets = [];
+    toProcess.forEach((element) => {
+      const nextIndex = state.magnets.length + newMagnets.length;
+      applyMagnetDecorations(element, nextIndex);
+      const [magnet] = createMagnetStates(state.board, [element]);
+      if (!magnet) {
+        return;
+      }
+      magnet.id = element.dataset.magnetId || magnet.id || `${index}-${state.magnets.length}`;
+      magnet.searchLabel = (element.textContent || '').trim();
+      magnet.searchValue = magnet.searchLabel.toLocaleLowerCase();
+      const hrefAttr = element.getAttribute ? element.getAttribute('href') : null;
+      if (hrefAttr) {
+        magnet.href = hrefAttr;
+      } else if (element instanceof HTMLAnchorElement && element.href) {
+        magnet.href = element.href;
+      } else {
+        magnet.href = '';
+      }
+      magnet.element.dataset.navRegistered = 'true';
+      state.magnets.push(magnet);
+      state.magnetMap.set(magnet.id, magnet);
+      setMagnetTransform(magnet);
+      newMagnets.push(magnet);
+    });
+
+    if (!newMagnets.length) {
+      syncMagnetOrderToDOM();
+      if (wasPlaying) {
+        setPlayState(state, true);
+      }
+      return;
+    }
+
+    syncMagnetOrderToDOM();
+    remeasureMagnets(state);
+    resolveNavLayoutToNearestValid(state);
+    updateBoardHeight(state);
+    updateLayout(state);
+    persistLayout(state, true);
+    state.lastLayoutType = 'manual';
+
+    if (wasPlaying) {
+      setPlayState(state, true);
+    }
+  };
+
+  if (isNavBoard) {
+    const handleRegisterEvent = (event) => {
+      if (!event || !event.detail) {
+        registerNavMagnets([]);
+        return;
+      }
+      const { element, elements } = event.detail;
+      const candidates = [];
+      if (element instanceof HTMLElement) {
+        candidates.push(element);
+      }
+      if (Array.isArray(elements)) {
+        elements.forEach((item) => {
+          if (item instanceof HTMLElement) {
+            candidates.push(item);
+          }
+        });
+      }
+      registerNavMagnets(candidates);
+    };
+    board.addEventListener('navmagnetregister', handleRegisterEvent);
+
+    if (typeof MutationObserver === 'function') {
+      const observer = new MutationObserver((mutations) => {
+        const added = [];
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (!(node instanceof HTMLElement)) {
+              return;
+            }
+            if (node.matches('.magnet[data-magnet-id]')) {
+              added.push(node);
+            }
+            node.querySelectorAll?.('.magnet[data-magnet-id]')?.forEach((child) => {
+              if (child instanceof HTMLElement) {
+                added.push(child);
+              }
+            });
+          });
+        });
+        if (added.length) {
+          registerNavMagnets(added);
+        } else {
+          syncMagnetOrderToDOM();
+        }
+      });
+      observer.observe(board, { childList: true, subtree: true });
+
+      const cleanupDynamicMagnets = () => {
+        observer.disconnect();
+        board.removeEventListener('navmagnetregister', handleRegisterEvent);
+        window.removeEventListener('pagehide', cleanupDynamicMagnets);
+        window.removeEventListener('beforeunload', cleanupDynamicMagnets);
+      };
+
+      window.addEventListener('pagehide', cleanupDynamicMagnets, { once: true });
+      window.addEventListener('beforeunload', cleanupDynamicMagnets, { once: true });
+      state.cleanupDynamicMagnets = cleanupDynamicMagnets;
+    } else {
+      const cleanupDynamicMagnets = () => {
+        board.removeEventListener('navmagnetregister', handleRegisterEvent);
+        window.removeEventListener('pagehide', cleanupDynamicMagnets);
+        window.removeEventListener('beforeunload', cleanupDynamicMagnets);
+      };
+      window.addEventListener('pagehide', cleanupDynamicMagnets, { once: true });
+      window.addEventListener('beforeunload', cleanupDynamicMagnets, { once: true });
+      state.cleanupDynamicMagnets = cleanupDynamicMagnets;
+    }
+  }
 
   if (typeof ResizeObserver === 'function') {
     const observer = new ResizeObserver(() => {
