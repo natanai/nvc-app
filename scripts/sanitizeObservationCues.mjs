@@ -30,6 +30,9 @@ export function sanitizeObservationCues({
   let dropped = 0;
   let changed = 0;
   let fauxFeelingDrops = 0;
+  let duplicateDrops = 0;
+
+  const seenExamples = new Set();
 
   const exampleIndex = header.findIndex(col => col.toLowerCase().startsWith('example'));
   const cueIndex = header.findIndex(col => col.toLowerCase().startsWith('cue'));
@@ -64,6 +67,14 @@ export function sanitizeObservationCues({
       changed += 1;
     }
 
+    const exampleKey = sanitizedExample.toLowerCase();
+    if (seenExamples.has(exampleKey)) {
+      dropped += 1;
+      duplicateDrops += 1;
+      return;
+    }
+    seenExamples.add(exampleKey);
+
     const normalizedRow = [...row];
     normalizedRow[exampleIndex] = sanitizedExample;
 
@@ -84,14 +95,16 @@ export function sanitizeObservationCues({
 
   const fauxFeelingSummary =
     fauxFeelingDrops > 0 ? `, removed ${fauxFeelingDrops} containing faux feelings` : '';
+  const duplicateSummary =
+    duplicateDrops > 0 ? `, removed ${duplicateDrops} duplicates` : '';
 
   if (logger && typeof logger.info === 'function') {
     logger.info(
-      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}${fauxFeelingSummary}, changed ${changed}).`,
+      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}${fauxFeelingSummary}${duplicateSummary}, changed ${changed}).`,
     );
   } else if (logger && typeof logger.log === 'function') {
     logger.log(
-      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}${fauxFeelingSummary}, changed ${changed}).`,
+      `Sanitized observation cues written to ${outputPath} (kept ${sanitizedRows.length}, dropped ${dropped}${fauxFeelingSummary}${duplicateSummary}, changed ${changed}).`,
     );
   }
 
@@ -101,6 +114,7 @@ export function sanitizeObservationCues({
     dropped,
     changed,
     droppedFauxFeelings: fauxFeelingDrops,
+    droppedDuplicates: duplicateDrops,
   };
 }
 
