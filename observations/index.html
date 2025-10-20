@@ -293,23 +293,56 @@
         letter-spacing: 0.12em;
       }
 
-      .observation-editor__input {
-        width: 100%;
-        min-height: 9rem;
-        padding: 1rem;
+      .observation-editor__input-wrapper {
+        position: relative;
         border: 3px solid var(--outline);
         border-radius: var(--radius-2xl);
         background: color-mix(in srgb, #ffffff 90%, var(--sky) 10%);
-        font: inherit;
-        line-height: 1.6;
-        resize: vertical;
         box-shadow: inset 0 -10px 0 color-mix(in srgb, var(--outline) 12%, transparent);
       }
 
-      .observation-editor__input:focus {
+      .observation-editor__input-wrapper:focus-within {
         outline: 3px dashed var(--outline);
         outline-offset: 3px;
         box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      .observation-editor__input {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        min-height: 9rem;
+        padding: 1rem;
+        border: none;
+        border-radius: var(--radius-2xl);
+        background: transparent;
+        font: inherit;
+        line-height: 1.6;
+        resize: vertical;
+        color: var(--ink);
+      }
+
+      .observation-editor__input:focus {
+        outline: none;
+      }
+
+      .observation-editor__highlight {
+        position: absolute;
+        inset: 0;
+        padding: 1rem;
+        font: inherit;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-word;
+        color: transparent;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .observation-editor__highlight mark {
+        background: color-mix(in srgb, var(--rose) 25%, transparent);
+        border-radius: var(--radius-md);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 18%, transparent);
       }
 
       .observation-editor__feedback {
@@ -385,36 +418,85 @@
 
       .observation-editor__submit {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .observation-editor__submit-button {
+        min-width: 8.5rem;
+      }
+
+      .observation-editor__status {
+        display: flex;
         align-items: center;
         gap: 0.85rem;
       }
 
-      .observation-editor__submit-button {
-        font-size: 1rem;
+      .observation-editor__status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: color-mix(in srgb, var(--outline) 70%, transparent);
       }
 
-      .observation-editor__status {
-        width: 2.35rem;
-        height: 2.35rem;
-        border-radius: var(--radius-circle);
-        border: 3px solid color-mix(in srgb, var(--outline) 75%, transparent);
+      .observation-editor__status-text {
+        display: inline-flex;
+      }
+
+      .observation-editor__status-light {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--outline) 40%, transparent);
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--outline) 20%, transparent);
+      }
+
+      .observation-editor__status-indicator[data-state='loading'] .observation-editor__status-light {
+        background: color-mix(in srgb, var(--sky) 65%, transparent);
+      }
+
+      .observation-editor__status-indicator[data-state='searching'] .observation-editor__status-light {
+        background: color-mix(in srgb, var(--gold) 72%, transparent);
+      }
+
+      .observation-editor__status-indicator[data-state='found'] .observation-editor__status-light {
+        background: color-mix(in srgb, var(--mint) 78%, transparent);
+      }
+
+      .observation-editor__validity-icon {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
-        background: color-mix(in srgb, #ffffff 85%, var(--lavender) 15%);
-        color: color-mix(in srgb, var(--outline) 65%, transparent);
-        transition: transform 0.25s ease, opacity 0.25s ease, background 0.25s ease;
-        opacity: 0;
-        transform: scale(0.8);
+        width: 1.65rem;
+        height: 1.65rem;
+        border-radius: 999px;
+        border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
+        color: color-mix(in srgb, var(--outline) 80%, transparent);
+        font-size: 1.05rem;
+        font-weight: 700;
+        background: transparent;
       }
 
-      .observation-editor__status[data-state='ready'] {
-        background: color-mix(in srgb, var(--mint) 78%, #fff 22%);
-        color: color-mix(in srgb, var(--outline) 80%, var(--ink) 20%);
-        box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-        opacity: 1;
-        transform: scale(1);
+      .observation-editor__status-indicator[data-state='pending'] .observation-editor__validity-icon {
+        background: color-mix(in srgb, var(--sky) 20%, transparent);
+        border-color: color-mix(in srgb, var(--sky) 52%, transparent);
+        color: color-mix(in srgb, var(--sky) 65%, transparent);
+      }
+
+      .observation-editor__status-indicator[data-state='invalid'] .observation-editor__validity-icon,
+      .observation-editor__status-indicator[data-state='error'] .observation-editor__validity-icon {
+        background: color-mix(in srgb, var(--rose) 28%, transparent);
+        border-color: color-mix(in srgb, var(--rose) 55%, transparent);
+        color: color-mix(in srgb, var(--outline) 90%, transparent);
+      }
+
+      .observation-editor__status-indicator[data-state='valid'] .observation-editor__validity-icon {
+        background: color-mix(in srgb, var(--mint) 32%, transparent);
+        border-color: color-mix(in srgb, var(--mint) 62%, transparent);
+        color: color-mix(in srgb, var(--outline) 96%, transparent);
       }
 
       .observation-suggestions {
@@ -482,6 +564,29 @@
         margin: 0;
         font-size: 0.95rem;
         color: var(--ink-soft);
+      }
+
+      .observation-suggestions__fallback {
+        margin: 1rem 0 0;
+        display: grid;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border-radius: var(--radius-xl);
+        background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 70%, var(--lavender) 30%);
+        box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      .observation-suggestions__fallback[hidden] {
+        display: none;
+      }
+
+      .observation-suggestions__fallback-text {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .observation-suggestions__next {
+        align-self: flex-start;
       }
 
       .observation-suggestions__actions {
@@ -953,13 +1058,16 @@
             <div class="observation-editor__grid">
               <div class="observation-editor__field">
                 <label class="observation-editor__label" for="observation-text">Observation statement</label>
-                <textarea
-                  id="observation-text"
-                  class="observation-editor__input"
-                  rows="7"
-                  placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
-                  aria-describedby="observation-guidelines observation-feedback"
-                ></textarea>
+                <div class="observation-editor__input-wrapper">
+                  <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
+                  <textarea
+                    id="observation-text"
+                    class="observation-editor__input"
+                    rows="7"
+                    placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
+                    aria-describedby="observation-guidelines observation-feedback"
+                  ></textarea>
+                </div>
                 <p id="observation-feedback" class="observation-editor__feedback" role="status" aria-live="polite">
                   Start by anchoring your observation in time and place.
                 </p>
@@ -986,7 +1094,30 @@
               >
                 Submit
               </button>
-              <span id="observation-status" class="observation-editor__status" aria-hidden="true"></span>
+              <div class="observation-editor__status">
+                <div
+                  id="observation-detection"
+                  class="observation-editor__status-indicator"
+                  data-state="loading"
+                  aria-live="polite"
+                >
+                  <span class="observation-editor__status-light" aria-hidden="true"></span>
+                  <span id="observation-detection-text" class="observation-editor__status-text"
+                    >Preparing suggestions…</span
+                  >
+                </div>
+                <div
+                  id="observation-validity-container"
+                  class="observation-editor__status-indicator"
+                  data-state="idle"
+                  aria-live="polite"
+                >
+                  <span id="observation-validity" class="observation-editor__validity-icon" aria-hidden="true"></span>
+                  <span id="observation-validity-label" class="visually-hidden"
+                    >Observation not submitted yet.</span
+                  >
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1013,6 +1144,25 @@
             </div>
           </div>
           <p id="suggested-why" class="observation-suggestions__why"></p>
+          <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
+            <p class="observation-suggestions__fallback-text">
+              We didn’t spot obvious feelings or needs yet. Would you like to see the closest matches we can find?
+            </p>
+            <button id="observation-fallback-start" class="support-button support-button--ghost" type="button">
+              Show closest match
+            </button>
+          </div>
+          <div id="observation-fallback-running" class="observation-suggestions__fallback" hidden>
+            <p class="observation-suggestions__fallback-text">Finding the closest matches…</p>
+          </div>
+          <button
+            id="observation-fallback-next"
+            class="support-button observation-suggestions__next"
+            type="button"
+            hidden
+          >
+            Next suggestion
+          </button>
           <div class="observation-suggestions__actions support-actions">
             <button id="edit-again" class="support-button" type="button">Edit observation</button>
             <a class="support-button support-button--ghost" href="../feelings/">Browse all feelings</a>
