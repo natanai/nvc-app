@@ -1424,6 +1424,41 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
   }
 
+  .observations-page .observation-annotation__message[data-variant='match'] {
+    color: color-mix(in srgb, var(--ink) 70%, var(--mint) 30%);
+  }
+
+  .observations-page .observation-cue-builder {
+    margin-top: 0.75rem;
+  }
+
+  .observations-page .observation-cue-builder__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .observations-page .observation-cue-suggestion {
+    width: min(100%, 320px);
+    text-align: left;
+  }
+
+  .observations-page .observation-cue-suggestion .chip__note {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .observations-page .observation-cue-suggestion--active {
+    background: color-mix(in srgb, var(--chip-bg) 50%, var(--mint) 50%);
+    border-color: color-mix(in srgb, var(--outline) 80%, transparent);
+    box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 30%, transparent);
+  }
+
+  .observations-page .observation-cue-suggestion--active .chip__note {
+    color: color-mix(in srgb, var(--ink-soft) 60%, #fff 40%);
+  }
+
   .observations-page .preview {
     border: 0;
     border-radius: var(--radius-2xl);
@@ -2043,6 +2078,24 @@ button.site-nav__magnet {
                     aria-live="polite"
                   >
                     Start typing to surface highlights.
+                  </p>
+                </div>
+
+                <div class="observation-annotation observation-cue-builder" aria-live="polite">
+                  <div class="observation-annotation__label">Cue phrases from the wizard</div>
+                  <div
+                    id="obs-cue-suggestions"
+                    class="chip-group observation-cue-builder__chips"
+                    role="list"
+                    aria-label="Observation cue phrases"
+                  ></div>
+                  <p
+                    id="obs-cue-suggestions-msg"
+                    class="observation-annotation__message"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    Start typing to see cue phrases from the wizard catalog. Click a card to insert its sample wording.
                   </p>
                 </div>
 

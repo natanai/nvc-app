@@ -53,6 +53,14 @@ const FLAG_SUPPLEMENTAL_TIPS = {
   thoughtsAsFeelings: 'Separate the observation from the interpretation — capture the quote or action.',
 };
 
+const CUE_TOKEN_SPLIT_REGEX = (() => {
+  try {
+    return new RegExp('[^\\p{L}\\p{N}]+', 'u');
+  } catch (error) {
+    return /[^a-z0-9]+/i;
+  }
+})();
+
 const state = {
   whenWhere: '',
   whatSawHeard: '',
@@ -121,6 +129,8 @@ function bind() {
     annotationHost.addEventListener('click', handleAnnotationActivation);
     annotationHost.addEventListener('keydown', handleAnnotationKeydown);
   }
+
+  $('#obs-cue-suggestions')?.addEventListener('click', handleCueSuggestionClick);
 }
 
 function syncInputs() {
@@ -151,9 +161,11 @@ function render() {
   renderObservationAnnotations(state.whatSawHeard, lint);
 
   const sanitizedTrimmed = sanitizedPreview.trim();
+  const suggestionPayload = sanitizedTrimmed.length > 0
+    ? suggestFromObservation(sanitizedTrimmed, state.cues)
+    : { feelings: [], needs: [], why: [], hits: [] };
+  renderCueAutocomplete(state.whatSawHeard, state.cues, suggestionPayload.hits || []);
   const canSuggest = sanitizedTrimmed.length > 0 && lint.ok;
-  const suggestionSource = canSuggest ? sanitizedTrimmed : '';
-  const suggestionPayload = canSuggest ? suggestFromObservation(suggestionSource, state.cues) : { feelings: [], needs: [], why: [] };
   const directFeelingSlugs = (lint.feelings || []).filter(slug => state.catalog.feelings.has(slug));
   const directNeedSlugs = (lint.needs || []).filter(slug => state.catalog.needs.has(slug));
   const directFauxFeelings = (lint.fauxFeelings || []).filter(slug => state.catalog.fauxFeelings.has(slug));
@@ -274,6 +286,249 @@ function renderChips(host, items, baseHref, labelMap) {
     a.setAttribute('role', 'listitem');
     host.appendChild(a);
   });
+}
+
+function renderCueAutocomplete(text, cues, hits) {
+  const host = $('#obs-cue-suggestions');
+  const msg = $('#obs-cue-suggestions-msg');
+  if (!host || !msg) return;
+
+  host.classList.add('chip-group');
+  host.setAttribute('role', 'list');
+
+  const info = deriveCueAutocomplete(text, cues, hits);
+  while (host.firstChild) {
+    host.removeChild(host.firstChild);
+  }
+
+  if (!info.items.length) {
+    const ghost = document.createElement('span');
+    ghost.className = 'chip chip--ghost';
+    ghost.textContent = '—';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.setAttribute('role', 'presentation');
+    host.appendChild(ghost);
+  } else {
+    info.items.forEach(item => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'chip chip--stacked observation-cue-suggestion';
+      if (item.active) {
+        button.classList.add('observation-cue-suggestion--active');
+        button.setAttribute('data-state', 'recognized');
+      }
+      button.dataset.example = item.example;
+      button.dataset.cue = item.cue;
+      button.setAttribute('role', 'listitem');
+      button.setAttribute(
+        'aria-label',
+        item.active
+          ? `${item.cue}. Recognized cue phrase. Press to insert the sample wording.`
+          : `${item.cue}. Press to insert the sample wording.`
+      );
+      button.title = item.active
+        ? `${item.cue} · Recognized from what you typed`
+        : `${item.cue} · Click to paste sample wording`;
+      const title = document.createElement('span');
+      title.className = 'chip__title';
+      title.textContent = item.cue;
+      const note = document.createElement('span');
+      note.className = 'chip__note';
+      note.textContent = formatCueExample(item.example);
+      button.appendChild(title);
+      button.appendChild(note);
+      host.appendChild(button);
+    });
+  }
+
+  const trimmed = typeof text === 'string' ? text.trim() : '';
+  if (!trimmed) {
+    msg.textContent = 'Start typing to see cue phrases from the wizard catalog. Click a card to insert its sample wording.';
+    delete msg.dataset.variant;
+    return;
+  }
+
+  if (info.activeCount > 0) {
+    msg.textContent =
+      info.activeCount === 1
+        ? 'Recognized 1 cue phrase. Click it to paste the matching sample wording.'
+        : `Recognized ${info.activeCount} cue phrases. Click a card to paste the matching sample wording.`;
+    msg.dataset.variant = 'match';
+    return;
+  }
+
+  if (info.items.length) {
+    msg.textContent = 'These cue phrases are close to what you typed — try them to surface feeling and need suggestions.';
+    delete msg.dataset.variant;
+    return;
+  }
+
+  msg.textContent = 'No cue matches yet. Try adding direct quotes, counts, or the communication channel you noticed.';
+  msg.dataset.variant = 'flagged';
+}
+
+function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
+  const items = [];
+  const seen = new Set();
+  const activeRows = Array.isArray(hits) ? hits : [];
+  activeRows.forEach(row => {
+    const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
+    const example = typeof row?.example === 'string' ? row.example.trim() : '';
+    if (!cue || !example || seen.has(cue)) return;
+    items.push({ cue, example, active: true });
+    seen.add(cue);
+  });
+  const activeCount = items.length;
+  if (!Array.isArray(cues) || items.length >= maxItems) {
+    return { items, activeCount };
+  }
+
+  const trimmed = typeof text === 'string' ? text.trim() : '';
+  if (!trimmed) {
+    return { items, activeCount };
+  }
+
+  const fragments = buildCueFragments(trimmed);
+  if (fragments.length) {
+    for (const row of cues) {
+      if (items.length >= maxItems) break;
+      const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
+      const example = typeof row?.example === 'string' ? row.example.trim() : '';
+      if (!cue || !example || seen.has(cue)) continue;
+      const cueLower = cue.toLowerCase();
+      const exampleLower = example.toLowerCase();
+      const matchesFragment = fragments.some(fragment => cueLower.includes(fragment) || exampleLower.includes(fragment));
+      if (matchesFragment) {
+        items.push({ cue, example, active: false });
+        seen.add(cue);
+      }
+    }
+  }
+
+  if (items.length < maxItems) {
+    const tokenSet = collectCueTokens(trimmed);
+    if (tokenSet.size) {
+      for (const row of cues) {
+        if (items.length >= maxItems) break;
+        const cue = typeof row?.cue === 'string' ? row.cue.trim() : '';
+        const example = typeof row?.example === 'string' ? row.example.trim() : '';
+        if (!cue || !example || seen.has(cue)) continue;
+        const candidateTokens = [
+          ...collectCueTokens(cue),
+          ...collectCueTokens(example),
+        ];
+        const hasOverlap = candidateTokens.some(token => tokenSet.has(token));
+        if (hasOverlap) {
+          items.push({ cue, example, active: false });
+          seen.add(cue);
+        }
+      }
+    }
+  }
+
+  return { items: items.slice(0, maxItems), activeCount };
+}
+
+function buildCueFragments(text) {
+  const source = typeof text === 'string' ? text.toLowerCase() : '';
+  if (!source.trim()) return [];
+  const normalized = source.replace(/\s+/g, ' ').trim();
+  if (!normalized) return [];
+
+  const tokens = normalized.split(' ');
+  const fragments = [];
+  const pushFragment = fragment => {
+    const trimmed = fragment.trim();
+    if (!trimmed || trimmed.length < 3) return;
+    const bounded = trimmed.length > 60 ? trimmed.slice(-60) : trimmed;
+    fragments.push(bounded);
+  };
+
+  if (tokens.length) pushFragment(tokens[tokens.length - 1]);
+  if (tokens.length >= 2) pushFragment(tokens.slice(-2).join(' '));
+  if (tokens.length >= 3) pushFragment(tokens.slice(-3).join(' '));
+
+  const lastClause = normalized.split(/[,;.!?]/).pop();
+  if (lastClause) pushFragment(lastClause);
+
+  return [...new Set(fragments)];
+}
+
+function collectCueTokens(text, minLength = 4, limit = 12) {
+  const set = new Set();
+  if (typeof text !== 'string') return set;
+  const tokens = text
+    .toLowerCase()
+    .split(CUE_TOKEN_SPLIT_REGEX)
+    .filter(Boolean);
+  for (let i = Math.max(tokens.length - limit, 0); i < tokens.length; i += 1) {
+    const token = tokens[i];
+    if (token.length >= minLength) {
+      set.add(token);
+    }
+  }
+  return set;
+}
+
+function formatCueExample(example) {
+  const text = typeof example === 'string' ? example.trim() : '';
+  if (!text) {
+    return '—';
+  }
+  if (text.length <= 120) {
+    return text;
+  }
+  return `${text.slice(0, 117)}…`;
+}
+
+function handleCueSuggestionClick(event) {
+  const button = event.target?.closest('button[data-example]');
+  if (!button) {
+    return;
+  }
+  event.preventDefault();
+  const example = button.dataset.example || '';
+  if (!example) {
+    return;
+  }
+  insertCueExample(example);
+  if (typeof button.blur === 'function') {
+    button.blur();
+  }
+}
+
+function insertCueExample(example) {
+  const textarea = $('#obs-what');
+  if (!textarea) {
+    return;
+  }
+  const snippet = typeof example === 'string' ? example.trim() : '';
+  if (!snippet) {
+    return;
+  }
+  const value = textarea.value || '';
+  const start = typeof textarea.selectionStart === 'number' ? textarea.selectionStart : value.length;
+  const end = typeof textarea.selectionEnd === 'number' ? textarea.selectionEnd : value.length;
+  const before = value.slice(0, start);
+  const after = value.slice(end);
+  const needsSpaceBefore = before && !/[\s\n]$/.test(before);
+  const needsSpaceAfter = after && !/^[\s\n]/.test(after);
+  let insertion = snippet;
+  if (needsSpaceBefore) {
+    insertion = ` ${insertion}`;
+  }
+  if (needsSpaceAfter) {
+    insertion = `${insertion} `;
+  }
+  const nextValue = `${before}${insertion}${after}`;
+  textarea.value = nextValue;
+  const caret = before.length + insertion.length;
+  if (typeof textarea.setSelectionRange === 'function') {
+    textarea.setSelectionRange(caret, caret);
+  }
+  textarea.focus();
+  state.whatSawHeard = textarea.value;
+  render();
 }
 
 function buildSuggestionLinks(slugs, baseHref, labelMap) {
