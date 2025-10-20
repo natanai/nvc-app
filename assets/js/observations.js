@@ -119,9 +119,9 @@ function buildPreview() {
 
 function render() {
   const preview = buildPreview();
-  updateSharedPreview(preview);
-
   const lint = lintObservation([state.whenWhere, state.whatSawHeard, state.gap].join(' '), state.catalog);
+  const sanitizedPreview = sanitizeObservationPreview(preview, lint);
+  updateSharedPreview(sanitizedPreview);
   renderLintFeedback(lint, state.catalog);
   renderObservationAnnotations(state.whatSawHeard, lint);
 
@@ -203,6 +203,86 @@ function updateSharedPreview(preview) {
     text: message,
     fallback: FREE_PREVIEW_FALLBACK,
   });
+}
+
+function sanitizeObservationPreview(text, lint) {
+  const source = typeof text === 'string' ? text : '';
+  const trimmed = source.trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  const flaggedTokens = collectFlaggedTokens(lint);
+  if (!flaggedTokens.length) {
+    return trimmed;
+  }
+
+  let sanitized = trimmed;
+  flaggedTokens
+    .map(buildPreviewTokenRegex)
+    .filter(Boolean)
+    .forEach(regex => {
+      sanitized = sanitized.replace(regex, ' ');
+    });
+
+  sanitized = sanitized
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.!?;:])/g, '$1')
+    .replace(/([,.!?;:])(\s*[,.!?;:]+)/g, '$1')
+    .trim();
+
+  if (!/[\p{L}\p{N}]/u.test(sanitized)) {
+    return '';
+  }
+
+  return sanitized;
+}
+
+function collectFlaggedTokens(lint) {
+  if (!lint || typeof lint !== 'object') {
+    return [];
+  }
+
+  const matches = [];
+  const groups = Array.isArray(lint.flaggedGroups) ? lint.flaggedGroups : [];
+  groups.forEach(group => {
+    (group.matches || []).forEach(match => {
+      const token = typeof match === 'string' ? match.trim() : '';
+      if (token) {
+        matches.push(token);
+      }
+    });
+  });
+
+  const evaluations = uniqueStrings([...(lint.evaluationMarkers || []), ...(lint.agentiveMarkers || [])]);
+  evaluations.forEach(token => {
+    if (token) {
+      matches.push(token);
+    }
+  });
+
+  return uniqueStrings(matches);
+}
+
+function buildPreviewTokenRegex(token) {
+  const trimmed = typeof token === 'string' ? token.trim() : '';
+  if (!trimmed) {
+    return null;
+  }
+  const escaped = escapeRegExpLiteral(trimmed);
+  if (!escaped) {
+    return null;
+  }
+  const needsWordBoundary = /^[\w\s]+$/.test(trimmed);
+  const pattern = needsWordBoundary ? `\\b${escaped}\\b` : escaped;
+  return new RegExp(pattern, 'gi');
+}
+
+function escapeRegExpLiteral(str) {
+  if (typeof str !== 'string') {
+    return '';
+  }
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function renderChips(host, items, baseHref, labelMap) {
