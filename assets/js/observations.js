@@ -417,9 +417,9 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
       if (!suggestion) continue;
       const cue = suggestion.cue;
       if (seen.has(cue)) continue;
-      const cueLower = cue.toLowerCase();
-      const phraseLower = suggestion.phrase.toLowerCase();
-      const matchesFragment = fragments.some(fragment => cueLower.includes(fragment) || phraseLower.includes(fragment));
+      const hints = getCuePatternHints(row).map(hint => hint.toLowerCase());
+      if (!hints.length) continue;
+      const matchesFragment = fragments.some(fragment => hints.some(hint => hint.includes(fragment)));
       if (matchesFragment) {
         items.push({ ...suggestion, active: false });
         seen.add(cue);
@@ -436,11 +436,19 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
         if (!suggestion) continue;
         const cue = suggestion.cue;
         if (seen.has(cue)) continue;
-        const candidateTokens = [
-          ...collectCueTokens(cue),
-          ...collectCueTokens(suggestion.phrase),
-        ];
-        const hasOverlap = candidateTokens.some(token => tokenSet.has(token));
+        const hints = getCuePatternHints(row);
+        if (!hints.length) continue;
+        let hasOverlap = false;
+        for (const hint of hints) {
+          const hintTokens = collectCueTokens(hint);
+          for (const token of hintTokens) {
+            if (tokenSet.has(token)) {
+              hasOverlap = true;
+              break;
+            }
+          }
+          if (hasOverlap) break;
+        }
         if (hasOverlap) {
           items.push({ ...suggestion, active: false });
           seen.add(cue);
@@ -613,16 +621,35 @@ function createCueSuggestion(row, isActive = false) {
   };
 }
 
-function getCuePhrase(row) {
-  const direct = typeof row?.phrase === 'string' ? row.phrase.trim() : '';
-  if (direct) {
-    return direct;
-  }
+function getCuePatternHints(row) {
+  const hints = [];
+  const pushHint = value => {
+    if (typeof value !== 'string') return;
+    const normalized = value.trim().replace(/\s+/g, ' ');
+    if (!normalized) return;
+    if (hints.includes(normalized)) return;
+    hints.push(normalized);
+  };
+
   if (Array.isArray(row?.phrases)) {
-    const candidate = row.phrases.find(phrase => typeof phrase === 'string' && phrase.trim());
-    if (candidate) {
-      return candidate.trim();
-    }
+    row.phrases.forEach(pushHint);
+  }
+
+  if (!hints.length && typeof row?.patternPhrase === 'string') {
+    pushHint(row.patternPhrase);
+  }
+
+  if (!hints.length && typeof row?.phrase === 'string') {
+    pushHint(row.phrase);
+  }
+
+  return hints;
+}
+
+function getCuePhrase(row) {
+  const hints = getCuePatternHints(row);
+  if (hints.length) {
+    return hints[0];
   }
   const label = typeof row?.label === 'string' ? row.label.trim() : '';
   if (label) {
@@ -786,16 +813,21 @@ function sanitizeCues(cues, catalog) {
     const label = typeof row?.label === 'string' && row.label.trim()
       ? row.label.trim()
       : cue.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
-    const phrases = Array.isArray(row?.phrases)
-      ? row.phrases.map(normalizeCuePhrase).filter(Boolean)
+    const patternHints = Array.isArray(row?.phrases)
+      ? uniqueStrings(row.phrases.map(normalizeCuePhrase).filter(Boolean))
       : [];
-    const phrase = normalizeCuePhrase(row?.phrase);
-    const snippet = phrase || phrases[0] || label || cue;
+    const directPattern = normalizeCuePhrase(row?.phrase);
+    if (!patternHints.length && directPattern) {
+      patternHints.push(directPattern);
+    }
+    const patternPhrase = patternHints[0] || '';
+    const snippet = patternPhrase || label || cue;
     return {
       ...row,
       cue,
       label,
-      phrases,
+      phrases: patternHints,
+      patternPhrase,
       phrase: snippet,
       feelings: Array.isArray(row.feelings) ? row.feelings.filter(slug => catalog.feelings.has(slug)) : [],
       needs: Array.isArray(row.needs) ? row.needs.filter(slug => catalog.needs.has(slug)) : [],
