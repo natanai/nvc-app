@@ -1,6 +1,25 @@
 {
   "cues": [
     {
+      "cue": "no-reply_next",
+      "patterns": [
+        "\\b(?:no\\s+(?:reply|response)|didn[’']?t\\s+(?:reply|respond)|never\\s+(?:replied|responded))\\b",
+        "\\b(?:read|seen)\\b[^.!?]*\\bno\\s+reply\\b",
+        "\\b(?:no\\s+call\\s+back|no\\s+callback|didn[’']?t\\s+call\\s+back|no\\s+return\\s+call)\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "to-be-seen",
+        "connection",
+        "consideration"
+      ],
+      "example": "Two messages were read and there was no reply for two days."
+    },
+    {
       "cue": "time-off-request-denied_next",
       "patterns": [
         "\\b(?:i|we) asked (?:for|to) .* (?:they|(?:boss|manager|supervisor)) (?:said|says) no\\b",
