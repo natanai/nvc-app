@@ -1005,6 +1005,36 @@ button.site-nav__magnet {
     display: none !important;
   }
 
+  .observations-page .observation-search__faux-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    border: 2px solid color-mix(in srgb, var(--outline) 65%, transparent);
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--observations-card-bg) 30%);
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 15%, transparent);
+    font-weight: 650;
+    text-decoration: none;
+    color: color-mix(in srgb, var(--ink) 80%, #ffffff 20%);
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    position: relative;
+    top: -0.05rem;
+  }
+
+  .observations-page .observation-search__faux-button:hover,
+  .observations-page .observation-search__faux-button:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 76%, var(--observations-card-bg) 24%);
+  }
+
+  .observations-page .observation-search__faux-button:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 3px;
+  }
+
   .observations-page .observation-collage__preview {
     display: grid;
     gap: clamp(0.6rem, 2vw, 1rem);

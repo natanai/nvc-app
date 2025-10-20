@@ -310,12 +310,14 @@ function renderSearchHint() {
   host.hidden = false;
   host.textContent = '';
   const prefix = document.createElement('span');
-  prefix.textContent = `Looks like “${label}” is a faux feeling. `;
+  prefix.textContent = 'Looks like ';
   const link = document.createElement('a');
   link.href = `../faux-feelings/${encodeURIComponent(best.slug)}/`;
-  link.textContent = 'Jump straight there';
+  link.className = 'observation-search__faux-button';
+  link.textContent = `“${label}”`;
+  link.setAttribute('aria-label', `Open faux feeling “${label}”`);
   const suffix = document.createElement('span');
-  suffix.textContent = ' if you’d like to start from it.';
+  suffix.textContent = ' is a faux feeling—feel free to jump straight there.';
   host.append(prefix, link, suffix);
 }
 
