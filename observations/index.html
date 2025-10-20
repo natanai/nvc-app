@@ -1139,23 +1139,20 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
   }
 
-  .observations-page .observation-panel__cta {
-    display: grid;
-    gap: 0.4rem;
-  }
-
-  .observations-page .observation-panel__cta .support-actions {
-    margin-top: 0.25rem;
-  }
-
-  .observations-page .observation-panel__cta .support-button {
-    width: fit-content;
-  }
-
   .observations-page .observation-panel__placeholder {
     margin: 0;
     font-size: 0.95rem;
     color: color-mix(in srgb, var(--ink-soft) 70%, #ffffff 30%);
+  }
+
+  .observations-page .observation-collage__cta {
+    margin-top: clamp(0.75rem, 2vw, 1.25rem);
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .observations-page .observation-collage__cta .support-actions {
+    margin-top: 0.25rem;
   }
 
   .observations-page .observation-magnet-shelf {
@@ -1196,7 +1193,26 @@ button.site-nav__magnet {
   }
 
   .observations-page .observation-magnet-grid--suggestions {
-    grid-template-columns: repeat(auto-fit, minmax(9.75rem, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: clamp(0.55rem, 1.4vw, 0.85rem);
+  }
+
+  .observations-page .observation-magnet-grid--feelings,
+  .observations-page .observation-magnet-grid--needs {
+    padding: clamp(0.85rem, 2.4vw, 1.35rem);
+    border-radius: var(--radius-3xl);
+    border: 3px solid color-mix(in srgb, var(--outline) 75%, transparent);
+    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .observations-page .observation-magnet-grid--feelings {
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 72%, var(--rose) 28%);
+  }
+
+  .observations-page .observation-magnet-grid--needs {
+    background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, var(--mint) 30%);
   }
 
   .observations-page .observation-magnet {
@@ -1231,9 +1247,21 @@ button.site-nav__magnet {
   }
 
   .observations-page .observation-magnet--suggestion {
+    width: auto;
+    min-width: clamp(8.25rem, 14vw, 11.5rem);
+    flex: 0 1 clamp(9.5rem, 16vw, 12.5rem);
+    justify-content: center;
+    text-align: center;
     font-weight: 600;
     letter-spacing: 0.01em;
-    background: color-mix(in srgb, #ffffff 65%, var(--lavender) 35%);
+    background: color-mix(in srgb, #ffffff 70%, var(--lavender) 30%);
+    transform: rotate(var(--magnet-tilt, 0deg)) translateY(var(--magnet-offset, 0px));
+  }
+
+  .observations-page .observation-magnet--suggestion:hover:not(.observation-magnet--active),
+  .observations-page .observation-magnet--suggestion:focus-visible:not(.observation-magnet--active) {
+    transform: rotate(var(--magnet-tilt, 0deg))
+      translateY(calc(var(--magnet-offset, 0px) - 6px));
   }
 
   .observations-page .observation-magnet:hover:not(.observation-magnet--active),
@@ -1796,45 +1824,35 @@ button.site-nav__magnet {
               <div class="scrap-paper__body preview preview--scrap" id="obs-example" role="status" aria-live="polite">Select a pattern below to start building your observation.</div>
             </div>
             <p class="scrap-note">Keep your wording to what a camera could capture. As you click magnets below, this scrap fills in with a clear observational sentence.</p>
+            <div class="observation-collage__cta">
+              <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
+              <div class="support-actions support-actions--muted">
+                <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
+              </div>
+            </div>
           </div>
           <div class="observation-panel" id="observation-panel" role="region" aria-label="Suggested feelings and needs">
             <p class="observation-panel__empty" id="observation-panel-empty">Pick a pattern to surface feelings and needs magnets that might support your wording.</p>
             <div class="observation-panel__content" id="observation-panel-content" hidden>
               <div class="observation-panel__group">
                 <p class="observation-panel__heading">Feelings to explore</p>
-                <div class="observation-magnet-shelf observation-magnet-shelf--feelings">
-                  <div
-                    class="observation-magnet-grid observation-magnet-grid--suggestions"
-                    id="suggest-feelings"
-                    role="group"
-                    aria-label="Suggested feelings"
-                  ></div>
-                </div>
+                <div
+                  class="observation-magnet-grid observation-magnet-grid--suggestions observation-magnet-grid--feelings"
+                  id="suggest-feelings"
+                  role="list"
+                  aria-label="Suggested feelings"
+                ></div>
               </div>
               <div class="observation-panel__group">
                 <p class="observation-panel__heading">Needs to consider</p>
-                <div class="observation-magnet-shelf observation-magnet-shelf--needs">
-                  <div
-                    class="observation-magnet-grid observation-magnet-grid--suggestions"
-                    id="suggest-needs"
-                    role="group"
-                    aria-label="Suggested needs"
-                  ></div>
-                </div>
+                <div
+                  class="observation-magnet-grid observation-magnet-grid--suggestions observation-magnet-grid--needs"
+                  id="suggest-needs"
+                  role="list"
+                  aria-label="Suggested needs"
+                ></div>
               </div>
               <p class="hint observation-panel__why" id="why"></p>
-              <div class="observation-panel__cta">
-                <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
-                <div class="support-actions support-actions--muted">
-                  <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
-                </div>
-              </div>
-            </div>
-            <div class="observation-panel__cta">
-              <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
-              <div class="support-actions support-actions--muted">
-                <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
-              </div>
             </div>
           </div>
         </section>

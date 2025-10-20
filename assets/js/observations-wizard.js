@@ -404,6 +404,19 @@ function renderSuggestions() {
   }
 }
 
+const SUGGESTION_TILTS = [-3, -2, -1, 0, 1, 2, 3];
+const SUGGESTION_OFFSETS = [-3, -2, -1, 0, 1, 2, 3];
+
+function getSuggestionTilt(index) {
+  const tilt = SUGGESTION_TILTS[index % SUGGESTION_TILTS.length];
+  return Number.isFinite(tilt) ? tilt : 0;
+}
+
+function getSuggestionOffset(index) {
+  const offset = SUGGESTION_OFFSETS[index % SUGGESTION_OFFSETS.length];
+  return Number.isFinite(offset) ? offset : 0;
+}
+
 function renderChipSet(host, items, baseHref, emptyLabel) {
   host.innerHTML = '';
   const list = Array.isArray(items) ? items.filter(Boolean) : [];
@@ -413,7 +426,7 @@ function renderChipSet(host, items, baseHref, emptyLabel) {
     }
     return false;
   }
-  list.forEach(label => {
+  list.forEach((label, index) => {
     const el = baseHref ? document.createElement('a') : document.createElement('span');
     el.className = 'observation-magnet observation-magnet--suggestion';
     const slug = slugify(label);
@@ -422,6 +435,9 @@ function renderChipSet(host, items, baseHref, emptyLabel) {
     }
     el.textContent = label;
     el.setAttribute('data-slug', slug);
+    el.setAttribute('role', 'listitem');
+    el.style.setProperty('--magnet-tilt', `${getSuggestionTilt(index)}deg`);
+    el.style.setProperty('--magnet-offset', `${getSuggestionOffset(index)}px`);
     host.appendChild(el);
   });
   return true;
