@@ -8,25 +8,25 @@
     {
       "id": "time-off-request-denied_next",
       "slots": {
-        "who": ["(?:my\\s+)?(?:boss|manager|supervisor)"],
-        "what_base": ["(?:time\\s+off|pto|vacation|leave)"]
+        "who": ["boss", "manager", "supervisor"],
+        "what_timeoff": ["time off", "pto", "vacation", "leave"]
       },
       "patterns": [
-        "\\b(?:i|we)\\s+asked\\s+(?:for|to)\\s+${what_base}\\b[^.!?]*\\b(?:they|${who})\\s+(?:said|says)\\s+no\\b",
-        "\\b(?:${who})\\s+(?:did\\s+not|didn[’']?t)\\s+(?:approve|allow)\\b[^.!?]*\\b${what_base}\\b",
-        "\\bmy\\s+${what_base}\\s+request\\s+was\\s+not\\s+approved\\b"
+        "\\b(?:i|we)\\s+asked\\s+(?:for\\s+(?:${what_timeoff})|to\\s+take\\s+(?:${what_timeoff}))\\b[^.!?]*\\b(?:they|(?:my\\s+|the\\s+)?(?:${who}))\\s+(?:said|says)\\s+no\\b",
+        "\\b(?:my\\s+|the\\s+)?(?:${who})\\s+(?:did\\s+not|didn[’']?t)\\s+(?:approve|allow)\\b[^.!?]*\\b(?:${what_timeoff})\\b",
+        "\\bmy\\s+(?:${what_timeoff})\\s+request\\s+was\\s+not\\s+approved\\b"
       ],
       "example": "I asked for time off and my manager said no."
     },
     {
       "id": "schedule-change-request-denied_next",
       "slots": {
-        "who": ["(?:my\\s+)?(?:boss|manager|supervisor)"]
+        "who": ["boss", "manager", "supervisor"]
       },
       "patterns": [
-        "\\b(?:i|we)\\s+asked\\s+to\\s+change\\s+my\\s+schedule\\b[^.!?]*\\b(?:they|${who})\\s+(?:said|says)\\s+no\\b",
-        "\\b(?:i|we)\\s+asked\\s+for\\s+a\\s+schedule\\s+change\\b[^.!?]*\\b(?:they|${who})\\s+(?:said|says)\\s+no\\b",
-        "\\b(?:${who})\\s+(?:did\\s+not|didn[’']?t)\\s+approve\\s+(?:my\\s+schedule\\s+change\\s+request|a\\s+schedule\\s+change)\\b",
+        "\\b(?:i|we)\\s+asked\\s+to\\s+change\\s+my\\s+schedule\\b[^.!?]*\\b(?:they|(?:my\\s+|the\\s+)?(?:${who}))\\s+(?:said|says)\\s+no\\b",
+        "\\b(?:i|we)\\s+asked\\s+for\\s+a\\s+schedule\\s+change\\b[^.!?]*\\b(?:they|(?:my\\s+|the\\s+)?(?:${who}))\\s+(?:said|says)\\s+no\\b",
+        "\\b(?:my\\s+|the\\s+)?(?:${who})\\s+(?:did\\s+not|didn[’']?t)\\s+approve\\s+(?:my\\s+schedule\\s+change\\s+request|a\\s+schedule\\s+change)\\b",
         "\\bmy\\s+schedule\\s+change\\s+request\\s+was\\s+not\\s+approved\\b"
       ],
       "example": "I asked to change my schedule and my boss said no."
@@ -34,13 +34,13 @@
     {
       "id": "meeting-request-denied_next",
       "slots": {
-        "who": ["(?:my\\s+)?(?:boss|manager|supervisor|partner|teacher|professor|landlord)"],
-        "what_base": ["(?:meeting|one\\s+on\\s+one|1\\s+on\\s+1|1:1)"]
+        "who_ext": ["boss", "manager", "supervisor", "partner", "teacher", "professor", "landlord"],
+        "what_meeting": ["meeting", "one on one", "1 on 1", "1:1"]
       },
       "patterns": [
-        "\\b(?:i|we)\\s+asked\\s+for\\s+(?:a\\s+)?${what_base}\\b[^.!?]*\\b(?:they|${who})\\s+(?:said|says)\\s+no\\b",
-        "\\b(?:they|${who})\\s+(?:did\\s+not|didn[’']?t)\\s+approve\\s+my\\s+${what_base}\\s+request\\b",
-        "\\bmy\\s+${what_base}\\s+request\\s+was\\s+not\\s+approved\\b"
+        "\\b(?:i|we)\\s+asked\\s+for\\s+(?:a\\s+)?(?:${what_meeting})\\b[^.!?]*\\b(?:they|(?:my\\s+|the\\s+)?(?:${who_ext}))\\s+(?:said|says)\\s+no\\b",
+        "\\b(?:they|(?:my\\s+|the\\s+)?(?:${who_ext}))\\s+(?:did\\s+not|didn[’']?t)\\s+approve\\s+my\\s+(?:${what_meeting})\\s+request\\b",
+        "\\bmy\\s+(?:${what_meeting})\\s+request\\s+was\\s+not\\s+approved\\b"
       ],
       "example": "I asked for a meeting and my landlord said no."
     }
