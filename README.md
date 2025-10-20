@@ -67,14 +67,24 @@ and be removed once the source is reachable again.
 
 ## Stable local release snapshot
 
-To reproduce the `release-stable-local` GitHub Actions workflow without pushing a release, run the helper script:
+Run the helper script to create a timestamped ZIP archive without publishing a GitHub release:
 
 ```bash
 ./scripts/run-release-stable-local.sh
 ```
 
-The script creates a timestamped ZIP archive under `releases/` that mirrors the artifact the workflow would publish. Pass a
-custom directory as the first argument to store the archive elsewhere.
+The script writes the archive to `releases/` by default. Pass a custom directory as the first argument to store the archive
+elsewhere.
+
+## Observation cue sanitization
+
+Use the **Observation Cue Sanitizer** workflow from the GitHub Actions tab to regenerate `data/observation_cues.sanitized.csv`.
+Toggle the `regenerate_index` input when you need to rebuild `data/index.json` from the CSV sources before sanitizing. The
+workflow uploads the sanitized CSV as a downloadable artifact. Locally, run the sanitizer directly with:
+
+```bash
+node scripts/sanitizeObservationCues.mjs
+```
 
 ## Project structure
 
