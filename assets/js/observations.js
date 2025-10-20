@@ -61,6 +61,14 @@ const CUE_TOKEN_SPLIT_REGEX = (() => {
   }
 })();
 
+const CUE_LEADING_TRIM_REGEX = (() => {
+  try {
+    return new RegExp('^[^\\p{L}\\p{N}]+', 'u');
+  } catch (error) {
+    return /^[^a-z0-9]+/i;
+  }
+})();
+
 const state = {
   whenWhere: '',
   whatSawHeard: '',
@@ -388,6 +396,14 @@ function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
     return { items, activeCount };
   }
 
+  if (!items.some(item => item.active)) {
+    const partial = findPartialCueMatch(text, cues);
+    if (partial && !seen.has(partial.cue)) {
+      items.unshift(partial);
+      seen.add(partial.cue);
+    }
+  }
+
   const trimmed = typeof text === 'string' ? text.trim() : '';
   if (!trimmed) {
     return { items, activeCount };
@@ -475,6 +491,83 @@ function collectCueTokens(text, minLength = 4, limit = 12) {
     }
   }
   return set;
+}
+
+function stripCueLeadingNoise(fragment) {
+  if (typeof fragment !== 'string') {
+    return '';
+  }
+  return fragment.replace(CUE_LEADING_TRIM_REGEX, '');
+}
+
+function collectCuePrefixCandidates(text, maxLength = 60) {
+  const candidates = new Set();
+  if (typeof text !== 'string') {
+    return [];
+  }
+  const normalized = text
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[\u0000-\u001f]+/g, ' ')
+    .trimEnd();
+  if (!normalized) {
+    return [];
+  }
+  const limit = Math.min(maxLength, normalized.length);
+  for (let len = 1; len <= limit; len += 1) {
+    const slice = normalized.slice(-len);
+    const cleaned = stripCueLeadingNoise(slice).replace(/\s+/g, ' ').trim();
+    if (cleaned) {
+      candidates.add(cleaned);
+    }
+  }
+  return Array.from(candidates);
+}
+
+function findPartialCueMatch(text, cues) {
+  if (!Array.isArray(cues) || !cues.length || typeof text !== 'string') {
+    return null;
+  }
+  const candidates = collectCuePrefixCandidates(text);
+  if (!candidates.length) {
+    return null;
+  }
+  let best = null;
+  for (const row of cues) {
+    const phrase = getCuePhrase(row);
+    const normalizedPhrase = typeof phrase === 'string'
+      ? phrase.toLowerCase().replace(/\s+/g, ' ').trim()
+      : '';
+    if (!normalizedPhrase) {
+      continue;
+    }
+    let matchLength = 0;
+    for (const fragment of candidates) {
+      if (normalizedPhrase.startsWith(fragment)) {
+        const fragmentLength = fragment.length;
+        if (fragmentLength > matchLength) {
+          matchLength = fragmentLength;
+        }
+      }
+    }
+    if (!matchLength) {
+      continue;
+    }
+    if (!best || matchLength > best.matchLength || (
+      matchLength === best.matchLength && normalizedPhrase.length < best.phraseLength
+    )) {
+      const suggestion = createCueSuggestion(row, true);
+      if (!suggestion) {
+        continue;
+      }
+      best = {
+        suggestion,
+        matchLength,
+        phraseLength: normalizedPhrase.length,
+      };
+    }
+  }
+  return best ? best.suggestion : null;
 }
 
 function formatCuePhrase(phrase) {
