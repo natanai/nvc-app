@@ -53,6 +53,8 @@ interface InternalMagnetState extends MagnetSnapshot {
   pointerId: number | null;
   offsetX: number;
   offsetY: number;
+  driftX: number;
+  driftY: number;
 }
 
 interface InternalState {
@@ -117,6 +119,17 @@ const getNow = () =>
 const parsePx = (value: string | null | undefined) => {
   const parsed = Number.parseFloat(value || '0');
   return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const createDriftVector = () => {
+  let x = 0;
+  let y = 0;
+  while (x === 0 && y === 0) {
+    x = Math.random() * 2 - 1;
+    y = Math.random() * 2 - 1;
+  }
+  const magnitude = Math.hypot(x, y) || 1;
+  return { x: x / magnitude, y: y / magnitude };
 };
 
 const waitForAnimationFrames = async (count = 1): Promise<void> => {
@@ -328,6 +341,7 @@ const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnet
     element.hidden ||
     element.dataset.navHidden === 'true' ||
     element.getAttribute('aria-hidden') === 'true';
+  const drift = createDriftVector();
   return {
     id: String(id),
     element,
@@ -342,6 +356,8 @@ const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnet
     pointerId: null,
     offsetX: 0,
     offsetY: 0,
+    driftX: drift.x,
+    driftY: drift.y,
   };
 };
 
@@ -492,7 +508,7 @@ const addPointerListeners = (state: InternalState) => {
 };
 
 const applySeparationForces = (state: InternalState, dt: number) => {
-  const { sepRadiusScale, sepStrength, dragSepMultiplier } = state.config;
+  const { sepStrength, dragSepMultiplier } = state.config;
   for (let i = 0; i < state.magnets.length; i += 1) {
     const magnetA = state.magnets[i];
     if (magnetA.navHidden) {
@@ -503,31 +519,42 @@ const applySeparationForces = (state: InternalState, dt: number) => {
       if (magnetB.navHidden) {
         continue;
       }
+      const overlapX =
+        Math.min(magnetA.x + magnetA.w, magnetB.x + magnetB.w) -
+        Math.max(magnetA.x, magnetB.x);
+      if (overlapX <= 0) {
+        continue;
+      }
+      const overlapY =
+        Math.min(magnetA.y + magnetA.h, magnetB.y + magnetB.h) -
+        Math.max(magnetA.y, magnetB.y);
+      if (overlapY <= 0) {
+        continue;
+      }
       const centerAX = magnetA.x + magnetA.w / 2;
       const centerAY = magnetA.y + magnetA.h / 2;
       const centerBX = magnetB.x + magnetB.w / 2;
       const centerBY = magnetB.y + magnetB.h / 2;
-      const diffX = centerBX - centerAX;
-      const diffY = centerBY - centerAY;
-      const distance = Math.hypot(diffX, diffY) || 0.0001;
-      const radiusA = Math.hypot(magnetA.w, magnetA.h) * sepRadiusScale;
-      const radiusB = Math.hypot(magnetB.w, magnetB.h) * sepRadiusScale;
-      const minDistance = radiusA + radiusB;
-      if (distance >= minDistance) {
-        continue;
-      }
-      const overlap = minDistance - distance;
-      const strength = (sepStrength * (overlap / minDistance)) * dt;
-      const dirX = diffX / distance;
-      const dirY = diffY / distance;
       const multiplier = magnetA.dragging || magnetB.dragging ? dragSepMultiplier : 1;
-      if (!magnetA.dragging) {
-        magnetA.vx -= dirX * strength * multiplier;
-        magnetA.vy -= dirY * strength * multiplier;
-      }
-      if (!magnetB.dragging) {
-        magnetB.vx += dirX * strength * multiplier;
-        magnetB.vy += dirY * strength * multiplier;
+      const impulseScale = sepStrength * dt * multiplier;
+      if (overlapX < overlapY) {
+        const direction = centerAX < centerBX ? -1 : 1;
+        const impulse = overlapX * impulseScale;
+        if (!magnetA.dragging) {
+          magnetA.vx += direction * impulse;
+        }
+        if (!magnetB.dragging) {
+          magnetB.vx -= direction * impulse;
+        }
+      } else {
+        const direction = centerAY < centerBY ? -1 : 1;
+        const impulse = overlapY * impulseScale;
+        if (!magnetA.dragging) {
+          magnetA.vy += direction * impulse;
+        }
+        if (!magnetB.dragging) {
+          magnetB.vy -= direction * impulse;
+        }
       }
     }
   }
@@ -583,15 +610,22 @@ const integrateMotion = (state: InternalState, dt: number) => {
       magnet.vy = 0;
       return;
     }
-    if (!magnet.dragging) {
-      magnet.vx += (Math.random() * 2 - 1) * drift * jitterScaleX * dt;
-      magnet.vy += (Math.random() * 2 - 1) * drift * jitterScaleY * dt;
+    if (magnet.dragging) {
+      magnet.vx *= damping;
+      magnet.vy *= damping;
+    } else {
+      magnet.vx *= damping;
+      magnet.vy *= damping;
+      const driftWeight = clamp(1 - damping, 0, 1);
+      if (driftWeight > 0) {
+        magnet.vx += magnet.driftX * drift * jitterScaleX * driftWeight;
+        magnet.vy += magnet.driftY * drift * jitterScaleY * driftWeight;
+      } else {
+        magnet.vx += magnet.driftX * drift * jitterScaleX * dt;
+        magnet.vy += magnet.driftY * drift * jitterScaleY * dt;
+      }
       magnet.vx += tiltStrength * tiltX * dt;
       magnet.vy += tiltStrength * tiltY * dt;
-    }
-    magnet.vx *= damping;
-    magnet.vy *= damping;
-    if (!magnet.dragging) {
       magnet.x += magnet.vx * dt;
       magnet.y += magnet.vy * dt;
     }
@@ -599,17 +633,25 @@ const integrateMotion = (state: InternalState, dt: number) => {
     const maxY = Math.max(height - magnet.h, 0);
     if (magnet.x < 0) {
       magnet.x = 0;
-      magnet.vx = Math.abs(magnet.vx) * edgeBounce;
+      const boost = drift * 0.5;
+      magnet.vx = Math.abs(magnet.vx) * edgeBounce + boost;
+      magnet.driftX = Math.abs(magnet.driftX);
     } else if (magnet.x > maxX) {
       magnet.x = maxX;
-      magnet.vx = -Math.abs(magnet.vx) * edgeBounce;
+      const boost = drift * 0.5;
+      magnet.vx = -Math.abs(magnet.vx) * edgeBounce - boost;
+      magnet.driftX = -Math.abs(magnet.driftX);
     }
     if (magnet.y < 0) {
       magnet.y = 0;
-      magnet.vy = Math.abs(magnet.vy) * edgeBounce;
+      const boost = drift * 0.5;
+      magnet.vy = Math.abs(magnet.vy) * edgeBounce + boost;
+      magnet.driftY = Math.abs(magnet.driftY);
     } else if (magnet.y > maxY) {
       magnet.y = maxY;
-      magnet.vy = -Math.abs(magnet.vy) * edgeBounce;
+      const boost = drift * 0.5;
+      magnet.vy = -Math.abs(magnet.vy) * edgeBounce - boost;
+      magnet.driftY = -Math.abs(magnet.driftY);
     }
     applyTransform(magnet);
   });
