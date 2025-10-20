@@ -2674,6 +2674,1089 @@
           ]
         }
       ]
+    },
+    {
+      "id": "household-mess",
+      "label": "Household mess / Cleanliness",
+      "patterns": [
+        {
+          "id": "dishes-left-overnight",
+          "label": "Dishes left in sink past agreed time",
+          "example": "Dirty dishes remained in the sink the morning after the agreed cleanup time.",
+          "feelings": [
+            "Annoyed",
+            "Tired",
+            "Irritated",
+            "Tense"
+          ],
+          "needs": [
+            "Order",
+            "Reliability",
+            "Consideration",
+            "Peace"
+          ]
+        },
+        {
+          "id": "trash-not-taken",
+          "label": "Trash not taken out on pickup day",
+          "example": "The bins were still full at 8:00 am on pickup day.",
+          "feelings": [
+            "Frustrated",
+            "Irritated",
+            "Concerned",
+            "Tense"
+          ],
+          "needs": [
+            "Accountability",
+            "Reliability",
+            "Support",
+            "Consistency"
+          ]
+        },
+        {
+          "id": "shared-space-clutter",
+          "label": "Items left in shared space",
+          "example": "Shoes and bags were left in the hallway after we finished reminding last night.",
+          "feelings": [
+            "Irritated",
+            "Overwhelmed",
+            "Tense",
+            "Distracted"
+          ],
+          "needs": [
+            "Order",
+            "Consideration",
+            "Space",
+            "Peace"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phone-presence",
+      "label": "Phone use during time together",
+      "patterns": [
+        {
+          "id": "phones-at-dinner",
+          "label": "Phone used during meals",
+          "example": "During dinner, the phone screen was on for most of the meal.",
+          "feelings": [
+            "Lonely",
+            "Hurt",
+            "Irritated",
+            "Sad"
+          ],
+          "needs": [
+            "Connection",
+            "To be seen",
+            "To be heard",
+            "Belonging"
+          ]
+        },
+        {
+          "id": "scrolling-while-speaking",
+          "label": "Scrolling while I was talking",
+          "example": "While I was sharing about my day, the other person scrolled on their phone.",
+          "feelings": [
+            "Hurt",
+            "Annoyed",
+            "Tense",
+            "Unsure"
+          ],
+          "needs": [
+            "To be heard",
+            "Consideration",
+            "Recognition",
+            "Closeness"
+          ]
+        },
+        {
+          "id": "calls-during-movie",
+          "label": "Taking calls during shared activity",
+          "example": "During the movie, two calls were taken in the same room.",
+          "feelings": [
+            "Irritated",
+            "Lonely",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "Peace",
+            "Consideration",
+            "Connection",
+            "Participation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lateness-chronic",
+      "label": "Chronic lateness",
+      "patterns": [
+        {
+          "id": "late-10min",
+          "label": "Arrived ~10 minutes after start",
+          "example": "The 10:00 am meeting began at 10:10 am.",
+          "feelings": [
+            "Irritated",
+            "Anxious",
+            "Tense",
+            "Frustrated"
+          ],
+          "needs": [
+            "Predictability",
+            "Reliability",
+            "Consideration",
+            "Respect"
+          ]
+        },
+        {
+          "id": "late-30min",
+          "label": "Arrived ~30 minutes after start",
+          "example": "The scheduled lunch at 12:00 pm started at 12:30 pm.",
+          "feelings": [
+            "Annoyed",
+            "Concerned",
+            "Tense",
+            "Disappointed"
+          ],
+          "needs": [
+            "Respect",
+            "Predictability",
+            "Reliability",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "no-heads-up",
+          "label": "Late without message",
+          "example": "No message was sent before arriving late to the appointment.",
+          "feelings": [
+            "Anxious",
+            "Irritated",
+            "Tense",
+            "Concerned"
+          ],
+          "needs": [
+            "Clarity",
+            "Accountability",
+            "Respect",
+            "Dependability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lack-appreciation",
+      "label": "Feeling unappreciated",
+      "patterns": [
+        {
+          "id": "no-ack-effort",
+          "label": "Effort not acknowledged",
+          "example": "After I finished the project, there was no mention of my work in the meeting.",
+          "feelings": [
+            "Hurt",
+            "Sad",
+            "Frustrated",
+            "Tense"
+          ],
+          "needs": [
+            "Acknowledgement",
+            "Appreciation",
+            "Recognition",
+            "Mattering"
+          ]
+        },
+        {
+          "id": "credit-missing",
+          "label": "Contribution shared without naming me",
+          "example": "My example appeared in the presentation without my name.",
+          "feelings": [
+            "Hurt",
+            "Irritated",
+            "Tense",
+            "Disappointed"
+          ],
+          "needs": [
+            "Recognition",
+            "Fairness",
+            "Integrity",
+            "Peer Respect"
+          ]
+        },
+        {
+          "id": "no-thanks-routine",
+          "label": "Routine support not thanked",
+          "example": "After three days of school drop-offs, there was no ‘thank you’.",
+          "feelings": [
+            "Hurt",
+            "Lonely",
+            "Annoyed",
+            "Tired"
+          ],
+          "needs": [
+            "Appreciation",
+            "To be seen",
+            "Mutuality",
+            "Support"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "follow-through",
+      "label": "Not following through",
+      "patterns": [
+        {
+          "id": "promise-missed",
+          "label": "Said would do X by date, didn’t",
+          "example": "They agreed to send the file by Tuesday; no file arrived by end of day.",
+          "feelings": [
+            "Anxious",
+            "Frustrated",
+            "Concerned",
+            "Disappointed"
+          ],
+          "needs": [
+            "Reliability",
+            "Trust",
+            "Accountability",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "reminder-needed",
+          "label": "Task done only after multiple reminders",
+          "example": "The form was submitted after three reminders.",
+          "feelings": [
+            "Tired",
+            "Annoyed",
+            "Irritated",
+            "Tense"
+          ],
+          "needs": [
+            "Dependability",
+            "Consistency",
+            "Support",
+            "Order"
+          ]
+        },
+        {
+          "id": "partial-complete",
+          "label": "Partially completed without note",
+          "example": "The requested steps were half-finished and no message explained the status.",
+          "feelings": [
+            "Confused",
+            "Concerned",
+            "Irritated",
+            "Tense"
+          ],
+          "needs": [
+            "Clarity",
+            "Accountability",
+            "Honesty",
+            "Reliability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gossip",
+      "label": "Talking about me when I’m not there",
+      "patterns": [
+        {
+          "id": "quote-in-my-absence",
+          "label": "Comment about me relayed later",
+          "example": "In a separate chat, a comment about my work was shared without me present.",
+          "feelings": [
+            "Hurt",
+            "Unsure",
+            "Anxious",
+            "Irritated"
+          ],
+          "needs": [
+            "Honesty",
+            "Non-judgmental Communication",
+            "Respect",
+            "Trust"
+          ]
+        },
+        {
+          "id": "private-info-shared",
+          "label": "Private detail shared",
+          "example": "A personal detail I shared privately appeared in a group thread.",
+          "feelings": [
+            "Embarrassed",
+            "Hurt",
+            "Anxious",
+            "Concerned"
+          ],
+          "needs": [
+            "Privacy",
+            "Integrity",
+            "Respect",
+            "Trust"
+          ]
+        },
+        {
+          "id": "speculation",
+          "label": "Speculative claims about me",
+          "example": "A guess about my intentions was posted in the team chat.",
+          "feelings": [
+            "Uncomfortable",
+            "Hurt",
+            "Concerned",
+            "Tense"
+          ],
+          "needs": [
+            "Honesty",
+            "Understanding",
+            "Respect",
+            "To be heard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "social-exclusion",
+      "label": "Not being included",
+      "patterns": [
+        {
+          "id": "not-invited",
+          "label": "Not invited to group activity",
+          "example": "Photos show the team lunch; I was not in the calendar invite list.",
+          "feelings": [
+            "Lonely",
+            "Sad",
+            "Hurt",
+            "Disappointed"
+          ],
+          "needs": [
+            "Inclusion",
+            "Belonging",
+            "Connection",
+            "Participation"
+          ]
+        },
+        {
+          "id": "info-channel-missed",
+          "label": "Left out of info channel",
+          "example": "The new project channel didn’t include my account.",
+          "feelings": [
+            "Unsure",
+            "Anxious",
+            "Irritated",
+            "Hurt"
+          ],
+          "needs": [
+            "Inclusion",
+            "Participation",
+            "To be seen",
+            "Equality"
+          ]
+        },
+        {
+          "id": "decision-without-me",
+          "label": "Decision made without my input",
+          "example": "A decision affecting my work was made in a meeting I wasn’t invited to.",
+          "feelings": [
+            "Frustrated",
+            "Hurt",
+            "Tense",
+            "Concerned"
+          ],
+          "needs": [
+            "Participation",
+            "To be heard",
+            "Fairness",
+            "Respect"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "customer-service",
+      "label": "Customer service frustrations",
+      "patterns": [
+        {
+          "id": "long-hold",
+          "label": "Long hold time",
+          "example": "The call was on hold for 28 minutes.",
+          "feelings": [
+            "Frustrated",
+            "Tired",
+            "Irritated",
+            "Anxious"
+          ],
+          "needs": [
+            "Respect",
+            "Clarity",
+            "Peace",
+            "Order"
+          ]
+        },
+        {
+          "id": "repeat-explanations",
+          "label": "Had to explain issue repeatedly",
+          "example": "The same issue was explained to three different agents.",
+          "feelings": [
+            "Tired",
+            "Annoyed",
+            "Sad",
+            "Irritated"
+          ],
+          "needs": [
+            "Understanding",
+            "Clarity",
+            "Accountability",
+            "Consistency"
+          ]
+        },
+        {
+          "id": "missed-callback",
+          "label": "Promised callback didn’t happen",
+          "example": "A callback scheduled for 2–3 pm did not occur.",
+          "feelings": [
+            "Anxious",
+            "Irritated",
+            "Concerned",
+            "Disappointed"
+          ],
+          "needs": [
+            "Reliability",
+            "Trust",
+            "Accountability",
+            "Clarity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "micromanagement",
+      "label": "Micromanaging / Over-control",
+      "patterns": [
+        {
+          "id": "hovering",
+          "label": "Standing over me while I work",
+          "example": "During the task, the manager stood behind my chair watching.",
+          "feelings": [
+            "Tense",
+            "Anxious",
+            "Irritated",
+            "Embarrassed"
+          ],
+          "needs": [
+            "Autonomy",
+            "Trust",
+            "Act Freely",
+            "Choose Freely"
+          ]
+        },
+        {
+          "id": "changed-steps",
+          "label": "Steps changed mid-task",
+          "example": "Instructions were changed while I was executing the plan.",
+          "feelings": [
+            "Stressed",
+            "Anxious",
+            "Tense",
+            "Frustrated"
+          ],
+          "needs": [
+            "Clarity",
+            "Predictability",
+            "Control",
+            "Consistency"
+          ]
+        },
+        {
+          "id": "constant-check-ins",
+          "label": "Frequent check-ins within short window",
+          "example": "Three messages asked for status within 15 minutes.",
+          "feelings": [
+            "Overwhelmed",
+            "Tense",
+            "Irritated",
+            "Distracted"
+          ],
+          "needs": [
+            "Trust",
+            "Do things at my own pace and in my own way",
+            "Calm",
+            "Autonomy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "driving-etiquette",
+      "label": "Driving behavior",
+      "patterns": [
+        {
+          "id": "tailgating",
+          "label": "Following very closely",
+          "example": "The car followed at a distance of one car length at 60 mph.",
+          "feelings": [
+            "Scared",
+            "Tense",
+            "Alert",
+            "Anxious"
+          ],
+          "needs": [
+            "Safety",
+            "Security",
+            "Calm",
+            "Predictability"
+          ]
+        },
+        {
+          "id": "lane-weaving",
+          "label": "Changing lanes rapidly",
+          "example": "The driver changed lanes three times within 10 seconds.",
+          "feelings": [
+            "Scared",
+            "Tense",
+            "Worried",
+            "Anxious"
+          ],
+          "needs": [
+            "Safety",
+            "Predictability",
+            "Calm",
+            "Security"
+          ]
+        },
+        {
+          "id": "phone-while-driving",
+          "label": "Using phone while vehicle moving",
+          "example": "The driver typed on a phone while the car was in motion.",
+          "feelings": [
+            "Anxious",
+            "Scared",
+            "Tense",
+            "Concerned"
+          ],
+          "needs": [
+            "Safety",
+            "Accountability",
+            "Love/Caring",
+            "Calm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pet-etiquette",
+      "label": "Pets / Etiquette",
+      "patterns": [
+        {
+          "id": "off-leash",
+          "label": "Dog off leash in posted area",
+          "example": "A dog ran free where a leash sign was posted.",
+          "feelings": [
+            "Anxious",
+            "Concerned",
+            "Tense",
+            "Startled"
+          ],
+          "needs": [
+            "Safety",
+            "Order",
+            "Predictability",
+            "Community"
+          ]
+        },
+        {
+          "id": "barking-late",
+          "label": "Barking late at night",
+          "example": "Barking continued past 11:00 pm for 20 minutes.",
+          "feelings": [
+            "Irritated",
+            "Tired",
+            "Overwhelmed",
+            "Tense"
+          ],
+          "needs": [
+            "Rest",
+            "Peace",
+            "Serenity",
+            "Consideration"
+          ]
+        },
+        {
+          "id": "waste-left",
+          "label": "Pet waste not cleaned",
+          "example": "Pet waste remained on the shared sidewalk.",
+          "feelings": [
+            "Annoyed",
+            "Irritated",
+            "Sad",
+            "Tense"
+          ],
+          "needs": [
+            "Order",
+            "Community",
+            "Consideration",
+            "Beauty"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "public-noise",
+      "label": "Noise in shared/public spaces",
+      "patterns": [
+        {
+          "id": "speakerphone-public",
+          "label": "Speakerphone call in quiet area",
+          "example": "A speakerphone call continued in the library for five minutes.",
+          "feelings": [
+            "Irritated",
+            "Distracted",
+            "Tense",
+            "Annoyed"
+          ],
+          "needs": [
+            "Peace",
+            "Order",
+            "Consideration",
+            "Community"
+          ]
+        },
+        {
+          "id": "music-no-headphones",
+          "label": "Music played without headphones",
+          "example": "Music played out loud on the bus during the ride.",
+          "feelings": [
+            "Annoyed",
+            "Distracted",
+            "Tense",
+            "Overwhelmed"
+          ],
+          "needs": [
+            "Peace",
+            "Consideration",
+            "Community",
+            "Order"
+          ]
+        },
+        {
+          "id": "loud-convo",
+          "label": "Very loud conversation next to me",
+          "example": "Two people spoke loudly beside my seat for 15 minutes.",
+          "feelings": [
+            "Distracted",
+            "Irritated",
+            "Tense",
+            "Tired"
+          ],
+          "needs": [
+            "Peace",
+            "Serenity",
+            "Space",
+            "Consideration"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "queue-etiquette",
+      "label": "Lines / Queues",
+      "patterns": [
+        {
+          "id": "cutting-line",
+          "label": "Someone stepped ahead in line",
+          "example": "A person moved ahead of me while I was standing in the checkout line.",
+          "feelings": [
+            "Irritated",
+            "Hurt",
+            "Annoyed",
+            "Angry"
+          ],
+          "needs": [
+            "Fairness",
+            "Equality",
+            "Order",
+            "Justice"
+          ]
+        },
+        {
+          "id": "saving-spots",
+          "label": "Holding places for late arrivals",
+          "example": "Three people joined a friend at the front of the line.",
+          "feelings": [
+            "Annoyed",
+            "Frustrated",
+            "Tense",
+            "Concerned"
+          ],
+          "needs": [
+            "Fairness",
+            "Order",
+            "Community",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "unclear-queue",
+          "label": "No clear line markers",
+          "example": "People formed two lines at the counter without signage.",
+          "feelings": [
+            "Confused",
+            "Tense",
+            "Irritated",
+            "Anxious"
+          ],
+          "needs": [
+            "Clarity",
+            "Order",
+            "Predictability",
+            "Peace"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delivery-issues",
+      "label": "Deliveries / Service windows",
+      "patterns": [
+        {
+          "id": "late-delivery",
+          "label": "Package arrived after window",
+          "example": "The delivery window was 2–4 pm; the package arrived at 6:10 pm.",
+          "feelings": [
+            "Frustrated",
+            "Anxious",
+            "Annoyed",
+            "Tense"
+          ],
+          "needs": [
+            "Predictability",
+            "Reliability",
+            "Clarity",
+            "Accountability"
+          ]
+        },
+        {
+          "id": "no-doorbell",
+          "label": "No ring/knock on delivery",
+          "example": "The package was left without ringing the bell while I was home.",
+          "feelings": [
+            "Irritated",
+            "Concerned",
+            "Unsure",
+            "Annoyed"
+          ],
+          "needs": [
+            "Consideration",
+            "Clarity",
+            "Reliability",
+            "Respect"
+          ]
+        },
+        {
+          "id": "signature-missed",
+          "label": "Signature required but no attempt",
+          "example": "A ‘signature required’ notice appeared without a knock.",
+          "feelings": [
+            "Frustrated",
+            "Tense",
+            "Concerned",
+            "Annoyed"
+          ],
+          "needs": [
+            "Accountability",
+            "Clarity",
+            "Reliability",
+            "Respect"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "money-billing",
+      "label": "Bills / Subscriptions",
+      "patterns": [
+        {
+          "id": "charged-after-cancel",
+          "label": "Charged after cancellation",
+          "example": "A charge posted after I received a cancellation confirmation email.",
+          "feelings": [
+            "Concerned",
+            "Irritated",
+            "Anxious",
+            "Sad"
+          ],
+          "needs": [
+            "Honesty",
+            "Integrity",
+            "Justice",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "hidden-fee",
+          "label": "Fee not shown upfront",
+          "example": "A service fee appeared at checkout that wasn’t listed on the menu.",
+          "feelings": [
+            "Concerned",
+            "Irritated",
+            "Anxious",
+            "Annoyed"
+          ],
+          "needs": [
+            "Honesty",
+            "Fairness",
+            "Trust",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "auto-renew",
+          "label": "Auto-renewal without reminder",
+          "example": "A subscription renewed without an advance reminder email.",
+          "feelings": [
+            "Irritated",
+            "Anxious",
+            "Concerned",
+            "Frustrated"
+          ],
+          "needs": [
+            "Clarity",
+            "Accountability",
+            "Dependability",
+            "Trust"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tech-issues",
+      "label": "Tech reliability",
+      "patterns": [
+        {
+          "id": "wifi-drop",
+          "label": "Connection dropped repeatedly",
+          "example": "The call disconnected three times in 20 minutes.",
+          "feelings": [
+            "Frustrated",
+            "Tense",
+            "Distracted",
+            "Anxious"
+          ],
+          "needs": [
+            "Reliability",
+            "Predictability",
+            "Order",
+            "Peace"
+          ]
+        },
+        {
+          "id": "audio-echo",
+          "label": "Echo/noise in call",
+          "example": "Echo persisted for five minutes after the meeting started.",
+          "feelings": [
+            "Irritated",
+            "Distracted",
+            "Tense",
+            "Overwhelmed"
+          ],
+          "needs": [
+            "Clarity",
+            "Order",
+            "Peace",
+            "Support"
+          ]
+        },
+        {
+          "id": "share-failed",
+          "label": "Screen share failed during demo",
+          "example": "The screen share cut out twice during the demo.",
+          "feelings": [
+            "Anxious",
+            "Tense",
+            "Embarrassed",
+            "Frustrated"
+          ],
+          "needs": [
+            "Support",
+            "Predictability",
+            "Accomplishment",
+            "Clarity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parenting-routines",
+      "label": "Routines / Requests with kids",
+      "patterns": [
+        {
+          "id": "homework-delayed",
+          "label": "Homework not started by agreed time",
+          "example": "At 7:30 pm the homework page was still blank after our 7:00 pm start agreement.",
+          "feelings": [
+            "Concerned",
+            "Irritated",
+            "Anxious",
+            "Tense"
+          ],
+          "needs": [
+            "Consistency",
+            "Accountability",
+            "Support",
+            "Order"
+          ]
+        },
+        {
+          "id": "screen-time-continued",
+          "label": "Screen stayed on after limit",
+          "example": "The tablet remained on 20 minutes past the 8:00 pm limit.",
+          "feelings": [
+            "Frustrated",
+            "Tense",
+            "Concerned",
+            "Irritated"
+          ],
+          "needs": [
+            "Consistency",
+            "Respect",
+            "Accountability",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "morning-routine",
+          "label": "Morning routine steps skipped",
+          "example": "Shoes and backpack were not by the door at the agreed time.",
+          "feelings": [
+            "Stressed",
+            "Tense",
+            "Anxious",
+            "Irritated"
+          ],
+          "needs": [
+            "Order",
+            "Predictability",
+            "Support",
+            "Do things at my own pace and in my own way"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sleep-noise",
+      "label": "Sleep disruptions",
+      "patterns": [
+        {
+          "id": "snoring-loud",
+          "label": "Loud snoring",
+          "example": "Snoring continued loudly for 40 minutes after midnight.",
+          "feelings": [
+            "Tired",
+            "Irritated",
+            "Overwhelmed",
+            "Tense"
+          ],
+          "needs": [
+            "Rest",
+            "Peace",
+            "Serenity",
+            "Space"
+          ]
+        },
+        {
+          "id": "late-night-notifications",
+          "label": "Notifications after quiet time",
+          "example": "Phone notifications sounded after 11:00 pm on the nightstand.",
+          "feelings": [
+            "Startled",
+            "Irritated",
+            "Tired",
+            "Tense"
+          ],
+          "needs": [
+            "Rest",
+            "Peace",
+            "Consideration",
+            "Order"
+          ]
+        },
+        {
+          "id": "roommate-late-entrance",
+          "label": "Came in loudly late at night",
+          "example": "The door closed loudly and footsteps were heavy at 1:10 am.",
+          "feelings": [
+            "Startled",
+            "Irritated",
+            "Tired",
+            "Tense"
+          ],
+          "needs": [
+            "Rest",
+            "Peace",
+            "Consideration",
+            "Respect"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "social-media-sharing",
+      "label": "Social media / Sharing",
+      "patterns": [
+        {
+          "id": "posted-photo-no-ask",
+          "label": "Posted photo of me without asking",
+          "example": "A photo of me at the event was posted without checking first.",
+          "feelings": [
+            "Uncomfortable",
+            "Anxious",
+            "Hurt",
+            "Irritated"
+          ],
+          "needs": [
+            "Privacy",
+            "Autonomy",
+            "Respect",
+            "Honor"
+          ]
+        },
+        {
+          "id": "tagged-location-home",
+          "label": "Tagged my home location",
+          "example": "The post included my street name.",
+          "feelings": [
+            "Anxious",
+            "Concerned",
+            "Tense",
+            "Angry"
+          ],
+          "needs": [
+            "Safety",
+            "Security",
+            "Privacy",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "shared-dm",
+          "label": "Shared my DM publicly",
+          "example": "A direct message from me appeared in a public comment thread.",
+          "feelings": [
+            "Embarrassed",
+            "Hurt",
+            "Anxious",
+            "Irritated"
+          ],
+          "needs": [
+            "Privacy",
+            "Respect",
+            "Trust",
+            "Non-judgmental Communication"
+          ]
+        }
+      ]
     }
   ]
 }
