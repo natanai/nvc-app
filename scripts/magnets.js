@@ -79,6 +79,23 @@ const applyMagnetDecorations = (element, index) => {
   element.style.setProperty('--magnet-offset', `${offset}px`);
 };
 
+const updateMagnetMetadata = (magnet) => {
+  if (!magnet || !magnet.element) {
+    return;
+  }
+  const label = (magnet.element.textContent || '').trim();
+  magnet.searchLabel = label;
+  magnet.searchValue = label.toLocaleLowerCase();
+  const hrefAttr = magnet.element.getAttribute ? magnet.element.getAttribute('href') : null;
+  if (hrefAttr) {
+    magnet.href = hrefAttr;
+  } else if (magnet.element instanceof HTMLAnchorElement && magnet.element.href) {
+    magnet.href = magnet.element.href;
+  } else {
+    magnet.href = '';
+  }
+};
+
 const setMagnetTransform = (magnet) => {
   magnet.element.style.transform =
     `translate3d(${magnet.x}px, ${magnet.y}px, 0) translateY(calc(var(--magnet-offset, 0px) + var(--magnet-hover-offset, 0px))) rotate(var(--magnet-tilt, 0))`;
@@ -1366,10 +1383,210 @@ const attachSearch = (state) => {
   }
 };
 
+const normalizeNodeList = (value) => {
+  if (!value) {
+    return [];
+  }
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof NodeList !== 'undefined' && value instanceof NodeList) {
+    return Array.from(value);
+  }
+  if (typeof HTMLCollection !== 'undefined' && value instanceof HTMLCollection) {
+    return Array.from(value);
+  }
+  return [value];
+};
+
+const registerNavBoardMagnets = (state, elements) => {
+  if (!state || !isNavBoardState(state) || !state.board) {
+    return [];
+  }
+
+  const queue = normalizeNodeList(elements);
+  if (!queue.length) {
+    return [];
+  }
+
+  const candidates = [];
+  const seen = new Set();
+  queue.forEach((item) => {
+    if (!item) {
+      return;
+    }
+    if (item instanceof HTMLElement) {
+      if (item.matches?.('.magnet[data-magnet-id]')) {
+        if (!seen.has(item)) {
+          seen.add(item);
+          candidates.push(item);
+        }
+      }
+      if (typeof item.querySelectorAll === 'function') {
+        item.querySelectorAll('.magnet[data-magnet-id]').forEach((child) => {
+          if (!seen.has(child)) {
+            seen.add(child);
+            candidates.push(child);
+          }
+        });
+      }
+      return;
+    }
+    if (typeof item.querySelectorAll === 'function') {
+      item.querySelectorAll('.magnet[data-magnet-id]').forEach((child) => {
+        if (!seen.has(child)) {
+          seen.add(child);
+          candidates.push(child);
+        }
+      });
+    }
+  });
+
+  if (!candidates.length) {
+    return [];
+  }
+
+  const replacements = [];
+  const newElements = [];
+  candidates.forEach((element) => {
+    const id = element?.dataset?.magnetId;
+    if (!id) {
+      return;
+    }
+    const existing = state.magnetMap.get(id);
+    if (existing) {
+      if (existing.element !== element) {
+        replacements.push({ element, magnet: existing });
+      }
+      return;
+    }
+    newElements.push(element);
+  });
+
+  if (!replacements.length && !newElements.length) {
+    return [];
+  }
+
+  const orderList = Array.from(state.board.querySelectorAll('.magnet'));
+  const orderLookup = new Map(orderList.map((node, index) => [node, index]));
+
+  const wasPlaying = state.playActive;
+  if (wasPlaying) {
+    setPlayState(state, false);
+  }
+
+  replacements.forEach(({ element, magnet }) => {
+    const fallbackIndex = state.magnets.indexOf(magnet);
+    const orderIndex = orderLookup.has(element) ? orderLookup.get(element) : fallbackIndex;
+    const resolvedIndex = Number.isInteger(orderIndex) && orderIndex >= 0
+      ? orderIndex
+      : (fallbackIndex >= 0 ? fallbackIndex : state.magnets.length);
+    magnet.element = element;
+    applyMagnetDecorations(element, resolvedIndex);
+    updateMagnetMetadata(magnet);
+    setMagnetTransform(magnet);
+  });
+
+  const addedMagnets = [];
+  newElements.forEach((element) => {
+    const fallbackIndex = state.magnets.length + addedMagnets.length;
+    const orderIndex = orderLookup.has(element) ? orderLookup.get(element) : fallbackIndex;
+    const resolvedIndex = Number.isInteger(orderIndex) && orderIndex >= 0 ? orderIndex : fallbackIndex;
+    applyMagnetDecorations(element, resolvedIndex);
+    const [measured] = createMagnetStates(state.board, [element]);
+    if (!measured) {
+      return;
+    }
+    const generatedId = `dynamic-${Date.now()}-${Math.floor(Math.random() * 1000000)}`;
+    const id = element.dataset.magnetId || measured.id || generatedId;
+    element.dataset.magnetId = id;
+    measured.id = id;
+    state.magnetMap.set(id, measured);
+    state.magnets.push(measured);
+    updateMagnetMetadata(measured);
+    setMagnetTransform(measured);
+    addedMagnets.push(measured);
+  });
+
+  if (orderList.length) {
+    const orderedMagnets = [];
+    const seenIds = new Set();
+    orderList.forEach((element, index) => {
+      element.style.order = String(index);
+      const id = element?.dataset?.magnetId;
+      if (!id) {
+        return;
+      }
+      const magnet = state.magnetMap.get(id);
+      if (magnet && !seenIds.has(id)) {
+        orderedMagnets.push(magnet);
+        seenIds.add(id);
+      }
+    });
+    if (orderedMagnets.length) {
+      const extras = state.magnets.filter((magnet) => !seenIds.has(magnet.id));
+      orderedMagnets.push(...extras);
+      state.magnets.splice(0, state.magnets.length, ...orderedMagnets);
+    }
+  }
+
+  remeasureMagnets(state);
+  updateBoardHeight(state);
+  updateLayout(state);
+  persistLayout(state, true);
+  state.lastLayoutType = 'manual';
+
+  if (wasPlaying) {
+    setPlayState(state, true);
+  }
+
+  return addedMagnets;
+};
+
+const observeNavBoardForNewMagnets = (state) => {
+  if (!state || !isNavBoardState(state) || !state.board || typeof MutationObserver !== 'function') {
+    return null;
+  }
+  const observer = new MutationObserver((records) => {
+    const added = [];
+    records.forEach((record) => {
+      record.addedNodes?.forEach((node) => {
+        if (!node) {
+          return;
+        }
+        if (node instanceof HTMLElement) {
+          if (node.matches?.('.magnet[data-magnet-id]')) {
+            added.push(node);
+          }
+          if (typeof node.querySelectorAll === 'function') {
+            added.push(...node.querySelectorAll('.magnet[data-magnet-id]'));
+          }
+          return;
+        }
+        if (typeof node.querySelectorAll === 'function') {
+          added.push(...node.querySelectorAll('.magnet[data-magnet-id]'));
+        }
+      });
+    });
+    if (added.length) {
+      registerNavBoardMagnets(state, added);
+    }
+  });
+  observer.observe(state.board, { childList: true });
+  return () => observer.disconnect();
+};
+
 const initializeBoard = async (root, index) => {
   const board = root.querySelector('[data-magnet-board]');
   if (!board) {
     return;
+  }
+  if (typeof board.__navDynamicMagnetCleanup === 'function') {
+    try {
+      board.__navDynamicMagnetCleanup();
+    } catch (error) {
+      // Ignore cleanup errors during reinitialization.
+    }
   }
   const toggle = root.querySelector('[data-magnet-toggle]');
   const toggleInput = toggle?.querySelector('.magnet-play-toggle__input');
@@ -1399,17 +1616,7 @@ const initializeBoard = async (root, index) => {
   const searchList = searchContainer?.querySelector('[data-magnet-search-list]');
 
   measured.forEach((magnet) => {
-    const label = (magnet.element.textContent || '').trim();
-    magnet.searchLabel = label;
-    magnet.searchValue = label.toLocaleLowerCase();
-    const hrefAttr = magnet.element.getAttribute ? magnet.element.getAttribute('href') : null;
-    if (hrefAttr) {
-      magnet.href = hrefAttr;
-    } else if (magnet.element instanceof HTMLAnchorElement && magnet.element.href) {
-      magnet.href = magnet.element.href;
-    } else {
-      magnet.href = '';
-    }
+    updateMagnetMetadata(magnet);
   });
   const customStorageKey = root.dataset.magnetKey;
   const resolvedStorageKey = customStorageKey || createStorageKey(index);
@@ -1462,7 +1669,42 @@ const initializeBoard = async (root, index) => {
     searchActive: false,
     searchWasPlaying: false,
     cleanupSearch: null,
+    registerDynamicMagnets: null,
+    cleanupDynamicObserver: null,
+    cleanupNavDynamics: null,
   };
+
+  if (isNavBoardState(state)) {
+    const registerDynamics = (elements) => registerNavBoardMagnets(state, elements);
+    state.registerDynamicMagnets = registerDynamics;
+    board.__navDynamicMagnetRegistrar = (elements) => registerDynamics(elements);
+    const observerCleanup = observeNavBoardForNewMagnets(state);
+    if (typeof observerCleanup === 'function') {
+      state.cleanupDynamicObserver = () => {
+        observerCleanup();
+        state.cleanupDynamicObserver = null;
+      };
+    } else {
+      state.cleanupDynamicObserver = null;
+    }
+    const cleanupNavDynamics = () => {
+      if (typeof state.cleanupDynamicObserver === 'function') {
+        state.cleanupDynamicObserver();
+        state.cleanupDynamicObserver = null;
+      }
+      state.registerDynamicMagnets = null;
+      board.__navDynamicMagnetRegistrar = null;
+      board.__navDynamicMagnetCleanup = null;
+    };
+    state.cleanupNavDynamics = cleanupNavDynamics;
+    board.__navDynamicMagnetCleanup = cleanupNavDynamics;
+  } else {
+    state.registerDynamicMagnets = null;
+    state.cleanupDynamicObserver = null;
+    state.cleanupNavDynamics = null;
+    board.__navDynamicMagnetRegistrar = null;
+    board.__navDynamicMagnetCleanup = null;
+  }
 
   state.setClickSuppress = () => {
     state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;

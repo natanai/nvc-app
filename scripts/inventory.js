@@ -904,6 +904,7 @@ function applyNavSettings() {
   const { order, enabled } = navState.settings;
   let hasSupplementalItems = false;
   const fragment = document.createDocumentFragment();
+  const pendingDynamicRegistration = [];
 
   order.forEach((id) => {
     const element = ensureNavItemElement(id);
@@ -917,10 +918,22 @@ function applyNavSettings() {
     if (definition.isSupplemental && isEnabled) {
       hasSupplementalItems = true;
     }
+    if (element.dataset.navDynamic === 'true') {
+      pendingDynamicRegistration.push(element);
+    }
     fragment.appendChild(element);
   });
 
   navState.board.appendChild(fragment);
+
+  if (pendingDynamicRegistration.length) {
+    const registrar = typeof navState.board.__navDynamicMagnetRegistrar === 'function'
+      ? navState.board.__navDynamicMagnetRegistrar
+      : null;
+    if (registrar) {
+      registrar(pendingDynamicRegistration);
+    }
+  }
 
   if (navState.nav) {
     if (hasSupplementalItems) {
