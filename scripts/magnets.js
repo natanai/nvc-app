@@ -2,6 +2,16 @@ import { initMagnetBoard, updateBoardHeight as syncBoardHeightFromDOM } from './
 import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhysics.js';
 
 const NAV_STORAGE_KEY = 'site-nav';
+const NAV_MOBILE_ORDER_QUERY = '(max-width: 640px)';
+const NAV_MOBILE_ORDER_IDS = [
+  'nav-home',
+  'nav-customizer',
+  'nav-journal',
+  'nav-observations',
+  'nav-feelings',
+  'nav-needs',
+  'nav-inventory',
+];
 const ALLOWED_OVERLAP = 6;
 const DEFAULT_CONFIG = {
   drift: 1.5,
@@ -77,6 +87,48 @@ const applyMagnetDecorations = (element, index) => {
   const offset = randomFrom(OFFSET_OPTIONS);
   element.style.setProperty('--magnet-tilt', `${tilt}deg`);
   element.style.setProperty('--magnet-offset', `${offset}px`);
+};
+
+const reorderNavMagnetsForMobile = (board) => {
+  if (
+    !board
+    || typeof window === 'undefined'
+    || typeof window.matchMedia !== 'function'
+  ) {
+    return false;
+  }
+
+  const media = window.matchMedia(NAV_MOBILE_ORDER_QUERY);
+  if (!media.matches) {
+    return false;
+  }
+
+  const existing = Array.from(board.querySelectorAll('.magnet'));
+  if (!existing.length) {
+    return false;
+  }
+
+  const desired = NAV_MOBILE_ORDER_IDS
+    .map((id) => board.querySelector(`[data-magnet-id="${id}"]`))
+    .filter((element) => element);
+
+  if (!desired.length) {
+    return false;
+  }
+
+  const appended = new Set();
+  desired.forEach((element) => {
+    board.appendChild(element);
+    appended.add(element);
+  });
+
+  existing.forEach((element) => {
+    if (!appended.has(element)) {
+      board.appendChild(element);
+    }
+  });
+
+  return true;
 };
 
 const setMagnetTransform = (magnet) => {
@@ -1374,9 +1426,14 @@ const initializeBoard = async (root, index) => {
   const toggle = root.querySelector('[data-magnet-toggle]');
   const toggleInput = toggle?.querySelector('.magnet-play-toggle__input');
   const shuffleButton = root.querySelector('[data-magnet-shuffle]');
-  const magnetElements = Array.from(board.querySelectorAll('.magnet'));
+  let magnetElements = Array.from(board.querySelectorAll('.magnet'));
   if (!magnetElements.length) {
     return;
+  }
+
+  const isNavBoard = root.dataset.magnetKey === NAV_STORAGE_KEY;
+  if (isNavBoard && reorderNavMagnetsForMobile(board)) {
+    magnetElements = Array.from(board.querySelectorAll('.magnet'));
   }
 
   const fastInit = Boolean(root.dataset.magnetFastInit) || Boolean(root.dataset.magnetKey);
