@@ -1,0 +1,18 @@
+{
+  "family": "no_reply",
+  "defaults": {
+    "feelings": ["lonely", "hurt", "anxious"],
+    "needs": ["to-be-seen", "connection", "consideration"]
+  },
+  "cues": [
+    {
+      "id": "no-reply_next",
+      "patterns": [
+        "\\b(?:no\\s+(?:reply|response)|didn[’']?t\\s+(?:reply|respond)|never\\s+(?:replied|responded))\\b",
+        "\\b(?:read|seen)\\b[^.!?]*\\bno\\s+reply\\b",
+        "\\b(?:no\\s+call\\s+back|no\\s+callback|didn[’']?t\\s+call\\s+back|no\\s+return\\s+call)\\b"
+      ],
+      "example": "Two messages were read and there was no reply for two days."
+    }
+  ]
+}

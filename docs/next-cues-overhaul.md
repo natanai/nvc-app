@@ -15,3 +15,11 @@ node scripts/next/build-cues.mjs
 Artifacts:
 - `data/generated/cues.bundle.json`
 - `data/generated/observation_cues.generated.csv`
+
+## How to build & validate (Step 2)
+Run the build, validator, and coverage harness in order:
+```
+node scripts/next/build-cues.mjs
+node scripts/next/validate-cues.mjs
+node scripts/next/test-coverage.mjs
+```

@@ -8,8 +8,8 @@
     {
       "id": "time-off-request-denied_next",
       "slots": {
-        "who": ["(?:boss|manager|supervisor)"],
-        "what": ["(?:time off|pto|vacation|leave)"]
+        "who": ["boss", "manager", "supervisor"],
+        "what": ["time off", "pto", "vacation", "leave"]
       },
       "patterns": [
         "\\b(?:i|we) asked (?:for|to) .* (?:they|${who}) (?:said|says) no\\b",
@@ -21,8 +21,8 @@
     {
       "id": "schedule-change-request-denied_next",
       "slots": {
-        "who": ["(?:boss|manager|supervisor)"],
-        "what": ["(?:change my schedule|a schedule change)"]
+        "who": ["boss", "manager", "supervisor"],
+        "what": ["change my schedule", "a schedule change"]
       },
       "patterns": [
         "\\b(?:i|we) asked to ${what} and (?:they|${who}) said no\\b",
@@ -33,8 +33,8 @@
     {
       "id": "meeting-request-denied_next",
       "slots": {
-        "who": ["(?:boss|manager|supervisor|partner|teacher|professor|landlord)"],
-        "what": ["(?:a meeting|one on one|1 on 1|1:1)"]
+        "who": ["boss", "manager", "supervisor", "partner", "teacher", "professor", "landlord"],
+        "what": ["a meeting", "one on one", "1 on 1", "1:1"]
       },
       "patterns": [
         "\\bi asked for ${what} and (?:they|${who}) said no\\b",
