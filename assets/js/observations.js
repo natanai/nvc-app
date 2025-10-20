@@ -317,43 +317,56 @@ function renderCueAutocomplete(text, cues, hits) {
   host.setAttribute('role', 'list');
 
   const info = deriveCueAutocomplete(text, cues, hits);
-  const recognized = info.items.find(item => item.active);
+  const recognizedAny = info.items.some(item => item.active);
   while (host.firstChild) {
     host.removeChild(host.firstChild);
   }
 
-  if (!recognized && !info.items.length) {
+  if (!info.items.length) {
     const ghost = document.createElement('span');
     ghost.className = 'chip chip--ghost';
     ghost.textContent = '—';
     ghost.setAttribute('aria-hidden', 'true');
     ghost.setAttribute('role', 'presentation');
     host.appendChild(ghost);
-  } else if (recognized) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'chip chip--stacked observation-cue-suggestion';
-    button.classList.add('observation-cue-suggestion--active');
-    button.setAttribute('data-state', 'recognized');
-    if (recognized.phrase) {
-      button.dataset.phrase = recognized.phrase;
-    }
-    button.dataset.cue = recognized.cue;
-    button.setAttribute('role', 'listitem');
-    button.setAttribute('aria-label', describeCueSuggestion(recognized));
-    button.title = `${recognized.label || recognized.cue} · Recognized from what you typed`;
-    const title = document.createElement('span');
-    title.className = 'chip__title';
-    title.textContent = recognized.label || recognized.cue;
-    button.appendChild(title);
-    host.appendChild(button);
   } else {
-    const ghost = document.createElement('span');
-    ghost.className = 'chip chip--ghost';
-    ghost.textContent = '—';
-    ghost.setAttribute('aria-hidden', 'true');
-    ghost.setAttribute('role', 'presentation');
-    host.appendChild(ghost);
+    info.items.forEach(item => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'chip chip--stacked observation-cue-suggestion';
+      if (item.active) {
+        button.classList.add('observation-cue-suggestion--active');
+        button.setAttribute('data-state', 'recognized');
+      } else {
+        button.setAttribute('data-state', 'suggested');
+      }
+      if (item.phrase) {
+        button.dataset.phrase = item.phrase;
+      }
+      button.dataset.cue = item.cue;
+      button.setAttribute('role', 'listitem');
+      button.setAttribute('aria-label', describeCueSuggestion(item));
+      const label = typeof item.label === 'string' && item.label.trim() ? item.label.trim() : item.cue;
+      const phrase = typeof item.phrase === 'string' && item.phrase.trim() ? item.phrase.trim() : label;
+      const note = item.active ? 'Recognized from what you typed' : 'Tap to paste this cue phrase';
+      const tooltipParts = [`“${phrase}”`];
+      if (label && label !== phrase) {
+        tooltipParts.push(label);
+      }
+      tooltipParts.push(note);
+      button.title = tooltipParts.join(' · ');
+      const title = document.createElement('span');
+      title.className = 'chip__title';
+      title.textContent = phrase;
+      button.appendChild(title);
+      if (label && label !== phrase) {
+        const chipNote = document.createElement('span');
+        chipNote.className = 'chip__note';
+        chipNote.textContent = label;
+        button.appendChild(chipNote);
+      }
+      host.appendChild(button);
+    });
   }
 
   const trimmed = typeof text === 'string' ? text.trim() : '';
@@ -363,7 +376,7 @@ function renderCueAutocomplete(text, cues, hits) {
     return;
   }
 
-  if (recognized) {
+  if (recognizedAny) {
     msg.textContent = 'Recognized a cue phrase. Click to paste the nearest pattern.';
     msg.dataset.variant = 'match';
     return;
@@ -587,18 +600,26 @@ function formatCuePhrase(phrase) {
 }
 
 function describeCueSuggestion(item) {
-  const label = typeof item?.label === 'string' && item.label.trim() ? item.label.trim() : item?.cue || '';
+  const rawLabel = typeof item?.label === 'string' ? item.label.trim() : '';
+  const label = rawLabel || item?.cue || '';
   const phrase = typeof item?.phrase === 'string' ? item.phrase.trim() : '';
-  const phraseDescription = phrase ? `the cue phrase “${phrase}”` : 'the cue phrase';
-  if (!label) {
-    return item?.active
-      ? `Recognized cue phrase. Press to paste ${phraseDescription}.`
-      : `Press to paste ${phraseDescription}.`;
-  }
+  const phraseDescription = phrase ? `Cue phrase “${phrase}”` : 'Cue phrase';
+  const hasDistinctLabel = Boolean(label && phrase && label !== phrase);
+  const labelPart = hasDistinctLabel ? ` from ${label}` : label && !phrase ? ` ${label}` : '';
+  const action = 'Press to paste it.';
   if (item?.active) {
-    return `${label}. Recognized cue phrase. Press to paste ${phraseDescription}.`;
+    if (phrase) {
+      return `${phraseDescription}${labelPart}. Recognized from what you typed. ${action}`;
+    }
+    return `${label || 'Cue phrase'}. Recognized from what you typed. ${action}`;
   }
-  return `${label}. Press to paste ${phraseDescription}.`;
+  if (phrase) {
+    return `${phraseDescription}${labelPart}. ${action}`;
+  }
+  if (label) {
+    return `${label}. ${action}`;
+  }
+  return `Cue phrase. ${action}`;
 }
 
 function createCueSuggestion(row, isActive = false) {
