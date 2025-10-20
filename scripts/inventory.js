@@ -729,7 +729,7 @@ function getDefaultNavSettings() {
   NAV_ITEM_DEFINITIONS.forEach((item) => {
     enabled[item.id] = item.alwaysEnabled ? true : item.defaultEnabled !== false;
   });
-  return { order, enabled };
+  return { order, enabled, updatedAt: 0 };
 }
 
 function normalizeNavSettings(raw) {
@@ -781,7 +781,9 @@ function normalizeNavSettings(raw) {
     }
   });
 
-  return { order, enabled };
+  const timestamp = typeof raw.updatedAt === 'number' && Number.isFinite(raw.updatedAt) ? raw.updatedAt : defaults.updatedAt;
+
+  return { order, enabled, updatedAt: timestamp };
 }
 
 function loadNavSettings() {
@@ -800,11 +802,14 @@ function loadNavSettings() {
 
 function saveNavSettings(settings) {
   try {
-    const serialized = JSON.stringify(settings);
+    const normalized = normalizeNavSettings(settings);
+    const payload = { ...normalized, updatedAt: Date.now() };
+    const serialized = JSON.stringify(payload);
     const { success, error } = storageSetItem(NAV_SETTINGS_STORAGE_KEY, serialized);
     if (!success && error) {
       console.warn('Unable to persist navigation settings', error);
     }
+    navState.settings = payload;
   } catch (error) {
     console.warn('Unable to serialize navigation settings', error);
   }

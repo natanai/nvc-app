@@ -865,7 +865,7 @@ button.site-nav__magnet {
               if (typeof candidate === 'string') {
                 var trimmed = candidate.trim();
                 if (trimmed) {
-                  candidates.push({ value: trimmed, index: i });
+                  candidates.push({ value: trimmed, index: candidates.length });
                 }
               }
             } catch (error) {}
@@ -874,10 +874,6 @@ button.site-nav__magnet {
           if (!candidates.length) {
             return;
           }
-
-          var best = candidates[0];
-          var bestTimestamp = 0;
-          var bestIndex = typeof best.index === 'number' ? best.index : 0;
 
           var parseUpdatedAt = function(raw) {
             if (typeof raw !== 'string' || !raw) {
@@ -896,24 +892,39 @@ button.site-nav__magnet {
             return 0;
           };
 
-          bestTimestamp = parseUpdatedAt(best.value);
-
-          for (var j = 1; j < candidates.length; j += 1) {
-            var candidate = candidates[j];
-            var timestamp = parseUpdatedAt(candidate.value);
-            var candidateIndex = typeof candidate.index === 'number' ? candidate.index : j;
-            if (timestamp > bestTimestamp || (timestamp === bestTimestamp && candidateIndex < bestIndex)) {
-              best = candidate;
-              bestTimestamp = timestamp;
-              bestIndex = candidateIndex;
-            }
+          for (var c = 0; c < candidates.length; c += 1) {
+            var candidate = candidates[c];
+            candidate.timestamp = parseUpdatedAt(candidate.value);
+            candidate.rankIndex = typeof candidate.index === 'number' ? candidate.index : c;
           }
 
-          var parsed;
-          try {
-            parsed = JSON.parse(best.value);
-          } catch (error) {
-            return;
+          var remainingCandidates = candidates.slice();
+          var parsed = null;
+
+          while (remainingCandidates.length) {
+            var bestIndex = 0;
+            var bestCandidate = remainingCandidates[0];
+
+            for (var r = 1; r < remainingCandidates.length; r += 1) {
+              var contender = remainingCandidates[r];
+              if (
+                contender.timestamp > bestCandidate.timestamp ||
+                (contender.timestamp === bestCandidate.timestamp && contender.rankIndex < bestCandidate.rankIndex)
+              ) {
+                bestCandidate = contender;
+                bestIndex = r;
+              }
+            }
+
+            try {
+              var parsedCandidate = JSON.parse(bestCandidate.value);
+              if (parsedCandidate && typeof parsedCandidate === 'object') {
+                parsed = parsedCandidate;
+                break;
+              }
+            } catch (error) {}
+
+            remainingCandidates.splice(bestIndex, 1);
           }
 
           if (!parsed || typeof parsed !== 'object') {

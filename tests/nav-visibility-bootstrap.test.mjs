@@ -218,14 +218,12 @@ test('nav bootstrap reveals supplemental magnets before app boot', async () => {
   const nav = buildNavFromMarkup(navMarkup);
 
   const document = createDocument(nav);
-  const localStorage = {
-    getItem() {
-      throw new Error('local storage disabled');
-    },
-  };
+  const localStorage = new FakeStorage({
+    [NAV_STORAGE_KEY]: 'not-json',
+  });
   const sessionStorage = new FakeStorage({
     [NAV_STORAGE_KEY]: JSON.stringify({
-      updatedAt: Date.now() + 1000,
+      updatedAt: 0,
       enabled: {
         bodyCues: true,
         journalDashboard: true,
