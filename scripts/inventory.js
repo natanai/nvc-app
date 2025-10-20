@@ -1181,16 +1181,26 @@ function updateTiltPermissionUI(snapshot) {
     ? Boolean(liveState.pending)
     : false;
 
+  const enabled = liveState && 'enabled' in liveState
+    ? Boolean(liveState.enabled)
+    : permissionState === 'granted';
+
+  const everGranted = liveState && 'everGranted' in liveState
+    ? Boolean(liveState.everGranted)
+    : permissionState === 'granted';
+
   paletteState.tiltSnapshot = {
     supported,
     available,
     state: permissionState,
     pending,
+    enabled,
+    everGranted,
   };
 
-  const isGranted = permissionState === 'granted';
-  toggle.setAttribute('aria-checked', isGranted ? 'true' : 'false');
-  const disableToggle = pending || !available || (!supported && permissionState === 'granted');
+  const isActive = enabled && available;
+  toggle.setAttribute('aria-checked', isActive ? 'true' : 'false');
+  const disableToggle = pending || !available;
   toggle.disabled = disableToggle;
   if (disableToggle) {
     toggle.setAttribute('aria-disabled', 'true');
@@ -1210,7 +1220,7 @@ function updateTiltPermissionUI(snapshot) {
     label = 'Requesting…';
     statusText = 'Waiting for device permission…';
     statusState = 'pending';
-  } else if (isGranted) {
+  } else if (isActive) {
     label = 'On';
     statusText = supported
       ? 'Device tilt control is active.'
@@ -1219,6 +1229,9 @@ function updateTiltPermissionUI(snapshot) {
     label = 'Request again';
     statusText = 'Permission denied. Tap to try again.';
     statusState = 'error';
+  } else if (everGranted) {
+    label = 'Off';
+    statusText = 'Tilt control is paused. Tap to resume and recalibrate.';
   } else {
     statusText = 'Request permission to let magnets follow your device tilt.';
   }
@@ -2379,7 +2392,11 @@ function buildPaletteUi() {
     if (snapshot && snapshot.pending) {
       return;
     }
-    if (snapshot && snapshot.supported === false && snapshot.available && snapshot.state === 'granted') {
+    if (!snapshot || snapshot.available === false) {
+      return;
+    }
+    if (snapshot.enabled) {
+      window.dispatchEvent(new CustomEvent('magnettiltdisable'));
       return;
     }
     window.dispatchEvent(new CustomEvent('magnettiltrequest'));

@@ -811,8 +811,9 @@ export function startPhysics(options) {
   const removePointerListeners = addPointerListeners(state);
   let removeTiltListener = null;
 
-  const enableTilt = (permissionPromise) => {
+  const disableTilt = () => {
     removeTiltListener?.();
+    removeTiltListener = null;
     if (state.tilt) {
       state.tilt.x = 0;
       state.tilt.y = 0;
@@ -821,6 +822,10 @@ export function startPhysics(options) {
       state.tilt.baselineGamma = null;
       state.tilt.baselineBeta = null;
     }
+  };
+
+  const enableTilt = (permissionPromise) => {
+    disableTilt();
     const teardown = addTiltListener(state, {
       permissionPromise,
       onPermissionDenied: options.onTiltPermissionDenied,
@@ -832,8 +837,7 @@ export function startPhysics(options) {
   return {
     stop: () => {
       removePointerListeners?.();
-      removeTiltListener?.();
-      removeTiltListener = null;
+      disableTilt();
       stopAnimation(state);
       state.magnets.forEach((magnet) => {
         magnet.dragging = false;
@@ -863,6 +867,9 @@ export function startPhysics(options) {
     },
     enableTilt: (permissionPromise) => {
       enableTilt(permissionPromise);
+    },
+    disableTilt: () => {
+      disableTilt();
     },
   };
 }
