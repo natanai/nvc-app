@@ -1,0 +1,11 @@
+input,ready,matched_cues
+"I asked for time off and my manager said no.",true,"time-off-request-denied_next"
+"They arrived twenty minutes late without a message.",true,"arrived-late_next"
+"The call started early and decisions were discussed before I joined.",true,""
+"I saw ""Recording has started"" in the corner.",true,""
+"Alex said ""This is a waste of time.""",true,""
+"I noticed the invite disappeared from my calendar.",true,""
+"They muted me while I was speaking.",true,""
+"They looked at their phone while I was talking.",true,""
+"Yesterday at 3:10 pm the meeting started without me.",true,""
+"I received a calendar removal notice.",true,""
