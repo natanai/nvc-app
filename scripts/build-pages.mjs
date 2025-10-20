@@ -216,6 +216,7 @@ const navVisibilityBootstrapScript = () => String.raw`
             fauxFeelings: false,
             feelings: true,
             needs: true,
+            alexithymiaSupport: false,
             bodyCues: false,
             journalDashboard: false,
           };
@@ -260,6 +261,7 @@ const navVisibilityBootstrapScript = () => String.raw`
             fauxFeelings: 'nav-faux-feelings',
             feelings: 'nav-feelings',
             needs: 'nav-needs',
+            alexithymiaSupport: 'nav-alexithymia-support',
             bodyCues: 'nav-body-cues',
             journalDashboard: 'nav-journal-dashboard',
           };

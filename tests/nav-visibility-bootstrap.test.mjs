@@ -228,6 +228,20 @@ function extractMagnetMap(scriptBody) {
   return magnetIdToNavId;
 }
 
+function extractObjectKeys(scriptBody, variableName) {
+  const pattern = new RegExp(`var\\s+${variableName}\\s*=\\s*\\{([\\s\\S]*?)\\};`);
+  const match = pattern.exec(scriptBody);
+  assert.ok(match, `${variableName} object missing from bootstrap script`);
+  const body = match[1];
+  const keyRegex = /([A-Za-z0-9_$]+)\s*:/g;
+  const keys = new Set();
+  let keyMatch;
+  while ((keyMatch = keyRegex.exec(body))) {
+    keys.add(keyMatch[1]);
+  }
+  return keys;
+}
+
 async function listIndexFiles(rootDir) {
   const entries = await fs.readdir(rootDir, { withFileTypes: true });
   const files = [];
@@ -255,6 +269,17 @@ async function runBootstrapAssertions(htmlPath) {
   const scriptBody = extractBootstrapScript(html, htmlPath);
   const nav = buildNavFromMarkup(navMarkup);
   const magnetIdToNavId = extractMagnetMap(scriptBody);
+
+  const defaultsKeys = extractObjectKeys(scriptBody, 'defaults');
+  const magnetMapKeys = extractObjectKeys(scriptBody, 'magnetMap');
+
+  assert.ok(defaultsKeys.size > 0, 'defaults object missing nav entries');
+  for (const key of defaultsKeys) {
+    assert.ok(magnetMapKeys.has(key), `magnetMap missing nav mapping for ${key}`);
+  }
+  for (const key of magnetMapKeys) {
+    assert.ok(defaultsKeys.has(key), `defaults missing nav toggle for ${key}`);
+  }
 
   const supplementalMagnets = nav
     .querySelectorAll('[data-magnet-id]')
