@@ -59,6 +59,23 @@ test('removes soft qualifiers while keeping the measurable core', () => {
   assert.equal(sanitizeObservationText(text, catalog), 'at 4 pm you sent the file.');
 });
 
+test('drops abstract lack statements outside of quotes', () => {
+  const text = 'At noon there was a lack of respect for the agreement.';
+  assert.equal(sanitizeObservationText(text, catalog), '');
+});
+
+test('allows abstract lack phrasing inside direct quotes', () => {
+  const text = 'At noon Pat said, "There is a lack of respect here."';
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.ok, true, 'quoted abstract language should be preserved');
+  assert.equal(sanitizeObservationText(text, catalog), text);
+});
+
+test('filters agentive phrasing like "forced me to"', () => {
+  const text = 'They forced me to stay after the meeting.';
+  assert.equal(sanitizeObservationText(text, catalog), '');
+});
+
 async function run() {
   for (const { name, fn } of tests) {
     try {
