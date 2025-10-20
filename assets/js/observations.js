@@ -126,13 +126,19 @@ function render() {
   renderLintFeedback(lint, state.catalog);
   renderObservationAnnotations(state.whatSawHeard, lint);
 
-  const suggestionSource = sanitizedPreview && sanitizedPreview.trim() ? sanitizedPreview : preview;
-  const { feelings, needs, why } = suggestFromObservation(suggestionSource, state.cues);
+  const sanitizedTrimmed = sanitizedPreview.trim();
+  const canSuggest = sanitizedTrimmed.length > 0 && lint.ok;
+  const suggestionSource = canSuggest ? sanitizedTrimmed : '';
+  const suggestionPayload = canSuggest ? suggestFromObservation(suggestionSource, state.cues) : { feelings: [], needs: [], why: [] };
   const directFeelingSlugs = (lint.feelings || []).filter(slug => state.catalog.feelings.has(slug));
   const directNeedSlugs = (lint.needs || []).filter(slug => state.catalog.needs.has(slug));
   const directFauxFeelings = (lint.fauxFeelings || []).filter(slug => state.catalog.fauxFeelings.has(slug));
-  const feelingSlugs = mergeUnique(directFeelingSlugs, feelings).filter(slug => state.catalog.feelings.has(slug));
-  const needSlugs = mergeUnique(directNeedSlugs, needs).filter(slug => state.catalog.needs.has(slug));
+  const feelingSlugs = canSuggest
+    ? mergeUnique(directFeelingSlugs, suggestionPayload.feelings).filter(slug => state.catalog.feelings.has(slug))
+    : directFeelingSlugs;
+  const needSlugs = canSuggest
+    ? mergeUnique(directNeedSlugs, suggestionPayload.needs).filter(slug => state.catalog.needs.has(slug))
+    : directNeedSlugs;
   const feelingItems = buildSuggestionLinks(
     feelingSlugs.slice(0, 6),
     '/feelings/',
@@ -143,7 +149,7 @@ function render() {
     '/needs/',
     state.catalog.needs,
   );
-  const cueList = [...new Set(why)];
+  const cueList = canSuggest ? [...new Set(suggestionPayload.why)] : [];
   const reasons = [];
   if (cueList.length) {
     reasons.push(`Cue matches: ${cueList.map(slug => slug.replace(/-/g, ' ')).join(', ')}`);
@@ -157,17 +163,25 @@ function render() {
   }
   const reasonsText = reasons.length
     ? reasons.join(' · ')
-    : 'No cues detected yet — add what was seen/heard.';
-  const previewHasContent = preview.trim().length > 0;
-  const showPanel = previewHasContent || feelingItems.length > 0 || needItems.length > 0;
+    : canSuggest
+      ? 'No cues detected yet — add what was seen/heard.'
+      : 'Resolve highlighted language to surface cues.';
+  const previewHasContent = sanitizedTrimmed.length > 0;
+  const showPanel = canSuggest && (previewHasContent || feelingItems.length > 0 || needItems.length > 0);
   if (typeof window.setObservationSuggestions === 'function') {
     window.setObservationSuggestions('free', {
       showPanel,
-      feelings: feelingItems,
-      needs: needItems,
-      emptyMessage: 'Add what was seen/heard to surface related feelings and needs.',
-      feelingsEmptyMessage: 'No feelings surfaced yet.',
-      needsEmptyMessage: 'No needs surfaced yet.',
+      feelings: showPanel ? feelingItems : [],
+      needs: showPanel ? needItems : [],
+      emptyMessage: lint.ok
+        ? 'Add what was seen/heard to surface related feelings and needs.'
+        : 'Resolve highlighted language to see suggestions.',
+      feelingsEmptyMessage: lint.ok
+        ? 'No feelings surfaced yet.'
+        : 'Observations only — remove evaluations to see feeling suggestions.',
+      needsEmptyMessage: lint.ok
+        ? 'No needs surfaced yet.'
+        : 'Observations only — remove evaluations to see need suggestions.',
       why: showPanel ? reasonsText : '',
     });
   }
