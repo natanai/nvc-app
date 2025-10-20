@@ -176,7 +176,8 @@ function render() {
   const cueList = canSuggest ? [...new Set(suggestionPayload.why)] : [];
   const reasons = [];
   if (cueList.length) {
-    reasons.push(`Cue matches: ${cueList.map(slug => slug.replace(/-/g, ' ')).join(', ')}`);
+    const cueLabel = cueList.length === 1 ? 'match' : 'matches';
+    reasons.push(`Cue ${cueLabel}: ${cueList.length}`);
   }
   const directReasons = [];
   if (directFeelingSlugs.length) directReasons.push(directFeelingSlugs.length === 1 ? 'a feeling word' : 'feeling words');
