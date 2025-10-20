@@ -317,6 +317,19 @@ const NAV_ITEM_DEFINITIONS = [
     label: 'Faux feelings magnet',
     defaultEnabled: false,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-faux-feelings"]') || null,
+    createElement: () => {
+      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
+      const link = document.createElement('a');
+      link.className = 'pill magnet site-nav__magnet site-nav__magnet--faux-feelings';
+      link.href = `${basePath}faux-feelings/`;
+      link.dataset.magnetId = 'nav-faux-feelings';
+      link.dataset.navDynamic = 'true';
+      const label = document.createElement('span');
+      label.className = 'site-nav__magnet-label';
+      label.textContent = 'Faux feelings';
+      link.appendChild(label);
+      return link;
+    },
   },
   {
     id: 'feelings',
