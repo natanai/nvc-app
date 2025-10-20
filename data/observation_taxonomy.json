@@ -1876,6 +1876,804 @@
           ]
         }
       ]
+    },
+    {
+      "id": "quality-time",
+      "label": "Quality time / Attention",
+      "patterns": [
+        {
+          "id": "phone-during-convo",
+          "label": "Phone used while I was sharing",
+          "example": "While I was talking about my day, you scrolled on your phone.",
+          "feelings": [
+            "Hurt",
+            "Irritated",
+            "Lonely",
+            "Sad"
+          ],
+          "needs": [
+            "Connection",
+            "To be heard",
+            "To be seen",
+            "Consideration"
+          ]
+        },
+        {
+          "id": "calls-during-date",
+          "label": "Took calls during our time together",
+          "example": "During dinner, two calls were answered at the table.",
+          "feelings": [
+            "Annoyed",
+            "Lonely",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "Closeness",
+            "Connection",
+            "Peace",
+            "Participation"
+          ]
+        },
+        {
+          "id": "canceled-quality-time",
+          "label": "Canceled plans for solo screen time",
+          "example": "Our movie plan was canceled 15 minutes before start to keep gaming.",
+          "feelings": [
+            "Disappointed",
+            "Hurt",
+            "Frustrated",
+            "Tense"
+          ],
+          "needs": [
+            "Commitment",
+            "Reliability",
+            "Closeness",
+            "Consideration"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chores-mental-load",
+      "label": "Household tasks / Mental load",
+      "patterns": [
+        {
+          "id": "chore-missed-deadline",
+          "label": "Shared chore not done by agreed time",
+          "example": "Trash day passed and the bins were still at the side of the house at 8:00 am.",
+          "feelings": [
+            "Annoyed",
+            "Tired",
+            "Irritated",
+            "Tense"
+          ],
+          "needs": [
+            "Reliability",
+            "Support",
+            "Order",
+            "Accountability"
+          ]
+        },
+        {
+          "id": "needed-multiple-reminders",
+          "label": "Task done after multiple reminders",
+          "example": "The grocery pickup happened after three reminders in the chat.",
+          "feelings": [
+            "Tired",
+            "Frustrated",
+            "Irritated",
+            "Concerned"
+          ],
+          "needs": [
+            "Dependability",
+            "Consistency",
+            "Support",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "last-minute-planning",
+          "label": "Asked me to plan last minute after agreeing earlier",
+          "example": "At 5 pm you asked me to pick and book a restaurant for 6 pm after saying you'd handle plans.",
+          "feelings": [
+            "Stressed",
+            "Irritated",
+            "Tense",
+            "Overwhelmed"
+          ],
+          "needs": [
+            "Mutuality",
+            "Consideration",
+            "Predictability",
+            "Clarity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "money-shared",
+      "label": "Money / Shared expenses",
+      "patterns": [
+        {
+          "id": "added-unagreed-expense",
+          "label": "Added item to split I didn’t order",
+          "example": "The split bill included a drink I didn’t have.",
+          "feelings": [
+            "Annoyed",
+            "Irritated",
+            "Concerned",
+            "Tense"
+          ],
+          "needs": [
+            "Fairness",
+            "Clarity",
+            "Honesty",
+            "Respect"
+          ]
+        },
+        {
+          "id": "late-payback",
+          "label": "Payback later than agreed",
+          "example": "Payment for the tickets arrived two days after the date we agreed.",
+          "feelings": [
+            "Anxious",
+            "Irritated",
+            "Concerned",
+            "Disappointed"
+          ],
+          "needs": [
+            "Reliability",
+            "Trust",
+            "Accountability",
+            "Clarity"
+          ]
+        },
+        {
+          "id": "used-shared-fund",
+          "label": "Used shared funds without checking",
+          "example": "The joint account was used for a purchase without a message beforehand.",
+          "feelings": [
+            "Concerned",
+            "Anxious",
+            "Irritated",
+            "Tense"
+          ],
+          "needs": [
+            "Honesty",
+            "Clarity",
+            "Mutuality",
+            "Trust"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "honesty-info",
+      "label": "Honesty / Information",
+      "patterns": [
+        {
+          "id": "plan-changed-without-telling",
+          "label": "Plan changed without telling me",
+          "example": "You said you'd be home after the gym, and later texted from a bar without a heads-up.",
+          "feelings": [
+            "Concerned",
+            "Hurt",
+            "Anxious",
+            "Irritated"
+          ],
+          "needs": [
+            "Honesty",
+            "Clarity",
+            "Trust",
+            "Predictability"
+          ]
+        },
+        {
+          "id": "omitted-detail",
+          "label": "Important detail not shared",
+          "example": "You accepted a weekend shift and told me on Friday night.",
+          "feelings": [
+            "Disappointed",
+            "Tense",
+            "Anxious",
+            "Frustrated"
+          ],
+          "needs": [
+            "Clarity",
+            "Consideration",
+            "Predictability",
+            "Commitment"
+          ]
+        },
+        {
+          "id": "story-changed",
+          "label": "Statement changed later",
+          "example": "Yesterday you said, “I didn’t message them,” and today you said, “I sent one reply.”",
+          "feelings": [
+            "Confused",
+            "Concerned",
+            "Hurt",
+            "Anxious"
+          ],
+          "needs": [
+            "Honesty",
+            "Integrity",
+            "Trust",
+            "Clarity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "privacy-boundaries",
+      "label": "Privacy / Boundaries",
+      "patterns": [
+        {
+          "id": "looked-through-phone",
+          "label": "Looked through my phone without asking",
+          "example": "My messages were opened on my phone while it was on the table.",
+          "feelings": [
+            "Anxious",
+            "Hurt",
+            "Embarrassed",
+            "Angry"
+          ],
+          "needs": [
+            "Privacy",
+            "Respect",
+            "Autonomy",
+            "Trust"
+          ]
+        },
+        {
+          "id": "shared-private-chat",
+          "label": "Shared our private chat with someone else",
+          "example": "A screenshot of our conversation was sent to a group chat.",
+          "feelings": [
+            "Anxious",
+            "Hurt",
+            "Embarrassed",
+            "Irritated"
+          ],
+          "needs": [
+            "Privacy",
+            "Honesty",
+            "Respect",
+            "Non-judgmental Communication"
+          ]
+        },
+        {
+          "id": "entered-room-no-knock",
+          "label": "Entered my room without knocking",
+          "example": "The door opened and you walked in while it was closed.",
+          "feelings": [
+            "Startled",
+            "Uncomfortable",
+            "Irritated",
+            "Tense"
+          ],
+          "needs": [
+            "Space",
+            "Respect",
+            "Autonomy",
+            "Consideration"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "social-inclusion",
+      "label": "Plans / Inclusion with friends",
+      "patterns": [
+        {
+          "id": "plan-made-without-me",
+          "label": "Group plan made without including me",
+          "example": "The group dinner was arranged in the chat and I wasn’t added to the invite.",
+          "feelings": [
+            "Sad",
+            "Lonely",
+            "Hurt",
+            "Disappointed"
+          ],
+          "needs": [
+            "Inclusion",
+            "Belonging",
+            "Connection",
+            "Participation"
+          ]
+        },
+        {
+          "id": "left-event-without-telling",
+          "label": "Left event without telling me",
+          "example": "At the party, you left and I learned from someone else after 20 minutes.",
+          "feelings": [
+            "Confused",
+            "Concerned",
+            "Hurt",
+            "Tense"
+          ],
+          "needs": [
+            "Clarity",
+            "Respect",
+            "Connection",
+            "Trust"
+          ]
+        },
+        {
+          "id": "changed-seating",
+          "label": "Switched seats away from me without a word",
+          "example": "At the show you moved to a different row without saying anything.",
+          "feelings": [
+            "Hurt",
+            "Confused",
+            "Sad",
+            "Anxious"
+          ],
+          "needs": [
+            "Closeness",
+            "Connection",
+            "To be seen",
+            "Consideration"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "affection-closeness",
+      "label": "Affection / Closeness (PG)",
+      "patterns": [
+        {
+          "id": "pulled-away-hug",
+          "label": "Pulled away from a hug without words",
+          "example": "When I hugged you hello, you pulled away without saying anything.",
+          "feelings": [
+            "Hurt",
+            "Confused",
+            "Sad",
+            "Tense"
+          ],
+          "needs": [
+            "Closeness",
+            "Understanding",
+            "Connection",
+            "To be seen"
+          ]
+        },
+        {
+          "id": "no-goodnight",
+          "label": "No goodnight check-in",
+          "example": "On three nights this week there was no goodnight message or call.",
+          "feelings": [
+            "Lonely",
+            "Hurt",
+            "Anxious",
+            "Sad"
+          ],
+          "needs": [
+            "Connection",
+            "Consistency",
+            "Appreciation",
+            "Commitment"
+          ]
+        },
+        {
+          "id": "turned-away",
+          "label": "Turned away during cuddle time",
+          "example": "During the show, you turned away and sat at the edge of the couch.",
+          "feelings": [
+            "Hurt",
+            "Confused",
+            "Sad",
+            "Tense"
+          ],
+          "needs": [
+            "Closeness",
+            "Connection",
+            "Understanding",
+            "To be seen"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conflict-style",
+      "label": "Conflict style / Repair",
+      "patterns": [
+        {
+          "id": "raised-voice",
+          "label": "Voice got louder during disagreement",
+          "example": "In the discussion your voice became much louder after I spoke.",
+          "feelings": [
+            "Tense",
+            "Scared",
+            "Hurt",
+            "Anxious"
+          ],
+          "needs": [
+            "Peace",
+            "Calm",
+            "To be heard",
+            "Respect"
+          ]
+        },
+        {
+          "id": "walked-away-mid-sentence",
+          "label": "Walked away while I was mid-sentence",
+          "example": "You turned and walked to the kitchen while I was talking.",
+          "feelings": [
+            "Hurt",
+            "Angry",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "To be heard",
+            "Respect",
+            "Peace",
+            "Mutuality"
+          ]
+        },
+        {
+          "id": "silent-period",
+          "label": "No responses after argument",
+          "example": "After our disagreement there were no replies for 24 hours.",
+          "feelings": [
+            "Anxious",
+            "Lonely",
+            "Hurt",
+            "Confused"
+          ],
+          "needs": [
+            "Clarity",
+            "Connection",
+            "Non-judgmental Communication",
+            "Trust"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "criticism-sarcasm",
+      "label": "Criticism / Sarcasm",
+      "patterns": [
+        {
+          "id": "joke-at-expense",
+          "label": "Joke about me in front of others",
+          "example": "At dinner you joked about my habit and others laughed.",
+          "feelings": [
+            "Embarrassed",
+            "Hurt",
+            "Tense",
+            "Anxious"
+          ],
+          "needs": [
+            "Peer Respect",
+            "Respect",
+            "To be seen",
+            "Acknowledgement"
+          ]
+        },
+        {
+          "id": "always-never-quote",
+          "label": "Used 'always/never' about me",
+          "example": "You said, “You never listen.”",
+          "feelings": [
+            "Hurt",
+            "Disappointed",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "Non-judgmental Communication",
+            "To be heard",
+            "Understanding",
+            "Respect"
+          ]
+        },
+        {
+          "id": "public-correction",
+          "label": "Corrected me publicly about a small detail",
+          "example": "You corrected my story date in front of our friends.",
+          "feelings": [
+            "Embarrassed",
+            "Hurt",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "Respect",
+            "To be seen",
+            "Acknowledgement",
+            "Peer Respect"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "commitment-rituals",
+      "label": "Commitments / Rituals",
+      "patterns": [
+        {
+          "id": "forgot-occasion",
+          "label": "No message on important date",
+          "example": "There was no message about our anniversary on the day.",
+          "feelings": [
+            "Hurt",
+            "Sad",
+            "Disappointed",
+            "Confused"
+          ],
+          "needs": [
+            "Commitment",
+            "Appreciation",
+            "Acknowledgement",
+            "Mattering"
+          ]
+        },
+        {
+          "id": "canceled-date-repeated",
+          "label": "Repeatedly canceled date night",
+          "example": "Two Fridays in a row, date night was canceled within an hour of start.",
+          "feelings": [
+            "Frustrated",
+            "Hurt",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "Reliability",
+            "Consistency",
+            "Closeness",
+            "Commitment"
+          ]
+        },
+        {
+          "id": "future-plan-avoid",
+          "label": "Avoided confirming a planned trip",
+          "example": "The deposit due date passed without a yes/no message about the trip.",
+          "feelings": [
+            "Anxious",
+            "Confused",
+            "Disappointed",
+            "Tense"
+          ],
+          "needs": [
+            "Clarity",
+            "Commitment",
+            "Predictability",
+            "Trust"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "external-boundaries",
+      "label": "Interactions with others",
+      "patterns": [
+        {
+          "id": "messaging-ex-after-agreement",
+          "label": "Messaged an ex after we agreed to pause contact",
+          "example": "After we agreed to pause, a message was sent to the ex on Saturday.",
+          "feelings": [
+            "Hurt",
+            "Anxious",
+            "Angry",
+            "Tense"
+          ],
+          "needs": [
+            "Trust",
+            "Honesty",
+            "Security",
+            "Respect"
+          ]
+        },
+        {
+          "id": "flirty-comments-online",
+          "label": "Left hearts on someone’s photos during our conflict",
+          "example": "On the same evening we argued, heart reactions appeared on another person’s photos.",
+          "feelings": [
+            "Hurt",
+            "Sad",
+            "Anxious",
+            "Tense"
+          ],
+          "needs": [
+            "Commitment",
+            "Security",
+            "Trust",
+            "Closeness"
+          ]
+        },
+        {
+          "id": "private-story-shared",
+          "label": "Shared my personal story with friends",
+          "example": "A detail I shared in private was repeated at brunch.",
+          "feelings": [
+            "Embarrassed",
+            "Hurt",
+            "Anxious",
+            "Tense"
+          ],
+          "needs": [
+            "Privacy",
+            "Respect",
+            "Honesty",
+            "Trust"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "space-alonetime",
+      "label": "Alone time / Space",
+      "patterns": [
+        {
+          "id": "booked-every-night",
+          "label": "Made plans every night after I asked for one evening alone",
+          "example": "After I said I wanted Wednesday to myself, plans were made for Monday–Thursday.",
+          "feelings": [
+            "Overwhelmed",
+            "Tense",
+            "Irritated",
+            "Anxious"
+          ],
+          "needs": [
+            "Space",
+            "Autonomy",
+            "Do things at my own pace and in my own way",
+            "Freedom"
+          ]
+        },
+        {
+          "id": "called-repeatedly",
+          "label": "Called repeatedly during my quiet window",
+          "example": "Three calls came within an hour after I said I was taking quiet time.",
+          "feelings": [
+            "Overwhelmed",
+            "Irritated",
+            "Tense",
+            "Anxious"
+          ],
+          "needs": [
+            "Rest",
+            "Peace",
+            "Respect",
+            "Consideration"
+          ]
+        },
+        {
+          "id": "moved-my-things",
+          "label": "Moved my belongings from my space",
+          "example": "My desk items were rearranged while I was out.",
+          "feelings": [
+            "Irritated",
+            "Uncomfortable",
+            "Tense",
+            "Anxious"
+          ],
+          "needs": [
+            "Space",
+            "Order",
+            "Autonomy",
+            "Respect"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "substance-agreements",
+      "label": "Substances / Agreements",
+      "patterns": [
+        {
+          "id": "agreed-dd-had-drinks",
+          "label": "Agreed to drive but had drinks",
+          "example": "After agreeing to drive us home, two drinks were ordered at the bar.",
+          "feelings": [
+            "Scared",
+            "Tense",
+            "Concerned",
+            "Anxious"
+          ],
+          "needs": [
+            "Safety",
+            "Accountability",
+            "Trust",
+            "Reliability"
+          ]
+        },
+        {
+          "id": "showed-up-under-influence",
+          "label": "Arrived under the influence to our plan",
+          "example": "You arrived smelling of alcohol to our meeting with my parents.",
+          "feelings": [
+            "Anxious",
+            "Embarrassed",
+            "Tense",
+            "Concerned"
+          ],
+          "needs": [
+            "Respect",
+            "Integrity",
+            "Commitment",
+            "Security"
+          ]
+        },
+        {
+          "id": "cancelled-due-to-hangover",
+          "label": "Cancelled our plan due to a hangover",
+          "example": "Brunch was canceled the morning after because of a hangover.",
+          "feelings": [
+            "Disappointed",
+            "Frustrated",
+            "Tense",
+            "Sad"
+          ],
+          "needs": [
+            "Reliability",
+            "Commitment",
+            "Consideration",
+            "Predictability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "texting-availability",
+      "label": "Texting / Availability",
+      "patterns": [
+        {
+          "id": "read-no-reply",
+          "label": "Read receipt, no reply by next day",
+          "example": "A read receipt showed last night and there was no reply by the next day.",
+          "feelings": [
+            "Confused",
+            "Anxious",
+            "Hurt",
+            "Lonely"
+          ],
+          "needs": [
+            "Clarity",
+            "Connection",
+            "To be seen",
+            "Reliability"
+          ]
+        },
+        {
+          "id": "short-replies-only",
+          "label": "One-word replies for days",
+          "example": "For three days replies were one word while we discussed plans.",
+          "feelings": [
+            "Confused",
+            "Hurt",
+            "Frustrated",
+            "Sad"
+          ],
+          "needs": [
+            "Non-judgmental Communication",
+            "Clarity",
+            "Connection",
+            "To be heard"
+          ]
+        },
+        {
+          "id": "late-night-texts",
+          "label": "Late-night texts during sleep hours",
+          "example": "Messages arrived after midnight on weekdays.",
+          "feelings": [
+            "Tired",
+            "Irritated",
+            "Startled",
+            "Tense"
+          ],
+          "needs": [
+            "Rest",
+            "Peace",
+            "Consideration",
+            "Order"
+          ]
+        }
+      ]
     }
   ]
 }
