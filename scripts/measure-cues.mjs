@@ -4,7 +4,11 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { performance } from 'node:perf_hooks';
 
-import { suggestFromObservation } from '../lib/observationSuggest.js';
+import {
+  suggestFromObservation,
+  splitCuePatterns,
+  compilePattern,
+} from '../lib/observationSuggest.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
@@ -47,29 +51,6 @@ function parseCSV(str) {
     out.push(row);
   }
   return out;
-}
-
-function compilePattern(raw) {
-  const trimmed = typeof raw === 'string' ? raw.trim() : '';
-  if (!trimmed) {
-    return null;
-  }
-
-  const attempts = [trimmed];
-  const sanitized = trimmed.replace(/\.\?\*/g, '.*');
-  if (sanitized !== trimmed) {
-    attempts.push(sanitized);
-  }
-
-  for (const attempt of attempts) {
-    try {
-      return new RegExp(attempt, 'i');
-    } catch (error) {
-      // continue
-    }
-  }
-
-  return null;
 }
 
 function formatCuePhrase(rawPattern) {
@@ -119,10 +100,7 @@ async function main({ inputPath = DEFAULT_INPUT } = {}) {
   const compileStart = performance.now();
   const cues = dataRows.map(cols => {
     const [cue, patternsRaw, feelingsRaw, needsRaw, example] = cols;
-    const rawPatterns = (patternsRaw || '')
-      .split('|')
-      .map(p => (p || '').trim())
-      .filter(Boolean);
+    const rawPatterns = splitCuePatterns(patternsRaw);
     const patterns = rawPatterns.map(p => compilePattern(p)).filter(Boolean);
     const feelings = (feelingsRaw || '').split('|').map(s => s.trim()).filter(Boolean);
     const needs = (needsRaw || '').split('|').map(s => s.trim()).filter(Boolean);
