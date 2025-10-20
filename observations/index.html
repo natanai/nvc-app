@@ -1430,17 +1430,30 @@ button.site-nav__magnet {
 
   .observations-page .observation-cue-builder {
     margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .observations-page .observation-cue-builder__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--ink) 75%, #fff 25%);
   }
 
   .observations-page .observation-cue-builder__chips {
     display: flex;
+    flex: 1 1 200px;
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: flex-start;
   }
 
   .observations-page .observation-cue-suggestion {
-    width: min(100%, 320px);
+    width: auto;
+    max-width: min(100%, 320px);
+    flex: 1 1 240px;
     text-align: left;
   }
 
@@ -2065,6 +2078,17 @@ button.site-nav__magnet {
                 <div class="label">When/where? <span class="hint">(optional)</span></div>
                 <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
 
+                <div class="observation-cue-builder">
+                  <div class="observation-cue-builder__label">Cues:</div>
+                  <div
+                    id="obs-cue-suggestions"
+                    class="chip-group observation-cue-builder__chips"
+                    role="list"
+                    aria-label="Observation cue phrases"
+                    aria-live="polite"
+                  ></div>
+                </div>
+
                 <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
                 <textarea
                   id="obs-what"
@@ -2081,24 +2105,6 @@ button.site-nav__magnet {
                     aria-live="polite"
                   >
                     Start typing to surface highlights.
-                  </p>
-                </div>
-
-                <div class="observation-annotation observation-cue-builder" aria-live="polite">
-                  <div class="observation-annotation__label">Cue phrases from the wizard</div>
-                  <div
-                    id="obs-cue-suggestions"
-                    class="chip-group observation-cue-builder__chips"
-                    role="list"
-                    aria-label="Observation cue phrases"
-                  ></div>
-                  <p
-                    id="obs-cue-suggestions-msg"
-                    class="observation-annotation__message"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    Start typing to see cue phrases from the wizard catalog. Click a card to paste the cue phrase.
                   </p>
                 </div>
 

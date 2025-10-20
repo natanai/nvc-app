@@ -310,8 +310,7 @@ function selectCueSearchText(sanitizedPreview) {
 
 function renderCueAutocomplete(text, cues, hits) {
   const host = $('#obs-cue-suggestions');
-  const msg = $('#obs-cue-suggestions-msg');
-  if (!host || !msg) return;
+  if (!host) return;
 
   host.classList.add('chip-group');
   host.setAttribute('role', 'list');
@@ -371,25 +370,14 @@ function renderCueAutocomplete(text, cues, hits) {
 
   const trimmed = typeof text === 'string' ? text.trim() : '';
   if (!trimmed) {
-    msg.textContent = 'Start typing to see cue phrases from the wizard catalog. Click a card to paste the cue phrase.';
-    delete msg.dataset.variant;
-    return;
+    host.setAttribute('data-state', 'empty');
+  } else if (recognizedAny) {
+    host.setAttribute('data-state', 'match');
+  } else if (info.items.length) {
+    host.setAttribute('data-state', 'suggestions');
+  } else {
+    host.setAttribute('data-state', 'no-results');
   }
-
-  if (recognizedAny) {
-    msg.textContent = 'Recognized a cue phrase. Click to paste the nearest pattern.';
-    msg.dataset.variant = 'match';
-    return;
-  }
-
-  if (info.items.length) {
-    msg.textContent = 'No exact cue phrase match yet. Keep typing to help the wizard find a pattern.';
-    msg.dataset.variant = 'flagged';
-    return;
-  }
-
-  msg.textContent = 'No cue matches yet. Try adding direct quotes, counts, or the communication channel you noticed.';
-  msg.dataset.variant = 'flagged';
 }
 
 function deriveCueAutocomplete(text, cues, hits, maxItems = 6) {
