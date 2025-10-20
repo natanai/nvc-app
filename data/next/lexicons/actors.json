@@ -1,0 +1,6 @@
+{
+  "manager_like": ["boss", "manager", "supervisor"],
+  "partner_like": ["partner"],
+  "teacher_like": ["teacher", "professor"],
+  "landlord_like": ["landlord"]
+}

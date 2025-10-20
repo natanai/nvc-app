@@ -1,0 +1,5 @@
+{
+  "time_off_like": ["time off", "pto", "vacation", "leave"],
+  "schedule_change_like": ["change my schedule", "a schedule change"],
+  "meeting_like": ["a meeting", "one on one", "1 on 1", "1:1"]
+}
