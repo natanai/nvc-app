@@ -1290,6 +1290,82 @@ button.site-nav__magnet {
     margin: 0;
   }
 
+  .observations-page .observation-annotation {
+    margin-top: 0.75rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: var(--radius-xl);
+    border: 2px dashed color-mix(in srgb, var(--outline) 70%, transparent);
+    background: color-mix(in srgb, #ffffff 94%, var(--observations-card-bg) 6%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .observations-page .observation-annotation__label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--ink) 78%, #fff 22%);
+  }
+
+  .observations-page .observation-annotation__preview {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 1.6rem;
+    word-break: break-word;
+  }
+
+  .observations-page .observation-annotation__token {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.05rem 0.25rem;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .observations-page .observation-annotation__token:not(:last-child) {
+    margin-right: 0.05rem;
+  }
+
+  .observations-page .observation-annotation__token:focus-visible {
+    outline: 2px solid var(--outline);
+    outline-offset: 1px;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--outline) 20%, transparent);
+  }
+
+  .observations-page .observation-annotation__token--flagged {
+    background: color-mix(in srgb, var(--rose) 25%, #fff 75%);
+    color: color-mix(in srgb, var(--rose) 75%, var(--ink) 25%);
+    text-decoration: line-through;
+    text-decoration-thickness: 0.15em;
+  }
+
+  .observations-page .observation-annotation__token--celebrated {
+    background: color-mix(in srgb, var(--mint) 25%, #fff 75%);
+    color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
+    font-weight: 600;
+  }
+
+  .observations-page .observation-annotation__token:hover {
+    transform: translateY(-1px);
+  }
+
+  .observations-page .observation-annotation__message {
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--ink) 70%, #fff 30%);
+  }
+
+  .observations-page .observation-annotation__message[data-variant='flagged'] {
+    color: color-mix(in srgb, var(--rose) 70%, var(--ink) 30%);
+  }
+
+  .observations-page .observation-annotation__message[data-variant='celebrated'] {
+    color: color-mix(in srgb, var(--mint) 65%, var(--ink) 35%);
+  }
+
   .observations-page .preview {
     border: 0;
     border-radius: var(--radius-2xl);
@@ -1900,6 +1976,19 @@ button.site-nav__magnet {
 
                 <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
                 <textarea id="obs-what" placeholder="While I was speaking, Casey said “This is a waste of time” and spoke over me."></textarea>
+
+                <div class="observation-annotation" aria-live="polite">
+                  <div class="observation-annotation__label">Language check</div>
+                  <div id="obs-what-annotated" class="observation-annotation__preview"></div>
+                  <p
+                    id="obs-what-annotation-msg"
+                    class="observation-annotation__message"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    Start typing to surface highlights.
+                  </p>
+                </div>
 
                 <div class="label">Expectation gap <span class="hint">(optional)</span></div>
                 <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
