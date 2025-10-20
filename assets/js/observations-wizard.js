@@ -207,11 +207,15 @@ function renderFamilies() {
 function applyFamilyMenuState() {
   const menu = $('#family-menu');
   const toggle = $('#family-toggle');
+  const card = toggle?.closest('.card');
   if (menu) {
     menu.hidden = !familyMenuOpen;
   }
   if (toggle) {
     toggle.setAttribute('aria-expanded', String(familyMenuOpen));
+  }
+  if (card) {
+    card.classList.toggle('observation-family-picker-card--open', familyMenuOpen);
   }
 }
 
