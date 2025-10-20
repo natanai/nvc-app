@@ -963,6 +963,19 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
   }
 
+  .observations-page .observation-panel__cta {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .observations-page .observation-panel__cta .support-actions {
+    margin-top: 0.25rem;
+  }
+
+  .observations-page .observation-panel__cta .support-button {
+    width: fit-content;
+  }
+
   .observations-page .observation-panel__placeholder {
     margin: 0;
     font-size: 0.95rem;
@@ -1586,7 +1599,7 @@ button.site-nav__magnet {
       <main id="main" class="page observations-page" role="main">
         <header class="page-header observations-header">
           <h1 class="page-title">Start with an Observation</h1>
-          <p class="page-description observations-description">Choose the guided wizard to click through faux feelings and instantly surface feelings and needs, or switch to free-text if you already have wording you want to lint.</p>
+          <p class="page-description observations-description">Choose the guided wizard to surface feelings and needs from observational cues, or switch to free-text if you already have wording you want to lint.</p>
         </header>
 
         <section class="observation-collage" aria-label="Observation idea preview">
@@ -1623,6 +1636,12 @@ button.site-nav__magnet {
                 </div>
               </div>
               <p class="hint observation-panel__why" id="why"></p>
+              <div class="observation-panel__cta">
+                <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
+                <div class="support-actions support-actions--muted">
+                  <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1702,7 +1721,7 @@ button.site-nav__magnet {
 
                 <hr style="margin:1rem 0;opacity:.25"/>
 
-                <div class="hint">Prefer to start from a story word like “ignored” or “disrespected”? Try <a href="../stories/">Story words</a>.</div>
+                <div class="hint">Prefer to start from a faux feeling like “ignored” or “disrespected”? Try <a href="../faux-feelings/">Faux feelings</a>.</div>
               </div>
             </section>
 
