@@ -308,6 +308,177 @@ function selectCueSearchText(sanitizedPreview) {
   return typeof state.whatSawHeard === 'string' ? state.whatSawHeard : '';
 }
 
+const CUE_DROPDOWN_MENU_ID = 'obs-cue-dropdown-menu';
+let cueDropdownOpen = false;
+
+function createCueSuggestionButton(item) {
+  if (!item) {
+    return null;
+  }
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'chip chip--stacked observation-cue-suggestion';
+  if (item.active) {
+    button.classList.add('observation-cue-suggestion--active');
+    button.setAttribute('data-state', 'recognized');
+  } else {
+    button.setAttribute('data-state', 'suggested');
+  }
+  if (item.phrase) {
+    button.dataset.phrase = item.phrase;
+  }
+  if (item.cue) {
+    button.dataset.cue = item.cue;
+  }
+  button.setAttribute('role', 'listitem');
+  button.setAttribute('aria-label', describeCueSuggestion(item));
+  const label = typeof item.label === 'string' && item.label.trim() ? item.label.trim() : item.cue;
+  const phrase = typeof item.phrase === 'string' && item.phrase.trim() ? item.phrase.trim() : label;
+  const note = item.active ? 'Recognized from what you typed' : 'Tap to paste this cue phrase';
+  const tooltipParts = [];
+  if (phrase) {
+    tooltipParts.push(`“${phrase}”`);
+  }
+  if (label && label !== phrase) {
+    tooltipParts.push(label);
+  }
+  tooltipParts.push(note);
+  button.title = tooltipParts.join(' · ');
+  const title = document.createElement('span');
+  title.className = 'chip__title';
+  title.textContent = phrase || label || '';
+  button.appendChild(title);
+  if (label && label !== phrase) {
+    const chipNote = document.createElement('span');
+    chipNote.className = 'chip__note';
+    chipNote.textContent = label;
+    button.appendChild(chipNote);
+  }
+  return button;
+}
+
+function syncCueDropdownState(dropdown, toggle, menu) {
+  if (!dropdown || !toggle || !menu) {
+    return;
+  }
+  dropdown.dataset.open = cueDropdownOpen ? 'true' : 'false';
+  toggle.setAttribute('aria-expanded', String(cueDropdownOpen));
+  toggle.title = cueDropdownOpen ? 'Hide extra cue suggestions' : 'Show extra cue suggestions';
+  const note = toggle.querySelector('.observation-cue-dropdown__note');
+  if (note) {
+    note.textContent = cueDropdownOpen ? 'Tap to collapse' : 'Tap to explore more cues';
+  }
+  menu.hidden = !cueDropdownOpen;
+}
+
+function closeCueDropdown() {
+  if (!cueDropdownOpen) {
+    return;
+  }
+  cueDropdownOpen = false;
+  const host = $('#obs-cue-suggestions');
+  if (!host) {
+    return;
+  }
+  const dropdown = host.querySelector('.observation-cue-dropdown');
+  if (!dropdown) {
+    return;
+  }
+  const toggle = dropdown.querySelector('.observation-cue-dropdown__toggle');
+  const menu = dropdown.querySelector('.observation-cue-dropdown__menu');
+  syncCueDropdownState(dropdown, toggle, menu);
+}
+
+function renderCueDropdown(host, items) {
+  if (!host || !Array.isArray(items) || !items.length) {
+    return;
+  }
+  const dropdown = document.createElement('div');
+  dropdown.className = 'observation-cue-dropdown';
+  dropdown.setAttribute('role', 'presentation');
+
+  const menu = document.createElement('div');
+  menu.id = CUE_DROPDOWN_MENU_ID;
+  menu.className = 'observation-cue-dropdown__menu';
+  menu.setAttribute('role', 'list');
+  menu.setAttribute('aria-label', 'Additional cue suggestions');
+
+  items.forEach(item => {
+    const button = createCueSuggestionButton(item);
+    if (button) {
+      menu.appendChild(button);
+    }
+  });
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'chip chip--stacked observation-cue-suggestion observation-cue-dropdown__toggle';
+  toggle.setAttribute('aria-haspopup', 'true');
+  toggle.setAttribute('aria-controls', CUE_DROPDOWN_MENU_ID);
+
+  const textWrapper = document.createElement('span');
+  textWrapper.className = 'observation-cue-dropdown__text';
+
+  const title = document.createElement('span');
+  title.className = 'chip__title';
+  title.textContent = `More cue suggestions (${items.length})`;
+  textWrapper.appendChild(title);
+
+  const note = document.createElement('span');
+  note.className = 'chip__note observation-cue-dropdown__note';
+  textWrapper.appendChild(note);
+
+  toggle.appendChild(textWrapper);
+
+  const chevron = document.createElement('span');
+  chevron.className = 'observation-cue-dropdown__chevron';
+  chevron.textContent = '▾';
+  chevron.setAttribute('aria-hidden', 'true');
+  toggle.appendChild(chevron);
+
+  toggle.addEventListener('click', () => {
+    cueDropdownOpen = !cueDropdownOpen;
+    syncCueDropdownState(dropdown, toggle, menu);
+    if (cueDropdownOpen) {
+      menu.scrollTop = 0;
+    }
+  });
+
+  dropdown.appendChild(toggle);
+  dropdown.appendChild(menu);
+  host.appendChild(dropdown);
+  syncCueDropdownState(dropdown, toggle, menu);
+}
+
+function handleCueDropdownDismiss(event) {
+  if (!cueDropdownOpen) {
+    return;
+  }
+  const host = $('#obs-cue-suggestions');
+  if (!host) {
+    cueDropdownOpen = false;
+    return;
+  }
+  if (host.contains(event.target)) {
+    return;
+  }
+  closeCueDropdown();
+}
+
+function handleCueDropdownKeydown(event) {
+  if (!cueDropdownOpen) {
+    return;
+  }
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    closeCueDropdown();
+  }
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('pointerdown', handleCueDropdownDismiss);
+  document.addEventListener('keydown', handleCueDropdownKeydown);
+}
+
 function renderCueAutocomplete(text, cues, hits) {
   const host = $('#obs-cue-suggestions');
   if (!host) return;
@@ -328,44 +499,34 @@ function renderCueAutocomplete(text, cues, hits) {
     ghost.setAttribute('aria-hidden', 'true');
     ghost.setAttribute('role', 'presentation');
     host.appendChild(ghost);
+    cueDropdownOpen = false;
   } else {
-    info.items.forEach(item => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'chip chip--stacked observation-cue-suggestion';
-      if (item.active) {
-        button.classList.add('observation-cue-suggestion--active');
-        button.setAttribute('data-state', 'recognized');
+    const items = info.items;
+    let inlineItems = items;
+    let dropdownItems = [];
+
+    if (items.length > 1) {
+      const activeItems = items.filter(item => item.active);
+      if (activeItems.length) {
+        inlineItems = [activeItems[0]];
       } else {
-        button.setAttribute('data-state', 'suggested');
+        inlineItems = [items[0]];
       }
-      if (item.phrase) {
-        button.dataset.phrase = item.phrase;
+      dropdownItems = items.filter(item => !inlineItems.includes(item));
+    }
+
+    inlineItems.forEach(item => {
+      const button = createCueSuggestionButton(item);
+      if (button) {
+        host.appendChild(button);
       }
-      button.dataset.cue = item.cue;
-      button.setAttribute('role', 'listitem');
-      button.setAttribute('aria-label', describeCueSuggestion(item));
-      const label = typeof item.label === 'string' && item.label.trim() ? item.label.trim() : item.cue;
-      const phrase = typeof item.phrase === 'string' && item.phrase.trim() ? item.phrase.trim() : label;
-      const note = item.active ? 'Recognized from what you typed' : 'Tap to paste this cue phrase';
-      const tooltipParts = [`“${phrase}”`];
-      if (label && label !== phrase) {
-        tooltipParts.push(label);
-      }
-      tooltipParts.push(note);
-      button.title = tooltipParts.join(' · ');
-      const title = document.createElement('span');
-      title.className = 'chip__title';
-      title.textContent = phrase;
-      button.appendChild(title);
-      if (label && label !== phrase) {
-        const chipNote = document.createElement('span');
-        chipNote.className = 'chip__note';
-        chipNote.textContent = label;
-        button.appendChild(chipNote);
-      }
-      host.appendChild(button);
     });
+
+    if (dropdownItems.length) {
+      renderCueDropdown(host, dropdownItems);
+    } else {
+      cueDropdownOpen = false;
+    }
   }
 
   const trimmed = typeof text === 'string' ? text.trim() : '';
@@ -695,6 +856,7 @@ function handleCueSuggestionClick(event) {
   if (!phrase) {
     return;
   }
+  closeCueDropdown();
   insertCuePhrase(phrase);
   if (typeof button.blur === 'function') {
     button.blur();
