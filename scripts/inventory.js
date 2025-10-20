@@ -305,6 +305,13 @@ const NAV_ITEM_DEFINITIONS = [
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-inventory"]') || null,
   },
   {
+    id: 'observations',
+    magnetId: 'nav-observations',
+    label: 'Observations magnet',
+    defaultEnabled: true,
+    getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-observations"]') || null,
+  },
+  {
     id: 'fauxFeelings',
     magnetId: 'nav-faux-feelings',
     label: 'Faux feelings magnet',
@@ -382,6 +389,193 @@ const navState = {
 const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
 ]);
+
+const DOORS_CONFIG_PATH = 'data/doors.json';
+let doorsConfigPromise = null;
+
+function resolveDoorConfigUrl() {
+  const basePath = document.body?.dataset?.basePath ?? '';
+  try {
+    const base = new URL(basePath || './', window.location.href);
+    return new URL(DOORS_CONFIG_PATH, base).toString();
+  } catch (error) {
+    console.warn('Unable to resolve doors config URL', error);
+    return `${basePath || ''}${DOORS_CONFIG_PATH}`;
+  }
+}
+
+async function loadDoorConfig() {
+  if (doorsConfigPromise) {
+    return doorsConfigPromise;
+  }
+
+  const url = resolveDoorConfigUrl();
+  doorsConfigPromise = fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Failed to load doors config: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data)) {
+        return [];
+      }
+      return data
+        .map((entry) => ({
+          id: typeof entry?.id === 'string' ? entry.id.trim() : '',
+          label: typeof entry?.label === 'string' ? entry.label.trim() : '',
+          href: typeof entry?.href === 'string' ? entry.href.trim() : '',
+        }))
+        .filter((entry) => entry.id && entry.label && entry.href);
+    })
+    .catch((error) => {
+      console.warn('Unable to load doors configuration', error);
+      return [];
+    });
+
+  return doorsConfigPromise;
+}
+
+function createDoorCardElement(door, options = {}) {
+  if (!door || !door.id || !door.label || !door.href) {
+    return null;
+  }
+
+  const { basePath = '' } = options;
+  const card = document.createElement('div');
+  card.className = `door-card door-card--${door.id}`;
+
+  const link = document.createElement('a');
+  link.className = 'door-card__link';
+  link.href = door.href;
+
+  const doorVisual = document.createElement('span');
+  doorVisual.className = 'door-card__door';
+  doorVisual.setAttribute('aria-hidden', 'true');
+
+  const icon = document.createElement('img');
+  icon.className = 'door-card__icon';
+  icon.src = `${basePath}icons/door-${door.id}.svg`;
+  icon.alt = '';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.loading = 'lazy';
+  doorVisual.appendChild(icon);
+  link.appendChild(doorVisual);
+
+  const label = document.createElement('span');
+  label.className = 'door-card__label';
+  label.textContent = door.label;
+  link.appendChild(label);
+
+  card.appendChild(link);
+
+  if (door.id === 'feelings') {
+    const supportLink = document.createElement('a');
+    supportLink.className = 'door-card__support';
+    supportLink.href = `${basePath}alexithymia-support/`;
+    supportLink.textContent = 'Alexithymia support';
+    card.appendChild(supportLink);
+  }
+
+  return card;
+}
+
+function renderHomepageDoors(doors) {
+  if (!Array.isArray(doors) || !doors.length) {
+    return;
+  }
+
+  const containers = document.querySelectorAll('[data-door-grid]');
+  if (!containers.length) {
+    return;
+  }
+
+  const basePath = document.body?.dataset?.basePath ?? '';
+
+  containers.forEach((container) => {
+    const limitRaw = container.dataset.doorLimit;
+    const limit = Number.parseInt(limitRaw, 10);
+    const entries = Number.isFinite(limit) && limit > 0 ? doors.slice(0, limit) : doors;
+
+    container.innerHTML = '';
+
+    entries.forEach((door) => {
+      const card = createDoorCardElement(door, { basePath });
+      if (card) {
+        container.appendChild(card);
+      }
+    });
+  });
+}
+
+const DOOR_NAV_MAP = new Map([
+  ['observations', { magnetId: 'nav-observations' }],
+  ['feelings', { magnetId: 'nav-feelings' }],
+  ['needs', { magnetId: 'nav-needs' }],
+  ['faux', { magnetId: 'nav-faux-feelings' }],
+]);
+
+const DOOR_NAV_IDS = Array.from(DOOR_NAV_MAP.values()).map((entry) => entry.magnetId);
+
+function renderNavDoorMagnets(doors) {
+  if (!Array.isArray(doors) || !doors.length) {
+    return;
+  }
+
+  const nav = document.querySelector('[data-magnet-root][data-magnet-key="site-nav"]');
+  if (!nav) {
+    return;
+  }
+
+  const board = nav.querySelector('[data-magnet-board]');
+  if (!board) {
+    return;
+  }
+
+  const existing = Array.from(board.querySelectorAll('.site-nav__magnet[data-magnet-id]'));
+  existing.forEach((element) => {
+    if (element && DOOR_NAV_IDS.includes(element.dataset?.magnetId || '')) {
+      element.remove();
+    }
+  });
+
+  const fragment = document.createDocumentFragment();
+
+  doors.forEach((door) => {
+    const navInfo = DOOR_NAV_MAP.get(door.id);
+    if (!navInfo) {
+      return;
+    }
+
+    let resolvedHref = door.href;
+    try {
+      resolvedHref = new URL(door.href, window.location.href).href;
+    } catch (error) {
+      resolvedHref = door.href;
+    }
+
+    const magnet = document.createElement('a');
+    magnet.className = 'pill magnet site-nav__magnet';
+    magnet.dataset.magnetId = navInfo.magnetId;
+    magnet.dataset.navDoor = 'true';
+    magnet.href = resolvedHref;
+
+    const label = document.createElement('span');
+    label.className = 'site-nav__magnet-label';
+    label.textContent = door.label;
+    magnet.appendChild(label);
+
+    fragment.appendChild(magnet);
+  });
+
+  const inventoryMagnet = board.querySelector('[data-magnet-id="nav-inventory"]');
+  if (inventoryMagnet) {
+    inventoryMagnet.after(fragment);
+  } else {
+    board.appendChild(fragment);
+  }
+}
 
 const state = {
   inventory: [],
@@ -1423,15 +1617,24 @@ function setupScrollTopButton() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   state.basePath = document.body?.dataset?.basePath || '';
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  const doorsPromise = loadDoorConfig();
   setupViewportHeightProperty();
   state.inventory = loadInventory();
   refreshSavedStrategyIndex();
   state.journalStore = resolveJournalStore();
   updateJournalEntriesFromStore();
   highlightNavigation();
+  try {
+    const doors = await doorsPromise;
+    renderHomepageDoors(doors);
+    renderNavDoorMagnets(doors);
+    highlightNavigation();
+  } catch (error) {
+    console.warn('Unable to render homepage doors', error);
+  }
   initCustomizer().catch((error) => {
     console.warn('Unable to set up the customizer', error);
   });
@@ -1984,15 +2187,15 @@ function highlightNavigation() {
     });
   });
 
-  if (activeLink) {
-    navLinks.forEach((link) => {
-      if (link === activeLink) {
-        link.setAttribute('aria-current', 'page');
-      } else {
-        link.removeAttribute('aria-current');
-      }
-    });
-  }
+  navLinks.forEach((link) => {
+    if (link === activeLink && activeLink) {
+      link.setAttribute('aria-current', 'page');
+      link.classList.add('active');
+    } else {
+      link.removeAttribute('aria-current');
+      link.classList.remove('active');
+    }
+  });
 }
 
 function normalizePath(pathname) {
