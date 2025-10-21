@@ -1,5 +1,5 @@
 import { lintObservation } from '/lib/nvcLint.js';
-import { loadCueRows, suggestFromObservation } from '/lib/observationSuggest.js';
+import { loadCueRows, suggestFromObservation, nearest as nearestObservationCues } from '/lib/observationSuggest.js';
 
 const state = {
   text: '',
@@ -25,6 +25,9 @@ const state = {
 
 let guideNavigationBound = false;
 
+let detectionNearestRequestId = 0;
+let fallbackNearestRequestId = 0;
+
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
   need: '../needs/',
@@ -47,6 +50,14 @@ const DETECTION_LABELS = {
 const DETECTION_MIN_WORDS = 3;
 const DETECTION_MATCH_LIMIT = 1;
 const DETECTION_NEAR_LIMIT = 6;
+
+const NEAREST_EMPTY_MESSAGE =
+  'We couldn’t find a close match yet. Browse all feelings and needs below while we keep learning.';
+const NEAREST_READY_SINGLE_MESSAGE =
+  'No exact cue match detected. Showing the nearest match we could find.';
+const NEAREST_READY_MULTI_MESSAGE =
+  'No exact cue matches detected. Showing the nearest matches we could find.';
+const NEAREST_SEARCH_MESSAGE = 'Looking for the nearest cues our detector can find…';
 
 const OBSERVATION_GUIDELINE_INTRO = 'Use these anchors to keep your statement observational.';
 const OBSERVATION_GUIDELINE_NOTE =
@@ -440,22 +451,21 @@ function finalizeObservation() {
   const hasDirect = hasSuggestions(direct);
   state.fallback = createFallbackState();
   state.fallback.shouldPrompt = !hasDirect;
-  if (!hasDirect && state.detectionStatus === 'near') {
-    const fallbackQueue = state.detectionSource === trimmed
-      ? (state.detectionFallbackQueue || [])
-      : computeFallbackQueue(trimmed);
-    if (state.detectionSource !== trimmed) {
-      state.detectionFallbackQueue = fallbackQueue;
-      state.detectionFallbacks = fallbackQueue.length;
-      state.detectionSource = trimmed;
-      renderDetectionStatus();
-    }
-    if (fallbackQueue.length) {
-      applyFallbackQueue(fallbackQueue, {
-        message: fallbackQueue.length > 1
-          ? 'No exact cue matches detected. Showing the nearest matches we could find.'
-          : 'No exact cue matches detected. Showing the nearest match we could find.',
-      });
+  state.fallback.autoApply = !hasDirect;
+  if (!hasDirect) {
+    const detectionQueue = state.detectionSource === trimmed ? state.detectionFallbackQueue : null;
+    if (Array.isArray(detectionQueue)) {
+      if (detectionQueue.length) {
+        applyFallbackQueue(detectionQueue, {
+          message: formatNearestMatchMessage(detectionQueue.length),
+          source: trimmed,
+        });
+      } else if (state.detectionStatus === 'near' || state.detectionStatus === 'none') {
+        applyFallbackQueue([], { source: trimmed });
+      }
+    } else if (state.detectionStatus === 'searching') {
+      state.fallback.message = NEAREST_SEARCH_MESSAGE;
+      state.fallback.shouldPrompt = false;
     }
   }
   renderPanels();
@@ -517,16 +527,19 @@ function renderSuggestions() {
   populateChipList(needsHost, needsEmpty, current.needs || []);
 
   if (fallbackActive) {
-    const message = state.fallback.message ||
-      (state.fallback.queue.length > 1
-        ? 'Showing the nearest matches our detector can offer.'
-        : 'Showing the nearest match our detector can offer.');
-    whyHost.textContent = message;
+    const count = state.fallback.queue.length;
+    const fallbackMessage = state.fallback.message || formatNearestMatchMessage(count);
+    whyHost.textContent = fallbackMessage;
   } else {
     const cueLabels = (direct.cues || []).map(formatCueLabel).filter(Boolean);
     if (cueLabels.length) {
       whyHost.textContent = `${cueLabels.length > 1 ? 'Matched cues' : 'Matched cue'} from our detector: ${cueLabels.join(', ')}`;
-    } else if (!hasDirect && state.fallback.message && !state.fallback.shouldPrompt && !state.fallback.running) {
+    } else if (
+      !hasDirect &&
+      state.fallback.message &&
+      (!state.fallback.shouldPrompt || state.fallback.autoApply) &&
+      !state.fallback.running
+    ) {
       whyHost.textContent = state.fallback.message;
     } else if (hasDirect) {
       whyHost.textContent = 'Suggestions come from our language detector and common observation patterns.';
@@ -890,6 +903,8 @@ function createFallbackState() {
     running: false,
     shouldPrompt: false,
     message: '',
+    autoApply: false,
+    source: '',
   };
 }
 
@@ -900,14 +915,16 @@ function applyFallbackQueue(queue, options = {}) {
   state.fallback.active = results.length > 0;
   state.fallback.running = false;
   state.fallback.shouldPrompt = Boolean(options.shouldPrompt);
+  state.fallback.autoApply = false;
+  state.fallback.source = typeof options.source === 'string' ? options.source : state.lastSubmitted || '';
+
   if (results.length) {
-    const defaultMessage = results.length > 1
-      ? 'Showing the nearest matches our detector can offer.'
-      : 'Showing the nearest match our detector can offer.';
-    state.fallback.message = options.message || defaultMessage;
+    const baseMessage = options.message || formatNearestMatchMessage(results.length);
+    const summary = formatQueueCueSummary(results);
+    state.fallback.message = joinMessageWithSummary(baseMessage, summary);
   } else {
-    state.fallback.message = options.emptyMessage ||
-      'We couldn’t find a close match yet. Browse all feelings and needs below while we keep learning.';
+    const emptyMessage = options.emptyMessage || NEAREST_EMPTY_MESSAGE;
+    state.fallback.message = emptyMessage;
   }
 }
 
@@ -964,25 +981,58 @@ function startFallbackSearch() {
   if (state.fallback.running || state.fallback.active) {
     return;
   }
-  if (!state.lastSubmitted) {
+  const source = state.lastSubmitted;
+  if (!source) {
     setValidityStatus('pending', 'Add a valid observation before requesting the nearest match.');
     return;
   }
+
   state.fallback.running = true;
   state.fallback.shouldPrompt = false;
+  state.fallback.autoApply = false;
+
+  const limit = Math.max(Number(state.detectionNearLimit) || DETECTION_NEAR_LIMIT, 1);
+  const requestId = ++fallbackNearestRequestId;
+  const existingQueue = state.detectionSource === source ? state.detectionFallbackQueue : null;
+
+  state.detectionSource = source;
+  state.detectionStatus = 'searching';
+  state.detectionFallbackQueue = [];
+  state.detectionFallbacks = 0;
+  renderDetectionStatus();
   renderSuggestions();
-  window.setTimeout(() => {
-    const queue = computeFallbackQueue(state.lastSubmitted);
-    applyFallbackQueue(queue);
-    if (state.detectionSource === state.lastSubmitted) {
-      state.detectionFallbackQueue = queue;
-      state.detectionFallbacks = queue.length;
-      if (!state.detectionMatches) {
-        state.detectionStatus = queue.length ? 'near' : 'none';
-      }
+
+  const finish = queue => {
+    if (fallbackNearestRequestId !== requestId) {
+      return;
     }
+    applyFallbackQueue(queue, {
+      message: queue.length ? formatNearestMatchMessage(queue.length) : '',
+      source,
+      shouldPrompt: !queue.length,
+    });
+    state.detectionFallbackQueue = queue;
+    state.detectionFallbacks = queue.length;
+    state.detectionStatus = queue.length ? 'near' : 'none';
     renderDetectionStatus();
     renderSuggestions();
+  };
+
+  if (Array.isArray(existingQueue) && existingQueue.length) {
+    window.setTimeout(() => finish(existingQueue), 120);
+    return;
+  }
+
+  window.setTimeout(() => {
+    computeFallbackQueue(source, limit)
+      .then(queue => finish(queue))
+      .catch(error => {
+        if (fallbackNearestRequestId !== requestId) {
+          return;
+        }
+        console.warn('Observation editor: unable to load nearest cues', error);
+        finish([]);
+      });
   }, 120);
 }
 
@@ -994,66 +1044,107 @@ function advanceFallback() {
   renderSuggestions();
 }
 
-function computeFallbackQueue(text) {
-  if (!text || !state.cues.length) {
+async function computeFallbackQueue(text, limit = DETECTION_NEAR_LIMIT) {
+  const trimmed = typeof text === 'string' ? text.trim() : '';
+  if (!trimmed) {
     return [];
   }
 
-  const tokens = tokenizeForScore(text);
-  const tokenSet = new Set(tokens);
-  const normalized = text.toLowerCase();
+  const max = Math.max(Number(limit) || 0, 1);
 
-  const candidates = state.cues
-    .map(cue => {
-      const feelings = buildSuggestionEntries(cue.feelings, 'feeling');
-      const needs = buildSuggestionEntries(cue.needs, 'need');
+  try {
+    const nearestMatches = await nearestObservationCues(trimmed, max);
+    if (!Array.isArray(nearestMatches) || !nearestMatches.length) {
+      return [];
+    }
+
+    const seen = new Set();
+    const queue = [];
+
+    nearestMatches.forEach(entry => {
+      const feelings = buildSuggestionEntries(entry?.feelings, 'feeling');
+      const needs = buildSuggestionEntries(entry?.needs, 'need');
       if (!feelings.length && !needs.length) {
-        return null;
+        return;
       }
-      const score = scoreCueMatch(tokenSet, normalized, cue);
-      return { cue, feelings, needs, score };
-    })
-    .filter(Boolean);
 
-  if (!candidates.length) {
+      const dedupeKey = `${feelings
+        .map(item => item.slug || item.title || '')
+        .join('|')}|${needs.map(item => item.slug || item.title || '').join('|')}`;
+      if (dedupeKey && seen.has(dedupeKey)) {
+        return;
+      }
+      if (dedupeKey) {
+        seen.add(dedupeKey);
+      }
+
+      const cueLabel = formatCueLabel(entry?.label || entry?.cue || '');
+      queue.push({
+        feelings,
+        needs,
+        cues: cueLabel ? [cueLabel] : [],
+        meta: {
+          cue: typeof entry?.cue === 'string' ? entry.cue : '',
+          label: cueLabel,
+          example: typeof entry?.example === 'string' ? entry.example : '',
+        },
+      });
+    });
+
+    return queue;
+  } catch (error) {
+    console.warn('Observation editor: unable to load nearest cues', error);
     return [];
   }
+}
 
-  const positive = candidates.filter(item => item.score > 0);
-  const pool = positive.length ? positive : candidates;
+function formatNearestMatchMessage(count) {
+  return count > 1 ? NEAREST_READY_MULTI_MESSAGE : NEAREST_READY_SINGLE_MESSAGE;
+}
 
-  pool.sort((a, b) => {
-    if (b.score !== a.score) {
-      return b.score - a.score;
+function formatQueueCueSummary(queue) {
+  const names = [];
+  (queue || []).forEach(entry => {
+    const cueNames = Array.isArray(entry?.cues) ? entry.cues : [];
+    if (cueNames.length) {
+      cueNames.forEach(name => {
+        const label = formatCueLabel(name);
+        if (label) {
+          names.push(label);
+        }
+      });
+      return;
     }
-    const aCount = a.feelings.length + a.needs.length;
-    const bCount = b.feelings.length + b.needs.length;
-    if (bCount !== aCount) {
-      return bCount - aCount;
+    const fallbackLabel = entry?.meta?.label;
+    if (fallbackLabel) {
+      const label = formatCueLabel(fallbackLabel);
+      if (label) {
+        names.push(label);
+      }
     }
-    const aLabel = a.cue?.label || a.cue?.cue || '';
-    const bLabel = b.cue?.label || b.cue?.cue || '';
-    return aLabel.localeCompare(bLabel);
   });
 
-  const seen = new Set();
-  const results = [];
-  for (const entry of pool) {
-    const key = `${entry.feelings.map(item => item.slug || item.title).join('|')}|${entry.needs.map(item => item.slug || item.title).join('|')}`;
-    if (!key.trim()) {
-      continue;
-    }
-    if (seen.has(key)) {
-      continue;
-    }
-    seen.add(key);
-    results.push({ feelings: entry.feelings, needs: entry.needs, cues: [] });
-    if (results.length >= 6) {
-      break;
-    }
+  const unique = [...new Set(names.filter(Boolean))];
+  if (!unique.length) {
+    return '';
   }
 
-  return results;
+  const prefix = unique.length > 1 ? 'Nearest cues:' : 'Nearest cue:';
+  return `${prefix} ${formatNaturalList(unique)}`;
+}
+
+function joinMessageWithSummary(message, summary) {
+  const base = typeof message === 'string' ? message.trim() : '';
+  const extra = typeof summary === 'string' ? summary.trim() : '';
+  if (!base) {
+    return extra;
+  }
+  if (!extra) {
+    return base;
+  }
+  const normalizedBase = /[.!?]$/.test(base) ? base : `${base}.`;
+  const normalizedExtra = /[.!?]$/.test(extra) ? extra : `${extra}.`;
+  return `${normalizedBase} ${normalizedExtra}`;
 }
 
 function countFlaggedTokens(lint) {
@@ -1071,59 +1162,7 @@ function countWords(value) {
   return matches ? matches.length : 0;
 }
 
-function tokenizeForScore(text) {
-  return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
-}
-
-function scoreCueMatch(tokenSet, normalizedText, cue) {
-  const sources = [];
-  if (Array.isArray(cue?.phrases)) {
-    sources.push(...cue.phrases);
-  }
-  if (cue?.phrase) {
-    sources.push(cue.phrase);
-  }
-  if (cue?.example) {
-    sources.push(cue.example);
-  }
-  if (cue?.label) {
-    sources.push(cue.label);
-  }
-  if (cue?.cue) {
-    sources.push(cue.cue);
-  }
-
-  let best = 0;
-  sources.forEach(source => {
-    const value = typeof source === 'string' ? source.trim() : '';
-    if (!value) {
-      return;
-    }
-    const sourceTokens = tokenizeForScore(value);
-    if (!sourceTokens.length) {
-      return;
-    }
-    let matches = 0;
-    sourceTokens.forEach(token => {
-      if (tokenSet.has(token)) {
-        matches += 1;
-      }
-    });
-    let score = matches;
-    if (matches) {
-      score += matches / sourceTokens.length;
-    }
-    const lower = value.toLowerCase();
-    if (normalizedText.includes(lower)) {
-      score += Math.min(4, lower.length / 12);
-    }
-    if (score > best) {
-      best = score;
-    }
-  });
-
-  return best;
-}
+// Legacy scoring helpers removed in favour of precomputed nearest matches.
 
 function setValidityStatus(status, message) {
   state.validityStatus = status || 'idle';
@@ -1165,6 +1204,7 @@ function defaultValidityMessage(status) {
 }
 
 function updateDetectionStatus(rawInput, trimmedInput) {
+  const requestId = ++detectionNearestRequestId;
   const sourceText = typeof rawInput === 'string' ? rawInput : '';
   const trimmed = typeof trimmedInput === 'string' ? trimmedInput : sourceText.trim();
   const lint = state.analysis?.lint || null;
@@ -1226,10 +1266,58 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   if (!hits.length) {
     state.cueHighlightRanges = [];
   }
-  const fallbackQueue = computeFallbackQueue(trimmed);
-  state.detectionFallbackQueue = fallbackQueue;
-  state.detectionFallbacks = fallbackQueue.length;
-  state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
+  state.detectionStatus = 'searching';
+  state.detectionFallbackQueue = [];
+  state.detectionFallbacks = 0;
+
+  if (state.mode === 'results' && state.lastSubmitted === trimmed && state.fallback.autoApply) {
+    state.fallback.message = NEAREST_SEARCH_MESSAGE;
+    state.fallback.queue = [];
+    state.fallback.active = false;
+    renderSuggestions();
+  }
+
+  const limit = Math.max(Number(state.detectionNearLimit) || DETECTION_NEAR_LIMIT, 1);
+
+  computeFallbackQueue(trimmed, limit)
+    .then(queue => {
+      if (detectionNearestRequestId !== requestId) {
+        return;
+      }
+      state.detectionFallbackQueue = queue;
+      state.detectionFallbacks = queue.length;
+      state.detectionStatus = queue.length ? 'near' : 'none';
+
+      if (state.mode === 'results' && state.lastSubmitted === trimmed && state.fallback.autoApply) {
+        if (queue.length) {
+          applyFallbackQueue(queue, {
+            message: formatNearestMatchMessage(queue.length),
+            source: trimmed,
+          });
+        } else {
+          applyFallbackQueue([], { source: trimmed, shouldPrompt: true });
+        }
+        renderSuggestions();
+      }
+
+      renderDetectionStatus();
+    })
+    .catch(error => {
+      if (detectionNearestRequestId !== requestId) {
+        return;
+      }
+      console.warn('Observation editor: unable to load nearest cues', error);
+      state.detectionFallbackQueue = [];
+      state.detectionFallbacks = 0;
+      state.detectionStatus = 'none';
+
+      if (state.mode === 'results' && state.lastSubmitted === trimmed && state.fallback.autoApply) {
+        applyFallbackQueue([], { source: trimmed, shouldPrompt: true });
+        renderSuggestions();
+      }
+
+      renderDetectionStatus();
+    });
 }
 
 function renderDetectionStatus() {
@@ -1246,6 +1334,9 @@ function renderDetectionStatus() {
   switch (status) {
     case 'idle':
       message = 'Language detector ready.';
+      break;
+    case 'searching':
+      message = NEAREST_SEARCH_MESSAGE;
       break;
     case 'short':
       message = `Add at least ${DETECTION_MIN_WORDS} words to start matching.`;
@@ -1291,7 +1382,7 @@ function renderDetectionSummary() {
 
   let exactCount = 0;
   let nearCount = 0;
-  if (status !== 'flagged' && status !== 'short' && status !== 'loading') {
+  if (status !== 'flagged' && status !== 'short' && status !== 'loading' && status !== 'searching') {
     exactCount = Math.min(Number(state.detectionMatches) || 0, matchLimit);
     nearCount = Math.min(Number(state.detectionFallbacks) || 0, nearLimit || Number(state.detectionFallbacks) || 0);
   }
@@ -1325,6 +1416,9 @@ function renderDetectionSummary() {
         message = limitMessage
           ? `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
           : `Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
+        break;
+      case 'searching':
+        message = limitMessage ? `${NEAREST_SEARCH_MESSAGE} ${limitMessage}` : NEAREST_SEARCH_MESSAGE;
         break;
       case 'flagged':
         message = limitMessage
