@@ -751,15 +751,68 @@ button.site-nav__magnet {
   }
 
   .observation-guide {
-    display: grid;
-    gap: clamp(1.75rem, 4vw, 2.75rem);
-  }
-
-  .observation-guide__card {
-    background: color-mix(in srgb, #ffffff 96%, transparent);
+    display: block;
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
     border-radius: var(--radius-3xl);
     box-shadow: 0 12px 28px color-mix(in srgb, var(--outline) 12%, transparent);
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    overflow: hidden;
+  }
+
+  .observation-guide__toggle {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: clamp(1.1rem, 2.6vw, 1.5rem) clamp(1.4rem, 3vw, 2rem);
+    background: color-mix(in srgb, var(--chip-bg) 55%, #ffffff 45%);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .observation-guide__toggle::marker {
+    display: none;
+    content: '';
+  }
+
+  .observation-guide__toggle-text {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .observation-guide__toggle-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    letter-spacing: 0.04em;
+  }
+
+  .observation-guide__toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 160ms ease;
+  }
+
+  .observation-guide[open] .observation-guide__toggle {
+    background: color-mix(in srgb, var(--chip-bg) 45%, #ffffff 55%);
+    border-bottom: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .observation-guide[open] .observation-guide__toggle-icon {
+    transform: rotate(45deg);
+  }
+
+  .observation-guide__card {
     padding: clamp(1.6rem, 3.5vw, 2.4rem);
     display: grid;
     gap: clamp(1.4rem, 3vw, 2.25rem);
@@ -790,39 +843,75 @@ button.site-nav__magnet {
 
   .observation-guide__nav {
     display: flex;
-    flex-wrap: wrap;
-  }
-
-  .observation-guide__toc {
-    display: flex;
-    flex-wrap: wrap;
+    align-items: flex-end;
     gap: 0.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    overflow-x: auto;
+    padding: 0.35rem 0.35rem 0;
+    margin: 0 -0.35rem;
+    scrollbar-width: thin;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .observation-guide__toc a {
-    text-decoration: none;
+  .observation-guide__nav::-webkit-scrollbar {
+    height: 0.35rem;
+  }
+
+  .observation-guide__nav::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--outline) 25%, transparent);
+    border-radius: 999px;
+  }
+
+  .observation-guide__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.1rem 0.55rem;
+    border-radius: 1.25rem 1.25rem 0 0;
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    border-bottom: none;
+    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
     color: inherit;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
     font-weight: 600;
-    border: 2px solid color-mix(in srgb, var(--outline) 22%, transparent);
-    border-radius: var(--radius-pill);
-    padding: 0.35rem 0.85rem;
-    background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 12px color-mix(in srgb, var(--outline) 12%, transparent);
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
   }
 
-  .observation-guide__toc a:hover {
-    background: color-mix(in srgb, var(--mint) 35%, var(--chip-bg) 65%);
+  .observation-guide__tab.is-active {
+    background: color-mix(in srgb, var(--mint) 28%, #ffffff 72%);
+    box-shadow: 0 18px 32px color-mix(in srgb, var(--outline) 14%, transparent);
+    transform: translateY(0);
+    z-index: 2;
+  }
+
+  .observation-guide__tab:not(.is-active):hover {
+    background: color-mix(in srgb, var(--mint) 25%, var(--chip-bg) 75%);
     transform: translateY(-2px);
-    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+    box-shadow: 0 14px 24px color-mix(in srgb, var(--outline) 18%, transparent);
+  }
+
+  .observation-guide__tab:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 2px;
+  }
+
+  .observation-guide__tab-label {
+    pointer-events: none;
   }
 
   .observation-guide__sections {
     display: grid;
     gap: clamp(1rem, 2.5vw, 1.6rem);
+    position: relative;
   }
 
   .observation-guide__section {
@@ -830,37 +919,30 @@ button.site-nav__magnet {
     border-radius: var(--radius-2xl);
     background: color-mix(in srgb, #ffffff 94%, transparent);
     padding: 0;
-    overflow: hidden;
+    display: grid;
+    gap: 0;
   }
 
-  .observation-guide__section summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  .observation-guide[data-tabs-ready='true'] .observation-guide__section {
+    display: none;
+  }
+
+  .observation-guide[data-tabs-ready='true'] .observation-guide__section.is-active {
+    display: grid;
+    box-shadow: 0 24px 36px color-mix(in srgb, var(--outline) 16%, transparent);
+    border-color: color-mix(in srgb, var(--mint) 34%, var(--outline) 18%);
+  }
+
+  .observation-guide__section-title {
+    margin: 0;
+    padding: 0.95rem 1.2rem;
     font-family: var(--font-display);
     font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 0.95rem 1.2rem;
-    margin: 0;
     background: color-mix(in srgb, var(--chip-bg) 55%, #ffffff 45%);
-  }
-
-  .observation-guide__section summary::marker {
-    display: none;
-    content: '';
-  }
-
-  .observation-guide__section summary:focus-visible {
-    outline: 3px dashed var(--outline);
-    outline-offset: 2px;
-  }
-
-  .observation-guide__section[open] summary {
-    box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
   }
 
   .observation-guide__section-content {
@@ -883,6 +965,43 @@ button.site-nav__magnet {
 
   .observation-guide__section-content li {
     margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .observation-guide__toggle {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .observation-guide__toggle-icon {
+      align-self: flex-start;
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .observation-guide__tab {
+      font-size: 0.74rem;
+      letter-spacing: 0.07em;
+      padding: 0.6rem 0.9rem 0.45rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .observation-guide__nav {
+      gap: 0.35rem;
+      padding: 0.35rem 0.2rem 0;
+      margin: 0 -0.2rem;
+    }
+
+    .observation-guide__tab {
+      padding: 0.55rem 0.7rem 0.4rem;
+    }
+
+    .observation-guide__section-title {
+      font-size: 0.96rem;
+    }
   }
 
   .observation-guide__examples {
@@ -2165,12 +2284,15 @@ button.site-nav__magnet {
           </div>
         </section>
 
-        <section
-          id="observation-guide"
-          class="observation-guide"
-          aria-labelledby="observation-guide-title"
-        >
-          <div class="observation-guide__card">
+        <details id="observation-guide" class="observation-guide">
+          <summary class="observation-guide__toggle">
+            <span class="observation-guide__toggle-text">
+              <span class="observation-guide__eyebrow">Observation guide</span>
+              <span class="observation-guide__toggle-title">Tap to explore principles, steps, and examples</span>
+            </span>
+            <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
+          </summary>
+          <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
             <header class="observation-guide__intro">
               <p class="observation-guide__eyebrow">Observation guide</p>
               <h2 id="observation-guide-title" class="observation-guide__title">
@@ -2188,36 +2310,101 @@ button.site-nav__magnet {
                 practise staying with the facts before moving on to feelings and needs.
               </p>
             </header>
-            <nav class="observation-guide__nav" aria-label="Observation guide sections">
-              <ul class="observation-guide__toc">
-                <li>
-                  <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">
-                    Observations vs. evaluations
-                  </a>
-                </li>
-                <li>
-                  <a href="#observation-guide-why" data-guide-target="observation-guide-why">Why it matters</a>
-                </li>
-                <li>
-                  <a href="#observation-guide-principles" data-guide-target="observation-guide-principles">Key principles</a>
-                </li>
-                <li>
-                  <a href="#observation-guide-steps" data-guide-target="observation-guide-steps">Step-by-step practice</a>
-                </li>
-                <li>
-                  <a href="#observation-guide-examples" data-guide-target="observation-guide-examples">Example rewrites</a>
-                </li>
-                <li>
-                  <a href="#observation-guide-builder" data-guide-target="observation-guide-builder">Builder tips</a>
-                </li>
-                <li>
-                  <a href="#observation-guide-practice" data-guide-target="observation-guide-practice">Keep practicing</a>
-                </li>
-              </ul>
+            <nav class="observation-guide__nav" aria-label="Observation guide sections" role="tablist">
+              <a
+                class="observation-guide__tab is-active"
+                href="#observation-guide-foundations"
+                role="tab"
+                aria-selected="true"
+                aria-controls="observation-guide-foundations"
+                id="observation-guide-tab-foundations"
+                data-guide-target="observation-guide-foundations"
+              >
+                <span class="observation-guide__tab-label">Observations vs. evaluations</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-why"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-why"
+                id="observation-guide-tab-why"
+                data-guide-target="observation-guide-why"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Why it matters</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-principles"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-principles"
+                id="observation-guide-tab-principles"
+                data-guide-target="observation-guide-principles"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Key principles</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-steps"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-steps"
+                id="observation-guide-tab-steps"
+                data-guide-target="observation-guide-steps"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Step-by-step practice</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-examples"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-examples"
+                id="observation-guide-tab-examples"
+                data-guide-target="observation-guide-examples"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Example rewrites</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-builder"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-builder"
+                id="observation-guide-tab-builder"
+                data-guide-target="observation-guide-builder"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Builder tips</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-practice"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-practice"
+                id="observation-guide-tab-practice"
+                data-guide-target="observation-guide-practice"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Keep practicing</span>
+              </a>
             </nav>
             <div class="observation-guide__sections">
-              <details class="observation-guide__section" id="observation-guide-foundations" open data-guide-section>
-                <summary>Observations vs. evaluations</summary>
+              <section
+                class="observation-guide__section is-active"
+                id="observation-guide-foundations"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-foundations"
+                tabindex="0"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Observations vs. evaluations</h3>
                 <div class="observation-guide__section-content">
                   <p>
                     The observation step in Nonviolent Communication invites us to describe what actually happened without
@@ -2236,9 +2423,16 @@ button.site-nav__magnet {
                     was still ordering yesterday evening”). This shift keeps the focus on what happened instead of who someone is.
                   </p>
                 </div>
-              </details>
-              <details class="observation-guide__section" id="observation-guide-why" open data-guide-section>
-                <summary>Why it matters</summary>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-why"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-why"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Why it matters</h3>
                 <div class="observation-guide__section-content">
                   <p>
                     Blending evaluation with observation often lands as criticism. “You’re always late and inconsiderate” mixes a
@@ -2255,9 +2449,16 @@ button.site-nav__magnet {
                     </li>
                   </ul>
                 </div>
-              </details>
-              <details class="observation-guide__section" id="observation-guide-principles" data-guide-section>
-                <summary>Key principles</summary>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-principles"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-principles"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Key principles</h3>
                 <div class="observation-guide__section-content">
                   <ul>
                     <li>
@@ -2286,9 +2487,16 @@ button.site-nav__magnet {
                     </li>
                   </ul>
                 </div>
-              </details>
-              <details class="observation-guide__section" id="observation-guide-steps" data-guide-section>
-                <summary>Step-by-step practice</summary>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-steps"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-steps"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Step-by-step practice</h3>
                 <div class="observation-guide__section-content">
                   <ol>
                     <li>
@@ -2338,9 +2546,16 @@ button.site-nav__magnet {
                     with the examples below. The more you practise, the easier it becomes to spot hidden evaluations.
                   </p>
                 </div>
-              </details>
-              <details class="observation-guide__section" id="observation-guide-examples" data-guide-section>
-                <summary>Example rewrites</summary>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-examples"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-examples"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Example rewrites</h3>
                 <div class="observation-guide__section-content observation-guide__examples">
                   <dl>
                     <div>
@@ -2388,9 +2603,16 @@ button.site-nav__magnet {
                     </div>
                   </dl>
                 </div>
-              </details>
-              <details class="observation-guide__section" id="observation-guide-builder" data-guide-section>
-                <summary>Builder tips</summary>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-builder"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-builder"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Builder tips</h3>
                 <div class="observation-guide__section-content">
                   <ul>
                     <li>
@@ -2427,9 +2649,16 @@ button.site-nav__magnet {
                     </li>
                   </ul>
                 </div>
-              </details>
-              <details class="observation-guide__section" id="observation-guide-practice" data-guide-section>
-                <summary>Keep practicing</summary>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-practice"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-practice"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Keep practicing</h3>
                 <div class="observation-guide__section-content">
                   <p>
                     Observational language can feel plain at first, yet it opens space for empathy. By clearly naming what happened
@@ -2443,10 +2672,10 @@ button.site-nav__magnet {
                     story later.
                   </p>
                 </div>
-              </details>
+              </section>
             </div>
           </div>
-        </section>
+        </details>
 
         
 
