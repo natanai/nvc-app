@@ -998,11 +998,15 @@ button.site-nav__magnet {
     background: color-mix(in srgb, var(--sky) 62%, transparent);
   }
 
-  .observation-editor__status-indicator[data-state='searching'] .observation-editor__status-light {
+  .observation-editor__status-indicator[data-state='none'] .observation-editor__status-light {
+    background: color-mix(in srgb, var(--rose) 68%, transparent);
+  }
+
+  .observation-editor__status-indicator[data-state='near'] .observation-editor__status-light {
     background: color-mix(in srgb, var(--gold) 68%, transparent);
   }
 
-  .observation-editor__status-indicator[data-state='found'] .observation-editor__status-light {
+  .observation-editor__status-indicator[data-state='match'] .observation-editor__status-light {
     background: color-mix(in srgb, var(--mint) 72%, transparent);
   }
 
@@ -1024,6 +1028,7 @@ button.site-nav__magnet {
     gap: clamp(1.5rem, 3vw, 2.25rem);
     padding-block: clamp(1.8rem, 4vw, 2.6rem);
     border-top: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+    scroll-margin-top: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   .observation-suggestions__header {

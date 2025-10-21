@@ -11,9 +11,13 @@ const state = {
   directSuggestions: createEmptySuggestionSet(),
   detectionStatus: 'loading',
   detectionMatches: 0,
+  detectionFallbacks: 0,
+  detectionFallbackQueue: [],
+  detectionSource: '',
   validityStatus: 'idle',
   validityMessage: 'Matches not requested yet.',
   fallback: createFallbackState(),
+  scrolledToSuggestions: false,
 };
 
 const SUGGESTION_BASE_PATHS = {
@@ -57,8 +61,10 @@ function bind() {
   if (textarea) {
     textarea.addEventListener('input', event => {
       state.text = event.target.value || '';
+      state.scrolledToSuggestions = false;
       if (state.mode !== 'editing') {
         state.mode = 'editing';
+        state.scrolledToSuggestions = false;
         renderPanels();
       }
       if (state.validityStatus === 'valid' || state.validityStatus === 'invalid' || state.validityStatus === 'error') {
@@ -78,6 +84,7 @@ function bind() {
   if (editAgain) {
     editAgain.addEventListener('click', () => {
       state.mode = 'editing';
+      state.scrolledToSuggestions = false;
       renderPanels();
       analyze(state.text, {
         message: state.analysis?.ok
@@ -194,11 +201,31 @@ function finalizeObservation() {
     return;
   }
   state.mode = 'results';
+  state.scrolledToSuggestions = false;
   state.lastSubmitted = trimmed;
   const direct = buildSuggestions(trimmed);
   state.directSuggestions = direct;
+  const hasDirect = hasSuggestions(direct);
   state.fallback = createFallbackState();
-  state.fallback.shouldPrompt = !hasSuggestions(direct);
+  state.fallback.shouldPrompt = !hasDirect;
+  if (!hasDirect && state.detectionStatus === 'near') {
+    const fallbackQueue = state.detectionSource === trimmed
+      ? (state.detectionFallbackQueue || [])
+      : computeFallbackQueue(trimmed);
+    if (state.detectionSource !== trimmed) {
+      state.detectionFallbackQueue = fallbackQueue;
+      state.detectionFallbacks = fallbackQueue.length;
+      state.detectionSource = trimmed;
+      renderDetectionStatus();
+    }
+    if (fallbackQueue.length) {
+      applyFallbackQueue(fallbackQueue, {
+        message: fallbackQueue.length > 1
+          ? 'No exact cue matches detected. Showing the nearest matches we could find. Use Next for another option.'
+          : 'No exact cue matches detected. Showing the nearest match we could find.',
+      });
+    }
+  }
   renderPanels();
   renderSuggestions();
 }
@@ -206,12 +233,27 @@ function finalizeObservation() {
 function renderPanels() {
   const editorSection = document.getElementById('observation-editor');
   const suggestionSection = document.getElementById('observation-suggestions');
+  if (editorSection) {
+    editorSection.dataset.mode = state.mode || 'editing';
+  }
+  if (!suggestionSection) {
+    return;
+  }
   if (state.mode === 'results') {
-    if (editorSection) editorSection.setAttribute('hidden', 'hidden');
-    if (suggestionSection) suggestionSection.removeAttribute('hidden');
+    suggestionSection.removeAttribute('hidden');
+    if (!state.scrolledToSuggestions) {
+      state.scrolledToSuggestions = true;
+      const scrollTarget = () => {
+        suggestionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(scrollTarget);
+      } else {
+        scrollTarget();
+      }
+    }
   } else {
-    if (editorSection) editorSection.removeAttribute('hidden');
-    if (suggestionSection) suggestionSection.setAttribute('hidden', 'hidden');
+    suggestionSection.setAttribute('hidden', 'hidden');
   }
 }
 
@@ -548,6 +590,24 @@ function createFallbackState() {
   };
 }
 
+function applyFallbackQueue(queue, options = {}) {
+  const results = Array.isArray(queue) ? queue : [];
+  state.fallback.queue = results;
+  state.fallback.index = 0;
+  state.fallback.active = results.length > 0;
+  state.fallback.running = false;
+  state.fallback.shouldPrompt = Boolean(options.shouldPrompt);
+  if (results.length) {
+    const defaultMessage = results.length > 1
+      ? 'Showing the nearest matches our detector can offer. Use Next for another option.'
+      : 'Showing the nearest match our detector can offer.';
+    state.fallback.message = options.message || defaultMessage;
+  } else {
+    state.fallback.message = options.emptyMessage ||
+      'We couldn’t find a close match yet. Browse all feelings and needs below while we keep learning.';
+  }
+}
+
 function hasSuggestions(set) {
   if (!set) {
     return false;
@@ -588,17 +648,15 @@ function startFallbackSearch() {
   renderSuggestions();
   window.setTimeout(() => {
     const queue = computeFallbackQueue(state.lastSubmitted);
-    state.fallback.queue = queue;
-    state.fallback.index = 0;
-    state.fallback.active = queue.length > 0;
-    state.fallback.running = false;
-    if (queue.length) {
-      state.fallback.message = queue.length > 1
-        ? 'Showing the nearest matches our detector can offer. Use Next for another option.'
-        : 'Showing the nearest match our detector can offer.';
-    } else {
-      state.fallback.message = 'We couldn’t find a close match yet. Browse all feelings and needs below while we keep learning.';
+    applyFallbackQueue(queue);
+    if (state.detectionSource === state.lastSubmitted) {
+      state.detectionFallbackQueue = queue;
+      state.detectionFallbacks = queue.length;
+      if (!state.detectionMatches) {
+        state.detectionStatus = queue.length ? 'near' : 'none';
+      }
     }
+    renderDetectionStatus();
     renderSuggestions();
   }, 120);
 }
@@ -770,19 +828,37 @@ function updateDetectionStatus(trimmed) {
   if (!state.cues.length) {
     state.detectionStatus = 'loading';
     state.detectionMatches = 0;
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+    state.detectionSource = '';
     return;
   }
   if (!trimmed) {
     state.detectionStatus = 'idle';
     state.detectionMatches = 0;
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+    state.detectionSource = '';
     return;
   }
+
+  state.detectionSource = trimmed;
 
   const suggestion = suggestFromObservation(trimmed, state.cues || [], 4);
   const feelingsCount = Array.isArray(suggestion.feelings) ? suggestion.feelings.length : 0;
   const needsCount = Array.isArray(suggestion.needs) ? suggestion.needs.length : 0;
   state.detectionMatches = feelingsCount + needsCount;
-  state.detectionStatus = state.detectionMatches ? 'found' : 'searching';
+  if (state.detectionMatches > 0) {
+    state.detectionStatus = 'match';
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+    return;
+  }
+
+  const fallbackQueue = computeFallbackQueue(trimmed);
+  state.detectionFallbackQueue = fallbackQueue;
+  state.detectionFallbacks = fallbackQueue.length;
+  state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
 }
 
 function renderDetectionStatus() {
@@ -797,13 +873,17 @@ function renderDetectionStatus() {
 
   let message = 'Warming up the language detector…';
   if (status === 'idle') {
-    message = 'Language detector ready';
-  } else if (status === 'searching') {
-    message = 'Our detector hasn’t spotted cues yet. Nearest match remains available.';
-  } else if (status === 'found') {
+    message = 'Language detector ready.';
+  } else if (status === 'none') {
+    message = 'No cue matches detected yet.';
+  } else if (status === 'near') {
+    message = state.detectionFallbacks > 1
+      ? `No exact cue matches detected. ${state.detectionFallbacks} nearest matches ready to review.`
+      : 'No exact cue match detected. Nearest match ready to review.';
+  } else if (status === 'match') {
     message = state.detectionMatches > 1
-      ? `${state.detectionMatches} matches detected`
-      : 'Match detected';
+      ? `${state.detectionMatches} exact cue matches detected.`
+      : 'Exact cue match detected.';
   }
   text.textContent = message;
 }
