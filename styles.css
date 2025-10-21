@@ -2588,6 +2588,25 @@ body.has-support-journal-open {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.pill.link {
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.pill.link:hover,
+.pill.link:focus-visible {
+  filter: brightness(0.95);
+}
+
+.pill.error {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #991b1b;
+  text-decoration: underline;
+  text-decoration-color: #dc2626;
+}
+
 .pill.site-nav__magnet {
   box-shadow: none;
 }
