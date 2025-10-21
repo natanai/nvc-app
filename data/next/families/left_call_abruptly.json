@@ -1,0 +1,19 @@
+{
+  "family": "left_call_abruptly",
+  "defaults": {
+    "feelings": ["confused", "lonely", "hurt", "anxious"],
+    "needs": ["connection", "consideration", "to-be-seen", "reliability"]
+  },
+  "cues": [
+    {
+      "id": "left-call-abruptly_next",
+      "patterns": [
+        "\\bcall\\s+ended\\b[^.!?]*\\bwithout\\s+(?:a\\s+)?goodbye\\b",
+        "\\bhung\\s+up\\s+suddenly\\b",
+        "\\bleft\\s+(?:the\\s+)?(?:video\\s+)?call\\b[^.!?]*\\bwithout\\s+(?:a\\s+)?word\\b",
+        "\\bdropped\\s+off\\s+the\\s+call\\b[^.!?]*\\bwithout\\s+(?:a\\s+)?message\\b"
+      ],
+      "example": "In the middle of my update, the video call disconnected with no goodbye."
+    }
+  ]
+}

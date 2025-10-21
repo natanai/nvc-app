@@ -45,6 +45,50 @@
       "example": "While I spoke, their camera switched off and stayed blank."
     },
     {
+      "cue": "canceled-short-notice_next",
+      "patterns": [
+        "\\bcancel(?:ed|led)\\b[^.!?]*\\b(?:last\\s+minute|minutes?\\s+before)\\b",
+        "\\bpulled\\s+out\\b[^.!?]*\\bshort\\s+notice\\b",
+        "\\bbacked\\s+out\\b[^.!?]*\\bshort\\s+notice\\b",
+        "\\bcanceled\\s+\\d{1,2}\\s*(?:min|mins|minutes)\\s+before\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "anxious",
+        "frustrated",
+        "sad"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "They canceled 30 minutes before our meeting."
+    },
+    {
+      "cue": "interrupted-while-speaking_next",
+      "patterns": [
+        "\\b(?:spoke|talked)\\s+over\\s+(?:me|my\\s+sentence)\\b",
+        "\\binterrupted\\b[^.!?]*\\bwhile\\s+I\\s+(?:was\\s+)?speaking\\b",
+        "\\bbegan\\s+speaking\\b[^.!?]*\\bwhile\\s+I\\s+was\\s+speaking\\b",
+        "\\bcut\\s+me\\s+off\\b[^.!?]*\\bmid\\-?(?:word|sentence)\\b"
+      ],
+      "feelings": [
+        "angry",
+        "hurt",
+        "tense",
+        "frustrated"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "fairness"
+      ],
+      "example": "While I was speaking, they began speaking and my sentence stopped mid-word."
+    },
+    {
       "cue": "arrived-late_next",
       "patterns": [
         "\\barrived\\s+late\\b",
@@ -67,6 +111,28 @@
         "predictability"
       ],
       "example": "We agreed on 2:00; they arrived late without a message."
+    },
+    {
+      "cue": "left-call-abruptly_next",
+      "patterns": [
+        "\\bcall\\s+ended\\b[^.!?]*\\bwithout\\s+(?:a\\s+)?goodbye\\b",
+        "\\bhung\\s+up\\s+suddenly\\b",
+        "\\bleft\\s+(?:the\\s+)?(?:video\\s+)?call\\b[^.!?]*\\bwithout\\s+(?:a\\s+)?word\\b",
+        "\\bdropped\\s+off\\s+the\\s+call\\b[^.!?]*\\bwithout\\s+(?:a\\s+)?message\\b"
+      ],
+      "feelings": [
+        "confused",
+        "lonely",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "connection",
+        "consideration",
+        "to-be-seen",
+        "reliability"
+      ],
+      "example": "In the middle of my update, the video call disconnected with no goodbye."
     },
     {
       "cue": "meeting-started-early_next",

@@ -16,3 +16,6 @@ input,ready,matched_cues
 "The calendar event disappeared from my calendar.",true,"calendar-event-removed_next"
 "They used reply all and shared my note.",true,"reply-all-exposed_next"
 "When I joined at the scheduled time, the meeting had already started.",true,"meeting-started-early_next"
+"They spoke over me while I was talking.",true,"interrupted-while-speaking_next"
+"They canceled 15 minutes before the meeting.",true,"canceled-short-notice_next"
+"They left the video call without a word.",true,"left-call-abruptly_next"

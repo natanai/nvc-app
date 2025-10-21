@@ -15,3 +15,6 @@ The host muted me while I was speaking.
 The calendar event disappeared from my calendar.
 They used reply all and shared my note.
 When I joined at the scheduled time, the meeting had already started.
+They spoke over me while I was talking.
+They canceled 15 minutes before the meeting.
+They left the video call without a word.
