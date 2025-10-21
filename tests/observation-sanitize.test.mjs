@@ -96,6 +96,12 @@ test('filters agentive phrasing like "forced me to"', () => {
   assert.equal(sanitizeObservationText(text, catalog), '');
 });
 
+test('flags "annoying" as evaluative language', () => {
+  const text = 'You were annoying during the review.';
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.evaluationMarkers.includes('annoying'), true, 'annoying should be flagged as evaluation');
+});
+
 test('highlights observational anchors and quotes for guidance', () => {
   const text = 'Yesterday at 6:15 pm I noticed Alex type "I will handle it." in the chat.';
   const lint = lintObservation(text, catalog);
@@ -106,6 +112,16 @@ test('highlights observational anchors and quotes for guidance', () => {
     lint.observationHighlights.some(token => /I will handle it\./i.test(token)),
     true,
     'direct quote should be highlighted',
+  );
+});
+
+test('highlights location anchors for observational guidance', () => {
+  const text = 'On Tuesday at 3:10 pm in room 204 I heard Taylor say, "I submitted the form."';
+  const lint = lintObservation(text, catalog);
+  assert.equal(
+    lint.observationHighlights.some(token => /in\s+room\s+204/i.test(token)),
+    true,
+    'location phrase should be highlighted',
   );
 });
 
