@@ -308,6 +308,7 @@ body {
 
 body.has-observation-guide-overlay {
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 a,
@@ -838,6 +839,10 @@ button.site-nav__magnet {
     display: block;
   }
 
+  .observation-guide__dialog {
+    display: contents;
+  }
+
   .observation-guide__card {
     padding: clamp(1.6rem, 3.5vw, 2.4rem);
     display: grid;
@@ -1068,17 +1073,17 @@ button.site-nav__magnet {
     [data-observation-guide][data-overlay-state='overlay'] {
       position: fixed;
       inset: 0;
-      z-index: 60;
-      width: 100%;
-      max-height: 100vh;
+      z-index: 2600;
       margin: 0;
       border: none;
       border-radius: 0;
       box-shadow: none;
-      background: color-mix(in srgb, var(--chip-bg) 28%, #ffffff 72%);
-      overflow: hidden;
+      background: color-mix(in srgb, var(--ink) 46%, transparent);
+      backdrop-filter: blur(10px);
       display: flex;
-      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      overflow: hidden;
     }
 
     [data-observation-guide][data-overlay-state='overlay'] > summary {
@@ -1086,25 +1091,61 @@ button.site-nav__magnet {
     }
 
     [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-panel] {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      min-height: 0;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-dialog] {
       display: flex;
       flex-direction: column;
-      gap: clamp(0.85rem, 3.5vw, 1.4rem);
-      height: 100%;
-      min-height: 0;
-      padding: clamp(1.1rem, 5vw, 1.9rem);
-      background: color-mix(in srgb, #ffffff 96%, transparent);
+      width: 100%;
+      min-height: 100vh;
+      height: 100vh;
+      max-height: 100vh;
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, #ffffff 88%, var(--lavender) 12%) 0%,
+        color-mix(in srgb, #ffffff 92%, var(--mint) 8%) 100%
+      );
+      color: inherit;
+      border-radius: 0;
+      box-shadow: none;
       overflow: hidden;
+    }
+
+    @supports (height: 100dvh) {
+      [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-dialog] {
+        min-height: 100dvh;
+        height: 100dvh;
+        max-height: 100dvh;
+      }
+    }
+
+    @supports (height: 100svh) {
+      [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-dialog] {
+        min-height: 100svh;
+        height: 100svh;
+        max-height: 100svh;
+      }
     }
 
     [data-observation-guide][data-overlay-state='overlay'] .observation-guide__card {
       flex: 1 1 auto;
       min-height: 0;
+      margin: 0;
+      padding: clamp(1.2rem, 5vw, 2.2rem);
       overflow-y: auto;
-      padding: clamp(1.1rem, 5vw, 1.9rem);
-      border-radius: var(--radius-3xl);
-      box-shadow: 0 28px 48px color-mix(in srgb, var(--outline) 18%, transparent);
-      background: color-mix(in srgb, #ffffff 98%, transparent);
+      overscroll-behavior: contain;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
     }
 
     [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button {
@@ -1112,9 +1153,22 @@ button.site-nav__magnet {
       align-items: center;
       justify-content: center;
       gap: 0.35rem;
-      background: color-mix(in srgb, var(--chip-bg) 68%, #ffffff 32%);
-      border-color: color-mix(in srgb, var(--outline) 16%, transparent);
-      box-shadow: 0 12px 18px color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+      border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+      border-width: 2px;
+      box-shadow: 0 12px 20px color-mix(in srgb, var(--outline) 24%, transparent);
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button:hover {
+      background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+      border-color: color-mix(in srgb, var(--outline) 32%, transparent);
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button:focus-visible {
+      background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+      border-color: color-mix(in srgb, var(--outline) 32%, transparent);
+      outline: 3px dashed var(--outline);
+      outline-offset: 2px;
     }
 
     [data-observation-guide][data-overlay-state='overlay'] .observation-guide__nav {
@@ -2629,7 +2683,8 @@ button.site-nav__magnet {
             <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
           </summary>
           <div data-observation-guide-panel id="observation-guide-panel">
-            <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
+            <div class="observation-guide__dialog" data-observation-guide-dialog>
+              <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
               <header class="observation-guide__intro">
                 <button
                   type="button"
@@ -2918,6 +2973,7 @@ button.site-nav__magnet {
                   </ol>
                 </div>
               </section>
+              </div>
             </div>
           </div>
           </div>

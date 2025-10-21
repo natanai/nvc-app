@@ -1691,10 +1691,16 @@ function bindGuideOverlay() {
 
   const summary = host.querySelector('[data-observation-guide-open]');
   const panel = host.querySelector('[data-observation-guide-panel]');
+  const dialog = panel ? panel.querySelector('[data-observation-guide-dialog]') : null;
   const closeButton = host.querySelector('[data-observation-guide-close]');
-  const card = panel ? panel.querySelector('.observation-guide__card') : null;
+  let card = null;
+  if (dialog && typeof dialog.querySelector === 'function') {
+    card = dialog.querySelector('.observation-guide__card');
+  } else if (panel && typeof panel.querySelector === 'function') {
+    card = panel.querySelector('.observation-guide__card');
+  }
 
-  if (!summary || !panel || !closeButton || !card) {
+  if (!summary || !panel || !dialog || !closeButton || !card) {
     return;
   }
 
@@ -1702,6 +1708,9 @@ function bindGuideOverlay() {
   const labelledBy = card.getAttribute('aria-labelledby') || 'observation-guide-title';
 
   card.setAttribute('tabindex', '-1');
+  if (!dialog.hasAttribute('tabindex')) {
+    dialog.setAttribute('tabindex', '-1');
+  }
   if (!summary.getAttribute('aria-haspopup')) {
     summary.setAttribute('aria-haspopup', 'dialog');
   }
@@ -1710,6 +1719,7 @@ function bindGuideOverlay() {
     host,
     summary,
     panel,
+    dialog,
     closeButton,
     card,
     labelledBy,
@@ -1814,12 +1824,15 @@ function applyGuideOverlayState() {
   if (!guideOverlayState) {
     return;
   }
-  const { host, panel, labelledBy } = guideOverlayState;
+  const { host, dialog, labelledBy } = guideOverlayState;
   host.dataset.overlayState = 'overlay';
-  panel.setAttribute('role', 'dialog');
-  panel.setAttribute('aria-modal', 'true');
-  if (labelledBy) {
-    panel.setAttribute('aria-labelledby', labelledBy);
+  if (dialog) {
+    dialog.setAttribute('role', 'dialog');
+    dialog.setAttribute('aria-modal', 'true');
+    if (labelledBy) {
+      dialog.setAttribute('aria-labelledby', labelledBy);
+    }
+    dialog.setAttribute('aria-hidden', 'false');
   }
   if (typeof document !== 'undefined' && document.body) {
     document.body.classList.add('has-observation-guide-overlay');
@@ -1830,11 +1843,17 @@ function removeGuideOverlayState() {
   if (!guideOverlayState) {
     return;
   }
-  const { host, panel } = guideOverlayState;
+  const { host, dialog } = guideOverlayState;
   delete host.dataset.overlayState;
-  panel.removeAttribute('role');
-  panel.removeAttribute('aria-modal');
-  panel.removeAttribute('aria-labelledby');
+  if (dialog) {
+    dialog.removeAttribute('role');
+    dialog.removeAttribute('aria-modal');
+    dialog.removeAttribute('aria-labelledby');
+    dialog.removeAttribute('aria-hidden');
+    if (typeof dialog.scrollTop === 'number') {
+      dialog.scrollTop = 0;
+    }
+  }
   if (typeof document !== 'undefined' && document.body) {
     document.body.classList.remove('has-observation-guide-overlay');
   }
@@ -1865,7 +1884,7 @@ function openGuideOverlay(options = {}) {
     return;
   }
 
-  const { summary, card } = guideOverlayState;
+  const { summary, card, panel, dialog } = guideOverlayState;
   const focusCard = options.focusCard !== false;
 
   if (!guideOverlayState.host.open) {
@@ -1892,6 +1911,12 @@ function openGuideOverlay(options = {}) {
   }
 
   if (focusCard) {
+    if (panel && typeof panel.scrollTop === 'number') {
+      panel.scrollTop = 0;
+    }
+    if (dialog && typeof dialog.scrollTop === 'number') {
+      dialog.scrollTop = 0;
+    }
     card.scrollTop = 0;
   }
 }
@@ -1906,6 +1931,16 @@ function closeGuideOverlay(options = {}) {
       host.open = false;
     }
     return;
+  }
+
+  if (guideOverlayState.card && typeof guideOverlayState.card.scrollTop === 'number') {
+    guideOverlayState.card.scrollTop = 0;
+  }
+  if (guideOverlayState.panel && typeof guideOverlayState.panel.scrollTop === 'number') {
+    guideOverlayState.panel.scrollTop = 0;
+  }
+  if (guideOverlayState.dialog && typeof guideOverlayState.dialog.scrollTop === 'number') {
+    guideOverlayState.dialog.scrollTop = 0;
   }
 
   removeGuideOverlayState();
