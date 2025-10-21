@@ -1962,6 +1962,94 @@ button.site-nav__magnet {
           </p>
         </header>
 
+        <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
+          <div class="observation-editor__card">
+            <div class="observation-editor__grid">
+              <div class="observation-editor__field">
+                <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                <div class="observation-editor__input-wrapper">
+                  <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
+                  <textarea
+                    id="observation-text"
+                    class="observation-editor__input"
+                    rows="7"
+                    placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
+                    aria-describedby="observation-guidelines observation-feedback"
+                  ></textarea>
+                </div>
+                <div class="observation-editor__status observation-editor__status--inline">
+                  <div
+                    id="observation-detection"
+                    class="observation-editor__status-indicator"
+                    data-state="loading"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <span class="observation-editor__status-light" aria-hidden="true"></span>
+                    <span id="observation-detection-text" class="observation-editor__status-text">Warming up the language detector…</span>
+                  </div>
+                </div>
+                <p id="observation-feedback" class="observation-editor__feedback" role="status" aria-live="polite">
+                  Start by anchoring your observation in time and place.
+                </p>
+                <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
+              </div>
+              <aside
+                class="observation-editor__recipe"
+                id="observation-guidelines"
+                aria-label="Observation recipe"
+                data-state="default"
+              >
+                <h2 class="observation-editor__recipe-title">Observation recipe</h2>
+                <div
+                  id="observation-guidelines-body"
+                  class="observation-editor__recipe-body"
+                  aria-live="polite"
+                >
+                  <p class="observation-editor__recipe-intro">Use these anchors to keep your statement observational.</p>
+                  <ol class="observation-editor__recipe-list">
+                    <li><strong>Name the moment:</strong> Specify when and where it happened, and who was involved.</li>
+                    <li><strong>Describe sensory facts:</strong> Report what a camera or microphone would capture.</li>
+                    <li><strong>Remove judgments:</strong> Swap labels, motives, and generalisations for concrete actions.</li>
+                    <li><strong>Quantify &amp; quote:</strong> Use numbers or direct quotes to keep the scene verifiable.</li>
+                    <li><strong>Optional gap:</strong> Mention what you expected while keeping feelings and needs for the next step.</li>
+                  </ol>
+                  <p class="observation-editor__recipe-note">
+                    Need a refresher? Visit the
+                    <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a>
+                    below for principles, steps, and examples.
+                  </p>
+                </div>
+              </aside>
+            </div>
+            <footer class="observation-editor__footer">
+              <div class="observation-editor__actions">
+                <button
+                  id="observation-submit"
+                  class="support-button observation-editor__submit-button"
+                  type="button"
+                  disabled
+                >
+                  See matches
+                </button>
+                <p class="observation-editor__hint">We’ll scan for cues as you type.</p>
+              </div>
+              <div class="observation-editor__status">
+                <div
+                  id="observation-validity-container"
+                  class="observation-editor__status-indicator observation-editor__status-indicator--validity"
+                  data-state="idle"
+                  aria-live="polite"
+                >
+                  <span id="observation-validity-label" class="observation-editor__status-text">
+                    Observation not submitted yet.
+                  </span>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </section>
+
         <section
           id="observation-guide"
           class="observation-guide"
@@ -2245,93 +2333,7 @@ button.site-nav__magnet {
           </div>
         </section>
 
-        <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
-          <div class="observation-editor__card">
-            <div class="observation-editor__grid">
-              <div class="observation-editor__field">
-                <label class="observation-editor__label" for="observation-text">Observation statement</label>
-                <div class="observation-editor__input-wrapper">
-                  <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
-                  <textarea
-                    id="observation-text"
-                    class="observation-editor__input"
-                    rows="7"
-                    placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
-                    aria-describedby="observation-guidelines observation-feedback"
-                  ></textarea>
-                </div>
-                <div class="observation-editor__status observation-editor__status--inline">
-                  <div
-                    id="observation-detection"
-                    class="observation-editor__status-indicator"
-                    data-state="loading"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    <span class="observation-editor__status-light" aria-hidden="true"></span>
-                    <span id="observation-detection-text" class="observation-editor__status-text">Warming up the language detector…</span>
-                  </div>
-                </div>
-                <p id="observation-feedback" class="observation-editor__feedback" role="status" aria-live="polite">
-                  Start by anchoring your observation in time and place.
-                </p>
-                <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
-              </div>
-              <aside
-                class="observation-editor__recipe"
-                id="observation-guidelines"
-                aria-label="Observation recipe"
-                data-state="default"
-              >
-                <h2 class="observation-editor__recipe-title">Observation recipe</h2>
-                <div
-                  id="observation-guidelines-body"
-                  class="observation-editor__recipe-body"
-                  aria-live="polite"
-                >
-                  <p class="observation-editor__recipe-intro">Use these anchors to keep your statement observational.</p>
-                  <ol class="observation-editor__recipe-list">
-                    <li><strong>Name the moment:</strong> Specify when and where it happened, and who was involved.</li>
-                    <li><strong>Describe sensory facts:</strong> Report what a camera or microphone would capture.</li>
-                    <li><strong>Remove judgments:</strong> Swap labels, motives, and generalisations for concrete actions.</li>
-                    <li><strong>Quantify &amp; quote:</strong> Use numbers or direct quotes to keep the scene verifiable.</li>
-                    <li><strong>Optional gap:</strong> Mention what you expected while keeping feelings and needs for the next step.</li>
-                  </ol>
-                  <p class="observation-editor__recipe-note">
-                    Need a refresher? Visit the
-                    <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a>
-                    below for principles, steps, and examples.
-                  </p>
-                </div>
-              </aside>
-            </div>
-            <footer class="observation-editor__footer">
-              <div class="observation-editor__actions">
-                <button
-                  id="observation-submit"
-                  class="support-button observation-editor__submit-button"
-                  type="button"
-                  disabled
-                >
-                  See matches
-                </button>
-                <p class="observation-editor__hint">We’ll scan for cues as you type.</p>
-              </div>
-              <div class="observation-editor__status">
-                <div
-                  id="observation-validity-container"
-                  class="observation-editor__status-indicator observation-editor__status-indicator--validity"
-                  data-state="idle"
-                  aria-live="polite"
-                >
-                  <span id="observation-validity-label" class="observation-editor__status-text">
-                    Observation not submitted yet.
-                  </span>
-                </div>
-              </div>
-            </footer>
-          </div>
-        </section>
+        
 
         <section id="observation-suggestions" class="observation-suggestions" hidden aria-live="polite">
           <header class="observation-suggestions__header">
