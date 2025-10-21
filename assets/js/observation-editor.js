@@ -318,6 +318,7 @@ function buildDefaultGuidelineContent() {
   const fragment = document.createDocumentFragment();
   const intro = document.createElement('p');
   intro.className = 'observation-editor__recipe-intro';
+  intro.id = 'observation-guidelines-summary';
   intro.textContent = OBSERVATION_GUIDELINE_INTRO;
   fragment.appendChild(intro);
 
@@ -349,6 +350,7 @@ function buildDetectionGuidelineContent(groups) {
 
   const intro = document.createElement('p');
   intro.className = 'observation-editor__recipe-intro observation-editor__recipe-intro--detected';
+  intro.id = 'observation-guidelines-summary';
   intro.textContent = summary
     ? `We spotted ${summary} in your observation. Jump straight to ${pronoun}?`
     : 'We spotted language from outside the observation. Jump straight to them?';
