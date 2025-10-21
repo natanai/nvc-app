@@ -1077,6 +1077,8 @@ button.site-nav__magnet {
       box-shadow: none;
       background: color-mix(in srgb, var(--chip-bg) 28%, #ffffff 72%);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     [data-observation-guide][data-overlay-state='overlay'] > summary {
@@ -1088,19 +1090,21 @@ button.site-nav__magnet {
       flex-direction: column;
       gap: clamp(0.85rem, 3.5vw, 1.4rem);
       height: 100%;
+      min-height: 0;
       padding: clamp(1.1rem, 5vw, 1.9rem);
       background: color-mix(in srgb, #ffffff 96%, transparent);
       overflow: hidden;
     }
 
     [data-observation-guide][data-overlay-state='overlay'] .observation-guide__card {
-      flex: 1;
-      min-height: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
       overflow-y: auto;
       padding: clamp(1.1rem, 5vw, 1.9rem);
       border-radius: var(--radius-3xl);
       box-shadow: 0 28px 48px color-mix(in srgb, var(--outline) 18%, transparent);
       background: color-mix(in srgb, #ffffff 98%, transparent);
+      -webkit-overflow-scrolling: touch;
     }
 
     [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button {
