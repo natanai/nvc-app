@@ -1834,7 +1834,22 @@ button.site-nav__magnet {
     max-width: 65ch;
   }
 
-</style>
+  </style>
+  <style>
+    .obs-editor { max-width: 840px; margin: 24px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .obs-editor textarea { width: 100%; font-size: 16px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; }
+    .obs-editor .bar { display:flex; align-items:center; gap:12px; margin:12px 0; }
+    .obs-editor .check { width: 16px; height: 16px; border-radius: 50%; display:inline-block; }
+    .obs-editor .check.ok { background:#22c55e; }
+    .obs-editor .check.no { background:#ef4444; }
+    .obs-editor button { padding:10px 14px; border-radius:8px; border:0; background:#111827; color:#fff; font-weight:600; }
+    .obs-editor button[disabled] { background:#9ca3af; }
+    .obs-editor .hints { color:#6b7280; font-size:14px; }
+    .obs-editor .panel { border:1px solid #e5e7eb; border-radius:8px; padding:12px; margin-top:12px; }
+    .obs-editor .pill { display:inline-block; padding:4px 8px; margin:4px; border-radius:999px; background:#f3f4f6; }
+    .obs-editor .muted { color:#6b7280; font-size:13px; }
+    .obs-editor .small { font-size: 12px; }
+  </style>
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
   </head>
@@ -2270,224 +2285,26 @@ button.site-nav__magnet {
         </ol>
       </nav>
       <main id="main" class="page observations-page" role="main">
-        <header class="page-header observations-header">
-          <h1 class="page-title">Start with an Observation</h1>
-          <p class="page-description observations-description">Choose the guided wizard to surface feelings and needs from observational cues, or switch to free-text if you already have wording you want to lint.</p>
-        </header>
-
-        <section class="observation-collage" aria-label="Observation idea preview">
-          <div class="observation-collage__preview">
-            <div class="scrap-paper" data-preview-board>
-              <p class="scrap-paper__title">Observation idea</p>
-              <div class="scrap-paper__body preview preview--scrap" id="obs-example" role="status" aria-live="polite">Select a pattern below to start building your observation.</div>
-            </div>
-            <p class="scrap-note">Keep your wording to what a camera could capture. As you click magnets below, this scrap fills in with a clear observational sentence.</p>
-            <div class="observation-collage__cta">
-              <p class="hint observation-panel__cta-text">Prefer to start from a faux feeling like “ignored” or “disrespected”?</p>
-              <div class="support-actions support-actions--muted">
-                <a class="support-button support-button--ghost" href="../faux-feelings/">Browse faux feelings</a>
-              </div>
-            </div>
+        <section id="obs-editor-root" class="obs-editor">
+          <h1>Observation Builder</h1>
+          <p class="muted">Type what you saw/heard/read/received. A green check appears when a valid observation is detected. Submit to see suggested feelings and needs.</p>
+          <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
+          <div class="bar">
+            <span id="check" class="check no" title="Not ready"></span>
+            <span id="why" class="hints">Not ready — add something you saw/heard, a quoted phrase, or who did what.</span>
+            <button id="submit" disabled>Submit</button>
           </div>
-          <div
-            class="observation-panel"
-            id="observation-panel"
-            role="region"
-            aria-labelledby="observation-panel-title"
-            aria-label="Suggested feelings and needs"
-            tabindex="-1"
-          >
-            <header class="observation-panel__mobile-header">
-              <div class="observation-panel__mobile-handle" aria-hidden="true"></div>
-              <p class="observation-panel__mobile-title" id="observation-panel-title">Feelings &amp; needs suggestions</p>
-              <button
-                class="observation-panel__close"
-                type="button"
-                data-observation-panel-close
-              >
-                <span class="visually-hidden">Close suggestions</span>
-                <span aria-hidden="true">✕</span>
-              </button>
-            </header>
-            <p class="observation-panel__empty" id="observation-panel-empty">Pick a pattern to surface feelings and needs magnets that might support your wording.</p>
-            <div class="observation-panel__content" id="observation-panel-content" hidden>
-              <div class="observation-panel__group observation-panel__group--magnet">
-                <p class="observation-panel__heading">Feelings to explore</p>
-                <div class="magnet-board-wrapper observation-panel__magnet-wrapper">
-                  <div class="magnet-board observation-panel__magnet-board observation-panel__magnet-board--feelings">
-                    <div
-                      class="observation-panel__magnet-grid"
-                      id="suggest-feelings"
-                      role="list"
-                      aria-label="Suggested feelings"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div class="observation-panel__group observation-panel__group--magnet">
-                <p class="observation-panel__heading">Needs to consider</p>
-                <div class="magnet-board-wrapper observation-panel__magnet-wrapper">
-                  <div class="magnet-board observation-panel__magnet-board observation-panel__magnet-board--needs">
-                    <div
-                      class="observation-panel__magnet-grid"
-                      id="suggest-needs"
-                      role="list"
-                      aria-label="Suggested needs"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <p class="hint observation-panel__why" id="why"></p>
-            </div>
+          <div id="suggestions" class="panel" style="display:none">
+            <div><strong>Possible feelings</strong></div>
+            <div id="feelings"></div>
+            <div style="margin-top:8px"><strong>Possible needs</strong></div>
+            <div id="needs"></div>
+            <div class="small muted" id="matchedCues"></div>
           </div>
         </section>
-
-        <div class="observation-panel__scrim" data-observation-panel-scrim hidden aria-hidden="true"></div>
-
-        <div class="observations-body">
-          <button
-            class="observation-panel__toggle"
-            type="button"
-            data-observation-panel-toggle
-            aria-controls="observation-panel"
-            aria-expanded="false"
-          >
-            <span class="observation-panel__toggle-icon" aria-hidden="true">✨</span>
-            <span class="observation-panel__toggle-label">Feelings &amp; needs suggestions</span>
-            <span class="observation-panel__toggle-meta">
-              <span class="observation-panel__toggle-badge" data-observation-panel-badge hidden aria-hidden="true">New</span>
-              <span class="observation-panel__toggle-status" data-observation-panel-status>Hidden</span>
-            </span>
-            <span class="visually-hidden" aria-live="polite" data-observation-panel-announcer></span>
-          </button>
-          <nav class="tab-nav" role="tablist">
-            <button id="tab-guided-button" class="tab-button tab-button--active" role="tab" aria-selected="true" aria-controls="tab-guided" data-tab-target="guided">Guided</button>
-            <button id="tab-free-button" class="tab-button" role="tab" aria-selected="false" aria-controls="tab-free" data-tab-target="free">Free-text</button>
-          </nav>
-
-          <section id="tab-guided" class="tab-panel" role="tabpanel" aria-labelledby="tab-guided-button">
-            <div class="grid">
-              <div class="card">
-                <div class="h2">1. What best describes the situation?</div>
-                <p class="hint">Pick a category to see matching patterns.</p>
-                <input id="search" type="search" placeholder="Search patterns (e.g., pronouns, cancel, privacy)…" />
-                <p class="hint observation-search__faux" id="search-faux-feeling-hint" hidden></p>
-                <div class="observation-magnet-shelf observation-magnet-shelf--families">
-                  <div id="family-picker" class="observation-family-picker">
-                    <button
-                      id="family-toggle"
-                      class="observation-family-picker__button"
-                      type="button"
-                      aria-haspopup="listbox"
-                      aria-expanded="false"
-                    >
-                      <span id="family-toggle-label">Browse categories</span>
-                      <span class="observation-family-picker__chevron" aria-hidden="true">▾</span>
-                    </button>
-                    <div
-                      id="family-menu"
-                      class="observation-family-picker__menu"
-                      role="listbox"
-                      aria-labelledby="family-toggle"
-                      hidden
-                    >
-                      <div id="families" class="observation-family-picker__options" role="presentation"></div>
-                    </div>
-                    <p id="family-empty" class="hint observation-family-picker__empty" hidden></p>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="h2">2. Which pattern fits?</div>
-                <p class="hint">Every option below expands into an observation example plus feelings &amp; needs.</p>
-                <div class="observation-magnet-shelf observation-magnet-shelf--patterns">
-                  <div
-                    id="patterns"
-                    class="observation-magnet-grid observation-magnet-grid--patterns"
-                    role="group"
-                    aria-label="Observation patterns"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="tab-free" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-free-button">
-            <section class="grid">
-              <div class="card">
-                <div class="label">When/where? <span class="hint">(optional)</span></div>
-                <input id="obs-when" placeholder="Yesterday at 3:10 pm, in the meeting…"/>
-
-                <div class="observation-cue-builder">
-                  <div class="observation-cue-builder__label">Cues:</div>
-                  <div
-                    id="obs-cue-suggestions"
-                    class="chip-group observation-cue-builder__chips"
-                    role="list"
-                    aria-label="Observation cue phrases"
-                    aria-live="polite"
-                  ></div>
-                </div>
-
-                <div class="label">What was seen/heard? <span class="hint">(required)</span></div>
-                <textarea
-                  id="obs-what"
-                  placeholder="While I was speaking, Casey said “This is a waste of time” and also began speaking at a louder volume."
-                ></textarea>
-
-                <div class="observation-annotation" aria-live="polite">
-                  <div class="observation-annotation__label">Language check</div>
-                  <div id="obs-what-annotated" class="observation-annotation__preview"></div>
-                  <p
-                    id="obs-what-annotation-msg"
-                    class="observation-annotation__message"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    Start typing to surface highlights.
-                  </p>
-                </div>
-
-                <div class="label">Expectation gap <span class="hint">(optional)</span></div>
-                <input id="obs-gap" placeholder="…that they’d wait and hear me out"/>
-
-                <div id="free-lint-box" class="banner hidden">
-                  <div id="free-lint-msg" role="status" aria-live="polite"></div>
-                  <button id="rewrite-btn">Help me rewrite</button>
-                </div>
-
-                <p class="hint">Your observation idea updates in the preview panel above.</p>
-              </div>
-
-              <div class="card">
-                <p class="hint observation-free__suggest-hint">Feelings &amp; needs suggestions refresh in the shared panel above.</p>
-
-                <div class="h2" style="margin-top:.75rem">Faux feelings to explore</div>
-                <div id="free-suggest-faux-feelings"></div>
-
-                <div class="hint" id="free-suggest-faux-feelings-hint" style="margin-top:.25rem">Add more detail to surface related faux feelings.</div>
-
-                <hr style="margin:1rem 0;opacity:.25"/>
-              </div>
-            </section>
-
-            <section class="card" style="margin-top:1rem">
-              <div class="h2">Observation idea starters (click to copy)</div>
-              <ul class="example-list">
-                <li onclick="window.setObservationExample('This week','Two messages were read (check marks visible) with no reply for 48 hours.');">No reply after read receipts for 48 hours</li>
-                <li onclick="window.setObservationExample('In today’s meeting','While I was speaking, they also began speaking and my sentence stopped mid-word.');">They also began speaking while I was mid-sentence</li>
-                <li onclick="window.setObservationExample('Yesterday','They changed the plan and said, “You’ll do it this way,” without asking.');">Plan changed without asking</li>
-              </ul>
-            </section>
-          </section>
-        </div>
       </main>
 
     </div>
-    <script src="../assets/js/journal/store.js" type="module"></script>
-    <script src="../scripts/inventory.js" defer></script>
-    <script src="../scripts/magnets.js" type="module"></script>
-    <script type="module" src="../assets/js/observations-wizard.js"></script>
-    <script type="module" src="../assets/js/observations.js"></script>
+    <script type="module" src="/next/observations-page.js"></script>
   </body>
 </html>
