@@ -18,3 +18,6 @@ When I joined at the scheduled time, the meeting had already started.
 They spoke over me while I was talking.
 They canceled 15 minutes before the meeting.
 They left the video call without a word.
+The meeting ran past the scheduled end without anyone checking.
+I asked a question and they changed the subject.
+I shared the update and there was silence afterward.
