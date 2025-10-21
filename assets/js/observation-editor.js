@@ -16,6 +16,13 @@ const state = {
   fallback: createFallbackState(),
 };
 
+const SUGGESTION_BASE_PATHS = {
+  feeling: '../feelings/',
+  need: '../needs/',
+};
+
+const SUGGESTION_SLUG_PATTERN = /^[a-z0-9-]+$/i;
+
 document.addEventListener('DOMContentLoaded', () => {
   bind();
   renderPanels();
@@ -285,13 +292,23 @@ function renderSuggestions() {
 
 function populateChipList(container, emptyNode, items) {
   container.innerHTML = '';
-  if (Array.isArray(items) && items.length) {
-    items.forEach(item => {
-      const chip = document.createElement('span');
-      chip.className = 'observation-chip';
-      chip.setAttribute('role', 'listitem');
-      chip.textContent = item;
-      container.appendChild(chip);
+  const entries = Array.isArray(items) ? items.map(normalizeSuggestionItem).filter(Boolean) : [];
+  if (entries.length) {
+    entries.forEach(entry => {
+      const element = entry.href ? document.createElement('a') : document.createElement('span');
+      element.className = 'observation-chip';
+      element.setAttribute('role', 'listitem');
+      element.textContent = entry.title;
+      if (entry.href) {
+        element.href = entry.href;
+      }
+      if (entry.slug) {
+        element.dataset.suggestionSlug = entry.slug;
+      }
+      if (entry.kind) {
+        element.dataset.suggestionKind = entry.kind;
+      }
+      container.appendChild(element);
     });
     if (emptyNode) {
       emptyNode.setAttribute('hidden', 'hidden');
@@ -299,6 +316,24 @@ function populateChipList(container, emptyNode, items) {
   } else if (emptyNode) {
     emptyNode.removeAttribute('hidden');
   }
+}
+
+function normalizeSuggestionItem(item) {
+  if (!item) {
+    return null;
+  }
+  if (typeof item === 'string') {
+    const title = item.trim();
+    return title ? { title, href: '', slug: '', kind: '' } : null;
+  }
+  const title = typeof item.title === 'string' ? item.title.trim() : '';
+  if (!title) {
+    return null;
+  }
+  const href = typeof item.href === 'string' ? item.href : '';
+  const slug = typeof item.slug === 'string' ? item.slug : '';
+  const kind = typeof item.kind === 'string' ? item.kind : '';
+  return { title, href, slug, kind };
 }
 
 function buildIssueList(lint) {
@@ -346,15 +381,56 @@ function formatQuotedList(values) {
 
 function buildSuggestions(text) {
   if (!text) {
-    return { feelings: [], needs: [], cues: [] };
+    return createEmptySuggestionSet();
   }
   const suggestion = suggestFromObservation(text, state.cues || [], 8);
-  const feelings = (suggestion.feelings || []).map(resolveFeelingTitle).filter(Boolean);
-  const needs = (suggestion.needs || []).map(resolveNeedTitle).filter(Boolean);
   return {
-    feelings,
-    needs,
+    feelings: buildSuggestionEntries(suggestion.feelings, 'feeling'),
+    needs: buildSuggestionEntries(suggestion.needs, 'need'),
     cues: suggestion.why || [],
+  };
+}
+
+function buildSuggestionEntries(slugs, kind) {
+  if (!Array.isArray(slugs)) {
+    return [];
+  }
+  const seen = new Set();
+  const entries = [];
+  slugs.forEach(slug => {
+    const entry = createSuggestionEntry(kind, slug);
+    if (!entry) {
+      return;
+    }
+    const dedupeKey = entry.slug || entry.title;
+    if (seen.has(dedupeKey)) {
+      return;
+    }
+    seen.add(dedupeKey);
+    entries.push(entry);
+  });
+  return entries;
+}
+
+function createSuggestionEntry(kind, slug) {
+  const trimmed = typeof slug === 'string' ? slug.trim() : '';
+  if (!trimmed || !SUGGESTION_SLUG_PATTERN.test(trimmed)) {
+    return null;
+  }
+  const title = kind === 'feeling' ? resolveFeelingTitle(trimmed) : resolveNeedTitle(trimmed);
+  if (!title) {
+    return null;
+  }
+  const base = SUGGESTION_BASE_PATHS[kind];
+  if (!base) {
+    return null;
+  }
+  const encodedSlug = encodeURIComponent(trimmed);
+  return {
+    slug: trimmed,
+    title,
+    href: `${base}${encodedSlug}/`,
+    kind,
   };
 }
 
@@ -546,8 +622,8 @@ function computeFallbackQueue(text) {
 
   const candidates = state.cues
     .map(cue => {
-      const feelings = (cue.feelings || []).map(resolveFeelingTitle).filter(Boolean);
-      const needs = (cue.needs || []).map(resolveNeedTitle).filter(Boolean);
+      const feelings = buildSuggestionEntries(cue.feelings, 'feeling');
+      const needs = buildSuggestionEntries(cue.needs, 'need');
       if (!feelings.length && !needs.length) {
         return null;
       }
@@ -580,7 +656,7 @@ function computeFallbackQueue(text) {
   const seen = new Set();
   const results = [];
   for (const entry of pool) {
-    const key = `${entry.feelings.join('|')}|${entry.needs.join('|')}`;
+    const key = `${entry.feelings.map(item => item.slug || item.title).join('|')}|${entry.needs.map(item => item.slug || item.title).join('|')}`;
     if (!key.trim()) {
       continue;
     }
@@ -588,7 +664,7 @@ function computeFallbackQueue(text) {
       continue;
     }
     seen.add(key);
-    results.push({ feelings: entry.feelings, needs: entry.needs });
+    results.push({ feelings: entry.feelings, needs: entry.needs, cues: [] });
     if (results.length >= 6) {
       break;
     }
