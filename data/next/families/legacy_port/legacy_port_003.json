@@ -1,0 +1,3014 @@
+{
+  "family": "legacy_port",
+  "defaults": {
+    "feelings": [],
+    "needs": []
+  },
+  "cues": [
+    {
+      "id": "questions-not-logged_legacy_next",
+      "patterns": [
+        "\\bchat\\s+questions\\s+missing\\s+from\\s+minutes\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "lonely",
+        "frustrated"
+      ],
+      "needs": [
+        "acknowledgement",
+        "clarity",
+        "respect",
+        "to-be-heard"
+      ],
+      "example": "My two questions were not included in the shared minutes."
+    },
+    {
+      "id": "quiet-hours-music_legacy_next",
+      "patterns": [
+        "\\bloud\\s+music\\s+during\\s+quiet\\s+hours\\b"
+      ],
+      "feelings": [
+        "tired",
+        "irritated",
+        "overwhelmed",
+        "anxious"
+      ],
+      "needs": [
+        "rest",
+        "consideration",
+        "peace",
+        "respect"
+      ],
+      "example": "At 11:30 p.m. music was playing loudly through the shared wall."
+    },
+    {
+      "id": "raised-voice_legacy_next",
+      "patterns": [
+        "\\byelled\\b",
+        "\\bshouted\\b",
+        "\\bdoor\\s+slammed\\b",
+        "\\braised\\s+voice\\b",
+        "\\bsnapped\\s+at\\s+me\\b",
+        "\\bvoice\\s+got\\s+louder\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "safety",
+        "calm",
+        "respect",
+        "love-caring"
+      ],
+      "example": "Their voice got louder and the door closed loudly during our talk."
+    },
+    {
+      "id": "received-thanks_legacy_next",
+      "patterns": [
+        "\\bsaid\\s+thank\\s+you\\s+sincerely\\b",
+        "\\bexpressed\\s+gratitude\\s+to\\s+me\\b"
+      ],
+      "needs": [
+        "appreciation",
+        "acknowledgement",
+        "to-be-seen",
+        "connection"
+      ],
+      "example": "After my help, they looked me in the eye and said thank you."
+    },
+    {
+      "id": "recording-shared-public_legacy_next",
+      "patterns": [
+        "\\bsync\\s+video\\s+shared\\s+broadly\\b",
+        "\\bhuddle\\s+video\\s+shared\\s+broadly\\b",
+        "\\bmeeting\\s+video\\s+shared\\s+broadly\\b",
+        "\\bstandup\\s+video\\s+shared\\s+broadly\\b",
+        "\\bdoc\\s+to\\s+recording\\s+made\\s+public\\b",
+        "\\blink\\s+to\\s+recording\\s+made\\s+public\\b",
+        "\\bfile\\s+to\\s+recording\\s+made\\s+public\\b",
+        "\\bsheet\\s+to\\s+recording\\s+made\\s+public\\b",
+        "\\bdocument\\s+to\\s+recording\\s+made\\s+public\\b"
+      ],
+      "feelings": [
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "trust",
+        "clarity",
+        "respect"
+      ],
+      "example": "The recording link was posted to a public channel."
+    },
+    {
+      "id": "referee-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from referee."
+    },
+    {
+      "id": "referee-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+referee\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "referee canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "referee-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "referee said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "referee-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+referee\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "referee posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "referee-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from referee"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "referee said I could come only if I handled the driving."
+    },
+    {
+      "id": "referee-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "referee muted me while I was speaking."
+    },
+    {
+      "id": "referee-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+referee\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from referee included a fee that wasn't in the quote."
+    },
+    {
+      "id": "referee-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "referee opened my door and stepped in without knocking."
+    },
+    {
+      "id": "registrar-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from registrar."
+    },
+    {
+      "id": "registrar-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+registrar\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "registrar canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "registrar-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "registrar said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "registrar-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+registrar\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "registrar posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "registrar-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from registrar"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "registrar said I could come only if I handled the driving."
+    },
+    {
+      "id": "registrar-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "registrar muted me while I was speaking."
+    },
+    {
+      "id": "registrar-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+registrar\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from registrar included a fee that wasn't in the quote."
+    },
+    {
+      "id": "registrar-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "registrar opened my door and stepped in without knocking."
+    },
+    {
+      "id": "repeated-cancellations_legacy_next",
+      "patterns": [
+        "\\bkeeps\\s+canceling\\b",
+        "\\bcanceled\\s+repeatedly\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "sad",
+        "frustrated",
+        "hurt"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "They canceled three weekends in a row."
+    },
+    {
+      "id": "reply-late_legacy_next",
+      "patterns": [
+        "\\breply\\s+hours\\s+later\\b",
+        "\\bresponse\\s+after\\s+days\\b",
+        "\\btook\\s+days\\s+to\\s+reply\\b"
+      ],
+      "feelings": [
+        "anxious",
+        "hurt",
+        "confused"
+      ],
+      "needs": [
+        "to-be-seen",
+        "connection",
+        "belonging",
+        "consideration"
+      ],
+      "example": "They replied two days after I asked a time‑sensitive question."
+    },
+    {
+      "id": "resources-removed_legacy_next",
+      "patterns": [
+        "\\bbroken\\s+doc\\b",
+        "\\bbroken\\s+link\\b",
+        "\\bbroken\\s+deck\\b",
+        "\\bbroken\\s+file\\b",
+        "\\bbroken\\s+sheet\\b",
+        "\\bbroken\\s+folder\\b",
+        "\\bdoc\\s+permissions\\s+removed\\b",
+        "\\bfile\\s+permissions\\s+removed\\b",
+        "\\blink\\s+permissions\\s+removed\\b",
+        "\\bsheet\\s+permissions\\s+removed\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious",
+        "frustrated",
+        "powerless"
+      ],
+      "needs": [
+        "clarity",
+        "support",
+        "respect"
+      ],
+      "example": "The shared folder I use every day suddenly denied my access."
+    },
+    {
+      "id": "results-portal-no-update_legacy_next",
+      "patterns": [
+        "\\bresults\\s+missing\\s+in\\s+portal\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "predictability",
+        "support",
+        "trust"
+      ],
+      "example": "The portal still shows 'pending' two weeks later."
+    },
+    {
+      "id": "ride-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bride\\s+canceled\\s+last\\s+minute\\b",
+        "\\bdriver\\s+canceled\\s+at\\s+pickup\\b",
+        "\\btrip\\s+canceled\\s+as\\s+i\\s+came\\b",
+        "\\btrip\\s+canceled\\s+as\\s+I\\s+arrived\\b",
+        "\\btrip\\s+canceled\\s+as\\s+i\\s+showed\\s+up\\b"
+      ],
+      "feelings": [
+        "anxious",
+        "frustrated",
+        "tired"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "predictability",
+        "consideration"
+      ],
+      "example": "The ride canceled when I reached the curb."
+    },
+    {
+      "id": "ride-waited-for-me_legacy_next",
+      "patterns": [
+        "\\bdriver\\s+waited\\s+for\\s+me\\b",
+        "\\bwaited\\s+instead\\s+of\\s+canceling\\b"
+      ],
+      "needs": [
+        "consideration",
+        "support",
+        "reliability"
+      ],
+      "example": "They waited five minutes instead of canceling instantly."
+    },
+    {
+      "id": "roommate-accused-lying_legacy_next",
+      "patterns": [
+        "\\bsaid\\s+I\\s+lied\\b",
+        "\\baccused\\s+me\\s+of\\s+lying\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My roommate they said I was lying about the timeline."
+    },
+    {
+      "id": "roommate-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from roommate."
+    },
+    {
+      "id": "roommate-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+roommate\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "roommate canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "roommate-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "roommate said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "roommate-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+roommate\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "roommate posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "roommate-broke-promise_legacy_next",
+      "patterns": [
+        "\\bfailed\\s+to\\s+follow\\s+through\\b",
+        "\\bbroke\\s+a\\s+promise\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "sad",
+        "frustrated",
+        "hurt"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My roommate they didn't do the thing they promised yesterday."
+    },
+    {
+      "id": "roommate-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from roommate"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "roommate said I could come only if I handled the driving."
+    },
+    {
+      "id": "roommate-humiliated_legacy_next",
+      "patterns": [
+        "\\bhumiliated\\s+me\\s+in\\s+public\\b",
+        "\\bexposed\\s+me\\s+in\\s+front\\s+of\\s+people\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "inclusion",
+        "belonging",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "My roommate they pointed out a mistake loudly in front of others."
+    },
+    {
+      "id": "roommate-lied_legacy_next",
+      "patterns": [
+        "\\blied\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My roommate i learned the story they told me wasn't true."
+    },
+    {
+      "id": "roommate-made-fun_legacy_next",
+      "patterns": [
+        "\\bmocked\\s+me\\b",
+        "\\bridiculed\\s+me\\b",
+        "\\bmade\\s+fun\\s+of\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My roommate they mimicked my voice to get laughs."
+    },
+    {
+      "id": "roommate-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "roommate muted me while I was speaking."
+    },
+    {
+      "id": "roommate-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+roommate\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from roommate included a fee that wasn't in the quote."
+    },
+    {
+      "id": "roommate-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "roommate opened my door and stepped in without knocking."
+    },
+    {
+      "id": "roommate-silent-treatment_legacy_next",
+      "patterns": [
+        "\\brefused\\s+to\\s+speak\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "sad",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "support",
+        "consideration",
+        "connection"
+      ],
+      "example": "My roommate they wouldn't answer my texts or talk to me."
+    },
+    {
+      "id": "roommate-talked-over_legacy_next",
+      "patterns": [
+        "\\bcut\\s+me\\s+off\\b",
+        "\\bspoke\\s+over\\s+me\\b",
+        "\\btalked\\s+over\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My roommate they started speaking while I was mid‑sentence."
+    },
+    {
+      "id": "roommate-yelled_legacy_next",
+      "patterns": [
+        "\\byelled\\s+at\\s+me\\b",
+        "\\bshouted\\s+at\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My roommate their voice got louder while speaking to me."
+    },
+    {
+      "id": "rumor-spread_legacy_next",
+      "patterns": [
+        "[’']I heard you[’']",
+        "\\bshared\\s+unverified\\s+story\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "angry",
+        "humiliated"
+      ],
+      "needs": [
+        "honesty",
+        "recognition",
+        "honor",
+        "understanding"
+      ],
+      "example": "They repeated a story about me to the team."
+    },
+    {
+      "id": "sarcasm_legacy_next",
+      "patterns": [
+        "\\bimitated\\s+my\\s+voice\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "angry",
+        "tense",
+        "embarrassed"
+      ],
+      "needs": [
+        "respect",
+        "honor",
+        "love-caring",
+        "consideration"
+      ],
+      "example": "They imitated my voice when I asked a question."
+    },
+    {
+      "id": "screen-share-not-prepped_legacy_next",
+      "patterns": [
+        "\\bpersonal\\s+info\\s+shown\\s+on\\s+share\\b",
+        "\\bscreen\\s+shared\\s+with\\s+private\\s+tabs\\b"
+      ],
+      "feelings": [
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "safety",
+        "respect",
+        "consideration"
+      ],
+      "example": "Personal messages popped up during screen share."
+    },
+    {
+      "id": "screen-time-exceeded_legacy_next",
+      "patterns": [
+        "\\bagreed\\s+limit\\s+exceeded\\b",
+        "\\bmore\\s+TV\\s+than\\s+agreed\\b"
+      ],
+      "feelings": [
+        "tense",
+        "frustrated",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "predictability",
+        "respect"
+      ],
+      "example": "The agreed 30‑minute limit became 2 hours."
+    },
+    {
+      "id": "screenshots-shared_legacy_next",
+      "patterns": [
+        "screen‑grab posted without consent",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\b",
+        "\\bphoto\\s+of\\s+our\\s+conversation\\s+circulated\\b",
+        "\\bimage\\s+of\\s+our\\s+conversation\\s+circulated\\b",
+        "\\bpicture\\s+of\\s+our\\s+conversation\\s+circulated\\b"
+      ],
+      "feelings": [
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "A screenshot of our conversation was posted in a group chat."
+    },
+    {
+      "id": "seat-reassigned-last-minute_legacy_next",
+      "patterns": [
+        "\\bseat\\s+changed\\s+last\\s+minute\\b",
+        "\\bassigned\\s+seat\\s+given\\s+away\\b",
+        "\\bticket\\s+seat\\s+reassigned\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "anxious",
+        "frustrated"
+      ],
+      "needs": [
+        "predictability",
+        "consideration",
+        "respect",
+        "choice"
+      ],
+      "example": "At the event, my assigned seat had been given to someone else without notice."
+    },
+    {
+      "id": "seat-taken_legacy_next",
+      "patterns": [
+        "\\breserved\\s+seat\\s+occupied\\b",
+        "\\bseat\\s+taken\\s+though\\s+reserved\\b"
+      ],
+      "feelings": [
+        "irritated",
+        "frustrated",
+        "disappointed",
+        "tense"
+      ],
+      "needs": [
+        "fairness",
+        "order",
+        "respect",
+        "predictability"
+      ],
+      "example": "My reserved seat was occupied and no alternative provided."
+    },
+    {
+      "id": "seen-no-reply-variant_legacy_next",
+      "patterns": [
+        "\\bdm\\s+marked\\s+as\\s+read\\s+without\\s+response\\b",
+        "\\btext\\s+marked\\s+as\\s+read\\s+without\\s+response\\b",
+        "\\bchat\\s+marked\\s+as\\s+read\\s+without\\s+response\\b",
+        "\\bemail\\s+marked\\s+as\\s+read\\s+without\\s+response\\b",
+        "\\bmessage\\s+marked\\s+as\\s+read\\s+without\\s+response\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "sad",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "to-be-seen",
+        "connection",
+        "belonging",
+        "consideration"
+      ],
+      "example": "Message showed as 'seen' yesterday; no reply since then."
+    },
+    {
+      "id": "server-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from server."
+    },
+    {
+      "id": "server-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+server\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "server canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "server-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "server said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "server-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+server\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "server posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "server-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from server"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "server said I could come only if I handled the driving."
+    },
+    {
+      "id": "server-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "server muted me while I was speaking."
+    },
+    {
+      "id": "server-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+server\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from server included a fee that wasn't in the quote."
+    },
+    {
+      "id": "server-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "server opened my door and stepped in without knocking."
+    },
+    {
+      "id": "shared-sensitive-photo_legacy_next",
+      "patterns": [
+        "\\bshared\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bshared\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+our\\s+photo\\s+without\\s+consent\\b",
+        "\\bposted\\s+our\\s+image\\s+without\\s+consent\\b",
+        "\\bshared\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bposted\\s+our\\s+picture\\s+without\\s+consent\\b",
+        "\\buploaded\\s+photo\\s+of\\s+me\\s+without\\s+checking\\b",
+        "\\buploaded\\s+image\\s+of\\s+me\\s+without\\s+checking\\b",
+        "\\buploaded\\s+picture\\s+of\\s+me\\s+without\\s+checking\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "angry"
+      ],
+      "needs": [
+        "privacy",
+        "respect",
+        "autonomy",
+        "trust"
+      ],
+      "example": "A photo of me at the event was posted online without anyone asking first."
+    },
+    {
+      "id": "sibling-accused-lying_legacy_next",
+      "patterns": [
+        "\\bsaid\\s+I\\s+lied\\b",
+        "\\baccused\\s+me\\s+of\\s+lying\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My sibling they said I was lying about the timeline."
+    },
+    {
+      "id": "sibling-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from sibling."
+    },
+    {
+      "id": "sibling-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+sibling\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "sibling canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "sibling-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "sibling said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "sibling-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+sibling\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "sibling posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "sibling-broke-promise_legacy_next",
+      "patterns": [
+        "\\bfailed\\s+to\\s+follow\\s+through\\b",
+        "\\bbroke\\s+a\\s+promise\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "sad",
+        "frustrated",
+        "hurt"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My sibling they didn't do the thing they promised yesterday."
+    },
+    {
+      "id": "sibling-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from sibling"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "sibling said I could come only if I handled the driving."
+    },
+    {
+      "id": "sibling-humiliated_legacy_next",
+      "patterns": [
+        "\\bhumiliated\\s+me\\s+in\\s+public\\b",
+        "\\bexposed\\s+me\\s+in\\s+front\\s+of\\s+people\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "inclusion",
+        "belonging",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "My sibling they pointed out a mistake loudly in front of others."
+    },
+    {
+      "id": "sibling-lied_legacy_next",
+      "patterns": [
+        "\\blied\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My sibling i learned the story they told me wasn't true."
+    },
+    {
+      "id": "sibling-made-fun_legacy_next",
+      "patterns": [
+        "\\bmocked\\s+me\\b",
+        "\\bridiculed\\s+me\\b",
+        "\\bmade\\s+fun\\s+of\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My sibling they mimicked my voice to get laughs."
+    },
+    {
+      "id": "sibling-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "sibling muted me while I was speaking."
+    },
+    {
+      "id": "sibling-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+sibling\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from sibling included a fee that wasn't in the quote."
+    },
+    {
+      "id": "sibling-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "sibling opened my door and stepped in without knocking."
+    },
+    {
+      "id": "sibling-silent-treatment_legacy_next",
+      "patterns": [
+        "\\brefused\\s+to\\s+speak\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "sad",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "support",
+        "consideration",
+        "connection"
+      ],
+      "example": "My sibling they wouldn't answer my texts or talk to me."
+    },
+    {
+      "id": "sibling-talked-over_legacy_next",
+      "patterns": [
+        "\\bcut\\s+me\\s+off\\b",
+        "\\bspoke\\s+over\\s+me\\b",
+        "\\btalked\\s+over\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My sibling they started speaking while I was mid‑sentence."
+    },
+    {
+      "id": "sibling-yelled_legacy_next",
+      "patterns": [
+        "\\byelled\\s+at\\s+me\\b",
+        "\\bshouted\\s+at\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My sibling their voice got louder while speaking to me."
+    },
+    {
+      "id": "side-conversation_legacy_next",
+      "patterns": [
+        "\\bseparate\\s+chat\\s+during\\s+discussion\\b",
+        "\\btwo\\s+people\\s+held\\s+a\\s+side\\s+conversation\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "tense",
+        "lonely"
+      ],
+      "needs": [
+        "consideration",
+        "respect",
+        "to-be-heard"
+      ],
+      "example": "While I presented, two colleagues started a quiet conversation with each other."
+    },
+    {
+      "id": "slide-skipped_legacy_next",
+      "patterns": [
+        "\\bskipped\\s+my\\s+slide\\b",
+        "\\bjumped\\s+over\\s+my\\s+update\\b",
+        "\\bmoved\\s+past\\s+my\\s+section\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "frustrated"
+      ],
+      "needs": [
+        "acknowledgement",
+        "respect",
+        "to-be-heard",
+        "inclusion"
+      ],
+      "example": "During the deck review, they scrolled past my slide without stopping or mentioning it."
+    },
+    {
+      "id": "smell-trigger_legacy_next",
+      "patterns": [
+        "\\bchemical\\s+smell\\s+from\\s+cleaner\\b",
+        "\\bscented\\s+candle\\s+in\\s+sync\\s+room\\b",
+        "\\bscented\\s+candle\\s+in\\s+huddle\\s+room\\b",
+        "\\bscented\\s+candle\\s+in\\s+standup\\s+room\\b",
+        "\\bscented\\s+candle\\s+in\\s+meeting\\s+room\\b",
+        "\\bstrong\\s+perfume\\s+in\\s+shared\\s+space\\b"
+      ],
+      "feelings": [
+        "overwhelmed",
+        "tense"
+      ],
+      "needs": [
+        "safety"
+      ],
+      "example": "The conference room had a heavy chemical cleaner smell."
+    },
+    {
+      "id": "smoked-indoors_legacy_next",
+      "patterns": [
+        "\\bsmoked\\s+indoors\\b",
+        "\\blit\\s+a\\s+cigarette\\s+inside\\b",
+        "\\bvape\\s+clouds\\s+inside\\s+shared\\s+space\\b"
+      ],
+      "feelings": [
+        "tense",
+        "irritated",
+        "overwhelmed"
+      ],
+      "needs": [
+        "respect",
+        "consideration"
+      ],
+      "example": "A cigarette was lit in the shared living room even though we agreed to keep smoke outside."
+    },
+    {
+      "id": "social-worker-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from social worker."
+    },
+    {
+      "id": "social-worker-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+social\\s+worker\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "social worker canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "social-worker-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "social worker said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "social-worker-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+social\\s+worker\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "social worker posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "social-worker-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from social worker"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "social worker said I could come only if I handled the driving."
+    },
+    {
+      "id": "social-worker-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "social worker muted me while I was speaking."
+    },
+    {
+      "id": "social-worker-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+social\\s+worker\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from social worker included a fee that wasn't in the quote."
+    },
+    {
+      "id": "social-worker-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "social worker opened my door and stepped in without knocking."
+    },
+    {
+      "id": "space-encroached_legacy_next",
+      "patterns": [
+        "\\bstood\\s+too\\s+close\\b",
+        "\\bstood\\s+very\\s+close\\b",
+        "didn[’']t give me space",
+        "\\bstepped\\s+into\\s+my\\s+space\\b",
+        "\\bkept\\s+standing\\s+too\\s+close\\b"
+      ],
+      "feelings": [
+        "tense",
+        "alarmed",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "safety",
+        "serenity"
+      ],
+      "example": "They stood close that our shoulders touched continuously."
+    },
+    {
+      "id": "special-date-forgotten_legacy_next",
+      "patterns": [
+        "\\bforgot\\s+anniversary\\b",
+        "\\bforgot\\s+special\\s+date\\b",
+        "\\bmissed\\s+important\\s+date\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "disappointed",
+        "lonely"
+      ],
+      "needs": [
+        "appreciation",
+        "acknowledgement",
+        "to-be-seen",
+        "connection"
+      ],
+      "example": "Our anniversary passed without any message or plan."
+    },
+    {
+      "id": "stonewalling_legacy_next",
+      "patterns": [
+        "\\brefused\\s+to\\s+engage\\b",
+        "\\bsilent\\s+during\\s+discussion\\b"
+      ],
+      "feelings": [
+        "frustrated",
+        "lonely",
+        "anxious",
+        "hurt"
+      ],
+      "needs": [
+        "participation",
+        "to-be-heard",
+        "peace",
+        "love-caring"
+      ],
+      "example": "They stayed silent and looked away when I asked a question."
+    },
+    {
+      "id": "stranger-kindness_legacy_next",
+      "patterns": [
+        "\\bstranger\\s+helped\\s+me\\b"
+      ],
+      "needs": [
+        "community",
+        "connection",
+        "appreciation"
+      ],
+      "example": "A stranger paid for my coffee."
+    },
+    {
+      "id": "supplies-not-replenished_legacy_next",
+      "patterns": [
+        "\\bprinter\\s+out\\s+of\\s+paper\\s+for\\s+days\\b"
+      ],
+      "feelings": [
+        "frustrated",
+        "tired",
+        "anxious"
+      ],
+      "needs": [
+        "support",
+        "reliability",
+        "order"
+      ],
+      "example": "The communal printer was empty for three days despite notes about it."
+    },
+    {
+      "id": "tagged-without-context_legacy_next",
+      "patterns": [
+        "\\btagged\\s+me\\s+without\\s+context\\b",
+        "\\btagged\\s+my\\s+name\\s+without\\s+explanation\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "consideration",
+        "respect",
+        "to-be-seen"
+      ],
+      "example": "I was @mentioned with no description or task."
+    },
+    {
+      "id": "teacher-accused-lying_legacy_next",
+      "patterns": [
+        "\\bsaid\\s+I\\s+lied\\b",
+        "\\baccused\\s+me\\s+of\\s+lying\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My teacher they said I was lying about the timeline."
+    },
+    {
+      "id": "teacher-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from teacher."
+    },
+    {
+      "id": "teacher-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+teacher\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "teacher canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "teacher-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "teacher said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "teacher-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+teacher\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "teacher posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "teacher-broke-promise_legacy_next",
+      "patterns": [
+        "\\bfailed\\s+to\\s+follow\\s+through\\b",
+        "\\bbroke\\s+a\\s+promise\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "disappointed",
+        "sad",
+        "frustrated",
+        "hurt"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My teacher they didn't do the thing they promised yesterday."
+    },
+    {
+      "id": "teacher-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from teacher"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "teacher said I could come only if I handled the driving."
+    },
+    {
+      "id": "teacher-humiliated_legacy_next",
+      "patterns": [
+        "\\bhumiliated\\s+me\\s+in\\s+public\\b",
+        "\\bexposed\\s+me\\s+in\\s+front\\s+of\\s+people\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "inclusion",
+        "belonging",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "My teacher they pointed out a mistake loudly in front of others."
+    },
+    {
+      "id": "teacher-lied_legacy_next",
+      "patterns": [
+        "\\blied\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "commitment",
+        "dependability"
+      ],
+      "example": "My teacher i learned the story they told me wasn't true."
+    },
+    {
+      "id": "teacher-made-fun_legacy_next",
+      "patterns": [
+        "\\bmocked\\s+me\\b",
+        "\\bridiculed\\s+me\\b",
+        "\\bmade\\s+fun\\s+of\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My teacher they mimicked my voice to get laughs."
+    },
+    {
+      "id": "teacher-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "teacher muted me while I was speaking."
+    },
+    {
+      "id": "teacher-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+teacher\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from teacher included a fee that wasn't in the quote."
+    },
+    {
+      "id": "teacher-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "teacher opened my door and stepped in without knocking."
+    },
+    {
+      "id": "teacher-silent-treatment_legacy_next",
+      "patterns": [
+        "\\brefused\\s+to\\s+speak\\s+to\\s+me\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "sad",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "support",
+        "consideration",
+        "connection"
+      ],
+      "example": "My teacher they wouldn't answer my texts or talk to me."
+    },
+    {
+      "id": "teacher-talked-over_legacy_next",
+      "patterns": [
+        "\\bcut\\s+me\\s+off\\b",
+        "\\bspoke\\s+over\\s+me\\b",
+        "\\btalked\\s+over\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My teacher they started speaking while I was mid‑sentence."
+    },
+    {
+      "id": "teacher-yelled_legacy_next",
+      "patterns": [
+        "\\byelled\\s+at\\s+me\\b",
+        "\\bshouted\\s+at\\s+me\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "tense",
+        "angry"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "My teacher their voice got louder while speaking to me."
+    },
+    {
+      "id": "team-supported_legacy_next",
+      "patterns": [
+        "\\bteam\\s+covered\\s+for\\s+me\\b",
+        "\\bcoworker\\s+offered\\s+to\\s+help\\b"
+      ],
+      "needs": [
+        "support",
+        "consideration",
+        "trust"
+      ],
+      "example": "My teammate offered to take a task off my plate."
+    },
+    {
+      "id": "teammate-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from teammate."
+    },
+    {
+      "id": "teammate-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+teammate\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "teammate canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "teammate-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "teammate said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "teammate-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+teammate\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "teammate posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "teammate-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from teammate"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "teammate said I could come only if I handled the driving."
+    },
+    {
+      "id": "teammate-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "teammate muted me while I was speaking."
+    },
+    {
+      "id": "teammate-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+teammate\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from teammate included a fee that wasn't in the quote."
+    },
+    {
+      "id": "teammate-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "teammate opened my door and stepped in without knocking."
+    },
+    {
+      "id": "tech-during-talk_legacy_next",
+      "patterns": [
+        "\\bkept\\s+typing\\s+while\\s+I\\s+spoke\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "confused",
+        "tense",
+        "powerless"
+      ],
+      "needs": [
+        "to-be-seen",
+        "consideration",
+        "respect"
+      ],
+      "example": "They typed on their laptop while I shared an update."
+    },
+    {
+      "id": "teller-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from teller."
+    },
+    {
+      "id": "teller-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b",
+        "\\bappointment\\s+canceled\\s+last\\s+minute\\s+by\\s+teller\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "teller canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "teller-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "teller said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "teller-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b",
+        "\\bscreenshot\\s+of\\s+our\\s+chat\\s+shared\\s+by\\s+teller\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "teller posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "teller-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b",
+        "[’']you can come if[’'] from teller"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "teller said I could come only if I handled the driving."
+    },
+    {
+      "id": "teller-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "teller muted me while I was speaking."
+    },
+    {
+      "id": "teller-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\s+by\\s+teller\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from teller included a fee that wasn't in the quote."
+    },
+    {
+      "id": "teller-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "teller opened my door and stepped in without knocking."
+    },
+    {
+      "id": "therapist-apology-missing_legacy_next",
+      "patterns": [
+        "\\bnever\\s+apologized\\b",
+        "didn[’']t say sorry"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "accountability",
+        "respect",
+        "honesty"
+      ],
+      "example": "After the mistake, there was no apology from therapist."
+    },
+    {
+      "id": "therapist-appointment-canceled-last-minute_legacy_next",
+      "patterns": [
+        "\\bcanceled\\s+same\\s+day\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "consideration",
+        "security"
+      ],
+      "example": "therapist canceled 30 minutes before the appointment."
+    },
+    {
+      "id": "therapist-backhanded-compliment_legacy_next",
+      "patterns": [
+        "\\bcompliment\\s+with\\s+a\\s+dig\\b",
+        "\\bgave\\s+a\\s+backhanded\\s+compliment\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration",
+        "honor"
+      ],
+      "example": "therapist said, 'You're articulate for someone so young.'"
+    },
+    {
+      "id": "therapist-breach-privacy_legacy_next",
+      "patterns": [
+        "\\bforwarded\\s+my\\s+email\\b",
+        "\\bshared\\s+my\\s+info\\s+without\\s+consent\\b",
+        "\\bposted\\s+my\\s+image\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+photo\\s+without\\s+asking\\b",
+        "\\bposted\\s+my\\s+picture\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "privacy",
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "example": "therapist posted a screenshot of our chat in a group without asking."
+    },
+    {
+      "id": "therapist-conditional-invite_legacy_next",
+      "patterns": [
+        "\\binvited\\s+only\\s+if\\b"
+      ],
+      "feelings": [
+        "hurt",
+        "sad",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "belonging",
+        "inclusion",
+        "to-be-seen",
+        "respect"
+      ],
+      "example": "therapist said I could come only if I handled the driving."
+    },
+    {
+      "id": "therapist-muted-or-removed_legacy_next",
+      "patterns": [
+        "\\bmuted\\s+me\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "hurt",
+        "anxious",
+        "lonely"
+      ],
+      "needs": [
+        "respect",
+        "autonomy",
+        "consideration",
+        "to-be-heard"
+      ],
+      "example": "therapist muted me while I was speaking."
+    },
+    {
+      "id": "therapist-overcharged_legacy_next",
+      "patterns": [
+        "\\bfee\\s+added\\s+after\\s+total\\b",
+        "\\bcharged\\s+extra\\s+at\\s+checkout\\b",
+        "\\btip\\s+changed\\s+after\\s+payment\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "The final bill from therapist included a fee that wasn't in the quote."
+    },
+    {
+      "id": "therapist-room-entered-without-consent_legacy_next",
+      "patterns": [
+        "\\bopened\\s+my\\s+door\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "scared",
+        "tense",
+        "anxious"
+      ],
+      "needs": [
+        "space",
+        "privacy",
+        "safety",
+        "respect"
+      ],
+      "example": "therapist opened my door and stepped in without knocking."
+    },
+    {
+      "id": "thermostat-changed-without-check_legacy_next",
+      "patterns": [
+        "\\bheat\\s+turned\\s+off\\s+without\\s+telling\\b",
+        "\\btemperature\\s+changed\\s+without\\s+checking\\s+in\\b"
+      ],
+      "feelings": [
+        "irritated",
+        "anxious"
+      ],
+      "needs": [
+        "consideration",
+        "respect"
+      ],
+      "example": "The thermostat was turned down 6 degrees while I was still working there."
+    },
+    {
+      "id": "thermostat-maxed_legacy_next",
+      "patterns": [
+        "\\bheat\\s+set\\s+to\\s+maximum\\b",
+        "\\bAC\\s+set\\s+to\\s+very\\s+cold\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "irritated",
+        "anxious"
+      ],
+      "needs": [
+        "consideration",
+        "respect"
+      ],
+      "example": "The AC was set to 62°F without checking with roommates."
+    },
+    {
+      "id": "tip-adjusted-after_legacy_next",
+      "patterns": [
+        "amount adjusted post‑charge",
+        "\\btip\\s+changed\\s+after\\s+payment\\b",
+        "\\bgratuity\\s+added\\s+after\\s+I\\s+signed\\b"
+      ],
+      "feelings": [
+        "bewildered",
+        "tense",
+        "anxious",
+        "irritated"
+      ],
+      "needs": [
+        "honesty",
+        "clarity",
+        "fairness",
+        "trust"
+      ],
+      "example": "Receipt showed a higher total than the signed amount."
+    },
+    {
+      "id": "tone-shift_legacy_next",
+      "patterns": [
+        "\\bhuffed\\b",
+        "\\bsighed\\s+before\\s+replying\\b"
+      ],
+      "feelings": [
+        "anxious",
+        "tense"
+      ],
+      "needs": [
+        "love-caring",
+        "peace",
+        "respect",
+        "to-be-heard"
+      ],
+      "example": "They sighed and paused for a long time before answering."
+    },
+    {
+      "id": "topic-changed_legacy_next",
+      "patterns": [
+        "\\bswitched\\s+topics\\b",
+        "\\bredirected\\s+without\\s+answering\\b",
+        "\\bwent\\s+off-topic\\s+after\\s+I\\s+asked\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "understanding",
+        "clarity",
+        "respect",
+        "to-be-heard"
+      ],
+      "example": "I asked about budget; the reply shifted to weekend plans."
+    },
+    {
+      "id": "touched-without-ask_legacy_next",
+      "patterns": [
+        "\\btouched\\s+me\\b",
+        "\\bput\\s+hand\\s+on\\s+shoulder\\b",
+        "\\bhugged\\s+me\\s+without\\s+asking\\b"
+      ],
+      "feelings": [
+        "tense",
+        "alarmed",
+        "angry"
+      ],
+      "needs": [
+        "autonomy",
+        "space",
+        "safety"
+      ],
+      "example": "They put a hand on my shoulder without asking."
+    },
+    {
+      "id": "twofactor-required-suddenly_legacy_next",
+      "patterns": [
+        "2FA required suddenly",
+        "\\bnew\\s+verification\\s+requirement\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "predictability",
+        "support",
+        "security"
+      ],
+      "example": "Two‑factor login was enforced without prior notice."
+    },
+    {
+      "id": "unexpected-autocharge_legacy_next",
+      "patterns": [
+        "subscription auto‑charged without reminder",
+        "\\bfree\\s+trial\\s+converted\\s+without\\s+alert\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious"
+      ],
+      "needs": [
+        "fairness",
+        "clarity",
+        "respect",
+        "predictability"
+      ],
+      "example": "A subscription renewed with no reminder after the trial period."
+    },
+    {
+      "id": "unexpected-charge_legacy_next",
+      "patterns": [
+        "\\bcharged\\s+extra\\b",
+        "\\badded\\s+fee\\s+at\\s+checkout\\b",
+        "\\bprice\\s+higher\\s+than\\s+quoted\\b"
+      ],
+      "feelings": [
+        "bewildered",
+        "tense",
+        "anxious",
+        "irritated"
+      ],
+      "needs": [
+        "clarity",
+        "fairness",
+        "trust",
+        "honesty"
+      ],
+      "example": "Final bill included fees not in the quote."
+    },
+    {
+      "id": "unmute-background-noise_legacy_next",
+      "patterns": [
+        "\\bmic\\s+left\\s+on\\s+causing\\s+echo\\b"
+      ],
+      "feelings": [
+        "overwhelmed",
+        "tense",
+        "irritated"
+      ],
+      "needs": [
+        "clarity",
+        "consideration",
+        "respect"
+      ],
+      "example": "Typing sounds drowned out the speaker."
+    },
+    {
+      "id": "unsafe-driving_legacy_next",
+      "patterns": [
+        "\\bswerved\\b",
+        "\\btailgated\\b",
+        "\\btexting\\s+while\\s+driving\\b"
+      ],
+      "feelings": [
+        "scared",
+        "tense",
+        "alarmed",
+        "anxious"
+      ],
+      "needs": [
+        "safety",
+        "love-caring",
+        "predictability",
+        "trust"
+      ],
+      "example": "They looked down at their phone while driving on the highway."
+    },
+    {
+      "id": "unsolicited-advice_legacy_next",
+      "patterns": [
+        "\\bfixing\\s+mode\\b",
+        "\\bgave\\s+advice\\s+without\\s+asking\\b",
+        "\\btold\\s+me\\s+what\\s+to\\s+do\\b"
+      ],
+      "feelings": [
+        "irritated",
+        "afraid",
+        "tense",
+        "overwhelmed"
+      ],
+      "needs": [
+        "autonomy",
+        "to-be-heard",
+        "empathy",
+        "space"
+      ],
+      "example": "They offered step-by-step advice before I finished explaining."
+    },
+    {
+      "id": "voice-note-instead_legacy_next",
+      "patterns": [
+        "\\baudio\\s+dm\\s+instead\\s+of\\s+written\\b",
+        "\\bvoice\\s+dm\\s+during\\s+quiet\\s+hours\\b",
+        "\\baudio\\s+text\\s+instead\\s+of\\s+written\\b",
+        "\\baudio\\s+chat\\s+instead\\s+of\\s+written\\b",
+        "\\bvoice\\s+chat\\s+during\\s+quiet\\s+hours\\b",
+        "\\bvoice\\s+text\\s+during\\s+quiet\\s+hours\\b",
+        "\\baudio\\s+email\\s+instead\\s+of\\s+written\\b",
+        "\\bvoice\\s+email\\s+during\\s+quiet\\s+hours\\b",
+        "\\bvoice\\s+message\\s+during\\s+quiet\\s+hours\\b",
+        "\\baudio\\s+message\\s+instead\\s+of\\s+written\\b"
+      ],
+      "feelings": [
+        "anxious",
+        "overwhelmed",
+        "irritated",
+        "tired"
+      ],
+      "needs": [
+        "support",
+        "do-things-at-my-own-pace-and-in-my-own-way",
+        "consideration",
+        "rest"
+      ],
+      "example": "At midnight they sent a 5‑minute voice message instead of a short text."
+    },
+    {
+      "id": "volume-overlap_legacy_next",
+      "patterns": [
+        "\\bmultiple\\s+people\\s+speaking\\b",
+        "\\bcross-talk\\s+prevented\\s+hearing\\b"
+      ],
+      "feelings": [
+        "overwhelmed",
+        "tense",
+        "lonely",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "order",
+        "to-be-heard",
+        "inclusion"
+      ],
+      "example": "Three people spoke at once during the call; I couldn't get a word in."
+    },
+    {
+      "id": "waited-time-numeric_legacy_next",
+      "patterns": [
+        "\\bwaited\\s+minutes\\b",
+        "\\bstuck\\s+for\\s+hours\\b",
+        "\\bheld\\s+on\\s+hold\\s+for\\s+minutes\\b",
+        "queue didn[’']t move for minutes"
+      ],
+      "feelings": [
+        "anxious",
+        "tense"
+      ],
+      "needs": [
+        "order",
+        "clarity",
+        "predictability",
+        "respect"
+      ],
+      "example": "I waited 45 minutes past the scheduled time."
+    },
+    {
+      "id": "workspace-too-cold_legacy_next",
+      "patterns": [
+        "\\baircon\\s+too\\s+cold\\b",
+        "\\bworkspace\\s+too\\s+cold\\b",
+        "\\btemperature\\s+uncomfortably\\s+low\\b"
+      ],
+      "feelings": [
+        "tense",
+        "tired"
+      ],
+      "needs": [
+        "consideration",
+        "respect"
+      ],
+      "example": "The office was so cold I needed a coat."
+    },
+    {
+      "id": "workspace-too-hot_legacy_next",
+      "patterns": [
+        "\\bworkspace\\s+too\\s+hot\\b",
+        "\\btemperature\\s+uncomfortably\\s+high\\b"
+      ],
+      "feelings": [
+        "overwhelmed",
+        "tired",
+        "irritated"
+      ],
+      "needs": [
+        "consideration"
+      ],
+      "example": "The room was hot and stuffy during the meeting."
+    }
+  ]
+}

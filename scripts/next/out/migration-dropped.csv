@@ -1,0 +1,10 @@
+cue,id,reason,detail,pattern_or_slug
+"credit-noted-elsewhere","credit-noted-elsewhere_legacy_next","no_valid_patterns","All patterns dropped",""
+"invite-last-seat","invite-last-seat_legacy_next","no_valid_patterns","All patterns dropped",""
+"i-shared-without-consent","i-shared-without-consent_legacy_next","no_valid_patterns","All patterns dropped",""
+"talked-over-general","talked-over-general_legacy_next","no_valid_patterns","All patterns dropped",""
+"arrival-late-night-call","arrival-late-night-call_legacy_next","no_valid_patterns","All patterns dropped",""
+"translation-not-provided","translation-not-provided_legacy_next","no_valid_patterns","All patterns dropped",""
+"boss-algorithm-shadowban","boss-algorithm-shadowban_legacy_next","no_valid_patterns","All patterns dropped",""
+"boss-accessibility-gap","boss-accessibility-gap_legacy_next","no_valid_patterns","All patterns dropped",""
+"boss-after-clause","boss-after-clause_legacy_next","no_valid_patterns","All patterns dropped",""
