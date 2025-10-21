@@ -21,6 +21,8 @@ const state = {
   scrolledToSuggestions: false,
 };
 
+let guideNavigationBound = false;
+
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
   need: '../needs/',
@@ -40,13 +42,18 @@ const DETECTION_LABELS = {
   fauxFeeling: { singular: 'story word', plural: 'story words' },
 };
 
-const OBSERVATION_GUIDELINE_INTRO = 'Follow these anchors to keep the moment concrete.';
+const OBSERVATION_GUIDELINE_INTRO = 'Use these anchors to keep your statement observational.';
 const OBSERVATION_GUIDELINE_NOTE =
-  'Stick with what a camera or microphone would record. Feelings and needs come after the observation.';
+  'Need a refresher? Visit the <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a> below for principles, steps, and examples.';
 const OBSERVATION_GUIDELINE_STEPS = [
-  { title: 'When & where', description: 'Anchor the moment in time and place.' },
-  { title: 'Sensory details', description: 'Quote what was said or describe what was seen.' },
-  { title: 'Optional gap', description: 'Add what you expected or hoped for.' },
+  { title: 'Name the moment', description: 'Specify when and where it happened, and who was involved.' },
+  { title: 'Describe sensory facts', description: 'Report what a camera or microphone would capture.' },
+  { title: 'Remove judgments', description: 'Swap labels, motives, and generalisations for concrete actions.' },
+  { title: 'Quantify & quote', description: 'Use numbers or direct quotes to keep the scene verifiable.' },
+  {
+    title: 'Optional gap',
+    description: 'Mention what you expected while keeping feelings and needs for the next step.',
+  },
 ];
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
@@ -124,6 +131,8 @@ function bind() {
       advanceFallback();
     });
   }
+
+  bindGuideNavigation();
 }
 
 function analyze(raw, options = {}) {
@@ -286,7 +295,7 @@ function buildDefaultGuidelineContent() {
 
   const note = document.createElement('p');
   note.className = 'observation-editor__recipe-note';
-  note.textContent = OBSERVATION_GUIDELINE_NOTE;
+  note.innerHTML = OBSERVATION_GUIDELINE_NOTE;
   fragment.appendChild(note);
 
   return fragment;
@@ -1365,4 +1374,64 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function bindGuideNavigation() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  if (guideNavigationBound) {
+    return;
+  }
+  guideNavigationBound = true;
+
+  document.addEventListener('click', handleGuideNavigationClick);
+
+  if (typeof window !== 'undefined') {
+    openGuideSectionFromHash();
+    window.addEventListener('hashchange', openGuideSectionFromHash);
+  }
+}
+
+function handleGuideNavigationClick(event) {
+  if (!event || typeof event.target === 'undefined') {
+    return;
+  }
+
+  const target = typeof event.target.closest === 'function'
+    ? event.target.closest('[data-guide-target]')
+    : null;
+  if (!target) {
+    return;
+  }
+
+  const sectionId = target.getAttribute('data-guide-target');
+  if (sectionId) {
+    openGuideSection(sectionId);
+  }
+}
+
+function openGuideSectionFromHash() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  const hash = window.location.hash || '';
+  if (!hash || hash.length <= 1) {
+    return;
+  }
+  openGuideSection(hash.slice(1));
+}
+
+function openGuideSection(id) {
+  if (!id || typeof document === 'undefined') {
+    return;
+  }
+  const section = document.getElementById(id);
+  if (!section) {
+    return;
+  }
+  if (section.tagName && section.tagName.toLowerCase() === 'details' && !section.open) {
+    section.open = true;
+  }
 }
