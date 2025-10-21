@@ -15,4 +15,4 @@ input,ready,matched_cues
 "The host muted me while I was speaking.",true,"muted-by-host_next"
 "The calendar event disappeared from my calendar.",true,"calendar-event-removed_next"
 "They used reply all and shared my note.",true,"reply-all-exposed_next"
-"When I joined at the scheduled time, the meeting had already started.",true,""
+"When I joined at the scheduled time, the meeting had already started.",true,"meeting-started-early_next"
