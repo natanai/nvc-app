@@ -27,6 +27,7 @@ const state = {
 
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
+const guideMobileState = new WeakMap();
 
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
@@ -2172,6 +2173,176 @@ function bindGuideNavigation() {
   }
 }
 
+function setupGuideMobileNavigation(host, tabs, activeId) {
+  if (!host || !Array.isArray(tabs) || !tabs.length) {
+    return;
+  }
+
+  const mobileRoot = host.querySelector('[data-guide-mobile]');
+  const list = mobileRoot ? mobileRoot.querySelector('[data-guide-mobile-list]') : null;
+  if (!mobileRoot || !list) {
+    return;
+  }
+
+  const items = tabs
+    .map(tab => {
+      if (!tab || typeof tab.getAttribute !== 'function') {
+        return null;
+      }
+      const id = tab.getAttribute('data-guide-target');
+      if (!id) {
+        return null;
+      }
+      const labelElement = tab.querySelector('.observation-guide__tab-label');
+      const label = labelElement ? labelElement.textContent : tab.textContent;
+      const trimmedLabel = label ? label.trim() : '';
+      if (!trimmedLabel) {
+        return null;
+      }
+      const href = tab.getAttribute('href') || `#${id}`;
+      return { id, label: trimmedLabel, href };
+    })
+    .filter(Boolean);
+
+  if (!items.length) {
+    return;
+  }
+
+  let state = guideMobileState.get(host);
+  if (!state) {
+    state = { bound: false };
+    guideMobileState.set(host, state);
+  }
+
+  list.innerHTML = '';
+  items.forEach(item => {
+    const row = document.createElement('li');
+    const link = document.createElement('a');
+    link.className = 'observation-guide__mobile-link';
+    link.setAttribute('href', item.href);
+    link.setAttribute('data-guide-target', item.id);
+    link.textContent = item.label;
+    row.appendChild(link);
+    list.appendChild(row);
+  });
+
+  state.items = items;
+  state.links = Array.from(list.querySelectorAll('[data-guide-target]'));
+  state.label = mobileRoot.querySelector('[data-guide-mobile-label]') || null;
+  state.prevLabel = mobileRoot.querySelector('[data-guide-mobile-prev]') || null;
+  state.nextLabel = mobileRoot.querySelector('[data-guide-mobile-next]') || null;
+  state.prevButton = mobileRoot.querySelector('[data-guide-step="prev"]') || null;
+  state.nextButton = mobileRoot.querySelector('[data-guide-step="next"]') || null;
+  const details = mobileRoot.querySelector('[data-guide-mobile-sections]');
+  state.details = details instanceof HTMLDetailsElement ? details : null;
+
+  if (!state.bound) {
+    if (state.prevButton) {
+      state.prevButton.addEventListener('click', () => {
+        stepGuideMobile(host, -1);
+      });
+    }
+    if (state.nextButton) {
+      state.nextButton.addEventListener('click', () => {
+        stepGuideMobile(host, 1);
+      });
+    }
+    state.bound = true;
+  }
+
+  host.dataset.mobileReady = 'true';
+  updateGuideMobileState(host, activeId);
+}
+
+function updateGuideMobileState(host, activeId) {
+  if (!host) {
+    return;
+  }
+
+  const state = guideMobileState.get(host);
+  if (!state || !Array.isArray(state.items) || !state.items.length) {
+    return;
+  }
+
+  let index = state.items.findIndex(item => item.id === activeId);
+  if (index === -1) {
+    index = 0;
+    activeId = state.items[0].id;
+  }
+
+  state.activeId = activeId;
+
+  const current = state.items[index] || state.items[0];
+  const previous = index > 0 ? state.items[index - 1] : null;
+  const next = index < state.items.length - 1 ? state.items[index + 1] : null;
+
+  if (state.label) {
+    state.label.textContent = current ? current.label : '';
+  }
+  if (state.prevLabel) {
+    state.prevLabel.textContent = previous ? previous.label : '—';
+  }
+  if (state.nextLabel) {
+    state.nextLabel.textContent = next ? next.label : '—';
+  }
+  if (state.prevButton) {
+    const isDisabled = !previous;
+    state.prevButton.disabled = isDisabled;
+    state.prevButton.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+  }
+  if (state.nextButton) {
+    const isDisabled = !next;
+    state.nextButton.disabled = isDisabled;
+    state.nextButton.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+  }
+  if (Array.isArray(state.links)) {
+    state.links.forEach(link => {
+      if (!link || typeof link.getAttribute !== 'function') {
+        return;
+      }
+      const id = link.getAttribute('data-guide-target');
+      link.classList.toggle('is-active', id === activeId);
+    });
+  }
+}
+
+function stepGuideMobile(host, delta) {
+  if (!host || typeof delta !== 'number') {
+    return;
+  }
+  const state = guideMobileState.get(host);
+  if (!state || !Array.isArray(state.items) || !state.items.length) {
+    return;
+  }
+
+  let index = state.items.findIndex(item => item.id === state.activeId);
+  if (index === -1) {
+    index = 0;
+  }
+
+  let nextIndex = index + delta;
+  nextIndex = Math.max(0, Math.min(state.items.length - 1, nextIndex));
+  if (nextIndex === index) {
+    return;
+  }
+
+  const target = state.items[nextIndex];
+  if (target && target.id) {
+    openGuideSection(target.id);
+  }
+}
+
+function closeGuideMobileSections(host) {
+  if (!host) {
+    return;
+  }
+  const state = guideMobileState.get(host);
+  if (!state || !state.details) {
+    return;
+  }
+  state.details.open = false;
+}
+
 function initializeGuideTabs() {
   if (typeof document === 'undefined') {
     return;
@@ -2223,6 +2394,7 @@ function initializeGuideTabs() {
     tab.setAttribute('tabindex', isActive ? '0' : '-1');
   });
 
+  setupGuideMobileNavigation(host, tabs, activeId);
   host.dataset.tabsReady = 'true';
 }
 
@@ -2274,6 +2446,7 @@ function activateGuideSectionById(id) {
     tab.setAttribute('tabindex', isActive ? '0' : '-1');
   });
 
+  updateGuideMobileState(host, activeSection.id);
   return activeSection;
 }
 
@@ -2327,4 +2500,6 @@ function openGuideSection(id) {
       tab.focus();
     }
   }
+
+  closeGuideMobileSections(host);
 }
