@@ -8,7 +8,10 @@ const FALLBACK = [
   { kw: /\btime\s+off|pto|vacation|leave\b/i, feelings: ["disappointed", "frustrated"], needs: ["consideration", "respect", "predictability"] },
   { kw: /\blate|minutes?\s+late\b/i, feelings: ["disappointed", "irritated"], needs: ["reliability", "consideration"] },
   { kw: /\breply\s+all|cc['’]?d\b/i, feelings: ["anxious", "embarrassed"], needs: ["privacy", "clarity", "respect"] },
-  { kw: /\bcalendar|invite\b/i, feelings: ["anxious", "confused"], needs: ["predictability", "clarity"] }
+  { kw: /\bcalendar|invite\b/i, feelings: ["anxious", "confused"], needs: ["predictability", "clarity"] },
+  { kw: /\b(cancel(?:ed|led)|last\s+minute|short\s+notice)\b/i, feelings: ["disappointed", "pressured"], needs: ["reliability", "consideration"] },
+  { kw: /\b(interrupted|spoke\s+over|cut\s+me\s+off)\b/i, feelings: ["hurt", "frustrated"], needs: ["to-be-heard", "respect"] },
+  { kw: /\b(hung\s+up|left\s+the\s+call|disconnected)\b/i, feelings: ["lonely", "confused"], needs: ["connection", "consideration"] }
 ];
 
 function deriveFallback(text) {

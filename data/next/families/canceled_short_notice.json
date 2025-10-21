@@ -1,0 +1,19 @@
+{
+  "family": "canceled_short_notice",
+  "defaults": {
+    "feelings": ["disappointed", "anxious", "frustrated", "sad"],
+    "needs": ["reliability", "support", "consideration", "security"]
+  },
+  "cues": [
+    {
+      "id": "canceled-short-notice_next",
+      "patterns": [
+        "\\bcancel(?:ed|led)\\b[^.!?]*\\b(?:last\\s+minute|minutes?\\s+before)\\b",
+        "\\bpulled\\s+out\\b[^.!?]*\\bshort\\s+notice\\b",
+        "\\bbacked\\s+out\\b[^.!?]*\\bshort\\s+notice\\b",
+        "\\bcanceled\\s+\\d{1,2}\\s*(?:min|mins|minutes)\\s+before\\b"
+      ],
+      "example": "They canceled 30 minutes before our meeting."
+    }
+  ]
+}

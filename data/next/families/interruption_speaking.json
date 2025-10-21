@@ -1,0 +1,19 @@
+{
+  "family": "interruption_speaking",
+  "defaults": {
+    "feelings": ["angry", "hurt", "tense", "frustrated"],
+    "needs": ["respect", "to-be-heard", "consideration", "fairness"]
+  },
+  "cues": [
+    {
+      "id": "interrupted-while-speaking_next",
+      "patterns": [
+        "\\b(?:spoke|talked)\\s+over\\s+(?:me|my\\s+sentence)\\b",
+        "\\binterrupted\\b[^.!?]*\\bwhile\\s+I\\s+(?:was\\s+)?speaking\\b",
+        "\\bbegan\\s+speaking\\b[^.!?]*\\bwhile\\s+I\\s+was\\s+speaking\\b",
+        "\\bcut\\s+me\\s+off\\b[^.!?]*\\bmid\\-?(?:word|sentence)\\b"
+      ],
+      "example": "While I was speaking, they began speaking and my sentence stopped mid-word."
+    }
+  ]
+}
