@@ -25,6 +25,24 @@ const state = {
 
 let guideNavigationBound = false;
 
+const GUIDE_OVERLAY_MEDIA_QUERY = '(max-width: 720px)';
+
+const guideOverlayState = {
+  bound: false,
+  host: null,
+  summary: null,
+  closeButton: null,
+  panel: null,
+  card: null,
+  title: null,
+  overlayMedia: null,
+  open: false,
+  focusReturn: null,
+  keydownHandler: null,
+  suppressToggleHandling: false,
+  skipNextSummaryClick: false,
+};
+
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
   need: '../needs/',
@@ -136,6 +154,7 @@ function bind() {
   }
 
   bindGuideNavigation();
+  bindGuideOverlay();
 }
 
 function analyze(raw, options = {}) {
@@ -1677,6 +1696,357 @@ function bindGuideNavigation() {
   }
 }
 
+function bindGuideOverlay() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  if (guideOverlayState.bound) {
+    return;
+  }
+
+  const host = document.querySelector('[data-observation-guide]');
+  if (!host) {
+    return;
+  }
+
+  const summary = host.querySelector('[data-observation-guide-open]');
+  if (!summary) {
+    return;
+  }
+
+  guideOverlayState.bound = true;
+  guideOverlayState.host = host;
+  guideOverlayState.summary = summary;
+  guideOverlayState.closeButton = host.querySelector('[data-observation-guide-close]');
+  guideOverlayState.panel = host.querySelector('[data-observation-guide-panel]');
+  guideOverlayState.card = host.querySelector('.observation-guide__card');
+  guideOverlayState.title = host.querySelector('#observation-guide-title');
+  guideOverlayState.focusReturn = summary;
+
+  syncGuideSummaryExpanded();
+
+  host.addEventListener('toggle', handleGuideToggleEvent);
+  summary.addEventListener('click', handleGuideSummaryClick);
+  summary.addEventListener('keydown', handleGuideSummaryKeydown);
+
+  const closeButton = guideOverlayState.closeButton;
+  if (closeButton) {
+    closeButton.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      closeGuideOverlay();
+    });
+  }
+
+  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+    const media = window.matchMedia(GUIDE_OVERLAY_MEDIA_QUERY);
+    guideOverlayState.overlayMedia = media;
+    const mediaChangeHandler = event => {
+      handleGuideOverlayMediaChange(Boolean(event?.matches));
+    };
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', mediaChangeHandler);
+    } else if (typeof media.addListener === 'function') {
+      media.addListener(mediaChangeHandler);
+    }
+    handleGuideOverlayMediaChange(media.matches);
+  }
+
+  if (shouldUseGuideOverlay() && host.open) {
+    openGuideOverlay();
+  } else {
+    syncGuideSummaryExpanded();
+  }
+}
+
+function shouldUseGuideOverlay() {
+  if (guideOverlayState.overlayMedia && typeof guideOverlayState.overlayMedia.matches === 'boolean') {
+    return guideOverlayState.overlayMedia.matches;
+  }
+
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+
+  try {
+    return window.matchMedia(GUIDE_OVERLAY_MEDIA_QUERY).matches;
+  } catch (error) {
+    return false;
+  }
+}
+
+function handleGuideSummaryClick(event) {
+  if (!event || typeof event.preventDefault !== 'function') {
+    return;
+  }
+
+  if (!shouldUseGuideOverlay()) {
+    syncGuideSummaryExpanded();
+    return;
+  }
+
+  if (guideOverlayState.skipNextSummaryClick) {
+    guideOverlayState.skipNextSummaryClick = false;
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  if (guideOverlayState.open) {
+    closeGuideOverlay();
+  } else {
+    openGuideOverlay();
+  }
+}
+
+function handleGuideSummaryKeydown(event) {
+  if (!event) {
+    return;
+  }
+
+  if (!shouldUseGuideOverlay()) {
+    return;
+  }
+
+  const key = event.key;
+  if (key === 'Enter' || key === ' ' || key === 'Spacebar') {
+    event.preventDefault();
+    event.stopPropagation();
+    guideOverlayState.skipNextSummaryClick = true;
+    if (guideOverlayState.open) {
+      closeGuideOverlay();
+    } else {
+      openGuideOverlay();
+    }
+  }
+}
+
+function handleGuideToggleEvent() {
+  const host = guideOverlayState.host;
+  if (!host) {
+    return;
+  }
+
+  if (guideOverlayState.suppressToggleHandling) {
+    guideOverlayState.suppressToggleHandling = false;
+    syncGuideSummaryExpanded();
+    return;
+  }
+
+  if (shouldUseGuideOverlay()) {
+    if (host.open && !guideOverlayState.open) {
+      openGuideOverlay();
+      return;
+    }
+
+    if (!host.open && guideOverlayState.open) {
+      closeGuideOverlay({ returnFocus: false });
+      return;
+    }
+  }
+
+  syncGuideSummaryExpanded();
+}
+
+function handleGuideOverlayMediaChange(matches) {
+  const host = guideOverlayState.host;
+  if (!host) {
+    return;
+  }
+
+  if (matches) {
+    if (host.open && !guideOverlayState.open) {
+      openGuideOverlay();
+    }
+    return;
+  }
+
+  if (guideOverlayState.open) {
+    closeGuideOverlay({ returnFocus: false, keepOpen: true });
+    return;
+  }
+
+  if (host.dataset) {
+    delete host.dataset.overlayState;
+  }
+  host.removeAttribute('data-overlay-state');
+  if (document.body?.classList) {
+    document.body.classList.remove('has-observation-guide-overlay');
+  }
+  syncGuideSummaryExpanded();
+}
+
+function syncGuideSummaryExpanded() {
+  const host = guideOverlayState.host || document.querySelector('[data-observation-guide]');
+  const summary = guideOverlayState.summary || host?.querySelector('[data-observation-guide-open]');
+  if (!host || !summary) {
+    return;
+  }
+  summary.setAttribute('aria-expanded', host.open ? 'true' : 'false');
+}
+
+function openGuideOverlay(options = {}) {
+  const { focus = true, trigger } = options;
+  const host = guideOverlayState.host || document.querySelector('[data-observation-guide]');
+  if (!host) {
+    return;
+  }
+
+  guideOverlayState.host = host;
+  const summary = guideOverlayState.summary || host.querySelector('[data-observation-guide-open]');
+  if (summary) {
+    guideOverlayState.summary = summary;
+  }
+
+  const effectiveTrigger = trigger instanceof HTMLElement ? trigger : guideOverlayState.summary;
+  if (!guideOverlayState.open && effectiveTrigger instanceof HTMLElement) {
+    guideOverlayState.focusReturn = effectiveTrigger;
+  }
+
+  if (!shouldUseGuideOverlay()) {
+    if (!host.open) {
+      guideOverlayState.suppressToggleHandling = true;
+      host.open = true;
+    }
+    syncGuideSummaryExpanded();
+    return;
+  }
+
+  if (guideOverlayState.open) {
+    syncGuideSummaryExpanded();
+    return;
+  }
+
+  guideOverlayState.open = true;
+  guideOverlayState.skipNextSummaryClick = false;
+
+  if (host.dataset) {
+    host.dataset.overlayState = 'overlay';
+  } else {
+    host.setAttribute('data-overlay-state', 'overlay');
+  }
+
+  if (!host.open) {
+    guideOverlayState.suppressToggleHandling = true;
+    host.open = true;
+  }
+
+  syncGuideSummaryExpanded();
+
+  if (document.body?.classList) {
+    document.body.classList.add('has-observation-guide-overlay');
+  }
+
+  const panel = guideOverlayState.panel || host.querySelector('[data-observation-guide-panel]');
+  if (panel) {
+    guideOverlayState.panel = panel;
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+    const title = guideOverlayState.title || host.querySelector('#observation-guide-title');
+    if (title && title.id) {
+      guideOverlayState.title = title;
+      panel.setAttribute('aria-labelledby', title.id);
+    }
+  }
+
+  const card = guideOverlayState.card || host.querySelector('.observation-guide__card');
+  if (card) {
+    guideOverlayState.card = card;
+  }
+
+  const focusTarget = guideOverlayState.card || guideOverlayState.panel || host;
+  if (focus && focusTarget && typeof focusTarget.focus === 'function') {
+    const applyFocus = () => {
+      try {
+        focusTarget.focus({ preventScroll: true });
+      } catch (error) {
+        focusTarget.focus();
+      }
+    };
+    if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(applyFocus);
+    } else {
+      applyFocus();
+    }
+  }
+
+  const keydownHandler = event => {
+    if (event.key === 'Escape' || event.key === 'Esc') {
+      event.preventDefault();
+      closeGuideOverlay();
+    }
+  };
+  guideOverlayState.keydownHandler = keydownHandler;
+  document.addEventListener('keydown', keydownHandler);
+}
+
+function closeGuideOverlay(options = {}) {
+  const { returnFocus = true, keepOpen = false } = options;
+  const host = guideOverlayState.host;
+  if (!host) {
+    return;
+  }
+
+  if (!guideOverlayState.open && host.dataset?.overlayState !== 'overlay') {
+    if (!keepOpen && host.open && shouldUseGuideOverlay()) {
+      guideOverlayState.suppressToggleHandling = true;
+      host.open = false;
+      syncGuideSummaryExpanded();
+    }
+    return;
+  }
+
+  guideOverlayState.open = false;
+  guideOverlayState.skipNextSummaryClick = false;
+
+  const panel = guideOverlayState.panel;
+  if (panel) {
+    panel.removeAttribute('role');
+    panel.removeAttribute('aria-modal');
+    panel.removeAttribute('aria-labelledby');
+  }
+
+  if (guideOverlayState.keydownHandler) {
+    document.removeEventListener('keydown', guideOverlayState.keydownHandler);
+    guideOverlayState.keydownHandler = null;
+  }
+
+  if (host.dataset) {
+    delete host.dataset.overlayState;
+  }
+  host.removeAttribute('data-overlay-state');
+
+  if (document.body?.classList) {
+    document.body.classList.remove('has-observation-guide-overlay');
+  }
+
+  if (!keepOpen && host.open) {
+    guideOverlayState.suppressToggleHandling = true;
+    host.open = false;
+  }
+
+  syncGuideSummaryExpanded();
+
+  if (returnFocus) {
+    const focusTarget = guideOverlayState.focusReturn instanceof HTMLElement
+      ? guideOverlayState.focusReturn
+      : guideOverlayState.summary;
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      try {
+        focusTarget.focus();
+      } catch (error) {
+        focusTarget.focus();
+      }
+    }
+  }
+
+  guideOverlayState.focusReturn = guideOverlayState.summary;
+}
+
 function initializeGuideTabs() {
   if (typeof document === 'undefined') {
     return;
@@ -1816,8 +2186,13 @@ function openGuideSection(id) {
     return;
   }
   const host = document.getElementById('observation-guide');
-  if (host && host.tagName && host.tagName.toLowerCase() === 'details' && !host.open) {
-    host.open = true;
+  if (host && host.tagName && host.tagName.toLowerCase() === 'details') {
+    if (guideOverlayState.bound && shouldUseGuideOverlay()) {
+      openGuideOverlay();
+    } else if (!host.open) {
+      host.open = true;
+      syncGuideSummaryExpanded();
+    }
   }
 
   const section = activateGuideSectionById(id);
