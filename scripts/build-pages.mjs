@@ -874,6 +874,18 @@ function renderNav(basePath, activeNav, options = {}) {
 
   const defaultSecondaryLinks = [
     { key: 'observations', href: 'observations/', label: 'Observations' },
+    {
+      key: 'faux-feelings',
+      href: 'faux-feelings/',
+      label: 'Faux feelings',
+      magnetId: 'nav-faux-feelings',
+      className: 'site-nav__magnet--faux-feelings',
+      attributes: {
+        'data-nav-hidden': 'true',
+        'aria-hidden': 'true',
+        tabindex: '-1',
+      },
+    },
     { key: 'feelings', href: 'feelings/', label: 'Feelings' },
     { key: 'needs', href: 'needs/', label: 'Needs' },
     {
