@@ -1,6 +1,6 @@
 {
   "meta": {
-    "builtAt": "2025-10-21T04:22:58.742Z",
+    "builtAt": "2025-10-21T04:50:58.139Z",
     "count": 570,
     "sigLen": 64
   },
@@ -83,7 +83,8 @@
         "connection",
         "to-be-seen",
         "reliability"
-      ]
+      ],
+      "example": "I posted the project status and no one replied or reacted."
     },
     {
       "sig": [
@@ -163,7 +164,8 @@
         "clarity",
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "The planning session disappeared from my calendar without any message."
     },
     {
       "sig": [
@@ -243,7 +245,8 @@
         "to-be-seen",
         "consideration",
         "belonging"
-      ]
+      ],
+      "example": "While I spoke, their camera switched off and stayed blank."
     },
     {
       "sig": [
@@ -323,7 +326,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "They canceled 30 minutes before our meeting."
     },
     {
       "sig": [
@@ -403,7 +407,8 @@
         "to-be-heard",
         "consideration",
         "fairness"
-      ]
+      ],
+      "example": "While I was speaking, they began speaking and my sentence stopped mid-word."
     },
     {
       "sig": [
@@ -483,7 +488,8 @@
         "consideration",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "We agreed on 2:00; they arrived late without a message."
     },
     {
       "sig": [
@@ -563,7 +569,8 @@
         "consideration",
         "to-be-seen",
         "reliability"
-      ]
+      ],
+      "example": "In the middle of my update, the video call disconnected with no goodbye."
     },
     {
       "sig": [
@@ -640,7 +647,8 @@
         "inclusion",
         "respect",
         "support"
-      ]
+      ],
+      "example": "The webinar had no captions despite the earlier request."
     },
     {
       "sig": [
@@ -718,7 +726,8 @@
         "safety",
         "peace",
         "support"
-      ]
+      ],
+      "example": "I witnessed a crash at the intersection on my street."
     },
     {
       "sig": [
@@ -794,7 +803,8 @@
       "needs": [
         "support",
         "clarity"
-      ]
+      ],
+      "example": "My account was locked after one failed attempt."
     },
     {
       "sig": [
@@ -873,7 +883,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from admin."
     },
     {
       "sig": [
@@ -953,7 +964,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "admin canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -1033,7 +1045,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "admin said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -1111,7 +1124,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "admin posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -1191,7 +1205,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "admin said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -1271,7 +1286,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "admin muted me while I was speaking."
     },
     {
       "sig": [
@@ -1349,7 +1365,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from admin included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -1429,7 +1446,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "admin opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -1508,7 +1526,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from advisor."
     },
     {
       "sig": [
@@ -1588,7 +1607,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "advisor canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -1668,7 +1688,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "advisor said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -1746,7 +1767,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "advisor posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -1826,7 +1848,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "advisor said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -1906,7 +1929,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "advisor muted me while I was speaking."
     },
     {
       "sig": [
@@ -1984,7 +2008,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from advisor included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -2064,7 +2089,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "advisor opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -2142,7 +2168,8 @@
         "predictability",
         "support",
         "order"
-      ]
+      ],
+      "example": "The meeting invite had no agenda or outline before we joined."
     },
     {
       "sig": [
@@ -2220,7 +2247,8 @@
         "clarity",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "The meeting followed a new agenda not shared in the invite."
     },
     {
       "sig": [
@@ -2299,7 +2327,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from agent."
     },
     {
       "sig": [
@@ -2379,7 +2408,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "agent canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -2459,7 +2489,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "agent said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -2537,7 +2568,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "agent posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -2617,7 +2649,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "agent said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -2697,7 +2730,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "agent muted me while I was speaking."
     },
     {
       "sig": [
@@ -2775,7 +2809,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from agent included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -2855,7 +2890,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "agent opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -2935,7 +2971,8 @@
         "space",
         "predictability",
         "safety"
-      ]
+      ],
+      "example": "They knocked on my door late at night without sending a message beforehand."
     },
     {
       "sig": [
@@ -3010,7 +3047,8 @@
         "privacy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "They asked if a hug was okay first."
     },
     {
       "sig": [
@@ -3089,7 +3127,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from banker."
     },
     {
       "sig": [
@@ -3169,7 +3208,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "banker canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -3249,7 +3289,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "banker said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -3327,7 +3368,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "banker posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -3407,7 +3449,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "banker said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -3487,7 +3530,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "banker muted me while I was speaking."
     },
     {
       "sig": [
@@ -3565,7 +3609,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from banker included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -3645,7 +3690,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "banker opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -3724,7 +3770,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from barista."
     },
     {
       "sig": [
@@ -3804,7 +3851,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "barista canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -3884,7 +3932,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "barista said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -3962,7 +4011,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "barista posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -4042,7 +4092,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "barista said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -4122,7 +4173,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "barista muted me while I was speaking."
     },
     {
       "sig": [
@@ -4200,7 +4252,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from barista included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -4280,7 +4333,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "barista opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -4357,7 +4411,8 @@
         "clarity",
         "predictability",
         "consideration"
-      ]
+      ],
+      "example": "The only restroom was locked without any sign or directions."
     },
     {
       "sig": [
@@ -4437,7 +4492,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My boss they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -4516,7 +4572,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from boss."
     },
     {
       "sig": [
@@ -4596,7 +4653,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "boss canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -4674,7 +4732,8 @@
         "predictability",
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "Two appointments were booked at the same time for me."
     },
     {
       "sig": [
@@ -4754,7 +4813,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "boss said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -4832,7 +4892,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "A fee appeared on my account with no explanation."
     },
     {
       "sig": [
@@ -4910,7 +4971,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "boss posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -4990,7 +5052,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My boss they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -5070,7 +5133,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "boss said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -5148,7 +5212,8 @@
         "clarity",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "The application portal closed hours before the stated deadline."
     },
     {
       "sig": [
@@ -5228,7 +5293,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My boss they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -5306,7 +5372,8 @@
         "consideration",
         "respect",
         "clarity"
-      ]
+      ],
+      "example": "The appointment was moved to a weekday morning without checking my availability."
     },
     {
       "sig": [
@@ -5386,7 +5453,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My boss i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -5466,7 +5534,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My boss they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -5544,7 +5613,8 @@
         "inclusion",
         "predictability",
         "respect"
-      ]
+      ],
+      "example": "When I joined at the scheduled time, they were already on agenda item two."
     },
     {
       "sig": [
@@ -5623,7 +5693,8 @@
         "to-be-heard",
         "consideration",
         "mutuality"
-      ]
+      ],
+      "example": "A moderator removed my post without any reason."
     },
     {
       "sig": [
@@ -5703,7 +5774,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "boss muted me while I was speaking."
     },
     {
       "sig": [
@@ -5781,7 +5853,8 @@
         "honesty",
         "support",
         "fairness"
-      ]
+      ],
+      "example": "I learned the requirement only after the submission closed."
     },
     {
       "sig": [
@@ -5859,7 +5932,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from boss included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -5937,7 +6011,8 @@
         "inclusion",
         "respect",
         "support"
-      ]
+      ],
+      "example": "My request for captions was declined without alternatives."
     },
     {
       "sig": [
@@ -6017,7 +6092,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "boss opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -6096,7 +6172,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My boss they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -6176,7 +6253,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My boss they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -6256,7 +6334,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My boss their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -6336,7 +6415,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "They opened my backpack without asking."
     },
     {
       "sig": [
@@ -6416,7 +6496,8 @@
         "trust",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "They said they would send the draft by Friday; it didn't arrive."
     },
     {
       "sig": [
@@ -6494,7 +6575,8 @@
         "clarity",
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "The planning session disappeared from my calendar without any accompanying message."
     },
     {
       "sig": [
@@ -6571,7 +6653,8 @@
         "autonomy",
         "respect",
         "security"
-      ]
+      ],
+      "example": "I received a notification that my calendar was made visible to the whole organization."
     },
     {
       "sig": [
@@ -6651,7 +6734,8 @@
         "to-be-seen",
         "consideration",
         "belonging"
-      ]
+      ],
+      "example": "While I spoke, their camera switched off and stayed blank."
     },
     {
       "sig": [
@@ -6730,7 +6814,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from caseworker."
     },
     {
       "sig": [
@@ -6810,7 +6895,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "caseworker canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -6890,7 +6976,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "caseworker said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -6968,7 +7055,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "caseworker posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -7048,7 +7136,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "caseworker said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -7128,7 +7217,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "caseworker muted me while I was speaking."
     },
     {
       "sig": [
@@ -7206,7 +7296,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from caseworker included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -7286,7 +7377,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "caseworker opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -7365,7 +7457,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from cashier."
     },
     {
       "sig": [
@@ -7445,7 +7538,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "cashier canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -7525,7 +7619,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "cashier said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -7603,7 +7698,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "cashier posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -7683,7 +7779,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "cashier said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -7763,7 +7860,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "cashier muted me while I was speaking."
     },
     {
       "sig": [
@@ -7841,7 +7939,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from cashier included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -7921,7 +8020,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "cashier opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -8000,7 +8100,8 @@
         "inclusion",
         "security",
         "respect"
-      ]
+      ],
+      "example": "I saw the message 'You no longer have access to this channel' with no explanation."
     },
     {
       "sig": [
@@ -8079,7 +8180,8 @@
         "to-be-heard",
         "connection",
         "consideration"
-      ]
+      ],
+      "example": "I sent a detailed update and received only a thumbs-up emoji."
     },
     {
       "sig": [
@@ -8154,7 +8256,8 @@
         "respect",
         "mutuality",
         "support"
-      ]
+      ],
+      "example": "They asked about my bandwidth before assigning the task."
     },
     {
       "sig": [
@@ -8229,7 +8332,8 @@
         "honor",
         "belonging",
         "to-be-seen"
-      ]
+      ],
+      "example": "They asked how I want to be addressed before the meeting."
     },
     {
       "sig": [
@@ -8308,7 +8412,8 @@
         "safety",
         "predictability",
         "trust"
-      ]
+      ],
+      "example": "I found the child alone for several minutes in the hallway."
     },
     {
       "sig": [
@@ -8386,7 +8491,8 @@
         "safety",
         "reliability",
         "predictability"
-      ]
+      ],
+      "example": "Pickup was 25 minutes late without a call."
     },
     {
       "sig": [
@@ -8465,7 +8571,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from clerk."
     },
     {
       "sig": [
@@ -8545,7 +8652,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "clerk canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -8625,7 +8733,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "clerk said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -8703,7 +8812,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "clerk posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -8783,7 +8893,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "clerk said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -8863,7 +8974,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "clerk muted me while I was speaking."
     },
     {
       "sig": [
@@ -8941,7 +9053,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from clerk included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -9021,7 +9134,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "clerk opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -9100,7 +9214,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from coach."
     },
     {
       "sig": [
@@ -9180,7 +9295,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "coach canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -9260,7 +9376,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "coach said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -9338,7 +9455,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "coach posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -9418,7 +9536,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "coach said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -9498,7 +9617,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "coach muted me while I was speaking."
     },
     {
       "sig": [
@@ -9576,7 +9696,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from coach included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -9656,7 +9777,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "coach opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -9734,7 +9856,8 @@
         "clarity",
         "respect",
         "mutuality"
-      ]
+      ],
+      "example": "The doc showed my comment as resolved even though no change or reply appeared."
     },
     {
       "sig": [
@@ -9814,7 +9937,8 @@
         "fairness",
         "acknowledgement",
         "respect"
-      ]
+      ],
+      "example": "They said, 'Unlike Alex, you don't follow through.'"
     },
     {
       "sig": [
@@ -9894,7 +10018,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My coworker they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -9973,7 +10098,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from coworker."
     },
     {
       "sig": [
@@ -10053,7 +10179,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "coworker canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -10133,7 +10260,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "coworker said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -10211,7 +10339,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "coworker posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -10291,7 +10420,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My coworker they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -10371,7 +10501,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "coworker said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -10451,7 +10582,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My coworker they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -10531,7 +10663,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My coworker i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -10611,7 +10744,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My coworker they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -10691,7 +10825,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "coworker muted me while I was speaking."
     },
     {
       "sig": [
@@ -10769,7 +10904,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from coworker included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -10849,7 +10985,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "coworker opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -10928,7 +11065,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My coworker they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -11008,7 +11146,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My coworker they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -11088,7 +11227,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My coworker their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -11163,7 +11303,8 @@
         "recognition",
         "respect",
         "honor"
-      ]
+      ],
+      "example": "They thanked me by name in the meeting notes."
     },
     {
       "sig": [
@@ -11243,7 +11384,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My dad they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -11323,7 +11465,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My dad they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -11403,7 +11546,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My dad they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -11483,7 +11627,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My dad i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -11563,7 +11708,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My dad they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -11642,7 +11788,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My dad they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -11722,7 +11869,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My dad they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -11802,7 +11950,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My dad their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -11882,7 +12031,8 @@
         "mutuality",
         "respect",
         "to-be-heard"
-      ]
+      ],
+      "example": "We were asked for input after the decision had been finalized."
     },
     {
       "sig": [
@@ -11958,7 +12108,8 @@
         "trust",
         "clarity",
         "respect"
-      ]
+      ],
+      "example": "The chat history disappeared without any explanation."
     },
     {
       "sig": [
@@ -12038,7 +12189,8 @@
         "support",
         "order",
         "respect"
-      ]
+      ],
+      "example": "Shared sink stayed full after the agreed chore time."
     },
     {
       "sig": [
@@ -12118,7 +12270,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "They rolled their eyes while I presented."
     },
     {
       "sig": [
@@ -12197,7 +12350,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from dispatcher."
     },
     {
       "sig": [
@@ -12277,7 +12431,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "dispatcher canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -12357,7 +12512,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "dispatcher said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -12435,7 +12591,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "dispatcher posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -12515,7 +12672,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "dispatcher said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -12595,7 +12753,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "dispatcher muted me while I was speaking."
     },
     {
       "sig": [
@@ -12673,7 +12832,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from dispatcher included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -12753,7 +12913,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "dispatcher opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -12832,7 +12993,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from doctor."
     },
     {
       "sig": [
@@ -12912,7 +13074,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "doctor canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -12992,7 +13155,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "doctor said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -13070,7 +13234,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "doctor posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -13150,7 +13315,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "doctor said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -13228,7 +13394,8 @@
         "predictability",
         "respect",
         "consideration"
-      ]
+      ],
+      "example": "The appointment started 45 minutes after the scheduled time."
     },
     {
       "sig": [
@@ -13308,7 +13475,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "doctor muted me while I was speaking."
     },
     {
       "sig": [
@@ -13386,7 +13554,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from doctor included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -13466,7 +13635,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "doctor opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -13545,7 +13715,8 @@
         "consideration",
         "respect",
         "acknowledgement"
-      ]
+      ],
+      "example": "When I opened the draft, my edits were replaced by a newer upload without any heads-up."
     },
     {
       "sig": [
@@ -13625,7 +13796,8 @@
         "respect",
         "mutuality",
         "consideration"
-      ]
+      ],
+      "example": "One person spoke for 80% of the meeting time."
     },
     {
       "sig": [
@@ -13704,7 +13876,8 @@
         "to-be-heard",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "As I spoke, they turned and closed the door between us."
     },
     {
       "sig": [
@@ -13781,7 +13954,8 @@
         "security",
         "safety",
         "predictability"
-      ]
+      ],
+      "example": "The exterior door was propped open overnight."
     },
     {
       "sig": [
@@ -13860,7 +14034,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from driver."
     },
     {
       "sig": [
@@ -13940,7 +14115,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "driver canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -14020,7 +14196,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "driver said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -14098,7 +14275,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "driver posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -14178,7 +14356,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "driver said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -14258,7 +14437,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "driver muted me while I was speaking."
     },
     {
       "sig": [
@@ -14336,7 +14516,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from driver included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -14416,7 +14597,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "driver opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -14494,7 +14676,8 @@
         "honesty",
         "trust",
         "respect"
-      ]
+      ],
+      "example": "After I responded, the original message was edited to say something different."
     },
     {
       "sig": [
@@ -14574,7 +14757,8 @@
         "belonging",
         "to-be-seen",
         "consideration"
-      ]
+      ],
+      "example": "The team event invite didn't include my address."
     },
     {
       "sig": [
@@ -14651,7 +14835,8 @@
       "needs": [
         "support",
         "community"
-      ]
+      ],
+      "example": "My mom was diagnosed with a serious condition."
     },
     {
       "sig": [
@@ -14726,7 +14911,8 @@
         "appreciation",
         "to-be-seen",
         "connection"
-      ]
+      ],
+      "example": "They named exactly what they valued about my work."
     },
     {
       "sig": [
@@ -14805,7 +14991,8 @@
         "to-be-seen",
         "accountability",
         "justice"
-      ]
+      ],
+      "example": "A photo of me was posted publicly without asking first."
     },
     {
       "sig": [
@@ -14884,7 +15071,8 @@
         "respect",
         "safety",
         "community"
-      ]
+      ],
+      "example": "Someone cut in front of me in a long line at the store."
     },
     {
       "sig": [
@@ -14963,7 +15151,8 @@
         "to-be-seen",
         "love-caring",
         "acceptance"
-      ]
+      ],
+      "example": "They canceled our plan at the last minute and stopped replying."
     },
     {
       "sig": [
@@ -15042,7 +15231,8 @@
         "justice",
         "to-be-heard",
         "peer-respect"
-      ]
+      ],
+      "example": "Feedback about me was given publicly without any heads-up."
     },
     {
       "sig": [
@@ -15120,7 +15310,8 @@
         "predictability",
         "respect",
         "consideration"
-      ]
+      ],
+      "example": "Shared folders were reorganized and links broke."
     },
     {
       "sig": [
@@ -15200,7 +15391,8 @@
         "consideration",
         "order",
         "respect"
-      ]
+      ],
+      "example": "One person took most of the shared snacks."
     },
     {
       "sig": [
@@ -15280,7 +15472,8 @@
         "consideration",
         "trust",
         "to-be-seen"
-      ]
+      ],
+      "example": "The container with my name on it was empty when I went to get my lunch."
     },
     {
       "sig": [
@@ -15360,7 +15553,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My friend they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -15439,7 +15633,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from friend."
     },
     {
       "sig": [
@@ -15519,7 +15714,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "friend canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -15599,7 +15795,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "friend said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -15677,7 +15874,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "friend posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -15757,7 +15955,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My friend they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -15837,7 +16036,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "friend said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -15917,7 +16117,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My friend they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -15997,7 +16198,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My friend i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -16077,7 +16279,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My friend they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -16157,7 +16360,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "friend muted me while I was speaking."
     },
     {
       "sig": [
@@ -16235,7 +16439,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from friend included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -16315,7 +16520,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "friend opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -16394,7 +16600,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My friend they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -16474,7 +16681,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My friend they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -16554,7 +16762,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My friend their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -16634,7 +16843,8 @@
         "to-be-seen",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "No response to three messages over two weeks."
     },
     {
       "sig": [
@@ -16710,7 +16920,8 @@
       "needs": [
         "support",
         "clarity"
-      ]
+      ],
+      "example": "Grades were posted three weeks after the promised date."
     },
     {
       "sig": [
@@ -16789,7 +17000,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "They took a team photo while I was in the room and didn't include me."
     },
     {
       "sig": [
@@ -16866,7 +17078,8 @@
         "security",
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "My weekly hours dropped from 30 to 18 without anyone speaking with me."
     },
     {
       "sig": [
@@ -16945,7 +17158,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from hr."
     },
     {
       "sig": [
@@ -17025,7 +17239,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "hr canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -17105,7 +17320,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "hr said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -17183,7 +17399,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "hr posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -17263,7 +17480,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "hr said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -17343,7 +17561,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "hr muted me while I was speaking."
     },
     {
       "sig": [
@@ -17421,7 +17640,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from hr included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -17501,7 +17721,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "hr opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -17579,7 +17800,8 @@
         "accountability",
         "integrity",
         "honesty"
-      ]
+      ],
+      "example": "I said I'd call and I didn't."
     },
     {
       "sig": [
@@ -17656,7 +17878,8 @@
         "acknowledgement",
         "respect",
         "love-caring"
-      ]
+      ],
+      "example": "I forgot their birthday."
     },
     {
       "sig": [
@@ -17734,7 +17957,8 @@
         "accountability",
         "integrity",
         "honesty"
-      ]
+      ],
+      "example": "I raised my voice during the argument and wish I hadn't."
     },
     {
       "sig": [
@@ -17813,7 +18037,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from immigration officer."
     },
     {
       "sig": [
@@ -17893,7 +18118,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "immigration officer canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -17973,7 +18199,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "immigration officer said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -18051,7 +18278,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "immigration officer posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -18131,7 +18359,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "immigration officer said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -18211,7 +18440,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "immigration officer muted me while I was speaking."
     },
     {
       "sig": [
@@ -18289,7 +18519,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from immigration officer included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -18369,7 +18600,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "immigration officer opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -18448,7 +18680,8 @@
         "mutuality",
         "clarity",
         "consideration"
-      ]
+      ],
+      "example": "While I drafted the paragraph, another cursor deleted my sentence mid-word."
     },
     {
       "sig": [
@@ -18523,7 +18756,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "They asked if I'd like to join the outing and saved me a seat."
     },
     {
       "sig": [
@@ -18601,7 +18835,8 @@
         "support",
         "rest",
         "understanding"
-      ]
+      ],
+      "example": "I snapped at a friend over something small."
     },
     {
       "sig": [
@@ -18681,7 +18916,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "They called me a nickname I dislike and said it was just a joke."
     },
     {
       "sig": [
@@ -18756,7 +18992,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "They delivered the draft on the day they promised."
     },
     {
       "sig": [
@@ -18835,7 +19072,8 @@
         "order",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "I waited 40 minutes past the start time."
     },
     {
       "sig": [
@@ -18914,7 +19152,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from landlord."
     },
     {
       "sig": [
@@ -18994,7 +19233,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "landlord canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -19074,7 +19314,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "landlord said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -19152,7 +19393,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "landlord posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -19232,7 +19474,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "landlord said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -19312,7 +19555,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "landlord muted me while I was speaking."
     },
     {
       "sig": [
@@ -19390,7 +19634,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from landlord included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -19470,7 +19715,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "landlord opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -19550,7 +19796,8 @@
         "consideration",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "We agreed on 2:00; they arrived at 2:20 without a message."
     },
     {
       "sig": [
@@ -19630,7 +19877,8 @@
         "to-be-heard",
         "belonging",
         "consideration"
-      ]
+      ],
+      "example": "After I described the issue, several people laughed and looked at each other."
     },
     {
       "sig": [
@@ -19710,7 +19958,8 @@
         "consideration",
         "to-be-seen",
         "reliability"
-      ]
+      ],
+      "example": "In the middle of my update, the video call disconnected with no goodbye."
     },
     {
       "sig": [
@@ -19789,7 +20038,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from librarian."
     },
     {
       "sig": [
@@ -19869,7 +20119,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "librarian canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -19949,7 +20200,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "librarian said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -20027,7 +20279,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "librarian posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -20107,7 +20360,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "librarian said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -20187,7 +20441,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "librarian muted me while I was speaking."
     },
     {
       "sig": [
@@ -20265,7 +20520,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from librarian included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -20345,7 +20601,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "librarian opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -20421,7 +20678,8 @@
       ],
       "needs": [
         "safety"
-      ]
+      ],
+      "example": "The flickering light made it hard to focus."
     },
     {
       "sig": [
@@ -20499,7 +20757,8 @@
         "support",
         "order",
         "predictability"
-      ]
+      ],
+      "example": "The shared link returned a 404 error."
     },
     {
       "sig": [
@@ -20578,7 +20837,8 @@
         "trust",
         "privacy",
         "respect"
-      ]
+      ],
+      "example": "I discovered my username and password were emailed to a group without my consent."
     },
     {
       "sig": [
@@ -20656,7 +20916,8 @@
         "support",
         "connection",
         "love-caring"
-      ]
+      ],
+      "example": "My dog passed away last night."
     },
     {
       "sig": [
@@ -20735,7 +20996,8 @@
         "calm",
         "serenity",
         "rest"
-      ]
+      ],
+      "example": "A loud alarm test went off without any prior notice."
     },
     {
       "sig": [
@@ -20814,7 +21076,8 @@
         "respect",
         "trust",
         "safety"
-      ]
+      ],
+      "example": "My mail was opened and the contents were mentioned to me before I had seen it."
     },
     {
       "sig": [
@@ -20894,7 +21157,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My manager they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -20973,7 +21237,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from manager."
     },
     {
       "sig": [
@@ -21053,7 +21318,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "manager canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -21133,7 +21399,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "manager said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -21211,7 +21478,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "manager posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -21291,7 +21559,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My manager they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -21371,7 +21640,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "manager said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -21451,7 +21721,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My manager they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -21531,7 +21802,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My manager i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -21611,7 +21883,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My manager they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -21691,7 +21964,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "manager muted me while I was speaking."
     },
     {
       "sig": [
@@ -21769,7 +22043,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from manager included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -21849,7 +22124,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "manager opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -21928,7 +22204,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My manager they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -22008,7 +22285,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My manager they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -22088,7 +22366,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My manager their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -22167,7 +22446,8 @@
         "respect",
         "trust",
         "predictability"
-      ]
+      ],
+      "example": "The video call displayed 'Recording has started' without anyone asking first."
     },
     {
       "sig": [
@@ -22245,7 +22525,8 @@
         "inclusion",
         "predictability",
         "respect"
-      ]
+      ],
+      "example": "When I entered at the scheduled time, the meeting had already started and decisions were being discussed."
     },
     {
       "sig": [
@@ -22323,7 +22604,8 @@
         "consideration",
         "support",
         "order"
-      ]
+      ],
+      "example": "Shared sink was full of dishes after agreed chore time."
     },
     {
       "sig": [
@@ -22400,7 +22682,8 @@
         "respect",
         "consideration",
         "trust"
-      ]
+      ],
+      "example": "My private email was forwarded to two managers without asking me."
     },
     {
       "sig": [
@@ -22480,7 +22763,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "While I was speaking, a notification said 'You have been muted by the host.'"
     },
     {
       "sig": [
@@ -22560,7 +22844,8 @@
         "inclusion",
         "respect",
         "belonging"
-      ]
+      ],
+      "example": "They asked 'Where are you from?' in the meeting."
     },
     {
       "sig": [
@@ -22639,7 +22924,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from moderator."
     },
     {
       "sig": [
@@ -22719,7 +23005,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "moderator canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -22799,7 +23086,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "moderator said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -22877,7 +23165,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "moderator posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -22957,7 +23246,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "moderator said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -23037,7 +23327,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "moderator muted me while I was speaking."
     },
     {
       "sig": [
@@ -23115,7 +23406,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from moderator included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -23195,7 +23487,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "moderator opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -23275,7 +23568,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My mom they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -23355,7 +23649,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My mom they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -23435,7 +23730,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My mom they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -23515,7 +23811,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My mom i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -23595,7 +23892,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My mom they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -23674,7 +23972,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My mom they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -23754,7 +24053,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My mom they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -23834,7 +24134,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My mom their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -23913,7 +24214,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "During my update, two people were visibly typing on another screen."
     },
     {
       "sig": [
@@ -23991,7 +24293,8 @@
         "to-be-heard",
         "acceptance",
         "respect"
-      ]
+      ],
+      "example": "After I shared, they said I was overreacting."
     },
     {
       "sig": [
@@ -24069,7 +24372,8 @@
         "community",
         "friendship",
         "to-be-seen"
-      ]
+      ],
+      "example": "An event was planned without inviting me."
     },
     {
       "sig": [
@@ -24144,7 +24448,8 @@
         "serenity",
         "rest",
         "connection"
-      ]
+      ],
+      "example": "I watched the sunrise before work."
     },
     {
       "sig": [
@@ -24221,7 +24526,8 @@
         "acceptance",
         "equality",
         "community"
-      ]
+      ],
+      "example": "The venue had no ramp even though accessibility was requested."
     },
     {
       "sig": [
@@ -24298,7 +24604,8 @@
         "acceptance",
         "privacy",
         "respect"
-      ]
+      ],
+      "example": "The appointment started 45 minutes late and test results still show pending."
     },
     {
       "sig": [
@@ -24375,7 +24682,8 @@
         "accountability",
         "consistency",
         "respect"
-      ]
+      ],
+      "example": "The thermostat was changed several degrees without checking with me."
     },
     {
       "sig": [
@@ -24453,7 +24761,8 @@
         "accountability",
         "to-be-heard",
         "peer-respect"
-      ]
+      ],
+      "example": "A decision about my work was made before I joined the meeting."
     },
     {
       "sig": [
@@ -24531,7 +24840,8 @@
         "act-freely",
         "closeness",
         "love-caring"
-      ]
+      ],
+      "example": "I shared something personal and received no response for days."
     },
     {
       "sig": [
@@ -24610,7 +24920,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from neighbor."
     },
     {
       "sig": [
@@ -24690,7 +25001,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "neighbor canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -24770,7 +25082,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "neighbor said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -24848,7 +25161,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "neighbor posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -24928,7 +25242,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "neighbor said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -25008,7 +25323,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "neighbor muted me while I was speaking."
     },
     {
       "sig": [
@@ -25086,7 +25402,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from neighbor included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -25166,7 +25483,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "neighbor opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -25246,7 +25564,8 @@
         "connection",
         "belonging",
         "consideration"
-      ]
+      ],
+      "example": "Two messages were read (check marks visible) with no reply for 48 hours."
     },
     {
       "sig": [
@@ -25326,7 +25645,8 @@
         "connection",
         "belonging",
         "consideration"
-      ]
+      ],
+      "example": "There was no reply for 7 days."
     },
     {
       "sig": [
@@ -25406,7 +25726,8 @@
         "peace",
         "rest",
         "clarity"
-      ]
+      ],
+      "example": "Alarms sounded repeatedly for 20 minutes in the workspace."
     },
     {
       "sig": [
@@ -25484,7 +25805,8 @@
         "mutuality",
         "respect",
         "trust"
-      ]
+      ],
+      "example": "The shared meeting notes were altered with new wording without anyone mentioning the edits."
     },
     {
       "sig": [
@@ -25563,7 +25885,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from nurse."
     },
     {
       "sig": [
@@ -25643,7 +25966,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "nurse canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -25723,7 +26047,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "nurse said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -25801,7 +26126,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "nurse posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -25881,7 +26207,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "nurse said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -25961,7 +26288,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "nurse muted me while I was speaking."
     },
     {
       "sig": [
@@ -26039,7 +26367,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from nurse included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -26119,7 +26448,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "nurse opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -26193,7 +26523,8 @@
         "community",
         "consideration",
         "belonging"
-      ]
+      ],
+      "example": "A stranger offered me their seat on the bus."
     },
     {
       "sig": [
@@ -26270,7 +26601,8 @@
         "support",
         "consideration",
         "predictability"
-      ]
+      ],
+      "example": "Office hours were canceled without alternative times."
     },
     {
       "sig": [
@@ -26349,7 +26681,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from officer."
     },
     {
       "sig": [
@@ -26429,7 +26762,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "officer canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -26509,7 +26843,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "officer said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -26587,7 +26922,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "officer posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -26667,7 +27003,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "officer said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -26747,7 +27084,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "officer muted me while I was speaking."
     },
     {
       "sig": [
@@ -26825,7 +27163,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from officer included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -26905,7 +27244,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "officer opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -26984,7 +27324,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "After my long update, the only reply was 'k'."
     },
     {
       "sig": [
@@ -27064,7 +27405,8 @@
         "empowerment",
         "to-be-heard",
         "mutuality"
-      ]
+      ],
+      "example": "The decision was announced after I had asked to contribute."
     },
     {
       "sig": [
@@ -27143,7 +27485,8 @@
         "respect",
         "autonomy",
         "safety"
-      ]
+      ],
+      "example": "A package addressed to me was opened and left on the counter before I got home."
     },
     {
       "sig": [
@@ -27222,7 +27565,8 @@
         "safety",
         "support",
         "peace"
-      ]
+      ],
+      "example": "I had a panic attack on the train."
     },
     {
       "sig": [
@@ -27302,7 +27646,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My parent they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -27381,7 +27726,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from parent."
     },
     {
       "sig": [
@@ -27461,7 +27807,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "parent canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -27541,7 +27888,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "parent said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -27619,7 +27967,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "parent posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -27699,7 +28048,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My parent they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -27779,7 +28129,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "parent said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -27859,7 +28210,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My parent they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -27939,7 +28291,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My parent i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -28019,7 +28372,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My parent they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -28099,7 +28453,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "parent muted me while I was speaking."
     },
     {
       "sig": [
@@ -28177,7 +28532,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from parent included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -28257,7 +28613,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "parent opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -28336,7 +28693,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My parent they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -28416,7 +28774,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My parent they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -28496,7 +28855,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My parent their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -28576,7 +28936,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My partner they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -28655,7 +29016,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from partner."
     },
     {
       "sig": [
@@ -28735,7 +29097,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "partner canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -28815,7 +29178,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "partner said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -28893,7 +29257,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "partner posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -28973,7 +29338,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My partner they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -29053,7 +29419,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "partner said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -29133,7 +29500,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My partner they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -29213,7 +29581,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My partner i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -29293,7 +29662,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My partner they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -29373,7 +29743,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "partner muted me while I was speaking."
     },
     {
       "sig": [
@@ -29451,7 +29822,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from partner included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -29531,7 +29903,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "partner opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -29610,7 +29983,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My partner they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -29690,7 +30064,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My partner they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -29770,7 +30145,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My partner their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -29849,7 +30225,8 @@
         "space",
         "respect",
         "consideration"
-      ]
+      ],
+      "example": "My labeled folders were moved to a cabinet without asking."
     },
     {
       "sig": [
@@ -29927,7 +30304,8 @@
         "respect",
         "autonomy",
         "space"
-      ]
+      ],
+      "example": "In the group, they asked, 'So why were you at the clinic?' after I hadn't shared that."
     },
     {
       "sig": [
@@ -30005,7 +30383,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "Someone bent down and picked up my dog without asking me first."
     },
     {
       "sig": [
@@ -30084,7 +30463,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from pharmacist."
     },
     {
       "sig": [
@@ -30164,7 +30544,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "pharmacist canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -30244,7 +30625,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "pharmacist said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -30322,7 +30704,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "pharmacist posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -30402,7 +30785,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "pharmacist said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -30482,7 +30866,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "pharmacist muted me while I was speaking."
     },
     {
       "sig": [
@@ -30560,7 +30945,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from pharmacist included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -30640,7 +31026,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "pharmacist opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -30719,7 +31106,8 @@
         "order",
         "respect",
         "consideration"
-      ]
+      ],
+      "example": "They stepped ahead of me in the line without asking."
     },
     {
       "sig": [
@@ -30799,7 +31187,8 @@
         "choice",
         "freedom",
         "mutuality"
-      ]
+      ],
+      "example": "They changed the plan and said, 'You'll do it this way,' without asking."
     },
     {
       "sig": [
@@ -30877,7 +31266,8 @@
         "clarity",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "The handbook says 'as needed' without defining who decides."
     },
     {
       "sig": [
@@ -30955,7 +31345,8 @@
         "predictability",
         "respect",
         "participation"
-      ]
+      ],
+      "example": "The handbook update announced a new policy that had already taken effect yesterday."
     },
     {
       "sig": [
@@ -31035,7 +31426,8 @@
         "fairness",
         "respect",
         "clarity"
-      ]
+      ],
+      "example": "Others were allowed exceptions that I was not."
     },
     {
       "sig": [
@@ -31111,7 +31503,8 @@
         "privacy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "Medical details were discussed at the desk within earshot of others."
     },
     {
       "sig": [
@@ -31191,7 +31584,8 @@
         "autonomy",
         "trust",
         "respect"
-      ]
+      ],
+      "example": "They screen-shared a direct message I sent them."
     },
     {
       "sig": [
@@ -31271,7 +31665,8 @@
         "trust",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "A private message I sent was copied into the group channel without checking first."
     },
     {
       "sig": [
@@ -31350,7 +31745,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from professor."
     },
     {
       "sig": [
@@ -31430,7 +31826,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "professor canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -31510,7 +31907,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "professor said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -31588,7 +31986,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "professor posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -31668,7 +32067,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "professor said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -31748,7 +32148,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "professor muted me while I was speaking."
     },
     {
       "sig": [
@@ -31826,7 +32227,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from professor included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -31906,7 +32308,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "professor opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -31986,7 +32389,8 @@
         "trust",
         "consideration",
         "acknowledgement"
-      ]
+      ],
+      "example": "They dropped my tablet and the screen cracked."
     },
     {
       "sig": [
@@ -32064,7 +32468,8 @@
         "respect",
         "rest",
         "consideration"
-      ]
+      ],
+      "example": "My PTO request was declined with no explanation."
     },
     {
       "sig": [
@@ -32142,7 +32547,8 @@
         "respect",
         "autonomy",
         "safety"
-      ]
+      ],
+      "example": "My name was tagged in a public post about the event without anyone asking me first."
     },
     {
       "sig": [
@@ -32222,7 +32628,8 @@
         "to-be-heard",
         "understanding",
         "respect"
-      ]
+      ],
+      "example": "I asked 'Can we review the budget?' and the topic switched without any answer."
     },
     {
       "sig": [
@@ -32301,7 +32708,8 @@
         "clarity",
         "respect",
         "to-be-heard"
-      ]
+      ],
+      "example": "My two questions were not included in the shared minutes."
     },
     {
       "sig": [
@@ -32381,7 +32789,8 @@
         "consideration",
         "peace",
         "respect"
-      ]
+      ],
+      "example": "At 11:30 p.m. music was playing loudly through the shared wall."
     },
     {
       "sig": [
@@ -32461,7 +32870,8 @@
         "calm",
         "respect",
         "love-caring"
-      ]
+      ],
+      "example": "Their voice got louder and the door closed loudly during our talk."
     },
     {
       "sig": [
@@ -32536,7 +32946,8 @@
         "acknowledgement",
         "to-be-seen",
         "connection"
-      ]
+      ],
+      "example": "After my help, they looked me in the eye and said thank you."
     },
     {
       "sig": [
@@ -32613,7 +33024,8 @@
         "trust",
         "clarity",
         "respect"
-      ]
+      ],
+      "example": "The recording link was posted to a public channel."
     },
     {
       "sig": [
@@ -32692,7 +33104,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from referee."
     },
     {
       "sig": [
@@ -32772,7 +33185,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "referee canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -32852,7 +33266,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "referee said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -32930,7 +33345,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "referee posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -33010,7 +33426,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "referee said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -33090,7 +33507,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "referee muted me while I was speaking."
     },
     {
       "sig": [
@@ -33168,7 +33586,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from referee included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -33248,7 +33667,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "referee opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -33327,7 +33747,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from registrar."
     },
     {
       "sig": [
@@ -33407,7 +33828,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "registrar canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -33487,7 +33909,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "registrar said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -33565,7 +33988,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "registrar posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -33645,7 +34069,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "registrar said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -33725,7 +34150,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "registrar muted me while I was speaking."
     },
     {
       "sig": [
@@ -33803,7 +34229,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from registrar included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -33883,7 +34310,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "registrar opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -33963,7 +34391,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "They canceled three weekends in a row."
     },
     {
       "sig": [
@@ -34042,7 +34471,8 @@
         "connection",
         "belonging",
         "consideration"
-      ]
+      ],
+      "example": "They replied two days after I asked a time‑sensitive question."
     },
     {
       "sig": [
@@ -34121,7 +34551,8 @@
         "clarity",
         "support",
         "respect"
-      ]
+      ],
+      "example": "The shared folder I use every day suddenly denied my access."
     },
     {
       "sig": [
@@ -34199,7 +34630,8 @@
         "predictability",
         "support",
         "trust"
-      ]
+      ],
+      "example": "The portal still shows 'pending' two weeks later."
     },
     {
       "sig": [
@@ -34278,7 +34710,8 @@
         "support",
         "predictability",
         "consideration"
-      ]
+      ],
+      "example": "The ride canceled when I reached the curb."
     },
     {
       "sig": [
@@ -34352,7 +34785,8 @@
         "consideration",
         "support",
         "reliability"
-      ]
+      ],
+      "example": "They waited five minutes instead of canceling instantly."
     },
     {
       "sig": [
@@ -34432,7 +34866,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My roommate they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -34511,7 +34946,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from roommate."
     },
     {
       "sig": [
@@ -34591,7 +35027,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "roommate canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -34671,7 +35108,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "roommate said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -34749,7 +35187,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "roommate posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -34829,7 +35268,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My roommate they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -34909,7 +35349,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "roommate said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -34989,7 +35430,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My roommate they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -35069,7 +35511,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My roommate i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -35149,7 +35592,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My roommate they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -35229,7 +35673,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "roommate muted me while I was speaking."
     },
     {
       "sig": [
@@ -35307,7 +35752,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from roommate included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -35387,7 +35833,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "roommate opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -35466,7 +35913,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My roommate they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -35546,7 +35994,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My roommate they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -35626,7 +36075,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My roommate their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -35706,7 +36156,8 @@
         "recognition",
         "honor",
         "understanding"
-      ]
+      ],
+      "example": "They repeated a story about me to the team."
     },
     {
       "sig": [
@@ -35786,7 +36237,8 @@
         "honor",
         "love-caring",
         "consideration"
-      ]
+      ],
+      "example": "They imitated my voice when I asked a question."
     },
     {
       "sig": [
@@ -35863,7 +36315,8 @@
         "safety",
         "respect",
         "consideration"
-      ]
+      ],
+      "example": "Personal messages popped up during screen share."
     },
     {
       "sig": [
@@ -35941,7 +36394,8 @@
         "clarity",
         "predictability",
         "respect"
-      ]
+      ],
+      "example": "The agreed 30‑minute limit became 2 hours."
     },
     {
       "sig": [
@@ -36018,7 +36472,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "A screenshot of our conversation was posted in a group chat."
     },
     {
       "sig": [
@@ -36097,7 +36552,8 @@
         "consideration",
         "respect",
         "choice"
-      ]
+      ],
+      "example": "At the event, my assigned seat had been given to someone else without notice."
     },
     {
       "sig": [
@@ -36177,7 +36633,8 @@
         "order",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "My reserved seat was occupied and no alternative provided."
     },
     {
       "sig": [
@@ -36257,7 +36714,8 @@
         "connection",
         "belonging",
         "consideration"
-      ]
+      ],
+      "example": "Message showed as 'seen' yesterday; no reply since then."
     },
     {
       "sig": [
@@ -36336,7 +36794,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from server."
     },
     {
       "sig": [
@@ -36416,7 +36875,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "server canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -36496,7 +36956,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "server said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -36574,7 +37035,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "server posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -36654,7 +37116,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "server said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -36734,7 +37197,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "server muted me while I was speaking."
     },
     {
       "sig": [
@@ -36812,7 +37276,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from server included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -36892,7 +37357,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "server opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -36971,7 +37437,8 @@
         "respect",
         "autonomy",
         "trust"
-      ]
+      ],
+      "example": "A photo of me at the event was posted online without anyone asking first."
     },
     {
       "sig": [
@@ -37051,7 +37518,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My sibling they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -37130,7 +37598,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from sibling."
     },
     {
       "sig": [
@@ -37210,7 +37679,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "sibling canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -37290,7 +37760,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "sibling said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -37368,7 +37839,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "sibling posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -37448,7 +37920,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My sibling they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -37528,7 +38001,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "sibling said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -37608,7 +38082,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My sibling they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -37688,7 +38163,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My sibling i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -37768,7 +38244,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My sibling they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -37848,7 +38325,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "sibling muted me while I was speaking."
     },
     {
       "sig": [
@@ -37926,7 +38404,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from sibling included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -38006,7 +38485,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "sibling opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -38085,7 +38565,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My sibling they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -38165,7 +38646,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My sibling they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -38245,7 +38727,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My sibling their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -38323,7 +38806,8 @@
         "consideration",
         "respect",
         "to-be-heard"
-      ]
+      ],
+      "example": "While I presented, two colleagues started a quiet conversation with each other."
     },
     {
       "sig": [
@@ -38402,7 +38886,8 @@
         "respect",
         "to-be-heard",
         "inclusion"
-      ]
+      ],
+      "example": "During the deck review, they scrolled past my slide without stopping or mentioning it."
     },
     {
       "sig": [
@@ -38477,7 +38962,8 @@
       ],
       "needs": [
         "safety"
-      ]
+      ],
+      "example": "The conference room had a heavy chemical cleaner smell."
     },
     {
       "sig": [
@@ -38554,7 +39040,8 @@
       "needs": [
         "respect",
         "consideration"
-      ]
+      ],
+      "example": "A cigarette was lit in the shared living room even though we agreed to keep smoke outside."
     },
     {
       "sig": [
@@ -38633,7 +39120,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from social worker."
     },
     {
       "sig": [
@@ -38713,7 +39201,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "social worker canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -38793,7 +39282,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "social worker said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -38871,7 +39361,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "social worker posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -38951,7 +39442,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "social worker said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -39031,7 +39523,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "social worker muted me while I was speaking."
     },
     {
       "sig": [
@@ -39109,7 +39602,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from social worker included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -39189,7 +39683,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "social worker opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -39267,7 +39762,8 @@
         "space",
         "safety",
         "serenity"
-      ]
+      ],
+      "example": "They stood close that our shoulders touched continuously."
     },
     {
       "sig": [
@@ -39347,7 +39843,8 @@
         "acknowledgement",
         "to-be-seen",
         "connection"
-      ]
+      ],
+      "example": "Our anniversary passed without any message or plan."
     },
     {
       "sig": [
@@ -39427,7 +39924,8 @@
         "to-be-heard",
         "peace",
         "love-caring"
-      ]
+      ],
+      "example": "They stayed silent and looked away when I asked a question."
     },
     {
       "sig": [
@@ -39501,7 +39999,8 @@
         "community",
         "connection",
         "appreciation"
-      ]
+      ],
+      "example": "A stranger paid for my coffee."
     },
     {
       "sig": [
@@ -39579,7 +40078,8 @@
         "support",
         "reliability",
         "order"
-      ]
+      ],
+      "example": "The communal printer was empty for three days despite notes about it."
     },
     {
       "sig": [
@@ -39657,7 +40157,8 @@
         "consideration",
         "respect",
         "to-be-seen"
-      ]
+      ],
+      "example": "I was @mentioned with no description or task."
     },
     {
       "sig": [
@@ -39737,7 +40238,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My teacher they said I was lying about the timeline."
     },
     {
       "sig": [
@@ -39816,7 +40318,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from teacher."
     },
     {
       "sig": [
@@ -39896,7 +40399,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "teacher canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -39976,7 +40480,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "teacher said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -40054,7 +40559,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "teacher posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -40134,7 +40640,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My teacher they didn't do the thing they promised yesterday."
     },
     {
       "sig": [
@@ -40214,7 +40721,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "teacher said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -40294,7 +40802,8 @@
         "belonging",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "My teacher they pointed out a mistake loudly in front of others."
     },
     {
       "sig": [
@@ -40374,7 +40883,8 @@
         "reliability",
         "commitment",
         "dependability"
-      ]
+      ],
+      "example": "My teacher i learned the story they told me wasn't true."
     },
     {
       "sig": [
@@ -40454,7 +40964,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My teacher they mimicked my voice to get laughs."
     },
     {
       "sig": [
@@ -40534,7 +41045,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "teacher muted me while I was speaking."
     },
     {
       "sig": [
@@ -40612,7 +41124,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from teacher included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -40692,7 +41205,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "teacher opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -40771,7 +41285,8 @@
         "support",
         "consideration",
         "connection"
-      ]
+      ],
+      "example": "My teacher they wouldn't answer my texts or talk to me."
     },
     {
       "sig": [
@@ -40851,7 +41366,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My teacher they started speaking while I was mid‑sentence."
     },
     {
       "sig": [
@@ -40931,7 +41447,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "My teacher their voice got louder while speaking to me."
     },
     {
       "sig": [
@@ -41005,7 +41522,8 @@
         "support",
         "consideration",
         "trust"
-      ]
+      ],
+      "example": "My teammate offered to take a task off my plate."
     },
     {
       "sig": [
@@ -41084,7 +41602,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from teammate."
     },
     {
       "sig": [
@@ -41164,7 +41683,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "teammate canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -41244,7 +41764,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "teammate said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -41322,7 +41843,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "teammate posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -41402,7 +41924,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "teammate said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -41482,7 +42005,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "teammate muted me while I was speaking."
     },
     {
       "sig": [
@@ -41560,7 +42084,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from teammate included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -41640,7 +42165,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "teammate opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -41719,7 +42245,8 @@
         "to-be-seen",
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "They typed on their laptop while I shared an update."
     },
     {
       "sig": [
@@ -41798,7 +42325,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from teller."
     },
     {
       "sig": [
@@ -41878,7 +42406,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "teller canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -41958,7 +42487,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "teller said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -42036,7 +42566,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "teller posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -42116,7 +42647,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "teller said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -42196,7 +42728,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "teller muted me while I was speaking."
     },
     {
       "sig": [
@@ -42274,7 +42807,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from teller included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -42354,7 +42888,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "teller opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -42433,7 +42968,8 @@
         "accountability",
         "respect",
         "honesty"
-      ]
+      ],
+      "example": "After the mistake, there was no apology from therapist."
     },
     {
       "sig": [
@@ -42513,7 +43049,8 @@
         "support",
         "consideration",
         "security"
-      ]
+      ],
+      "example": "therapist canceled 30 minutes before the appointment."
     },
     {
       "sig": [
@@ -42593,7 +43130,8 @@
         "to-be-heard",
         "consideration",
         "honor"
-      ]
+      ],
+      "example": "therapist said, 'You're articulate for someone so young.'"
     },
     {
       "sig": [
@@ -42671,7 +43209,8 @@
         "autonomy",
         "respect",
         "safety"
-      ]
+      ],
+      "example": "therapist posted a screenshot of our chat in a group without asking."
     },
     {
       "sig": [
@@ -42751,7 +43290,8 @@
         "inclusion",
         "to-be-seen",
         "respect"
-      ]
+      ],
+      "example": "therapist said I could come only if I handled the driving."
     },
     {
       "sig": [
@@ -42831,7 +43371,8 @@
         "autonomy",
         "consideration",
         "to-be-heard"
-      ]
+      ],
+      "example": "therapist muted me while I was speaking."
     },
     {
       "sig": [
@@ -42909,7 +43450,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "The final bill from therapist included a fee that wasn't in the quote."
     },
     {
       "sig": [
@@ -42989,7 +43531,8 @@
         "privacy",
         "safety",
         "respect"
-      ]
+      ],
+      "example": "therapist opened my door and stepped in without knocking."
     },
     {
       "sig": [
@@ -43065,7 +43608,8 @@
       "needs": [
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "The thermostat was turned down 6 degrees while I was still working there."
     },
     {
       "sig": [
@@ -43141,7 +43685,8 @@
       "needs": [
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "The AC was set to 62°F without checking with roommates."
     },
     {
       "sig": [
@@ -43221,7 +43766,8 @@
         "clarity",
         "fairness",
         "trust"
-      ]
+      ],
+      "example": "Receipt showed a higher total than the signed amount."
     },
     {
       "sig": [
@@ -43299,7 +43845,8 @@
         "peace",
         "respect",
         "to-be-heard"
-      ]
+      ],
+      "example": "They sighed and paused for a long time before answering."
     },
     {
       "sig": [
@@ -43377,7 +43924,8 @@
         "clarity",
         "respect",
         "to-be-heard"
-      ]
+      ],
+      "example": "I asked about budget; the reply shifted to weekend plans."
     },
     {
       "sig": [
@@ -43455,7 +44003,8 @@
         "autonomy",
         "space",
         "safety"
-      ]
+      ],
+      "example": "They put a hand on my shoulder without asking."
     },
     {
       "sig": [
@@ -43533,7 +44082,8 @@
         "predictability",
         "support",
         "security"
-      ]
+      ],
+      "example": "Two‑factor login was enforced without prior notice."
     },
     {
       "sig": [
@@ -43611,7 +44161,8 @@
         "clarity",
         "respect",
         "predictability"
-      ]
+      ],
+      "example": "A subscription renewed with no reminder after the trial period."
     },
     {
       "sig": [
@@ -43691,7 +44242,8 @@
         "fairness",
         "trust",
         "honesty"
-      ]
+      ],
+      "example": "Final bill included fees not in the quote."
     },
     {
       "sig": [
@@ -43769,7 +44321,8 @@
         "clarity",
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "Typing sounds drowned out the speaker."
     },
     {
       "sig": [
@@ -43849,7 +44402,8 @@
         "love-caring",
         "predictability",
         "trust"
-      ]
+      ],
+      "example": "They looked down at their phone while driving on the highway."
     },
     {
       "sig": [
@@ -43929,7 +44483,8 @@
         "to-be-heard",
         "empathy",
         "space"
-      ]
+      ],
+      "example": "They offered step-by-step advice before I finished explaining."
     },
     {
       "sig": [
@@ -44009,7 +44564,8 @@
         "do-things-at-my-own-pace-and-in-my-own-way",
         "consideration",
         "rest"
-      ]
+      ],
+      "example": "At midnight they sent a 5‑minute voice message instead of a short text."
     },
     {
       "sig": [
@@ -44089,7 +44645,8 @@
         "order",
         "to-be-heard",
         "inclusion"
-      ]
+      ],
+      "example": "Three people spoke at once during the call; I couldn't get a word in."
     },
     {
       "sig": [
@@ -44167,7 +44724,8 @@
         "clarity",
         "predictability",
         "respect"
-      ]
+      ],
+      "example": "I waited 45 minutes past the scheduled time."
     },
     {
       "sig": [
@@ -44243,7 +44801,8 @@
       "needs": [
         "consideration",
         "respect"
-      ]
+      ],
+      "example": "The office was so cold I needed a coat."
     },
     {
       "sig": [
@@ -44319,7 +44878,8 @@
       ],
       "needs": [
         "consideration"
-      ]
+      ],
+      "example": "The room was hot and stuffy during the meeting."
     },
     {
       "sig": [
@@ -44399,7 +44959,8 @@
         "clarity",
         "predictability",
         "respect"
-      ]
+      ],
+      "example": "The meeting continued fifteen minutes past the end time without anyone checking in."
     },
     {
       "sig": [
@@ -44479,7 +45040,8 @@
         "inclusion",
         "predictability",
         "respect"
-      ]
+      ],
+      "example": "When I joined at the scheduled time, the meeting had already started."
     },
     {
       "sig": [
@@ -44559,7 +45121,8 @@
         "respect",
         "consideration",
         "autonomy"
-      ]
+      ],
+      "example": "While I was speaking, a notification said 'You have been muted by the host.'"
     },
     {
       "sig": [
@@ -44637,7 +45200,8 @@
         "to-be-seen",
         "connection",
         "consideration"
-      ]
+      ],
+      "example": "Two messages were read and there was no reply for two days."
     },
     {
       "sig": [
@@ -44717,7 +45281,8 @@
         "to-be-heard",
         "understanding",
         "respect"
-      ]
+      ],
+      "example": "I asked 'Can we review the budget?' and the topic switched without any answer."
     },
     {
       "sig": [
@@ -44797,7 +45362,8 @@
         "respect",
         "trust",
         "predictability"
-      ]
+      ],
+      "example": "The video call displayed 'Recording has started' without anyone asking first."
     },
     {
       "sig": [
@@ -44877,7 +45443,8 @@
         "consideration",
         "respect",
         "clarity"
-      ]
+      ],
+      "example": "They used reply all and shared my note with the whole list."
     },
     {
       "sig": [
@@ -44957,7 +45524,8 @@
         "predictability",
         "respect",
         "support"
-      ]
+      ],
+      "example": "I asked for time off and my manager said no."
     },
     {
       "sig": [
@@ -45037,7 +45605,8 @@
         "predictability",
         "respect",
         "support"
-      ]
+      ],
+      "example": "I asked to change my schedule and my boss said no."
     },
     {
       "sig": [
@@ -45117,7 +45686,8 @@
         "predictability",
         "respect",
         "support"
-      ]
+      ],
+      "example": "I asked for a meeting and my landlord said no."
     }
   ]
 }
