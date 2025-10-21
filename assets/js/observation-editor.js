@@ -1821,6 +1821,10 @@ function setGuideContentVisibility(expanded, options = {}) {
     content.setAttribute('hidden', 'hidden');
   }
 
+  const container = typeof document !== 'undefined'
+    ? document.getElementById('observation-guide')
+    : null;
+
   const toggle = typeof document !== 'undefined'
     ? document.querySelector('[data-guide-toggle]')
     : null;
@@ -1830,6 +1834,10 @@ function setGuideContentVisibility(expanded, options = {}) {
     if (expanded && options.focusButton) {
       toggle.focus();
     }
+  }
+
+  if (container) {
+    container.dataset.expanded = expanded ? 'true' : 'false';
   }
 }
 
