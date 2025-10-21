@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderPanels();
   renderValidityStatus();
   renderDetectionStatus();
+  renderSuggestions();
   analyze(state.text);
 
   Promise.all([
@@ -109,12 +110,15 @@ function bind() {
       }
       state.fallback = createFallbackState();
       analyze(state.text);
+      renderSuggestions();
     });
   }
 
   const submit = document.getElementById('observation-submit');
   if (submit) {
-    submit.addEventListener('click', handleSubmit);
+    submit.addEventListener('click', () => {
+      handlePrimaryAction();
+    });
   }
 
   const clearButton = document.getElementById('observation-clear');
@@ -128,13 +132,6 @@ function bind() {
   if (fallbackStart) {
     fallbackStart.addEventListener('click', () => {
       startFallbackSearch();
-    });
-  }
-
-  const fallbackNext = document.getElementById('observation-fallback-next');
-  if (fallbackNext) {
-    fallbackNext.addEventListener('click', () => {
-      advanceFallback();
     });
   }
 
@@ -176,23 +173,11 @@ function analyze(raw, options = {}) {
 }
 
 function renderAnalysis() {
-  const feedback = document.getElementById('observation-feedback');
   const issuesList = document.getElementById('observation-issues');
   const submitButton = document.getElementById('observation-submit');
   const editor = document.getElementById('observation-editor');
 
   const analysis = state.analysis;
-
-  if (feedback) {
-    feedback.textContent = analysis?.message || 'Start by anchoring your observation in time and place.';
-    if (analysis?.ok) {
-      feedback.setAttribute('data-state', 'ok');
-    } else if (analysis?.issues?.length) {
-      feedback.setAttribute('data-state', 'warn');
-    } else {
-      feedback.removeAttribute('data-state');
-    }
-  }
 
   if (issuesList) {
     issuesList.innerHTML = '';
@@ -471,8 +456,9 @@ function renderPanels() {
   if (!suggestionSection) {
     return;
   }
+  suggestionSection.dataset.mode = state.mode || 'editing';
+  suggestionSection.removeAttribute('hidden');
   if (state.mode === 'results') {
-    suggestionSection.removeAttribute('hidden');
     if (!state.scrolledToSuggestions) {
       state.scrolledToSuggestions = true;
       const scrollTarget = () => {
@@ -485,7 +471,7 @@ function renderPanels() {
       }
     }
   } else {
-    suggestionSection.setAttribute('hidden', 'hidden');
+    state.scrolledToSuggestions = false;
   }
 }
 
@@ -498,7 +484,7 @@ function renderSuggestions() {
   const preview = document.getElementById('observation-preview');
   const fallbackPrompt = document.getElementById('observation-fallback-prompt');
   const fallbackRunning = document.getElementById('observation-fallback-running');
-  const fallbackNext = document.getElementById('observation-fallback-next');
+  const actionButton = document.getElementById('observation-submit');
   const fallbackStart = document.getElementById('observation-fallback-start');
 
   if (!feelingsHost || !needsHost || !whyHost || !preview) {
@@ -555,11 +541,16 @@ function renderSuggestions() {
     fallbackStart.disabled = Boolean(state.fallback.running);
   }
 
-  if (fallbackNext) {
-    if (fallbackActive && state.fallback.queue.length > 1) {
-      fallbackNext.removeAttribute('hidden');
+  if (actionButton) {
+    const hasNextFallback = fallbackActive && state.fallback.queue.length > 1;
+    if (hasNextFallback) {
+      actionButton.textContent = 'Next match';
+      actionButton.dataset.action = 'next';
+      actionButton.disabled = false;
     } else {
-      fallbackNext.setAttribute('hidden', 'hidden');
+      actionButton.textContent = 'See matches';
+      actionButton.dataset.action = 'submit';
+      actionButton.disabled = !state.analysis?.ok;
     }
   }
 }
@@ -920,6 +911,14 @@ function hasSuggestions(set) {
   return feelingCount + needCount > 0;
 }
 
+function handlePrimaryAction() {
+  if (state.mode === 'results' && state.fallback.active && state.fallback.queue.length > 1) {
+    advanceFallback();
+    return;
+  }
+  handleSubmit();
+}
+
 function handleSubmit() {
   const trimmed = state.text.trim();
   if (!trimmed) {
@@ -1253,11 +1252,10 @@ function renderDetectionStatus() {
     case 'none':
       message = 'No cue matches detected yet.';
       break;
-    case 'near':
-      message = state.detectionFallbacks > 1
-        ? `No exact cue matches detected. ${state.detectionFallbacks} nearest matches ready to review.`
-        : 'No exact cue match detected. Nearest match ready to review.';
+    case 'near': {
+      message = 'Near matches detected.';
       break;
+    }
     case 'match':
       message = state.detectionMatches > 1
         ? `${state.detectionMatches} exact cue matches detected.`
