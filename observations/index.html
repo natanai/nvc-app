@@ -795,16 +795,17 @@ button.site-nav__magnet {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.35rem;
-    height: 2.35rem;
-    border-radius: 50%;
+    gap: 0.55rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: var(--radius-pill);
     border: 2px solid color-mix(in srgb, var(--outline) 22%, transparent);
     background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
-    color: color-mix(in srgb, var(--ink) 85%, #ffffff 15%);
+    color: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
     font-family: var(--font-display);
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
     letter-spacing: 0.08em;
+    text-transform: uppercase;
     line-height: 1;
     cursor: pointer;
     transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
@@ -822,8 +823,16 @@ button.site-nav__magnet {
     outline-offset: 2px;
   }
 
-  .observation-guide__fullscreen-button-label {
+  .observation-guide__fullscreen-button-icon {
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
     transform: translateY(-0.05rem);
+  }
+
+  .observation-guide__fullscreen-button-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
   }
 
   .observation-guide__toggle::marker {
@@ -839,7 +848,10 @@ button.site-nav__magnet {
   .observation-guide__toggle-actions {
     display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.8rem;
+    padding-left: 0.85rem;
+    margin-left: 0.85rem;
+    border-left: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
   }
 
   .observation-guide__toggle-title {
@@ -1057,12 +1069,15 @@ button.site-nav__magnet {
 
     .observation-guide__toggle-actions {
       align-self: flex-start;
+      margin-left: 0;
+      padding-left: 0;
+      border-left: none;
     }
 
     .observation-guide__fullscreen-button {
-      width: 2rem;
-      height: 2rem;
-      font-size: 0.95rem;
+      width: auto;
+      height: auto;
+      font-size: 0.72rem;
     }
 
     .observation-guide__toggle-icon {
@@ -1130,6 +1145,39 @@ button.site-nav__magnet {
 
   .observation-guide__callout strong {
     font-family: var(--font-display);
+  }
+
+  body.has-observation-guide-open .support-journal__content {
+    justify-items: center;
+  }
+
+  body.has-observation-guide-open .observation-guide__card {
+    width: min(100%, 960px);
+    margin: 0 auto;
+  }
+
+  body.has-observation-guide-open .observation-guide__intro,
+  body.has-observation-guide-open .observation-guide__sections {
+    width: min(100%, 72ch);
+    margin-inline: auto;
+  }
+
+  body.has-observation-guide-open .observation-guide__sections {
+    gap: clamp(1.2rem, 3vw, 1.9rem);
+  }
+
+  body.has-observation-guide-open .observation-guide__section {
+    margin: 0 auto;
+  }
+
+  body.has-observation-guide-open .observation-guide__nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    margin: 0 auto;
+    padding: 0.35rem 0 0;
+    row-gap: 0.35rem;
+    width: min(100%, 72ch);
   }
 
   .observation-editor__card {
@@ -2573,7 +2621,8 @@ button.site-nav__magnet {
                 aria-label="Open full screen observation guide"
                 aria-expanded="false"
               >
-                <span class="observation-guide__fullscreen-button-label" aria-hidden="true">&lt; &gt;</span>
+                <span class="observation-guide__fullscreen-button-icon" aria-hidden="true">&lt; &gt;</span>
+                <span class="observation-guide__fullscreen-button-text">Full screen</span>
               </button>
               <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
             </span>
