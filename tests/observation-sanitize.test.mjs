@@ -95,6 +95,24 @@ test('highlights observational anchors and quotes for guidance', () => {
   );
 });
 
+test('highlights location anchors within observations', () => {
+  const text = 'On Tuesday at 9 am in room 204 I saw the client sign the form.';
+  const lint = lintObservation(text, catalog);
+  assert.equal(
+    lint.observationHighlights.some(token => /in\s+room\s+204/i.test(token)),
+    true,
+    'location anchor should be highlighted',
+  );
+});
+
+test('flags "annoying" variants as evaluative language', () => {
+  const text = 'At 3 pm the comment was annoying, the tone was annoyed, and the subject still annoys the team.';
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.evaluationMarkers.includes('annoying'), true, 'annoying should trigger evaluation flag');
+  assert.equal(lint.evaluationMarkers.includes('annoyed'), true, 'annoyed should trigger evaluation flag');
+  assert.equal(lint.evaluationMarkers.includes('annoys'), true, 'annoys should trigger evaluation flag');
+});
+
 async function run() {
   for (const { name, fn } of tests) {
     try {
