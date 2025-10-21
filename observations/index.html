@@ -1302,6 +1302,32 @@ button.site-nav__magnet {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 40%, transparent);
   }
 
+  .observation-editor__highlight-details {
+    margin: 0.75rem 0 0;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, var(--mint) 12%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 22%, transparent);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
+    word-break: break-word;
+  }
+
+  .observation-editor__highlight-details[hidden] {
+    display: none;
+  }
+
+  .observation-editor__highlight-details-phrase {
+    margin: 0;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--outline) 85%, transparent);
+  }
+
+  .observation-editor__highlight-details-message {
+    margin: 0.35rem 0 0;
+  }
+
   .observation-editor__issues {
     margin: 0;
     padding-left: 1.25rem;
@@ -2345,6 +2371,12 @@ button.site-nav__magnet {
                     aria-describedby="observation-guidelines"
                   ></textarea>
                 </div>
+                <div
+                  id="observation-highlight-details"
+                  class="observation-editor__highlight-details"
+                  hidden
+                  aria-live="polite"
+                ></div>
                 <div class="observation-editor__status observation-editor__status--inline">
                   <div
                     id="observation-detection"

@@ -15,6 +15,8 @@ const state = {
   detectionFallbackQueue: [],
   detectionSource: '',
   cueHighlightRanges: [],
+  positiveHighlightRanges: [],
+  activeHighlightKey: '',
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
   validityStatus: 'idle',
@@ -100,6 +102,7 @@ function bind() {
     textarea.addEventListener('input', event => {
       state.text = event.target.value || '';
       state.scrolledToSuggestions = false;
+      renderHighlightDetails(null);
       if (state.mode !== 'editing') {
         state.mode = 'editing';
         state.scrolledToSuggestions = false;
@@ -111,6 +114,17 @@ function bind() {
       state.fallback = createFallbackState();
       analyze(state.text);
       renderSuggestions();
+    });
+    textarea.addEventListener('pointerup', () => {
+      inspectHighlightAtCursor(textarea);
+    });
+    textarea.addEventListener('keyup', event => {
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
+        inspectHighlightAtCursor(textarea);
+      }
+    });
+    textarea.addEventListener('blur', () => {
+      renderHighlightDetails(null);
     });
   }
 
@@ -1435,16 +1449,177 @@ function renderDetectionSummary() {
 
 function renderHighlight() {
   const host = document.getElementById('observation-highlight');
-  if (!host) {
-    return;
-  }
   const text = state.text || '';
   const warnTokens = collectWarnHighlightTokens(state.analysis?.lint);
   const okTokens = collectPositiveHighlightTokens(state.analysis?.lint);
   const warnRanges = buildHighlightRanges(text, warnTokens).map(range => ({ ...range, tone: 'warn' }));
   const okRanges = buildHighlightRanges(text, okTokens).map(range => ({ ...range, tone: 'ok' }));
   const cueRanges = Array.isArray(state.cueHighlightRanges) ? state.cueHighlightRanges : [];
-  host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...okRanges, ...cueRanges]);
+  if (host) {
+    host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...okRanges, ...cueRanges]);
+  }
+
+  const positiveRanges = okRanges
+    .map(range => {
+      const items = Array.isArray(range.data)
+        ? range.data.map(item => ({
+            label: typeof item.label === 'string' ? item.label : '',
+            message: typeof item.message === 'string' ? item.message : '',
+            key: typeof item.key === 'string' ? item.key : '',
+            value: typeof item.value === 'string' ? item.value : '',
+          }))
+        : [];
+      return { start: range.start, end: range.end, items };
+    })
+    .filter(range => range.items.length > 0);
+
+  state.positiveHighlightRanges = positiveRanges;
+  const activeRange = state.activeHighlightKey
+    ? state.positiveHighlightRanges.find(range => buildHighlightKey(range) === state.activeHighlightKey)
+    : null;
+  renderHighlightDetails(activeRange || null);
+}
+
+function inspectHighlightAtCursor(textarea) {
+  if (!textarea || !Array.isArray(state.positiveHighlightRanges) || !state.positiveHighlightRanges.length) {
+    renderHighlightDetails(null);
+    return;
+  }
+  const start = typeof textarea.selectionStart === 'number' ? textarea.selectionStart : null;
+  const end = typeof textarea.selectionEnd === 'number' ? textarea.selectionEnd : null;
+  if (start === null || end === null || start !== end) {
+    renderHighlightDetails(null);
+    return;
+  }
+  const match = findPositiveHighlightAtIndex(start);
+  if (match) {
+    renderHighlightDetails(match);
+  } else {
+    renderHighlightDetails(null);
+  }
+}
+
+function findPositiveHighlightAtIndex(index) {
+  if (!Number.isFinite(index)) {
+    return null;
+  }
+  const ranges = Array.isArray(state.positiveHighlightRanges) ? state.positiveHighlightRanges : [];
+  if (!ranges.length) {
+    return null;
+  }
+  const positions = [index];
+  if (index > 0) {
+    positions.push(index - 1);
+  }
+  for (let i = 0; i < positions.length; i += 1) {
+    const position = positions[i];
+    const range = ranges.find(candidate => {
+      if (!candidate) {
+        return false;
+      }
+      return position >= candidate.start && position < candidate.end;
+    });
+    if (range) {
+      return range;
+    }
+  }
+  return null;
+}
+
+function renderHighlightDetails(range) {
+  const container = document.getElementById('observation-highlight-details');
+  if (!container) {
+    state.activeHighlightKey = range ? buildHighlightKey(range) : '';
+    return;
+  }
+
+  if (!range || !Array.isArray(range.items) || !range.items.length) {
+    container.innerHTML = '';
+    container.setAttribute('hidden', 'hidden');
+    state.activeHighlightKey = '';
+    return;
+  }
+
+  state.activeHighlightKey = buildHighlightKey(range);
+
+  container.innerHTML = '';
+  const matchText = extractHighlightText(range);
+  if (matchText) {
+    const phrase = document.createElement('p');
+    phrase.className = 'observation-editor__highlight-details-phrase';
+    phrase.textContent = `“${matchText}”`;
+    container.appendChild(phrase);
+  }
+
+  const seen = new Set();
+  range.items.forEach(item => {
+    const message = formatHighlightMessage(item);
+    if (!message) {
+      return;
+    }
+    const key = message.toLowerCase();
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    const note = document.createElement('p');
+    note.className = 'observation-editor__highlight-details-message';
+    note.textContent = message;
+    container.appendChild(note);
+  });
+
+  if (!container.childNodes.length) {
+    container.setAttribute('hidden', 'hidden');
+    state.activeHighlightKey = '';
+    return;
+  }
+
+  container.removeAttribute('hidden');
+}
+
+function extractHighlightText(range) {
+  const text = typeof state.text === 'string' ? state.text : '';
+  if (text && Number.isFinite(range.start) && Number.isFinite(range.end)) {
+    const slice = text.slice(range.start, range.end).trim();
+    if (slice) {
+      return slice;
+    }
+  }
+  if (Array.isArray(range.items) && range.items.length) {
+    const fallback = range.items[0]?.value;
+    if (typeof fallback === 'string' && fallback.trim()) {
+      return fallback.trim();
+    }
+  }
+  return '';
+}
+
+function buildHighlightKey(range) {
+  if (!range) {
+    return '';
+  }
+  const start = Number(range.start);
+  const end = Number(range.end);
+  if (!Number.isFinite(start) || !Number.isFinite(end)) {
+    return '';
+  }
+  return `${start}:${end}`;
+}
+
+function formatHighlightMessage(item) {
+  if (!item || typeof item !== 'object') {
+    return '';
+  }
+  const message = typeof item.message === 'string' ? item.message.trim() : '';
+  if (message) {
+    return message;
+  }
+  const label = typeof item.label === 'string' ? item.label.trim() : '';
+  if (label) {
+    const capitalized = label.charAt(0).toUpperCase() + label.slice(1);
+    return `Highlighted for ${capitalized}.`;
+  }
+  return 'Highlighted for observational language.';
 }
 
 function collectWarnHighlightTokens(lint) {
@@ -1470,16 +1645,96 @@ function collectWarnHighlightTokens(lint) {
 }
 
 function collectPositiveHighlightTokens(lint) {
-  if (!lint) {
+  if (!lint || !Array.isArray(lint.observationHighlights)) {
     return [];
   }
-  const tokens = new Set();
-  (lint.observationHighlights || []).forEach(token => {
-    if (token) {
-      tokens.add(String(token).trim());
+  const entries = new Map();
+  lint.observationHighlights.forEach(item => {
+    const normalized = normalizeObservationHighlight(item);
+    if (!normalized.value) {
+      return;
+    }
+    const key = normalized.value.toLowerCase();
+    if (!entries.has(key)) {
+      entries.set(key, normalized);
     }
   });
-  return Array.from(tokens).filter(Boolean);
+  return Array.from(entries.values());
+}
+
+function normalizeObservationHighlight(entry) {
+  if (!entry) {
+    return { value: '', label: '', message: '', key: '' };
+  }
+  if (typeof entry === 'string') {
+    const value = entry.trim();
+    return { value, label: '', message: '', key: '' };
+  }
+  const rawValue = typeof entry.token === 'string'
+    ? entry.token
+    : typeof entry.value === 'string'
+      ? entry.value
+      : '';
+  const value = typeof rawValue === 'string' ? rawValue.trim() : '';
+  const label = typeof entry.label === 'string' ? entry.label.trim() : '';
+  const message = typeof entry.message === 'string' ? entry.message.trim() : '';
+  const key = typeof entry.key === 'string' ? entry.key.trim() : '';
+  return { value, label, message, key };
+}
+
+function normalizeHighlightToken(token) {
+  if (typeof token === 'string') {
+    const value = token.trim();
+    return { value, meta: value ? { source: value } : null };
+  }
+  if (!token || typeof token !== 'object') {
+    return { value: '', meta: null };
+  }
+  const baseValue = typeof token.value === 'string'
+    ? token.value
+    : typeof token.token === 'string'
+      ? token.token
+      : '';
+  const value = typeof baseValue === 'string' ? baseValue.trim() : '';
+  const meta = {};
+  if (value) {
+    meta.source = value;
+  }
+  if (typeof token.label === 'string' && token.label.trim()) {
+    meta.label = token.label.trim();
+  }
+  if (typeof token.message === 'string' && token.message.trim()) {
+    meta.message = token.message.trim();
+  }
+  if (typeof token.key === 'string' && token.key.trim()) {
+    meta.key = token.key.trim();
+  }
+  return { value, meta: Object.keys(meta).length ? meta : null };
+}
+
+function createHighlightData(meta, match) {
+  const data = {};
+  if (meta && typeof meta === 'object') {
+    if (typeof meta.label === 'string' && meta.label.trim()) {
+      data.label = meta.label.trim();
+    }
+    if (typeof meta.message === 'string' && meta.message.trim()) {
+      data.message = meta.message.trim();
+    }
+    if (typeof meta.key === 'string' && meta.key.trim()) {
+      data.key = meta.key.trim();
+    }
+    if (typeof meta.source === 'string' && meta.source.trim()) {
+      data.source = meta.source.trim();
+    }
+  }
+  if (typeof match === 'string' && match) {
+    const trimmed = match.trim();
+    if (trimmed) {
+      data.value = trimmed;
+    }
+  }
+  return Object.keys(data).length ? data : null;
 }
 
 function buildHighlightMarkupFromRanges(text, ranges) {
@@ -1519,7 +1774,8 @@ function buildHighlightRanges(text, tokens) {
   const lower = text.toLowerCase();
   const ranges = [];
   tokens.forEach(token => {
-    const value = typeof token === 'string' ? token.trim() : '';
+    const normalized = normalizeHighlightToken(token);
+    const value = normalized.value;
     if (!value) {
       return;
     }
@@ -1532,7 +1788,13 @@ function buildHighlightRanges(text, tokens) {
       }
       const end = found + target.length;
       if (isWordBoundary(text, found, end)) {
-        ranges.push({ start: found, end });
+        const match = text.slice(found, end);
+        const data = createHighlightData(normalized.meta, match);
+        const range = { start: found, end };
+        if (data) {
+          range.data = [data];
+        }
+        ranges.push(range);
       }
       searchIndex = end;
     }
@@ -1545,19 +1807,96 @@ function mergeRanges(ranges) {
     return [];
   }
   const sorted = ranges
-    .map(range => ({ start: range.start, end: range.end }))
+    .map(range => {
+      const start = typeof range.start === 'number' ? range.start : Number(range.start);
+      const end = typeof range.end === 'number' ? range.end : Number(range.end);
+      if (!Number.isFinite(start) || !Number.isFinite(end)) {
+        return null;
+      }
+      const data = Array.isArray(range.data)
+        ? range.data.filter(Boolean).map(item => ({ ...item }))
+        : [];
+      return { start, end, data };
+    })
+    .filter(Boolean)
     .sort((a, b) => (a.start - b.start) || (a.end - b.end));
+  if (!sorted.length) {
+    return [];
+  }
   const merged = [sorted[0]];
   for (let i = 1; i < sorted.length; i += 1) {
     const current = sorted[i];
     const prev = merged[merged.length - 1];
     if (current.start <= prev.end) {
       prev.end = Math.max(prev.end, current.end);
+      if (current.data?.length) {
+        if (!prev.data) {
+          prev.data = [];
+        }
+        current.data.forEach(item => {
+          addHighlightData(prev.data, item);
+        });
+      }
     } else {
-      merged.push({ start: current.start, end: current.end });
+      merged.push({
+        start: current.start,
+        end: current.end,
+        data: current.data && current.data.length ? current.data.slice() : undefined,
+      });
     }
   }
-  return merged;
+  return merged.map(range => {
+    const entry = { start: range.start, end: range.end };
+    if (range.data && range.data.length) {
+      entry.data = range.data;
+    }
+    return entry;
+  });
+}
+
+function addHighlightData(target, item) {
+  const normalized = normalizeHighlightData(item);
+  if (!normalized) {
+    return;
+  }
+  const key = createHighlightDataKey(normalized);
+  if (target.some(existing => createHighlightDataKey(existing) === key)) {
+    return;
+  }
+  target.push(normalized);
+}
+
+function normalizeHighlightData(data) {
+  if (!data || typeof data !== 'object') {
+    return null;
+  }
+  const normalized = {};
+  if (typeof data.label === 'string' && data.label.trim()) {
+    normalized.label = data.label.trim();
+  }
+  if (typeof data.message === 'string' && data.message.trim()) {
+    normalized.message = data.message.trim();
+  }
+  if (typeof data.source === 'string' && data.source.trim()) {
+    normalized.source = data.source.trim();
+  }
+  if (typeof data.value === 'string' && data.value.trim()) {
+    normalized.value = data.value.trim();
+  }
+  if (typeof data.key === 'string' && data.key.trim()) {
+    normalized.key = data.key.trim();
+  }
+  return Object.keys(normalized).length ? normalized : null;
+}
+
+function createHighlightDataKey(data) {
+  return [
+    (data.label || '').toLowerCase(),
+    (data.message || '').toLowerCase(),
+    (data.source || '').toLowerCase(),
+    (data.value || '').toLowerCase(),
+    (data.key || '').toLowerCase(),
+  ].join('|');
 }
 
 function buildCueHighlightRanges(text, hits) {
@@ -1619,7 +1958,14 @@ function normalizeHighlightRanges(ranges, length) {
       if (end <= start || !tone) {
         return null;
       }
-      return { start, end, tone };
+      const data = Array.isArray(range.data)
+        ? range.data.filter(Boolean).map(item => ({ ...item }))
+        : [];
+      const normalized = { start, end, tone };
+      if (data.length) {
+        normalized.data = data;
+      }
+      return normalized;
     })
     .filter(Boolean)
     .sort((a, b) => (a.start - b.start) || (a.end - b.end));
