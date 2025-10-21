@@ -790,6 +790,42 @@ button.site-nav__magnet {
     text-decoration: none;
   }
 
+  .observation-guide__fullscreen-button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
+    color: color-mix(in srgb, var(--ink) 85%, #ffffff 15%);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+  }
+
+  .observation-guide__fullscreen-button:hover,
+  .observation-guide__fullscreen-button:focus-visible {
+    background: color-mix(in srgb, var(--mint) 45%, #ffffff 55%);
+    border-color: color-mix(in srgb, var(--outline) 35%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 20%, transparent);
+  }
+
+  .observation-guide__fullscreen-button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--outline) 55%, transparent);
+    outline-offset: 2px;
+  }
+
+  .observation-guide__fullscreen-button-label {
+    transform: translateY(-0.05rem);
+  }
+
   .observation-guide__toggle::marker {
     display: none;
     content: '';
@@ -798,6 +834,12 @@ button.site-nav__magnet {
   .observation-guide__toggle-text {
     display: grid;
     gap: 0.35rem;
+  }
+
+  .observation-guide__toggle-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
   }
 
   .observation-guide__toggle-title {
@@ -1011,6 +1053,16 @@ button.site-nav__magnet {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.75rem;
+    }
+
+    .observation-guide__toggle-actions {
+      align-self: flex-start;
+    }
+
+    .observation-guide__fullscreen-button {
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.95rem;
     }
 
     .observation-guide__toggle-icon {
@@ -2506,16 +2558,32 @@ button.site-nav__magnet {
           </div>
         </section>
 
-        <details id="observation-guide" class="observation-guide">
+        <details id="observation-guide" class="observation-guide" data-observation-guide-details>
           <!-- observation-guide:start -->
           <summary class="observation-guide__toggle">
             <span class="observation-guide__toggle-text">
               <span class="observation-guide__eyebrow">Research-grounded (open-access links)</span>
               <span class="observation-guide__toggle-title">Observation Guide: Low-Inference Description</span>
             </span>
-            <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
+            <span class="observation-guide__toggle-actions">
+              <button
+                type="button"
+                class="observation-guide__fullscreen-button"
+                data-observation-guide-open
+                aria-label="Open full screen observation guide"
+                aria-expanded="false"
+              >
+                <span class="observation-guide__fullscreen-button-label" aria-hidden="true">&lt; &gt;</span>
+              </button>
+              <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
+            </span>
           </summary>
-          <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
+          <div
+            class="observation-guide__card"
+            role="group"
+            aria-labelledby="observation-guide-title"
+            data-observation-guide-card
+          >
             <header class="observation-guide__intro">
               <p class="observation-guide__eyebrow">Abstract</p>
               <h2 id="observation-guide-title" class="observation-guide__title">
@@ -2800,6 +2868,41 @@ button.site-nav__magnet {
           </div>
           <!-- observation-guide:end -->
         </details>
+
+        <div class="observation-guide__overlay support-journal">
+          <div
+            id="observation-guide-fullscreen-layer"
+            class="support-journal__layer"
+            data-observation-guide-layer
+            data-state="closed"
+            aria-hidden="true"
+          >
+            <div class="support-journal__dialog" data-observation-guide-dialog tabindex="-1">
+              <header class="support-journal__header">
+                <div class="support-journal__titles">
+                  <h3
+                    class="support-journal__heading"
+                    id="observation-guide-fullscreen-heading"
+                    data-observation-guide-heading
+                  >
+                    Observation guide
+                  </h3>
+                </div>
+                <button
+                  class="support-journal__close"
+                  type="button"
+                  data-observation-guide-close
+                  aria-label="Close full screen observation guide"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </header>
+              <div class="support-journal__body">
+                <div class="support-journal__content" data-observation-guide-overlay-content></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <script>
           (function() {

@@ -644,7 +644,8 @@ a:focus-visible {
   }
 }
 
-body.has-support-journal-open {
+body.has-support-journal-open,
+body.has-observation-guide-open {
   overflow: hidden;
 }
 
