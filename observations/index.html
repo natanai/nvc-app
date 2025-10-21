@@ -750,6 +750,178 @@ button.site-nav__magnet {
     margin: 0;
   }
 
+  .observation-guide {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .observation-guide__card {
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: var(--radius-3xl);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--outline) 12%, transparent);
+    padding: clamp(1.6rem, 3.5vw, 2.4rem);
+    display: grid;
+    gap: clamp(1.4rem, 3vw, 2.25rem);
+  }
+
+  .observation-guide__intro {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .observation-guide__eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0;
+    color: color-mix(in srgb, var(--outline) 45%, transparent);
+  }
+
+  .observation-guide__title {
+    margin: 0;
+  }
+
+  .observation-guide__intro p {
+    margin: 0;
+    max-width: 75ch;
+  }
+
+  .observation-guide__nav {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .observation-guide__toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .observation-guide__toc a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+    border: 2px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 0.85rem;
+    background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .observation-guide__toc a:hover {
+    background: color-mix(in srgb, var(--mint) 35%, var(--chip-bg) 65%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  }
+
+  .observation-guide__sections {
+    display: grid;
+    gap: clamp(1rem, 2.5vw, 1.6rem);
+  }
+
+  .observation-guide__section {
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 94%, transparent);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .observation-guide__section summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.95rem 1.2rem;
+    margin: 0;
+    background: color-mix(in srgb, var(--chip-bg) 55%, #ffffff 45%);
+  }
+
+  .observation-guide__section summary::marker {
+    display: none;
+    content: '';
+  }
+
+  .observation-guide__section summary:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 2px;
+  }
+
+  .observation-guide__section[open] summary {
+    box-shadow: inset 0 -3px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+  }
+
+  .observation-guide__section-content {
+    padding: 1.1rem 1.2rem 1.3rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .observation-guide__section-content p {
+    margin: 0;
+  }
+
+  .observation-guide__section-content ul,
+  .observation-guide__section-content ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .observation-guide__section-content li {
+    margin: 0;
+  }
+
+  .observation-guide__examples {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .observation-guide__examples dl {
+    margin: 0;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .observation-guide__examples dt {
+    font-weight: 700;
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+  }
+
+  .observation-guide__examples dd {
+    margin: 0.25rem 0 0;
+  }
+
+  .observation-guide__examples dd:last-child {
+    margin-bottom: 0;
+  }
+
+  .observation-guide__callout {
+    border-left: 4px solid color-mix(in srgb, var(--mint) 60%, var(--outline) 12%);
+    padding: 0.75rem 1rem;
+    background: color-mix(in srgb, var(--mint) 18%, transparent);
+    border-radius: var(--radius-lg);
+    margin: 0;
+  }
+
+  .observation-guide__callout strong {
+    font-family: var(--font-display);
+  }
+
   .observation-editor__card {
     background: color-mix(in srgb, #ffffff 96%, transparent);
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
@@ -1790,6 +1962,289 @@ button.site-nav__magnet {
           </p>
         </header>
 
+        <section
+          id="observation-guide"
+          class="observation-guide"
+          aria-labelledby="observation-guide-title"
+        >
+          <div class="observation-guide__card">
+            <header class="observation-guide__intro">
+              <p class="observation-guide__eyebrow">Observation guide</p>
+              <h2 id="observation-guide-title" class="observation-guide__title">
+                Learn to separate what happened from the story
+              </h2>
+              <p>
+                Marshall Rosenberg describes observations as a camera-ready record of what we saw, heard, or noticed in a
+                specific moment. Instead of “The principal has a big mouth,” an observation is “The principal spoke for about
+                twenty minutes about personal stories during the staff meeting.” The first statement evaluates a person; the
+                second simply reports what occurred.
+              </p>
+              <p>
+                Observing without evaluating is challenging—Rosenberg echoed J. Krishnamurti’s reminder that it is “the highest
+                form of human intelligence.” These notes walk through every principle from the observation guide so you can
+                practise staying with the facts before moving on to feelings and needs.
+              </p>
+            </header>
+            <nav class="observation-guide__nav" aria-label="Observation guide sections">
+              <ul class="observation-guide__toc">
+                <li>
+                  <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">
+                    Observations vs. evaluations
+                  </a>
+                </li>
+                <li>
+                  <a href="#observation-guide-why" data-guide-target="observation-guide-why">Why it matters</a>
+                </li>
+                <li>
+                  <a href="#observation-guide-principles" data-guide-target="observation-guide-principles">Key principles</a>
+                </li>
+                <li>
+                  <a href="#observation-guide-steps" data-guide-target="observation-guide-steps">Step-by-step practice</a>
+                </li>
+                <li>
+                  <a href="#observation-guide-examples" data-guide-target="observation-guide-examples">Example rewrites</a>
+                </li>
+                <li>
+                  <a href="#observation-guide-builder" data-guide-target="observation-guide-builder">Builder tips</a>
+                </li>
+                <li>
+                  <a href="#observation-guide-practice" data-guide-target="observation-guide-practice">Keep practicing</a>
+                </li>
+              </ul>
+            </nav>
+            <div class="observation-guide__sections">
+              <details class="observation-guide__section" id="observation-guide-foundations" open data-guide-section>
+                <summary>Observations vs. evaluations</summary>
+                <div class="observation-guide__section-content">
+                  <p>
+                    The observation step in Nonviolent Communication invites us to describe what actually happened without
+                    folding in judgments. Observations cover concrete behaviours, words, or events that a neutral witness could
+                    verify. Evaluations—including labels, assumptions, or speculation about motives—tell our story about the
+                    event instead of the event itself.
+                  </p>
+                  <p>
+                    Rosenberg encourages us to think like a reporter: what would the camera capture? It can record someone
+                    saying, “This is all your fault,” or leaving the room, but it cannot record “He was disrespectful.” When we
+                    speak in observations, we ground our conversation in something both people can recognise.
+                  </p>
+                  <p>
+                    Because reality unfolds moment by moment, observations stay anchored in time and place. Rather than a static
+                    label such as “You’re inconsiderate,” we describe the specific interaction (“You left the restaurant while I
+                    was still ordering yesterday evening”). This shift keeps the focus on what happened instead of who someone is.
+                  </p>
+                </div>
+              </details>
+              <details class="observation-guide__section" id="observation-guide-why" open data-guide-section>
+                <summary>Why it matters</summary>
+                <div class="observation-guide__section-content">
+                  <p>
+                    Blending evaluation with observation often lands as criticism. “You’re always late and inconsiderate” mixes a
+                    fact with a judgment, which usually triggers defensiveness. “You arrived twenty minutes after our agreed time”
+                    invites a shared reality instead. Research on NVC shows that this clarity supports empathy and more effective
+                    dialogue, because people no longer have to fight the story before hearing the feelings and needs beneath it.
+                  </p>
+                  <ul>
+                    <li>Neutral descriptions reduce the chance that the listener hears blame or attack.</li>
+                    <li>Specific observations prevent debates over what “really” happened and let us move on to feelings and needs.</li>
+                    <li>
+                      Training studies and literature reviews on NVC report increased empathy and communication skills when
+                      people practise separating observations from evaluations.
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="observation-guide__section" id="observation-guide-principles" data-guide-section>
+                <summary>Key principles</summary>
+                <div class="observation-guide__section-content">
+                  <ul>
+                    <li>
+                      <strong>Use the camera-or-microphone test.</strong> If a recorder cannot capture it, it is probably an
+                      evaluation. Describe the behaviour (“She rolled her eyes and walked out”) instead of the conclusion (“She
+                      was rude”).
+                    </li>
+                    <li>
+                      <strong>Anchor every statement in time and context.</strong> Avoid broad generalisations such as “always”
+                      or “never.” Replace them with the moment, date, or frequency that actually happened.
+                    </li>
+                    <li>
+                      <strong>Name actions, not character traits.</strong> Labels—even positive ones like “amazing teammate”—tell
+                      your appraisal. Observations mention the behaviour that led to the label, such as “You helped each person
+                      finish their task this week.”
+                    </li>
+                    <li>
+                      <strong>Leave motives and causes for later.</strong> Phrases like “for no reason” or “to hurt me” assume why
+                      something happened. In the observation step we only log that it happened (“He left the party without saying
+                      goodbye”).
+                    </li>
+                    <li>
+                      <strong>Keep feelings and needs in their own sentences.</strong> You might later say, “When that happened I
+                      felt hurt,” but the pure observation stops at “When you didn’t say hello this morning…”. Keeping these parts
+                      separate makes each one clearer.
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="observation-guide__section" id="observation-guide-steps" data-guide-section>
+                <summary>Step-by-step practice</summary>
+                <div class="observation-guide__section-content">
+                  <ol>
+                    <li>
+                      <strong>Identify the specific moment.</strong> Choose the scene you want to discuss, including when and
+                      where it occurred and who was present. Narrowing the scope keeps the conversation precise.
+                    </li>
+                    <li>
+                      <strong>Describe what the senses recorded.</strong> Write what you saw or heard as if you were quoting a
+                      transcript. Include actions, exact words, tone shifts, or observable results. The camera can show someone
+                      shutting the office door without knocking; it cannot show “disrespect.”
+                    </li>
+                    <li>
+                      <strong>Remove evaluation triggers.</strong> Scan your statement for judgement clues and swap them for what
+                      actually happened:
+                      <ul>
+                        <li>
+                          Personality adjectives (“lazy,” “aggressive,” “unprofessional”) become descriptions of the behaviour
+                          you observed.
+                        </li>
+                        <li>
+                          Opinion adverbs (“too much,” “too loud,” “slowly”) get replaced with specifics such as duration,
+                          decibel level, or speed.
+                        </li>
+                        <li>
+                          Generalisations (“always,” “never,” “constantly”) turn into the real frequency—how many times, on what
+                          dates, or during which interactions.
+                        </li>
+                        <li>
+                          Assumed motives (“to annoy me,” “for no reason”) are dropped entirely; we only note the observable
+                          behaviour.
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Quantify and quote when possible.</strong> Numbers, time frames, or direct quotes make the
+                      observation less debatable. “You played music that I could hear through my closed door and the bass shook
+                      the floor” paints a clearer picture than “Your music was too loud.”
+                    </li>
+                    <li>
+                      <strong>Add an optional gap.</strong> If it helps, mention what you hoped for instead (“I expected we would
+                      finish the report together”). Keep it factual and separate from feelings so the observation still stands on
+                      its own.
+                    </li>
+                  </ol>
+                  <p class="observation-guide__callout">
+                    <strong>Practice prompt:</strong> Try rewriting a charged statement into camera-ready language, then compare it
+                    with the examples below. The more you practise, the easier it becomes to spot hidden evaluations.
+                  </p>
+                </div>
+              </details>
+              <details class="observation-guide__section" id="observation-guide-examples" data-guide-section>
+                <summary>Example rewrites</summary>
+                <div class="observation-guide__section-content observation-guide__examples">
+                  <dl>
+                    <div>
+                      <dt>Evaluation: “Janice works too much.”</dt>
+                      <dd>
+                        Observation: “Janice spent over sixty hours at the office this week, including Saturday.” Why it works:
+                        “Too much” is subjective; the hours are concrete.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: “Henry is aggressive.”</dt>
+                      <dd>
+                        Observation: “Yesterday, Henry hit his sister on the arm when she changed the TV channel.” Why it works:
+                        it names the specific behaviour without labelling Henry’s character.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: “You’re always late.”</dt>
+                      <dd>
+                        Observation: “In the last two weeks, you arrived between five and fifteen minutes late to our meetings on
+                        three occasions.” Why it works: it replaces “always” with a verifiable pattern.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: “My son often doesn’t brush his teeth.”</dt>
+                      <dd>
+                        Observation: “Twice this week, my son didn’t brush his teeth before bed.” Why it works: “often” becomes a
+                        specific count.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: “My aunt complains whenever I talk to her.”</dt>
+                      <dd>
+                        Observation: “This week my aunt called me three times, and each call focused on people who treated her in
+                        ways she didn’t like.” Why it works: it describes the conversations instead of labelling them as
+                        “complaining.”
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: “You’re destroying our child’s self-esteem!”</dt>
+                      <dd>
+                        Observation: “When you said to our son, ‘You’re lazy and will never amount to anything,’ …” Why it works:
+                        quoting the words keeps the focus on what was said. Feelings about the impact can follow afterward.
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </details>
+              <details class="observation-guide__section" id="observation-guide-builder" data-guide-section>
+                <summary>Builder tips</summary>
+                <div class="observation-guide__section-content">
+                  <ul>
+                    <li>
+                      Watch for generalisations or absolutes (“always,” “never,” “constantly”). The builder flags them and prompts
+                      you to name a specific instance or number instead.
+                    </li>
+                    <li>
+                      When judgement-heavy adjectives appear (“lazy,” “selfish,” “disrespectful”), expect a reminder to describe
+                      the underlying behaviour you observed.
+                    </li>
+                    <li>
+                      Name-calling and labels (including positive ones like “hero”) signal evaluation. The tool nudges you to show
+                      what happened instead of who someone supposedly is.
+                    </li>
+                    <li>
+                      Subjective phrases that guess motives—“to get back at me,” “for no reason,” “on purpose”—are highlighted so
+                      you can focus on the observable part of the story.
+                    </li>
+                    <li>
+                      Structure helps. Start with when and where (“Yesterday at dinner…”) and then describe the action. Prompts in
+                      the editor keep these anchors visible.
+                    </li>
+                    <li>
+                      Use the example library above when you need inspiration. Comparing your sentence to model observations can
+                      reveal hidden evaluations quickly.
+                    </li>
+                    <li>
+                      Every flag comes with a short explanation referencing NVC principles, so each correction also teaches the
+                      “why.”
+                    </li>
+                    <li>
+                      If a feeling sneaks into the observation (“I felt ignored”), separate it out. The builder acknowledges the
+                      emotion while guiding you back to the factual first step.
+                    </li>
+                  </ul>
+                </div>
+              </details>
+              <details class="observation-guide__section" id="observation-guide-practice" data-guide-section>
+                <summary>Keep practicing</summary>
+                <div class="observation-guide__section-content">
+                  <p>
+                    Observational language can feel plain at first, yet it opens space for empathy. By clearly naming what happened
+                    before sharing feelings or needs, you lower defences and invite collaboration. Studies of NVC programmes show
+                    that this discipline strengthens relationships and increases self-awareness.
+                  </p>
+                  <p>
+                    Remember that the goal is not to suppress judgments forever. NVC simply asks us to lead with the shared reality
+                    of what occurred, then speak to how it affected us. As you keep practising—rewriting charged sentences, using
+                    the detector’s feedback, and revisiting the steps above—you will build the reflex to observe first and tell the
+                    story later.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
         <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
           <div class="observation-editor__card">
             <div class="observation-editor__grid">
@@ -1834,14 +2289,18 @@ button.site-nav__magnet {
                   class="observation-editor__recipe-body"
                   aria-live="polite"
                 >
-                  <p class="observation-editor__recipe-intro">Follow these anchors to keep the moment concrete.</p>
+                  <p class="observation-editor__recipe-intro">Use these anchors to keep your statement observational.</p>
                   <ol class="observation-editor__recipe-list">
-                    <li><strong>When &amp; where:</strong> Anchor the moment in time and place.</li>
-                    <li><strong>Sensory details:</strong> Quote what was said or describe what was seen.</li>
-                    <li><strong>Optional gap:</strong> Add what you expected or hoped for.</li>
+                    <li><strong>Name the moment:</strong> Specify when and where it happened, and who was involved.</li>
+                    <li><strong>Describe sensory facts:</strong> Report what a camera or microphone would capture.</li>
+                    <li><strong>Remove judgments:</strong> Swap labels, motives, and generalisations for concrete actions.</li>
+                    <li><strong>Quantify &amp; quote:</strong> Use numbers or direct quotes to keep the scene verifiable.</li>
+                    <li><strong>Optional gap:</strong> Mention what you expected while keeping feelings and needs for the next step.</li>
                   </ol>
                   <p class="observation-editor__recipe-note">
-                    Stick with what a camera or microphone would record. Feelings and needs come after the observation.
+                    Need a refresher? Visit the
+                    <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a>
+                    below for principles, steps, and examples.
                   </p>
                 </div>
               </aside>
