@@ -1605,12 +1605,118 @@ function bindGuideNavigation() {
   }
   guideNavigationBound = true;
 
+  initializeGuideTabs();
   document.addEventListener('click', handleGuideNavigationClick);
 
   if (typeof window !== 'undefined') {
     openGuideSectionFromHash();
     window.addEventListener('hashchange', openGuideSectionFromHash);
   }
+}
+
+function initializeGuideTabs() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const host = document.getElementById('observation-guide');
+  if (!host) {
+    return;
+  }
+
+  const sections = Array.from(host.querySelectorAll('[data-guide-section]'));
+  const tabs = Array.from(host.querySelectorAll('.observation-guide__tab[data-guide-target]'));
+  if (!sections.length || !tabs.length) {
+    return;
+  }
+
+  let activeSection = sections.find(section => section.classList.contains('is-active')) || sections[0];
+  const activeId = activeSection ? activeSection.id : '';
+
+  sections.forEach(section => {
+    const isActive = section === activeSection;
+    section.classList.toggle('is-active', isActive);
+    section.setAttribute('role', 'tabpanel');
+    section.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    section.setAttribute('tabindex', isActive ? '0' : '-1');
+    if (isActive) {
+      section.removeAttribute('hidden');
+    } else {
+      section.setAttribute('hidden', 'hidden');
+    }
+  });
+
+  tabs.forEach(tab => {
+    const targetId = tab.getAttribute('data-guide-target');
+    if (targetId) {
+      tab.setAttribute('aria-controls', targetId);
+      const panel = document.getElementById(targetId);
+      if (panel) {
+        if (!tab.id) {
+          tab.id = `observation-guide-tab-${targetId}`;
+        }
+        panel.setAttribute('aria-labelledby', tab.id);
+      }
+    }
+    const isActive = targetId === activeId;
+    tab.classList.toggle('is-active', isActive);
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    tab.setAttribute('tabindex', isActive ? '0' : '-1');
+  });
+
+  host.dataset.tabsReady = 'true';
+}
+
+function activateGuideSectionById(id) {
+  if (!id || typeof document === 'undefined') {
+    return null;
+  }
+
+  const host = document.getElementById('observation-guide');
+  if (!host) {
+    return null;
+  }
+
+  const sections = Array.from(host.querySelectorAll('[data-guide-section]'));
+  if (!sections.length) {
+    return null;
+  }
+
+  let activeSection = sections.find(section => section.id === id);
+  if (!activeSection) {
+    activeSection = sections[0] || null;
+    if (activeSection) {
+      id = activeSection.id;
+    }
+  }
+
+  if (!activeSection) {
+    return null;
+  }
+
+  sections.forEach(section => {
+    const isActive = section === activeSection;
+    section.classList.toggle('is-active', isActive);
+    section.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    section.setAttribute('tabindex', isActive ? '0' : '-1');
+    if (isActive) {
+      section.removeAttribute('hidden');
+    } else {
+      section.setAttribute('hidden', 'hidden');
+    }
+  });
+
+  const tabs = Array.from(host.querySelectorAll('.observation-guide__tab[data-guide-target]'));
+  tabs.forEach(tab => {
+    const targetId = tab.getAttribute('data-guide-target');
+    const isActive = targetId === id;
+    tab.classList.toggle('is-active', isActive);
+    tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    tab.setAttribute('tabindex', isActive ? '0' : '-1');
+  });
+
+  return activeSection;
 }
 
 function handleGuideNavigationClick(event) {
@@ -1646,11 +1752,21 @@ function openGuideSection(id) {
   if (!id || typeof document === 'undefined') {
     return;
   }
-  const section = document.getElementById(id);
+  const host = document.getElementById('observation-guide');
+  if (host && host.tagName && host.tagName.toLowerCase() === 'details' && !host.open) {
+    host.open = true;
+  }
+
+  const section = activateGuideSectionById(id);
   if (!section) {
     return;
   }
-  if (section.tagName && section.tagName.toLowerCase() === 'details' && !section.open) {
-    section.open = true;
+
+  const tabId = section.getAttribute('aria-labelledby');
+  if (tabId) {
+    const tab = document.getElementById(tabId);
+    if (tab && typeof tab.focus === 'function') {
+      tab.focus();
+    }
   }
 }
