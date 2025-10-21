@@ -1,5 +1,11 @@
 const state = { compiled: [], };
 
+let FEELING_SLUGS = new Set();
+let FAUX_FEELING_SLUGS = new Set();
+let NEED_SLUGS = new Set();
+
+let EXAMPLE_PAIRS = [];
+
 function escapeHtml(str) {
   return String(str ?? "")
     .replace(/&/g, "&amp;")
@@ -54,34 +60,91 @@ function splitSentences(text) {
   return String(text).replace(/\r/g, "").split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean);
 }
 
-const EVAL_PATTERNS = [
-  /\b(always|never|every\s+time|nothing\s+ever|no\s+one\s+ever)\b/i,
-  /\b(should(?:n['’]t)?|must|have\s+to|ought(?:\s+to)?)\b/i,
-  /\b(rude|lazy|selfish|liar|stupid|dumb|incompetent|unprofessional)\b/i,
-  /\b(on\s+purpose|intentionally|they\s+just\s+wanted|they\s+meant\s+to)\b/i,
-  /\bbecause\s+of\s+you\b/i,
-  /\b(clearly|obviously)\b/i
+const ABSOLUTES_RX = /\b(always|never|constantly|every\s+time|nothing\s+ever|no\s+one\s+ever)\b/i;
+const SHOULD_RX = /\b(should(?:n['’]t)?|must|have\s+to|ought(?:\s+to)?)\b/i;
+const INTENT_RX = /\b(on\s+purpose|intentionally|to\s+(?:hurt|get\s+back)|for\s+no\s+reason|they\s+(?:meant|wanted)\s+to)\b/i;
+const LABELS_RX = /\b(rude|selfish|lazy|aggressive|unprofessional|inconsiderate|immature|arrogant|disrespectful|toxic|careless|liar|stupid|dumb|incompetent)\b/i;
+const INTENS_RX = /\b(clearly|obviously|plainly)\b/i;
+const BLAME_RX = /\bbecause\s+of\s+you\b/i;
+
+const EVAL_RULES = [
+  { key: "absolutes", rx: ABSOLUTES_RX, blocking: true, hint: "Observations avoid ‘always/never’. Try a timeframe or count (e.g., ‘three times this week’)." },
+  { key: "shoulds", rx: SHOULD_RX, blocking: true, hint: "‘Should/must’ is evaluative. Describe what you saw/heard." },
+  { key: "labels", rx: LABELS_RX, blocking: true, hint: "Words like ‘rude’ are judgments. What would a camera/mic capture?" },
+  { key: "intent", rx: INTENT_RX, blocking: true, hint: "We can’t know motives. Remove ‘on purpose/for no reason’; describe the action." },
+  { key: "blame", rx: BLAME_RX, blocking: true, hint: "Skip blame phrases like ‘because of you’. Describe what happened instead." },
+  { key: "intensifiers", rx: INTENS_RX, blocking: true, hint: "Words like ‘obviously’ lean judgment. Stick to what you noticed." }
 ];
 
 function stripQuoted(s){
   return String(s || "").replace(/"[^"]*"|‘[^’]*’|“[^”]*”/g, " ");
 }
 
+function findMatches(text, rx) {
+  const flags = rx.flags.includes("g") ? rx.flags : rx.flags + "g";
+  const finder = new RegExp(rx.source, flags);
+  const matches = [];
+  let match;
+  while ((match = finder.exec(text))) {
+    if (match[0]) {
+      matches.push(match[0]);
+    }
+    if (finder.lastIndex === match.index) finder.lastIndex++;
+  }
+  return matches;
+}
+
 function detectEvaluation(text){
   const t = stripQuoted(text);
   const hits = [];
-  for (const rx of EVAL_PATTERNS){
-    const flags = rx.flags.includes("g") ? rx.flags : rx.flags + "g";
-    const finder = new RegExp(rx.source, flags);
-    let match;
-    while ((match = finder.exec(t))){
-      if (match[0]) {
-        hits.push({ pattern: rx.source, match: match[0] });
-      }
-      if (finder.lastIndex === match.index) finder.lastIndex++;
+  const hints = [];
+  const seen = new Set();
+  for (const rule of EVAL_RULES){
+    const matches = findMatches(t, rule.rx);
+    if (!matches.length) continue;
+    for (const m of matches){
+      hits.push({ pattern: rule.rx.source, match: m, key: rule.key, blocking: !!rule.blocking });
+    }
+    if (rule.hint && !seen.has(rule.key)) {
+      hints.push({ key: rule.key, message: rule.hint, blocking: !!rule.blocking });
+      seen.add(rule.key);
     }
   }
-  return hits;
+  return { hits, hints, blocking: hints.some(h => h.blocking) };
+}
+
+function detectCatalogHints(text){
+  const stripped = stripQuoted(text).toLowerCase();
+  const tokens = stripped.match(/[a-z0-9]+(?:-[a-z0-9]+)*/g) || [];
+  const feelings = new Set();
+  const faux = new Set();
+  const needs = new Set();
+  for (const rawToken of tokens){
+    const token = rawToken.toLowerCase();
+    if (FAUX_FEELING_SLUGS.has(token)) {
+      faux.add(token);
+    } else if (FEELING_SLUGS.has(token)) {
+      feelings.add(token);
+    } else if (NEED_SLUGS.has(token)) {
+      needs.add(token);
+    }
+  }
+  const hints = [];
+  if (faux.size) {
+    const list = formatWordList(Array.from(faux));
+    const msg = list
+      ? `Words like ${list} describe interpretations. Focus on the observable behavior.`
+      : "Words that describe interpretations belong outside the observation.";
+    hints.push({ key: "faux_feelings", message: msg, blocking: false });
+  }
+  if (feelings.size || needs.size) {
+    const combined = Array.from(new Set([...feelings, ...needs]));
+    const list = formatWordList(combined);
+    const prefix = "Save feelings/needs for the next step. Keep this sentence to observable actions/quotes.";
+    const msg = list ? `${prefix} (${list})` : prefix;
+    hints.push({ key: "feelings_needs", message: msg, blocking: false });
+  }
+  return { hints, blocking: false };
 }
 
 function compileCues(json) {
@@ -129,6 +192,46 @@ function evalText(text) {
 }
 
 function uniqueSorted(arr) { return Array.from(new Set(arr)).sort((a,b)=>a.localeCompare(b)); }
+
+function formatWordList(words) {
+  const sorted = uniqueSorted(words.map(w => String(w || "").toLowerCase()).filter(Boolean));
+  if (!sorted.length) return "";
+  if (sorted.length === 1) {
+    return `“${escapeHtml(sorted[0])}”`;
+  }
+  const last = sorted[sorted.length - 1];
+  const rest = sorted.slice(0, -1).map(w => `“${escapeHtml(w)}”`).join(", ");
+  return `${rest} and “${escapeHtml(last)}”`;
+}
+
+function renderHints(container, hints) {
+  if (!container) return;
+  if (!Array.isArray(hints) || !hints.length) {
+    container.innerHTML = "";
+    container.style.display = "none";
+    return;
+  }
+  const items = hints.map(h => `<li>${escapeHtml(h.message || "")}</li>`).join("");
+  container.innerHTML = `<ul style="margin:0;padding-left:18px;">${items}</ul>`;
+  container.style.display = "block";
+}
+
+function renderExamples(container, pairs) {
+  if (!container) return;
+  if (!Array.isArray(pairs) || !pairs.length) {
+    container.innerHTML = "<div class=\"muted\">No examples available right now.</div>";
+    return;
+  }
+  const rows = pairs.map((pair) => {
+    const evaluation = escapeHtml(pair?.evaluation ?? "");
+    const observation = escapeHtml(pair?.observation ?? "");
+    return `<div class="example-pair" style="margin-bottom:8px;">
+      <div><span class="muted">Evaluation:</span> ${evaluation}</div>
+      <div><span class="muted">Observation:</span> ${observation}</div>
+    </div>`;
+  }).join("");
+  container.innerHTML = rows;
+}
 
 function aggregateSuggestions(hits){
   const weight = h => /_legacy_next$/.test(h?.id || "") ? 1 : 1.2;
@@ -207,7 +310,8 @@ function nearestForTextMinHash(text, k=5, thr=0.22){
 
 const PASS_LABELS = { cue:"Cue", speech:"Speech", action:"Action", perception:"Perception", timeEvent:"Time+Event" };
 
-function computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt }) {
+function computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt, blockingEval }) {
+  if (blockingEval) return "red";
   if (hits.length > 0) return "green";
   const passesOK = passCue && passSpeech && passAction && passPerception && passTimeEvent;
   if (passesOK && evalHits.length === 0) {
@@ -217,7 +321,7 @@ function computeState({ hits, evalHits, passCue, passSpeech, passAction, passPer
   return "red";
 }
 
-function renderBadges(container, reasons, evalHits) {
+function renderBadges(container, reasons, evalHits, blockingEval) {
   if (!container) return;
   const ALL = ["cue","speech","action","perception","timeEvent"];
   const badge = (label, ok, kind="default") => {
@@ -229,7 +333,7 @@ function renderBadges(container, reasons, evalHits) {
     return `<span class="pill" style="${style}">${label}</span>`;
   };
   const html = ALL.map(k => badge(PASS_LABELS[k], reasons.has(k))).join(" ");
-  const evalOk = !evalHits?.length;
+  const evalOk = !blockingEval;
   container.innerHTML = `${html} ${badge("Eval", evalOk, "eval")}`.trim();
 }
 
@@ -245,6 +349,28 @@ async function boot() {
   } catch (e) { console.error("Failed to load cues bundle:", e); }
 
   await loadNearest(BASES);
+
+  let catalogs = null;
+  try {
+    catalogs = await fetchFirst(BASES.map(b => `${b}/catalog-slugs.json`));
+  } catch {}
+  const toSet = (arr) => new Set(Array.isArray(arr) ? arr.map(x => String(x || "").toLowerCase()) : []);
+  if (catalogs) {
+    FEELING_SLUGS = toSet(catalogs.feelings);
+    FAUX_FEELING_SLUGS = toSet(catalogs.faux_feelings);
+    NEED_SLUGS = toSet(catalogs.needs);
+  } else {
+    FEELING_SLUGS = new Set();
+    FAUX_FEELING_SLUGS = new Set();
+    NEED_SLUGS = new Set();
+  }
+
+  try {
+    const examples = await fetchFirst(BASES.map(b => `${b}/observation-examples.json`));
+    EXAMPLE_PAIRS = Array.isArray(examples?.pairs) ? examples.pairs : [];
+  } catch {
+    EXAMPLE_PAIRS = [];
+  }
 
   const root = document.getElementById("obs-editor-root");
   if (!root) return;
@@ -262,6 +388,9 @@ async function boot() {
   const noteEl = root.querySelector("#suggestionNote");
   const passBadges = root.querySelector("#passBadges");
   const evalWarnings = root.querySelector("#evalWarnings");
+  const hintStack = root.querySelector("#hintStack");
+  const examplesPanel = root.querySelector("#examplesPanel");
+  const examplesBody = root.querySelector("#examplesBody");
   const nearestPanel = root.querySelector("#nearestPanel");
   const nearFeelings = root.querySelector("#nearFeelings");
   const nearNeeds = root.querySelector("#nearNeeds");
@@ -271,6 +400,14 @@ async function boot() {
 
   let nearList = [];
   let nearIdx = 0;
+
+  if (hintStack) hintStack.style.display = "none";
+  if (examplesBody) {
+    renderExamples(examplesBody, EXAMPLE_PAIRS);
+    if (examplesPanel) {
+      examplesPanel.style.display = EXAMPLE_PAIRS.length ? "block" : "none";
+    }
+  }
 
   function setStatus(state){
     if (!readyDot || !readyLabel || !submitBtn) return;
@@ -308,14 +445,17 @@ async function boot() {
 
   function render() {
     const { reasons, hits } = evalText(txt.value);
-    const evalHits = detectEvaluation(txt.value);
-    if (passBadges) renderBadges(passBadges, reasons, evalHits);
+    const evalCheck = detectEvaluation(txt.value);
+    const catalogCheck = detectCatalogHints(txt.value);
+    const allHints = [...(evalCheck.hints || []), ...(catalogCheck.hints || [])];
+    if (passBadges) renderBadges(passBadges, reasons, evalCheck.hits, evalCheck.blocking);
+    renderHints(hintStack, allHints);
     const passCue = reasons.has("cue");
     const passSpeech = reasons.has("speech");
     const passAction = reasons.has("action");
     const passPerception = reasons.has("perception");
     const passTimeEvent = reasons.has("timeEvent");
-    const state = computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value });
+    const state = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
     setStatus(state);
     if (nearestPanel) nearestPanel.style.display = "none";
     nearList = [];
@@ -329,8 +469,8 @@ async function boot() {
     if (matchedCues) matchedCues.textContent = "";
 
     if (evalWarnings) {
-      if (evalHits.length) {
-        const chips = uniqueSorted(evalHits.map(h => h.match?.trim()).filter(Boolean));
+      if (evalCheck.hits.length) {
+        const chips = uniqueSorted(evalCheck.hits.map(h => h.match?.trim()).filter(Boolean));
         const chipHtml = chips.map(word => `<span class="pill error">${escapeHtml(word)}</span>`).join(" ");
         const prefix = '<div class="muted" style="margin-bottom:4px">Evaluation language detected:</div>';
         const words = chipHtml ? `<div>${chipHtml}</div>` : "";
@@ -344,7 +484,7 @@ async function boot() {
     if (!submitBtn) return;
 
     submitBtn.onclick = () => {
-      const stateNow = computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value });
+      const stateNow = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
       if (stateNow === "red") {
         if (noteEl) noteEl.textContent = "Not ready — please make the statement purely observational.";
         return;

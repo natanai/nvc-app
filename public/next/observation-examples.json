@@ -1,0 +1,20 @@
+{
+  "pairs": [
+    {
+      "evaluation": "You’re always inconsiderate.",
+      "observation": "In the last two weeks, there were three times when I started presenting and you took phone calls."
+    },
+    {
+      "evaluation": "He was rude to me.",
+      "observation": "He said, \"This is a waste of time,\" while I was speaking."
+    },
+    {
+      "evaluation": "She never listens.",
+      "observation": "During my update, she looked down at her phone and typed for about 90 seconds."
+    },
+    {
+      "evaluation": "They left to hurt me.",
+      "observation": "They ended the call without saying goodbye while I was mid‑sentence."
+    }
+  ]
+}
