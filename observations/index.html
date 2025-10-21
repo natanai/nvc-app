@@ -1052,26 +1052,6 @@ button.site-nav__magnet {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 40%, transparent);
   }
 
-  .observation-editor__feedback {
-    margin: 0;
-    padding: 0.85rem 1rem;
-    border-radius: var(--radius-3xl);
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 75%, var(--lavender) 25%);
-    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-    color: color-mix(in srgb, var(--outline) 70%, transparent);
-    font-weight: 600;
-  }
-
-  .observation-editor__feedback[data-state='warn'] {
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 68%, var(--rose) 32%);
-    border-color: color-mix(in srgb, var(--outline) 20%, transparent);
-  }
-
-  .observation-editor__feedback[data-state='ok'] {
-    background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 68%, var(--mint) 32%);
-    border-color: color-mix(in srgb, var(--outline) 16%, transparent);
-  }
-
   .observation-editor__issues {
     margin: 0;
     padding-left: 1.25rem;
@@ -1427,12 +1407,6 @@ button.site-nav__magnet {
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--outline) 62%, transparent);
-  }
-
-  .observation-panel__hint {
-    margin: 0;
-    font-size: 0.9rem;
-    color: color-mix(in srgb, var(--outline) 52%, transparent);
   }
 
   .observation-panel__empty {
@@ -2036,7 +2010,7 @@ button.site-nav__magnet {
                     class="observation-editor__input"
                     rows="7"
                     placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
-                    aria-describedby="observation-guidelines observation-feedback"
+                    aria-describedby="observation-guidelines"
                   ></textarea>
                 </div>
                 <div class="observation-editor__status observation-editor__status--inline">
@@ -2051,9 +2025,6 @@ button.site-nav__magnet {
                     <span id="observation-detection-text" class="observation-editor__status-text">Warming up the language detector…</span>
                   </div>
                 </div>
-                <p id="observation-feedback" class="observation-editor__feedback" role="status" aria-live="polite">
-                  Start by anchoring your observation in time and place.
-                </p>
                 <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
                 <section id="observation-suggestions" class="observation-suggestions" aria-live="polite">
                   <header class="observation-suggestions__header">
@@ -2076,7 +2047,6 @@ button.site-nav__magnet {
                     <section class="observation-panel observation-panel--feelings" aria-live="polite">
                       <header class="observation-panel__header">
                         <h3 class="observation-panel__title">Feelings to consider</h3>
-                        <p class="observation-panel__hint">Matches from the detector will appear here.</p>
                       </header>
                       <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
                       <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
@@ -2086,7 +2056,6 @@ button.site-nav__magnet {
                     <section class="observation-panel observation-panel--needs" aria-live="polite">
                       <header class="observation-panel__header">
                         <h3 class="observation-panel__title">Related needs</h3>
-                        <p class="observation-panel__hint">Matches from the detector will appear here.</p>
                       </header>
                       <div id="suggested-needs" class="observation-chip-list" role="list"></div>
                       <p id="suggested-needs-empty" class="observation-panel__empty" hidden>

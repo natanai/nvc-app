@@ -173,23 +173,11 @@ function analyze(raw, options = {}) {
 }
 
 function renderAnalysis() {
-  const feedback = document.getElementById('observation-feedback');
   const issuesList = document.getElementById('observation-issues');
   const submitButton = document.getElementById('observation-submit');
   const editor = document.getElementById('observation-editor');
 
   const analysis = state.analysis;
-
-  if (feedback) {
-    feedback.textContent = analysis?.message || 'Start by anchoring your observation in time and place.';
-    if (analysis?.ok) {
-      feedback.setAttribute('data-state', 'ok');
-    } else if (analysis?.issues?.length) {
-      feedback.setAttribute('data-state', 'warn');
-    } else {
-      feedback.removeAttribute('data-state');
-    }
-  }
 
   if (issuesList) {
     issuesList.innerHTML = '';
@@ -1265,8 +1253,7 @@ function renderDetectionStatus() {
       message = 'No cue matches detected yet.';
       break;
     case 'near': {
-      const nearCount = Number(state.detectionFallbacks) || 0;
-      message = nearCount > 1 ? `${nearCount} near matches detected.` : 'Near matches detected.';
+      message = 'Near matches detected.';
       break;
     }
     case 'match':
