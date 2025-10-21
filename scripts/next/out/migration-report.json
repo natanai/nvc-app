@@ -1,0 +1,18 @@
+{
+  "source": "data/observation_cues.csv",
+  "rows_read": 562,
+  "cues_emitted": 553,
+  "families_written": 3,
+  "patterns_in": 1442,
+  "patterns_kept": 1442,
+  "patterns_dropped_compile": 0,
+  "patterns_dropped_disallowed": 0,
+  "unknown_feelings_dropped": 0,
+  "unknown_needs_dropped": 0,
+  "cues_skipped_no_valid_patterns": 9,
+  "files": [
+    "data/next/families/legacy_port/legacy_port_001.json",
+    "data/next/families/legacy_port/legacy_port_002.json",
+    "data/next/families/legacy_port/legacy_port_003.json"
+  ]
+}

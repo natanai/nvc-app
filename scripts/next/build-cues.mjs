@@ -131,10 +131,25 @@ function compileFamily(filePath, stats) {
   const rows = [];
   const stats = { patternsTotal: 0, patternsInvalid: 0, invalid: [] };
   const famPath = path.join(ROOT, FAM_DIR);
-  const families = fs.readdirSync(famPath).filter(n => n.endsWith(".json"));
 
-  for (const f of families) {
-    rows.push(...compileFamily(path.join(famPath, f), stats));
+  function listFamilyFiles(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const files = [];
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        files.push(...listFamilyFiles(fullPath));
+      } else if (entry.isFile() && entry.name.endsWith(".json")) {
+        files.push(fullPath);
+      }
+    }
+    return files;
+  }
+
+  const familyFiles = listFamilyFiles(famPath).sort();
+
+  for (const filePath of familyFiles) {
+    rows.push(...compileFamily(filePath, stats));
   }
 
   const jsonBundle = rows.map(r => ({
@@ -163,7 +178,7 @@ function compileFamily(filePath, stats) {
   fs.writeFileSync(CSV_OUT, csvString, "utf8");
 
   const summary = {
-    families: families.length,
+    families: familyFiles.length,
     cues: rows.length,
     patterns_total: stats.patternsTotal,
     patterns_invalid: stats.patternsInvalid,
