@@ -1303,15 +1303,51 @@ button.site-nav__magnet {
   }
 
   .observation-editor__highlight-details {
-    margin: 0.75rem 0 0;
+    --highlight-gap: 0.65rem;
+    --highlight-popover-bg: color-mix(in srgb, var(--mint) 12%, transparent);
+    --highlight-popover-border: color-mix(in srgb, var(--mint) 22%, transparent);
+    position: absolute;
+    top: var(--highlight-top, 0);
+    left: var(--highlight-left, 50%);
+    transform: translate(-50%, calc(-100% - var(--highlight-gap)));
+    margin: 0;
     padding: 0.75rem 1rem;
     border-radius: var(--radius-2xl);
-    background: color-mix(in srgb, var(--mint) 12%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 22%, transparent);
+    background: var(--highlight-popover-bg);
+    box-shadow:
+      inset 0 0 0 1px var(--highlight-popover-border),
+      0 18px 28px color-mix(in srgb, var(--outline) 10%, transparent);
     font-size: 0.95rem;
     line-height: 1.45;
     color: color-mix(in srgb, var(--outline) 70%, transparent);
     word-break: break-word;
+    max-width: min(24rem, calc(100% - 2.6rem));
+    text-align: left;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .observation-editor__highlight-details[data-placement='below'] {
+    transform: translate(-50%, var(--highlight-gap));
+  }
+
+  .observation-editor__highlight-details::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 0.22rem;
+    background: var(--highlight-popover-bg);
+    box-shadow: inset 0 0 0 1px var(--highlight-popover-border);
+    transform: translate(-50%, 50%) rotate(45deg);
+    bottom: -0.35rem;
+  }
+
+  .observation-editor__highlight-details[data-placement='below']::after {
+    top: -0.35rem;
+    bottom: auto;
+    transform: translate(-50%, -50%) rotate(45deg);
   }
 
   .observation-editor__highlight-details[hidden] {
@@ -2370,13 +2406,13 @@ button.site-nav__magnet {
                     placeholder="Formula: “At [specific day/time] in [location], I observed [person] [quote or detail of the exact action only—no judgments, motives, or feelings].”"
                     aria-describedby="observation-guidelines"
                   ></textarea>
+                  <div
+                    id="observation-highlight-details"
+                    class="observation-editor__highlight-details"
+                    hidden
+                    aria-live="polite"
+                  ></div>
                 </div>
-                <div
-                  id="observation-highlight-details"
-                  class="observation-editor__highlight-details"
-                  hidden
-                  aria-live="polite"
-                ></div>
                 <div class="observation-editor__status observation-editor__status--inline">
                   <div
                     id="observation-detection"

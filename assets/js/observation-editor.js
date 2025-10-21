@@ -26,6 +26,7 @@ const state = {
 };
 
 let guideNavigationBound = false;
+let highlightPopoverBound = false;
 
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
@@ -123,6 +124,9 @@ function bind() {
         inspectHighlightAtCursor(textarea);
       }
     });
+    textarea.addEventListener('scroll', () => {
+      renderHighlightDetails(null);
+    });
     textarea.addEventListener('blur', () => {
       renderHighlightDetails(null);
     });
@@ -150,6 +154,19 @@ function bind() {
   }
 
   bindGuideNavigation();
+
+  if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('resize', () => {
+      if (!state.activeHighlightKey) {
+        return;
+      }
+      const active = Array.isArray(state.positiveHighlightRanges)
+        ? state.positiveHighlightRanges.find(range => buildHighlightKey(range) === state.activeHighlightKey)
+        : null;
+      renderHighlightDetails(active || null);
+    });
+    highlightPopoverBound = true;
+  }
 }
 
 function analyze(raw, options = {}) {
@@ -1533,6 +1550,8 @@ function renderHighlightDetails(range) {
     return;
   }
 
+  resetHighlightDetailsPosition(container);
+
   if (!range || !Array.isArray(range.items) || !range.items.length) {
     container.innerHTML = '';
     container.setAttribute('hidden', 'hidden');
@@ -1574,7 +1593,110 @@ function renderHighlightDetails(range) {
     return;
   }
 
+  container.style.visibility = 'hidden';
   container.removeAttribute('hidden');
+  const positioned = positionHighlightDetails(container, range);
+  if (!positioned) {
+    container.innerHTML = '';
+    container.setAttribute('hidden', 'hidden');
+    state.activeHighlightKey = '';
+    container.style.visibility = '';
+    return;
+  }
+
+  container.style.visibility = '';
+}
+
+function resetHighlightDetailsPosition(container) {
+  if (!container) {
+    return;
+  }
+  container.style.removeProperty('--highlight-top');
+  container.style.removeProperty('--highlight-left');
+  container.removeAttribute('data-placement');
+  container.removeAttribute('data-highlight-key');
+}
+
+function positionHighlightDetails(container, range) {
+  if (!container || !range) {
+    return false;
+  }
+  const key = buildHighlightKey(range);
+  if (!key) {
+    return false;
+  }
+  const host = document.getElementById('observation-highlight');
+  const wrapper = container.closest('.observation-editor__input-wrapper');
+  if (!host || !wrapper) {
+    return false;
+  }
+  const selectorKey = String(key).replace(/"/g, '\\"');
+  const marks = host.querySelectorAll(`[data-highlight-key="${selectorKey}"]`);
+  if (!marks.length) {
+    return false;
+  }
+
+  const wrapperRect = wrapper.getBoundingClientRect();
+  let minTop = Number.POSITIVE_INFINITY;
+  let maxBottom = Number.NEGATIVE_INFINITY;
+  let minLeft = Number.POSITIVE_INFINITY;
+  let maxRight = Number.NEGATIVE_INFINITY;
+
+  marks.forEach(mark => {
+    if (!mark || typeof mark.getBoundingClientRect !== 'function') {
+      return;
+    }
+    const rect = mark.getBoundingClientRect();
+    if (!rect) {
+      return;
+    }
+    if (rect.top < minTop) {
+      minTop = rect.top;
+    }
+    if (rect.bottom > maxBottom) {
+      maxBottom = rect.bottom;
+    }
+    if (rect.left < minLeft) {
+      minLeft = rect.left;
+    }
+    if (rect.right > maxRight) {
+      maxRight = rect.right;
+    }
+  });
+
+  if (!Number.isFinite(minTop) || !Number.isFinite(maxBottom) || !Number.isFinite(minLeft) || !Number.isFinite(maxRight)) {
+    return false;
+  }
+
+  const highlightTop = minTop - wrapperRect.top;
+  const highlightBottom = maxBottom - wrapperRect.top;
+  const highlightCenter = (minLeft + maxRight) / 2 - wrapperRect.left;
+  const wrapperWidth = wrapperRect.width;
+  const clampMargin = 16;
+  const clampedCenter = Math.min(wrapperWidth - clampMargin, Math.max(clampMargin, highlightCenter));
+
+  container.style.setProperty('--highlight-left', `${Math.max(0, clampedCenter)}px`);
+
+  const gap = 12;
+  const containerHeight = container.offsetHeight || 0;
+  const wrapperHeight = wrapperRect.height;
+  const aboveSpace = highlightTop;
+  const belowSpace = wrapperHeight - highlightBottom;
+
+  let placement = 'above';
+  let anchorTop = highlightTop;
+  if (aboveSpace < containerHeight + gap && belowSpace > aboveSpace) {
+    placement = 'below';
+    anchorTop = Math.min(wrapperHeight, highlightBottom);
+  } else {
+    placement = 'above';
+    anchorTop = Math.max(0, highlightTop);
+  }
+
+  container.style.setProperty('--highlight-top', `${Math.max(0, anchorTop)}px`);
+  container.setAttribute('data-placement', placement);
+  container.setAttribute('data-highlight-key', key);
+  return true;
 }
 
 function extractHighlightText(range) {
@@ -1762,7 +1884,15 @@ function buildHighlightMarkupFromRanges(text, ranges) {
     const tone = resolveHighlightTone(normalized, start, end);
     const html = escapeHtml(segment).replace(/\n/g, '<br />');
     if (tone) {
-      output += `<mark data-tone="${tone}">${html}</mark>`;
+      const attributes = [`data-tone="${tone}"`];
+      if (tone === 'ok') {
+        const anchorRange = resolveHighlightAnchorRange(normalized, start, end);
+        const anchorKey = anchorRange ? buildHighlightKey(anchorRange) : '';
+        if (anchorKey) {
+          attributes.push(`data-highlight-key="${anchorKey}"`);
+        }
+      }
+      output += `<mark ${attributes.join(' ')}>${html}</mark>`;
     } else {
       output += html;
     }
@@ -1984,6 +2114,25 @@ function resolveHighlightTone(ranges, start, end) {
     }
   }
   return active[0].tone;
+}
+
+function resolveHighlightAnchorRange(ranges, start, end) {
+  if (!Array.isArray(ranges) || !ranges.length) {
+    return null;
+  }
+  for (let i = 0; i < ranges.length; i += 1) {
+    const range = ranges[i];
+    if (!range || range.tone !== 'ok') {
+      continue;
+    }
+    if (!Array.isArray(range.data) || !range.data.length) {
+      continue;
+    }
+    if (range.start < end && range.end > start) {
+      return range;
+    }
+  }
+  return null;
 }
 
 function isWordBoundary(text, start, end) {
