@@ -73,6 +73,15 @@ function evalText(text) {
 
 function uniqueSorted(arr) { return Array.from(new Set(arr)).sort((a,b)=>a.localeCompare(b)); }
 
+function renderBadges(container, reasons) {
+  const ALL = ["cue","speech","action","perception","timeEvent"];
+  const labels = { cue:"Cue", speech:"Speech", action:"Action", perception:"Perception", timeEvent:"Time+Event" };
+  container.innerHTML = ALL.map(k => {
+    const on = reasons.has(k);
+    return `<span class="pill" style="background:${on ? '#eaffea':'#f3f4f6'};border:1px solid ${on ? '#16a34a':'#e5e7eb'}">${labels[k]}</span>`;
+  }).join(" ");
+}
+
 async function boot() {
   // Load cues
   try {
@@ -90,9 +99,11 @@ async function boot() {
   const feelings = root.querySelector("#feelings");
   const needs = root.querySelector("#needs");
   const matchedCues = root.querySelector("#matchedCues");
+  const passBadges = root.querySelector("#passBadges");
 
   function render() {
     const { ok, reasons, hits } = evalText(txt.value);
+    if (passBadges) renderBadges(passBadges, reasons);
     check.className = "check " + (ok ? "ok" : "no");
     why.textContent = ok
       ? "Ready — passes: " + Array.from(reasons).join(", ")

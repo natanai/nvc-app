@@ -14,3 +14,4 @@ A notification said "You have been muted by the host."
 The host muted me while I was speaking.
 The calendar event disappeared from my calendar.
 They used reply all and shared my note.
+When I joined at the scheduled time, the meeting had already started.

@@ -1,7 +1,7 @@
 input,ready,matched_cues
 "I asked for time off and my manager said no.",true,"time-off-request-denied_next"
 "They arrived twenty minutes late without a message.",true,"arrived-late_next"
-"The call started early and decisions were discussed before I joined.",true,""
+"The call started early and decisions were discussed before I joined.",true,"meeting-started-early_next"
 "I saw ""Recording has started"" in the corner.",true,"meeting-recorded-without-consent_next"
 "Alex said ""This is a waste of time.""",true,""
 "I noticed the invite disappeared from my calendar.",true,""
@@ -15,3 +15,4 @@ input,ready,matched_cues
 "The host muted me while I was speaking.",true,"muted-by-host_next"
 "The calendar event disappeared from my calendar.",true,"calendar-event-removed_next"
 "They used reply all and shared my note.",true,"reply-all-exposed_next"
+"When I joined at the scheduled time, the meeting had already started.",true,""

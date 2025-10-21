@@ -1,0 +1,21 @@
+{
+  "family": "meeting_started_early",
+  "defaults": {
+    "feelings": ["anxious", "frustrated", "tense", "lonely"],
+    "needs": ["consideration", "inclusion", "predictability", "respect"]
+  },
+  "cues": [
+    {
+      "id": "meeting-started-early_next",
+      "patterns": [
+        "\\b(?:the\\s+)?(?:call|meeting)\\s+started\\s+early\\b",
+        "\\b(?:the\\s+)?(?:call|meeting)\\s+began\\s+early\\b",
+        "\\b(?:the\\s+)?(?:call|meeting)\\s+started\\s+before\\s+(?:the\\s+)?scheduled\\s+time\\b",
+        "\\b(?:the\\s+)?(?:call|meeting)\\s+began\\s+before\\s+(?:the\\s+)?scheduled\\s+time\\b",
+        "\\b(?:the\\s+)?(?:call|meeting)\\s+had\\s+already\\s+started\\b[^.!?]*\\bwhen\\s+I\\s+joined\\b",
+        "\\bstarted\\s+before\\s+I\\s+joined\\b"
+      ],
+      "example": "When I joined at the scheduled time, the meeting had already started."
+    }
+  ]
+}
