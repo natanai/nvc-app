@@ -1,0 +1,19 @@
+{
+  "family": "camera_off_midcall",
+  "defaults": {
+    "feelings": ["lonely", "anxious", "confused", "hurt"],
+    "needs": ["connection", "to-be-seen", "consideration", "belonging"]
+  },
+  "cues": [
+    {
+      "id": "camera-off-midcall_next",
+      "patterns": [
+        "\\bcamera\\s+turned\\s+off\\b",
+        "\\bcamera\\s+went\\s+off\\b",
+        "\\bblank\\s+screen\\b[^.!?]*\\bwhile\\s+I\\s+(?:spoke|was\\s+speaking|shared)\\b",
+        "\\bvideo\\s+off\\b[^.!?]*\\bwhile\\s+I\\s+(?:spoke|was\\s+speaking|shared)\\b"
+      ],
+      "example": "While I spoke, their camera switched off and stayed blank."
+    }
+  ]
+}

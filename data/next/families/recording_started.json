@@ -1,0 +1,19 @@
+{
+  "family": "recording_started",
+  "defaults": {
+    "feelings": ["alarmed", "anxious", "tense", "distressed"],
+    "needs": ["privacy", "respect", "trust", "predictability"]
+  },
+  "cues": [
+    {
+      "id": "meeting-recorded-without-consent_next",
+      "patterns": [
+        "\\brecording\\s+started\\b",
+        "\\b(?:red\\s+)?recording\\s+dot\\s+appeared\\b",
+        "\\b(?:recording\\s+has\\s+started|recording\\s+began)\\b",
+        "\\bstarted\\s+recording\\b[^.!?]*\\bwithout\\s+(?:asking|consent|notice)\\b"
+      ],
+      "example": "The video call displayed 'Recording has started' without anyone asking first."
+    }
+  ]
+}
