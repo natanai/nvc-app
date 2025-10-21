@@ -1264,11 +1264,11 @@ function renderDetectionStatus() {
     case 'none':
       message = 'No cue matches detected yet.';
       break;
-    case 'near':
-      message = state.detectionFallbacks > 1
-        ? `No exact cue matches detected. ${state.detectionFallbacks} nearest matches ready to review.`
-        : 'No exact cue match detected. Nearest match ready to review.';
+    case 'near': {
+      const nearCount = Number(state.detectionFallbacks) || 0;
+      message = nearCount > 1 ? `${nearCount} near matches detected.` : 'Near matches detected.';
       break;
+    }
     case 'match':
       message = state.detectionMatches > 1
         ? `${state.detectionMatches} exact cue matches detected.`
