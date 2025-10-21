@@ -2302,6 +2302,24 @@ button.site-nav__magnet {
             <div id="needs"></div>
             <div class="small muted" id="matchedCues"></div>
           </div>
+          <div id="nearestPanel" class="panel" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong>Similar situations</strong>
+              <div>
+                <button id="prevNear" class="small">Prev</button>
+                <button id="nextNear" class="small">Next</button>
+              </div>
+            </div>
+            <div class="small muted" style="margin:6px 0">Showing suggestions based on similar phrasing.</div>
+            <div><strong>Possible feelings</strong></div>
+            <div id="nearFeelings"></div>
+            <div style="margin-top:8px"><strong>Possible needs</strong></div>
+            <div id="nearNeeds"></div>
+            <div id="nearPager" class="small muted" style="margin-top:8px"></div>
+          </div>
+          <div class="bar" id="nearestCta" style="display:none">
+            <button id="findNearest">Find similar situations</button>
+          </div>
         </section>
       </main>
 
