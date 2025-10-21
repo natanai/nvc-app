@@ -1889,6 +1889,74 @@ button.site-nav__magnet {
     min-width: 0;
     padding-inline: 0.95rem;
     margin-block-start: 0.15rem;
+    position: relative;
+    z-index: 0;
+    overflow: visible;
+  }
+
+  .observation-suggestions__action:disabled {
+    cursor: not-allowed;
+    border-color: color-mix(in srgb, var(--outline) 22%, transparent);
+    background: color-mix(in srgb, #ffffff 92%, var(--ink-soft) 8%);
+    color: color-mix(in srgb, var(--ink-soft) 55%, transparent);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .observation-suggestions__action:disabled::after {
+    content: none;
+  }
+
+  .observation-suggestions__action:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--gold) 78%, #ffffff 22%),
+      color-mix(in srgb, var(--rose) 45%, var(--gold) 55%)
+    );
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--outline) 72%, transparent);
+    box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 46%, transparent);
+  }
+
+  .observation-suggestions__action:not(:disabled)::after {
+    content: '';
+    position: absolute;
+    inset: -0.35rem;
+    border-radius: inherit;
+    border: 3px solid color-mix(in srgb, var(--gold) 55%, transparent);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: -1;
+    animation: observationActionGlow 2.6s ease-in-out infinite;
+  }
+
+  .observation-suggestions__action:not(:disabled):hover,
+  .observation-suggestions__action:not(:disabled):focus-visible {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--gold) 85%, #ffffff 15%),
+      color-mix(in srgb, var(--rose) 38%, var(--gold) 62%)
+    );
+    box-shadow: 0 20px 0 color-mix(in srgb, var(--outline) 52%, transparent);
+  }
+
+  .observation-suggestions__action:not(:disabled):focus-visible::after {
+    opacity: 0.8;
+  }
+
+  @keyframes observationActionGlow {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.07);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
   }
 
   .observation-suggestions__actions {
@@ -2408,7 +2476,7 @@ button.site-nav__magnet {
                     id="observation-text"
                     class="observation-editor__input"
                     rows="7"
-                    placeholder="Formula: “At [specific day/time] in [location], I observed [person] [quote or detail of the exact action only—no judgments, motives, or feelings].”"
+                    placeholder="Try something like “Yesterday evening on the porch, I watched Jamie set the mug down and walk away without saying anything.” Keep it to what a camera would capture."
                     aria-describedby="observation-guidelines"
                   ></textarea>
                   <div
