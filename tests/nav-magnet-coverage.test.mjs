@@ -10,12 +10,36 @@ const repoRoot = path.resolve(__dirname, '..');
 
 const requiredMagnets = [
   {
+    id: 'nav-faux-feelings',
+    label: 'Faux feelings magnet',
+    requiredClasses: ['site-nav__magnet--faux-feelings'],
+    requiredAttributes: [
+      { name: 'data-nav-hidden', value: 'true' },
+      { name: 'aria-hidden', value: 'true' },
+      { name: 'tabindex', value: '-1' },
+    ],
+  },
+  {
     id: 'nav-body-cues',
     label: 'Body cues magnet',
+    requiredClasses: ['site-nav__magnet--body-cues'],
+    requiredAttributes: [
+      { name: 'data-nav-hidden', value: 'true' },
+      { name: 'data-nav-supplemental', value: 'true' },
+      { name: 'aria-hidden', value: 'true' },
+      { name: 'tabindex', value: '-1' },
+    ],
   },
   {
     id: 'nav-journal-dashboard',
     label: 'Journal dashboard magnet',
+    requiredClasses: ['site-nav__magnet--journal-dashboard'],
+    requiredAttributes: [
+      { name: 'data-nav-hidden', value: 'true' },
+      { name: 'data-nav-supplemental', value: 'true' },
+      { name: 'aria-hidden', value: 'true' },
+      { name: 'tabindex', value: '-1' },
+    ],
   },
 ];
 
@@ -39,6 +63,30 @@ async function collectHtmlFiles(dir) {
   return files;
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+}
+
+function extractAttribute(tag, name) {
+  const pattern = new RegExp(
+    `${escapeRegExp(name)}(?:\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+)))?`,
+    'i',
+  );
+  const match = pattern.exec(tag);
+  if (!match) {
+    return null;
+  }
+  return match[1] ?? match[2] ?? match[3] ?? '';
+}
+
+function findMagnetTags(html, magnetId) {
+  const pattern = new RegExp(
+    `<a[^>]*data-magnet-id=(?:"|')${escapeRegExp(magnetId)}(?:"|')[^>]*>`,
+    'gi',
+  );
+  return Array.from(html.matchAll(pattern), (match) => match[0]);
+}
+
 test('navigation pages include updated nav magnet definitions', async () => {
   const htmlFiles = await collectHtmlFiles(repoRoot);
   const violations = [];
@@ -50,9 +98,50 @@ test('navigation pages include updated nav magnet definitions', async () => {
     }
 
     for (const magnet of requiredMagnets) {
-      if (!contents.includes(`data-magnet-id="${magnet.id}"`)) {
-        const relative = path.relative(repoRoot, file);
+      const tags = findMagnetTags(contents, magnet.id);
+      const relative = path.relative(repoRoot, file);
+
+      if (!tags.length) {
         violations.push(`${relative} is missing ${magnet.label} (${magnet.id})`);
+        continue;
+      }
+
+      for (const tag of tags) {
+        if (magnet.requiredClasses) {
+          const classValue = extractAttribute(tag, 'class') ?? '';
+          const classList = new Set(
+            classValue
+              .split(/\s+/)
+              .map((cls) => cls.trim())
+              .filter(Boolean),
+          );
+
+          for (const requiredClass of magnet.requiredClasses) {
+            if (!classList.has(requiredClass)) {
+              violations.push(
+                `${relative} ${magnet.label} (${magnet.id}) is missing class ${requiredClass}`,
+              );
+            }
+          }
+        }
+
+        if (magnet.requiredAttributes) {
+          for (const attribute of magnet.requiredAttributes) {
+            const actual = extractAttribute(tag, attribute.name);
+            if (actual === null) {
+              violations.push(
+                `${relative} ${magnet.label} (${magnet.id}) is missing attribute ${attribute.name}`,
+              );
+            } else if (
+              Object.prototype.hasOwnProperty.call(attribute, 'value') &&
+              actual !== attribute.value
+            ) {
+              violations.push(
+                `${relative} ${magnet.label} (${magnet.id}) has ${attribute.name}="${actual}" but expected "${attribute.value}"`,
+              );
+            }
+          }
+        }
       }
     }
   }
