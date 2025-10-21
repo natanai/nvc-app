@@ -21,7 +21,7 @@ const state = {
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
   validityStatus: 'idle',
-  validityMessage: 'Matches not requested yet.',
+  validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
 };
@@ -111,7 +111,7 @@ function bind() {
         renderPanels();
       }
       if (state.validityStatus === 'valid' || state.validityStatus === 'invalid' || state.validityStatus === 'error') {
-        setValidityStatus('pending', 'Observation updated. See matches again when you’re ready.');
+        setValidityStatus('pending', 'Observation updated.');
       }
       state.fallback = createFallbackState();
       analyze(state.text);
@@ -318,6 +318,7 @@ function buildDefaultGuidelineContent() {
   const fragment = document.createDocumentFragment();
   const intro = document.createElement('p');
   intro.className = 'observation-editor__recipe-intro';
+  intro.id = 'observation-guidelines-summary';
   intro.textContent = OBSERVATION_GUIDELINE_INTRO;
   fragment.appendChild(intro);
 
@@ -349,6 +350,7 @@ function buildDetectionGuidelineContent(groups) {
 
   const intro = document.createElement('p');
   intro.className = 'observation-editor__recipe-intro observation-editor__recipe-intro--detected';
+  intro.id = 'observation-guidelines-summary';
   intro.textContent = summary
     ? `We spotted ${summary} in your observation. Jump straight to ${pronoun}?`
     : 'We spotted language from outside the observation. Jump straight to them?';
@@ -1017,21 +1019,21 @@ function handlePrimaryAction() {
 function handleSubmit() {
   const trimmed = state.text.trim();
   if (!trimmed) {
-    setValidityStatus('error', 'Add concrete details before seeing matches.');
+    setValidityStatus('error', 'Add details first.');
     analyze(state.text, { message: 'Start by anchoring your observation in time and place.' });
     return;
   }
 
   if (!state.analysis?.ok) {
     if (!canSubmitMatches()) {
-      setValidityStatus('invalid', 'Observation still needs adjustments.');
+      setValidityStatus('invalid', 'Needs more detail.');
       renderHighlight();
       return;
     }
-    setValidityStatus('invalid', 'Observation still needs adjustments. Explore matches below while you refine.');
+    setValidityStatus('invalid', 'Keep refining.');
     renderHighlight();
   } else {
-    setValidityStatus('valid', 'Observation recorded. Review the suggestions below.');
+    setValidityStatus('valid', 'Observation saved.');
   }
 
   finalizeObservation();
@@ -1064,7 +1066,7 @@ function startFallbackSearch() {
     return;
   }
   if (!state.lastSubmitted) {
-    setValidityStatus('pending', 'Add a valid observation before requesting the nearest match.');
+    setValidityStatus('pending', 'Enter an observation first.');
     return;
   }
   state.fallback.running = true;
@@ -1229,9 +1231,9 @@ function setValidityStatus(status, message) {
   if (typeof message === 'string') {
     state.validityMessage = message;
   } else if (state.validityStatus === 'idle') {
-    state.validityMessage = 'Matches not requested yet.';
+    state.validityMessage = 'No matches yet.';
   } else if (state.validityStatus === 'pending') {
-    state.validityMessage = 'Edit the observation and see matches when ready.';
+    state.validityMessage = 'Keep editing.';
   }
   renderValidityStatus();
 }
@@ -1251,15 +1253,15 @@ function renderValidityStatus() {
 function defaultValidityMessage(status) {
   switch (status) {
     case 'valid':
-      return 'Observation captured successfully.';
+      return 'Observation saved.';
     case 'invalid':
-      return 'Observation still needs adjustments.';
+      return 'Needs more detail.';
     case 'error':
-      return 'Observation was empty. Add details before seeing matches.';
+      return 'Add details first.';
     case 'pending':
-      return 'Edit the observation and see matches when ready.';
+      return 'Keep editing.';
     default:
-      return 'Matches not requested yet.';
+      return 'No matches yet.';
   }
 }
 

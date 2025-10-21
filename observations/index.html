@@ -2455,12 +2455,6 @@ button.site-nav__magnet {
         </ol>
       </nav>
             <main id="main" class="page observations-page" role="main">
-        <header class="page-header observations-header">
-          <h1 class="page-title">Start with what you saw</h1>
-          <p class="page-description observations-description">
-            Describe what happened using concrete details. We’ll surface feelings and needs once it’s observational.
-          </p>
-        </header>
 
         <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
           <div class="observation-editor__card">
@@ -2481,8 +2475,8 @@ button.site-nav__magnet {
                     id="observation-text"
                     class="observation-editor__input"
                     rows="7"
-                    placeholder="Try something like “Yesterday evening on the porch, I watched Jamie set the mug down and walk away without saying anything.” Keep it to what a camera would capture."
-                    aria-describedby="observation-guidelines"
+                    placeholder="Describe exactly what you observed—just the concrete facts."
+                    aria-describedby="observation-guidelines-summary"
                   ></textarea>
                   <div
                     id="observation-highlight-details"
@@ -2579,13 +2573,20 @@ button.site-nav__magnet {
                   aria-expanded="false"
                   aria-label="Expand observation recipe"
                 ></button>
-                <h2 class="observation-editor__recipe-title">Observation recipe</h2>
+                <h2 class="observation-editor__recipe-title" id="observation-guidelines-title">
+                  Observation recipe
+                </h2>
                 <div
                   id="observation-guidelines-body"
                   class="observation-editor__recipe-body"
                   aria-live="polite"
                 >
-                  <p class="observation-editor__recipe-intro">Use these anchors to keep your statement observational.</p>
+                  <p
+                    id="observation-guidelines-summary"
+                    class="observation-editor__recipe-intro"
+                  >
+                    Use these anchors to keep your statement observational.
+                  </p>
                   <ol class="observation-editor__recipe-list">
                     <li><strong>Name the moment:</strong> Specify when and where it happened, and who was involved.</li>
                     <li><strong>Describe sensory facts:</strong> Report what a camera or microphone would capture.</li>
@@ -2644,7 +2645,7 @@ button.site-nav__magnet {
                   aria-live="polite"
                 >
                   <span id="observation-validity-label" class="observation-editor__status-text">
-                    Observation not submitted yet.
+                    No matches yet.
                   </span>
                 </div>
               </div>
@@ -3044,21 +3045,17 @@ button.site-nav__magnet {
             });
 
             function handleMediaChange(event) {
-              if (!event.matches) {
-                setCollapsed(false);
+              if (event.matches) {
+                setCollapsed(true);
               }
             }
+
+            applyState();
 
             if (typeof mediaQuery.addEventListener === 'function') {
               mediaQuery.addEventListener('change', handleMediaChange);
             } else if (typeof mediaQuery.addListener === 'function') {
               mediaQuery.addListener(handleMediaChange);
-            }
-
-            if (mediaQuery.matches) {
-              setCollapsed(true);
-            } else {
-              setCollapsed(false);
             }
           })();
         </script>
