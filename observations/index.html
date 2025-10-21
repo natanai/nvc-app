@@ -760,13 +760,6 @@ button.site-nav__magnet {
     gap: clamp(1.4rem, 3vw, 2rem);
   }
 
-  .observation-editor__lede {
-    margin: 0;
-    font-size: 1rem;
-    color: color-mix(in srgb, var(--outline) 60%, transparent);
-    max-width: 62ch;
-  }
-
   .observation-editor__status {
     display: grid;
     gap: 0.5rem;
@@ -783,6 +776,22 @@ button.site-nav__magnet {
       gap: 1.25rem;
       min-width: 0;
     }
+  }
+
+  .observation-editor__status--inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    min-width: 0;
+    flex: none;
+    width: fit-content;
+    justify-content: flex-start;
+  }
+
+  .observation-editor__status--inline .observation-editor__status-indicator {
+    font-size: 0.85rem;
+    gap: 0.3rem;
   }
 
   .observation-editor__grid {
@@ -857,9 +866,18 @@ button.site-nav__magnet {
   }
 
   .observation-editor__highlight mark {
-    background: color-mix(in srgb, var(--rose) 18%, transparent);
     border-radius: var(--radius-md-plus);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .observation-editor__highlight mark[data-tone='warn'] {
+    background: color-mix(in srgb, var(--rose) 28%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rose) 38%, transparent);
+  }
+
+  .observation-editor__highlight mark[data-tone='ok'] {
+    background: color-mix(in srgb, var(--mint) 30%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 40%, transparent);
   }
 
   .observation-editor__feedback {
@@ -1056,30 +1074,62 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--outline) 64%, transparent);
   }
 
-  .observation-suggestions__lists {
+  .observation-suggestions__panels {
     display: grid;
-    gap: 1.5rem;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
   }
 
   @media (min-width: 640px) {
-    .observation-suggestions__lists {
+    .observation-suggestions__panels {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.25rem 2.5rem;
+      gap: 1.25rem 2rem;
     }
   }
 
-  .observation-suggestions__group {
+  .observation-panel {
     display: grid;
     gap: 0.75rem;
+    padding: 1.1rem 1.2rem;
+    border-radius: var(--radius-3xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--outline) 10%, transparent);
   }
 
-  .observation-suggestions__group-title {
+  .observation-panel__header {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .observation-panel__title {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 0.95rem;
-    letter-spacing: 0.08em;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
+  }
+
+  .observation-panel__hint {
+    margin: 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--outline) 52%, transparent);
+  }
+
+  .observation-panel__empty {
+    margin: 0;
+    font-size: 0.95rem;
     color: color-mix(in srgb, var(--outline) 58%, transparent);
+  }
+
+  .observation-panel--feelings {
+    border-color: color-mix(in srgb, var(--mint) 32%, transparent);
+    background: color-mix(in srgb, #ffffff 95%, var(--mint) 5%);
+  }
+
+  .observation-panel--needs {
+    border-color: color-mix(in srgb, var(--gold) 32%, transparent);
+    background: color-mix(in srgb, #ffffff 95%, var(--gold) 5%);
   }
 
   .observation-chip-list {
@@ -1128,12 +1178,6 @@ button.site-nav__magnet {
     box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 20%, transparent);
   }
 
-  .observation-suggestions__empty {
-    margin: 0;
-    font-size: 0.95rem;
-    color: var(--ink-soft);
-  }
-
   .observation-suggestions__fallback {
     display: grid;
     gap: 0.6rem;
@@ -1154,6 +1198,8 @@ button.site-nav__magnet {
 
   .observation-suggestions__next {
     align-self: flex-start;
+    min-width: 0;
+    padding-inline: 0.95rem;
   }
 
   .observation-suggestions__actions {
@@ -1161,6 +1207,10 @@ button.site-nav__magnet {
     flex-wrap: wrap;
     gap: 0.85rem;
     align-items: center;
+  }
+
+  .observation-suggestions__clear {
+    min-width: 6rem;
   }
 
   .observation-suggestions__links {
@@ -1652,16 +1702,12 @@ button.site-nav__magnet {
         <header class="page-header observations-header">
           <h1 class="page-title">Start with what you saw</h1>
           <p class="page-description observations-description">
-            Describe a single moment so we can surface feelings and needs once it’s purely observational.
+            Describe what happened using concrete details. We’ll surface feelings and needs once it’s observational.
           </p>
         </header>
 
         <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
           <div class="observation-editor__card">
-            <p class="observation-editor__lede">
-              Capture a single snapshot so we can recommend language that fits. We’ll highlight any phrases that sound like
-              judgments before you continue.
-            </p>
             <div class="observation-editor__grid">
               <div class="observation-editor__field">
                 <label class="observation-editor__label" for="observation-text">Observation statement</label>
@@ -1674,6 +1720,18 @@ button.site-nav__magnet {
                     placeholder="Yesterday at 3:10 pm in the planning meeting, Casey said “This is a waste of time” while closing their laptop."
                     aria-describedby="observation-guidelines observation-feedback"
                   ></textarea>
+                </div>
+                <div class="observation-editor__status observation-editor__status--inline">
+                  <div
+                    id="observation-detection"
+                    class="observation-editor__status-indicator"
+                    data-state="loading"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <span class="observation-editor__status-light" aria-hidden="true"></span>
+                    <span id="observation-detection-text" class="observation-editor__status-text">Warming up the language detector…</span>
+                  </div>
                 </div>
                 <p id="observation-feedback" class="observation-editor__feedback" role="status" aria-live="polite">
                   Start by anchoring your observation in time and place.
@@ -1703,21 +1761,9 @@ button.site-nav__magnet {
                 >
                   See matches
                 </button>
-                <p class="observation-editor__hint">
-                  We’ll scan your observation for language cues. If we miss something, you can still explore the nearest
-                  match.
-                </p>
+                <p class="observation-editor__hint">We’ll scan for cues as you type.</p>
               </div>
               <div class="observation-editor__status">
-                <div
-                  id="observation-detection"
-                  class="observation-editor__status-indicator"
-                  data-state="loading"
-                  aria-live="polite"
-                >
-                  <span class="observation-editor__status-light" aria-hidden="true"></span>
-                  <span id="observation-detection-text" class="observation-editor__status-text">Warming up the language detector…</span>
-                </div>
                 <div
                   id="observation-validity-container"
                   class="observation-editor__status-indicator observation-editor__status-indicator--validity"
@@ -1739,32 +1785,38 @@ button.site-nav__magnet {
             <p id="observation-preview" class="observation-suggestions__preview"></p>
           </header>
           <p id="suggested-why" class="observation-suggestions__why"></p>
-          <div class="observation-suggestions__lists">
-            <div class="observation-suggestions__group" aria-live="polite">
-              <h3 class="observation-suggestions__group-title">Possible feelings</h3>
+          <div class="observation-suggestions__panels">
+            <section class="observation-panel observation-panel--feelings" aria-live="polite">
+              <header class="observation-panel__header">
+                <h3 class="observation-panel__title">Feelings to consider</h3>
+                <p class="observation-panel__hint">Matches from the detector will appear here.</p>
+              </header>
               <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
-              <p id="suggested-feelings-empty" class="observation-suggestions__empty" hidden>
-                No direct matches from our detector yet. Browse every feeling or ask for the nearest match.
+              <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
+                We’ll list feelings here once we pick up observational cues.
               </p>
-            </div>
-            <div class="observation-suggestions__group" aria-live="polite">
-              <h3 class="observation-suggestions__group-title">Possible needs</h3>
+            </section>
+            <section class="observation-panel observation-panel--needs" aria-live="polite">
+              <header class="observation-panel__header">
+                <h3 class="observation-panel__title">Needs to revisit</h3>
+                <p class="observation-panel__hint">Matches from the detector will appear here.</p>
+              </header>
               <div id="suggested-needs" class="observation-chip-list" role="list"></div>
-              <p id="suggested-needs-empty" class="observation-suggestions__empty" hidden>
-                No direct matches from our detector yet. Browse all needs or ask for the nearest match.
+              <p id="suggested-needs-empty" class="observation-panel__empty" hidden>
+                We’ll list needs here once we pick up observational cues.
               </p>
-            </div>
+            </section>
           </div>
           <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
             <p class="observation-suggestions__fallback-text">
-              Our detector didn’t find clear feelings or needs yet. Want to see the nearest match we can offer?
+              We didn’t find a direct match yet. Want to review the closest option?
             </p>
             <button id="observation-fallback-start" class="support-button support-button--ghost" type="button">
-              See nearest match
+              Show closest match
             </button>
           </div>
           <div id="observation-fallback-running" class="observation-suggestions__fallback" hidden>
-            <p class="observation-suggestions__fallback-text">Looking for the nearest match…</p>
+            <p class="observation-suggestions__fallback-text">Looking for the closest match…</p>
           </div>
           <button
             id="observation-fallback-next"
@@ -1772,11 +1824,11 @@ button.site-nav__magnet {
             type="button"
             hidden
           >
-            Next suggestion
+            Next match
           </button>
           <div class="observation-suggestions__actions">
-            <button id="edit-again" class="support-button observation-suggestions__edit" type="button">
-              Edit observation
+            <button id="observation-clear" class="support-button observation-suggestions__clear" type="button">
+              Clear
             </button>
             <p class="observation-suggestions__links">
               <a href="../feelings/">Browse all feelings</a>

@@ -14,6 +14,7 @@ const state = {
   detectionFallbacks: 0,
   detectionFallbackQueue: [],
   detectionSource: '',
+  cueHighlightRanges: [],
   validityStatus: 'idle',
   validityMessage: 'Matches not requested yet.',
   fallback: createFallbackState(),
@@ -80,27 +81,10 @@ function bind() {
     submit.addEventListener('click', handleSubmit);
   }
 
-  const editAgain = document.getElementById('edit-again');
-  if (editAgain) {
-    editAgain.addEventListener('click', () => {
-      state.mode = 'editing';
-      state.scrolledToSuggestions = false;
-      renderPanels();
-      analyze(state.text, {
-        message: state.analysis?.ok
-          ? 'Observation saved. Edit the text to explore other possibilities.'
-          : state.analysis?.message,
-      });
-      state.fallback = createFallbackState();
-      if (state.analysis?.ok) {
-        setValidityStatus('pending', 'Edit the observation and see matches again when ready.');
-      } else {
-        renderValidityStatus();
-      }
-      const field = document.getElementById('observation-text');
-      if (field) {
-        field.focus();
-      }
+  const clearButton = document.getElementById('observation-clear');
+  if (clearButton) {
+    clearButton.addEventListener('click', () => {
+      handleClear();
     });
   }
 
@@ -147,9 +131,9 @@ function analyze(raw, options = {}) {
   }
 
   state.analysis = analysis;
+  updateDetectionStatus(source, trimmed);
   renderAnalysis();
   renderHighlight();
-  updateDetectionStatus(trimmed);
   renderDetectionStatus();
 }
 
@@ -221,7 +205,7 @@ function finalizeObservation() {
     if (fallbackQueue.length) {
       applyFallbackQueue(fallbackQueue, {
         message: fallbackQueue.length > 1
-          ? 'No exact cue matches detected. Showing the nearest matches we could find. Use Next for another option.'
+          ? 'No exact cue matches detected. Showing the nearest matches we could find.'
           : 'No exact cue matches detected. Showing the nearest match we could find.',
       });
     }
@@ -287,7 +271,7 @@ function renderSuggestions() {
   if (fallbackActive) {
     const message = state.fallback.message ||
       (state.fallback.queue.length > 1
-        ? 'Showing the nearest matches our detector can offer. Use Next for another option.'
+        ? 'Showing the nearest matches our detector can offer.'
         : 'Showing the nearest match our detector can offer.');
     whyHost.textContent = message;
   } else {
@@ -299,7 +283,7 @@ function renderSuggestions() {
     } else if (hasDirect) {
       whyHost.textContent = 'Suggestions come from our language detector and common observation patterns.';
     } else {
-      whyHost.textContent = 'Our detector didn’t find direct matches. Browse every feeling and need or request the nearest match.';
+      whyHost.textContent = 'Our detector didn’t find direct matches. Browse every feeling and need or ask for the closest match.';
     }
   }
 
@@ -599,7 +583,7 @@ function applyFallbackQueue(queue, options = {}) {
   state.fallback.shouldPrompt = Boolean(options.shouldPrompt);
   if (results.length) {
     const defaultMessage = results.length > 1
-      ? 'Showing the nearest matches our detector can offer. Use Next for another option.'
+      ? 'Showing the nearest matches our detector can offer.'
       : 'Showing the nearest match our detector can offer.';
     state.fallback.message = options.message || defaultMessage;
   } else {
@@ -626,13 +610,35 @@ function handleSubmit() {
   }
 
   if (!state.analysis?.ok) {
-    setValidityStatus('invalid', 'Keep editing until the observation is purely descriptive.');
+    setValidityStatus('invalid', 'Observation still needs adjustments.');
     renderHighlight();
     return;
   }
 
   setValidityStatus('valid', 'Observation recorded. Review the suggestions below.');
   finalizeObservation();
+}
+
+function handleClear() {
+  state.text = '';
+  state.mode = 'editing';
+  state.analysis = null;
+  state.lastSubmitted = '';
+  state.directSuggestions = createEmptySuggestionSet();
+  state.fallback = createFallbackState();
+  state.scrolledToSuggestions = false;
+  state.cueHighlightRanges = [];
+
+  const field = document.getElementById('observation-text');
+  if (field) {
+    field.value = '';
+    field.focus();
+  }
+
+  analyze('');
+  setValidityStatus('idle');
+  renderPanels();
+  renderSuggestions();
 }
 
 function startFallbackSearch() {
@@ -824,13 +830,16 @@ function defaultValidityMessage(status) {
   }
 }
 
-function updateDetectionStatus(trimmed) {
+function updateDetectionStatus(rawInput, trimmedInput) {
+  const sourceText = typeof rawInput === 'string' ? rawInput : '';
+  const trimmed = typeof trimmedInput === 'string' ? trimmedInput : sourceText.trim();
   if (!state.cues.length) {
     state.detectionStatus = 'loading';
     state.detectionMatches = 0;
     state.detectionFallbacks = 0;
     state.detectionFallbackQueue = [];
     state.detectionSource = '';
+    state.cueHighlightRanges = [];
     return;
   }
   if (!trimmed) {
@@ -839,12 +848,15 @@ function updateDetectionStatus(trimmed) {
     state.detectionFallbacks = 0;
     state.detectionFallbackQueue = [];
     state.detectionSource = '';
+    state.cueHighlightRanges = [];
     return;
   }
 
   state.detectionSource = trimmed;
 
   const suggestion = suggestFromObservation(trimmed, state.cues || [], 4);
+  const hits = Array.isArray(suggestion.hits) ? suggestion.hits : [];
+  state.cueHighlightRanges = buildCueHighlightRanges(sourceText, hits);
   const feelingsCount = Array.isArray(suggestion.feelings) ? suggestion.feelings.length : 0;
   const needsCount = Array.isArray(suggestion.needs) ? suggestion.needs.length : 0;
   state.detectionMatches = feelingsCount + needsCount;
@@ -855,6 +867,9 @@ function updateDetectionStatus(trimmed) {
     return;
   }
 
+  if (!hits.length) {
+    state.cueHighlightRanges = [];
+  }
   const fallbackQueue = computeFallbackQueue(trimmed);
   state.detectionFallbackQueue = fallbackQueue;
   state.detectionFallbacks = fallbackQueue.length;
@@ -895,7 +910,9 @@ function renderHighlight() {
   }
   const text = state.text || '';
   const tokens = collectHighlightTokens(state.analysis?.lint);
-  host.innerHTML = buildHighlightMarkup(text, tokens);
+  const warnRanges = buildHighlightRanges(text, tokens).map(range => ({ ...range, tone: 'warn' }));
+  const cueRanges = Array.isArray(state.cueHighlightRanges) ? state.cueHighlightRanges : [];
+  host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...cueRanges]);
 }
 
 function collectHighlightTokens(lint) {
@@ -903,44 +920,52 @@ function collectHighlightTokens(lint) {
     return [];
   }
   const tokens = new Set();
-  (lint.hits || []).forEach(token => {
-    if (token) {
-      tokens.add(String(token).trim());
+  const addToken = value => {
+    if (value) {
+      tokens.add(String(value).trim());
     }
-  });
+  };
+  (lint.hits || []).forEach(addToken);
   (lint.flaggedGroups || []).forEach(group => {
     (group?.matches || []).forEach(match => {
-      if (match) {
-        tokens.add(String(match).trim());
-      }
+      addToken(match);
     });
   });
+  (lint.fauxFeelings || []).forEach(addToken);
+  (lint.feelings || []).forEach(addToken);
+  (lint.needs || []).forEach(addToken);
   return Array.from(tokens).filter(Boolean);
 }
 
-function buildHighlightMarkup(text, tokens) {
+function buildHighlightMarkupFromRanges(text, ranges) {
   if (!text) {
     return '&nbsp;';
   }
-  if (!Array.isArray(tokens) || !tokens.length) {
+  const normalized = normalizeHighlightRanges(ranges, text.length);
+  if (!normalized.length) {
     return escapeHtml(text).replace(/\n/g, '<br />');
   }
-  const ranges = buildHighlightRanges(text, tokens);
-  if (!ranges.length) {
-    return escapeHtml(text).replace(/\n/g, '<br />');
-  }
-  let output = '';
-  let index = 0;
-  ranges.forEach(range => {
-    if (range.start > index) {
-      output += escapeHtml(text.slice(index, range.start)).replace(/\n/g, '<br />');
-    }
-    const highlighted = escapeHtml(text.slice(range.start, range.end)).replace(/\n/g, '<br />');
-    output += `<mark>${highlighted}</mark>`;
-    index = range.end;
+  const breakpoints = new Set([0, text.length]);
+  normalized.forEach(range => {
+    breakpoints.add(range.start);
+    breakpoints.add(range.end);
   });
-  if (index < text.length) {
-    output += escapeHtml(text.slice(index)).replace(/\n/g, '<br />');
+  const sortedPoints = Array.from(breakpoints).sort((a, b) => a - b);
+  let output = '';
+  for (let i = 0; i < sortedPoints.length - 1; i += 1) {
+    const start = sortedPoints[i];
+    const end = sortedPoints[i + 1];
+    if (start === end) {
+      continue;
+    }
+    const segment = text.slice(start, end);
+    const tone = resolveHighlightTone(normalized, start, end);
+    const html = escapeHtml(segment).replace(/\n/g, '<br />');
+    if (tone) {
+      output += `<mark data-tone="${tone}">${html}</mark>`;
+    } else {
+      output += html;
+    }
   }
   return output || '&nbsp;';
 }
@@ -988,6 +1013,86 @@ function mergeRanges(ranges) {
     }
   }
   return merged;
+}
+
+function buildCueHighlightRanges(text, hits) {
+  if (!text || !Array.isArray(hits) || !hits.length) {
+    return [];
+  }
+  const ranges = [];
+  hits.forEach(hit => {
+    if (!hit || !Array.isArray(hit.patterns)) {
+      return;
+    }
+    hit.patterns.forEach(pattern => {
+      const regex = toGlobalRegex(pattern);
+      if (!regex) {
+        return;
+      }
+      let match;
+      while ((match = regex.exec(text)) !== null) {
+        const matchedText = match[0] || '';
+        if (!matchedText) {
+          regex.lastIndex += 1;
+          continue;
+        }
+        const start = match.index;
+        const end = start + matchedText.length;
+        ranges.push({ start, end });
+      }
+    });
+  });
+  return mergeRanges(ranges).map(range => ({ ...range, tone: 'ok' }));
+}
+
+function toGlobalRegex(pattern) {
+  if (!(pattern instanceof RegExp)) {
+    return null;
+  }
+  const flags = pattern.flags && pattern.flags.includes('g') ? pattern.flags : `${pattern.flags || ''}g`;
+  try {
+    return new RegExp(pattern.source, flags);
+  } catch (error) {
+    return null;
+  }
+}
+
+function normalizeHighlightRanges(ranges, length) {
+  if (!Array.isArray(ranges) || !ranges.length) {
+    return [];
+  }
+  return ranges
+    .map(range => {
+      const tone = typeof range.tone === 'string' ? range.tone.trim().toLowerCase() : '';
+      let start = typeof range.start === 'number' ? range.start : Number(range.start);
+      let end = typeof range.end === 'number' ? range.end : Number(range.end);
+      if (!Number.isFinite(start) || !Number.isFinite(end)) {
+        return null;
+      }
+      start = Math.max(0, Math.min(length, start));
+      end = Math.max(0, Math.min(length, end));
+      if (end <= start || !tone) {
+        return null;
+      }
+      return { start, end, tone };
+    })
+    .filter(Boolean)
+    .sort((a, b) => (a.start - b.start) || (a.end - b.end));
+}
+
+function resolveHighlightTone(ranges, start, end) {
+  const active = ranges.filter(range => range.start < end && range.end > start);
+  if (!active.length) {
+    return '';
+  }
+  const priority = ['warn', 'ok'];
+  for (let i = 0; i < priority.length; i += 1) {
+    const tone = priority[i];
+    if (active.some(range => range.tone === tone)) {
+      return tone;
+    }
+  }
+  return active[0].tone;
 }
 
 function isWordBoundary(text, start, end) {
