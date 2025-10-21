@@ -1240,7 +1240,7 @@ button.site-nav__magnet {
     gap: 0.4rem;
     margin: 0;
     font-size: 0.9rem;
-    color: color-mix(in srgb, var(--outline) 55%, transparent);
+    color: color-mix(in srgb, var(--ink) 72%, transparent);
     max-width: 40ch;
   }
 
@@ -1253,23 +1253,23 @@ button.site-nav__magnet {
 
   .observation-editor__match-summary-label {
     font-weight: 500;
-    color: color-mix(in srgb, var(--outline) 62%, transparent);
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
   }
 
   .observation-editor__match-summary-value {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    color: color-mix(in srgb, var(--ink) 68%, transparent);
+    color: color-mix(in srgb, var(--ink) 92%, transparent);
   }
 
   .observation-editor__match-summary-note,
   .observation-editor__match-summary-coverage {
     margin: 0;
-    color: color-mix(in srgb, var(--outline) 58%, transparent);
+    color: color-mix(in srgb, var(--ink) 68%, transparent);
   }
 
   .observation-editor__match-summary-coverage {
-    color: color-mix(in srgb, var(--outline) 52%, transparent);
+    color: color-mix(in srgb, var(--ink) 64%, transparent);
   }
 
   .observation-editor__status-indicator {
@@ -1359,8 +1359,15 @@ button.site-nav__magnet {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
-    align-items: baseline;
+    align-items: flex-start;
     justify-content: space-between;
+  }
+
+  .observation-suggestions__heading {
+    display: grid;
+    gap: 0.35rem;
+    flex: 1 1 auto;
+    min-width: min(100%, 16rem);
   }
 
   .observation-suggestions__title {
@@ -1467,6 +1474,12 @@ button.site-nav__magnet {
     text-decoration: none;
     min-width: 44px;
     min-height: 44px;
+    max-width: min(100%, 18rem);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    text-align: center;
+    line-height: 1.25;
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
       border-color 0.18s ease;
@@ -1512,6 +1525,7 @@ button.site-nav__magnet {
     align-self: flex-start;
     min-width: 0;
     padding-inline: 0.95rem;
+    margin-block-start: 0.15rem;
   }
 
   .observation-suggestions__actions {
@@ -2045,8 +2059,19 @@ button.site-nav__magnet {
                 <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
                 <section id="observation-suggestions" class="observation-suggestions" aria-live="polite">
                   <header class="observation-suggestions__header">
-                    <h2 class="observation-suggestions__title">Feelings &amp; needs to explore</h2>
-                    <p id="observation-preview" class="observation-suggestions__preview"></p>
+                    <div class="observation-suggestions__heading">
+                      <h2 class="observation-suggestions__title">Feelings &amp; needs to explore</h2>
+                      <p id="observation-preview" class="observation-suggestions__preview"></p>
+                    </div>
+                    <button
+                      id="observation-submit"
+                      class="support-button observation-suggestions__action"
+                      type="button"
+                      data-action="submit"
+                      disabled
+                    >
+                      See matches
+                    </button>
                   </header>
                   <p id="suggested-why" class="observation-suggestions__why"></p>
                   <div class="observation-suggestions__panels">
@@ -2071,15 +2096,6 @@ button.site-nav__magnet {
                       </p>
                     </section>
                   </div>
-                  <button
-                    id="observation-submit"
-                    class="support-button observation-suggestions__action"
-                    type="button"
-                    data-action="submit"
-                    disabled
-                  >
-                    See matches
-                  </button>
                   <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
                     <p class="observation-suggestions__fallback-text">
                       We didn’t find a direct match yet. Want to review the closest option?
