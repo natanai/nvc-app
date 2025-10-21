@@ -736,7 +736,25 @@ button.site-nav__magnet {
     width: min(100%, 960px);
     margin: 0 auto clamp(2rem, 5vw, 3.5rem);
     display: grid;
-    gap: clamp(1.75rem, 4vw, 2.75rem);
+    gap: clamp(1.6rem, 4vw, 2.75rem);
+    padding: clamp(1.35rem, 4vw, 2.75rem);
+    border-width: clamp(3px, 1vw, 4px);
+  }
+
+  @media (max-width: 640px) {
+    .observations-page {
+      padding: clamp(1rem, 6vw, 1.85rem);
+      gap: clamp(1.4rem, 5vw, 2.25rem);
+    }
+  }
+
+  @media (max-width: 460px) {
+    .observations-page {
+      padding: clamp(0.85rem, 6.5vw, 1.5rem);
+      border-width: 2px;
+      border-radius: var(--radius-3xl);
+      box-shadow: 0 20px 0 var(--shadow);
+    }
   }
 
   .observations-header {
@@ -1046,9 +1064,16 @@ button.site-nav__magnet {
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
     border-radius: var(--radius-3xl);
     box-shadow: 0 12px 28px color-mix(in srgb, var(--outline) 12%, transparent);
-    padding: clamp(1.6rem, 3.5vw, 2.4rem);
+    padding: clamp(1.35rem, 3.2vw, 2.4rem);
     display: grid;
-    gap: clamp(1.4rem, 3vw, 2rem);
+    gap: clamp(1.3rem, 3vw, 2rem);
+  }
+
+  @media (max-width: 640px) {
+    .observation-editor__card {
+      padding: clamp(1rem, 5.5vw, 1.75rem);
+      gap: clamp(1.1rem, 4.5vw, 1.75rem);
+    }
   }
 
   .observation-editor__status {
@@ -1095,6 +1120,91 @@ button.site-nav__magnet {
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
       align-items: start;
     }
+  }
+
+  .observation-editor__label-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 2.4vw, 1rem);
+  }
+
+  @media (max-width: 380px) {
+    .observation-editor__label-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .observation-editor__inline-detection {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-2xl);
+    border: 1px solid color-mix(in srgb, var(--rose) 32%, transparent);
+    background: color-mix(in srgb, #ffffff 94%, var(--rose) 6%);
+    justify-self: end;
+    max-width: 100%;
+    width: min(100%, 16rem);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--rose) 18%, transparent);
+  }
+
+  @media (max-width: 420px) {
+    .observation-editor__inline-detection {
+      width: min(100%, 13.75rem);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .observation-editor__inline-detection {
+      justify-self: stretch;
+    }
+  }
+
+  .observation-editor__inline-detection[hidden] {
+    display: none;
+  }
+
+  @media (min-width: 760px) {
+    .observation-editor__inline-detection {
+      display: none !important;
+    }
+  }
+
+  .observation-editor__inline-detection-label {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--rose) 60%, transparent);
+  }
+
+  .observation-editor__inline-detection-group {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .observation-editor__inline-detection-group-label {
+    margin: 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 60%, transparent);
+  }
+
+  .observation-editor__inline-detection-magnets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .observation-editor__inline-detection .observation-editor__recipe-magnet {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .observation-editor__inline-detection-note {
+    margin: 0;
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
   }
 
   .observation-editor__field {
@@ -2121,7 +2231,15 @@ button.site-nav__magnet {
           <div class="observation-editor__card">
             <div class="observation-editor__grid">
               <div class="observation-editor__field">
-                <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                <div class="observation-editor__label-row">
+                  <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                  <div
+                    id="observation-guidelines-inline"
+                    class="observation-editor__inline-detection"
+                    hidden
+                    aria-live="polite"
+                  ></div>
+                </div>
                 <div class="observation-editor__input-wrapper">
                   <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
                   <textarea

@@ -206,26 +206,43 @@ function renderAnalysis() {
 
 function renderObservationGuidelines() {
   const container = document.getElementById('observation-guidelines-body');
-  if (!container) {
+  const inline = document.getElementById('observation-guidelines-inline');
+
+  if (container) {
+    container.innerHTML = '';
+  }
+  if (inline) {
+    inline.innerHTML = '';
+    inline.setAttribute('hidden', 'hidden');
+  }
+
+  if (!container && !inline) {
     return;
   }
 
   const host = document.getElementById('observation-guidelines');
   const groups = collectDetectionGroups(state.analysis?.lint);
-  container.innerHTML = '';
 
   if (!groups.length) {
     if (host) {
       host.dataset.state = 'default';
     }
-    container.appendChild(buildDefaultGuidelineContent());
+    if (container) {
+      container.appendChild(buildDefaultGuidelineContent());
+    }
     return;
   }
 
   if (host) {
     host.dataset.state = 'detected';
   }
-  container.appendChild(buildDetectionGuidelineContent(groups));
+  if (container) {
+    container.appendChild(buildDetectionGuidelineContent(groups));
+  }
+  if (inline) {
+    inline.appendChild(buildInlineGuidelineContent(groups));
+    inline.removeAttribute('hidden');
+  }
 }
 
 function collectDetectionGroups(lint) {
@@ -333,6 +350,52 @@ function buildDetectionGuidelineContent(groups) {
   const note = document.createElement('p');
   note.className = 'observation-editor__recipe-note observation-editor__recipe-note--detected';
   note.textContent = OBSERVATION_DETECTION_NOTE;
+  fragment.appendChild(note);
+
+  return fragment;
+}
+
+function buildInlineGuidelineContent(groups) {
+  const fragment = document.createDocumentFragment();
+  const summary = formatDetectionSummary(groups);
+  const totalEntries = groups.reduce((sum, group) => sum + group.entries.length, 0);
+  const pronoun = totalEntries === 1 ? 'it' : 'them';
+
+  const intro = document.createElement('p');
+  intro.className = 'observation-editor__inline-detection-label';
+  intro.textContent = summary
+    ? `We spotted ${summary}.`
+    : 'We spotted language from outside the observation.';
+  fragment.appendChild(intro);
+
+  groups.forEach(group => {
+    const section = document.createElement('div');
+    section.className = 'observation-editor__inline-detection-group';
+
+    const label = document.createElement('p');
+    label.className = 'observation-editor__inline-detection-group-label';
+    const meta = DETECTION_LABELS[group.kind] || { singular: 'word', plural: 'words' };
+    label.textContent = group.entries.length > 1
+      ? `Detected ${meta.plural}:`
+      : `Detected ${meta.singular}:`;
+    section.appendChild(label);
+
+    const magnets = document.createElement('div');
+    magnets.className = 'observation-editor__inline-detection-magnets';
+    group.entries.forEach(entry => {
+      const magnet = createGuidelineMagnet(entry);
+      if (magnet) {
+        magnets.appendChild(magnet);
+      }
+    });
+    section.appendChild(magnets);
+
+    fragment.appendChild(section);
+  });
+
+  const note = document.createElement('p');
+  note.className = 'observation-editor__inline-detection-note';
+  note.textContent = `Tap a magnet to explore ${pronoun} in the feelings or needs lists.`;
   fragment.appendChild(note);
 
   return fragment;
