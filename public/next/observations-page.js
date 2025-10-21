@@ -4,8 +4,6 @@ let FEELING_SLUGS = new Set();
 let FAUX_FEELING_SLUGS = new Set();
 let NEED_SLUGS = new Set();
 
-let EXAMPLE_PAIRS = [];
-
 function escapeHtml(str) {
   return String(str ?? "")
     .replace(/&/g, "&amp;")
@@ -227,47 +225,68 @@ function formatWordList(words) {
   return `${rest} and “${escapeHtml(last)}”`;
 }
 
-function renderHints(container, hints) {
+function renderHints(container, hints, actions = {}) {
   if (!container) return;
   if (!Array.isArray(hints) || !hints.length) {
     container.innerHTML = "";
-    container.style.display = "none";
-    if (container.classList && typeof container.classList.remove === "function") {
-      container.classList.remove("is-visible");
-    }
+    container.hidden = true;
     return;
   }
-  const items = hints.map(h => `<li class="obs-hints__item">${escapeHtml(h.message || "")}</li>`).join("");
-  container.innerHTML = `
-    <div class="obs-hints__header">
-      <span class="obs-hints__eyebrow">Try this</span>
-      <h3 class="obs-hints__title">Make it purely observational</h3>
-    </div>
-    <ul class="obs-hints__list">${items}</ul>
-  `;
-  container.style.display = "grid";
-  if (container.classList && typeof container.classList.add === "function") {
-    container.classList.add("is-visible");
-  }
-}
+  container.innerHTML = "";
+  container.hidden = false;
 
-function renderExamples(container, pairs) {
-  if (!container) return;
-  if (!Array.isArray(pairs) || !pairs.length) {
-    container.innerHTML = "<p class=\"obs-muted\">No examples available right now.</p>";
-    return;
+  const heading = document.createElement("p");
+  heading.className = "hint-intro muted";
+  heading.textContent = "Try these tweaks:";
+  container.appendChild(heading);
+
+  const list = document.createElement("ul");
+  list.className = "hint-list";
+
+  for (const hint of hints) {
+    const item = document.createElement("li");
+    item.className = "hint-item";
+    const message = document.createElement("span");
+    message.className = "hint-text";
+    message.textContent = hint?.message || "";
+    item.appendChild(message);
+
+    if (hint?.key === "absolutes" && typeof actions.insertText === "function") {
+      const wrap = document.createElement("span");
+      wrap.className = "hint-actions";
+      const options = [
+        { label: "this week", insert: "this week " },
+        { label: "today at …", insert: "today at " },
+        { label: "yesterday at …", insert: "yesterday at " },
+      ];
+      for (const opt of options) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "hint-action";
+        btn.textContent = opt.label;
+        btn.addEventListener("click", (evt) => {
+          evt.preventDefault();
+          actions.insertText(opt.insert, opt.caret ?? 0);
+        });
+        wrap.appendChild(btn);
+      }
+      item.appendChild(wrap);
+    } else if (hint?.key === "labels" && typeof actions.replaceLabel === "function") {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hint-action";
+      btn.textContent = "Swap for a quote";
+      btn.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        actions.replaceLabel();
+      });
+      item.appendChild(btn);
+    }
+
+    list.appendChild(item);
   }
-  const rows = pairs.map((pair) => {
-    const evaluation = escapeHtml(pair?.evaluation ?? "");
-    const observation = escapeHtml(pair?.observation ?? "");
-    return `<article class="obs-example">
-      <p class="obs-example__label">Evaluation</p>
-      <p class="obs-example__text">${evaluation}</p>
-      <p class="obs-example__label">Observation</p>
-      <p class="obs-example__text">${observation}</p>
-    </article>`;
-  }).join("");
-  container.innerHTML = `<div class="obs-examples__list">${rows}</div>`;
+
+  container.appendChild(list);
 }
 
 const BLOCKING_HL_KEYS = new Set(["absolutes", "shoulds", "labels", "intent", "intensifiers"]);
@@ -446,47 +465,41 @@ async function boot() {
     NEED_SLUGS = new Set();
   }
 
-  try {
-    const examples = await fetchFirst(BASES.map(b => `${b}/observation-examples.json`));
-    EXAMPLE_PAIRS = Array.isArray(examples?.pairs) ? examples.pairs : [];
-  } catch {
-    EXAMPLE_PAIRS = [];
-  }
-
   const root = document.getElementById("obs-editor-root");
   if (!root) return;
-  const txt = root.querySelector("#txt");
+  const txt = root.querySelector("#builderInput");
   if (!txt) return;
   const overlay = root.querySelector("#overlay");
   const submitBtn = root.querySelector("#submitBtn");
   const readyDot = root.querySelector("#readyDot");
   const readyLabel = root.querySelector("#readyLabel");
-  const sug = root.querySelector("#suggestions");
-  const feelingsHeading = root.querySelector("#feelingsHeading");
-  const feelings = root.querySelector("#feelings");
-  const needsHeading = root.querySelector("#needsHeading");
-  const needs = root.querySelector("#needs");
-  const matchedCues = root.querySelector("#matchedCues");
-  const noteEl = root.querySelector("#suggestionNote");
-  const passBadges = root.querySelector("#passBadges");
-  const evalWarnings = root.querySelector("#evalWarnings");
+  const wordCountEl = root.querySelector("#wordCount");
   const hintStack = root.querySelector("#hintStack");
-  const examplesPanel = root.querySelector("#examplesPanel");
-  const examplesBody = root.querySelector("#examplesBody");
+  const nearestBanner = root.querySelector("#nearestBanner");
+  const resultsHeader = root.querySelector("#resultsHeader");
+  const exactPanel = root.querySelector("#exactPanel");
+  const exactBody = root.querySelector("#exactBody");
   const nearestPanel = root.querySelector("#nearestPanel");
-  const nearBanner = root.querySelector("#nearBanner");
-  const nearExample = root.querySelector("#nearExample");
-  const nearFeelings = root.querySelector("#nearFeelings");
-  const nearNeeds = root.querySelector("#nearNeeds");
-  const nearPager = root.querySelector("#nearPager");
-  const btnPrev = root.querySelector("#prevNear");
-  const btnNext = root.querySelector("#nextNear");
+  const nearestBody = root.querySelector("#nearestBody");
+  const nearPrev = root.querySelector("#nearPrev");
+  const nearNext = root.querySelector("#nearNext");
+  const nearIdxLabel = root.querySelector("#nearIdx");
+
+  const quickstartButtons = root.querySelectorAll(".quickstart .ex");
+  const guidedChips = root.querySelectorAll(".chip.add");
+  const tplInsert = root.querySelector("#tplInsert");
+  const tplWhen = root.querySelector("#tplWhen");
+  const tplWhere = root.querySelector("#tplWhere");
+  const tplWho = root.querySelector("#tplWho");
+  const tplWhat = root.querySelector("#tplWhat");
+  const tplDetails = root.querySelector("#tpl");
+
+  const TEXT_STORAGE_KEY = "builder:text";
+  const NEAR_STORAGE_KEY = "obs-nearest-last";
 
   let nearList = [];
   let nearIdx = 0;
   let lastNearHash = null;
-
-  const NEAR_STORAGE_KEY = "obs-nearest-last";
 
   const ensureOverlayBase = () => {
     if (!overlay) return;
@@ -552,54 +565,152 @@ async function boot() {
 
   const hashText = (s) => fnv1a32(String(s || ""), 0x811c9dc5).toString(16);
 
-  if (hintStack) hintStack.style.display = "none";
-  if (examplesBody) {
-    renderExamples(examplesBody, EXAMPLE_PAIRS);
-    if (examplesPanel) {
-      examplesPanel.style.display = EXAMPLE_PAIRS.length ? "block" : "none";
+  const readStoredText = () => {
+    try {
+      const raw = sessionStorage.getItem(TEXT_STORAGE_KEY);
+      return typeof raw === "string" ? raw : "";
+    } catch {
+      return "";
     }
-  }
+  };
 
-  function setStatus(state){
+  const writeStoredText = (value) => {
+    try {
+      if (value) {
+        sessionStorage.setItem(TEXT_STORAGE_KEY, value);
+      } else {
+        sessionStorage.removeItem(TEXT_STORAGE_KEY);
+      }
+    } catch {}
+  };
+
+  const updateWordCount = () => {
+    if (!wordCountEl) return;
+    const words = txt.value.trim().match(/\S+/g);
+    const count = words ? words.length : 0;
+    wordCountEl.textContent = count ? `${count} word${count === 1 ? "" : "s"}` : "";
+  };
+
+  const clearResults = () => {
+    if (exactBody) exactBody.innerHTML = "";
+    if (nearestBody) nearestBody.innerHTML = "";
+    if (exactPanel) exactPanel.hidden = true;
+    if (nearestPanel) nearestPanel.hidden = true;
+    if (nearestBanner) nearestBanner.hidden = true;
+    if (nearIdxLabel) nearIdxLabel.textContent = "";
+    if (nearPrev) nearPrev.disabled = true;
+    if (nearNext) nearNext.disabled = true;
+  };
+
+  function setStatus(state) {
     if (!readyDot || !readyLabel || !submitBtn) return;
     readyDot.className = `dot ${state}`;
-    const statusWrap = readyDot.parentElement;
-    if (statusWrap && statusWrap.classList && statusWrap.classList.contains("obs-status")) {
-      statusWrap.setAttribute("data-state", state);
-    }
-    readyLabel.textContent = state === "green" ? "Ready — direct matches unlocked"
-      : state === "yellow" ? "Almost there — submit to explore similar situations"
-      : "Not ready yet — focus on observable details";
-    submitBtn.disabled = (state === "red");
+    readyLabel.textContent = state === "green"
+      ? "Ready — exact match"
+      : state === "yellow"
+        ? "Almost — similar situations available"
+        : "Not ready — keep only what a camera/mic would capture";
+    submitBtn.disabled = state === "red";
   }
 
-  function renderNearest(){
-    if (!nearestPanel) return;
-    if (!nearList.length){
-      nearestPanel.style.display = "none";
-      if (nearBanner) nearBanner.style.display = "none";
-      if (nearExample) {
-        nearExample.style.display = "none";
-        nearExample.innerHTML = "";
-      }
+  function renderExactMatches(hits) {
+    if (!exactBody) return;
+    exactBody.innerHTML = "";
+    const agg = aggregateSuggestions(hits);
+    const feelings = Array.isArray(agg.feelings) ? agg.feelings : [];
+    const needs = Array.isArray(agg.needs) ? agg.needs : [];
+    const lead = document.createElement("p");
+    lead.className = "muted small";
+    if (hits.length) {
+      lead.textContent = `Direct matches from ${hits.length} cue${hits.length === 1 ? "" : "s"} — suggestions tailored to your sentence.`;
+    } else {
+      lead.textContent = "Direct matches found — suggestions tailored to your sentence.";
+    }
+    exactBody.appendChild(lead);
+
+    const buildGroup = (title, items, kind) => {
+      if (!items.length) return;
+      const group = document.createElement("div");
+      group.className = "result-group";
+      const heading = document.createElement("h5");
+      heading.className = "h6";
+      heading.textContent = title;
+      group.appendChild(heading);
+      const row = document.createElement("div");
+      row.className = "pill-row";
+      renderSuggestionPills(row, items, kind);
+      group.appendChild(row);
+      exactBody.appendChild(group);
+    };
+
+    buildGroup("Feelings to explore", feelings, "feeling");
+    buildGroup("Needs to explore", needs, "need");
+
+    if (!feelings.length && !needs.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted small";
+      empty.textContent = "No suggestions yet — add a quote, timing, or concrete action to unlock more.";
+      exactBody.appendChild(empty);
+    }
+  }
+
+  function renderNearest() {
+    if (!nearestBody) return;
+    nearestBody.innerHTML = "";
+    if (!nearList.length) {
+      if (nearestPanel) nearestPanel.hidden = true;
+      if (nearIdxLabel) nearIdxLabel.textContent = "";
+      if (nearPrev) nearPrev.disabled = true;
+      if (nearNext) nearNext.disabled = true;
       return;
     }
-    nearestPanel.style.display = "block";
-    if (nearBanner) nearBanner.style.display = "block";
-    const cur = nearList[nearIdx];
-    const uniq = xs => uniqueSorted(Array.isArray(xs) ? xs : []);
-    renderSuggestionPills(nearFeelings, uniq(cur.feelings), "feeling");
-    renderSuggestionPills(nearNeeds, uniq(cur.needs), "need");
-    if (nearExample) {
-      if (cur.example) {
-        nearExample.innerHTML = `<div class="muted">Example</div><div>${escapeHtml(cur.example)}</div>`;
-        nearExample.style.display = "block";
-      } else {
-        nearExample.innerHTML = "";
-        nearExample.style.display = "none";
-      }
+    if (nearestPanel) nearestPanel.hidden = false;
+
+    const current = nearList[nearIdx];
+    const intro = document.createElement("p");
+    intro.className = "muted small";
+    intro.textContent = "Borrow phrasing from this similar situation to turn the light green.";
+    nearestBody.appendChild(intro);
+
+    if (current.example) {
+      const example = document.createElement("blockquote");
+      example.className = "nearest-example";
+      example.textContent = current.example;
+      nearestBody.appendChild(example);
     }
-    if (nearPager) nearPager.textContent = `Similar suggestion ${nearIdx+1} of ${nearList.length} — use ← → to cycle.`;
+
+    const uniq = (xs) => uniqueSorted(Array.isArray(xs) ? xs : []);
+    const feelings = uniq(current.feelings);
+    const needs = uniq(current.needs);
+
+    const buildGroup = (title, items, kind) => {
+      if (!items.length) return;
+      const group = document.createElement("div");
+      group.className = "result-group";
+      const heading = document.createElement("h5");
+      heading.className = "h6";
+      heading.textContent = title;
+      group.appendChild(heading);
+      const row = document.createElement("div");
+      row.className = "pill-row";
+      renderSuggestionPills(row, items, kind);
+      group.appendChild(row);
+      nearestBody.appendChild(group);
+    };
+
+    buildGroup("Feelings to explore", feelings, "feeling");
+    buildGroup("Needs to explore", needs, "need");
+
+    if (!feelings.length && !needs.length && !current.example) {
+      const empty = document.createElement("p");
+      empty.className = "muted small";
+      empty.textContent = "We found a close situation, but no suggestions yet. Add the exact words or actions you noticed.";
+      nearestBody.appendChild(empty);
+    }
+
+    if (nearIdxLabel) nearIdxLabel.textContent = `${nearIdx + 1}/${nearList.length}`;
+    if (nearPrev) nearPrev.disabled = nearList.length <= 1;
+    if (nearNext) nearNext.disabled = nearList.length <= 1;
     persistNearSelection();
   }
 
@@ -610,16 +721,9 @@ async function boot() {
     renderNearest();
   };
 
-  btnPrev?.addEventListener("click", ()=>{
-    stepNearest(-1);
-  });
-  btnNext?.addEventListener("click", ()=>{
-    stepNearest(1);
-  });
-
   const handleNearestKeys = (evt) => {
     if (!nearList.length) return;
-    if (!nearestPanel || nearestPanel.style.display === "none") return;
+    if (!nearestPanel || nearestPanel.hidden) return;
     if (evt.target === txt) return;
     if (evt.key === "ArrowLeft") {
       evt.preventDefault();
@@ -630,9 +734,39 @@ async function boot() {
     }
   };
 
-  document.addEventListener("keydown", handleNearestKeys);
+  function insertAtCaret(str, caretAdjust = 0) {
+    const s = txt.selectionStart;
+    const e = txt.selectionEnd;
+    txt.setRangeText(str, s, e, "end");
+    if (caretAdjust) {
+      const pos = txt.selectionStart + caretAdjust;
+      txt.setSelectionRange(pos, pos);
+    }
+    render(true);
+    txt.focus();
+  }
 
-  function render() {
+  function replaceLabelExample() {
+    const sample = "said “Please join us on time.”";
+    const value = txt.value;
+    const rx = /\brude\b/i;
+    const match = rx.exec(value);
+    if (match) {
+      const before = value.slice(0, match.index);
+      const after = value.slice(match.index + match[0].length);
+      txt.value = `${before}${sample}${after}`;
+      const pos = before.length + sample.length;
+      txt.setSelectionRange(pos, pos);
+      render(true);
+      txt.focus();
+    } else {
+      insertAtCaret(sample);
+    }
+  }
+
+  function render(force = false) {
+    updateWordCount();
+    writeStoredText(txt.value);
     const { reasons, hits } = evalText(txt.value);
     const evalCheck = detectEvaluation(txt.value);
     const catalogCheck = detectCatalogHints(txt.value);
@@ -643,96 +777,142 @@ async function boot() {
       .map(({ start, end, match, key }) => ({ start, end, match, key }));
     renderOverlay(overlay, txt.value, overlaySpans);
     syncOverlayScroll();
-    if (passBadges) renderBadges(passBadges, reasons, evalCheck.hits, evalCheck.blocking);
-    renderHints(hintStack, allHints);
+    renderHints(hintStack, allHints, {
+      insertText: (str, caret = 0) => insertAtCaret(str, caret),
+      replaceLabel: replaceLabelExample,
+    });
+
+    clearResults();
+    nearList = [];
+    nearIdx = 0;
+    lastNearHash = null;
+
     const passCue = reasons.has("cue");
     const passSpeech = reasons.has("speech");
     const passAction = reasons.has("action");
     const passPerception = reasons.has("perception");
     const passTimeEvent = reasons.has("timeEvent");
-    const state = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
+    const state = computeState({
+      hits,
+      evalHits: evalCheck.hits,
+      passCue,
+      passSpeech,
+      passAction,
+      passPerception,
+      passTimeEvent,
+      txt: txt.value,
+      blockingEval: evalCheck.blocking,
+    });
     setStatus(state);
-    if (nearestPanel) nearestPanel.style.display = "none";
-    if (nearBanner) nearBanner.style.display = "none";
-    if (nearExample) {
-      nearExample.style.display = "none";
-      nearExample.innerHTML = "";
-    }
-    nearList = [];
-    nearIdx = 0;
-    lastNearHash = null;
-    if (noteEl) noteEl.textContent = "";
-    if (sug) sug.style.display = "none";
-    if (feelingsHeading) feelingsHeading.style.display = "none";
-    if (feelings) feelings.innerHTML = "";
-    if (needsHeading) needsHeading.style.display = "none";
-    if (needs) needs.innerHTML = "";
-    if (matchedCues) matchedCues.textContent = "";
 
-    if (evalWarnings) {
-      if (evalCheck.hits.length) {
-        const chips = uniqueSorted(evalCheck.hits.map(h => h.match?.trim()).filter(Boolean));
-        const chipHtml = chips.map(word => `<span class="obs-warning__token">${escapeHtml(word)}</span>`).join("");
-        const tokens = chipHtml ? `<div class="obs-warning__tokens">${chipHtml}</div>` : "";
-        evalWarnings.innerHTML = `
-          <div class="obs-warning__header">
-            <strong class="obs-warning__title">Judgment words detected</strong>
-            <p class="obs-warning__message">Swap these words for what you literally observed.</p>
-          </div>
-          ${tokens}
-        `;
-        evalWarnings.style.display = "grid";
-        if (evalWarnings.classList && typeof evalWarnings.classList.add === "function") {
-          evalWarnings.classList.add("is-visible");
-        }
-      } else {
-        evalWarnings.innerHTML = "";
-        evalWarnings.style.display = "none";
-        if (evalWarnings.classList && typeof evalWarnings.classList.remove === "function") {
-          evalWarnings.classList.remove("is-visible");
-        }
-      }
-    }
     if (!submitBtn) return;
 
     submitBtn.onclick = () => {
-      const stateNow = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
+      clearResults();
+      const stateNow = computeState({
+        hits,
+        evalHits: evalCheck.hits,
+        passCue,
+        passSpeech,
+        passAction,
+        passPerception,
+        passTimeEvent,
+        txt: txt.value,
+        blockingEval: evalCheck.blocking,
+      });
       if (stateNow === "red") {
-        if (noteEl) noteEl.textContent = "Not ready — please make the statement purely observational.";
+        if (nearestBanner) nearestBanner.hidden = true;
         return;
       }
       if (stateNow === "green") {
-        const agg = aggregateSuggestions(hits);
-        const f = agg.feelings;
-        const n = agg.needs;
-        if (feelingsHeading) feelingsHeading.style.display = f.length ? "block" : "none";
-        renderSuggestionPills(feelings, f, "feeling");
-        if (needsHeading) needsHeading.style.display = n.length ? "block" : "none";
-        renderSuggestionPills(needs, n, "need");
-        if (matchedCues) matchedCues.textContent = hits.length
-          ? `Direct matches found — suggestions prioritized from ${hits.length} cue${hits.length === 1 ? "" : "s"}.`
-          : "Direct matches found.";
-        if (noteEl) noteEl.textContent = "Direct matches found — suggestions prioritized from exact cues.";
-        if (nearestPanel) nearestPanel.style.display = "none";
-        if (sug) sug.style.display = "block";
+        renderExactMatches(hits);
+        if (exactPanel) exactPanel.hidden = false;
+        if (nearestBanner) nearestBanner.hidden = true;
       } else if (stateNow === "yellow") {
         nearList = nearestForTextMinHash(txt.value, NEAR_TOP_K, NEAR_THRESHOLD);
         lastNearHash = nearList.length ? hashText(txt.value) : null;
         const storedIdx = lastNearHash != null ? loadNearSelection() : null;
-        nearIdx = typeof storedIdx === "number" && nearList.length && storedIdx >= 0 && storedIdx < nearList.length ? storedIdx : 0;
-        if (feelings) feelings.innerHTML = "";
-        if (needs) needs.innerHTML = "";
-        if (matchedCues) matchedCues.textContent = "";
-        if (sug) sug.style.display = "block";
-        if (feelingsHeading) feelingsHeading.style.display = "none";
-        if (needsHeading) needsHeading.style.display = "none";
+        if (typeof storedIdx === "number" && storedIdx >= 0 && storedIdx < nearList.length) {
+          nearIdx = storedIdx;
+        } else {
+          nearIdx = 0;
+        }
         renderNearest();
-        if (nearestPanel) nearestPanel.style.display = "block";
-        if (noteEl) noteEl.textContent = "No exact match — showing similar situations you can cycle through.";
+        if (nearestBanner) nearestBanner.hidden = nearList.length === 0;
+        if (nearestPanel) nearestPanel.hidden = nearList.length === 0;
+      }
+      if (resultsHeader) {
+        resultsHeader.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.requestAnimationFrame(() => {
+          try {
+            resultsHeader.focus({ preventScroll: true });
+          } catch {
+            resultsHeader.focus();
+          }
+        });
       }
     };
   }
-  txt.addEventListener("input", () => { render(); });
+
+  const storedText = readStoredText();
+  if (!txt.value && storedText) {
+    txt.value = storedText;
+  }
+
+  quickstartButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const value = btn.getAttribute("data-ex") || "";
+      txt.value = value;
+      render(true);
+      const pos = txt.value.length;
+      txt.setSelectionRange(pos, pos);
+      txt.focus();
+      if (tplDetails) tplDetails.open = false;
+    });
+  });
+
+  guidedChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const insert = chip.getAttribute("data-insert") || "";
+      const caretAdjRaw = chip.getAttribute("data-caret") || "0";
+      const caretAdj = parseInt(caretAdjRaw, 10);
+      insertAtCaret(insert, Number.isNaN(caretAdj) ? 0 : caretAdj);
+    });
+  });
+
+  tplInsert?.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    const when = tplWhen?.value.trim() || "";
+    const where = tplWhere?.value.trim() || "";
+    const who = tplWho?.value.trim() || "";
+    const what = tplWhat?.value.trim() || "";
+    const parts = [];
+    if (when) parts.push(when);
+    if (where) parts.push(where);
+    let body = "";
+    if (who && what) body = `${who} ${what}`;
+    else if (what) body = what;
+    const sentence = [parts.filter(Boolean).join(" "), body].filter(Boolean).join(", ").trim();
+    if (sentence) {
+      insertAtCaret(sentence);
+      [tplWhen, tplWhere, tplWho, tplWhat].forEach((field) => {
+        if (field) field.value = "";
+      });
+      if (tplDetails) tplDetails.open = false;
+    }
+  });
+
+  nearPrev?.addEventListener("click", () => {
+    stepNearest(-1);
+  });
+  nearNext?.addEventListener("click", () => {
+    stepNearest(1);
+  });
+
+  document.addEventListener("keydown", handleNearestKeys);
+  txt.addEventListener("input", () => {
+    render();
+  });
   txt.addEventListener("scroll", syncOverlayScroll);
   window.addEventListener("resize", syncOverlayMetrics);
   render();

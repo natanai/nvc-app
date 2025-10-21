@@ -2081,6 +2081,330 @@ button.site-nav__magnet {
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--rose) 28%, transparent);
     }
 
+    .builder-card {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .builder-card .hero {
+      display: grid;
+      gap: 0.35rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .builder-card .hero .h3 {
+      margin: 0;
+      font-size: clamp(1.35rem, 1.2vw + 1rem, 1.65rem);
+      letter-spacing: -0.01em;
+    }
+
+    .builder-card .hero .muted {
+      margin: 0;
+      color: color-mix(in srgb, var(--ink-soft) 78%, #ffffff 22%);
+    }
+
+    .builder-card .quickstart {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.25rem 0 0.65rem;
+    }
+
+    .builder-card .quickstart .ghost {
+      font: inherit;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 88%, var(--sky) 12%);
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+    }
+
+    .builder-card .quickstart .ghost:hover,
+    .builder-card .quickstart .ghost:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 90%, var(--mint) 10%);
+    }
+
+    .builder-card .quickstart .ghost:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 3px;
+    }
+
+    .builder-card .template {
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      border-radius: var(--radius-xl);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 78%, var(--sky) 22%);
+      padding: 0.65rem 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .builder-card .template summary {
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      outline-offset: 3px;
+    }
+
+    .builder-card .template summary:focus-visible {
+      outline: 3px dashed var(--outline);
+    }
+
+    .builder-card .tpl-body {
+      display: grid;
+      gap: 0.55rem;
+      margin-top: 0.65rem;
+    }
+
+    .builder-card .tpl-body .row {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .builder-card .tpl-body label {
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .builder-card .tpl-body input {
+      width: 100%;
+      font: inherit;
+      padding: 0.45rem 0.6rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: #fff;
+    }
+
+    .builder-card .tpl-body input:focus {
+      outline: 2px dashed var(--outline);
+      outline-offset: 2px;
+    }
+
+    .builder-card button {
+      font: inherit;
+    }
+
+    .builder-card .secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-pill);
+      border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+      background: color-mix(in srgb, #ffffff 90%, var(--sky) 10%);
+      padding: 0.4rem 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .builder-card .secondary:hover,
+    .builder-card .secondary:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+      background: color-mix(in srgb, #ffffff 92%, var(--mint) 8%);
+    }
+
+    .builder-card .secondary:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 3px;
+    }
+
+    .editor-wrap {
+      position: relative;
+    }
+
+    #builderInput {
+      width: 100%;
+      min-height: clamp(9rem, 22vh, 12rem);
+      font: inherit;
+      line-height: 1.6;
+      padding: 1rem 1.15rem;
+      border-radius: clamp(1rem, 3vw, 1.5rem);
+      border: 2px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 94%, var(--sky) 6%);
+      resize: vertical;
+      box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 10%, transparent);
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #builderInput:focus {
+      outline: 3px dashed var(--outline);
+      outline-offset: 4px;
+      background: color-mix(in srgb, #ffffff 96%, var(--mint) 4%);
+      border-color: color-mix(in srgb, var(--outline) 34%, transparent);
+    }
+
+    #overlay {
+      white-space: pre-wrap;
+      color: transparent;
+    }
+
+    .guide-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+      margin: 0.35rem 0 0.25rem;
+    }
+
+    .guide-chips .chip {
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 0.35rem 0.7rem;
+    }
+
+    .builder-sticky {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      padding-top: 0.35rem;
+      border-top: 1px dashed color-mix(in srgb, var(--outline) 16%, transparent);
+    }
+
+    .builder-card .primary {
+      border-radius: var(--radius-pill);
+      border: 0;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 0.55rem 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .builder-card .primary:hover,
+    .builder-card .primary:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+      background: color-mix(in srgb, var(--ink) 90%, #ffffff 10%);
+    }
+
+    .builder-card .primary:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 3px;
+    }
+
+    .builder-card .primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #hintStack[hidden] {
+      display: none !important;
+    }
+
+    #hintStack {
+      border-radius: var(--radius-xl);
+      border: 1px dashed color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 75%, var(--gold) 25%);
+      padding: 0.65rem 0.75rem;
+    }
+
+    .hint-intro {
+      margin: 0;
+      color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
+    }
+
+    .hint-list {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+    }
+
+    .hint-item {
+      color: color-mix(in srgb, var(--ink) 85%, #ffffff 15%);
+      line-height: 1.55;
+    }
+
+    .hint-actions {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-left: 0.45rem;
+    }
+
+    .hint-action {
+      border-radius: var(--radius-pill);
+      border: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);
+      background: color-mix(in srgb, #ffffff 88%, var(--gold) 12%);
+      padding: 0.2rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .hint-action:hover,
+    .hint-action:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 90%, var(--mint) 10%);
+    }
+
+    .hint-action:focus-visible {
+      outline: 2px dashed var(--outline);
+      outline-offset: 2px;
+    }
+
+    .builder-card .banner {
+      padding: 0.65rem 0.75rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+      background: color-mix(in srgb, #fff7e0 85%, #ffffff 15%);
+      color: color-mix(in srgb, var(--ink) 85%, #ffffff 15%);
+    }
+
+    #results {
+      margin-top: 0.75rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .result-group {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .result-group .h6 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+
+    .nearest-example {
+      margin: 0 0 0.6rem;
+      padding: 0.55rem 0.75rem;
+      border-left: 3px solid color-mix(in srgb, var(--outline) 20%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 78%, var(--lavender) 22%);
+      font-style: italic;
+    }
+
     .obs-status-bar {
       display: flex;
       flex-wrap: wrap;
@@ -2985,96 +3309,101 @@ button.site-nav__magnet {
           </header>
           <div class="obs-editor__layout">
             <div class="obs-editor__primary">
-              <article class="obs-card obs-card--input">
-                <header class="obs-card__header">
-                  <span class="obs-card__eyebrow">Step 1</span>
-                  <h2 class="obs-card__title">Describe exactly what happened</h2>
-                  <p class="obs-card__subtitle">Keep it neutral and observable — think about what a camera or recorder would notice.</p>
+              <div class="card builder-card">
+                <header class="hero">
+                  <h1 class="h3">Turn what happened into an observation</h1>
+                  <p class="muted small">Write only what a camera/mic would capture. When your sentence is observational, you’ll see suggestions for feelings and needs.</p>
                 </header>
-                <div class="obs-input">
-                  <label class="obs-input__label" for="txt">What did you observe?</label>
-                  <div class="obs-input__field">
-                    <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
-                    <div id="overlay" aria-hidden="true"></div>
-                  </div>
-                  <p class="obs-input__hint">Mention quotes, actions, timestamps, or counts. Leave out feelings or judgments for now.</p>
+
+                <!-- Quickstart examples -->
+                <div class="quickstart" aria-label="Quickstart examples">
+                  <button type="button" class="ghost ex" data-ex='A notification said "Recording has started."'>Recording started</button>
+                  <button type="button" class="ghost ex" data-ex='While I was speaking, my camera turned off.'>Camera off mid-call</button>
+                  <button type="button" class="ghost ex" data-ex='The invite disappeared from my calendar.'>Event removed</button>
+                  <button type="button" class="ghost ex" data-ex='They arrived twenty minutes late without a message.'>Arrived late</button>
+                  <button type="button" class="ghost ex" data-ex='I asked for time off and my manager said no.'>Request denied</button>
                 </div>
-                <div class="obs-status-bar">
-                  <div class="obs-status" role="status" aria-live="polite">
-                    <span id="readyDot" class="dot red" aria-hidden="true"></span>
-                    <span id="readyLabel" class="obs-status__label">Not ready yet — focus on observable details</span>
+
+                <!-- Template helper (collapsible) -->
+                <details id="tpl" class="template">
+                  <summary class="small muted">Build from prompts (optional)</summary>
+                  <div class="tpl-body">
+                    <div class="row">
+                      <label class="small" for="tplWhen">When</label>
+                      <input id="tplWhen" placeholder="Yesterday at 3:10 p.m.">
+                    </div>
+                    <div class="row">
+                      <label class="small" for="tplWhere">Where</label>
+                      <input id="tplWhere" placeholder="in the team meeting">
+                    </div>
+                    <div class="row">
+                      <label class="small" for="tplWho">Who</label>
+                      <input id="tplWho" placeholder="the host / my manager / Alex">
+                    </div>
+                    <div class="row">
+                      <label class="small" for="tplWhat">What happened</label>
+                      <input id="tplWhat" placeholder="muted my microphone / said “This is a waste of time.”">
+                    </div>
+                    <div class="row">
+                      <button id="tplInsert" type="button" class="secondary small">Insert sentence</button>
+                    </div>
                   </div>
-                  <button id="submitBtn" class="obs-primary-action" type="button">See suggestions</button>
-                </div>
-                <div class="obs-checklist">
-                  <div class="obs-checklist__header">
-                    <h3 class="obs-checklist__title">Readiness checklist</h3>
-                    <p class="obs-checklist__description">We’ll light up each item as your sentence covers it.</p>
-                  </div>
-                  <div id="passBadges" class="obs-checklist__list-wrapper" aria-live="polite"></div>
-                </div>
-                <div id="evalWarnings" class="obs-warning" role="alert"></div>
-                <div id="hintStack" class="obs-hints" aria-live="polite"></div>
-                <details id="examplesPanel" class="obs-examples">
-                  <summary class="obs-examples__summary">See transformations from evaluation to observation</summary>
-                  <div id="examplesBody" class="obs-examples__body"></div>
                 </details>
-              </article>
 
-              <section id="suggestions" class="obs-card obs-card--suggestions" style="display:none" aria-live="polite">
-                <header class="obs-card__header">
-                  <span class="obs-card__eyebrow">Step 2</span>
-                  <h2 class="obs-card__title">Explore suggested feelings &amp; needs</h2>
-                  <p class="obs-card__subtitle">Select any suggestion to open its full description.</p>
-                </header>
-                <div class="obs-card__body obs-card__body--stack">
-                  <div class="obs-stack">
-                    <h3 id="feelingsHeading" class="obs-section-title">Possible feelings</h3>
-                    <div id="feelings" class="obs-pill-grid" role="list"></div>
-                  </div>
-                  <div class="obs-stack">
-                    <h3 id="needsHeading" class="obs-section-title">Possible needs</h3>
-                    <div id="needs" class="obs-pill-grid" role="list"></div>
-                  </div>
-                  <p id="matchedCues" class="obs-muted"></p>
-                  <p id="suggestionNote" class="obs-muted"></p>
+                <!-- Editor -->
+                <div class="editor-wrap">
+                  <textarea id="builderInput" placeholder='Try: I heard "You’re late again."' autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+                  <div id="overlay" aria-hidden="true"></div>
                 </div>
-              </section>
 
-              <section id="nearestPanel" class="obs-card obs-card--nearest" style="display:none" aria-live="polite">
-                <header class="obs-card__header">
-                  <span class="obs-card__eyebrow">Almost there</span>
-                  <h2 class="obs-card__title">Browse similar situations</h2>
-                  <p class="obs-card__subtitle">Cycle through nearby matches to borrow phrasing.</p>
-                </header>
-                <div class="obs-card__body obs-card__body--stack">
-                  <div id="nearBanner" class="obs-banner" style="display:none;">No exact match — showing similar situations you can cycle through.</div>
-                  <div class="obs-nearest__controls">
-                    <button id="prevNear" type="button" class="obs-secondary-button" aria-label="Show previous similar situation">Previous</button>
-                    <button id="nextNear" type="button" class="obs-secondary-button" aria-label="Show next similar situation">Next</button>
-                  </div>
-                  <p class="obs-muted">Suggestions refresh as you edit. Use the arrow keys to switch quickly.</p>
-                  <div id="nearExample" class="obs-nearest__example" style="display:none;"></div>
-                  <div class="obs-stack">
-                    <h3 class="obs-section-title">Possible feelings</h3>
-                    <div id="nearFeelings" class="obs-pill-grid"></div>
-                  </div>
-                  <div class="obs-stack">
-                    <h3 class="obs-section-title">Possible needs</h3>
-                    <div id="nearNeeds" class="obs-pill-grid"></div>
-                  </div>
-                  <p id="nearPager" class="obs-muted"></p>
+                <!-- Guided chips -->
+                <div class="guide-chips small">
+                  <span class="muted">Add quickly:</span>
+                  <button type="button" class="chip add when" data-insert="Yesterday at ">When</button>
+                  <button type="button" class="chip add where" data-insert="in ">Where</button>
+                  <button type="button" class="chip add who" data-insert="my manager ">Who</button>
+                  <button type="button" class="chip add quote" data-insert='“”' data-caret="-1">Quote</button>
                 </div>
-              </section>
-            </div>
 
+                <!-- Status & submit -->
+                <div class="bar builder-sticky">
+                  <span id="readyDot" class="dot red" aria-hidden="true"></span>
+                  <span id="readyLabel" class="small muted">Not ready — keep only what a camera/mic would capture</span>
+                  <span id="wordCount" class="small muted" style="margin-left:8px"></span>
+                  <button id="submitBtn" type="button" class="primary" style="margin-left:auto">Submit</button>
+                </div>
+
+                <!-- Hints -->
+                <div id="hintStack" class="small"></div>
+
+                <!-- Nearest banner -->
+                <div id="nearestBanner" class="banner" hidden>No exact match — showing similar situations you can cycle through.</div>
+
+                <!-- Results -->
+                <section id="results">
+                  <h3 id="resultsHeader" tabindex="-1" class="h5">Results</h3>
+                  <div id="exactPanel" hidden>
+                    <h4 class="h6">Exact matches</h4>
+                    <div id="exactBody"></div>
+                  </div>
+                  <div id="nearestPanel" hidden>
+                    <h4 class="h6">Similar situations</h4>
+                    <div class="pager">
+                      <button id="nearPrev" type="button" class="secondary small" aria-label="Previous similar">◀ Prev</button>
+                      <span id="nearIdx" class="small muted">1/1</span>
+                      <button id="nearNext" type="button" class="secondary small" aria-label="Next similar">Next ▶</button>
+                    </div>
+                    <div id="nearestBody"></div>
+                  </div>
+                </section>
+              </div>
             <aside class="obs-editor__sidebar" aria-label="Guidance for first-time users">
               <div class="obs-sidebar-card">
                 <h2 class="obs-sidebar-card__title">How it works</h2>
                 <ul class="obs-sidebar-card__list">
-                  <li>Write a single snapshot of what you observed — no feelings or judgments yet.</li>
-                  <li>Watch the readiness checklist fill in as you include quotes, actions, and timing.</li>
-                  <li>When the light turns green, unlock direct suggestions tailored to your words.</li>
+                  <li>Start from a quick example or describe what you noticed in plain language.</li>
+                  <li>Add timing, location, people, or quotes with the helper chips or template.</li>
+                  <li>Submit to see exact matches or cycle through similar situations for phrasing.</li>
                 </ul>
               </div>
               <div class="obs-sidebar-card">
