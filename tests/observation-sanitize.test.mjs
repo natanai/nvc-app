@@ -10,6 +10,24 @@ function test(name, fn) {
   tests.push({ name, fn });
 }
 
+function readHighlightTokens(lint) {
+  return (lint?.observationHighlights || []).map(entry => {
+    if (!entry) {
+      return '';
+    }
+    if (typeof entry === 'string') {
+      return entry.trim();
+    }
+    if (typeof entry.token === 'string' && entry.token.trim()) {
+      return entry.token.trim();
+    }
+    if (typeof entry.value === 'string' && entry.value.trim()) {
+      return entry.value.trim();
+    }
+    return '';
+  });
+}
+
 test('keeps direct quotes with evaluative content', () => {
   const text = 'Yesterday at 3 pm, Alex said, "You are lazy."';
   const lint = lintObservation(text, catalog);
@@ -105,11 +123,12 @@ test('flags "annoying" as evaluative language', () => {
 test('highlights observational anchors and quotes for guidance', () => {
   const text = 'Yesterday at 6:15 pm I noticed Alex type "I will handle it." in the chat.';
   const lint = lintObservation(text, catalog);
-  assert.equal(lint.observationHighlights.some(token => /yesterday/i.test(token)), true, 'time anchor should be highlighted');
-  assert.equal(lint.observationHighlights.some(token => /6:15\s*pm/i.test(token)), true, 'clock time should be highlighted');
-  assert.equal(lint.observationHighlights.some(token => /noticed/i.test(token)), true, 'sensory verb should be highlighted');
+  const tokens = readHighlightTokens(lint);
+  assert.equal(tokens.some(token => /yesterday/i.test(token)), true, 'time anchor should be highlighted');
+  assert.equal(tokens.some(token => /6:15\s*pm/i.test(token)), true, 'clock time should be highlighted');
+  assert.equal(tokens.some(token => /noticed/i.test(token)), true, 'sensory verb should be highlighted');
   assert.equal(
-    lint.observationHighlights.some(token => /I will handle it\./i.test(token)),
+    tokens.some(token => /I will handle it\./i.test(token)),
     true,
     'direct quote should be highlighted',
   );
@@ -119,7 +138,7 @@ test('highlights location anchors for observational guidance', () => {
   const text = 'On Tuesday at 3:10 pm in room 204 I heard Taylor say, "I submitted the form."';
   const lint = lintObservation(text, catalog);
   assert.equal(
-    lint.observationHighlights.some(token => /in\s+room\s+204/i.test(token)),
+    readHighlightTokens(lint).some(token => /in\s+room\s+204/i.test(token)),
     true,
     'location phrase should be highlighted',
   );
@@ -129,7 +148,7 @@ test('highlights single-quoted speech as observational evidence', () => {
   const text = "At noon I heard Pat say 'I finished it.'";
   const lint = lintObservation(text, catalog);
   assert.equal(
-    lint.observationHighlights.some(token => /I finished it\./i.test(token)),
+    readHighlightTokens(lint).some(token => /I finished it\./i.test(token)),
     true,
     'single-quoted speech should be highlighted',
   );
