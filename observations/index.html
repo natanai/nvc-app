@@ -466,37 +466,17 @@
         background: color-mix(in srgb, var(--mint) 78%, transparent);
       }
 
-      .observation-editor__validity-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.65rem;
-        height: 1.65rem;
-        border-radius: 999px;
-        border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
-        color: color-mix(in srgb, var(--outline) 80%, transparent);
-        font-size: 1.05rem;
-        font-weight: 700;
-        background: transparent;
+      .observation-editor__status-indicator--validity[data-state='pending'] {
+        color: color-mix(in srgb, var(--sky) 62%, var(--outline) 32%);
       }
 
-      .observation-editor__status-indicator[data-state='pending'] .observation-editor__validity-icon {
-        background: color-mix(in srgb, var(--sky) 20%, transparent);
-        border-color: color-mix(in srgb, var(--sky) 52%, transparent);
-        color: color-mix(in srgb, var(--sky) 65%, transparent);
+      .observation-editor__status-indicator--validity[data-state='invalid'],
+      .observation-editor__status-indicator--validity[data-state='error'] {
+        color: color-mix(in srgb, var(--rose) 60%, var(--outline) 35%);
       }
 
-      .observation-editor__status-indicator[data-state='invalid'] .observation-editor__validity-icon,
-      .observation-editor__status-indicator[data-state='error'] .observation-editor__validity-icon {
-        background: color-mix(in srgb, var(--rose) 28%, transparent);
-        border-color: color-mix(in srgb, var(--rose) 55%, transparent);
-        color: color-mix(in srgb, var(--outline) 90%, transparent);
-      }
-
-      .observation-editor__status-indicator[data-state='valid'] .observation-editor__validity-icon {
-        background: color-mix(in srgb, var(--mint) 32%, transparent);
-        border-color: color-mix(in srgb, var(--mint) 62%, transparent);
-        color: color-mix(in srgb, var(--outline) 96%, transparent);
+      .observation-editor__status-indicator--validity[data-state='valid'] {
+        color: color-mix(in srgb, var(--mint) 68%, var(--outline) 28%);
       }
 
       .observation-suggestions {
@@ -1108,12 +1088,11 @@
                 </div>
                 <div
                   id="observation-validity-container"
-                  class="observation-editor__status-indicator"
+                  class="observation-editor__status-indicator observation-editor__status-indicator--validity"
                   data-state="idle"
                   aria-live="polite"
                 >
-                  <span id="observation-validity" class="observation-editor__validity-icon" aria-hidden="true"></span>
-                  <span id="observation-validity-label" class="visually-hidden"
+                  <span id="observation-validity-label" class="observation-editor__status-text"
                     >Observation not submitted yet.</span
                   >
                 </div>

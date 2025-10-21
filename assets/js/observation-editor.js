@@ -665,23 +665,14 @@ function setValidityStatus(status, message) {
 
 function renderValidityStatus() {
   const container = document.getElementById('observation-validity-container');
-  const icon = document.getElementById('observation-validity');
   const label = document.getElementById('observation-validity-label');
-  if (!container || !icon || !label) {
+  if (!container || !label) {
     return;
   }
 
   const status = state.validityStatus || 'idle';
   container.setAttribute('data-state', status);
   label.textContent = state.validityMessage || defaultValidityMessage(status);
-
-  let glyph = '';
-  if (status === 'valid') {
-    glyph = '✓';
-  } else if (status === 'invalid' || status === 'error') {
-    glyph = '!';
-  }
-  icon.textContent = glyph;
 }
 
 function defaultValidityMessage(status) {
