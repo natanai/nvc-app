@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { splitCuePatterns, compilePattern, preparePattern } from '../lib/observationSuggest.js';
+
 const EXPECTED_HEADERS = ['cue', 'patterns (|)', 'feelings (|)', 'needs (|)', 'example'];
 
 function slugify(label) {
@@ -77,29 +79,6 @@ function loadCSVLabels(csvPath, { labelKey, filterRow } = {}) {
   return labels;
 }
 
-function compilePattern(raw) {
-  const trimmed = typeof raw === 'string' ? raw.trim() : '';
-  if (!trimmed) {
-    return null;
-  }
-
-  const attempts = [trimmed];
-  const sanitized = trimmed.replace(/\\.\\?\\*/g, '.*');
-  if (sanitized !== trimmed) {
-    attempts.push(sanitized);
-  }
-
-  for (const attempt of attempts) {
-    try {
-      return new RegExp(attempt, 'i');
-    } catch (error) {
-      // continue
-    }
-  }
-
-  return null;
-}
-
 function splitPipeList(value) {
   return String(value || '')
     .split('|')
@@ -173,13 +152,19 @@ rows.slice(1).forEach((cols, rowIndex) => {
     seenCues.add(cue);
   }
 
-  const patterns = splitPipeList(patternsRaw);
+  const patterns = splitCuePatterns(patternsRaw);
   if (!patterns.length) {
     errors.push(`Cue "${cue || `line ${lineNumber}`}" must include at least one pattern.`);
   }
   patterns.forEach((pattern, patternIndex) => {
-    if (!compilePattern(pattern)) {
-      errors.push(`Cue "${cue || `line ${lineNumber}`}": pattern ${patternIndex + 1} ("${pattern}") is not a valid regular expression.`);
+    const prepared = preparePattern(pattern);
+    let compiled = null;
+    if (prepared && prepared.attempts.length) {
+      compiled = compilePattern(pattern);
+    }
+    if (!prepared || !compiled) {
+      const reason = prepared?.error ? ` (${prepared.error})` : '';
+      errors.push(`Cue "${cue || `line ${lineNumber}`}": pattern ${patternIndex + 1} ("${pattern}") is not a valid regular expression${reason}.`);
     }
   });
 
