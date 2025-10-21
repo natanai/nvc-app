@@ -1329,6 +1329,79 @@ button.site-nav__magnet {
     transition: border-color 0.18s ease, background 0.18s ease;
   }
 
+  .observation-editor__recipe-toggle {
+    display: none;
+  }
+
+  @media (max-width: 759px) {
+    .observation-editor__recipe {
+      gap: 0.5rem 0.75rem;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .observation-editor__recipe-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: var(--radius-circle);
+      border: 1px solid color-mix(in srgb, var(--outline) 28%, transparent);
+      background: color-mix(in srgb, #ffffff 96%, transparent);
+      color: var(--ink);
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+      justify-self: end;
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .observation-editor__recipe-toggle::after {
+      content: '<';
+      display: inline-block;
+      transform: rotate(-90deg);
+      transition: transform 0.18s ease;
+    }
+
+    .observation-editor__recipe-toggle[aria-expanded='true']::after {
+      transform: rotate(90deg);
+    }
+
+    .observation-editor__recipe-toggle:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 3px;
+    }
+
+    .observation-editor__recipe-toggle:hover,
+    .observation-editor__recipe-toggle:active {
+      background: color-mix(in srgb, #ffffff 92%, var(--mint) 8%);
+      border-color: color-mix(in srgb, var(--outline) 40%, transparent);
+    }
+
+    .observation-editor__recipe-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.045em;
+      white-space: nowrap;
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .observation-editor__recipe-body {
+      grid-column: 1 / -1;
+    }
+
+    .observation-editor__recipe[data-collapsed='true'] .observation-editor__recipe-body {
+      display: none;
+    }
+  }
+
   .observation-editor__recipe[data-state='detected'] {
     border-style: solid;
     border-color: color-mix(in srgb, var(--rose) 36%, transparent);
@@ -2349,7 +2422,16 @@ button.site-nav__magnet {
                 id="observation-guidelines"
                 aria-label="Observation recipe"
                 data-state="default"
+                data-collapsed="true"
               >
+                <button
+                  type="button"
+                  class="observation-editor__recipe-toggle"
+                  id="observation-recipe-toggle"
+                  aria-controls="observation-guidelines-body"
+                  aria-expanded="false"
+                  aria-label="Expand observation recipe"
+                ></button>
                 <h2 class="observation-editor__recipe-title">Observation recipe</h2>
                 <div
                   id="observation-guidelines-body"
@@ -2718,7 +2800,55 @@ button.site-nav__magnet {
           <!-- observation-guide:end -->
         </details>
 
-        
+        <script>
+          (function() {
+            const recipe = document.getElementById('observation-guidelines');
+            const recipeToggle = document.getElementById('observation-recipe-toggle');
+
+            if (!recipe || !recipeToggle) {
+              return;
+            }
+
+            const mediaQuery = window.matchMedia('(max-width: 759px)');
+            const state = { collapsed: true };
+
+            function applyState() {
+              recipe.setAttribute('data-collapsed', state.collapsed ? 'true' : 'false');
+              recipeToggle.setAttribute('aria-expanded', state.collapsed ? 'false' : 'true');
+              recipeToggle.setAttribute(
+                'aria-label',
+                state.collapsed ? 'Expand observation recipe' : 'Collapse observation recipe',
+              );
+            }
+
+            function setCollapsed(nextState) {
+              state.collapsed = Boolean(nextState);
+              applyState();
+            }
+
+            recipeToggle.addEventListener('click', function() {
+              setCollapsed(!state.collapsed);
+            });
+
+            function handleMediaChange(event) {
+              if (!event.matches) {
+                setCollapsed(false);
+              }
+            }
+
+            if (typeof mediaQuery.addEventListener === 'function') {
+              mediaQuery.addEventListener('change', handleMediaChange);
+            } else if (typeof mediaQuery.addListener === 'function') {
+              mediaQuery.addListener(handleMediaChange);
+            }
+
+            if (mediaQuery.matches) {
+              setCollapsed(true);
+            } else {
+              setCollapsed(false);
+            }
+          })();
+        </script>
 
       </main>
 
