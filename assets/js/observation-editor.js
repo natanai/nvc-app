@@ -1581,14 +1581,14 @@ function escapeHtml(value) {
 }
 
 function bindGuideNavigation() {
-  if (typeof document === 'undefined') {
+  if (typeof document === 'undefined' || guideNavigationBound) {
     return;
   }
 
-  if (guideNavigationBound) {
-    return;
-  }
   guideNavigationBound = true;
+
+  initializeGuideToggle();
+  initializeGuideTabs();
 
   document.addEventListener('click', handleGuideNavigationClick);
 
@@ -1611,9 +1611,23 @@ function handleGuideNavigationClick(event) {
   }
 
   const sectionId = target.getAttribute('data-guide-target');
-  if (sectionId) {
-    openGuideSection(sectionId);
+  if (!sectionId) {
+    return;
   }
+
+  const tagName = target.tagName ? target.tagName.toLowerCase() : '';
+  const href = tagName === 'a' ? target.getAttribute('href') : '';
+  if (tagName === 'a' && typeof href === 'string' && href.startsWith('#')) {
+    event.preventDefault();
+  }
+
+  const isTab = target.hasAttribute('data-guide-tab');
+  openGuideSection(sectionId, {
+    updateHash: true,
+    scrollIntoView: !isTab,
+    focusTab: isTab,
+    focusPanel: !isTab,
+  });
 }
 
 function openGuideSectionFromHash() {
@@ -1624,18 +1638,220 @@ function openGuideSectionFromHash() {
   if (!hash || hash.length <= 1) {
     return;
   }
-  openGuideSection(hash.slice(1));
+  openGuideSection(hash.slice(1), { updateHash: false, scrollIntoView: true });
 }
 
-function openGuideSection(id) {
+function openGuideSection(id, options = {}) {
   if (!id || typeof document === 'undefined') {
     return;
   }
-  const section = document.getElementById(id);
-  if (!section) {
+
+  const panel = document.getElementById(id);
+  if (!panel) {
     return;
   }
-  if (section.tagName && section.tagName.toLowerCase() === 'details' && !section.open) {
-    section.open = true;
+
+  setGuideContentVisibility(true);
+
+  const activeTab = syncGuideTabs(id);
+  syncGuidePanels(id);
+
+  if (options.updateHash !== false && typeof window !== 'undefined') {
+    const hash = `#${id}`;
+    if (window.location.hash !== hash) {
+      if (window.history && typeof window.history.replaceState === 'function') {
+        window.history.replaceState(null, '', hash);
+      } else {
+        window.location.hash = id;
+      }
+    }
   }
+
+  if (options.focusTab && activeTab) {
+    activeTab.focus();
+  } else if (options.focusPanel) {
+    panel.focus({ preventScroll: true });
+  }
+
+  if (options.scrollIntoView) {
+    const container = document.getElementById('observation-guide');
+    const target = container || panel;
+    if (target && typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+
+function initializeGuideToggle() {
+  const toggle = typeof document !== 'undefined'
+    ? document.querySelector('[data-guide-toggle]')
+    : null;
+  const content = getGuideContent();
+  if (!toggle || !content) {
+    return;
+  }
+
+  setGuideContentVisibility(!content.hasAttribute('hidden'));
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    setGuideContentVisibility(!expanded);
+    if (!expanded) {
+      const activeId = getActiveGuideSectionId();
+      if (activeId) {
+        syncGuidePanels(activeId);
+      }
+    }
+  });
+}
+
+function initializeGuideTabs() {
+  const tabs = getGuideTabs();
+  if (!tabs.length) {
+    return;
+  }
+
+  const active = tabs.find(tab => tab.getAttribute('aria-selected') === 'true') || tabs[0];
+  const activeId = active ? active.getAttribute('data-guide-target') : '';
+
+  tabs.forEach(tab => {
+    const isActive = tab === active;
+    tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    tab.setAttribute('tabindex', isActive ? '0' : '-1');
+    tab.addEventListener('keydown', event => handleGuideTabKeydown(event, tabs));
+  });
+
+  syncGuidePanels(activeId);
+}
+
+function handleGuideTabKeydown(event, tabs) {
+  if (!event || !tabs?.length) {
+    return;
+  }
+
+  const key = event.key;
+  if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') {
+    return;
+  }
+
+  event.preventDefault();
+
+  const current = event.currentTarget;
+  const index = tabs.indexOf(current);
+  if (index === -1) {
+    return;
+  }
+
+  let nextIndex = index;
+  if (key === 'ArrowRight') {
+    nextIndex = (index + 1) % tabs.length;
+  } else if (key === 'ArrowLeft') {
+    nextIndex = (index - 1 + tabs.length) % tabs.length;
+  } else if (key === 'Home') {
+    nextIndex = 0;
+  } else if (key === 'End') {
+    nextIndex = tabs.length - 1;
+  }
+
+  const next = tabs[nextIndex];
+  if (next) {
+    openGuideSection(next.getAttribute('data-guide-target'), {
+      updateHash: true,
+      scrollIntoView: false,
+      focusTab: true,
+    });
+  }
+}
+
+function syncGuideTabs(activeId) {
+  const tabs = getGuideTabs();
+  let activeTab = null;
+  tabs.forEach(tab => {
+    const matches = tab.getAttribute('data-guide-target') === activeId;
+    tab.setAttribute('aria-selected', matches ? 'true' : 'false');
+    tab.setAttribute('tabindex', matches ? '0' : '-1');
+    if (matches) {
+      activeTab = tab;
+    }
+  });
+  return activeTab;
+}
+
+function syncGuidePanels(activeId) {
+  const panels = getGuideSections();
+  panels.forEach(panel => {
+    if (panel.id === activeId) {
+      panel.removeAttribute('hidden');
+    } else {
+      panel.setAttribute('hidden', 'hidden');
+    }
+  });
+}
+
+function getGuideTabs() {
+  if (typeof document === 'undefined') {
+    return [];
+  }
+  return Array.from(document.querySelectorAll('[data-guide-tab]'));
+}
+
+function getGuideSections() {
+  if (typeof document === 'undefined') {
+    return [];
+  }
+  return Array.from(document.querySelectorAll('[data-guide-section]'));
+}
+
+function getGuideContent() {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+  return document.getElementById('observation-guide-content');
+}
+
+function setGuideContentVisibility(expanded, options = {}) {
+  const content = getGuideContent();
+  if (!content) {
+    return;
+  }
+
+  if (expanded) {
+    content.removeAttribute('hidden');
+  } else {
+    content.setAttribute('hidden', 'hidden');
+  }
+
+  const toggle = typeof document !== 'undefined'
+    ? document.querySelector('[data-guide-toggle]')
+    : null;
+  if (toggle) {
+    toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    updateGuideToggleLabel(toggle, expanded);
+    if (expanded && options.focusButton) {
+      toggle.focus();
+    }
+  }
+}
+
+function updateGuideToggleLabel(toggle, expanded) {
+  if (!toggle) {
+    return;
+  }
+  const label = expanded
+    ? toggle.getAttribute('data-expanded-label')
+    : toggle.getAttribute('data-collapsed-label');
+  if (label) {
+    toggle.textContent = label;
+  }
+}
+
+function getActiveGuideSectionId() {
+  const tabs = getGuideTabs();
+  const activeTab = tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+  if (activeTab) {
+    return activeTab.getAttribute('data-guide-target');
+  }
+  const panels = getGuideSections();
+  const visible = panels.find(panel => !panel.hasAttribute('hidden'));
+  return visible ? visible.id : '';
 }
