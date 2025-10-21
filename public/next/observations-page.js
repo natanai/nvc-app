@@ -11,7 +11,10 @@ const FALLBACK = [
   { kw: /\bcalendar|invite\b/i, feelings: ["anxious", "confused"], needs: ["predictability", "clarity"] },
   { kw: /\b(cancel(?:ed|led)|last\s+minute|short\s+notice)\b/i, feelings: ["disappointed", "pressured"], needs: ["reliability", "consideration"] },
   { kw: /\b(interrupted|spoke\s+over|cut\s+me\s+off)\b/i, feelings: ["hurt", "frustrated"], needs: ["to-be-heard", "respect"] },
-  { kw: /\b(hung\s+up|left\s+the\s+call|disconnected)\b/i, feelings: ["lonely", "confused"], needs: ["connection", "consideration"] }
+  { kw: /\b(hung\s+up|left\s+the\s+call|disconnected)\b/i, feelings: ["lonely", "confused"], needs: ["connection", "consideration"] },
+  { kw: /\bquestion\b|\basked\b/i, feelings: ["confused", "lonely"], needs: ["clarity", "to-be-heard"] },
+  { kw: /\bovertime\b|\bpast\s+the\s+end\b|\bran\s+over\b|\bwent\s+over\b/i, feelings: ["overwhelmed", "tired"], needs: ["consideration", "predictability"] },
+  { kw: /\bno\s+response\b|\bsilence\b/i, feelings: ["confused", "hurt"], needs: ["acknowledgement", "connection"] }
 ];
 
 function deriveFallback(text) {

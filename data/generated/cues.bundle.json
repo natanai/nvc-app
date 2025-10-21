@@ -1,6 +1,28 @@
 {
   "cues": [
     {
+      "cue": "acknowledgement-missing_next",
+      "patterns": [
+        "\\bno\\s+response\\b[^.!?]*\\bafter\\s+I\\s+(?:shared|posted|sent)\\b",
+        "\\bsilence\\b[^.!?]*\\bafter\\s+I\\s+(?:shared|posted|sent)\\b",
+        "\\bmessage\\s+seen\\b[^.!?]*\\bwithout\\s+(?:comment|reply|response)\\b",
+        "\\bI\\s+(?:shared|posted|sent)\\b[^.!?]*\\bthere\\s+was\\s+silence\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "anxious",
+        "hurt",
+        "confused"
+      ],
+      "needs": [
+        "acknowledgement",
+        "connection",
+        "to-be-seen",
+        "reliability"
+      ],
+      "example": "I posted the project status and no one replied or reacted."
+    },
+    {
       "cue": "calendar-event-removed_next",
       "patterns": [
         "\\bcalendar\\s+event\\s+(?:disappeared|was\\s+removed)\\b",
@@ -135,6 +157,27 @@
       "example": "In the middle of my update, the video call disconnected with no goodbye."
     },
     {
+      "cue": "meeting-extended-without-checking_next",
+      "patterns": [
+        "\\b(?:the\\s+)?meeting\\s+(?:ran|went)\\s+past\\s+(?:the\\s+)?scheduled\\s+end\\b[^.!?]*\\bwithout\\s+(?:anyone\\s+|someone\\s+)?(?:checking(?:\\s+in)?|asking)\\b",
+        "\\bextended\\s+(?:the\\s+)?meeting\\b[^.!?]*\\bwithout\\s+(?:anyone\\s+|someone\\s+)?(?:checking(?:\\s+in)?|asking)\\b",
+        "\\bkept\\s+going\\b[^.!?]*\\bafter\\s+(?:the\\s+)?time\\s+we\\s+set\\b"
+      ],
+      "feelings": [
+        "tired",
+        "overwhelmed",
+        "frustrated",
+        "anxious"
+      ],
+      "needs": [
+        "consideration",
+        "clarity",
+        "predictability",
+        "respect"
+      ],
+      "example": "The meeting continued fifteen minutes past the end time without anyone checking in."
+    },
+    {
       "cue": "meeting-started-early_next",
       "patterns": [
         "\\b(?:the\\s+)?(?:call|meeting)\\s+started\\s+early\\b",
@@ -200,6 +243,27 @@
         "consideration"
       ],
       "example": "Two messages were read and there was no reply for two days."
+    },
+    {
+      "cue": "question-not-answered_next",
+      "patterns": [
+        "\\bdid(?:\\s+not|n't)\\s+answer\\s+my\\s+question\\b",
+        "\\bchanged\\s+the\\s+subject\\b[^.!?]*\\bafter\\s+I\\s+asked\\b",
+        "\\breplied\\b[^.!?]*\\bwithout\\s+addressing\\s+the\\s+question\\b"
+      ],
+      "feelings": [
+        "confused",
+        "lonely",
+        "anxious",
+        "frustrated"
+      ],
+      "needs": [
+        "clarity",
+        "to-be-heard",
+        "understanding",
+        "respect"
+      ],
+      "example": "I asked 'Can we review the budget?' and the topic switched without any answer."
     },
     {
       "cue": "meeting-recorded-without-consent_next",

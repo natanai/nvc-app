@@ -1,0 +1,18 @@
+{
+  "family": "question_not_answered",
+  "defaults": {
+    "feelings": ["confused","lonely","anxious","frustrated"],
+    "needs": ["clarity","to-be-heard","understanding","respect"]
+  },
+  "cues": [
+    {
+      "id": "question-not-answered_next",
+      "patterns": [
+        "\\bdid(?:\\s+not|n't)\\s+answer\\s+my\\s+question\\b",
+        "\\bchanged\\s+the\\s+subject\\b[^.!?]*\\bafter\\s+I\\s+asked\\b",
+        "\\breplied\\b[^.!?]*\\bwithout\\s+addressing\\s+the\\s+question\\b"
+      ],
+      "example": "I asked 'Can we review the budget?' and the topic switched without any answer."
+    }
+  ]
+}

@@ -19,3 +19,6 @@ input,ready,matched_cues
 "They spoke over me while I was talking.",true,"interrupted-while-speaking_next"
 "They canceled 15 minutes before the meeting.",true,"canceled-short-notice_next"
 "They left the video call without a word.",true,"left-call-abruptly_next"
+"The meeting ran past the scheduled end without anyone checking.",true,"meeting-extended-without-checking_next"
+"I asked a question and they changed the subject.",true,""
+"I shared the update and there was silence afterward.",true,"acknowledgement-missing_next"

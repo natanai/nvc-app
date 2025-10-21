@@ -1,0 +1,19 @@
+{
+  "family": "acknowledgement_missing",
+  "defaults": {
+    "feelings": ["lonely","anxious","hurt","confused"],
+    "needs": ["acknowledgement","connection","to-be-seen","reliability"]
+  },
+  "cues": [
+    {
+      "id": "acknowledgement-missing_next",
+      "patterns": [
+        "\\bno\\s+response\\b[^.!?]*\\bafter\\s+I\\s+(?:shared|posted|sent)\\b",
+        "\\bsilence\\b[^.!?]*\\bafter\\s+I\\s+(?:shared|posted|sent)\\b",
+        "\\bmessage\\s+seen\\b[^.!?]*\\bwithout\\s+(?:comment|reply|response)\\b",
+        "\\bI\\s+(?:shared|posted|sent)\\b[^.!?]*\\bthere\\s+was\\s+silence\\b"
+      ],
+      "example": "I posted the project status and no one replied or reacted."
+    }
+  ]
+}

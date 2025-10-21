@@ -1,0 +1,18 @@
+{
+  "family": "meeting_overran_without_check",
+  "defaults": {
+    "feelings": ["tired","overwhelmed","frustrated","anxious"],
+    "needs": ["consideration","clarity","predictability","respect"]
+  },
+  "cues": [
+    {
+      "id": "meeting-extended-without-checking_next",
+      "patterns": [
+        "\\b(?:the\\s+)?meeting\\s+(?:ran|went)\\s+past\\s+(?:the\\s+)?scheduled\\s+end\\b[^.!?]*\\bwithout\\s+(?:anyone\\s+|someone\\s+)?(?:checking(?:\\s+in)?|asking)\\b",
+        "\\bextended\\s+(?:the\\s+)?meeting\\b[^.!?]*\\bwithout\\s+(?:anyone\\s+|someone\\s+)?(?:checking(?:\\s+in)?|asking)\\b",
+        "\\bkept\\s+going\\b[^.!?]*\\bafter\\s+(?:the\\s+)?time\\s+we\\s+set\\b"
+      ],
+      "example": "The meeting continued fifteen minutes past the end time without anyone checking in."
+    }
+  ]
+}
