@@ -15,6 +15,15 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
+function escapeAttr(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function slug(s) { return String(s || "").trim().toLowerCase(); }
 function feelingHref(slugVal) { return `/feelings/${encodeURIComponent(slug(slugVal))}/`; }
 function needHref(slugVal) { return `/needs/${encodeURIComponent(slug(slugVal))}/`; }
@@ -223,28 +232,42 @@ function renderHints(container, hints) {
   if (!Array.isArray(hints) || !hints.length) {
     container.innerHTML = "";
     container.style.display = "none";
+    if (container.classList && typeof container.classList.remove === "function") {
+      container.classList.remove("is-visible");
+    }
     return;
   }
-  const items = hints.map(h => `<li>${escapeHtml(h.message || "")}</li>`).join("");
-  container.innerHTML = `<ul style="margin:0;padding-left:18px;">${items}</ul>`;
-  container.style.display = "block";
+  const items = hints.map(h => `<li class="obs-hints__item">${escapeHtml(h.message || "")}</li>`).join("");
+  container.innerHTML = `
+    <div class="obs-hints__header">
+      <span class="obs-hints__eyebrow">Try this</span>
+      <h3 class="obs-hints__title">Make it purely observational</h3>
+    </div>
+    <ul class="obs-hints__list">${items}</ul>
+  `;
+  container.style.display = "grid";
+  if (container.classList && typeof container.classList.add === "function") {
+    container.classList.add("is-visible");
+  }
 }
 
 function renderExamples(container, pairs) {
   if (!container) return;
   if (!Array.isArray(pairs) || !pairs.length) {
-    container.innerHTML = "<div class=\"muted\">No examples available right now.</div>";
+    container.innerHTML = "<p class=\"obs-muted\">No examples available right now.</p>";
     return;
   }
   const rows = pairs.map((pair) => {
     const evaluation = escapeHtml(pair?.evaluation ?? "");
     const observation = escapeHtml(pair?.observation ?? "");
-    return `<div class="example-pair" style="margin-bottom:8px;">
-      <div><span class="muted">Evaluation:</span> ${evaluation}</div>
-      <div><span class="muted">Observation:</span> ${observation}</div>
-    </div>`;
+    return `<article class="obs-example">
+      <p class="obs-example__label">Evaluation</p>
+      <p class="obs-example__text">${evaluation}</p>
+      <p class="obs-example__label">Observation</p>
+      <p class="obs-example__text">${observation}</p>
+    </article>`;
   }).join("");
-  container.innerHTML = rows;
+  container.innerHTML = `<div class="obs-examples__list">${rows}</div>`;
 }
 
 const BLOCKING_HL_KEYS = new Set(["absolutes", "shoulds", "labels", "intent", "intensifiers"]);
@@ -260,7 +283,8 @@ function renderOverlay(el, text, spans) {
     const start = Math.max(0, Math.min(source.length, sp.start ?? 0));
     const end = Math.max(start, Math.min(source.length, sp.end ?? start));
     out += esc(source.slice(i, start));
-    out += `<mark class="hl" style="background:rgba(220,50,47,0.28);border-radius:3px;">${esc(source.slice(start, end))}</mark>`;
+    const keyAttr = sp?.key ? ` data-flag="${escapeAttr(sp.key)}"` : "";
+    out += `<mark class="obs-overlay__flag"${keyAttr}>${esc(source.slice(start, end))}</mark>`;
     i = end;
   }
   out += esc(source.slice(i));
@@ -344,6 +368,14 @@ function nearestForTextMinHash(text, k=5, thr=0.22){
 }
 
 const PASS_LABELS = { cue:"Cue", speech:"Speech", action:"Action", perception:"Perception", timeEvent:"Time+Event" };
+const PASS_DESCRIPTIONS = {
+  cue: "Matches a known situation from our library.",
+  speech: "Includes the exact words that were spoken or written.",
+  action: "Describes a concrete action someone took.",
+  perception: "Uses language like ‘I saw/heard/read…’.",
+  timeEvent: "Anchors the observation with timing or frequency.",
+};
+const EVAL_DESCRIPTION = "Keep judgment words out of this sentence for a clean observation.";
 
 function computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt, blockingEval }) {
   if (blockingEval) return "red";
@@ -358,18 +390,32 @@ function computeState({ hits, evalHits, passCue, passSpeech, passAction, passPer
 
 function renderBadges(container, reasons, evalHits, blockingEval) {
   if (!container) return;
-  const ALL = ["cue","speech","action","perception","timeEvent"];
-  const badge = (label, ok, kind="default") => {
-    const style = ok
-      ? "background:#eaffea;border:1px solid #16a34a"
-      : kind === "eval"
-        ? "background:#fee2e2;border:1px solid #dc2626;color:#991b1b"
-        : "background:#f3f4f6;border:1px solid #e5e7eb";
-    return `<span class="pill" style="${style}">${label}</span>`;
+  const keys = ["cue","speech","action","perception","timeEvent"];
+  const stateText = {
+    pass: "Complete",
+    todo: "Not yet detected",
+    alert: "Remove evaluation language",
   };
-  const html = ALL.map(k => badge(PASS_LABELS[k], reasons.has(k))).join(" ");
-  const evalOk = !blockingEval;
-  container.innerHTML = `${html} ${badge("Eval", evalOk, "eval")}`.trim();
+  const buildItem = (item) => {
+    const state = item.state;
+    const icon = state === "pass" ? "✓" : state === "alert" ? "!" : "•";
+    const srLabel = stateText[state] ? ` <span class="visually-hidden">— ${escapeHtml(stateText[state])}</span>` : "";
+    const kindAttr = item.kind ? ` data-kind="${escapeAttr(item.kind)}"` : "";
+    const description = item.description ? `<span class="obs-checklist__description">${escapeHtml(item.description)}</span>` : "";
+    return `<li class="obs-checklist__item" data-state="${escapeAttr(state)}"${kindAttr}>`
+      + `<span class="obs-checklist__icon" aria-hidden="true">${icon}</span>`
+      + `<div class="obs-checklist__content">`
+      + `<span class="obs-checklist__label">${escapeHtml(item.label)}${srLabel}</span>`
+      + `${description}</div>`
+      + `</li>`;
+  };
+  const items = keys.map((key) => ({
+    label: PASS_LABELS[key] || key,
+    description: PASS_DESCRIPTIONS[key] || "",
+    state: reasons.has(key) ? "pass" : "todo",
+  }));
+  items.push({ label: "Evaluation language", description: EVAL_DESCRIPTION, state: blockingEval ? "alert" : "pass", kind: "eval" });
+  container.innerHTML = `<ul class="obs-checklist__list">${items.map(buildItem).join("")}</ul>`;
 }
 
 async function boot() {
@@ -517,9 +563,13 @@ async function boot() {
   function setStatus(state){
     if (!readyDot || !readyLabel || !submitBtn) return;
     readyDot.className = `dot ${state}`;
-    readyLabel.textContent = state === "green" ? "Ready — exact match"
-      : state === "yellow" ? "Almost — submit to see similar situations"
-      : "Not ready — make it purely observational";
+    const statusWrap = readyDot.parentElement;
+    if (statusWrap && statusWrap.classList && statusWrap.classList.contains("obs-status")) {
+      statusWrap.setAttribute("data-state", state);
+    }
+    readyLabel.textContent = state === "green" ? "Ready — direct matches unlocked"
+      : state === "yellow" ? "Almost there — submit to explore similar situations"
+      : "Not ready yet — focus on observable details";
     submitBtn.disabled = (state === "red");
   }
 
@@ -622,14 +672,25 @@ async function boot() {
     if (evalWarnings) {
       if (evalCheck.hits.length) {
         const chips = uniqueSorted(evalCheck.hits.map(h => h.match?.trim()).filter(Boolean));
-        const chipHtml = chips.map(word => `<span class="pill error">${escapeHtml(word)}</span>`).join(" ");
-        const prefix = '<div class="muted" style="margin-bottom:4px">Evaluation language detected:</div>';
-        const words = chipHtml ? `<div>${chipHtml}</div>` : "";
-        evalWarnings.innerHTML = prefix + words;
-        evalWarnings.style.display = "block";
+        const chipHtml = chips.map(word => `<span class="obs-warning__token">${escapeHtml(word)}</span>`).join("");
+        const tokens = chipHtml ? `<div class="obs-warning__tokens">${chipHtml}</div>` : "";
+        evalWarnings.innerHTML = `
+          <div class="obs-warning__header">
+            <strong class="obs-warning__title">Judgment words detected</strong>
+            <p class="obs-warning__message">Swap these words for what you literally observed.</p>
+          </div>
+          ${tokens}
+        `;
+        evalWarnings.style.display = "grid";
+        if (evalWarnings.classList && typeof evalWarnings.classList.add === "function") {
+          evalWarnings.classList.add("is-visible");
+        }
       } else {
         evalWarnings.innerHTML = "";
         evalWarnings.style.display = "none";
+        if (evalWarnings.classList && typeof evalWarnings.classList.remove === "function") {
+          evalWarnings.classList.remove("is-visible");
+        }
       }
     }
     if (!submitBtn) return;

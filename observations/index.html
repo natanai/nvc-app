@@ -1837,19 +1837,696 @@ button.site-nav__magnet {
 
   </style>
   <style>
-    .obs-editor { max-width: 840px; margin: 24px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-    .obs-editor textarea { width: 100%; font-size: 16px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; }
-    .obs-editor .bar { display:flex; align-items:center; gap:12px; margin:12px 0; }
-    .obs-editor .check { width: 16px; height: 16px; border-radius: 50%; display:inline-block; }
-    .obs-editor .check.ok { background:#22c55e; }
-    .obs-editor .check.no { background:#ef4444; }
-    .obs-editor button { padding:10px 14px; border-radius:8px; border:0; background:#111827; color:#fff; font-weight:600; }
-    .obs-editor button[disabled] { background:#9ca3af; }
-    .obs-editor .hints { color:#6b7280; font-size:14px; }
-    .obs-editor .panel { border:1px solid #e5e7eb; border-radius:8px; padding:12px; margin-top:12px; }
-    .obs-editor .pill { display:inline-block; padding:4px 8px; margin:4px; border-radius:999px; background:#f3f4f6; }
-    .obs-editor .muted { color:#6b7280; font-size:13px; }
-    .obs-editor .small { font-size: 12px; }
+    .obs-editor {
+      max-width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(3rem, 7vw, 4rem);
+      display: grid;
+      gap: clamp(2rem, 5vw, 3.5rem);
+      color: var(--ink);
+    }
+
+    .obs-editor__hero {
+      background: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
+      border: 2px solid color-mix(in srgb, var(--outline) 16%, transparent);
+      border-radius: clamp(1.5rem, 4vw, 2.5rem);
+      padding: clamp(1.6rem, 4vw, 2.6rem);
+      box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+      display: grid;
+      gap: clamp(1rem, 2.5vw, 1.5rem);
+    }
+
+    .obs-editor__eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: color-mix(in srgb, var(--outline) 70%, var(--ink) 30%);
+      margin: 0;
+    }
+
+    .obs-editor__title {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 2.4vw, 2.4rem);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .obs-editor__lead {
+      margin: 0;
+      max-width: 64ch;
+      color: color-mix(in srgb, var(--ink-soft) 80%, #ffffff 20%);
+      font-size: clamp(1rem, 1.1vw + 0.8rem, 1.15rem);
+    }
+
+    .obs-editor__highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: clamp(0.75rem, 2vw, 1.2rem);
+    }
+
+    .obs-highlight {
+      border-radius: clamp(1rem, 3vw, 1.5rem);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 80%, var(--lavender) 20%);
+      border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+      padding: clamp(0.85rem, 2.3vw, 1.1rem);
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .obs-highlight__title {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-size: 0.95rem;
+    }
+
+    .obs-highlight__text {
+      margin: 0;
+      font-size: 0.92rem;
+      color: color-mix(in srgb, var(--ink-soft) 78%, #ffffff 22%);
+    }
+
+    .obs-editor__layout {
+      display: grid;
+      gap: clamp(1.5rem, 4vw, 2.5rem);
+    }
+
+    .obs-editor__primary {
+      display: grid;
+      gap: clamp(1.5rem, 4vw, 2.25rem);
+    }
+
+    .obs-editor__sidebar {
+      display: grid;
+      gap: clamp(1.25rem, 3vw, 1.75rem);
+    }
+
+    .obs-sidebar-card {
+      border-radius: clamp(1.25rem, 3vw, 1.8rem);
+      border: 2px solid color-mix(in srgb, var(--outline) 16%, transparent);
+      background: color-mix(in srgb, #ffffff 88%, var(--gold) 12%);
+      padding: clamp(1.1rem, 3vw, 1.6rem);
+      box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .obs-sidebar-card:nth-child(2) {
+      background: color-mix(in srgb, #ffffff 92%, var(--mint) 8%);
+    }
+
+    .obs-sidebar-card:nth-child(3) {
+      background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+    }
+
+    .obs-sidebar-card__title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+    }
+
+    .obs-sidebar-card__list {
+      margin: 0;
+      padding-left: 1.15rem;
+      display: grid;
+      gap: 0.45rem;
+      font-size: 0.95rem;
+    }
+
+    .obs-sidebar-card__link {
+      font-weight: 600;
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 0.1em;
+      text-underline-offset: 0.2em;
+    }
+
+    .obs-card {
+      border-radius: clamp(1.5rem, 3vw, 2rem);
+      border: 2px solid color-mix(in srgb, var(--outline) 16%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 78%, var(--observations-card-bg) 22%);
+      box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+      padding: clamp(1.4rem, 3vw, 2rem);
+      display: grid;
+      gap: clamp(1rem, 3vw, 1.5rem);
+    }
+
+    .obs-card--suggestions {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, var(--mint) 30%);
+    }
+
+    .obs-card--nearest {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, var(--lavender) 30%);
+    }
+
+    .obs-card__header {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .obs-card__eyebrow {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      font-weight: 700;
+      color: color-mix(in srgb, var(--outline) 68%, var(--ink) 32%);
+    }
+
+    .obs-card__title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 1.6vw + 0.9rem, 1.75rem);
+      letter-spacing: 0.005em;
+    }
+
+    .obs-card__subtitle {
+      margin: 0;
+      color: color-mix(in srgb, var(--ink-soft) 80%, #ffffff 20%);
+      font-size: 0.98rem;
+    }
+
+    .obs-card__body {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .obs-card__body--stack {
+      gap: clamp(1rem, 2.5vw, 1.4rem);
+    }
+
+    .obs-stack {
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .obs-section-title {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: 1rem;
+    }
+
+    .obs-input {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .obs-input__label {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .obs-input__field {
+      position: relative;
+    }
+
+    .obs-input__field textarea {
+      width: 100%;
+      min-height: clamp(9rem, 22vh, 12rem);
+      font: inherit;
+      line-height: 1.6;
+      padding: 1rem 1.15rem;
+      border-radius: clamp(1rem, 3vw, 1.5rem);
+      border: 2px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 94%, var(--sky) 6%);
+      resize: vertical;
+      box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--outline) 10%, transparent);
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .obs-input__field textarea:focus {
+      outline: 3px dashed var(--outline);
+      outline-offset: 4px;
+      background: color-mix(in srgb, #ffffff 96%, var(--mint) 4%);
+      border-color: color-mix(in srgb, var(--outline) 36%, transparent);
+    }
+
+    .obs-input__hint {
+      margin: 0;
+      font-size: 0.95rem;
+      color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
+    }
+
+    #overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    #overlay .obs-overlay__flag {
+      background: color-mix(in srgb, var(--rose) 32%, transparent);
+      border-radius: 0.4rem;
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--rose) 28%, transparent);
+    }
+
+    .obs-status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .obs-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, var(--lavender) 30%);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .obs-status[data-state='green'] {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, var(--mint) 30%);
+      border-color: color-mix(in srgb, var(--outline) 28%, transparent);
+    }
+
+    .obs-status[data-state='yellow'] {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, var(--gold) 30%);
+      border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+    }
+
+    .obs-status__label {
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .dot {
+      width: 0.95rem;
+      height: 0.95rem;
+      border-radius: 999px;
+      background: #d4d4d8;
+      box-shadow: 0 0 0 4px rgba(212, 212, 216, 0.24);
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .dot.red {
+      background: #f87171;
+      box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.22);
+    }
+
+    .dot.yellow {
+      background: #fbbf24;
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.24);
+    }
+
+    .dot.green {
+      background: #34d399;
+      box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.24);
+    }
+
+    .obs-primary-action {
+      margin-left: auto;
+      background: color-mix(in srgb, var(--plum) 82%, var(--rose) 18%);
+      color: #ffffff;
+      border: 0;
+      border-radius: var(--radius-pill);
+      padding: 0.65rem 1.4rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      min-height: 44px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .obs-primary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+    }
+
+    .obs-primary-action:active {
+      transform: translateY(1px);
+      box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+    }
+
+    .obs-primary-action:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 4px;
+    }
+
+    .obs-primary-action[disabled] {
+      cursor: not-allowed;
+      opacity: 0.75;
+      transform: none;
+      box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+      filter: saturate(0.6);
+    }
+
+    .obs-checklist {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .obs-checklist__header {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .obs-checklist__title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .obs-checklist__description {
+      margin: 0;
+      font-size: 0.9rem;
+      color: color-mix(in srgb, var(--ink-soft) 72%, #ffffff 28%);
+    }
+
+    .obs-checklist__list-wrapper {
+      display: grid;
+    }
+
+    .obs-checklist__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .obs-checklist__item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.7rem 0.85rem;
+      border-radius: clamp(0.9rem, 3vw, 1.1rem);
+      border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+      background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+      box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      min-height: 3.2rem;
+    }
+
+    .obs-checklist__item[data-state='pass'] {
+      background: color-mix(in srgb, #ffffff 86%, var(--mint) 14%);
+      border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+    }
+
+    .obs-checklist__item[data-state='alert'] {
+      background: color-mix(in srgb, #ffffff 82%, var(--rose) 18%);
+      border-color: color-mix(in srgb, var(--outline) 26%, transparent);
+    }
+
+    .obs-checklist__icon {
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: color-mix(in srgb, var(--ink) 85%, #ffffff 15%);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.92) 70%, var(--outline) 30%);
+    }
+
+    .obs-checklist__item[data-state='pass'] .obs-checklist__icon {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 65%, var(--mint) 35%);
+      color: color-mix(in srgb, var(--ink) 70%, #ffffff 30%);
+    }
+
+    .obs-checklist__item[data-state='alert'] .obs-checklist__icon {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.94) 65%, var(--rose) 35%);
+      color: color-mix(in srgb, var(--ink) 70%, #ffffff 30%);
+    }
+
+    .obs-checklist__content {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .obs-checklist__label {
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .obs-checklist__description {
+      display: block;
+    }
+
+    .obs-warning {
+      display: none;
+      border-radius: clamp(1rem, 3vw, 1.3rem);
+      border: 1px solid color-mix(in srgb, var(--rose) 55%, var(--outline) 15%);
+      background: color-mix(in srgb, var(--rose) 18%, #ffffff 82%);
+      padding: 0.95rem 1rem;
+      box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      gap: 0.65rem;
+    }
+
+    .obs-warning.is-visible {
+      display: grid !important;
+    }
+
+    .obs-warning__header {
+      display: grid;
+      gap: 0.3rem;
+    }
+
+    .obs-warning__title {
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .obs-warning__message {
+      margin: 0;
+      font-size: 0.9rem;
+      color: color-mix(in srgb, var(--ink) 75%, #ffffff 25%);
+    }
+
+    .obs-warning__tokens {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .obs-warning__token {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-pill);
+      background: color-mix(in srgb, #ffffff 82%, var(--rose) 18%);
+      border: 1px solid color-mix(in srgb, var(--rose) 45%, transparent);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .obs-hints {
+      display: none;
+      border-radius: clamp(1rem, 3vw, 1.3rem);
+      border: 1px dashed color-mix(in srgb, var(--outline) 22%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 72%, var(--gold) 28%);
+      padding: 0.95rem 1rem;
+      box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      gap: 0.6rem;
+    }
+
+    .obs-hints.is-visible {
+      display: grid !important;
+    }
+
+    .obs-hints__header {
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .obs-hints__eyebrow {
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      font-weight: 700;
+      color: color-mix(in srgb, var(--outline) 60%, var(--ink) 40%);
+    }
+
+    .obs-hints__title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .obs-hints__list {
+      margin: 0;
+      padding-left: 1.15rem;
+      display: grid;
+      gap: 0.45rem;
+      font-size: 0.95rem;
+    }
+
+    .obs-hints__item {
+      color: color-mix(in srgb, var(--ink) 80%, #ffffff 20%);
+    }
+
+    .obs-examples {
+      border-radius: clamp(1rem, 3vw, 1.4rem);
+      border: 1px dashed color-mix(in srgb, var(--outline) 22%, transparent);
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.95) 70%, var(--lavender) 30%);
+      padding: 0.85rem 1rem;
+      box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+    }
+
+    .obs-examples__summary {
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      outline-offset: 4px;
+    }
+
+    .obs-examples__summary:focus-visible {
+      outline: 3px dashed var(--outline);
+    }
+
+    .obs-examples__body {
+      margin-top: 0.75rem;
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .obs-examples__list {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .obs-example {
+      border-radius: var(--radius-xl);
+      border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+      background: color-mix(in srgb, #ffffff 90%, var(--sky) 10%);
+      padding: 0.75rem 0.9rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .obs-example__label {
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--outline) 72%, var(--ink) 28%);
+    }
+
+    .obs-example__text {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .obs-pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .obs-card .pill {
+      border-width: 2px;
+      box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      background: color-mix(in srgb, #ffffff 88%, var(--sky) 12%);
+    }
+
+    .obs-card .pill:hover,
+    .obs-card .pill:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+    }
+
+    .obs-muted {
+      margin: 0;
+      font-size: 0.9rem;
+      color: color-mix(in srgb, var(--ink-soft) 75%, #ffffff 25%);
+    }
+
+    .obs-banner {
+      border-radius: var(--radius-xl);
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, var(--gold) 28%, #ffffff 72%);
+      padding: 0.75rem 0.85rem;
+      font-weight: 600;
+    }
+
+    .obs-nearest__controls {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .obs-secondary-button {
+      background: transparent;
+      border: 2px solid color-mix(in srgb, var(--outline) 24%, transparent);
+      border-radius: var(--radius-pill);
+      padding: 0.45rem 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      min-height: 40px;
+    }
+
+    .obs-secondary-button:hover,
+    .obs-secondary-button:focus-visible {
+      background: color-mix(in srgb, rgba(255, 255, 255, 0.96) 70%, var(--sky) 30%);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .obs-secondary-button:focus-visible {
+      outline: 3px dashed var(--outline);
+      outline-offset: 4px;
+    }
+
+    .obs-nearest__example {
+      border-radius: var(--radius-xl);
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+      padding: 0.8rem 0.9rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .obs-nearest__example .muted {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @media (min-width: 960px) {
+      .obs-editor__layout {
+        grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 880px) {
+      .obs-editor__hero {
+        padding: clamp(1.25rem, 5vw, 2.1rem);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .obs-status-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .obs-primary-action {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .obs-primary-action,
+      .obs-secondary-button,
+      .obs-card .pill {
+        transition: none;
+      }
+    }
   </style>
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
@@ -2286,51 +2963,137 @@ button.site-nav__magnet {
         </ol>
       </nav>
       <main id="main" class="page observations-page" role="main">
-        <section id="obs-editor-root" class="obs-editor">
-          <h1>Observation Builder</h1>
-          <p class="muted">Type what you saw/heard/read/received. A green check appears when a valid observation is detected. Submit to see suggested feelings and needs.</p>
-          <div class="editor-input" style="position:relative;">
-            <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
-            <div id="overlay" aria-hidden="true"></div>
-          </div>
-          <div class="bar" style="display:flex;align-items:center;gap:8px;margin-top:8px">
-            <span id="readyDot" class="dot red"></span>
-            <span id="readyLabel" class="small muted">Not ready — make it purely observational</span>
-            <button id="submitBtn" class="primary" style="margin-left:auto">Submit</button>
-          </div>
-          <div id="passBadges" class="small muted" style="margin-bottom:8px"></div>
-          <div id="evalWarnings" class="small" style="display:none"></div>
-          <div id="hintStack" class="small" style="margin-top:6px;display:none"></div>
-          <details id="examplesPanel" style="margin-top:8px">
-            <summary class="small muted">Examples</summary>
-            <div id="examplesBody" class="small" style="margin-top:6px"></div>
-          </details>
-          <div id="suggestions" class="panel" style="display:none">
-            <div id="feelingsHeading"><strong>Possible feelings</strong></div>
-            <div id="feelings"></div>
-            <div id="needsHeading" style="margin-top:8px"><strong>Possible needs</strong></div>
-            <div id="needs"></div>
-            <div class="small muted" id="matchedCues"></div>
-            <div id="suggestionNote" class="small muted" style="margin-top:6px"></div>
-          </div>
-          <div id="nearestPanel" class="panel" style="display:none">
-            <div id="nearBanner" style="display:none;margin-bottom:8px;padding:8px;border-radius:6px;background:#fef3c7;border:1px solid #fbbf24;color:#92400e;font-weight:600;">
-              No exact match — showing similar situations you can cycle through.
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <strong>Similar situations</strong>
-              <div>
-                <button id="prevNear" class="small">Prev</button>
-                <button id="nextNear" class="small">Next</button>
+        <section id="obs-editor-root" class="obs-editor" aria-labelledby="obs-editor-title">
+          <header class="obs-editor__hero">
+            <p class="obs-editor__eyebrow">Observation studio</p>
+            <h1 id="obs-editor-title" class="obs-editor__title">Build your observation with confidence</h1>
+            <p class="obs-editor__lead">Describe what you noticed without judgment. We'll check it in real time and unlock tailored feelings and needs when you're ready.</p>
+            <div class="obs-editor__highlights">
+              <div class="obs-highlight">
+                <p class="obs-highlight__title">Spot the facts</p>
+                <p class="obs-highlight__text">Focus on what a camera or recorder would capture.</p>
+              </div>
+              <div class="obs-highlight">
+                <p class="obs-highlight__title">Check for judgments</p>
+                <p class="obs-highlight__text">Replace labels or assumptions with what you literally noticed.</p>
+              </div>
+              <div class="obs-highlight">
+                <p class="obs-highlight__title">Anchor it in time</p>
+                <p class="obs-highlight__text">Mention when it happened or how often to ground the story.</p>
               </div>
             </div>
-            <div class="small muted" style="margin:6px 0">Showing suggestions based on similar phrasing.</div>
-            <div id="nearExample" class="small" style="margin:8px 0;display:none;"></div>
-            <div><strong>Possible feelings</strong></div>
-            <div id="nearFeelings"></div>
-            <div style="margin-top:8px"><strong>Possible needs</strong></div>
-            <div id="nearNeeds"></div>
-            <div id="nearPager" class="small muted" style="margin-top:8px"></div>
+          </header>
+          <div class="obs-editor__layout">
+            <div class="obs-editor__primary">
+              <article class="obs-card obs-card--input">
+                <header class="obs-card__header">
+                  <span class="obs-card__eyebrow">Step 1</span>
+                  <h2 class="obs-card__title">Describe exactly what happened</h2>
+                  <p class="obs-card__subtitle">Keep it neutral and observable — think about what a camera or recorder would notice.</p>
+                </header>
+                <div class="obs-input">
+                  <label class="obs-input__label" for="txt">What did you observe?</label>
+                  <div class="obs-input__field">
+                    <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
+                    <div id="overlay" aria-hidden="true"></div>
+                  </div>
+                  <p class="obs-input__hint">Mention quotes, actions, timestamps, or counts. Leave out feelings or judgments for now.</p>
+                </div>
+                <div class="obs-status-bar">
+                  <div class="obs-status" role="status" aria-live="polite">
+                    <span id="readyDot" class="dot red" aria-hidden="true"></span>
+                    <span id="readyLabel" class="obs-status__label">Not ready yet — focus on observable details</span>
+                  </div>
+                  <button id="submitBtn" class="obs-primary-action" type="button">See suggestions</button>
+                </div>
+                <div class="obs-checklist">
+                  <div class="obs-checklist__header">
+                    <h3 class="obs-checklist__title">Readiness checklist</h3>
+                    <p class="obs-checklist__description">We’ll light up each item as your sentence covers it.</p>
+                  </div>
+                  <div id="passBadges" class="obs-checklist__list-wrapper" aria-live="polite"></div>
+                </div>
+                <div id="evalWarnings" class="obs-warning" role="alert"></div>
+                <div id="hintStack" class="obs-hints" aria-live="polite"></div>
+                <details id="examplesPanel" class="obs-examples">
+                  <summary class="obs-examples__summary">See transformations from evaluation to observation</summary>
+                  <div id="examplesBody" class="obs-examples__body"></div>
+                </details>
+              </article>
+
+              <section id="suggestions" class="obs-card obs-card--suggestions" style="display:none" aria-live="polite">
+                <header class="obs-card__header">
+                  <span class="obs-card__eyebrow">Step 2</span>
+                  <h2 class="obs-card__title">Explore suggested feelings &amp; needs</h2>
+                  <p class="obs-card__subtitle">Select any suggestion to open its full description.</p>
+                </header>
+                <div class="obs-card__body obs-card__body--stack">
+                  <div class="obs-stack">
+                    <h3 id="feelingsHeading" class="obs-section-title">Possible feelings</h3>
+                    <div id="feelings" class="obs-pill-grid" role="list"></div>
+                  </div>
+                  <div class="obs-stack">
+                    <h3 id="needsHeading" class="obs-section-title">Possible needs</h3>
+                    <div id="needs" class="obs-pill-grid" role="list"></div>
+                  </div>
+                  <p id="matchedCues" class="obs-muted"></p>
+                  <p id="suggestionNote" class="obs-muted"></p>
+                </div>
+              </section>
+
+              <section id="nearestPanel" class="obs-card obs-card--nearest" style="display:none" aria-live="polite">
+                <header class="obs-card__header">
+                  <span class="obs-card__eyebrow">Almost there</span>
+                  <h2 class="obs-card__title">Browse similar situations</h2>
+                  <p class="obs-card__subtitle">Cycle through nearby matches to borrow phrasing.</p>
+                </header>
+                <div class="obs-card__body obs-card__body--stack">
+                  <div id="nearBanner" class="obs-banner" style="display:none;">No exact match — showing similar situations you can cycle through.</div>
+                  <div class="obs-nearest__controls">
+                    <button id="prevNear" type="button" class="obs-secondary-button" aria-label="Show previous similar situation">Previous</button>
+                    <button id="nextNear" type="button" class="obs-secondary-button" aria-label="Show next similar situation">Next</button>
+                  </div>
+                  <p class="obs-muted">Suggestions refresh as you edit. Use the arrow keys to switch quickly.</p>
+                  <div id="nearExample" class="obs-nearest__example" style="display:none;"></div>
+                  <div class="obs-stack">
+                    <h3 class="obs-section-title">Possible feelings</h3>
+                    <div id="nearFeelings" class="obs-pill-grid"></div>
+                  </div>
+                  <div class="obs-stack">
+                    <h3 class="obs-section-title">Possible needs</h3>
+                    <div id="nearNeeds" class="obs-pill-grid"></div>
+                  </div>
+                  <p id="nearPager" class="obs-muted"></p>
+                </div>
+              </section>
+            </div>
+
+            <aside class="obs-editor__sidebar" aria-label="Guidance for first-time users">
+              <div class="obs-sidebar-card">
+                <h2 class="obs-sidebar-card__title">How it works</h2>
+                <ul class="obs-sidebar-card__list">
+                  <li>Write a single snapshot of what you observed — no feelings or judgments yet.</li>
+                  <li>Watch the readiness checklist fill in as you include quotes, actions, and timing.</li>
+                  <li>When the light turns green, unlock direct suggestions tailored to your words.</li>
+                </ul>
+              </div>
+              <div class="obs-sidebar-card">
+                <h2 class="obs-sidebar-card__title">What you’ll receive</h2>
+                <ul class="obs-sidebar-card__list">
+                  <li>Suggested feelings &amp; needs sourced from our catalog.</li>
+                  <li>Shortcuts to explore each feeling or need in depth.</li>
+                  <li>Language you can reuse for journaling or conversations.</li>
+                </ul>
+              </div>
+              <div class="obs-sidebar-card">
+                <h2 class="obs-sidebar-card__title">Need more inspiration?</h2>
+                <ul class="obs-sidebar-card__list">
+                  <li><a class="obs-sidebar-card__link" href="../feelings/">Browse the feelings library</a></li>
+                  <li><a class="obs-sidebar-card__link" href="../needs/">Review universal needs</a></li>
+                  <li><a class="obs-sidebar-card__link" href="../faux-feelings/">Spot faux feelings to avoid</a></li>
+                </ul>
+              </div>
+            </aside>
           </div>
         </section>
       </main>
