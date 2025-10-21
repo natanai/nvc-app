@@ -2289,7 +2289,10 @@ button.site-nav__magnet {
         <section id="obs-editor-root" class="obs-editor">
           <h1>Observation Builder</h1>
           <p class="muted">Type what you saw/heard/read/received. A green check appears when a valid observation is detected. Submit to see suggested feelings and needs.</p>
-          <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
+          <div class="editor-input" style="position:relative;">
+            <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
+            <div id="overlay" aria-hidden="true"></div>
+          </div>
           <div class="bar" style="display:flex;align-items:center;gap:8px;margin-top:8px">
             <span id="readyDot" class="dot red"></span>
             <span id="readyLabel" class="small muted">Not ready — make it purely observational</span>
@@ -2311,6 +2314,9 @@ button.site-nav__magnet {
             <div id="suggestionNote" class="small muted" style="margin-top:6px"></div>
           </div>
           <div id="nearestPanel" class="panel" style="display:none">
+            <div id="nearBanner" style="display:none;margin-bottom:8px;padding:8px;border-radius:6px;background:#fef3c7;border:1px solid #fbbf24;color:#92400e;font-weight:600;">
+              No exact match — showing similar situations you can cycle through.
+            </div>
             <div style="display:flex;justify-content:space-between;align-items:center">
               <strong>Similar situations</strong>
               <div>
@@ -2319,6 +2325,7 @@ button.site-nav__magnet {
               </div>
             </div>
             <div class="small muted" style="margin:6px 0">Showing suggestions based on similar phrasing.</div>
+            <div id="nearExample" class="small" style="margin:8px 0;display:none;"></div>
             <div><strong>Possible feelings</strong></div>
             <div id="nearFeelings"></div>
             <div style="margin-top:8px"><strong>Possible needs</strong></div>

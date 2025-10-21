@@ -76,41 +76,55 @@ const EVAL_RULES = [
   { key: "intensifiers", rx: INTENS_RX, blocking: true, hint: "Words like ‘obviously’ lean judgment. Stick to what you noticed." }
 ];
 
+function quoteRanges(s){
+  const ranges = [];
+  const rx = /"[^"]*"|‘[^’]*’|“[^”]*”/g;
+  let m;
+  while ((m = rx.exec(s))) ranges.push([m.index, m.index + m[0].length]);
+  return ranges;
+}
+
+function inRanges(i, ranges){
+  for (const [a, b] of ranges) if (i >= a && i < b) return true;
+  return false;
+}
+
 function stripQuoted(s){
   return String(s || "").replace(/"[^"]*"|‘[^’]*’|“[^”]*”/g, " ");
 }
 
-function findMatches(text, rx) {
-  const flags = rx.flags.includes("g") ? rx.flags : rx.flags + "g";
-  const finder = new RegExp(rx.source, flags);
-  const matches = [];
-  let match;
-  while ((match = finder.exec(text))) {
-    if (match[0]) {
-      matches.push(match[0]);
-    }
-    if (finder.lastIndex === match.index) finder.lastIndex++;
-  }
-  return matches;
-}
-
 function detectEvaluation(text){
-  const t = stripQuoted(text);
+  const source = String(text || "");
+  const qr = quoteRanges(source);
   const hits = [];
   const hints = [];
   const seen = new Set();
   for (const rule of EVAL_RULES){
-    const matches = findMatches(t, rule.rx);
-    if (!matches.length) continue;
-    for (const m of matches){
-      hits.push({ pattern: rule.rx.source, match: m, key: rule.key, blocking: !!rule.blocking });
+    const flags = rule.rx.flags.includes("g") ? rule.rx.flags : rule.rx.flags + "g";
+    const finder = new RegExp(rule.rx.source, flags);
+    let match;
+    let any = false;
+    while ((match = finder.exec(source))) {
+      const textMatch = match[0];
+      if (!textMatch) {
+        if (finder.lastIndex === match.index) finder.lastIndex++;
+        continue;
+      }
+      if (inRanges(match.index, qr)) {
+        if (finder.lastIndex === match.index) finder.lastIndex++;
+        continue;
+      }
+      any = true;
+      const end = match.index + textMatch.length;
+      hits.push({ pattern: rule.rx.source, match: textMatch, key: rule.key, blocking: !!rule.blocking, start: match.index, end });
+      if (finder.lastIndex === match.index) finder.lastIndex++;
     }
-    if (rule.hint && !seen.has(rule.key)) {
+    if (any && rule.hint && !seen.has(rule.key)) {
       hints.push({ key: rule.key, message: rule.hint, blocking: !!rule.blocking });
       seen.add(rule.key);
     }
   }
-  return { hits, hints, blocking: hints.some(h => h.blocking) };
+  return { hits, hints, blocking: hits.some(h => h.blocking) };
 }
 
 function detectCatalogHints(text){
@@ -233,6 +247,26 @@ function renderExamples(container, pairs) {
   container.innerHTML = rows;
 }
 
+const BLOCKING_HL_KEYS = new Set(["absolutes", "shoulds", "labels", "intent", "intensifiers"]);
+
+function renderOverlay(el, text, spans) {
+  if (!el) return;
+  const esc = (s) => String(s || "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  const ordered = Array.isArray(spans) ? [...spans].sort((a, b) => (a.start ?? 0) - (b.start ?? 0)) : [];
+  let i = 0;
+  let out = "";
+  const source = String(text || "");
+  for (const sp of ordered) {
+    const start = Math.max(0, Math.min(source.length, sp.start ?? 0));
+    const end = Math.max(start, Math.min(source.length, sp.end ?? start));
+    out += esc(source.slice(i, start));
+    out += `<mark class="hl" style="background:rgba(220,50,47,0.28);border-radius:3px;">${esc(source.slice(start, end))}</mark>`;
+    i = end;
+  }
+  out += esc(source.slice(i));
+  el.innerHTML = out;
+}
+
 function aggregateSuggestions(hits){
   const weight = h => /_legacy_next$/.test(h?.id || "") ? 1 : 1.2;
   const add = (map, key, w) => { map.set(key, (map.get(key) || 0) + w); };
@@ -300,7 +334,8 @@ function nearestForTextMinHash(text, k=5, thr=0.22){
   const scored = nearestIndex.items.map(it => ({
     score: jaccardFromMinHash(sigQ, it.sig || []),
     feelings: it.feelings || [],
-    needs: it.needs || []
+    needs: it.needs || [],
+    example: it.example || ""
   }))
     .filter(x => x.score >= thr)
     .sort((a,b) => b.score - a.score)
@@ -376,6 +411,7 @@ async function boot() {
   if (!root) return;
   const txt = root.querySelector("#txt");
   if (!txt) return;
+  const overlay = root.querySelector("#overlay");
   const submitBtn = root.querySelector("#submitBtn");
   const readyDot = root.querySelector("#readyDot");
   const readyLabel = root.querySelector("#readyLabel");
@@ -392,6 +428,8 @@ async function boot() {
   const examplesPanel = root.querySelector("#examplesPanel");
   const examplesBody = root.querySelector("#examplesBody");
   const nearestPanel = root.querySelector("#nearestPanel");
+  const nearBanner = root.querySelector("#nearBanner");
+  const nearExample = root.querySelector("#nearExample");
   const nearFeelings = root.querySelector("#nearFeelings");
   const nearNeeds = root.querySelector("#nearNeeds");
   const nearPager = root.querySelector("#nearPager");
@@ -400,6 +438,73 @@ async function boot() {
 
   let nearList = [];
   let nearIdx = 0;
+  let lastNearHash = null;
+
+  const NEAR_STORAGE_KEY = "obs-nearest-last";
+
+  const ensureOverlayBase = () => {
+    if (!overlay) return;
+    overlay.style.position = "absolute";
+    overlay.style.inset = "0";
+    overlay.style.pointerEvents = "none";
+    overlay.style.whiteSpace = "pre-wrap";
+    overlay.style.color = "transparent";
+    overlay.style.overflow = "hidden";
+    overlay.style.zIndex = "1";
+    overlay.style.userSelect = "none";
+    overlay.style.wordBreak = "break-word";
+  };
+
+  const syncOverlayMetrics = () => {
+    if (!overlay) return;
+    ensureOverlayBase();
+    const cs = window.getComputedStyle(txt);
+    overlay.style.padding = cs.padding;
+    overlay.style.font = cs.font;
+    overlay.style.lineHeight = cs.lineHeight;
+    overlay.style.letterSpacing = cs.letterSpacing;
+    overlay.style.textAlign = cs.textAlign;
+    overlay.style.borderRadius = cs.borderRadius;
+    overlay.style.boxSizing = cs.boxSizing;
+  };
+
+  const syncOverlayScroll = () => {
+    if (!overlay) return;
+    overlay.style.transform = `translate(${-txt.scrollLeft}px, ${-txt.scrollTop}px)`;
+  };
+
+  const readNearStorage = () => {
+    try {
+      const raw = sessionStorage.getItem(NEAR_STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const writeNearStorage = (data) => {
+    try {
+      sessionStorage.setItem(NEAR_STORAGE_KEY, JSON.stringify(data));
+    } catch {}
+  };
+
+  const persistNearSelection = () => {
+    if (!lastNearHash || !nearList.length) return;
+    const data = readNearStorage();
+    data[lastNearHash] = nearIdx;
+    writeNearStorage(data);
+  };
+
+  const loadNearSelection = () => {
+    if (!lastNearHash) return null;
+    const data = readNearStorage();
+    const value = data[lastNearHash];
+    return typeof value === "number" ? value : null;
+  };
+
+  const hashText = (s) => fnv1a32(String(s || ""), 0x811c9dc5).toString(16);
 
   if (hintStack) hintStack.style.display = "none";
   if (examplesBody) {
@@ -422,32 +527,72 @@ async function boot() {
     if (!nearestPanel) return;
     if (!nearList.length){
       nearestPanel.style.display = "none";
+      if (nearBanner) nearBanner.style.display = "none";
+      if (nearExample) {
+        nearExample.style.display = "none";
+        nearExample.innerHTML = "";
+      }
       return;
     }
     nearestPanel.style.display = "block";
+    if (nearBanner) nearBanner.style.display = "block";
     const cur = nearList[nearIdx];
     const uniq = xs => uniqueSorted(Array.isArray(xs) ? xs : []);
     renderSuggestionPills(nearFeelings, uniq(cur.feelings), "feeling");
     renderSuggestionPills(nearNeeds, uniq(cur.needs), "need");
-    if (nearPager) nearPager.textContent = `Similar suggestion ${nearIdx+1} of ${nearList.length}`;
+    if (nearExample) {
+      if (cur.example) {
+        nearExample.innerHTML = `<div class="muted">Example</div><div>${escapeHtml(cur.example)}</div>`;
+        nearExample.style.display = "block";
+      } else {
+        nearExample.innerHTML = "";
+        nearExample.style.display = "none";
+      }
+    }
+    if (nearPager) nearPager.textContent = `Similar suggestion ${nearIdx+1} of ${nearList.length} — use ← → to cycle.`;
+    persistNearSelection();
   }
 
-  btnPrev?.addEventListener("click", ()=>{
+  const stepNearest = (delta) => {
     if (!nearList.length) return;
-    nearIdx = (nearIdx + nearList.length - 1) % nearList.length;
+    const total = nearList.length;
+    nearIdx = ((nearIdx + delta) % total + total) % total;
     renderNearest();
+  };
+
+  btnPrev?.addEventListener("click", ()=>{
+    stepNearest(-1);
   });
   btnNext?.addEventListener("click", ()=>{
-    if (!nearList.length) return;
-    nearIdx = (nearIdx + 1) % nearList.length;
-    renderNearest();
+    stepNearest(1);
   });
+
+  const handleNearestKeys = (evt) => {
+    if (!nearList.length) return;
+    if (!nearestPanel || nearestPanel.style.display === "none") return;
+    if (evt.target === txt) return;
+    if (evt.key === "ArrowLeft") {
+      evt.preventDefault();
+      stepNearest(-1);
+    } else if (evt.key === "ArrowRight") {
+      evt.preventDefault();
+      stepNearest(1);
+    }
+  };
+
+  document.addEventListener("keydown", handleNearestKeys);
 
   function render() {
     const { reasons, hits } = evalText(txt.value);
     const evalCheck = detectEvaluation(txt.value);
     const catalogCheck = detectCatalogHints(txt.value);
     const allHints = [...(evalCheck.hints || []), ...(catalogCheck.hints || [])];
+    syncOverlayMetrics();
+    const overlaySpans = (evalCheck.hits || [])
+      .filter(h => h && h.blocking && BLOCKING_HL_KEYS.has(h.key) && Number.isFinite(h.start) && Number.isFinite(h.end))
+      .map(({ start, end, match, key }) => ({ start, end, match, key }));
+    renderOverlay(overlay, txt.value, overlaySpans);
+    syncOverlayScroll();
     if (passBadges) renderBadges(passBadges, reasons, evalCheck.hits, evalCheck.blocking);
     renderHints(hintStack, allHints);
     const passCue = reasons.has("cue");
@@ -458,8 +603,14 @@ async function boot() {
     const state = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
     setStatus(state);
     if (nearestPanel) nearestPanel.style.display = "none";
+    if (nearBanner) nearBanner.style.display = "none";
+    if (nearExample) {
+      nearExample.style.display = "none";
+      nearExample.innerHTML = "";
+    }
     nearList = [];
     nearIdx = 0;
+    lastNearHash = null;
     if (noteEl) noteEl.textContent = "";
     if (sug) sug.style.display = "none";
     if (feelingsHeading) feelingsHeading.style.display = "none";
@@ -505,7 +656,9 @@ async function boot() {
         if (sug) sug.style.display = "block";
       } else if (stateNow === "yellow") {
         nearList = nearestForTextMinHash(txt.value, NEAR_TOP_K, NEAR_THRESHOLD);
-        nearIdx = 0;
+        lastNearHash = nearList.length ? hashText(txt.value) : null;
+        const storedIdx = lastNearHash != null ? loadNearSelection() : null;
+        nearIdx = typeof storedIdx === "number" && nearList.length && storedIdx >= 0 && storedIdx < nearList.length ? storedIdx : 0;
         if (feelings) feelings.innerHTML = "";
         if (needs) needs.innerHTML = "";
         if (matchedCues) matchedCues.textContent = "";
@@ -518,7 +671,9 @@ async function boot() {
       }
     };
   }
-  txt.addEventListener("input", render);
+  txt.addEventListener("input", () => { render(); });
+  txt.addEventListener("scroll", syncOverlayScroll);
+  window.addEventListener("resize", syncOverlayMetrics);
   render();
 }
 

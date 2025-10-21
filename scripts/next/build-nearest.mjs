@@ -50,7 +50,8 @@ function minhash(tokens){
       // no cue id, no tokens, no patterns shipped
       sig,
       feelings: c.feelings||[],
-      needs: c.needs||[]
+      needs: c.needs||[],
+      example: c.example || ""
     });
   }
   const out = { builtAt: new Date().toISOString(), count: items.length, sigLen: 64 };
