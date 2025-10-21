@@ -24,6 +24,7 @@ const state = {
 };
 
 let guideNavigationBound = false;
+let guideOverlayState = null;
 
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
@@ -136,6 +137,7 @@ function bind() {
   }
 
   bindGuideNavigation();
+  bindGuideOverlay();
 }
 
 function analyze(raw, options = {}) {
@@ -1677,6 +1679,254 @@ function bindGuideNavigation() {
   }
 }
 
+function bindGuideOverlay() {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    return;
+  }
+
+  const host = document.querySelector('[data-observation-guide]');
+  if (!host || guideOverlayState?.host) {
+    return;
+  }
+
+  const summary = host.querySelector('[data-observation-guide-open]');
+  const panel = host.querySelector('[data-observation-guide-panel]');
+  const closeButton = host.querySelector('[data-observation-guide-close]');
+  const card = panel ? panel.querySelector('.observation-guide__card') : null;
+
+  if (!summary || !panel || !closeButton || !card) {
+    return;
+  }
+
+  const mediaQuery = typeof window.matchMedia === 'function' ? window.matchMedia('(max-width: 720px)') : null;
+  const labelledBy = card.getAttribute('aria-labelledby') || 'observation-guide-title';
+
+  card.setAttribute('tabindex', '-1');
+  if (!summary.getAttribute('aria-haspopup')) {
+    summary.setAttribute('aria-haspopup', 'dialog');
+  }
+
+  guideOverlayState = {
+    host,
+    summary,
+    panel,
+    closeButton,
+    card,
+    labelledBy,
+    mediaQuery,
+    lastTrigger: null,
+  };
+
+  syncGuideOverlaySummary();
+
+  const handleToggle = () => {
+    syncGuideOverlaySummary();
+    if (!guideOverlayState) {
+      return;
+    }
+    if (!guideOverlayState.host.open) {
+      removeGuideOverlayState();
+      guideOverlayState.lastTrigger = null;
+    } else if (guideOverlayState.host.dataset.overlayState === 'overlay') {
+      applyGuideOverlayState();
+    }
+  };
+
+  host.addEventListener('toggle', handleToggle);
+
+  const handleSummaryClick = event => {
+    if (!shouldUseOverlay()) {
+      guideOverlayState.lastTrigger = summary;
+      return;
+    }
+    event.preventDefault();
+    const alreadyOverlay = host.dataset.overlayState === 'overlay';
+    openGuideOverlay({ trigger: summary, focusCard: !alreadyOverlay });
+  };
+
+  summary.addEventListener('click', handleSummaryClick);
+
+  summary.addEventListener('keydown', event => {
+    if (!shouldUseOverlay()) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      const alreadyOverlay = host.dataset.overlayState === 'overlay';
+      openGuideOverlay({ trigger: summary, focusCard: !alreadyOverlay });
+    }
+  });
+
+  closeButton.addEventListener('click', event => {
+    event.preventDefault();
+    closeGuideOverlay();
+  });
+
+  host.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && host.dataset.overlayState === 'overlay') {
+      event.preventDefault();
+      closeGuideOverlay();
+    }
+  });
+
+  const handleMediaChange = event => {
+    if (!guideOverlayState) {
+      return;
+    }
+    if (event.matches) {
+      if (host.open) {
+        openGuideOverlay({ focusCard: false });
+      }
+    } else if (host.dataset.overlayState === 'overlay') {
+      removeGuideOverlayState();
+      guideOverlayState.lastTrigger = null;
+      syncGuideOverlaySummary();
+    }
+  };
+
+  if (mediaQuery) {
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleMediaChange);
+    } else if (typeof mediaQuery.addListener === 'function') {
+      mediaQuery.addListener(handleMediaChange);
+    }
+  }
+
+  if (shouldUseOverlay() && host.open) {
+    openGuideOverlay({ focusCard: true });
+  }
+}
+
+function shouldUseOverlay() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  if (guideOverlayState?.mediaQuery) {
+    return guideOverlayState.mediaQuery.matches;
+  }
+  if (typeof window.matchMedia === 'function') {
+    return window.matchMedia('(max-width: 720px)').matches;
+  }
+  return false;
+}
+
+function applyGuideOverlayState() {
+  if (!guideOverlayState) {
+    return;
+  }
+  const { host, panel, labelledBy } = guideOverlayState;
+  host.dataset.overlayState = 'overlay';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-modal', 'true');
+  if (labelledBy) {
+    panel.setAttribute('aria-labelledby', labelledBy);
+  }
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.add('has-observation-guide-overlay');
+  }
+}
+
+function removeGuideOverlayState() {
+  if (!guideOverlayState) {
+    return;
+  }
+  const { host, panel } = guideOverlayState;
+  delete host.dataset.overlayState;
+  panel.removeAttribute('role');
+  panel.removeAttribute('aria-modal');
+  panel.removeAttribute('aria-labelledby');
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.remove('has-observation-guide-overlay');
+  }
+}
+
+function syncGuideOverlaySummary() {
+  if (!guideOverlayState) {
+    return;
+  }
+  const { host, summary } = guideOverlayState;
+  if (summary) {
+    summary.setAttribute('aria-expanded', host.open ? 'true' : 'false');
+  }
+}
+
+function openGuideOverlay(options = {}) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const host = document.getElementById('observation-guide');
+  if (!guideOverlayState || !shouldUseOverlay()) {
+    if (host && host.tagName && host.tagName.toLowerCase() === 'details' && !host.open) {
+      host.open = true;
+    }
+    if (guideOverlayState) {
+      syncGuideOverlaySummary();
+    }
+    return;
+  }
+
+  const { summary, card } = guideOverlayState;
+  const focusCard = options.focusCard !== false;
+
+  if (!guideOverlayState.host.open) {
+    guideOverlayState.host.open = true;
+  }
+
+  applyGuideOverlayState();
+
+  if (options.trigger && typeof options.trigger.focus === 'function') {
+    guideOverlayState.lastTrigger = options.trigger;
+  } else if (!guideOverlayState.lastTrigger) {
+    guideOverlayState.lastTrigger = summary;
+  }
+
+  syncGuideOverlaySummary();
+
+  if (focusCard && typeof card.focus === 'function') {
+    const focusCardElement = () => card.focus();
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(focusCardElement);
+    } else {
+      setTimeout(focusCardElement, 0);
+    }
+  }
+
+  if (focusCard) {
+    card.scrollTop = 0;
+  }
+}
+
+function closeGuideOverlay(options = {}) {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const host = document.getElementById('observation-guide');
+  if (!guideOverlayState) {
+    if (host && host.tagName && host.tagName.toLowerCase() === 'details') {
+      host.open = false;
+    }
+    return;
+  }
+
+  removeGuideOverlayState();
+  guideOverlayState.host.open = false;
+  syncGuideOverlaySummary();
+
+  const shouldRestoreFocus = options.restoreFocus !== false;
+  const { summary } = guideOverlayState;
+  const trigger = guideOverlayState.lastTrigger || summary;
+  guideOverlayState.lastTrigger = null;
+
+  if (shouldRestoreFocus && trigger && typeof trigger.focus === 'function') {
+    const focusTrigger = () => trigger.focus();
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(focusTrigger);
+    } else {
+      setTimeout(focusTrigger, 0);
+    }
+  }
+}
+
 function initializeGuideTabs() {
   if (typeof document === 'undefined') {
     return;
@@ -1816,12 +2066,23 @@ function openGuideSection(id) {
     return;
   }
   const host = document.getElementById('observation-guide');
-  if (host && host.tagName && host.tagName.toLowerCase() === 'details' && !host.open) {
-    host.open = true;
+  let shouldFocusTab = true;
+  if (host && host.tagName && host.tagName.toLowerCase() === 'details') {
+    if (shouldUseOverlay()) {
+      const alreadyOverlay = host.dataset.overlayState === 'overlay';
+      openGuideOverlay({ focusCard: !alreadyOverlay });
+      shouldFocusTab = false;
+    } else if (!host.open) {
+      host.open = true;
+    }
   }
 
   const section = activateGuideSectionById(id);
   if (!section) {
+    return;
+  }
+
+  if (!shouldFocusTab) {
     return;
   }
 
