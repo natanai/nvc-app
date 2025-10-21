@@ -13,7 +13,9 @@
         "\\b(?:the\\s+)?(?:call|meeting)\\s+started\\s+before\\s+(?:the\\s+)?scheduled\\s+time\\b",
         "\\b(?:the\\s+)?(?:call|meeting)\\s+began\\s+before\\s+(?:the\\s+)?scheduled\\s+time\\b",
         "\\b(?:the\\s+)?(?:call|meeting)\\s+had\\s+already\\s+started\\b[^.!?]*\\bwhen\\s+I\\s+joined\\b",
-        "\\bstarted\\s+before\\s+I\\s+joined\\b"
+        "\\bstarted\\s+before\\s+I\\s+joined\\b",
+        "\\bwhen\\s+I\\s+joined\\b[^.!?]*\\b(?:the\\s+)?(?:call|meeting)\\s+had\\s+already\\s+started\\b",
+        "\\bby\\s+the\\s+time\\s+I\\s+joined\\b[^.!?]*\\b(?:the\\s+)?(?:call|meeting)\\s+had\\s+already\\s+started\\b"
       ],
       "example": "When I joined at the scheduled time, the meeting had already started."
     }
