@@ -2802,6 +2802,67 @@ button.site-nav__magnet {
 
         <script>
           (function() {
+            var CITATION_SELECTOR = '.observation-guide__citation a[href^="#observation-guide-ref-"]';
+            var referenceLinks = document.querySelectorAll('a[id^="observation-guide-ref-"]');
+            var citationLinks = document.querySelectorAll(CITATION_SELECTOR);
+
+            if (!referenceLinks.length || !citationLinks.length) {
+              return;
+            }
+
+            var referenceMap = {};
+
+            referenceLinks.forEach(function(reference) {
+              if (!(reference instanceof HTMLAnchorElement)) {
+                return;
+              }
+
+              var id = reference.getAttribute('id');
+              var href = reference.getAttribute('href');
+
+              if (!id || !href) {
+                return;
+              }
+
+              referenceMap['#' + id] = {
+                href: href,
+                rel: reference.getAttribute('rel') || '',
+                target: reference.getAttribute('target') || '',
+              };
+            });
+
+            citationLinks.forEach(function(citation) {
+              if (!(citation instanceof HTMLAnchorElement)) {
+                return;
+              }
+
+              var originalHref = citation.getAttribute('href');
+              if (!originalHref) {
+                return;
+              }
+
+              var reference = referenceMap[originalHref];
+              if (!reference || !reference.href) {
+                return;
+              }
+
+              citation.setAttribute('href', reference.href);
+
+              if (reference.target) {
+                citation.setAttribute('target', reference.target);
+              }
+
+              var rel = citation.getAttribute('rel') || '';
+              var combinedRel = (rel + ' ' + reference.rel).trim();
+              if (combinedRel) {
+                citation.setAttribute('rel', Array.from(new Set(combinedRel.split(/\s+/))).join(' '));
+              }
+            });
+          })();
+        </script>
+
+        <script>
+          (function() {
             const recipe = document.getElementById('observation-guidelines');
             const recipeToggle = document.getElementById('observation-recipe-toggle');
 
