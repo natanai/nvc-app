@@ -601,33 +601,83 @@ function buildIssueList(lint) {
   }
   const issues = [];
   if (lint.evaluationMarkers?.length) {
-    issues.push(formatIssue('Evaluation words', lint.evaluationMarkers));
+    const entry = formatIssue(
+      'Evaluation words',
+      lint.evaluationMarkers,
+      'Swap judgments for what a camera would capture (quotes, actions, counts).',
+    );
+    if (entry) {
+      issues.push(entry);
+    }
   }
   if (lint.agentiveMarkers?.length) {
-    issues.push(formatIssue('Interpretations to revisit', lint.agentiveMarkers));
+    const entry = formatIssue(
+      'Interpretations to revisit',
+      lint.agentiveMarkers,
+      'Stick with what happened without adding cause-and-effect language.',
+    );
+    if (entry) {
+      issues.push(entry);
+    }
   }
   if (Array.isArray(lint.flaggedGroups)) {
     lint.flaggedGroups.forEach(group => {
       if (group?.matches?.length) {
-        issues.push(formatIssue(group.label || 'Flagged language', group.matches));
+        const entry = formatIssue(group.label || 'Flagged language', group.matches, group.advice);
+        if (entry) {
+          issues.push(entry);
+        }
       }
     });
   }
   if (lint.fauxFeelings?.length) {
-    issues.push(formatIssue('Story words', lint.fauxFeelings));
+    const entry = formatIssue(
+      'Story words',
+      lint.fauxFeelings,
+      'Name the observable action or quote instead of story shorthand.',
+    );
+    if (entry) {
+      issues.push(entry);
+    }
   }
   if (lint.feelings?.length) {
-    issues.push(formatIssue('Feeling words', lint.feelings));
+    const entry = formatIssue(
+      'Feeling words',
+      lint.feelings,
+      'Save feelings for the next step; the observation just covers what happened.',
+    );
+    if (entry) {
+      issues.push(entry);
+    }
   }
   if (lint.needs?.length) {
-    issues.push(formatIssue('Need words', lint.needs));
+    const entry = formatIssue(
+      'Need words',
+      lint.needs,
+      'Needs come after the observation—focus on the concrete moment first.',
+    );
+    if (entry) {
+      issues.push(entry);
+    }
   }
   return issues;
 }
 
-function formatIssue(label, tokens) {
-  const text = formatQuotedList(tokens);
-  return text ? `${label}: ${text}` : label;
+function formatIssue(label, tokens, advice) {
+  const parts = [];
+  const trimmedLabel = typeof label === 'string' ? label.trim() : '';
+  if (trimmedLabel) {
+    parts.push(trimmedLabel);
+  }
+  const quoted = formatQuotedList(tokens);
+  if (quoted) {
+    parts.push(quoted);
+  }
+  const trimmedAdvice = typeof advice === 'string' ? advice.trim() : '';
+  if (trimmedAdvice) {
+    parts.push(trimmedAdvice);
+  }
+  return parts.join(' — ') || '';
 }
 
 function formatQuotedList(values) {
