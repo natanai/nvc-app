@@ -15,6 +15,8 @@ const state = {
   detectionFallbackQueue: [],
   detectionSource: '',
   cueHighlightRanges: [],
+  detectionMatchLimit: 1,
+  detectionNearLimit: 6,
   validityStatus: 'idle',
   validityMessage: 'Matches not requested yet.',
   fallback: createFallbackState(),
@@ -41,6 +43,10 @@ const DETECTION_LABELS = {
   need: { singular: 'need word', plural: 'need words' },
   fauxFeeling: { singular: 'story word', plural: 'story words' },
 };
+
+const DETECTION_MIN_WORDS = 3;
+const DETECTION_MATCH_LIMIT = 1;
+const DETECTION_NEAR_LIMIT = 6;
 
 const OBSERVATION_GUIDELINE_INTRO = 'Use these anchors to keep your statement observational.';
 const OBSERVATION_GUIDELINE_NOTE =
@@ -1050,6 +1056,21 @@ function computeFallbackQueue(text) {
   return results;
 }
 
+function countFlaggedTokens(lint) {
+  if (!lint?.flaggedGroups?.length) {
+    return 0;
+  }
+  return lint.flaggedGroups.reduce((sum, group) => sum + (group?.matches?.length || 0), 0);
+}
+
+function countWords(value) {
+  if (!value) {
+    return 0;
+  }
+  const matches = String(value).toLowerCase().match(/[a-z0-9'’]+/g);
+  return matches ? matches.length : 0;
+}
+
 function tokenizeForScore(text) {
   return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
 }
@@ -1146,6 +1167,14 @@ function defaultValidityMessage(status) {
 function updateDetectionStatus(rawInput, trimmedInput) {
   const sourceText = typeof rawInput === 'string' ? rawInput : '';
   const trimmed = typeof trimmedInput === 'string' ? trimmedInput : sourceText.trim();
+  const lint = state.analysis?.lint || null;
+  const flaggedCount = countFlaggedTokens(lint);
+  const wordCount = countWords(trimmed);
+
+  state.detectionMatchLimit = DETECTION_MATCH_LIMIT;
+  state.detectionNearLimit = DETECTION_NEAR_LIMIT;
+  state.detectionSource = trimmed;
+
   if (!state.cues.length) {
     state.detectionStatus = 'loading';
     state.detectionMatches = 0;
@@ -1165,14 +1194,28 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     return;
   }
 
-  state.detectionSource = trimmed;
+  if (flaggedCount > 0) {
+    state.detectionStatus = 'flagged';
+    state.detectionMatches = 0;
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+    state.cueHighlightRanges = [];
+    return;
+  }
+
+  if (wordCount < DETECTION_MIN_WORDS) {
+    state.detectionStatus = 'short';
+    state.detectionMatches = 0;
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+    state.cueHighlightRanges = [];
+    return;
+  }
 
   const suggestion = suggestFromObservation(trimmed, state.cues || [], 4);
   const hits = Array.isArray(suggestion.hits) ? suggestion.hits : [];
   state.cueHighlightRanges = buildCueHighlightRanges(sourceText, hits);
-  const feelingsCount = Array.isArray(suggestion.feelings) ? suggestion.feelings.length : 0;
-  const needsCount = Array.isArray(suggestion.needs) ? suggestion.needs.length : 0;
-  state.detectionMatches = feelingsCount + needsCount;
+  state.detectionMatches = hits.length;
   if (state.detectionMatches > 0) {
     state.detectionStatus = 'match';
     state.detectionFallbacks = 0;
@@ -1200,20 +1243,133 @@ function renderDetectionStatus() {
   container.setAttribute('data-state', status);
 
   let message = 'Warming up the language detector…';
-  if (status === 'idle') {
-    message = 'Language detector ready.';
-  } else if (status === 'none') {
-    message = 'No cue matches detected yet.';
-  } else if (status === 'near') {
-    message = state.detectionFallbacks > 1
-      ? `No exact cue matches detected. ${state.detectionFallbacks} nearest matches ready to review.`
-      : 'No exact cue match detected. Nearest match ready to review.';
-  } else if (status === 'match') {
-    message = state.detectionMatches > 1
-      ? `${state.detectionMatches} exact cue matches detected.`
-      : 'Exact cue match detected.';
+  switch (status) {
+    case 'idle':
+      message = 'Language detector ready.';
+      break;
+    case 'short':
+      message = `Add at least ${DETECTION_MIN_WORDS} words to start matching.`;
+      break;
+    case 'none':
+      message = 'No cue matches detected yet.';
+      break;
+    case 'near':
+      message = state.detectionFallbacks > 1
+        ? `No exact cue matches detected. ${state.detectionFallbacks} nearest matches ready to review.`
+        : 'No exact cue match detected. Nearest match ready to review.';
+      break;
+    case 'match':
+      message = state.detectionMatches > 1
+        ? `${state.detectionMatches} exact cue matches detected.`
+        : 'Exact cue match detected.';
+      break;
+    case 'flagged':
+      message = 'Flagged language detected. Update your wording before matching.';
+      break;
+    default:
+      break;
   }
   text.textContent = message;
+  renderDetectionSummary();
+}
+
+function renderDetectionSummary() {
+  const summary = document.getElementById('observation-detection-summary');
+  const exactValue = document.getElementById('observation-detection-exact');
+  const nearValue = document.getElementById('observation-detection-near');
+  const note = document.getElementById('observation-detection-note');
+  const coverage = document.getElementById('observation-detection-coverage');
+
+  if (!summary) {
+    return;
+  }
+
+  const status = state.detectionStatus || 'loading';
+  const matchLimit = Math.max(Number(state.detectionMatchLimit) || DETECTION_MATCH_LIMIT, 1);
+  const nearLimit = Math.max(Number(state.detectionNearLimit) || DETECTION_NEAR_LIMIT, 0);
+  const cuesCount = Array.isArray(state.cues) ? state.cues.length : 0;
+
+  let exactCount = 0;
+  let nearCount = 0;
+  if (status !== 'flagged' && status !== 'short' && status !== 'loading') {
+    exactCount = Math.min(Number(state.detectionMatches) || 0, matchLimit);
+    nearCount = Math.min(Number(state.detectionFallbacks) || 0, nearLimit || Number(state.detectionFallbacks) || 0);
+  }
+
+  if (exactValue) {
+    exactValue.textContent = `${exactCount}/${matchLimit}`;
+  }
+
+  if (nearValue) {
+    const denominator = nearLimit > 0 ? nearLimit : Math.max(nearLimit, nearCount, 0);
+    nearValue.textContent = `${nearCount}/${denominator}`;
+  }
+
+  summary.setAttribute('data-state', status);
+
+  if (note) {
+    const limitMessage = nearLimit
+      ? `We review up to ${nearLimit} nearest cues at a time to keep things focused.`
+      : '';
+    let message = '';
+    switch (status) {
+      case 'loading':
+        message = 'Warming up the detector…';
+        break;
+      case 'idle':
+        message = limitMessage
+          ? `We’ll scan for cues as you type. ${limitMessage}`
+          : 'We’ll scan for cues as you type.';
+        break;
+      case 'short':
+        message = limitMessage
+          ? `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
+          : `Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
+        break;
+      case 'flagged':
+        message = limitMessage
+          ? 'Remove flagged language so we can search for matches. ' + limitMessage
+          : 'Remove flagged language so we can search for matches.';
+        break;
+      case 'match':
+        message = limitMessage
+          ? `Exact matches are ready when you are. ${limitMessage}`
+          : 'Exact matches are ready when you are.';
+        break;
+      case 'near':
+        message = limitMessage || 'Nearest matches are queued when you need them.';
+        break;
+      case 'none':
+        message = limitMessage
+          ? `We didn’t spot an exact match yet. ${limitMessage}`
+          : 'We didn’t spot an exact match yet.';
+        break;
+      default:
+        message = limitMessage || 'We’re preparing the detector…';
+        break;
+    }
+
+    if (status === 'match' && Number(state.detectionMatches) > matchLimit) {
+      message = `${message} We surface the strongest exact match first.`;
+    } else if (
+      matchLimit === 1 &&
+      (status === 'match' || status === 'near' || status === 'none')
+    ) {
+      message = `${message} We surface the strongest exact match first.`;
+    }
+
+    note.textContent = message.trim();
+  }
+
+  if (coverage) {
+    if (cuesCount) {
+      coverage.textContent = `Our detector currently covers ${cuesCount.toLocaleString()} cues.`;
+      coverage.removeAttribute('hidden');
+    } else {
+      coverage.textContent = '';
+      coverage.setAttribute('hidden', 'hidden');
+    }
+  }
 }
 
 function renderHighlight() {
