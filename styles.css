@@ -55,6 +55,18 @@ body {
   font-family: var(--font-body);
 }
 
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #d33;
+}
+
+.dot.yellow { background: #e6a800; }
+.dot.green { background: #2fa84f; }
+.dot.red { background: #d33; }
+
 a,
 button,
 [role='button'],

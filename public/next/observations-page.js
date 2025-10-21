@@ -47,34 +47,8 @@ function assetBases() {
 
 const BASES = assetBases();
 
-const FALLBACK = [
-  { kw: /\bdeadline|due\b/i, feelings: ["anxious", "pressured"], needs: ["predictability", "clarity"] },
-  { kw: /\bmeeting|call|recording\b/i, feelings: ["tense", "anxious"], needs: ["respect", "to-be-heard", "predictability"] },
-  { kw: /\bcamera\b/i, feelings: ["lonely", "anxious"], needs: ["connection", "to-be-seen"] },
-  { kw: /\bmuted|mute\b/i, feelings: ["embarrassed", "confused"], needs: ["to-be-heard", "respect"] },
-  { kw: /\btime\s+off|pto|vacation|leave\b/i, feelings: ["disappointed", "frustrated"], needs: ["consideration", "respect", "predictability"] },
-  { kw: /\blate|minutes?\s+late\b/i, feelings: ["disappointed", "irritated"], needs: ["reliability", "consideration"] },
-  { kw: /\breply\s+all|cc['’]?d\b/i, feelings: ["anxious", "embarrassed"], needs: ["privacy", "clarity", "respect"] },
-  { kw: /\bcalendar|invite\b/i, feelings: ["anxious", "confused"], needs: ["predictability", "clarity"] },
-  { kw: /\b(cancel(?:ed|led)|last\s+minute|short\s+notice)\b/i, feelings: ["disappointed", "pressured"], needs: ["reliability", "consideration"] },
-  { kw: /\b(interrupted|spoke\s+over|cut\s+me\s+off)\b/i, feelings: ["hurt", "frustrated"], needs: ["to-be-heard", "respect"] },
-  { kw: /\b(hung\s+up|left\s+the\s+call|disconnected)\b/i, feelings: ["lonely", "confused"], needs: ["connection", "consideration"] },
-  { kw: /\bquestion\b|\basked\b/i, feelings: ["confused", "lonely"], needs: ["clarity", "to-be-heard"] },
-  { kw: /\bovertime\b|\bpast\s+the\s+end\b|\bran\s+over\b|\bwent\s+over\b/i, feelings: ["overwhelmed", "tired"], needs: ["consideration", "predictability"] },
-  { kw: /\bno\s+response\b|\bsilence\b/i, feelings: ["confused", "hurt"], needs: ["acknowledgement", "connection"] }
-];
-
-function deriveFallback(text) {
-  const feelings = new Set();
-  const needs = new Set();
-  for (const rule of FALLBACK) {
-    if (rule.kw.test(text)) {
-      (rule.feelings || []).forEach(f => feelings.add(f));
-      (rule.needs || []).forEach(n => needs.add(n));
-    }
-  }
-  return { feelings: Array.from(feelings), needs: Array.from(needs) };
-}
+const NEAR_THRESHOLD = 0.22;
+const NEAR_TOP_K = 7;
 
 function splitSentences(text) {
   return String(text).replace(/\r/g, "").split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean);
@@ -233,6 +207,16 @@ function nearestForTextMinHash(text, k=5, thr=0.22){
 
 const PASS_LABELS = { cue:"Cue", speech:"Speech", action:"Action", perception:"Perception", timeEvent:"Time+Event" };
 
+function computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt }) {
+  if (hits.length > 0) return "green";
+  const passesOK = passCue && passSpeech && passAction && passPerception && passTimeEvent;
+  if (passesOK && evalHits.length === 0) {
+    const near = nearestForTextMinHash(txt, NEAR_TOP_K, NEAR_THRESHOLD);
+    return near.length ? "yellow" : "red";
+  }
+  return "red";
+}
+
 function renderBadges(container, reasons, evalHits) {
   if (!container) return;
   const ALL = ["cue","speech","action","perception","timeEvent"];
@@ -263,27 +247,39 @@ async function boot() {
   await loadNearest(BASES);
 
   const root = document.getElementById("obs-editor-root");
+  if (!root) return;
   const txt = root.querySelector("#txt");
-  const check = root.querySelector("#check");
-  const why = root.querySelector("#why");
-  const btn = root.querySelector("#submit");
+  if (!txt) return;
+  const submitBtn = root.querySelector("#submitBtn");
+  const readyDot = root.querySelector("#readyDot");
+  const readyLabel = root.querySelector("#readyLabel");
   const sug = root.querySelector("#suggestions");
+  const feelingsHeading = root.querySelector("#feelingsHeading");
   const feelings = root.querySelector("#feelings");
+  const needsHeading = root.querySelector("#needsHeading");
   const needs = root.querySelector("#needs");
   const matchedCues = root.querySelector("#matchedCues");
+  const noteEl = root.querySelector("#suggestionNote");
   const passBadges = root.querySelector("#passBadges");
   const evalWarnings = root.querySelector("#evalWarnings");
   const nearestPanel = root.querySelector("#nearestPanel");
   const nearFeelings = root.querySelector("#nearFeelings");
   const nearNeeds = root.querySelector("#nearNeeds");
   const nearPager = root.querySelector("#nearPager");
-  const nearestCta = root.querySelector("#nearestCta");
-  const btnFindNearest = root.querySelector("#findNearest");
   const btnPrev = root.querySelector("#prevNear");
   const btnNext = root.querySelector("#nextNear");
 
   let nearList = [];
   let nearIdx = 0;
+
+  function setStatus(state){
+    if (!readyDot || !readyLabel || !submitBtn) return;
+    readyDot.className = `dot ${state}`;
+    readyLabel.textContent = state === "green" ? "Ready — exact match"
+      : state === "yellow" ? "Almost — submit to see similar situations"
+      : "Not ready — make it purely observational";
+    submitBtn.disabled = (state === "red");
+  }
 
   function renderNearest(){
     if (!nearestPanel) return;
@@ -309,28 +305,28 @@ async function boot() {
     nearIdx = (nearIdx + 1) % nearList.length;
     renderNearest();
   });
-  btnFindNearest?.addEventListener("click", ()=>{
-    nearList = nearestForTextMinHash(txt.value, 7, 0.22);
-    nearIdx = 0;
-    renderNearest();
-  });
 
   function render() {
-    const { ok: structureOk, reasons, hits } = evalText(txt.value);
+    const { reasons, hits } = evalText(txt.value);
     const evalHits = detectEvaluation(txt.value);
     if (passBadges) renderBadges(passBadges, reasons, evalHits);
-    const ready = structureOk && evalHits.length === 0;
-    check.className = "check " + (ready ? "ok" : "no");
-    let message = "Not ready — add something you saw/heard, a quoted phrase, or who did what.";
-    if (ready) {
-      const passList = Array.from(reasons).map(k => PASS_LABELS[k] || k);
-      if (!evalHits.length) passList.push("Eval");
-      message = "Ready — passes: " + (passList.length ? passList.join(", ") : "Eval");
-    } else if (evalHits.length) {
-      message = "Not ready — remove evaluation (‘should’, ‘always’, …) to make it observational.";
-    }
-    why.textContent = message;
-    btn.disabled = !ready;
+    const passCue = reasons.has("cue");
+    const passSpeech = reasons.has("speech");
+    const passAction = reasons.has("action");
+    const passPerception = reasons.has("perception");
+    const passTimeEvent = reasons.has("timeEvent");
+    const state = computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value });
+    setStatus(state);
+    if (nearestPanel) nearestPanel.style.display = "none";
+    nearList = [];
+    nearIdx = 0;
+    if (noteEl) noteEl.textContent = "";
+    if (sug) sug.style.display = "none";
+    if (feelingsHeading) feelingsHeading.style.display = "none";
+    if (feelings) feelings.innerHTML = "";
+    if (needsHeading) needsHeading.style.display = "none";
+    if (needs) needs.innerHTML = "";
+    if (matchedCues) matchedCues.textContent = "";
 
     if (evalWarnings) {
       if (evalHits.length) {
@@ -345,35 +341,41 @@ async function boot() {
         evalWarnings.style.display = "none";
       }
     }
+    if (!submitBtn) return;
 
-    if (hits.length === 0) {
-      if (nearestCta) nearestCta.style.display = "block";
-    } else {
-      if (nearestCta) nearestCta.style.display = "none";
-      if (nearestPanel) nearestPanel.style.display = "none";
-      nearList = [];
-      nearIdx = 0;
-    }
-
-    btn.onclick = () => {
-      if (!ready) return;
-      let f = uniqueSorted(hits.flatMap(h => h.feelings));
-      let n = uniqueSorted(hits.flatMap(h => h.needs));
-      if (hits.length) {
-        const agg = aggregateSuggestions(hits);
-        f = agg.feelings;
-        n = agg.needs;
-      } else {
-        const fb = deriveFallback(txt.value);
-        f = uniqueSorted([...(f || []), ...(fb.feelings || [])]);
-        n = uniqueSorted([...(n || []), ...(fb.needs || [])]);
+    submitBtn.onclick = () => {
+      const stateNow = computeState({ hits, evalHits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value });
+      if (stateNow === "red") {
+        if (noteEl) noteEl.textContent = "Not ready — please make the statement purely observational.";
+        return;
       }
-      renderSuggestionPills(feelings, f, "feeling");
-      renderSuggestionPills(needs, n, "need");
-      matchedCues.textContent = hits.length
-        ? `Direct matches found — suggestions prioritized from ${hits.length} cue${hits.length === 1 ? "" : "s"}.`
-        : "No direct cue hits — suggestions are generalized.";
-      sug.style.display = "block";
+      if (stateNow === "green") {
+        const agg = aggregateSuggestions(hits);
+        const f = agg.feelings;
+        const n = agg.needs;
+        if (feelingsHeading) feelingsHeading.style.display = f.length ? "block" : "none";
+        renderSuggestionPills(feelings, f, "feeling");
+        if (needsHeading) needsHeading.style.display = n.length ? "block" : "none";
+        renderSuggestionPills(needs, n, "need");
+        if (matchedCues) matchedCues.textContent = hits.length
+          ? `Direct matches found — suggestions prioritized from ${hits.length} cue${hits.length === 1 ? "" : "s"}.`
+          : "Direct matches found.";
+        if (noteEl) noteEl.textContent = "Direct matches found — suggestions prioritized from exact cues.";
+        if (nearestPanel) nearestPanel.style.display = "none";
+        if (sug) sug.style.display = "block";
+      } else if (stateNow === "yellow") {
+        nearList = nearestForTextMinHash(txt.value, NEAR_TOP_K, NEAR_THRESHOLD);
+        nearIdx = 0;
+        if (feelings) feelings.innerHTML = "";
+        if (needs) needs.innerHTML = "";
+        if (matchedCues) matchedCues.textContent = "";
+        if (sug) sug.style.display = "block";
+        if (feelingsHeading) feelingsHeading.style.display = "none";
+        if (needsHeading) needsHeading.style.display = "none";
+        renderNearest();
+        if (nearestPanel) nearestPanel.style.display = "block";
+        if (noteEl) noteEl.textContent = "No exact match — showing similar situations you can cycle through.";
+      }
     };
   }
   txt.addEventListener("input", render);
