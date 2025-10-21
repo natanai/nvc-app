@@ -8,3 +8,5 @@ They muted me while I was speaking.
 They looked at their phone while I was talking.
 Yesterday at 3:10 pm the meeting started without me.
 I received a calendar removal notice.
+The video call displayed "Recording has started".
+While I was speaking, their camera turned off.

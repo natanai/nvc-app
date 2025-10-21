@@ -1,5 +1,26 @@
 const state = { compiled: [], };
 
+const FALLBACK = [
+  { kw: /\bdeadline|due\b/i, feelings: ["anxious", "pressured"], needs: ["predictability", "clarity"] },
+  { kw: /\bmeeting|call|recording\b/i, feelings: ["tense", "anxious"], needs: ["respect", "to-be-heard", "predictability"] },
+  { kw: /\bcamera\b/i, feelings: ["lonely", "anxious"], needs: ["connection", "to-be-seen"] },
+  { kw: /\bmuted|mute\b/i, feelings: ["embarrassed", "confused"], needs: ["to-be-heard", "respect"] },
+  { kw: /\btime\s+off|pto|vacation|leave\b/i, feelings: ["disappointed", "frustrated"], needs: ["consideration", "respect", "predictability"] },
+  { kw: /\blate|minutes?\s+late\b/i, feelings: ["disappointed", "irritated"], needs: ["reliability", "consideration"] }
+];
+
+function deriveFallback(text) {
+  const feelings = new Set();
+  const needs = new Set();
+  for (const rule of FALLBACK) {
+    if (rule.kw.test(text)) {
+      (rule.feelings || []).forEach(f => feelings.add(f));
+      (rule.needs || []).forEach(n => needs.add(n));
+    }
+  }
+  return { feelings: Array.from(feelings), needs: Array.from(needs) };
+}
+
 function splitSentences(text) {
   return String(text).replace(/\r/g, "").split(/(?<=[.!?])\s+|\n+/).map(s => s.trim()).filter(Boolean);
 }
@@ -76,8 +97,13 @@ async function boot() {
       : "Not ready — add something you saw/heard, a quoted phrase, or who did what.";
     btn.disabled = !ok;
     btn.onclick = () => {
-      const f = uniqueSorted(hits.flatMap(h => h.feelings));
-      const n = uniqueSorted(hits.flatMap(h => h.needs));
+      let f = uniqueSorted(hits.flatMap(h => h.feelings));
+      let n = uniqueSorted(hits.flatMap(h => h.needs));
+      if (hits.length === 0) {
+        const fb = deriveFallback(txt.value);
+        f = uniqueSorted([...(f || []), ...(fb.feelings || [])]);
+        n = uniqueSorted([...(n || []), ...(fb.needs || [])]);
+      }
       feelings.innerHTML = f.map(s => `<span class="pill">${s}</span>`).join("");
       needs.innerHTML = n.map(s => `<span class="pill">${s}</span>`).join("");
       matchedCues.textContent = hits.length

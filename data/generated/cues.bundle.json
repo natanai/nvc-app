@@ -1,6 +1,28 @@
 {
   "cues": [
     {
+      "cue": "camera-off-midcall_next",
+      "patterns": [
+        "\\bcamera\\s+turned\\s+off\\b",
+        "\\bcamera\\s+went\\s+off\\b",
+        "\\bblank\\s+screen\\b[^.!?]*\\bwhile\\s+I\\s+(?:spoke|was\\s+speaking|shared)\\b",
+        "\\bvideo\\s+off\\b[^.!?]*\\bwhile\\s+I\\s+(?:spoke|was\\s+speaking|shared)\\b"
+      ],
+      "feelings": [
+        "lonely",
+        "anxious",
+        "confused",
+        "hurt"
+      ],
+      "needs": [
+        "connection",
+        "to-be-seen",
+        "consideration",
+        "belonging"
+      ],
+      "example": "While I spoke, their camera switched off and stayed blank."
+    },
+    {
       "cue": "arrived-late_next",
       "patterns": [
         "\\barrived\\s+late\\b",
@@ -42,6 +64,28 @@
         "consideration"
       ],
       "example": "Two messages were read and there was no reply for two days."
+    },
+    {
+      "cue": "meeting-recorded-without-consent_next",
+      "patterns": [
+        "\\brecording\\s+started\\b",
+        "\\b(?:red\\s+)?recording\\s+dot\\s+appeared\\b",
+        "\\b(?:recording\\s+has\\s+started|recording\\s+began)\\b",
+        "\\bstarted\\s+recording\\b[^.!?]*\\bwithout\\s+(?:asking|consent|notice)\\b"
+      ],
+      "feelings": [
+        "alarmed",
+        "anxious",
+        "tense",
+        "distressed"
+      ],
+      "needs": [
+        "privacy",
+        "respect",
+        "trust",
+        "predictability"
+      ],
+      "example": "The video call displayed 'Recording has started' without anyone asking first."
     },
     {
       "cue": "time-off-request-denied_next",
