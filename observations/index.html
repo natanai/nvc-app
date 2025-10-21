@@ -2290,19 +2290,20 @@ button.site-nav__magnet {
           <h1>Observation Builder</h1>
           <p class="muted">Type what you saw/heard/read/received. A green check appears when a valid observation is detected. Submit to see suggested feelings and needs.</p>
           <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
-          <div class="bar">
-            <span id="check" class="check no" title="Not ready"></span>
-            <span id="why" class="hints">Not ready — add something you saw/heard, a quoted phrase, or who did what.</span>
-            <button id="submit" disabled>Submit</button>
+          <div class="bar" style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <span id="readyDot" class="dot red"></span>
+            <span id="readyLabel" class="small muted">Not ready — make it purely observational</span>
+            <button id="submitBtn" class="primary" style="margin-left:auto">Submit</button>
           </div>
           <div id="passBadges" class="small muted" style="margin-bottom:8px"></div>
           <div id="evalWarnings" class="small" style="display:none"></div>
           <div id="suggestions" class="panel" style="display:none">
-            <div><strong>Possible feelings</strong></div>
+            <div id="feelingsHeading"><strong>Possible feelings</strong></div>
             <div id="feelings"></div>
-            <div style="margin-top:8px"><strong>Possible needs</strong></div>
+            <div id="needsHeading" style="margin-top:8px"><strong>Possible needs</strong></div>
             <div id="needs"></div>
             <div class="small muted" id="matchedCues"></div>
+            <div id="suggestionNote" class="small muted" style="margin-top:6px"></div>
           </div>
           <div id="nearestPanel" class="panel" style="display:none">
             <div style="display:flex;justify-content:space-between;align-items:center">
@@ -2318,9 +2319,6 @@ button.site-nav__magnet {
             <div style="margin-top:8px"><strong>Possible needs</strong></div>
             <div id="nearNeeds"></div>
             <div id="nearPager" class="small muted" style="margin-top:8px"></div>
-          </div>
-          <div class="bar" id="nearestCta" style="display:none">
-            <button id="findNearest">Find similar situations</button>
           </div>
         </section>
       </main>
