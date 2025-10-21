@@ -12,7 +12,7 @@ const state = {
   detectionStatus: 'loading',
   detectionMatches: 0,
   validityStatus: 'idle',
-  validityMessage: 'Observation not submitted yet.',
+  validityMessage: 'Matches not requested yet.',
   fallback: createFallbackState(),
 };
 
@@ -55,7 +55,7 @@ function bind() {
         renderPanels();
       }
       if (state.validityStatus === 'valid' || state.validityStatus === 'invalid' || state.validityStatus === 'error') {
-        setValidityStatus('pending', 'Observation updated. Submit again when you’re ready.');
+        setValidityStatus('pending', 'Observation updated. See matches again when you’re ready.');
       }
       state.fallback = createFallbackState();
       analyze(state.text);
@@ -79,7 +79,7 @@ function bind() {
       });
       state.fallback = createFallbackState();
       if (state.analysis?.ok) {
-        setValidityStatus('pending', 'Edit the observation and submit again when ready.');
+        setValidityStatus('pending', 'Edit the observation and see matches again when ready.');
       } else {
         renderValidityStatus();
       }
@@ -124,7 +124,7 @@ function analyze(raw, options = {}) {
     analysis.message = options.message || 'Start by anchoring your observation in time and place.';
   } else if (!analysis.message) {
     if (analysis.ok) {
-      analysis.message = 'Looks observational! Submit to explore feelings and needs.';
+      analysis.message = 'Looks observational! See matches to explore feelings and needs.';
     } else if (issues.length) {
       analysis.message = 'Edit the highlighted language to keep it purely observational.';
     } else {
@@ -238,19 +238,19 @@ function renderSuggestions() {
   if (fallbackActive) {
     const message = state.fallback.message ||
       (state.fallback.queue.length > 1
-        ? 'Showing the closest matches we could find. Use Next for another option.'
-        : 'Showing the closest match we could find.');
+        ? 'Showing the nearest matches our detector can offer. Use Next for another option.'
+        : 'Showing the nearest match our detector can offer.');
     whyHost.textContent = message;
   } else {
     const cueLabels = (direct.cues || []).map(formatCueLabel).filter(Boolean);
     if (cueLabels.length) {
-      whyHost.textContent = `${cueLabels.length > 1 ? 'Matched cues' : 'Matched cue'}: ${cueLabels.join(', ')}`;
+      whyHost.textContent = `${cueLabels.length > 1 ? 'Matched cues' : 'Matched cue'} from our detector: ${cueLabels.join(', ')}`;
     } else if (!hasDirect && state.fallback.message && !state.fallback.shouldPrompt && !state.fallback.running) {
       whyHost.textContent = state.fallback.message;
     } else if (hasDirect) {
-      whyHost.textContent = 'Suggestions are based on common observation patterns.';
+      whyHost.textContent = 'Suggestions come from our language detector and common observation patterns.';
     } else {
-      whyHost.textContent = 'We didn’t find direct matches yet. You can still browse every feeling and need below.';
+      whyHost.textContent = 'Our detector didn’t find direct matches. Browse every feeling and need or request the nearest match.';
     }
   }
 
@@ -288,7 +288,7 @@ function populateChipList(container, emptyNode, items) {
   if (Array.isArray(items) && items.length) {
     items.forEach(item => {
       const chip = document.createElement('span');
-      chip.className = 'chip';
+      chip.className = 'observation-chip';
       chip.setAttribute('role', 'listitem');
       chip.textContent = item;
       container.appendChild(chip);
@@ -484,7 +484,7 @@ function hasSuggestions(set) {
 function handleSubmit() {
   const trimmed = state.text.trim();
   if (!trimmed) {
-    setValidityStatus('error', 'Add concrete details before submitting.');
+    setValidityStatus('error', 'Add concrete details before seeing matches.');
     analyze(state.text, { message: 'Start by anchoring your observation in time and place.' });
     return;
   }
@@ -495,7 +495,7 @@ function handleSubmit() {
     return;
   }
 
-  setValidityStatus('valid', 'Observation submitted. Review the suggestions below.');
+  setValidityStatus('valid', 'Observation recorded. Review the suggestions below.');
   finalizeObservation();
 }
 
@@ -504,7 +504,7 @@ function startFallbackSearch() {
     return;
   }
   if (!state.lastSubmitted) {
-    setValidityStatus('pending', 'Submit a valid observation before requesting closest matches.');
+    setValidityStatus('pending', 'Add a valid observation before requesting the nearest match.');
     return;
   }
   state.fallback.running = true;
@@ -518,10 +518,10 @@ function startFallbackSearch() {
     state.fallback.running = false;
     if (queue.length) {
       state.fallback.message = queue.length > 1
-        ? 'Showing the closest matches we could find. Use Next for another option.'
-        : 'Showing the closest match we could find.';
+        ? 'Showing the nearest matches our detector can offer. Use Next for another option.'
+        : 'Showing the nearest match our detector can offer.';
     } else {
-      state.fallback.message = 'We couldn’t find a close match yet. Try refining the observation or browse all feelings and needs below.';
+      state.fallback.message = 'We couldn’t find a close match yet. Browse all feelings and needs below while we keep learning.';
     }
     renderSuggestions();
   }, 120);
@@ -656,9 +656,9 @@ function setValidityStatus(status, message) {
   if (typeof message === 'string') {
     state.validityMessage = message;
   } else if (state.validityStatus === 'idle') {
-    state.validityMessage = 'Observation not submitted yet.';
+    state.validityMessage = 'Matches not requested yet.';
   } else if (state.validityStatus === 'pending') {
-    state.validityMessage = 'Edit the observation and submit when ready.';
+    state.validityMessage = 'Edit the observation and see matches when ready.';
   }
   renderValidityStatus();
 }
@@ -678,15 +678,15 @@ function renderValidityStatus() {
 function defaultValidityMessage(status) {
   switch (status) {
     case 'valid':
-      return 'Observation submitted successfully.';
+      return 'Observation captured successfully.';
     case 'invalid':
       return 'Observation still needs adjustments.';
     case 'error':
-      return 'Observation was empty. Add details before submitting.';
+      return 'Observation was empty. Add details before seeing matches.';
     case 'pending':
-      return 'Edit the observation and submit when ready.';
+      return 'Edit the observation and see matches when ready.';
     default:
-      return 'Observation not submitted yet.';
+      return 'Matches not requested yet.';
   }
 }
 
@@ -719,11 +719,11 @@ function renderDetectionStatus() {
   const status = state.detectionStatus || 'loading';
   container.setAttribute('data-state', status);
 
-  let message = 'Preparing suggestions…';
+  let message = 'Warming up the language detector…';
   if (status === 'idle') {
-    message = 'Detector idle';
+    message = 'Language detector ready';
   } else if (status === 'searching') {
-    message = 'No matches detected yet';
+    message = 'Our detector hasn’t spotted cues yet. Nearest match remains available.';
   } else if (status === 'found') {
     message = state.detectionMatches > 1
       ? `${state.detectionMatches} matches detected`
