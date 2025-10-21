@@ -29,7 +29,7 @@
             "Sad",
             "Anxious",
             "Hurt",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Connection",
@@ -61,7 +61,7 @@
           "example": "In the Slack thread, later messages appeared but my question received no reply by the next day.",
           "feelings": [
             "Confused",
-            "Disappointed",
+            "Disappointment",
             "Anxious",
             "Hurt"
           ],
@@ -78,7 +78,7 @@
           "example": "I called at 3:10 pm and there was no call back within the agreed 2-hour window.",
           "feelings": [
             "Anxious",
-            "Disappointed",
+            "Disappointment",
             "Anxious",
             "Irritated"
           ],
@@ -225,7 +225,7 @@
           "label": "Decision made without my input",
           "example": "The decision was announced after I asked to contribute.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Resentful",
             "Tense",
             "Lonely"
@@ -424,7 +424,7 @@
           "label": "Arrived 15–30 minutes late",
           "example": "We agreed on 2:00; they arrived at 2:20 without a message.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Irritated",
             "Anxious",
             "Hurt"
@@ -441,7 +441,7 @@
           "label": "Canceled at short notice",
           "example": "They canceled 30 minutes before our meeting.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Pressured",
             "Frustrated",
             "Sad"
@@ -461,7 +461,7 @@
             "Anxious",
             "Irritated",
             "Tense",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Reliability",
@@ -477,7 +477,7 @@
           "feelings": [
             "Frustrated",
             "Tense",
-            "Disappointed",
+            "Disappointment",
             "Anxious"
           ],
           "needs": [
@@ -715,7 +715,7 @@
           "example": "My contribution was used without my name.",
           "feelings": [
             "Hurt",
-            "Disappointed",
+            "Disappointment",
             "Sad",
             "Irritated"
           ],
@@ -750,7 +750,7 @@
           "feelings": [
             "Hurt",
             "Frustrated",
-            "Disappointed",
+            "Disappointment",
             "Tense"
           ],
           "needs": [
@@ -839,7 +839,7 @@
           "label": "Compared me to someone in front of others",
           "example": "They compared my output to another person during the meeting.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Hurt",
             "Anxious",
             "Irritated"
@@ -1186,7 +1186,7 @@
           "label": "Used a name I don’t use in email subject",
           "example": "An email about me used a name I don’t use in the subject line.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Hurt",
             "Tense",
             "Anxious"
@@ -1210,7 +1210,7 @@
           "example": "They didn’t arrive for pickup at the agreed time.",
           "feelings": [
             "Tense",
-            "Disappointed",
+            "Disappointment",
             "Anxious",
             "Tired"
           ],
@@ -1284,7 +1284,7 @@
           "example": "Planned materials weren’t set out by start time.",
           "feelings": [
             "Tense",
-            "Disappointed",
+            "Disappointment",
             "Anxious",
             "Frustrated"
           ],
@@ -1301,7 +1301,7 @@
           "example": "My hand was raised for two questions and I was not called on.",
           "feelings": [
             "Lonely",
-            "Disappointed",
+            "Disappointment",
             "Anxious",
             "Tense"
           ],
@@ -1451,7 +1451,7 @@
             "Anxious",
             "Anxious",
             "Irritated",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Reliability",
@@ -1818,7 +1818,7 @@
           "label": "Canceled plans for solo screen time",
           "example": "Our movie plan was canceled 15 minutes before start to keep gaming.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Hurt",
             "Frustrated",
             "Tense"
@@ -1918,7 +1918,7 @@
             "Anxious",
             "Irritated",
             "Concerned",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Reliability",
@@ -1972,7 +1972,7 @@
           "label": "Important detail not shared",
           "example": "You accepted a weekend shift and told me on Friday night.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Tense",
             "Anxious",
             "Frustrated"
@@ -2055,7 +2055,7 @@
             "Sad",
             "Lonely",
             "Hurt",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Inclusion",
@@ -2207,7 +2207,7 @@
           "example": "You said, “You never listen.”",
           "feelings": [
             "Hurt",
-            "Disappointed",
+            "Disappointment",
             "Tense",
             "Sad"
           ],
@@ -2248,7 +2248,7 @@
           "feelings": [
             "Hurt",
             "Sad",
-            "Disappointed",
+            "Disappointment",
             "Confused"
           ],
           "needs": [
@@ -2282,7 +2282,7 @@
           "feelings": [
             "Anxious",
             "Confused",
-            "Disappointed",
+            "Disappointment",
             "Tense"
           ],
           "needs": [
@@ -2451,7 +2451,7 @@
           "label": "Cancelled our plan due to a hangover",
           "example": "Brunch was canceled the morning after because of a hangover.",
           "feelings": [
-            "Disappointed",
+            "Disappointment",
             "Frustrated",
             "Tense",
             "Sad"
@@ -2665,7 +2665,7 @@
             "Annoyed",
             "Concerned",
             "Tense",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Respect",
@@ -2722,7 +2722,7 @@
             "Hurt",
             "Irritated",
             "Tense",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Recognition",
@@ -2762,7 +2762,7 @@
             "Anxious",
             "Frustrated",
             "Concerned",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Reliability",
@@ -2876,7 +2876,7 @@
             "Lonely",
             "Sad",
             "Hurt",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Inclusion",
@@ -2950,7 +2950,7 @@
             "Anxious",
             "Irritated",
             "Concerned",
-            "Disappointed"
+            "Disappointment"
           ],
           "needs": [
             "Reliability",
