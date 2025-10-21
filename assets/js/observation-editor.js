@@ -14,6 +14,7 @@ const state = {
   detectionFallbacks: 0,
   detectionFallbackQueue: [],
   detectionSource: '',
+  detectionHasFlagged: false,
   cueHighlightRanges: [],
   positiveHighlightRanges: [],
   activeHighlightKey: '',
@@ -225,7 +226,7 @@ function renderAnalysis() {
   }
 
   if (submitButton) {
-    submitButton.disabled = !analysis?.ok;
+    submitButton.disabled = !canSubmitMatches();
   }
 
   if (editor) {
@@ -644,7 +645,7 @@ function renderSuggestions() {
     } else {
       actionButton.textContent = 'See matches';
       actionButton.dataset.action = 'submit';
-      actionButton.disabled = !state.analysis?.ok;
+      actionButton.disabled = !canSubmitMatches();
     }
   }
 }
@@ -1022,12 +1023,17 @@ function handleSubmit() {
   }
 
   if (!state.analysis?.ok) {
-    setValidityStatus('invalid', 'Observation still needs adjustments.');
+    if (!canSubmitMatches()) {
+      setValidityStatus('invalid', 'Observation still needs adjustments.');
+      renderHighlight();
+      return;
+    }
+    setValidityStatus('invalid', 'Observation still needs adjustments. Explore matches below while you refine.');
     renderHighlight();
-    return;
+  } else {
+    setValidityStatus('valid', 'Observation recorded. Review the suggestions below.');
   }
 
-  setValidityStatus('valid', 'Observation recorded. Review the suggestions below.');
   finalizeObservation();
 }
 
@@ -1262,11 +1268,13 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   const trimmed = typeof trimmedInput === 'string' ? trimmedInput : sourceText.trim();
   const lint = state.analysis?.lint || null;
   const flaggedCount = countFlaggedTokens(lint);
+  const hasFlagged = flaggedCount > 0;
   const wordCount = countWords(trimmed);
 
   state.detectionMatchLimit = DETECTION_MATCH_LIMIT;
   state.detectionNearLimit = DETECTION_NEAR_LIMIT;
   state.detectionSource = trimmed;
+  state.detectionHasFlagged = hasFlagged;
 
   if (!state.cues.length) {
     state.detectionStatus = 'loading';
@@ -1275,6 +1283,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionFallbackQueue = [];
     state.detectionSource = '';
     state.cueHighlightRanges = [];
+    state.detectionHasFlagged = false;
     return;
   }
   if (!trimmed) {
@@ -1284,15 +1293,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionFallbackQueue = [];
     state.detectionSource = '';
     state.cueHighlightRanges = [];
-    return;
-  }
-
-  if (flaggedCount > 0) {
-    state.detectionStatus = 'flagged';
-    state.detectionMatches = 0;
-    state.detectionFallbacks = 0;
-    state.detectionFallbackQueue = [];
-    state.cueHighlightRanges = [];
+    state.detectionHasFlagged = false;
     return;
   }
 
@@ -1302,6 +1303,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionFallbacks = 0;
     state.detectionFallbackQueue = [];
     state.cueHighlightRanges = [];
+    state.detectionHasFlagged = hasFlagged;
     return;
   }
 
@@ -1313,16 +1315,14 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionStatus = 'match';
     state.detectionFallbacks = 0;
     state.detectionFallbackQueue = [];
-    return;
-  }
-
-  if (!hits.length) {
+  } else {
     state.cueHighlightRanges = [];
+    const fallbackQueue = computeFallbackQueue(trimmed);
+    state.detectionFallbackQueue = fallbackQueue;
+    state.detectionFallbacks = fallbackQueue.length;
+    state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
   }
-  const fallbackQueue = computeFallbackQueue(trimmed);
-  state.detectionFallbackQueue = fallbackQueue;
-  state.detectionFallbacks = fallbackQueue.length;
-  state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
+  state.detectionHasFlagged = hasFlagged;
 }
 
 function renderDetectionStatus() {
@@ -1333,30 +1333,37 @@ function renderDetectionStatus() {
   }
 
   const status = state.detectionStatus || 'loading';
-  container.setAttribute('data-state', status);
+  const flagged = Boolean(state.detectionHasFlagged);
+  const displayState = flagged ? 'flagged' : status;
+  container.setAttribute('data-state', displayState);
 
   let message = 'Warming up the language detector…';
   switch (status) {
     case 'idle':
-      message = 'Language detector ready.';
+      message = flagged ? 'Flagged language detected. Language detector ready.' : 'Language detector ready.';
       break;
     case 'short':
-      message = `Add at least ${DETECTION_MIN_WORDS} words to start matching.`;
+      message = flagged
+        ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words to start matching.`
+        : `Add at least ${DETECTION_MIN_WORDS} words to start matching.`;
       break;
     case 'none':
-      message = 'No cue matches detected yet.';
+      message = flagged ? 'Flagged language detected. No cue matches detected yet.' : 'No cue matches detected yet.';
       break;
     case 'near': {
-      message = 'Near matches detected.';
+      message = flagged ? 'Flagged language detected. Near matches detected.' : 'Near matches detected.';
       break;
     }
     case 'match':
-      message = state.detectionMatches > 1
-        ? `${state.detectionMatches} exact cue matches detected.`
-        : 'Exact cue match detected.';
-      break;
-    case 'flagged':
-      message = 'Flagged language detected. Update your wording before matching.';
+      if (flagged) {
+        message = state.detectionMatches > 1
+          ? `Flagged language detected. ${state.detectionMatches} exact cue matches detected.`
+          : 'Flagged language detected. Exact cue match detected.';
+      } else {
+        message = state.detectionMatches > 1
+          ? `${state.detectionMatches} exact cue matches detected.`
+          : 'Exact cue match detected.';
+      }
       break;
     default:
       break;
@@ -1377,13 +1384,15 @@ function renderDetectionSummary() {
   }
 
   const status = state.detectionStatus || 'loading';
+  const flagged = Boolean(state.detectionHasFlagged);
   const matchLimit = Math.max(Number(state.detectionMatchLimit) || DETECTION_MATCH_LIMIT, 1);
   const nearLimit = Math.max(Number(state.detectionNearLimit) || DETECTION_NEAR_LIMIT, 0);
   const cuesCount = Array.isArray(state.cues) ? state.cues.length : 0;
 
   let exactCount = 0;
   let nearCount = 0;
-  if (status !== 'flagged' && status !== 'short' && status !== 'loading') {
+  const allowCounts = status !== 'loading' && status !== 'short' && status !== 'idle';
+  if (allowCounts) {
     exactCount = Math.min(Number(state.detectionMatches) || 0, matchLimit);
     nearCount = Math.min(Number(state.detectionFallbacks) || 0, nearLimit || Number(state.detectionFallbacks) || 0);
   }
@@ -1397,7 +1406,7 @@ function renderDetectionSummary() {
     nearValue.textContent = `${nearCount}/${denominator}`;
   }
 
-  summary.setAttribute('data-state', status);
+  summary.setAttribute('data-state', flagged ? 'flagged' : status);
 
   if (note) {
     const limitMessage = nearLimit
@@ -1418,11 +1427,6 @@ function renderDetectionSummary() {
           ? `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
           : `Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
         break;
-      case 'flagged':
-        message = limitMessage
-          ? 'Remove flagged language so we can search for matches. ' + limitMessage
-          : 'Remove flagged language so we can search for matches.';
-        break;
       case 'match':
         message = limitMessage
           ? `Exact matches are ready when you are. ${limitMessage}`
@@ -1439,6 +1443,41 @@ function renderDetectionSummary() {
       default:
         message = limitMessage || 'We’re preparing the detector…';
         break;
+    }
+
+    if (flagged) {
+      switch (status) {
+        case 'idle':
+          message = limitMessage
+            ? `Flagged language detected. We’ll scan for cues as you type. ${limitMessage}`
+            : 'Flagged language detected. We’ll scan for cues as you type.';
+          break;
+        case 'short':
+          message = limitMessage
+            ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
+            : `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
+          break;
+        case 'match':
+          message = limitMessage
+            ? `Flagged language detected. Exact matches are ready when you are. ${limitMessage}`
+            : 'Flagged language detected. Exact matches are ready when you are.';
+          break;
+        case 'near':
+          message = limitMessage
+            ? `Flagged language detected. Nearest matches are queued when you need them. ${limitMessage}`
+            : 'Flagged language detected. Nearest matches are queued when you need them.';
+          break;
+        case 'none':
+          message = limitMessage
+            ? `Flagged language detected. We didn’t spot an exact match yet. ${limitMessage}`
+            : 'Flagged language detected. We didn’t spot an exact match yet.';
+          break;
+        default:
+          message = limitMessage
+            ? `Flagged language detected. ${limitMessage}`
+            : 'Flagged language detected.';
+          break;
+      }
     }
 
     if (status === 'match' && Number(state.detectionMatches) > matchLimit) {
@@ -1462,6 +1501,18 @@ function renderDetectionSummary() {
       coverage.setAttribute('hidden', 'hidden');
     }
   }
+}
+
+function canSubmitMatches() {
+  const trimmed = state.analysis?.trimmed || state.text.trim();
+  if (!trimmed) {
+    return false;
+  }
+  const status = state.detectionStatus || 'loading';
+  if (status === 'loading' || status === 'idle' || status === 'short') {
+    return false;
+  }
+  return true;
 }
 
 function renderHighlight() {
