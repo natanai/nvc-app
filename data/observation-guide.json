@@ -1,183 +1,197 @@
 {
   "summary": {
-    "eyebrow": "Observation guide",
-    "title": "Tap to explore principles, steps, and examples"
+    "eyebrow": "Research-grounded (open-access links)",
+    "title": "Observation Guide: Low-Inference Description"
   },
   "intro": {
-    "eyebrow": "Observation guide",
-    "title": "Learn to separate what happened from the story",
+    "eyebrow": "Abstract",
+    "title": "Constructing Low-Inference, Time-Bound Observations",
     "paragraphs": [
-      "Marshall Rosenberg describes observations as a camera-ready record of what we saw, heard, or noticed in a specific moment. Instead of “The principal has a big mouth,” an observation is “The principal spoke for about twenty minutes about personal stories during the staff meeting.” The first statement evaluates a person; the second simply reports what occurred.",
-      "Observing without evaluating is challenging—Rosenberg echoed J. Krishnamurti’s reminder that it is “the highest form of human intelligence.” These notes walk through every principle from the observation guide so you can practise staying with the facts before moving on to feelings and needs."
+      "This guide formalizes a fill-in-the-blank process for producing low-inference observational statements: descriptions restricted to verifiable sensory data (what was seen/heard), anchored to concrete time and context, and free of trait labels or motive attributions. The approach synthesizes findings from behavioral observation, psycholinguistics, and affect-regulation research. Linguistic abstraction increases biased social inference (https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf); concreteness improves comprehension (https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/; https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/); and affect labeling is associated with reduced limbic reactivity (https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf).",
+      "Perspective-taking and I-language are linked to lower perceived hostility in communication contexts (https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/). Research on basic psychological needs provides relevant context for why clear description may matter in interpersonal settings: autonomy/competence (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/; https://selfdeterminationtheory.org/topics/basic-psychological-needs/) and belonging/social connection (https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf)."
     ]
   },
   "sections": [
     {
-      "id": "observation-guide-foundations",
-      "label": "Observations vs. evaluations",
-      "title": "Observations vs. evaluations",
-      "content": [
-        {
-          "type": "paragraph",
-          "text": "The observation step in Nonviolent Communication invites us to describe what actually happened without folding in judgments. Observations cover concrete behaviours, words, or events that a neutral witness could verify. Evaluations—including labels, assumptions, or speculation about motives—tell our story about the event instead of the event itself."
-        },
-        {
-          "type": "paragraph",
-          "text": "Rosenberg encourages us to think like a reporter: what would the camera capture? It can record someone saying, “This is all your fault,” or leaving the room, but it cannot record “He was disrespectful.” When we speak in observations, we ground our conversation in something both people can recognise."
-        },
-        {
-          "type": "paragraph",
-          "text": "Because reality unfolds moment by moment, observations stay anchored in time and place. Rather than a static label such as “You’re inconsiderate,” we describe the specific interaction (“You left the restaurant while I was still ordering yesterday evening”). This shift keeps the focus on what happened instead of who someone is."
-        }
-      ]
-    },
-    {
-      "id": "observation-guide-why",
-      "label": "Why it matters",
-      "title": "Why it matters",
-      "content": [
-        {
-          "type": "paragraph",
-          "text": "Blending evaluation with observation often lands as criticism. “You’re always late and inconsiderate” mixes a fact with a judgment, which usually triggers defensiveness. “You arrived twenty minutes after our agreed time” invites a shared reality instead. Research on NVC shows that this clarity supports empathy and more effective dialogue, because people no longer have to fight the story before hearing the feelings and needs beneath it."
-        },
-        {
-          "type": "list",
-          "style": "unordered",
-          "items": [
-            "Neutral descriptions reduce the chance that the listener hears blame or attack.",
-            "Specific observations prevent debates over what “really” happened and let us move on to feelings and needs.",
-            "Training studies and literature reviews on NVC report increased empathy and communication skills when people practise separating observations from evaluations."
-          ]
-        }
-      ]
-    },
-    {
-      "id": "observation-guide-principles",
-      "label": "Key principles",
-      "title": "Key principles",
+      "id": "observation-guide-definition",
+      "label": "Definition",
+      "title": "Operational Definition & Evidence Context",
       "content": [
         {
           "type": "list",
           "style": "unordered",
           "items": [
-            "<strong>Use the camera-or-microphone test.</strong> If a recorder cannot capture it, it is probably an evaluation. Describe the behaviour (“She rolled her eyes and walked out”) instead of the conclusion (“She was rude”).",
-            "<strong>Anchor every statement in time and context.</strong> Avoid broad generalisations such as “always” or “never.” Replace them with the moment, date, or frequency that actually happened.",
-            "<strong>Name actions, not character traits.</strong> Labels—even positive ones like “amazing teammate”—tell your appraisal. Observations mention the behaviour that led to the label, such as “You helped each person finish their task this week.”",
-            "<strong>Leave motives and causes for later.</strong> Phrases like “for no reason” or “to hurt me” assume why something happened. In the observation step we only log that it happened (“He left the party without saying goodbye”).",
-            "<strong>Keep feelings and needs in their own sentences.</strong> You might later say, “When that happened I felt hurt,” but the pure observation stops at “When you didn’t say hello this morning…”. Keeping these parts separate makes each one clearer."
+            "Recorder criterion: report only what a camera/microphone could capture (verbatim words, visible actions, measurable outcomes). Behavioral observation emphasizes observable units to aid reliability (https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/).",
+            "Time- and context-bound: specify when/where (e.g., “On Tue 15:10 in the team room…”). Concreteness improves comprehension and reduces ambiguity (https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/).",
+            "Avoid absolutes (“always/never/constantly”): prefer frequency, duration, or counts (https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/).",
+            "No mind-reading or motive attributions (e.g., “to hurt me,” “on purpose”): hostile-attribution tendencies relate to aggressive/negative responding (https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/; https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full).",
+            "Quantify when feasible: counts, durations, latency, intensity (e.g., decibels). Linguistic abstraction inflates inference; measurables support shared description (https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf)."
           ]
+        },
+        {
+          "type": "callout",
+          "html": "Observations describe events; other components (feelings/needs/requests) are handled elsewhere in the app. Separating description from evaluation aligns with evidence on perspective-taking/I-language (https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/)."
         }
       ]
     },
     {
-      "id": "observation-guide-steps",
-      "label": "Step-by-step practice",
-      "title": "Step-by-step practice",
+      "id": "observation-guide-method",
+      "label": "Method",
+      "title": "Fill-in-the-Blank Procedure (Low-Inference Observation)",
       "content": [
         {
           "type": "list",
           "style": "ordered",
           "items": [
-            "<strong>Identify the specific moment.</strong> Choose the scene you want to discuss, including when and where it occurred and who was present. Narrowing the scope keeps the conversation precise.",
-            "<strong>Describe what the senses recorded.</strong> Write what you saw or heard as if you were quoting a transcript. Include actions, exact words, tone shifts, or observable results. The camera can show someone shutting the office door without knocking; it cannot show “disrespect.”",
-            {
-              "text": "<strong>Remove evaluation triggers.</strong> Scan your statement for judgement clues and swap them for what actually happened:",
-              "children": {
-                "style": "unordered",
-                "items": [
-                  "Personality adjectives (lazy,” “aggressive,” “unprofessional”) become descriptions of the behaviour you observed.",
-                  "Opinion adverbs (“too much,” “too loud,” “slowly”) get replaced with specifics such as duration, decibel level, or speed.",
-                  "Generalisations (“always,” “never,” “constantly”) turn into the real frequency—how many times, on what dates, or during which interactions.",
-                  "Assumed motives (“to annoy me,” “for no reason”) are dropped entirely; we only note the observable behaviour."
-                ]
-              }
-            },
-            "<strong>Quantify and quote when possible.</strong> Numbers, time frames, or direct quotes make the observation less debatable. “You played music that I could hear through my closed door and the bass shook the floor” paints a clearer picture than “Your music was too loud.”",
-            "<strong>Add an optional gap.</strong> If it helps, mention what you hoped for instead (“I expected we would finish the report together”). Keep it factual and separate from feelings so the observation still stands on its own."
+            "Anchor the scene: “On [DATE] at [TIME] in [PLACE], …” (concreteness advantage: https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/).",
+            "Describe only what was sensed: “I saw/heard [ACTOR] [ACTION/WORDS].” Behavioral observation favors observable units (https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/).",
+            "Quote verbatim when feasible: “[Exact words].” Wording influences blame inferences; direct quotes minimize reinterpretation (https://doi.org/10.3758/PBR.17.5.644).",
+            "Quantify: “[N times / for M minutes / on D dates / ~latency].” Replace vague adverbs with measurable data (https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/).",
+            "Remove evaluations: omit trait adjectives and “too/should” adverbs; substitute the underlying observable behavior (language framing affects judgment: https://doi.org/10.3758/PBR.17.5.644).",
+            "Remove intent clauses (e.g., “to annoy me”). Hostile intent attributions are linked with negative responding; keep to what occurred (https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/)."
           ]
         },
         {
           "type": "callout",
-          "html": "<strong>Practice prompt:</strong> Try rewriting a charged statement into camera-ready language, then compare it with the examples below. The more you practise, the easier it becomes to spot hidden evaluations."
+          "html": "<strong>Template:</strong> “On [DATE] at [TIME] in [PLACE], I saw/heard [ACTOR] [ACTION/WORDS]. This occurred [COUNT/DURATION/LATENCY].”"
+        }
+      ]
+    },
+    {
+      "id": "observation-guide-heuristics",
+      "label": "Heuristics",
+      "title": "Automated Flags & Coaching Prompts",
+      "content": [
+        {
+          "type": "list",
+          "style": "unordered",
+          "items": [
+            "Absolutes: flag “always/never/constantly/every time.” Prompt for timeframe and count (https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/).",
+            "Trait labels: flag “rude, selfish, careless, disrespectful, aggressive, lazy,” etc. Prompt: “Describe the exact behavior instead” (https://doi.org/10.3758/PBR.17.5.644).",
+            "Mind-reading: flag “on purpose,” “to hurt me,” “because you don’t care.” Prompt: “Omit intent; report the observable act” (https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/).",
+            "Causation claims without evidence: flag “for no reason,” “made me,” unless tied to a measurable outcome. Encourage sticking to recorded events.",
+            "Perspective-taking for later steps: I-language and checking understanding are associated with less defensive escalation (https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/)."
+          ]
         }
       ]
     },
     {
       "id": "observation-guide-examples",
-      "label": "Example rewrites",
-      "title": "Example rewrites",
-      "contentClass": "observation-guide__section-content observation-guide__examples",
+      "label": "Examples",
+      "title": "Evaluation → Observation (Worked Examples)",
       "content": [
         {
           "type": "examples",
           "items": [
             {
-              "evaluation": "Janice works too much.",
-              "observation": "Janice spent over sixty hours at the office this week, including Saturday.",
-              "why": "“Too much” is subjective; the hours are concrete."
+              "evaluation": "“You’re always late and inconsiderate.”",
+              "observation": "“In the past two weeks, you arrived 5–15 minutes after our agreed time on three occasions.”",
+              "why": "Replaces global language with time-bound frequency; concreteness improves agreement (https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/)."
             },
             {
-              "evaluation": "Henry is aggressive.",
-              "observation": "Yesterday, Henry hit his sister on the arm when she changed the TV channel.",
-              "why": "It names the specific behaviour without labelling Henry’s character."
+              "evaluation": "“Janice works too much.”",
+              "observation": "“Janice logged 62 on-site hours this week, including Saturday.”",
+              "why": "Removes evaluative adverb; supplies measurable quantity (https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/)."
             },
             {
-              "evaluation": "You’re always late.",
-              "observation": "In the last two weeks, you arrived between five and fifteen minutes late to our meetings on three occasions.",
-              "why": "It replaces “always” with a verifiable pattern."
+              "evaluation": "“He left the party to hurt me.”",
+              "observation": "“He left the party without saying goodbye at 9:10 p.m.”",
+              "why": "Strips motive attribution; hostile-attribution research cautions against inferred intent (https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/)."
             },
             {
-              "evaluation": "My son often doesn’t brush his teeth.",
-              "observation": "Twice this week, my son didn’t brush his teeth before bed.",
-              "why": "“Often” becomes a specific count."
-            },
-            {
-              "evaluation": "My aunt complains whenever I talk to her.",
-              "observation": "This week my aunt called me three times, and each call focused on people who treated her in ways she didn’t like.",
-              "why": "It describes the conversations instead of labelling them as “complaining.”"
-            },
-            {
-              "evaluation": "You’re destroying our child’s self-esteem!",
-              "observation": "When you said to our son, ‘You’re lazy and will never amount to anything,’ …",
-              "why": "Quoting the words keeps the focus on what was said. Feelings about the impact can follow afterward."
+              "evaluation": "“You were rude in the meeting.”",
+              "observation": "“During the 2:00–2:15 agenda item, while I was speaking, you interrupted twice (timestamps 08:12 and 09:47).”",
+              "why": "Replaces trait with event-bounded counts; wording shapes perceived blame (https://doi.org/10.3758/PBR.17.5.644)."
             }
           ]
         }
       ]
     },
     {
-      "id": "observation-guide-builder",
-      "label": "Builder tips",
-      "title": "Builder tips",
+      "id": "observation-guide-data",
+      "label": "Measurement",
+      "title": "Measurement Concepts: Operational Definitions, ABC, Agreement",
       "content": [
         {
+          "type": "paragraph",
+          "text": "This section summarizes commonly used measurement concepts that may inform personal or professional record-keeping in observational work."
+        },
+        {
           "type": "list",
-          "style": "unordered",
+          "style": "ordered",
           "items": [
-            "Watch for generalisations or absolutes (“always,” “never,” “constantly”). The builder flags them and prompts you to name a specific instance or number instead.",
-            "When judgement-heavy adjectives appear (“lazy,” “selfish,” “disrespectful”), expect a reminder to describe the underlying behaviour you observed.",
-            "Name-calling and labels (including positive ones like “hero”) signal evaluation. The tool nudges you to show what happened instead of who someone supposedly is.",
-            "Subjective phrases that guess motives—“to get back at me,” “for no reason,” “on purpose”—are highlighted so you can focus on the observable part of the story.",
-            "Structure helps. Start with when and where (“Yesterday at dinner…”) and then describe the action. Prompts in the editor keep these anchors visible.",
-            "Use the example library above when you need inspiration. Comparing your sentence to model observations can reveal hidden evaluations quickly.",
-            "Every flag comes with a short explanation referencing NVC principles, so each correction also teaches the “why.”",
-            "If a feeling sneaks into the observation (“I felt ignored”), separate it out. The builder acknowledges the emotion while guiding you back to the factual first step."
+            "Operational definitions with exemplars/non-examples (https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/).",
+            "ABC recording with timestamps; where feasible, use continuous measures (count, duration, latency) (https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/; https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/).",
+            "Inter-observer agreement (IOA) on a sample of observations; consider statistics appropriate to the data (e.g., kappa) (https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/; https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf).",
+            "Audit for observer drift and recalibrate using reference clips/exemplars (https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/)."
           ]
         }
       ]
     },
     {
-      "id": "observation-guide-practice",
-      "label": "Keep practicing",
-      "title": "Keep practicing",
+      "id": "observation-guide-needs",
+      "label": "Needs link",
+      "title": "Context: Research on Psychological Needs",
       "content": [
         {
           "type": "paragraph",
-          "text": "Observational language can feel plain at first, yet it opens space for empathy. By clearly naming what happened before sharing feelings or needs, you lower defences and invite collaboration. Studies of NVC programmes show that this discipline strengthens relationships and increases self-awareness."
+          "text": "Autonomy/competence: studies and reviews describing these needs and their health associations (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/; https://selfdeterminationtheory.org/topics/basic-psychological-needs/)."
         },
         {
           "type": "paragraph",
-          "text": "Remember that the goal is not to suppress judgments forever. NVC simply asks us to lead with the shared reality of what occurred, then speak to how it affected us. As you keep practising—rewriting charged sentences, using the detector’s feedback, and revisiting the steps above—you will build the reflex to observe first and tell the story later."
+          "text": "Belonging/social connection: advisory summarizing links to well-being and risk (https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Trust/safety: work connecting interpersonal trust with stress pathways (https://pubmed.ncbi.nlm.nih.gov/21058850/; https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress)."
+        }
+      ]
+    },
+    {
+      "id": "observation-guide-limitations",
+      "label": "Limitations",
+      "title": "Limitations & Scope Notes",
+      "content": [
+        {
+          "type": "list",
+          "style": "unordered",
+          "items": [
+            "Memory/measurement: observations depend on recall or recording fidelity; contemporaneous notes/quotes provide clearer records (https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/).",
+            "Intent is not adjudicated by observation: avoid hostile attributions (https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/).",
+            "Cultural/linguistic nuance: perceptions of “neutral” phrasing can vary; invite verification of wording.",
+            "Scope: this guide summarizes research and provides structured prompts; it does not determine clinical reliability or outcomes."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "observation-guide-references",
+      "label": "References",
+      "title": "References (raw URLs)",
+      "content": [
+        {
+          "type": "list",
+          "style": "unordered",
+          "items": [
+            "https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/",
+            "https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/",
+            "https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/",
+            "https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/",
+            "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full",
+            "https://selfdeterminationtheory.org/topics/basic-psychological-needs/",
+            "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/",
+            "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/21058850/",
+            "https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress",
+            "https://doi.org/10.3758/PBR.17.5.644"
+          ]
         }
       ]
     }
