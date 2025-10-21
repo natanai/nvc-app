@@ -12,6 +12,8 @@ const DEST_DIR = "public/next";
 const DEST = path.join(DEST_DIR, "cues.bundle.json");
 const NEAR_SRC = "data/generated/cues.nearest.json";
 const NEAR_DEST = path.join(DEST_DIR, "cues.nearest.json");
+const CATALOG_SRC = "data/generated/catalog-slugs.json";
+const CATALOG_DEST = path.join(DEST_DIR, "catalog-slugs.json");
 
 async function exists(file) {
   try {
@@ -61,7 +63,16 @@ async function safeCopy(src, dest) {
     summary.public_next.nearest = Array.isArray(rawN.items) ? rawN.items.length : 0;
   }
 
-  for (const target of ["next/cues.bundle.json", "next/cues.nearest.json"]) {
+  if (await exists(CATALOG_SRC)) {
+    const rawCText = await readFile(CATALOG_SRC, "utf8");
+    const rawC = JSON.parse(rawCText);
+    await safeCopy(CATALOG_SRC, CATALOG_DEST);
+    summary.public_next.catalogCounts = Object.fromEntries(
+      Object.entries(rawC || {}).map(([k, v]) => [k, Array.isArray(v) ? v.length : 0])
+    );
+  }
+
+  for (const target of ["next/cues.bundle.json", "next/cues.nearest.json", "next/catalog-slugs.json"]) {
     if (await exists(target)) {
       await rm(target, { force: true });
       summary.cleanupRemoved = true;
