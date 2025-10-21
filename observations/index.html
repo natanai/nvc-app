@@ -924,6 +924,90 @@ button.site-nav__magnet {
     border: 1px dashed color-mix(in srgb, var(--outline) 28%, transparent);
     border-radius: var(--radius-2xl);
     background: color-mix(in srgb, #ffffff 98%, transparent);
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .observation-editor__recipe[data-state='detected'] {
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--rose) 36%, transparent);
+    background: color-mix(in srgb, #ffffff 94%, var(--rose) 6%);
+  }
+
+  .observation-editor__recipe-body {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .observation-editor__recipe-intro--detected {
+    color: color-mix(in srgb, var(--rose) 60%, transparent);
+    font-weight: 600;
+  }
+
+  .observation-editor__recipe-detection {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .observation-editor__recipe-detection-label {
+    margin: 0;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
+  }
+
+  .observation-editor__recipe[data-state='detected'] .observation-editor__recipe-detection-label {
+    color: color-mix(in srgb, var(--rose) 54%, transparent);
+  }
+
+  .observation-editor__recipe-magnets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .observation-editor__recipe-magnet {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-pill);
+    border: 2px solid color-mix(in srgb, var(--outline) 28%, transparent);
+    background: color-mix(in srgb, #ffffff 84%, var(--sky) 16%);
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+    min-height: 40px;
+    min-width: 44px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .observation-editor__recipe-magnet:hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, #ffffff 70%, var(--mint) 30%);
+    border-color: color-mix(in srgb, var(--outline) 42%, transparent);
+    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  }
+
+  .observation-editor__recipe-magnet:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 2px;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  }
+
+  .observation-editor__recipe-magnet:active {
+    transform: translateY(1px);
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+  }
+
+  .observation-editor__recipe-magnet-icon {
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .observation-editor__recipe-note--detected {
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
   }
 
   .observation-editor__recipe-intro {
@@ -1738,17 +1822,28 @@ button.site-nav__magnet {
                 </p>
                 <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
               </div>
-              <aside class="observation-editor__recipe" id="observation-guidelines" aria-label="Observation recipe">
+              <aside
+                class="observation-editor__recipe"
+                id="observation-guidelines"
+                aria-label="Observation recipe"
+                data-state="default"
+              >
                 <h2 class="observation-editor__recipe-title">Observation recipe</h2>
-                <p class="observation-editor__recipe-intro">Follow these anchors to keep the moment concrete.</p>
-                <ol class="observation-editor__recipe-list">
-                  <li><strong>When &amp; where:</strong> Anchor the moment in time and place.</li>
-                  <li><strong>Sensory details:</strong> Quote what was said or describe what was seen.</li>
-                  <li><strong>Optional gap:</strong> Add what you expected or hoped for.</li>
-                </ol>
-                <p class="observation-editor__recipe-note">
-                  Stick with what a camera or microphone would record. Feelings and needs come after the observation.
-                </p>
+                <div
+                  id="observation-guidelines-body"
+                  class="observation-editor__recipe-body"
+                  aria-live="polite"
+                >
+                  <p class="observation-editor__recipe-intro">Follow these anchors to keep the moment concrete.</p>
+                  <ol class="observation-editor__recipe-list">
+                    <li><strong>When &amp; where:</strong> Anchor the moment in time and place.</li>
+                    <li><strong>Sensory details:</strong> Quote what was said or describe what was seen.</li>
+                    <li><strong>Optional gap:</strong> Add what you expected or hoped for.</li>
+                  </ol>
+                  <p class="observation-editor__recipe-note">
+                    Stick with what a camera or microphone would record. Feelings and needs come after the observation.
+                  </p>
+                </div>
               </aside>
             </div>
             <footer class="observation-editor__footer">

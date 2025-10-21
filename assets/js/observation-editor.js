@@ -28,6 +28,29 @@ const SUGGESTION_BASE_PATHS = {
 
 const SUGGESTION_SLUG_PATTERN = /^[a-z0-9-]+$/i;
 
+const DETECTION_BASE_PATHS = {
+  feeling: '../feelings/',
+  need: '../needs/',
+  fauxFeeling: '../faux-feelings/',
+};
+
+const DETECTION_LABELS = {
+  feeling: { singular: 'feeling word', plural: 'feeling words' },
+  need: { singular: 'need word', plural: 'need words' },
+  fauxFeeling: { singular: 'story word', plural: 'story words' },
+};
+
+const OBSERVATION_GUIDELINE_INTRO = 'Follow these anchors to keep the moment concrete.';
+const OBSERVATION_GUIDELINE_NOTE =
+  'Stick with what a camera or microphone would record. Feelings and needs come after the observation.';
+const OBSERVATION_GUIDELINE_STEPS = [
+  { title: 'When & where', description: 'Anchor the moment in time and place.' },
+  { title: 'Sensory details', description: 'Quote what was said or describe what was seen.' },
+  { title: 'Optional gap', description: 'Add what you expected or hoped for.' },
+];
+const OBSERVATION_DETECTION_NOTE =
+  'Magnets open the matching entry so you can work with feelings and needs right away.';
+
 document.addEventListener('DOMContentLoaded', () => {
   bind();
   renderPanels();
@@ -177,6 +200,216 @@ function renderAnalysis() {
   if (editor) {
     editor.dataset.ready = analysis?.ok ? '1' : '0';
   }
+
+  renderObservationGuidelines();
+}
+
+function renderObservationGuidelines() {
+  const container = document.getElementById('observation-guidelines-body');
+  if (!container) {
+    return;
+  }
+
+  const host = document.getElementById('observation-guidelines');
+  const groups = collectDetectionGroups(state.analysis?.lint);
+  container.innerHTML = '';
+
+  if (!groups.length) {
+    if (host) {
+      host.dataset.state = 'default';
+    }
+    container.appendChild(buildDefaultGuidelineContent());
+    return;
+  }
+
+  if (host) {
+    host.dataset.state = 'detected';
+  }
+  container.appendChild(buildDetectionGuidelineContent(groups));
+}
+
+function collectDetectionGroups(lint) {
+  if (!lint) {
+    return [];
+  }
+
+  const groups = [];
+
+  const pushGroup = (kind, slugs) => {
+    const entries = [];
+    const seen = new Set();
+    (slugs || []).forEach(slug => {
+      const trimmed = typeof slug === 'string' ? slug.trim() : '';
+      if (!trimmed) {
+        return;
+      }
+      const key = trimmed.toLowerCase();
+      if (seen.has(key)) {
+        return;
+      }
+      seen.add(key);
+      const entry = createDetectionEntry(kind, trimmed);
+      if (entry) {
+        entries.push(entry);
+      }
+    });
+    if (entries.length) {
+      groups.push({ kind, entries });
+    }
+  };
+
+  pushGroup('fauxFeeling', lint.fauxFeelings);
+  pushGroup('feeling', lint.feelings);
+  pushGroup('need', lint.needs);
+
+  return groups;
+}
+
+function buildDefaultGuidelineContent() {
+  const fragment = document.createDocumentFragment();
+  const intro = document.createElement('p');
+  intro.className = 'observation-editor__recipe-intro';
+  intro.textContent = OBSERVATION_GUIDELINE_INTRO;
+  fragment.appendChild(intro);
+
+  const list = document.createElement('ol');
+  list.className = 'observation-editor__recipe-list';
+  OBSERVATION_GUIDELINE_STEPS.forEach(step => {
+    const item = document.createElement('li');
+    const strong = document.createElement('strong');
+    strong.textContent = `${step.title}:`;
+    item.appendChild(strong);
+    item.appendChild(document.createTextNode(` ${step.description}`));
+    list.appendChild(item);
+  });
+  fragment.appendChild(list);
+
+  const note = document.createElement('p');
+  note.className = 'observation-editor__recipe-note';
+  note.textContent = OBSERVATION_GUIDELINE_NOTE;
+  fragment.appendChild(note);
+
+  return fragment;
+}
+
+function buildDetectionGuidelineContent(groups) {
+  const fragment = document.createDocumentFragment();
+  const summary = formatDetectionSummary(groups);
+  const totalEntries = groups.reduce((sum, group) => sum + group.entries.length, 0);
+  const pronoun = totalEntries === 1 ? 'it' : 'them';
+
+  const intro = document.createElement('p');
+  intro.className = 'observation-editor__recipe-intro observation-editor__recipe-intro--detected';
+  intro.textContent = summary
+    ? `We spotted ${summary} in your observation. Jump straight to ${pronoun}?`
+    : 'We spotted language from outside the observation. Jump straight to them?';
+  fragment.appendChild(intro);
+
+  groups.forEach(group => {
+    const section = document.createElement('div');
+    section.className = 'observation-editor__recipe-detection';
+
+    const label = document.createElement('p');
+    label.className = 'observation-editor__recipe-detection-label';
+    const meta = DETECTION_LABELS[group.kind] || { singular: 'word', plural: 'words' };
+    label.textContent = group.entries.length > 1
+      ? `Detected ${meta.plural}:`
+      : `Detected ${meta.singular}:`;
+    section.appendChild(label);
+
+    const magnets = document.createElement('div');
+    magnets.className = 'observation-editor__recipe-magnets';
+    group.entries.forEach(entry => {
+      const magnet = createGuidelineMagnet(entry);
+      if (magnet) {
+        magnets.appendChild(magnet);
+      }
+    });
+    section.appendChild(magnets);
+
+    fragment.appendChild(section);
+  });
+
+  const note = document.createElement('p');
+  note.className = 'observation-editor__recipe-note observation-editor__recipe-note--detected';
+  note.textContent = OBSERVATION_DETECTION_NOTE;
+  fragment.appendChild(note);
+
+  return fragment;
+}
+
+function createGuidelineMagnet(entry) {
+  if (!entry?.href) {
+    return null;
+  }
+
+  const link = document.createElement('a');
+  link.className = 'observation-editor__recipe-magnet';
+  link.href = entry.href;
+  if (entry.slug) {
+    link.dataset.slug = entry.slug;
+  }
+  if (entry.kind) {
+    link.dataset.kind = entry.kind;
+  }
+
+  const icon = document.createElement('span');
+  icon.className = 'observation-editor__recipe-magnet-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.textContent = '🧲';
+  link.appendChild(icon);
+
+  const label = document.createElement('span');
+  label.className = 'observation-editor__recipe-magnet-label';
+  label.textContent = entry.title || formatTitle(entry.slug || '');
+  link.appendChild(label);
+
+  return link;
+}
+
+function createDetectionEntry(kind, slug) {
+  const normalized = typeof slug === 'string' ? slug.trim() : '';
+  if (!normalized) {
+    return null;
+  }
+
+  const title = resolveDetectionTitle(kind, normalized) || formatTitle(normalized);
+  const base = DETECTION_BASE_PATHS[kind];
+  if (!base || !title) {
+    return null;
+  }
+
+  return {
+    kind,
+    slug: normalized,
+    title,
+    href: `${base}${encodeURIComponent(normalized)}/`,
+  };
+}
+
+function resolveDetectionTitle(kind, slug) {
+  switch (kind) {
+    case 'feeling':
+      return resolveFeelingTitle(slug);
+    case 'need':
+      return resolveNeedTitle(slug);
+    case 'fauxFeeling':
+      return resolveFauxFeelingTitle(slug);
+    default:
+      return formatTitle(slug);
+  }
+}
+
+function formatDetectionSummary(groups) {
+  const parts = (groups || []).map(group => {
+    const meta = DETECTION_LABELS[group.kind] || { singular: 'word', plural: 'words' };
+    if (group.entries.length > 1) {
+      return meta.plural;
+    }
+    const singular = meta.singular || 'word';
+    return singular.startsWith('a ') ? singular : `a ${singular}`;
+  }).filter(Boolean);
+  return formatNaturalList(parts);
 }
 
 function finalizeObservation() {
@@ -470,6 +703,11 @@ function resolveNeedTitle(slug) {
   return entry?.title || formatTitle(slug);
 }
 
+function resolveFauxFeelingTitle(slug) {
+  const entry = state.catalog?.fauxFeelings?.get?.(slug);
+  return entry?.title || formatTitle(slug);
+}
+
 function formatCueLabel(value) {
   return formatTitle(value);
 }
@@ -488,6 +726,22 @@ function formatTitle(value) {
     .split(' ')
     .map(token => (token ? token[0].toUpperCase() + token.slice(1) : ''))
     .join(' ');
+}
+
+function formatNaturalList(items) {
+  const values = (items || [])
+    .map(item => (typeof item === 'string' ? item.trim() : ''))
+    .filter(Boolean);
+  if (!values.length) {
+    return '';
+  }
+  if (values.length === 1) {
+    return values[0];
+  }
+  if (values.length === 2) {
+    return `${values[0]} and ${values[1]}`;
+  }
+  return `${values.slice(0, -1).join(', ')}, and ${values[values.length - 1]}`;
 }
 
 function createEmptyCatalog() {
