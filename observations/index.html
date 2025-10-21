@@ -306,6 +306,11 @@ body {
   font-family: var(--font-body);
 }
 
+body.has-observation-guide-overlay {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
 a,
 button,
 [role='button'],
@@ -830,6 +835,14 @@ button.site-nav__magnet {
     transform: rotate(45deg);
   }
 
+  [data-observation-guide-panel] {
+    display: block;
+  }
+
+  .observation-guide__dialog {
+    display: contents;
+  }
+
   .observation-guide__card {
     padding: clamp(1.6rem, 3.5vw, 2.4rem);
     display: grid;
@@ -839,6 +852,37 @@ button.site-nav__magnet {
   .observation-guide__intro {
     display: grid;
     gap: 0.75rem;
+  }
+
+  .observation-guide__close-button {
+    display: none;
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    justify-self: end;
+    align-self: start;
+    line-height: 1.1;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .observation-guide__close-button:hover {
+    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
+    border-color: color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .observation-guide__close-button:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 2px;
   }
 
   .observation-guide__eyebrow {
@@ -1024,6 +1068,124 @@ button.site-nav__magnet {
       font-size: 0.74rem;
       letter-spacing: 0.07em;
       padding: 0.6rem 0.9rem 0.45rem;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] {
+      position: fixed;
+      inset: 0;
+      z-index: 2600;
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      background: color-mix(in srgb, var(--ink) 46%, transparent);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] > summary {
+      display: none;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-panel] {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      min-height: 0;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-dialog] {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      height: 100vh;
+      max-height: 100vh;
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, #ffffff 88%, var(--lavender) 12%) 0%,
+        color-mix(in srgb, #ffffff 92%, var(--mint) 8%) 100%
+      );
+      color: inherit;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    @supports (height: 100dvh) {
+      [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-dialog] {
+        min-height: 100dvh;
+        height: 100dvh;
+        max-height: 100dvh;
+      }
+    }
+
+    @supports (height: 100svh) {
+      [data-observation-guide][data-overlay-state='overlay'] [data-observation-guide-dialog] {
+        min-height: 100svh;
+        height: 100svh;
+        max-height: 100svh;
+      }
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__card {
+      flex: 1 1 auto;
+      min-height: 0;
+      margin: 0;
+      padding: clamp(1.2rem, 5vw, 2.2rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+      border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+      border-width: 2px;
+      box-shadow: 0 12px 20px color-mix(in srgb, var(--outline) 24%, transparent);
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button:hover {
+      background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+      border-color: color-mix(in srgb, var(--outline) 32%, transparent);
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__close-button:focus-visible {
+      background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+      border-color: color-mix(in srgb, var(--outline) 32%, transparent);
+      outline: 3px dashed var(--outline);
+      outline-offset: 2px;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__nav {
+      margin: 0;
+      padding: 0.35rem 0 0;
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__section {
+      border: none;
+      border-radius: var(--radius-2xl);
+      box-shadow: none;
+      background: color-mix(in srgb, #ffffff 94%, transparent);
+    }
+
+    [data-observation-guide][data-overlay-state='overlay'] .observation-guide__section-title {
+      border-bottom: none;
+      background: color-mix(in srgb, var(--chip-bg) 65%, #ffffff 35%);
     }
   }
 
@@ -2506,22 +2668,38 @@ button.site-nav__magnet {
           </div>
         </section>
 
-        <details id="observation-guide" class="observation-guide">
+        <details id="observation-guide" class="observation-guide" data-observation-guide>
           <!-- observation-guide:start -->
-          <summary class="observation-guide__toggle">
+          <summary
+            class="observation-guide__toggle"
+            data-observation-guide-open
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="observation-guide-panel"
+          >
             <span class="observation-guide__toggle-text">
               <span class="observation-guide__eyebrow">Research-grounded (open-access links)</span>
               <span class="observation-guide__toggle-title">Observation Guide: Low-Inference Description</span>
             </span>
             <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
           </summary>
-          <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
-            <header class="observation-guide__intro">
-              <p class="observation-guide__eyebrow">Abstract</p>
-              <h2 id="observation-guide-title" class="observation-guide__title">
-                Constructing Low-Inference, Time-Bound Observations
-              </h2>
-              <p>This guide formalizes a fill-in-the-blank process for producing low-inference observational statements: descriptions restricted to verifiable sensory data (what was seen/heard), anchored to concrete time and context, and free of trait labels or motive attributions. The approach synthesizes findings from behavioral observation, psycholinguistics, and affect-regulation research. Linguistic abstraction increases biased social inference <sup class="observation-guide__citation"><a href="#observation-guide-ref-1">[1]</a></sup>; concreteness improves comprehension <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>; and affect labeling is associated with reduced limbic reactivity <sup class="observation-guide__citation"><a href="#observation-guide-ref-4">[4]</a></sup>.</p>
+          <div data-observation-guide-panel id="observation-guide-panel">
+            <div class="observation-guide__dialog" data-observation-guide-dialog>
+              <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
+              <header class="observation-guide__intro">
+                <button
+                  type="button"
+                  class="observation-guide__close-button"
+                  data-observation-guide-close
+                  aria-label="Close observation guide"
+                >
+                  Close
+                </button>
+                <p class="observation-guide__eyebrow">Abstract</p>
+                <h2 id="observation-guide-title" class="observation-guide__title">
+                  Constructing Low-Inference, Time-Bound Observations
+                </h2>
+                <p>This guide formalizes a fill-in-the-blank process for producing low-inference observational statements: descriptions restricted to verifiable sensory data (what was seen/heard), anchored to concrete time and context, and free of trait labels or motive attributions. The approach synthesizes findings from behavioral observation, psycholinguistics, and affect-regulation research. Linguistic abstraction increases biased social inference <sup class="observation-guide__citation"><a href="#observation-guide-ref-1">[1]</a></sup>; concreteness improves comprehension <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>; and affect labeling is associated with reduced limbic reactivity <sup class="observation-guide__citation"><a href="#observation-guide-ref-4">[4]</a></sup>.</p>
               <p>Perspective-taking and I-language are linked to lower perceived hostility in communication contexts <sup class="observation-guide__citation"><a href="#observation-guide-ref-5">[5]</a></sup>. Research on basic psychological needs provides relevant context for why clear description may matter in interpersonal settings: autonomy/competence <sup class="observation-guide__citation"><a href="#observation-guide-ref-6">[6]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-7">[7]</a></sup> and belonging/social connection <sup class="observation-guide__citation"><a href="#observation-guide-ref-8">[8]</a></sup>.</p>
             </header>
             <nav class="observation-guide__nav" aria-label="Observation guide sections" role="tablist">
@@ -2796,7 +2974,9 @@ button.site-nav__magnet {
                   </ol>
                 </div>
               </section>
+              </div>
             </div>
+          </div>
           </div>
           <!-- observation-guide:end -->
         </details>
