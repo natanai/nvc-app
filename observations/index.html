@@ -1235,11 +1235,6 @@ button.site-nav__magnet {
     }
   }
 
-  .observation-editor__submit-button {
-    min-width: 8.5rem;
-    justify-self: flex-start;
-  }
-
   .observation-editor__match-summary {
     display: grid;
     gap: 0.4rem;
@@ -1513,7 +1508,7 @@ button.site-nav__magnet {
     font-size: 0.95rem;
   }
 
-  .observation-suggestions__next {
+  .observation-suggestions__action {
     align-self: flex-start;
     min-width: 0;
     padding-inline: 0.95rem;
@@ -1558,12 +1553,6 @@ button.site-nav__magnet {
 
     .observation-editor__actions {
       width: 100%;
-    }
-
-    .observation-editor__actions .support-button,
-    .observation-editor__submit-button {
-      width: 100%;
-      justify-content: center;
     }
 
     .observation-editor__match-summary {
@@ -2054,7 +2043,7 @@ button.site-nav__magnet {
                   Start by anchoring your observation in time and place.
                 </p>
                 <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
-                <section id="observation-suggestions" class="observation-suggestions" hidden aria-live="polite">
+                <section id="observation-suggestions" class="observation-suggestions" aria-live="polite">
                   <header class="observation-suggestions__header">
                     <h2 class="observation-suggestions__title">Feelings &amp; needs to explore</h2>
                     <p id="observation-preview" class="observation-suggestions__preview"></p>
@@ -2073,7 +2062,7 @@ button.site-nav__magnet {
                     </section>
                     <section class="observation-panel observation-panel--needs" aria-live="polite">
                       <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Needs to revisit</h3>
+                        <h3 class="observation-panel__title">Related needs</h3>
                         <p class="observation-panel__hint">Matches from the detector will appear here.</p>
                       </header>
                       <div id="suggested-needs" class="observation-chip-list" role="list"></div>
@@ -2082,6 +2071,15 @@ button.site-nav__magnet {
                       </p>
                     </section>
                   </div>
+                  <button
+                    id="observation-submit"
+                    class="support-button observation-suggestions__action"
+                    type="button"
+                    data-action="submit"
+                    disabled
+                  >
+                    See matches
+                  </button>
                   <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
                     <p class="observation-suggestions__fallback-text">
                       We didn’t find a direct match yet. Want to review the closest option?
@@ -2093,14 +2091,6 @@ button.site-nav__magnet {
                   <div id="observation-fallback-running" class="observation-suggestions__fallback" hidden>
                     <p class="observation-suggestions__fallback-text">Looking for the closest match…</p>
                   </div>
-                  <button
-                    id="observation-fallback-next"
-                    class="support-button observation-suggestions__next"
-                    type="button"
-                    hidden
-                  >
-                    Next match
-                  </button>
                   <div class="observation-suggestions__actions">
                     <button id="observation-clear" class="support-button observation-suggestions__clear" type="button">
                       Clear
@@ -2143,14 +2133,6 @@ button.site-nav__magnet {
             </div>
             <footer class="observation-editor__footer">
               <div class="observation-editor__actions">
-                <button
-                  id="observation-submit"
-                  class="support-button observation-editor__submit-button"
-                  type="button"
-                  disabled
-                >
-                  See matches
-                </button>
                 <div
                   id="observation-detection-summary"
                   class="observation-editor__match-summary"

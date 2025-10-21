@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderPanels();
   renderValidityStatus();
   renderDetectionStatus();
+  renderSuggestions();
   analyze(state.text);
 
   Promise.all([
@@ -109,12 +110,15 @@ function bind() {
       }
       state.fallback = createFallbackState();
       analyze(state.text);
+      renderSuggestions();
     });
   }
 
   const submit = document.getElementById('observation-submit');
   if (submit) {
-    submit.addEventListener('click', handleSubmit);
+    submit.addEventListener('click', () => {
+      handlePrimaryAction();
+    });
   }
 
   const clearButton = document.getElementById('observation-clear');
@@ -128,13 +132,6 @@ function bind() {
   if (fallbackStart) {
     fallbackStart.addEventListener('click', () => {
       startFallbackSearch();
-    });
-  }
-
-  const fallbackNext = document.getElementById('observation-fallback-next');
-  if (fallbackNext) {
-    fallbackNext.addEventListener('click', () => {
-      advanceFallback();
     });
   }
 
@@ -471,8 +468,9 @@ function renderPanels() {
   if (!suggestionSection) {
     return;
   }
+  suggestionSection.dataset.mode = state.mode || 'editing';
+  suggestionSection.removeAttribute('hidden');
   if (state.mode === 'results') {
-    suggestionSection.removeAttribute('hidden');
     if (!state.scrolledToSuggestions) {
       state.scrolledToSuggestions = true;
       const scrollTarget = () => {
@@ -485,7 +483,7 @@ function renderPanels() {
       }
     }
   } else {
-    suggestionSection.setAttribute('hidden', 'hidden');
+    state.scrolledToSuggestions = false;
   }
 }
 
@@ -498,7 +496,7 @@ function renderSuggestions() {
   const preview = document.getElementById('observation-preview');
   const fallbackPrompt = document.getElementById('observation-fallback-prompt');
   const fallbackRunning = document.getElementById('observation-fallback-running');
-  const fallbackNext = document.getElementById('observation-fallback-next');
+  const actionButton = document.getElementById('observation-submit');
   const fallbackStart = document.getElementById('observation-fallback-start');
 
   if (!feelingsHost || !needsHost || !whyHost || !preview) {
@@ -555,11 +553,16 @@ function renderSuggestions() {
     fallbackStart.disabled = Boolean(state.fallback.running);
   }
 
-  if (fallbackNext) {
-    if (fallbackActive && state.fallback.queue.length > 1) {
-      fallbackNext.removeAttribute('hidden');
+  if (actionButton) {
+    const hasNextFallback = fallbackActive && state.fallback.queue.length > 1;
+    if (hasNextFallback) {
+      actionButton.textContent = 'Next match';
+      actionButton.dataset.action = 'next';
+      actionButton.disabled = false;
     } else {
-      fallbackNext.setAttribute('hidden', 'hidden');
+      actionButton.textContent = 'See matches';
+      actionButton.dataset.action = 'submit';
+      actionButton.disabled = !state.analysis?.ok;
     }
   }
 }
@@ -918,6 +921,14 @@ function hasSuggestions(set) {
   const feelingCount = Array.isArray(set.feelings) ? set.feelings.length : 0;
   const needCount = Array.isArray(set.needs) ? set.needs.length : 0;
   return feelingCount + needCount > 0;
+}
+
+function handlePrimaryAction() {
+  if (state.mode === 'results' && state.fallback.active && state.fallback.queue.length > 1) {
+    advanceFallback();
+    return;
+  }
+  handleSubmit();
 }
 
 function handleSubmit() {
