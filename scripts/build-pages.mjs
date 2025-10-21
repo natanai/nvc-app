@@ -213,7 +213,7 @@ const navVisibilityBootstrapScript = () => String.raw`
             customizer: true,
             journal: true,
             inventory: true,
-            observations: false,
+            observations: true,
             fauxFeelings: false,
             feelings: true,
             needs: true,
