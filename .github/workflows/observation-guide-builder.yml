@@ -1,0 +1,70 @@
+name: Observation Guide Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Branch to rebuild (defaults to main).'
+        required: false
+        default: main
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    name: Rebuild observation guide page
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target_branch }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rebuild observation guide page
+        run: npm run build:pages
+
+      - name: Commit updated observation guide
+        id: commit
+        run: |
+          if [[ -z "$(git status --porcelain)" ]]; then
+            echo "No changes detected after rebuilding observation guide."
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: rebuild observation guide page"
+          echo "changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push changes
+        if: steps.commit.outputs.changes == 'true'
+        run: |
+          git push origin HEAD:${{ github.event.inputs.target_branch }}
+
+      - name: Summarize run
+        run: |
+          if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
+            SUMMARY="Rebuilt observation guide page and pushed updated markup."
+          else
+            SUMMARY="No changes were needed; observation guide page already up to date."
+          fi
+
+          if [ -n "$GITHUB_STEP_SUMMARY" ]; then
+            {
+              echo "## Observation Guide Builder"
+              echo "${SUMMARY}"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
