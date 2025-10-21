@@ -15,6 +15,14 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
+function escapeAttr(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function slug(s) { return String(s || "").trim().toLowerCase(); }
 function feelingHref(slugVal) { return `/feelings/${encodeURIComponent(slug(slugVal))}/`; }
 function needHref(slugVal) { return `/needs/${encodeURIComponent(slug(slugVal))}/`; }
@@ -220,14 +228,24 @@ function formatWordList(words) {
 
 function renderHints(container, hints) {
   if (!container) return;
-  if (!Array.isArray(hints) || !hints.length) {
+  const list = Array.isArray(hints) ? hints.filter(Boolean) : [];
+  if (!list.length) {
     container.innerHTML = "";
     container.style.display = "none";
+    container.hidden = true;
     return;
   }
-  const items = hints.map(h => `<li>${escapeHtml(h.message || "")}</li>`).join("");
-  container.innerHTML = `<ul style="margin:0;padding-left:18px;">${items}</ul>`;
+  const items = list
+    .map((h) => {
+      const key = escapeAttr(h?.key || "");
+      const dataKey = key ? ` data-hint-key="${key}"` : "";
+      const message = escapeHtml(h?.message || "");
+      return `<li${dataKey}><span class="hint-text">${message}</span></li>`;
+    })
+    .join("");
+  container.innerHTML = `<ul class="hint-list">${items}</ul>`;
   container.style.display = "block";
+  container.hidden = false;
 }
 
 function renderExamples(container, pairs) {
@@ -409,38 +427,39 @@ async function boot() {
 
   const root = document.getElementById("obs-editor-root");
   if (!root) return;
-  const txt = root.querySelector("#txt");
+  const txt = root.querySelector("#builderInput");
   if (!txt) return;
   const overlay = root.querySelector("#overlay");
   const submitBtn = root.querySelector("#submitBtn");
   const readyDot = root.querySelector("#readyDot");
   const readyLabel = root.querySelector("#readyLabel");
-  const sug = root.querySelector("#suggestions");
-  const feelingsHeading = root.querySelector("#feelingsHeading");
-  const feelings = root.querySelector("#feelings");
-  const needsHeading = root.querySelector("#needsHeading");
-  const needs = root.querySelector("#needs");
-  const matchedCues = root.querySelector("#matchedCues");
-  const noteEl = root.querySelector("#suggestionNote");
-  const passBadges = root.querySelector("#passBadges");
-  const evalWarnings = root.querySelector("#evalWarnings");
+  const wordCountEl = root.querySelector("#wordCount");
   const hintStack = root.querySelector("#hintStack");
-  const examplesPanel = root.querySelector("#examplesPanel");
-  const examplesBody = root.querySelector("#examplesBody");
+  const nearestBanner = root.querySelector("#nearestBanner");
+  const exactPanel = root.querySelector("#exactPanel");
+  const exactBody = root.querySelector("#exactBody");
   const nearestPanel = root.querySelector("#nearestPanel");
-  const nearBanner = root.querySelector("#nearBanner");
-  const nearExample = root.querySelector("#nearExample");
-  const nearFeelings = root.querySelector("#nearFeelings");
-  const nearNeeds = root.querySelector("#nearNeeds");
-  const nearPager = root.querySelector("#nearPager");
-  const btnPrev = root.querySelector("#prevNear");
-  const btnNext = root.querySelector("#nextNear");
+  const nearestBody = root.querySelector("#nearestBody");
+  const nearPrev = root.querySelector("#nearPrev");
+  const nearNext = root.querySelector("#nearNext");
+  const nearIdxEl = root.querySelector("#nearIdx");
+  const resultsHeader = root.querySelector("#resultsHeader");
+  const quickstartBtns = root.querySelectorAll(".quickstart .ex");
+  const guidedChips = root.querySelectorAll(".chip.add");
+  const tplInsert = root.querySelector("#tplInsert");
+  const tplWhen = root.querySelector("#tplWhen");
+  const tplWhere = root.querySelector("#tplWhere");
+  const tplWho = root.querySelector("#tplWho");
+  const tplWhat = root.querySelector("#tplWhat");
+
+  const TEXT_STORAGE_KEY = "builder:text";
+  const NEAR_STORAGE_KEY = "obs-nearest-last";
 
   let nearList = [];
   let nearIdx = 0;
   let lastNearHash = null;
-
-  const NEAR_STORAGE_KEY = "obs-nearest-last";
+  let showNearestNotice = false;
+  let lastContext = null;
 
   const ensureOverlayBase = () => {
     if (!overlay) return;
@@ -472,6 +491,62 @@ async function boot() {
     if (!overlay) return;
     overlay.style.transform = `translate(${-txt.scrollLeft}px, ${-txt.scrollTop}px)`;
   };
+
+  const persistText = () => {
+    try {
+      sessionStorage.setItem(TEXT_STORAGE_KEY, txt.value);
+    } catch {}
+  };
+
+  function insertAtCaret(str, caretAdjust = 0) {
+    const s = txt.selectionStart;
+    const e = txt.selectionEnd;
+    const value = typeof str === "string" ? str : "";
+    txt.setRangeText(value, s, e, "end");
+    if (caretAdjust !== 0) {
+      const pos = txt.selectionStart + caretAdjust;
+      txt.setSelectionRange(pos, pos);
+    }
+    txt.focus();
+    render(true);
+  }
+
+  quickstartBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      txt.value = btn.getAttribute("data-ex") || "";
+      render(true);
+      txt.focus();
+    });
+  });
+
+  if (tplInsert) {
+    tplInsert.addEventListener("click", (e) => {
+      e.preventDefault();
+      const when = (tplWhen?.value || "").trim();
+      const where = (tplWhere?.value || "").trim();
+      const who = (tplWho?.value || "").trim();
+      const what = (tplWhat?.value || "").trim();
+      const parts = [];
+      if (when) parts.push(when);
+      if (where) parts.push(where);
+      let body = "";
+      if (who && what) body = `${who} ${what}`;
+      else if (what) body = what;
+      const sentence = [parts.filter(Boolean).join(" "), body].filter(Boolean).join(", ");
+      if (sentence) {
+        insertAtCaret(sentence);
+      }
+    });
+  }
+
+  guidedChips.forEach((ch) => {
+    ch.addEventListener("click", () => {
+      const s = ch.getAttribute("data-insert") || "";
+      const caretRaw = parseInt(ch.getAttribute("data-caret") || "0", 10);
+      const caretAdj = Number.isNaN(caretRaw) ? 0 : caretRaw;
+      insertAtCaret(s, caretAdj);
+    });
+  });
 
   const readNearStorage = () => {
     try {
@@ -506,70 +581,184 @@ async function boot() {
 
   const hashText = (s) => fnv1a32(String(s || ""), 0x811c9dc5).toString(16);
 
-  if (hintStack) hintStack.style.display = "none";
-  if (examplesBody) {
-    renderExamples(examplesBody, EXAMPLE_PAIRS);
-    if (examplesPanel) {
-      examplesPanel.style.display = EXAMPLE_PAIRS.length ? "block" : "none";
+  if (hintStack) {
+    hintStack.style.display = "none";
+    hintStack.hidden = true;
+  }
+
+  function buildPillMarkup(items, kind) {
+    const list = uniqueSorted(Array.isArray(items) ? items.filter(Boolean) : []);
+    if (!list.length) return "";
+    const wrapper = document.createElement("div");
+    renderSuggestionPills(wrapper, list, kind);
+    const html = wrapper.innerHTML.trim();
+    return html ? `<div class="pill-group">${html}</div>` : "";
+  }
+
+  function clearResults() {
+    nearList = [];
+    nearIdx = 0;
+    lastNearHash = null;
+    showNearestNotice = false;
+    if (exactBody) exactBody.innerHTML = "";
+    if (exactPanel) exactPanel.hidden = true;
+    if (nearestBody) nearestBody.innerHTML = "";
+    if (nearestPanel) nearestPanel.hidden = true;
+    if (nearestBanner) nearestBanner.hidden = true;
+    if (nearIdxEl) nearIdxEl.textContent = "";
+    if (nearPrev) nearPrev.disabled = true;
+    if (nearNext) nearNext.disabled = true;
+  }
+
+  function updateWordCount(value) {
+    const wc = (String(value || "").trim().match(/\S+/g) || []).length;
+    if (wordCountEl) {
+      wordCountEl.textContent = wc ? `${wc} words` : "";
     }
   }
 
-  function setStatus(state){
+  function setStatus(state) {
     if (!readyDot || !readyLabel || !submitBtn) return;
     readyDot.className = `dot ${state}`;
-    readyLabel.textContent = state === "green" ? "Ready — exact match"
-      : state === "yellow" ? "Almost — submit to see similar situations"
-      : "Not ready — make it purely observational";
-    submitBtn.disabled = (state === "red");
+    if (state === "green") {
+      readyLabel.textContent = "Ready — exact match";
+    } else if (state === "yellow") {
+      readyLabel.textContent = "Almost — similar situations available";
+    } else {
+      readyLabel.textContent = "Not ready — keep only what a camera/mic would capture";
+    }
+    submitBtn.disabled = state === "red";
+    if (state !== "yellow" && nearestBanner) {
+      nearestBanner.hidden = true;
+    }
   }
 
-  function renderNearest(){
-    if (!nearestPanel) return;
-    if (!nearList.length){
-      nearestPanel.style.display = "none";
-      if (nearBanner) nearBanner.style.display = "none";
-      if (nearExample) {
-        nearExample.style.display = "none";
-        nearExample.innerHTML = "";
+  function attachHintActions(hints) {
+    if (!hintStack) return;
+    const list = Array.isArray(hints) ? hints : [];
+    if (!list.length) return;
+    const ensureActions = (item) => {
+      if (!item) return null;
+      let actions = item.querySelector(".hint-actions");
+      if (actions) {
+        actions.innerHTML = "";
+        return actions;
       }
+      actions = document.createElement("span");
+      actions.className = "hint-actions";
+      item.appendChild(actions);
+      return actions;
+    };
+    list.forEach((hint) => {
+      const key = hint?.key;
+      if (!key) return;
+      const item = hintStack.querySelector(`[data-hint-key="${key}"]`);
+      if (!item) return;
+      const actions = ensureActions(item);
+      if (!actions) return;
+      if (key === "absolutes") {
+        const options = [
+          { label: "this week", insert: "this week " },
+          { label: "today at", insert: "today at " },
+          { label: "yesterday at", insert: "yesterday at " },
+        ];
+        options.forEach((opt) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "hint-chip";
+          btn.textContent = opt.label;
+          btn.addEventListener("click", () => {
+            txt.focus();
+            insertAtCaret(opt.insert);
+          });
+          actions.appendChild(btn);
+        });
+      } else if (key === "labels") {
+        const sample = 'said “This is a waste of time.”';
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "hint-chip";
+        btn.textContent = "Swap to a quote";
+        btn.addEventListener("click", () => {
+          const text = txt.value;
+          const rx = new RegExp(LABELS_RX.source, LABELS_RX.flags);
+          const match = rx.exec(text);
+          if (match && typeof match.index === "number") {
+            const start = match.index;
+            const end = start + match[0].length;
+            txt.focus();
+            txt.setSelectionRange(start, end);
+            insertAtCaret(sample);
+          } else {
+            txt.focus();
+            insertAtCaret(sample);
+          }
+        });
+        actions.appendChild(btn);
+      }
+      if (!actions.childElementCount) {
+        actions.remove();
+      }
+    });
+  }
+
+  function renderNearest() {
+    if (!nearestPanel || !nearestBody) return;
+    if (!nearList.length) {
+      nearestPanel.hidden = true;
+      nearestBody.innerHTML = "";
+      if (nearestBanner) nearestBanner.hidden = true;
+      if (nearIdxEl) nearIdxEl.textContent = "";
+      if (nearPrev) nearPrev.disabled = true;
+      if (nearNext) nearNext.disabled = true;
       return;
     }
-    nearestPanel.style.display = "block";
-    if (nearBanner) nearBanner.style.display = "block";
-    const cur = nearList[nearIdx];
-    const uniq = xs => uniqueSorted(Array.isArray(xs) ? xs : []);
-    renderSuggestionPills(nearFeelings, uniq(cur.feelings), "feeling");
-    renderSuggestionPills(nearNeeds, uniq(cur.needs), "need");
-    if (nearExample) {
-      if (cur.example) {
-        nearExample.innerHTML = `<div class="muted">Example</div><div>${escapeHtml(cur.example)}</div>`;
-        nearExample.style.display = "block";
-      } else {
-        nearExample.innerHTML = "";
-        nearExample.style.display = "none";
-      }
+    nearestPanel.hidden = false;
+    if (nearestBanner) nearestBanner.hidden = !showNearestNotice;
+    const cur = nearList[nearIdx] || {};
+    const uniq = (xs) => uniqueSorted(Array.isArray(xs) ? xs : []);
+    const feelingsMarkup = buildPillMarkup(uniq(cur.feelings), "feeling");
+    const needsMarkup = buildPillMarkup(uniq(cur.needs), "need");
+    const parts = [];
+    if (cur.example) {
+      parts.push(`<div class="result-note"><div class="muted small">Example</div><p>${escapeHtml(cur.example)}</p></div>`);
     }
-    if (nearPager) nearPager.textContent = `Similar suggestion ${nearIdx+1} of ${nearList.length} — use ← → to cycle.`;
+    if (feelingsMarkup) {
+      parts.push(`<div class="result-block"><span class="muted small">Feelings to explore</span>${feelingsMarkup}</div>`);
+    }
+    if (needsMarkup) {
+      parts.push(`<div class="result-block"><span class="muted small">Needs to consider</span>${needsMarkup}</div>`);
+    }
+    if (!parts.length) {
+      parts.push(`<p class="muted small">No catalog suggestions available yet.</p>`);
+    }
+    parts.push(`<p class="muted small">Use ◀ ▶ buttons or arrow keys to cycle similar situations.</p>`);
+    nearestBody.innerHTML = parts.join("\n");
+    if (nearIdxEl) nearIdxEl.textContent = `${nearIdx + 1}/${nearList.length}`;
+    if (nearPrev) nearPrev.disabled = nearList.length <= 1;
+    if (nearNext) nearNext.disabled = nearList.length <= 1;
     persistNearSelection();
   }
 
-  const stepNearest = (delta) => {
+  function stepNearest(delta) {
     if (!nearList.length) return;
     const total = nearList.length;
     nearIdx = ((nearIdx + delta) % total + total) % total;
     renderNearest();
-  };
+  }
 
-  btnPrev?.addEventListener("click", ()=>{
+  nearPrev?.addEventListener("click", (evt) => {
+    evt.preventDefault();
     stepNearest(-1);
   });
-  btnNext?.addEventListener("click", ()=>{
+  nearNext?.addEventListener("click", (evt) => {
+    evt.preventDefault();
     stepNearest(1);
   });
 
-  const handleNearestKeys = (evt) => {
+  function handleNearestKeys(evt) {
     if (!nearList.length) return;
-    if (!nearestPanel || nearestPanel.style.display === "none") return;
+    if (!nearestPanel || nearestPanel.hidden) return;
     if (evt.target === txt) return;
     if (evt.key === "ArrowLeft") {
       evt.preventDefault();
@@ -578,103 +767,152 @@ async function boot() {
       evt.preventDefault();
       stepNearest(1);
     }
-  };
+  }
 
   document.addEventListener("keydown", handleNearestKeys);
 
-  function render() {
-    const { reasons, hits } = evalText(txt.value);
-    const evalCheck = detectEvaluation(txt.value);
-    const catalogCheck = detectCatalogHints(txt.value);
+  function showExactResults(ctx) {
+    if (!exactPanel || !exactBody) return;
+    const hitsCount = Array.isArray(ctx?.hits) ? ctx.hits.length : 0;
+    const agg = aggregateSuggestions(ctx?.hits || []);
+    const feelingsMarkup = buildPillMarkup(agg.feelings || [], "feeling");
+    const needsMarkup = buildPillMarkup(agg.needs || [], "need");
+    const parts = [];
+    let note = "Ready to explore feelings and needs.";
+    if (hitsCount > 1) {
+      note = `Direct matches found — suggestions prioritized from ${hitsCount} cues.`;
+    } else if (hitsCount === 1) {
+      note = "Direct match found — suggestions prioritized from the matching cue.";
+    }
+    parts.push(`<p class="muted small">${escapeHtml(note)}</p>`);
+    if (feelingsMarkup) {
+      parts.push(`<div class="result-block"><span class="muted small">Feelings to explore</span>${feelingsMarkup}</div>`);
+    }
+    if (needsMarkup) {
+      parts.push(`<div class="result-block"><span class="muted small">Needs to consider</span>${needsMarkup}</div>`);
+    }
+    if (!feelingsMarkup && !needsMarkup) {
+      parts.push(`<p class="muted small">No catalog suggestions available yet.</p>`);
+    }
+    exactBody.innerHTML = parts.join("\n");
+    exactPanel.hidden = false;
+    if (nearestPanel) nearestPanel.hidden = true;
+    if (nearestBody) nearestBody.innerHTML = "";
+    if (nearestBanner) nearestBanner.hidden = true;
+  }
+
+  function handleSubmit(auto = false, context = null) {
+    const ctx = context || lastContext;
+    if (!ctx) return;
+    const stateNow = ctx.state ?? computeState(ctx);
+    if (stateNow === "red") {
+      showNearestNotice = false;
+      if (nearestBanner) nearestBanner.hidden = true;
+      return;
+    }
+    if (stateNow === "green") {
+      showNearestNotice = false;
+      showExactResults(ctx);
+    } else if (stateNow === "yellow") {
+      nearList = nearestForTextMinHash(ctx.txt, NEAR_TOP_K, NEAR_THRESHOLD);
+      lastNearHash = nearList.length ? hashText(ctx.txt) : null;
+      const storedIdx = lastNearHash != null ? loadNearSelection() : null;
+      nearIdx =
+        typeof storedIdx === "number" && nearList.length && storedIdx >= 0 && storedIdx < nearList.length
+          ? storedIdx
+          : 0;
+      showNearestNotice = true;
+      renderNearest();
+    }
+    if (resultsHeader) {
+      try {
+        resultsHeader.focus({ preventScroll: true });
+      } catch {
+        if (typeof resultsHeader.focus === "function") {
+          resultsHeader.focus();
+        }
+      }
+      try {
+        resultsHeader.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch {
+        resultsHeader.scrollIntoView();
+      }
+    }
+  }
+
+  function render(force = false) {
+    persistText();
+    clearResults();
+    const value = txt.value;
+    const { reasons, hits } = evalText(value);
+    const evalCheck = detectEvaluation(value);
+    const catalogCheck = detectCatalogHints(value);
     const allHints = [...(evalCheck.hints || []), ...(catalogCheck.hints || [])];
     syncOverlayMetrics();
     const overlaySpans = (evalCheck.hits || [])
-      .filter(h => h && h.blocking && BLOCKING_HL_KEYS.has(h.key) && Number.isFinite(h.start) && Number.isFinite(h.end))
+      .filter(
+        (h) => h && h.blocking && BLOCKING_HL_KEYS.has(h.key) && Number.isFinite(h.start) && Number.isFinite(h.end)
+      )
       .map(({ start, end, match, key }) => ({ start, end, match, key }));
-    renderOverlay(overlay, txt.value, overlaySpans);
+    renderOverlay(overlay, value, overlaySpans);
     syncOverlayScroll();
-    if (passBadges) renderBadges(passBadges, reasons, evalCheck.hits, evalCheck.blocking);
     renderHints(hintStack, allHints);
+    attachHintActions(allHints);
     const passCue = reasons.has("cue");
     const passSpeech = reasons.has("speech");
     const passAction = reasons.has("action");
     const passPerception = reasons.has("perception");
     const passTimeEvent = reasons.has("timeEvent");
-    const state = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
+    const state = computeState({
+      hits,
+      evalHits: evalCheck.hits,
+      passCue,
+      passSpeech,
+      passAction,
+      passPerception,
+      passTimeEvent,
+      txt: value,
+      blockingEval: evalCheck.blocking,
+    });
     setStatus(state);
-    if (nearestPanel) nearestPanel.style.display = "none";
-    if (nearBanner) nearBanner.style.display = "none";
-    if (nearExample) {
-      nearExample.style.display = "none";
-      nearExample.innerHTML = "";
-    }
-    nearList = [];
-    nearIdx = 0;
-    lastNearHash = null;
-    if (noteEl) noteEl.textContent = "";
-    if (sug) sug.style.display = "none";
-    if (feelingsHeading) feelingsHeading.style.display = "none";
-    if (feelings) feelings.innerHTML = "";
-    if (needsHeading) needsHeading.style.display = "none";
-    if (needs) needs.innerHTML = "";
-    if (matchedCues) matchedCues.textContent = "";
-
-    if (evalWarnings) {
-      if (evalCheck.hits.length) {
-        const chips = uniqueSorted(evalCheck.hits.map(h => h.match?.trim()).filter(Boolean));
-        const chipHtml = chips.map(word => `<span class="pill error">${escapeHtml(word)}</span>`).join(" ");
-        const prefix = '<div class="muted" style="margin-bottom:4px">Evaluation language detected:</div>';
-        const words = chipHtml ? `<div>${chipHtml}</div>` : "";
-        evalWarnings.innerHTML = prefix + words;
-        evalWarnings.style.display = "block";
-      } else {
-        evalWarnings.innerHTML = "";
-        evalWarnings.style.display = "none";
-      }
-    }
-    if (!submitBtn) return;
-
-    submitBtn.onclick = () => {
-      const stateNow = computeState({ hits, evalHits: evalCheck.hits, passCue, passSpeech, passAction, passPerception, passTimeEvent, txt: txt.value, blockingEval: evalCheck.blocking });
-      if (stateNow === "red") {
-        if (noteEl) noteEl.textContent = "Not ready — please make the statement purely observational.";
-        return;
-      }
-      if (stateNow === "green") {
-        const agg = aggregateSuggestions(hits);
-        const f = agg.feelings;
-        const n = agg.needs;
-        if (feelingsHeading) feelingsHeading.style.display = f.length ? "block" : "none";
-        renderSuggestionPills(feelings, f, "feeling");
-        if (needsHeading) needsHeading.style.display = n.length ? "block" : "none";
-        renderSuggestionPills(needs, n, "need");
-        if (matchedCues) matchedCues.textContent = hits.length
-          ? `Direct matches found — suggestions prioritized from ${hits.length} cue${hits.length === 1 ? "" : "s"}.`
-          : "Direct matches found.";
-        if (noteEl) noteEl.textContent = "Direct matches found — suggestions prioritized from exact cues.";
-        if (nearestPanel) nearestPanel.style.display = "none";
-        if (sug) sug.style.display = "block";
-      } else if (stateNow === "yellow") {
-        nearList = nearestForTextMinHash(txt.value, NEAR_TOP_K, NEAR_THRESHOLD);
-        lastNearHash = nearList.length ? hashText(txt.value) : null;
-        const storedIdx = lastNearHash != null ? loadNearSelection() : null;
-        nearIdx = typeof storedIdx === "number" && nearList.length && storedIdx >= 0 && storedIdx < nearList.length ? storedIdx : 0;
-        if (feelings) feelings.innerHTML = "";
-        if (needs) needs.innerHTML = "";
-        if (matchedCues) matchedCues.textContent = "";
-        if (sug) sug.style.display = "block";
-        if (feelingsHeading) feelingsHeading.style.display = "none";
-        if (needsHeading) needsHeading.style.display = "none";
-        renderNearest();
-        if (nearestPanel) nearestPanel.style.display = "block";
-        if (noteEl) noteEl.textContent = "No exact match — showing similar situations you can cycle through.";
-      }
+    updateWordCount(value);
+    lastContext = {
+      hits,
+      evalHits: evalCheck.hits,
+      passCue,
+      passSpeech,
+      passAction,
+      passPerception,
+      passTimeEvent,
+      txt: value,
+      blockingEval: evalCheck.blocking,
+      state,
     };
+    if (force && state !== "red") {
+      handleSubmit(true, lastContext);
+    }
   }
-  txt.addEventListener("input", () => { render(); });
+
+  try {
+    const stored = sessionStorage.getItem(TEXT_STORAGE_KEY);
+    if (stored && !txt.value) {
+      txt.value = stored;
+    }
+  } catch {}
+
+  txt.addEventListener("input", () => {
+    render();
+  });
   txt.addEventListener("scroll", syncOverlayScroll);
   window.addEventListener("resize", syncOverlayMetrics);
+  submitBtn?.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    handleSubmit(false);
+  });
+
+  syncOverlayMetrics();
   render();
 }
+
 
 document.addEventListener("DOMContentLoaded", boot);

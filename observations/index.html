@@ -1837,19 +1837,36 @@ button.site-nav__magnet {
 
   </style>
   <style>
-    .obs-editor { max-width: 840px; margin: 24px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-    .obs-editor textarea { width: 100%; font-size: 16px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; }
-    .obs-editor .bar { display:flex; align-items:center; gap:12px; margin:12px 0; }
-    .obs-editor .check { width: 16px; height: 16px; border-radius: 50%; display:inline-block; }
-    .obs-editor .check.ok { background:#22c55e; }
-    .obs-editor .check.no { background:#ef4444; }
-    .obs-editor button { padding:10px 14px; border-radius:8px; border:0; background:#111827; color:#fff; font-weight:600; }
-    .obs-editor button[disabled] { background:#9ca3af; }
-    .obs-editor .hints { color:#6b7280; font-size:14px; }
-    .obs-editor .panel { border:1px solid #e5e7eb; border-radius:8px; padding:12px; margin-top:12px; }
-    .obs-editor .pill { display:inline-block; padding:4px 8px; margin:4px; border-radius:999px; background:#f3f4f6; }
-    .obs-editor .muted { color:#6b7280; font-size:13px; }
-    .obs-editor .small { font-size: 12px; }
+    .obs-editor { max-width: 880px; margin: 24px auto; display: block; }
+    .builder-card { display: flex; flex-direction: column; gap: 12px; padding: clamp(18px, 3vw, 26px); border-radius: var(--radius-3xl); background: color-mix(in srgb, #ffffff 92%, var(--observations-card-bg) 8%); box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 12%, transparent); }
+    .builder-card textarea { width: 100%; min-height: 130px; font: inherit; line-height: 1.5; padding: 12px; border: 1px solid color-mix(in srgb, var(--outline) 65%, transparent); border-radius: var(--radius-xl); background: #fff; resize: vertical; }
+    .builder-card textarea:focus-visible { outline: 2px solid var(--outline); outline-offset: 2px; }
+    .hero { margin-bottom: 8px; }
+    .quickstart { display:flex; flex-wrap:wrap; gap:6px; margin: 4px 0 10px; }
+    .quickstart .ex { padding:6px 10px; border-radius:999px; }
+    .template { margin-bottom: 8px; }
+    .template .tpl-body { display:grid; gap:6px; grid-template-columns: 1fr; }
+    .template .row { display:flex; flex-direction:column; gap:4px; }
+    .template .row input { width:100%; padding:6px 8px; border:1px solid color-mix(in srgb, var(--outline) 50%, transparent); border-radius: var(--radius-lg); font: inherit; }
+    .editor-wrap { position:relative; }
+    #builderInput { width:100%; min-height:130px; }
+    #overlay { position:absolute; inset:0; pointer-events:none; white-space:pre-wrap; color:transparent; }
+    #overlay mark.hl { background: rgba(220,50,47,0.3); color: transparent; border-radius:3px; }
+    .guide-chips { display:flex; align-items:center; gap:6px; margin: 6px 0 2px; flex-wrap: wrap; }
+    .chip.add { border-radius:999px; padding:4px 8px; font-size:0.82rem; }
+    .builder-sticky { position: sticky; bottom: 0; background: color-mix(in srgb, rgba(255,255,255,0.95) 85%, var(--observations-card-bg) 15%); border-radius: 12px; padding: 8px 10px; display:flex; align-items:center; gap:8px; box-shadow: 0 -2px 0 color-mix(in srgb, var(--outline) 12%, transparent); }
+    .banner { padding:8px 10px; border-radius:8px; background:#fff7e0; border:1px solid #ffd36a; color:#5a4300; margin-top:8px; }
+    #results { margin-top:12px; display:grid; gap:12px; }
+    #exactBody, #nearestBody { display:grid; gap:10px; }
+    .pager { display:flex; align-items:center; gap:8px; margin:8px 0; }
+    .pill-group { display:flex; flex-wrap:wrap; gap:6px; }
+    .result-block .muted { display:block; margin-bottom:2px; }
+    .hint-list { margin:8px 0 0; padding-left:18px; display:grid; gap:6px; }
+    .hint-text { display:inline; }
+    .hint-actions { display:inline-flex; gap:4px; margin-left:6px; flex-wrap:wrap; align-items:center; }
+    .hint-chip { border:1px solid color-mix(in srgb, var(--outline) 70%, transparent); border-radius:999px; padding:2px 6px; background: color-mix(in srgb, rgba(255,255,255,0.95) 80%, var(--observations-card-bg) 20%); font-size:0.72rem; cursor:pointer; }
+    .hint-chip:focus-visible { outline:2px solid var(--outline); outline-offset:1px; }
+    [hidden] { display: none !important; }
   </style>
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
@@ -2287,50 +2304,93 @@ button.site-nav__magnet {
       </nav>
       <main id="main" class="page observations-page" role="main">
         <section id="obs-editor-root" class="obs-editor">
-          <h1>Observation Builder</h1>
-          <p class="muted">Type what you saw/heard/read/received. A green check appears when a valid observation is detected. Submit to see suggested feelings and needs.</p>
-          <div class="editor-input" style="position:relative;">
-            <textarea id="txt" placeholder="Example: I asked for time off and my manager said no." rows="8"></textarea>
-            <div id="overlay" aria-hidden="true"></div>
-          </div>
-          <div class="bar" style="display:flex;align-items:center;gap:8px;margin-top:8px">
-            <span id="readyDot" class="dot red"></span>
-            <span id="readyLabel" class="small muted">Not ready — make it purely observational</span>
-            <button id="submitBtn" class="primary" style="margin-left:auto">Submit</button>
-          </div>
-          <div id="passBadges" class="small muted" style="margin-bottom:8px"></div>
-          <div id="evalWarnings" class="small" style="display:none"></div>
-          <div id="hintStack" class="small" style="margin-top:6px;display:none"></div>
-          <details id="examplesPanel" style="margin-top:8px">
-            <summary class="small muted">Examples</summary>
-            <div id="examplesBody" class="small" style="margin-top:6px"></div>
-          </details>
-          <div id="suggestions" class="panel" style="display:none">
-            <div id="feelingsHeading"><strong>Possible feelings</strong></div>
-            <div id="feelings"></div>
-            <div id="needsHeading" style="margin-top:8px"><strong>Possible needs</strong></div>
-            <div id="needs"></div>
-            <div class="small muted" id="matchedCues"></div>
-            <div id="suggestionNote" class="small muted" style="margin-top:6px"></div>
-          </div>
-          <div id="nearestPanel" class="panel" style="display:none">
-            <div id="nearBanner" style="display:none;margin-bottom:8px;padding:8px;border-radius:6px;background:#fef3c7;border:1px solid #fbbf24;color:#92400e;font-weight:600;">
-              No exact match — showing similar situations you can cycle through.
+          <div class="card builder-card">
+            <header class="hero">
+              <h1 class="h3">Turn what happened into an observation</h1>
+              <p class="muted small">Write only what a camera/mic would capture. When your sentence is observational, you’ll see suggestions for feelings and needs.</p>
+            </header>
+
+            <!-- Quickstart examples -->
+            <div class="quickstart" aria-label="Quickstart examples">
+              <button class="ghost ex" data-ex='A notification said "Recording has started."'>Recording started</button>
+              <button class="ghost ex" data-ex='While I was speaking, my camera turned off.'>Camera off mid-call</button>
+              <button class="ghost ex" data-ex='The invite disappeared from my calendar.'>Event removed</button>
+              <button class="ghost ex" data-ex='They arrived twenty minutes late without a message.'>Arrived late</button>
+              <button class="ghost ex" data-ex='I asked for time off and my manager said no.'>Request denied</button>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <strong>Similar situations</strong>
-              <div>
-                <button id="prevNear" class="small">Prev</button>
-                <button id="nextNear" class="small">Next</button>
+
+            <!-- Template helper (collapsible) -->
+            <details id="tpl" class="template">
+              <summary class="small muted">Build from prompts (optional)</summary>
+              <div class="tpl-body">
+                <div class="row">
+                  <label class="small">When</label>
+                  <input id="tplWhen" placeholder="Yesterday at 3:10 p.m.">
+                </div>
+                <div class="row">
+                  <label class="small">Where</label>
+                  <input id="tplWhere" placeholder="in the team meeting">
+                </div>
+                <div class="row">
+                  <label class="small">Who</label>
+                  <input id="tplWho" placeholder="the host / my manager / Alex">
+                </div>
+                <div class="row">
+                  <label class="small">What happened</label>
+                  <input id="tplWhat" placeholder="muted my microphone / said “This is a waste of time.”">
+                </div>
+                <div class="row">
+                  <button id="tplInsert" class="secondary small">Insert sentence</button>
+                </div>
               </div>
+            </details>
+
+            <!-- Editor -->
+            <div class="editor-wrap">
+              <textarea id="builderInput" placeholder='Try: I heard "You’re late again."' autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+              <div id="overlay" aria-hidden="true"></div>
             </div>
-            <div class="small muted" style="margin:6px 0">Showing suggestions based on similar phrasing.</div>
-            <div id="nearExample" class="small" style="margin:8px 0;display:none;"></div>
-            <div><strong>Possible feelings</strong></div>
-            <div id="nearFeelings"></div>
-            <div style="margin-top:8px"><strong>Possible needs</strong></div>
-            <div id="nearNeeds"></div>
-            <div id="nearPager" class="small muted" style="margin-top:8px"></div>
+
+            <!-- Guided chips -->
+            <div class="guide-chips small">
+              <span class="muted">Add quickly:</span>
+              <button class="chip add when" data-insert="Yesterday at ">When</button>
+              <button class="chip add where" data-insert="in ">Where</button>
+              <button class="chip add who" data-insert="my manager ">Who</button>
+              <button class="chip add quote" data-insert='“”' data-caret="-1">Quote</button>
+            </div>
+
+            <!-- Status & submit -->
+            <div class="bar builder-sticky">
+              <span id="readyDot" class="dot red" aria-hidden="true"></span>
+              <span id="readyLabel" class="small muted">Not ready — keep only what a camera/mic would capture</span>
+              <span id="wordCount" class="small muted" style="margin-left:8px"></span>
+              <button id="submitBtn" class="primary" style="margin-left:auto">Submit</button>
+            </div>
+
+            <!-- Hints -->
+            <div id="hintStack" class="small"></div>
+
+            <!-- Nearest banner -->
+            <div id="nearestBanner" class="banner" hidden>No exact match — showing similar situations you can cycle through.</div>
+
+            <!-- Results -->
+            <section id="results">
+              <h3 id="resultsHeader" tabindex="-1" class="h5">Results</h3>
+              <div id="exactPanel" hidden>
+                <h4 class="h6">Exact matches</h4>
+                <div id="exactBody"></div>
+              </div>
+              <div id="nearestPanel" hidden>
+                <h4 class="h6">Similar situations</h4>
+                <div class="pager">
+                  <button id="nearPrev" class="secondary small" aria-label="Previous similar">◀ Prev</button>
+                  <span id="nearIdx" class="small muted">1/1</span>
+                  <button id="nearNext" class="secondary small" aria-label="Next similar">Next ▶</button>
+                </div>
+                <div id="nearestBody"></div>
+              </div>
+            </section>
           </div>
         </section>
       </main>
