@@ -1,5 +1,27 @@
 const state = { compiled: [], };
 
+async function fetchFirst(urls) {
+  for (const u of urls) {
+    try {
+      const r = await fetch(u, { cache: "no-store" });
+      if (r.ok) {
+        return await r.json();
+      }
+    } catch {}
+  }
+  return null;
+}
+
+function assetBases() {
+  const meta = document.querySelector('meta[name="next-asset-root"]')?.content;
+  const bases = [];
+  if (meta) bases.push(meta);
+  bases.push("/public/next", "/next");
+  return Array.from(new Set(bases));
+}
+
+const BASES = assetBases();
+
 const FALLBACK = [
   { kw: /\bdeadline|due\b/i, feelings: ["anxious", "pressured"], needs: ["predictability", "clarity"] },
   { kw: /\bmeeting|call|recording\b/i, feelings: ["tense", "anxious"], needs: ["respect", "to-be-heard", "predictability"] },
@@ -97,12 +119,12 @@ function aggregateSuggestions(hits){
 }
 
 let nearestIndex = null;
-async function loadNearest(){
-  try {
-    const res = await fetch("/next/cues.nearest.json", { cache:"no-store" });
-    if (res.ok) nearestIndex = await res.json();
-  } catch (err) {
-    console.warn("Failed to load nearest index", err);
+async function loadNearest(bases){
+  const data = await fetchFirst(bases.map(b => `${b}/cues.nearest.json`));
+  if (data) {
+    nearestIndex = data;
+  } else {
+    console.warn("Failed to load nearest index");
   }
 }
 
@@ -166,12 +188,15 @@ function renderBadges(container, reasons) {
 async function boot() {
   // Load cues
   try {
-    const res = await fetch("/next/cues.bundle.json", { cache: "no-store" });
-    const json = await res.json();
-    state.compiled = compileCues(json);
+    const json = await fetchFirst(BASES.map(b => `${b}/cues.bundle.json`));
+    if (json) {
+      state.compiled = compileCues(json);
+    } else {
+      console.error("Failed to load cues bundle");
+    }
   } catch (e) { console.error("Failed to load cues bundle:", e); }
 
-  await loadNearest();
+  await loadNearest(BASES);
 
   const root = document.getElementById("obs-editor-root");
   const txt = root.querySelector("#txt");
