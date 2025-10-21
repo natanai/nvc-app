@@ -1376,13 +1376,15 @@ function renderHighlight() {
     return;
   }
   const text = state.text || '';
-  const tokens = collectHighlightTokens(state.analysis?.lint);
-  const warnRanges = buildHighlightRanges(text, tokens).map(range => ({ ...range, tone: 'warn' }));
+  const warnTokens = collectWarnHighlightTokens(state.analysis?.lint);
+  const okTokens = collectPositiveHighlightTokens(state.analysis?.lint);
+  const warnRanges = buildHighlightRanges(text, warnTokens).map(range => ({ ...range, tone: 'warn' }));
+  const okRanges = buildHighlightRanges(text, okTokens).map(range => ({ ...range, tone: 'ok' }));
   const cueRanges = Array.isArray(state.cueHighlightRanges) ? state.cueHighlightRanges : [];
-  host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...cueRanges]);
+  host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...okRanges, ...cueRanges]);
 }
 
-function collectHighlightTokens(lint) {
+function collectWarnHighlightTokens(lint) {
   if (!lint) {
     return [];
   }
@@ -1401,6 +1403,19 @@ function collectHighlightTokens(lint) {
   (lint.fauxFeelings || []).forEach(addToken);
   (lint.feelings || []).forEach(addToken);
   (lint.needs || []).forEach(addToken);
+  return Array.from(tokens).filter(Boolean);
+}
+
+function collectPositiveHighlightTokens(lint) {
+  if (!lint) {
+    return [];
+  }
+  const tokens = new Set();
+  (lint.observationHighlights || []).forEach(token => {
+    if (token) {
+      tokens.add(String(token).trim());
+    }
+  });
   return Array.from(tokens).filter(Boolean);
 }
 

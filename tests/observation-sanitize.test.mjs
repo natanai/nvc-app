@@ -37,6 +37,12 @@ test('preserves observational portion while dropping evaluations', () => {
   assert.equal(sanitizeObservationText(text, catalog), 'At 4 pm I noticed the report had 3 errors.');
 });
 
+test('detects faux feeling variants like "ignoring"', () => {
+  const text = 'At noon I noticed you ignoring my request about the schedule.';
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.fauxFeelings.includes('ignored'), true, 'ignoring should map to ignored faux feeling');
+});
+
 test('allows quotes that include feeling words', () => {
   const text = 'At noon you said, "I feel sad about the delay."';
   const lint = lintObservation(text, catalog);
@@ -74,6 +80,19 @@ test('allows abstract lack phrasing inside direct quotes', () => {
 test('filters agentive phrasing like "forced me to"', () => {
   const text = 'They forced me to stay after the meeting.';
   assert.equal(sanitizeObservationText(text, catalog), '');
+});
+
+test('highlights observational anchors and quotes for guidance', () => {
+  const text = 'Yesterday at 6:15 pm I noticed Alex type "I will handle it." in the chat.';
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.observationHighlights.some(token => /yesterday/i.test(token)), true, 'time anchor should be highlighted');
+  assert.equal(lint.observationHighlights.some(token => /6:15\s*pm/i.test(token)), true, 'clock time should be highlighted');
+  assert.equal(lint.observationHighlights.some(token => /noticed/i.test(token)), true, 'sensory verb should be highlighted');
+  assert.equal(
+    lint.observationHighlights.some(token => /I will handle it\./i.test(token)),
+    true,
+    'direct quote should be highlighted',
+  );
 });
 
 async function run() {
