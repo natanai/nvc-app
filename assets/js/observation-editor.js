@@ -25,6 +25,24 @@ const state = {
 
 let guideNavigationBound = false;
 
+const guideOverlayState = {
+  initialized: false,
+  open: false,
+  layer: null,
+  dialog: null,
+  closeButton: null,
+  openButton: null,
+  overlayContent: null,
+  inlineContainer: null,
+  card: null,
+  heading: null,
+  activeTrigger: null,
+  details: null,
+};
+
+const GUIDE_OVERLAY_BODY_CLASS = 'has-observation-guide-open';
+const GUIDE_OVERLAY_LAYER_ID = 'observation-guide-fullscreen-layer';
+
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
   need: '../needs/',
@@ -136,6 +154,7 @@ function bind() {
   }
 
   bindGuideNavigation();
+  bindGuideOverlay();
 }
 
 function analyze(raw, options = {}) {
@@ -1832,4 +1851,190 @@ function openGuideSection(id) {
       tab.focus();
     }
   }
+}
+
+function bindGuideOverlay() {
+  if (guideOverlayState.initialized || typeof document === 'undefined') {
+    return;
+  }
+
+  const layer = document.querySelector('[data-observation-guide-layer]');
+  const dialog = layer?.querySelector('[data-observation-guide-dialog]') || null;
+  const closeButton = layer?.querySelector('[data-observation-guide-close]') || null;
+  const overlayContent = layer?.querySelector('[data-observation-guide-overlay-content]') || null;
+  const openButton = document.querySelector('[data-observation-guide-open]');
+  const card = document.querySelector('[data-observation-guide-card]');
+
+  if (!layer || !dialog || !overlayContent || !openButton || !card) {
+    return;
+  }
+
+  guideOverlayState.layer = layer;
+  guideOverlayState.dialog = dialog;
+  guideOverlayState.closeButton = closeButton;
+  guideOverlayState.overlayContent = overlayContent;
+  guideOverlayState.openButton = openButton;
+  guideOverlayState.card = card;
+  guideOverlayState.inlineContainer = card.parentElement || null;
+  guideOverlayState.heading = layer.querySelector('[data-observation-guide-heading]') || null;
+  guideOverlayState.details = card.closest('[data-observation-guide-details]') || card.closest('details');
+
+  if (!guideOverlayState.inlineContainer) {
+    guideOverlayState.inlineContainer = guideOverlayState.details || null;
+  }
+
+  const layerId = layer.id || GUIDE_OVERLAY_LAYER_ID;
+  if (!layer.id) {
+    layer.id = layerId;
+  }
+
+  openButton.setAttribute('aria-controls', layerId);
+  openButton.setAttribute('aria-haspopup', 'dialog');
+  openButton.setAttribute('aria-expanded', 'false');
+
+  openButton.addEventListener('click', handleGuideOverlayOpenClick);
+  if (closeButton) {
+    closeButton.addEventListener('click', () => closeGuideOverlay());
+  }
+  layer.addEventListener('click', handleGuideOverlayLayerClick);
+
+  guideOverlayState.initialized = true;
+}
+
+function handleGuideOverlayOpenClick(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const trigger = event?.currentTarget instanceof HTMLElement ? event.currentTarget : guideOverlayState.openButton;
+  if (trigger instanceof HTMLElement) {
+    guideOverlayState.activeTrigger = trigger;
+  } else {
+    guideOverlayState.activeTrigger = guideOverlayState.openButton || null;
+  }
+  openGuideOverlay();
+}
+
+function openGuideOverlay() {
+  if (!guideOverlayState.layer || !guideOverlayState.overlayContent || !guideOverlayState.card) {
+    return;
+  }
+  if (guideOverlayState.open) {
+    return;
+  }
+
+  moveGuideCardToOverlay();
+
+  guideOverlayState.open = true;
+  guideOverlayState.layer.dataset.state = 'open';
+  guideOverlayState.layer.setAttribute('aria-hidden', 'false');
+  if (guideOverlayState.openButton) {
+    guideOverlayState.openButton.setAttribute('aria-expanded', 'true');
+  }
+  enableGuideOverlayDialogAttributes();
+
+  if (document.body?.classList) {
+    document.body.classList.add(GUIDE_OVERLAY_BODY_CLASS);
+  }
+
+  const focusDialog = () => {
+    if (!guideOverlayState.dialog) {
+      return;
+    }
+    try {
+      guideOverlayState.dialog.focus({ preventScroll: true });
+    } catch (error) {
+      guideOverlayState.dialog.focus();
+    }
+  };
+
+  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(focusDialog);
+  } else {
+    focusDialog();
+  }
+
+  document.addEventListener('keydown', handleGuideOverlayKeydown);
+}
+
+function closeGuideOverlay(options = {}) {
+  const { returnFocus = true } = options;
+  if (!guideOverlayState.layer || !guideOverlayState.open) {
+    return;
+  }
+
+  guideOverlayState.open = false;
+  guideOverlayState.layer.dataset.state = 'closed';
+  guideOverlayState.layer.setAttribute('aria-hidden', 'true');
+  if (guideOverlayState.openButton) {
+    guideOverlayState.openButton.setAttribute('aria-expanded', 'false');
+  }
+
+  disableGuideOverlayDialogAttributes();
+  if (document.body?.classList) {
+    document.body.classList.remove(GUIDE_OVERLAY_BODY_CLASS);
+  }
+  document.removeEventListener('keydown', handleGuideOverlayKeydown);
+  restoreGuideCardToInline();
+
+  if (returnFocus) {
+    const focusTarget = guideOverlayState.activeTrigger || guideOverlayState.openButton;
+    if (focusTarget instanceof HTMLElement) {
+      focusTarget.focus();
+    }
+  }
+  guideOverlayState.activeTrigger = null;
+}
+
+function moveGuideCardToOverlay() {
+  if (!guideOverlayState.overlayContent || !guideOverlayState.card) {
+    return;
+  }
+  if (guideOverlayState.overlayContent.contains(guideOverlayState.card)) {
+    return;
+  }
+  guideOverlayState.overlayContent.appendChild(guideOverlayState.card);
+}
+
+function restoreGuideCardToInline() {
+  if (!guideOverlayState.inlineContainer || !guideOverlayState.card) {
+    return;
+  }
+  if (guideOverlayState.inlineContainer.contains(guideOverlayState.card)) {
+    return;
+  }
+  guideOverlayState.inlineContainer.appendChild(guideOverlayState.card);
+}
+
+function handleGuideOverlayLayerClick(event) {
+  if (!guideOverlayState.layer || event.target !== guideOverlayState.layer) {
+    return;
+  }
+  closeGuideOverlay();
+}
+
+function handleGuideOverlayKeydown(event) {
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    closeGuideOverlay();
+  }
+}
+
+function enableGuideOverlayDialogAttributes() {
+  if (!guideOverlayState.dialog) {
+    return;
+  }
+  guideOverlayState.dialog.setAttribute('role', 'dialog');
+  guideOverlayState.dialog.setAttribute('aria-modal', 'true');
+  if (guideOverlayState.heading?.id) {
+    guideOverlayState.dialog.setAttribute('aria-labelledby', guideOverlayState.heading.id);
+  }
+}
+
+function disableGuideOverlayDialogAttributes() {
+  if (!guideOverlayState.dialog) {
+    return;
+  }
+  guideOverlayState.dialog.removeAttribute('role');
+  guideOverlayState.dialog.removeAttribute('aria-modal');
+  guideOverlayState.dialog.removeAttribute('aria-labelledby');
 }
