@@ -985,6 +985,27 @@ button.site-nav__magnet {
     margin: 0;
   }
 
+  .observation-guide__section-content a {
+    overflow-wrap: anywhere;
+  }
+
+  .observation-guide__citation {
+    font-size: 0.72em;
+    line-height: 0;
+    margin-left: 0.2em;
+  }
+
+  .observation-guide__citation a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .observation-guide__citation a:hover,
+  .observation-guide__citation a:focus-visible {
+    text-decoration: underline;
+  }
+
   @media (max-width: 720px) {
     .observation-guide__toggle {
       flex-direction: column;
@@ -2406,67 +2427,55 @@ button.site-nav__magnet {
           <!-- observation-guide:start -->
           <summary class="observation-guide__toggle">
             <span class="observation-guide__toggle-text">
-              <span class="observation-guide__eyebrow">Observation guide</span>
-              <span class="observation-guide__toggle-title">Tap to explore principles, steps, and examples</span>
+              <span class="observation-guide__eyebrow">Research-grounded (open-access links)</span>
+              <span class="observation-guide__toggle-title">Observation Guide: Low-Inference Description</span>
             </span>
             <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
           </summary>
           <div class="observation-guide__card" role="group" aria-labelledby="observation-guide-title">
             <header class="observation-guide__intro">
-              <p class="observation-guide__eyebrow">Observation guide</p>
+              <p class="observation-guide__eyebrow">Abstract</p>
               <h2 id="observation-guide-title" class="observation-guide__title">
-                Learn to separate what happened from the story
+                Constructing Low-Inference, Time-Bound Observations
               </h2>
-              <p>Marshall Rosenberg describes observations as a camera-ready record of what we saw, heard, or noticed in a specific moment. Instead of “The principal has a big mouth,” an observation is “The principal spoke for about twenty minutes about personal stories during the staff meeting.” The first statement evaluates a person; the second simply reports what occurred.</p>
-              <p>Observing without evaluating is challenging—Rosenberg echoed J. Krishnamurti’s reminder that it is “the highest form of human intelligence.” These notes walk through every principle from the observation guide so you can practise staying with the facts before moving on to feelings and needs.</p>
+              <p>This guide formalizes a fill-in-the-blank process for producing low-inference observational statements: descriptions restricted to verifiable sensory data (what was seen/heard), anchored to concrete time and context, and free of trait labels or motive attributions. The approach synthesizes findings from behavioral observation, psycholinguistics, and affect-regulation research. Linguistic abstraction increases biased social inference <sup class="observation-guide__citation"><a href="#observation-guide-ref-1">[1]</a></sup>; concreteness improves comprehension <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>; and affect labeling is associated with reduced limbic reactivity <sup class="observation-guide__citation"><a href="#observation-guide-ref-4">[4]</a></sup>.</p>
+              <p>Perspective-taking and I-language are linked to lower perceived hostility in communication contexts <sup class="observation-guide__citation"><a href="#observation-guide-ref-5">[5]</a></sup>. Research on basic psychological needs provides relevant context for why clear description may matter in interpersonal settings: autonomy/competence <sup class="observation-guide__citation"><a href="#observation-guide-ref-6">[6]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-7">[7]</a></sup> and belonging/social connection <sup class="observation-guide__citation"><a href="#observation-guide-ref-8">[8]</a></sup>.</p>
             </header>
             <nav class="observation-guide__nav" aria-label="Observation guide sections" role="tablist">
               <a
                 class="observation-guide__tab is-active"
-                href="#observation-guide-foundations"
+                href="#observation-guide-definition"
                 role="tab"
                 aria-selected="true"
-                aria-controls="observation-guide-foundations"
-                id="observation-guide-tab-foundations"
-                data-guide-target="observation-guide-foundations"
+                aria-controls="observation-guide-definition"
+                id="observation-guide-tab-definition"
+                data-guide-target="observation-guide-definition"
               >
-                <span class="observation-guide__tab-label">Observations vs. evaluations</span>
+                <span class="observation-guide__tab-label">Definition</span>
               </a>
               <a
                 class="observation-guide__tab"
-                href="#observation-guide-why"
+                href="#observation-guide-method"
                 role="tab"
                 aria-selected="false"
-                aria-controls="observation-guide-why"
-                id="observation-guide-tab-why"
-                data-guide-target="observation-guide-why"
+                aria-controls="observation-guide-method"
+                id="observation-guide-tab-method"
+                data-guide-target="observation-guide-method"
                 tabindex="-1"
               >
-                <span class="observation-guide__tab-label">Why it matters</span>
+                <span class="observation-guide__tab-label">Method</span>
               </a>
               <a
                 class="observation-guide__tab"
-                href="#observation-guide-principles"
+                href="#observation-guide-heuristics"
                 role="tab"
                 aria-selected="false"
-                aria-controls="observation-guide-principles"
-                id="observation-guide-tab-principles"
-                data-guide-target="observation-guide-principles"
+                aria-controls="observation-guide-heuristics"
+                id="observation-guide-tab-heuristics"
+                data-guide-target="observation-guide-heuristics"
                 tabindex="-1"
               >
-                <span class="observation-guide__tab-label">Key principles</span>
-              </a>
-              <a
-                class="observation-guide__tab"
-                href="#observation-guide-steps"
-                role="tab"
-                aria-selected="false"
-                aria-controls="observation-guide-steps"
-                id="observation-guide-tab-steps"
-                data-guide-target="observation-guide-steps"
-                tabindex="-1"
-              >
-                <span class="observation-guide__tab-label">Step-by-step practice</span>
+                <span class="observation-guide__tab-label">Heuristics</span>
               </a>
               <a
                 class="observation-guide__tab"
@@ -2478,112 +2487,116 @@ button.site-nav__magnet {
                 data-guide-target="observation-guide-examples"
                 tabindex="-1"
               >
-                <span class="observation-guide__tab-label">Example rewrites</span>
+                <span class="observation-guide__tab-label">Examples</span>
               </a>
               <a
                 class="observation-guide__tab"
-                href="#observation-guide-builder"
+                href="#observation-guide-data"
                 role="tab"
                 aria-selected="false"
-                aria-controls="observation-guide-builder"
-                id="observation-guide-tab-builder"
-                data-guide-target="observation-guide-builder"
+                aria-controls="observation-guide-data"
+                id="observation-guide-tab-data"
+                data-guide-target="observation-guide-data"
                 tabindex="-1"
               >
-                <span class="observation-guide__tab-label">Builder tips</span>
+                <span class="observation-guide__tab-label">Measurement</span>
               </a>
               <a
                 class="observation-guide__tab"
-                href="#observation-guide-practice"
+                href="#observation-guide-needs"
                 role="tab"
                 aria-selected="false"
-                aria-controls="observation-guide-practice"
-                id="observation-guide-tab-practice"
-                data-guide-target="observation-guide-practice"
+                aria-controls="observation-guide-needs"
+                id="observation-guide-tab-needs"
+                data-guide-target="observation-guide-needs"
                 tabindex="-1"
               >
-                <span class="observation-guide__tab-label">Keep practicing</span>
+                <span class="observation-guide__tab-label">Needs link</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-limitations"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-limitations"
+                id="observation-guide-tab-limitations"
+                data-guide-target="observation-guide-limitations"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">Limitations</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-references"
+                role="tab"
+                aria-selected="false"
+                aria-controls="observation-guide-references"
+                id="observation-guide-tab-references"
+                data-guide-target="observation-guide-references"
+                tabindex="-1"
+              >
+                <span class="observation-guide__tab-label">References</span>
               </a>
             </nav>
             <div class="observation-guide__sections">
               <section
                 class="observation-guide__section is-active"
-                id="observation-guide-foundations"
+                id="observation-guide-definition"
                 role="tabpanel"
-                aria-labelledby="observation-guide-tab-foundations"
+                aria-labelledby="observation-guide-tab-definition"
                 tabindex="0"
                 data-guide-section
               >
-                <h3 class="observation-guide__section-title">Observations vs. evaluations</h3>
-                <div class="observation-guide__section-content">
-                  <p>The observation step in Nonviolent Communication invites us to describe what actually happened without folding in judgments. Observations cover concrete behaviours, words, or events that a neutral witness could verify. Evaluations—including labels, assumptions, or speculation about motives—tell our story about the event instead of the event itself.</p>
-                  <p>Rosenberg encourages us to think like a reporter: what would the camera capture? It can record someone saying, “This is all your fault,” or leaving the room, but it cannot record “He was disrespectful.” When we speak in observations, we ground our conversation in something both people can recognise.</p>
-                  <p>Because reality unfolds moment by moment, observations stay anchored in time and place. Rather than a static label such as “You’re inconsiderate,” we describe the specific interaction (“You left the restaurant while I was still ordering yesterday evening”). This shift keeps the focus on what happened instead of who someone is.</p>
-                </div>
-              </section>
-              <section
-                class="observation-guide__section"
-                id="observation-guide-why"
-                role="tabpanel"
-                aria-labelledby="observation-guide-tab-why"
-                tabindex="-1"
-                data-guide-section
-              >
-                <h3 class="observation-guide__section-title">Why it matters</h3>
-                <div class="observation-guide__section-content">
-                  <p>Blending evaluation with observation often lands as criticism. “You’re always late and inconsiderate” mixes a fact with a judgment, which usually triggers defensiveness. “You arrived twenty minutes after our agreed time” invites a shared reality instead. Research on NVC shows that this clarity supports empathy and more effective dialogue, because people no longer have to fight the story before hearing the feelings and needs beneath it.</p>
-                  <ul>
-                    <li>Neutral descriptions reduce the chance that the listener hears blame or attack.</li>
-                    <li>Specific observations prevent debates over what “really” happened and let us move on to feelings and needs.</li>
-                    <li>Training studies and literature reviews on NVC report increased empathy and communication skills when people practise separating observations from evaluations.</li>
-                  </ul>
-                </div>
-              </section>
-              <section
-                class="observation-guide__section"
-                id="observation-guide-principles"
-                role="tabpanel"
-                aria-labelledby="observation-guide-tab-principles"
-                tabindex="-1"
-                data-guide-section
-              >
-                <h3 class="observation-guide__section-title">Key principles</h3>
+                <h3 class="observation-guide__section-title">Operational Definition & Evidence Context</h3>
                 <div class="observation-guide__section-content">
                   <ul>
-                    <li><strong>Use the camera-or-microphone test.</strong> If a recorder cannot capture it, it is probably an evaluation. Describe the behaviour (“She rolled her eyes and walked out”) instead of the conclusion (“She was rude”).</li>
-                    <li><strong>Anchor every statement in time and context.</strong> Avoid broad generalisations such as “always” or “never.” Replace them with the moment, date, or frequency that actually happened.</li>
-                    <li><strong>Name actions, not character traits.</strong> Labels—even positive ones like “amazing teammate”—tell your appraisal. Observations mention the behaviour that led to the label, such as “You helped each person finish their task this week.”</li>
-                    <li><strong>Leave motives and causes for later.</strong> Phrases like “for no reason” or “to hurt me” assume why something happened. In the observation step we only log that it happened (“He left the party without saying goodbye”).</li>
-                    <li><strong>Keep feelings and needs in their own sentences.</strong> You might later say, “When that happened I felt hurt,” but the pure observation stops at “When you didn’t say hello this morning…”. Keeping these parts separate makes each one clearer.</li>
+                    <li>Recorder criterion: report only what a camera/microphone could capture (verbatim words, visible actions, measurable outcomes). Behavioral observation emphasizes observable units to aid reliability <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Time- and context-bound: specify when/where (e.g., “On Tue 15:10 in the team room…”). Concreteness improves comprehension and reduces ambiguity <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</li>
+                    <li>Avoid absolutes (“always/never/constantly”): prefer frequency, duration, or counts <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>.</li>
+                    <li>No mind-reading or motive attributions (e.g., “to hurt me,” “on purpose”): hostile-attribution tendencies relate to aggressive/negative responding <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-11">[11]</a></sup>.</li>
+                    <li>Quantify when feasible: counts, durations, latency, intensity (e.g., decibels). Linguistic abstraction inflates inference; measurables support shared description <sup class="observation-guide__citation"><a href="#observation-guide-ref-1">[1]</a></sup>.</li>
                   </ul>
+                  <p class="observation-guide__callout">Observations describe events; other components (feelings/needs/requests) are handled elsewhere in the app. Separating description from evaluation aligns with evidence on perspective-taking/I-language <sup class="observation-guide__citation"><a href="#observation-guide-ref-5">[5]</a></sup>.</p>
                 </div>
               </section>
               <section
                 class="observation-guide__section"
-                id="observation-guide-steps"
+                id="observation-guide-method"
                 role="tabpanel"
-                aria-labelledby="observation-guide-tab-steps"
+                aria-labelledby="observation-guide-tab-method"
                 tabindex="-1"
                 data-guide-section
               >
-                <h3 class="observation-guide__section-title">Step-by-step practice</h3>
+                <h3 class="observation-guide__section-title">Fill-in-the-Blank Procedure (Low-Inference Observation)</h3>
                 <div class="observation-guide__section-content">
                   <ol>
-                    <li><strong>Identify the specific moment.</strong> Choose the scene you want to discuss, including when and where it occurred and who was present. Narrowing the scope keeps the conversation precise.</li>
-                    <li><strong>Describe what the senses recorded.</strong> Write what you saw or heard as if you were quoting a transcript. Include actions, exact words, tone shifts, or observable results. The camera can show someone shutting the office door without knocking; it cannot show “disrespect.”</li>
-                    <li>
-                      <strong>Remove evaluation triggers.</strong> Scan your statement for judgement clues and swap them for what actually happened:
-                      <ul>
-                        <li>Personality adjectives (lazy,” “aggressive,” “unprofessional”) become descriptions of the behaviour you observed.</li>
-                        <li>Opinion adverbs (“too much,” “too loud,” “slowly”) get replaced with specifics such as duration, decibel level, or speed.</li>
-                        <li>Generalisations (“always,” “never,” “constantly”) turn into the real frequency—how many times, on what dates, or during which interactions.</li>
-                        <li>Assumed motives (“to annoy me,” “for no reason”) are dropped entirely; we only note the observable behaviour.</li>
-                      </ul>
-                    </li>
-                    <li><strong>Quantify and quote when possible.</strong> Numbers, time frames, or direct quotes make the observation less debatable. “You played music that I could hear through my closed door and the bass shook the floor” paints a clearer picture than “Your music was too loud.”</li>
-                    <li><strong>Add an optional gap.</strong> If it helps, mention what you hoped for instead (“I expected we would finish the report together”). Keep it factual and separate from feelings so the observation still stands on its own.</li>
+                    <li>Anchor the scene: “On [DATE] at [TIME] in [PLACE], …”. Concreteness advantage <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</li>
+                    <li>Describe only what was sensed: “I saw/heard [ACTOR] [ACTION/WORDS].” Behavioral observation favors observable units <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Quote verbatim when feasible: “[Exact words].” Wording influences blame inferences; direct quotes minimize reinterpretation <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</li>
+                    <li>Quantify: “[N times / for M minutes / on D dates / ~latency].” Replace vague adverbs with measurable data <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>.</li>
+                    <li>Remove evaluations: omit trait adjectives and “too/should” adverbs; substitute the underlying observable behavior. Language framing affects judgment <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</li>
+                    <li>Remove intent clauses (e.g., “to annoy me”). Hostile intent attributions are linked with negative responding; keep to what occurred <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</li>
                   </ol>
-                  <p class="observation-guide__callout"><strong>Practice prompt:</strong> Try rewriting a charged statement into camera-ready language, then compare it with the examples below. The more you practise, the easier it becomes to spot hidden evaluations.</p>
+                  <p class="observation-guide__callout"><strong>Template:</strong> “On [DATE] at [TIME] in [PLACE], I saw/heard [ACTOR] [ACTION/WORDS]. This occurred [COUNT/DURATION/LATENCY].”</p>
+                </div>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-heuristics"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-heuristics"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Automated Flags & Coaching Prompts</h3>
+                <div class="observation-guide__section-content">
+                  <ul>
+                    <li>Absolutes: flag “always/never/constantly/every time.” Prompt for timeframe and count <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</li>
+                    <li>Trait labels: flag “rude, selfish, careless, disrespectful, aggressive, lazy,” etc. Prompt: “Describe the exact behavior instead” <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</li>
+                    <li>Mind-reading: flag “on purpose,” “to hurt me,” “because you don’t care.” Prompt: “Omit intent; report the observable act” <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</li>
+                    <li>Causation claims without evidence: flag “for no reason,” “made me,” unless tied to a measurable outcome. Encourage sticking to recorded events.</li>
+                    <li>Perspective-taking for later steps: I-language and checking understanding are associated with less defensive escalation <sup class="observation-guide__citation"><a href="#observation-guide-ref-5">[5]</a></sup>.</li>
+                  </ul>
                 </div>
               </section>
               <section
@@ -2594,70 +2607,110 @@ button.site-nav__magnet {
                 tabindex="-1"
                 data-guide-section
               >
-                <h3 class="observation-guide__section-title">Example rewrites</h3>
-                <div class="observation-guide__section-content observation-guide__examples">
+                <h3 class="observation-guide__section-title">Evaluation → Observation (Worked Examples)</h3>
+                <div class="observation-guide__section-content">
                   <dl>
                     <div>
-                      <dt>Evaluation: “Janice works too much.”</dt>
-                      <dd>Observation: “Janice spent over sixty hours at the office this week, including Saturday.” Why it works: “Too much” is subjective; the hours are concrete.</dd>
+                      <dt>Evaluation: ““You’re always late and inconsiderate.””</dt>
+                      <dd>Observation: ““In the past two weeks, you arrived 5–15 minutes after our agreed time on three occasions.”” Why it works: Replaces global language with time-bound frequency; concreteness improves agreement <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</dd>
                     </div>
                     <div>
-                      <dt>Evaluation: “Henry is aggressive.”</dt>
-                      <dd>Observation: “Yesterday, Henry hit his sister on the arm when she changed the TV channel.” Why it works: It names the specific behaviour without labelling Henry’s character.</dd>
+                      <dt>Evaluation: ““Janice works too much.””</dt>
+                      <dd>Observation: ““Janice logged 62 on-site hours this week, including Saturday.”” Why it works: Removes evaluative adverb; supplies measurable quantity <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>.</dd>
                     </div>
                     <div>
-                      <dt>Evaluation: “You’re always late.”</dt>
-                      <dd>Observation: “In the last two weeks, you arrived between five and fifteen minutes late to our meetings on three occasions.” Why it works: It replaces “always” with a verifiable pattern.</dd>
+                      <dt>Evaluation: ““He left the party to hurt me.””</dt>
+                      <dd>Observation: ““He left the party without saying goodbye at 9:10 p.m.”” Why it works: Strips motive attribution; hostile-attribution research cautions against inferred intent <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</dd>
                     </div>
                     <div>
-                      <dt>Evaluation: “My son often doesn’t brush his teeth.”</dt>
-                      <dd>Observation: “Twice this week, my son didn’t brush his teeth before bed.” Why it works: “Often” becomes a specific count.</dd>
-                    </div>
-                    <div>
-                      <dt>Evaluation: “My aunt complains whenever I talk to her.”</dt>
-                      <dd>Observation: “This week my aunt called me three times, and each call focused on people who treated her in ways she didn’t like.” Why it works: It describes the conversations instead of labelling them as “complaining.”</dd>
-                    </div>
-                    <div>
-                      <dt>Evaluation: “You’re destroying our child’s self-esteem!”</dt>
-                      <dd>Observation: “When you said to our son, ‘You’re lazy and will never amount to anything,’ …” Why it works: Quoting the words keeps the focus on what was said. Feelings about the impact can follow afterward.</dd>
+                      <dt>Evaluation: ““You were rude in the meeting.””</dt>
+                      <dd>Observation: ““During the 2:00–2:15 agenda item, while I was speaking, you interrupted twice (timestamps 08:12 and 09:47).”” Why it works: Replaces trait with event-bounded counts; wording shapes perceived blame <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</dd>
                     </div>
                   </dl>
                 </div>
               </section>
               <section
                 class="observation-guide__section"
-                id="observation-guide-builder"
+                id="observation-guide-data"
                 role="tabpanel"
-                aria-labelledby="observation-guide-tab-builder"
+                aria-labelledby="observation-guide-tab-data"
                 tabindex="-1"
                 data-guide-section
               >
-                <h3 class="observation-guide__section-title">Builder tips</h3>
+                <h3 class="observation-guide__section-title">Measurement Concepts: Operational Definitions, ABC, Agreement</h3>
+                <div class="observation-guide__section-content">
+                  <p>This section summarizes commonly used measurement concepts that may inform personal or professional record-keeping in observational work.</p>
+                  <ol>
+                    <li>Operational definitions with exemplars/non-examples <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>ABC recording with timestamps; where feasible, use continuous measures (count, duration, latency) <sup class="observation-guide__citation"><a href="#observation-guide-ref-13">[13]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-14">[14]</a></sup>.</li>
+                    <li>Inter-observer agreement (IOA) on a sample of observations; consider statistics appropriate to the data (e.g., kappa) <sup class="observation-guide__citation"><a href="#observation-guide-ref-15">[15]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-16">[16]</a></sup>.</li>
+                    <li>Audit for observer drift and recalibrate using reference clips/exemplars <sup class="observation-guide__citation"><a href="#observation-guide-ref-15">[15]</a></sup>.</li>
+                  </ol>
+                </div>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-needs"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-needs"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Context: Research on Psychological Needs</h3>
+                <div class="observation-guide__section-content">
+                  <p>Autonomy/competence: studies and reviews describing these needs and their health associations <sup class="observation-guide__citation"><a href="#observation-guide-ref-6">[6]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-7">[7]</a></sup>.</p>
+                  <p>Belonging/social connection: advisory summarizing links to well-being and risk <sup class="observation-guide__citation"><a href="#observation-guide-ref-8">[8]</a></sup>.</p>
+                  <p>Trust/safety: work connecting interpersonal trust with stress pathways <sup class="observation-guide__citation"><a href="#observation-guide-ref-17">[17]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-18">[18]</a></sup>.</p>
+                </div>
+              </section>
+              <section
+                class="observation-guide__section"
+                id="observation-guide-limitations"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-limitations"
+                tabindex="-1"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Limitations & Scope Notes</h3>
                 <div class="observation-guide__section-content">
                   <ul>
-                    <li>Watch for generalisations or absolutes (“always,” “never,” “constantly”). The builder flags them and prompts you to name a specific instance or number instead.</li>
-                    <li>When judgement-heavy adjectives appear (“lazy,” “selfish,” “disrespectful”), expect a reminder to describe the underlying behaviour you observed.</li>
-                    <li>Name-calling and labels (including positive ones like “hero”) signal evaluation. The tool nudges you to show what happened instead of who someone supposedly is.</li>
-                    <li>Subjective phrases that guess motives—“to get back at me,” “for no reason,” “on purpose”—are highlighted so you can focus on the observable part of the story.</li>
-                    <li>Structure helps. Start with when and where (“Yesterday at dinner…”) and then describe the action. Prompts in the editor keep these anchors visible.</li>
-                    <li>Use the example library above when you need inspiration. Comparing your sentence to model observations can reveal hidden evaluations quickly.</li>
-                    <li>Every flag comes with a short explanation referencing NVC principles, so each correction also teaches the “why.”</li>
-                    <li>If a feeling sneaks into the observation (“I felt ignored”), separate it out. The builder acknowledges the emotion while guiding you back to the factual first step.</li>
+                    <li>Memory/measurement: observations depend on recall or recording fidelity; contemporaneous notes/quotes provide clearer records <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Intent is not adjudicated by observation: avoid hostile attributions <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</li>
+                    <li>Cultural/linguistic nuance: perceptions of “neutral” phrasing can vary; invite verification of wording.</li>
+                    <li>Scope: this guide summarizes research and provides structured prompts; it does not determine clinical reliability or outcomes.</li>
                   </ul>
                 </div>
               </section>
               <section
                 class="observation-guide__section"
-                id="observation-guide-practice"
+                id="observation-guide-references"
                 role="tabpanel"
-                aria-labelledby="observation-guide-tab-practice"
+                aria-labelledby="observation-guide-tab-references"
                 tabindex="-1"
                 data-guide-section
               >
-                <h3 class="observation-guide__section-title">Keep practicing</h3>
+                <h3 class="observation-guide__section-title">References</h3>
                 <div class="observation-guide__section-content">
-                  <p>Observational language can feel plain at first, yet it opens space for empathy. By clearly naming what happened before sharing feelings or needs, you lower defences and invite collaboration. Studies of NVC programmes show that this discipline strengthens relationships and increases self-awareness.</p>
-                  <p>Remember that the goal is not to suppress judgments forever. NVC simply asks us to lead with the shared reality of what occurred, then speak to how it affected us. As you keep practising—rewriting charged sentences, using the detector’s feedback, and revisiting the steps above—you will build the reflex to observe first and tell the story later.</p>
+                  <ol>
+                    <li><a id="observation-guide-ref-1" href="https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf" rel="noopener noreferrer" target="_blank">uni-muenster.de – Linguistic abstraction and inference study (1989)</a></li>
+                    <li><a id="observation-guide-ref-2" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/" rel="noopener noreferrer" target="_blank">PMC6353691 – Concreteness and comprehension research</a></li>
+                    <li><a id="observation-guide-ref-3" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/" rel="noopener noreferrer" target="_blank">PMC8773921 – Measurement-focused language guidance</a></li>
+                    <li><a id="observation-guide-ref-4" href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf" rel="noopener noreferrer" target="_blank">Lieberman et al. (2007) – Affect labeling reduces limbic response</a></li>
+                    <li><a id="observation-guide-ref-5" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/" rel="noopener noreferrer" target="_blank">PMC5961625 – Perspective-taking and I-language outcomes</a></li>
+                    <li><a id="observation-guide-ref-6" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/" rel="noopener noreferrer" target="_blank">PMC5050353 – Autonomy and competence needs review</a></li>
+                    <li><a id="observation-guide-ref-7" href="https://selfdeterminationtheory.org/topics/basic-psychological-needs/" rel="noopener noreferrer" target="_blank">Self-Determination Theory – Basic psychological needs overview</a></li>
+                    <li><a id="observation-guide-ref-8" href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" rel="noopener noreferrer" target="_blank">U.S. Surgeon General – Social connection advisory</a></li>
+                    <li><a id="observation-guide-ref-9" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/" rel="noopener noreferrer" target="_blank">PMC4766977 – Behavioral observation reliability guidance</a></li>
+                    <li><a id="observation-guide-ref-10" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/" rel="noopener noreferrer" target="_blank">PMC4243523 – Hostile attribution and aggression analysis</a></li>
+                    <li><a id="observation-guide-ref-11" href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full" rel="noopener noreferrer" target="_blank">Frontiers in Psychology – Hostile attribution coaching study</a></li>
+                    <li><a id="observation-guide-ref-12" href="https://doi.org/10.3758/PBR.17.5.644" rel="noopener noreferrer" target="_blank">Psychonomic Bulletin &amp; Review – Language framing and blame study</a></li>
+                    <li><a id="observation-guide-ref-13" href="https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/" rel="noopener noreferrer" target="_blank">opentext.wsu.edu – ABC recording overview</a></li>
+                    <li><a id="observation-guide-ref-14" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/" rel="noopener noreferrer" target="_blank">PMC4841258 – Functional assessment measurement research</a></li>
+                    <li><a id="observation-guide-ref-15" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/" rel="noopener noreferrer" target="_blank">PMC10098472 – Observer agreement calibration study</a></li>
+                    <li><a id="observation-guide-ref-16" href="https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf" rel="noopener noreferrer" target="_blank">edpsychassociates.com – Kappa statistic primer</a></li>
+                    <li><a id="observation-guide-ref-17" href="https://pubmed.ncbi.nlm.nih.gov/21058850/" rel="noopener noreferrer" target="_blank">PubMed 21058850 – Interpersonal trust and stress pathways</a></li>
+                    <li><a id="observation-guide-ref-18" href="https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress" rel="noopener noreferrer" target="_blank">Dignity Health – Human connection and stress relief</a></li>
+                  </ol>
                 </div>
               </section>
             </div>
