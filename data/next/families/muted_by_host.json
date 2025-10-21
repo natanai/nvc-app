@@ -1,0 +1,19 @@
+{
+  "family": "muted_by_host",
+  "defaults": {
+    "feelings": ["embarrassed", "confused", "tense", "powerless"],
+    "needs": ["to-be-heard", "respect", "consideration", "autonomy"]
+  },
+  "cues": [
+    {
+      "id": "muted-by-host_next",
+      "patterns": [
+        "\\byou\\s+have\\s+been\\s+muted\\s+by\\s+the\\s+host\\b",
+        "\\bhost\\s+muted\\s+me\\b",
+        "\\bmuted\\b[^.!?]*\\bby\\s+the\\s+host\\b",
+        "\\bmicrophone\\b[^.!?]*\\bmuted\\b[^.!?]*\\bby\\s+(?:someone\\s+else|another\\s+person)\\b"
+      ],
+      "example": "While I was speaking, a notification said 'You have been muted by the host.'"
+    }
+  ]
+}

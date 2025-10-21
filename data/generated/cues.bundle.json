@@ -1,6 +1,28 @@
 {
   "cues": [
     {
+      "cue": "calendar-event-removed_next",
+      "patterns": [
+        "\\bcalendar\\s+event\\s+(?:disappeared|was\\s+removed)\\b",
+        "\\bmeeting\\b[^.!?]*\\bremoved\\s+from\\s+my\\s+calendar\\b",
+        "\\binvite\\s+(?:withdrawn|removed)\\b",
+        "\\bcalendar\\b[^.!?]*\\bdisappeared\\b"
+      ],
+      "feelings": [
+        "confused",
+        "anxious",
+        "bewildered",
+        "upset"
+      ],
+      "needs": [
+        "predictability",
+        "clarity",
+        "consideration",
+        "respect"
+      ],
+      "example": "The planning session disappeared from my calendar without any message."
+    },
+    {
       "cue": "camera-off-midcall_next",
       "patterns": [
         "\\bcamera\\s+turned\\s+off\\b",
@@ -47,6 +69,28 @@
       "example": "We agreed on 2:00; they arrived late without a message."
     },
     {
+      "cue": "muted-by-host_next",
+      "patterns": [
+        "\\byou\\s+have\\s+been\\s+muted\\s+by\\s+the\\s+host\\b",
+        "\\bhost\\s+muted\\s+me\\b",
+        "\\bmuted\\b[^.!?]*\\bby\\s+the\\s+host\\b",
+        "\\bmicrophone\\b[^.!?]*\\bmuted\\b[^.!?]*\\bby\\s+(?:someone\\s+else|another\\s+person)\\b"
+      ],
+      "feelings": [
+        "embarrassed",
+        "confused",
+        "tense",
+        "powerless"
+      ],
+      "needs": [
+        "to-be-heard",
+        "respect",
+        "consideration",
+        "autonomy"
+      ],
+      "example": "While I was speaking, a notification said 'You have been muted by the host.'"
+    },
+    {
       "cue": "no-reply_next",
       "patterns": [
         "\\b(?:no\\s+(?:reply|response)|didn[’']?t\\s+(?:reply|respond)|never\\s+(?:replied|responded))\\b",
@@ -86,6 +130,28 @@
         "predictability"
       ],
       "example": "The video call displayed 'Recording has started' without anyone asking first."
+    },
+    {
+      "cue": "reply-all-exposed_next",
+      "patterns": [
+        "\\breply\\s+all\\b[^.!?]*\\bshared\\s+my\\b",
+        "\\bused\\s+reply\\s+all\\b[^.!?]*\\binstead\\s+of\\s+direct\\b",
+        "\\bcc[’']?d\\b[^.!?]*\\bthe\\s+whole\\s+group\\b",
+        "\\breplied\\s+all\\b[^.!?]*\\bwith\\s+my\\s+note\\b"
+      ],
+      "feelings": [
+        "anxious",
+        "embarrassed",
+        "irritated",
+        "upset"
+      ],
+      "needs": [
+        "privacy",
+        "consideration",
+        "respect",
+        "clarity"
+      ],
+      "example": "They used reply all and shared my note with the whole list."
     },
     {
       "cue": "time-off-request-denied_next",
