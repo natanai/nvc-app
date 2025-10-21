@@ -1729,6 +1729,14 @@ function bindGuideOverlay() {
 
   syncGuideOverlaySummary();
 
+  const externalTriggers = Array.from(document.querySelectorAll('[data-observation-guide-mobile-open]'));
+  externalTriggers.forEach(trigger => {
+    trigger.addEventListener('click', event => {
+      event.preventDefault();
+      openGuideOverlay({ trigger, focusCard: true });
+    });
+  });
+
   const handleToggle = () => {
     syncGuideOverlaySummary();
     if (!guideOverlayState) {

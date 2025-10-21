@@ -773,6 +773,221 @@ button.site-nav__magnet {
     margin: 0;
   }
 
+  .observation-guide-mobile {
+    display: none;
+  }
+
+  .observation-guide-mobile__header {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .observation-guide-mobile__eyebrow {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 46%, transparent);
+  }
+
+  .observation-guide-mobile__title {
+    margin: 0;
+    font-size: clamp(1.15rem, 1.05rem + 1vw, 1.45rem);
+    letter-spacing: 0.02em;
+  }
+
+  .observation-guide-mobile__description {
+    margin: 0;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--outline) 60%, transparent);
+  }
+
+  .observation-guide-mobile__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .observation-guide-mobile__step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-3xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 14px 26px color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .observation-guide-mobile__step-index {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: var(--radius-circle);
+    background: color-mix(in srgb, var(--mint) 38%, var(--lavender) 62%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  .observation-guide-mobile__step-body {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .observation-guide-mobile__step-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    letter-spacing: 0.045em;
+  }
+
+  .observation-guide-mobile__step-description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
+  }
+
+  .observation-guide-mobile__actions {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .observation-guide-mobile__open {
+    justify-self: flex-start;
+  }
+
+  .observation-guide-mobile__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--outline) 60%, transparent);
+  }
+
+  .observation-guide-mobile__link {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .observation-guide__section-content--foundations {
+    gap: 1.2rem;
+  }
+
+  .observation-guide__foundation-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .observation-guide__foundation-step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.9rem;
+    align-items: flex-start;
+    padding: 1rem 1.15rem;
+    border-radius: var(--radius-3xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 16px 32px color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .observation-guide__foundation-index {
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: var(--radius-circle);
+    background: color-mix(in srgb, var(--mint) 42%, var(--lavender) 58%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+
+  .observation-guide__foundation-body {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .observation-guide__foundation-body strong {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+  }
+
+  .observation-guide__foundation-body p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--outline) 65%, transparent);
+  }
+
+  .observation-guide__foundation-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .observation-guide__foundation-actions .chip {
+    font-size: 0.85rem;
+    padding-inline: 0.95rem;
+  }
+
+  @media (max-width: 720px) {
+    .observation-guide-mobile {
+      display: grid;
+      gap: clamp(1.1rem, 4vw, 1.9rem);
+      padding: clamp(1.1rem, 5vw, 1.9rem);
+      border-radius: var(--radius-3xl);
+      border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--lavender) 82%, #ffffff 18%) 0%,
+        color-mix(in srgb, var(--mint) 68%, #ffffff 32%) 100%
+      );
+      box-shadow: 0 24px 36px color-mix(in srgb, var(--outline) 14%, transparent);
+    }
+
+    .observation-guide-mobile__steps {
+      gap: clamp(0.7rem, 3vw, 1rem);
+    }
+
+    .observation-guide-mobile__actions {
+      gap: clamp(0.6rem, 3vw, 0.9rem);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .observation-guide-mobile__step,
+    .observation-guide__foundation-step {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .observation-guide-mobile__step-index,
+    .observation-guide__foundation-index {
+      justify-self: flex-start;
+    }
+  }
+
+  @media (min-width: 721px) {
+    .observation-guide-mobile {
+      display: none;
+    }
+  }
+
   .observation-guide {
     display: block;
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
@@ -2667,6 +2882,92 @@ button.site-nav__magnet {
           </div>
         </section>
 
+        <section class="observation-guide-mobile" aria-labelledby="observation-guide-mobile-title">
+          <div class="observation-guide-mobile__header">
+            <p class="observation-guide-mobile__eyebrow">Observation quickstart</p>
+            <h2 id="observation-guide-mobile-title" class="observation-guide-mobile__title">
+              Build the scene before feelings
+            </h2>
+            <p class="observation-guide-mobile__description">
+              Use these steps when you need a fast refresher. The full research-backed guide opens in a focused
+              mobile view when you want all the detail.
+            </p>
+          </div>
+          <ol class="observation-guide-mobile__steps">
+            <li class="observation-guide-mobile__step">
+              <span class="observation-guide-mobile__step-index">1</span>
+              <div class="observation-guide-mobile__step-body">
+                <p class="observation-guide-mobile__step-title">Name the moment</p>
+                <p class="observation-guide-mobile__step-description">
+                  Specify when and where it happened, and who was involved.
+                </p>
+              </div>
+            </li>
+            <li class="observation-guide-mobile__step">
+              <span class="observation-guide-mobile__step-index">2</span>
+              <div class="observation-guide-mobile__step-body">
+                <p class="observation-guide-mobile__step-title">Describe sensory facts</p>
+                <p class="observation-guide-mobile__step-description">
+                  Capture what a camera or microphone would register—visible actions or direct quotes.
+                </p>
+              </div>
+            </li>
+            <li class="observation-guide-mobile__step">
+              <span class="observation-guide-mobile__step-index">3</span>
+              <div class="observation-guide-mobile__step-body">
+                <p class="observation-guide-mobile__step-title">Remove judgments</p>
+                <p class="observation-guide-mobile__step-description">
+                  Swap labels and motives for the exact behavior you observed.
+                </p>
+              </div>
+            </li>
+            <li class="observation-guide-mobile__step">
+              <span class="observation-guide-mobile__step-index">4</span>
+              <div class="observation-guide-mobile__step-body">
+                <p class="observation-guide-mobile__step-title">Quantify &amp; quote</p>
+                <p class="observation-guide-mobile__step-description">
+                  Use counts, durations, or verbatim words so the record stays verifiable.
+                </p>
+              </div>
+            </li>
+            <li class="observation-guide-mobile__step">
+              <span class="observation-guide-mobile__step-index">5</span>
+              <div class="observation-guide-mobile__step-body">
+                <p class="observation-guide-mobile__step-title">Optional gap</p>
+                <p class="observation-guide-mobile__step-description">
+                  If helpful, note what you expected—keep feelings and needs for the next step in the app.
+                </p>
+              </div>
+            </li>
+          </ol>
+          <div class="observation-guide-mobile__actions">
+            <button
+              type="button"
+              class="support-button observation-guide-mobile__open"
+              data-observation-guide-mobile-open
+            >
+              View full observation guide
+            </button>
+            <div class="observation-guide-mobile__links">
+              <a
+                class="observation-guide-mobile__link"
+                href="#observation-guide-definition"
+                data-guide-target="observation-guide-definition"
+              >
+                Jump to definition
+              </a>
+              <span aria-hidden="true">•</span>
+              <a
+                class="observation-guide-mobile__link"
+                href="#observation-guide-examples"
+                data-guide-target="observation-guide-examples"
+              >
+                See examples
+              </a>
+            </div>
+          </div>
+        </section>
+
         <details id="observation-guide" class="observation-guide" data-observation-guide>
           <!-- observation-guide:start -->
           <summary
@@ -2704,12 +3005,24 @@ button.site-nav__magnet {
             <nav class="observation-guide__nav" aria-label="Observation guide sections" role="tablist">
               <a
                 class="observation-guide__tab is-active"
-                href="#observation-guide-definition"
+                href="#observation-guide-foundations"
                 role="tab"
                 aria-selected="true"
+                aria-controls="observation-guide-foundations"
+                id="observation-guide-tab-foundations"
+                data-guide-target="observation-guide-foundations"
+              >
+                <span class="observation-guide__tab-label">Foundations</span>
+              </a>
+              <a
+                class="observation-guide__tab"
+                href="#observation-guide-definition"
+                role="tab"
+                aria-selected="false"
                 aria-controls="observation-guide-definition"
                 id="observation-guide-tab-definition"
                 data-guide-target="observation-guide-definition"
+                tabindex="-1"
               >
                 <span class="observation-guide__tab-label">Definition</span>
               </a>
@@ -2801,10 +3114,72 @@ button.site-nav__magnet {
             <div class="observation-guide__sections">
               <section
                 class="observation-guide__section is-active"
+                id="observation-guide-foundations"
+                role="tabpanel"
+                aria-labelledby="observation-guide-tab-foundations"
+                tabindex="0"
+                data-guide-section
+              >
+                <h3 class="observation-guide__section-title">Foundations: Quick-Reference Checklist</h3>
+                <div class="observation-guide__section-content observation-guide__section-content--foundations">
+                  <p>
+                    Capture the scene with concrete details before moving on to feelings or needs. This checklist keeps
+                    mobile note-taking grounded in what a recorder could verify.
+                  </p>
+                  <ol class="observation-guide__foundation-list">
+                    <li class="observation-guide__foundation-step">
+                      <span class="observation-guide__foundation-index">1</span>
+                      <div class="observation-guide__foundation-body">
+                        <strong>Name the moment.</strong>
+                        <p>Note the date, time, setting, and who was involved so the observation ties to one event.</p>
+                      </div>
+                    </li>
+                    <li class="observation-guide__foundation-step">
+                      <span class="observation-guide__foundation-index">2</span>
+                      <div class="observation-guide__foundation-body">
+                        <strong>Describe sensory facts.</strong>
+                        <p>Write only what was seen or heard—no trait labels, diagnoses, or motive guesses.</p>
+                      </div>
+                    </li>
+                    <li class="observation-guide__foundation-step">
+                      <span class="observation-guide__foundation-index">3</span>
+                      <div class="observation-guide__foundation-body">
+                        <strong>Remove judgments.</strong>
+                        <p>Replace evaluations like “rude” with the concrete behavior that triggered the label.</p>
+                      </div>
+                    </li>
+                    <li class="observation-guide__foundation-step">
+                      <span class="observation-guide__foundation-index">4</span>
+                      <div class="observation-guide__foundation-body">
+                        <strong>Quantify &amp; quote.</strong>
+                        <p>Use counts, durations, or direct quotes so others can audit what happened.</p>
+                      </div>
+                    </li>
+                    <li class="observation-guide__foundation-step">
+                      <span class="observation-guide__foundation-index">5</span>
+                      <div class="observation-guide__foundation-body">
+                        <strong>Optional gap.</strong>
+                        <p>Mention what you expected only if it clarifies context—feelings and needs stay for later steps.</p>
+                      </div>
+                    </li>
+                  </ol>
+                  <p class="observation-guide__callout">
+                    Each step links to deeper guidance below. Open the guide on mobile to explore methods, automated
+                    checks, and worked examples without losing your place.
+                  </p>
+                  <div class="observation-guide__foundation-actions">
+                    <a class="chip" href="#observation-guide-method" data-guide-target="observation-guide-method">Method details</a>
+                    <a class="chip" href="#observation-guide-heuristics" data-guide-target="observation-guide-heuristics">Automated flags</a>
+                    <a class="chip" href="#observation-guide-examples" data-guide-target="observation-guide-examples">Worked examples</a>
+                  </div>
+                </div>
+              </section>
+              <section
+                class="observation-guide__section"
                 id="observation-guide-definition"
                 role="tabpanel"
                 aria-labelledby="observation-guide-tab-definition"
-                tabindex="0"
+                tabindex="-1"
                 data-guide-section
               >
                 <h3 class="observation-guide__section-title">Operational Definition & Evidence Context</h3>
