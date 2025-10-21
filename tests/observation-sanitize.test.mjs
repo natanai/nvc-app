@@ -17,6 +17,20 @@ test('keeps direct quotes with evaluative content', () => {
   assert.equal(sanitizeObservationText(text, catalog), text);
 });
 
+test('keeps single-quoted dialogue with evaluative language', () => {
+  const text = "Yesterday at 3 pm, Alex said, 'You are lazy.'";
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.ok, true, 'single quoted dialogue should not flag lint errors');
+  assert.equal(sanitizeObservationText(text, catalog), text);
+});
+
+test('keeps multi-line direct quotes intact', () => {
+  const text = 'Yesterday Alex wrote, "You are lazy.\nThis keeps happening."';
+  const lint = lintObservation(text, catalog);
+  assert.equal(lint.ok, true, 'multi-line quotes should not flag lint errors');
+  assert.equal(sanitizeObservationText(text, catalog), text);
+});
+
 test('strips sentences that only contain evaluations', () => {
   const text = 'You always leave a mess on the table.';
   assert.equal(sanitizeObservationText(text, catalog), '');
@@ -92,6 +106,16 @@ test('highlights observational anchors and quotes for guidance', () => {
     lint.observationHighlights.some(token => /I will handle it\./i.test(token)),
     true,
     'direct quote should be highlighted',
+  );
+});
+
+test('highlights single-quoted speech as observational evidence', () => {
+  const text = "At noon I heard Pat say 'I finished it.'";
+  const lint = lintObservation(text, catalog);
+  assert.equal(
+    lint.observationHighlights.some(token => /I finished it\./i.test(token)),
+    true,
+    'single-quoted speech should be highlighted',
   );
 });
 
