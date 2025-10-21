@@ -37,7 +37,7 @@ function compileCues(json) {
   const compiled = [];
   for (const c of (json.cues || [])) {
     for (const p of (c.patterns || [])) {
-      try { compiled.push({ cue: c.cue, re: new RegExp(p, "i"), feelings: c.feelings || [], needs: c.needs || [] }); } catch {}
+      try { compiled.push({ cue: c.cue, id: c.cue, re: new RegExp(p, "i"), feelings: c.feelings || [], needs: c.needs || [] }); } catch {}
     }
   }
   return compiled;
@@ -79,6 +79,81 @@ function evalText(text) {
 
 function uniqueSorted(arr) { return Array.from(new Set(arr)).sort((a,b)=>a.localeCompare(b)); }
 
+function aggregateSuggestions(hits){
+  const weight = h => /_legacy_next$/.test(h?.id || "") ? 1 : 1.2;
+  const add = (map, key, w) => { map.set(key, (map.get(key) || 0) + w); };
+  const feelMap = new Map();
+  const needMap = new Map();
+  for (const h of hits){
+    const w = weight(h);
+    (h.feelings || []).forEach(x => add(feelMap, x, w));
+    (h.needs || []).forEach(x => add(needMap, x, w));
+  }
+  const top = (map, k=12) => Array.from(map.entries())
+    .sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]))
+    .slice(0,k)
+    .map(([s]) => s);
+  return { feelings: top(feelMap), needs: top(needMap) };
+}
+
+let nearestIndex = null;
+async function loadNearest(){
+  try {
+    const res = await fetch("/next/cues.nearest.json", { cache:"no-store" });
+    if (res.ok) nearestIndex = await res.json();
+  } catch (err) {
+    console.warn("Failed to load nearest index", err);
+  }
+}
+
+function tokenizeMin(s){
+  return String(s||"").toLowerCase().replace(/["“”„'’]/g," ").replace(/[^a-z0-9]+/g," ").trim().split(/\s+/)
+    .filter(x=>x && x.length>=3 && !["i","me","my","we","our","you","your","they","their","he","she","it","the","a","an","and","or","but","to","of","for","on","in","at","with","without","by","from","as","that","this","these","those","was","were","is","are","be","been","am","do","did","does","have","has","had","will","would","can","could","while","when","before","after","yesterday","today","tomorrow"].includes(x))
+    .map(x=>x.replace(/(ing|ed|ly|s)$/,""));
+}
+
+const SEEDS = Array.from({length:64}, (_,i)=> 0x811c9dc5 ^ (i*0x27d4eb2d));
+function fnv1a32(str, seed){
+  let h = seed>>>0;
+  for (let i=0;i<str.length;i++){
+    h ^= str.charCodeAt(i);
+    h = (h>>>0) + ((h<<1)>>>0) + ((h<<4)>>>0) + ((h<<7)>>>0) + ((h<<8)>>>0) + ((h<<24)>>>0);
+  }
+  return h>>>0;
+}
+
+function minhashSig(tokens){
+  const sig = new Array(SEEDS.length).fill(0xffffffff);
+  for (const t of tokens){
+    for (let i=0;i<SEEDS.length;i++){
+      const hv = fnv1a32(t, SEEDS[i]);
+      if (hv < sig[i]) sig[i] = hv;
+    }
+  }
+  return sig;
+}
+
+function jaccardFromMinHash(sigA, sigB){
+  let same = 0;
+  const L = Math.min(sigA.length, sigB.length);
+  for (let i=0;i<L;i++) if (sigA[i] === sigB[i]) same++;
+  return L ? same / L : 0;
+}
+
+function nearestForTextMinHash(text, k=5, thr=0.22){
+  if (!nearestIndex || !Array.isArray(nearestIndex.items)) return [];
+  const sigQ = minhashSig(tokenizeMin(text));
+  const scored = nearestIndex.items.map(it => ({
+    score: jaccardFromMinHash(sigQ, it.sig || []),
+    feelings: it.feelings || [],
+    needs: it.needs || []
+  }))
+    .filter(x => x.score >= thr)
+    .sort((a,b) => b.score - a.score)
+    .slice(0,k);
+  return scored;
+}
+
 function renderBadges(container, reasons) {
   const ALL = ["cue","speech","action","perception","timeEvent"];
   const labels = { cue:"Cue", speech:"Speech", action:"Action", perception:"Perception", timeEvent:"Time+Event" };
@@ -96,6 +171,8 @@ async function boot() {
     state.compiled = compileCues(json);
   } catch (e) { console.error("Failed to load cues bundle:", e); }
 
+  await loadNearest();
+
   const root = document.getElementById("obs-editor-root");
   const txt = root.querySelector("#txt");
   const check = root.querySelector("#check");
@@ -106,6 +183,47 @@ async function boot() {
   const needs = root.querySelector("#needs");
   const matchedCues = root.querySelector("#matchedCues");
   const passBadges = root.querySelector("#passBadges");
+  const nearestPanel = root.querySelector("#nearestPanel");
+  const nearFeelings = root.querySelector("#nearFeelings");
+  const nearNeeds = root.querySelector("#nearNeeds");
+  const nearPager = root.querySelector("#nearPager");
+  const nearestCta = root.querySelector("#nearestCta");
+  const btnFindNearest = root.querySelector("#findNearest");
+  const btnPrev = root.querySelector("#prevNear");
+  const btnNext = root.querySelector("#nextNear");
+
+  let nearList = [];
+  let nearIdx = 0;
+
+  function renderNearest(){
+    if (!nearestPanel) return;
+    if (!nearList.length){
+      nearestPanel.style.display = "none";
+      return;
+    }
+    nearestPanel.style.display = "block";
+    const cur = nearList[nearIdx];
+    const uniq = xs => Array.from(new Set(xs)).sort((a,b)=>a.localeCompare(b));
+    if (nearFeelings) nearFeelings.innerHTML = uniq(cur.feelings).map(s=>`<span class="pill">${s}</span>`).join("");
+    if (nearNeeds) nearNeeds.innerHTML = uniq(cur.needs).map(s=>`<span class="pill">${s}</span>`).join("");
+    if (nearPager) nearPager.textContent = `Similar suggestion ${nearIdx+1} of ${nearList.length}`;
+  }
+
+  btnPrev?.addEventListener("click", ()=>{
+    if (!nearList.length) return;
+    nearIdx = (nearIdx + nearList.length - 1) % nearList.length;
+    renderNearest();
+  });
+  btnNext?.addEventListener("click", ()=>{
+    if (!nearList.length) return;
+    nearIdx = (nearIdx + 1) % nearList.length;
+    renderNearest();
+  });
+  btnFindNearest?.addEventListener("click", ()=>{
+    nearList = nearestForTextMinHash(txt.value, 7, 0.22);
+    nearIdx = 0;
+    renderNearest();
+  });
 
   function render() {
     const { ok, reasons, hits } = evalText(txt.value);
@@ -115,10 +233,24 @@ async function boot() {
       ? "Ready — passes: " + Array.from(reasons).join(", ")
       : "Not ready — add something you saw/heard, a quoted phrase, or who did what.";
     btn.disabled = !ok;
+
+    if (hits.length === 0) {
+      if (nearestCta) nearestCta.style.display = "block";
+    } else {
+      if (nearestCta) nearestCta.style.display = "none";
+      if (nearestPanel) nearestPanel.style.display = "none";
+      nearList = [];
+      nearIdx = 0;
+    }
+
     btn.onclick = () => {
       let f = uniqueSorted(hits.flatMap(h => h.feelings));
       let n = uniqueSorted(hits.flatMap(h => h.needs));
-      if (hits.length === 0) {
+      if (hits.length) {
+        const agg = aggregateSuggestions(hits);
+        f = agg.feelings;
+        n = agg.needs;
+      } else {
         const fb = deriveFallback(txt.value);
         f = uniqueSorted([...(f || []), ...(fb.feelings || [])]);
         n = uniqueSorted([...(n || []), ...(fb.needs || [])]);
@@ -126,7 +258,7 @@ async function boot() {
       feelings.innerHTML = f.map(s => `<span class="pill">${s}</span>`).join("");
       needs.innerHTML = n.map(s => `<span class="pill">${s}</span>`).join("");
       matchedCues.textContent = hits.length
-        ? `Matched cues: ${uniqueSorted(hits.map(h => h.cue)).join(", ")}`
+        ? `Direct matches found — suggestions prioritized from ${hits.length} cue${hits.length === 1 ? "" : "s"}.`
         : "No direct cue hits — suggestions are generalized.";
       sug.style.display = "block";
     };
