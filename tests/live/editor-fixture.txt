@@ -10,3 +10,7 @@ Yesterday at 3:10 pm the meeting started without me.
 I received a calendar removal notice.
 The video call displayed "Recording has started".
 While I was speaking, their camera turned off.
+A notification said "You have been muted by the host."
+The host muted me while I was speaking.
+The calendar event disappeared from my calendar.
+They used reply all and shared my note.

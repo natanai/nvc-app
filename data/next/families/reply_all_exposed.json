@@ -1,0 +1,19 @@
+{
+  "family": "reply_all_exposed",
+  "defaults": {
+    "feelings": ["anxious", "embarrassed", "irritated", "upset"],
+    "needs": ["privacy", "consideration", "respect", "clarity"]
+  },
+  "cues": [
+    {
+      "id": "reply-all-exposed_next",
+      "patterns": [
+        "\\breply\\s+all\\b[^.!?]*\\bshared\\s+my\\b",
+        "\\bused\\s+reply\\s+all\\b[^.!?]*\\binstead\\s+of\\s+direct\\b",
+        "\\bcc[’']?d\\b[^.!?]*\\bthe\\s+whole\\s+group\\b",
+        "\\breplied\\s+all\\b[^.!?]*\\bwith\\s+my\\s+note\\b"
+      ],
+      "example": "They used reply all and shared my note with the whole list."
+    }
+  ]
+}

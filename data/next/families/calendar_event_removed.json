@@ -1,0 +1,19 @@
+{
+  "family": "calendar_event_removed",
+  "defaults": {
+    "feelings": ["confused", "anxious", "bewildered", "upset"],
+    "needs": ["predictability", "clarity", "consideration", "respect"]
+  },
+  "cues": [
+    {
+      "id": "calendar-event-removed_next",
+      "patterns": [
+        "\\bcalendar\\s+event\\s+(?:disappeared|was\\s+removed)\\b",
+        "\\bmeeting\\b[^.!?]*\\bremoved\\s+from\\s+my\\s+calendar\\b",
+        "\\binvite\\s+(?:withdrawn|removed)\\b",
+        "\\bcalendar\\b[^.!?]*\\bdisappeared\\b"
+      ],
+      "example": "The planning session disappeared from my calendar without any message."
+    }
+  ]
+}
