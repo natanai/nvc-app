@@ -1220,6 +1220,53 @@ function countWords(value) {
   return matches ? matches.length : 0;
 }
 
+function hasMinimumCompleteWords(rawInput, trimmedInput, minimum) {
+  const minWords = Math.max(Number(minimum) || 0, 0);
+  if (!minWords) {
+    return true;
+  }
+
+  const trimmed = typeof trimmedInput === 'string' ? trimmedInput : '';
+  const wordCount = countWords(trimmed);
+  if (wordCount < minWords) {
+    return false;
+  }
+  if (wordCount > minWords) {
+    return true;
+  }
+
+  const raw = typeof rawInput === 'string' ? rawInput : trimmed;
+  if (endsWithWordBoundary(raw)) {
+    return true;
+  }
+
+  const lastWord = readLastWord(trimmed);
+  if (!lastWord) {
+    return false;
+  }
+
+  return lastWord.length > 1;
+}
+
+function endsWithWordBoundary(value) {
+  if (typeof value !== 'string' || !value) {
+    return false;
+  }
+  const last = value[value.length - 1];
+  if (!last) {
+    return false;
+  }
+  return /[\s.,!?;:]/.test(last);
+}
+
+function readLastWord(value) {
+  if (typeof value !== 'string' || !value) {
+    return '';
+  }
+  const match = value.match(/[a-z0-9'’]+$/i);
+  return match ? match[0] : '';
+}
+
 function tokenizeForScore(text) {
   return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
 }
@@ -1319,7 +1366,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   const lint = state.analysis?.lint || null;
   const flaggedCount = countFlaggedTokens(lint);
   const hasFlagged = flaggedCount > 0;
-  const wordCount = countWords(trimmed);
+  const hasEnoughCompleteWords = hasMinimumCompleteWords(sourceText, trimmed, DETECTION_MIN_WORDS);
 
   state.detectionMatchLimit = DETECTION_MATCH_LIMIT;
   state.detectionNearLimit = DETECTION_NEAR_LIMIT;
@@ -1349,7 +1396,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     return;
   }
 
-  if (wordCount < DETECTION_MIN_WORDS) {
+  if (!hasEnoughCompleteWords) {
     state.detectionStatus = 'short';
     state.detectionMatches = 0;
     state.detectionFallbacks = 0;
@@ -1579,6 +1626,7 @@ function renderDetectionMatchesPopover() {
     toggle.setAttribute('aria-expanded', 'false');
     toggle.textContent = 'Show exact matches';
     popover.setAttribute('hidden', 'hidden');
+    popover.style.display = 'none';
     list.innerHTML = '';
     delete list.dataset.matchesSignature;
     state.detectionMatchesOpen = false;
@@ -1627,9 +1675,11 @@ function renderDetectionMatchesPopover() {
 
   if (open) {
     popover.removeAttribute('hidden');
+    popover.style.removeProperty('display');
     constrainDetectionMatchesList(list);
   } else {
     popover.setAttribute('hidden', 'hidden');
+    popover.style.display = 'none';
     list.scrollTop = 0;
   }
 }
