@@ -1,10 +1,11 @@
 import { lintObservation } from '/lib/nvcLint.js';
-import { loadCueRows, suggestFromObservation } from '/lib/observationSuggest.js';
+import { loadCueCatalog, matchCueGuides, suggestFromObservation } from '/lib/observationSuggest.js';
 
 const state = {
   text: '',
   catalog: createEmptyCatalog(),
   cues: [],
+  cueGuides: [],
   analysis: null,
   mode: 'editing',
   lastSubmitted: '',
@@ -68,437 +69,6 @@ const OBSERVATION_GUIDELINE_STEPS = [
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 
-const OBSERVATION_FORMULA_SENSE_VERBS = ['saw', 'heard', 'noticed', 'observed', 'watched'];
-const OBSERVATION_FORMULA_TIME_WORDS = new Set([
-  'morning',
-  'afternoon',
-  'evening',
-  'night',
-  'noon',
-  'midday',
-  'midnight',
-  'sunrise',
-  'sunset',
-  'dawn',
-  'dusk',
-  'lunchtime',
-  'breakfast',
-  'lunch',
-  'dinner',
-]);
-const OBSERVATION_FORMULA_ACTOR_ARTICLES = new Set([
-  'a',
-  'an',
-  'the',
-  'this',
-  'that',
-  'these',
-  'those',
-  'my',
-  'our',
-  'your',
-  'his',
-  'her',
-  'their',
-]);
-const OBSERVATION_FORMULA_ACTOR_PRONOUNS = new Set([
-  'he',
-  'she',
-  'they',
-  'them',
-  'him',
-  'her',
-  'we',
-  'us',
-  'you',
-  'someone',
-  'somebody',
-  'anyone',
-  'anybody',
-  'everyone',
-  'everybody',
-  'staff',
-  'team',
-  'group',
-  'coworker',
-  'coworkers',
-  'colleague',
-  'colleagues',
-  'manager',
-  'supervisor',
-  'client',
-  'clients',
-  'customer',
-  'customers',
-  'participant',
-  'participants',
-  'student',
-  'students',
-  'teacher',
-  'nurse',
-  'parent',
-  'parents',
-  'child',
-  'children',
-  'neighbor',
-  'neighbour',
-  'people',
-  'person',
-  'friend',
-  'friends',
-  'guest',
-  'guests',
-  'facilitator',
-  'speaker',
-  'host',
-]);
-const OBSERVATION_FORMULA_ACTION_KEYWORDS = new Set([
-  'said',
-  'say',
-  'says',
-  'saying',
-  'ask',
-  'asks',
-  'asked',
-  'asking',
-  'tell',
-  'tells',
-  'told',
-  'telling',
-  'mention',
-  'mentioned',
-  'mentions',
-  'mentioning',
-  'share',
-  'shares',
-  'shared',
-  'sharing',
-  'shout',
-  'shouted',
-  'shouts',
-  'shouting',
-  'yell',
-  'yelled',
-  'yells',
-  'yelling',
-  'report',
-  'reports',
-  'reported',
-  'reporting',
-  'log',
-  'logs',
-  'logged',
-  'logging',
-  'leave',
-  'leaves',
-  'left',
-  'leaving',
-  'fly',
-  'flies',
-  'flew',
-  'flying',
-  'arrive',
-  'arrives',
-  'arrived',
-  'arriving',
-  'join',
-  'joins',
-  'joined',
-  'joining',
-  'speak',
-  'speaks',
-  'spoke',
-  'speaking',
-  'stand',
-  'stands',
-  'stood',
-  'standing',
-  'sit',
-  'sits',
-  'sat',
-  'sitting',
-  'write',
-  'writes',
-  'wrote',
-  'writing',
-  'read',
-  'reads',
-  'reading',
-  'email',
-  'emails',
-  'emailed',
-  'emailing',
-  'text',
-  'texts',
-  'texted',
-  'texting',
-  'call',
-  'calls',
-  'called',
-  'calling',
-  'post',
-  'posts',
-  'posted',
-  'posting',
-  'laugh',
-  'laughs',
-  'laughed',
-  'laughing',
-  'cry',
-  'cries',
-  'cried',
-  'crying',
-  'open',
-  'opens',
-  'opened',
-  'opening',
-  'close',
-  'closes',
-  'closed',
-  'closing',
-  'start',
-  'starts',
-  'started',
-  'starting',
-  'stop',
-  'stops',
-  'stopped',
-  'stopping',
-  'interrupt',
-  'interrupts',
-  'interrupted',
-  'interrupting',
-  'respond',
-  'responds',
-  'responded',
-  'responding',
-  'nod',
-  'nods',
-  'nodded',
-  'nodding',
-  'smile',
-  'smiles',
-  'smiled',
-  'smiling',
-  'frown',
-  'frowns',
-  'frowned',
-  'frowning',
-  'clap',
-  'claps',
-  'clapped',
-  'clapping',
-  'raise',
-  'raises',
-  'raised',
-  'raising',
-  'lower',
-  'lowers',
-  'lowered',
-  'lowering',
-  'hand',
-  'hands',
-  'handed',
-  'handing',
-  'wave',
-  'waves',
-  'waved',
-  'waving',
-  'type',
-  'types',
-  'typed',
-  'typing',
-  'click',
-  'clicks',
-  'clicked',
-  'clicking',
-  'greet',
-  'greets',
-  'greeted',
-  'greeting',
-  'apologize',
-  'apologizes',
-  'apologized',
-  'apologizing',
-  'thank',
-  'thanks',
-  'thanked',
-  'thanking',
-  'promise',
-  'promises',
-  'promised',
-  'promising',
-  'count',
-  'counts',
-  'counted',
-  'counting',
-  'measure',
-  'measures',
-  'measured',
-  'measuring',
-  'note',
-  'notes',
-  'noted',
-  'noting',
-  'show',
-  'shows',
-  'showed',
-  'showing',
-  'hold',
-  'holds',
-  'held',
-  'holding',
-  'gesture',
-  'gestures',
-  'gestured',
-  'gesturing',
-  'handshake',
-  'handshakes',
-  'handshook',
-  'handshaking',
-  'sign',
-  'signs',
-  'signed',
-  'signing',
-  'deliver',
-  'delivers',
-  'delivered',
-  'delivering',
-  'remind',
-  'reminds',
-  'reminded',
-  'reminding',
-  'coach',
-  'coaches',
-  'coached',
-  'coaching',
-  'review',
-  'reviews',
-  'reviewed',
-  'reviewing',
-  'observe',
-  'observes',
-  'observed',
-  'observing',
-  'record',
-  'records',
-  'recorded',
-  'recording',
-]);
-const OBSERVATION_FORMULA_ACTION_EXCLUDE = new Set([
-  'times',
-  'time',
-  'minutes',
-  'minute',
-  'hours',
-  'hour',
-  'days',
-  'day',
-  'weeks',
-  'week',
-  'months',
-  'month',
-  'seconds',
-  'second',
-  'percent',
-  'percentage',
-  'percentages',
-  'emails',
-  'email',
-  'messages',
-  'message',
-  'notes',
-  'note',
-  'reports',
-  'report',
-  'calls',
-  'call',
-  'texts',
-  'text',
-  'records',
-  'record',
-]);
-const OBSERVATION_FORMULA_NUMBER_WORD_PATTERN = /\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred)\b/i;
-const OBSERVATION_FORMULA_FREQUENCY_PATTERN = /\b(?:once|twice|thrice|three times|four times|five times|six times|seven times|eight times|nine times|ten times)\b/i;
-const OBSERVATION_FORMULA_DURATION_PATTERN = /\bfor\s+(?:about\s+)?(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)\s+(?:seconds?|minutes?|hours?|days?|weeks?)\b/i;
-const OBSERVATION_FORMULA_RANGE_PATTERN = /\b\d+\s*[–-]\s*\d+\b/;
-const OBSERVATION_FORMULA_PERCENT_PATTERN = /\b\d+%/;
-const OBSERVATION_FORMULA_TIME_RANGE_PATTERN = /\b\d{1,2}:\d{2}\s*(?:[ap]\.?m\.?)?\s*(?:–|-|to)\s*\d{1,2}:\d{2}\s*(?:[ap]\.?m\.?)?\b/i;
-const OBSERVATION_FORMULA_COLON_TIME_PATTERN = /\b\d{1,2}:\d{2}\s*(?:[ap]\.?m\.?)?\b/i;
-const OBSERVATION_FORMULA_AMPM_PATTERN = /\b\d{1,2}\s*(?:[ap]\.?m\.?)\b/i;
-const OBSERVATION_FORMULA_RELATIVE_TIME_PATTERN = /\b(?:at|around|about|by|just after|just before|during)\s+(?:\d{1,2}(?::\d{2})?\s*(?:[ap]\.?m\.?)?|noon|midnight)\b/i;
-const OBSERVATION_FORMULA_TIMEWORD_PATTERN = /\b(?:noon|midnight)\b/i;
-const OBSERVATION_FORMULA_MONTH_PATTERN = /\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b/i;
-const OBSERVATION_FORMULA_DAY_PATTERN = /\b(?:mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\b/i;
-const OBSERVATION_FORMULA_RELATIVE_DATE_PATTERN = /\b(?:today|yesterday|tonight|this\s+(?:morning|afternoon|evening|week|month|year|weekend)|last\s+(?:night|week|month|year|weekend|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|earlier\s+(?:today|this\s+week|this\s+month)|later\s+that\s+day|over\s+the\s+weekend|that\s+(?:morning|afternoon|evening))\b/i;
-const OBSERVATION_FORMULA_NUMERIC_DATE_PATTERN = /\b\d{1,2}[/-]\d{1,2}(?:[/-]\d{2,4})?\b/;
-const OBSERVATION_FORMULA_ISO_DATE_PATTERN = /\b\d{4}-\d{1,2}-\d{1,2}\b/;
-const OBSERVATION_FORMULA_ORDINAL_DATE_PATTERN = /\bon\s+\d{1,2}(?:st|nd|rd|th)\b/i;
-
-const OBSERVATION_FORMULA_LOCATION_WORDS = [
-  'conference room',
-  'meeting room',
-  'office',
-  'kitchen',
-  'hallway',
-  'classroom',
-  'library',
-  'gym',
-  'lobby',
-  'zoom call',
-  'video call',
-  'phone call',
-  'stage',
-  'auditorium',
-  'cafeteria',
-  'cafe',
-  'restaurant',
-  'warehouse',
-  'workshop',
-  'desk',
-  'table',
-  'lab',
-  'laboratory',
-  'clinic',
-  'ward',
-  'room',
-  'break room',
-  'breakroom',
-  'kitchenette',
-  'hall',
-  'corridor',
-  'parking lot',
-  'parking garage',
-  'car',
-  'vehicle',
-  'bus',
-  'train',
-  'platform',
-  'station',
-  'airport',
-  'waiting room',
-  'lunchroom',
-  'office lobby',
-  'front desk',
-  'reception',
-  'studio',
-  'shop floor',
-  'store',
-  'market',
-  'checkout',
-  'counter',
-  'patient room',
-  'exam room',
-  'workroom',
-];
-const OBSERVATION_FORMULA_LOCATION_PATTERNS = OBSERVATION_FORMULA_LOCATION_WORDS.map(word => {
-  const escaped = word.replace(/[-/\^$*+?.()|[\]{}]/g, '\$&');
-  return new RegExp(`\b${escaped}\b`, 'i');
-});
-const OBSERVATION_FORMULA_SENSE_PATTERN = new RegExp(`\bI\s+(?:${OBSERVATION_FORMULA_SENSE_VERBS.join('|')})\s+([^.!?]*)`, 'i');
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
   bind();
   renderPanels();
@@ -509,14 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Promise.all([
     loadCatalog('/data/index.json'),
-    loadCueRows('/data/observation_cues.sanitized.csv').catch(error => {
-      console.warn('Unable to load observation cue map', error);
-      return [];
+    loadCueCatalog({
+      cuesUrl: '/data/observation_cues.sanitized.csv',
+      guidesUrl: '/data/observation_cue_guides.json',
+    }).catch(error => {
+      console.warn('Unable to load observation cue catalog', error);
+      return { cues: [], guides: [] };
     }),
   ])
-    .then(([catalog, cues]) => {
+    .then(([catalog, cueCatalog]) => {
       state.catalog = catalog;
-      state.cues = cues;
+      state.cues = Array.isArray(cueCatalog?.cues) ? cueCatalog.cues : [];
+      state.cueGuides = Array.isArray(cueCatalog?.guides) ? cueCatalog.guides : [];
       if (!state.text.trim()) {
         state.detectionStatus = 'idle';
         state.detectionMatches = 0;
@@ -1956,9 +1530,30 @@ function renderObservationFormula() {
     return;
   }
 
+  const guides = Array.isArray(state.cueGuides)
+    ? state.cueGuides.filter(guide => (guide?.type || '') === 'formula')
+    : [];
+  if (!guides.length) {
+    container.textContent = '';
+    container.setAttribute('hidden', 'hidden');
+    return;
+  }
+
   const text = typeof state.text === 'string' ? state.text : '';
-  const parts = detectObservationFormulaParts(text);
-  const formulaText = buildObservationFormulaText(parts);
+  const matches = matchCueGuides(text, guides);
+  const matchedIds = matches?.matchedIds instanceof Set ? matches.matchedIds : new Set(matches?.matchedIds || []);
+
+  const leadSegments = guides
+    .filter(guide => (guide?.group || 'tail') === 'lead')
+    .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
+  const tailSegments = guides
+    .filter(guide => (guide?.group || 'tail') === 'tail')
+    .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
+
+  const missingLead = leadSegments.filter(segment => !matchedIds.has(segment?.id || segment?.cue));
+  const missingTail = tailSegments.filter(segment => !matchedIds.has(segment?.id || segment?.cue));
+
+  const formulaText = buildObservationFormulaTextFromSegments(missingLead, missingTail);
 
   if (formulaText) {
     container.textContent = formulaText;
@@ -1969,73 +1564,19 @@ function renderObservationFormula() {
   }
 }
 
-function detectObservationFormulaParts(text) {
-  const source = typeof text === 'string' ? text : '';
-  const trimmed = source.trim();
-  if (!trimmed) {
-    return {
-      date: false,
-      time: false,
-      place: false,
-      sense: false,
-      actor: false,
-      action: false,
-      count: false,
-    };
-  }
+function buildObservationFormulaTextFromSegments(leadSegments, tailSegments) {
+  const leadTexts = extractFormulaSegmentTexts(leadSegments);
+  const tailTexts = extractFormulaSegmentTexts(tailSegments);
 
-  const sense = detectObservationFormulaSense(source);
-
-  return {
-    date: hasObservationDateCue(source),
-    time: hasObservationTimeCue(source),
-    place: hasObservationPlaceCue(source),
-    sense: sense.sense,
-    actor: sense.actor,
-    action: sense.action,
-    count: hasObservationCountCue(source),
-  };
-}
-
-function buildObservationFormulaText(parts) {
-  if (!parts) {
-    return '';
-  }
-
-  const leadSegments = [];
-  if (!parts.date) {
-    leadSegments.push('On [DATE]');
-  }
-  if (!parts.time) {
-    leadSegments.push('at [TIME]');
-  }
-  if (!parts.place) {
-    leadSegments.push('in [PLACE]');
-  }
-
-  const tailSegments = [];
-  if (!parts.sense) {
-    tailSegments.push('I saw/heard');
-  }
-  if (!parts.actor) {
-    tailSegments.push('[ACTOR]');
-  }
-  if (!parts.action) {
-    tailSegments.push('[ACTION/WORDS]');
-  }
-  if (!parts.count) {
-    tailSegments.push('[COUNT/DURATION]');
-  }
-
-  if (!leadSegments.length && !tailSegments.length) {
+  if (!leadTexts.length && !tailTexts.length) {
     return '';
   }
 
   const lines = [];
-  if (leadSegments.length) {
-    let intro = capitalizeFormulaLine(leadSegments.join(' '));
+  if (leadTexts.length) {
+    let intro = capitalizeFormulaLine(leadTexts.join(' '));
     if (intro) {
-      if (tailSegments.length) {
+      if (tailTexts.length) {
         intro = intro.endsWith(',') ? intro : `${intro},`;
       } else if (!intro.endsWith('.')) {
         intro = `${intro}.`;
@@ -2044,9 +1585,8 @@ function buildObservationFormulaText(parts) {
     }
   }
 
-  if (tailSegments.length) {
-    let sentence = tailSegments.join(' ');
-    sentence = capitalizeFormulaLine(sentence);
+  if (tailTexts.length) {
+    let sentence = capitalizeFormulaLine(tailTexts.join(' '));
     if (sentence && !sentence.endsWith('.')) {
       sentence = `${sentence}.`;
     }
@@ -2055,7 +1595,17 @@ function buildObservationFormulaText(parts) {
     }
   }
 
-  return lines.join('\n');
+  return lines.join('
+');
+}
+
+function extractFormulaSegmentTexts(segments) {
+  if (!Array.isArray(segments) || !segments.length) {
+    return [];
+  }
+  return segments
+    .map(segment => (typeof segment?.text === 'string' ? segment.text.trim() : ''))
+    .filter(Boolean);
 }
 
 function capitalizeFormulaLine(value) {
@@ -2072,229 +1622,6 @@ function capitalizeFormulaLine(value) {
   }
   return trimmed;
 }
-
-function hasObservationDateCue(text) {
-  if (typeof text !== 'string') {
-    return false;
-  }
-  if (OBSERVATION_FORMULA_ISO_DATE_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_NUMERIC_DATE_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_MONTH_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_DAY_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_RELATIVE_DATE_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_ORDINAL_DATE_PATTERN.test(text)) {
-    return true;
-  }
-  return false;
-}
-
-function hasObservationTimeCue(text) {
-  if (typeof text !== 'string') {
-    return false;
-  }
-  if (OBSERVATION_FORMULA_TIME_RANGE_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_COLON_TIME_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_AMPM_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_RELATIVE_TIME_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_TIMEWORD_PATTERN.test(text)) {
-    return true;
-  }
-  return false;
-}
-
-function hasObservationPlaceCue(text) {
-  if (typeof text !== 'string') {
-    return false;
-  }
-  const trimmed = text.trim();
-  if (!trimmed) {
-    return false;
-  }
-
-  const locationPattern = /\b(?:in|inside|outside|at|on)\s+(?:the\s+)?([\w“”"'\-]+(?:\s+[\w“”"'\-]+){0,4})/gi;
-  let match;
-  while ((match = locationPattern.exec(trimmed))) {
-    const phrase = (match[1] || '').trim();
-    if (!phrase) {
-      continue;
-    }
-    const pieces = phrase.split(/\s+/).filter(Boolean);
-    if (!pieces.length) {
-      continue;
-    }
-    let index = 0;
-    let first = sanitizeFormulaWord(pieces[index]);
-    if (OBSERVATION_FORMULA_ACTOR_ARTICLES.has(first) && pieces.length > 1) {
-      index += 1;
-      first = sanitizeFormulaWord(pieces[index]);
-    }
-    if (!first) {
-      continue;
-    }
-    if (OBSERVATION_FORMULA_TIME_WORDS.has(first)) {
-      continue;
-    }
-    if (/^\d+$/.test(first)) {
-      continue;
-    }
-    if (first && (OBSERVATION_FORMULA_AMPM_PATTERN.test(first) || OBSERVATION_FORMULA_COLON_TIME_PATTERN.test(first))) {
-      continue;
-    }
-    if (OBSERVATION_FORMULA_TIMEWORD_PATTERN.test(first)) {
-      continue;
-    }
-    return true;
-  }
-
-  return OBSERVATION_FORMULA_LOCATION_PATTERNS.some(regex => regex.test(trimmed));
-}
-
-function detectObservationFormulaSense(text) {
-  if (typeof text !== 'string') {
-    return { sense: false, actor: false, action: false };
-  }
-  const match = OBSERVATION_FORMULA_SENSE_PATTERN.exec(text);
-  if (!match) {
-    return { sense: false, actor: false, action: false };
-  }
-  const clause = (match[1] || '').trim();
-  if (!clause) {
-    return { sense: true, actor: false, action: false };
-  }
-  const boundaryIndex = clause.search(/[,;]|\s+-\s+/);
-  const scope = boundaryIndex >= 0 ? clause.slice(0, boundaryIndex).trim() : clause;
-  const words = scope.split(/\s+/).filter(Boolean);
-  if (!words.length) {
-    return { sense: true, actor: false, action: false };
-  }
-  const actor = detectObservationActor(words);
-  const action = detectObservationAction(words, scope);
-  return { sense: true, actor, action };
-}
-
-function detectObservationActor(words) {
-  if (!Array.isArray(words) || !words.length) {
-    return false;
-  }
-  let index = 0;
-  let rawWord = typeof words[index] === 'string' ? words[index] : '';
-  let word = sanitizeFormulaWord(rawWord);
-  if (!word) {
-    return false;
-  }
-  if (OBSERVATION_FORMULA_ACTOR_ARTICLES.has(word) && words.length > index + 1) {
-    index += 1;
-    rawWord = typeof words[index] === 'string' ? words[index] : '';
-    word = sanitizeFormulaWord(rawWord);
-  }
-  if (!word) {
-    return false;
-  }
-  if (/^["“”'‘’]/.test(rawWord || '')) {
-    return false;
-  }
-  if (OBSERVATION_FORMULA_ACTOR_PRONOUNS.has(word)) {
-    return true;
-  }
-  if (/^[A-Z]/.test(words[index])) {
-    return true;
-  }
-  return word.length > 2;
-}
-
-function detectObservationAction(words, scope) {
-  if (!Array.isArray(words) || words.length <= 1) {
-    if (/["“”'‘’]/.test(scope)) {
-      return true;
-    }
-    return false;
-  }
-  const tail = words.slice(1);
-  for (let i = 0; i < tail.length; i += 1) {
-    if (isObservationActionWord(tail[i])) {
-      return true;
-    }
-  }
-  if (/["“”'‘’]/.test(scope)) {
-    return true;
-  }
-  return false;
-}
-
-function sanitizeFormulaWord(word) {
-  if (typeof word !== 'string') {
-    return '';
-  }
-  return word.replace(/^[^a-z0-9]+/i, '').replace(/[^a-z0-9]+$/i, '').toLowerCase();
-}
-
-function isObservationActionWord(word) {
-  const candidate = sanitizeFormulaWord(word);
-  if (!candidate) {
-    return false;
-  }
-  if (OBSERVATION_FORMULA_ACTION_KEYWORDS.has(candidate)) {
-    return true;
-  }
-  if (
-    candidate.length > 3 &&
-    /(ed|ing|ies|ied|ized|izes|ising|izing|s|es)$/.test(candidate) &&
-    !OBSERVATION_FORMULA_ACTION_EXCLUDE.has(candidate)
-  ) {
-    return true;
-  }
-  return false;
-}
-
-function hasObservationCountCue(text) {
-  if (typeof text !== 'string') {
-    return false;
-  }
-  if (OBSERVATION_FORMULA_PERCENT_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_RANGE_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_DURATION_PATTERN.test(text)) {
-    return true;
-  }
-  if (OBSERVATION_FORMULA_FREQUENCY_PATTERN.test(text)) {
-    return true;
-  }
-  if (/\b\d+(?:\.\d+)?\s*(?:times?|x|minutes?|minute|hours?|hour|hrs?|hr|days?|day|weeks?|week|seconds?|second|sec|emails?|messages?|calls?|people|participants?|items?|occurrences?|occasions?|percent|%)\b/i.test(text)) {
-    return true;
-  }
-  if (
-    OBSERVATION_FORMULA_NUMBER_WORD_PATTERN.test(text) &&
-    /\b(?:times?|minutes?|hours?|days?|weeks?|calls?|emails?|messages?|people|participants?|items?|occurrences?)\b/i.test(text)
-  ) {
-    return true;
-  }
-  if (/\bper\s+(?:hour|day|week|month|session|call)\b/i.test(text)) {
-    return true;
-  }
-  return false;
-}
-
 
 function renderHighlight() {
   const host = document.getElementById('observation-highlight');
