@@ -182,11 +182,14 @@ function bindDetectionMatchesPopover() {
       const status = state.detectionStatus || 'loading';
       const hits = Array.isArray(state.detectionHits) ? state.detectionHits : [];
       if (status !== 'match' || !hits.length) {
-        state.detectionMatchesOpen = false;
-        renderDetectionMatchesPopover();
+        if (state.detectionMatchesOpen === true) {
+          state.detectionMatchesOpen = false;
+          renderDetectionMatchesPopover();
+        }
         return;
       }
-      state.detectionMatchesOpen = !state.detectionMatchesOpen;
+      const open = state.detectionMatchesOpen === true;
+      state.detectionMatchesOpen = !open;
       renderDetectionMatchesPopover();
     });
     toggle.dataset.bound = '1';
@@ -1569,19 +1572,22 @@ function renderDetectionMatchesPopover() {
   const hits = Array.isArray(state.detectionHits) ? state.detectionHits : [];
   const hasMatches = status === 'match' && hits.length > 0;
 
+  resetDetectionMatchesList(list);
+
   if (!hasMatches) {
     container.setAttribute('hidden', 'hidden');
     toggle.setAttribute('aria-expanded', 'false');
     toggle.textContent = 'Show exact matches';
     popover.setAttribute('hidden', 'hidden');
     list.innerHTML = '';
+    delete list.dataset.matchesSignature;
     state.detectionMatchesOpen = false;
     return;
   }
 
   container.removeAttribute('hidden');
 
-  const open = Boolean(state.detectionMatchesOpen);
+  const open = state.detectionMatchesOpen === true;
   const count = hits.length;
   const showLabel = count === 1 ? 'Show exact match' : `Show ${count} exact matches`;
   const hideLabel = count === 1 ? 'Hide exact match' : `Hide ${count} exact matches`;
@@ -1608,10 +1614,23 @@ function renderDetectionMatchesPopover() {
     list.appendChild(fallback);
   }
 
+  const signature = buildDetectionMatchesSignature(hits);
+  const previousSignature = list.dataset.matchesSignature || '';
+  if (signature !== previousSignature) {
+    if (signature) {
+      list.dataset.matchesSignature = signature;
+    } else {
+      delete list.dataset.matchesSignature;
+    }
+    list.scrollTop = 0;
+  }
+
   if (open) {
     popover.removeAttribute('hidden');
+    constrainDetectionMatchesList(list);
   } else {
     popover.setAttribute('hidden', 'hidden');
+    list.scrollTop = 0;
   }
 }
 
@@ -1658,6 +1677,97 @@ function buildDetectionMatchListItem(hit) {
   }
 
   return item;
+}
+
+function resetDetectionMatchesList(list) {
+  if (!list) {
+    return;
+  }
+  list.classList.remove('observation-detection__matches-list--scrollable');
+  list.style.removeProperty('max-height');
+  list.style.removeProperty('overflow-y');
+  list.style.removeProperty('scrollbar-gutter');
+}
+
+function constrainDetectionMatchesList(list) {
+  if (!list) {
+    return;
+  }
+
+  const elements = Array.from(list.children).filter(child => child && child.nodeType === 1);
+  if (elements.length <= 1) {
+    resetDetectionMatchesList(list);
+    return;
+  }
+
+  const firstItem = elements[0];
+  if (!firstItem || typeof firstItem.getBoundingClientRect !== 'function') {
+    resetDetectionMatchesList(list);
+    return;
+  }
+
+  let itemHeight = firstItem.getBoundingClientRect().height;
+  if (!itemHeight) {
+    itemHeight = firstItem.scrollHeight || firstItem.offsetHeight || 0;
+  }
+
+  if (!itemHeight) {
+    list.classList.add('observation-detection__matches-list--scrollable');
+    list.style.overflowY = 'auto';
+    list.style.setProperty('scrollbar-gutter', 'stable');
+    list.style.removeProperty('max-height');
+    return;
+  }
+
+  const gap = readDetectionMatchesRowGap(list);
+  const limit = Math.max(0, Math.ceil(itemHeight + gap));
+
+  list.classList.add('observation-detection__matches-list--scrollable');
+  list.style.maxHeight = `${limit}px`;
+  list.style.overflowY = 'auto';
+  list.style.setProperty('scrollbar-gutter', 'stable');
+}
+
+function readDetectionMatchesRowGap(list) {
+  if (!list || typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+    return 0;
+  }
+  try {
+    const styles = window.getComputedStyle(list);
+    if (!styles) {
+      return 0;
+    }
+    const raw = styles.getPropertyValue('row-gap') || styles.getPropertyValue('grid-row-gap') || '';
+    const value = Number.parseFloat(raw);
+    return Number.isNaN(value) ? 0 : value;
+  } catch (error) {
+    return 0;
+  }
+}
+
+function buildDetectionMatchesSignature(hits) {
+  if (!Array.isArray(hits) || !hits.length) {
+    return '';
+  }
+
+  return hits
+    .map(hit => {
+      if (!hit || typeof hit !== 'object') {
+        return '';
+      }
+      const label = typeof hit.label === 'string' ? hit.label.trim() : '';
+      const cue = typeof hit.cue === 'string' ? hit.cue.trim() : '';
+      const phrase = typeof hit.phrase === 'string' ? hit.phrase.trim() : '';
+      const example = typeof hit.example === 'string' ? hit.example.trim() : '';
+      const feelings = Array.isArray(hit.feelings)
+        ? hit.feelings.map(value => (typeof value === 'string' ? value.trim() : '')).join(',')
+        : '';
+      const needs = Array.isArray(hit.needs)
+        ? hit.needs.map(value => (typeof value === 'string' ? value.trim() : '')).join(',')
+        : '';
+      return [label, cue, phrase, example, feelings, needs].join('¦');
+    })
+    .join('§');
 }
 
 function formatDetectionMatchTitle(hit) {

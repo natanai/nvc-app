@@ -1475,6 +1475,20 @@ button.site-nav__magnet {
     gap: 0.65rem;
   }
 
+  .observation-detection__matches-list--scrollable {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+
+  .observation-detection__matches-list--scrollable::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  .observation-detection__matches-list--scrollable::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--mint) 35%, transparent);
+    border-radius: var(--radius-pill);
+  }
+
   .observation-detection__matches-item {
     display: grid;
     gap: 0.35rem;
