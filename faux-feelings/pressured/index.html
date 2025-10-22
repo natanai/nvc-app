@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>faux feeling: pressured • allneeds.app</title>
-    <meta name="description" content="When you say you feel pressured, you might actually be anxious, resentful, or overwhelmed as demands pile up. Check for those emotions while tending to needs like relaxation, clarity, space, and consideration." />
+    <meta name="description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
     <link rel="icon" type="image/svg+xml" href="../../icons/favicon-color.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-color-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-color-16x16.png" />
@@ -23,7 +23,7 @@
     <meta property="og:site_name" content="allneeds.app" />
     <meta property="og:url" content="https://allneeds.app/faux-feelings/pressured/" />
     <meta property="og:title" content="faux feeling: pressured • allneeds.app" />
-    <meta property="og:description" content="When you say you feel pressured, you might actually be anxious, resentful, or overwhelmed as demands pile up. Check for those emotions while tending to needs like relaxation, clarity, space, and consideration." />
+    <meta property="og:description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
     <meta property="og:image" content="https://allneeds.app/social/og-image-1200x630.png" />
     <meta property="og:image:secure_url" content="https://allneeds.app/social/og-image-1200x630.png" />
     <meta property="og:image:type" content="image/png" />
@@ -32,7 +32,7 @@
     <meta property="og:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="faux feeling: pressured • allneeds.app" />
-    <meta name="twitter:description" content="When you say you feel pressured, you might actually be anxious, resentful, or overwhelmed as demands pile up. Check for those emotions while tending to needs like relaxation, clarity, space, and consideration." />
+    <meta name="twitter:description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
     <meta name="twitter:url" content="https://allneeds.app/faux-feelings/pressured/" />
     <meta name="twitter:image" content="https://allneeds.app/social/twitter-card-1200x630.png" />
     <meta name="twitter:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
@@ -775,8 +775,8 @@ button.site-nav__magnet {
               <span class="site-nav__count" data-inventory-count hidden></span>
             </a>
             <a class="pill magnet site-nav__magnet" data-magnet-id="nav-observations" href="../../observations/"><span class="site-nav__magnet-label">Observations</span></a>
-            <a class="pill magnet site-nav__magnet site-nav__magnet--faux-feelings" data-magnet-id="nav-faux-feelings" href="../../faux-feelings/" data-nav-hidden="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Faux feelings</span></a>
-            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../../feelings/" aria-current="page"><span class="site-nav__magnet-label">Feelings</span></a>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--faux-feelings" data-magnet-id="nav-faux-feelings" href="../../faux-feelings/" aria-current="page" data-nav-hidden="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Faux feelings</span></a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../../feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
             <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="../../needs/"><span class="site-nav__magnet-label">Needs</span></a>
             <a class="pill magnet site-nav__magnet site-nav__magnet--body-cues" data-magnet-id="nav-body-cues" href="../../feelings/body-cues/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
             <a class="pill magnet site-nav__magnet site-nav__magnet--journal-dashboard" data-magnet-id="nav-journal-dashboard" href="../../inventory/journal/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
@@ -1166,8 +1166,11 @@ button.site-nav__magnet {
           <li><a href="../../">Home</a></li><li><a href="../">Faux feelings</a></li><li aria-current="page">Pressured</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main" data-feeling-slug="pressured">
+      <main id="main" class="page" role="main">
         
+      <header class="page-header">
+        <h1 class="page-title">Faux feeling: Pressured</h1>
+      </header>
       <section class="pill-section magnet-section" aria-labelledby="feelings-heading" data-magnet-root>
       <div class="magnet-section__header">
         <h2 id="feelings-heading" class="section-title">Feelings</h2>
@@ -1175,7 +1178,7 @@ button.site-nav__magnet {
       </div>
       <div class="magnet-board-wrapper">
         <div class="pill-grid magnet-board" data-magnet-board>
-          <a class="pill magnet" data-magnet-id="feelings-anxious" href="../../feelings/anxious/">Anxious</a><a class="pill magnet" data-magnet-id="feelings-overwhelmed" href="../../feelings/overwhelmed/">Overwhelmed</a><a class="pill magnet" data-magnet-id="feelings-resentful" href="../../feelings/resentful/">Resentful</a><a class="pill magnet" data-magnet-id="feelings-tense" href="../../feelings/tense/">Tense</a><a class="pill magnet" data-magnet-id="feelings-distressed" href="../../feelings/distressed/">Distressed</a>
+          <a class="pill magnet" data-magnet-id="feelings-anxious" href="../../feelings/anxious/">Anxious</a><a class="pill magnet" data-magnet-id="feelings-resentful" href="../../feelings/resentful/">Resentful</a><a class="pill magnet" data-magnet-id="feelings-overwhelmed" href="../../feelings/overwhelmed/">Overwhelmed</a>
         </div>
           <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
             <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
@@ -1204,36 +1207,11 @@ button.site-nav__magnet {
           </label>
       </div>
     </section>
-      <header class="page-header">
-        <h1 class="page-title">Faux feeling: Pressured</h1>
-        
-        <p class="page-description page-description--feeling">When you say you feel pressured, you might actually be anxious, resentful, or overwhelmed as demands pile up. Check for those emotions while tending to needs like relaxation, clarity, space, and consideration.</p>
-      </header>
-      <section class="feeling-poem" aria-labelledby="poem-heading-pressured">
-        <h2 id="poem-heading-pressured" class="section-title">Poem reflection</h2>
-        <figure class="feeling-poem__figure">
-          <blockquote class="feeling-poem__quote">&quot;push-pulling me away and toward <br />the shore of knowing what is <br />to come—which pressure <br />causes metamorphoses,<br />protostar pre-nucleosynthesis,<br />and which pressure produces fissures...&quot;<br />- Chet’la Sebree</blockquote>
-          <figcaption class="feeling-poem__cta"><a class="feeling-poem__link" href="https://poets.org/poem/end-4" target="_blank" rel="noopener noreferrer">Continue reading the poem</a></figcaption>
-        </figure>
-      </section>
-      
-      <section class="feeling-inference-wrapper" data-reverse-inference-container hidden>
-        <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="reverse-inference-panel-pressured" disabled>
-          <span class="feeling-inference-toggle__copy">
-            <span class="feeling-inference-toggle__badge">Alexithymia support</span>
-            <span class="feeling-inference-toggle__label">How this feeling might be inferred</span>
-          </span>
-        </button>
-        <div id="reverse-inference-panel-pressured" class="feeling-inference-panel" data-reverse-inference-panel hidden>
-          <section class="feeling-inference" data-reverse-inference hidden></section>
-        </div>
-      </section>
     
       </main>
     </div>
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
-    <script src="../../scripts/feeling-reverse-inference.js" type="module"></script>
   </body>
 </html>
