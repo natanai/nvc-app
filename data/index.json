@@ -3230,6 +3230,403 @@
       ],
       "poemQuote": "",
       "poemUrl": ""
+    },
+    {
+      "title": "Calm",
+      "slug": "calm",
+      "description": "Your breathing steadies, muscles soften, and thoughts move with easy clarity. Calm often arrives when your nervous system registers safety and the pace of life matches your capacity. Researchers link this regulated state to the parasympathetic response that lets bodies recover and integrate experience.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Safety",
+          "slug": "safety"
+        }
+      ],
+      "bodySignals": [
+        "Slow",
+        "even breaths expanding through the belly; Shoulders settling away from the ears; Jaw unclenching with the tongue resting gently"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Inspired",
+      "slug": "inspired",
+      "description": "Your eyes may widen and posture lift as fresh ideas gather momentum. Inspiration surfaces when something resonates with your values and reveals new possibilities. Neuroscientists note this spark often rides dopamine pathways that fuel curiosity and creative exploration.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Contribution",
+          "slug": "contribution"
+        },
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        }
+      ],
+      "bodySignals": [
+        "Eyes widening toward new possibilities; Spine lengthening with an energized lift; Hands reaching or sketching shapes midair"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Proud",
+      "slug": "proud",
+      "description": "Your chest may rise and shoulders open as you recognize meaningful effort bearing fruit. Pride appears when achievements align with your values and are witnessed by yourself or others. Psychologists link it to a sense of competence that strengthens bonds within communities.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Accomplishment",
+          "slug": "accomplishment"
+        },
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        },
+        {
+          "title": "Respect",
+          "slug": "respect"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        }
+      ],
+      "bodySignals": [
+        "Chest expanding with a gentle lift; Chin tilting slightly upward with a soft smile; Warmth spreading across the face and shoulders"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Hopeful",
+      "slug": "hopeful",
+      "description": "Your gaze may brighten as you glimpse pathways toward what matters. Hope grows when resources, support, or possibilities seem within reach. Researchers describe it as a forward-looking motivation system that helps people persist through uncertainty.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Need for all living things to flourish",
+          "slug": "need-for-all-living-things-to-flourish"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        }
+      ],
+      "bodySignals": [
+        "Eyes focusing toward a future point; Heartbeat lifting with gentle energy; Breath filling the chest with buoyant steadiness"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Contented",
+      "slug": "contented",
+      "description": "Your breath may sink deeper and muscles let go as you register that life feels sufficiently met. Contentment arises when needs feel attended to without striving for more. Studies associate this settled satisfaction with gratitude practices that calm stress responses.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Safety",
+          "slug": "safety"
+        }
+      ],
+      "bodySignals": [
+        "Breath moving deep into the abdomen; Body leaning back into supportive surfaces; A soft sigh releasing remaining tension"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Peaceful",
+      "slug": "peaceful",
+      "description": "Your face softens and attention widens when conflicts quiet and surroundings feel safe. Peacefulness appears as competing demands settle and harmony feels possible. Polyvagal research connects it with social engagement states that let people rest and relate.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Peace",
+          "slug": "peace"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Safety",
+          "slug": "safety"
+        }
+      ],
+      "bodySignals": [
+        "Eyelids relaxing with a gentle gaze; Shoulders draping downward evenly; Breath flowing in a quiet rhythmic pattern"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Relieved",
+      "slug": "relieved",
+      "description": "You may feel a long exhale and loosened muscles after strain eases. Relief arrives when a feared outcome passes or support appears in time. Physiologists observe cortisol levels drop during this release, allowing the body to reset.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        }
+      ],
+      "bodySignals": [
+        "Extended exhale spilling from the lungs; Shoulders dropping as tension drains; Belly loosening while the jaw softens"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Relaxed",
+      "slug": "relaxed",
+      "description": "Your limbs may feel pleasantly heavy as your nervous system shifts out of high alert. Relaxation grows when you have enough time, space, and permission to unwind. Researchers associate it with parasympathetic activation that aids digestion and repair.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Relaxation",
+          "slug": "relaxation"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        }
+      ],
+      "bodySignals": [
+        "Limbs resting with comfortable heaviness; Breathing slowing with easy pauses; Hands lying open without gripping"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Joyful",
+      "slug": "joyful",
+      "description": "A smile may spread quickly and energy dance through your body when joy bursts forth. Joy often blooms in moments of connection, play, or meaning shared with others. Social scientists view it as a bonding emotion that reinforces cooperative relationships.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Love/Caring",
+          "slug": "love-caring"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Closeness",
+          "slug": "closeness"
+        }
+      ],
+      "bodySignals": [
+        "Smile radiating across the face; Body swaying or bouncing with lightness; Laughter bubbling up through the chest"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Playful",
+      "slug": "playful",
+      "description": "You might feel quick, inventive movements and a spark of mischief when playfulness arrives. This feeling shows up when the environment feels safe enough to experiment and improvise. Biologists note that mammals use play to learn skills and deepen trust.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        },
+        {
+          "title": "Choose Freely",
+          "slug": "choose-freely"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        }
+      ],
+      "bodySignals": [
+        "Eyes sparkling with curiosity; Movements darting in spontaneous patterns; Voice hopping between tones or laughter"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Excited",
+      "slug": "excited",
+      "description": "Your pulse may quicken and attention sharpen as anticipation builds. Excitement surfaces when a valued event draws near or fresh challenges invite engagement. Psychologists describe it as high-arousal energy that prepares the body for purposeful action.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        },
+        {
+          "title": "Participation",
+          "slug": "participation"
+        },
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        }
+      ],
+      "bodySignals": [
+        "Heartbeat thumping with eager energy; Feet bouncing or shifting in place; Breath quickening while staying open"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Energized",
+      "slug": "energized",
+      "description": "Muscles can feel ready and responsive when energy surges through your system. Feeling energized often follows meaningful rest, nourishment, or inspiration. Researchers connect it with metabolic balance that supports sustained focus and movement.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Physical Fitness",
+          "slug": "physical-fitness"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Accomplishment",
+          "slug": "accomplishment"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Empowerment",
+          "slug": "empowerment"
+        }
+      ],
+      "bodySignals": [
+        "Muscles humming with lively readiness; Posture aligning upright with ease; Steps landing with springy momentum"
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
     }
   ],
   "needs": [
