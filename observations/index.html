@@ -864,6 +864,11 @@ button.site-nav__magnet {
     max-width: 75ch;
   }
 
+  .observation-guide__desktop {
+    display: grid;
+    gap: clamp(1rem, 2.5vw, 1.6rem);
+  }
+
   .observation-guide__nav {
     display: flex;
     align-items: flex-end;
@@ -994,6 +999,140 @@ button.site-nav__magnet {
     overflow-wrap: anywhere;
   }
 
+  .observation-guide__mobile {
+    display: none;
+    gap: 0.9rem;
+  }
+
+  .observation-guide__mobile-intro {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, var(--chip-bg) 50%, #ffffff 50%);
+  }
+
+  .observation-guide__mobile-eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    color: color-mix(in srgb, var(--outline) 55%, transparent);
+  }
+
+  .observation-guide__mobile-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+  }
+
+  .observation-guide__mobile-intro-text {
+    margin: 0;
+  }
+
+  .observation-guide__mobile-panel {
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 94%, transparent);
+    overflow: hidden;
+  }
+
+  .observation-guide__mobile-panel + .observation-guide__mobile-panel {
+    margin-top: 0.75rem;
+  }
+
+  .observation-guide__mobile-summary {
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+    padding: 1rem 3.1rem 1rem 1.1rem;
+    cursor: pointer;
+    position: relative;
+    font: inherit;
+  }
+
+  .observation-guide__mobile-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .observation-guide__mobile-summary::after {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    right: 1.1rem;
+    transform: translateY(-50%);
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 88%, #ffffff 12%);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: transform 160ms ease, background 160ms ease;
+  }
+
+  .observation-guide__mobile-panel[open] .observation-guide__mobile-summary::after {
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .observation-guide__mobile-summary-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    color: color-mix(in srgb, var(--outline) 50%, transparent);
+  }
+
+  .observation-guide__mobile-summary-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .observation-guide__mobile-summary-description {
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--ink) 75%, transparent);
+  }
+
+  .observation-guide__mobile-content {
+    padding: 0.2rem 1.1rem 1.1rem;
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .observation-guide__mobile-content p {
+    margin: 0;
+  }
+
+  .observation-guide__mobile-content ul,
+  .observation-guide__mobile-content ol {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .observation-guide__mobile-content a {
+    overflow-wrap: anywhere;
+  }
+
+  .observation-guide__mobile-footer {
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    border-radius: var(--radius-2xl);
+    padding: 0.9rem 1.1rem;
+    background: color-mix(in srgb, var(--chip-bg) 42%, #ffffff 58%);
+    font-size: 0.9rem;
+  }
+
+  .observation-guide__mobile-footer p {
+    margin: 0;
+  }
+
   .observation-guide__citation {
     font-size: 0.72em;
     line-height: 0;
@@ -1023,6 +1162,14 @@ button.site-nav__magnet {
       width: 2rem;
       height: 2rem;
       font-size: 0.95rem;
+    }
+
+    .observation-guide__desktop {
+      display: none;
+    }
+
+    .observation-guide__mobile {
+      display: grid;
     }
 
     .observation-guide__tab {
@@ -2671,6 +2818,7 @@ button.site-nav__magnet {
               <p>This guide formalizes a fill-in-the-blank process for producing low-inference observational statements: descriptions restricted to verifiable sensory data (what was seen/heard), anchored to concrete time and context, and free of trait labels or motive attributions. The approach synthesizes findings from behavioral observation, psycholinguistics, and affect-regulation research. Linguistic abstraction increases biased social inference <sup class="observation-guide__citation"><a href="#observation-guide-ref-1">[1]</a></sup>; concreteness improves comprehension <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>; and affect labeling is associated with reduced limbic reactivity <sup class="observation-guide__citation"><a href="#observation-guide-ref-4">[4]</a></sup>.</p>
               <p>Perspective-taking and I-language are linked to lower perceived hostility in communication contexts <sup class="observation-guide__citation"><a href="#observation-guide-ref-5">[5]</a></sup>. Research on basic psychological needs provides relevant context for why clear description may matter in interpersonal settings: autonomy/competence <sup class="observation-guide__citation"><a href="#observation-guide-ref-6">[6]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-7">[7]</a></sup> and belonging/social connection <sup class="observation-guide__citation"><a href="#observation-guide-ref-8">[8]</a></sup>.</p>
             </header>
+            <div class="observation-guide__desktop">
             <nav class="observation-guide__nav" aria-label="Observation guide sections" role="tablist">
               <a
                 class="observation-guide__tab is-active"
@@ -2948,6 +3096,163 @@ button.site-nav__magnet {
                   </ol>
                 </div>
               </section>
+            </div>
+            </div>
+            <div class="observation-guide__mobile" data-observation-guide-mobile>
+            <div class="observation-guide__mobile-intro">
+              <p class="observation-guide__mobile-eyebrow">Quick mobile reference</p>
+              <h3 class="observation-guide__mobile-title">Observation mini-guide</h3>
+              <p class="observation-guide__mobile-intro-text">Tap a card for research-backed pointers. The full desktop guide stays available if you rotate or switch to a larger screen.</p>
+            </div>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-definition" open>
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Start here</span>
+                  <span class="observation-guide__mobile-summary-title">What counts as an observation</span>
+                  <span class="observation-guide__mobile-summary-description">Stick to verifiable sights and sounds.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <ul>
+                    <li>Camera-ready facts only—words, actions, measurable results <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Anchor the time and location to keep statements concrete <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</li>
+                    <li>Swap absolutes for counts, durations, or frequencies <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>.</li>
+                    <li>Drop motive guesses or labels; stay with what happened <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</li>
+                  </ul>
+                  <p class="observation-guide__callout">Observations cover events; feelings, needs, and requests have their own steps.</p>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-method">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Write it out</span>
+                  <span class="observation-guide__mobile-summary-title">Fill-in-the-blank recipe</span>
+                  <span class="observation-guide__mobile-summary-description">Use this structure when you capture a moment.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <ol>
+                    <li>Scene setter: “On [DATE] at [TIME] in [PLACE]…” <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</li>
+                    <li>What you sensed: “I saw/heard [ACTOR] [ACTION/WORDS].” <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Exact words when possible. Quotes reduce interpretation <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</li>
+                    <li>Measurements beat vague adverbs (how many times, how long) <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>.</li>
+                    <li>Drop value judgments or intent guesses; stick to what occurred <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</li>
+                  </ol>
+                  <p class="observation-guide__callout"><strong>Quick template:</strong> “On [DATE] at [TIME] in [PLACE], I saw/heard [ACTOR] [ACTION/WORDS] [COUNT/DURATION].”</p>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-heuristics">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Spot checks</span>
+                  <span class="observation-guide__mobile-summary-title">When the app will nudge you</span>
+                  <span class="observation-guide__mobile-summary-description">Flags catch language that drifts from low-inference wording.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <ul>
+                    <li>Absolutes like “always/never”—expect a prompt for specific counts <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</li>
+                    <li>Trait labels (rude, careless, disrespectful)—swap for what was seen <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</li>
+                    <li>Mind-reading (“on purpose,” “because you don’t care”)—return to observable facts <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</li>
+                    <li>Unbacked causation (“made me,” “for no reason”)—tie claims to measurable effects when you have them.</li>
+                    <li>Future steps: I-language and perspective checks lower defensiveness later on <sup class="observation-guide__citation"><a href="#observation-guide-ref-5">[5]</a></sup>.</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-examples">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">See it in action</span>
+                  <span class="observation-guide__mobile-summary-title">From evaluation to observation</span>
+                  <span class="observation-guide__mobile-summary-description">Compare a judgment with a low-inference rewrite.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <dl>
+                    <div>
+                      <dt>Evaluation: ““You’re always late and inconsiderate.””</dt>
+                      <dd>Observation: ““In the past two weeks, you arrived 5–15 minutes after our agreed time on three occasions.”” Why it works: Replaces global language with time-bound frequency <sup class="observation-guide__citation"><a href="#observation-guide-ref-2">[2]</a></sup>.</dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: ““Janice works too much.””</dt>
+                      <dd>Observation: ““Janice logged 62 on-site hours this week, including Saturday.”” Why it works: Removes evaluative adverb; supplies measurable quantity <sup class="observation-guide__citation"><a href="#observation-guide-ref-3">[3]</a></sup>.</dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: ““He left the party to hurt me.””</dt>
+                      <dd>Observation: ““He left the party without saying goodbye at 9:10 p.m.”” Why it works: Strips motive attribution; hostile-attribution research cautions against inferred intent <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</dd>
+                    </div>
+                    <div>
+                      <dt>Evaluation: ““You were rude in the meeting.””</dt>
+                      <dd>Observation: ““During the 2:00–2:15 agenda item, while I was speaking, you interrupted twice (timestamps 08:12 and 09:47).”” Why it works: Replaces trait with event-bounded counts <sup class="observation-guide__citation"><a href="#observation-guide-ref-12">[12]</a></sup>.</dd>
+                    </div>
+                  </dl>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-measurement">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Research practice</span>
+                  <span class="observation-guide__mobile-summary-title">If you need stronger evidence</span>
+                  <span class="observation-guide__mobile-summary-description">Useful for programs, facilitation, or research settings.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <ul>
+                    <li>Define behaviors with examples and non-examples <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Use ABC logs with timestamps; capture counts, durations, or latency <sup class="observation-guide__citation"><a href="#observation-guide-ref-13">[13]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-14">[14]</a></sup>.</li>
+                    <li>Calibrate observers with agreement checks (kappa, % agreement) <sup class="observation-guide__citation"><a href="#observation-guide-ref-15">[15]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-16">[16]</a></sup>.</li>
+                    <li>Watch for observer drift; schedule refreshers with sample clips <sup class="observation-guide__citation"><a href="#observation-guide-ref-15">[15]</a></sup>.</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-why">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Why it matters</span>
+                  <span class="observation-guide__mobile-summary-title">Link to needs & nervous systems</span>
+                  <span class="observation-guide__mobile-summary-description">Neutral description keeps the door open for collaboration.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <p>Clear, time-bound language supports autonomy and competence because everyone sees the same scenario to solve <sup class="observation-guide__citation"><a href="#observation-guide-ref-6">[6]</a></sup>.</p>
+                  <p>Lowering ambiguity builds belonging and social safety <sup class="observation-guide__citation"><a href="#observation-guide-ref-8">[8]</a></sup> and buffers stress responses tied to trust <sup class="observation-guide__citation"><a href="#observation-guide-ref-17">[17]</a></sup>, <sup class="observation-guide__citation"><a href="#observation-guide-ref-18">[18]</a></sup>.</p>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-limitations">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Scope check</span>
+                  <span class="observation-guide__mobile-summary-title">Limits to remember</span>
+                  <span class="observation-guide__mobile-summary-description">Use observations as inputs—not verdicts.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <ul>
+                    <li>Memories fade; jot notes or quote quickly when accuracy matters <sup class="observation-guide__citation"><a href="#observation-guide-ref-9">[9]</a></sup>.</li>
+                    <li>Observations do not prove intent—skip hostile attributions <sup class="observation-guide__citation"><a href="#observation-guide-ref-10">[10]</a></sup>.</li>
+                    <li>Language norms shift; invite people to sanity-check phrasing across cultures.</li>
+                    <li>This guide summarizes research, not clinical or legal rulings.</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="observation-guide__mobile-panel" id="observation-guide-mobile-references">
+                <summary class="observation-guide__mobile-summary">
+                  <span class="observation-guide__mobile-summary-eyebrow">Want the studies?</span>
+                  <span class="observation-guide__mobile-summary-title">Reference library</span>
+                  <span class="observation-guide__mobile-summary-description">Tap to browse full links in a single list.</span>
+                </summary>
+                <div class="observation-guide__mobile-content">
+                  <ol>
+                    <li><a href="https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf" rel="noopener noreferrer" target="_blank">Linguistic abstraction &amp; inference (1989)</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/" rel="noopener noreferrer" target="_blank">Concreteness improves comprehension</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/" rel="noopener noreferrer" target="_blank">Measurement-focused language guidance</a></li>
+                    <li><a href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf" rel="noopener noreferrer" target="_blank">Affect labeling &amp; limbic response</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/" rel="noopener noreferrer" target="_blank">Perspective-taking &amp; I-language outcomes</a></li>
+                    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/" rel="noopener noreferrer" target="_blank">Autonomy &amp; competence needs review</a></li>
+                    <li><a href="https://selfdeterminationtheory.org/topics/basic-psychological-needs/" rel="noopener noreferrer" target="_blank">Basic psychological needs overview</a></li>
+                    <li><a href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" rel="noopener noreferrer" target="_blank">Social connection advisory</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/" rel="noopener noreferrer" target="_blank">Behavioral observation reliability guidance</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/" rel="noopener noreferrer" target="_blank">Hostile attribution &amp; aggression analysis</a></li>
+                    <li><a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full" rel="noopener noreferrer" target="_blank">Hostile attribution coaching study</a></li>
+                    <li><a href="https://doi.org/10.3758/PBR.17.5.644" rel="noopener noreferrer" target="_blank">Language framing &amp; blame study</a></li>
+                    <li><a href="https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/" rel="noopener noreferrer" target="_blank">ABC recording overview</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/" rel="noopener noreferrer" target="_blank">Functional assessment measurement research</a></li>
+                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/" rel="noopener noreferrer" target="_blank">Observer agreement calibration study</a></li>
+                    <li><a href="https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf" rel="noopener noreferrer" target="_blank">Kappa statistic primer</a></li>
+                    <li><a href="https://pubmed.ncbi.nlm.nih.gov/21058850/" rel="noopener noreferrer" target="_blank">Interpersonal trust &amp; stress pathways</a></li>
+                    <li><a href="https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress" rel="noopener noreferrer" target="_blank">Human connection &amp; stress relief</a></li>
+                  </ol>
+                </div>
+              </details>
+            <div class="observation-guide__mobile-footer">
+              <p>Need the tabbed layout? Rotate your device or open this page on desktop to switch back to the full research view.</p>
+            </div>
             </div>
           </div>
           <!-- observation-guide:end -->
