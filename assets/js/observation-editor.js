@@ -13,6 +13,7 @@ const state = {
   detectionMatches: 0,
   detectionFallbacks: 0,
   detectionFallbackQueue: [],
+  detectionHits: [],
   detectionSource: '',
   detectionHasFlagged: false,
   cueHighlightRanges: [],
@@ -20,6 +21,7 @@ const state = {
   activeHighlightKey: '',
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
+  detectionMatchesOpen: false,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
@@ -28,6 +30,7 @@ const state = {
 
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
+let detectionMatchesDocumentBound = false;
 
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
@@ -154,6 +157,7 @@ function bind() {
     });
   }
 
+  bindDetectionMatchesPopover();
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -167,6 +171,47 @@ function bind() {
       renderHighlightDetails(active || null);
     });
     highlightPopoverBound = true;
+  }
+}
+
+function bindDetectionMatchesPopover() {
+  const toggle = document.getElementById('observation-detection-matches-toggle');
+  if (toggle && !toggle.dataset.bound) {
+    toggle.addEventListener('click', event => {
+      event.preventDefault();
+      const status = state.detectionStatus || 'loading';
+      const hits = Array.isArray(state.detectionHits) ? state.detectionHits : [];
+      if (status !== 'match' || !hits.length) {
+        state.detectionMatchesOpen = false;
+        renderDetectionMatchesPopover();
+        return;
+      }
+      state.detectionMatchesOpen = !state.detectionMatchesOpen;
+      renderDetectionMatchesPopover();
+    });
+    toggle.dataset.bound = '1';
+  }
+
+  if (!detectionMatchesDocumentBound && typeof document !== 'undefined') {
+    document.addEventListener('click', event => {
+      if (!state.detectionMatchesOpen) {
+        return;
+      }
+      const toggleEl = document.getElementById('observation-detection-matches-toggle');
+      const popover = document.getElementById('observation-detection-matches-popover');
+      if ((toggleEl && toggleEl.contains(event.target)) || (popover && popover.contains(event.target))) {
+        return;
+      }
+      state.detectionMatchesOpen = false;
+      renderDetectionMatchesPopover();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && state.detectionMatchesOpen) {
+        state.detectionMatchesOpen = false;
+        renderDetectionMatchesPopover();
+      }
+    });
+    detectionMatchesDocumentBound = true;
   }
 }
 
@@ -1277,6 +1322,8 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   state.detectionNearLimit = DETECTION_NEAR_LIMIT;
   state.detectionSource = trimmed;
   state.detectionHasFlagged = hasFlagged;
+  state.detectionMatchesOpen = false;
+  state.detectionHits = [];
 
   if (!state.cues.length) {
     state.detectionStatus = 'loading';
@@ -1317,6 +1364,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionStatus = 'match';
     state.detectionFallbacks = 0;
     state.detectionFallbackQueue = [];
+    state.detectionHits = hits;
   } else {
     state.cueHighlightRanges = [];
     const fallbackQueue = computeFallbackQueue(trimmed);
@@ -1372,6 +1420,7 @@ function renderDetectionStatus() {
   }
   text.textContent = message;
   renderDetectionSummary();
+  renderDetectionMatchesPopover();
 }
 
 function renderDetectionSummary() {
@@ -1503,6 +1552,159 @@ function renderDetectionSummary() {
       coverage.setAttribute('hidden', 'hidden');
     }
   }
+}
+
+function renderDetectionMatchesPopover() {
+  const container = document.getElementById('observation-detection-matches');
+  const toggle = document.getElementById('observation-detection-matches-toggle');
+  const popover = document.getElementById('observation-detection-matches-popover');
+  const summary = document.getElementById('observation-detection-matches-summary');
+  const list = document.getElementById('observation-detection-matches-list');
+
+  if (!container || !toggle || !popover || !list) {
+    return;
+  }
+
+  const status = state.detectionStatus || 'loading';
+  const hits = Array.isArray(state.detectionHits) ? state.detectionHits : [];
+  const hasMatches = status === 'match' && hits.length > 0;
+
+  if (!hasMatches) {
+    container.setAttribute('hidden', 'hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'Show exact matches';
+    popover.setAttribute('hidden', 'hidden');
+    list.innerHTML = '';
+    state.detectionMatchesOpen = false;
+    return;
+  }
+
+  container.removeAttribute('hidden');
+
+  const open = Boolean(state.detectionMatchesOpen);
+  const count = hits.length;
+  const showLabel = count === 1 ? 'Show exact match' : `Show ${count} exact matches`;
+  const hideLabel = count === 1 ? 'Hide exact match' : `Hide ${count} exact matches`;
+
+  toggle.textContent = open ? hideLabel : showLabel;
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+  if (summary) {
+    summary.textContent = count === 1 ? 'We found this cue:' : 'We found these cues:';
+  }
+
+  list.innerHTML = '';
+  hits.forEach(hit => {
+    const item = buildDetectionMatchListItem(hit);
+    if (item) {
+      list.appendChild(item);
+    }
+  });
+
+  if (!list.children.length) {
+    const fallback = document.createElement('li');
+    fallback.className = 'observation-detection__matches-item';
+    fallback.textContent = 'No exact matches detected yet.';
+    list.appendChild(fallback);
+  }
+
+  if (open) {
+    popover.removeAttribute('hidden');
+  } else {
+    popover.setAttribute('hidden', 'hidden');
+  }
+}
+
+function buildDetectionMatchListItem(hit) {
+  if (!hit) {
+    return null;
+  }
+
+  const title = formatDetectionMatchTitle(hit);
+  if (!title) {
+    return null;
+  }
+
+  const item = document.createElement('li');
+  item.className = 'observation-detection__matches-item';
+
+  const heading = document.createElement('p');
+  heading.className = 'observation-detection__matches-title';
+  heading.textContent = title;
+  item.appendChild(heading);
+
+  const phrase = formatDetectionMatchPhrase(hit);
+  if (phrase) {
+    const phraseNode = document.createElement('p');
+    phraseNode.className = 'observation-detection__matches-phrase';
+    phraseNode.textContent = phrase;
+    item.appendChild(phraseNode);
+  }
+
+  const feelingsLine = formatDetectionMatchMeta(hit?.feelings, 'feeling');
+  if (feelingsLine) {
+    const meta = document.createElement('p');
+    meta.className = 'observation-detection__matches-meta';
+    meta.textContent = feelingsLine;
+    item.appendChild(meta);
+  }
+
+  const needsLine = formatDetectionMatchMeta(hit?.needs, 'need');
+  if (needsLine) {
+    const meta = document.createElement('p');
+    meta.className = 'observation-detection__matches-meta';
+    meta.textContent = needsLine;
+    item.appendChild(meta);
+  }
+
+  return item;
+}
+
+function formatDetectionMatchTitle(hit) {
+  const label = typeof hit?.label === 'string' ? hit.label.trim() : '';
+  if (label) {
+    return label;
+  }
+  const cue = typeof hit?.cue === 'string' ? hit.cue.trim() : '';
+  if (cue) {
+    return formatTitle(cue);
+  }
+  return '';
+}
+
+function formatDetectionMatchPhrase(hit) {
+  const phrase = typeof hit?.phrase === 'string' ? hit.phrase.trim() : '';
+  if (phrase) {
+    return `Matches phrases like “${phrase}”.`;
+  }
+  const example = typeof hit?.example === 'string' ? hit.example.trim() : '';
+  if (example) {
+    return `Example: “${example}”.`;
+  }
+  return '';
+}
+
+function formatDetectionMatchMeta(slugs, kind) {
+  if (!Array.isArray(slugs) || !slugs.length) {
+    return '';
+  }
+  const titles = slugs
+    .map(slug => {
+      if (kind === 'feeling') {
+        return resolveFeelingTitle(slug);
+      }
+      if (kind === 'need') {
+        return resolveNeedTitle(slug);
+      }
+      return '';
+    })
+    .map(title => (typeof title === 'string' ? title.trim() : ''))
+    .filter(Boolean);
+  if (!titles.length) {
+    return '';
+  }
+  const prefix = kind === 'feeling' ? (titles.length === 1 ? 'Feeling' : 'Feelings') : titles.length === 1 ? 'Need' : 'Needs';
+  return `${prefix}: ${formatNaturalList(titles)}`;
 }
 
 function canSubmitMatches() {
