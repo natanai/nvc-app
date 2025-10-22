@@ -2088,10 +2088,22 @@ function buildCueHighlightRanges(text, hits) {
   }
   const ranges = [];
   hits.forEach(hit => {
-    if (!hit || !Array.isArray(hit.patterns)) {
+    if (!hit) {
       return;
     }
-    hit.patterns.forEach(pattern => {
+    const candidates = [];
+    if (Array.isArray(hit.patterns)) {
+      candidates.push(...hit.patterns);
+    }
+    if (Array.isArray(hit.matchers)) {
+      hit.matchers
+        .map(matcher => (matcher && matcher.regex instanceof RegExp ? matcher.regex : null))
+        .filter(Boolean)
+        .forEach(regex => {
+          candidates.push(regex);
+        });
+    }
+    candidates.forEach(pattern => {
       const regex = toGlobalRegex(pattern);
       if (!regex) {
         return;
