@@ -1541,6 +1541,21 @@ button.site-nav__magnet {
     outline: none;
   }
 
+  .observation-editor__formula {
+    position: absolute;
+    inset: 0;
+    padding: 1.15rem 1.2rem;
+    font: inherit;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: color-mix(in srgb, var(--outline) 42%, transparent);
+    opacity: 0.9;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
   .observation-editor__highlight {
     position: absolute;
     inset: 0;
@@ -2727,12 +2742,12 @@ button.site-nav__magnet {
                   ></div>
                 </div>
                 <div class="observation-editor__input-wrapper">
+                  <div id="observation-formula" class="observation-editor__formula" aria-hidden="true"></div>
                   <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
                   <textarea
                     id="observation-text"
                     class="observation-editor__input"
                     rows="7"
-                    placeholder="Describe exactly what you observed—just the concrete facts."
                     aria-describedby="observation-guidelines-summary"
                   ></textarea>
                   <div
