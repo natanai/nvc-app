@@ -146,6 +146,29 @@ test('navigation pages include updated nav magnet definitions', async () => {
     }
   }
 
+  const supportPath = path.join(repoRoot, 'alexithymia-support', 'index.html');
+  const supportContents = await fs.readFile(supportPath, 'utf8');
+
+  assert.ok(
+    supportContents.includes('magnetPositions:site-nav'),
+    'Alexithymia Support page is missing the nav magnet prefill script (magnetPositions:site-nav).',
+  );
+
+  const supportObservationTags = findMagnetTags(supportContents, 'nav-observations');
+  assert.ok(
+    supportObservationTags.length > 0,
+    'Alexithymia Support page is missing the Observations magnet.',
+  );
+
+  assert.ok(
+    supportObservationTags.some((tag) => {
+      const hidden = extractAttribute(tag, 'data-nav-hidden');
+      const ariaHidden = extractAttribute(tag, 'aria-hidden');
+      return hidden !== 'true' && ariaHidden !== 'true';
+    }),
+    'Alexithymia Support page should display the Observations magnet by default.',
+  );
+
   if (violations.length) {
     assert.fail(`Missing navigation magnets:\n${violations.join('\n')}`);
   }
