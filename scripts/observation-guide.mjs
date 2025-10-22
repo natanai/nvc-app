@@ -22,14 +22,16 @@ export function renderObservationGuide(data) {
 
   const summary = data.summary || {};
   const intro = data.intro || {};
-  const sections = Array.isArray(data.sections) ? data.sections : [];
+  const desktop = data.desktop || {};
+  const desktopSections = Array.isArray(desktop.sections) ? desktop.sections : [];
+  const mobile = data.mobile || {};
 
   const introParagraphs = Array.isArray(intro.paragraphs)
     ? intro.paragraphs.map(text => `              <p>${text}</p>`).join('\n')
     : '';
 
-  const nav = renderObservationGuideNav(sections);
-  const sectionsMarkup = renderObservationGuideSections(sections);
+  const desktopMarkup = renderObservationGuideDesktop(desktopSections);
+  const mobileMarkup = renderObservationGuideMobile(mobile);
 
   return `          <summary class="observation-guide__toggle">
             <span class="observation-guide__toggle-text">
@@ -46,9 +48,97 @@ export function renderObservationGuide(data) {
               </h2>
 ${introParagraphs}
             </header>
+${desktopMarkup}
+${mobileMarkup}
+          </div>`;
+}
+
+function renderObservationGuideDesktop(sections) {
+  if (!Array.isArray(sections) || !sections.length) {
+    return '';
+  }
+
+  const nav = renderObservationGuideNav(sections);
+  const sectionsMarkup = renderObservationGuideSections(sections);
+
+  return `            <div class="observation-guide__desktop">
 ${nav}
 ${sectionsMarkup}
-          </div>`;
+            </div>`;
+}
+
+function renderObservationGuideMobile(config) {
+  if (!config || typeof config !== 'object') {
+    return '';
+  }
+
+  const sections = Array.isArray(config.sections) ? config.sections : [];
+  if (!sections.length) {
+    return '';
+  }
+
+  const eyebrow = config.eyebrow ? `              <p class="observation-guide__mobile-eyebrow">${config.eyebrow}</p>` : '';
+  const title = config.title ? `              <h3 class="observation-guide__mobile-title">${config.title}</h3>` : '';
+  const introParagraphs = Array.isArray(config.intro)
+    ? config.intro.map(text => `              <p class="observation-guide__mobile-intro-text">${text}</p>`).join('\n')
+    : '';
+
+  const introMarkup = eyebrow || title || introParagraphs
+    ? `            <div class="observation-guide__mobile-intro">
+${eyebrow}
+${title}
+${introParagraphs}
+            </div>`
+    : '';
+
+  const panels = sections
+    .map((section, index) => renderMobilePanel(section, index === 0))
+    .filter(Boolean)
+    .join('\n');
+
+  const footerContent = renderContentItems(config.footer, 14);
+  const footer = footerContent
+    ? `            <div class="observation-guide__mobile-footer">
+${footerContent}
+            </div>`
+    : '';
+
+  return `            <div class="observation-guide__mobile" data-observation-guide-mobile>
+${introMarkup}
+${panels}
+${footer}
+            </div>`;
+}
+
+function renderMobilePanel(section, isFirst) {
+  if (!section || typeof section !== 'object') {
+    return '';
+  }
+
+  const idAttr = section.id ? ` id="${section.id}"` : '';
+  const isOpen = typeof section.defaultOpen === 'boolean' ? section.defaultOpen : isFirst;
+  const openAttr = isOpen ? ' open' : '';
+  const eyebrow = section.eyebrow
+    ? `                  <span class="observation-guide__mobile-summary-eyebrow">${section.eyebrow}</span>\n`
+    : '';
+  const title = section.title
+    ? `                  <span class="observation-guide__mobile-summary-title">${section.title}</span>\n`
+    : '';
+  const description = section.description
+    ? `                  <span class="observation-guide__mobile-summary-description">${section.description}</span>\n`
+    : '';
+  const content = renderContentItems(section.content, 18);
+  const body = content
+    ? `                <div class="observation-guide__mobile-content">
+${content}
+                </div>`
+    : '';
+
+  return `              <details class="observation-guide__mobile-panel"${idAttr}${openAttr}>
+                <summary class="observation-guide__mobile-summary">
+${eyebrow}${title}${description}                </summary>
+${body}
+              </details>`;
 }
 
 function renderObservationGuideNav(sections) {
@@ -115,11 +205,15 @@ ${panels}
 }
 
 function renderSectionContent(content, contentClass) {
-  const items = Array.isArray(content) ? content : [];
-  const body = items.map(item => renderContentItem(item, 18)).filter(Boolean).join('\n');
+  const body = renderContentItems(content, 18);
   return `                <div class="${contentClass}">
 ${body}
                 </div>`;
+}
+
+function renderContentItems(content, indent) {
+  const items = Array.isArray(content) ? content : [];
+  return items.map(item => renderContentItem(item, indent)).filter(Boolean).join('\n');
 }
 
 function renderContentItem(item, indent) {
