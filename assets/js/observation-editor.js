@@ -1595,8 +1595,7 @@ function buildObservationFormulaTextFromSegments(leadSegments, tailSegments) {
     }
   }
 
-  return lines.join('
-');
+  return lines.join('\n');
 }
 
 function extractFormulaSegmentTexts(segments) {
