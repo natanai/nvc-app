@@ -1036,6 +1036,27 @@ ${navVisibilityBootstrap}
 ${prefill}`;
 }
 
+function indentBlock(value, indent) {
+  const stringValue = String(value ?? '');
+  if (!indent) {
+    return stringValue;
+  }
+
+  const lines = stringValue.split('\n').map((line) => {
+    if (!line) {
+      return '';
+    }
+
+    if (/^\s/.test(line)) {
+      return line;
+    }
+
+    return `${indent}${line}`;
+  });
+
+  return lines.join('\n');
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -2056,6 +2077,44 @@ function slugify(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
+function updateSupportLaneNav() {
+  const supportPath = join(rootDir, 'alexithymia-support', 'index.html');
+  let contents;
+
+  try {
+    contents = readFileSync(supportPath, 'utf8');
+  } catch (error) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn('Unable to read Alexithymia Support page for nav update', error);
+    }
+    return;
+  }
+
+  const navPattern = /(^\s*)<nav class="site-nav magnet-section"[\s\S]*?<\/nav>(?:\s*<script[\s\S]*?<\/script>)*(?=\s*<(?:nav|main)\b)/m;
+  const match = navPattern.exec(contents);
+
+  if (!match) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn('Alexithymia Support page is missing the primary nav block; skipped nav sync.');
+    }
+    return;
+  }
+
+  const indent = match[1] ?? '';
+  const navMarkup = renderNav('../', 'feelings');
+  const replacement = indentBlock(navMarkup, indent);
+
+  if (match[0] === replacement) {
+    return;
+  }
+
+  const updated = contents.replace(navPattern, replacement);
+
+  if (updated !== contents) {
+    writeFileSync(supportPath, updated);
+  }
+}
+
 function build() {
   sanitizeObservationCues();
   renderHome();
@@ -2081,6 +2140,7 @@ function build() {
   }
 
   updateObservationGuidePage();
+  updateSupportLaneNav();
 }
 
 build();
