@@ -1,158 +1,1459 @@
 [
   {
-    "id": "async-replies",
-    "label": "Follow-ups on delayed replies",
-    "summary": "Patterns where messages are seen, delayed, or rerouted instead of answered.",
-    "slotIds": ["time", "context", "measure"],
+    "id": "dismissive-responses",
+    "label": "Dismissive responses and gestures",
+    "summary": "Moments where gestures or comments dismiss the speaker in front of others.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(seen|read)\\b[^\\n]{0,80}\\b(no|without)\\s+reply",
-        "flags": "i"
+        "pattern": "\\broll(?:ed|s|ing)?\\b[^\\n]{0,40}\\beyes?\\b",
+        "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\brepl(?:y|ied)\\b[^\\n]{0,80}\\b(hours|days)\\s+(later|after)",
-        "flags": "i"
+        "pattern": "\\beye[-\\s]?roll(?:ed|s|ing)?\\b",
+        "flags": "iu"
       },
       {
-        "type": "tokens",
-        "tokens": ["voice", "note"],
-        "threshold": 2
+        "type": "regex",
+        "pattern": "\\b(?:said|muttered|snapped)\\b[^\\n]{0,40}\"?whatever\"?\\b[^\\n]{0,60}\\b(?:slamm(?:ed|ing)|shut|closed)\\b[^\\n]{0,30}\\bdoor\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:you(?:'|\\s*are)|you're|ya)\\s+too\\s+sensitive\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:called|said)\\b[^\\n]{0,40}\\btoo\\s+sensitive\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bwhisper(?:ed|ing)?\\b[^\\n]{0,80}\\b(?:laughed|giggl(?:ed|ing)|snicker(?:ed|ing))\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
-      "Message showed as 'seen' yesterday; no reply since then.",
-      "They replied two days after I asked a time-sensitive question.",
-      "After my long update, the only reply was 'k'."
+      "My manager rolled his eyes when I asked about the budget.",
+      "My teenager muttered \"whatever\" and slammed the bedroom door.",
+      "A teammate whispered to another person and laughed after I spoke."
     ],
     "cueIds": [
-      "seen-no-reply-variant",
-      "reply-late",
-      "one-word-reply",
-      "topic-changed",
-      "message-forwarded",
-      "voice-note-instead"
+      "dismissive-eye-roll",
+      "dismissive-whatever-door",
+      "dismissive-too-sensitive",
+      "dismissive-whisper-laugh"
+    ],
+    "feelings": [
+      "hurt",
+      "embarrassed",
+      "lonely",
+      "angry",
+      "frustrated"
+    ],
+    "needs": [
+      "respect",
+      "consideration",
+      "connection",
+      "acceptance",
+      "to-be-heard"
     ]
   },
   {
-    "id": "schedule-shifts",
-    "label": "Schedule changes and cancellations",
-    "summary": "Moments where plans move without notice or commitments are canceled.",
-    "slotIds": ["time", "context"],
+    "id": "listening-boundaries",
+    "label": "When listening feels one-sided",
+    "summary": "Moments where partners or clients talk over you or insist you never listen.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(cancel(?:ed|led)|rescheduled|pushed\\s+back)\\b",
-        "flags": "i"
+        "pattern": "\\b(?:you|ya|u)\\s+never\\s+listen\\b",
+        "flags": "iu"
       },
       {
-        "type": "tokens",
-        "tokens": ["agenda", "switched"],
-        "threshold": 2
+        "type": "regex",
+        "pattern": "\\b(?:you|ya|u)\\s+(?:don(?:'|o)t|do\\s+not)\\s+listen\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:talk(?:ed)?|spoke)\\s+over\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:cut\\s+me\\s+off|interrup(?:ted|ting))\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
-      "The agenda switched while we were in the meeting.",
-      "Office hours were canceled without a new time.",
-      "The ride was canceled last minute."
+      "My partner said I never listen when we talked about chores.",
+      "During the call, the client talked over every proposal.",
+      "The conversation kept looping because my input was interrupted."
     ],
     "cueIds": [
-      "agenda-switched",
-      "decision-pre-announced",
-      "questions-not-logged",
-      "repeated-cancellations",
-      "office-hours-canceled",
-      "ride-canceled-last-minute"
+      "accused-never-listen",
+      "client-talked-over"
+    ],
+    "feelings": [
+      "frustrated",
+      "anxious",
+      "hurt"
+    ],
+    "needs": [
+      "respect",
+      "to-be-heard",
+      "mutuality",
+      "understanding"
     ]
   },
   {
-    "id": "access-friction",
-    "label": "Sudden access or login friction",
-    "summary": "Barriers that block entry, links, or tools that used to be available.",
-    "slotIds": ["context", "measure"],
+    "id": "presentation-departures",
+    "label": "Walkouts during presentations",
+    "summary": "Abandoning the room mid-presentation or slamming notebooks while someone shares.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(account|login|passcode|two[-\\s]?factor|locked|blocked)\\b",
-        "flags": "i"
+        "pattern": "\\b(?:walked|stormed|strode)\\s+out\\b[^\\n]{0,80}\\b(?:presentation|talk|briefing|update)\\b",
+        "flags": "iu"
       },
       {
-        "type": "tokens",
-        "tokens": ["link", "broken"],
-        "threshold": 2
+        "type": "regex",
+        "pattern": "\\bslamm(?:ed|ing)\\b[^\\n]{0,40}\\b(?:notebook|laptop|binder)\\b[^\\n]{0,80}\\b(?:left|walked\\s+out)\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
-      "The accessibility ramp was missing at the venue.",
-      "The account locked me out and demanded two-factor codes.",
-      "The link in the instructions was broken."
+      "A coworker slammed her notebook and left during the presentation.",
+      "Someone walked out as I showed the final slide.",
+      "The room fell silent after the door closed behind them."
     ],
     "cueIds": [
-      "accessibility-missing",
-      "bathroom-closed",
-      "door-propped-open",
-      "seat-taken",
-      "link-broken",
-      "account-locked",
-      "twofactor-required-suddenly"
+      "presentation-walkout"
+    ],
+    "feelings": [
+      "hurt",
+      "anxious",
+      "startled"
+    ],
+    "needs": [
+      "respect",
+      "support",
+      "stability"
     ]
   },
   {
-    "id": "environment-irritants",
-    "label": "Environmental irritants that break focus",
-    "summary": "Concrete sensory distractions in shared spaces.",
-    "slotIds": ["context", "sensory"],
+    "id": "sports-officiating",
+    "label": "Missed fouls and officiating gaps",
+    "summary": "Referees overlooking fouls or making no-calls that impact fairness and safety.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(thermostat|temperature|smell|odor|scent|noise|loud)\\b",
-        "flags": "i"
+        "pattern": "\\b(?:ref|referee|ump)\\b[^\\n]{0,120}\\b(?:miss(?:ed)?|ignor(?:ed|ing)|skipped)\\b[^\\n]{0,60}\\b(?:foul|penalty|call)\\b",
+        "flags": "iu"
       },
       {
-        "type": "tokens",
-        "tokens": ["dishes", "sink"],
-        "threshold": 2
+        "type": "regex",
+        "pattern": "\\bno\\s+call\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
-      "The thermostat was maxed and the vents blasted hot air.",
-      "Someone left dishes stacked in the sink overnight.",
-      "A loud bang startled everyone in the hallway."
+      "The referee missed three fouls in a row.",
+      "No whistle blew when our player was shoved.",
+      "The bench kept shouting about the no-call."
     ],
     "cueIds": [
-      "dishes-left-sink",
-      "thermostat-maxed",
-      "loud-startle",
-      "smell-trigger",
-      "workspace-too-cold",
-      "workspace-too-hot"
+      "referee-missed-fouls"
+    ],
+    "feelings": [
+      "frustrated",
+      "powerless",
+      "anxious"
+    ],
+    "needs": [
+      "fairness",
+      "safety",
+      "respect"
     ]
   },
   {
-    "id": "care-promises",
-    "label": "Care-related commitments kept or missed",
-    "summary": "How people follow through on caretaking promises and check-ins.",
-    "slotIds": ["time", "context", "sensory"],
+    "id": "queue-respect",
+    "label": "Fairness in lines and shared resources",
+    "summary": "When service staff or shoppers bypass the queue or reach over you for the last item.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(check(?:ed)?\\s+in|wait(?:ing|ed)|picked\\s+up|forgot|remembered)\\b",
-        "flags": "i"
+        "pattern": "\\b(?:barista|server|cashier|clerk|agent)\\b[^\\n]{0,120}\\b(?:skip(?:ped)?|served)\\b[^\\n]{0,60}\\b(?:before|ahead\\s+of)\\b[^\\n]{0,40}\\bme\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skip(?:ped)?|cut)\\s+(?:the\\s+)?(?:line|queue)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\breach(?:ed)?\\s+over\\b[^\\n]{0,60}\\b(?:me|my\\s+shoulder)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bgrab(?:bed|bing)\\b[^\\n]{0,60}\\b(?:last|final)\\s+(?:carton|item|package|box)\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
-      "They checked in before asking for another favor.",
-      "We were kept waiting forty minutes after the appointment time.",
-      "Childcare pickup ran late twice this week."
+      "The barista served someone who arrived after me.",
+      "Another shopper reached over my shoulder for the last carton.",
+      "I stayed in line but others jumped ahead."
     ],
     "cueIds": [
-      "check-in-before-ask",
-      "kept-waiting",
-      "childcare-late-pickup",
-      "child-unsupervised",
-      "special-date-forgotten",
-      "kept-promise"
+      "service-line-skip",
+      "reached-over-last-item"
+    ],
+    "feelings": [
+      "irritated",
+      "hurt",
+      "alarmed"
+    ],
+    "needs": [
+      "fairness",
+      "respect",
+      "order",
+      "safety"
+    ]
+  },
+  {
+    "id": "shared-upkeep",
+    "label": "Shared space upkeep and boundaries",
+    "summary": "Living with others who leave messes or return shared items without care.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:sink|counter)\\b[^\\n]{0,120}\\b(?:stacked|piled|filled)\\b[^\\n]{0,60}\\b(?:dishes|plates|cups)\\b[^\\n]{0,60}\\b(?:again|still)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bborrow(?:ed|ing)\\b[^\\n]{0,120}\\bcar\\b[^\\n]{0,120}\\b(?:empty|no|without)\\s+(?:gas|fuel|a\\s+tank)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Dishes piled up again in the sink before work.",
+      "A borrowed car came back with an empty tank.",
+      "Shared chores keep getting skipped."
+    ],
+    "cueIds": [
+      "roommate-dishes-repeated",
+      "borrowed-car-empty"
+    ],
+    "feelings": [
+      "irritated",
+      "hurt",
+      "anxious"
+    ],
+    "needs": [
+      "consideration",
+      "respect",
+      "responsibility",
+      "reliability"
+    ]
+  },
+  {
+    "id": "job-security",
+    "label": "Employment status surprises",
+    "summary": "Contract endings or renewals delivered without context or warning.",
+    "slotIds": [
+      "time",
+      "context"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:contract|agreement|deal)\\b[^\\n]{0,120}\\b(?:was(?:n't)?|is(?:n't)?|won't\\s+be|not)\\s+(?:renew(?:ed)?|extended|continued)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "HR emailed that my contract wasn't renewed without a reason.",
+      "A contract ended without anyone explaining why.",
+      "Employment status shifted with no warning."
+    ],
+    "cueIds": [
+      "contract-not-renewed"
+    ],
+    "feelings": [
+      "anxious",
+      "disheartened",
+      "confused"
+    ],
+    "needs": [
+      "security",
+      "clarity",
+      "respect"
+    ]
+  },
+  {
+    "id": "feedback-clarity",
+    "label": "Feedback without specifics",
+    "summary": "Critiques that label work as sloppy or list mistakes without examples.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:teacher|instructor)\\b[^\\n]{0,120}\\b(?:wrote|scribbled|marked)\\b[^\\n]{0,80}\\b(?:sloppy|messy|careless|lazy)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:performance\\s+review|feedback|evaluation)\\b[^\\n]{0,160}\\b(?:only|just|mostly)\\b[^\\n]{0,80}\\b(?:mistakes|issues|problems|faults)\\b[^\\n]{0,120}\\b(?:no|without)\\s+(?:examples|specifics|details)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A teacher wrote 'sloppy' across the assignment.",
+      "A review listed mistakes without concrete examples.",
+      "Feedback lacked specifics about what to adjust."
+    ],
+    "cueIds": [
+      "teacher-derogatory-feedback",
+      "review-no-examples"
+    ],
+    "feelings": [
+      "confused",
+      "discouraged",
+      "protective"
+    ],
+    "needs": [
+      "clarity",
+      "support",
+      "growth",
+      "respect"
+    ]
+  },
+  {
+    "id": "housing-reliability",
+    "label": "Maintenance requests with no follow-up",
+    "summary": "Landlords or contractors who ignore repairs or miss appointments without notice.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:landlord|property\\s+(?:manager|office)|superintendent|building\\s+(?:manager|office))\\b[^\\n]{0,160}\\b(?:hasn'?t|still\\s+hasn't|never|won't)\\s+(?:respond(?:ed)?|repl(?:ied|y)|called|texted|gotten\\s+back)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:contractor|repair\\s+(?:tech|person)|plumber|electrician|installer|handyman)\\b[^\\n]{0,160}\\b(?:no[-\\s]?show|never\\s+showed|miss(?:ed)?\\s+(?:the\\s+)?(?:appointment|visit|slot)|didn'?t\\s+(?:come|arrive))\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Messages about the leak went unanswered.",
+      "A contractor missed the appointment and never called.",
+      "Maintenance issues linger without updates."
+    ],
+    "cueIds": [
+      "landlord-no-response",
+      "contractor-no-show"
+    ],
+    "feelings": [
+      "anxious",
+      "frustrated",
+      "vulnerable"
+    ],
+    "needs": [
+      "safety",
+      "support",
+      "responsiveness",
+      "reliability"
+    ]
+  },
+  {
+    "id": "care-attention",
+    "label": "Care visits that feel rushed",
+    "summary": "Providers who glance at the clock or otherwise signal impatience while you explain symptoms.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:doctor|physician|provider)\\b[^\\n]{0,120}\\b(?:kept\\s+)?(?:checking|glancing|looking)\\b[^\\n]{0,40}\\bclock\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The doctor kept checking the clock mid-appointment.",
+      "A provider glanced at the clock while I spoke.",
+      "The visit felt rushed instead of attentive."
+    ],
+    "cueIds": [
+      "doctor-checked-clock"
+    ],
+    "feelings": [
+      "anxious",
+      "dismissed"
+    ],
+    "needs": [
+      "care",
+      "respect",
+      "attention",
+      "to-be-heard"
+    ]
+  },
+  {
+    "id": "workload-boundaries",
+    "label": "Workload stacking and late-night pings",
+    "summary": "Teams that hand you every follow-up task or bosses who ping late at night without regard for rest.",
+    "slotIds": [
+      "time",
+      "context",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bassign(?:ed|ing)\\b[^\\n]{0,160}\\b(?:all|every|entire|whole)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?up|action\\s+item|task)s?\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:boss|manager|lead|supervisor)\\b[^\\n]{0,160}\\b(?:slack|teams|message|dm|ping|text|email)\\b[^\\n]{0,120}\\b(?:11\\s?p\\.?m\\.?|midnight|late\\s+at\\s+night|after\\s+hours)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "All the follow-up tasks landed on my plate again.",
+      "Slack pings came in around midnight from my boss.",
+      "I keep getting the action items after every meeting."
+    ],
+    "cueIds": [
+      "assigned-all-followups",
+      "boss-late-night-pings"
+    ],
+    "feelings": [
+      "overwhelmed",
+      "tense",
+      "resentful"
+    ],
+    "needs": [
+      "boundaries",
+      "rest",
+      "fairness",
+      "support"
+    ]
+  },
+  {
+    "id": "connection-presence",
+    "label": "Disconnected dinners",
+    "summary": "Shared meals where someone stays on their phone instead of engaging.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:during|at)\\s+(?:dinner|the\\s+meal|our\\s+meal)\\b[^\\n]{0,120}\\b(?:phone|scroll(?:ed|ing)|looking\\s+down\\s+at\\s+their\\s+screen)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Phones stayed on the table during dinner.",
+      "Conversation faded while someone scrolled.",
+      "I looked up and saw them on their screen instead of with me."
+    ],
+    "cueIds": [
+      "partner-phone-during-dinner"
+    ],
+    "feelings": [
+      "lonely",
+      "hurt",
+      "disappointed"
+    ],
+    "needs": [
+      "connection",
+      "attention",
+      "respect"
+    ]
+  },
+  {
+    "id": "ride-environment",
+    "label": "Noisy rideshares",
+    "summary": "Drivers who fill the car with loud speakerphone calls or chatter during the ride.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:driver|rideshare|uber|lyft|cab)\\b[^\\n]{0,120}\\b(?:speaker\\s*phone|speakerphone|on\\s+speaker)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A driver talked loudly on speakerphone the whole trip.",
+      "The car felt like a call center during the ride.",
+      "Noise filled the ride instead of quiet."
+    ],
+    "cueIds": [
+      "driver-speakerphone-entire-trip"
+    ],
+    "feelings": [
+      "overwhelmed",
+      "irritated",
+      "tense"
+    ],
+    "needs": [
+      "calm",
+      "respect",
+      "consideration"
+    ]
+  },
+  {
+    "id": "noise-disturbance",
+    "label": "Early-morning noise",
+    "summary": "Neighbors or surroundings that create loud noise before the day starts.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:neighbor'?s|next\\s+door)\\s+dog\\b[^\\n]{0,160}\\b(?:bark(?:ed|ing))\\b[^\\n]{0,120}\\b(?:6\\s?a\\.?m\\.?|five\\s?(?:thirty|30)\\s?a\\.?m\\.?|before\\s+sunrise|early\\s+morning)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A dog barked for thirty minutes at 6 a.m.",
+      "Weekend mornings start with loud barking next door.",
+      "Noise woke me up before sunrise."
+    ],
+    "cueIds": [
+      "neighbor-dog-morning"
+    ],
+    "feelings": [
+      "tired",
+      "irritated",
+      "overwhelmed"
+    ],
+    "needs": [
+      "rest",
+      "peace",
+      "consideration"
+    ]
+  },
+  {
+    "id": "safety-commute",
+    "label": "Traffic safety scares",
+    "summary": "Cyclists or others rushing through red lights where pedestrians cross.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:cyclist|bike\\s+rider|bicyclist)\\b[^\\n]{0,160}\\b(?:blew|ran|sped)\\b[^\\n]{0,80}\\b(?:red\\s+light|red\\s+signal|stop\\s+light)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A cyclist ran the red light through the crosswalk.",
+      "Bikes sped through while the walk signal was on.",
+      "Someone on a bike ignored the traffic signal next to me."
+    ],
+    "cueIds": [
+      "cyclist-ran-red"
+    ],
+    "feelings": [
+      "alarmed",
+      "startled",
+      "unsafe"
+    ],
+    "needs": [
+      "safety",
+      "predictability",
+      "care"
+    ]
+  },
+  {
+    "id": "self-accountability",
+    "label": "Noticing my own delays",
+    "summary": "Recognizing when you scroll or stall instead of following through on your plans.",
+    "slotIds": [
+      "time",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bscroll(?:ed|ing)\\b[^\\n]{0,120}\\b(?:instead\\s+of|rather\\s+than)\\b[^\\n]{0,120}\\b(?:call(?:ing)?|phone|reach(?:ing)?\\s+out|text(?:ing)?)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "I scrolled instead of returning an important call.",
+      "An hour went by on my phone before I reached out.",
+      "I delayed following through because I kept scrolling."
+    ],
+    "cueIds": [
+      "self-delayed-call"
+    ],
+    "feelings": [
+      "regretful",
+      "disappointed"
+    ],
+    "needs": [
+      "integrity",
+      "connection",
+      "follow-through"
+    ]
+  },
+  {
+    "id": "collaboration-safeguards",
+    "label": "Teammates catching mistakes before they spread",
+    "summary": "When coworkers double-check work and spot errors before they reach others.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:coworker|colleague|teammate)\\b[^\\n]{0,160}\\b(?:double[-\\s]?checked|caught|spotted|flagged)\\b[^\\n]{0,120}\\b(?:mistake|error|issue)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A teammate double-checked an expense report and caught an error before it went out.",
+      "Someone on the team spotted a calculation mistake and flagged it before the client saw it.",
+      "A coworker reviewed my draft and found a typo in the headline."
+    ],
+    "cueIds": [
+      "coworker-caught-mistake"
+    ],
+    "feelings": [
+      "grateful",
+      "reassured",
+      "supported"
+    ],
+    "needs": [
+      "reliability",
+      "accuracy",
+      "teamwork"
+    ]
+  },
+  {
+    "id": "milestone-celebration",
+    "label": "Celebrations of personal milestones",
+    "summary": "Coaches or teammates who visibly celebrate your progress or new personal bests.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:trainer|coach)\\b[^\\n]{0,160}\\b(?:high[-\\s]?fiv(?:ed|e)|celebrat(?:ed|ing)|cheered)\\b[^\\n]{0,120}\\b(?:personal\\s+best|milestone|record)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At the 8 a.m. session, the trainer high-fived me after I racked 185 pounds on squats.",
+      "The coach paused practice to high-five me when the board showed my new record.",
+      "Teammates clapped while the trainer called out the weight I just logged."
+    ],
+    "cueIds": [
+      "trainer-celebrated-progress"
+    ],
+    "feelings": [
+      "proud",
+      "energized",
+      "encouraged"
+    ],
+    "needs": [
+      "acknowledgment",
+      "growth",
+      "celebration"
+    ]
+  },
+  {
+    "id": "neighbor-support",
+    "label": "Neighbors lending a hand",
+    "summary": "Neighbors who step in to clear a path or help with home care while you are away.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:neighbor|next\\s+door)\\b[^\\n]{0,160}\\b(?:shovel(?:ed|ing)|cleared|snow[-\\s]?blow(?:ed|ing))\\b[^\\n]{0,120}\\b(?:sidewalk|driveway|walkway|steps)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A neighbor shoveled our sidewalk while we were gone.",
+      "Someone next door cleared the driveway before we got home.",
+      "Our neighbor salted the steps so we wouldn't slip."
+    ],
+    "cueIds": [
+      "neighbor-shoveled-sidewalk"
+    ],
+    "feelings": [
+      "grateful",
+      "touched",
+      "connected"
+    ],
+    "needs": [
+      "community",
+      "care",
+      "support"
+    ]
+  },
+  {
+    "id": "specific-appreciation",
+    "label": "Specific appreciation and thank-yous",
+    "summary": "Heartfelt notes or emails that name what you contributed and why it mattered.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:thank[-\\s]*you|appreciat(?:e|ed|ion)|grateful)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|how\\s+you|what\\s+you\\s+did|made\\s+a\\s+big\\s+difference|the\\s+way\\s+you\\s+helped|calling\\s+out\\s+each)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:highlighted|called\\s+out|named|listed|spelled\\s+out|detailed)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|individual|each)\\b[^\\n]{0,120}\\b(?:ways?\\s+(?:I|we|you)\\s+helped|tasks?\\s+I\\s+handled|moments?\\s+you\\s+showed\\s+up|contributions?|shifts?)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:my|your|our)\\s+(?:volunteer\\s+hours|support|help|time|efforts?|contribution|work)\\b[^\\n]{0,120}\\b(?:made|makes|making)\\s+(?:such\\s+)?a\\s+big\\s+difference\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 4 p.m., the coordinator emailed naming the volunteer shifts I covered on Saturday.",
+      "The principal highlighted the exact stations I staffed during the fundraiser.",
+      "A manager DM’d the timestamps where I stepped in during the launch."
+    ],
+    "cueIds": [
+      "appreciation-specific-note"
+    ],
+    "feelings": [
+      "appreciated",
+      "seen",
+      "motivated"
+    ],
+    "needs": [
+      "acknowledgment",
+      "contribution",
+      "belonging"
+    ]
+  },
+  {
+    "id": "reflective-presence",
+    "label": "Reflective listening during support sessions",
+    "summary": "Counselors or listeners who mirror your words before offering input so you feel heard.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:counselor|therap(?:ist|y)|coach|facilitator)\\b[^\\n]{0,160}\\b(?:reflected|mirrored|paraphrased|summarized)\\b[^\\n]{0,120}\\b(?:back|what\\s+I\\s+said|my\\s+words)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A therapist reflected my words before sharing ideas.",
+      "A counselor paused to mirror back what I said.",
+      "A support group facilitator summarized my message first."
+    ],
+    "cueIds": [
+      "counselor-reflected"
+    ],
+    "feelings": [
+      "understood",
+      "calm",
+      "supported"
+    ],
+    "needs": [
+      "to-be-heard",
+      "understanding",
+      "trust"
+    ]
+  },
+  {
+    "id": "supportive-rebalancing",
+    "label": "Loved ones and leads sharing the load",
+    "summary": "Partners or managers who redistribute tasks so responsibilities feel shared.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:partner|spouse|husband|wife|roommate)\\b[^\\n]{0,160}\\b(?:cooked|made|prepared)\\b[^\\n]{0,80}\\b(?:dinner|meal|supper)\\b[^\\n]{0,120}\\b(?:cleaned|did|handled)\\b[^\\n]{0,60}\\b(?:dishes|kitchen|cleanup)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:manager|lead|supervisor|project\\s+manager|pm)\\b[^\\n]{0,160}\\b(?:balanced|redistribut(?:ed|ing)|spread|limited|shared)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?ups|follow\\s*ups|tasks|workload|assignments)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "My partner handled dinner and dishes so I could finish a deadline.",
+      "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate.",
+      "A friend swapped shifts so we split the weekend coverage."
+    ],
+    "cueIds": [
+      "partner-covered-dinner",
+      "manager-balanced-followups"
+    ],
+    "feelings": [
+      "supported",
+      "relieved",
+      "grateful"
+    ],
+    "needs": [
+      "care",
+      "balance",
+      "collaboration"
+    ]
+  },
+  {
+    "id": "integrity-returns",
+    "label": "Strangers returning lost items intact",
+    "summary": "Moments when someone brings back what you dropped with nothing missing.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:returned|brought\\s+back|handed\\s+back|gave\\s+back)\\b[^\\n]{0,120}\\b(?:wallet|phone|purse|bag|keys)\\b[^\\n]{0,120}\\b(?:with|with\\s+all|still\\s+had|everything|cash)\\b[^\\n]{0,80}\\b(?:inside|intact|still\\s+there)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside.",
+      "Security called me to pick up my phone after a customer turned it in at the front desk.",
+      "A passerby jogged over with the keys I dropped on the sidewalk."
+    ],
+    "cueIds": [
+      "wallet-returned-intact"
+    ],
+    "feelings": [
+      "relieved",
+      "grateful"
+    ],
+    "needs": [
+      "safety",
+      "trust",
+      "integrity"
+    ]
+  },
+  {
+    "id": "responsive-approvals",
+    "label": "Quick responses to time-off requests",
+    "summary": "Leaders who respond promptly when you ask for time away from work.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:approved|okayed|cleared|green[-\\s]?lit|signed\\s+off\\s+on)\\b[^\\n]{0,120}\\b(?:vacation|pto|time\\s+off|leave)\\b[^\\n]{0,120}\\b(?:same\\s+day|right\\s+away|within\\s+(?:the\\s+)?day|within\\s+hours)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "My manager approved my vacation request the same day.",
+      "HR confirmed my PTO within a few hours.",
+      "A supervisor okayed my time off without delay."
+    ],
+    "cueIds": [
+      "vacation-approved-quickly"
+    ],
+    "feelings": [
+      "relieved",
+      "valued"
+    ],
+    "needs": [
+      "rest",
+      "respect",
+      "responsiveness"
+    ]
+  },
+  {
+    "id": "care-attentive-support",
+    "label": "Care teams offering calm, attentive updates",
+    "summary": "Medical staff who explain steps or check in to reassure you and your loved ones.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:nurse|caregiver)\\b[^\\n]{0,120}\\b(?:checked\\s+in|stopped\\s+in|came\\s+by|looked\\s+in|made\\s+rounds)\\b[^\\n]{0,120}\\b(?:night|overnight|late\\s+at\\s+night)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:dentist|hygienist|doctor|provider)\\b[^\\n]{0,160}\\b(?:explained|walked\\s+me\\s+through|described|talked\\s+through)\\b[^\\n]{0,120}\\b(?:each|every|the)\\s+step\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A nurse checked in overnight to make sure my dad was comfortable.",
+      "A dentist explained each step before starting the procedure.",
+      "A tech walked us through the test process in advance."
+    ],
+    "cueIds": [
+      "nurse-night-check",
+      "dentist-explained-steps"
+    ],
+    "feelings": [
+      "reassured",
+      "cared-for",
+      "calm"
+    ],
+    "needs": [
+      "care",
+      "clarity",
+      "comfort"
+    ]
+  },
+  {
+    "id": "delivery-gaps",
+    "label": "Deliveries marked complete with nothing there",
+    "summary": "Orders showing as delivered when no package actually arrived.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:delivery|order|package|parcel)\\b[^\\n]{0,160}\\b(?:marked|showed|said)\\b[^\\n]{0,120}\\bdelivered\\b[^\\n]{0,160}\\b(?:nothing|not\\s+at\\s+my\\s+door|never\\s+arrived|missing)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 7 p.m. the app marked my dinner order delivered while the porch camera still showed an empty doorstep.",
+      "The tracker pinged \"delivered\" even though the hallway camera never recorded a drop-off.",
+      "Courier status flipped to delivered, but the lobby shelf stayed empty all night."
+    ],
+    "cueIds": [
+      "delivery-marked-delivered"
+    ],
+    "feelings": [
+      "frustrated",
+      "confused"
+    ],
+    "needs": [
+      "reliability",
+      "communication",
+      "follow-through"
+    ]
+  },
+  {
+    "id": "punctuality-boundaries",
+    "label": "Late arrivals without notice",
+    "summary": "Friends or contacts who show up far past the meeting time without sending a heads-up.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:friend|buddy|pal|coworker|guest)\\b[^\\n]{0,120}\\b(?:arrived|showed\\s+up)\\b[^\\n]{0,80}\\b(?:\\d+\\s+(?:minutes|min|mins)|half\\s+an\\s+hour|thirty\\s+minutes)\\s+late\\b[^\\n]{0,120}\\b(?:no|without|never)\\s+(?:text|message|call|warning|heads?-?up)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A friend arrived half an hour late with no text.",
+      "Someone showed up late to lunch without a heads-up.",
+      "My date was 30 minutes late and never messaged."
+    ],
+    "cueIds": [
+      "friend-late-no-text"
+    ],
+    "feelings": [
+      "irritated",
+      "unimportant"
+    ],
+    "needs": [
+      "respect",
+      "reliability",
+      "communication"
+    ]
+  },
+  {
+    "id": "policy-warnings",
+    "label": "Unexpected policy warning letters",
+    "summary": "Associations or boards that send a warning without first talking it through.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:hoa|association|board|management)\\b[^\\n]{0,160}\\b(?:warning|violation|notice|letter)\\b[^\\n]{0,120}\\b(?:lawn|yard|grass|weeds)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The HOA sent a lawn warning letter without asking first.",
+      "A board left a notice about hedge height with no conversation.",
+      "Management posted a warning about patio chairs without talking to us."
+    ],
+    "cueIds": [
+      "hoa-lawn-warning"
+    ],
+    "feelings": [
+      "defensive",
+      "confused"
+    ],
+    "needs": [
+      "fairness",
+      "communication",
+      "respect"
+    ]
+  },
+  {
+    "id": "recognition-boundaries",
+    "label": "Credit given to the wrong person",
+    "summary": "Moments when someone else claims your idea or contribution in front of others.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:colleague|coworker|teammate|manager)\\b[^\\n]{0,160}\\b(?:took|claimed|grabbed|accepted)\\b[^\\n]{0,80}\\b(?:credit|ownership|recognition)\\b[^\\n]{0,120}\\b(?:idea|work|proposal|plan|suggestion)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A colleague took credit for my idea in the pitch.",
+      "Someone presented my work as theirs during the meeting.",
+      "An editor left my name off the project summary."
+    ],
+    "cueIds": [
+      "colleague-took-credit"
+    ],
+    "feelings": [
+      "hurt",
+      "angry",
+      "unseen"
+    ],
+    "needs": [
+      "acknowledgment",
+      "fairness",
+      "integrity"
+    ]
+  },
+  {
+    "id": "care-communication-gaps",
+    "label": "Care teams that miss critical updates",
+    "summary": "Childcare or health providers who forget to call about urgent symptoms.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:daycare|pre[-\\s]?school|school|child\\s*care|nursery)\\b[^\\n]{0,160}\\b(?:didn'?t|never|forgot\\s+to)\\s+(?:call|notify|let\\s+me\\s+know|text|reach\\s+out)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fever|sick|ill|temperature)\\b[^\\n]{0,120}\\b(?:no\\s+call|without\\s+calling|without\\s+telling\\s+me)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Daycare forgot to call when my child had a fever.",
+      "The clinic didn't phone about a concerning result.",
+      "Camp missed letting us know about an injury."
+    ],
+    "cueIds": [
+      "daycare-no-call"
+    ],
+    "feelings": [
+      "scared",
+      "alarmed"
+    ],
+    "needs": [
+      "safety",
+      "communication",
+      "trust"
+    ]
+  },
+  {
+    "id": "commute-kindness",
+    "label": "Transit drivers who wait for you",
+    "summary": "Drivers who pause the route so you can catch up and ride.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:bus\\s+driver|driver)\\b[^\\n]{0,120}\\b(?:waited|held\\s+the\\s+bus|kept\\s+the\\s+doors\\s+open|paused)\\b[^\\n]{0,120}\\b(?:while\\s+I\\s+ran|as\\s+I\\s+was\\s+running|for\\s+me)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A bus driver waited as I ran toward the stop.",
+      "The train conductor held the doors when I called out.",
+      "A shuttle driver paused so I could board."
+    ],
+    "cueIds": [
+      "bus-driver-waited"
+    ],
+    "feelings": [
+      "grateful",
+      "relieved"
+    ],
+    "needs": [
+      "consideration",
+      "support",
+      "ease"
+    ]
+  },
+  {
+    "id": "collaboration-visibility",
+    "label": "Team updates that go missing",
+    "summary": "Moments when teammates skip shared boards or updates for days at a time.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|ignor(?:ed|ing)|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "From Monday through Friday, no cards under Jordan's initials moved on the shared sprint board.",
+      "The kanban view shows five tasks assigned to Sam untouched since last Tuesday.",
+      "Our tracker still lists Casey's items in \"In Progress\" after a full week."
+    ],
+    "cueIds": [
+      "teammate-sprint-update-gap"
+    ],
+    "feelings": [
+      "stressed",
+      "anxious"
+    ],
+    "needs": [
+      "clarity",
+      "accountability",
+      "teamwork"
+    ]
+  },
+  {
+    "id": "housing-responsiveness",
+    "label": "Repairs handled right away",
+    "summary": "Landlords or maintenance crews who respond quickly to repair requests.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:landlord|property\\s+manager|superintendent|maintenance)\\b[^\\n]{0,160}\\b(?:fixed|repaired|sent\\s+someone|took\\s+care|handled)\\b[^\\n]{0,120}\\b(?:same\\s+day|next\\s+day|within\\s+24\\s+hours|right\\s+away)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Maintenance fixed the leak the day after we reported it.",
+      "Our landlord scheduled a plumber the next morning.",
+      "The repair team showed up within 24 hours."
+    ],
+    "cueIds": [
+      "landlord-fixed-quickly"
+    ],
+    "feelings": [
+      "relieved",
+      "thankful"
+    ],
+    "needs": [
+      "safety",
+      "responsiveness",
+      "care"
+    ]
+  },
+  {
+    "id": "commitment-followthrough",
+    "label": "When repayment promises slip",
+    "summary": "Friends or relatives who miss the payback they said was coming soon.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:sibling|brother|sister|friend|roommate)\\b[^\\n]{0,160}\\b(?:promised|said)\\b[^\\n]{0,120}\\b(?:pay\\s+me\\s+back|return\\s+the\\s+money|send\\s+the\\s+payment)\\b[^\\n]{0,120}\\b(?:still|yet)\\b[^\\n]{0,80}\\b(?:hasn'?t|has\\s+not|didn'?t)\\s+(?:paid|sent|transferred)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A sibling missed the repayment they promised Friday.",
+      "A friend still hasn't paid me back after saying they would.",
+      "Someone delayed sending the money again."
+    ],
+    "cueIds": [
+      "sibling-did-not-pay"
+    ],
+    "feelings": [
+      "frustrated",
+      "disappointed"
+    ],
+    "needs": [
+      "trust",
+      "reliability",
+      "fairness"
+    ]
+  },
+  {
+    "id": "food-safety",
+    "label": "Allergy instructions ignored",
+    "summary": "Restaurants that serve allergens even after you clearly note them.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:restaurant|server|kitchen|staff)\\b[^\\n]{0,160}\\b(?:served|brought|delivered|sent)\\b[^\\n]{0,160}\\b(?:peanut|nut|nuts|allergen|dairy|gluten|egg)\\b[^\\n]{0,160}\\b(?:after|even\\s+though|although)\\b[^\\n]{0,160}\\b(?:allergy|told\\s+them|noted|flagged)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The restaurant served my meal with peanuts after I flagged my allergy.",
+      "Catering included dairy even though I mentioned the allergy.",
+      "A cafe added walnuts despite my warning."
+    ],
+    "cueIds": [
+      "allergy-served-peanuts"
+    ],
+    "feelings": [
+      "scared",
+      "angry"
+    ],
+    "needs": [
+      "safety",
+      "care",
+      "attentiveness"
+    ]
+  },
+  {
+    "id": "schedule-respect",
+    "label": "Meetings scheduled over breaks",
+    "summary": "Managers who drop meetings onto your lunch or rest time without asking.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|call|sync|check[-\\s]?in|one[-\\s]?on[-\\s]?one)\\b[^\\n]{0,160}\\b(?:scheduled|booked|set|put)\\b[^\\n]{0,120}\\b(?:over|during|on)\\s+(?:my\\s+)?(?:lunch|meal|break|lunchtime)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "My manager scheduled a meeting over my lunch break without asking.",
+      "A lead booked a call during my only break.",
+      "Someone added a meeting right over my dinner time."
+    ],
+    "cueIds": [
+      "meeting-over-lunch"
+    ],
+    "feelings": [
+      "annoyed",
+      "disregarded"
+    ],
+    "needs": [
+      "respect",
+      "rest",
+      "autonomy"
+    ]
+  },
+  {
+    "id": "support-followthrough",
+    "label": "Support staff who follow up",
+    "summary": "Helpers who guide you through a fix and check back afterward.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:support|service|help\\s*desk|agent|representative|rep)\\b[^\\n]{0,160}\\b(?:follow(?:ed)?\\s+up|checked\\s+back|emailed\\s+the\\s+next\\s+day|reached\\s+out\\s+after)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bwalk(?:ed)?\\s+me\\s+through\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
+      "IT kept the remote session open until the app loaded and sent a ticket update at 9 a.m.",
+      "Customer service called back the next day after guiding me through the reset."
+    ],
+    "cueIds": [
+      "support-agent-followed-up"
+    ],
+    "feelings": [
+      "grateful",
+      "supported"
+    ],
+    "needs": [
+      "clarity",
+      "support",
+      "follow-through"
+    ]
+  },
+  {
+    "id": "infrastructure-response",
+    "label": "City fixes after persistent outreach",
+    "summary": "Public works teams that finally resolve an issue after repeated contact.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:city|municipal|public\\s+works|council)\\b[^\\n]{0,160}\\b(?:fixed|repaired|replaced)\\b[^\\n]{0,120}\\b(?:street\\s*light|streetlight|lamp)\\b[^\\n]{0,160}\\b(?:after|following|finally|eventually)\\b[^\\n]{0,160}\\b(?:months|weeks|several|many)\\s+(?:emails|requests|reports|complaints)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The city fixed the streetlight after months of emails.",
+      "Public works repaired the pothole we kept reporting.",
+      "The utilities crew finally addressed the outage after persistent follow-up."
+    ],
+    "cueIds": [
+      "city-fixed-streetlight"
+    ],
+    "feelings": [
+      "relieved",
+      "grateful",
+      "safer"
+    ],
+    "needs": [
+      "safety",
+      "responsiveness",
+      "community"
     ]
   }
 ]

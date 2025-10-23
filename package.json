@@ -18,6 +18,7 @@
     "extract:citations": "node scripts/extract-citations.mjs",
     "replace:needs-sources": "node scripts/replace-needs-sources.mjs",
     "validate:taxonomy": "node scripts/validateTaxonomy.mjs",
-    "validate:observation-cues": "node scripts/validateObservationCues.mjs"
+    "validate:observation-cues": "node scripts/validateObservationCues.mjs",
+    "build:observation-cues": "node scripts/buildObservationCueLibrary.mjs && node scripts/sanitizeObservationCues.mjs"
   }
 }
