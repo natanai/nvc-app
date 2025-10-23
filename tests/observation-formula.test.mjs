@@ -22,6 +22,24 @@ test('detects all observation formula slots in a detailed statement', () => {
   assert.ok(completed.has('measure'));
 });
 
+test('recognizes ISO-style numeric dates as time anchors', () => {
+  const text = 'On 2023-08-14 I saw the maintenance log update on the dashboard.';
+  const evaluation = evaluateObservationFormula(text);
+  assert.ok(evaluation.slots.time.satisfied);
+});
+
+test('recognizes 24-hour clock times without am/pm markers', () => {
+  const text = 'At 17:45 I heard the service bell ring twice.';
+  const evaluation = evaluateObservationFormula(text);
+  assert.ok(evaluation.slots.time.satisfied);
+});
+
+test('avoids treating bare numbers as 24-hour clock times', () => {
+  const text = 'By 1700 our group usually wraps the exercises.';
+  const evaluation = evaluateObservationFormula(text);
+  assert.ok(!evaluation.slots.time.satisfied);
+});
+
 test('detects expanded observation phrases and counts', () => {
   const text =
     'Over the weekend at home with my project manager on Zoom I was listening as she said “Let’s review it” after a couple of follow-up emails.';
