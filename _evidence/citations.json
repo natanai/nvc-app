@@ -470,6 +470,86 @@
     "label_domain_hint": ""
   },
   {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1185,
+    "label": "Humans have an intrinsic need for control/choice: integrative review arguing that a sense of control and the opportunity to choose are fundamental, with neural, motivational, and affective benefits",
+    "url": "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(10)00185-3",
+    "how": "html_anchor",
+    "context": "Humans have an intrinsic need for control/choice: integrative review arguing that a sense of control and the opportunity to choose are fundamental, with neural, motivational, and affective benefits",
+    "domain": "www.cell.com",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1186,
+    "label": "Controllability reduces stress responses (learned helplessness: modern account): authoritative review describing how experiencing controllable stress engages prefrontal circuits that inhibit stress responses while lack of control yields learned helplessness",
+    "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-clinpsy-021815-093006",
+    "how": "html_anchor",
+    "context": "Controllability reduces stress responses (learned helplessness: modern account): authoritative review describing how experiencing controllable stress engages prefrontal circuits that inhibit stress responses while lack of control yields learned helplessness",
+    "domain": "www.annualreviews.org",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1187,
+    "label": "Sense of control buffers socioeconomic gradients in health: large population study showing higher perceived control is associated with better health and well-being, moderating SES differences",
+    "url": "https://psycnet.apa.org/record/1998-00299-016",
+    "how": "html_anchor",
+    "context": "Sense of control buffers socioeconomic gradients in health: large population study showing higher perceived control is associated with better health and well-being, moderating SES differences",
+    "domain": "psycnet.apa.org",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1188,
+    "label": "Control beliefs taxonomy and functions: classic review clarifying perceived control, mastery, and self-efficacy, how they develop, and why they matter",
+    "url": "https://psycnet.apa.org/record/1996-01799-010",
+    "how": "html_anchor",
+    "context": "Control beliefs taxonomy and functions: classic review clarifying perceived control, mastery, and self-efficacy, how they develop, and why they matter",
+    "domain": "psycnet.apa.org",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1189,
+    "label": "Low job control + high demands → strain and ill-health (Demand–Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research",
+    "url": "https://www.jstor.org/stable/2392498?origin=crossref",
+    "how": "html_anchor",
+    "context": "Low job control + high demands → strain and ill-health (Demand–Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research",
+    "domain": "www.jstor.org",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1190,
+    "label": "Job strain (including low control) predicts heart disease (meta-analysis): individual participant data meta-analysis linking job strain to increased coronary heart disease risk, highlighting the role of low control",
+    "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60994-5/fulltext",
+    "how": "html_anchor",
+    "context": "Job strain (including low control) predicts heart disease (meta-analysis): individual participant data meta-analysis linking job strain to increased coronary heart disease risk, highlighting the role of low control",
+    "domain": "www.thelancet.com",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1191,
+    "label": "Autonomy as a basic psychological need (self-determination theory review): comprehensive review establishing autonomy as a basic need that fosters wellness and performance",
+    "url": "https://psycnet.apa.org/record/2000-13324-007",
+    "how": "html_anchor",
+    "context": "Autonomy as a basic psychological need (self-determination theory review): comprehensive review establishing autonomy as a basic need that fosters wellness and performance",
+    "domain": "psycnet.apa.org",
+    "label_domain_hint": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/control/index.html",
+    "line": 1192,
+    "label": "Self-efficacy (control over action) → motivation and change: foundational theory paper demonstrating that beliefs about one’s control over actions regulate motivation, affect, and behavior change",
+    "url": "https://psycnet.apa.org/record/1977-25733-001",
+    "how": "html_anchor",
+    "context": "Self-efficacy (control over action) → motivation and change: foundational theory paper demonstrating that beliefs about one’s control over actions regulate motivation, affect, and behavior change",
+    "domain": "psycnet.apa.org",
+    "label_domain_hint": ""
+  },
+  {
     "file": "/workspace/nvc-app/needs/dependability/index.html",
     "line": 1180,
     "label": "study on how reliability of team members lowers the need for oversight and improves collective performance",
