@@ -1,11 +1,12 @@
 import { lintObservation } from '/lib/nvcLint.js';
-import { loadCueCatalog, matchCueGuides, suggestFromObservation } from '/lib/observationSuggest.js';
+import { createObservationProfile } from '/lib/observationCueMatcher.js';
+import { loadCueCatalog, suggestFromObservation } from '/lib/observationSuggest.js';
 
 const state = {
   text: '',
   catalog: createEmptyCatalog(),
-  cues: [],
-  cueGuides: [],
+  cueModules: [],
+  observationSchema: null,
   analysis: null,
   mode: 'editing',
   lastSubmitted: '',
@@ -18,6 +19,9 @@ const state = {
   detectionHasFlagged: false,
   cueHighlightRanges: [],
   positiveHighlightRanges: [],
+  observationProfile: null,
+  slotCoverage: {},
+  lastCueResult: null,
   activeHighlightKey: '',
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
@@ -80,17 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
   Promise.all([
     loadCatalog('/data/index.json'),
     loadCueCatalog({
-      cuesUrl: '/data/observation_cues.sanitized.csv',
-      guidesUrl: '/data/observation_cue_guides.json',
+      schemaUrl: '/data/observation_formula_schema.json',
+      modulesUrl: '/data/observation_cue_modules.json',
     }).catch(error => {
       console.warn('Unable to load observation cue catalog', error);
-      return { cues: [], guides: [] };
+      return { schema: null, modules: [] };
     }),
   ])
     .then(([catalog, cueCatalog]) => {
       state.catalog = catalog;
-      state.cues = Array.isArray(cueCatalog?.cues) ? cueCatalog.cues : [];
-      state.cueGuides = Array.isArray(cueCatalog?.guides) ? cueCatalog.guides : [];
+      state.observationSchema = cueCatalog?.schema || null;
+      state.cueModules = Array.isArray(cueCatalog?.modules) ? cueCatalog.modules : [];
       if (!state.text.trim()) {
         state.detectionStatus = 'idle';
         state.detectionMatches = 0;
@@ -625,7 +629,7 @@ function renderSuggestions() {
   }
 
   if (fallbackPrompt) {
-    if (!hasDirect && !fallbackActive && !state.fallback.running && state.fallback.shouldPrompt && state.cues.length) {
+    if (!hasDirect && !fallbackActive && !state.fallback.running && state.fallback.shouldPrompt && state.cueModules.length) {
       fallbackPrompt.removeAttribute('hidden');
     } else {
       fallbackPrompt.setAttribute('hidden', 'hidden');
@@ -798,10 +802,10 @@ function formatQuotedList(values) {
 }
 
 function buildSuggestions(text) {
-  if (!text) {
+  if (!text || !state.cueModules.length) {
     return createEmptySuggestionSet();
   }
-  const suggestion = suggestFromObservation(text, state.cues || [], 8);
+  const suggestion = suggestFromObservation(text, state.cueModules || [], state.observationSchema, { maxEach: 8 });
   return {
     feelings: buildSuggestionEntries(suggestion.feelings, 'feeling'),
     needs: buildSuggestionEntries(suggestion.needs, 'need'),
@@ -1102,25 +1106,35 @@ function advanceFallback() {
 }
 
 function computeFallbackQueue(text) {
-  if (!text || !state.cues.length) {
+  const trimmed = typeof text === 'string' ? text.trim() : '';
+  if (!trimmed || !state.cueModules.length) {
     return [];
   }
 
-  const tokens = tokenizeForScore(text);
-  const tokenSet = new Set(tokens);
-  const normalized = text.toLowerCase();
+  const profile = resolveProfileForFallback(trimmed);
+  if (!profile) {
+    return [];
+  }
 
-  const candidates = state.cues
-    .map(cue => {
-      const feelings = buildSuggestionEntries(cue.feelings, 'feeling');
-      const needs = buildSuggestionEntries(cue.needs, 'need');
+  const candidates = [];
+  state.cueModules.forEach(module => {
+    (module.entries || []).forEach(entry => {
+      const feelings = buildSuggestionEntries(entry.feelings, 'feeling');
+      const needs = buildSuggestionEntries(entry.needs, 'need');
       if (!feelings.length && !needs.length) {
-        return null;
+        return;
       }
-      const score = scoreCueMatch(tokenSet, normalized, cue);
-      return { cue, feelings, needs, score };
-    })
-    .filter(Boolean);
+      const score = scoreFallbackCandidate(profile, module, entry);
+      candidates.push({
+        module,
+        entry,
+        feelings,
+        needs,
+        score,
+        slotIds: Array.isArray(entry.slots) ? entry.slots : [],
+      });
+    });
+  });
 
   if (!candidates.length) {
     return [];
@@ -1133,34 +1147,206 @@ function computeFallbackQueue(text) {
     if (b.score !== a.score) {
       return b.score - a.score;
     }
-    const aCount = a.feelings.length + a.needs.length;
-    const bCount = b.feelings.length + b.needs.length;
-    if (bCount !== aCount) {
-      return bCount - aCount;
+    const aSlotHits = countMatchedSlots(profile, a.slotIds);
+    const bSlotHits = countMatchedSlots(profile, b.slotIds);
+    if (bSlotHits !== aSlotHits) {
+      return bSlotHits - aSlotHits;
     }
-    const aLabel = a.cue?.label || a.cue?.cue || '';
-    const bLabel = b.cue?.label || b.cue?.cue || '';
+    const aCoverage = sumSlotWeights(a.slotIds, a.module?.slotCoverage);
+    const bCoverage = sumSlotWeights(b.slotIds, b.module?.slotCoverage);
+    if (bCoverage !== aCoverage) {
+      return bCoverage - aCoverage;
+    }
+    const aLabel = formatFallbackLabel(a);
+    const bLabel = formatFallbackLabel(b);
     return aLabel.localeCompare(bLabel);
   });
 
   const seen = new Set();
   const results = [];
-  for (const entry of pool) {
-    const key = `${entry.feelings.map(item => item.slug || item.title).join('|')}|${entry.needs.map(item => item.slug || item.title).join('|')}`;
-    if (!key.trim()) {
-      continue;
-    }
-    if (seen.has(key)) {
+  for (const candidate of pool) {
+    const key = `${candidate.feelings.map(item => item.slug || item.title).join('|')}|${candidate.needs
+      .map(item => item.slug || item.title)
+      .join('|')}`;
+    if (!key.trim() || seen.has(key)) {
       continue;
     }
     seen.add(key);
-    results.push({ feelings: entry.feelings, needs: entry.needs, cues: [] });
+    results.push({
+      feelings: candidate.feelings,
+      needs: candidate.needs,
+      cues: [
+        {
+          moduleId: candidate.module?.id || '',
+          moduleLabel: candidate.module?.label || '',
+          entryId: candidate.entry?.id || '',
+          entryLabel: candidate.entry?.label || candidate.entry?.id || '',
+          score: candidate.score,
+        },
+      ],
+    });
     if (results.length >= 6) {
       break;
     }
   }
 
   return results;
+}
+
+function resolveProfileForFallback(text) {
+  const trimmed = typeof text === 'string' ? text.trim() : '';
+  if (!trimmed) {
+    return null;
+  }
+  const cachedProfile = state.lastCueResult?.profile;
+  if (cachedProfile && typeof cachedProfile.original === 'string' && cachedProfile.original === trimmed) {
+    return cachedProfile;
+  }
+  try {
+    return createObservationProfile(trimmed, { schema: state.observationSchema });
+  } catch (error) {
+    console.warn('Unable to build fallback profile', error);
+    return null;
+  }
+}
+
+function scoreFallbackCandidate(profile, module, entry) {
+  const slotScore = computeSlotMatchScore(profile, module, entry);
+  const matcherScore = computeMatcherScore(profile, entry);
+  const patternScore = computePatternScore(profile, entry);
+  const traitScore = computeTraitScore(profile, module);
+  const total = slotScore * 1.5 + matcherScore + patternScore + traitScore;
+  return Number.isFinite(total) ? total : 0;
+}
+
+function computeSlotMatchScore(profile, module, entry) {
+  const slotIds = Array.isArray(entry.slots) ? entry.slots : [];
+  if (!slotIds.length) {
+    return 0;
+  }
+  let score = 0;
+  slotIds.forEach(slotId => {
+    const slotFeature = profile.features?.slots?.[slotId];
+    const coverageWeight = Math.max(1, Number(module?.slotCoverage?.[slotId]) || 0);
+    if (slotFeature && slotFeature.count) {
+      score += coverageWeight * (2 + Math.min(3, slotFeature.count));
+    }
+    const evidence = entry.slotEvidenceCompiled?.[slotId];
+    if (evidence) {
+      const tokenMatches = countTokenMatches(profile.tokenSet, evidence.tokens);
+      if (tokenMatches) {
+        score += coverageWeight * (1 + tokenMatches * 0.75);
+      }
+      const patternMatches = countPatternArrayMatches(evidence.compiledPatterns, profile.raw);
+      if (patternMatches) {
+        score += coverageWeight * (patternMatches * 1.5);
+      }
+    }
+  });
+  return score;
+}
+
+function computeMatcherScore(profile, entry) {
+  let score = 0;
+  (entry.matchers || []).forEach(matcher => {
+    if (matcher?.tokenSet instanceof Set && matcher.tokenSet.size) {
+      const matches = countTokenMatches(profile.tokenSet, Array.from(matcher.tokenSet));
+      if (matches) {
+        const coverage = matches / matcher.tokenSet.size;
+        const threshold = Math.max(1, matcher.tokenThreshold || matcher.tokenSet.size);
+        const closeness = matches / threshold;
+        score += Math.max(coverage * 3.5, closeness * 4);
+      }
+    }
+    if (matcher?.regex instanceof RegExp) {
+      const regexMatches = countPatternMatches(matcher.regex, profile.raw);
+      if (regexMatches) {
+        score += regexMatches * 1.5;
+      }
+    }
+  });
+  return score;
+}
+
+function computePatternScore(profile, entry) {
+  const matches = countPatternArrayMatches(entry.compiledPatterns, profile.raw);
+  return matches * 1.25;
+}
+
+function computeTraitScore(profile, module) {
+  const tokenMatches = countTokenMatches(profile.tokenSet, module?.traitTokens || []);
+  const patternMatches = countPatternArrayMatches(module?.traitCompiledPatterns, profile.raw);
+  return tokenMatches + patternMatches * 1.5;
+}
+
+function countTokenMatches(tokenSet, tokens) {
+  if (!(tokenSet instanceof Set) || !Array.isArray(tokens)) {
+    return 0;
+  }
+  let count = 0;
+  tokens.forEach(token => {
+    const normalized = typeof token === 'string' ? token.trim().toLowerCase() : '';
+    if (normalized && tokenSet.has(normalized)) {
+      count += 1;
+    }
+  });
+  return count;
+}
+
+function countPatternArrayMatches(patterns, text) {
+  if (!Array.isArray(patterns) || !patterns.length || typeof text !== 'string' || !text) {
+    return 0;
+  }
+  return patterns.reduce((sum, pattern) => sum + countPatternMatches(pattern, text), 0);
+}
+
+function countPatternMatches(pattern, text, limit = 6) {
+  if (!(pattern instanceof RegExp) || typeof text !== 'string' || !text) {
+    return 0;
+  }
+  const flags = pattern.flags && pattern.flags.includes('g') ? pattern.flags : `${pattern.flags || ''}g`;
+  const regex = new RegExp(pattern.source, flags);
+  let count = 0;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    if (match[0]) {
+      count += 1;
+    }
+    if (!regex.global || count >= limit) {
+      break;
+    }
+    if (match[0] === '' && regex.lastIndex === match.index) {
+      regex.lastIndex += 1;
+    }
+  }
+  return count;
+}
+
+function countMatchedSlots(profile, slotIds) {
+  if (!profile?.features?.slots || !Array.isArray(slotIds)) {
+    return 0;
+  }
+  let count = 0;
+  slotIds.forEach(slotId => {
+    const feature = profile.features.slots[slotId];
+    if (feature && feature.count) {
+      count += 1;
+    }
+  });
+  return count;
+}
+
+function sumSlotWeights(slotIds, coverage) {
+  if (!Array.isArray(slotIds) || !slotIds.length) {
+    return 0;
+  }
+  return slotIds.reduce((sum, slotId) => sum + (Number(coverage?.[slotId]) || 0), 0);
+}
+
+function formatFallbackLabel(candidate) {
+  const moduleLabel = candidate.module?.label || '';
+  const entryLabel = candidate.entry?.label || candidate.entry?.id || '';
+  return `${moduleLabel} ${entryLabel}`.trim();
 }
 
 function countFlaggedTokens(lint) {
@@ -1176,60 +1362,6 @@ function countWords(value) {
   }
   const matches = String(value).toLowerCase().match(/[a-z0-9'’]+/g);
   return matches ? matches.length : 0;
-}
-
-function tokenizeForScore(text) {
-  return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
-}
-
-function scoreCueMatch(tokenSet, normalizedText, cue) {
-  const sources = [];
-  if (Array.isArray(cue?.phrases)) {
-    sources.push(...cue.phrases);
-  }
-  if (cue?.phrase) {
-    sources.push(cue.phrase);
-  }
-  if (cue?.example) {
-    sources.push(cue.example);
-  }
-  if (cue?.label) {
-    sources.push(cue.label);
-  }
-  if (cue?.cue) {
-    sources.push(cue.cue);
-  }
-
-  let best = 0;
-  sources.forEach(source => {
-    const value = typeof source === 'string' ? source.trim() : '';
-    if (!value) {
-      return;
-    }
-    const sourceTokens = tokenizeForScore(value);
-    if (!sourceTokens.length) {
-      return;
-    }
-    let matches = 0;
-    sourceTokens.forEach(token => {
-      if (tokenSet.has(token)) {
-        matches += 1;
-      }
-    });
-    let score = matches;
-    if (matches) {
-      score += matches / sourceTokens.length;
-    }
-    const lower = value.toLowerCase();
-    if (normalizedText.includes(lower)) {
-      score += Math.min(4, lower.length / 12);
-    }
-    if (score > best) {
-      best = score;
-    }
-  });
-
-  return best;
 }
 
 function setValidityStatus(status, message) {
@@ -1284,7 +1416,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   state.detectionSource = trimmed;
   state.detectionHasFlagged = hasFlagged;
 
-  if (!state.cues.length) {
+  if (!state.cueModules.length) {
     state.detectionStatus = 'loading';
     state.detectionMatches = 0;
     state.detectionFallbacks = 0;
@@ -1292,6 +1424,10 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionSource = '';
     state.cueHighlightRanges = [];
     state.detectionHasFlagged = false;
+    state.observationProfile = null;
+    state.slotCoverage = {};
+    state.lastCueResult = null;
+    renderObservationFormula();
     return;
   }
   if (!trimmed) {
@@ -1302,6 +1438,10 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionSource = '';
     state.cueHighlightRanges = [];
     state.detectionHasFlagged = false;
+    state.observationProfile = null;
+    state.slotCoverage = {};
+    state.lastCueResult = null;
+    renderObservationFormula();
     return;
   }
 
@@ -1312,13 +1452,20 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionFallbackQueue = [];
     state.cueHighlightRanges = [];
     state.detectionHasFlagged = hasFlagged;
+    state.observationProfile = null;
+    state.slotCoverage = {};
+    state.lastCueResult = null;
+    renderObservationFormula();
     return;
   }
 
-  const suggestion = suggestFromObservation(trimmed, state.cues || [], 4);
+  const suggestion = suggestFromObservation(trimmed, state.cueModules || [], state.observationSchema, { maxEach: 4 });
   const hits = Array.isArray(suggestion.hits) ? suggestion.hits : [];
   state.cueHighlightRanges = buildCueHighlightRanges(sourceText, hits);
   state.detectionMatches = hits.length;
+  state.observationProfile = suggestion.profile || null;
+  state.slotCoverage = suggestion.slotCoverage || {};
+  state.lastCueResult = suggestion;
   if (state.detectionMatches > 0) {
     state.detectionStatus = 'match';
     state.detectionFallbacks = 0;
@@ -1331,6 +1478,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
   }
   state.detectionHasFlagged = hasFlagged;
+  renderObservationFormula();
 }
 
 function renderDetectionStatus() {
@@ -1395,7 +1543,7 @@ function renderDetectionSummary() {
   const flagged = Boolean(state.detectionHasFlagged);
   const matchLimit = Math.max(Number(state.detectionMatchLimit) || DETECTION_MATCH_LIMIT, 1);
   const nearLimit = Math.max(Number(state.detectionNearLimit) || DETECTION_NEAR_LIMIT, 0);
-  const cuesCount = Array.isArray(state.cues) ? state.cues.length : 0;
+  const cuesCount = Array.isArray(state.cueModules) ? state.cueModules.reduce((sum, module) => sum + (module.entries?.length || 0), 0) : 0;
 
   let exactCount = 0;
   let nearCount = 0;
@@ -1530,96 +1678,58 @@ function renderObservationFormula() {
     return;
   }
 
-  const guides = Array.isArray(state.cueGuides)
-    ? state.cueGuides.filter(guide => (guide?.type || '') === 'formula')
-    : [];
-  if (!guides.length) {
+  const schema = state.observationSchema;
+  if (!schema || !Array.isArray(schema.slots) || !schema.slots.length) {
     container.textContent = '';
     container.setAttribute('hidden', 'hidden');
     return;
   }
 
-  const text = typeof state.text === 'string' ? state.text : '';
-  const matches = matchCueGuides(text, guides);
-  const matchedIds = matches?.matchedIds instanceof Set ? matches.matchedIds : new Set(matches?.matchedIds || []);
+  const coverage = state.slotCoverage || {};
+  const missingSlots = schema.slots.filter(slot => {
+    const info = coverage[slot.id];
+    return !(info && info.filled);
+  });
 
-  const leadSegments = guides
-    .filter(guide => (guide?.group || 'tail') === 'lead')
-    .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
-  const tailSegments = guides
-    .filter(guide => (guide?.group || 'tail') === 'tail')
-    .sort((a, b) => (Number(a?.order) || 0) - (Number(b?.order) || 0));
-
-  const missingLead = leadSegments.filter(segment => !matchedIds.has(segment?.id || segment?.cue));
-  const missingTail = tailSegments.filter(segment => !matchedIds.has(segment?.id || segment?.cue));
-
-  const formulaText = buildObservationFormulaTextFromSegments(missingLead, missingTail);
-
-  if (formulaText) {
-    container.textContent = formulaText;
-    container.removeAttribute('hidden');
-  } else {
+  if (!missingSlots.length) {
     container.textContent = '';
     container.setAttribute('hidden', 'hidden');
+    return;
   }
+
+  const markup = missingSlots.map(slot => buildFormulaSlotLine(slot, coverage[slot.id])).join('');
+  container.innerHTML = markup;
+  container.removeAttribute('hidden');
 }
 
-function buildObservationFormulaTextFromSegments(leadSegments, tailSegments) {
-  const leadTexts = extractFormulaSegmentTexts(leadSegments);
-  const tailTexts = extractFormulaSegmentTexts(tailSegments);
-
-  if (!leadTexts.length && !tailTexts.length) {
-    return '';
+function buildFormulaSlotLine(slot, coverage) {
+  const prompts = mergeFormulaPrompts(slot, coverage);
+  const chips = Array.isArray(slot.chips) ? slot.chips.filter(Boolean).slice(0, 3) : [];
+  let html = '<div class="observation-editor__formula-line">';
+  html += `<span class="observation-editor__formula-prompt">${escapeHtml(slot.prompt || '')}</span>`;
+  if (prompts.length) {
+    html += `<span class="observation-editor__formula-hint">${escapeHtml(prompts.join(' · '))}</span>`;
   }
-
-  const lines = [];
-  if (leadTexts.length) {
-    let intro = capitalizeFormulaLine(leadTexts.join(' '));
-    if (intro) {
-      if (tailTexts.length) {
-        intro = intro.endsWith(',') ? intro : `${intro},`;
-      } else if (!intro.endsWith('.')) {
-        intro = `${intro}.`;
-      }
-      lines.push(intro);
-    }
+  if (chips.length) {
+    html += '<span class="observation-editor__formula-chips">';
+    chips.forEach(chip => {
+      html += `<span class="observation-editor__formula-chip">${escapeHtml(chip)}</span>`;
+    });
+    html += '</span>';
   }
-
-  if (tailTexts.length) {
-    let sentence = capitalizeFormulaLine(tailTexts.join(' '));
-    if (sentence && !sentence.endsWith('.')) {
-      sentence = `${sentence}.`;
-    }
-    if (sentence) {
-      lines.push(sentence);
-    }
-  }
-
-  return lines.join('\n');
+  html += '</div>';
+  return html;
 }
 
-function extractFormulaSegmentTexts(segments) {
-  if (!Array.isArray(segments) || !segments.length) {
-    return [];
+function mergeFormulaPrompts(slot, coverage) {
+  const prompts = [];
+  if (coverage && Array.isArray(coverage.prompts)) {
+    prompts.push(...coverage.prompts);
   }
-  return segments
-    .map(segment => (typeof segment?.text === 'string' ? segment.text.trim() : ''))
-    .filter(Boolean);
-}
-
-function capitalizeFormulaLine(value) {
-  if (typeof value !== 'string') {
-    return '';
+  if (Array.isArray(slot.suggestions)) {
+    prompts.push(...slot.suggestions);
   }
-  const trimmed = value.replace(/\s+/g, ' ').trim();
-  if (!trimmed) {
-    return '';
-  }
-  const letterIndex = trimmed.search(/[a-z]/i);
-  if (letterIndex >= 0) {
-    return trimmed.slice(0, letterIndex) + trimmed[letterIndex].toUpperCase() + trimmed.slice(letterIndex + 1);
-  }
-  return trimmed;
+  return Array.from(new Set(prompts.map(value => (typeof value === 'string' ? value.trim() : '')).filter(Boolean))).slice(0, 3);
 }
 
 function renderHighlight() {
@@ -1944,11 +2054,11 @@ function collectPositiveHighlightTokens(lint) {
 
 function normalizeObservationHighlight(entry) {
   if (!entry) {
-    return { value: '', label: '', message: '', key: '' };
+    return { value: '', label: '', message: '', key: '', slotId: '' };
   }
   if (typeof entry === 'string') {
     const value = entry.trim();
-    return { value, label: '', message: '', key: '' };
+    return { value, label: '', message: '', key: '', slotId: '' };
   }
   const rawValue = typeof entry.token === 'string'
     ? entry.token
@@ -1959,7 +2069,8 @@ function normalizeObservationHighlight(entry) {
   const label = typeof entry.label === 'string' ? entry.label.trim() : '';
   const message = typeof entry.message === 'string' ? entry.message.trim() : '';
   const key = typeof entry.key === 'string' ? entry.key.trim() : '';
-  return { value, label, message, key };
+  const slotId = typeof entry.slotId === 'string' ? entry.slotId.trim() : '';
+  return { value, label, message, key, slotId };
 }
 
 function normalizeHighlightToken(token) {
@@ -1989,6 +2100,9 @@ function normalizeHighlightToken(token) {
   if (typeof token.key === 'string' && token.key.trim()) {
     meta.key = token.key.trim();
   }
+  if (typeof token.slotId === 'string' && token.slotId.trim()) {
+    meta.slotId = token.slotId.trim();
+  }
   return { value, meta: Object.keys(meta).length ? meta : null };
 }
 
@@ -2006,6 +2120,9 @@ function createHighlightData(meta, match) {
     }
     if (typeof meta.source === 'string' && meta.source.trim()) {
       data.source = meta.source.trim();
+    }
+    if (typeof meta.slotId === 'string' && meta.slotId.trim()) {
+      data.slotId = meta.slotId.trim();
     }
   }
   if (typeof match === 'string' && match) {
@@ -2174,6 +2291,9 @@ function normalizeHighlightData(data) {
   if (typeof data.key === 'string' && data.key.trim()) {
     normalized.key = data.key.trim();
   }
+  if (typeof data.slotId === 'string' && data.slotId.trim()) {
+    normalized.slotId = data.slotId.trim();
+  }
   return Object.keys(normalized).length ? normalized : null;
 }
 
@@ -2184,6 +2304,7 @@ function createHighlightDataKey(data) {
     (data.source || '').toLowerCase(),
     (data.value || '').toLowerCase(),
     (data.key || '').toLowerCase(),
+    (data.slotId || '').toLowerCase(),
   ].join('|');
 }
 
@@ -2197,16 +2318,23 @@ function buildCueHighlightRanges(text, hits) {
       return;
     }
     const candidates = [];
-    if (Array.isArray(hit.patterns)) {
-      candidates.push(...hit.patterns);
+    if (Array.isArray(hit.entry?.compiledPatterns)) {
+      candidates.push(...hit.entry.compiledPatterns);
     }
-    if (Array.isArray(hit.matchers)) {
-      hit.matchers
-        .map(matcher => (matcher && matcher.regex instanceof RegExp ? matcher.regex : null))
-        .filter(Boolean)
-        .forEach(regex => {
+    if (Array.isArray(hit.match?.patternMatches)) {
+      hit.match.patternMatches.forEach(match => {
+        if (match?.pattern instanceof RegExp) {
+          candidates.push(match.pattern);
+        }
+      });
+    }
+    if (Array.isArray(hit.match?.matcherMatches)) {
+      hit.match.matcherMatches.forEach(match => {
+        const regex = match?.matcher?.regex;
+        if (regex instanceof RegExp) {
           candidates.push(regex);
-        });
+        }
+      });
     }
     candidates.forEach(pattern => {
       const regex = toGlobalRegex(pattern);
