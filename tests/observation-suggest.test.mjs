@@ -33,6 +33,18 @@ test('summarizes cue modules and formula coverage', () => {
   });
 });
 
+test('limits module hits and reports overflow', () => {
+  const observation =
+    'Yesterday at 3 p.m. in the conference room with Alex I heard him say "Please follow up" after they had emailed me 5 times.';
+  const library = createMockCueLibrary();
+
+  const result = suggestFromObservation(observation, library, 6, { maxModules: 2 });
+
+  assert.equal(result.hits.length, 2);
+  assert.equal(result.totalHits, 3);
+  assert.equal(result.overflow, 1);
+});
+
 function createMockCueLibrary() {
   const cues = [
     {

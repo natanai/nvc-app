@@ -206,7 +206,7 @@ function analyze(raw, options = {}) {
     analysis.message = options.message || 'Start by anchoring your observation in time and place.';
   } else if (!analysis.message) {
     if (analysis.ok) {
-      analysis.message = 'Looks observational! See matches to explore feelings and needs.';
+      analysis.message = 'Looks observational! Load possible matches to explore feelings and needs.';
     } else if (issues.length) {
       analysis.message = 'Edit the highlighted language to keep it purely observational.';
     } else {
@@ -221,6 +221,7 @@ function analyze(raw, options = {}) {
   renderHighlight();
   renderDetectionStatus();
   renderObservationFormula();
+  autoResolveValidity();
 }
 
 function renderAnalysis() {
@@ -641,8 +642,15 @@ function renderSuggestions() {
     whyHost.textContent = `${message}${slotNote}`.trim();
   } else {
     const cueLabels = (direct.cues || []).map(formatCueLabel).filter(Boolean);
+    const overflowCount = fallbackActive ? 0 : Math.max(Number(direct.overflow) || 0, 0);
     if (cueLabels.length) {
-      let message = `${cueLabels.length > 1 ? 'Matched cues' : 'Matched cue'} from our detector: ${cueLabels.join(', ')}`;
+      const cueList = formatNaturalList(cueLabels);
+      let message = cueLabels.length > 1
+        ? `Matched cue groups from our detector: ${cueList}.`
+        : `Matched cue group from our detector: ${cueList}.`;
+      if (overflowCount > 0) {
+        message += ` Showing the top ${cueLabels.length} groups to keep things focused.`;
+      }
       if (slotSupportSummary) {
         message += `. They reinforce your ${slotSupportSummary} in the observation formula.`;
         if (slotGapSummary) {
@@ -697,7 +705,7 @@ function renderSuggestions() {
       actionButton.dataset.action = 'next';
       actionButton.disabled = false;
     } else {
-      actionButton.textContent = 'See matches';
+      actionButton.textContent = 'Load possible matches';
       actionButton.dataset.action = 'submit';
       actionButton.disabled = !canSubmitMatches();
     }
@@ -854,6 +862,12 @@ function buildSuggestions(text) {
     cues: suggestion.why || [],
     modules: Array.isArray(suggestion.modules) ? suggestion.modules : [],
     slotSummary: suggestion.slots || null,
+    overflow: Number.isFinite(suggestion.overflow) ? Number(suggestion.overflow) : 0,
+    total: Number.isFinite(suggestion.totalHits)
+      ? Number(suggestion.totalHits)
+      : Array.isArray(suggestion.hits)
+        ? suggestion.hits.length
+        : 0,
   };
 }
 
@@ -1021,7 +1035,7 @@ function buildCatalog(data) {
 }
 
 function createEmptySuggestionSet() {
-  return { feelings: [], needs: [], cues: [], modules: [], slotSummary: null };
+  return { feelings: [], needs: [], cues: [], modules: [], slotSummary: null, overflow: 0, total: 0 };
 }
 
 function createEmptyCueLibrary() {
@@ -1248,7 +1262,15 @@ function computeFallbackQueue(text) {
       continue;
     }
     seen.add(key);
-    results.push({ feelings: entry.feelings, needs: entry.needs, cues: [], modules: [], slotSummary: null });
+    results.push({
+      feelings: entry.feelings,
+      needs: entry.needs,
+      cues: [],
+      modules: [],
+      slotSummary: null,
+      overflow: 0,
+      total: entry.feelings.length + entry.needs.length,
+    });
     if (results.length >= 6) {
       break;
     }
@@ -1348,6 +1370,31 @@ function renderValidityStatus() {
   const status = state.validityStatus || 'idle';
   container.setAttribute('data-state', status);
   label.textContent = state.validityMessage || defaultValidityMessage(status);
+}
+
+function autoResolveValidity() {
+  const trimmed = state.analysis?.trimmed || state.text.trim();
+  const formula = state.formula || createEmptyObservationFormulaState();
+  const lintOk = Boolean(state.analysis?.ok);
+  const formulaComplete = Array.isArray(formula?.missingIds) ? formula.missingIds.length === 0 : false;
+
+  if (!trimmed) {
+    if (state.validityStatus !== 'idle') {
+      setValidityStatus('idle');
+    }
+    return;
+  }
+
+  if (lintOk && formulaComplete) {
+    if (state.validityStatus !== 'valid') {
+      setValidityStatus('valid', 'Observation looks observational.');
+    }
+    return;
+  }
+
+  if (state.validityStatus === 'valid') {
+    setValidityStatus('pending', 'Keep refining.');
+  }
 }
 
 function defaultValidityMessage(status) {

@@ -22,6 +22,17 @@ test('detects all observation formula slots in a detailed statement', () => {
   assert.ok(completed.has('measure'));
 });
 
+test('detects expanded observation phrases and counts', () => {
+  const text =
+    'Over the weekend at home with my project manager on Zoom I was listening as she said “Let’s review it” after a couple of follow-up emails.';
+  const evaluation = evaluateObservationFormula(text);
+  const completed = new Set(evaluation.completedIds);
+  assert.ok(completed.has('time'));
+  assert.ok(completed.has('context'));
+  assert.ok(completed.has('sensory'));
+  assert.ok(completed.has('measure'));
+});
+
 test('honours highlight keys when evaluating formula slots', () => {
   const text = 'At noon I saw the note on the door.';
   const evaluation = evaluateObservationFormula(text, {
