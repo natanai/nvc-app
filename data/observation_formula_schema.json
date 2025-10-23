@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "id": "date",
+      "group": "lead",
+      "order": 10,
+      "label": "Date or day anchor",
+      "prompt": "On [DATE]",
+      "description": "Name the day or timeframe so the moment is checkable.",
+      "examples": [
+        "On Tuesday, March 5",
+        "On 2024-04-18"
+      ],
+      "chips": [
+        "yesterday",
+        "on Tuesday morning",
+        "earlier this week"
+      ],
+      "suggestions": [
+        "Add the day or calendar date when it happened.",
+        "Mention if it was earlier this week, last night, or another concrete window."
+      ],
+      "traits": {
+        "tokens": [
+          "today",
+          "yesterday",
+          "tonight",
+          "this morning",
+          "this afternoon",
+          "this evening",
+          "last night",
+          "last week",
+          "last weekend",
+          "last month",
+          "last year",
+          "earlier today",
+          "earlier this week",
+          "earlier tonight",
+          "later that day",
+          "later that night",
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ],
+        "anchors": ["temporal", "calendar"],
+        "syntactic": ["time-phrase"]
+      },
+      "patterns": [
+        "\\b\\d{4}-\\d{1,2}-\\d{1,2}\\b",
+        "\\b\\d{1,2}[/-]\\d{1,2}(?:[/-]\\d{2,4})?\\b",
+        "\\bon\\s+\\d{1,2}(?:st|nd|rd|th)?\\s+(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\\s+\\d{2,4})?\\b",
+        "\\bon\\s+(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\b"
+      ]
+    },
+    {
+      "id": "time",
+      "group": "lead",
+      "order": 20,
+      "label": "Clock or time-of-day anchor",
+      "prompt": "at [TIME]",
+      "description": "Add a clock time or part of the day to pinpoint the moment.",
+      "examples": [
+        "at 3:10 pm",
+        "around midnight"
+      ],
+      "chips": [
+        "at 3:15 pm",
+        "around noon",
+        "during the evening call"
+      ],
+      "suggestions": [
+        "Name the time on the clock or describe the part of day.",
+        "If you remember the window (“between 3 and 4”), jot it down."
+      ],
+      "traits": {
+        "tokens": [
+          "noon",
+          "midday",
+          "midnight",
+          "morning",
+          "afternoon",
+          "evening",
+          "night",
+          "sunrise",
+          "sunset",
+          "lunchtime",
+          "breakfast",
+          "lunch",
+          "dinner",
+          "am",
+          "pm"
+        ],
+        "anchors": ["temporal", "clock"],
+        "syntactic": ["time-phrase"]
+      },
+      "patterns": [
+        "\\b\\d{1,2}:\\d{2}\\s*(?:[ap]\\.?m\\.?)?\\b",
+        "\\b\\d{1,2}\\s*(?:[ap]\\.?m\\.?)\\b",
+        "\\b(?:at|around|about|by|just\\s+after|just\\s+before|during)\\s+(?:\\d{1,2}(?::\\d{2})?\\s*(?:[ap]\\.?m\\.?)?|noon|midnight)\\b",
+        "\\bfrom\\s+\\d{1,2}(?::\\d{2})?\\s*(?:[ap]\\.?m\\.?)?\\s+(?:to|until|through)\\s+\\d{1,2}(?::\\d{2})?\\s*(?:[ap]\\.?m\\.?)?\\b",
+        "\\b(?:that\\s+morning|that\\s+afternoon|that\\s+evening|that\\s+night)\\b"
+      ]
+    },
+    {
+      "id": "place",
+      "group": "lead",
+      "order": 30,
+      "label": "Location or channel",
+      "prompt": "in [PLACE]",
+      "description": "Say where it happened—physical space or communication channel.",
+      "examples": [
+        "in the conference room",
+        "on the Zoom call"
+      ],
+      "chips": [
+        "in conference room B",
+        "on the project Slack channel",
+        "at the front desk"
+      ],
+      "suggestions": [
+        "Name the room, call, or channel you were in.",
+        "If it was online, mention the app or thread."
+      ],
+      "traits": {
+        "tokens": [
+          "conference room",
+          "meeting room",
+          "office",
+          "kitchen",
+          "hallway",
+          "classroom",
+          "library",
+          "gym",
+          "lobby",
+          "zoom",
+          "call",
+          "video",
+          "phone",
+          "stage",
+          "auditorium",
+          "cafeteria",
+          "cafe",
+          "restaurant",
+          "warehouse",
+          "workshop",
+          "desk",
+          "table",
+          "lab",
+          "clinic",
+          "ward",
+          "room",
+          "break room",
+          "parking lot",
+          "parking garage",
+          "car",
+          "bus",
+          "train",
+          "platform",
+          "station",
+          "airport",
+          "waiting room",
+          "lunchroom",
+          "studio",
+          "shop floor",
+          "store",
+          "market",
+          "checkout",
+          "counter",
+          "channel"
+        ],
+        "anchors": ["location"],
+        "syntactic": ["location-phrase"]
+      },
+      "patterns": [
+        "\\b(?:conference\\s+room|meeting\\s+room|office|kitchen|hallway|classroom|library|gym|lobby|zoom\\s+call|video\\s+call|phone\\s+call|stage|auditorium|cafeteria|cafe|restaurant|warehouse|workshop|desk|table|lab|laboratory|clinic|ward|room|break\\s+room|breakroom|kitchenette|hall|corridor|parking\\s+lot|parking\\s+garage|car|vehicle|bus|train|platform|station|airport|waiting\\s+room|lunchroom|office\\s+lobby|front\\s+desk|reception|studio|shop\\s+floor|store|market|checkout|counter|patient\\s+room|exam\\s+room|workroom|channel|thread)\\b"
+      ]
+    },
+    {
+      "id": "sensory",
+      "group": "tail",
+      "order": 40,
+      "label": "Sensory verb",
+      "prompt": "I saw/heard",
+      "description": "Lead with what your senses picked up—what a camera or mic could capture.",
+      "examples": [
+        "I heard Jordan say",
+        "I saw the document marked as resolved"
+      ],
+      "chips": [
+        "I heard",
+        "I saw",
+        "I noticed"
+      ],
+      "suggestions": [
+        "Start sentences with “I saw…”, “I heard…”, or “I noticed…”",
+        "Pair the sensory verb with the action you observed."
+      ],
+      "traits": {
+        "tokens": [
+          "i saw",
+          "i see",
+          "i heard",
+          "i hear",
+          "i noticed",
+          "i observe",
+          "i observed",
+          "i watched",
+          "we saw",
+          "we heard"
+        ],
+        "anchors": ["sensory"],
+        "syntactic": ["sensory-phrase"]
+      },
+      "patterns": [
+        "\\b(?:i|we)\\s+(?:saw|see|heard|hear|noticed|observe|observed|watched|witnessed|recorded|captured|measured|timed|counted|checked|read)\\b"
+      ]
+    },
+    {
+      "id": "actor",
+      "group": "tail",
+      "order": 50,
+      "label": "People involved",
+      "prompt": "[WHO]",
+      "description": "Name who did it—roles, names, or groups instead of labels.",
+      "examples": [
+        "Jordan",
+        "the manager",
+        "two participants"
+      ],
+      "chips": [
+        "Jordan",
+        "the manager",
+        "three participants"
+      ],
+      "suggestions": [
+        "Use names or roles (“Jordan”, “the facilitator”) rather than traits.",
+        "Mention how many people were involved if it helps."
+      ],
+      "traits": {
+        "tokens": [
+          "he",
+          "she",
+          "they",
+          "them",
+          "him",
+          "her",
+          "we",
+          "us",
+          "you",
+          "someone",
+          "somebody",
+          "everyone",
+          "team",
+          "group",
+          "coworker",
+          "colleague",
+          "manager",
+          "supervisor",
+          "client",
+          "customer",
+          "participant",
+          "student",
+          "teacher",
+          "nurse",
+          "parent",
+          "child",
+          "neighbor",
+          "friend",
+          "guest",
+          "facilitator",
+          "speaker",
+          "host"
+        ],
+        "anchors": ["actor"],
+        "syntactic": ["noun-phrase"]
+      },
+      "patterns": [
+        "\\b(?:he|she|they|them|him|her|we|us|you|someone|somebody|anyone|anybody|everyone|everybody|staff|team|group|coworker|coworkers|colleague|colleagues|manager|supervisor|client|clients|customer|customers|participant|participants|student|students|teacher|nurse|parent|parents|child|children|neighbor|neighbour|people|person|friend|friends|guest|guests|facilitator|speaker|host)\\b",
+        "\\b(?:a|an|the|this|that|these|those|my|our|your|his|her|their)\\s+[A-Za-z][\\w-]*\\b"
+      ]
+    },
+    {
+      "id": "action",
+      "group": "tail",
+      "order": 60,
+      "label": "What they did or said",
+      "prompt": "[ACTION/WORDS]",
+      "description": "Describe the observable action or exact words.",
+      "examples": [
+        "said \"We're done here\"",
+        "closed the laptop"
+      ],
+      "chips": [
+        "said \"Let's wrap up\"",
+        "closed the laptop",
+        "left the room"
+      ],
+      "suggestions": [
+        "Quote the words or describe the concrete action you saw.",
+        "Avoid interpretations—stick to what happened."
+      ],
+      "traits": {
+        "tokens": [
+          "said",
+          "say",
+          "asks",
+          "asked",
+          "tell",
+          "told",
+          "shout",
+          "yell",
+          "email",
+          "text",
+          "call",
+          "wrote",
+          "write",
+          "laugh",
+          "cry",
+          "smile",
+          "touch",
+          "handed",
+          "wave",
+          "point",
+          "show",
+          "share",
+          "post",
+          "present",
+          "arrive",
+          "leave",
+          "open",
+          "close",
+          "walk",
+          "stand",
+          "sit",
+          "give",
+          "bring",
+          "offer",
+          "sign",
+          "deliver",
+          "coach",
+          "review",
+          "record"
+        ],
+        "anchors": ["action"],
+        "syntactic": ["verb-phrase"]
+      },
+      "patterns": [
+        "\\b(?:said|say|says|saying|ask|asked|asking|asks|tell|tells|telling|told|shout|shouted|shouting|shouts|yell|yelled|yelling|yells|email|emailed|emailing|emails|text|texted|texting|texts|slack|slacked|slacking|slacks|message|messaged|messaging|messages|call|called|calling|calls|wrote|write|writes|writing|laugh|laughed|laughing|laughs|cry|cried|crying|cries|smile|smiled|smiling|smiles|touch|touched|touching|touches|hand|handed|handing|hands|wave|waved|waving|waves|point|pointed|pointing|points|show|showed|showing|shows|share|shared|sharing|shares|post|posted|posting|posts|present|presented|presenting|presents|arrive|arrived|arriving|arrives|leave|left|leaving|leaves|open|opened|opening|opens|close|closed|closing|closes|walk|walked|walking|walks|stand|stood|standing|stands|sit|sat|sitting|sits|give|gave|giving|gives|bring|brought|bringing|brings|offer|offered|offering|offers|sign|signed|signing|signs|deliver|delivered|delivering|delivers|coach|coached|coaching|coaches|review|reviewed|reviewing|reviews|record|recorded|recording|records)\\b"
+      ]
+    },
+    {
+      "id": "count",
+      "group": "tail",
+      "order": 70,
+      "label": "Counts or duration",
+      "prompt": "[COUNT/DURATION]",
+      "description": "Quantify how often, how long, or how many.",
+      "examples": [
+        "three times",
+        "for 20 minutes"
+      ],
+      "chips": [
+        "once",
+        "three times",
+        "for 15 minutes"
+      ],
+      "suggestions": [
+        "Add how many times it happened or how long it lasted.",
+        "Numbers, percentages, or ranges all help keep it observable."
+      ],
+      "traits": {
+        "tokens": [
+          "once",
+          "twice",
+          "thrice",
+          "three times",
+          "four times",
+          "five times",
+          "minutes",
+          "hours",
+          "days",
+          "weeks",
+          "months",
+          "percent",
+          "times",
+          "people",
+          "emails",
+          "messages",
+          "calls"
+        ],
+        "anchors": ["quantity"],
+        "syntactic": ["quantity-phrase"]
+      },
+      "patterns": [
+        "\\b(?:once|twice|thrice|three\\s+times|four\\s+times|five\\s+times|six\\s+times|seven\\s+times|eight\\s+times|nine\\s+times|ten\\s+times)\\b",
+        "\\bfor\\s+(?:about\\s+)?(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\\d+)\\s+(?:seconds?|minutes?|hours?|days?|weeks?)\\b",
+        "\\b\\d+\\s*[–-]\\s*\\d+\\b",
+        "\\b\\d+%\\b",
+        "\\b\\d{1,2}:\\d{2}\\s*(?:[ap]\\.?m\\.?)?\\s*(?:–|-|to)\\s*\\d{1,2}:\\d{2}\\s*(?:[ap]\\.?m\\.?)?\\b",
+        "\\b\\d+\\s+(?:times?|people|participants|emails|messages|calls|notes|reports|visits|students|clients|customers|guests|hours?|minutes?|seconds?|days?|weeks?|months?)\\b",
+        "\\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred)\\s+(?:times?|people|participants|emails|messages|calls|notes|reports|visits|students|clients|customers|guests|hours?|minutes?|seconds?|days?|weeks?|months?)\\b"
+      ]
+    }
+  ]
+}
