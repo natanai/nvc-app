@@ -13,6 +13,7 @@ const state = {
   detectionMatches: 0,
   detectionFallbacks: 0,
   detectionFallbackQueue: [],
+  detectionHits: [],
   detectionSource: '',
   detectionHasFlagged: false,
   cueHighlightRanges: [],
@@ -20,6 +21,7 @@ const state = {
   activeHighlightKey: '',
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
+  detectionMatchesOpen: false,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
@@ -28,6 +30,7 @@ const state = {
 
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
+let detectionMatchesDocumentBound = false;
 
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
@@ -154,6 +157,7 @@ function bind() {
     });
   }
 
+  bindDetectionMatchesPopover();
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -167,6 +171,50 @@ function bind() {
       renderHighlightDetails(active || null);
     });
     highlightPopoverBound = true;
+  }
+}
+
+function bindDetectionMatchesPopover() {
+  const toggle = document.getElementById('observation-detection-matches-toggle');
+  if (toggle && !toggle.dataset.bound) {
+    toggle.addEventListener('click', event => {
+      event.preventDefault();
+      const status = state.detectionStatus || 'loading';
+      const hits = Array.isArray(state.detectionHits) ? state.detectionHits : [];
+      if (status !== 'match' || !hits.length) {
+        if (state.detectionMatchesOpen === true) {
+          state.detectionMatchesOpen = false;
+          renderDetectionMatchesPopover();
+        }
+        return;
+      }
+      const open = state.detectionMatchesOpen === true;
+      state.detectionMatchesOpen = !open;
+      renderDetectionMatchesPopover();
+    });
+    toggle.dataset.bound = '1';
+  }
+
+  if (!detectionMatchesDocumentBound && typeof document !== 'undefined') {
+    document.addEventListener('click', event => {
+      if (!state.detectionMatchesOpen) {
+        return;
+      }
+      const toggleEl = document.getElementById('observation-detection-matches-toggle');
+      const popover = document.getElementById('observation-detection-matches-popover');
+      if ((toggleEl && toggleEl.contains(event.target)) || (popover && popover.contains(event.target))) {
+        return;
+      }
+      state.detectionMatchesOpen = false;
+      renderDetectionMatchesPopover();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && state.detectionMatchesOpen) {
+        state.detectionMatchesOpen = false;
+        renderDetectionMatchesPopover();
+      }
+    });
+    detectionMatchesDocumentBound = true;
   }
 }
 
@@ -1172,6 +1220,53 @@ function countWords(value) {
   return matches ? matches.length : 0;
 }
 
+function hasMinimumCompleteWords(rawInput, trimmedInput, minimum) {
+  const minWords = Math.max(Number(minimum) || 0, 0);
+  if (!minWords) {
+    return true;
+  }
+
+  const trimmed = typeof trimmedInput === 'string' ? trimmedInput : '';
+  const wordCount = countWords(trimmed);
+  if (wordCount < minWords) {
+    return false;
+  }
+  if (wordCount > minWords) {
+    return true;
+  }
+
+  const raw = typeof rawInput === 'string' ? rawInput : trimmed;
+  if (endsWithWordBoundary(raw)) {
+    return true;
+  }
+
+  const lastWord = readLastWord(trimmed);
+  if (!lastWord) {
+    return false;
+  }
+
+  return lastWord.length > 1;
+}
+
+function endsWithWordBoundary(value) {
+  if (typeof value !== 'string' || !value) {
+    return false;
+  }
+  const last = value[value.length - 1];
+  if (!last) {
+    return false;
+  }
+  return /[\s.,!?;:]/.test(last);
+}
+
+function readLastWord(value) {
+  if (typeof value !== 'string' || !value) {
+    return '';
+  }
+  const match = value.match(/[a-z0-9'’]+$/i);
+  return match ? match[0] : '';
+}
+
 function tokenizeForScore(text) {
   return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
 }
@@ -1271,12 +1366,14 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   const lint = state.analysis?.lint || null;
   const flaggedCount = countFlaggedTokens(lint);
   const hasFlagged = flaggedCount > 0;
-  const wordCount = countWords(trimmed);
+  const hasEnoughCompleteWords = hasMinimumCompleteWords(sourceText, trimmed, DETECTION_MIN_WORDS);
 
   state.detectionMatchLimit = DETECTION_MATCH_LIMIT;
   state.detectionNearLimit = DETECTION_NEAR_LIMIT;
   state.detectionSource = trimmed;
   state.detectionHasFlagged = hasFlagged;
+  state.detectionMatchesOpen = false;
+  state.detectionHits = [];
 
   if (!state.cues.length) {
     state.detectionStatus = 'loading';
@@ -1299,7 +1396,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     return;
   }
 
-  if (wordCount < DETECTION_MIN_WORDS) {
+  if (!hasEnoughCompleteWords) {
     state.detectionStatus = 'short';
     state.detectionMatches = 0;
     state.detectionFallbacks = 0;
@@ -1317,6 +1414,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionStatus = 'match';
     state.detectionFallbacks = 0;
     state.detectionFallbackQueue = [];
+    state.detectionHits = hits;
   } else {
     state.cueHighlightRanges = [];
     const fallbackQueue = computeFallbackQueue(trimmed);
@@ -1372,6 +1470,7 @@ function renderDetectionStatus() {
   }
   text.textContent = message;
   renderDetectionSummary();
+  renderDetectionMatchesPopover();
 }
 
 function renderDetectionSummary() {
@@ -1503,6 +1602,269 @@ function renderDetectionSummary() {
       coverage.setAttribute('hidden', 'hidden');
     }
   }
+}
+
+function renderDetectionMatchesPopover() {
+  const container = document.getElementById('observation-detection-matches');
+  const toggle = document.getElementById('observation-detection-matches-toggle');
+  const popover = document.getElementById('observation-detection-matches-popover');
+  const summary = document.getElementById('observation-detection-matches-summary');
+  const list = document.getElementById('observation-detection-matches-list');
+
+  if (!container || !toggle || !popover || !list) {
+    return;
+  }
+
+  const status = state.detectionStatus || 'loading';
+  const hits = Array.isArray(state.detectionHits) ? state.detectionHits : [];
+  const hasMatches = status === 'match' && hits.length > 0;
+
+  resetDetectionMatchesList(list);
+
+  if (!hasMatches) {
+    container.setAttribute('hidden', 'hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'Show exact matches';
+    popover.setAttribute('hidden', 'hidden');
+    popover.style.display = 'none';
+    list.innerHTML = '';
+    delete list.dataset.matchesSignature;
+    state.detectionMatchesOpen = false;
+    return;
+  }
+
+  container.removeAttribute('hidden');
+
+  const open = state.detectionMatchesOpen === true;
+  const count = hits.length;
+  const showLabel = count === 1 ? 'Show exact match' : `Show ${count} exact matches`;
+  const hideLabel = count === 1 ? 'Hide exact match' : `Hide ${count} exact matches`;
+
+  toggle.textContent = open ? hideLabel : showLabel;
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+  if (summary) {
+    summary.textContent = count === 1 ? 'We found this cue:' : 'We found these cues:';
+  }
+
+  list.innerHTML = '';
+  hits.forEach(hit => {
+    const item = buildDetectionMatchListItem(hit);
+    if (item) {
+      list.appendChild(item);
+    }
+  });
+
+  if (!list.children.length) {
+    const fallback = document.createElement('li');
+    fallback.className = 'observation-detection__matches-item';
+    fallback.textContent = 'No exact matches detected yet.';
+    list.appendChild(fallback);
+  }
+
+  const signature = buildDetectionMatchesSignature(hits);
+  const previousSignature = list.dataset.matchesSignature || '';
+  if (signature !== previousSignature) {
+    if (signature) {
+      list.dataset.matchesSignature = signature;
+    } else {
+      delete list.dataset.matchesSignature;
+    }
+    list.scrollTop = 0;
+  }
+
+  if (open) {
+    popover.removeAttribute('hidden');
+    popover.style.removeProperty('display');
+    constrainDetectionMatchesList(list);
+  } else {
+    popover.setAttribute('hidden', 'hidden');
+    popover.style.display = 'none';
+    list.scrollTop = 0;
+  }
+}
+
+function buildDetectionMatchListItem(hit) {
+  if (!hit) {
+    return null;
+  }
+
+  const title = formatDetectionMatchTitle(hit);
+  if (!title) {
+    return null;
+  }
+
+  const item = document.createElement('li');
+  item.className = 'observation-detection__matches-item';
+
+  const heading = document.createElement('p');
+  heading.className = 'observation-detection__matches-title';
+  heading.textContent = title;
+  item.appendChild(heading);
+
+  const phrase = formatDetectionMatchPhrase(hit);
+  if (phrase) {
+    const phraseNode = document.createElement('p');
+    phraseNode.className = 'observation-detection__matches-phrase';
+    phraseNode.textContent = phrase;
+    item.appendChild(phraseNode);
+  }
+
+  const feelingsLine = formatDetectionMatchMeta(hit?.feelings, 'feeling');
+  if (feelingsLine) {
+    const meta = document.createElement('p');
+    meta.className = 'observation-detection__matches-meta';
+    meta.textContent = feelingsLine;
+    item.appendChild(meta);
+  }
+
+  const needsLine = formatDetectionMatchMeta(hit?.needs, 'need');
+  if (needsLine) {
+    const meta = document.createElement('p');
+    meta.className = 'observation-detection__matches-meta';
+    meta.textContent = needsLine;
+    item.appendChild(meta);
+  }
+
+  return item;
+}
+
+function resetDetectionMatchesList(list) {
+  if (!list) {
+    return;
+  }
+  list.classList.remove('observation-detection__matches-list--scrollable');
+  list.style.removeProperty('max-height');
+  list.style.removeProperty('overflow-y');
+  list.style.removeProperty('scrollbar-gutter');
+}
+
+function constrainDetectionMatchesList(list) {
+  if (!list) {
+    return;
+  }
+
+  const elements = Array.from(list.children).filter(child => child && child.nodeType === 1);
+  if (elements.length <= 1) {
+    resetDetectionMatchesList(list);
+    return;
+  }
+
+  const firstItem = elements[0];
+  if (!firstItem || typeof firstItem.getBoundingClientRect !== 'function') {
+    resetDetectionMatchesList(list);
+    return;
+  }
+
+  let itemHeight = firstItem.getBoundingClientRect().height;
+  if (!itemHeight) {
+    itemHeight = firstItem.scrollHeight || firstItem.offsetHeight || 0;
+  }
+
+  if (!itemHeight) {
+    list.classList.add('observation-detection__matches-list--scrollable');
+    list.style.overflowY = 'auto';
+    list.style.setProperty('scrollbar-gutter', 'stable');
+    list.style.removeProperty('max-height');
+    return;
+  }
+
+  const gap = readDetectionMatchesRowGap(list);
+  const limit = Math.max(0, Math.ceil(itemHeight + gap));
+
+  list.classList.add('observation-detection__matches-list--scrollable');
+  list.style.maxHeight = `${limit}px`;
+  list.style.overflowY = 'auto';
+  list.style.setProperty('scrollbar-gutter', 'stable');
+}
+
+function readDetectionMatchesRowGap(list) {
+  if (!list || typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+    return 0;
+  }
+  try {
+    const styles = window.getComputedStyle(list);
+    if (!styles) {
+      return 0;
+    }
+    const raw = styles.getPropertyValue('row-gap') || styles.getPropertyValue('grid-row-gap') || '';
+    const value = Number.parseFloat(raw);
+    return Number.isNaN(value) ? 0 : value;
+  } catch (error) {
+    return 0;
+  }
+}
+
+function buildDetectionMatchesSignature(hits) {
+  if (!Array.isArray(hits) || !hits.length) {
+    return '';
+  }
+
+  return hits
+    .map(hit => {
+      if (!hit || typeof hit !== 'object') {
+        return '';
+      }
+      const label = typeof hit.label === 'string' ? hit.label.trim() : '';
+      const cue = typeof hit.cue === 'string' ? hit.cue.trim() : '';
+      const phrase = typeof hit.phrase === 'string' ? hit.phrase.trim() : '';
+      const example = typeof hit.example === 'string' ? hit.example.trim() : '';
+      const feelings = Array.isArray(hit.feelings)
+        ? hit.feelings.map(value => (typeof value === 'string' ? value.trim() : '')).join(',')
+        : '';
+      const needs = Array.isArray(hit.needs)
+        ? hit.needs.map(value => (typeof value === 'string' ? value.trim() : '')).join(',')
+        : '';
+      return [label, cue, phrase, example, feelings, needs].join('¦');
+    })
+    .join('§');
+}
+
+function formatDetectionMatchTitle(hit) {
+  const label = typeof hit?.label === 'string' ? hit.label.trim() : '';
+  if (label) {
+    return label;
+  }
+  const cue = typeof hit?.cue === 'string' ? hit.cue.trim() : '';
+  if (cue) {
+    return formatTitle(cue);
+  }
+  return '';
+}
+
+function formatDetectionMatchPhrase(hit) {
+  const phrase = typeof hit?.phrase === 'string' ? hit.phrase.trim() : '';
+  if (phrase) {
+    return `Matches phrases like “${phrase}”.`;
+  }
+  const example = typeof hit?.example === 'string' ? hit.example.trim() : '';
+  if (example) {
+    return `Example: “${example}”.`;
+  }
+  return '';
+}
+
+function formatDetectionMatchMeta(slugs, kind) {
+  if (!Array.isArray(slugs) || !slugs.length) {
+    return '';
+  }
+  const titles = slugs
+    .map(slug => {
+      if (kind === 'feeling') {
+        return resolveFeelingTitle(slug);
+      }
+      if (kind === 'need') {
+        return resolveNeedTitle(slug);
+      }
+      return '';
+    })
+    .map(title => (typeof title === 'string' ? title.trim() : ''))
+    .filter(Boolean);
+  if (!titles.length) {
+    return '';
+  }
+  const prefix = kind === 'feeling' ? (titles.length === 1 ? 'Feeling' : 'Feelings') : titles.length === 1 ? 'Need' : 'Needs';
+  return `${prefix}: ${formatNaturalList(titles)}`;
 }
 
 function canSubmitMatches() {
