@@ -184,12 +184,12 @@
       "feelings": [
         "hurt",
         "anxious",
-        "startled"
+        "alarmed"
       ],
       "needs": [
         "respect",
         "support",
-        "stability"
+        "predictability"
       ],
       "examples": [
         "A coworker slammed her notebook and left during the presentation.",
@@ -205,12 +205,12 @@
           "feelings": [
             "hurt",
             "anxious",
-            "startled"
+            "alarmed"
           ],
           "needs": [
             "respect",
             "support",
-            "stability"
+            "predictability"
           ],
           "example": "A coworker slammed her notebook shut and walked out during my presentation yesterday."
         }
@@ -349,7 +349,7 @@
       "needs": [
         "consideration",
         "respect",
-        "responsibility",
+        "accountability",
         "reliability"
       ],
       "examples": [
@@ -385,7 +385,7 @@
           ],
           "needs": [
             "respect",
-            "responsibility",
+            "accountability",
             "consideration"
           ],
           "example": "My sibling borrowed my car without asking and returned it with the tank empty."
@@ -405,7 +405,7 @@
       ],
       "feelings": [
         "anxious",
-        "disheartened",
+        "distressed",
         "confused"
       ],
       "needs": [
@@ -426,7 +426,7 @@
           ],
           "feelings": [
             "anxious",
-            "disheartened"
+            "distressed"
           ],
           "needs": [
             "security",
@@ -453,8 +453,8 @@
       ],
       "feelings": [
         "confused",
-        "discouraged",
-        "protective"
+        "distressed",
+        "defiant"
       ],
       "needs": [
         "clarity",
@@ -474,13 +474,13 @@
             "teacher_sloppy"
           ],
           "feelings": [
-            "protective",
+            "defiant",
             "hurt"
           ],
           "needs": [
             "support",
             "respect",
-            "encouragement"
+            "appreciation"
           ],
           "example": "The teacher handed back my child's assignment with \"sloppy\" written across the top."
         },
@@ -518,12 +518,12 @@
       "feelings": [
         "anxious",
         "frustrated",
-        "vulnerable"
+        "powerless"
       ],
       "needs": [
         "safety",
         "support",
-        "responsiveness",
+        "dependability",
         "reliability"
       ],
       "examples": [
@@ -544,7 +544,7 @@
           "needs": [
             "safety",
             "support",
-            "responsiveness"
+            "dependability"
           ],
           "example": "The landlord hasn't responded to three messages about the leak this week."
         },
@@ -559,7 +559,7 @@
           ],
           "needs": [
             "reliability",
-            "communication",
+            "clarity",
             "predictability"
           ],
           "example": "The contractor missed today's 8 a.m. appointment and hasn't texted or called."
@@ -581,12 +581,12 @@
       ],
       "feelings": [
         "anxious",
-        "dismissed"
+        "hurt"
       ],
       "needs": [
-        "care",
+        "nurturing",
         "respect",
-        "attention",
+        "consideration",
         "to-be-heard"
       ],
       "examples": [
@@ -602,12 +602,12 @@
           ],
           "feelings": [
             "anxious",
-            "dismissed"
+            "hurt"
           ],
           "needs": [
-            "care",
+            "nurturing",
             "respect",
-            "attention"
+            "consideration"
           ],
           "example": "My doctor glanced at the clock twice while I was describing my symptoms today."
         }
@@ -632,7 +632,7 @@
         "resentful"
       ],
       "needs": [
-        "boundaries",
+        "space",
         "rest",
         "fairness",
         "support"
@@ -669,7 +669,7 @@
             "tired"
           ],
           "needs": [
-            "boundaries",
+            "space",
             "rest",
             "respect"
           ],
@@ -692,11 +692,11 @@
       "feelings": [
         "lonely",
         "hurt",
-        "disappointed"
+        "disappointment"
       ],
       "needs": [
         "connection",
-        "attention",
+        "consideration",
         "respect"
       ],
       "examples": [
@@ -716,7 +716,7 @@
           ],
           "needs": [
             "connection",
-            "attention",
+            "consideration",
             "respect"
           ],
           "example": "My partner scrolled through their phone during dinner instead of looking up."
@@ -830,13 +830,13 @@
       ],
       "feelings": [
         "alarmed",
-        "startled",
-        "unsafe"
+        "scared",
+        "afraid"
       ],
       "needs": [
         "safety",
         "predictability",
-        "care"
+        "consideration"
       ],
       "examples": [
         "A cyclist ran the red light through the crosswalk.",
@@ -851,12 +851,12 @@
           ],
           "feelings": [
             "alarmed",
-            "unsafe"
+            "scared"
           ],
           "needs": [
             "safety",
             "predictability",
-            "care"
+            "consideration"
           ],
           "example": "A cyclist sped through the crosswalk even though the light was red this morning."
         }
@@ -874,13 +874,13 @@
         "scroll_instead"
       ],
       "feelings": [
-        "regretful",
-        "disappointed"
+        "sad",
+        "disappointment"
       ],
       "needs": [
         "integrity",
         "connection",
-        "follow-through"
+        "accountability"
       ],
       "examples": [
         "I scrolled instead of returning an important call.",
@@ -894,13 +894,13 @@
             "scroll_instead"
           ],
           "feelings": [
-            "regretful",
-            "disappointed"
+            "sad",
+            "disappointment"
           ],
           "needs": [
             "integrity",
             "connection",
-            "follow-through"
+            "accountability"
           ],
           "example": "I caught myself scrolling for an hour instead of calling my grandmother back."
         }
@@ -919,14 +919,14 @@
         "coworker_caught_error"
       ],
       "feelings": [
-        "grateful",
-        "reassured",
-        "supported"
+        "relieved",
+        "hopeful",
+        "calm"
       ],
       "needs": [
         "reliability",
-        "accuracy",
-        "teamwork"
+        "integrity",
+        "mutuality"
       ],
       "examples": [
         "A teammate double-checked an expense report and caught an error before it went out.",
@@ -940,13 +940,13 @@
             "coworker_caught_error"
           ],
           "feelings": [
-            "grateful",
-            "reassured"
+            "relieved",
+            "hopeful"
           ],
           "needs": [
-            "teamwork",
+            "mutuality",
             "reliability",
-            "accuracy"
+            "integrity"
           ],
           "example": "My coworker double-checked the expense report and caught a mistake before we sent it."
         }
@@ -967,12 +967,12 @@
       "feelings": [
         "proud",
         "energized",
-        "encouraged"
+        "hopeful"
       ],
       "needs": [
-        "acknowledgment",
+        "acknowledgement",
         "growth",
-        "celebration"
+        "recognition"
       ],
       "examples": [
         "At the 8 a.m. session, the trainer high-fived me after I racked 185 pounds on squats.",
@@ -987,11 +987,11 @@
           ],
           "feelings": [
             "proud",
-            "encouraged"
+            "hopeful"
           ],
           "needs": [
-            "celebration",
-            "acknowledgment",
+            "recognition",
+            "acknowledgement",
             "growth"
           ],
           "example": "At the 8 a.m. session, the gym trainer high-fived me right after I racked 185 pounds on squats."
@@ -1011,13 +1011,13 @@
         "neighbor_shoveled"
       ],
       "feelings": [
-        "grateful",
-        "touched",
-        "connected"
+        "joyful",
+        "contented",
+        "hopeful"
       ],
       "needs": [
         "community",
-        "care",
+        "nurturing",
         "support"
       ],
       "examples": [
@@ -1032,12 +1032,12 @@
             "neighbor_shoveled"
           ],
           "feelings": [
-            "grateful",
-            "touched"
+            "joyful",
+            "contented"
           ],
           "needs": [
             "community",
-            "care",
+            "nurturing",
             "support"
           ],
           "example": "My neighbor shoveled our sidewalk after the snowstorm while we were at work."
@@ -1057,12 +1057,12 @@
         "appreciation_specific"
       ],
       "feelings": [
-        "appreciated",
-        "seen",
-        "motivated"
+        "proud",
+        "energized",
+        "hopeful"
       ],
       "needs": [
-        "acknowledgment",
+        "acknowledgement",
         "contribution",
         "belonging"
       ],
@@ -1078,12 +1078,12 @@
             "appreciation_specific"
           ],
           "feelings": [
-            "seen",
-            "appreciated",
-            "motivated"
+            "proud",
+            "energized",
+            "hopeful"
           ],
           "needs": [
-            "acknowledgment",
+            "acknowledgement",
             "belonging",
             "contribution"
           ],
@@ -1104,9 +1104,9 @@
         "counselor_reflection"
       ],
       "feelings": [
-        "understood",
         "calm",
-        "supported"
+        "relieved",
+        "hopeful"
       ],
       "needs": [
         "to-be-heard",
@@ -1125,8 +1125,8 @@
             "counselor_reflection"
           ],
           "feelings": [
-            "understood",
-            "supported"
+            "calm",
+            "relieved"
           ],
           "needs": [
             "to-be-heard",
@@ -1151,14 +1151,14 @@
         "manager_balanced_workload"
       ],
       "feelings": [
-        "supported",
         "relieved",
-        "grateful"
+        "hopeful",
+        "contented"
       ],
       "needs": [
-        "care",
-        "balance",
-        "collaboration"
+        "support",
+        "fairness",
+        "mutuality"
       ],
       "examples": [
         "My partner handled dinner and dishes so I could finish a deadline.",
@@ -1172,13 +1172,13 @@
             "partner_cooked_cleaned"
           ],
           "feelings": [
-            "supported",
-            "grateful"
+            "relieved",
+            "hopeful"
           ],
           "needs": [
-            "care",
+            "support",
             "rest",
-            "collaboration"
+            "mutuality"
           ],
           "example": "My partner cooked dinner and cleaned the kitchen while I finished my deadline."
         },
@@ -1194,7 +1194,7 @@
           "needs": [
             "fairness",
             "support",
-            "teamwork"
+            "mutuality"
           ],
           "example": "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate."
         }
@@ -1214,7 +1214,7 @@
       ],
       "feelings": [
         "relieved",
-        "grateful"
+        "hopeful"
       ],
       "needs": [
         "safety",
@@ -1234,7 +1234,7 @@
           ],
           "feelings": [
             "relieved",
-            "grateful"
+            "hopeful"
           ],
           "needs": [
             "safety",
@@ -1259,12 +1259,12 @@
       ],
       "feelings": [
         "relieved",
-        "valued"
+        "contented"
       ],
       "needs": [
         "rest",
         "respect",
-        "responsiveness"
+        "reliability"
       ],
       "examples": [
         "My manager approved my vacation request the same day.",
@@ -1279,12 +1279,12 @@
           ],
           "feelings": [
             "relieved",
-            "valued"
+            "contented"
           ],
           "needs": [
             "rest",
             "respect",
-            "responsiveness"
+            "reliability"
           ],
           "example": "My boss approved my vacation request the same day I submitted it."
         }
@@ -1305,14 +1305,14 @@
         "dentist_explained_steps"
       ],
       "feelings": [
-        "reassured",
-        "cared-for",
-        "calm"
+        "relieved",
+        "calm",
+        "hopeful"
       ],
       "needs": [
-        "care",
+        "nurturing",
         "clarity",
-        "comfort"
+        "serenity"
       ],
       "examples": [
         "A nurse checked in overnight to make sure my dad was comfortable.",
@@ -1326,12 +1326,12 @@
             "night_nurse_checkin"
           ],
           "feelings": [
-            "reassured",
-            "cared-for"
+            "relieved",
+            "calm"
           ],
           "needs": [
-            "care",
-            "comfort",
+            "nurturing",
+            "serenity",
             "support"
           ],
           "example": "The nurse checked in twice during the night to make sure my dad was comfortable."
@@ -1347,7 +1347,7 @@
           ],
           "needs": [
             "clarity",
-            "care",
+            "nurturing",
             "trust"
           ],
           "example": "My dentist explained each step before starting the procedure."
@@ -1372,8 +1372,8 @@
       ],
       "needs": [
         "reliability",
-        "communication",
-        "follow-through"
+        "clarity",
+        "accountability"
       ],
       "examples": [
         "At 7 p.m. the app marked my dinner order delivered while the porch camera still showed an empty doorstep.",
@@ -1391,8 +1391,8 @@
             "confused"
           ],
           "needs": [
-            "communication",
-            "follow-through",
+            "clarity",
+            "accountability",
             "reliability"
           ],
           "example": "At 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep."
@@ -1413,12 +1413,12 @@
       ],
       "feelings": [
         "irritated",
-        "unimportant"
+        "hurt"
       ],
       "needs": [
         "respect",
         "reliability",
-        "communication"
+        "consideration"
       ],
       "examples": [
         "A friend arrived half an hour late with no text.",
@@ -1433,11 +1433,11 @@
           ],
           "feelings": [
             "irritated",
-            "unimportant"
+            "hurt"
           ],
           "needs": [
             "respect",
-            "communication",
+            "consideration",
             "reliability"
           ],
           "example": "My friend arrived 30 minutes late to lunch without texting."
@@ -1457,12 +1457,12 @@
         "hoa_warning_letter"
       ],
       "feelings": [
-        "defensive",
+        "irritated",
         "confused"
       ],
       "needs": [
         "fairness",
-        "communication",
+        "clarity",
         "respect"
       ],
       "examples": [
@@ -1477,12 +1477,12 @@
             "hoa_warning_letter"
           ],
           "feelings": [
-            "defensive",
+            "irritated",
             "confused"
           ],
           "needs": [
             "fairness",
-            "communication",
+            "clarity",
             "respect"
           ],
           "example": "Our HOA sent a warning letter about lawn length without asking first."
@@ -1504,10 +1504,10 @@
       "feelings": [
         "hurt",
         "angry",
-        "unseen"
+        "resentful"
       ],
       "needs": [
-        "acknowledgment",
+        "acknowledgement",
         "fairness",
         "integrity"
       ],
@@ -1527,7 +1527,7 @@
             "angry"
           ],
           "needs": [
-            "acknowledgment",
+            "acknowledgement",
             "integrity",
             "fairness"
           ],
@@ -1554,7 +1554,7 @@
       ],
       "needs": [
         "safety",
-        "communication",
+        "clarity",
         "trust"
       ],
       "examples": [
@@ -1574,7 +1574,7 @@
           ],
           "needs": [
             "safety",
-            "communication",
+            "clarity",
             "trust"
           ],
           "example": "The daycare forgot to call when my child had a fever."
@@ -1594,13 +1594,13 @@
         "bus_driver_waited"
       ],
       "feelings": [
-        "grateful",
+        "joyful",
         "relieved"
       ],
       "needs": [
         "consideration",
         "support",
-        "ease"
+        "relaxation"
       ],
       "examples": [
         "A bus driver waited as I ran toward the stop.",
@@ -1614,13 +1614,13 @@
             "bus_driver_waited"
           ],
           "feelings": [
-            "grateful",
+            "joyful",
             "relieved"
           ],
           "needs": [
             "consideration",
             "support",
-            "ease"
+            "relaxation"
           ],
           "example": "The bus driver waited for me when I was running toward the stop."
         }
@@ -1639,13 +1639,13 @@
         "teammate_ignored_updates"
       ],
       "feelings": [
-        "stressed",
+        "pressured",
         "anxious"
       ],
       "needs": [
         "clarity",
         "accountability",
-        "teamwork"
+        "mutuality"
       ],
       "examples": [
         "From Monday through Friday, no cards under Jordan's initials moved on the shared sprint board.",
@@ -1659,13 +1659,13 @@
             "teammate_ignored_updates"
           ],
           "feelings": [
-            "stressed",
+            "pressured",
             "anxious"
           ],
           "needs": [
             "clarity",
             "accountability",
-            "teamwork"
+            "mutuality"
           ],
           "example": "From Monday through Friday, no cards under my teammate's initials moved on the shared sprint board."
         }
@@ -1685,12 +1685,12 @@
       ],
       "feelings": [
         "relieved",
-        "thankful"
+        "hopeful"
       ],
       "needs": [
         "safety",
-        "responsiveness",
-        "care"
+        "dependability",
+        "support"
       ],
       "examples": [
         "Maintenance fixed the leak the day after we reported it.",
@@ -1705,12 +1705,12 @@
           ],
           "feelings": [
             "relieved",
-            "thankful"
+            "hopeful"
           ],
           "needs": [
-            "responsiveness",
+            "dependability",
             "safety",
-            "care"
+            "support"
           ],
           "example": "Our landlord repaired the leaky faucet the day after we reported it."
         }
@@ -1730,7 +1730,7 @@
       ],
       "feelings": [
         "frustrated",
-        "disappointed"
+        "disappointment"
       ],
       "needs": [
         "trust",
@@ -1750,7 +1750,7 @@
           ],
           "feelings": [
             "frustrated",
-            "disappointed"
+            "disappointment"
           ],
           "needs": [
             "trust",
@@ -1780,8 +1780,8 @@
       ],
       "needs": [
         "safety",
-        "care",
-        "attentiveness"
+        "consideration",
+        "trust"
       ],
       "examples": [
         "The restaurant served my meal with peanuts after I flagged my allergy.",
@@ -1800,8 +1800,8 @@
           ],
           "needs": [
             "safety",
-            "care",
-            "attentiveness"
+            "consideration",
+            "trust"
           ],
           "example": "The restaurant served my meal with peanuts after I noted my allergy."
         }
@@ -1820,8 +1820,8 @@
         "meeting_over_lunch"
       ],
       "feelings": [
-        "annoyed",
-        "disregarded"
+        "irritated",
+        "hurt"
       ],
       "needs": [
         "respect",
@@ -1840,8 +1840,8 @@
             "meeting_over_lunch"
           ],
           "feelings": [
-            "annoyed",
-            "disregarded"
+            "irritated",
+            "hurt"
           ],
           "needs": [
             "respect",
@@ -1865,13 +1865,13 @@
         "support_agent_followup"
       ],
       "feelings": [
-        "grateful",
-        "supported"
+        "relieved",
+        "hopeful"
       ],
       "needs": [
         "clarity",
         "support",
-        "follow-through"
+        "accountability"
       ],
       "examples": [
         "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
@@ -1885,13 +1885,13 @@
             "support_agent_followup"
           ],
           "feelings": [
-            "grateful",
-            "supported"
+            "relieved",
+            "hopeful"
           ],
           "needs": [
             "clarity",
             "support",
-            "follow-through"
+            "accountability"
           ],
           "example": "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix."
         }
@@ -1911,12 +1911,12 @@
       ],
       "feelings": [
         "relieved",
-        "grateful",
-        "safer"
+        "hopeful",
+        "calm"
       ],
       "needs": [
         "safety",
-        "responsiveness",
+        "reliability",
         "community"
       ],
       "examples": [
@@ -1932,11 +1932,11 @@
           ],
           "feelings": [
             "relieved",
-            "safer"
+            "calm"
           ],
           "needs": [
             "safety",
-            "responsiveness",
+            "reliability",
             "community"
           ],
           "example": "The city finally fixed the streetlight after months of emails."
