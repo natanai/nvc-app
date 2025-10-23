@@ -76,15 +76,39 @@ Run the helper script to create a timestamped ZIP archive without publishing a G
 The script writes the archive to `releases/` by default. Pass a custom directory as the first argument to store the archive
 elsewhere.
 
-## Observation cue sanitization
+## Observation cue module system
 
-Use the **Observation Cue Sanitizer** workflow from the GitHub Actions tab to regenerate `data/observation_cues.sanitized.csv`.
-Toggle the `regenerate_index` input when you need to rebuild `data/index.json` from the CSV sources before sanitizing. The
-workflow uploads the sanitized CSV as a downloadable artifact. Locally, run the sanitizer directly with:
+All observation feedback now comes from a modular cue library that is generated from two source files:
+
+- `data/observation_lexicon.json` collects reusable vocabulary. Each entry defines a regular-expression `pattern` or a `tokens` array (with an optional `threshold`) plus an optional `phrase` hint that appears in the editor. Build scripts normalize the tokens so common inflections ("listened," "listening") map to the same matcher.
+- `data/observation_module_blueprints.json` describes every module. A module bundles:
+  - metadata (`id`, `label`, `summary`, optional `slotIds`, and up to three representative `examples`),
+  - `lexiconKeys` that pull in the shared vocabulary,
+  - optional custom `detectors` for edge cases,
+  - default `feelings` and `needs`, and
+  - a `cues` collection. Each cue references lexicon keys (or inherits the module’s keys), can extend the feeling/need lists, and must provide an `example`. Patterns are assembled automatically from the lexicon plus any cue-level `phrases` or `patterns`.
+
+The build pipeline consumes those source files and emits the artifacts used by the site:
 
 ```bash
-node scripts/sanitizeObservationCues.mjs
+npm run build:observation-cues
 ```
+
+This command runs `scripts/buildObservationCueLibrary.mjs` to generate:
+
+- `data/observation_cue_modules.json` – the compiled module definitions consumed by the observation editor, and
+- `data/observation_cues.csv` – the cue list with merged pattern sets.
+
+It then calls `scripts/sanitizeObservationCues.mjs` to produce the derived `data/observation_cues.sanitized.csv`. **Do not edit any of the generated files directly**—always modify the lexicon or module blueprint and rebuild.
+
+After updating the lexicon or blueprint, run the focused tests to confirm coverage and structural integrity:
+
+```bash
+node tests/observation-module-integrity.test.mjs
+node tests/observation-scenario-coverage.test.mjs
+```
+
+The integrity test verifies that every module references valid cues, that every cue uses known lexicon keys, and that the compiled output stays in sync. The scenario coverage suite exercises a curated set of positive and challenging observations to ensure the modular system suggests both feelings and needs for each case. New contributions should extend the lexicon and blueprint (rather than hard-coding phrases in the generated CSVs) so future scenarios automatically inherit the broader vocabulary.
 
 ## Project structure
 

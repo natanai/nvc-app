@@ -1,0 +1,1947 @@
+{
+  "modules": [
+    {
+      "id": "dismissive-responses",
+      "label": "Dismissive responses and gestures",
+      "summary": "Moments where gestures or comments dismiss the speaker in front of others.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "eye_roll",
+        "whatever_door",
+        "too_sensitive",
+        "mocking_whisper"
+      ],
+      "feelings": [
+        "hurt",
+        "embarrassed",
+        "lonely",
+        "angry",
+        "frustrated"
+      ],
+      "needs": [
+        "respect",
+        "consideration",
+        "connection",
+        "acceptance",
+        "to-be-heard"
+      ],
+      "examples": [
+        "My manager rolled his eyes when I asked about the budget.",
+        "My teenager muttered \"whatever\" and slammed the bedroom door.",
+        "A teammate whispered to another person and laughed after I spoke."
+      ],
+      "cues": [
+        {
+          "id": "dismissive-eye-roll",
+          "lexiconKeys": [
+            "eye_roll"
+          ],
+          "feelings": [
+            "hurt",
+            "irritated",
+            "embarrassed"
+          ],
+          "needs": [
+            "respect",
+            "to-be-heard",
+            "consideration"
+          ],
+          "example": "At today's 9 a.m. budget review in conference room B, my manager rolled his eyes right after I asked for the spreadsheet update."
+        },
+        {
+          "id": "dismissive-whatever-door",
+          "lexiconKeys": [
+            "whatever_door"
+          ],
+          "feelings": [
+            "hurt",
+            "angry",
+            "lonely"
+          ],
+          "needs": [
+            "respect",
+            "connection",
+            "consideration"
+          ],
+          "example": "My teenager muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight."
+        },
+        {
+          "id": "dismissive-too-sensitive",
+          "lexiconKeys": [
+            "too_sensitive"
+          ],
+          "feelings": [
+            "embarrassed",
+            "hurt",
+            "lonely"
+          ],
+          "needs": [
+            "acceptance",
+            "respect",
+            "to-be-seen"
+          ],
+          "example": "At dinner tonight at Sam's Diner, a friend said \"You're too sensitive\" when I declined the joke."
+        },
+        {
+          "id": "dismissive-whisper-laugh",
+          "lexiconKeys": [
+            "mocking_whisper"
+          ],
+          "feelings": [
+            "embarrassed",
+            "hurt",
+            "anxious"
+          ],
+          "needs": [
+            "respect",
+            "belonging",
+            "consideration"
+          ],
+          "example": "During Tuesday's 2 p.m. planning stand-up, my colleague whispered to Taylor and they both laughed right after I described the roadmap change."
+        }
+      ]
+    },
+    {
+      "id": "listening-boundaries",
+      "label": "When listening feels one-sided",
+      "summary": "Moments where partners or clients talk over you or insist you never listen.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "never_listen",
+        "client_interrupt"
+      ],
+      "feelings": [
+        "frustrated",
+        "anxious",
+        "hurt"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "mutuality",
+        "understanding"
+      ],
+      "examples": [
+        "My partner said I never listen when we talked about chores.",
+        "During the call, the client talked over every proposal.",
+        "The conversation kept looping because my input was interrupted."
+      ],
+      "cues": [
+        {
+          "id": "accused-never-listen",
+          "lexiconKeys": [
+            "never_listen"
+          ],
+          "feelings": [
+            "hurt",
+            "frustrated"
+          ],
+          "needs": [
+            "respect",
+            "understanding",
+            "mutuality"
+          ],
+          "example": "Yesterday evening in the kitchen, my partner said \"You never listen\" when we talked about chores."
+        },
+        {
+          "id": "client-talked-over",
+          "lexiconKeys": [
+            "client_interrupt"
+          ],
+          "feelings": [
+            "frustrated",
+            "anxious"
+          ],
+          "needs": [
+            "respect",
+            "to-be-heard",
+            "mutuality"
+          ],
+          "example": "During this morning's 10 a.m. project video call, the client's audio overlapped mine three times when I proposed a change."
+        }
+      ]
+    },
+    {
+      "id": "presentation-departures",
+      "label": "Walkouts during presentations",
+      "summary": "Abandoning the room mid-presentation or slamming notebooks while someone shares.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "left_presentation"
+      ],
+      "feelings": [
+        "hurt",
+        "anxious",
+        "startled"
+      ],
+      "needs": [
+        "respect",
+        "support",
+        "stability"
+      ],
+      "examples": [
+        "A coworker slammed her notebook and left during the presentation.",
+        "Someone walked out as I showed the final slide.",
+        "The room fell silent after the door closed behind them."
+      ],
+      "cues": [
+        {
+          "id": "presentation-walkout",
+          "lexiconKeys": [
+            "left_presentation"
+          ],
+          "feelings": [
+            "hurt",
+            "anxious",
+            "startled"
+          ],
+          "needs": [
+            "respect",
+            "support",
+            "stability"
+          ],
+          "example": "A coworker slammed her notebook shut and walked out during my presentation yesterday."
+        }
+      ]
+    },
+    {
+      "id": "sports-officiating",
+      "label": "Missed fouls and officiating gaps",
+      "summary": "Referees overlooking fouls or making no-calls that impact fairness and safety.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "referee_missed_foul"
+      ],
+      "feelings": [
+        "frustrated",
+        "powerless",
+        "anxious"
+      ],
+      "needs": [
+        "fairness",
+        "safety",
+        "respect"
+      ],
+      "examples": [
+        "The referee missed three fouls in a row.",
+        "No whistle blew when our player was shoved.",
+        "The bench kept shouting about the no-call."
+      ],
+      "cues": [
+        {
+          "id": "referee-missed-fouls",
+          "lexiconKeys": [
+            "referee_missed_foul"
+          ],
+          "feelings": [
+            "frustrated",
+            "powerless",
+            "anxious"
+          ],
+          "needs": [
+            "fairness",
+            "safety",
+            "respect"
+          ],
+          "example": "During last night's game, the referee missed three fouls against our team."
+        }
+      ]
+    },
+    {
+      "id": "queue-respect",
+      "label": "Fairness in lines and shared resources",
+      "summary": "When service staff or shoppers bypass the queue or reach over you for the last item.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "barista_skipped",
+        "reach_over"
+      ],
+      "feelings": [
+        "irritated",
+        "hurt",
+        "alarmed"
+      ],
+      "needs": [
+        "fairness",
+        "respect",
+        "order",
+        "safety"
+      ],
+      "examples": [
+        "The barista served someone who arrived after me.",
+        "Another shopper reached over my shoulder for the last carton.",
+        "I stayed in line but others jumped ahead."
+      ],
+      "cues": [
+        {
+          "id": "service-line-skip",
+          "lexiconKeys": [
+            "barista_skipped"
+          ],
+          "feelings": [
+            "irritated",
+            "hurt"
+          ],
+          "needs": [
+            "fairness",
+            "respect",
+            "order"
+          ],
+          "example": "The barista skipped me and served two people who arrived later in line this afternoon."
+        },
+        {
+          "id": "reached-over-last-item",
+          "lexiconKeys": [
+            "reach_over"
+          ],
+          "feelings": [
+            "alarmed",
+            "irritated"
+          ],
+          "needs": [
+            "safety",
+            "respect",
+            "fairness"
+          ],
+          "example": "At the grocery store, another shopper reached over me to grab the last carton of eggs."
+        }
+      ]
+    },
+    {
+      "id": "shared-upkeep",
+      "label": "Shared space upkeep and boundaries",
+      "summary": "Living with others who leave messes or return shared items without care.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "dishes_again",
+        "borrowed_car"
+      ],
+      "feelings": [
+        "irritated",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "consideration",
+        "respect",
+        "responsibility",
+        "reliability"
+      ],
+      "examples": [
+        "Dishes piled up again in the sink before work.",
+        "A borrowed car came back with an empty tank.",
+        "Shared chores keep getting skipped."
+      ],
+      "cues": [
+        {
+          "id": "roommate-dishes-repeated",
+          "lexiconKeys": [
+            "dishes_again"
+          ],
+          "feelings": [
+            "irritated",
+            "tired"
+          ],
+          "needs": [
+            "consideration",
+            "order",
+            "support"
+          ],
+          "example": "My roommate left dirty dishes piled in the sink again before leaving for work."
+        },
+        {
+          "id": "borrowed-car-empty",
+          "lexiconKeys": [
+            "borrowed_car"
+          ],
+          "feelings": [
+            "hurt",
+            "anxious"
+          ],
+          "needs": [
+            "respect",
+            "responsibility",
+            "consideration"
+          ],
+          "example": "My sibling borrowed my car without asking and returned it with the tank empty."
+        }
+      ]
+    },
+    {
+      "id": "job-security",
+      "label": "Employment status surprises",
+      "summary": "Contract endings or renewals delivered without context or warning.",
+      "slotIds": [
+        "time",
+        "context"
+      ],
+      "lexiconKeys": [
+        "contract_not_renewed"
+      ],
+      "feelings": [
+        "anxious",
+        "disheartened",
+        "confused"
+      ],
+      "needs": [
+        "security",
+        "clarity",
+        "respect"
+      ],
+      "examples": [
+        "HR emailed that my contract wasn't renewed without a reason.",
+        "A contract ended without anyone explaining why.",
+        "Employment status shifted with no warning."
+      ],
+      "cues": [
+        {
+          "id": "contract-not-renewed",
+          "lexiconKeys": [
+            "contract_not_renewed"
+          ],
+          "feelings": [
+            "anxious",
+            "disheartened"
+          ],
+          "needs": [
+            "security",
+            "clarity",
+            "respect"
+          ],
+          "example": "The email from HR said my contract wasn't renewed with no explanation."
+        }
+      ]
+    },
+    {
+      "id": "feedback-clarity",
+      "label": "Feedback without specifics",
+      "summary": "Critiques that label work as sloppy or list mistakes without examples.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "teacher_sloppy",
+        "review_no_examples"
+      ],
+      "feelings": [
+        "confused",
+        "discouraged",
+        "protective"
+      ],
+      "needs": [
+        "clarity",
+        "support",
+        "growth",
+        "respect"
+      ],
+      "examples": [
+        "A teacher wrote 'sloppy' across the assignment.",
+        "A review listed mistakes without concrete examples.",
+        "Feedback lacked specifics about what to adjust."
+      ],
+      "cues": [
+        {
+          "id": "teacher-derogatory-feedback",
+          "lexiconKeys": [
+            "teacher_sloppy"
+          ],
+          "feelings": [
+            "protective",
+            "hurt"
+          ],
+          "needs": [
+            "support",
+            "respect",
+            "encouragement"
+          ],
+          "example": "The teacher handed back my child's assignment with \"sloppy\" written across the top."
+        },
+        {
+          "id": "review-no-examples",
+          "lexiconKeys": [
+            "review_no_examples"
+          ],
+          "feelings": [
+            "confused",
+            "anxious"
+          ],
+          "needs": [
+            "clarity",
+            "growth",
+            "respect"
+          ],
+          "example": "I received a performance review that only listed mistakes without any concrete examples."
+        }
+      ]
+    },
+    {
+      "id": "housing-reliability",
+      "label": "Maintenance requests with no follow-up",
+      "summary": "Landlords or contractors who ignore repairs or miss appointments without notice.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "landlord_no_reply",
+        "contractor_no_show"
+      ],
+      "feelings": [
+        "anxious",
+        "frustrated",
+        "vulnerable"
+      ],
+      "needs": [
+        "safety",
+        "support",
+        "responsiveness",
+        "reliability"
+      ],
+      "examples": [
+        "Messages about the leak went unanswered.",
+        "A contractor missed the appointment and never called.",
+        "Maintenance issues linger without updates."
+      ],
+      "cues": [
+        {
+          "id": "landlord-no-response",
+          "lexiconKeys": [
+            "landlord_no_reply"
+          ],
+          "feelings": [
+            "anxious",
+            "frustrated"
+          ],
+          "needs": [
+            "safety",
+            "support",
+            "responsiveness"
+          ],
+          "example": "The landlord hasn't responded to three messages about the leak this week."
+        },
+        {
+          "id": "contractor-no-show",
+          "lexiconKeys": [
+            "contractor_no_show"
+          ],
+          "feelings": [
+            "anxious",
+            "frustrated"
+          ],
+          "needs": [
+            "reliability",
+            "communication",
+            "predictability"
+          ],
+          "example": "The contractor missed today's 8 a.m. appointment and hasn't texted or called."
+        }
+      ]
+    },
+    {
+      "id": "care-attention",
+      "label": "Care visits that feel rushed",
+      "summary": "Providers who glance at the clock or otherwise signal impatience while you explain symptoms.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "doctor_clock"
+      ],
+      "feelings": [
+        "anxious",
+        "dismissed"
+      ],
+      "needs": [
+        "care",
+        "respect",
+        "attention",
+        "to-be-heard"
+      ],
+      "examples": [
+        "The doctor kept checking the clock mid-appointment.",
+        "A provider glanced at the clock while I spoke.",
+        "The visit felt rushed instead of attentive."
+      ],
+      "cues": [
+        {
+          "id": "doctor-checked-clock",
+          "lexiconKeys": [
+            "doctor_clock"
+          ],
+          "feelings": [
+            "anxious",
+            "dismissed"
+          ],
+          "needs": [
+            "care",
+            "respect",
+            "attention"
+          ],
+          "example": "My doctor glanced at the clock twice while I was describing my symptoms today."
+        }
+      ]
+    },
+    {
+      "id": "workload-boundaries",
+      "label": "Workload stacking and late-night pings",
+      "summary": "Teams that hand you every follow-up task or bosses who ping late at night without regard for rest.",
+      "slotIds": [
+        "time",
+        "context",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "followups_stacked",
+        "boss_late_pings"
+      ],
+      "feelings": [
+        "overwhelmed",
+        "tense",
+        "resentful"
+      ],
+      "needs": [
+        "boundaries",
+        "rest",
+        "fairness",
+        "support"
+      ],
+      "examples": [
+        "All the follow-up tasks landed on my plate again.",
+        "Slack pings came in around midnight from my boss.",
+        "I keep getting the action items after every meeting."
+      ],
+      "cues": [
+        {
+          "id": "assigned-all-followups",
+          "lexiconKeys": [
+            "followups_stacked"
+          ],
+          "feelings": [
+            "overwhelmed",
+            "resentful"
+          ],
+          "needs": [
+            "fairness",
+            "mutuality",
+            "support"
+          ],
+          "example": "In last Thursday's sprint retrospective, the project lead assigned me every follow-up action item again."
+        },
+        {
+          "id": "boss-late-night-pings",
+          "lexiconKeys": [
+            "boss_late_pings"
+          ],
+          "feelings": [
+            "tense",
+            "tired"
+          ],
+          "needs": [
+            "boundaries",
+            "rest",
+            "respect"
+          ],
+          "example": "My boss sent me three Slack messages between 11 p.m. and midnight about tomorrow's report."
+        }
+      ]
+    },
+    {
+      "id": "connection-presence",
+      "label": "Disconnected dinners",
+      "summary": "Shared meals where someone stays on their phone instead of engaging.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "phone_dinner"
+      ],
+      "feelings": [
+        "lonely",
+        "hurt",
+        "disappointed"
+      ],
+      "needs": [
+        "connection",
+        "attention",
+        "respect"
+      ],
+      "examples": [
+        "Phones stayed on the table during dinner.",
+        "Conversation faded while someone scrolled.",
+        "I looked up and saw them on their screen instead of with me."
+      ],
+      "cues": [
+        {
+          "id": "partner-phone-during-dinner",
+          "lexiconKeys": [
+            "phone_dinner"
+          ],
+          "feelings": [
+            "lonely",
+            "hurt"
+          ],
+          "needs": [
+            "connection",
+            "attention",
+            "respect"
+          ],
+          "example": "My partner scrolled through their phone during dinner instead of looking up."
+        }
+      ]
+    },
+    {
+      "id": "ride-environment",
+      "label": "Noisy rideshares",
+      "summary": "Drivers who fill the car with loud speakerphone calls or chatter during the ride.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "driver_speakerphone"
+      ],
+      "feelings": [
+        "overwhelmed",
+        "irritated",
+        "tense"
+      ],
+      "needs": [
+        "calm",
+        "respect",
+        "consideration"
+      ],
+      "examples": [
+        "A driver talked loudly on speakerphone the whole trip.",
+        "The car felt like a call center during the ride.",
+        "Noise filled the ride instead of quiet."
+      ],
+      "cues": [
+        {
+          "id": "driver-speakerphone-entire-trip",
+          "lexiconKeys": [
+            "driver_speakerphone"
+          ],
+          "feelings": [
+            "overwhelmed",
+            "irritated"
+          ],
+          "needs": [
+            "calm",
+            "consideration",
+            "respect"
+          ],
+          "example": "The rideshare driver talked loudly on speakerphone for the entire trip yesterday."
+        }
+      ]
+    },
+    {
+      "id": "noise-disturbance",
+      "label": "Early-morning noise",
+      "summary": "Neighbors or surroundings that create loud noise before the day starts.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "dog_barking"
+      ],
+      "feelings": [
+        "tired",
+        "irritated",
+        "overwhelmed"
+      ],
+      "needs": [
+        "rest",
+        "peace",
+        "consideration"
+      ],
+      "examples": [
+        "A dog barked for thirty minutes at 6 a.m.",
+        "Weekend mornings start with loud barking next door.",
+        "Noise woke me up before sunrise."
+      ],
+      "cues": [
+        {
+          "id": "neighbor-dog-morning",
+          "lexiconKeys": [
+            "dog_barking"
+          ],
+          "feelings": [
+            "tired",
+            "irritated"
+          ],
+          "needs": [
+            "rest",
+            "peace",
+            "consideration"
+          ],
+          "example": "My neighbor's dog barked loudly for 30 minutes starting at 6 a.m. on Saturday."
+        }
+      ]
+    },
+    {
+      "id": "safety-commute",
+      "label": "Traffic safety scares",
+      "summary": "Cyclists or others rushing through red lights where pedestrians cross.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "cyclist_red"
+      ],
+      "feelings": [
+        "alarmed",
+        "startled",
+        "unsafe"
+      ],
+      "needs": [
+        "safety",
+        "predictability",
+        "care"
+      ],
+      "examples": [
+        "A cyclist ran the red light through the crosswalk.",
+        "Bikes sped through while the walk signal was on.",
+        "Someone on a bike ignored the traffic signal next to me."
+      ],
+      "cues": [
+        {
+          "id": "cyclist-ran-red",
+          "lexiconKeys": [
+            "cyclist_red"
+          ],
+          "feelings": [
+            "alarmed",
+            "unsafe"
+          ],
+          "needs": [
+            "safety",
+            "predictability",
+            "care"
+          ],
+          "example": "A cyclist sped through the crosswalk even though the light was red this morning."
+        }
+      ]
+    },
+    {
+      "id": "self-accountability",
+      "label": "Noticing my own delays",
+      "summary": "Recognizing when you scroll or stall instead of following through on your plans.",
+      "slotIds": [
+        "time",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "scroll_instead"
+      ],
+      "feelings": [
+        "regretful",
+        "disappointed"
+      ],
+      "needs": [
+        "integrity",
+        "connection",
+        "follow-through"
+      ],
+      "examples": [
+        "I scrolled instead of returning an important call.",
+        "An hour went by on my phone before I reached out.",
+        "I delayed following through because I kept scrolling."
+      ],
+      "cues": [
+        {
+          "id": "self-delayed-call",
+          "lexiconKeys": [
+            "scroll_instead"
+          ],
+          "feelings": [
+            "regretful",
+            "disappointed"
+          ],
+          "needs": [
+            "integrity",
+            "connection",
+            "follow-through"
+          ],
+          "example": "I caught myself scrolling for an hour instead of calling my grandmother back."
+        }
+      ]
+    },
+    {
+      "id": "collaboration-safeguards",
+      "label": "Teammates catching mistakes before they spread",
+      "summary": "When coworkers double-check work and spot errors before they reach others.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "coworker_caught_error"
+      ],
+      "feelings": [
+        "grateful",
+        "reassured",
+        "supported"
+      ],
+      "needs": [
+        "reliability",
+        "accuracy",
+        "teamwork"
+      ],
+      "examples": [
+        "A teammate double-checked an expense report and caught an error before it went out.",
+        "Someone on the team spotted a calculation mistake and flagged it before the client saw it.",
+        "A coworker reviewed my draft and found a typo in the headline."
+      ],
+      "cues": [
+        {
+          "id": "coworker-caught-mistake",
+          "lexiconKeys": [
+            "coworker_caught_error"
+          ],
+          "feelings": [
+            "grateful",
+            "reassured"
+          ],
+          "needs": [
+            "teamwork",
+            "reliability",
+            "accuracy"
+          ],
+          "example": "My coworker double-checked the expense report and caught a mistake before we sent it."
+        }
+      ]
+    },
+    {
+      "id": "milestone-celebration",
+      "label": "Celebrations of personal milestones",
+      "summary": "Coaches or teammates who visibly celebrate your progress or new personal bests.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "trainer_high_five"
+      ],
+      "feelings": [
+        "proud",
+        "energized",
+        "encouraged"
+      ],
+      "needs": [
+        "acknowledgment",
+        "growth",
+        "celebration"
+      ],
+      "examples": [
+        "At the 8 a.m. session, the trainer high-fived me after I racked 185 pounds on squats.",
+        "The coach paused practice to high-five me when the board showed my new record.",
+        "Teammates clapped while the trainer called out the weight I just logged."
+      ],
+      "cues": [
+        {
+          "id": "trainer-celebrated-progress",
+          "lexiconKeys": [
+            "trainer_high_five"
+          ],
+          "feelings": [
+            "proud",
+            "encouraged"
+          ],
+          "needs": [
+            "celebration",
+            "acknowledgment",
+            "growth"
+          ],
+          "example": "At the 8 a.m. session, the gym trainer high-fived me right after I racked 185 pounds on squats."
+        }
+      ]
+    },
+    {
+      "id": "neighbor-support",
+      "label": "Neighbors lending a hand",
+      "summary": "Neighbors who step in to clear a path or help with home care while you are away.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "neighbor_shoveled"
+      ],
+      "feelings": [
+        "grateful",
+        "touched",
+        "connected"
+      ],
+      "needs": [
+        "community",
+        "care",
+        "support"
+      ],
+      "examples": [
+        "A neighbor shoveled our sidewalk while we were gone.",
+        "Someone next door cleared the driveway before we got home.",
+        "Our neighbor salted the steps so we wouldn't slip."
+      ],
+      "cues": [
+        {
+          "id": "neighbor-shoveled-sidewalk",
+          "lexiconKeys": [
+            "neighbor_shoveled"
+          ],
+          "feelings": [
+            "grateful",
+            "touched"
+          ],
+          "needs": [
+            "community",
+            "care",
+            "support"
+          ],
+          "example": "My neighbor shoveled our sidewalk after the snowstorm while we were at work."
+        }
+      ]
+    },
+    {
+      "id": "specific-appreciation",
+      "label": "Specific appreciation and thank-yous",
+      "summary": "Heartfelt notes or emails that name what you contributed and why it mattered.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "appreciation_specific"
+      ],
+      "feelings": [
+        "appreciated",
+        "seen",
+        "motivated"
+      ],
+      "needs": [
+        "acknowledgment",
+        "contribution",
+        "belonging"
+      ],
+      "examples": [
+        "At 4 p.m., the coordinator emailed naming the volunteer shifts I covered on Saturday.",
+        "The principal highlighted the exact stations I staffed during the fundraiser.",
+        "A manager DM’d the timestamps where I stepped in during the launch."
+      ],
+      "cues": [
+        {
+          "id": "appreciation-specific-note",
+          "lexiconKeys": [
+            "appreciation_specific"
+          ],
+          "feelings": [
+            "seen",
+            "appreciated",
+            "motivated"
+          ],
+          "needs": [
+            "acknowledgment",
+            "belonging",
+            "contribution"
+          ],
+          "example": "At 4 p.m., the coordinator emailed me listing the volunteer shifts I covered during the fundraiser."
+        }
+      ]
+    },
+    {
+      "id": "reflective-presence",
+      "label": "Reflective listening during support sessions",
+      "summary": "Counselors or listeners who mirror your words before offering input so you feel heard.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "counselor_reflection"
+      ],
+      "feelings": [
+        "understood",
+        "calm",
+        "supported"
+      ],
+      "needs": [
+        "to-be-heard",
+        "understanding",
+        "trust"
+      ],
+      "examples": [
+        "A therapist reflected my words before sharing ideas.",
+        "A counselor paused to mirror back what I said.",
+        "A support group facilitator summarized my message first."
+      ],
+      "cues": [
+        {
+          "id": "counselor-reflected",
+          "lexiconKeys": [
+            "counselor_reflection"
+          ],
+          "feelings": [
+            "understood",
+            "supported"
+          ],
+          "needs": [
+            "to-be-heard",
+            "understanding",
+            "trust"
+          ],
+          "example": "During therapy, my counselor paused and reflected back exactly what I said before offering input."
+        }
+      ]
+    },
+    {
+      "id": "supportive-rebalancing",
+      "label": "Loved ones and leads sharing the load",
+      "summary": "Partners or managers who redistribute tasks so responsibilities feel shared.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "partner_cooked_cleaned",
+        "manager_balanced_workload"
+      ],
+      "feelings": [
+        "supported",
+        "relieved",
+        "grateful"
+      ],
+      "needs": [
+        "care",
+        "balance",
+        "collaboration"
+      ],
+      "examples": [
+        "My partner handled dinner and dishes so I could finish a deadline.",
+        "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate.",
+        "A friend swapped shifts so we split the weekend coverage."
+      ],
+      "cues": [
+        {
+          "id": "partner-covered-dinner",
+          "lexiconKeys": [
+            "partner_cooked_cleaned"
+          ],
+          "feelings": [
+            "supported",
+            "grateful"
+          ],
+          "needs": [
+            "care",
+            "rest",
+            "collaboration"
+          ],
+          "example": "My partner cooked dinner and cleaned the kitchen while I finished my deadline."
+        },
+        {
+          "id": "manager-balanced-followups",
+          "lexiconKeys": [
+            "manager_balanced_workload"
+          ],
+          "feelings": [
+            "relieved",
+            "hopeful"
+          ],
+          "needs": [
+            "fairness",
+            "support",
+            "teamwork"
+          ],
+          "example": "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate."
+        }
+      ]
+    },
+    {
+      "id": "integrity-returns",
+      "label": "Strangers returning lost items intact",
+      "summary": "Moments when someone brings back what you dropped with nothing missing.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "wallet_returned"
+      ],
+      "feelings": [
+        "relieved",
+        "grateful"
+      ],
+      "needs": [
+        "safety",
+        "trust",
+        "integrity"
+      ],
+      "examples": [
+        "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside.",
+        "Security called me to pick up my phone after a customer turned it in at the front desk.",
+        "A passerby jogged over with the keys I dropped on the sidewalk."
+      ],
+      "cues": [
+        {
+          "id": "wallet-returned-intact",
+          "lexiconKeys": [
+            "wallet_returned"
+          ],
+          "feelings": [
+            "relieved",
+            "grateful"
+          ],
+          "needs": [
+            "safety",
+            "trust",
+            "integrity"
+          ],
+          "example": "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside the billfold."
+        }
+      ]
+    },
+    {
+      "id": "responsive-approvals",
+      "label": "Quick responses to time-off requests",
+      "summary": "Leaders who respond promptly when you ask for time away from work.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "vacation_approved_quick"
+      ],
+      "feelings": [
+        "relieved",
+        "valued"
+      ],
+      "needs": [
+        "rest",
+        "respect",
+        "responsiveness"
+      ],
+      "examples": [
+        "My manager approved my vacation request the same day.",
+        "HR confirmed my PTO within a few hours.",
+        "A supervisor okayed my time off without delay."
+      ],
+      "cues": [
+        {
+          "id": "vacation-approved-quickly",
+          "lexiconKeys": [
+            "vacation_approved_quick"
+          ],
+          "feelings": [
+            "relieved",
+            "valued"
+          ],
+          "needs": [
+            "rest",
+            "respect",
+            "responsiveness"
+          ],
+          "example": "My boss approved my vacation request the same day I submitted it."
+        }
+      ]
+    },
+    {
+      "id": "care-attentive-support",
+      "label": "Care teams offering calm, attentive updates",
+      "summary": "Medical staff who explain steps or check in to reassure you and your loved ones.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "night_nurse_checkin",
+        "dentist_explained_steps"
+      ],
+      "feelings": [
+        "reassured",
+        "cared-for",
+        "calm"
+      ],
+      "needs": [
+        "care",
+        "clarity",
+        "comfort"
+      ],
+      "examples": [
+        "A nurse checked in overnight to make sure my dad was comfortable.",
+        "A dentist explained each step before starting the procedure.",
+        "A tech walked us through the test process in advance."
+      ],
+      "cues": [
+        {
+          "id": "nurse-night-check",
+          "lexiconKeys": [
+            "night_nurse_checkin"
+          ],
+          "feelings": [
+            "reassured",
+            "cared-for"
+          ],
+          "needs": [
+            "care",
+            "comfort",
+            "support"
+          ],
+          "example": "The nurse checked in twice during the night to make sure my dad was comfortable."
+        },
+        {
+          "id": "dentist-explained-steps",
+          "lexiconKeys": [
+            "dentist_explained_steps"
+          ],
+          "feelings": [
+            "calm",
+            "relieved"
+          ],
+          "needs": [
+            "clarity",
+            "care",
+            "trust"
+          ],
+          "example": "My dentist explained each step before starting the procedure."
+        }
+      ]
+    },
+    {
+      "id": "delivery-gaps",
+      "label": "Deliveries marked complete with nothing there",
+      "summary": "Orders showing as delivered when no package actually arrived.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "delivery_marked_missing"
+      ],
+      "feelings": [
+        "frustrated",
+        "confused"
+      ],
+      "needs": [
+        "reliability",
+        "communication",
+        "follow-through"
+      ],
+      "examples": [
+        "At 7 p.m. the app marked my dinner order delivered while the porch camera still showed an empty doorstep.",
+        "The tracker pinged \"delivered\" even though the hallway camera never recorded a drop-off.",
+        "Courier status flipped to delivered, but the lobby shelf stayed empty all night."
+      ],
+      "cues": [
+        {
+          "id": "delivery-marked-delivered",
+          "lexiconKeys": [
+            "delivery_marked_missing"
+          ],
+          "feelings": [
+            "frustrated",
+            "confused"
+          ],
+          "needs": [
+            "communication",
+            "follow-through",
+            "reliability"
+          ],
+          "example": "At 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep."
+        }
+      ]
+    },
+    {
+      "id": "punctuality-boundaries",
+      "label": "Late arrivals without notice",
+      "summary": "Friends or contacts who show up far past the meeting time without sending a heads-up.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "friend_late_no_text"
+      ],
+      "feelings": [
+        "irritated",
+        "unimportant"
+      ],
+      "needs": [
+        "respect",
+        "reliability",
+        "communication"
+      ],
+      "examples": [
+        "A friend arrived half an hour late with no text.",
+        "Someone showed up late to lunch without a heads-up.",
+        "My date was 30 minutes late and never messaged."
+      ],
+      "cues": [
+        {
+          "id": "friend-late-no-text",
+          "lexiconKeys": [
+            "friend_late_no_text"
+          ],
+          "feelings": [
+            "irritated",
+            "unimportant"
+          ],
+          "needs": [
+            "respect",
+            "communication",
+            "reliability"
+          ],
+          "example": "My friend arrived 30 minutes late to lunch without texting."
+        }
+      ]
+    },
+    {
+      "id": "policy-warnings",
+      "label": "Unexpected policy warning letters",
+      "summary": "Associations or boards that send a warning without first talking it through.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "hoa_warning_letter"
+      ],
+      "feelings": [
+        "defensive",
+        "confused"
+      ],
+      "needs": [
+        "fairness",
+        "communication",
+        "respect"
+      ],
+      "examples": [
+        "The HOA sent a lawn warning letter without asking first.",
+        "A board left a notice about hedge height with no conversation.",
+        "Management posted a warning about patio chairs without talking to us."
+      ],
+      "cues": [
+        {
+          "id": "hoa-lawn-warning",
+          "lexiconKeys": [
+            "hoa_warning_letter"
+          ],
+          "feelings": [
+            "defensive",
+            "confused"
+          ],
+          "needs": [
+            "fairness",
+            "communication",
+            "respect"
+          ],
+          "example": "Our HOA sent a warning letter about lawn length without asking first."
+        }
+      ]
+    },
+    {
+      "id": "recognition-boundaries",
+      "label": "Credit given to the wrong person",
+      "summary": "Moments when someone else claims your idea or contribution in front of others.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "colleague_took_credit"
+      ],
+      "feelings": [
+        "hurt",
+        "angry",
+        "unseen"
+      ],
+      "needs": [
+        "acknowledgment",
+        "fairness",
+        "integrity"
+      ],
+      "examples": [
+        "A colleague took credit for my idea in the pitch.",
+        "Someone presented my work as theirs during the meeting.",
+        "An editor left my name off the project summary."
+      ],
+      "cues": [
+        {
+          "id": "colleague-took-credit",
+          "lexiconKeys": [
+            "colleague_took_credit"
+          ],
+          "feelings": [
+            "hurt",
+            "angry"
+          ],
+          "needs": [
+            "acknowledgment",
+            "integrity",
+            "fairness"
+          ],
+          "example": "My colleague took credit for my idea during the pitch meeting."
+        }
+      ]
+    },
+    {
+      "id": "care-communication-gaps",
+      "label": "Care teams that miss critical updates",
+      "summary": "Childcare or health providers who forget to call about urgent symptoms.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "daycare_no_call"
+      ],
+      "feelings": [
+        "scared",
+        "alarmed"
+      ],
+      "needs": [
+        "safety",
+        "communication",
+        "trust"
+      ],
+      "examples": [
+        "Daycare forgot to call when my child had a fever.",
+        "The clinic didn't phone about a concerning result.",
+        "Camp missed letting us know about an injury."
+      ],
+      "cues": [
+        {
+          "id": "daycare-no-call",
+          "lexiconKeys": [
+            "daycare_no_call"
+          ],
+          "feelings": [
+            "scared",
+            "alarmed"
+          ],
+          "needs": [
+            "safety",
+            "communication",
+            "trust"
+          ],
+          "example": "The daycare forgot to call when my child had a fever."
+        }
+      ]
+    },
+    {
+      "id": "commute-kindness",
+      "label": "Transit drivers who wait for you",
+      "summary": "Drivers who pause the route so you can catch up and ride.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "bus_driver_waited"
+      ],
+      "feelings": [
+        "grateful",
+        "relieved"
+      ],
+      "needs": [
+        "consideration",
+        "support",
+        "ease"
+      ],
+      "examples": [
+        "A bus driver waited as I ran toward the stop.",
+        "The train conductor held the doors when I called out.",
+        "A shuttle driver paused so I could board."
+      ],
+      "cues": [
+        {
+          "id": "bus-driver-waited",
+          "lexiconKeys": [
+            "bus_driver_waited"
+          ],
+          "feelings": [
+            "grateful",
+            "relieved"
+          ],
+          "needs": [
+            "consideration",
+            "support",
+            "ease"
+          ],
+          "example": "The bus driver waited for me when I was running toward the stop."
+        }
+      ]
+    },
+    {
+      "id": "collaboration-visibility",
+      "label": "Team updates that go missing",
+      "summary": "Moments when teammates skip shared boards or updates for days at a time.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "teammate_ignored_updates"
+      ],
+      "feelings": [
+        "stressed",
+        "anxious"
+      ],
+      "needs": [
+        "clarity",
+        "accountability",
+        "teamwork"
+      ],
+      "examples": [
+        "From Monday through Friday, no cards under Jordan's initials moved on the shared sprint board.",
+        "The kanban view shows five tasks assigned to Sam untouched since last Tuesday.",
+        "Our tracker still lists Casey's items in \"In Progress\" after a full week."
+      ],
+      "cues": [
+        {
+          "id": "teammate-sprint-update-gap",
+          "lexiconKeys": [
+            "teammate_ignored_updates"
+          ],
+          "feelings": [
+            "stressed",
+            "anxious"
+          ],
+          "needs": [
+            "clarity",
+            "accountability",
+            "teamwork"
+          ],
+          "example": "From Monday through Friday, no cards under my teammate's initials moved on the shared sprint board."
+        }
+      ]
+    },
+    {
+      "id": "housing-responsiveness",
+      "label": "Repairs handled right away",
+      "summary": "Landlords or maintenance crews who respond quickly to repair requests.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "landlord_quick_fix"
+      ],
+      "feelings": [
+        "relieved",
+        "thankful"
+      ],
+      "needs": [
+        "safety",
+        "responsiveness",
+        "care"
+      ],
+      "examples": [
+        "Maintenance fixed the leak the day after we reported it.",
+        "Our landlord scheduled a plumber the next morning.",
+        "The repair team showed up within 24 hours."
+      ],
+      "cues": [
+        {
+          "id": "landlord-fixed-quickly",
+          "lexiconKeys": [
+            "landlord_quick_fix"
+          ],
+          "feelings": [
+            "relieved",
+            "thankful"
+          ],
+          "needs": [
+            "responsiveness",
+            "safety",
+            "care"
+          ],
+          "example": "Our landlord repaired the leaky faucet the day after we reported it."
+        }
+      ]
+    },
+    {
+      "id": "commitment-followthrough",
+      "label": "When repayment promises slip",
+      "summary": "Friends or relatives who miss the payback they said was coming soon.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "sibling_unpaid"
+      ],
+      "feelings": [
+        "frustrated",
+        "disappointed"
+      ],
+      "needs": [
+        "trust",
+        "reliability",
+        "fairness"
+      ],
+      "examples": [
+        "A sibling missed the repayment they promised Friday.",
+        "A friend still hasn't paid me back after saying they would.",
+        "Someone delayed sending the money again."
+      ],
+      "cues": [
+        {
+          "id": "sibling-did-not-pay",
+          "lexiconKeys": [
+            "sibling_unpaid"
+          ],
+          "feelings": [
+            "frustrated",
+            "disappointed"
+          ],
+          "needs": [
+            "trust",
+            "reliability",
+            "fairness"
+          ],
+          "example": "My sibling promised to pay me back Friday but still hasn't sent anything."
+        }
+      ]
+    },
+    {
+      "id": "food-safety",
+      "label": "Allergy instructions ignored",
+      "summary": "Restaurants that serve allergens even after you clearly note them.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "allergy_ignored"
+      ],
+      "feelings": [
+        "scared",
+        "angry"
+      ],
+      "needs": [
+        "safety",
+        "care",
+        "attentiveness"
+      ],
+      "examples": [
+        "The restaurant served my meal with peanuts after I flagged my allergy.",
+        "Catering included dairy even though I mentioned the allergy.",
+        "A cafe added walnuts despite my warning."
+      ],
+      "cues": [
+        {
+          "id": "allergy-served-peanuts",
+          "lexiconKeys": [
+            "allergy_ignored"
+          ],
+          "feelings": [
+            "scared",
+            "angry"
+          ],
+          "needs": [
+            "safety",
+            "care",
+            "attentiveness"
+          ],
+          "example": "The restaurant served my meal with peanuts after I noted my allergy."
+        }
+      ]
+    },
+    {
+      "id": "schedule-respect",
+      "label": "Meetings scheduled over breaks",
+      "summary": "Managers who drop meetings onto your lunch or rest time without asking.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "meeting_over_lunch"
+      ],
+      "feelings": [
+        "annoyed",
+        "disregarded"
+      ],
+      "needs": [
+        "respect",
+        "rest",
+        "autonomy"
+      ],
+      "examples": [
+        "My manager scheduled a meeting over my lunch break without asking.",
+        "A lead booked a call during my only break.",
+        "Someone added a meeting right over my dinner time."
+      ],
+      "cues": [
+        {
+          "id": "meeting-over-lunch",
+          "lexiconKeys": [
+            "meeting_over_lunch"
+          ],
+          "feelings": [
+            "annoyed",
+            "disregarded"
+          ],
+          "needs": [
+            "respect",
+            "rest",
+            "autonomy"
+          ],
+          "example": "My manager scheduled a meeting over my lunch break without asking."
+        }
+      ]
+    },
+    {
+      "id": "support-followthrough",
+      "label": "Support staff who follow up",
+      "summary": "Helpers who guide you through a fix and check back afterward.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "support_agent_followup"
+      ],
+      "feelings": [
+        "grateful",
+        "supported"
+      ],
+      "needs": [
+        "clarity",
+        "support",
+        "follow-through"
+      ],
+      "examples": [
+        "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
+        "IT kept the remote session open until the app loaded and sent a ticket update at 9 a.m.",
+        "Customer service called back the next day after guiding me through the reset."
+      ],
+      "cues": [
+        {
+          "id": "support-agent-followed-up",
+          "lexiconKeys": [
+            "support_agent_followup"
+          ],
+          "feelings": [
+            "grateful",
+            "supported"
+          ],
+          "needs": [
+            "clarity",
+            "support",
+            "follow-through"
+          ],
+          "example": "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix."
+        }
+      ]
+    },
+    {
+      "id": "infrastructure-response",
+      "label": "City fixes after persistent outreach",
+      "summary": "Public works teams that finally resolve an issue after repeated contact.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "streetlight_fixed"
+      ],
+      "feelings": [
+        "relieved",
+        "grateful",
+        "safer"
+      ],
+      "needs": [
+        "safety",
+        "responsiveness",
+        "community"
+      ],
+      "examples": [
+        "The city fixed the streetlight after months of emails.",
+        "Public works repaired the pothole we kept reporting.",
+        "The utilities crew finally addressed the outage after persistent follow-up."
+      ],
+      "cues": [
+        {
+          "id": "city-fixed-streetlight",
+          "lexiconKeys": [
+            "streetlight_fixed"
+          ],
+          "feelings": [
+            "relieved",
+            "safer"
+          ],
+          "needs": [
+            "safety",
+            "responsiveness",
+            "community"
+          ],
+          "example": "The city finally fixed the streetlight after months of emails."
+        }
+      ]
+    }
+  ]
+}

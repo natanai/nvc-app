@@ -63,7 +63,7 @@ const DETECTION_LABELS = {
   fauxFeeling: { singular: 'story word', plural: 'story words' },
 };
 
-const DETECTION_MIN_WORDS = 3;
+const DETECTION_MIN_WORDS = 2;
 const DETECTION_MATCH_LIMIT = 1;
 const DETECTION_NEAR_LIMIT = 6;
 
