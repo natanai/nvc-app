@@ -206,7 +206,7 @@ function analyze(raw, options = {}) {
     analysis.message = options.message || 'Start by anchoring your observation in time and place.';
   } else if (!analysis.message) {
     if (analysis.ok) {
-      analysis.message = 'Looks observational! Load possible matches to explore feelings and needs.';
+      analysis.message = 'Looks observational! Load possible matches to explore feelings and needs that might fit.';
     } else if (issues.length) {
       analysis.message = 'Edit the highlighted language to keep it purely observational.';
     } else {
