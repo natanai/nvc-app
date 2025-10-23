@@ -1898,6 +1898,116 @@ button.site-nav__magnet {
     color: var(--ink-soft);
   }
 
+  .observation-editor__recipe-helper {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-2xl);
+    border: 1px solid color-mix(in srgb, var(--mint) 34%, transparent);
+    background: color-mix(in srgb, #ffffff 94%, var(--mint) 6%);
+  }
+
+  .observation-editor__recipe-helper[data-helper='anchor'] {
+    border-color: color-mix(in srgb, var(--mint) 42%, transparent);
+  }
+
+  .observation-editor__recipe-helper--note {
+    border-color: color-mix(in srgb, var(--gold) 40%, transparent);
+    background: color-mix(in srgb, #ffffff 92%, var(--gold) 8%);
+  }
+
+  .observation-editor__recipe-helper-title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--ink) 85%, transparent);
+  }
+
+  .observation-editor__recipe-helper-summary {
+    margin: 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--outline) 65%, transparent);
+  }
+
+  .observation-editor__recipe-helper-inputs {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .observation-editor__recipe-helper-field {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .observation-editor__recipe-helper-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
+  }
+
+  .observation-editor__recipe-helper-input {
+    border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    border-radius: var(--radius-xl);
+    padding: 0.45rem 0.6rem;
+    font: inherit;
+    width: 100%;
+    background: #ffffff;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-editor__recipe-helper-input:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--mint) 45%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mint) 32%, transparent);
+  }
+
+  .observation-editor__recipe-helper-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .observation-editor__recipe-helper-action {
+    border: none;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--mint) 68%, transparent);
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-weight: 600;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-editor__recipe-helper-action:hover:not(:disabled),
+  .observation-editor__recipe-helper-action:focus-visible:not(:disabled) {
+    background: color-mix(in srgb, var(--mint) 78%, transparent);
+    box-shadow: 0 10px 18px color-mix(in srgb, var(--mint) 26%, transparent);
+  }
+
+  .observation-editor__recipe-helper-action:focus-visible {
+    outline: 3px dashed color-mix(in srgb, var(--mint) 42%, transparent);
+    outline-offset: 2px;
+  }
+
+  .observation-editor__recipe-helper-action:disabled {
+    cursor: not-allowed;
+    background: color-mix(in srgb, var(--outline) 20%, transparent);
+    color: color-mix(in srgb, var(--ink) 58%, transparent);
+    box-shadow: none;
+  }
+
+  .observation-editor__recipe-helper-action[data-success='1'] {
+    background: color-mix(in srgb, var(--gold) 68%, transparent);
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
+  }
+
+  .observation-editor__recipe-helper-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--outline) 60%, transparent);
+  }
+
   .observation-editor__footer {
     display: flex;
     flex-wrap: wrap;

@@ -91,6 +91,32 @@ test('formats observation formula slot summaries', () => {
   );
 });
 
+test('detects asynchronous message senders as context anchors', () => {
+  const emailEvaluation = evaluateObservationFormula('At 9:05 a.m. my boss emailed "I need that deck tonight."');
+  const emailContext = emailEvaluation.slots.context;
+  assert.ok(emailContext.satisfied);
+  assert.ok(emailContext.matches.some(match => match.detectorId === 'message-actor'));
+
+  const voicemailEvaluation = evaluateObservationFormula('At 10:12 a.m. a customer left a voicemail saying "You are useless."');
+  const voicemailContext = voicemailEvaluation.slots.context;
+  assert.ok(voicemailContext.satisfied);
+  assert.ok(voicemailContext.matches.some(match => match.detectorId === 'message-actor'));
+});
+
+test('accepts device sourced sensory descriptions', () => {
+  const evaluation = evaluateObservationFormula('Security footage shows two contractors climbing the fence at 9 p.m.');
+  const sensory = evaluation.slots.sensory;
+  assert.ok(sensory.satisfied);
+  assert.ok(sensory.matches.some(match => match.detectorId === 'device-sensory'));
+});
+
+test('counts collective body-language phrases as measurements', () => {
+  const evaluation = evaluateObservationFormula('During mediation I watched both partners fold their arms.');
+  const measure = evaluation.slots.measure;
+  assert.ok(measure.satisfied);
+  assert.ok(measure.matches.some(match => match.detectorId === 'body-language-count'));
+});
+
 async function run() {
   for (const { name, fn } of tests) {
     try {

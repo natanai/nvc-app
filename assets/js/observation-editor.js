@@ -1,4 +1,4 @@
-import { lintObservation } from '/lib/nvcLint.js';
+import { lintObservation, scaffoldRewrite } from '/lib/nvcLint.js';
 import {
   OBSERVATION_FORMULA_SLOTS,
   createEmptyObservationFormulaState,
@@ -35,6 +35,7 @@ const state = {
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
+  anchorRewrite: { when: '', where: '' },
 };
 
 let guideNavigationBound = false;
@@ -178,6 +179,42 @@ function bind() {
   }
 }
 
+function updateObservationText(value, options = {}) {
+  const textarea = document.getElementById('observation-text');
+  const next = typeof value === 'string' ? value : '';
+  if (textarea && textarea.value !== next) {
+    textarea.value = next;
+  }
+
+  state.text = next;
+  state.scrolledToSuggestions = false;
+  renderHighlightDetails(null);
+
+  if (state.mode !== 'editing') {
+    state.mode = 'editing';
+    state.scrolledToSuggestions = false;
+    renderPanels();
+  }
+
+  if (state.validityStatus === 'valid' || state.validityStatus === 'invalid' || state.validityStatus === 'error') {
+    setValidityStatus('pending', 'Observation updated.');
+  }
+
+  state.fallback = createFallbackState();
+  scheduleAnalysis(options.reason || 'rewrite', { immediate: options.immediate !== false });
+  renderSuggestions();
+
+  if (textarea && options.focus !== false) {
+    requestAnimationFrame(() => {
+      const position = next.length;
+      textarea.focus();
+      if (typeof textarea.setSelectionRange === 'function') {
+        textarea.setSelectionRange(position, position);
+      }
+    });
+  }
+}
+
 function analyze(raw, options = {}) {
   const source = typeof raw === 'string' ? raw : '';
   const trimmed = source.trim();
@@ -268,7 +305,8 @@ function renderObservationGuidelines() {
   }
 
   const host = document.getElementById('observation-guidelines');
-  const groups = collectDetectionGroups(state.analysis?.lint);
+  const lint = state.analysis?.lint || null;
+  const groups = collectDetectionGroups(lint);
   const missing = Array.isArray(state.formulaMissing)
     ? state.formulaMissing.filter(entry => entry && entry.slot)
     : resolveMissingObservationFormulaEntries(state.formula);
@@ -281,12 +319,12 @@ function renderObservationGuidelines() {
     const fragment = document.createDocumentFragment();
 
     if (groups.length) {
-      const detection = buildDetectionGuidelineContent(groups, missing);
+      const detection = buildDetectionGuidelineContent(groups, missing, lint);
       if (detection) {
         fragment.appendChild(detection);
       }
     } else {
-      const defaults = buildDefaultGuidelineContent(missing);
+      const defaults = buildDefaultGuidelineContent(missing, lint);
       if (defaults) {
         fragment.appendChild(defaults);
       }
@@ -340,7 +378,7 @@ function collectDetectionGroups(lint) {
   return groups;
 }
 
-function buildDefaultGuidelineContent(missingEntries) {
+function buildDefaultGuidelineContent(missingEntries, lint) {
   const fragment = document.createDocumentFragment();
   const entries = Array.isArray(missingEntries) ? missingEntries.filter(Boolean) : [];
 
@@ -349,6 +387,16 @@ function buildDefaultGuidelineContent(missingEntries) {
   intro.id = 'observation-guidelines-summary';
   intro.textContent = entries.length ? OBSERVATION_GUIDELINE_INTRO : OBSERVATION_GUIDELINE_COMPLETE;
   fragment.appendChild(intro);
+
+  const anchorHelper = buildAnchorRewriteHelper(lint, entries);
+  if (anchorHelper) {
+    fragment.appendChild(anchorHelper);
+  }
+
+  const measurementPrompt = buildMeasurementPrompt(entries);
+  if (measurementPrompt) {
+    fragment.appendChild(measurementPrompt);
+  }
 
   if (entries.length) {
     const list = buildObservationFormulaGuidanceList(entries);
@@ -365,7 +413,7 @@ function buildDefaultGuidelineContent(missingEntries) {
   return fragment;
 }
 
-function buildDetectionGuidelineContent(groups, missingEntries) {
+function buildDetectionGuidelineContent(groups, missingEntries, lint) {
   const fragment = document.createDocumentFragment();
   const summary = formatDetectionSummary(groups);
   const totalEntries = groups.reduce((sum, group) => sum + group.entries.length, 0);
@@ -411,6 +459,16 @@ function buildDetectionGuidelineContent(groups, missingEntries) {
     promptsIntro.textContent = 'Still need anchors? Try these prompts:';
     fragment.appendChild(promptsIntro);
 
+    const anchorHelper = buildAnchorRewriteHelper(lint, entries);
+    if (anchorHelper) {
+      fragment.appendChild(anchorHelper);
+    }
+
+    const measurementPrompt = buildMeasurementPrompt(entries);
+    if (measurementPrompt) {
+      fragment.appendChild(measurementPrompt);
+    }
+
     const list = buildObservationFormulaGuidanceList(entries);
     if (list) {
       fragment.appendChild(list);
@@ -423,6 +481,198 @@ function buildDetectionGuidelineContent(groups, missingEntries) {
   fragment.appendChild(note);
 
   return fragment;
+}
+
+function buildAnchorRewriteHelper(lint, missingEntries) {
+  if (!shouldOfferAnchorRewrite(lint, missingEntries)) {
+    return null;
+  }
+
+  const helper = document.createElement('div');
+  helper.className = 'observation-editor__recipe-helper';
+  helper.dataset.helper = 'anchor';
+
+  const title = document.createElement('p');
+  title.className = 'observation-editor__recipe-helper-title';
+  title.textContent = 'Pin this moment to a single scene.';
+  helper.appendChild(title);
+
+  const summary = document.createElement('p');
+  summary.className = 'observation-editor__recipe-helper-summary';
+  summary.textContent = "Add when and where it happened, then we'll start a new first sentence using your anchors.";
+  helper.appendChild(summary);
+
+  const inputs = document.createElement('div');
+  inputs.className = 'observation-editor__recipe-helper-inputs';
+
+  inputs.appendChild(
+    createAnchorRewriteField({
+      id: 'observation-anchor-when',
+      label: 'When did it happen?',
+      placeholder: 'e.g., Last Tuesday at 4:15 p.m.',
+      key: 'when',
+    }),
+  );
+
+  inputs.appendChild(
+    createAnchorRewriteField({
+      id: 'observation-anchor-where',
+      label: 'Where or with whom?',
+      placeholder: 'e.g., In the war room with Jenna',
+      key: 'where',
+    }),
+  );
+
+  helper.appendChild(inputs);
+
+  const actions = document.createElement('div');
+  actions.className = 'observation-editor__recipe-helper-actions';
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'observation-editor__recipe-helper-action';
+  button.textContent = 'Insert anchored sentence';
+  button.addEventListener('click', event => {
+    event.preventDefault();
+    applyAnchorRewrite(button);
+  });
+
+  actions.appendChild(button);
+  helper.appendChild(actions);
+
+  const note = document.createElement('p');
+  note.className = 'observation-editor__recipe-helper-note';
+  note.textContent = "We'll drop the anchors in as a first sentence so you can revise the rest of the story.";
+  helper.appendChild(note);
+
+  updateAnchorRewriteButtonState(button);
+
+  return helper;
+}
+
+function buildMeasurementPrompt(missingEntries) {
+  const missingIds = getMissingSlotIds(missingEntries);
+  if (!missingIds.includes('measure')) {
+    return null;
+  }
+  const sensorySatisfied = Boolean(state.formula?.slots?.sensory?.satisfied);
+  if (!sensorySatisfied) {
+    return null;
+  }
+
+  const helper = document.createElement('div');
+  helper.className = 'observation-editor__recipe-helper observation-editor__recipe-helper--note';
+  helper.dataset.helper = 'measure';
+
+  const title = document.createElement('p');
+  title.className = 'observation-editor__recipe-helper-title';
+  title.textContent = 'Add one quick measurement to finish the observation.';
+  helper.appendChild(title);
+
+  const summary = document.createElement('p');
+  summary.className = 'observation-editor__recipe-helper-summary';
+  summary.textContent = 'Try a brief count or duration such as "both partners," "for five seconds," or "two families."';
+  helper.appendChild(summary);
+
+  return helper;
+}
+
+function shouldOfferAnchorRewrite(lint, missingEntries) {
+  const text = typeof state.text === 'string' ? state.text.trim() : '';
+  if (!text) {
+    return false;
+  }
+  const missingIds = getMissingSlotIds(missingEntries);
+  if (!missingIds.includes('time') && !missingIds.includes('context')) {
+    return false;
+  }
+  const flagged = Array.isArray(lint?.flaggedGroups) ? lint.flaggedGroups : [];
+  if (!flagged.length) {
+    return false;
+  }
+  return flagged.some(group => group && ['globalLanguage', 'comparisonStories'].includes(group.key));
+}
+
+function getMissingSlotIds(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+  return entries
+    .map(entry => (entry?.slot?.id || entry?.id || '').trim())
+    .filter(Boolean);
+}
+
+function createAnchorRewriteField({ id, label, placeholder, key }) {
+  const field = document.createElement('div');
+  field.className = 'observation-editor__recipe-helper-field';
+
+  const labelEl = document.createElement('label');
+  labelEl.className = 'observation-editor__recipe-helper-label';
+  if (id) {
+    labelEl.setAttribute('for', id);
+  }
+  labelEl.textContent = label || '';
+  field.appendChild(labelEl);
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.id = id || '';
+  input.className = 'observation-editor__recipe-helper-input';
+  input.placeholder = placeholder || '';
+  input.value = state.anchorRewrite?.[key] || '';
+  input.addEventListener('input', event => {
+    if (!state.anchorRewrite) {
+      state.anchorRewrite = { when: '', where: '' };
+    }
+    state.anchorRewrite[key] = event.target.value || '';
+    const root = field.closest('.observation-editor__recipe-helper');
+    if (root) {
+      const button = root.querySelector('.observation-editor__recipe-helper-action');
+      if (button) {
+        updateAnchorRewriteButtonState(button);
+      }
+    }
+  });
+
+  field.appendChild(input);
+  return field;
+}
+
+function updateAnchorRewriteButtonState(button) {
+  if (!button) {
+    return;
+  }
+  const when = typeof state.anchorRewrite?.when === 'string' ? state.anchorRewrite.when.trim() : '';
+  const where = typeof state.anchorRewrite?.where === 'string' ? state.anchorRewrite.where.trim() : '';
+  button.disabled = !(when && where);
+}
+
+function applyAnchorRewrite(trigger) {
+  const when = typeof state.anchorRewrite?.when === 'string' ? state.anchorRewrite.when.trim() : '';
+  const where = typeof state.anchorRewrite?.where === 'string' ? state.anchorRewrite.where.trim() : '';
+  if (!when || !where) {
+    const focusTarget = !when ? document.getElementById('observation-anchor-when') : document.getElementById('observation-anchor-where');
+    if (focusTarget) {
+      focusTarget.focus();
+    }
+    return;
+  }
+
+  const anchored = scaffoldRewrite({ when, what: where });
+  const existing = typeof state.text === 'string' ? state.text.trim() : '';
+  const rewrite = anchored && existing ? `${anchored}\n${existing}` : anchored || existing;
+  if (!rewrite) {
+    return;
+  }
+
+  updateObservationText(rewrite, { reason: 'anchor-rewrite', immediate: true });
+  if (trigger) {
+    trigger.setAttribute('data-success', '1');
+    setTimeout(() => {
+      trigger.removeAttribute('data-success');
+      updateAnchorRewriteButtonState(trigger);
+    }, 1200);
+  }
 }
 
 function buildInlineGuidelineContent(groups) {
@@ -1137,6 +1387,7 @@ function handleClear() {
   state.fallback = createFallbackState();
   state.scrolledToSuggestions = false;
   state.cueHighlightRanges = [];
+  state.anchorRewrite = { when: '', where: '' };
 
   const field = document.getElementById('observation-text');
   if (field) {
