@@ -1,9 +1,18 @@
 import { lintObservation } from '/lib/nvcLint.js';
-import { loadCueRows, suggestFromObservation } from '/lib/observationSuggest.js';
+import {
+  OBSERVATION_FORMULA_SLOTS,
+  createEmptyObservationFormulaState,
+  evaluateObservationFormula,
+  formatObservationFormulaSlotSummary,
+  getObservationFormulaSlotById,
+  resolveObservationFormulaSlotsForHighlightKey,
+} from '/lib/observationFormula.js';
+import { loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
 
 const state = {
   text: '',
   catalog: createEmptyCatalog(),
+  cueLibrary: createEmptyCueLibrary(),
   cues: [],
   analysis: null,
   mode: 'editing',
@@ -24,6 +33,7 @@ const state = {
   validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
+  formula: createEmptyObservationFormulaState(),
 };
 
 let guideNavigationBound = false;
@@ -78,14 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Promise.all([
     loadCatalog('/data/index.json'),
-    loadCueRows('/data/observation_cues.sanitized.csv').catch(error => {
+    loadCueLibrary('/data/observation_cues.sanitized.csv').catch(error => {
       console.warn('Unable to load observation cue map', error);
-      return [];
+      return createEmptyCueLibrary();
     }),
   ])
-    .then(([catalog, cues]) => {
+    .then(([catalog, cueLibrary]) => {
       state.catalog = catalog;
-      state.cues = cues;
+      state.cueLibrary = cueLibrary;
+      state.cues = Array.isArray(cueLibrary?.cues) ? cueLibrary.cues : [];
       if (!state.text.trim()) {
         state.detectionStatus = 'idle';
         state.detectionMatches = 0;
@@ -176,6 +187,8 @@ function analyze(raw, options = {}) {
   const lint = trimmed ? lintObservation(trimmed, state.catalog) : null;
   const issues = lint ? buildIssueList(lint) : [];
 
+  const formula = evaluateObservationFormula(source, { highlights: lint?.observationHighlights });
+
   const analysis = {
     ok: Boolean(trimmed && lint?.ok),
     issues,
@@ -198,10 +211,12 @@ function analyze(raw, options = {}) {
   }
 
   state.analysis = analysis;
+  state.formula = formula;
   updateDetectionStatus(source, trimmed);
   renderAnalysis();
   renderHighlight();
   renderDetectionStatus();
+  renderObservationFormula();
 }
 
 function renderAnalysis() {
@@ -599,20 +614,53 @@ function renderSuggestions() {
   populateChipList(feelingsHost, feelingsEmpty, current.feelings || []);
   populateChipList(needsHost, needsEmpty, current.needs || []);
 
+  const slotSupportSummary = typeof current.slotSummary?.supportSummary === 'string'
+    ? current.slotSummary.supportSummary.trim()
+    : '';
+  const slotGapSummary = typeof current.slotSummary?.missingSummary === 'string'
+    ? current.slotSummary.missingSummary.trim()
+    : '';
+
   if (fallbackActive) {
     const message = state.fallback.message ||
       (state.fallback.queue.length > 1
         ? 'Showing the nearest matches our detector can offer.'
         : 'Showing the nearest match our detector can offer.');
-    whyHost.textContent = message;
+    const slotNotes = [];
+    if (slotSupportSummary) {
+      slotNotes.push(`Coverage includes your ${slotSupportSummary}.`);
+    }
+    if (slotGapSummary) {
+      slotNotes.push(`Still watching for the ${slotGapSummary}.`);
+    }
+    const slotNote = slotNotes.length ? ` ${slotNotes.join(' ')}` : '';
+    whyHost.textContent = `${message}${slotNote}`.trim();
   } else {
     const cueLabels = (direct.cues || []).map(formatCueLabel).filter(Boolean);
     if (cueLabels.length) {
-      whyHost.textContent = `${cueLabels.length > 1 ? 'Matched cues' : 'Matched cue'} from our detector: ${cueLabels.join(', ')}`;
+      let message = `${cueLabels.length > 1 ? 'Matched cues' : 'Matched cue'} from our detector: ${cueLabels.join(', ')}`;
+      if (slotSupportSummary) {
+        message += `. They reinforce your ${slotSupportSummary} in the observation formula.`;
+        if (slotGapSummary) {
+          message += ` You're still missing the ${slotGapSummary}.`;
+        }
+      } else if (slotGapSummary) {
+        message += `. Focus next on the ${slotGapSummary}.`;
+      }
+      whyHost.textContent = message;
     } else if (!hasDirect && state.fallback.message && !state.fallback.shouldPrompt && !state.fallback.running) {
       whyHost.textContent = state.fallback.message;
     } else if (hasDirect) {
-      whyHost.textContent = 'Suggestions come from our language detector and common observation patterns.';
+      let message = 'Suggestions come from our language detector and common observation patterns.';
+      if (slotSupportSummary) {
+        message += ` They currently cover your ${slotSupportSummary}.`;
+        if (slotGapSummary) {
+          message += ` We’re still listening for the ${slotGapSummary}.`;
+        }
+      } else if (slotGapSummary) {
+        message += ` We’re still listening for the ${slotGapSummary}.`;
+      }
+      whyHost.textContent = message;
     } else {
       whyHost.textContent = 'Our detector didn’t find direct matches. Browse every feeling and need or ask for the closest match.';
     }
@@ -795,11 +843,13 @@ function buildSuggestions(text) {
   if (!text) {
     return createEmptySuggestionSet();
   }
-  const suggestion = suggestFromObservation(text, state.cues || [], 8);
+  const suggestion = suggestFromObservation(text, state.cueLibrary || state.cues || [], 8);
   return {
     feelings: buildSuggestionEntries(suggestion.feelings, 'feeling'),
     needs: buildSuggestionEntries(suggestion.needs, 'need'),
     cues: suggestion.why || [],
+    modules: Array.isArray(suggestion.modules) ? suggestion.modules : [],
+    slotSummary: suggestion.slots || null,
   };
 }
 
@@ -967,7 +1017,11 @@ function buildCatalog(data) {
 }
 
 function createEmptySuggestionSet() {
-  return { feelings: [], needs: [], cues: [] };
+  return { feelings: [], needs: [], cues: [], modules: [], slotSummary: null };
+}
+
+function createEmptyCueLibrary() {
+  return { cues: [], modules: [], slotIndex: {} };
 }
 
 function createFallbackState() {
@@ -1148,7 +1202,7 @@ function computeFallbackQueue(text) {
       continue;
     }
     seen.add(key);
-    results.push({ feelings: entry.feelings, needs: entry.needs, cues: [] });
+    results.push({ feelings: entry.feelings, needs: entry.needs, cues: [], modules: [], slotSummary: null });
     if (results.length >= 6) {
       break;
     }
@@ -1505,6 +1559,115 @@ function renderDetectionSummary() {
   }
 }
 
+function renderObservationFormula() {
+  const host = document.getElementById('observation-formula');
+  const formula = state.formula || createEmptyObservationFormulaState();
+  const order = Array.isArray(formula?.order) ? formula.order : OBSERVATION_FORMULA_SLOTS.map(slot => slot.id);
+
+  const missing = order
+    .map(id => ({ id, state: formula?.slots?.[id], slot: getObservationFormulaSlotById(id) }))
+    .filter(entry => entry.slot && !entry.state?.satisfied);
+
+  if (!host) {
+    renderObservationFormulaGuidance(missing);
+    return;
+  }
+
+  if (!missing.length) {
+    host.innerHTML = '';
+    host.setAttribute('hidden', 'hidden');
+    renderObservationFormulaGuidance([]);
+    return;
+  }
+
+  const text = typeof state.text === 'string' ? state.text : '';
+  const needsLineBreak = Boolean(text) && !text.endsWith('\n');
+  const currentMarkup = buildObservationFormulaCurrentMarkup(text);
+  const ghostParts = missing
+    .map(entry => {
+      const slot = entry.slot;
+      const prompt = slot?.overlayPrompt || slot?.summary || slot?.label || slot?.id;
+      return `<span class="observation-editor__formula-part" data-slot="${escapeHtml(slot.id)}">${escapeHtml(prompt)}</span>`;
+    })
+    .join('');
+  const ghostMarkup = `<span class="observation-editor__formula-ghost">${needsLineBreak ? '<br />' : ''}${ghostParts}</span>`;
+
+  host.innerHTML = `${currentMarkup}${ghostMarkup}`;
+  host.removeAttribute('hidden');
+  renderObservationFormulaGuidance(missing);
+}
+
+function renderObservationFormulaGuidance(missingEntries) {
+  const host = document.getElementById('observation-formula-guidance');
+  if (!host) {
+    return;
+  }
+
+  const entries = Array.isArray(missingEntries)
+    ? missingEntries.filter(Boolean)
+    : [];
+
+  if (!entries.length) {
+    host.innerHTML = '';
+    host.setAttribute('hidden', 'hidden');
+    return;
+  }
+
+  const list = document.createElement('ul');
+  list.className = 'observation-editor__formula-list';
+
+  entries.forEach(entry => {
+    const slot = entry.slot || getObservationFormulaSlotById(entry.id);
+    if (!slot) {
+      return;
+    }
+    const item = document.createElement('li');
+    item.className = 'observation-editor__formula-list-item';
+    item.dataset.slot = slot.id;
+
+    const label = document.createElement('span');
+    label.className = 'observation-editor__formula-list-label';
+    label.textContent = slot.guidance?.question || slot.label || slot.noun || slot.id;
+    item.appendChild(label);
+
+    const summaryText = slot.guidance?.summary || slot.summary || '';
+    if (summaryText) {
+      const summary = document.createElement('p');
+      summary.className = 'observation-editor__formula-list-summary';
+      summary.textContent = summaryText;
+      item.appendChild(summary);
+    }
+
+    const examples = Array.isArray(slot.guidance?.examples) ? slot.guidance.examples.filter(Boolean) : [];
+    if (examples.length) {
+      const example = document.createElement('p');
+      example.className = 'observation-editor__formula-list-examples';
+      const sample = examples.slice(0, 2).join(' · ');
+      example.textContent = `Try: ${sample}`;
+      item.appendChild(example);
+    }
+
+    list.appendChild(item);
+  });
+
+  host.innerHTML = '';
+  if (!list.childNodes.length) {
+    host.setAttribute('hidden', 'hidden');
+    return;
+  }
+  host.appendChild(list);
+  host.removeAttribute('hidden');
+}
+
+function buildObservationFormulaCurrentMarkup(text) {
+  const source = typeof text === 'string' ? text : '';
+  if (!source) {
+    return '<span class="observation-editor__formula-current"></span>';
+  }
+  const html = escapeHtml(source).replace(/\n/g, '<br />');
+  return `<span class="observation-editor__formula-current">${html}</span>`;
+}
+
 function canSubmitMatches() {
   const trimmed = state.analysis?.trimmed || state.text.trim();
   if (!trimmed) {
@@ -1537,6 +1700,8 @@ function renderHighlight() {
             message: typeof item.message === 'string' ? item.message : '',
             key: typeof item.key === 'string' ? item.key : '',
             value: typeof item.value === 'string' ? item.value : '',
+            slotIds: Array.isArray(item.slotIds) ? item.slotIds.slice() : [],
+            slotLabels: Array.isArray(item.slotLabels) ? item.slotLabels.slice() : [],
           }))
         : [];
       return { start: range.start, end: range.end, items };
@@ -1789,6 +1954,13 @@ function formatHighlightMessage(item) {
   if (message) {
     return message;
   }
+  const slotIds = Array.isArray(item.slotIds) ? item.slotIds.filter(Boolean) : [];
+  if (slotIds.length) {
+    const summary = formatObservationFormulaSlotSummary(slotIds, { includeArticle: false });
+    if (summary) {
+      return `Counts toward ${summary}.`;
+    }
+  }
   const label = typeof item.label === 'string' ? item.label.trim() : '';
   if (label) {
     const capitalized = label.charAt(0).toUpperCase() + label.slice(1);
@@ -1832,6 +2004,19 @@ function collectPositiveHighlightTokens(lint) {
     const key = normalized.value.toLowerCase();
     if (!entries.has(key)) {
       entries.set(key, normalized);
+    } else {
+      const existing = entries.get(key);
+      if (normalized.label && !existing.label) {
+        existing.label = normalized.label;
+      }
+      if (normalized.message && !existing.message) {
+        existing.message = normalized.message;
+      }
+      if (normalized.key && !existing.key) {
+        existing.key = normalized.key;
+      }
+      existing.slotIds = mergeUniqueStrings(existing.slotIds || [], normalized.slotIds || []);
+      existing.slotLabels = mergeUniqueStrings(existing.slotLabels || [], normalized.slotLabels || []);
     }
   });
   return Array.from(entries.values());
@@ -1839,11 +2024,11 @@ function collectPositiveHighlightTokens(lint) {
 
 function normalizeObservationHighlight(entry) {
   if (!entry) {
-    return { value: '', label: '', message: '', key: '' };
+    return { value: '', label: '', message: '', key: '', slotIds: [], slotLabels: [] };
   }
   if (typeof entry === 'string') {
     const value = entry.trim();
-    return { value, label: '', message: '', key: '' };
+    return { value, label: '', message: '', key: '', slotIds: [], slotLabels: [] };
   }
   const rawValue = typeof entry.token === 'string'
     ? entry.token
@@ -1854,7 +2039,12 @@ function normalizeObservationHighlight(entry) {
   const label = typeof entry.label === 'string' ? entry.label.trim() : '';
   const message = typeof entry.message === 'string' ? entry.message.trim() : '';
   const key = typeof entry.key === 'string' ? entry.key.trim() : '';
-  return { value, label, message, key };
+  const slotIds = resolveObservationFormulaSlotsForHighlightKey(key);
+  const slotLabels = slotIds
+    .map(id => getObservationFormulaSlotById(id)?.label || '')
+    .map(label => (label ? label.trim() : ''))
+    .filter(Boolean);
+  return { value, label, message, key, slotIds, slotLabels };
 }
 
 function normalizeHighlightToken(token) {
@@ -1884,6 +2074,12 @@ function normalizeHighlightToken(token) {
   if (typeof token.key === 'string' && token.key.trim()) {
     meta.key = token.key.trim();
   }
+  if (Array.isArray(token.slotIds) && token.slotIds.length) {
+    meta.slotIds = mergeUniqueStrings([], token.slotIds);
+  }
+  if (Array.isArray(token.slotLabels) && token.slotLabels.length) {
+    meta.slotLabels = mergeUniqueStrings([], token.slotLabels);
+  }
   return { value, meta: Object.keys(meta).length ? meta : null };
 }
 
@@ -1901,6 +2097,12 @@ function createHighlightData(meta, match) {
     }
     if (typeof meta.source === 'string' && meta.source.trim()) {
       data.source = meta.source.trim();
+    }
+    if (Array.isArray(meta.slotIds) && meta.slotIds.length) {
+      data.slotIds = mergeUniqueStrings([], meta.slotIds);
+    }
+    if (Array.isArray(meta.slotLabels) && meta.slotLabels.length) {
+      data.slotLabels = mergeUniqueStrings([], meta.slotLabels);
     }
   }
   if (typeof match === 'string' && match) {
@@ -2069,6 +2271,12 @@ function normalizeHighlightData(data) {
   if (typeof data.key === 'string' && data.key.trim()) {
     normalized.key = data.key.trim();
   }
+  if (Array.isArray(data.slotIds) && data.slotIds.length) {
+    normalized.slotIds = mergeUniqueStrings([], data.slotIds);
+  }
+  if (Array.isArray(data.slotLabels) && data.slotLabels.length) {
+    normalized.slotLabels = mergeUniqueStrings([], data.slotLabels);
+  }
   return Object.keys(normalized).length ? normalized : null;
 }
 
@@ -2079,7 +2287,22 @@ function createHighlightDataKey(data) {
     (data.source || '').toLowerCase(),
     (data.value || '').toLowerCase(),
     (data.key || '').toLowerCase(),
+    Array.isArray(data.slotIds) ? data.slotIds.join(',').toLowerCase() : '',
   ].join('|');
+}
+
+function mergeUniqueStrings(target, source) {
+  const base = Array.isArray(target) ? target.slice() : [];
+  const seen = new Set(base.map(value => (typeof value === 'string' ? value : '').trim()).filter(Boolean));
+  (Array.isArray(source) ? source : []).forEach(value => {
+    const trimmed = typeof value === 'string' ? value.trim() : '';
+    if (!trimmed || seen.has(trimmed)) {
+      return;
+    }
+    seen.add(trimmed);
+    base.push(trimmed);
+  });
+  return base;
 }
 
 function buildCueHighlightRanges(text, hits) {
