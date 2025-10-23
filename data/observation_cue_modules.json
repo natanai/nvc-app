@@ -1,0 +1,158 @@
+[
+  {
+    "id": "async-replies",
+    "label": "Follow-ups on delayed replies",
+    "summary": "Patterns where messages are seen, delayed, or rerouted instead of answered.",
+    "slotIds": ["time", "context", "measure"],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(seen|read)\\b[^\\n]{0,80}\\b(no|without)\\s+reply",
+        "flags": "i"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\brepl(?:y|ied)\\b[^\\n]{0,80}\\b(hours|days)\\s+(later|after)",
+        "flags": "i"
+      },
+      {
+        "type": "tokens",
+        "tokens": ["voice", "note"],
+        "threshold": 2
+      }
+    ],
+    "examples": [
+      "Message showed as 'seen' yesterday; no reply since then.",
+      "They replied two days after I asked a time-sensitive question.",
+      "After my long update, the only reply was 'k'."
+    ],
+    "cueIds": [
+      "seen-no-reply-variant",
+      "reply-late",
+      "one-word-reply",
+      "topic-changed",
+      "message-forwarded",
+      "voice-note-instead"
+    ]
+  },
+  {
+    "id": "schedule-shifts",
+    "label": "Schedule changes and cancellations",
+    "summary": "Moments where plans move without notice or commitments are canceled.",
+    "slotIds": ["time", "context"],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(cancel(?:ed|led)|rescheduled|pushed\\s+back)\\b",
+        "flags": "i"
+      },
+      {
+        "type": "tokens",
+        "tokens": ["agenda", "switched"],
+        "threshold": 2
+      }
+    ],
+    "examples": [
+      "The agenda switched while we were in the meeting.",
+      "Office hours were canceled without a new time.",
+      "The ride was canceled last minute."
+    ],
+    "cueIds": [
+      "agenda-switched",
+      "decision-pre-announced",
+      "questions-not-logged",
+      "repeated-cancellations",
+      "office-hours-canceled",
+      "ride-canceled-last-minute"
+    ]
+  },
+  {
+    "id": "access-friction",
+    "label": "Sudden access or login friction",
+    "summary": "Barriers that block entry, links, or tools that used to be available.",
+    "slotIds": ["context", "measure"],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(account|login|passcode|two[-\\s]?factor|locked|blocked)\\b",
+        "flags": "i"
+      },
+      {
+        "type": "tokens",
+        "tokens": ["link", "broken"],
+        "threshold": 2
+      }
+    ],
+    "examples": [
+      "The accessibility ramp was missing at the venue.",
+      "The account locked me out and demanded two-factor codes.",
+      "The link in the instructions was broken."
+    ],
+    "cueIds": [
+      "accessibility-missing",
+      "bathroom-closed",
+      "door-propped-open",
+      "seat-taken",
+      "link-broken",
+      "account-locked",
+      "twofactor-required-suddenly"
+    ]
+  },
+  {
+    "id": "environment-irritants",
+    "label": "Environmental irritants that break focus",
+    "summary": "Concrete sensory distractions in shared spaces.",
+    "slotIds": ["context", "sensory"],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(thermostat|temperature|smell|odor|scent|noise|loud)\\b",
+        "flags": "i"
+      },
+      {
+        "type": "tokens",
+        "tokens": ["dishes", "sink"],
+        "threshold": 2
+      }
+    ],
+    "examples": [
+      "The thermostat was maxed and the vents blasted hot air.",
+      "Someone left dishes stacked in the sink overnight.",
+      "A loud bang startled everyone in the hallway."
+    ],
+    "cueIds": [
+      "dishes-left-sink",
+      "thermostat-maxed",
+      "loud-startle",
+      "smell-trigger",
+      "workspace-too-cold",
+      "workspace-too-hot"
+    ]
+  },
+  {
+    "id": "care-promises",
+    "label": "Care-related commitments kept or missed",
+    "summary": "How people follow through on caretaking promises and check-ins.",
+    "slotIds": ["time", "context", "sensory"],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(check(?:ed)?\\s+in|wait(?:ing|ed)|picked\\s+up|forgot|remembered)\\b",
+        "flags": "i"
+      }
+    ],
+    "examples": [
+      "They checked in before asking for another favor.",
+      "We were kept waiting forty minutes after the appointment time.",
+      "Childcare pickup ran late twice this week."
+    ],
+    "cueIds": [
+      "check-in-before-ask",
+      "kept-waiting",
+      "childcare-late-pickup",
+      "child-unsupervised",
+      "special-date-forgotten",
+      "kept-promise"
+    ]
+  }
+]

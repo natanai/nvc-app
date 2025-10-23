@@ -16,7 +16,9 @@ test('matches cue when example chunk covers the variation', () => {
   const profile = createObservationProfile(
     'Yesterday the message was marked as seen and there has been no reply since then.',
   );
-  assert.equal(matchCueRow(profile, row), true);
+  const result = matchCueRow(profile, row);
+  assert.ok(result);
+  assert.ok(['pattern', 'regex', 'tokens'].includes(result.match.type));
 });
 
 test('detects matches with inserted words between tokens', () => {
@@ -24,7 +26,9 @@ test('detects matches with inserted words between tokens', () => {
   const matchers = createCueMatchers({ patterns: [], example });
   const row = { patterns: [], matchers };
   const profile = createObservationProfile('They forwarded my email to managers without asking first.');
-  assert.equal(matchCueRow(profile, row), true);
+  const result = matchCueRow(profile, row);
+  assert.ok(result);
+  assert.ok(result.match.type === 'tokens' || result.match.type === 'regex');
 });
 
 test('preserves direct regex matches for existing cues', () => {
@@ -33,7 +37,9 @@ test('preserves direct regex matches for existing cues', () => {
   const matchers = createCueMatchers({ patterns, example });
   const row = { patterns: patterns.map(p => new RegExp(p, 'i')), matchers };
   const profile = createObservationProfile('Please stop sending voice DM during quiet hours.');
-  assert.equal(matchCueRow(profile, row), true);
+  const result = matchCueRow(profile, row);
+  assert.ok(result);
+  assert.ok(['pattern', 'regex', 'tokens'].includes(result.match.type));
 });
 
 test('handles semicolon-delimited example phrases', () => {
@@ -41,7 +47,9 @@ test('handles semicolon-delimited example phrases', () => {
   const matchers = createCueMatchers({ patterns: [], example });
   const row = { patterns: [], matchers };
   const profile = createObservationProfile('There has been no reply since then on my message.');
-  assert.equal(matchCueRow(profile, row), true);
+  const result = matchCueRow(profile, row);
+  assert.ok(result);
+  assert.ok(result.match.type === 'tokens' || result.match.type === 'regex');
 });
 
 async function run() {
