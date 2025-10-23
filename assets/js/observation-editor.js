@@ -34,6 +34,7 @@ const state = {
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
+  formulaMissing: [],
 };
 
 let guideNavigationBound = false;
@@ -66,19 +67,11 @@ const DETECTION_MIN_WORDS = 3;
 const DETECTION_MATCH_LIMIT = 1;
 const DETECTION_NEAR_LIMIT = 6;
 
-const OBSERVATION_GUIDELINE_INTRO = 'Use these anchors to keep your statement observational.';
+const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
+const OBSERVATION_GUIDELINE_COMPLETE =
+  'All observation anchors are covered. Load possible matches when you’re ready.';
 const OBSERVATION_GUIDELINE_NOTE =
   'Need a refresher? Visit the <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a> below for principles, steps, and examples.';
-const OBSERVATION_GUIDELINE_STEPS = [
-  { title: 'Name the moment', description: 'Specify when and where it happened, and who was involved.' },
-  { title: 'Describe sensory facts', description: 'Report what a camera or microphone would capture.' },
-  { title: 'Remove judgments', description: 'Swap labels, motives, and generalisations for concrete actions.' },
-  { title: 'Quantify & quote', description: 'Use numbers or direct quotes to keep the scene verifiable.' },
-  {
-    title: 'Optional gap',
-    description: 'Mention what you expected while keeping feelings and needs for the next step.',
-  },
-];
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 
@@ -192,6 +185,7 @@ function analyze(raw, options = {}) {
   const issues = lint ? buildIssueList(lint) : [];
 
   const formula = evaluateObservationFormula(source, { highlights: lint?.observationHighlights });
+  const formulaMissing = resolveMissingObservationFormulaEntries(formula);
 
   const analysis = {
     ok: Boolean(trimmed && lint?.ok),
@@ -216,6 +210,7 @@ function analyze(raw, options = {}) {
 
   state.analysis = analysis;
   state.formula = formula;
+  state.formulaMissing = formulaMissing;
   updateDetectionStatus(source, trimmed);
   renderAnalysis();
   renderHighlight();
@@ -274,23 +269,34 @@ function renderObservationGuidelines() {
 
   const host = document.getElementById('observation-guidelines');
   const groups = collectDetectionGroups(state.analysis?.lint);
-
-  if (!groups.length) {
-    if (host) {
-      host.dataset.state = 'default';
-    }
-    if (container) {
-      container.appendChild(buildDefaultGuidelineContent());
-    }
-    return;
-  }
+  const missing = Array.isArray(state.formulaMissing)
+    ? state.formulaMissing.filter(entry => entry && entry.slot)
+    : resolveMissingObservationFormulaEntries(state.formula);
 
   if (host) {
-    host.dataset.state = 'detected';
+    host.dataset.state = groups.length ? 'detected' : 'default';
   }
+
   if (container) {
-    container.appendChild(buildDetectionGuidelineContent(groups));
+    const fragment = document.createDocumentFragment();
+
+    if (groups.length) {
+      const detection = buildDetectionGuidelineContent(groups, missing);
+      if (detection) {
+        fragment.appendChild(detection);
+      }
+    } else {
+      const defaults = buildDefaultGuidelineContent(missing);
+      if (defaults) {
+        fragment.appendChild(defaults);
+      }
+    }
+
+    if (fragment.childNodes.length) {
+      container.appendChild(fragment);
+    }
   }
+
   if (inline) {
     inline.appendChild(buildInlineGuidelineContent(groups));
     inline.removeAttribute('hidden');
@@ -334,25 +340,22 @@ function collectDetectionGroups(lint) {
   return groups;
 }
 
-function buildDefaultGuidelineContent() {
+function buildDefaultGuidelineContent(missingEntries) {
   const fragment = document.createDocumentFragment();
+  const entries = Array.isArray(missingEntries) ? missingEntries.filter(Boolean) : [];
+
   const intro = document.createElement('p');
   intro.className = 'observation-editor__recipe-intro';
   intro.id = 'observation-guidelines-summary';
-  intro.textContent = OBSERVATION_GUIDELINE_INTRO;
+  intro.textContent = entries.length ? OBSERVATION_GUIDELINE_INTRO : OBSERVATION_GUIDELINE_COMPLETE;
   fragment.appendChild(intro);
 
-  const list = document.createElement('ol');
-  list.className = 'observation-editor__recipe-list';
-  OBSERVATION_GUIDELINE_STEPS.forEach(step => {
-    const item = document.createElement('li');
-    const strong = document.createElement('strong');
-    strong.textContent = `${step.title}:`;
-    item.appendChild(strong);
-    item.appendChild(document.createTextNode(` ${step.description}`));
-    list.appendChild(item);
-  });
-  fragment.appendChild(list);
+  if (entries.length) {
+    const list = buildObservationFormulaGuidanceList(entries);
+    if (list) {
+      fragment.appendChild(list);
+    }
+  }
 
   const note = document.createElement('p');
   note.className = 'observation-editor__recipe-note';
@@ -362,7 +365,7 @@ function buildDefaultGuidelineContent() {
   return fragment;
 }
 
-function buildDetectionGuidelineContent(groups) {
+function buildDetectionGuidelineContent(groups, missingEntries) {
   const fragment = document.createDocumentFragment();
   const summary = formatDetectionSummary(groups);
   const totalEntries = groups.reduce((sum, group) => sum + group.entries.length, 0);
@@ -400,6 +403,19 @@ function buildDetectionGuidelineContent(groups) {
 
     fragment.appendChild(section);
   });
+
+  const entries = Array.isArray(missingEntries) ? missingEntries.filter(Boolean) : [];
+  if (entries.length) {
+    const promptsIntro = document.createElement('p');
+    promptsIntro.className = 'observation-editor__recipe-intro';
+    promptsIntro.textContent = 'Still need anchors? Try these prompts:';
+    fragment.appendChild(promptsIntro);
+
+    const list = buildObservationFormulaGuidanceList(entries);
+    if (list) {
+      fragment.appendChild(list);
+    }
+  }
 
   const note = document.createElement('p');
   note.className = 'observation-editor__recipe-note observation-editor__recipe-note--detected';
@@ -1659,11 +1675,10 @@ function renderDetectionSummary() {
 function renderObservationFormula() {
   const host = document.getElementById('observation-formula');
   const formula = state.formula || createEmptyObservationFormulaState();
-  const order = Array.isArray(formula?.order) ? formula.order : OBSERVATION_FORMULA_SLOTS.map(slot => slot.id);
-
-  const missing = order
-    .map(id => ({ id, state: formula?.slots?.[id], slot: getObservationFormulaSlotById(id) }))
-    .filter(entry => entry.slot && !entry.state?.satisfied);
+  const missing = Array.isArray(state.formulaMissing)
+    ? state.formulaMissing
+    : resolveMissingObservationFormulaEntries(formula);
+  state.formulaMissing = missing;
 
   if (!host) {
     renderObservationFormulaGuidance(missing);
@@ -1696,24 +1711,26 @@ function renderObservationFormula() {
 
 function renderObservationFormulaGuidance(missingEntries) {
   const host = document.getElementById('observation-formula-guidance');
-  if (!host) {
-    return;
-  }
-
-  const entries = Array.isArray(missingEntries)
-    ? missingEntries.filter(Boolean)
+  state.formulaMissing = Array.isArray(missingEntries)
+    ? missingEntries.filter(entry => entry && entry.slot)
     : [];
 
-  if (!entries.length) {
+  if (host) {
     host.innerHTML = '';
     host.setAttribute('hidden', 'hidden');
-    return;
+  }
+}
+
+function buildObservationFormulaGuidanceList(entries) {
+  const items = Array.isArray(entries) ? entries.filter(entry => entry && entry.slot) : [];
+  if (!items.length) {
+    return null;
   }
 
   const list = document.createElement('ul');
   list.className = 'observation-editor__formula-list';
 
-  entries.forEach(entry => {
+  items.forEach(entry => {
     const slot = entry.slot || getObservationFormulaSlotById(entry.id);
     if (!slot) {
       return;
@@ -1747,13 +1764,27 @@ function renderObservationFormulaGuidance(missingEntries) {
     list.appendChild(item);
   });
 
-  host.innerHTML = '';
   if (!list.childNodes.length) {
-    host.setAttribute('hidden', 'hidden');
-    return;
+    return null;
   }
-  host.appendChild(list);
-  host.removeAttribute('hidden');
+
+  return list;
+}
+
+function resolveMissingObservationFormulaEntries(formula) {
+  const source = formula || createEmptyObservationFormulaState();
+  const order = Array.isArray(source?.order) ? source.order : OBSERVATION_FORMULA_SLOTS.map(slot => slot.id);
+
+  return order
+    .map(id => {
+      const slot = getObservationFormulaSlotById(id);
+      if (!slot) {
+        return null;
+      }
+      const stateEntry = source?.slots?.[id];
+      return { id, state: stateEntry, slot };
+    })
+    .filter(entry => entry && !entry.state?.satisfied);
 }
 
 function buildObservationFormulaCurrentMarkup(text) {
