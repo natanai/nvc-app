@@ -33,6 +33,26 @@ test('detects expanded observation phrases and counts', () => {
   assert.ok(completed.has('measure'));
 });
 
+test('detects virtual locations introduced with varied prepositions', () => {
+  const slackEvaluation = evaluateObservationFormula('We aligned in Slack about the release.');
+  const slackContext = slackEvaluation.slots.context;
+  assert.ok(slackContext.satisfied);
+  assert.ok(
+    slackContext.matches.some(
+      match => match.detectorId === 'location-virtual' && /\bin Slack\b/i.test(match.value),
+    ),
+  );
+
+  const discordEvaluation = evaluateObservationFormula('I followed up via Discord before the call.');
+  const discordContext = discordEvaluation.slots.context;
+  assert.ok(discordContext.satisfied);
+  assert.ok(
+    discordContext.matches.some(
+      match => match.detectorId === 'location-virtual' && /\bvia Discord\b/i.test(match.value),
+    ),
+  );
+});
+
 test('honours highlight keys when evaluating formula slots', () => {
   const text = 'At noon I saw the note on the door.';
   const evaluation = evaluateObservationFormula(text, {
