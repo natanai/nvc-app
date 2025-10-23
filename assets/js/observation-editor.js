@@ -8,6 +8,7 @@ import {
   resolveObservationFormulaSlotsForHighlightKey,
 } from '/lib/observationFormula.js';
 import { loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
+import { normalizeForScore, tokenizeForScore, scoreCueMatch } from '/lib/observationScoring.js';
 
 const state = {
   text: '',
@@ -1216,7 +1217,7 @@ function computeFallbackQueue(text) {
 
   const tokens = tokenizeForScore(text);
   const tokenSet = new Set(tokens);
-  const normalized = text.toLowerCase();
+  const normalized = normalizeForScore(text);
 
   const candidates = state.cues
     .map(cue => {
@@ -1287,65 +1288,7 @@ function countFlaggedTokens(lint) {
 }
 
 function countWords(value) {
-  if (!value) {
-    return 0;
-  }
-  const matches = String(value).toLowerCase().match(/[a-z0-9'’]+/g);
-  return matches ? matches.length : 0;
-}
-
-function tokenizeForScore(text) {
-  return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
-}
-
-function scoreCueMatch(tokenSet, normalizedText, cue) {
-  const sources = [];
-  if (Array.isArray(cue?.phrases)) {
-    sources.push(...cue.phrases);
-  }
-  if (cue?.phrase) {
-    sources.push(cue.phrase);
-  }
-  if (cue?.example) {
-    sources.push(cue.example);
-  }
-  if (cue?.label) {
-    sources.push(cue.label);
-  }
-  if (cue?.cue) {
-    sources.push(cue.cue);
-  }
-
-  let best = 0;
-  sources.forEach(source => {
-    const value = typeof source === 'string' ? source.trim() : '';
-    if (!value) {
-      return;
-    }
-    const sourceTokens = tokenizeForScore(value);
-    if (!sourceTokens.length) {
-      return;
-    }
-    let matches = 0;
-    sourceTokens.forEach(token => {
-      if (tokenSet.has(token)) {
-        matches += 1;
-      }
-    });
-    let score = matches;
-    if (matches) {
-      score += matches / sourceTokens.length;
-    }
-    const lower = value.toLowerCase();
-    if (normalizedText.includes(lower)) {
-      score += Math.min(4, lower.length / 12);
-    }
-    if (score > best) {
-      best = score;
-    }
-  });
-
-  return best;
+  return tokenizeForScore(value).length;
 }
 
 function setValidityStatus(status, message) {
