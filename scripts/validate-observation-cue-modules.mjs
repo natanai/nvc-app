@@ -54,7 +54,14 @@ function buildReport({ cues, moduleDefs, library }) {
     }
   });
 
-  const fallbackCues = cues.filter(cue => !moduleDefs.some(def => Array.isArray(def.cueIds) && def.cueIds.includes(cue.id)));
+  const fallbackModules = (library.modules || []).filter(
+    module => Array.isArray(module.cueIds) && module.cueIds.length === 1 && module.id.startsWith('module-'),
+  );
+  const fallbackCues = fallbackModules.map(module => module.cueIds[0]);
+  const groupedModules = (library.modules || []).filter(
+    module => Array.isArray(module.cueIds) && module.cueIds.length > 1,
+  );
+  const autoModules = (library.modules || []).filter(module => module.auto);
 
   const issues = [];
   if (missingCues.length) {
@@ -68,18 +75,23 @@ function buildReport({ cues, moduleDefs, library }) {
     cueCount: cues.length,
     moduleCount: library.modules.length,
     customModuleCount: moduleDefs.length,
-    fallbackCount: fallbackCues.length,
+    autoModuleCount: autoModules.length,
+    groupedModuleCount: groupedModules.length,
+    fallbackModuleCount: fallbackModules.length,
     missingCues,
     detectorIssues,
     issues,
-    fallbackCues: fallbackCues.map(cue => cue.id),
+    fallbackCues,
   };
 }
 
 function outputReport(report) {
   console.log(`Loaded ${report.cueCount} cues.`);
-  console.log(`Compiled ${report.moduleCount} cue modules (${report.customModuleCount} custom definitions).`);
-  console.log(`Fallback modules covering individual cues: ${report.fallbackCount}`);
+  console.log(
+    `Compiled ${report.moduleCount} cue modules (${report.customModuleCount} curated, ${report.autoModuleCount} auto-generated).`,
+  );
+  console.log(`Modules covering multiple cues: ${report.groupedModuleCount}`);
+  console.log(`Fallback modules covering individual cues: ${report.fallbackModuleCount}`);
   if (report.missingCues.length) {
     console.warn('Missing cue references:');
     report.missingCues.forEach(entry => {

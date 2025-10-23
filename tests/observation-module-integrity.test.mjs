@@ -45,6 +45,21 @@ async function run() {
     assert.ok(cue.moduleId, `cue ${cue.id} missing moduleId`);
   });
 
+  const groupedModules = modules.filter(module => Array.isArray(module.cueIds) && module.cueIds.length > 1);
+  assert.ok(
+    groupedModules.length >= 50,
+    `expected at least 50 grouped modules, found ${groupedModules.length}`,
+  );
+
+  const autoModules = modules.filter(module => module.auto);
+  assert.ok(autoModules.length >= 40, `expected auto-generated modules to cover repeated cues`);
+
+  const fallbackModules = modules.filter(module => module.id.startsWith('module-'));
+  assert.ok(
+    fallbackModules.length < cues.length / 2,
+    `fallback modules should shrink after grouping, found ${fallbackModules.length}`,
+  );
+
   console.log('Observation module integrity checks passed.');
 }
 
