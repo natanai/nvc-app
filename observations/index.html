@@ -1594,22 +1594,6 @@ button.site-nav__magnet {
     opacity: 0.65;
   }
 
-  .observation-editor__formula-guidance {
-    margin: 0.6rem 0 0;
-    padding: 0.75rem 0.9rem;
-    border-radius: var(--radius-2xl);
-    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-    background: color-mix(in srgb, var(--sky) 12%, transparent);
-    color: color-mix(in srgb, var(--outline) 78%, transparent);
-    display: grid;
-    gap: 0.65rem;
-    font-size: 0.88rem;
-  }
-
-  .observation-editor__formula-guidance[hidden] {
-    display: none;
-  }
-
   .observation-editor__formula-list {
     list-style: none;
     padding: 0;
@@ -1906,18 +1890,6 @@ button.site-nav__magnet {
     font-size: 1.05rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-
-  .observation-editor__recipe-list {
-    margin: 0;
-    padding-left: 1.25rem;
-    display: grid;
-    gap: 0.45rem;
-  }
-
-  .observation-editor__recipe-list li strong {
-    font-weight: 700;
-    color: var(--ink);
   }
 
   .observation-editor__recipe-note {
@@ -2826,12 +2798,6 @@ button.site-nav__magnet {
                     aria-live="polite"
                   ></div>
                 </div>
-                <div
-                  id="observation-formula-guidance"
-                  class="observation-editor__formula-guidance"
-                  hidden
-                  aria-live="polite"
-                ></div>
                 <div class="observation-editor__status observation-editor__status--inline">
                   <div
                     id="observation-detection"
@@ -2927,26 +2893,7 @@ button.site-nav__magnet {
                   id="observation-guidelines-body"
                   class="observation-editor__recipe-body"
                   aria-live="polite"
-                >
-                  <p
-                    id="observation-guidelines-summary"
-                    class="observation-editor__recipe-intro"
-                  >
-                    Use these anchors to keep your statement observational.
-                  </p>
-                  <ol class="observation-editor__recipe-list">
-                    <li><strong>Name the moment:</strong> Specify when and where it happened, and who was involved.</li>
-                    <li><strong>Describe sensory facts:</strong> Report what a camera or microphone would capture.</li>
-                    <li><strong>Remove judgments:</strong> Swap labels, motives, and generalisations for concrete actions.</li>
-                    <li><strong>Quantify &amp; quote:</strong> Use numbers or direct quotes to keep the scene verifiable.</li>
-                    <li><strong>Optional gap:</strong> Mention what you expected while keeping feelings and needs for the next step.</li>
-                  </ol>
-                  <p class="observation-editor__recipe-note">
-                    Need a refresher? Visit the
-                    <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a>
-                    below for principles, steps, and examples.
-                  </p>
-                </div>
+                ></div>
               </aside>
             </div>
             <footer class="observation-editor__footer">
