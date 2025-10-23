@@ -1419,13 +1419,16 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   const flaggedCount = countFlaggedTokens(lint);
   const hasFlagged = flaggedCount > 0;
   const wordCount = countWords(trimmed);
+  const library = state.cueLibrary || null;
+  const libraryModules = Array.isArray(library?.modules) ? library.modules : [];
+  const hasCueLibrary = libraryModules.length > 0;
 
   state.detectionMatchLimit = DETECTION_MATCH_LIMIT;
   state.detectionNearLimit = DETECTION_NEAR_LIMIT;
   state.detectionSource = trimmed;
   state.detectionHasFlagged = hasFlagged;
 
-  if (!state.cues.length) {
+  if (!hasCueLibrary) {
     state.detectionStatus = 'loading';
     state.detectionMatches = 0;
     state.detectionFallbacks = 0;
@@ -1456,7 +1459,8 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     return;
   }
 
-  const suggestion = suggestFromObservation(trimmed, state.cues || [], 4);
+  const suggestionSource = hasCueLibrary ? library : state.cues || [];
+  const suggestion = suggestFromObservation(trimmed, suggestionSource, 4);
   const hits = Array.isArray(suggestion.hits) ? suggestion.hits : [];
   state.cueHighlightRanges = buildCueHighlightRanges(sourceText, hits);
   state.detectionMatches = hits.length;
