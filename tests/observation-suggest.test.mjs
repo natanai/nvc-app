@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 
+import { createCueMatchers } from '../lib/observationCueMatcher.js';
+import { compileObservationCueLibrary } from '../lib/observationCueData.js';
 import { suggestFromObservation } from '../lib/observationSuggest.js';
 
 const tests = [];
@@ -25,9 +27,9 @@ test('summarizes cue modules and formula coverage', () => {
 
   const moduleCounts = Object.fromEntries(result.modules.map(module => [module.id, module.count]));
   assert.deepEqual(moduleCounts, {
-    'module-time-context': 1,
-    'module-sensory': 1,
-    'module-measure': 1,
+    'time-context-module': 1,
+    'sensory-module': 1,
+    'measure-module': 1,
   });
 });
 
@@ -37,63 +39,65 @@ function createMockCueLibrary() {
       id: 'time-context-cue',
       cue: 'time + context support',
       label: 'Time + context support',
-      patterns: [/conference room/i],
       feelings: ['concerned'],
       needs: ['clarity'],
       slotCoverage: ['time', 'context'],
-      moduleId: 'module-time-context',
+      matchers: createCueMatchers({ patterns: ['conference room with alex'] }),
+      example: 'In the conference room with Alex yesterday.',
+      phrases: ['conference room with Alex'],
     },
     {
       id: 'sensory-cue',
       cue: 'sensory detail prompt',
       label: 'Sensory detail prompt',
-      patterns: [/heard him say/i],
       feelings: ['curious'],
       needs: ['understanding'],
       slotCoverage: ['sensory'],
-      moduleId: 'module-sensory',
+      matchers: createCueMatchers({ patterns: ['heard him say'] }),
+      example: 'I heard him say “Please follow up.”',
+      phrases: ['heard him say'],
     },
     {
       id: 'measure-cue',
       cue: 'measurement reinforcement',
       label: 'Measurement reinforcement',
-      patterns: [/5 times/i],
       feelings: ['relieved'],
       needs: ['progress'],
       slotCoverage: ['measure'],
-      moduleId: 'module-measure',
+      matchers: createCueMatchers({ patterns: ['emailed me 5 times'] }),
+      example: 'They emailed me 5 times.',
+      phrases: ['emailed me 5 times'],
     },
   ];
 
-  const modules = [
+  const moduleDefs = [
     {
-      id: 'module-time-context',
+      id: 'time-context-module',
       label: 'Formula coverage: time and context slots',
       summary: 'Supports the time and context slots.',
       slotIds: ['time', 'context'],
+      detectors: [{ type: 'regex', pattern: 'conference room', flags: 'i' }],
+      cueIds: ['time-context-cue'],
     },
     {
-      id: 'module-sensory',
+      id: 'sensory-module',
       label: 'Formula coverage: sensory slot',
       summary: 'Supports the sensory slot.',
       slotIds: ['sensory'],
+      detectors: [{ type: 'regex', pattern: 'heard him say', flags: 'i' }],
+      cueIds: ['sensory-cue'],
     },
     {
-      id: 'module-measure',
+      id: 'measure-module',
       label: 'Formula coverage: measurement slot',
       summary: 'Supports the measurement slot.',
       slotIds: ['measure'],
+      detectors: [{ type: 'regex', pattern: 'emailed me 5 times', flags: 'i' }],
+      cueIds: ['measure-cue'],
     },
   ];
 
-  const slotIndex = {
-    time: ['module-time-context'],
-    context: ['module-time-context'],
-    sensory: ['module-sensory'],
-    measure: ['module-measure'],
-  };
-
-  return { cues, modules, slotIndex };
+  return compileObservationCueLibrary({ cues, modules: moduleDefs });
 }
 
 async function run() {

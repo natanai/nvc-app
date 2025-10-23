@@ -38,6 +38,10 @@ const state = {
 
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
+let analysisTimer = 0;
+let analysisIdleHandle = null;
+
+const ANALYSIS_DEBOUNCE_MS = 140;
 
 const SUGGESTION_BASE_PATHS = {
   feeling: '../feelings/',
@@ -84,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderValidityStatus();
   renderDetectionStatus();
   renderSuggestions();
-  analyze(state.text);
+  scheduleAnalysis('init', { immediate: true });
 
   Promise.all([
     loadCatalog('/data/index.json'),
@@ -102,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.detectionMatches = 0;
         renderDetectionStatus();
       }
-      analyze(state.text);
+      scheduleAnalysis('library-loaded', { immediate: true });
     })
     .catch(error => {
       console.warn('Unable to load observation helpers', error);
@@ -125,7 +129,7 @@ function bind() {
         setValidityStatus('pending', 'Observation updated.');
       }
       state.fallback = createFallbackState();
-      analyze(state.text);
+      scheduleAnalysis('typing');
       renderSuggestions();
     });
     textarea.addEventListener('pointerup', () => {
@@ -1071,6 +1075,7 @@ function handlePrimaryAction() {
 }
 
 function handleSubmit() {
+  cancelScheduledAnalysis();
   const trimmed = state.text.trim();
   if (!trimmed) {
     setValidityStatus('error', 'Add details first.');
@@ -1109,10 +1114,51 @@ function handleClear() {
     field.focus();
   }
 
-  analyze('');
+  scheduleAnalysis('clear', { immediate: true, text: '' });
   setValidityStatus('idle');
   renderPanels();
   renderSuggestions();
+}
+
+function scheduleAnalysis(reason, options = {}) {
+  const immediate = Boolean(options.immediate);
+  const text = Object.prototype.hasOwnProperty.call(options, 'text') ? options.text : state.text;
+  const run = () => {
+    cancelScheduledAnalysis();
+    analyze(text);
+  };
+
+  if (immediate) {
+    run();
+    return;
+  }
+
+  cancelScheduledAnalysis();
+
+  const hasWindow = typeof window !== 'undefined';
+  if (hasWindow && typeof window.requestIdleCallback === 'function') {
+    analysisIdleHandle = window.requestIdleCallback(() => {
+      analysisIdleHandle = null;
+      run();
+    }, { timeout: ANALYSIS_DEBOUNCE_MS });
+  }
+
+  analysisTimer = hasWindow ? window.setTimeout(run, ANALYSIS_DEBOUNCE_MS) : setTimeout(run, ANALYSIS_DEBOUNCE_MS);
+}
+
+function cancelScheduledAnalysis() {
+  if (analysisTimer) {
+    if (typeof window !== 'undefined' && typeof window.clearTimeout === 'function') {
+      window.clearTimeout(analysisTimer);
+    } else {
+      clearTimeout(analysisTimer);
+    }
+    analysisTimer = 0;
+  }
+  if (analysisIdleHandle && typeof window !== 'undefined' && typeof window.cancelIdleCallback === 'function') {
+    window.cancelIdleCallback(analysisIdleHandle);
+    analysisIdleHandle = null;
+  }
 }
 
 function startFallbackSearch() {
