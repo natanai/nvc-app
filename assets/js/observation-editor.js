@@ -1,4 +1,4 @@
-import { lintObservation } from '/lib/nvcLint.js';
+import { lintObservation, scaffoldRewrite } from '/lib/nvcLint.js';
 import {
   OBSERVATION_FORMULA_SLOTS,
   createEmptyObservationFormulaState,
@@ -29,12 +29,14 @@ const state = {
   activeHighlightKey: '',
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
+  detectorStats: null,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
+  anchorRewrite: { when: '', where: '' },
 };
 
 let guideNavigationBound = false;
@@ -89,17 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Unable to load observation cue map', error);
       return createEmptyCueLibrary();
     }),
+    loadDetectorStats('/data/observation_detector_stats.json'),
   ])
-    .then(([catalog, cueLibrary]) => {
+    .then(([catalog, cueLibrary, detectorStats]) => {
       state.catalog = catalog;
       state.cueLibrary = cueLibrary;
       state.cues = Array.isArray(cueLibrary?.cues) ? cueLibrary.cues : [];
+      state.detectorStats = detectorStats;
       if (!state.text.trim()) {
         state.detectionStatus = 'idle';
         state.detectionMatches = 0;
         renderDetectionStatus();
       }
       scheduleAnalysis('library-loaded', { immediate: true });
+      renderDetectionSummary();
     })
     .catch(error => {
       console.warn('Unable to load observation helpers', error);
@@ -175,6 +180,42 @@ function bind() {
       renderHighlightDetails(active || null);
     });
     highlightPopoverBound = true;
+  }
+}
+
+function updateObservationText(value, options = {}) {
+  const textarea = document.getElementById('observation-text');
+  const next = typeof value === 'string' ? value : '';
+  if (textarea && textarea.value !== next) {
+    textarea.value = next;
+  }
+
+  state.text = next;
+  state.scrolledToSuggestions = false;
+  renderHighlightDetails(null);
+
+  if (state.mode !== 'editing') {
+    state.mode = 'editing';
+    state.scrolledToSuggestions = false;
+    renderPanels();
+  }
+
+  if (state.validityStatus === 'valid' || state.validityStatus === 'invalid' || state.validityStatus === 'error') {
+    setValidityStatus('pending', 'Observation updated.');
+  }
+
+  state.fallback = createFallbackState();
+  scheduleAnalysis(options.reason || 'rewrite', { immediate: options.immediate !== false });
+  renderSuggestions();
+
+  if (textarea && options.focus !== false) {
+    requestAnimationFrame(() => {
+      const position = next.length;
+      textarea.focus();
+      if (typeof textarea.setSelectionRange === 'function') {
+        textarea.setSelectionRange(position, position);
+      }
+    });
   }
 }
 
@@ -268,7 +309,8 @@ function renderObservationGuidelines() {
   }
 
   const host = document.getElementById('observation-guidelines');
-  const groups = collectDetectionGroups(state.analysis?.lint);
+  const lint = state.analysis?.lint || null;
+  const groups = collectDetectionGroups(lint);
   const missing = Array.isArray(state.formulaMissing)
     ? state.formulaMissing.filter(entry => entry && entry.slot)
     : resolveMissingObservationFormulaEntries(state.formula);
@@ -281,12 +323,12 @@ function renderObservationGuidelines() {
     const fragment = document.createDocumentFragment();
 
     if (groups.length) {
-      const detection = buildDetectionGuidelineContent(groups, missing);
+      const detection = buildDetectionGuidelineContent(groups, missing, lint);
       if (detection) {
         fragment.appendChild(detection);
       }
     } else {
-      const defaults = buildDefaultGuidelineContent(missing);
+      const defaults = buildDefaultGuidelineContent(missing, lint);
       if (defaults) {
         fragment.appendChild(defaults);
       }
@@ -343,7 +385,7 @@ function collectDetectionGroups(lint) {
   return groups;
 }
 
-function buildDefaultGuidelineContent(missingEntries) {
+function buildDefaultGuidelineContent(missingEntries, lint) {
   const fragment = document.createDocumentFragment();
   const entries = Array.isArray(missingEntries) ? missingEntries.filter(Boolean) : [];
 
@@ -352,6 +394,16 @@ function buildDefaultGuidelineContent(missingEntries) {
   intro.id = 'observation-guidelines-summary';
   intro.textContent = entries.length ? OBSERVATION_GUIDELINE_INTRO : OBSERVATION_GUIDELINE_COMPLETE;
   fragment.appendChild(intro);
+
+  const anchorHelper = buildAnchorRewriteHelper(lint, entries);
+  if (anchorHelper) {
+    fragment.appendChild(anchorHelper);
+  }
+
+  const measurementPrompt = buildMeasurementPrompt(entries);
+  if (measurementPrompt) {
+    fragment.appendChild(measurementPrompt);
+  }
 
   if (entries.length) {
     const list = buildObservationFormulaGuidanceList(entries);
@@ -368,7 +420,7 @@ function buildDefaultGuidelineContent(missingEntries) {
   return fragment;
 }
 
-function buildDetectionGuidelineContent(groups, missingEntries) {
+function buildDetectionGuidelineContent(groups, missingEntries, lint) {
   const fragment = document.createDocumentFragment();
   const summary = formatDetectionSummary(groups);
   const totalEntries = groups.reduce((sum, group) => sum + group.entries.length, 0);
@@ -414,6 +466,16 @@ function buildDetectionGuidelineContent(groups, missingEntries) {
     promptsIntro.textContent = 'Still need anchors? Try these prompts:';
     fragment.appendChild(promptsIntro);
 
+    const anchorHelper = buildAnchorRewriteHelper(lint, entries);
+    if (anchorHelper) {
+      fragment.appendChild(anchorHelper);
+    }
+
+    const measurementPrompt = buildMeasurementPrompt(entries);
+    if (measurementPrompt) {
+      fragment.appendChild(measurementPrompt);
+    }
+
     const list = buildObservationFormulaGuidanceList(entries);
     if (list) {
       fragment.appendChild(list);
@@ -426,6 +488,198 @@ function buildDetectionGuidelineContent(groups, missingEntries) {
   fragment.appendChild(note);
 
   return fragment;
+}
+
+function buildAnchorRewriteHelper(lint, missingEntries) {
+  if (!shouldOfferAnchorRewrite(lint, missingEntries)) {
+    return null;
+  }
+
+  const helper = document.createElement('div');
+  helper.className = 'observation-editor__recipe-helper';
+  helper.dataset.helper = 'anchor';
+
+  const title = document.createElement('p');
+  title.className = 'observation-editor__recipe-helper-title';
+  title.textContent = 'Pin this moment to a single scene.';
+  helper.appendChild(title);
+
+  const summary = document.createElement('p');
+  summary.className = 'observation-editor__recipe-helper-summary';
+  summary.textContent = "Add when and where it happened, then we'll start a new first sentence using your anchors.";
+  helper.appendChild(summary);
+
+  const inputs = document.createElement('div');
+  inputs.className = 'observation-editor__recipe-helper-inputs';
+
+  inputs.appendChild(
+    createAnchorRewriteField({
+      id: 'observation-anchor-when',
+      label: 'When did it happen?',
+      placeholder: 'e.g., Last Tuesday at 4:15 p.m.',
+      key: 'when',
+    }),
+  );
+
+  inputs.appendChild(
+    createAnchorRewriteField({
+      id: 'observation-anchor-where',
+      label: 'Where or with whom?',
+      placeholder: 'e.g., In the war room with Jenna',
+      key: 'where',
+    }),
+  );
+
+  helper.appendChild(inputs);
+
+  const actions = document.createElement('div');
+  actions.className = 'observation-editor__recipe-helper-actions';
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'observation-editor__recipe-helper-action';
+  button.textContent = 'Insert anchored sentence';
+  button.addEventListener('click', event => {
+    event.preventDefault();
+    applyAnchorRewrite(button);
+  });
+
+  actions.appendChild(button);
+  helper.appendChild(actions);
+
+  const note = document.createElement('p');
+  note.className = 'observation-editor__recipe-helper-note';
+  note.textContent = "We'll drop the anchors in as a first sentence so you can revise the rest of the story.";
+  helper.appendChild(note);
+
+  updateAnchorRewriteButtonState(button);
+
+  return helper;
+}
+
+function buildMeasurementPrompt(missingEntries) {
+  const missingIds = getMissingSlotIds(missingEntries);
+  if (!missingIds.includes('measure')) {
+    return null;
+  }
+  const sensorySatisfied = Boolean(state.formula?.slots?.sensory?.satisfied);
+  if (!sensorySatisfied) {
+    return null;
+  }
+
+  const helper = document.createElement('div');
+  helper.className = 'observation-editor__recipe-helper observation-editor__recipe-helper--note';
+  helper.dataset.helper = 'measure';
+
+  const title = document.createElement('p');
+  title.className = 'observation-editor__recipe-helper-title';
+  title.textContent = 'Add one quick measurement to finish the observation.';
+  helper.appendChild(title);
+
+  const summary = document.createElement('p');
+  summary.className = 'observation-editor__recipe-helper-summary';
+  summary.textContent = 'Try a brief count or duration such as "both partners," "for five seconds," or "two families."';
+  helper.appendChild(summary);
+
+  return helper;
+}
+
+function shouldOfferAnchorRewrite(lint, missingEntries) {
+  const text = typeof state.text === 'string' ? state.text.trim() : '';
+  if (!text) {
+    return false;
+  }
+  const missingIds = getMissingSlotIds(missingEntries);
+  if (!missingIds.includes('time') && !missingIds.includes('context')) {
+    return false;
+  }
+  const flagged = Array.isArray(lint?.flaggedGroups) ? lint.flaggedGroups : [];
+  if (!flagged.length) {
+    return false;
+  }
+  return flagged.some(group => group && ['globalLanguage', 'comparisonStories'].includes(group.key));
+}
+
+function getMissingSlotIds(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+  return entries
+    .map(entry => (entry?.slot?.id || entry?.id || '').trim())
+    .filter(Boolean);
+}
+
+function createAnchorRewriteField({ id, label, placeholder, key }) {
+  const field = document.createElement('div');
+  field.className = 'observation-editor__recipe-helper-field';
+
+  const labelEl = document.createElement('label');
+  labelEl.className = 'observation-editor__recipe-helper-label';
+  if (id) {
+    labelEl.setAttribute('for', id);
+  }
+  labelEl.textContent = label || '';
+  field.appendChild(labelEl);
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.id = id || '';
+  input.className = 'observation-editor__recipe-helper-input';
+  input.placeholder = placeholder || '';
+  input.value = state.anchorRewrite?.[key] || '';
+  input.addEventListener('input', event => {
+    if (!state.anchorRewrite) {
+      state.anchorRewrite = { when: '', where: '' };
+    }
+    state.anchorRewrite[key] = event.target.value || '';
+    const root = field.closest('.observation-editor__recipe-helper');
+    if (root) {
+      const button = root.querySelector('.observation-editor__recipe-helper-action');
+      if (button) {
+        updateAnchorRewriteButtonState(button);
+      }
+    }
+  });
+
+  field.appendChild(input);
+  return field;
+}
+
+function updateAnchorRewriteButtonState(button) {
+  if (!button) {
+    return;
+  }
+  const when = typeof state.anchorRewrite?.when === 'string' ? state.anchorRewrite.when.trim() : '';
+  const where = typeof state.anchorRewrite?.where === 'string' ? state.anchorRewrite.where.trim() : '';
+  button.disabled = !(when && where);
+}
+
+function applyAnchorRewrite(trigger) {
+  const when = typeof state.anchorRewrite?.when === 'string' ? state.anchorRewrite.when.trim() : '';
+  const where = typeof state.anchorRewrite?.where === 'string' ? state.anchorRewrite.where.trim() : '';
+  if (!when || !where) {
+    const focusTarget = !when ? document.getElementById('observation-anchor-when') : document.getElementById('observation-anchor-where');
+    if (focusTarget) {
+      focusTarget.focus();
+    }
+    return;
+  }
+
+  const anchored = scaffoldRewrite({ when, what: where });
+  const existing = typeof state.text === 'string' ? state.text.trim() : '';
+  const rewrite = anchored && existing ? `${anchored}\n${existing}` : anchored || existing;
+  if (!rewrite) {
+    return;
+  }
+
+  updateObservationText(rewrite, { reason: 'anchor-rewrite', immediate: true });
+  if (trigger) {
+    trigger.setAttribute('data-success', '1');
+    setTimeout(() => {
+      trigger.removeAttribute('data-success');
+      updateAnchorRewriteButtonState(trigger);
+    }, 1200);
+  }
 }
 
 function buildInlineGuidelineContent(groups) {
@@ -1010,6 +1264,49 @@ async function loadCatalog(url) {
   }
 }
 
+async function loadDetectorStats(url) {
+  if (!url) {
+    return null;
+  }
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    if (data && typeof data === 'object') {
+      return data;
+    }
+  } catch (error) {
+    console.warn('Failed to load observation detector stats', error);
+  }
+  return null;
+}
+
+function formatCount(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return '';
+  }
+  return numeric.toLocaleString();
+}
+
+function formatPercent(value, maximumFractionDigits = 1) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return '';
+  }
+  const fractionDigits = Math.max(0, Math.min(4, Number(maximumFractionDigits) || 0));
+  const options = {
+    minimumFractionDigits: numeric % 1 === 0 ? 0 : Math.min(Math.max(fractionDigits, 1), 4),
+    maximumFractionDigits: Math.min(Math.max(fractionDigits, 0), 4),
+  };
+  if (options.maximumFractionDigits < options.minimumFractionDigits) {
+    options.maximumFractionDigits = options.minimumFractionDigits;
+  }
+  return numeric.toLocaleString(undefined, options);
+}
+
 function buildCatalog(data) {
   const feelings = new Map();
   const needs = new Map();
@@ -1144,6 +1441,7 @@ function handleClear() {
   state.fallback = createFallbackState();
   state.scrolledToSuggestions = false;
   state.cueHighlightRanges = [];
+  state.anchorRewrite = { when: '', where: '' };
 
   const field = document.getElementById('observation-text');
   if (field) {
@@ -1554,6 +1852,7 @@ function renderDetectionSummary() {
   const nearValue = document.getElementById('observation-detection-near');
   const note = document.getElementById('observation-detection-note');
   const coverage = document.getElementById('observation-detection-coverage');
+  const feelingsCoverage = document.getElementById('observation-detection-feelings');
 
   if (!summary) {
     return;
@@ -1675,6 +1974,34 @@ function renderDetectionSummary() {
     } else {
       coverage.textContent = '';
       coverage.setAttribute('hidden', 'hidden');
+    }
+  }
+
+  if (feelingsCoverage) {
+    const stats = state.detectorStats?.feelings;
+    if (stats && Number.isFinite(Number(stats.exactMatchCount)) && Number(stats.exactMatchCount) > 0) {
+      const matchedCount = Number(stats.exactMatchCount) || 0;
+      const uniqueCount = Number(stats.uniqueCueCount) || matchedCount;
+      const totalLibraryCount = Number(stats.totalLibraryCount) || 0;
+      const exactPercent = formatPercent(stats.exactMatchPercentage, 1);
+      const coveragePercent = formatPercent(stats.libraryCoveragePercentage, 1);
+
+      const matchText = uniqueCount !== matchedCount
+        ? `${formatCount(matchedCount)}/${formatCount(uniqueCount)}`
+        : formatCount(matchedCount);
+
+      let message = `Exact feeling matches cover ${matchText} feeling${matchedCount === 1 ? '' : 's'}`;
+      if (uniqueCount !== matchedCount && exactPercent) {
+        message += ` (${exactPercent}%)`;
+      }
+      if (totalLibraryCount > 0 && coveragePercent) {
+        message += ` (~${coveragePercent}% of our feelings library)`;
+      }
+      feelingsCoverage.textContent = `${message}.`;
+      feelingsCoverage.removeAttribute('hidden');
+    } else {
+      feelingsCoverage.textContent = '';
+      feelingsCoverage.setAttribute('hidden', 'hidden');
     }
   }
 }
