@@ -226,6 +226,54 @@ const SCENARIOS = [
     text: 'The city finally fixed the streetlight after months of emails.',
     moduleId: 'infrastructure-response',
   },
+  {
+    text: 'A friend saw my 2 a.m. help text and left me on read for two days.',
+    moduleId: 'digital-communication-gaps',
+  },
+  {
+    text: "The intake nurse kept calling me 'sir' after I introduced myself with she/her pronouns.",
+    moduleId: 'identity-respect-harms',
+  },
+  {
+    text: 'The company livestream started without the captions we requested.',
+    moduleId: 'accessibility-accommodations-denied',
+  },
+  {
+    text: 'Insurance marked the pre-authorization for my top surgery consultation as denied with no human contact to appeal.',
+    moduleId: 'healthcare-access-barriers',
+  },
+  {
+    text: 'Border agents separated our family for secondary screening without telling us why or how long it would take.',
+    moduleId: 'civic-process-obstacles',
+  },
+  {
+    text: 'Utility alerts gave only minutes of warning before a rolling blackout, leaving my refrigerated meds at risk.',
+    moduleId: 'environmental-safety-disruptions',
+  },
+  {
+    text: "The Slack channel showed my request as 'seen' but no one replied or reacted.",
+    moduleId: 'digital-communication-gaps',
+  },
+  {
+    text: 'They insisted on calling my partner her girlfriend even after I said they use they/them pronouns.',
+    moduleId: 'identity-respect-harms',
+  },
+  {
+    text: 'Leadership kept our daily check-in at 6 a.m. despite the accommodation letter about my chronic illness.',
+    moduleId: 'accessibility-accommodations-denied',
+  },
+  {
+    text: 'The utility email gave barely any notice before a planned outage, so my insulin in the fridge was at risk.',
+    moduleId: 'environmental-safety-disruptions',
+  },
+  {
+    text: 'My manager keeps using the shortened English version of my name even though I updated the directory with my chosen name.',
+    moduleId: 'identity-respect-harms',
+  },
+  {
+    text: 'During the heatwave, the cooling centre stayed locked with no staff when we arrived.',
+    moduleId: 'environmental-safety-disruptions',
+  },
 ];
 
 async function run() {

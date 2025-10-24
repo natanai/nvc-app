@@ -1942,6 +1942,729 @@
           "example": "The city finally fixed the streetlight after months of emails."
         }
       ]
+    },
+    {
+      "id": "digital-communication-gaps",
+      "label": "Digital communication gaps",
+      "summary": "Messages acknowledged but unanswered in digital channels.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "left_on_read",
+        "emoji_reaction_only",
+        "ghosted_followup",
+        "thread_silence"
+      ],
+      "feelings": [
+        "lonely",
+        "anxious",
+        "hurt",
+        "frustrated",
+        "confused"
+      ],
+      "needs": [
+        "responsiveness",
+        "connection",
+        "consideration",
+        "clarity",
+        "support"
+      ],
+      "examples": [
+        "A friend saw my urgent text and left me on read for two days.",
+        "My manager replied with only a thumbs-up emoji to my detailed update.",
+        "The family group chat stayed silent when I asked for help with a prescription."
+      ],
+      "cues": [
+        {
+          "id": "digital-left-on-read",
+          "lexiconKeys": [
+            "left_on_read"
+          ],
+          "feelings": [
+            "lonely",
+            "anxious",
+            "hurt"
+          ],
+          "needs": [
+            "responsiveness",
+            "consideration",
+            "connection"
+          ],
+          "example": "A friend saw my 2 a.m. help text and left me on read for two days."
+        },
+        {
+          "id": "digital-emoji-reaction-only",
+          "lexiconKeys": [
+            "emoji_reaction_only"
+          ],
+          "feelings": [
+            "confused",
+            "lonely",
+            "frustrated"
+          ],
+          "needs": [
+            "clarity",
+            "responsiveness",
+            "support"
+          ],
+          "example": "My manager replied to my detailed budget question with just a thumbs-up emoji."
+        },
+        {
+          "id": "digital-ghosted-followup",
+          "lexiconKeys": [
+            "ghosted_followup"
+          ],
+          "feelings": [
+            "anxious",
+            "disappointed",
+            "hurt"
+          ],
+          "needs": [
+            "reliability",
+            "connection",
+            "clarity"
+          ],
+          "example": "A date confirmed weekend plans on the app and then stopped responding to my follow-up messages."
+        },
+        {
+          "id": "digital-thread-silence",
+          "lexiconKeys": [
+            "thread_silence"
+          ],
+          "feelings": [
+            "anxious",
+            "frustrated",
+            "lonely"
+          ],
+          "needs": [
+            "support",
+            "participation",
+            "responsiveness"
+          ],
+          "example": "I begged the family group chat for someone to pick up grandma's prescription but the thread stayed silent."
+        }
+      ]
+    },
+    {
+      "id": "identity-respect-harms",
+      "label": "Identity and pronoun disrespect",
+      "summary": "Misgendering, deadnaming, and cultural disrespect that erase identity.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "misgendered",
+        "deadname",
+        "accent_mocked",
+        "name_override",
+        "pronoun_corrected"
+      ],
+      "feelings": [
+        "hurt",
+        "angry",
+        "embarrassed",
+        "tired",
+        "ashamed"
+      ],
+      "needs": [
+        "respect",
+        "inclusion",
+        "acceptance",
+        "to-be-seen",
+        "autonomy",
+        "safety"
+      ],
+      "examples": [
+        "A nurse kept calling me sir after I shared my pronouns.",
+        "A teacher read my child's old name at the ceremony.",
+        "A coworker mocked my accent in front of clients."
+      ],
+      "cues": [
+        {
+          "id": "identity-misgendered",
+          "lexiconKeys": [
+            "misgendered"
+          ],
+          "feelings": [
+            "hurt",
+            "angry",
+            "tired"
+          ],
+          "needs": [
+            "respect",
+            "inclusion",
+            "to-be-seen"
+          ],
+          "example": "The intake nurse kept calling me 'sir' after I introduced myself with she/her pronouns."
+        },
+        {
+          "id": "identity-deadname",
+          "lexiconKeys": [
+            "deadname"
+          ],
+          "feelings": [
+            "hurt",
+            "ashamed",
+            "angry"
+          ],
+          "needs": [
+            "respect",
+            "acceptance",
+            "safety"
+          ],
+          "example": "My child's teacher read their old name aloud at awards even though we updated the roster months ago."
+        },
+        {
+          "id": "identity-accent-mocked",
+          "lexiconKeys": [
+            "accent_mocked"
+          ],
+          "feelings": [
+            "embarrassed",
+            "angry",
+            "hurt"
+          ],
+          "needs": [
+            "respect",
+            "inclusion",
+            "fairness"
+          ],
+          "example": "A coworker mocked my accent and said clients wouldn't take it seriously."
+        },
+        {
+          "id": "identity-name-override",
+          "lexiconKeys": [
+            "name_override"
+          ],
+          "feelings": [
+            "hurt",
+            "disappointed",
+            "frustrated"
+          ],
+          "needs": [
+            "respect",
+            "to-be-seen",
+            "autonomy"
+          ],
+          "example": "HR listed the anglicized version of my name in the quarterly spotlight even after I updated the roster."
+        },
+        {
+          "id": "identity-pronoun-corrected",
+          "lexiconKeys": [
+            "pronoun_corrected"
+          ],
+          "feelings": [
+            "angry",
+            "embarrassed",
+            "hurt"
+          ],
+          "needs": [
+            "respect",
+            "acceptance",
+            "autonomy"
+          ],
+          "example": "A barista corrected me when I introduced my partner as 'they,' insisting on gendered terms."
+        }
+      ]
+    },
+    {
+      "id": "accessibility-accommodations-denied",
+      "label": "Accessibility and accommodation gaps",
+      "summary": "Requests for access features ignored or refused, leaving people without support.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "no_ramp",
+        "no_captions",
+        "fragrance_trigger",
+        "strobe_trigger",
+        "schedule_barrier"
+      ],
+      "feelings": [
+        "frustrated",
+        "anxious",
+        "tired",
+        "unsafe",
+        "vulnerable"
+      ],
+      "needs": [
+        "safety",
+        "support",
+        "consideration",
+        "care",
+        "inclusion"
+      ],
+      "examples": [
+        "The venue had steps and no ramp so my wheelchair could not enter.",
+        "The company livestream started without the captions we requested.",
+        "Management refused to move the daily check-in later after I requested an accommodation for chronic pain."
+      ],
+      "cues": [
+        {
+          "id": "access-no-ramp",
+          "lexiconKeys": [
+            "no_ramp"
+          ],
+          "feelings": [
+            "frustrated",
+            "unsafe",
+            "tired"
+          ],
+          "needs": [
+            "safety",
+            "support",
+            "consideration"
+          ],
+          "example": "The new brunch spot has three steps and no ramp so my wheelchair couldn't fit through the entrance."
+        },
+        {
+          "id": "access-no-captions",
+          "lexiconKeys": [
+            "no_captions"
+          ],
+          "feelings": [
+            "frustrated",
+            "anxious",
+            "tired"
+          ],
+          "needs": [
+            "communication",
+            "support",
+            "inclusion"
+          ],
+          "example": "The company livestream started without the captions we requested."
+        },
+        {
+          "id": "access-fragrance-trigger",
+          "lexiconKeys": [
+            "fragrance_trigger"
+          ],
+          "feelings": [
+            "sick",
+            "frustrated",
+            "anxious"
+          ],
+          "needs": [
+            "safety",
+            "care",
+            "consideration"
+          ],
+          "example": "My office mate sprayed cologne before every shift even with the fragrance-free sign posted."
+        },
+        {
+          "id": "access-strobe-trigger",
+          "lexiconKeys": [
+            "strobe_trigger"
+          ],
+          "feelings": [
+            "scared",
+            "anxious",
+            "vulnerable"
+          ],
+          "needs": [
+            "safety",
+            "support",
+            "consideration"
+          ],
+          "example": "The venue refused to disable the strobe lights even after I explained my seizure triggers."
+        },
+        {
+          "id": "access-schedule-barrier",
+          "lexiconKeys": [
+            "schedule_barrier"
+          ],
+          "feelings": [
+            "tired",
+            "discouraged",
+            "hurt"
+          ],
+          "needs": [
+            "consideration",
+            "support",
+            "care"
+          ],
+          "example": "My manager refused to move our daily stand-up later after I explained my morning pain flare-ups."
+        }
+      ]
+    },
+    {
+      "id": "healthcare-access-barriers",
+      "label": "Healthcare and affirming care barriers",
+      "summary": "Care teams dismiss symptoms, deny medication, or block affirming support.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "ivf_dismissal",
+        "miscarriage_support_gap",
+        "pain_medication_denied",
+        "gender_affirming_denial",
+        "doula_access_denied"
+      ],
+      "feelings": [
+        "sad",
+        "anxious",
+        "hurt",
+        "frustrated",
+        "scared"
+      ],
+      "needs": [
+        "care",
+        "support",
+        "clarity",
+        "respect",
+        "trust",
+        "autonomy"
+      ],
+      "examples": [
+        "The specialist said to just relax after another failed IVF cycle.",
+        "The urgent clinic doctor ended the visit without explaining warning signs after my miscarriage.",
+        "Insurance marked the pre-authorization for my gender-affirming surgery consult as denied with no appeal contact."
+      ],
+      "cues": [
+        {
+          "id": "health-ivf-dismissal",
+          "lexiconKeys": [
+            "ivf_dismissal"
+          ],
+          "feelings": [
+            "sad",
+            "anxious",
+            "frustrated"
+          ],
+          "needs": [
+            "care",
+            "support",
+            "clarity"
+          ],
+          "example": "My OB/GYN brushed off our third failed IVF cycle by saying 'just relax' instead of offering options."
+        },
+        {
+          "id": "health-miscarriage-support-gap",
+          "lexiconKeys": [
+            "miscarriage_support_gap"
+          ],
+          "feelings": [
+            "scared",
+            "sad",
+            "vulnerable"
+          ],
+          "needs": [
+            "care",
+            "clarity",
+            "support"
+          ],
+          "example": "At the urgent clinic, the doctor ended the visit without explaining what warning signs to watch for."
+        },
+        {
+          "id": "health-pain-medication-denied",
+          "lexiconKeys": [
+            "pain_medication_denied"
+          ],
+          "feelings": [
+            "angry",
+            "scared",
+            "frustrated"
+          ],
+          "needs": [
+            "care",
+            "trust",
+            "support"
+          ],
+          "example": "The pharmacist denied my pain medication refill even with the specialist's note."
+        },
+        {
+          "id": "health-gender-affirming-denial",
+          "lexiconKeys": [
+            "gender_affirming_denial"
+          ],
+          "feelings": [
+            "hurt",
+            "angry",
+            "anxious"
+          ],
+          "needs": [
+            "respect",
+            "support",
+            "autonomy"
+          ],
+          "example": "Insurance marked the pre-authorization for my top surgery consultation as denied with no human contact to appeal."
+        },
+        {
+          "id": "health-doula-access-denied",
+          "lexiconKeys": [
+            "doula_access_denied"
+          ],
+          "feelings": [
+            "scared",
+            "anxious",
+            "frustrated"
+          ],
+          "needs": [
+            "support",
+            "safety",
+            "care"
+          ],
+          "example": "The hospital canceled my doula's access because of a sudden policy change and offered no alternatives."
+        }
+      ]
+    },
+    {
+      "id": "civic-process-obstacles",
+      "label": "Civic and bureaucratic obstacles",
+      "summary": "Institutional processes that detain, delay, or deny without clear recourse.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "border_secondary",
+        "police_search",
+        "benefits_lost",
+        "court_reschedule",
+        "permit_denied"
+      ],
+      "feelings": [
+        "scared",
+        "angry",
+        "powerless",
+        "anxious",
+        "frustrated"
+      ],
+      "needs": [
+        "safety",
+        "fairness",
+        "predictability",
+        "clarity",
+        "participation",
+        "respect"
+      ],
+      "examples": [
+        "Border agents separated our family for secondary screening without explanation.",
+        "Police searched me during my commute while waving others through.",
+        "The benefits office lost my paperwork and made me restart the process."
+      ],
+      "cues": [
+        {
+          "id": "civic-border-secondary",
+          "lexiconKeys": [
+            "border_secondary"
+          ],
+          "feelings": [
+            "scared",
+            "powerless",
+            "anxious"
+          ],
+          "needs": [
+            "safety",
+            "fairness",
+            "predictability"
+          ],
+          "example": "Border agents separated our family for secondary screening without telling us why or how long it would take."
+        },
+        {
+          "id": "civic-police-search",
+          "lexiconKeys": [
+            "police_search"
+          ],
+          "feelings": [
+            "scared",
+            "angry",
+            "powerless"
+          ],
+          "needs": [
+            "safety",
+            "respect",
+            "fairness"
+          ],
+          "example": "Police stopped me on my commute to search my backpack 'randomly' while others walked by."
+        },
+        {
+          "id": "civic-benefits-lost",
+          "lexiconKeys": [
+            "benefits_lost"
+          ],
+          "feelings": [
+            "frustrated",
+            "anxious",
+            "worried"
+          ],
+          "needs": [
+            "stability",
+            "support",
+            "predictability"
+          ],
+          "example": "The welfare office lost my SNAP recertification packet and made me restart the process from scratch."
+        },
+        {
+          "id": "civic-court-reschedule",
+          "lexiconKeys": [
+            "court_reschedule"
+          ],
+          "feelings": [
+            "frustrated",
+            "anxious",
+            "stressed"
+          ],
+          "needs": [
+            "predictability",
+            "fairness",
+            "respect"
+          ],
+          "example": "The court clerk rescheduled my custody hearing with zero notice so I only learned when I showed up."
+        },
+        {
+          "id": "civic-permit-denied",
+          "lexiconKeys": [
+            "permit_denied"
+          ],
+          "feelings": [
+            "angry",
+            "disappointed",
+            "powerless"
+          ],
+          "needs": [
+            "participation",
+            "fairness",
+            "clarity"
+          ],
+          "example": "Our neighborhood association denied the protest permit without citing any policy."
+        }
+      ]
+    },
+    {
+      "id": "environmental-safety-disruptions",
+      "label": "Environmental safety disruptions",
+      "summary": "Climate and infrastructure emergencies that leave people without safe options.",
+      "slotIds": [
+        "time",
+        "context",
+        "sensory"
+      ],
+      "lexiconKeys": [
+        "wildfire_closure",
+        "flood_road",
+        "heatwave_support",
+        "air_quality_windows",
+        "blackout_warning"
+      ],
+      "feelings": [
+        "anxious",
+        "overwhelmed",
+        "worried",
+        "scared",
+        "vulnerable"
+      ],
+      "needs": [
+        "safety",
+        "support",
+        "stability",
+        "predictability",
+        "care"
+      ],
+      "examples": [
+        "Wildfire smoke closed the school and the district site listed no backup plan.",
+        "A flash flood washed out the only road out of town overnight.",
+        "Utility alerts gave only minutes of warning before a rolling blackout."
+      ],
+      "cues": [
+        {
+          "id": "environment-wildfire-closure",
+          "lexiconKeys": [
+            "wildfire_closure"
+          ],
+          "feelings": [
+            "anxious",
+            "overwhelmed",
+            "worried"
+          ],
+          "needs": [
+            "safety",
+            "support",
+            "stability"
+          ],
+          "example": "Wildfire smoke closed my kid's school and the district site listed no backup plan for the day."
+        },
+        {
+          "id": "environment-flood-road",
+          "lexiconKeys": [
+            "flood_road"
+          ],
+          "feelings": [
+            "scared",
+            "anxious",
+            "vulnerable"
+          ],
+          "needs": [
+            "safety",
+            "support",
+            "predictability"
+          ],
+          "example": "Yesterday's flash flood submerged the only road out of our town and stranded us overnight."
+        },
+        {
+          "id": "environment-heatwave-support",
+          "lexiconKeys": [
+            "heatwave_support"
+          ],
+          "feelings": [
+            "overwhelmed",
+            "worried",
+            "anxious"
+          ],
+          "needs": [
+            "care",
+            "support",
+            "safety"
+          ],
+          "example": "The city failed to open the promised cooling center during this week's heatwave."
+        },
+        {
+          "id": "environment-air-quality-windows",
+          "lexiconKeys": [
+            "air_quality_windows"
+          ],
+          "feelings": [
+            "anxious",
+            "frustrated",
+            "unsafe"
+          ],
+          "needs": [
+            "safety",
+            "care",
+            "consideration"
+          ],
+          "example": "Our office windows stayed shut despite hazardous air quality alerts downtown."
+        },
+        {
+          "id": "environment-blackout-warning",
+          "lexiconKeys": [
+            "blackout_warning"
+          ],
+          "feelings": [
+            "anxious",
+            "scared",
+            "stressed"
+          ],
+          "needs": [
+            "stability",
+            "safety",
+            "support"
+          ],
+          "example": "Utility alerts gave only minutes of warning before a rolling blackout, leaving my refrigerated meds at risk."
+        }
+      ]
     }
   ]
 }

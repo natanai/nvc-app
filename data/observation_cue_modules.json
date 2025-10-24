@@ -1455,5 +1455,495 @@
       "responsiveness",
       "community"
     ]
+  },
+  {
+    "id": "digital-communication-gaps",
+    "label": "Digital communication gaps",
+    "summary": "Messages acknowledged but unanswered in digital channels.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bleft\\s+(?:me\\s+)?on\\s+read\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bon\\s+read\\b[^\\n]{0,60}\\b(?:no\\s+(?:reply|response|answer)|never\\s+(?:wrote|responded|texted|called))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:read|seen)\\b[^\\n]{0,80}\\bno\\s+(?:reply|response|answer)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:read|seen)\\b[^\\n]{0,80}\\bno\\s+one\\s+(?:replied|responded|answered)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:sent|gave|left)\\b[^\\n]{0,80}\\b(?:thumbs(?:-?up)?|👍|heart|❤️|emoji)\\b[^\\n]{0,80}\\b(?:instead\\s+of|without)\\b[^\\n]{0,40}\\b(?:reply|response|message)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bemoji[-\\s]?only\\b[^\\n]{0,60}\\bresponse\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bghost(?:ed|ing)\\b[^\\n]{0,80}\\b(?:plans|messages|me)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bstopped\\s+responding\\b[^\\n]{0,80}\\b(?:after|once)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bno\\s+reply\\b[^\\n]{0,80}\\b(?:after|since)\\b[^\\n]{0,60}\\b(?:confirm|follow[-\\s]?up|message)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel|slack)\\b[^\\n]{0,160}\\b(?:stayed\\s+silent|went\\s+quiet|no\\s+reply|never\\s+responded)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bmuted\\b[^\\n]{0,80}\\bthread\\b[^\\n]{0,60}\\bno\\s+response\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A friend saw my urgent text and left me on read for two days.",
+      "My manager replied with only a thumbs-up emoji to my detailed update.",
+      "The family group chat stayed silent when I asked for help with a prescription."
+    ],
+    "cueIds": [
+      "digital-left-on-read",
+      "digital-emoji-reaction-only",
+      "digital-ghosted-followup",
+      "digital-thread-silence"
+    ],
+    "feelings": [
+      "lonely",
+      "anxious",
+      "hurt",
+      "frustrated",
+      "confused"
+    ],
+    "needs": [
+      "responsiveness",
+      "connection",
+      "consideration",
+      "clarity",
+      "support"
+    ]
+  },
+  {
+    "id": "identity-respect-harms",
+    "label": "Identity and pronoun disrespect",
+    "summary": "Misgendering, deadnaming, and cultural disrespect that erase identity.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:misgender(?:ed|ing)|called|referred|kept\\s+calling)\\b[^\\n]{0,120}\\b(?:me|them|my\\s+(?:child|kid|partner))\\b[^\\n]{0,120}\\b(?:sir|ma'?am|he|she)\\b[^\\n]{0,120}\\b(?:after|even\\s+though)\\b[^\\n]{0,120}\\b(?:told|introduced|shared|my\\s+pronouns)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdeadname(?:d)?\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:u(?:sed|ses|sing)|said|read)\\b[^\\n]{0,80}\\b(?:old|birth|former)\\s+name\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:mock(?:ed|ing)|made\\s+fun\\s+of)\\b[^\\n]{0,120}\\b(?:accent|pronunciation|the\\s+way\\s+I\\s+speak)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:anglicized|americanized|shorten(?:ed)?|english)\\b[^\\n]{0,120}\\bname\\b[^\\n]{0,80}\\b(?:after|even\\s+though)\\b[^\\n]{0,80}\\b(?:asked|updated|told)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:insisted|kept|keeps|told|prefers)\\b[^\\n]{0,160}\\b(?:calling|using)\\b[^\\n]{0,160}\\b(?:english|american|short|easier)\\b[^\\n]{0,120}\\bname\\b[^\\n]{0,160}\\b(?:after|even\\s+though)\\b[^\\n]{0,160}\\b(?:preferred|told|requested|updated)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:insisted|kept|keeps|told|demanded)\\b[^\\n]{0,160}\\b(?:use|uses|using|say|said|call(?:ed|ing)?|refer(?:red)?\\s+to)\\b[^\\n]{0,160}\\b(?:he|she|him|her|boyfriend|girlfriend|husband|wife)\\b[^\\n]{0,200}\\b(?:after|even\\s+though)\\b[^\\n]{0,160}\\b(?:I|we)\\b[^\\n]{0,160}\\b(?:said|shared|introduced|explained|told)\\b[^\\n]{0,160}\\b(?:they|them|their|they\\/them|pronouns|nonbinary|gender[-\\s]?neutral|partner)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bcorrected\\b[^\\n]{0,160}\\b(?:when|as)\\b[^\\n]{0,120}\\b(?:I|we)\\b[^\\n]{0,160}\\b(?:introduced|called|described)\\b[^\\n]{0,160}\\b(?:my\\s+partner|friend|child|sibling)\\b[^\\n]{0,120}\\b(?:as|with)\\b[^\\n]{0,80}\\b(?:they/them|they|nonbinary)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:insisted|demanded)\\b[^\\n]{0,160}\\b(?:gendered\\s+terms?|boyfriend|girlfriend|husband|wife)\\b[^\\n]{0,160}\\b(?:instead\\s+of|rather\\s+than)\\b[^\\n]{0,160}\\b(?:gender[-\\s]?neutral|partner|they/them|nonbinary)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "A nurse kept calling me sir after I shared my pronouns.",
+      "A teacher read my child's old name at the ceremony.",
+      "A coworker mocked my accent in front of clients."
+    ],
+    "cueIds": [
+      "identity-misgendered",
+      "identity-deadname",
+      "identity-accent-mocked",
+      "identity-name-override",
+      "identity-pronoun-corrected"
+    ],
+    "feelings": [
+      "hurt",
+      "angry",
+      "embarrassed",
+      "tired",
+      "ashamed"
+    ],
+    "needs": [
+      "respect",
+      "inclusion",
+      "acceptance",
+      "to-be-seen",
+      "autonomy",
+      "safety"
+    ]
+  },
+  {
+    "id": "accessibility-accommodations-denied",
+    "label": "Accessibility and accommodation gaps",
+    "summary": "Requests for access features ignored or refused, leaving people without support.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no|without)\\s+(?:ramp|wheelchair\\s+access|accessible\\s+entrance)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bwheelchair\\b[^\\n]{0,120}\\b(?:couldn'?t|can't|wouldn't)\\s+(?:fit|enter|get\\s+in)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no|without)\\s+(?:captions|subtitles|captioning)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bcaption\\b[^\\n]{0,120}\\b(?:request|ticket)\\b[^\\n]{0,120}\\b(?:den(?:ied|ies|ying)|ign(?:ored|ores|oring)|left\\s+pending|went\\s+unanswered)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fragrance|perfume|cologne|scent)\\b[^\\n]{0,160}\\b(?:ign(?:ored|ores|oring)|broke|violat(?:ed|es|ing)|breached)\\b[^\\n]{0,160}\\b(?:agreement|policy|request|sign)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bstrobe\\b[^\\n]{0,160}\\b(?:light|lights|lighting)\\b[^\\n]{0,120}\\b(?:refused|wouldn't|didn't)\\b[^\\n]{0,80}\\bturn\\s+off\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bseizure\\b[^\\n]{0,160}\\btrigger\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:chronic\\s+(?:pain|illness)|disability|flare|treatment)\\b[^\\n]{0,160}\\b(?:request(?:ed)?|asked|needed)\\b[^\\n]{0,120}\\b(?:later|different|adjust(?:ed|ment)?|flexible)\\b[^\\n]{0,160}\\b(?:schedule|time|shift|meeting)\\b[^\\n]{0,160}\\b(?:den(?:ied|ies|ying)|refus(?:ed|es|ing)|ign(?:ored|ores|oring)|dism(?:issed|issing)|left\\s+unchanged)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|stand[-\\s]?up|shift|check[-\\s]?in|schedule)\\b[^\\n]{0,160}\\b(?:kept|stayed|stuck|scheduled)\\b[^\\n]{0,160}\\b(?:early|same\\s+time|unchanged|before\\s+sunrise|\\d+\\s*a\\.?m\\.?|dawn|sunrise)\\b[^\\n]{0,160}\\b(?:after|even\\s+though|despite)\\b[^\\n]{0,160}\\b(?:accommodation|disability|medical|pain|health|illness)\\b[^\\n]{0,160}\\b(?:request|note|letter)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:kept|keeps|keeping|kept\\s+on)\\b[^\\n]{0,160}\\b(?:meeting|stand[-\\s]?up|shift|check[-\\s]?in|schedule)\\b[^\\n]{0,160}\\b(?:at|for)\\b[^\\n]{0,80}\\b(?:early|sunrise|dawn|\\d+\\s*a\\.?m\\.?)\\b[^\\n]{0,160}\\b(?:despite|after|even\\s+though)\\b[^\\n]{0,160}\\b(?:accommodation|disability|medical|pain|health|illness)\\b[^\\n]{0,160}\\b(?:request|note|letter)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The venue had steps and no ramp so my wheelchair could not enter.",
+      "The company livestream started without the captions we requested.",
+      "Management refused to move the daily check-in later after I requested an accommodation for chronic pain."
+    ],
+    "cueIds": [
+      "access-no-ramp",
+      "access-no-captions",
+      "access-fragrance-trigger",
+      "access-strobe-trigger",
+      "access-schedule-barrier"
+    ],
+    "feelings": [
+      "frustrated",
+      "anxious",
+      "tired",
+      "unsafe",
+      "vulnerable"
+    ],
+    "needs": [
+      "safety",
+      "support",
+      "consideration",
+      "care",
+      "inclusion"
+    ]
+  },
+  {
+    "id": "healthcare-access-barriers",
+    "label": "Healthcare and affirming care barriers",
+    "summary": "Care teams dismiss symptoms, deny medication, or block affirming support.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:IVF|fertility|cycle)\\b[^\\n]{0,160}\\b(?:told|said)\\b[^\\n]{0,120}\\b(?:just\\s+relax|relax|calm\\s+down)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:doctor|provider|OB\\/?GYN)\\b[^\\n]{0,160}\\b(?:dismissed|brushed\\s+off)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bmiscarriage\\b[^\\n]{0,160}\\b(?:refused|wouldn't|didn't)\\b[^\\n]{0,120}\\b(?:explain|tell|review|go\\s+over)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:pharmacist|pharmacy)\\b[^\\n]{0,160}\\b(?:refused|denied)\\b[^\\n]{0,160}\\b(?:pain|medication|prescription|refill)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:top\\s+surgery|gender\\s+affirm(?:ing|ation)|transition|hormone)\\b[^\\n]{0,160}\\b(?:denied|reje(?:cted|ction|cts)|refus(?:ed|es|ing)|no\\s+authorization|no\\s+approval)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:denied|reje(?:cted|ction|cts)|refus(?:ed|es|ing))\\b[^\\n]{0,120}\\b(?:pre[-\\s]?authorization|authorization)\\b[^\\n]{0,160}\\b(?:top\\s+surgery|gender\\s+affirm(?:ing|ation)|transition|hormone)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bpre[-\\s]?authorization\\b[^\\n]{0,120}\\b(?:denied|reje(?:cted|ction|cts)|refus(?:ed|es|ing))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:doula|support\\s+person)\\b[^\\n]{0,160}\\b(?:denied|refused|canceled|revoked)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The specialist said to just relax after another failed IVF cycle.",
+      "The urgent clinic doctor ended the visit without explaining warning signs after my miscarriage.",
+      "Insurance marked the pre-authorization for my gender-affirming surgery consult as denied with no appeal contact."
+    ],
+    "cueIds": [
+      "health-ivf-dismissal",
+      "health-miscarriage-support-gap",
+      "health-pain-medication-denied",
+      "health-gender-affirming-denial",
+      "health-doula-access-denied"
+    ],
+    "feelings": [
+      "sad",
+      "anxious",
+      "hurt",
+      "frustrated",
+      "scared"
+    ],
+    "needs": [
+      "care",
+      "support",
+      "clarity",
+      "respect",
+      "trust",
+      "autonomy"
+    ]
+  },
+  {
+    "id": "civic-process-obstacles",
+    "label": "Civic and bureaucratic obstacles",
+    "summary": "Institutional processes that detain, delay, or deny without clear recourse.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:border|customs)\\b[^\\n]{0,160}\\b(?:secondary|detain(?:ed)?|held|separated)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bpolice\\b[^\\n]{0,160}\\b(?:stopped|pulled|detained)\\b[^\\n]{0,160}\\b(?:search(?:ed)?|went\\s+through|looked\\s+through)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:welfare|SNAP|benefits|recertification|unemployment)\\b[^\\n]{0,160}\\b(?:lost|misplaced|missing)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bpaperwork\\b[^\\n]{0,120}\\b(?:lost|misplaced)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:court|hearing|trial|appearance)\\b[^\\n]{0,160}\\b(?:rescheduled|moved|canceled)\\b[^\\n]{0,120}\\b(?:without|no)\\s+(?:notice|call|warning)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:permit|application|license)\\b[^\\n]{0,160}\\b(?:denied|reje(?:cted|ction|cts)|refus(?:ed|es|ing))\\b[^\\n]{0,120}\\b(?:without|no)\\s+(?:reason|policy|explanation)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Border agents separated our family for secondary screening without explanation.",
+      "Police searched me during my commute while waving others through.",
+      "The benefits office lost my paperwork and made me restart the process."
+    ],
+    "cueIds": [
+      "civic-border-secondary",
+      "civic-police-search",
+      "civic-benefits-lost",
+      "civic-court-reschedule",
+      "civic-permit-denied"
+    ],
+    "feelings": [
+      "scared",
+      "angry",
+      "powerless",
+      "anxious",
+      "frustrated"
+    ],
+    "needs": [
+      "safety",
+      "fairness",
+      "predictability",
+      "clarity",
+      "participation",
+      "respect"
+    ]
+  },
+  {
+    "id": "environmental-safety-disruptions",
+    "label": "Environmental safety disruptions",
+    "summary": "Climate and infrastructure emergencies that leave people without safe options.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bwildfire\\b[^\\n]{0,160}\\b(?:smoke|air)\\b[^\\n]{0,160}\\b(?:school|campus|daycare)\\b[^\\n]{0,80}\\b(?:closed|canceled|shut)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:flash|flood|mudslide)\\b[^\\n]{0,160}\\b(?:road|bridge|highway)\\b[^\\n]{0,120}\\b(?:submerged|washed\\s+out|blocked|closed)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:heatwave|extreme\\s+heat|triple\\s+digit)\\b[^\\n]{0,160}\\b(?:cooling\\s+center|shelter|relief\\s+center)\\b[^\\n]{0,120}\\b(?:never\\s+opened|closed|missing|wasn't\\s+open)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:heatwave|extreme\\s+heat|triple\\s+digit)\\b[^\\n]{0,160}\\b(?:cooling\\s+centre|relief\\s+centre|cooling\\s+site)\\b[^\\n]{0,160}\\b(?:no\\s+staff|no\\s+one\\s+opened|locked|unavailable)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:air\\s+quality|AQI|smoke)\\b[^\\n]{0,160}\\b(?:windows?|vents?|doors)\\b[^\\n]{0,120}\\b(?:stayed\\s+shut|wouldn't\\s+open|kept\\s+closed)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:rolling\\s+blackout|power\\s+shutoff|planned\\s+outage|grid\\s+shutdown)\\b[^\\n]{0,160}\\b(?:\\d+\\s*minute|ten\\s+minute|fifteen\\s+minute|thirty\\s+minute|minutes'?|hours'?|little|barely|no)\\b[^\\n]{0,120}\\b(?:notice|warning|lead\\s+time)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:notice|warning)\\b[^\\n]{0,160}\\b(?:minutes?|hours?)\\b[^\\n]{0,160}\\b(?:before|prior\\s+to)\\b[^\\n]{0,160}\\b(?:outage|blackout|power\\s+cut|shutoff)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\boutage\\b[^\\n]{0,160}\\b(?:meds?|insulin|medicine|refrigerated|medical\\s+supplies)\\b[^\\n]{0,160}\\b(?:spoil|warm|at\\s+risk|unsafe)\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Wildfire smoke closed the school and the district site listed no backup plan.",
+      "A flash flood washed out the only road out of town overnight.",
+      "Utility alerts gave only minutes of warning before a rolling blackout."
+    ],
+    "cueIds": [
+      "environment-wildfire-closure",
+      "environment-flood-road",
+      "environment-heatwave-support",
+      "environment-air-quality-windows",
+      "environment-blackout-warning"
+    ],
+    "feelings": [
+      "anxious",
+      "overwhelmed",
+      "worried",
+      "scared",
+      "vulnerable"
+    ],
+    "needs": [
+      "safety",
+      "support",
+      "stability",
+      "predictability",
+      "care"
+    ]
   }
 ]
