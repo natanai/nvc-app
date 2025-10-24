@@ -9,6 +9,9 @@ import {
 } from '/lib/observationFormula.js';
 import { loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
 
+const INPUT_MODE_FREEFORM = 'freeform';
+const INPUT_MODE_BUILDER = 'builder';
+
 const state = {
   text: '',
   catalog: createEmptyCatalog(),
@@ -37,6 +40,8 @@ const state = {
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
   anchorRewrite: { when: '', where: '' },
+  inputMode: INPUT_MODE_FREEFORM,
+  builder: createEmptySentenceBuilderState(),
 };
 
 let guideNavigationBound = false;
@@ -77,12 +82,46 @@ const OBSERVATION_GUIDELINE_NOTE =
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 
+function createEmptySentenceBuilderState() {
+  return {
+    ready: false,
+    modules: [],
+    moduleLookup: new Map(),
+    cueLookup: new Map(),
+    sentencesByCueId: new Map(),
+    selectedModuleId: '',
+    selectedCueId: '',
+    selectedSentence: '',
+    selectedCueSummary: '',
+    selectedModuleSummary: '',
+  };
+}
+
+function formatBuilderTitle(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '';
+  }
+  return trimmed
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .split(' ')
+    .map(token => (token ? token[0].toUpperCase() + token.slice(1) : ''))
+    .join(' ');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   bind();
   renderPanels();
   renderValidityStatus();
   renderDetectionStatus();
   renderSuggestions();
+  renderSentenceBuilder();
+  renderEditorMode();
+
   scheduleAnalysis('init', { immediate: true });
 
   Promise.all([
@@ -92,8 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return createEmptyCueLibrary();
     }),
     loadDetectorStats('/data/observation_detector_stats.json'),
+    loadObservationBlueprints('/data/observation_module_blueprints.json'),
   ])
-    .then(([catalog, cueLibrary, detectorStats]) => {
+    .then(([catalog, cueLibrary, detectorStats, blueprints]) => {
       state.catalog = catalog;
       state.cueLibrary = cueLibrary;
       state.cues = Array.isArray(cueLibrary?.cues) ? cueLibrary.cues : [];
@@ -105,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       scheduleAnalysis('library-loaded', { immediate: true });
       renderDetectionSummary();
+      initializeSentenceBuilder(blueprints);
     })
     .catch(error => {
       console.warn('Unable to load observation helpers', error);
@@ -167,6 +208,21 @@ function bind() {
     });
   }
 
+  const modeButtons = document.querySelectorAll('[data-observation-mode]');
+  if (modeButtons.length) {
+    modeButtons.forEach(button => {
+      button.addEventListener('click', event => {
+        event.preventDefault();
+        const requestedMode = button.dataset.observationMode === INPUT_MODE_BUILDER
+          ? INPUT_MODE_BUILDER
+          : INPUT_MODE_FREEFORM;
+        setEditorMode(requestedMode);
+      });
+    });
+  }
+
+  bindSentenceBuilder();
+
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -180,6 +236,629 @@ function bind() {
       renderHighlightDetails(active || null);
     });
     highlightPopoverBound = true;
+  }
+}
+
+function loadObservationBlueprints(url) {
+  const source = typeof url === 'string' && url ? url : '/data/observation_module_blueprints.json';
+  return fetch(source)
+    .then(response => (response.ok ? response.json() : null))
+    .catch(error => {
+      console.warn('Unable to load observation module blueprints', error);
+      return null;
+    });
+}
+
+function initializeSentenceBuilder(blueprints) {
+  if (!state.builder) {
+    state.builder = createEmptySentenceBuilderState();
+  }
+  const builder = state.builder;
+  const cueList = Array.isArray(state.cues) ? state.cues : [];
+  const cueMap = new Map(cueList.map(cue => [cue.id, cue]));
+  const libraryModules = Array.isArray(state.cueLibrary?.modules) ? state.cueLibrary.modules : [];
+  const moduleSources = mergeBlueprintWithLibraryModules(blueprints, libraryModules, cueMap);
+
+  const normalizedModules = moduleSources
+    .map(module => normalizeBuilderModule(module, cueMap))
+    .filter(Boolean);
+
+  builder.modules = normalizedModules;
+  builder.moduleLookup = new Map(normalizedModules.map(module => [module.id, module]));
+  builder.cueLookup = new Map();
+  builder.sentencesByCueId = new Map();
+
+  normalizedModules.forEach(module => {
+    module.cues.forEach(cue => {
+      builder.cueLookup.set(cue.id, cue);
+      builder.sentencesByCueId.set(cue.id, cue.sentences);
+    });
+  });
+
+  builder.ready = normalizedModules.length > 0;
+
+  if (builder.ready) {
+    if (!builder.selectedModuleId || !builder.moduleLookup.has(builder.selectedModuleId)) {
+      builder.selectedModuleId = normalizedModules[0].id;
+    }
+    const activeModule = builder.moduleLookup.get(builder.selectedModuleId);
+    if (!builder.selectedCueId || !builder.cueLookup.has(builder.selectedCueId)) {
+      builder.selectedCueId = activeModule?.cues?.[0]?.id || '';
+    }
+    const activeCue = builder.cueLookup.get(builder.selectedCueId);
+    const sentences = builder.sentencesByCueId.get(builder.selectedCueId) || [];
+    if (!sentences.includes(builder.selectedSentence)) {
+      builder.selectedSentence = sentences[0] || '';
+    }
+    builder.selectedCueSummary = activeCue?.summary || activeModule?.slotSummary || '';
+    builder.selectedModuleSummary = activeModule?.slotSummary || '';
+  } else {
+    builder.selectedModuleId = '';
+    builder.selectedCueId = '';
+    builder.selectedSentence = '';
+    builder.selectedCueSummary = '';
+    builder.selectedModuleSummary = '';
+  }
+
+  renderSentenceBuilder();
+  const trimmedText = typeof state.text === 'string' ? state.text.trim() : '';
+  syncSentenceBuilderToText(state.text);
+  const selectedSentence = typeof builder.selectedSentence === 'string' ? builder.selectedSentence.trim() : '';
+  if (state.inputMode === INPUT_MODE_BUILDER) {
+    if ((!trimmedText && selectedSentence) || (trimmedText && trimmedText === selectedSentence)) {
+      applySentenceBuilderSelection({ focus: false });
+    }
+  }
+}
+
+function mergeBlueprintWithLibraryModules(blueprints, libraryModules, cueMap) {
+  const modules = [];
+  const blueprintList = Array.isArray(blueprints?.modules)
+    ? blueprints.modules
+    : Array.isArray(blueprints)
+      ? blueprints
+      : [];
+  const moduleIndex = new Map();
+
+  blueprintList.forEach(entry => {
+    if (!entry || typeof entry !== 'object') {
+      return;
+    }
+    const id = typeof entry.id === 'string' ? entry.id.trim() : '';
+    if (!id) {
+      return;
+    }
+    const module = {
+      id,
+      label: typeof entry.label === 'string' ? entry.label.trim() : '',
+      summary: typeof entry.summary === 'string' ? entry.summary.trim() : '',
+      slotSummary: typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '',
+      cues: Array.isArray(entry.cues) ? entry.cues.slice() : [],
+    };
+    moduleIndex.set(id, module);
+    modules.push(module);
+  });
+
+  (Array.isArray(libraryModules) ? libraryModules : []).forEach(entry => {
+    if (!entry || typeof entry !== 'object') {
+      return;
+    }
+    const id = typeof entry.id === 'string' ? entry.id.trim() : '';
+    if (!id) {
+      return;
+    }
+    const existing = moduleIndex.get(id);
+    if (existing) {
+      if (!existing.label && typeof entry.label === 'string') {
+        existing.label = entry.label.trim();
+      }
+      if (!existing.summary && typeof entry.summary === 'string') {
+        existing.summary = entry.summary.trim();
+      }
+      if (!existing.slotSummary && typeof entry.slotSummary === 'string') {
+        existing.slotSummary = entry.slotSummary.trim();
+      }
+      const existingCueIds = new Set(
+        Array.isArray(existing.cues)
+          ? existing.cues
+              .map(cue => (typeof cue?.id === 'string' ? cue.id.trim() : ''))
+              .filter(Boolean)
+          : [],
+      );
+      (Array.isArray(entry.cueIds) ? entry.cueIds : []).forEach(cueId => {
+        const trimmedCueId = typeof cueId === 'string' ? cueId.trim() : '';
+        if (!trimmedCueId || existingCueIds.has(trimmedCueId)) {
+          return;
+        }
+        const cueMeta = cueMap.get(trimmedCueId);
+        if (!existing.cues) {
+          existing.cues = [];
+        }
+        existing.cues.push({ id: trimmedCueId, example: cueMeta?.example || '' });
+        existingCueIds.add(trimmedCueId);
+      });
+    } else {
+      const cues = (Array.isArray(entry.cueIds) ? entry.cueIds : [])
+        .map(cueId => {
+          const trimmedCueId = typeof cueId === 'string' ? cueId.trim() : '';
+          if (!trimmedCueId) {
+            return null;
+          }
+          const cueMeta = cueMap.get(trimmedCueId);
+          return { id: trimmedCueId, example: cueMeta?.example || '' };
+        })
+        .filter(Boolean);
+      const module = {
+        id,
+        label: typeof entry.label === 'string' ? entry.label.trim() : '',
+        summary: typeof entry.summary === 'string' ? entry.summary.trim() : '',
+        slotSummary: typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '',
+        cues,
+      };
+      modules.push(module);
+      moduleIndex.set(id, module);
+    }
+  });
+
+  return modules;
+}
+
+function normalizeBuilderModule(entry, cueMap) {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+  const id = typeof entry.id === 'string' ? entry.id.trim() : '';
+  if (!id) {
+    return null;
+  }
+  const label = typeof entry.label === 'string' && entry.label.trim() ? entry.label.trim() : formatBuilderTitle(id);
+  const summary = typeof entry.summary === 'string' ? entry.summary.trim() : '';
+  const slotSummary = typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '';
+  const cues = Array.isArray(entry.cues) ? entry.cues : [];
+  const normalizedCues = cues
+    .map(cue => normalizeBuilderCue(cue, cueMap, slotSummary))
+    .filter(Boolean);
+  if (!normalizedCues.length) {
+    return null;
+  }
+  return {
+    id,
+    label,
+    summary,
+    slotSummary,
+    cues: normalizedCues,
+  };
+}
+
+function normalizeBuilderCue(entry, cueMap, moduleSlotSummary) {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+  const id = typeof entry.id === 'string' ? entry.id.trim() : '';
+  if (!id) {
+    return null;
+  }
+  const cueMeta = cueMap.get(id);
+  const label = cueMeta?.label || formatBuilderTitle(id);
+  const exampleCandidates = [];
+  if (typeof entry.example === 'string') {
+    exampleCandidates.push(entry.example.trim());
+  }
+  if (Array.isArray(entry.examples)) {
+    entry.examples.forEach(example => {
+      if (typeof example === 'string') {
+        exampleCandidates.push(example.trim());
+      }
+    });
+  }
+  if (cueMeta?.example) {
+    exampleCandidates.push(cueMeta.example.trim());
+  }
+  const uniqueSentences = [];
+  const seen = new Set();
+  exampleCandidates.forEach(sentence => {
+    const trimmed = typeof sentence === 'string' ? sentence.trim() : '';
+    if (!trimmed || seen.has(trimmed)) {
+      return;
+    }
+    seen.add(trimmed);
+    uniqueSentences.push(trimmed);
+  });
+  if (!uniqueSentences.length) {
+    return null;
+  }
+  const cueSlotSummary = typeof cueMeta?.slotSummary === 'string' ? cueMeta.slotSummary.trim() : '';
+  return {
+    id,
+    label,
+    summary: cueSlotSummary || moduleSlotSummary,
+    sentences: uniqueSentences,
+  };
+}
+
+function bindSentenceBuilder() {
+  const moduleSelect = document.getElementById('observation-builder-module');
+  if (moduleSelect) {
+    moduleSelect.addEventListener('change', event => {
+      state.builder.selectedModuleId = event.target.value || '';
+      state.builder.selectedCueId = '';
+      state.builder.selectedSentence = '';
+      renderSentenceBuilder();
+      applySentenceBuilderSelection({ focus: false });
+    });
+  }
+
+  const cueSelect = document.getElementById('observation-builder-cue');
+  if (cueSelect) {
+    cueSelect.addEventListener('change', event => {
+      state.builder.selectedCueId = event.target.value || '';
+      state.builder.selectedSentence = '';
+      renderSentenceBuilder();
+      applySentenceBuilderSelection({ focus: false });
+    });
+  }
+
+  const sentenceSelect = document.getElementById('observation-builder-sentence');
+  if (sentenceSelect) {
+    sentenceSelect.addEventListener('change', event => {
+      state.builder.selectedSentence = event.target.value || '';
+      renderSentenceBuilderPreview();
+      applySentenceBuilderSelection({ focus: false });
+    });
+  }
+
+  const applyButton = document.getElementById('observation-builder-apply');
+  if (applyButton) {
+    applyButton.addEventListener('click', event => {
+      event.preventDefault();
+      applySentenceBuilderSelection({ focus: state.inputMode !== INPUT_MODE_BUILDER });
+    });
+  }
+}
+
+function setEditorMode(mode) {
+  const next = mode === INPUT_MODE_BUILDER ? INPUT_MODE_BUILDER : INPUT_MODE_FREEFORM;
+  if (state.inputMode === next) {
+    if (next === INPUT_MODE_BUILDER) {
+      syncSentenceBuilderToText(state.text);
+      renderSentenceBuilder();
+    } else {
+      focusObservationTextarea();
+    }
+    renderEditorMode();
+    return;
+  }
+
+  state.inputMode = next;
+
+  if (next === INPUT_MODE_BUILDER) {
+    const previousText = typeof state.text === 'string' ? state.text.trim() : '';
+    syncSentenceBuilderToText(state.text);
+    renderSentenceBuilder();
+    renderEditorMode();
+    const selectedSentence = typeof state.builder?.selectedSentence === 'string'
+      ? state.builder.selectedSentence.trim()
+      : '';
+    if ((!previousText && selectedSentence) || (previousText && previousText === selectedSentence)) {
+      applySentenceBuilderSelection({ focus: false });
+    }
+  } else {
+    renderEditorMode();
+    focusObservationTextarea();
+  }
+}
+
+function renderEditorMode() {
+  const mode = state.inputMode === INPUT_MODE_BUILDER ? INPUT_MODE_BUILDER : INPUT_MODE_FREEFORM;
+  const wrapper = document.querySelector('.observation-editor__input-wrapper');
+  if (wrapper) {
+    wrapper.dataset.mode = mode;
+  }
+  const textarea = document.getElementById('observation-text');
+  if (textarea) {
+    if (mode === INPUT_MODE_BUILDER) {
+      textarea.setAttribute('hidden', 'hidden');
+      textarea.setAttribute('aria-hidden', 'true');
+    } else {
+      textarea.removeAttribute('hidden');
+      textarea.removeAttribute('aria-hidden');
+    }
+  }
+  const builderHost = document.getElementById('observation-sentence-builder');
+  if (builderHost) {
+    if (mode === INPUT_MODE_BUILDER) {
+      builderHost.removeAttribute('hidden');
+    } else {
+      builderHost.setAttribute('hidden', 'hidden');
+    }
+  }
+  const buttons = document.querySelectorAll('[data-observation-mode]');
+  buttons.forEach(button => {
+    const buttonMode = button.dataset.observationMode === INPUT_MODE_BUILDER ? INPUT_MODE_BUILDER : INPUT_MODE_FREEFORM;
+    const isActive = buttonMode === mode;
+    if (isActive) {
+      button.classList.add('is-active');
+      button.setAttribute('aria-pressed', 'true');
+    } else {
+      button.classList.remove('is-active');
+      button.setAttribute('aria-pressed', 'false');
+    }
+  });
+}
+
+function renderSentenceBuilder() {
+  const builder = state.builder || createEmptySentenceBuilderState();
+  const moduleSelect = document.getElementById('observation-builder-module');
+  const moduleSummary = document.getElementById('observation-builder-module-summary');
+  const cueSelect = document.getElementById('observation-builder-cue');
+  const cueSummary = document.getElementById('observation-builder-cue-summary');
+  const sentenceSelect = document.getElementById('observation-builder-sentence');
+  const applyButton = document.getElementById('observation-builder-apply');
+
+  if (!builder.ready || !builder.modules.length) {
+    if (moduleSelect) {
+      populateSentenceBuilderSelect(moduleSelect, [], { placeholder: 'Loading observation library…' });
+    }
+    if (moduleSummary) {
+      moduleSummary.textContent = '';
+      moduleSummary.setAttribute('hidden', 'hidden');
+    }
+    if (cueSelect) {
+      populateSentenceBuilderSelect(cueSelect, [], { placeholder: 'Choose a library above' });
+    }
+    if (cueSummary) {
+      cueSummary.textContent = '';
+      cueSummary.setAttribute('hidden', 'hidden');
+    }
+    if (sentenceSelect) {
+      populateSentenceBuilderSelect(sentenceSelect, [], { placeholder: 'Pick a focus to see sentences' });
+    }
+    if (applyButton) {
+      applyButton.disabled = true;
+    }
+    renderSentenceBuilderPreview();
+    return;
+  }
+
+  const modules = builder.modules;
+  let activeModule = builder.moduleLookup.get(builder.selectedModuleId);
+  if (!activeModule) {
+    activeModule = modules[0];
+    builder.selectedModuleId = activeModule ? activeModule.id : '';
+  }
+
+  if (moduleSelect) {
+    const moduleOptions = modules.map(module => ({
+      value: module.id,
+      label: module.label || formatBuilderTitle(module.id),
+    }));
+    populateSentenceBuilderSelect(moduleSelect, moduleOptions, {
+      selected: builder.selectedModuleId,
+      placeholder: 'Select a library topic',
+    });
+  }
+
+  if (moduleSummary) {
+    const summaryParts = [];
+    if (activeModule?.summary) {
+      summaryParts.push(activeModule.summary);
+    }
+    if (activeModule?.slotSummary) {
+      summaryParts.push(`Structure covers ${activeModule.slotSummary}.`);
+    }
+    const summaryText = summaryParts.join(' ').trim();
+    if (summaryText) {
+      moduleSummary.textContent = summaryText;
+      moduleSummary.removeAttribute('hidden');
+    } else {
+      moduleSummary.textContent = '';
+      moduleSummary.setAttribute('hidden', 'hidden');
+    }
+    builder.selectedModuleSummary = activeModule?.slotSummary || '';
+  }
+
+  const cues = Array.isArray(activeModule?.cues) ? activeModule.cues : [];
+  if (cues.length) {
+    if (!cues.some(cue => cue.id === builder.selectedCueId)) {
+      builder.selectedCueId = cues[0].id;
+    }
+  } else {
+    builder.selectedCueId = '';
+  }
+
+  const activeCue = cues.find(cue => cue.id === builder.selectedCueId) || null;
+
+  if (cueSelect) {
+    const cueOptions = cues.map(cue => ({
+      value: cue.id,
+      label: cue.label || formatBuilderTitle(cue.id),
+    }));
+    populateSentenceBuilderSelect(cueSelect, cueOptions, {
+      selected: builder.selectedCueId,
+      placeholder: activeModule ? 'Select a sentence focus' : 'Choose a library topic first',
+    });
+  }
+
+  if (cueSummary) {
+    const summaryText = activeCue?.summary && activeCue.summary !== activeModule?.slotSummary
+      ? `Focus covers ${activeCue.summary}.`
+      : '';
+    if (summaryText) {
+      cueSummary.textContent = summaryText;
+      cueSummary.removeAttribute('hidden');
+    } else {
+      cueSummary.textContent = '';
+      cueSummary.setAttribute('hidden', 'hidden');
+    }
+  }
+
+  builder.selectedCueSummary = activeCue?.summary || activeModule?.slotSummary || '';
+
+  const sentences = activeCue ? activeCue.sentences.filter(Boolean) : [];
+  if (sentences.length && !sentences.includes(builder.selectedSentence)) {
+    builder.selectedSentence = sentences[0];
+  } else if (!sentences.length) {
+    builder.selectedSentence = '';
+  }
+
+  if (sentenceSelect) {
+    const sentenceOptions = sentences.map((sentence, index) => ({
+      value: sentence,
+      label: formatSentenceOptionLabel(sentence, index),
+    }));
+    populateSentenceBuilderSelect(sentenceSelect, sentenceOptions, {
+      selected: builder.selectedSentence,
+      placeholder: activeCue ? 'No example sentences available yet' : 'Select a sentence focus first',
+    });
+  }
+
+  if (applyButton) {
+    applyButton.disabled = !builder.selectedSentence;
+  }
+
+  renderSentenceBuilderPreview();
+}
+
+function populateSentenceBuilderSelect(select, options, { selected = '', placeholder = '' } = {}) {
+  if (!select) {
+    return;
+  }
+  while (select.firstChild) {
+    select.removeChild(select.firstChild);
+  }
+  const list = Array.isArray(options) ? options : [];
+  if (!list.length) {
+    if (placeholder) {
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = placeholder;
+      select.appendChild(option);
+    }
+    select.value = '';
+    select.disabled = true;
+    return;
+  }
+
+  list.forEach(entry => {
+    const option = document.createElement('option');
+    option.value = entry.value || '';
+    option.textContent = entry.label || '';
+    select.appendChild(option);
+  });
+
+  const hasSelected = list.some(entry => entry.value === selected);
+  const nextValue = hasSelected ? selected : list[0].value;
+  select.value = nextValue;
+  select.disabled = false;
+}
+
+function formatSentenceOptionLabel(sentence, index) {
+  const normalized = typeof sentence === 'string' ? sentence.replace(/\s+/g, ' ').trim() : '';
+  if (!normalized) {
+    return `Sentence ${index + 1}`;
+  }
+  if (normalized.length <= 120) {
+    return normalized;
+  }
+  return `${normalized.slice(0, 117)}…`;
+}
+
+function renderSentenceBuilderPreview() {
+  const preview = document.getElementById('observation-builder-preview');
+  if (!preview) {
+    return;
+  }
+  const sentence = typeof state.builder?.selectedSentence === 'string' ? state.builder.selectedSentence.trim() : '';
+  if (!sentence) {
+    preview.innerHTML = '';
+    preview.setAttribute('hidden', 'hidden');
+    return;
+  }
+
+  preview.innerHTML = '';
+
+  const label = document.createElement('p');
+  label.className = 'observation-sentence-builder__preview-label';
+  label.textContent = 'Exact sentence preview';
+  preview.appendChild(label);
+
+  const text = document.createElement('p');
+  text.className = 'observation-sentence-builder__preview-text';
+  text.textContent = sentence;
+  preview.appendChild(text);
+
+  const summary = state.builder?.selectedCueSummary || state.builder?.selectedModuleSummary || '';
+  if (summary) {
+    const note = document.createElement('p');
+    note.className = 'observation-sentence-builder__preview-note';
+    note.textContent = `Structure covers ${summary}.`;
+    preview.appendChild(note);
+  }
+
+  preview.removeAttribute('hidden');
+}
+
+function applySentenceBuilderSelection(options = {}) {
+  const sentence = typeof state.builder?.selectedSentence === 'string' ? state.builder.selectedSentence.trim() : '';
+  if (!sentence) {
+    return;
+  }
+  const focus = Object.prototype.hasOwnProperty.call(options, 'focus')
+    ? options.focus
+    : state.inputMode !== INPUT_MODE_BUILDER;
+  const immediate = Object.prototype.hasOwnProperty.call(options, 'immediate') ? options.immediate : true;
+  updateObservationText(sentence, {
+    reason: 'sentence-builder',
+    immediate,
+    focus,
+  });
+}
+
+function syncSentenceBuilderToText(text) {
+  const builder = state.builder;
+  if (!builder?.ready) {
+    return;
+  }
+  const source = typeof text === 'string' ? text.trim() : '';
+  if (!source) {
+    return;
+  }
+  for (const module of builder.modules) {
+    if (!module || !Array.isArray(module.cues)) {
+      continue;
+    }
+    for (const cue of module.cues) {
+      if (!cue || !Array.isArray(cue.sentences)) {
+        continue;
+      }
+      if (cue.sentences.includes(source)) {
+        builder.selectedModuleId = module.id;
+        builder.selectedCueId = cue.id;
+        builder.selectedSentence = source;
+        builder.selectedCueSummary = cue.summary || module.slotSummary || '';
+        builder.selectedModuleSummary = module.slotSummary || '';
+        renderSentenceBuilder();
+        return;
+      }
+    }
+  }
+}
+
+function focusObservationTextarea() {
+  const textarea = document.getElementById('observation-text');
+  if (!textarea) {
+    return;
+  }
+  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(() => {
+      textarea.focus();
+      if (typeof textarea.setSelectionRange === 'function') {
+        const end = textarea.value ? textarea.value.length : 0;
+        textarea.setSelectionRange(end, end);
+      }
+    });
+  } else {
+    textarea.focus();
   }
 }
 
