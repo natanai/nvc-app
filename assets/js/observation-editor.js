@@ -298,8 +298,11 @@ function renderObservationGuidelines() {
   }
 
   if (inline) {
-    inline.appendChild(buildInlineGuidelineContent(groups));
-    inline.removeAttribute('hidden');
+    const inlineContent = buildInlineGuidelineContent(groups);
+    if (inlineContent) {
+      inline.appendChild(inlineContent);
+      inline.removeAttribute('hidden');
+    }
   }
 }
 
@@ -426,6 +429,10 @@ function buildDetectionGuidelineContent(groups, missingEntries) {
 }
 
 function buildInlineGuidelineContent(groups) {
+  if (!Array.isArray(groups) || !groups.length) {
+    return null;
+  }
+
   const fragment = document.createDocumentFragment();
   const summary = formatDetectionSummary(groups);
   const totalEntries = groups.reduce((sum, group) => sum + group.entries.length, 0);
