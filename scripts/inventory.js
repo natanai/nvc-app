@@ -3,6 +3,10 @@ const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
 const LEGACY_JOURNAL_HASHES = new Set(['#journal-dashboard']);
+const PERSONAL_STRATEGIES_EMAIL_ADDRESS = 'me8fire@gmail.com';
+const PERSONAL_STRATEGIES_EMAIL_SUBJECT = 'Strategies for allneeds.app!';
+const PERSONAL_STRATEGIES_EMAIL_BODY =
+  'Hi Nat,\n\nI just exported my personal strategies from allneeds.app and attached the file for you.\n\nWith care,';
 
 function redirectLegacyJournalHash() {
   if (typeof window === 'undefined') {
@@ -1894,6 +1898,11 @@ function setupInventoryPage() {
   const exportButton = document.getElementById('inventory-export');
   if (exportButton) {
     exportButton.addEventListener('click', handleExportInventory);
+  }
+
+  const personalEmailButton = document.getElementById('inventory-email-personal');
+  if (personalEmailButton) {
+    personalEmailButton.addEventListener('click', handleEmailPersonalStrategies);
   }
 
   const importTrigger = document.getElementById('inventory-import-trigger');
@@ -5948,6 +5957,55 @@ function downloadLocalDataBackup(payload) {
   URL.revokeObjectURL(url);
 }
 
+function buildPersonalStrategiesExportPayload() {
+  const inventorySource =
+    Array.isArray(state.inventory) && state.inventory.length ? state.inventory : loadInventory();
+  const list = Array.isArray(inventorySource)
+    ? inventorySource.filter((item) => item && item.personal)
+    : [];
+  const strategies = deepClone(list) || [];
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    personalStrategies: strategies,
+  };
+}
+
+function downloadPersonalStrategiesExport(payload) {
+  const serialized = JSON.stringify(payload, null, 2);
+  const blob = new Blob([serialized], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const timestamp = new Date().toISOString().replace(/[:]/g, '-');
+  link.href = url;
+  link.download = `allneeds-personal-strategies-${timestamp}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function openPersonalStrategiesEmailDraft() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  const email = PERSONAL_STRATEGIES_EMAIL_ADDRESS;
+  if (!email) {
+    return;
+  }
+  const subject = encodeURIComponent(PERSONAL_STRATEGIES_EMAIL_SUBJECT);
+  const body = encodeURIComponent(PERSONAL_STRATEGIES_EMAIL_BODY);
+  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+  try {
+    const opened = window.open(mailtoLink, '_blank');
+    if (!opened) {
+      window.location.href = mailtoLink;
+    }
+  } catch (error) {
+    window.location.href = mailtoLink;
+  }
+}
+
 function exportLocalData() {
   try {
     const payload = buildLocalDataBackup();
@@ -6354,6 +6412,32 @@ async function importLegacyJournalEntries(entries) {
 
 function handleExportInventory() {
   exportLocalData();
+}
+
+function handleEmailPersonalStrategies() {
+  const payload = buildPersonalStrategiesExportPayload();
+  const strategies = Array.isArray(payload.personalStrategies) ? payload.personalStrategies : [];
+  if (!strategies.length) {
+    showInventoryMessage('No personal strategies found yet. Add one before exporting.', 'warning');
+    return;
+  }
+
+  try {
+    downloadPersonalStrategiesExport(payload);
+  } catch (error) {
+    console.warn('Unable to export personal strategies', error);
+    showInventoryMessage('Export failed. Unable to prepare your personal strategies right now.', 'error');
+    return;
+  }
+
+  const successMessage = `Personal strategies exported! Email the downloaded file to ${PERSONAL_STRATEGIES_EMAIL_ADDRESS} with the subject “${PERSONAL_STRATEGIES_EMAIL_SUBJECT}”.`;
+  showInventoryMessage(successMessage, 'success');
+
+  if (typeof window !== 'undefined') {
+    window.setTimeout(() => {
+      openPersonalStrategiesEmailDraft();
+    }, 300);
+  }
 }
 
 function handleImportInventory(file) {
