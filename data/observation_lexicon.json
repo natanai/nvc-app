@@ -1,283 +1,2482 @@
 {
-  "eye_roll": [
+  "affection-closeness__no-goodnight": [
     {
-      "pattern": "\\broll(?:ed|s|ing)?\\b[^\\n]{0,40}\\beyes?\\b"
-    },
-    {
-      "pattern": "\\beye[-\\s]?roll(?:ed|s|ing)?\\b"
+      "tokens": [
+        "goodnight",
+        "message",
+        "nights",
+        "check",
+        "three",
+        "week"
+      ],
+      "threshold": 3
     }
   ],
-  "whatever_door": [
+  "affection-closeness__pulled-away-hug": [
     {
-      "pattern": "\\b(?:said|muttered|snapped)\\b[^\\n]{0,40}\"?whatever\"?\\b[^\\n]{0,60}\\b(?:slamm(?:ed|ing)|shut|closed)\\b[^\\n]{0,30}\\bdoor\\b"
+      "tokens": [
+        "anything",
+        "hugged",
+        "pulled",
+        "saying",
+        "away",
+        "hello"
+      ],
+      "threshold": 3
     }
   ],
-  "too_sensitive": [
+  "affection-closeness__turned-away": [
     {
-      "pattern": "\\b(?:you(?:'|\\s*are)|you're|ya)\\s+too\\s+sensitive\\b"
-    },
-    {
-      "pattern": "\\b(?:called|said)\\b[^\\n]{0,40}\\btoo\\s+sensitive\\b"
+      "tokens": [
+        "cuddle",
+        "turned",
+        "away",
+        "couch",
+        "edge",
+        "show"
+      ],
+      "threshold": 3
     }
   ],
-  "mocking_whisper": [
+  "attention__camera-off-when-called": [
     {
-      "pattern": "\\bwhisper(?:ed|ing)?\\b[^\\n]{0,80}\\b(?:laughed|giggl(?:ed|ing)|snicker(?:ed|ing))\\b"
+      "tokens": [
+        "called",
+        "camera",
+        "remained",
+        "respond",
+        "name",
+        "off"
+      ],
+      "threshold": 3
     }
   ],
-  "never_listen": [
+  "attention__no-eye-contact": [
     {
-      "pattern": "\\b(?:you|ya|u)\\s+never\\s+listen\\b"
-    },
-    {
-      "pattern": "\\b(?:you|ya|u)\\s+(?:don(?:'|o)t|do\\s+not)\\s+listen\\b"
+      "tokens": [
+        "contact",
+        "distracted",
+        "looking",
+        "typing",
+        "kept",
+        "eye"
+      ],
+      "threshold": 3
     }
   ],
-  "client_interrupt": [
+  "attention__phone-during-talk": [
     {
-      "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:talk(?:ed)?|spoke)\\s+over\\b"
-    },
-    {
-      "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:cut\\s+me\\s+off|interrup(?:ted|ting))\\b"
+      "tokens": [
+        "looked",
+        "talking",
+        "typing",
+        "kept",
+        "phone",
+        "talk"
+      ],
+      "threshold": 3
     }
   ],
-  "left_presentation": [
+  "attention__typing-while-i-spoke": [
     {
-      "pattern": "\\b(?:walked|stormed|strode)\\s+out\\b[^\\n]{0,80}\\b(?:presentation|talk|briefing|update)\\b"
-    },
-    {
-      "pattern": "\\bslamm(?:ed|ing)\\b[^\\n]{0,40}\\b(?:notebook|laptop|binder)\\b[^\\n]{0,80}\\b(?:left|walked\\s+out)\\b"
+      "tokens": [
+        "continuously",
+        "keyboard",
+        "speaking",
+        "typing",
+        "spoke",
+        "typed"
+      ],
+      "threshold": 3
     }
   ],
-  "referee_missed_foul": [
+  "boundaries__entered-room": [
     {
-      "pattern": "\\b(?:ref|referee|ump)\\b[^\\n]{0,120}\\b(?:miss(?:ed)?|ignor(?:ed|ing)|skipped)\\b[^\\n]{0,60}\\b(?:foul|penalty|call)\\b"
-    },
-    {
-      "pattern": "\\bno\\s+call\\b"
+      "tokens": [
+        "entered",
+        "knocking",
+        "room",
+        "space"
+      ],
+      "threshold": 3
     }
   ],
-  "barista_skipped": [
+  "boundaries__privacy-invaded": [
     {
-      "pattern": "\\b(?:barista|server|cashier|clerk|agent)\\b[^\\n]{0,120}\\b(?:skip(?:ped)?|served)\\b[^\\n]{0,60}\\b(?:before|ahead\\s+of)\\b[^\\n]{0,40}\\bme\\b"
-    },
-    {
-      "pattern": "\\b(?:skip(?:ped)?|cut)\\s+(?:the\\s+)?(?:line|queue)\\b"
+      "tokens": [
+        "direct",
+        "invaded",
+        "message",
+        "privacy",
+        "private",
+        "screen"
+      ],
+      "threshold": 3
     }
   ],
-  "reach_over": [
+  "boundaries__shared-dm-publicly": [
     {
-      "pattern": "\\breach(?:ed)?\\s+over\\b[^\\n]{0,60}\\b(?:me|my\\s+shoulder)\\b"
-    },
-    {
-      "pattern": "\\bgrab(?:bed|bing)\\b[^\\n]{0,60}\\b(?:last|final)\\s+(?:carton|item|package|box)\\b"
+      "tokens": [
+        "asking",
+        "channel",
+        "message",
+        "posted",
+        "private",
+        "public"
+      ],
+      "threshold": 3
     }
   ],
-  "dishes_again": [
+  "boundaries__shared-photo-without-ask": [
     {
-      "pattern": "\\b(?:sink|counter)\\b[^\\n]{0,120}\\b(?:stacked|piled|filled)\\b[^\\n]{0,60}\\b(?:dishes|plates|cups)\\b[^\\n]{0,60}\\b(?:again|still)\\b"
+      "tokens": [
+        "asking",
+        "checking",
+        "posted",
+        "shared",
+        "event",
+        "first"
+      ],
+      "threshold": 3
     }
   ],
-  "borrowed_car": [
+  "boundaries__space-encroached": [
     {
-      "pattern": "\\bborrow(?:ed|ing)\\b[^\\n]{0,120}\\bcar\\b[^\\n]{0,120}\\b(?:empty|no|without)\\s+(?:gas|fuel|a\\s+tank)\\b"
+      "tokens": [
+        "encroached",
+        "enough",
+        "public",
+        "shoulders",
+        "touched",
+        "close"
+      ],
+      "threshold": 3
     }
   ],
-  "contract_not_renewed": [
+  "boundaries__touched-without-asking": [
     {
-      "pattern": "\\b(?:contract|agreement|deal)\\b[^\\n]{0,120}\\b(?:was(?:n't)?|is(?:n't)?|won't\\s+be|not)\\s+(?:renew(?:ed)?|extended|continued)\\b"
+      "tokens": [
+        "asking",
+        "hugged",
+        "shoulder",
+        "touched",
+        "hand",
+        "put"
+      ],
+      "threshold": 3
     }
   ],
-  "landlord_no_reply": [
+  "caregiving__night-shift-imbalance": [
     {
-      "pattern": "\\b(?:landlord|property\\s+(?:manager|office)|superintendent|building\\s+(?:manager|office))\\b[^\\n]{0,160}\\b(?:hasn'?t|still\\s+hasn't|never|won't)\\s+(?:respond(?:ed)?|repl(?:ied|y)|called|texted|gotten\\s+back)\\b"
+      "tokens": [
+        "duties",
+        "falling",
+        "handled",
+        "imbalance",
+        "mostly",
+        "nights"
+      ],
+      "threshold": 3
     }
   ],
-  "contractor_no_show": [
+  "caregiving__pickup-missed": [
     {
-      "pattern": "\\b(?:contractor|repair\\s+(?:tech|person)|plumber|electrician|installer|handyman)\\b[^\\n]{0,160}\\b(?:no[-\\s]?show|never\\s+showed|miss(?:ed)?\\s+(?:the\\s+)?(?:appointment|visit|slot)|didn'?t\\s+(?:come|arrive))\\b"
+      "tokens": [
+        "agreed",
+        "arrive",
+        "childcare",
+        "missed",
+        "pickup",
+        "time"
+      ],
+      "threshold": 3
     }
   ],
-  "doctor_clock": [
+  "caregiving__used-supplies-last": [
     {
-      "pattern": "\\b(?:doctor|physician|provider)\\b[^\\n]{0,120}\\b(?:kept\\s+)?(?:checking|glancing|looking)\\b[^\\n]{0,40}\\bclock\\b"
+      "tokens": [
+        "detergent",
+        "laundry",
+        "leaving",
+        "shared",
+        "supplies",
+        "last"
+      ],
+      "threshold": 3
     }
   ],
-  "followups_stacked": [
+  "chores-mental-load__chore-missed-deadline": [
     {
-      "pattern": "\\bassign(?:ed|ing)\\b[^\\n]{0,160}\\b(?:all|every|entire|whole)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?up|action\\s+item|task)s?\\b"
+      "tokens": [
+        "agreed",
+        "deadline",
+        "missed",
+        "passed",
+        "shared",
+        "bins"
+      ],
+      "threshold": 3
     }
   ],
-  "boss_late_pings": [
+  "chores-mental-load__last-minute-planning": [
     {
-      "pattern": "\\b(?:boss|manager|lead|supervisor)\\b[^\\n]{0,160}\\b(?:slack|teams|message|dm|ping|text|email)\\b[^\\n]{0,120}\\b(?:11\\s?p\\.?m\\.?|midnight|late\\s+at\\s+night|after\\s+hours)\\b"
+      "tokens": [
+        "agreeing",
+        "earlier",
+        "handle",
+        "minute",
+        "planning",
+        "restaurant"
+      ],
+      "threshold": 3
     }
   ],
-  "review_no_examples": [
+  "chores-mental-load__needed-multiple-reminders": [
     {
-      "pattern": "\\b(?:performance\\s+review|feedback|evaluation)\\b[^\\n]{0,160}\\b(?:only|just|mostly)\\b[^\\n]{0,80}\\b(?:mistakes|issues|problems|faults)\\b[^\\n]{0,120}\\b(?:no|without)\\s+(?:examples|specifics|details)\\b"
+      "tokens": [
+        "grocery",
+        "happened",
+        "multiple",
+        "needed",
+        "pickup",
+        "reminders"
+      ],
+      "threshold": 3
     }
   ],
-  "teacher_sloppy": [
+  "commitment-rituals__canceled-date-repeated": [
     {
-      "pattern": "\\b(?:teacher|instructor)\\b[^\\n]{0,120}\\b(?:wrote|scribbled|marked)\\b[^\\n]{0,80}\\b(?:sloppy|messy|careless|lazy)\\b"
+      "tokens": [
+        "canceled",
+        "fridays",
+        "repeated",
+        "repeatedly",
+        "within",
+        "date"
+      ],
+      "threshold": 3
     }
   ],
-  "dog_barking": [
+  "commitment-rituals__forgot-occasion": [
     {
-      "pattern": "\\b(?:neighbor'?s|next\\s+door)\\s+dog\\b[^\\n]{0,160}\\b(?:bark(?:ed|ing))\\b[^\\n]{0,120}\\b(?:6\\s?a\\.?m\\.?|five\\s?(?:thirty|30)\\s?a\\.?m\\.?|before\\s+sunrise|early\\s+morning)\\b"
+      "tokens": [
+        "anniversary",
+        "forgot",
+        "important",
+        "message",
+        "occasion",
+        "date"
+      ],
+      "threshold": 3
     }
   ],
-  "driver_speakerphone": [
+  "commitment-rituals__future-plan-avoid": [
     {
-      "pattern": "\\b(?:driver|rideshare|uber|lyft|cab)\\b[^\\n]{0,120}\\b(?:speaker\\s*phone|speakerphone|on\\s+speaker)\\b"
+      "tokens": [
+        "avoided",
+        "confirming",
+        "deposit",
+        "future",
+        "message",
+        "passed"
+      ],
+      "threshold": 3
     }
   ],
-  "cyclist_red": [
+  "conflict-process__hung-up": [
     {
-      "pattern": "\\b(?:cyclist|bike\\s+rider|bicyclist)\\b[^\\n]{0,160}\\b(?:blew|ran|sped)\\b[^\\n]{0,80}\\b(?:red\\s+light|red\\s+signal|stop\\s+light)\\b"
+      "tokens": [
+        "abruptly",
+        "closing",
+        "discussion",
+        "ended",
+        "hung"
+      ],
+      "threshold": 3
     }
   ],
-  "phone_dinner": [
+  "conflict-process__message-burst": [
     {
-      "pattern": "\\b(?:during|at)\\s+(?:dinner|the\\s+meal|our\\s+meal)\\b[^\\n]{0,120}\\b(?:phone|scroll(?:ed|ing)|looking\\s+down\\s+at\\s+their\\s+screen)\\b"
+      "tokens": [
+        "argument",
+        "arrived",
+        "message",
+        "messages",
+        "minute",
+        "within"
+      ],
+      "threshold": 3
     }
   ],
-  "scroll_instead": [
+  "conflict-process__name-calling": [
     {
-      "pattern": "\\bscroll(?:ed|ing)\\b[^\\n]{0,120}\\b(?:instead\\s+of|rather\\s+than)\\b[^\\n]{0,120}\\b(?:call(?:ing)?|phone|reach(?:ing)?\\s+out|text(?:ing)?)\\b"
+      "tokens": [
+        "arguing",
+        "called",
+        "calling",
+        "conflict",
+        "derogatory",
+        "label"
+      ],
+      "threshold": 3
     }
   ],
-  "coworker_caught_error": [
+  "conflict-process__threat-to-leave": [
     {
-      "pattern": "\\b(?:coworker|colleague|teammate)\\b[^\\n]{0,160}\\b(?:double[-\\s]?checked|caught|spotted|flagged)\\b[^\\n]{0,120}\\b(?:mistake|error|issue)\\b"
+      "tokens": [
+        "conflict",
+        "relationship",
+        "threat",
+        "threatened",
+        "toward",
+        "walked"
+      ],
+      "threshold": 3
     }
   ],
-  "trainer_high_five": [
+  "conflict-style__silent-period": [
     {
-      "pattern": "\\b(?:trainer|coach)\\b[^\\n]{0,160}\\b(?:high[-\\s]?fiv(?:ed|e)|celebrat(?:ed|ing)|cheered)\\b[^\\n]{0,120}\\b(?:personal\\s+best|milestone|record)\\b"
+      "tokens": [
+        "argument",
+        "disagreement",
+        "period",
+        "replies",
+        "responses",
+        "silent"
+      ],
+      "threshold": 3
     }
   ],
-  "neighbor_shoveled": [
+  "conflict-style__walked-away-mid-sentence": [
     {
-      "pattern": "\\b(?:neighbor|next\\s+door)\\b[^\\n]{0,160}\\b(?:shovel(?:ed|ing)|cleared|snow[-\\s]?blow(?:ed|ing))\\b[^\\n]{0,120}\\b(?:sidewalk|driveway|walkway|steps)\\b"
+      "tokens": [
+        "kitchen",
+        "sentence",
+        "talking",
+        "turned",
+        "walked",
+        "away"
+      ],
+      "threshold": 3
     }
   ],
-  "appreciation_specific": [
+  "criticism-sarcasm__always-never-quote": [
     {
-      "pattern": "\\b(?:thank[-\\s]*you|appreciat(?:e|ed|ion)|grateful)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|how\\s+you|what\\s+you\\s+did|made\\s+a\\s+big\\s+difference|the\\s+way\\s+you\\s+helped|calling\\s+out\\s+each)\\b"
-    },
-    {
-      "pattern": "\\b(?:highlighted|called\\s+out|named|listed|spelled\\s+out|detailed)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|individual|each)\\b[^\\n]{0,120}\\b(?:ways?\\s+(?:I|we|you)\\s+helped|tasks?\\s+I\\s+handled|moments?\\s+you\\s+showed\\s+up|contributions?|shifts?)\\b"
-    },
-    {
-      "pattern": "\\b(?:my|your|our)\\s+(?:volunteer\\s+hours|support|help|time|efforts?|contribution|work)\\b[^\\n]{0,120}\\b(?:made|makes|making)\\s+(?:such\\s+)?a\\s+big\\s+difference\\b"
+      "tokens": [
+        "always",
+        "listen",
+        "never",
+        "quote",
+        "used"
+      ],
+      "threshold": 3
     }
   ],
-  "counselor_reflection": [
+  "criticism-sarcasm__public-correction": [
     {
-      "pattern": "\\b(?:counselor|therap(?:ist|y)|coach|facilitator)\\b[^\\n]{0,160}\\b(?:reflected|mirrored|paraphrased|summarized)\\b[^\\n]{0,120}\\b(?:back|what\\s+I\\s+said|my\\s+words)\\b"
+      "tokens": [
+        "corrected",
+        "correction",
+        "detail",
+        "friends",
+        "public",
+        "publicly"
+      ],
+      "threshold": 3
     }
   ],
-  "partner_cooked_cleaned": [
+  "customer-service__long-hold": [
     {
-      "pattern": "\\b(?:partner|spouse|husband|wife|roommate)\\b[^\\n]{0,160}\\b(?:cooked|made|prepared)\\b[^\\n]{0,80}\\b(?:dinner|meal|supper)\\b[^\\n]{0,120}\\b(?:cleaned|did|handled)\\b[^\\n]{0,60}\\b(?:dishes|kitchen|cleanup)\\b"
+      "tokens": [
+        "minutes",
+        "hold",
+        "long",
+        "time",
+        "28"
+      ],
+      "threshold": 3
     }
   ],
-  "manager_balanced_workload": [
+  "customer-service__missed-callback": [
     {
-      "pattern": "\\b(?:manager|lead|supervisor|project\\s+manager|pm)\\b[^\\n]{0,160}\\b(?:balanced|redistribut(?:ed|ing)|spread|limited|shared)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?ups|follow\\s*ups|tasks|workload|assignments)\\b"
+      "tokens": [
+        "callback",
+        "happen",
+        "missed",
+        "promised",
+        "scheduled",
+        "occur"
+      ],
+      "threshold": 3
     }
   ],
-  "wallet_returned": [
+  "customer-service__repeat-explanations": [
     {
-      "pattern": "\\b(?:returned|brought\\s+back|handed\\s+back|gave\\s+back)\\b[^\\n]{0,120}\\b(?:wallet|phone|purse|bag|keys)\\b[^\\n]{0,120}\\b(?:with|with\\s+all|still\\s+had|everything|cash)\\b[^\\n]{0,80}\\b(?:inside|intact|still\\s+there)\\b"
+      "tokens": [
+        "agents",
+        "different",
+        "explain",
+        "explained",
+        "explanations",
+        "repeat"
+      ],
+      "threshold": 3
     }
   ],
-  "vacation_approved_quick": [
+  "delivery-issues__late-delivery": [
     {
-      "pattern": "\\b(?:approved|okayed|cleared|green[-\\s]?lit|signed\\s+off\\s+on)\\b[^\\n]{0,120}\\b(?:vacation|pto|time\\s+off|leave)\\b[^\\n]{0,120}\\b(?:same\\s+day|right\\s+away|within\\s+(?:the\\s+)?day|within\\s+hours)\\b"
+      "tokens": [
+        "arrived",
+        "delivery",
+        "package",
+        "window",
+        "late",
+        "10"
+      ],
+      "threshold": 3
     }
   ],
-  "night_nurse_checkin": [
+  "delivery-issues__no-doorbell": [
     {
-      "pattern": "\\b(?:nurse|caregiver)\\b[^\\n]{0,120}\\b(?:checked\\s+in|stopped\\s+in|came\\s+by|looked\\s+in|made\\s+rounds)\\b[^\\n]{0,120}\\b(?:night|overnight|late\\s+at\\s+night)\\b"
+      "tokens": [
+        "delivery",
+        "doorbell",
+        "package",
+        "ringing",
+        "bell",
+        "home"
+      ],
+      "threshold": 3
     }
   ],
-  "delivery_marked_missing": [
+  "delivery-issues__signature-missed": [
     {
-      "pattern": "\\b(?:delivery|order|package|parcel)\\b[^\\n]{0,160}\\b(?:marked|showed|said)\\b[^\\n]{0,120}\\bdelivered\\b[^\\n]{0,160}\\b(?:nothing|not\\s+at\\s+my\\s+door|never\\s+arrived|missing)\\b"
+      "tokens": [
+        "appeared",
+        "attempt",
+        "missed",
+        "notice",
+        "required",
+        "signature"
+      ],
+      "threshold": 3
     }
   ],
-  "friend_late_no_text": [
+  "digital-boundaries__group-added": [
     {
-      "pattern": "\\b(?:friend|buddy|pal|coworker|guest)\\b[^\\n]{0,120}\\b(?:arrived|showed\\s+up)\\b[^\\n]{0,80}\\b(?:\\d+\\s+(?:minutes|min|mins)|half\\s+an\\s+hour|thirty\\s+minutes)\\s+late\\b[^\\n]{0,120}\\b(?:no|without|never)\\s+(?:text|message|call|warning|heads?-?up)\\b"
+      "tokens": [
+        "consent",
+        "people",
+        "thread",
+        "unknown",
+        "added",
+        "chat"
+      ],
+      "threshold": 3
     }
   ],
-  "hoa_warning_letter": [
+  "digital-boundaries__location-shared": [
     {
-      "pattern": "\\b(?:hoa|association|board|management)\\b[^\\n]{0,160}\\b(?:warning|violation|notice|letter)\\b[^\\n]{0,120}\\b(?:lawn|yard|grass|weeds)\\b"
+      "tokens": [
+        "asking",
+        "checking",
+        "location",
+        "others",
+        "screenshot",
+        "shared"
+      ],
+      "threshold": 3
     }
   ],
-  "colleague_took_credit": [
+  "digital-boundaries__shared-message-out-of-context": [
     {
-      "pattern": "\\b(?:colleague|coworker|teammate|manager)\\b[^\\n]{0,160}\\b(?:took|claimed|grabbed|accepted)\\b[^\\n]{0,80}\\b(?:credit|ownership|recognition)\\b[^\\n]{0,120}\\b(?:idea|work|proposal|plan|suggestion)\\b"
+      "tokens": [
+        "channel",
+        "context",
+        "message",
+        "original",
+        "outside",
+        "pasted"
+      ],
+      "threshold": 3
     }
   ],
-  "daycare_no_call": [
+  "digital-boundaries__tagged-photo-without-asking": [
     {
-      "pattern": "\\b(?:daycare|pre[-\\s]?school|school|child\\s*care|nursery)\\b[^\\n]{0,160}\\b(?:didn'?t|never|forgot\\s+to)\\s+(?:call|notify|let\\s+me\\s+know|text|reach\\s+out)\\b"
-    },
-    {
-      "pattern": "\\b(?:fever|sick|ill|temperature)\\b[^\\n]{0,120}\\b(?:no\\s+call|without\\s+calling|without\\s+telling\\s+me)\\b"
+      "tokens": [
+        "account",
+        "asking",
+        "checking",
+        "tagged",
+        "photo"
+      ],
+      "threshold": 3
     }
   ],
-  "dentist_explained_steps": [
+  "driving-etiquette__lane-weaving": [
     {
-      "pattern": "\\b(?:dentist|hygienist|doctor|provider)\\b[^\\n]{0,160}\\b(?:explained|walked\\s+me\\s+through|described|talked\\s+through)\\b[^\\n]{0,120}\\b(?:each|every|the)\\s+step\\b"
+      "tokens": [
+        "changed",
+        "changing",
+        "driver",
+        "rapidly",
+        "seconds",
+        "weaving"
+      ],
+      "threshold": 3
     }
   ],
-  "bus_driver_waited": [
+  "driving-etiquette__phone-while-driving": [
     {
-      "pattern": "\\b(?:bus\\s+driver|driver)\\b[^\\n]{0,120}\\b(?:waited|held\\s+the\\s+bus|kept\\s+the\\s+doors\\s+open|paused)\\b[^\\n]{0,120}\\b(?:while\\s+I\\s+ran|as\\s+I\\s+was\\s+running|for\\s+me)\\b"
+      "tokens": [
+        "driver",
+        "driving",
+        "motion",
+        "moving",
+        "vehicle",
+        "phone"
+      ],
+      "threshold": 3
     }
   ],
-  "teammate_ignored_updates": [
+  "driving-etiquette__tailgating": [
     {
-      "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|ignor(?:ed|ing)|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b"
+      "tokens": [
+        "closely",
+        "distance",
+        "followed",
+        "following",
+        "length",
+        "tailgating"
+      ],
+      "threshold": 3
     }
   ],
-  "landlord_quick_fix": [
+  "environment__lights-flicker": [
     {
-      "pattern": "\\b(?:landlord|property\\s+manager|superintendent|maintenance)\\b[^\\n]{0,160}\\b(?:fixed|repaired|sent\\s+someone|took\\s+care|handled)\\b[^\\n]{0,120}\\b(?:same\\s+day|next\\s+day|within\\s+24\\s+hours|right\\s+away)\\b"
+      "tokens": [
+        "flicker",
+        "flickered",
+        "lights",
+        "meeting",
+        "overhead",
+        "repeatedly"
+      ],
+      "threshold": 3
     }
   ],
-  "sibling_unpaid": [
+  "environment__mess-left": [
     {
-      "pattern": "\\b(?:sibling|brother|sister|friend|roommate)\\b[^\\n]{0,160}\\b(?:promised|said)\\b[^\\n]{0,120}\\b(?:pay\\s+me\\s+back|return\\s+the\\s+money|send\\s+the\\s+payment)\\b[^\\n]{0,120}\\b(?:still|yet)\\b[^\\n]{0,80}\\b(?:hasn'?t|has\\s+not|didn'?t)\\s+(?:paid|sent|transferred)\\b"
+      "tokens": [
+        "agreed",
+        "shared",
+        "chore",
+        "full",
+        "left",
+        "mess"
+      ],
+      "threshold": 3
     }
   ],
-  "allergy_ignored": [
+  "environment__noise-overwhelm": [
     {
-      "pattern": "\\b(?:restaurant|server|kitchen|staff)\\b[^\\n]{0,160}\\b(?:served|brought|delivered|sent)\\b[^\\n]{0,160}\\b(?:peanut|nut|nuts|allergen|dairy|gluten|egg)\\b[^\\n]{0,160}\\b(?:after|even\\s+though|although)\\b[^\\n]{0,160}\\b(?:allergy|told\\s+them|noted|flagged)\\b"
+      "tokens": [
+        "alarms",
+        "minutes",
+        "overwhelm",
+        "repeated",
+        "repeatedly",
+        "sounded"
+      ],
+      "threshold": 3
     }
   ],
-  "meeting_over_lunch": [
+  "environment__queue-cut": [
     {
-      "pattern": "\\b(?:meeting|call|sync|check[-\\s]?in|one[-\\s]?on[-\\s]?one)\\b[^\\n]{0,160}\\b(?:scheduled|booked|set|put)\\b[^\\n]{0,120}\\b(?:over|during|on)\\s+(?:my\\s+)?(?:lunch|meal|break|lunchtime)\\b"
+      "tokens": [
+        "checkout",
+        "someone",
+        "stepped",
+        "ahead",
+        "line",
+        "queue"
+      ],
+      "threshold": 3
     }
   ],
-  "support_agent_followup": [
+  "environment__strong-scent": [
     {
-      "pattern": "\\b(?:support|service|help\\s*desk|agent|representative|rep)\\b[^\\n]{0,160}\\b(?:follow(?:ed)?\\s+up|checked\\s+back|emailed\\s+the\\s+next\\s+day|reached\\s+out\\s+after)\\b"
-    },
-    {
-      "pattern": "\\bwalk(?:ed)?\\s+me\\s+through\\b"
+      "tokens": [
+        "filled",
+        "fragrance",
+        "minutes",
+        "shared",
+        "strong",
+        "workspace"
+      ],
+      "threshold": 3
     }
   ],
-  "streetlight_fixed": [
+  "environment__thermostat-change": [
     {
-      "pattern": "\\b(?:city|municipal|public\\s+works|council)\\b[^\\n]{0,160}\\b(?:fixed|repaired|replaced)\\b[^\\n]{0,120}\\b(?:street\\s*light|streetlight|lamp)\\b[^\\n]{0,160}\\b(?:after|following|finally|eventually)\\b[^\\n]{0,160}\\b(?:months|weeks|several|many)\\s+(?:emails|requests|reports|complaints)\\b"
+      "tokens": [
+        "became",
+        "change",
+        "changed",
+        "colder",
+        "session",
+        "sharply"
+      ],
+      "threshold": 3
+    }
+  ],
+  "external-boundaries__flirty-comments-online": [
+    {
+      "tokens": [
+        "another",
+        "appeared",
+        "argued",
+        "comments",
+        "conflict",
+        "evening"
+      ],
+      "threshold": 3
+    }
+  ],
+  "external-boundaries__messaging-ex-after-agreement": [
+    {
+      "tokens": [
+        "agreed",
+        "agreement",
+        "contact",
+        "message",
+        "messaged",
+        "messaging"
+      ],
+      "threshold": 3
+    }
+  ],
+  "external-boundaries__private-story-shared": [
+    {
+      "tokens": [
+        "brunch",
+        "detail",
+        "friends",
+        "personal",
+        "private",
+        "repeated"
+      ],
+      "threshold": 3
+    }
+  ],
+  "follow-through__partial-complete": [
+    {
+      "tokens": [
+        "complete",
+        "completed",
+        "explained",
+        "finished",
+        "message",
+        "partial"
+      ],
+      "threshold": 3
+    }
+  ],
+  "follow-through__promise-missed": [
+    {
+      "tokens": [
+        "agreed",
+        "arrived",
+        "missed",
+        "promise",
+        "tuesday",
+        "date"
+      ],
+      "threshold": 3
+    }
+  ],
+  "follow-through__reminder-needed": [
+    {
+      "tokens": [
+        "multiple",
+        "needed",
+        "reminder",
+        "reminders",
+        "submitted",
+        "done"
+      ],
+      "threshold": 3
+    }
+  ],
+  "gossip__private-info-shared": [
+    {
+      "tokens": [
+        "appeared",
+        "detail",
+        "personal",
+        "private",
+        "privately",
+        "shared"
+      ],
+      "threshold": 3
+    }
+  ],
+  "gossip__quote-in-my-absence": [
+    {
+      "tokens": [
+        "absence",
+        "comment",
+        "present",
+        "relayed",
+        "separate",
+        "shared"
+      ],
+      "threshold": 3
+    }
+  ],
+  "gossip__speculation": [
+    {
+      "tokens": [
+        "claims",
+        "intentions",
+        "posted",
+        "speculation",
+        "speculative",
+        "chat"
+      ],
+      "threshold": 3
+    }
+  ],
+  "healthcare__discussed-info-publicly": [
+    {
+      "tokens": [
+        "details",
+        "discussed",
+        "earshot",
+        "information",
+        "others",
+        "personal"
+      ],
+      "threshold": 3
+    }
+  ],
+  "healthcare__long-wait-beyond-appt": [
+    {
+      "tokens": [
+        "appointment",
+        "beyond",
+        "waited",
+        "appt",
+        "began",
+        "long"
+      ],
+      "threshold": 3
+    }
+  ],
+  "healthcare__symptoms-dismissed": [
+    {
+      "tokens": [
+        "changed",
+        "dismissed",
+        "inquiry",
+        "nothing",
+        "probably",
+        "provider"
+      ],
+      "threshold": 3
+    }
+  ],
+  "healthcare__touch-no-consent": [
+    {
+      "tokens": [
+        "asking",
+        "consent",
+        "explaining",
+        "explanation",
+        "began",
+        "exam"
+      ],
+      "threshold": 3
+    }
+  ],
+  "honesty-info__omitted-detail": [
+    {
+      "tokens": [
+        "accepted",
+        "detail",
+        "friday",
+        "important",
+        "omitted",
+        "shared"
+      ],
+      "threshold": 3
+    }
+  ],
+  "honesty-info__plan-changed-without-telling": [
+    {
+      "tokens": [
+        "changed",
+        "telling",
+        "texted",
+        "heads",
+        "home",
+        "later"
+      ],
+      "threshold": 3
+    }
+  ],
+  "honesty-info__story-changed": [
+    {
+      "tokens": [
+        "changed",
+        "message",
+        "statement",
+        "yesterday",
+        "later",
+        "reply"
+      ],
+      "threshold": 3
+    }
+  ],
+  "household-mess__dishes-left-overnight": [
+    {
+      "tokens": [
+        "agreed",
+        "cleanup",
+        "dishes",
+        "morning",
+        "overnight",
+        "remained"
+      ],
+      "threshold": 3
+    }
+  ],
+  "household-mess__shared-space-clutter": [
+    {
+      "tokens": [
+        "clutter",
+        "finished",
+        "hallway",
+        "reminding",
+        "shared",
+        "bags"
+      ],
+      "threshold": 3
+    }
+  ],
+  "household-mess__trash-not-taken": [
+    {
+      "tokens": [
+        "pickup",
+        "bins",
+        "full",
+        "still",
+        "taken",
+        "trash"
+      ],
+      "threshold": 3
+    }
+  ],
+  "info-load__deadline-pressure": [
+    {
+      "tokens": [
+        "deadline",
+        "pressure",
+        "turnaround",
+        "urgent",
+        "10pm",
+        "early"
+      ],
+      "threshold": 3
+    }
+  ],
+  "info-load__new-req-near-deadline": [
+    {
+      "tokens": [
+        "deadline",
+        "requirement",
+        "added",
+        "close",
+        "hours",
+        "near"
+      ],
+      "threshold": 3
+    }
+  ],
+  "info-load__withheld-critical-info": [
+    {
+      "tokens": [
+        "complete",
+        "critical",
+        "information",
+        "needed",
+        "provided",
+        "shared"
+      ],
+      "threshold": 3
+    }
+  ],
+  "info-load__withheld-info": [
+    {
+      "tokens": [
+        "closed",
+        "learned",
+        "omitted",
+        "requirement",
+        "submission",
+        "withheld"
+      ],
+      "threshold": 3
+    }
+  ],
+  "interruption__cross-talk": [
+    {
+      "tokens": [
+        "couldn",
+        "multiple",
+        "people",
+        "cross",
+        "spoke",
+        "talk"
+      ],
+      "threshold": 3
+    }
+  ],
+  "interruption__monopolized": [
+    {
+      "tokens": [
+        "meeting",
+        "monopolized",
+        "person",
+        "spoke",
+        "time"
+      ],
+      "threshold": 3
+    }
+  ],
+  "interruption__multiple-overlaps": [
+    {
+      "tokens": [
+        "minutes",
+        "multiple",
+        "overlaps",
+        "sentence",
+        "update",
+        "within"
+      ],
+      "threshold": 3
+    }
+  ],
+  "interruption__muted-while-speaking": [
+    {
+      "tokens": [
+        "microphone",
+        "speaking",
+        "muted"
+      ],
+      "threshold": 3
+    }
+  ],
+  "interruption__screen-share-takeover": [
+    {
+      "tokens": [
+        "another",
+        "presenting",
+        "replaced",
+        "screen",
+        "slides",
+        "speaking"
+      ],
+      "threshold": 3
+    }
+  ],
+  "interruption__spoke-over": [
+    {
+      "tokens": [
+        "sentence",
+        "speaking",
+        "stopped",
+        "began",
+        "spoke",
+        "word"
+      ],
+      "threshold": 3
+    }
+  ],
+  "lack-appreciation__credit-missing": [
+    {
+      "tokens": [
+        "appeared",
+        "contribution",
+        "credit",
+        "example",
+        "missing",
+        "naming"
+      ],
+      "threshold": 3
+    }
+  ],
+  "lack-appreciation__no-ack-effort": [
+    {
+      "tokens": [
+        "acknowledged",
+        "effort",
+        "finished",
+        "meeting",
+        "mention",
+        "project"
+      ],
+      "threshold": 3
+    }
+  ],
+  "lack-appreciation__no-thanks-routine": [
+    {
+      "tokens": [
+        "routine",
+        "school",
+        "support",
+        "thanked",
+        "thanks",
+        "days"
+      ],
+      "threshold": 3
+    }
+  ],
+  "lateness-chronic__late-10min": [
+    {
+      "tokens": [
+        "arrived",
+        "meeting",
+        "minutes",
+        "10min",
+        "began",
+        "late"
+      ],
+      "threshold": 3
+    }
+  ],
+  "lateness-chronic__late-30min": [
+    {
+      "tokens": [
+        "arrived",
+        "minutes",
+        "scheduled",
+        "started",
+        "30min",
+        "late"
+      ],
+      "threshold": 3
+    }
+  ],
+  "lateness-chronic__no-heads-up": [
+    {
+      "tokens": [
+        "appointment",
+        "arriving",
+        "message",
+        "heads",
+        "late",
+        "sent"
+      ],
+      "threshold": 3
+    }
+  ],
+  "micromanagement__changed-steps": [
+    {
+      "tokens": [
+        "changed",
+        "executing",
+        "instructions",
+        "plan",
+        "steps",
+        "task"
+      ],
+      "threshold": 3
+    }
+  ],
+  "micromanagement__constant-check-ins": [
+    {
+      "tokens": [
+        "constant",
+        "frequent",
+        "messages",
+        "minutes",
+        "status",
+        "window"
+      ],
+      "threshold": 3
+    }
+  ],
+  "micromanagement__hovering": [
+    {
+      "tokens": [
+        "behind",
+        "hovering",
+        "manager",
+        "standing",
+        "watching",
+        "chair"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-billing__auto-renew": [
+    {
+      "tokens": [
+        "advance",
+        "reminder",
+        "renewal",
+        "renewed",
+        "subscription",
+        "auto"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-billing__charged-after-cancel": [
+    {
+      "tokens": [
+        "cancel",
+        "cancellation",
+        "charge",
+        "charged",
+        "confirmation",
+        "posted"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-billing__hidden-fee": [
+    {
+      "tokens": [
+        "appeared",
+        "checkout",
+        "hidden",
+        "listed",
+        "service",
+        "upfront"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-boundaries__borrow-not-returned": [
+    {
+      "tokens": [
+        "agreed",
+        "borrow",
+        "borrowed",
+        "message",
+        "passed",
+        "repaid"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-boundaries__missed-payback-date": [
+    {
+      "tokens": [
+        "agreed",
+        "message",
+        "missed",
+        "passed",
+        "payback",
+        "payment"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-boundaries__split-uneven": [
+    {
+      "tokens": [
+        "agreement",
+        "assigned",
+        "consent",
+        "shared",
+        "uneven",
+        "unevenly"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-safety__speeding": [
+    {
+      "tokens": [
+        "posted",
+        "showed",
+        "speeding",
+        "speedometer",
+        "drove",
+        "speed"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-safety__texting-while-driving": [
+    {
+      "tokens": [
+        "driving",
+        "moving",
+        "stoplight",
+        "texted",
+        "texting",
+        "phone"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-safety__unexpected-charge": [
+    {
+      "tokens": [
+        "charge",
+        "higher",
+        "unexpected",
+        "bill",
+        "fees",
+        "final"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-safety__unexpected-fee": [
+    {
+      "tokens": [
+        "appeared",
+        "checkout",
+        "service",
+        "unexpected",
+        "added",
+        "bill"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-safety__unsafe-driving": [
+    {
+      "tokens": [
+        "driving",
+        "highway",
+        "looked",
+        "texting",
+        "unsafe",
+        "phone"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-shared__added-unagreed-expense": [
+    {
+      "tokens": [
+        "expense",
+        "included",
+        "unagreed",
+        "added",
+        "bill",
+        "drink"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-shared__late-payback": [
+    {
+      "tokens": [
+        "agreed",
+        "arrived",
+        "payback",
+        "payment",
+        "tickets",
+        "date"
+      ],
+      "threshold": 3
+    }
+  ],
+  "money-shared__used-shared-fund": [
+    {
+      "tokens": [
+        "account",
+        "beforehand",
+        "checking",
+        "message",
+        "purchase",
+        "shared"
+      ],
+      "threshold": 3
+    }
+  ],
+  "no-reply__call-not-returned": [
+    {
+      "tokens": [
+        "agreed",
+        "called",
+        "missed",
+        "returned",
+        "window",
+        "within"
+      ],
+      "threshold": 3
+    }
+  ],
+  "no-reply__emoji-only-no-reply": [
+    {
+      "tokens": [
+        "cutoff",
+        "message",
+        "reaction",
+        "received",
+        "emoji",
+        "reply"
+      ],
+      "threshold": 3
+    }
+  ],
+  "no-reply__read-no-reply": [
+    {
+      "tokens": [
+        "messages",
+        "receipts",
+        "check",
+        "hours",
+        "marks",
+        "read"
+      ],
+      "threshold": 3
+    }
+  ],
+  "no-reply__stopped-replying": [
+    {
+      "tokens": [
+        "messages",
+        "replying",
+        "response",
+        "stopped",
+        "three",
+        "week"
+      ],
+      "threshold": 3
+    }
+  ],
+  "no-reply__thread-continuing-no-reply": [
+    {
+      "tokens": [
+        "answered",
+        "appeared",
+        "continued",
+        "continuing",
+        "messages",
+        "question"
+      ],
+      "threshold": 3
+    }
+  ],
+  "parenting-routines__homework-delayed": [
+    {
+      "tokens": [
+        "agreed",
+        "agreement",
+        "delayed",
+        "homework",
+        "started",
+        "blank"
+      ],
+      "threshold": 3
+    }
+  ],
+  "parenting-routines__morning-routine": [
+    {
+      "tokens": [
+        "agreed",
+        "backpack",
+        "morning",
+        "routine",
+        "skipped",
+        "door"
+      ],
+      "threshold": 3
+    }
+  ],
+  "parenting-routines__screen-time-continued": [
+    {
+      "tokens": [
+        "continued",
+        "minutes",
+        "remained",
+        "screen",
+        "stayed",
+        "tablet"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pet-etiquette__barking-late": [
+    {
+      "tokens": [
+        "barking",
+        "continued",
+        "minutes",
+        "late",
+        "night",
+        "past"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pet-etiquette__off-leash": [
+    {
+      "tokens": [
+        "posted",
+        "area",
+        "free",
+        "leash",
+        "sign",
+        "dog"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pet-etiquette__waste-left": [
+    {
+      "tokens": [
+        "cleaned",
+        "remained",
+        "shared",
+        "sidewalk",
+        "left",
+        "waste"
+      ],
+      "threshold": 3
+    }
+  ],
+  "phone-presence__calls-during-movie": [
+    {
+      "tokens": [
+        "activity",
+        "shared",
+        "taking",
+        "calls",
+        "movie",
+        "room"
+      ],
+      "threshold": 3
+    }
+  ],
+  "phone-presence__phones-at-dinner": [
+    {
+      "tokens": [
+        "dinner",
+        "phones",
+        "screen",
+        "meal",
+        "meals",
+        "phone"
+      ],
+      "threshold": 3
+    }
+  ],
+  "phone-presence__scrolling-while-speaking": [
+    {
+      "tokens": [
+        "person",
+        "scrolled",
+        "scrolling",
+        "sharing",
+        "speaking",
+        "talking"
+      ],
+      "threshold": 3
+    }
+  ],
+  "plan-control__agenda-changed-midmeeting": [
+    {
+      "tokens": [
+        "agenda",
+        "attendees",
+        "changed",
+        "checking",
+        "meeting",
+        "midmeeting"
+      ],
+      "threshold": 3
+    }
+  ],
+  "plan-control__changed-without-asking": [
+    {
+      "tokens": [
+        "asking",
+        "changed",
+        "plan",
+        "way"
+      ],
+      "threshold": 3
+    }
+  ],
+  "plan-control__event-time-moved": [
+    {
+      "tokens": [
+        "changed",
+        "checking",
+        "meeting",
+        "message",
+        "check",
+        "event"
+      ],
+      "threshold": 3
+    }
+  ],
+  "plan-control__moving-goalposts": [
+    {
+      "tokens": [
+        "changed",
+        "criteria",
+        "delivered",
+        "finished",
+        "goalposts",
+        "moving"
+      ],
+      "threshold": 3
+    }
+  ],
+  "plan-control__overruled": [
+    {
+      "tokens": [
+        "announced",
+        "contribute",
+        "decision",
+        "overruled",
+        "asked",
+        "input"
+      ],
+      "threshold": 3
+    }
+  ],
+  "plan-control__task-assigned-without-checking": [
+    {
+      "tokens": [
+        "asking",
+        "assigned",
+        "capacity",
+        "checking",
+        "current",
+        "standup"
+      ],
+      "threshold": 3
+    }
+  ],
+  "privacy-boundaries__looked-through-phone": [
+    {
+      "tokens": [
+        "asking",
+        "looked",
+        "messages",
+        "opened",
+        "phone",
+        "table"
+      ],
+      "threshold": 3
+    }
+  ],
+  "privacy-boundaries__shared-private-chat": [
+    {
+      "tokens": [
+        "conversation",
+        "private",
+        "screenshot",
+        "shared",
+        "someone",
+        "chat"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pronouns-names__deadnaming": [
+    {
+      "tokens": [
+        "deadnaming",
+        "introduced",
+        "longer",
+        "name",
+        "used",
+        "using"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pronouns-names__mispronoun": [
+    {
+      "tokens": [
+        "different",
+        "meeting",
+        "mispronoun",
+        "pronouns",
+        "reminders",
+        "shared"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pronouns-names__old-name-in-email": [
+    {
+      "tokens": [
+        "subject",
+        "email",
+        "line",
+        "name",
+        "used",
+        "don"
+      ],
+      "threshold": 3
+    }
+  ],
+  "pronouns-names__wrong-pronouns-after-reminder": [
+    {
+      "tokens": [
+        "different",
+        "meeting",
+        "pronouns",
+        "reminder",
+        "reminders",
+        "used"
+      ],
+      "threshold": 3
+    }
+  ],
+  "property__broke-item": [
+    {
+      "tokens": [
+        "cracked",
+        "damaged",
+        "dropped",
+        "property",
+        "screen",
+        "tablet"
+      ],
+      "threshold": 3
+    }
+  ],
+  "property__edited-doc-without-permission": [
+    {
+      "tokens": [
+        "asking",
+        "document",
+        "edited",
+        "permission",
+        "check",
+        "edits"
+      ],
+      "threshold": 3
+    }
+  ],
+  "property__no-credit": [
+    {
+      "tokens": [
+        "contribution",
+        "credit",
+        "name",
+        "taken",
+        "used"
+      ],
+      "threshold": 3
+    }
+  ],
+  "property__reused-work-without-credit": [
+    {
+      "tokens": [
+        "appeared",
+        "contribution",
+        "credit",
+        "diagram",
+        "naming",
+        "reused"
+      ],
+      "threshold": 3
+    }
+  ],
+  "property__took-without-ask": [
+    {
+      "tokens": [
+        "account",
+        "asking",
+        "laptop",
+        "things",
+        "took",
+        "used"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-noise__loud-convo": [
+    {
+      "tokens": [
+        "beside",
+        "conversation",
+        "loudly",
+        "minutes",
+        "people",
+        "convo"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-noise__music-no-headphones": [
+    {
+      "tokens": [
+        "headphones",
+        "played",
+        "loud",
+        "music",
+        "ride",
+        "bus"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-noise__speakerphone-public": [
+    {
+      "tokens": [
+        "continued",
+        "library",
+        "minutes",
+        "public",
+        "speakerphone",
+        "area"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-remark__comparison": [
+    {
+      "tokens": [
+        "comparison",
+        "follow",
+        "unfavorable",
+        "unlike",
+        "alex",
+        "don"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-remark__comparison-public": [
+    {
+      "tokens": [
+        "another",
+        "compared",
+        "comparison",
+        "meeting",
+        "others",
+        "output"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-remark__joke-at-my-expense": [
+    {
+      "tokens": [
+        "expense",
+        "laughed",
+        "standup",
+        "group",
+        "joke",
+        "made"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-remark__micro-remark": [
+    {
+      "tokens": [
+        "meeting",
+        "really",
+        "remark",
+        "asked",
+        "micro",
+        "etc"
+      ],
+      "threshold": 3
+    }
+  ],
+  "public-remark__negative-public-remark": [
+    {
+      "tokens": [
+        "negative",
+        "public",
+        "remark",
+        "spoke",
+        "time",
+        "waste"
+      ],
+      "threshold": 3
+    }
+  ],
+  "quality-time__calls-during-date": [
+    {
+      "tokens": [
+        "answered",
+        "dinner",
+        "together",
+        "calls",
+        "date",
+        "table"
+      ],
+      "threshold": 3
+    }
+  ],
+  "quality-time__canceled-quality-time": [
+    {
+      "tokens": [
+        "canceled",
+        "gaming",
+        "minutes",
+        "quality",
+        "screen",
+        "keep"
+      ],
+      "threshold": 3
+    }
+  ],
+  "quality-time__phone-during-convo": [
+    {
+      "tokens": [
+        "scrolled",
+        "sharing",
+        "talking",
+        "convo",
+        "phone",
+        "used"
+      ],
+      "threshold": 3
+    }
+  ],
+  "queue-etiquette__cutting-line": [
+    {
+      "tokens": [
+        "checkout",
+        "cutting",
+        "person",
+        "someone",
+        "standing",
+        "stepped"
+      ],
+      "threshold": 3
+    }
+  ],
+  "queue-etiquette__saving-spots": [
+    {
+      "tokens": [
+        "arrivals",
+        "friend",
+        "holding",
+        "joined",
+        "people",
+        "places"
+      ],
+      "threshold": 3
+    }
+  ],
+  "queue-etiquette__unclear-queue": [
+    {
+      "tokens": [
+        "counter",
+        "formed",
+        "markers",
+        "people",
+        "signage",
+        "unclear"
+      ],
+      "threshold": 3
+    }
+  ],
+  "school-classroom__classroom-overstimulation": [
+    {
+      "tokens": [
+        "activities",
+        "centers",
+        "chaotic",
+        "classroom",
+        "environment",
+        "minutes"
+      ],
+      "threshold": 3
+    }
+  ],
+  "school-classroom__group-roles-changed": [
+    {
+      "tokens": [
+        "asking",
+        "changed",
+        "checking",
+        "project",
+        "reassigned",
+        "group"
+      ],
+      "threshold": 3
+    }
+  ],
+  "school-classroom__hand-raised-not-called": [
+    {
+      "tokens": [
+        "called",
+        "questions",
+        "raised",
+        "hand"
+      ],
+      "threshold": 3
+    }
+  ],
+  "school-classroom__materials-not-ready": [
+    {
+      "tokens": [
+        "agreed",
+        "materials",
+        "planned",
+        "prepared",
+        "ready",
+        "start"
+      ],
+      "threshold": 3
+    }
+  ],
+  "sleep-noise__late-night-notifications": [
+    {
+      "tokens": [
+        "nightstand",
+        "notifications",
+        "sounded",
+        "late",
+        "night",
+        "phone"
+      ],
+      "threshold": 3
+    }
+  ],
+  "sleep-noise__roommate-late-entrance": [
+    {
+      "tokens": [
+        "closed",
+        "entrance",
+        "footsteps",
+        "loudly",
+        "roommate",
+        "came"
+      ],
+      "threshold": 3
+    }
+  ],
+  "sleep-noise__snoring-loud": [
+    {
+      "tokens": [
+        "continued",
+        "loudly",
+        "midnight",
+        "minutes",
+        "snoring",
+        "loud"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-exclusion__info-channel-missed": [
+    {
+      "tokens": [
+        "account",
+        "channel",
+        "include",
+        "missed",
+        "project",
+        "info"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-exclusion__not-invited": [
+    {
+      "tokens": [
+        "activity",
+        "calendar",
+        "invite",
+        "invited",
+        "photos",
+        "group"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-inclusion__changed-seating": [
+    {
+      "tokens": [
+        "anything",
+        "changed",
+        "different",
+        "saying",
+        "seating",
+        "switched"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-inclusion__left-event-without-telling": [
+    {
+      "tokens": [
+        "learned",
+        "minutes",
+        "someone",
+        "telling",
+        "else",
+        "event"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-inclusion__plan-made-without-me": [
+    {
+      "tokens": [
+        "arranged",
+        "dinner",
+        "including",
+        "invite",
+        "added",
+        "chat"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-media-sharing__posted-photo-no-ask": [
+    {
+      "tokens": [
+        "asking",
+        "checking",
+        "posted",
+        "event",
+        "first",
+        "photo"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-media-sharing__shared-dm": [
+    {
+      "tokens": [
+        "appeared",
+        "comment",
+        "direct",
+        "message",
+        "public",
+        "publicly"
+      ],
+      "threshold": 3
+    }
+  ],
+  "social-media-sharing__tagged-location-home": [
+    {
+      "tokens": [
+        "included",
+        "location",
+        "street",
+        "tagged",
+        "home",
+        "name"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-alonetime__booked-every-night": [
+    {
+      "tokens": [
+        "booked",
+        "evening",
+        "monday",
+        "myself",
+        "thursday",
+        "wanted"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-alonetime__called-repeatedly": [
+    {
+      "tokens": [
+        "called",
+        "repeatedly",
+        "taking",
+        "window",
+        "within",
+        "calls"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-alonetime__moved-my-things": [
+    {
+      "tokens": [
+        "belongings",
+        "rearranged",
+        "things",
+        "desk",
+        "items",
+        "moved"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-shared__food-taken": [
+    {
+      "tokens": [
+        "container",
+        "labeled",
+        "empty",
+        "food",
+        "mine",
+        "note"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-shared__quiet-hours-audio": [
+    {
+      "tokens": [
+        "agreed",
+        "loudly",
+        "played",
+        "audio",
+        "hours",
+        "loud"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-shared__quiet-hours-ignored": [
+    {
+      "tokens": [
+        "agreed",
+        "disregarded",
+        "ignored",
+        "played",
+        "hours",
+        "loud"
+      ],
+      "threshold": 3
+    }
+  ],
+  "space-shared__used-my-shelf": [
+    {
+      "tokens": [
+        "asking",
+        "checking",
+        "placed",
+        "storage",
+        "items",
+        "shelf"
+      ],
+      "threshold": 3
+    }
+  ],
+  "substance-agreements__agreed-dd-had-drinks": [
+    {
+      "tokens": [
+        "agreed",
+        "agreeing",
+        "drinks",
+        "ordered",
+        "drive",
+        "home"
+      ],
+      "threshold": 3
+    }
+  ],
+  "substance-agreements__cancelled-due-to-hangover": [
+    {
+      "tokens": [
+        "because",
+        "brunch",
+        "canceled",
+        "cancelled",
+        "hangover",
+        "morning"
+      ],
+      "threshold": 3
+    }
+  ],
+  "substance-agreements__showed-up-under-influence": [
+    {
+      "tokens": [
+        "alcohol",
+        "arrived",
+        "influence",
+        "meeting",
+        "parents",
+        "showed"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tech-issues__audio-echo": [
+    {
+      "tokens": [
+        "meeting",
+        "minutes",
+        "persisted",
+        "started",
+        "audio",
+        "echo"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tech-issues__share-failed": [
+    {
+      "tokens": [
+        "failed",
+        "screen",
+        "demo",
+        "share",
+        "twice",
+        "cut"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tech-issues__wifi-drop": [
+    {
+      "tokens": [
+        "connection",
+        "disconnected",
+        "dropped",
+        "minutes",
+        "repeatedly",
+        "drop"
+      ],
+      "threshold": 3
+    }
+  ],
+  "texting-availability__late-night-texts": [
+    {
+      "tokens": [
+        "arrived",
+        "messages",
+        "midnight",
+        "weekdays",
+        "hours",
+        "late"
+      ],
+      "threshold": 3
+    }
+  ],
+  "texting-availability__read-no-reply": [
+    {
+      "tokens": [
+        "receipt",
+        "showed",
+        "last",
+        "next",
+        "night",
+        "read"
+      ],
+      "threshold": 3
+    }
+  ],
+  "texting-availability__short-replies-only": [
+    {
+      "tokens": [
+        "discussed",
+        "replies",
+        "days",
+        "plans",
+        "short",
+        "three"
+      ],
+      "threshold": 3
+    }
+  ],
+  "timeliness__cancel-short": [
+    {
+      "tokens": [
+        "cancel",
+        "canceled",
+        "meeting",
+        "minutes",
+        "notice",
+        "short"
+      ],
+      "threshold": 3
+    }
+  ],
+  "timeliness__late-20": [
+    {
+      "tokens": [
+        "agreed",
+        "arrived",
+        "message",
+        "minutes",
+        "late",
+        "00"
+      ],
+      "threshold": 3
+    }
+  ],
+  "timeliness__late-cancel-short-notice": [
+    {
+      "tokens": [
+        "cancel",
+        "canceled",
+        "meeting",
+        "minutes",
+        "notice",
+        "within"
+      ],
+      "threshold": 3
+    }
+  ],
+  "timeliness__left-early": [
+    {
+      "tokens": [
+        "meeting",
+        "minutes",
+        "scheduled",
+        "early",
+        "left",
+        "note"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tone-volume__audible-sighs": [
+    {
+      "tokens": [
+        "audible",
+        "several",
+        "speaking",
+        "sighs",
+        "turn"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tone-volume__door-slam": [
+    {
+      "tokens": [
+        "closed",
+        "conversation",
+        "loudly",
+        "door",
+        "exit",
+        "loud"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tone-volume__profanity-used": [
+    {
+      "tokens": [
+        "comment",
+        "immediately",
+        "meeting",
+        "profanity",
+        "response",
+        "used"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tone-volume__raised-voice": [
+    {
+      "tokens": [
+        "increased",
+        "louder",
+        "raised",
+        "volume",
+        "yelling",
+        "talk"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tone-volume__rapid-speech": [
+    {
+      "tokens": [
+        "became",
+        "discussion",
+        "faster",
+        "increased",
+        "noticeably",
+        "speaking"
+      ],
+      "threshold": 3
+    }
+  ],
+  "tone-volume__sarcasm": [
+    {
+      "tokens": [
+        "imitated",
+        "mocking",
+        "question",
+        "sarcasm",
+        "sarcastic",
+        "tone"
+      ],
+      "threshold": 3
+    }
+  ],
+  "work-collab__feedback-public": [
+    {
+      "tokens": [
+        "critical",
+        "feedback",
+        "public",
+        "gave",
+        "given",
+        "group"
+      ],
+      "threshold": 3
+    }
+  ],
+  "work-collab__meeting-overbook": [
+    {
+      "tokens": [
+        "asking",
+        "blocked",
+        "booked",
+        "checking",
+        "commitment",
+        "invite"
+      ],
+      "threshold": 3
+    }
+  ],
+  "work-collab__merged-without-review": [
+    {
+      "tokens": [
+        "change",
+        "merged",
+        "request",
+        "review",
+        "reviewer",
+        "pull"
+      ],
+      "threshold": 3
+    }
+  ],
+  "work-collab__reassigned-without-message": [
+    {
+      "tokens": [
+        "message",
+        "reassigned",
+        "ticket",
+        "away",
+        "check",
+        "issue"
+      ],
+      "threshold": 3
+    }
+  ],
+  "work-collab__removed-comment": [
+    {
+      "tokens": [
+        "comment",
+        "document",
+        "removed",
+        "resolved",
+        "response",
+        "reply"
+      ],
+      "threshold": 3
     }
   ]
 }

@@ -9,18 +9,21 @@ const DEFAULT_LEXICON_PATH = join(rootDir, 'data', 'observation_lexicon.json');
 const DEFAULT_BLUEPRINT_PATH = join(rootDir, 'data', 'observation_module_blueprints.json');
 const DEFAULT_CUE_OUTPUT = join(rootDir, 'data', 'observation_cues.csv');
 const DEFAULT_MODULE_OUTPUT = join(rootDir, 'data', 'observation_cue_modules.json');
+const DEFAULT_SITE_INDEX_PATH = join(rootDir, 'data', 'index.json');
 
 export function buildObservationCueLibrary({
   lexiconPath = DEFAULT_LEXICON_PATH,
   blueprintPath = DEFAULT_BLUEPRINT_PATH,
   cueOutputPath = DEFAULT_CUE_OUTPUT,
   moduleOutputPath = DEFAULT_MODULE_OUTPUT,
+  siteIndexPath = DEFAULT_SITE_INDEX_PATH,
   logger = console,
 } = {}) {
   const lexicon = loadLexicon(lexiconPath);
   const blueprint = loadBlueprint(blueprintPath);
+  const support = loadSupportedWordSets(siteIndexPath);
 
-  const { modules, cues } = compileFromBlueprint({ lexicon, blueprint });
+  const { modules, cues } = compileFromBlueprint({ lexicon, blueprint, support });
 
   writeCueCsv(cues, cueOutputPath);
   writeModuleJson(modules, moduleOutputPath);
@@ -52,7 +55,7 @@ function loadBlueprint(path) {
   throw new Error('Observation module blueprint must expose a modules array.');
 }
 
-function compileFromBlueprint({ lexicon, blueprint }) {
+function compileFromBlueprint({ lexicon, blueprint, support }) {
   const cues = [];
   const modules = [];
   const cueIds = new Set();
@@ -87,6 +90,8 @@ function compileFromBlueprint({ lexicon, blueprint }) {
       const cueNeeds = uniqueStrings(
         cueDef.needs && cueDef.needs.length ? cueDef.needs : normalizedModule.needs,
       );
+      validateSupported('feeling', cueFeelings, support?.feelings, cueDef.id);
+      validateSupported('need', cueNeeds, support?.needs, cueDef.id);
       const example = sanitizeSentence(cueDef.example || '');
       if (!example) {
         throw new Error(`Cue ${cueDef.id} is missing an example.`);
@@ -117,6 +122,8 @@ function compileFromBlueprint({ lexicon, blueprint }) {
         ? normalizedModule.needs
         : moduleCues.flatMap(cue => cue.needs || []),
     );
+    validateSupported('feeling', moduleFeelings, support?.feelings, normalizedModule.id);
+    validateSupported('need', moduleNeeds, support?.needs, normalizedModule.id);
 
     modules.push({
       id: normalizedModule.id,
@@ -212,6 +219,40 @@ function normalizeLexiconEntry(key, entry, index) {
     throw new Error(`Lexicon entry ${key}[${index}] must define a pattern or tokens.`);
   }
   return { key, pattern, flags, tokens, threshold, hint };
+}
+
+function loadSupportedWordSets(siteIndexPath) {
+  try {
+    const text = readFileSync(siteIndexPath, 'utf8');
+    const parsed = JSON.parse(text);
+    const feelings = new Set();
+    const needs = new Set();
+    (parsed.feelings || []).forEach(entry => {
+      if (entry?.slug) {
+        feelings.add(String(entry.slug).trim());
+      }
+    });
+    (parsed.needs || []).forEach(entry => {
+      if (entry?.slug) {
+        needs.add(String(entry.slug).trim());
+      }
+    });
+    return { feelings, needs };
+  } catch (error) {
+    throw new Error(`Failed to load site index from ${siteIndexPath}: ${error.message}`);
+  }
+}
+
+function validateSupported(type, values, supported, contextId) {
+  if (!supported || !supported.size) {
+    return;
+  }
+  const missing = (values || []).filter(value => value && !supported.has(value));
+  if (missing.length) {
+    throw new Error(
+      `${contextId || 'unknown'} references unsupported ${type}${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`,
+    );
+  }
 }
 
 function collectLexiconEntries(keys, lexicon) {
