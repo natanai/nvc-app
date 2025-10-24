@@ -195,7 +195,7 @@ const SCENARIOS = [
     moduleId: 'commute-kindness',
   },
   {
-    text: 'My teammate ignored the shared sprint board updates for a week.',
+    text: 'My teammate skipped the shared sprint board updates for a week.',
     moduleId: 'collaboration-visibility',
   },
   {
