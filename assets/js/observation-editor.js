@@ -29,6 +29,7 @@ const state = {
   activeHighlightKey: '',
   detectionMatchLimit: 1,
   detectionNearLimit: 6,
+  detectorStats: null,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
@@ -90,17 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Unable to load observation cue map', error);
       return createEmptyCueLibrary();
     }),
+    loadDetectorStats('/data/observation_detector_stats.json'),
   ])
-    .then(([catalog, cueLibrary]) => {
+    .then(([catalog, cueLibrary, detectorStats]) => {
       state.catalog = catalog;
       state.cueLibrary = cueLibrary;
       state.cues = Array.isArray(cueLibrary?.cues) ? cueLibrary.cues : [];
+      state.detectorStats = detectorStats;
       if (!state.text.trim()) {
         state.detectionStatus = 'idle';
         state.detectionMatches = 0;
         renderDetectionStatus();
       }
       scheduleAnalysis('library-loaded', { immediate: true });
+      renderDetectionSummary();
     })
     .catch(error => {
       console.warn('Unable to load observation helpers', error);
@@ -1253,6 +1257,49 @@ async function loadCatalog(url) {
   }
 }
 
+async function loadDetectorStats(url) {
+  if (!url) {
+    return null;
+  }
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    if (data && typeof data === 'object') {
+      return data;
+    }
+  } catch (error) {
+    console.warn('Failed to load observation detector stats', error);
+  }
+  return null;
+}
+
+function formatCount(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return '';
+  }
+  return numeric.toLocaleString();
+}
+
+function formatPercent(value, maximumFractionDigits = 1) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return '';
+  }
+  const fractionDigits = Math.max(0, Math.min(4, Number(maximumFractionDigits) || 0));
+  const options = {
+    minimumFractionDigits: numeric % 1 === 0 ? 0 : Math.min(Math.max(fractionDigits, 1), 4),
+    maximumFractionDigits: Math.min(Math.max(fractionDigits, 0), 4),
+  };
+  if (options.maximumFractionDigits < options.minimumFractionDigits) {
+    options.maximumFractionDigits = options.minimumFractionDigits;
+  }
+  return numeric.toLocaleString(undefined, options);
+}
+
 function buildCatalog(data) {
   const feelings = new Map();
   const needs = new Map();
@@ -1798,6 +1845,7 @@ function renderDetectionSummary() {
   const nearValue = document.getElementById('observation-detection-near');
   const note = document.getElementById('observation-detection-note');
   const coverage = document.getElementById('observation-detection-coverage');
+  const feelingsCoverage = document.getElementById('observation-detection-feelings');
 
   if (!summary) {
     return;
@@ -1919,6 +1967,34 @@ function renderDetectionSummary() {
     } else {
       coverage.textContent = '';
       coverage.setAttribute('hidden', 'hidden');
+    }
+  }
+
+  if (feelingsCoverage) {
+    const stats = state.detectorStats?.feelings;
+    if (stats && Number.isFinite(Number(stats.exactMatchCount)) && Number(stats.exactMatchCount) > 0) {
+      const matchedCount = Number(stats.exactMatchCount) || 0;
+      const uniqueCount = Number(stats.uniqueCueCount) || matchedCount;
+      const totalLibraryCount = Number(stats.totalLibraryCount) || 0;
+      const exactPercent = formatPercent(stats.exactMatchPercentage, 1);
+      const coveragePercent = formatPercent(stats.libraryCoveragePercentage, 1);
+
+      const matchText = uniqueCount !== matchedCount
+        ? `${formatCount(matchedCount)}/${formatCount(uniqueCount)}`
+        : formatCount(matchedCount);
+
+      let message = `Exact feeling matches cover ${matchText} feeling${matchedCount === 1 ? '' : 's'}`;
+      if (uniqueCount !== matchedCount && exactPercent) {
+        message += ` (${exactPercent}%)`;
+      }
+      if (totalLibraryCount > 0 && coveragePercent) {
+        message += ` (~${coveragePercent}% of our feelings library)`;
+      }
+      feelingsCoverage.textContent = `${message}.`;
+      feelingsCoverage.removeAttribute('hidden');
+    } else {
+      feelingsCoverage.textContent = '';
+      feelingsCoverage.setAttribute('hidden', 'hidden');
     }
   }
 }
