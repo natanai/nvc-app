@@ -1659,6 +1659,23 @@ button.site-nav__magnet {
     background: color-mix(in srgb, var(--outline) 6%, #ffffff 94%);
   }
 
+  .observation-sentence-builder__token-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+    background: #ffffff;
+    font: inherit;
+    line-height: 1.45;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-sentence-builder__token-input:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--sky) 34%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 22%, transparent);
+  }
+
   .observation-sentence-builder__summary {
     margin: 0;
     font-size: 0.8rem;

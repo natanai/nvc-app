@@ -82,6 +82,69 @@ const OBSERVATION_GUIDELINE_NOTE =
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 
+const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
+  person: {
+    label: '(person)',
+    prompt: 'Enter who was there (name, role, or relationship).',
+    example: 'my manager',
+  },
+  people: {
+    label: '(people)',
+    prompt: 'Enter who was there (group or people).',
+    example: 'my teammates',
+  },
+  role: {
+    label: '(role)',
+    prompt: 'Enter who was there (role or relationship).',
+    example: 'the facilitator',
+  },
+  group: {
+    label: '(group)',
+    prompt: 'Enter who was there (team or group).',
+    example: 'the audit committee',
+  },
+  location: {
+    label: '(location)',
+    prompt: 'Enter the place or setting.',
+    example: 'the conference room',
+  },
+  channel: {
+    label: '(channel)',
+    prompt: 'Enter the channel or medium.',
+    example: 'our project Slack channel',
+  },
+  event: {
+    label: '(event)',
+    prompt: 'Enter the event or activity.',
+    example: 'the weekly standup',
+  },
+  day: {
+    label: '(day)',
+    prompt: 'Enter the day or part of day.',
+    example: 'Monday morning',
+  },
+  date: {
+    label: '(date)',
+    prompt: 'Enter the date.',
+    example: 'March 2',
+  },
+  time: {
+    label: '(time)',
+    prompt: 'Enter the time.',
+    example: '7:45 a.m.',
+  },
+  moment: {
+    label: '(moment)',
+    prompt: 'Describe the moment briefly.',
+    example: 'while we checked in',
+  },
+  object: {
+    label: '(object)',
+    prompt: 'Describe the item or subject.',
+    example: 'the quarterly report',
+  },
+};
+
 function createEmptySentenceBuilderState() {
   return {
     ready: false,
@@ -104,11 +167,121 @@ function createEmptySentenceBuilderState() {
     selectedActionModule: '',
     customMoments: [],
     customCounter: 0,
+    tokenInputs: new Map(),
+    lastAppliedText: '',
+    lastAppliedTokens: [],
+    lastAppliedTokenInputs: [],
   };
 }
 
 function createEmptySentenceBuilderTrie() {
   return { options: [] };
+}
+
+function parseSentenceBuilderPlaceholderToken(token) {
+  if (typeof token !== 'string') {
+    return null;
+  }
+  const trimmed = token.trim();
+  if (!trimmed.startsWith('(')) {
+    return null;
+  }
+  const match = trimmed.match(/^\(([^()]+)\)([,:;.]*)$/);
+  if (!match) {
+    return null;
+  }
+  const rawKey = match[1].trim();
+  const suffix = match[2] || '';
+  if (!rawKey) {
+    return null;
+  }
+  const normalizedKey = rawKey.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const definition = SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS[normalizedKey]
+    || SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS[rawKey.toLowerCase()] || null;
+  return {
+    key: normalizedKey,
+    label: `(${rawKey})`,
+    suffix,
+    prompt: definition?.prompt || 'Enter custom text.',
+    example: definition?.example || '',
+    displayLabel: definition?.label || `(${rawKey})`,
+  };
+}
+
+function isSentenceBuilderPlaceholderToken(token) {
+  return Boolean(parseSentenceBuilderPlaceholderToken(token));
+}
+
+function formatSentenceBuilderPlaceholderValue(rawValue, placeholder) {
+  const source = typeof rawValue === 'string' ? rawValue.trim() : '';
+  if (!source) {
+    return '';
+  }
+  const normalized = source.replace(/[\s]+/g, ' ');
+  const suffix = placeholder?.suffix || '';
+  if (!suffix) {
+    return normalized;
+  }
+  const escaped = suffix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return normalized.replace(new RegExp(`${escaped}$`), '').trim();
+}
+
+function clearSentenceBuilderTokenInputsFrom(builder, startIndex) {
+  if (!builder || !(builder.tokenInputs instanceof Map)) {
+    return;
+  }
+  const keys = Array.from(builder.tokenInputs.keys());
+  keys.forEach(index => {
+    if (index >= startIndex) {
+      builder.tokenInputs.delete(index);
+    }
+  });
+}
+
+function getSentenceBuilderTokenInput(builder, index) {
+  if (!builder || !(builder.tokenInputs instanceof Map)) {
+    return '';
+  }
+  const value = builder.tokenInputs.get(index);
+  return typeof value === 'string' ? value : '';
+}
+
+function resolveSentenceBuilderSegment(sequence, builder, offset, { capitalize } = {}) {
+  const tokens = Array.isArray(sequence?.tokens) ? sequence.tokens : [];
+  if (!tokens.length) {
+    return { text: '', complete: false };
+  }
+  const words = [];
+  let complete = true;
+
+  tokens.forEach((token, tokenIndex) => {
+    const placeholder = parseSentenceBuilderPlaceholderToken(token);
+    if (placeholder) {
+      const inputIndex = offset + tokenIndex;
+      const value = formatSentenceBuilderPlaceholderValue(
+        getSentenceBuilderTokenInput(builder, inputIndex),
+        placeholder,
+      );
+      if (!value) {
+        complete = false;
+        words.push(placeholder.displayLabel);
+      } else {
+        const suffix = placeholder.suffix || '';
+        words.push(suffix ? `${value}${suffix}` : value);
+      }
+    } else if (token) {
+      words.push(token);
+    }
+  });
+
+  let text = words.join(' ').replace(/\s+([,;:.!?])/g, '$1').replace(/[\s]+/g, ' ').trim();
+  if (!text) {
+    return { text: '', complete: false };
+  }
+  if (capitalize) {
+    text = capitalizeFirst(text);
+  }
+  return { text, complete };
 }
 
 function cloneSentenceBuilderTrie(source) {
@@ -303,6 +476,11 @@ function initializeSentenceBuilder(dataset) {
   builder.selectedSentence = builder.selectedSentence || '';
   builder.selectedActionSummary = builder.selectedActionSummary || '';
   builder.selectedActionModule = builder.selectedActionModule || '';
+  builder.tokenInputs = builder.tokenInputs instanceof Map ? builder.tokenInputs : new Map();
+  builder.tokenInputs.clear();
+  builder.lastAppliedText = '';
+  builder.lastAppliedTokens = [];
+  builder.lastAppliedTokenInputs = [];
   builder.ready = builder.whenSequences.length > 0 && builder.whereSequences.length > 0 && builder.actions.length > 0;
 
   renderSentenceBuilder();
@@ -390,23 +568,38 @@ function consumeSentenceBuilderStage(trie, tokens, startIndex) {
   return { complete: Boolean(lastMatchId), nextIndex: lastMatchIndex, trimmedIndex: index, id: lastMatchId };
 }
 
-function populateSentenceBuilderStageSelectors(trie, tokens, offset, selectors) {
+function populateSentenceBuilderStageSelectors(trie, tokens, offset, selectors, builder) {
   let node = trie;
   let index = offset;
   const safetyLimit = 160;
 
   while (node && Array.isArray(node.options) && node.options.length && selectors.length < safetyLimit) {
-    const options = node.options.map(entry => entry.token);
+    const options = node.options.map(entry => {
+      const token = entry.token;
+      const placeholder = parseSentenceBuilderPlaceholderToken(token);
+      return {
+        value: token,
+        label: placeholder ? placeholder.displayLabel : token,
+        placeholder,
+      };
+    });
     const selected = tokens[index];
+    const optionValues = options.map(option => option.value);
+    const selectedOption = optionValues.includes(selected) ? selected : '';
+    const selectedPlaceholder = selectedOption ? parseSentenceBuilderPlaceholderToken(selectedOption) : null;
+    const inputValue = selectedPlaceholder ? getSentenceBuilderTokenInput(builder, index) : '';
     selectors.push({
       index,
       options,
-      selected: options.includes(selected) ? selected : '',
+      optionValues,
+      selected: selectedOption,
+      placeholder: selectedPlaceholder,
+      inputValue,
     });
-    if (!selected || !options.includes(selected)) {
+    if (!selectedOption) {
       return { complete: false, nextIndex: index };
     }
-    const option = node.options.find(entry => entry.token === selected);
+    const option = node.options.find(entry => entry.token === selectedOption);
     node = option.node;
     index += 1;
   }
@@ -520,10 +713,11 @@ function normalizeSentenceBuilderSelection(builder) {
   }
   const tokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
   let index = 0;
-
+  const whenOffset = index;
   const whenResult = consumeSentenceBuilderStage(builder.whenTrie, tokens, index);
   if (!whenResult.complete) {
     builder.selectedTokens = tokens.slice(0, whenResult.trimmedIndex);
+    clearSentenceBuilderTokenInputsFrom(builder, builder.selectedTokens.length);
     builder.selectedWhenId = whenResult.id || '';
     builder.selectedWhereId = '';
     builder.selectedActionId = '';
@@ -535,9 +729,11 @@ function normalizeSentenceBuilderSelection(builder) {
   index = whenResult.nextIndex;
   builder.selectedWhenId = whenResult.id;
 
+  const whereOffset = index;
   const whereResult = consumeSentenceBuilderStage(builder.whereTrie, tokens, index);
   if (!whereResult.complete) {
     builder.selectedTokens = tokens.slice(0, whereResult.trimmedIndex);
+    clearSentenceBuilderTokenInputsFrom(builder, builder.selectedTokens.length);
     builder.selectedWhereId = whereResult.id || '';
     builder.selectedActionId = '';
     builder.selectedSentence = '';
@@ -548,9 +744,11 @@ function normalizeSentenceBuilderSelection(builder) {
   index = whereResult.nextIndex;
   builder.selectedWhereId = whereResult.id;
 
+  const actionOffset = index;
   const actionResult = consumeSentenceBuilderStage(builder.actionTrie, tokens, index);
   if (!actionResult.complete) {
     builder.selectedTokens = tokens.slice(0, actionResult.trimmedIndex);
+    clearSentenceBuilderTokenInputsFrom(builder, builder.selectedTokens.length);
     builder.selectedActionId = actionResult.id || '';
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
@@ -565,15 +763,22 @@ function normalizeSentenceBuilderSelection(builder) {
   const whereSequence = builder.whereIndex.get(builder.selectedWhereId);
   const action = builder.actionIndex.get(builder.selectedActionId);
 
-  if (whenSequence && whereSequence && action) {
-    const sentence = composeObservationBuilderSentence(whenSequence.value, whereSequence.value, action.text);
+  const whenResolved = resolveSentenceBuilderSegment(whenSequence, builder, whenOffset, { capitalize: true });
+  const whereResolved = resolveSentenceBuilderSegment(whereSequence, builder, whereOffset);
+  const actionResolved = resolveSentenceBuilderSegment(action, builder, actionOffset);
+
+  builder.selectedActionSummary = action?.summary || '';
+  builder.selectedActionModule = action?.moduleLabel || '';
+
+  if (whenSequence && whereSequence && action && whenResolved.complete && whereResolved.complete && actionResolved.complete) {
+    const sentence = composeObservationBuilderSentence(
+      whenResolved.text,
+      whereResolved.text,
+      actionResolved.text,
+    );
     builder.selectedSentence = sentence;
-    builder.selectedActionSummary = action.summary || '';
-    builder.selectedActionModule = action.moduleLabel || '';
   } else {
     builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
   }
 }
 
@@ -585,19 +790,31 @@ function collectSentenceBuilderSelectors(builder) {
   const tokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
   let index = 0;
 
-  const whenResult = populateSentenceBuilderStageSelectors(builder.whenTrie, tokens, index, selectors);
+  const whenResult = populateSentenceBuilderStageSelectors(
+    builder.whenTrie,
+    tokens,
+    index,
+    selectors,
+    builder,
+  );
   if (!whenResult.complete) {
     return selectors;
   }
   index = whenResult.nextIndex;
 
-  const whereResult = populateSentenceBuilderStageSelectors(builder.whereTrie, tokens, index, selectors);
+  const whereResult = populateSentenceBuilderStageSelectors(
+    builder.whereTrie,
+    tokens,
+    index,
+    selectors,
+    builder,
+  );
   if (!whereResult.complete) {
     return selectors;
   }
   index = whereResult.nextIndex;
 
-  populateSentenceBuilderStageSelectors(builder.actionTrie, tokens, index, selectors);
+  populateSentenceBuilderStageSelectors(builder.actionTrie, tokens, index, selectors, builder);
 
   return selectors;
 }
@@ -613,8 +830,54 @@ function handleSentenceBuilderTokenChange(index, value) {
     tokens[index] = tokenValue;
   }
   builder.selectedTokens = tokenValue ? tokens : tokens.slice(0, index);
+  if (!tokenValue) {
+    clearSentenceBuilderTokenInputsFrom(builder, index);
+  } else {
+    clearSentenceBuilderTokenInputsFrom(builder, index + 1);
+    if (!isSentenceBuilderPlaceholderToken(tokenValue) && builder.tokenInputs instanceof Map) {
+      builder.tokenInputs.delete(index);
+    }
+  }
   normalizeSentenceBuilderSelection(builder);
   renderSentenceBuilder();
+  applySentenceBuilderSelection({ focus: false });
+}
+
+function handleSentenceBuilderTokenInputChange(index, value) {
+  const builder = state.builder;
+  if (!builder?.ready || index < 0) {
+    return;
+  }
+  if (!(builder.tokenInputs instanceof Map)) {
+    builder.tokenInputs = new Map();
+  }
+  const tokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
+  const token = tokens[index];
+  if (!isSentenceBuilderPlaceholderToken(token)) {
+    builder.tokenInputs.delete(index);
+    return;
+  }
+  const placeholder = parseSentenceBuilderPlaceholderToken(token);
+  const formatted = formatSentenceBuilderPlaceholderValue(value, placeholder || {});
+  if (formatted) {
+    builder.tokenInputs.set(index, formatted);
+  } else {
+    builder.tokenInputs.delete(index);
+  }
+  normalizeSentenceBuilderSelection(builder);
+  renderSentenceBuilder();
+  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(() => {
+      const input = document.querySelector(
+        `input.observation-sentence-builder__token-input[data-token-index="${index}"]`,
+      );
+      if (input && input instanceof HTMLInputElement) {
+        const length = input.value.length;
+        input.focus();
+        input.setSelectionRange(length, length);
+      }
+    });
+  }
   applySentenceBuilderSelection({ focus: false });
 }
 
@@ -638,6 +901,24 @@ function bindSentenceBuilder() {
         return;
       }
       handleSentenceBuilderTokenChange(index, target.value || '');
+    });
+    builderHost.addEventListener('input', event => {
+      const target = event.target;
+      if (!target || !(target instanceof Element)) {
+        return;
+      }
+      if (!target.matches('input.observation-sentence-builder__token-input')) {
+        return;
+      }
+      const indexValue = target.getAttribute('data-token-index');
+      if (indexValue === null || indexValue === undefined) {
+        return;
+      }
+      const index = Number.parseInt(indexValue, 10);
+      if (Number.isNaN(index) || index < 0) {
+        return;
+      }
+      handleSentenceBuilderTokenInputChange(index, target.value || '');
     });
     builderHost.dataset.bound = 'true';
   }
@@ -815,18 +1096,34 @@ function renderSentenceBuilder() {
       placeholderOption.textContent = `Word ${selector.index + 1}`;
       select.appendChild(placeholderOption);
 
-      selector.options.forEach(optionValue => {
+      selector.options.forEach(optionData => {
         const option = document.createElement('option');
-        option.value = optionValue;
-        option.textContent = optionValue;
+        option.value = optionData.value;
+        option.textContent = optionData.label;
         select.appendChild(option);
       });
 
-      select.value = selector.selected && selector.options.includes(selector.selected)
+      select.value = selector.selected && selector.optionValues?.includes(selector.selected)
         ? selector.selected
         : '';
 
       field.appendChild(select);
+
+      if (selector.placeholder) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'observation-sentence-builder__token-input';
+        input.id = `observation-builder-token-input-${selector.index}`;
+        input.setAttribute('data-token-index', String(selector.index));
+        const promptParts = [selector.placeholder.prompt || 'Enter custom text'];
+        if (selector.placeholder.example) {
+          promptParts.push(`e.g., ${selector.placeholder.example}`);
+        }
+        input.placeholder = promptParts.join(' ');
+        input.value = selector.inputValue || '';
+        field.appendChild(input);
+      }
+
       sequenceHost.appendChild(field);
     });
   }
@@ -914,6 +1211,17 @@ function applySentenceBuilderSelection(options = {}) {
     immediate,
     focus,
   });
+
+  if (state.builder?.ready) {
+    const builder = state.builder;
+    builder.lastAppliedText = sentence;
+    builder.lastAppliedTokens = Array.isArray(builder.selectedTokens)
+      ? builder.selectedTokens.slice()
+      : [];
+    builder.lastAppliedTokenInputs = builder.tokenInputs instanceof Map
+      ? Array.from(builder.tokenInputs.entries())
+      : [];
+  }
 }
 
 function syncSentenceBuilderToText(text) {
@@ -922,6 +1230,17 @@ function syncSentenceBuilderToText(text) {
     return;
   }
   const source = typeof text === 'string' ? text.trim() : '';
+  if (builder.lastAppliedText && source === builder.lastAppliedText) {
+    builder.selectedTokens = Array.isArray(builder.lastAppliedTokens)
+      ? builder.lastAppliedTokens.slice()
+      : [];
+    builder.tokenInputs = new Map(
+      Array.isArray(builder.lastAppliedTokenInputs) ? builder.lastAppliedTokenInputs : [],
+    );
+    normalizeSentenceBuilderSelection(builder);
+    renderSentenceBuilder();
+    return;
+  }
   if (!source) {
     builder.selectedTokens = [];
     builder.selectedWhenId = '';
@@ -930,6 +1249,10 @@ function syncSentenceBuilderToText(text) {
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
     builder.selectedActionModule = '';
+    builder.tokenInputs = new Map();
+    builder.lastAppliedText = '';
+    builder.lastAppliedTokens = [];
+    builder.lastAppliedTokenInputs = [];
     renderSentenceBuilder();
     return;
   }
@@ -943,6 +1266,10 @@ function syncSentenceBuilderToText(text) {
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
     builder.selectedActionModule = '';
+    builder.tokenInputs = new Map();
+    builder.lastAppliedText = '';
+    builder.lastAppliedTokens = [];
+    builder.lastAppliedTokenInputs = [];
     renderSentenceBuilder();
     return;
   }
@@ -957,6 +1284,10 @@ function syncSentenceBuilderToText(text) {
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
     builder.selectedActionModule = '';
+    builder.tokenInputs = new Map();
+    builder.lastAppliedText = '';
+    builder.lastAppliedTokens = [];
+    builder.lastAppliedTokenInputs = [];
     renderSentenceBuilder();
     return;
   }
@@ -971,6 +1302,10 @@ function syncSentenceBuilderToText(text) {
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
     builder.selectedActionModule = '';
+    builder.tokenInputs = new Map();
+    builder.lastAppliedText = '';
+    builder.lastAppliedTokens = [];
+    builder.lastAppliedTokenInputs = [];
     renderSentenceBuilder();
     return;
   }
@@ -985,6 +1320,10 @@ function syncSentenceBuilderToText(text) {
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
     builder.selectedActionModule = '';
+    builder.tokenInputs = new Map();
+    builder.lastAppliedText = '';
+    builder.lastAppliedTokens = [];
+    builder.lastAppliedTokenInputs = [];
     renderSentenceBuilder();
     return;
   }

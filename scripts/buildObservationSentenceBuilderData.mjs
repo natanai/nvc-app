@@ -370,6 +370,14 @@ function buildSentenceBuilderWhenOptionsFromLexicon(lexicon) {
     });
   }
 
+  [
+    'On (day)',
+    'On (date)',
+    'At (time)',
+    'On (date) at (time)',
+    '(moment)',
+  ].forEach(addOption);
+
   return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
 }
 
@@ -418,6 +426,24 @@ function buildSentenceBuilderWhereOptionsFromLexicon(lexicon) {
       });
     });
   }
+
+  [
+    'at (location)',
+    'in (location)',
+    'in the (location)',
+    'on (channel)',
+    'with (person)',
+    'with (people)',
+    'with (role)',
+    'with (group)',
+    'at (location) with (person)',
+    'on (channel) with (person)',
+    'during (event)',
+    'at (location) during (event)',
+    'during (event) with (person)',
+    'at (location) with (person) during (event)',
+    'on (channel) during (event)',
+  ].forEach(addOption);
 
   return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
 }
