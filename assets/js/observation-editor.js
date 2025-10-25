@@ -165,6 +165,26 @@ const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
     prompt: 'Describe the item or subject.',
     example: 'the quarterly report',
   },
+  message: {
+    label: '(message)',
+    prompt: 'Summarize or quote the message that was sent.',
+    example: '"please drop this"',
+  },
+  behavior: {
+    label: '(what they did)',
+    prompt: 'Describe the specific action you observed.',
+    example: 'ignored my request',
+  },
+  gesture: {
+    label: '(gesture or expression)',
+    prompt: 'Describe the facial expression or body language.',
+    example: 'rolled their eyes',
+  },
+  statement: {
+    label: '(what was said)',
+    prompt: 'Write the exact words or short summary of what you heard.',
+    example: '"you are overreacting"',
+  },
 };
 
 function getPreloadedSentenceBuilderData() {

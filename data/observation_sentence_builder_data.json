@@ -1,4 +1,4 @@
-  "generatedAt": "2025-10-25T14:07:50.742Z",
+  "generatedAt": "2025-10-25T15:56:25.947Z",
         "Earlier this week",
         "Over the weekend"
         "early this month",
@@ -3778,3 +3778,599 @@
                   ],
                   "ids": []
                 }
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I heard (person-general) said (statement) during (event).",
+          "(person-general)",
+          "said",
+          "(statement)",
+          "during",
+          "(event)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior) during (event).",
+          "(person-general)",
+          "did",
+          "(behavior)",
+          "during",
+          "(event)"
+        "text": "I saw (person-general) sent (message).",
+          "(person-general)",
+          "sent",
+          "(message)"
+        "text": "I saw (person-peer) did (behavior) during (event).",
+          "(person-peer)",
+          "did",
+          "(behavior)",
+          "(event)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-partner) did (behavior) over (channel).",
+          "(person-partner)",
+          "did",
+          "(behavior)",
+          "over",
+          "(channel)"
+        "text": "I heard (person-authority) said (statement) during (event).",
+          "(person-authority)",
+          "said",
+          "(statement)",
+          "during",
+          "(event)"
+        "text": "I heard (person-general) said (statement).",
+          "(person-general)",
+          "(statement)"
+        "text": "I heard (person-general) said (statement).",
+          "(person-general)",
+          "said",
+          "(statement)"
+        "text": "I heard (person-peer) said (statement) on (day) during (event) with (person-general).",
+          "(person-peer)",
+          "said",
+          "(statement)",
+          "on",
+          "(day)",
+          "during",
+          "(event)",
+          "with",
+          "(person-general)"
+        "text": "I saw (person-peer) did (behavior) on (day).",
+          "(person-peer)",
+          "did",
+          "(behavior)",
+          "(day)"
+        "text": "I heard (person-general) sent (message).",
+          "(person-general)",
+          "sent",
+          "(message)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior) during (event).",
+          "(person-general)",
+          "did",
+          "(behavior)",
+          "during",
+          "(event)"
+        "text": "I heard (person-authority) said (statement).",
+          "(person-authority)",
+          "said",
+          "(statement)"
+        "text": "I saw (person-peer) did (behavior).",
+          "(person-peer)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-authority) did (behavior) on (day) during (event) with (person-general).",
+          "(person-authority)",
+          "did",
+          "(behavior)",
+          "on",
+          "(day)",
+          "during",
+          "(event)",
+          "with",
+          "(person-general)"
+        "text": "I saw (person-partner) did (behavior) during (event).",
+          "(person-partner)",
+          "did",
+          "(behavior)",
+          "during",
+          "(event)"
+        "text": "I heard (person-general) sent (message).",
+          "(person-general)",
+          "sent",
+          "(message)"
+        "text": "I saw (person-general) sent (message).",
+          "(person-general)",
+          "sent",
+          "(message)"
+        "text": "I saw (person-authority) did (behavior) during (event).",
+          "(person-authority)",
+          "did",
+          "(behavior)",
+          "during",
+          "(event)"
+        "text": "I saw (group) did (behavior).",
+          "(group)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-peer) did (behavior).",
+          "(person-peer)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I heard (person-general) said (statement).",
+          "(person-general)",
+          "said",
+          "(statement)"
+        "text": "I saw (person-authority) did (behavior).",
+          "(person-authority)",
+          "did",
+          "(behavior)"
+        "text": "I heard (person-general) said (statement).",
+          "(person-general)",
+          "(statement)"
+        "text": "I heard (person-general) said (statement).",
+          "(person-general)",
+          "said",
+          "(statement)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I heard (person-general) sent (message).",
+          "(person-general)",
+          "sent",
+          "(message)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I heard (person-general) sent (message) during (event).",
+          "(person-general)",
+          "sent",
+          "(message)",
+          "during",
+          "(event)"
+        "text": "I saw (person-peer) said (statement) on (day).",
+          "(person-peer)",
+          "said",
+          "(statement)",
+          "(day)"
+        "text": "I saw (person-peer) did (behavior).",
+          "(person-peer)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I saw (person-general) did (behavior).",
+          "(person-general)",
+          "did",
+          "(behavior)"
+        "text": "I heard (person-partner) said (statement).",
+          "(person-partner)",
+          "(statement)"
+        "text": "I heard (people) said (statement) during (event).",
+          "(people)",
+          "said",
+          "(statement)",
+          "during",
+          "(event)"
+        "text": "I saw (person-general) did (behavior) on (day).",
+          "(person-general)",
+          "did",
+          "(behavior)",
+          "on",
+          "(day)"
+        "text": "I saw (person-authority) did (behavior) on (day).",
+          "(person-authority)",
+          "did",
+          "(behavior)",
+          "on",
+          "(day)"
+        "text": "I saw (person-authority) sent (message) over (channel).",
+          "(person-authority)",
+          "(message)",
+          "over",
+          "(channel)"
+                      "token": "(people)",
+                            "token": "said",
+                                  "token": "(statement)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "client-talked-over"
+                                                ]
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-authority)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "said",
+                            "node": {
+                              "options": [
+                                  "token": "(statement)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "dismissive-eye-roll"
+                                                ]
+                                    "ids": [
+                                      "teacher-derogatory-feedback"
+                                    ]
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-general)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "said",
+                            "node": {
+                              "options": [
+                                  "token": "(statement)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "daycare-no-call"
+                                                ]
+                                    "ids": [
+                                      "dismissive-too-sensitive",
+                                      "dismissive-whatever-door",
+                                      "self-delayed-call",
+                                      "counselor-reflected",
+                                      "landlord-fixed-quickly"
+                                    ]
+                            "token": "sent",
+                                  "token": "(message)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "support-agent-followed-up"
+                                                ]
+                                    "ids": [
+                                      "contract-not-renewed",
+                                      "contractor-no-show",
+                                      "appreciation-specific-note"
+                                    ]
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-partner)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "said",
+                            "node": {
+                              "options": [
+                                  "token": "(statement)",
+                                  "node": {
+                                    "options": [],
+                                    "ids": [
+                                      "accused-never-listen"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-peer)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "said",
+                            "node": {
+                              "options": [
+                                {
+                                  "token": "(statement)",
+                                        "token": "on",
+                                              "token": "(day)",
+                                                    "token": "during",
+                                                          "token": "(event)",
+                                                                "token": "with",
+                                                                      "token": "(person-general)",
+                                                                        "options": [],
+                                                                        "ids": [
+                                                                          "dismissive-whisper-laugh"
+                                                                        ]
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    }
+                  ],
+                  "ids": []
+                }
+              },
+              {
+                "token": "saw",
+                "node": {
+                  "options": [
+                    {
+                      "token": "(group)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "did",
+                            "node": {
+                              "options": [
+                                {
+                                  "token": "(behavior)",
+                                  "node": {
+                                    "options": [],
+                                    "ids": [
+                                      "referee-missed-fouls"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-authority)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "did",
+                            "node": {
+                              "options": [
+                                  "token": "(behavior)",
+                                        "token": "during",
+                                        "node": {
+                                          "options": [
+                                            {
+                                              "token": "(event)",
+                                              "node": {
+                                                "options": [],
+                                                "ids": [
+                                                  "meeting-over-lunch"
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          "ids": []
+                                        }
+                                      },
+                                      {
+                                        "token": "on",
+                                              "token": "(day)",
+                                                    "token": "during",
+                                                          "token": "(event)",
+                                                                "token": "with",
+                                                                      "token": "(person-general)",
+                                                                        "options": [],
+                                                                        "ids": [
+                                                                          "manager-balanced-followups"
+                                                                        ]
+                                                "ids": [
+                                                  "assigned-all-followups"
+                                                ]
+                                    "ids": [
+                                      "vacation-approved-quickly"
+                                    ]
+                            "token": "sent",
+                                  "token": "(message)",
+                                        "token": "over",
+                                              "token": "(channel)",
+                                                "options": [],
+                                                "ids": [
+                                                  "boss-late-night-pings"
+                                                ]
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-general)",
+                      "node": {
+                        "options": [
+                            "token": "did",
+                                  "token": "(behavior)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "trainer-celebrated-progress",
+                                                  "review-no-examples"
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          "ids": []
+                                        }
+                                      },
+                                      {
+                                        "token": "on",
+                                        "node": {
+                                          "options": [
+                                            {
+                                              "token": "(day)",
+                                              "node": {
+                                                "options": [],
+                                                "ids": [
+                                                  "sibling-did-not-pay"
+                                                ]
+                                    "ids": [
+                                      "allergy-served-peanuts",
+                                      "dentist-explained-steps",
+                                      "nurse-night-check",
+                                      "doctor-checked-clock",
+                                      "delivery-marked-delivered",
+                                      "reached-over-last-item",
+                                      "service-line-skip",
+                                      "driver-speakerphone-entire-trip",
+                                      "borrowed-car-empty",
+                                      "roommate-dishes-repeated",
+                                      "wallet-returned-intact",
+                                      "cyclist-ran-red",
+                                      "bus-driver-waited",
+                                      "hoa-lawn-warning",
+                                      "presentation-walkout"
+                                    ]
+                            "token": "sent",
+                            "node": {
+                              "options": [
+                                {
+                                  "token": "(message)",
+                                  "node": {
+                                    "options": [],
+                                    "ids": [
+                                      "city-fixed-streetlight",
+                                      "landlord-no-response"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-partner)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "did",
+                                  "token": "(behavior)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "partner-covered-dinner"
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          "ids": []
+                                        }
+                                      },
+                                      {
+                                        "token": "over",
+                                        "node": {
+                                          "options": [
+                                            {
+                                              "token": "(channel)",
+                                              "node": {
+                                                "options": [],
+                                                "ids": [
+                                                  "partner-phone-during-dinner"
+                                                ]
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "(person-peer)",
+                      "node": {
+                        "options": [
+                            "token": "did",
+                                  "token": "(behavior)",
+                                        "token": "during",
+                                              "token": "(event)",
+                                                "options": [],
+                                                "ids": [
+                                                  "colleague-took-credit"
+                                                ]
+                                      },
+                                        "token": "on",
+                                              "token": "(day)",
+                                                "options": [],
+                                                "ids": [
+                                                  "neighbor-dog-morning"
+                                                ]
+                                    "ids": [
+                                      "friend-late-no-text",
+                                      "neighbor-shoveled-sidewalk",
+                                      "coworker-caught-mistake"
+                                    ]
+                            "token": "said",
+                                  "token": "(statement)",
+                                        "token": "on",
+                                              "token": "(day)",
+                                                "options": [],
+                                                "ids": [
+                                                  "teammate-sprint-update-gap"
+                                                ]

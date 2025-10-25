@@ -247,6 +247,64 @@ const HEARD_VERB_KEYWORDS = [
   'reported',
 ];
 
+const ACTION_ACTOR_PATTERNS = [
+  { regex: /\bmy\s+(?:manager|boss|supervisor|director|principal|teacher|professor|coach|lead|leadership)\b/gi, value: '(person-authority)' },
+  { regex: /\bour\s+(?:manager|boss|supervisor|director|principal|teacher|professor|coach|lead|leadership)\b/gi, value: '(person-authority)' },
+  { regex: /\bthe\s+(?:manager|boss|supervisor|director|principal|teacher|professor|coach|lead)\b/gi, value: '(person-authority)' },
+  { regex: /\bmy\s+(?:partner|spouse|husband|wife|girlfriend|boyfriend|fianc[ée]|significant\s+other)\b/gi, value: '(person-partner)' },
+  { regex: /\bour\s+(?:partner|spouse|husband|wife|girlfriend|boyfriend|fianc[ée]|significant\s+other)\b/gi, value: '(person-partner)' },
+  { regex: /\bmy\s+(?:coworker|colleague|teammate|peer|classmate|friend|neighbor)\b/gi, value: '(person-peer)' },
+  { regex: /\bour\s+(?:coworker|colleague|teammate|peer|classmate|friend|neighbor)\b/gi, value: '(person-peer)' },
+  { regex: /\bthe\s+(?:coworker|colleague|teammate|peer|classmate|friend|neighbor)\b/gi, value: '(person-peer)' },
+  { regex: /(?<!person-)\b(?:someone|somebody|anyone|coworker|colleague|teammate|peer|classmate|friend|neighbor)\b/gi, value: '(person-general)' },
+  { regex: /\b(?:my|our|the)\s+(?:team|group|committee|department|board|staff|family|audience|class|crew)\b/gi, value: '(group)' },
+  { regex: /\b(?:customers?|clients?|patients?)\b/gi, value: '(people)' },
+  { regex: /\b(?:boss|manager|supervisor|director|principal|teacher|professor|coach|lead)\b/gi, value: '(person-authority)' },
+];
+
+const ACTION_OBJECT_PATTERNS = [
+  { regex: /\b(?:budget|report|plan|proposal|project|task|issue|update|deck|slides|presentation|document|policy|contract|schedule|invoice|notes?)\b/gi, value: '(object)' },
+  { regex: /\b(?:meeting|check[-\s]?in|stand[-\s]?up|review|call|sync|workshop|training|session|huddle)\b/gi, value: '(event)' },
+  { regex: /\b(?:slack|teams|zoom|text|email|phone|video\s+call)\b/gi, value: '(channel)' },
+  { regex: /\b(?:deadline|launch|handoff)\b/gi, value: '(event)' },
+];
+
+const ACTION_MESSAGE_PATTERNS = [
+  { regex: /\b(?:message|messages|text|texts|email|emails|dm|dms|post|posts|comment|comments|ping|pings)\b/gi, value: '(message)' },
+];
+
+const ACTION_PRONOUN_REPLACEMENTS = [
+  { regex: /\b(?:he|she|they)\b/gi, value: '(person-general)' },
+  { regex: /\b(?:him|her|them)\b/gi, value: '(person-general)' },
+  { regex: /\b(?:his|her|their)\b/gi, value: 'their' },
+];
+
+const ACTION_MISC_REPLACEMENTS = [
+  { regex: /[“”]/g, value: '"' },
+  { regex: /[’]/g, value: "'" },
+  { regex: /\bI\s+(?:saw|see|heard|hear|noticed|notice|observed|observe|witnessed|witness)\s+/gi, value: '' },
+  { regex: /\bWe\s+(?:saw|see|heard|hear|noticed|notice|observed|observe|witnessed|witness)\s+/gi, value: '' },
+  { regex: /\bI\s+(?:was|am)\s+hearing\s+/gi, value: '' },
+  { regex: /\bI\s+(?:was|am)\s+seeing\s+/gi, value: '' },
+  { regex: /\bthis\s+happen:\s*/gi, value: '' },
+  { regex: /\bthis:\s*/gi, value: '' },
+  { regex: /\bthat:\s*/gi, value: '' },
+  { regex: /\bthere\s+was\b/gi, value: 'there was' },
+];
+
+const ACTION_QUOTE_PLACEHOLDER = /"([^"\n]+)"/g;
+
+const ACTION_TIME_PATTERNS = [
+  { regex: /\b\d{1,2}:\d{2}\s*(?:a\.m\.|p\.m\.|am|pm)\b/gi, value: '(time)' },
+  { regex: /\b\d{1,2}\s*(?:a\.m\.|p\.m\.|am|pm)\b/gi, value: '(time)' },
+  { regex: /\b\d{1,2}[./-]\d{1,2}(?:[./-]\d{2,4})?\b/g, value: '(date)' },
+  { regex: /\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/gi, value: '(day)' },
+];
+
+const ACTION_DETAIL_REPLACEMENTS = [
+  { regex: /\b(?:yelled|shouted|screamed|announced|told|said|shared|asked)\b/gi, value: match => match.toLowerCase() === 'said' ? 'said' : match.toLowerCase() },
+];
+
 function createSentenceBuilderMomentLexicon() {
   return {
     daysOfWeek: [...SENTENCE_BUILDER_DAYS_OF_WEEK],
@@ -322,23 +380,156 @@ function determineBuilderSense(example) {
   return 'saw';
 }
 
-function buildBuilderActionText(example) {
-  const trimmed = typeof example === 'string' ? example.trim() : '';
-  if (!trimmed) {
+function applyReplacementPatterns(source, patterns) {
+  if (!patterns || !patterns.length) {
+    return source;
+  }
+  let text = source;
+  patterns.forEach(pattern => {
+    if (!pattern || !pattern.regex) {
+      return;
+    }
+    const replacer = typeof pattern.value === 'function' ? pattern.value : () => pattern.value;
+    text = text.replace(pattern.regex, replacer);
+  });
+  return text;
+}
+
+function normalizeActionExample(example) {
+  if (typeof example !== 'string') {
     return '';
   }
-  if (/^I\s+(?:saw|see|heard|hear|notice|noticed|observe|observed|watch|watched|record|recorded|smell|smelled|taste|tasted)/i.test(trimmed)) {
-    return ensureSentencePunctuation(trimmed);
+  let text = example.trim();
+  if (!text) {
+    return '';
   }
-  const sense = determineBuilderSense(trimmed);
-  const suffix = /[.!?]$/.test(trimmed) ? '' : '.';
-  if (sense === 'heard') {
-    return `I heard this: ${trimmed}${suffix}`;
+  text = applyReplacementPatterns(text, ACTION_MISC_REPLACEMENTS);
+  text = text.replace(ACTION_QUOTE_PLACEHOLDER, '(statement)');
+  text = applyReplacementPatterns(text, ACTION_TIME_PATTERNS);
+  text = applyReplacementPatterns(text, ACTION_ACTOR_PATTERNS);
+  text = applyReplacementPatterns(text, ACTION_PRONOUN_REPLACEMENTS);
+  text = applyReplacementPatterns(text, ACTION_MESSAGE_PATTERNS);
+  text = applyReplacementPatterns(text, ACTION_OBJECT_PATTERNS);
+  text = applyReplacementPatterns(text, ACTION_DETAIL_REPLACEMENTS);
+  text = text
+    .replace(/\s+/g, ' ')
+    .replace(/[?!]+$/g, '')
+    .trim();
+  return text;
+}
+
+function extractActionActor(normalized) {
+  const actorMatch = normalized.match(/\((person-[^)]+|group|people)\)/);
+  const actorToken = actorMatch ? `(${actorMatch[1]})` : '(person-general)';
+  const remainder = actorMatch
+    ? normalized.replace(actorToken, ' ').replace(/\s+/g, ' ').trim()
+    : normalized;
+  return { actorToken, remainder };
+}
+
+function determineActionPrimaryCategory({ lower, placeholders, sense }) {
+  if (placeholders.includes('(message)') || /\b(?:texted|emailed|messaged|dm|pinged|posted|slack|teams|wrote)\b/.test(lower)) {
+    return 'message';
   }
-  if (sense === 'saw') {
-    return `I saw this happen: ${trimmed}${suffix}`;
+  if (
+    placeholders.includes('(statement)')
+    || sense === 'heard'
+    || /\b(?:said|told|asked|shouted|yelled|shared|announced|reported|replied|responded|quoted|reminded|stated)\b/.test(lower)
+  ) {
+    return 'statement';
   }
-  return `I noticed this: ${trimmed}${suffix}`;
+  if (
+    placeholders.includes('(gesture)')
+    || /\b(?:rolled|shrugged|smiled|frowned|glared|stared|gestured|pointed|nodded|shook|sighed|laughed|eye[-\s]?roll)\b/.test(lower)
+  ) {
+    return 'gesture';
+  }
+  if (
+    placeholders.includes('(object)')
+    && /\b(?:shared|handed|gave|delivered|provided|submitted|uploaded|posted|presented|returned)\b/.test(lower)
+  ) {
+    return 'object';
+  }
+  return 'behavior';
+}
+
+function composeActionDetailTokens({ remainder, actorToken, sense }) {
+  const lower = remainder.toLowerCase();
+  const placeholderMatches = Array.from(remainder.matchAll(/\(([^)]+)\)/g)).map(match => `(${match[1]})`);
+  const placeholders = placeholderMatches.filter(token => token !== actorToken);
+  const primary = determineActionPrimaryCategory({ lower, placeholders, sense });
+
+  let tokens;
+  switch (primary) {
+    case 'message':
+      tokens = ['sent', '(message)'];
+      break;
+    case 'statement':
+      tokens = ['said', '(statement)'];
+      break;
+    case 'gesture':
+      tokens = ['showed', '(gesture)'];
+      break;
+    case 'object':
+      tokens = ['shared', '(object)'];
+      break;
+    default:
+      tokens = ['did', '(behavior)'];
+      break;
+  }
+
+  const connectorMap = new Map([
+    ['(object)', ['about', '(object)']],
+    ['(channel)', ['over', '(channel)']],
+    ['(event)', ['during', '(event)']],
+    ['(people)', ['with', '(people)']],
+    ['(group)', ['with', '(group)']],
+    ['(person-general)', ['with', '(person-general)']],
+    ['(person-peer)', ['with', '(person-peer)']],
+    ['(person-partner)', ['with', '(person-partner)']],
+    ['(person-authority)', ['with', '(person-authority)']],
+    ['(location)', ['at', '(location)']],
+    ['(time)', ['at', '(time)']],
+    ['(day)', ['on', '(day)']],
+    ['(date)', ['on', '(date)']],
+    ['(moment)', ['during', '(moment)']],
+  ]);
+
+  const added = new Set();
+  const connectors = [];
+  placeholders.forEach(token => {
+    if (token === '(statement)' || token === '(message)' || token === '(gesture)' || token === '(object)') {
+      return;
+    }
+    const mapping = connectorMap.get(token);
+    if (mapping) {
+      const key = mapping.join('|');
+      if (!added.has(key)) {
+        connectors.push(...mapping);
+        added.add(key);
+      }
+    }
+  });
+
+  return [...tokens, ...connectors];
+}
+
+function buildActionBuilderTokens(example) {
+  const normalized = normalizeActionExample(example);
+  if (!normalized) {
+    return [];
+  }
+  const sense = determineBuilderSense(example);
+  const sensePrefix = sense === 'heard'
+    ? ['I', 'heard']
+    : sense === 'saw'
+      ? ['I', 'saw']
+      : ['I', 'noticed'];
+
+  const { actorToken, remainder } = extractActionActor(normalized);
+  const detailTokens = composeActionDetailTokens({ remainder, actorToken, sense });
+
+  return [...sensePrefix, actorToken, ...detailTokens];
 }
 
 function resolveCueExample(cueEntry, cueMeta) {
@@ -383,10 +574,11 @@ function buildSentenceBuilderActions(modules, cueMap) {
       }
       const cueMeta = cueMap.get(cueId);
       const example = resolveCueExample(cueEntry, cueMeta);
-      const actionText = buildBuilderActionText(example);
-      if (!actionText) {
+      const builderTokens = buildActionBuilderTokens(example);
+      if (!builderTokens.length) {
         return;
       }
+      const actionText = ensureSentencePunctuation(builderTokens.join(' '));
       const label = (cueMeta?.phrase || cueMeta?.label || formatBuilderTitle(cueId)).trim();
       const summary = (cueMeta?.slotSummary || moduleSummary || '').trim();
       actions.push({
@@ -397,6 +589,7 @@ function buildSentenceBuilderActions(modules, cueMap) {
         label,
         summary,
         text: actionText,
+        builderTokens,
       });
       addedCueIds.add(cueId);
     });
@@ -408,10 +601,11 @@ function buildSentenceBuilderActions(modules, cueMap) {
         return;
       }
       const example = resolveCueExample({}, cueMeta);
-      const actionText = buildBuilderActionText(example);
-      if (!actionText) {
+      const builderTokens = buildActionBuilderTokens(example);
+      if (!builderTokens.length) {
         return;
       }
+      const actionText = ensureSentencePunctuation(builderTokens.join(' '));
       const label = (cueMeta?.phrase || cueMeta?.label || formatBuilderTitle(cueId)).trim();
       const summary = (cueMeta?.slotSummary || '').trim();
       actions.push({
@@ -422,6 +616,7 @@ function buildSentenceBuilderActions(modules, cueMap) {
         label,
         summary,
         text: actionText,
+        builderTokens,
       });
       addedCueIds.add(cueId);
     });
@@ -708,7 +903,9 @@ async function loadCueMap() {
 function buildActionItems(actions) {
   return actions.map(action => {
     const sentence = ensureSentencePunctuation(action.text);
-    const tokens = sentence.split(/\s+/).filter(Boolean);
+    const tokens = Array.isArray(action.builderTokens) && action.builderTokens.length
+      ? action.builderTokens.slice()
+      : sentence.split(/\s+/).filter(Boolean);
     return {
       id: action.id,
       label: action.label,
