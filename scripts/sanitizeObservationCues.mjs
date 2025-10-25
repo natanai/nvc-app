@@ -86,7 +86,21 @@ export function sanitizeObservationCues({
     sanitizedRows.push(normalizedRow);
   });
 
-  const csvOutput = [header, ...sanitizedRows]
+  const sortedRows = [...sanitizedRows].sort((a, b) => {
+    const cueA = cueIndex !== -1 && typeof a[cueIndex] === 'string' ? a[cueIndex].toLowerCase() : '';
+    const cueB = cueIndex !== -1 && typeof b[cueIndex] === 'string' ? b[cueIndex].toLowerCase() : '';
+
+    if (cueA && cueB && cueA !== cueB) {
+      return cueA.localeCompare(cueB);
+    }
+
+    const exampleA = exampleIndex !== -1 && typeof a[exampleIndex] === 'string' ? a[exampleIndex].toLowerCase() : '';
+    const exampleB = exampleIndex !== -1 && typeof b[exampleIndex] === 'string' ? b[exampleIndex].toLowerCase() : '';
+
+    return exampleA.localeCompare(exampleB);
+  });
+
+  const csvOutput = [header, ...sortedRows]
     .map(columns => columns.map(encodeCsvCell).join(','))
     .join('\n')
     .concat('\n');
