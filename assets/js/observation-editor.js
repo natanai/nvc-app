@@ -132,9 +132,12 @@ function createEmptySentenceBuilderState() {
     whereOptions: [],
     actions: [],
     actionLookup: new Map(),
-    selectedWhen: '',
-    selectedWhere: '',
-    selectedActionId: '',
+    sentences: [],
+    trie: createEmptySentenceBuilderTrieNode(),
+    sentenceLookup: new Map(),
+    sequenceLookup: new Map(),
+    selectedTokens: [],
+    selectedSentenceId: '',
     selectedSentence: '',
     selectedActionSummary: '',
     selectedActionModule: '',
@@ -315,16 +318,19 @@ function initializeSentenceBuilder(blueprints) {
   const actions = buildSentenceBuilderActions(blueprintModules, cueMap);
   builder.actions = actions;
   builder.actionLookup = new Map(actions.map(action => [action.id, action]));
-  builder.ready = builder.whenOptions.length > 0 && builder.whereOptions.length > 0 && actions.length > 0;
-
-  if (!builder.ready) {
-    builder.selectedWhen = '';
-    builder.selectedWhere = '';
-    builder.selectedActionId = '';
-    builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
-  }
+  const corpus = buildSentenceBuilderCorpus(builder.whenOptions, builder.whereOptions, actions);
+  builder.sentences = corpus;
+  builder.trie = buildSentenceBuilderTrie(corpus);
+  builder.sentenceLookup = new Map(corpus.map(entry => [entry.sentence, entry]));
+  builder.sequenceLookup = new Map(
+    corpus.map(entry => [composeSentenceBuilderSequenceKey(entry.tokens), entry]),
+  );
+  builder.selectedTokens = [];
+  builder.selectedSentenceId = '';
+  builder.selectedSentence = '';
+  builder.selectedActionSummary = '';
+  builder.selectedActionModule = '';
+  builder.ready = corpus.length > 0;
 
   renderSentenceBuilder();
   syncSentenceBuilderToText(state.text);
@@ -481,21 +487,6 @@ function formatBuilderSegmentLabel(value) {
   return text[0].toUpperCase() + text.slice(1);
 }
 
-function formatBuilderActionOptionLabel(action) {
-  if (!action) {
-    return '';
-  }
-  const moduleLabel = typeof action.moduleLabel === 'string' ? action.moduleLabel.trim() : '';
-  const detailSource = typeof action.label === 'string' && action.label.trim()
-    ? action.label.trim()
-    : typeof action.text === 'string'
-      ? action.text.replace(/\s+/g, ' ').trim()
-      : '';
-  const detail = detailSource.length > 120 ? `${detailSource.slice(0, 117)}…` : detailSource;
-  const fallback = detail || moduleLabel || 'Observation cue';
-  return moduleLabel ? `${moduleLabel} — ${fallback}` : fallback;
-}
-
 function normalizeBuilderSegment(value) {
   const text = typeof value === 'string' ? value.trim() : '';
   if (!text) {
@@ -522,37 +513,189 @@ function composeObservationBuilderSentence(when, where, actionText) {
   return `${start}, ${whereSegment}, ${actionSegment}`;
 }
 
+function createEmptySentenceBuilderTrieNode() {
+  return {
+    options: new Map(),
+    sentences: [],
+  };
+}
+
+function buildSentenceBuilderCorpus(whenOptions, whereOptions, actions) {
+  const corpus = [];
+  const whenList = Array.isArray(whenOptions) ? whenOptions : [];
+  const whereList = Array.isArray(whereOptions) ? whereOptions : [];
+  const actionList = Array.isArray(actions) ? actions : [];
+
+  whenList.forEach(whenEntry => {
+    const whenValue = whenEntry?.value || '';
+    if (!whenValue) {
+      return;
+    }
+    whereList.forEach(whereEntry => {
+      const whereValue = whereEntry?.value || '';
+      if (!whereValue) {
+        return;
+      }
+      actionList.forEach(action => {
+        const sentence = composeObservationBuilderSentence(whenValue, whereValue, action?.text || '');
+        if (!sentence) {
+          return;
+        }
+        const tokens = sentence.trim().split(/\s+/).filter(Boolean);
+        if (!tokens.length) {
+          return;
+        }
+        const id = `${whenValue}||${whereValue}||${action.id}`;
+        corpus.push({
+          id,
+          sentence,
+          tokens,
+          when: whenValue,
+          where: whereValue,
+          actionId: action.id,
+          summary: action.summary || '',
+          moduleLabel: action.moduleLabel || '',
+        });
+      });
+    });
+  });
+
+  return corpus;
+}
+
+function buildSentenceBuilderTrie(corpus) {
+  const root = createEmptySentenceBuilderTrieNode();
+  const entries = Array.isArray(corpus) ? corpus : [];
+  entries.forEach(entry => {
+    root.sentences.push(entry);
+    let node = root;
+    const tokens = Array.isArray(entry.tokens) ? entry.tokens : [];
+    tokens.forEach(token => {
+      if (!node.options.has(token)) {
+        node.options.set(token, createEmptySentenceBuilderTrieNode());
+      }
+      node = node.options.get(token);
+      node.sentences.push(entry);
+    });
+  });
+  return root;
+}
+
+function composeSentenceBuilderSequenceKey(tokens) {
+  if (!Array.isArray(tokens) || !tokens.length) {
+    return '';
+  }
+  return tokens.join('\u0001');
+}
+
+function findSentenceEntryByTokens(builder, tokens) {
+  if (!builder?.sequenceLookup) {
+    return null;
+  }
+  const key = composeSentenceBuilderSequenceKey(tokens);
+  if (!key) {
+    return null;
+  }
+  return builder.sequenceLookup.get(key) || null;
+}
+
+function normalizeSentenceBuilderSelection(builder) {
+  if (!builder?.ready) {
+    return;
+  }
+  const tokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
+  const validTokens = [];
+  let node = builder.trie;
+  for (let index = 0; index < tokens.length; index += 1) {
+    const token = tokens[index];
+    if (!token || !node || !node.options.has(token)) {
+      break;
+    }
+    validTokens.push(token);
+    node = node.options.get(token);
+  }
+
+  builder.selectedTokens = validTokens;
+  const entry = findSentenceEntryByTokens(builder, validTokens);
+  if (entry && entry.tokens.length === validTokens.length) {
+    builder.selectedSentenceId = entry.id;
+    builder.selectedSentence = entry.sentence;
+    builder.selectedActionSummary = entry.summary || '';
+    builder.selectedActionModule = entry.moduleLabel || '';
+  } else {
+    builder.selectedSentenceId = '';
+    builder.selectedSentence = '';
+    builder.selectedActionSummary = '';
+    builder.selectedActionModule = '';
+  }
+}
+
+function collectSentenceBuilderSelectors(builder) {
+  if (!builder?.ready) {
+    return [];
+  }
+  const selectors = [];
+  let node = builder.trie;
+  let index = 0;
+  const safetyLimit = 120;
+
+  while (node && node.options.size && index < safetyLimit) {
+    const optionValues = Array.from(node.options.keys());
+    const selected = builder.selectedTokens[index];
+    selectors.push({
+      index,
+      options: optionValues,
+      selected: selected && node.options.has(selected) ? selected : '',
+    });
+    const activeToken = selectors[index].selected;
+    if (!activeToken) {
+      break;
+    }
+    node = node.options.get(activeToken);
+    index += 1;
+  }
+
+  return selectors;
+}
+
+function handleSentenceBuilderTokenChange(index, value) {
+  const builder = state.builder;
+  if (!builder?.ready || index < 0) {
+    return;
+  }
+  const tokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens.slice(0, index) : [];
+  const tokenValue = typeof value === 'string' ? value.trim() : '';
+  if (tokenValue) {
+    tokens[index] = tokenValue;
+  }
+  builder.selectedTokens = tokenValue ? tokens : tokens.slice(0, index);
+  normalizeSentenceBuilderSelection(builder);
+  renderSentenceBuilder();
+  applySentenceBuilderSelection({ focus: false });
+}
+
 function bindSentenceBuilder() {
-  const whenSelect = document.getElementById('observation-builder-when');
-  if (whenSelect) {
-    whenSelect.addEventListener('change', event => {
-      state.builder.selectedWhen = event.target.value || '';
-      state.builder.selectedWhere = '';
-      state.builder.selectedActionId = '';
-      state.builder.selectedSentence = '';
-      renderSentenceBuilder();
-      applySentenceBuilderSelection({ focus: false });
+  const builderHost = document.getElementById('observation-sentence-builder');
+  if (builderHost && !builderHost.dataset.bound) {
+    builderHost.addEventListener('change', event => {
+      const target = event.target;
+      if (!target || !(target instanceof Element)) {
+        return;
+      }
+      if (!target.matches('select.observation-sentence-builder__token-select')) {
+        return;
+      }
+      const indexValue = target.getAttribute('data-token-index');
+      if (indexValue === null || indexValue === undefined) {
+        return;
+      }
+      const index = Number.parseInt(indexValue, 10);
+      if (Number.isNaN(index) || index < 0) {
+        return;
+      }
+      handleSentenceBuilderTokenChange(index, target.value || '');
     });
-  }
-
-  const whereSelect = document.getElementById('observation-builder-where');
-  if (whereSelect) {
-    whereSelect.addEventListener('change', event => {
-      state.builder.selectedWhere = event.target.value || '';
-      state.builder.selectedActionId = '';
-      state.builder.selectedSentence = '';
-      renderSentenceBuilder();
-      applySentenceBuilderSelection({ focus: false });
-    });
-  }
-
-  const actionSelect = document.getElementById('observation-builder-action');
-  if (actionSelect) {
-    actionSelect.addEventListener('change', event => {
-      state.builder.selectedActionId = event.target.value || '';
-      renderSentenceBuilder();
-      applySentenceBuilderSelection({ focus: false });
-    });
+    builderHost.dataset.bound = 'true';
   }
 
   const applyButton = document.getElementById('observation-builder-apply');
@@ -636,22 +779,20 @@ function renderEditorMode() {
 
 function renderSentenceBuilder() {
   const builder = state.builder || createEmptySentenceBuilderState();
-  const whenSelect = document.getElementById('observation-builder-when');
-  const whereSelect = document.getElementById('observation-builder-where');
-  const actionSelect = document.getElementById('observation-builder-action');
+  const sequenceHost = document.getElementById('observation-builder-sequence');
   const actionSummary = document.getElementById('observation-builder-action-summary');
   const applyButton = document.getElementById('observation-builder-apply');
 
+  if (!sequenceHost) {
+    return;
+  }
+
   if (!builder.ready) {
-    if (whenSelect) {
-      populateSentenceBuilderSelect(whenSelect, [], { placeholder: 'Loading time anchors…', disabled: true });
-    }
-    if (whereSelect) {
-      populateSentenceBuilderSelect(whereSelect, [], { placeholder: 'Select when first', disabled: true });
-    }
-    if (actionSelect) {
-      populateSentenceBuilderSelect(actionSelect, [], { placeholder: 'Add time and setting first', disabled: true });
-    }
+    sequenceHost.innerHTML = '';
+    const loading = document.createElement('p');
+    loading.className = 'observation-sentence-builder__loading';
+    loading.textContent = 'Loading the observation library…';
+    sequenceHost.appendChild(loading);
     if (actionSummary) {
       actionSummary.textContent = '';
       actionSummary.setAttribute('hidden', 'hidden');
@@ -660,50 +801,59 @@ function renderSentenceBuilder() {
       applyButton.disabled = true;
     }
     builder.selectedSentence = '';
+    builder.selectedSentenceId = '';
+    builder.selectedActionSummary = '';
+    builder.selectedActionModule = '';
     renderSentenceBuilderPreview();
     return;
   }
 
-  if (whenSelect) {
-    populateSentenceBuilderSelect(whenSelect, builder.whenOptions, {
-      selected: builder.selectedWhen,
-      placeholder: 'Choose when it happened',
+  normalizeSentenceBuilderSelection(builder);
+  const selectors = collectSentenceBuilderSelectors(builder);
+
+  sequenceHost.innerHTML = '';
+
+  if (!selectors.length) {
+    const placeholder = document.createElement('p');
+    placeholder.className = 'observation-sentence-builder__loading';
+    placeholder.textContent = 'Choose the first word to begin building your sentence.';
+    sequenceHost.appendChild(placeholder);
+  } else {
+    selectors.forEach(selector => {
+      const field = document.createElement('div');
+      field.className = 'observation-sentence-builder__token';
+
+      const label = document.createElement('label');
+      label.className = 'observation-sentence-builder__token-label';
+      label.setAttribute('for', `observation-builder-token-${selector.index}`);
+      label.textContent = `Word ${selector.index + 1}`;
+      field.appendChild(label);
+
+      const select = document.createElement('select');
+      select.className = 'observation-sentence-builder__token-select';
+      select.id = `observation-builder-token-${selector.index}`;
+      select.setAttribute('data-token-index', String(selector.index));
+
+      const placeholderOption = document.createElement('option');
+      placeholderOption.value = '';
+      placeholderOption.textContent = `Word ${selector.index + 1}`;
+      select.appendChild(placeholderOption);
+
+      selector.options.forEach(optionValue => {
+        const option = document.createElement('option');
+        option.value = optionValue;
+        option.textContent = optionValue;
+        select.appendChild(option);
+      });
+
+      select.value = selector.selected && selector.options.includes(selector.selected)
+        ? selector.selected
+        : '';
+
+      field.appendChild(select);
+      sequenceHost.appendChild(field);
     });
   }
-
-  const hasWhen = Boolean(builder.selectedWhen);
-
-  if (whereSelect) {
-    populateSentenceBuilderSelect(whereSelect, builder.whereOptions, {
-      selected: builder.selectedWhere,
-      placeholder: hasWhen ? 'Choose where or with whom' : 'Select when first',
-      disabled: !hasWhen,
-    });
-  }
-
-  const hasWhere = hasWhen && Boolean(builder.selectedWhere);
-
-  const actionOptions = builder.actions.map(action => ({
-    value: action.id,
-    label: formatBuilderActionOptionLabel(action),
-  }));
-
-  if (actionSelect) {
-    populateSentenceBuilderSelect(actionSelect, actionOptions, {
-      selected: hasWhere ? builder.selectedActionId : '',
-      placeholder: hasWhere ? 'Choose what you saw or heard' : 'Select a setting first',
-      disabled: !hasWhere,
-    });
-  }
-
-  const activeAction = hasWhere ? builder.actionLookup.get(builder.selectedActionId) : null;
-  const sentence = activeAction
-    ? composeObservationBuilderSentence(builder.selectedWhen, builder.selectedWhere, activeAction.text)
-    : '';
-
-  builder.selectedSentence = sentence;
-  builder.selectedActionSummary = activeAction?.summary || '';
-  builder.selectedActionModule = activeAction?.moduleLabel || '';
 
   if (actionSummary) {
     const noteParts = [];
@@ -724,39 +874,10 @@ function renderSentenceBuilder() {
   }
 
   if (applyButton) {
-    applyButton.disabled = !sentence;
+    applyButton.disabled = !builder.selectedSentence;
   }
 
   renderSentenceBuilderPreview();
-}
-
-function populateSentenceBuilderSelect(select, options, { selected = '', placeholder = '', disabled = false } = {}) {
-  if (!select) {
-    return;
-  }
-  while (select.firstChild) {
-    select.removeChild(select.firstChild);
-  }
-  const list = Array.isArray(options) ? options.filter(Boolean) : [];
-  if (placeholder) {
-    const placeholderOption = document.createElement('option');
-    placeholderOption.value = '';
-    placeholderOption.textContent = placeholder;
-    select.appendChild(placeholderOption);
-  }
-
-  list.forEach(entry => {
-    const option = document.createElement('option');
-    option.value = entry.value || '';
-    option.textContent = entry.label || '';
-    select.appendChild(option);
-  });
-
-  const hasSelected = list.some(entry => entry.value === selected);
-  const nextValue = hasSelected ? selected : '';
-  select.value = nextValue;
-  const shouldDisable = disabled || (!list.length && !placeholder);
-  select.disabled = shouldDisable;
 }
 
 function renderSentenceBuilderPreview() {
@@ -826,41 +947,36 @@ function syncSentenceBuilderToText(text) {
   }
   const source = typeof text === 'string' ? text.trim() : '';
   if (!source) {
+    builder.selectedTokens = [];
+    builder.selectedSentenceId = '';
+    builder.selectedSentence = '';
+    builder.selectedActionSummary = '';
+    builder.selectedActionModule = '';
+    renderSentenceBuilder();
     return;
   }
+
   if (builder.selectedSentence && builder.selectedSentence === source) {
     return;
   }
 
-  const whenOptions = Array.isArray(builder.whenOptions) ? builder.whenOptions : [];
-  const whereOptions = Array.isArray(builder.whereOptions) ? builder.whereOptions : [];
-  const actions = Array.isArray(builder.actions) ? builder.actions : [];
-
-  for (const whenOption of whenOptions) {
-    const whenValue = whenOption?.value || '';
-    if (!whenValue) {
-      continue;
-    }
-    for (const whereOption of whereOptions) {
-      const whereValue = whereOption?.value || '';
-      if (!whereValue) {
-        continue;
-      }
-      for (const action of actions) {
-        const candidate = composeObservationBuilderSentence(whenValue, whereValue, action?.text || '');
-        if (candidate && candidate === source) {
-          builder.selectedWhen = whenValue;
-          builder.selectedWhere = whereValue;
-          builder.selectedActionId = action.id;
-          builder.selectedSentence = candidate;
-          builder.selectedActionSummary = action.summary || '';
-          builder.selectedActionModule = action.moduleLabel || '';
-          renderSentenceBuilder();
-          return;
-        }
-      }
-    }
+  const entry = builder.sentenceLookup.get(source);
+  if (!entry) {
+    builder.selectedTokens = [];
+    builder.selectedSentenceId = '';
+    builder.selectedSentence = '';
+    builder.selectedActionSummary = '';
+    builder.selectedActionModule = '';
+    renderSentenceBuilder();
+    return;
   }
+
+  builder.selectedTokens = Array.isArray(entry.tokens) ? entry.tokens.slice() : [];
+  builder.selectedSentenceId = entry.id;
+  builder.selectedSentence = entry.sentence;
+  builder.selectedActionSummary = entry.summary || '';
+  builder.selectedActionModule = entry.moduleLabel || '';
+  renderSentenceBuilder();
 }
 
 function focusObservationTextarea() {

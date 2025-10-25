@@ -1607,32 +1607,39 @@ button.site-nav__magnet {
 
   .observation-editor__input-wrapper[data-mode='builder'] .observation-sentence-builder:not([hidden]) {
     display: grid;
+    gap: 1rem;
   }
 
-  .observation-sentence-builder__field {
-    display: grid;
-    gap: 0.5rem;
+  .observation-sentence-builder__intro {
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
   }
 
-  .observation-sentence-builder__label-row {
+  .observation-sentence-builder__sequence {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.65rem;
   }
 
-  .observation-sentence-builder__label {
+  .observation-sentence-builder__token {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 6.2rem;
+  }
+
+  .observation-sentence-builder__token-label {
     font-family: var(--font-display);
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--outline) 72%, transparent);
   }
 
-  .observation-sentence-builder__select {
+  .observation-sentence-builder__token-select {
     width: 100%;
-    padding: 0.65rem 0.85rem;
+    padding: 0.6rem 0.75rem;
     border-radius: var(--radius-2xl);
     border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
     background: #ffffff;
@@ -1641,13 +1648,13 @@ button.site-nav__magnet {
     transition: border-color 0.18s ease, box-shadow 0.18s ease;
   }
 
-  .observation-sentence-builder__select:focus {
+  .observation-sentence-builder__token-select:focus {
     outline: none;
     border-color: color-mix(in srgb, var(--sky) 34%, transparent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 22%, transparent);
   }
 
-  .observation-sentence-builder__select:disabled {
+  .observation-sentence-builder__token-select:disabled {
     color: color-mix(in srgb, var(--outline) 68%, transparent);
     background: color-mix(in srgb, var(--outline) 6%, #ffffff 94%);
   }
@@ -1658,8 +1665,19 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--outline) 68%, transparent);
   }
 
+  .observation-sentence-builder__controls {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .observation-sentence-builder__apply {
     white-space: nowrap;
+  }
+
+  .observation-sentence-builder__loading {
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
   }
 
   .observation-sentence-builder__preview {
@@ -3083,52 +3101,28 @@ button.site-nav__magnet {
                     hidden
                     aria-live="polite"
                   >
-                    <div class="observation-sentence-builder__field">
-                      <label class="observation-sentence-builder__label" for="observation-builder-when">When did it happen?</label>
-                      <select
-                        id="observation-builder-when"
-                        class="observation-sentence-builder__select"
+                    <p class="observation-sentence-builder__intro">
+                      Select each word from left to right to follow the “when + where/with whom + what I saw or heard” formula.
+                    </p>
+                    <div
+                      id="observation-builder-sequence"
+                      class="observation-sentence-builder__sequence"
+                      aria-live="polite"
+                    ></div>
+                    <p
+                      id="observation-builder-action-summary"
+                      class="observation-sentence-builder__summary"
+                      hidden
+                    ></p>
+                    <div class="observation-sentence-builder__controls">
+                      <button
+                        type="button"
+                        id="observation-builder-apply"
+                        class="support-button support-button--ghost observation-sentence-builder__apply"
                         disabled
                       >
-                        <option value="">Loading time anchors…</option>
-                      </select>
-                    </div>
-                    <div class="observation-sentence-builder__field">
-                      <label class="observation-sentence-builder__label" for="observation-builder-where">Where or with whom?</label>
-                      <select
-                        id="observation-builder-where"
-                        class="observation-sentence-builder__select"
-                        disabled
-                      >
-                        <option value="">Select when first</option>
-                      </select>
-                    </div>
-                    <div class="observation-sentence-builder__field">
-                      <div class="observation-sentence-builder__label-row">
-                        <label class="observation-sentence-builder__label" for="observation-builder-action">
-                          I saw/heard…
-                        </label>
-                        <button
-                          type="button"
-                          id="observation-builder-apply"
-                          class="support-button support-button--ghost observation-sentence-builder__apply"
-                          disabled
-                        >
-                          Insert sentence
-                        </button>
-                      </div>
-                      <select
-                        id="observation-builder-action"
-                        class="observation-sentence-builder__select"
-                        disabled
-                      >
-                        <option value="">Add time and setting first</option>
-                      </select>
-                      <p
-                        id="observation-builder-action-summary"
-                        class="observation-sentence-builder__summary"
-                        hidden
-                      ></p>
+                        Insert sentence
+                      </button>
                     </div>
                     <div
                       id="observation-builder-preview"
