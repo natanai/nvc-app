@@ -143,17 +143,17 @@ const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
   },
   day: {
     label: '(day)',
-    prompt: 'Enter the day or part of day.',
-    example: 'Monday morning',
+    prompt: 'Enter the day or part of the day that fits your experience.',
+    example: 'Tuesday afternoon',
   },
   date: {
     label: '(date)',
-    prompt: 'Enter the date.',
+    prompt: 'Enter the specific date you want to reference.',
     example: 'March 2',
   },
   time: {
     label: '(time)',
-    prompt: 'Enter the time.',
+    prompt: 'Enter the time in a way that makes sense to you.',
     example: '7:45 a.m.',
   },
   moment: {
@@ -187,6 +187,29 @@ const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
     example: '"you are overreacting"',
   },
 };
+
+const SENTENCE_BUILDER_CONNECTOR_TOKENS = new Set([
+  'with',
+  'about',
+  'during',
+  'on',
+  'at',
+  'over',
+  'between',
+  'near',
+  'outside',
+  'inside',
+  'alongside',
+  'for',
+  'to',
+  'from',
+  'as',
+  'into',
+  'onto',
+  'around',
+  'after',
+  'before',
+]);
 
 function getPreloadedSentenceBuilderData() {
   if (typeof window === 'undefined') {
@@ -599,6 +622,7 @@ function populateSentenceBuilderStageSelectors(trie, tokens, offset, selectors, 
   let node = trie;
   let index = offset;
   const safetyLimit = 160;
+  const tokenList = Array.isArray(tokens) ? tokens : [];
 
   while (node && Array.isArray(node.options) && node.options.length && selectors.length < safetyLimit) {
     const options = node.options.map(entry => {
@@ -610,10 +634,22 @@ function populateSentenceBuilderStageSelectors(trie, tokens, offset, selectors, 
         placeholder,
       };
     });
-    const selected = tokens[index];
+
+    const onlyOption = options.length === 1 ? options[0] : null;
+    const selected = tokenList[index];
     const optionValues = options.map(option => option.value);
-    const selectedOption = optionValues.includes(selected) ? selected : '';
-    const selectedPlaceholder = selectedOption ? parseSentenceBuilderPlaceholderToken(selectedOption) : null;
+    let selectedOption = optionValues.includes(selected) ? selected : '';
+
+    if (onlyOption) {
+      selectedOption = onlyOption.value;
+      if (tokenList[index] !== selectedOption) {
+        tokenList[index] = selectedOption;
+      }
+    }
+
+    const selectedPlaceholder = selectedOption
+      ? parseSentenceBuilderPlaceholderToken(selectedOption)
+      : null;
     const inputValue = selectedPlaceholder ? getSentenceBuilderTokenInput(builder, index) : '';
     selectors.push({
       index,
@@ -622,12 +658,15 @@ function populateSentenceBuilderStageSelectors(trie, tokens, offset, selectors, 
       selected: selectedOption,
       placeholder: selectedPlaceholder,
       inputValue,
+      autoSelected: Boolean(onlyOption),
     });
+
     if (!selectedOption) {
       return { complete: false, nextIndex: index };
     }
+
     const option = node.options.find(entry => entry.token === selectedOption);
-    node = option.node;
+    node = option?.node;
     index += 1;
   }
 
@@ -1025,6 +1064,7 @@ function renderSentenceBuilder() {
     placeholder.textContent = 'Choose the first word to begin building your sentence.';
     sequenceHost.appendChild(placeholder);
   } else {
+    const selectedTokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
     selectors.forEach(selector => {
       const field = document.createElement('div');
       field.className = 'observation-sentence-builder__token';
@@ -1032,31 +1072,57 @@ function renderSentenceBuilder() {
       const label = document.createElement('label');
       label.className = 'observation-sentence-builder__token-label';
       label.setAttribute('for', `observation-builder-token-${selector.index}`);
-      label.textContent = `Word ${selector.index + 1}`;
+      const previousToken = selector.index > 0 ? selectedTokens[selector.index - 1] : '';
+      const previousIsPlaceholder = isSentenceBuilderPlaceholderToken(previousToken || '');
+      let labelText = `Word ${selector.index + 1}`;
+      if (selector.placeholder) {
+        if (
+          previousToken
+          && !previousIsPlaceholder
+          && SENTENCE_BUILDER_CONNECTOR_TOKENS.has(String(previousToken).toLowerCase())
+        ) {
+          labelText = `${previousToken} → ${selector.placeholder.displayLabel}`;
+        } else {
+          labelText = selector.placeholder.displayLabel;
+        }
+      } else if (selector.selected) {
+        labelText = selector.selected;
+      }
+      label.textContent = labelText;
       field.appendChild(label);
 
-      const select = document.createElement('select');
-      select.className = 'observation-sentence-builder__token-select';
-      select.id = `observation-builder-token-${selector.index}`;
-      select.setAttribute('data-token-index', String(selector.index));
+      const isAutoSelected = Boolean(selector.autoSelected) && selector.optionValues?.length === 1;
 
-      const placeholderOption = document.createElement('option');
-      placeholderOption.value = '';
-      placeholderOption.textContent = `Word ${selector.index + 1}`;
-      select.appendChild(placeholderOption);
+      if (isAutoSelected) {
+        const optionData = selector.options && selector.options.length ? selector.options[0] : null;
+        const staticValue = document.createElement('div');
+        staticValue.className = 'observation-sentence-builder__token-static';
+        staticValue.textContent = optionData?.label || labelText;
+        field.appendChild(staticValue);
+      } else {
+        const select = document.createElement('select');
+        select.className = 'observation-sentence-builder__token-select';
+        select.id = `observation-builder-token-${selector.index}`;
+        select.setAttribute('data-token-index', String(selector.index));
 
-      selector.options.forEach(optionData => {
-        const option = document.createElement('option');
-        option.value = optionData.value;
-        option.textContent = optionData.label;
-        select.appendChild(option);
-      });
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = '';
+        placeholderOption.textContent = labelText;
+        select.appendChild(placeholderOption);
 
-      select.value = selector.selected && selector.optionValues?.includes(selector.selected)
-        ? selector.selected
-        : '';
+        selector.options.forEach(optionData => {
+          const option = document.createElement('option');
+          option.value = optionData.value;
+          option.textContent = optionData.label;
+          select.appendChild(option);
+        });
 
-      field.appendChild(select);
+        select.value = selector.selected && selector.optionValues?.includes(selector.selected)
+          ? selector.selected
+          : '';
+
+        field.appendChild(select);
+      }
 
       if (selector.placeholder) {
         const input = document.createElement('input');

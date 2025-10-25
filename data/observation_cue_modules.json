@@ -180,6 +180,21 @@
         "type": "regex",
         "pattern": "\\btouched\\s+(?:me|us)\\s+without\\s+permission\\b",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:stood|standing)\\s+too\\s+close\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\binvad(?:ed|ing)\\s+my\\s+(?:personal\\s+)?space\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bgot\\s+right\\s+up\\s+in\\s+my\\s+space\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -188,7 +203,8 @@
     "cueIds": [
       "boundary-ignored",
       "boundary-shared-private",
-      "boundary-touch"
+      "boundary-touch",
+      "boundary-invaded-space"
     ],
     "feelings": [
       "angry",
@@ -513,6 +529,16 @@
         "type": "regex",
         "pattern": "\\btalking\\s+over\\s+(?:me|us|them)\\b",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:started|began)\\s+(?:a\\s+)?side\\s+conversation\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:talked|chatted)\\s+with\\s+someone\\s+else\\s+while\\s+I\\s+was\\s+talking\\b",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -523,7 +549,8 @@
       "interruption-cut-off",
       "interruption-ignored-hand",
       "interruption-muted",
-      "interruption-talk-over"
+      "interruption-talk-over",
+      "interruption-side-conversation"
     ],
     "feelings": [
       "frustrated",
@@ -651,6 +678,16 @@
       },
       {
         "type": "regex",
+        "pattern": "\\b(?:never|didn't|did\\s+not)\\s+(?:check\\s+in|ask\\s+how\\s+(?:I|we)\\s+were)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bno\\s+one\\s+checked\\s+on\\s+(?:me|us)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
         "pattern": "\\bdidn't\\s+follow\\s+up\\b",
         "flags": "iu"
       },
@@ -667,7 +704,8 @@
     "cueIds": [
       "support-left-on-read",
       "support-no-backup",
-      "support-no-followup"
+      "support-no-followup",
+      "support-no-checkin"
     ],
     "feelings": [
       "hurt",

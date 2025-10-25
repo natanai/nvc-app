@@ -109,6 +109,20 @@
       "flags": "iu"
     }
   ],
+  "boundary_invaded_space": [
+    {
+      "pattern": "\\b(?:stood|standing)\\s+too\\s+close\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\binvad(?:ed|ing)\\s+my\\s+(?:personal\\s+)?space\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bgot\\s+right\\s+up\\s+in\\s+my\\s+space\\b",
+      "flags": "iu"
+    }
+  ],
   "credit_erased_role": [
     {
       "pattern": "\\bleft\\s+(?:my|our)\\s+name\\s+off\\b",
@@ -289,6 +303,16 @@
       "flags": "iu"
     }
   ],
+  "interrupting_side_conversation": [
+    {
+      "pattern": "\\b(?:started|began)\\s+(?:a\\s+)?side\\s+conversation\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\b(?:talked|chatted)\\s+with\\s+someone\\s+else\\s+while\\s+I\\s+was\\s+talking\\b",
+      "flags": "iu"
+    }
+  ],
   "invalidating_calmdown": [
     {
       "pattern": "\\b(?:relax|chill)\\s+out\\b",
@@ -446,6 +470,16 @@
     },
     {
       "pattern": "\\bstood\\s+by\\b[^\\n]{0,30}\\bsilent\\b",
+      "flags": "iu"
+    }
+  ],
+  "support_no_checkin": [
+    {
+      "pattern": "\\b(?:never|didn't|did\\s+not)\\s+(?:check\\s+in|ask\\s+how\\s+(?:I|we)\\s+were)\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bno\\s+one\\s+checked\\s+on\\s+(?:me|us)\\b",
       "flags": "iu"
     }
   ],

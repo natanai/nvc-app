@@ -75,7 +75,6 @@ const SENTENCE_BUILDER_CONTEXT_LOCATIONS = [
 ];
 
 const SENTENCE_BUILDER_CONTEXT_COMPANIONS = [
-  '',
   'with my team',
   'with my family',
   'with a client',
@@ -172,6 +171,35 @@ const SENTENCE_BUILDER_WHEN_TEMPLATE_TOKENS = [
   ['Immediately', 'before', '(event)'],
 ];
 
+const SENTENCE_BUILDER_WHEN_FLEXIBLE_EXTRAS = [
+  ['After', '(moment)'],
+  ['After', '(time)'],
+  ['After', '(day)'],
+  ['After', '(date)'],
+  ['Before', '(moment)'],
+  ['Before', '(time)'],
+  ['Before', '(day)'],
+  ['Before', '(date)'],
+  ['While', '(event)', 'at', '(location)'],
+  ['While', '(event)', 'with', '(person-general)'],
+  ['While', '(moment)', 'at', '(location)'],
+  ['When', '(day)', 'at', '(time)'],
+  ['When', '(moment)', 'at', '(location)'],
+  ['When', '(moment)', 'with', '(person-general)'],
+  ['When', '(time)'],
+  ['When', '(date)'],
+  ['During', '(moment)'],
+  ['During', '(moment)', 'at', '(location)'],
+  ['During', '(moment)', 'with', '(person-general)'],
+  ['Throughout', '(event)', 'with', '(person-general)'],
+  ['Around', '(time)'],
+  ['Around', '(moment)'],
+  ['Earlier', 'than', '(time)'],
+  ['Later', 'than', '(time)'],
+  ['Earlier', 'that', '(day)', 'at', '(time)'],
+  ['Later', 'that', '(day)', 'at', '(time)'],
+];
+
 const SENTENCE_BUILDER_WHERE_TEMPLATE_TOKENS = [
   ['at', '(location)'],
   ['at', '(location)', 'with', '(person-general)'],
@@ -196,10 +224,13 @@ const SENTENCE_BUILDER_WHERE_TEMPLATE_TOKENS = [
   ['on', '(channel)'],
   ['on', '(channel)', 'with', '(person-general)'],
   ['on', '(channel)', 'with', '(group)'],
+  ['on', '(channel)', 'with', '(person-general)', 'about', '(object)'],
+  ['on', '(channel)', 'with', '(group)', 'about', '(object)'],
   ['on', '(channel)', 'about', '(object)'],
   ['on', '(channel)', 'during', '(event)'],
   ['over', '(channel)'],
   ['over', '(channel)', 'with', '(person-general)'],
+  ['over', '(channel)', 'with', '(group)'],
   ['with', '(person-general)'],
   ['with', '(person-partner)'],
   ['with', '(person-peer)'],
@@ -207,9 +238,15 @@ const SENTENCE_BUILDER_WHERE_TEMPLATE_TOKENS = [
   ['with', '(role)'],
   ['with', '(group)'],
   ['with', '(people)'],
+  ['with', '(person-general)', 'on', '(channel)'],
+  ['with', '(person-general)', 'for', '(event)'],
   ['with', '(person-general)', 'about', '(object)'],
   ['with', '(person-general)', 'during', '(event)'],
   ['with', '(group)', 'during', '(event)'],
+  ['with', '(group)', 'about', '(object)'],
+  ['with', '(group)', 'on', '(channel)'],
+  ['with', '(people)', 'about', '(object)'],
+  ['with', '(people)', 'during', '(event)'],
   ['during', '(event)'],
   ['during', '(event)', 'with', '(person-general)'],
   ['during', '(event)', 'with', '(group)'],
@@ -717,6 +754,7 @@ function buildSentenceBuilderWhenSequences(lexicon) {
   }
 
   extras.push(['(moment)']);
+  SENTENCE_BUILDER_WHEN_FLEXIBLE_EXTRAS.forEach(entry => extras.push(entry));
 
   return collectSentenceBuilderSequences({
     templates: SENTENCE_BUILDER_WHEN_TEMPLATE_TOKENS,

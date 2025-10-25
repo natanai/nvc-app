@@ -101,10 +101,46 @@ function compilePattern(raw) {
 }
 
 function splitPipeList(value) {
-  return String(value || '')
-    .split('|')
-    .map(entry => entry.trim())
-    .filter(Boolean);
+  const source = typeof value === 'string' ? value : '';
+  const entries = [];
+  let buffer = '';
+  let escaping = false;
+
+  for (let i = 0; i < source.length; i += 1) {
+    const char = source[i];
+
+    if (escaping) {
+      buffer += char;
+      escaping = false;
+      continue;
+    }
+
+    if (char === '\\') {
+      buffer += char;
+      escaping = true;
+      continue;
+    }
+
+    if (char === '|') {
+      const trimmed = buffer.trim();
+      if (trimmed) {
+        entries.push(trimmed);
+      }
+      buffer = '';
+      continue;
+    }
+
+    buffer += char;
+  }
+
+  if (buffer.length) {
+    const trimmed = buffer.trim();
+    if (trimmed) {
+      entries.push(trimmed);
+    }
+  }
+
+  return entries;
 }
 
 function formatCueSet(set) {

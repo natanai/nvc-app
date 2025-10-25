@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2025-10-25T19:45:46.023Z",
+  "generatedAt": "2025-10-25T21:54:15.369Z",
   "lexicon": {
     "moments": {
       "daysOfWeek": [
@@ -70,7 +70,6 @@
         "on the project channel"
       ],
       "companions": [
-        "",
         "with my team",
         "with my family",
         "with a client",
@@ -118,6 +117,24 @@
       },
       {
         "id": "when-1",
+        "value": "After (date)",
+        "raw": "After (date)",
+        "tokens": [
+          "After",
+          "(date)"
+        ]
+      },
+      {
+        "id": "when-2",
+        "value": "After (day)",
+        "raw": "After (day)",
+        "tokens": [
+          "After",
+          "(day)"
+        ]
+      },
+      {
+        "id": "when-3",
         "value": "After (event)",
         "raw": "After (event)",
         "tokens": [
@@ -126,7 +143,7 @@
         ]
       },
       {
-        "id": "when-2",
+        "id": "when-4",
         "value": "After (event) at (location)",
         "raw": "After (event) at (location)",
         "tokens": [
@@ -137,7 +154,7 @@
         ]
       },
       {
-        "id": "when-3",
+        "id": "when-5",
         "value": "After (event) with (person-general)",
         "raw": "After (event) with (person-general)",
         "tokens": [
@@ -148,7 +165,43 @@
         ]
       },
       {
-        "id": "when-4",
+        "id": "when-6",
+        "value": "After (moment)",
+        "raw": "After (moment)",
+        "tokens": [
+          "After",
+          "(moment)"
+        ]
+      },
+      {
+        "id": "when-7",
+        "value": "After (time)",
+        "raw": "After (time)",
+        "tokens": [
+          "After",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-8",
+        "value": "Around (moment)",
+        "raw": "Around (moment)",
+        "tokens": [
+          "Around",
+          "(moment)"
+        ]
+      },
+      {
+        "id": "when-9",
+        "value": "Around (time)",
+        "raw": "Around (time)",
+        "tokens": [
+          "Around",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-10",
         "value": "Around early afternoon",
         "raw": "Around early afternoon",
         "tokens": [
@@ -157,7 +210,7 @@
         ]
       },
       {
-        "id": "when-5",
+        "id": "when-11",
         "value": "Around early evening",
         "raw": "Around early evening",
         "tokens": [
@@ -166,7 +219,7 @@
         ]
       },
       {
-        "id": "when-6",
+        "id": "when-12",
         "value": "Around early morning",
         "raw": "Around early morning",
         "tokens": [
@@ -175,7 +228,7 @@
         ]
       },
       {
-        "id": "when-7",
+        "id": "when-13",
         "value": "Around late afternoon",
         "raw": "Around late afternoon",
         "tokens": [
@@ -184,7 +237,7 @@
         ]
       },
       {
-        "id": "when-8",
+        "id": "when-14",
         "value": "Around late evening",
         "raw": "Around late evening",
         "tokens": [
@@ -193,7 +246,7 @@
         ]
       },
       {
-        "id": "when-9",
+        "id": "when-15",
         "value": "Around mid-morning",
         "raw": "Around mid-morning",
         "tokens": [
@@ -202,7 +255,7 @@
         ]
       },
       {
-        "id": "when-10",
+        "id": "when-16",
         "value": "Around midday",
         "raw": "Around midday",
         "tokens": [
@@ -211,7 +264,7 @@
         ]
       },
       {
-        "id": "when-11",
+        "id": "when-17",
         "value": "Around midnight",
         "raw": "Around midnight",
         "tokens": [
@@ -220,7 +273,7 @@
         ]
       },
       {
-        "id": "when-12",
+        "id": "when-18",
         "value": "As I (moment)",
         "raw": "As I (moment)",
         "tokens": [
@@ -230,7 +283,7 @@
         ]
       },
       {
-        "id": "when-13",
+        "id": "when-19",
         "value": "As soon as (event)",
         "raw": "As soon as (event)",
         "tokens": [
@@ -241,7 +294,7 @@
         ]
       },
       {
-        "id": "when-14",
+        "id": "when-20",
         "value": "As we (moment)",
         "raw": "As we (moment)",
         "tokens": [
@@ -251,7 +304,7 @@
         ]
       },
       {
-        "id": "when-15",
+        "id": "when-21",
         "value": "As we wrapped up for the day",
         "raw": "As we wrapped up for the day",
         "tokens": [
@@ -265,7 +318,7 @@
         ]
       },
       {
-        "id": "when-16",
+        "id": "when-22",
         "value": "At (time)",
         "raw": "At (time)",
         "tokens": [
@@ -274,7 +327,7 @@
         ]
       },
       {
-        "id": "when-17",
+        "id": "when-23",
         "value": "At (time) during (event)",
         "raw": "At (time) during (event)",
         "tokens": [
@@ -285,7 +338,7 @@
         ]
       },
       {
-        "id": "when-18",
+        "id": "when-24",
         "value": "At (time) with (person-general)",
         "raw": "At (time) with (person-general)",
         "tokens": [
@@ -296,7 +349,7 @@
         ]
       },
       {
-        "id": "when-19",
+        "id": "when-25",
         "value": "At early afternoon",
         "raw": "At early afternoon",
         "tokens": [
@@ -305,7 +358,7 @@
         ]
       },
       {
-        "id": "when-20",
+        "id": "when-26",
         "value": "At early evening",
         "raw": "At early evening",
         "tokens": [
@@ -314,7 +367,7 @@
         ]
       },
       {
-        "id": "when-21",
+        "id": "when-27",
         "value": "At early morning",
         "raw": "At early morning",
         "tokens": [
@@ -323,7 +376,7 @@
         ]
       },
       {
-        "id": "when-22",
+        "id": "when-28",
         "value": "At late afternoon",
         "raw": "At late afternoon",
         "tokens": [
@@ -332,7 +385,7 @@
         ]
       },
       {
-        "id": "when-23",
+        "id": "when-29",
         "value": "At late evening",
         "raw": "At late evening",
         "tokens": [
@@ -341,7 +394,7 @@
         ]
       },
       {
-        "id": "when-24",
+        "id": "when-30",
         "value": "At mid-morning",
         "raw": "At mid-morning",
         "tokens": [
@@ -350,7 +403,7 @@
         ]
       },
       {
-        "id": "when-25",
+        "id": "when-31",
         "value": "At midday",
         "raw": "At midday",
         "tokens": [
@@ -359,7 +412,7 @@
         ]
       },
       {
-        "id": "when-26",
+        "id": "when-32",
         "value": "At midnight",
         "raw": "At midnight",
         "tokens": [
@@ -368,7 +421,25 @@
         ]
       },
       {
-        "id": "when-27",
+        "id": "when-33",
+        "value": "Before (date)",
+        "raw": "Before (date)",
+        "tokens": [
+          "Before",
+          "(date)"
+        ]
+      },
+      {
+        "id": "when-34",
+        "value": "Before (day)",
+        "raw": "Before (day)",
+        "tokens": [
+          "Before",
+          "(day)"
+        ]
+      },
+      {
+        "id": "when-35",
         "value": "Before (event)",
         "raw": "Before (event)",
         "tokens": [
@@ -377,7 +448,7 @@
         ]
       },
       {
-        "id": "when-28",
+        "id": "when-36",
         "value": "Before (event) at (location)",
         "raw": "Before (event) at (location)",
         "tokens": [
@@ -388,7 +459,7 @@
         ]
       },
       {
-        "id": "when-29",
+        "id": "when-37",
         "value": "Before (event) with (person-general)",
         "raw": "Before (event) with (person-general)",
         "tokens": [
@@ -399,7 +470,25 @@
         ]
       },
       {
-        "id": "when-30",
+        "id": "when-38",
+        "value": "Before (moment)",
+        "raw": "Before (moment)",
+        "tokens": [
+          "Before",
+          "(moment)"
+        ]
+      },
+      {
+        "id": "when-39",
+        "value": "Before (time)",
+        "raw": "Before (time)",
+        "tokens": [
+          "Before",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-40",
         "value": "During (event)",
         "raw": "During (event)",
         "tokens": [
@@ -408,7 +497,7 @@
         ]
       },
       {
-        "id": "when-31",
+        "id": "when-41",
         "value": "During (event) at (location)",
         "raw": "During (event) at (location)",
         "tokens": [
@@ -419,7 +508,7 @@
         ]
       },
       {
-        "id": "when-32",
+        "id": "when-42",
         "value": "During (event) with (person-general)",
         "raw": "During (event) with (person-general)",
         "tokens": [
@@ -430,7 +519,38 @@
         ]
       },
       {
-        "id": "when-33",
+        "id": "when-43",
+        "value": "During (moment)",
+        "raw": "During (moment)",
+        "tokens": [
+          "During",
+          "(moment)"
+        ]
+      },
+      {
+        "id": "when-44",
+        "value": "During (moment) at (location)",
+        "raw": "During (moment) at (location)",
+        "tokens": [
+          "During",
+          "(moment)",
+          "at",
+          "(location)"
+        ]
+      },
+      {
+        "id": "when-45",
+        "value": "During (moment) with (person-general)",
+        "raw": "During (moment) with (person-general)",
+        "tokens": [
+          "During",
+          "(moment)",
+          "with",
+          "(person-general)"
+        ]
+      },
+      {
+        "id": "when-46",
         "value": "During the afternoon sync",
         "raw": "During the afternoon sync",
         "tokens": [
@@ -441,7 +561,7 @@
         ]
       },
       {
-        "id": "when-34",
+        "id": "when-47",
         "value": "During the morning standup",
         "raw": "During the morning standup",
         "tokens": [
@@ -452,7 +572,7 @@
         ]
       },
       {
-        "id": "when-35",
+        "id": "when-48",
         "value": "During the staff meeting",
         "raw": "During the staff meeting",
         "tokens": [
@@ -463,7 +583,7 @@
         ]
       },
       {
-        "id": "when-36",
+        "id": "when-49",
         "value": "During the weekly check-in",
         "raw": "During the weekly check-in",
         "tokens": [
@@ -474,7 +594,7 @@
         ]
       },
       {
-        "id": "when-37",
+        "id": "when-50",
         "value": "Earlier in (moment)",
         "raw": "Earlier in (moment)",
         "tokens": [
@@ -484,7 +604,17 @@
         ]
       },
       {
-        "id": "when-38",
+        "id": "when-51",
+        "value": "Earlier than (time)",
+        "raw": "Earlier than (time)",
+        "tokens": [
+          "Earlier",
+          "than",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-52",
         "value": "Earlier that (day)",
         "raw": "Earlier that (day)",
         "tokens": [
@@ -494,7 +624,19 @@
         ]
       },
       {
-        "id": "when-39",
+        "id": "when-53",
+        "value": "Earlier that (day) at (time)",
+        "raw": "Earlier that (day) at (time)",
+        "tokens": [
+          "Earlier",
+          "that",
+          "(day)",
+          "at",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-54",
         "value": "Earlier this week",
         "raw": "Earlier this week",
         "tokens": [
@@ -504,7 +646,7 @@
         ]
       },
       {
-        "id": "when-40",
+        "id": "when-55",
         "value": "Earlier today",
         "raw": "Earlier today",
         "tokens": [
@@ -513,7 +655,7 @@
         ]
       },
       {
-        "id": "when-41",
+        "id": "when-56",
         "value": "Early this month",
         "raw": "early this month",
         "tokens": [
@@ -523,7 +665,7 @@
         ]
       },
       {
-        "id": "when-42",
+        "id": "when-57",
         "value": "Early this quarter",
         "raw": "early this quarter",
         "tokens": [
@@ -533,7 +675,7 @@
         ]
       },
       {
-        "id": "when-43",
+        "id": "when-58",
         "value": "Heading into (event)",
         "raw": "Heading into (event)",
         "tokens": [
@@ -543,7 +685,7 @@
         ]
       },
       {
-        "id": "when-44",
+        "id": "when-59",
         "value": "Heading out of (event)",
         "raw": "Heading out of (event)",
         "tokens": [
@@ -554,7 +696,7 @@
         ]
       },
       {
-        "id": "when-45",
+        "id": "when-60",
         "value": "Immediately after (event)",
         "raw": "Immediately after (event)",
         "tokens": [
@@ -564,7 +706,7 @@
         ]
       },
       {
-        "id": "when-46",
+        "id": "when-61",
         "value": "Immediately before (event)",
         "raw": "Immediately before (event)",
         "tokens": [
@@ -574,7 +716,7 @@
         ]
       },
       {
-        "id": "when-47",
+        "id": "when-62",
         "value": "In the early afternoon",
         "raw": "In the early afternoon",
         "tokens": [
@@ -584,7 +726,7 @@
         ]
       },
       {
-        "id": "when-48",
+        "id": "when-63",
         "value": "In the early evening",
         "raw": "In the early evening",
         "tokens": [
@@ -594,7 +736,7 @@
         ]
       },
       {
-        "id": "when-49",
+        "id": "when-64",
         "value": "In the early morning",
         "raw": "In the early morning",
         "tokens": [
@@ -604,7 +746,7 @@
         ]
       },
       {
-        "id": "when-50",
+        "id": "when-65",
         "value": "In the late afternoon",
         "raw": "In the late afternoon",
         "tokens": [
@@ -614,7 +756,7 @@
         ]
       },
       {
-        "id": "when-51",
+        "id": "when-66",
         "value": "In the late evening",
         "raw": "In the late evening",
         "tokens": [
@@ -624,7 +766,7 @@
         ]
       },
       {
-        "id": "when-52",
+        "id": "when-67",
         "value": "In the mid-morning",
         "raw": "In the mid-morning",
         "tokens": [
@@ -634,7 +776,7 @@
         ]
       },
       {
-        "id": "when-53",
+        "id": "when-68",
         "value": "In the midday",
         "raw": "In the midday",
         "tokens": [
@@ -644,7 +786,7 @@
         ]
       },
       {
-        "id": "when-54",
+        "id": "when-69",
         "value": "In the middle of (event)",
         "raw": "In the middle of (event)",
         "tokens": [
@@ -656,7 +798,7 @@
         ]
       },
       {
-        "id": "when-55",
+        "id": "when-70",
         "value": "In the midnight",
         "raw": "In the midnight",
         "tokens": [
@@ -666,7 +808,7 @@
         ]
       },
       {
-        "id": "when-56",
+        "id": "when-71",
         "value": "Last night",
         "raw": "Last night",
         "tokens": [
@@ -675,7 +817,7 @@
         ]
       },
       {
-        "id": "when-57",
+        "id": "when-72",
         "value": "Late this year",
         "raw": "late this year",
         "tokens": [
@@ -685,7 +827,7 @@
         ]
       },
       {
-        "id": "when-58",
+        "id": "when-73",
         "value": "Later in (moment)",
         "raw": "Later in (moment)",
         "tokens": [
@@ -695,7 +837,17 @@
         ]
       },
       {
-        "id": "when-59",
+        "id": "when-74",
+        "value": "Later than (time)",
+        "raw": "Later than (time)",
+        "tokens": [
+          "Later",
+          "than",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-75",
         "value": "Later that (day)",
         "raw": "Later that (day)",
         "tokens": [
@@ -705,7 +857,19 @@
         ]
       },
       {
-        "id": "when-60",
+        "id": "when-76",
+        "value": "Later that (day) at (time)",
+        "raw": "Later that (day) at (time)",
+        "tokens": [
+          "Later",
+          "that",
+          "(day)",
+          "at",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-77",
         "value": "Later this month",
         "raw": "later this month",
         "tokens": [
@@ -715,7 +879,7 @@
         ]
       },
       {
-        "id": "when-61",
+        "id": "when-78",
         "value": "Mid-month",
         "raw": "mid-month",
         "tokens": [
@@ -723,7 +887,7 @@
         ]
       },
       {
-        "id": "when-62",
+        "id": "when-79",
         "value": "Mid-year",
         "raw": "mid-year",
         "tokens": [
@@ -731,7 +895,7 @@
         ]
       },
       {
-        "id": "when-63",
+        "id": "when-80",
         "value": "Moments after (event)",
         "raw": "Moments after (event)",
         "tokens": [
@@ -741,7 +905,7 @@
         ]
       },
       {
-        "id": "when-64",
+        "id": "when-81",
         "value": "Moments before (event)",
         "raw": "Moments before (event)",
         "tokens": [
@@ -751,7 +915,7 @@
         ]
       },
       {
-        "id": "when-65",
+        "id": "when-82",
         "value": "On (date)",
         "raw": "On (date)",
         "tokens": [
@@ -760,7 +924,7 @@
         ]
       },
       {
-        "id": "when-66",
+        "id": "when-83",
         "value": "On (date) at (time)",
         "raw": "On (date) at (time)",
         "tokens": [
@@ -771,7 +935,7 @@
         ]
       },
       {
-        "id": "when-67",
+        "id": "when-84",
         "value": "On (date) during (event)",
         "raw": "On (date) during (event)",
         "tokens": [
@@ -782,7 +946,7 @@
         ]
       },
       {
-        "id": "when-68",
+        "id": "when-85",
         "value": "On (day)",
         "raw": "On (day)",
         "tokens": [
@@ -791,7 +955,7 @@
         ]
       },
       {
-        "id": "when-69",
+        "id": "when-86",
         "value": "On (day) afternoon",
         "raw": "On (day) afternoon",
         "tokens": [
@@ -801,7 +965,7 @@
         ]
       },
       {
-        "id": "when-70",
+        "id": "when-87",
         "value": "On (day) at (time)",
         "raw": "On (day) at (time)",
         "tokens": [
@@ -812,7 +976,7 @@
         ]
       },
       {
-        "id": "when-71",
+        "id": "when-88",
         "value": "On (day) during (event)",
         "raw": "On (day) during (event)",
         "tokens": [
@@ -823,7 +987,7 @@
         ]
       },
       {
-        "id": "when-72",
+        "id": "when-89",
         "value": "On (day) evening",
         "raw": "On (day) evening",
         "tokens": [
@@ -833,7 +997,7 @@
         ]
       },
       {
-        "id": "when-73",
+        "id": "when-90",
         "value": "On (day) morning",
         "raw": "On (day) morning",
         "tokens": [
@@ -843,7 +1007,7 @@
         ]
       },
       {
-        "id": "when-74",
+        "id": "when-91",
         "value": "On Friday",
         "raw": "On Friday",
         "tokens": [
@@ -852,7 +1016,7 @@
         ]
       },
       {
-        "id": "when-75",
+        "id": "when-92",
         "value": "On Friday afternoon",
         "raw": "On Friday afternoon",
         "tokens": [
@@ -862,7 +1026,7 @@
         ]
       },
       {
-        "id": "when-76",
+        "id": "when-93",
         "value": "On Friday evening",
         "raw": "On Friday evening",
         "tokens": [
@@ -872,7 +1036,7 @@
         ]
       },
       {
-        "id": "when-77",
+        "id": "when-94",
         "value": "On Friday morning",
         "raw": "On Friday morning",
         "tokens": [
@@ -882,7 +1046,7 @@
         ]
       },
       {
-        "id": "when-78",
+        "id": "when-95",
         "value": "On Monday",
         "raw": "On Monday",
         "tokens": [
@@ -891,7 +1055,7 @@
         ]
       },
       {
-        "id": "when-79",
+        "id": "when-96",
         "value": "On Monday afternoon",
         "raw": "On Monday afternoon",
         "tokens": [
@@ -901,7 +1065,7 @@
         ]
       },
       {
-        "id": "when-80",
+        "id": "when-97",
         "value": "On Monday evening",
         "raw": "On Monday evening",
         "tokens": [
@@ -911,7 +1075,7 @@
         ]
       },
       {
-        "id": "when-81",
+        "id": "when-98",
         "value": "On Monday morning",
         "raw": "On Monday morning",
         "tokens": [
@@ -921,7 +1085,7 @@
         ]
       },
       {
-        "id": "when-82",
+        "id": "when-99",
         "value": "On Saturday",
         "raw": "On Saturday",
         "tokens": [
@@ -930,7 +1094,7 @@
         ]
       },
       {
-        "id": "when-83",
+        "id": "when-100",
         "value": "On Saturday afternoon",
         "raw": "On Saturday afternoon",
         "tokens": [
@@ -940,7 +1104,7 @@
         ]
       },
       {
-        "id": "when-84",
+        "id": "when-101",
         "value": "On Saturday evening",
         "raw": "On Saturday evening",
         "tokens": [
@@ -950,7 +1114,7 @@
         ]
       },
       {
-        "id": "when-85",
+        "id": "when-102",
         "value": "On Saturday morning",
         "raw": "On Saturday morning",
         "tokens": [
@@ -960,7 +1124,7 @@
         ]
       },
       {
-        "id": "when-86",
+        "id": "when-103",
         "value": "On Sunday",
         "raw": "On Sunday",
         "tokens": [
@@ -969,7 +1133,7 @@
         ]
       },
       {
-        "id": "when-87",
+        "id": "when-104",
         "value": "On Sunday afternoon",
         "raw": "On Sunday afternoon",
         "tokens": [
@@ -979,7 +1143,7 @@
         ]
       },
       {
-        "id": "when-88",
+        "id": "when-105",
         "value": "On Sunday evening",
         "raw": "On Sunday evening",
         "tokens": [
@@ -989,7 +1153,7 @@
         ]
       },
       {
-        "id": "when-89",
+        "id": "when-106",
         "value": "On Sunday morning",
         "raw": "On Sunday morning",
         "tokens": [
@@ -999,7 +1163,7 @@
         ]
       },
       {
-        "id": "when-90",
+        "id": "when-107",
         "value": "On Thursday",
         "raw": "On Thursday",
         "tokens": [
@@ -1008,7 +1172,7 @@
         ]
       },
       {
-        "id": "when-91",
+        "id": "when-108",
         "value": "On Thursday afternoon",
         "raw": "On Thursday afternoon",
         "tokens": [
@@ -1018,7 +1182,7 @@
         ]
       },
       {
-        "id": "when-92",
+        "id": "when-109",
         "value": "On Thursday evening",
         "raw": "On Thursday evening",
         "tokens": [
@@ -1028,7 +1192,7 @@
         ]
       },
       {
-        "id": "when-93",
+        "id": "when-110",
         "value": "On Thursday morning",
         "raw": "On Thursday morning",
         "tokens": [
@@ -1038,7 +1202,7 @@
         ]
       },
       {
-        "id": "when-94",
+        "id": "when-111",
         "value": "On Tuesday",
         "raw": "On Tuesday",
         "tokens": [
@@ -1047,7 +1211,7 @@
         ]
       },
       {
-        "id": "when-95",
+        "id": "when-112",
         "value": "On Tuesday afternoon",
         "raw": "On Tuesday afternoon",
         "tokens": [
@@ -1057,7 +1221,7 @@
         ]
       },
       {
-        "id": "when-96",
+        "id": "when-113",
         "value": "On Tuesday evening",
         "raw": "On Tuesday evening",
         "tokens": [
@@ -1067,7 +1231,7 @@
         ]
       },
       {
-        "id": "when-97",
+        "id": "when-114",
         "value": "On Tuesday morning",
         "raw": "On Tuesday morning",
         "tokens": [
@@ -1077,7 +1241,7 @@
         ]
       },
       {
-        "id": "when-98",
+        "id": "when-115",
         "value": "On Wednesday",
         "raw": "On Wednesday",
         "tokens": [
@@ -1086,7 +1250,7 @@
         ]
       },
       {
-        "id": "when-99",
+        "id": "when-116",
         "value": "On Wednesday afternoon",
         "raw": "On Wednesday afternoon",
         "tokens": [
@@ -1096,7 +1260,7 @@
         ]
       },
       {
-        "id": "when-100",
+        "id": "when-117",
         "value": "On Wednesday evening",
         "raw": "On Wednesday evening",
         "tokens": [
@@ -1106,7 +1270,7 @@
         ]
       },
       {
-        "id": "when-101",
+        "id": "when-118",
         "value": "On Wednesday morning",
         "raw": "On Wednesday morning",
         "tokens": [
@@ -1116,7 +1280,7 @@
         ]
       },
       {
-        "id": "when-102",
+        "id": "when-119",
         "value": "Over the weekend",
         "raw": "Over the weekend",
         "tokens": [
@@ -1126,7 +1290,7 @@
         ]
       },
       {
-        "id": "when-103",
+        "id": "when-120",
         "value": "Right after (event)",
         "raw": "Right after (event)",
         "tokens": [
@@ -1136,7 +1300,7 @@
         ]
       },
       {
-        "id": "when-104",
+        "id": "when-121",
         "value": "Right after (event) at (location)",
         "raw": "Right after (event) at (location)",
         "tokens": [
@@ -1148,7 +1312,7 @@
         ]
       },
       {
-        "id": "when-105",
+        "id": "when-122",
         "value": "Right after the call ended",
         "raw": "Right after the call ended",
         "tokens": [
@@ -1160,7 +1324,7 @@
         ]
       },
       {
-        "id": "when-106",
+        "id": "when-123",
         "value": "Right before (event)",
         "raw": "Right before (event)",
         "tokens": [
@@ -1170,7 +1334,7 @@
         ]
       },
       {
-        "id": "when-107",
+        "id": "when-124",
         "value": "Right before (event) at (location)",
         "raw": "Right before (event) at (location)",
         "tokens": [
@@ -1182,7 +1346,7 @@
         ]
       },
       {
-        "id": "when-108",
+        "id": "when-125",
         "value": "Right before the handoff",
         "raw": "Right before the handoff",
         "tokens": [
@@ -1193,7 +1357,7 @@
         ]
       },
       {
-        "id": "when-109",
+        "id": "when-126",
         "value": "This afternoon",
         "raw": "This afternoon",
         "tokens": [
@@ -1202,7 +1366,7 @@
         ]
       },
       {
-        "id": "when-110",
+        "id": "when-127",
         "value": "This evening",
         "raw": "This evening",
         "tokens": [
@@ -1211,7 +1375,7 @@
         ]
       },
       {
-        "id": "when-111",
+        "id": "when-128",
         "value": "This morning",
         "raw": "This morning",
         "tokens": [
@@ -1220,7 +1384,7 @@
         ]
       },
       {
-        "id": "when-112",
+        "id": "when-129",
         "value": "Throughout (event)",
         "raw": "Throughout (event)",
         "tokens": [
@@ -1229,7 +1393,7 @@
         ]
       },
       {
-        "id": "when-113",
+        "id": "when-130",
         "value": "Throughout (event) at (location)",
         "raw": "Throughout (event) at (location)",
         "tokens": [
@@ -1240,7 +1404,7 @@
         ]
       },
       {
-        "id": "when-114",
+        "id": "when-131",
         "value": "Throughout (event) with (group)",
         "raw": "Throughout (event) with (group)",
         "tokens": [
@@ -1251,7 +1415,18 @@
         ]
       },
       {
-        "id": "when-115",
+        "id": "when-132",
+        "value": "Throughout (event) with (person-general)",
+        "raw": "Throughout (event) with (person-general)",
+        "tokens": [
+          "Throughout",
+          "(event)",
+          "with",
+          "(person-general)"
+        ]
+      },
+      {
+        "id": "when-133",
         "value": "Tonight",
         "raw": "Tonight",
         "tokens": [
@@ -1259,7 +1434,27 @@
         ]
       },
       {
-        "id": "when-116",
+        "id": "when-134",
+        "value": "When (date)",
+        "raw": "When (date)",
+        "tokens": [
+          "When",
+          "(date)"
+        ]
+      },
+      {
+        "id": "when-135",
+        "value": "When (day) at (time)",
+        "raw": "When (day) at (time)",
+        "tokens": [
+          "When",
+          "(day)",
+          "at",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-136",
         "value": "When (moment)",
         "raw": "When (moment)",
         "tokens": [
@@ -1268,7 +1463,38 @@
         ]
       },
       {
-        "id": "when-117",
+        "id": "when-137",
+        "value": "When (moment) at (location)",
+        "raw": "When (moment) at (location)",
+        "tokens": [
+          "When",
+          "(moment)",
+          "at",
+          "(location)"
+        ]
+      },
+      {
+        "id": "when-138",
+        "value": "When (moment) with (person-general)",
+        "raw": "When (moment) with (person-general)",
+        "tokens": [
+          "When",
+          "(moment)",
+          "with",
+          "(person-general)"
+        ]
+      },
+      {
+        "id": "when-139",
+        "value": "When (time)",
+        "raw": "When (time)",
+        "tokens": [
+          "When",
+          "(time)"
+        ]
+      },
+      {
+        "id": "when-140",
         "value": "When I (moment)",
         "raw": "When I (moment)",
         "tokens": [
@@ -1278,7 +1504,7 @@
         ]
       },
       {
-        "id": "when-118",
+        "id": "when-141",
         "value": "When the (event)",
         "raw": "When the (event)",
         "tokens": [
@@ -1288,7 +1514,7 @@
         ]
       },
       {
-        "id": "when-119",
+        "id": "when-142",
         "value": "When we (moment)",
         "raw": "When we (moment)",
         "tokens": [
@@ -1298,7 +1524,29 @@
         ]
       },
       {
-        "id": "when-120",
+        "id": "when-143",
+        "value": "While (event) at (location)",
+        "raw": "While (event) at (location)",
+        "tokens": [
+          "While",
+          "(event)",
+          "at",
+          "(location)"
+        ]
+      },
+      {
+        "id": "when-144",
+        "value": "While (event) with (person-general)",
+        "raw": "While (event) with (person-general)",
+        "tokens": [
+          "While",
+          "(event)",
+          "with",
+          "(person-general)"
+        ]
+      },
+      {
+        "id": "when-145",
         "value": "While (moment)",
         "raw": "While (moment)",
         "tokens": [
@@ -1307,7 +1555,18 @@
         ]
       },
       {
-        "id": "when-121",
+        "id": "when-146",
+        "value": "While (moment) at (location)",
+        "raw": "While (moment) at (location)",
+        "tokens": [
+          "While",
+          "(moment)",
+          "at",
+          "(location)"
+        ]
+      },
+      {
+        "id": "when-147",
         "value": "While (moment) during (event)",
         "raw": "While (moment) during (event)",
         "tokens": [
@@ -1318,7 +1577,7 @@
         ]
       },
       {
-        "id": "when-122",
+        "id": "when-148",
         "value": "While I (moment)",
         "raw": "While I (moment)",
         "tokens": [
@@ -1328,7 +1587,7 @@
         ]
       },
       {
-        "id": "when-123",
+        "id": "when-149",
         "value": "While we (moment)",
         "raw": "While we (moment)",
         "tokens": [
@@ -1338,7 +1597,7 @@
         ]
       },
       {
-        "id": "when-124",
+        "id": "when-150",
         "value": "While we reviewed updates",
         "raw": "While we reviewed updates",
         "tokens": [
@@ -1349,7 +1608,7 @@
         ]
       },
       {
-        "id": "when-125",
+        "id": "when-151",
         "value": "While we waited for feedback",
         "raw": "While we waited for feedback",
         "tokens": [
@@ -1361,7 +1620,7 @@
         ]
       },
       {
-        "id": "when-126",
+        "id": "when-152",
         "value": "Yesterday",
         "raw": "Yesterday",
         "tokens": [
@@ -1385,6 +1644,24 @@
           "node": {
             "options": [
               {
+                "token": "(date)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-1"
+                  ]
+                }
+              },
+              {
+                "token": "(day)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-2"
+                  ]
+                }
+              },
+              {
                 "token": "(event)",
                 "node": {
                   "options": [
@@ -1397,7 +1674,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-2"
+                                "when-4"
                               ]
                             }
                           }
@@ -1414,7 +1691,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-3"
+                                "when-5"
                               ]
                             }
                           }
@@ -1424,7 +1701,25 @@
                     }
                   ],
                   "ids": [
-                    "when-1"
+                    "when-3"
+                  ]
+                }
+              },
+              {
+                "token": "(moment)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-6"
+                  ]
+                }
+              },
+              {
+                "token": "(time)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-7"
                   ]
                 }
               }
@@ -1437,43 +1732,7 @@
           "node": {
             "options": [
               {
-                "token": "early afternoon",
-                "node": {
-                  "options": [],
-                  "ids": [
-                    "when-4"
-                  ]
-                }
-              },
-              {
-                "token": "early evening",
-                "node": {
-                  "options": [],
-                  "ids": [
-                    "when-5"
-                  ]
-                }
-              },
-              {
-                "token": "early morning",
-                "node": {
-                  "options": [],
-                  "ids": [
-                    "when-6"
-                  ]
-                }
-              },
-              {
-                "token": "late afternoon",
-                "node": {
-                  "options": [],
-                  "ids": [
-                    "when-7"
-                  ]
-                }
-              },
-              {
-                "token": "late evening",
+                "token": "(moment)",
                 "node": {
                   "options": [],
                   "ids": [
@@ -1482,7 +1741,7 @@
                 }
               },
               {
-                "token": "mid-morning",
+                "token": "(time)",
                 "node": {
                   "options": [],
                   "ids": [
@@ -1491,7 +1750,7 @@
                 }
               },
               {
-                "token": "midday",
+                "token": "early afternoon",
                 "node": {
                   "options": [],
                   "ids": [
@@ -1500,11 +1759,65 @@
                 }
               },
               {
-                "token": "midnight",
+                "token": "early evening",
                 "node": {
                   "options": [],
                   "ids": [
                     "when-11"
+                  ]
+                }
+              },
+              {
+                "token": "early morning",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-12"
+                  ]
+                }
+              },
+              {
+                "token": "late afternoon",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-13"
+                  ]
+                }
+              },
+              {
+                "token": "late evening",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-14"
+                  ]
+                }
+              },
+              {
+                "token": "mid-morning",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-15"
+                  ]
+                }
+              },
+              {
+                "token": "midday",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-16"
+                  ]
+                }
+              },
+              {
+                "token": "midnight",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-17"
                   ]
                 }
               }
@@ -1525,7 +1838,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-12"
+                          "when-18"
                         ]
                       }
                     }
@@ -1546,7 +1859,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-13"
+                                "when-19"
                               ]
                             }
                           }
@@ -1567,7 +1880,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-14"
+                          "when-20"
                         ]
                       }
                     },
@@ -1592,7 +1905,7 @@
                                               "node": {
                                                 "options": [],
                                                 "ids": [
-                                                  "when-15"
+                                                  "when-21"
                                                 ]
                                               }
                                             }
@@ -1637,7 +1950,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-17"
+                                "when-23"
                               ]
                             }
                           }
@@ -1654,7 +1967,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-18"
+                                "when-24"
                               ]
                             }
                           }
@@ -1664,7 +1977,7 @@
                     }
                   ],
                   "ids": [
-                    "when-16"
+                    "when-22"
                   ]
                 }
               },
@@ -1673,7 +1986,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-19"
+                    "when-25"
                   ]
                 }
               },
@@ -1682,7 +1995,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-20"
+                    "when-26"
                   ]
                 }
               },
@@ -1691,7 +2004,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-21"
+                    "when-27"
                   ]
                 }
               },
@@ -1700,7 +2013,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-22"
+                    "when-28"
                   ]
                 }
               },
@@ -1709,7 +2022,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-23"
+                    "when-29"
                   ]
                 }
               },
@@ -1718,7 +2031,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-24"
+                    "when-30"
                   ]
                 }
               },
@@ -1727,7 +2040,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-25"
+                    "when-31"
                   ]
                 }
               },
@@ -1736,7 +2049,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-26"
+                    "when-32"
                   ]
                 }
               }
@@ -1748,6 +2061,24 @@
           "token": "Before",
           "node": {
             "options": [
+              {
+                "token": "(date)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-33"
+                  ]
+                }
+              },
+              {
+                "token": "(day)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-34"
+                  ]
+                }
+              },
               {
                 "token": "(event)",
                 "node": {
@@ -1761,7 +2092,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-28"
+                                "when-36"
                               ]
                             }
                           }
@@ -1778,7 +2109,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-29"
+                                "when-37"
                               ]
                             }
                           }
@@ -1788,7 +2119,25 @@
                     }
                   ],
                   "ids": [
-                    "when-27"
+                    "when-35"
+                  ]
+                }
+              },
+              {
+                "token": "(moment)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-38"
+                  ]
+                }
+              },
+              {
+                "token": "(time)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-39"
                   ]
                 }
               }
@@ -1813,7 +2162,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-31"
+                                "when-41"
                               ]
                             }
                           }
@@ -1830,7 +2179,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-32"
+                                "when-42"
                               ]
                             }
                           }
@@ -1840,7 +2189,51 @@
                     }
                   ],
                   "ids": [
-                    "when-30"
+                    "when-40"
+                  ]
+                }
+              },
+              {
+                "token": "(moment)",
+                "node": {
+                  "options": [
+                    {
+                      "token": "at",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(location)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-44"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "with",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(person-general)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-45"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    }
+                  ],
+                  "ids": [
+                    "when-43"
                   ]
                 }
               },
@@ -1857,7 +2250,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-33"
+                                "when-46"
                               ]
                             }
                           }
@@ -1874,7 +2267,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-34"
+                                "when-47"
                               ]
                             }
                           }
@@ -1891,7 +2284,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-35"
+                                "when-48"
                               ]
                             }
                           }
@@ -1908,7 +2301,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-36"
+                                "when-49"
                               ]
                             }
                           }
@@ -1937,7 +2330,24 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-37"
+                          "when-50"
+                        ]
+                      }
+                    }
+                  ],
+                  "ids": []
+                }
+              },
+              {
+                "token": "than",
+                "node": {
+                  "options": [
+                    {
+                      "token": "(time)",
+                      "node": {
+                        "options": [],
+                        "ids": [
+                          "when-51"
                         ]
                       }
                     }
@@ -1952,9 +2362,27 @@
                     {
                       "token": "(day)",
                       "node": {
-                        "options": [],
+                        "options": [
+                          {
+                            "token": "at",
+                            "node": {
+                              "options": [
+                                {
+                                  "token": "(time)",
+                                  "node": {
+                                    "options": [],
+                                    "ids": [
+                                      "when-53"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
                         "ids": [
-                          "when-38"
+                          "when-52"
                         ]
                       }
                     }
@@ -1971,7 +2399,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-39"
+                          "when-54"
                         ]
                       }
                     }
@@ -1984,7 +2412,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-40"
+                    "when-55"
                   ]
                 }
               }
@@ -2005,7 +2433,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-41"
+                          "when-56"
                         ]
                       }
                     },
@@ -2014,7 +2442,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-42"
+                          "when-57"
                         ]
                       }
                     }
@@ -2039,7 +2467,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-43"
+                          "when-58"
                         ]
                       }
                     }
@@ -2060,7 +2488,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-44"
+                                "when-59"
                               ]
                             }
                           }
@@ -2089,7 +2517,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-45"
+                          "when-60"
                         ]
                       }
                     }
@@ -2106,7 +2534,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-46"
+                          "when-61"
                         ]
                       }
                     }
@@ -2131,7 +2559,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-47"
+                          "when-62"
                         ]
                       }
                     },
@@ -2140,7 +2568,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-48"
+                          "when-63"
                         ]
                       }
                     },
@@ -2149,7 +2577,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-49"
+                          "when-64"
                         ]
                       }
                     },
@@ -2158,7 +2586,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-50"
+                          "when-65"
                         ]
                       }
                     },
@@ -2167,7 +2595,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-51"
+                          "when-66"
                         ]
                       }
                     },
@@ -2176,7 +2604,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-52"
+                          "when-67"
                         ]
                       }
                     },
@@ -2185,7 +2613,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-53"
+                          "when-68"
                         ]
                       }
                     },
@@ -2202,7 +2630,7 @@
                                   "node": {
                                     "options": [],
                                     "ids": [
-                                      "when-54"
+                                      "when-69"
                                     ]
                                   }
                                 }
@@ -2219,7 +2647,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-55"
+                          "when-70"
                         ]
                       }
                     }
@@ -2240,7 +2668,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-56"
+                    "when-71"
                   ]
                 }
               }
@@ -2261,7 +2689,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-57"
+                          "when-72"
                         ]
                       }
                     }
@@ -2286,7 +2714,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-60"
+                          "when-77"
                         ]
                       }
                     }
@@ -2311,7 +2739,24 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-58"
+                          "when-73"
+                        ]
+                      }
+                    }
+                  ],
+                  "ids": []
+                }
+              },
+              {
+                "token": "than",
+                "node": {
+                  "options": [
+                    {
+                      "token": "(time)",
+                      "node": {
+                        "options": [],
+                        "ids": [
+                          "when-74"
                         ]
                       }
                     }
@@ -2326,9 +2771,27 @@
                     {
                       "token": "(day)",
                       "node": {
-                        "options": [],
+                        "options": [
+                          {
+                            "token": "at",
+                            "node": {
+                              "options": [
+                                {
+                                  "token": "(time)",
+                                  "node": {
+                                    "options": [],
+                                    "ids": [
+                                      "when-76"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
                         "ids": [
-                          "when-59"
+                          "when-75"
                         ]
                       }
                     }
@@ -2345,7 +2808,7 @@
           "node": {
             "options": [],
             "ids": [
-              "when-61"
+              "when-78"
             ]
           }
         },
@@ -2354,7 +2817,7 @@
           "node": {
             "options": [],
             "ids": [
-              "when-62"
+              "when-79"
             ]
           }
         },
@@ -2371,7 +2834,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-63"
+                          "when-80"
                         ]
                       }
                     }
@@ -2388,7 +2851,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-64"
+                          "when-81"
                         ]
                       }
                     }
@@ -2417,7 +2880,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-66"
+                                "when-83"
                               ]
                             }
                           }
@@ -2434,7 +2897,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-67"
+                                "when-84"
                               ]
                             }
                           }
@@ -2444,7 +2907,7 @@
                     }
                   ],
                   "ids": [
-                    "when-65"
+                    "when-82"
                   ]
                 }
               },
@@ -2457,7 +2920,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-69"
+                          "when-86"
                         ]
                       }
                     },
@@ -2470,7 +2933,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-70"
+                                "when-87"
                               ]
                             }
                           }
@@ -2487,7 +2950,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-71"
+                                "when-88"
                               ]
                             }
                           }
@@ -2500,7 +2963,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-72"
+                          "when-89"
                         ]
                       }
                     },
@@ -2509,13 +2972,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-73"
+                          "when-90"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-68"
+                    "when-85"
                   ]
                 }
               },
@@ -2528,7 +2991,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-75"
+                          "when-92"
                         ]
                       }
                     },
@@ -2537,7 +3000,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-76"
+                          "when-93"
                         ]
                       }
                     },
@@ -2546,13 +3009,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-77"
+                          "when-94"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-74"
+                    "when-91"
                   ]
                 }
               },
@@ -2565,7 +3028,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-79"
+                          "when-96"
                         ]
                       }
                     },
@@ -2574,7 +3037,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-80"
+                          "when-97"
                         ]
                       }
                     },
@@ -2583,13 +3046,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-81"
+                          "when-98"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-78"
+                    "when-95"
                   ]
                 }
               },
@@ -2602,7 +3065,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-83"
+                          "when-100"
                         ]
                       }
                     },
@@ -2611,7 +3074,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-84"
+                          "when-101"
                         ]
                       }
                     },
@@ -2620,13 +3083,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-85"
+                          "when-102"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-82"
+                    "when-99"
                   ]
                 }
               },
@@ -2639,7 +3102,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-87"
+                          "when-104"
                         ]
                       }
                     },
@@ -2648,7 +3111,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-88"
+                          "when-105"
                         ]
                       }
                     },
@@ -2657,13 +3120,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-89"
+                          "when-106"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-86"
+                    "when-103"
                   ]
                 }
               },
@@ -2676,7 +3139,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-91"
+                          "when-108"
                         ]
                       }
                     },
@@ -2685,7 +3148,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-92"
+                          "when-109"
                         ]
                       }
                     },
@@ -2694,13 +3157,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-93"
+                          "when-110"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-90"
+                    "when-107"
                   ]
                 }
               },
@@ -2713,7 +3176,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-95"
+                          "when-112"
                         ]
                       }
                     },
@@ -2722,7 +3185,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-96"
+                          "when-113"
                         ]
                       }
                     },
@@ -2731,13 +3194,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-97"
+                          "when-114"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-94"
+                    "when-111"
                   ]
                 }
               },
@@ -2750,7 +3213,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-99"
+                          "when-116"
                         ]
                       }
                     },
@@ -2759,7 +3222,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-100"
+                          "when-117"
                         ]
                       }
                     },
@@ -2768,13 +3231,13 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-101"
+                          "when-118"
                         ]
                       }
                     }
                   ],
                   "ids": [
-                    "when-98"
+                    "when-115"
                   ]
                 }
               }
@@ -2795,7 +3258,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-102"
+                          "when-119"
                         ]
                       }
                     }
@@ -2828,7 +3291,7 @@
                                   "node": {
                                     "options": [],
                                     "ids": [
-                                      "when-104"
+                                      "when-121"
                                     ]
                                   }
                                 }
@@ -2838,7 +3301,7 @@
                           }
                         ],
                         "ids": [
-                          "when-103"
+                          "when-120"
                         ]
                       }
                     },
@@ -2855,7 +3318,7 @@
                                   "node": {
                                     "options": [],
                                     "ids": [
-                                      "when-105"
+                                      "when-122"
                                     ]
                                   }
                                 }
@@ -2888,7 +3351,7 @@
                                   "node": {
                                     "options": [],
                                     "ids": [
-                                      "when-107"
+                                      "when-124"
                                     ]
                                   }
                                 }
@@ -2898,7 +3361,7 @@
                           }
                         ],
                         "ids": [
-                          "when-106"
+                          "when-123"
                         ]
                       }
                     },
@@ -2911,7 +3374,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-108"
+                                "when-125"
                               ]
                             }
                           }
@@ -2936,7 +3399,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-109"
+                    "when-126"
                   ]
                 }
               },
@@ -2945,7 +3408,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-110"
+                    "when-127"
                   ]
                 }
               },
@@ -2954,7 +3417,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-111"
+                    "when-128"
                   ]
                 }
               }
@@ -2979,7 +3442,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-113"
+                                "when-130"
                               ]
                             }
                           }
@@ -2996,7 +3459,16 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-114"
+                                "when-131"
+                              ]
+                            }
+                          },
+                          {
+                            "token": "(person-general)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-132"
                               ]
                             }
                           }
@@ -3006,7 +3478,7 @@
                     }
                   ],
                   "ids": [
-                    "when-112"
+                    "when-129"
                   ]
                 }
               }
@@ -3019,7 +3491,7 @@
           "node": {
             "options": [],
             "ids": [
-              "when-115"
+              "when-133"
             ]
           }
         },
@@ -3028,11 +3500,89 @@
           "node": {
             "options": [
               {
-                "token": "(moment)",
+                "token": "(date)",
                 "node": {
                   "options": [],
                   "ids": [
-                    "when-116"
+                    "when-134"
+                  ]
+                }
+              },
+              {
+                "token": "(day)",
+                "node": {
+                  "options": [
+                    {
+                      "token": "at",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(time)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-135"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    }
+                  ],
+                  "ids": []
+                }
+              },
+              {
+                "token": "(moment)",
+                "node": {
+                  "options": [
+                    {
+                      "token": "at",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(location)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-137"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "with",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(person-general)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-138"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    }
+                  ],
+                  "ids": [
+                    "when-136"
+                  ]
+                }
+              },
+              {
+                "token": "(time)",
+                "node": {
+                  "options": [],
+                  "ids": [
+                    "when-139"
                   ]
                 }
               },
@@ -3045,7 +3595,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-117"
+                          "when-140"
                         ]
                       }
                     }
@@ -3062,7 +3612,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-118"
+                          "when-141"
                         ]
                       }
                     }
@@ -3079,7 +3629,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-119"
+                          "when-142"
                         ]
                       }
                     }
@@ -3096,9 +3646,68 @@
           "node": {
             "options": [
               {
+                "token": "(event)",
+                "node": {
+                  "options": [
+                    {
+                      "token": "at",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(location)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-143"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "with",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(person-general)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-144"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    }
+                  ],
+                  "ids": []
+                }
+              },
+              {
                 "token": "(moment)",
                 "node": {
                   "options": [
+                    {
+                      "token": "at",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(location)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "when-146"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
                     {
                       "token": "during",
                       "node": {
@@ -3108,7 +3717,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-121"
+                                "when-147"
                               ]
                             }
                           }
@@ -3118,7 +3727,7 @@
                     }
                   ],
                   "ids": [
-                    "when-120"
+                    "when-145"
                   ]
                 }
               },
@@ -3131,7 +3740,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-122"
+                          "when-148"
                         ]
                       }
                     }
@@ -3148,7 +3757,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "when-123"
+                          "when-149"
                         ]
                       }
                     },
@@ -3161,7 +3770,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "when-124"
+                                "when-150"
                               ]
                             }
                           }
@@ -3182,7 +3791,7 @@
                                   "node": {
                                     "options": [],
                                     "ids": [
-                                      "when-125"
+                                      "when-151"
                                     ]
                                   }
                                 }
@@ -3207,7 +3816,7 @@
           "node": {
             "options": [],
             "ids": [
-              "when-126"
+              "when-152"
             ]
           }
         }
@@ -3869,6 +4478,19 @@
       },
       {
         "id": "where-61",
+        "value": "on (channel) with (group) about (object)",
+        "raw": "on (channel) with (group) about (object)",
+        "tokens": [
+          "on",
+          "(channel)",
+          "with",
+          "(group)",
+          "about",
+          "(object)"
+        ]
+      },
+      {
+        "id": "where-62",
         "value": "on (channel) with (person-general)",
         "raw": "on (channel) with (person-general)",
         "tokens": [
@@ -3879,7 +4501,20 @@
         ]
       },
       {
-        "id": "where-62",
+        "id": "where-63",
+        "value": "on (channel) with (person-general) about (object)",
+        "raw": "on (channel) with (person-general) about (object)",
+        "tokens": [
+          "on",
+          "(channel)",
+          "with",
+          "(person-general)",
+          "about",
+          "(object)"
+        ]
+      },
+      {
+        "id": "where-64",
         "value": "on a video call",
         "raw": "on a video call",
         "tokens": [
@@ -3890,7 +4525,7 @@
         ]
       },
       {
-        "id": "where-63",
+        "id": "where-65",
         "value": "on a video call with a client",
         "raw": "on a video call with a client",
         "tokens": [
@@ -3904,7 +4539,7 @@
         ]
       },
       {
-        "id": "where-64",
+        "id": "where-66",
         "value": "on my own",
         "raw": "on my own",
         "tokens": [
@@ -3914,7 +4549,7 @@
         ]
       },
       {
-        "id": "where-65",
+        "id": "where-67",
         "value": "on the phone",
         "raw": "on the phone",
         "tokens": [
@@ -3924,7 +4559,7 @@
         ]
       },
       {
-        "id": "where-66",
+        "id": "where-68",
         "value": "on the phone with a support agent",
         "raw": "on the phone with a support agent",
         "tokens": [
@@ -3938,7 +4573,7 @@
         ]
       },
       {
-        "id": "where-67",
+        "id": "where-69",
         "value": "on the project channel",
         "raw": "on the project channel",
         "tokens": [
@@ -3949,7 +4584,7 @@
         ]
       },
       {
-        "id": "where-68",
+        "id": "where-70",
         "value": "on the project channel with the team",
         "raw": "on the project channel with the team",
         "tokens": [
@@ -3963,7 +4598,7 @@
         ]
       },
       {
-        "id": "where-69",
+        "id": "where-71",
         "value": "outside (location)",
         "raw": "outside (location)",
         "tokens": [
@@ -3972,7 +4607,7 @@
         ]
       },
       {
-        "id": "where-70",
+        "id": "where-72",
         "value": "over (channel)",
         "raw": "over (channel)",
         "tokens": [
@@ -3981,7 +4616,18 @@
         ]
       },
       {
-        "id": "where-71",
+        "id": "where-73",
+        "value": "over (channel) with (group)",
+        "raw": "over (channel) with (group)",
+        "tokens": [
+          "over",
+          "(channel)",
+          "with",
+          "(group)"
+        ]
+      },
+      {
+        "id": "where-74",
         "value": "over (channel) with (person-general)",
         "raw": "over (channel) with (person-general)",
         "tokens": [
@@ -3992,7 +4638,7 @@
         ]
       },
       {
-        "id": "where-72",
+        "id": "where-75",
         "value": "while we planned next steps",
         "raw": "while we planned next steps",
         "tokens": [
@@ -4004,7 +4650,7 @@
         ]
       },
       {
-        "id": "where-73",
+        "id": "where-76",
         "value": "while we reviewed updates",
         "raw": "while we reviewed updates",
         "tokens": [
@@ -4015,7 +4661,7 @@
         ]
       },
       {
-        "id": "where-74",
+        "id": "where-77",
         "value": "with (group)",
         "raw": "with (group)",
         "tokens": [
@@ -4024,7 +4670,18 @@
         ]
       },
       {
-        "id": "where-75",
+        "id": "where-78",
+        "value": "with (group) about (object)",
+        "raw": "with (group) about (object)",
+        "tokens": [
+          "with",
+          "(group)",
+          "about",
+          "(object)"
+        ]
+      },
+      {
+        "id": "where-79",
         "value": "with (group) during (event)",
         "raw": "with (group) during (event)",
         "tokens": [
@@ -4035,7 +4692,18 @@
         ]
       },
       {
-        "id": "where-76",
+        "id": "where-80",
+        "value": "with (group) on (channel)",
+        "raw": "with (group) on (channel)",
+        "tokens": [
+          "with",
+          "(group)",
+          "on",
+          "(channel)"
+        ]
+      },
+      {
+        "id": "where-81",
         "value": "with (people)",
         "raw": "with (people)",
         "tokens": [
@@ -4044,7 +4712,29 @@
         ]
       },
       {
-        "id": "where-77",
+        "id": "where-82",
+        "value": "with (people) about (object)",
+        "raw": "with (people) about (object)",
+        "tokens": [
+          "with",
+          "(people)",
+          "about",
+          "(object)"
+        ]
+      },
+      {
+        "id": "where-83",
+        "value": "with (people) during (event)",
+        "raw": "with (people) during (event)",
+        "tokens": [
+          "with",
+          "(people)",
+          "during",
+          "(event)"
+        ]
+      },
+      {
+        "id": "where-84",
         "value": "with (person-authority)",
         "raw": "with (person-authority)",
         "tokens": [
@@ -4053,7 +4743,7 @@
         ]
       },
       {
-        "id": "where-78",
+        "id": "where-85",
         "value": "with (person-general)",
         "raw": "with (person-general)",
         "tokens": [
@@ -4062,7 +4752,7 @@
         ]
       },
       {
-        "id": "where-79",
+        "id": "where-86",
         "value": "with (person-general) about (object)",
         "raw": "with (person-general) about (object)",
         "tokens": [
@@ -4073,7 +4763,7 @@
         ]
       },
       {
-        "id": "where-80",
+        "id": "where-87",
         "value": "with (person-general) during (event)",
         "raw": "with (person-general) during (event)",
         "tokens": [
@@ -4084,7 +4774,29 @@
         ]
       },
       {
-        "id": "where-81",
+        "id": "where-88",
+        "value": "with (person-general) for (event)",
+        "raw": "with (person-general) for (event)",
+        "tokens": [
+          "with",
+          "(person-general)",
+          "for",
+          "(event)"
+        ]
+      },
+      {
+        "id": "where-89",
+        "value": "with (person-general) on (channel)",
+        "raw": "with (person-general) on (channel)",
+        "tokens": [
+          "with",
+          "(person-general)",
+          "on",
+          "(channel)"
+        ]
+      },
+      {
+        "id": "where-90",
         "value": "with (person-partner)",
         "raw": "with (person-partner)",
         "tokens": [
@@ -4093,7 +4805,7 @@
         ]
       },
       {
-        "id": "where-82",
+        "id": "where-91",
         "value": "with (person-peer)",
         "raw": "with (person-peer)",
         "tokens": [
@@ -4102,7 +4814,7 @@
         ]
       },
       {
-        "id": "where-83",
+        "id": "where-92",
         "value": "with (role)",
         "raw": "with (role)",
         "tokens": [
@@ -4111,7 +4823,7 @@
         ]
       },
       {
-        "id": "where-84",
+        "id": "where-93",
         "value": "with a client",
         "raw": "with a client",
         "tokens": [
@@ -4121,7 +4833,7 @@
         ]
       },
       {
-        "id": "where-85",
+        "id": "where-94",
         "value": "with a facilitator",
         "raw": "with a facilitator",
         "tokens": [
@@ -4131,7 +4843,7 @@
         ]
       },
       {
-        "id": "where-86",
+        "id": "where-95",
         "value": "with a manager",
         "raw": "with a manager",
         "tokens": [
@@ -4141,7 +4853,7 @@
         ]
       },
       {
-        "id": "where-87",
+        "id": "where-96",
         "value": "with a partner",
         "raw": "with a partner",
         "tokens": [
@@ -4151,7 +4863,7 @@
         ]
       },
       {
-        "id": "where-88",
+        "id": "where-97",
         "value": "with a support agent",
         "raw": "with a support agent",
         "tokens": [
@@ -4162,7 +4874,7 @@
         ]
       },
       {
-        "id": "where-89",
+        "id": "where-98",
         "value": "with coworkers",
         "raw": "with coworkers",
         "tokens": [
@@ -4171,7 +4883,7 @@
         ]
       },
       {
-        "id": "where-90",
+        "id": "where-99",
         "value": "with my family",
         "raw": "with my family",
         "tokens": [
@@ -4181,7 +4893,7 @@
         ]
       },
       {
-        "id": "where-91",
+        "id": "where-100",
         "value": "with my team",
         "raw": "with my team",
         "tokens": [
@@ -4191,7 +4903,7 @@
         ]
       },
       {
-        "id": "where-92",
+        "id": "where-101",
         "value": "with the group",
         "raw": "with the group",
         "tokens": [
@@ -4201,7 +4913,7 @@
         ]
       },
       {
-        "id": "where-93",
+        "id": "where-102",
         "value": "with the students",
         "raw": "with the students",
         "tokens": [
@@ -4211,7 +4923,7 @@
         ]
       },
       {
-        "id": "where-94",
+        "id": "where-103",
         "value": "with the vendor",
         "raw": "with the vendor",
         "tokens": [
@@ -5252,7 +5964,25 @@
                           {
                             "token": "(group)",
                             "node": {
-                              "options": [],
+                              "options": [
+                                {
+                                  "token": "about",
+                                  "node": {
+                                    "options": [
+                                      {
+                                        "token": "(object)",
+                                        "node": {
+                                          "options": [],
+                                          "ids": [
+                                            "where-61"
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    "ids": []
+                                  }
+                                }
+                              ],
                               "ids": [
                                 "where-60"
                               ]
@@ -5261,9 +5991,27 @@
                           {
                             "token": "(person-general)",
                             "node": {
-                              "options": [],
+                              "options": [
+                                {
+                                  "token": "about",
+                                  "node": {
+                                    "options": [
+                                      {
+                                        "token": "(object)",
+                                        "node": {
+                                          "options": [],
+                                          "ids": [
+                                            "where-63"
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    "ids": []
+                                  }
+                                }
+                              ],
                               "ids": [
-                                "where-61"
+                                "where-62"
                               ]
                             }
                           }
@@ -5302,7 +6050,7 @@
                                               "node": {
                                                 "options": [],
                                                 "ids": [
-                                                  "where-63"
+                                                  "where-65"
                                                 ]
                                               }
                                             }
@@ -5316,7 +6064,7 @@
                                 }
                               ],
                               "ids": [
-                                "where-62"
+                                "where-64"
                               ]
                             }
                           }
@@ -5337,7 +6085,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-64"
+                          "where-66"
                         ]
                       }
                     }
@@ -5370,7 +6118,7 @@
                                               "node": {
                                                 "options": [],
                                                 "ids": [
-                                                  "where-66"
+                                                  "where-68"
                                                 ]
                                               }
                                             }
@@ -5388,7 +6136,7 @@
                           }
                         ],
                         "ids": [
-                          "where-65"
+                          "where-67"
                         ]
                       }
                     },
@@ -5413,7 +6161,7 @@
                                               "node": {
                                                 "options": [],
                                                 "ids": [
-                                                  "where-68"
+                                                  "where-70"
                                                 ]
                                               }
                                             }
@@ -5427,7 +6175,7 @@
                                 }
                               ],
                               "ids": [
-                                "where-67"
+                                "where-69"
                               ]
                             }
                           }
@@ -5452,7 +6200,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "where-69"
+                    "where-71"
                   ]
                 }
               }
@@ -5473,11 +6221,20 @@
                       "node": {
                         "options": [
                           {
+                            "token": "(group)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-73"
+                              ]
+                            }
+                          },
+                          {
                             "token": "(person-general)",
                             "node": {
                               "options": [],
                               "ids": [
-                                "where-71"
+                                "where-74"
                               ]
                             }
                           }
@@ -5487,7 +6244,7 @@
                     }
                   ],
                   "ids": [
-                    "where-70"
+                    "where-72"
                   ]
                 }
               }
@@ -5516,7 +6273,7 @@
                                   "node": {
                                     "options": [],
                                     "ids": [
-                                      "where-72"
+                                      "where-75"
                                     ]
                                   }
                                 }
@@ -5537,7 +6294,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "where-73"
+                                "where-76"
                               ]
                             }
                           }
@@ -5562,6 +6319,23 @@
                 "node": {
                   "options": [
                     {
+                      "token": "about",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(object)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-78"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
                       "token": "during",
                       "node": {
                         "options": [
@@ -5570,7 +6344,24 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "where-75"
+                                "where-79"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "on",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(channel)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-80"
                               ]
                             }
                           }
@@ -5580,16 +6371,51 @@
                     }
                   ],
                   "ids": [
-                    "where-74"
+                    "where-77"
                   ]
                 }
               },
               {
                 "token": "(people)",
                 "node": {
-                  "options": [],
+                  "options": [
+                    {
+                      "token": "about",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(object)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-82"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "during",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(event)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-83"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    }
+                  ],
                   "ids": [
-                    "where-76"
+                    "where-81"
                   ]
                 }
               },
@@ -5598,7 +6424,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "where-77"
+                    "where-84"
                   ]
                 }
               },
@@ -5615,7 +6441,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "where-79"
+                                "where-86"
                               ]
                             }
                           }
@@ -5632,7 +6458,41 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "where-80"
+                                "where-87"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "for",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(event)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-88"
+                              ]
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
+                      "token": "on",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "(channel)",
+                            "node": {
+                              "options": [],
+                              "ids": [
+                                "where-89"
                               ]
                             }
                           }
@@ -5642,7 +6502,7 @@
                     }
                   ],
                   "ids": [
-                    "where-78"
+                    "where-85"
                   ]
                 }
               },
@@ -5651,7 +6511,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "where-81"
+                    "where-90"
                   ]
                 }
               },
@@ -5660,7 +6520,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "where-82"
+                    "where-91"
                   ]
                 }
               },
@@ -5669,7 +6529,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "where-83"
+                    "where-92"
                   ]
                 }
               },
@@ -5682,7 +6542,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-84"
+                          "where-93"
                         ]
                       }
                     },
@@ -5691,7 +6551,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-85"
+                          "where-94"
                         ]
                       }
                     },
@@ -5700,7 +6560,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-86"
+                          "where-95"
                         ]
                       }
                     },
@@ -5709,7 +6569,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-87"
+                          "where-96"
                         ]
                       }
                     },
@@ -5722,7 +6582,7 @@
                             "node": {
                               "options": [],
                               "ids": [
-                                "where-88"
+                                "where-97"
                               ]
                             }
                           }
@@ -5739,7 +6599,7 @@
                 "node": {
                   "options": [],
                   "ids": [
-                    "where-89"
+                    "where-98"
                   ]
                 }
               },
@@ -5752,7 +6612,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-90"
+                          "where-99"
                         ]
                       }
                     },
@@ -5761,7 +6621,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-91"
+                          "where-100"
                         ]
                       }
                     }
@@ -5778,7 +6638,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-92"
+                          "where-101"
                         ]
                       }
                     },
@@ -5787,7 +6647,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-93"
+                          "where-102"
                         ]
                       }
                     },
@@ -5796,7 +6656,7 @@
                       "node": {
                         "options": [],
                         "ids": [
-                          "where-94"
+                          "where-103"
                         ]
                       }
                     }
@@ -5984,6 +6844,27 @@
           "(person-partner)",
           "did",
           "(behavior)",
+          "during",
+          "(event)",
+          "with",
+          "(person-general)"
+        ]
+      },
+      {
+        "id": "boundary-invaded-space",
+        "label": "Boundary Invaded Space",
+        "moduleId": "boundary-crossing",
+        "moduleLabel": "Boundary crossing actions",
+        "summary": "",
+        "text": "I saw (person-peer) did (behavior) at (location) during (event) with (person-general).",
+        "tokens": [
+          "I",
+          "saw",
+          "(person-peer)",
+          "did",
+          "(behavior)",
+          "at",
+          "(location)",
           "during",
           "(event)",
           "with",
@@ -6325,6 +7206,27 @@
         ]
       },
       {
+        "id": "interruption-side-conversation",
+        "label": "Interruption Side Conversation",
+        "moduleId": "interrupting-dynamics",
+        "moduleLabel": "Interrupting and talking over",
+        "summary": "",
+        "text": "I saw (person-peer) said (statement) during (event) at (location) with (person-general).",
+        "tokens": [
+          "I",
+          "saw",
+          "(person-peer)",
+          "said",
+          "(statement)",
+          "during",
+          "(event)",
+          "at",
+          "(location)",
+          "with",
+          "(person-general)"
+        ]
+      },
+      {
         "id": "interruption-talk-over",
         "label": "Interruption Talk Over",
         "moduleId": "interrupting-dynamics",
@@ -6484,6 +7386,23 @@
           "(location)",
           "with",
           "(person-general)"
+        ]
+      },
+      {
+        "id": "support-no-checkin",
+        "label": "Support No Checkin",
+        "moduleId": "lack-of-support",
+        "moduleLabel": "Lack of follow-through or support",
+        "summary": "",
+        "text": "I saw (person-general) did (behavior) during (event).",
+        "tokens": [
+          "I",
+          "saw",
+          "(person-general)",
+          "did",
+          "(behavior)",
+          "during",
+          "(event)"
         ]
       },
       {
@@ -7851,6 +8770,47 @@
                       }
                     },
                     {
+                      "token": "(person-general)",
+                      "node": {
+                        "options": [
+                          {
+                            "token": "did",
+                            "node": {
+                              "options": [
+                                {
+                                  "token": "(behavior)",
+                                  "node": {
+                                    "options": [
+                                      {
+                                        "token": "during",
+                                        "node": {
+                                          "options": [
+                                            {
+                                              "token": "(event)",
+                                              "node": {
+                                                "options": [],
+                                                "ids": [
+                                                  "support-no-checkin"
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          "ids": []
+                                        }
+                                      }
+                                    ],
+                                    "ids": []
+                                  }
+                                }
+                              ],
+                              "ids": []
+                            }
+                          }
+                        ],
+                        "ids": []
+                      }
+                    },
+                    {
                       "token": "(person-partner)",
                       "node": {
                         "options": [
@@ -7994,6 +8954,39 @@
                                               "token": "(location)",
                                               "node": {
                                                 "options": [
+                                                  {
+                                                    "token": "during",
+                                                    "node": {
+                                                      "options": [
+                                                        {
+                                                          "token": "(event)",
+                                                          "node": {
+                                                            "options": [
+                                                              {
+                                                                "token": "with",
+                                                                "node": {
+                                                                  "options": [
+                                                                    {
+                                                                      "token": "(person-general)",
+                                                                      "node": {
+                                                                        "options": [],
+                                                                        "ids": [
+                                                                          "boundary-invaded-space"
+                                                                        ]
+                                                                      }
+                                                                    }
+                                                                  ],
+                                                                  "ids": []
+                                                                }
+                                                              }
+                                                            ],
+                                                            "ids": []
+                                                          }
+                                                        }
+                                                      ],
+                                                      "ids": []
+                                                    }
+                                                  },
                                                   {
                                                     "token": "with",
                                                     "node": {
@@ -8297,6 +9290,7 @@
                                                                         "options": [],
                                                                         "ids": [
                                                                           "gesture-smirk",
+                                                                          "interruption-side-conversation",
                                                                           "stonewall-walked-away"
                                                                         ]
                                                                       }

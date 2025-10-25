@@ -154,7 +154,8 @@
       "lexiconKeys": [
         "boundary_ignored",
         "boundary_shared_private",
-        "boundary_touch"
+        "boundary_touch",
+        "boundary_invaded_space"
       ],
       "feelings": [
         "angry",
@@ -199,6 +200,16 @@
             "touched me without permission"
           ],
           "example": "During (event) at (location), (person-peer) touched (person-general) without permission."
+        },
+        {
+          "id": "boundary-invaded-space",
+          "lexiconKeys": [
+            "boundary_invaded_space"
+          ],
+          "phrases": [
+            "stood too close to me"
+          ],
+          "example": "At (location) during (event), (person-peer) stood too close to (person-general) and ignored their request for space."
         }
       ]
     },
@@ -478,7 +489,8 @@
         "interrupting_cutoff",
         "interrupting_ignored_hand",
         "interrupting_muted",
-        "interrupting_talk_over"
+        "interrupting_talk_over",
+        "interrupting_side_conversation"
       ],
       "feelings": [
         "frustrated",
@@ -534,6 +546,16 @@
             "talked over me"
           ],
           "example": "At (location) during (event), (person-authority) talked over (person-general) as they shared (statement)."
+        },
+        {
+          "id": "interruption-side-conversation",
+          "lexiconKeys": [
+            "interrupting_side_conversation"
+          ],
+          "phrases": [
+            "started a side conversation while I was talking"
+          ],
+          "example": "During (event) at (location), (person-peer) started a side conversation while (person-general) was sharing (statement)."
         }
       ]
     },
@@ -632,6 +654,7 @@
       "lexiconKeys": [
         "support_left_on_read",
         "support_no_backup",
+        "support_no_checkin",
         "support_no_followup"
       ],
       "feelings": [
@@ -678,6 +701,16 @@
             "never followed up"
           ],
           "example": "After (event), (person-peer) never followed up about (object) even though we agreed at (location)."
+        },
+        {
+          "id": "support-no-checkin",
+          "lexiconKeys": [
+            "support_no_checkin"
+          ],
+          "phrases": [
+            "didn't check on me afterward"
+          ],
+          "example": "After (event), no one checked on (person-general) about (object) even though we agreed to connect."
         }
       ]
     },
