@@ -82,6 +82,8 @@ const OBSERVATION_GUIDELINE_NOTE =
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 
+const SENTENCE_BUILDER_GLOBAL_KEY = '__OBSERVATION_SENTENCE_BUILDER_DATA__';
+
 const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
   person: {
     label: '(person)',
@@ -144,6 +146,17 @@ const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
     example: 'the quarterly report',
   },
 };
+
+function getPreloadedSentenceBuilderData() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  const preloaded = window[SENTENCE_BUILDER_GLOBAL_KEY];
+  if (preloaded && typeof preloaded === 'object') {
+    return preloaded;
+  }
+  return null;
+}
 
 function createEmptySentenceBuilderState() {
   return {
@@ -427,6 +440,10 @@ function bind() {
 }
 
 function loadObservationSentenceBuilderData(url) {
+  const preloaded = getPreloadedSentenceBuilderData();
+  if (preloaded) {
+    return Promise.resolve(preloaded);
+  }
   const source = typeof url === 'string' && url ? url : '/data/observation_sentence_builder_data.json';
   return fetch(source)
     .then(response => (response.ok ? response.json() : null))

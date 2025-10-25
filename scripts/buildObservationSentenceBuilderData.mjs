@@ -690,10 +690,14 @@ async function main() {
     actionTrie: buildActionTrie(actionItems),
   });
 
-  const outputPath = path.join(DATA_DIR, 'observation_sentence_builder_data.json');
-  await fs.writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}
-`);
-  console.log(`Wrote sentence builder dataset to ${path.relative(ROOT_DIR, outputPath)}`);
+  const outputJsonPath = path.join(DATA_DIR, 'observation_sentence_builder_data.json');
+  await fs.writeFile(outputJsonPath, `${JSON.stringify(dataset, null, 2)}\n`);
+  console.log(`Wrote sentence builder dataset to ${path.relative(ROOT_DIR, outputJsonPath)}`);
+
+  const outputScriptPath = path.join(DATA_DIR, 'observation_sentence_builder_data.js');
+  const scriptPayload = `window.__OBSERVATION_SENTENCE_BUILDER_DATA__ = ${JSON.stringify(dataset)};\n`;
+  await fs.writeFile(outputScriptPath, scriptPayload);
+  console.log(`Wrote sentence builder dataset script to ${path.relative(ROOT_DIR, outputScriptPath)}`);
 }
 
 main().catch(error => {
