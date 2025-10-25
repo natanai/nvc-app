@@ -74,12 +74,52 @@ const DETECTION_MIN_WORDS = 2;
 const DETECTION_MATCH_LIMIT = 1;
 const DETECTION_NEAR_LIMIT = 6;
 
-const SENTENCE_BUILDER_WHEN_OPTIONS = [
+const SENTENCE_BUILDER_DAYS_OF_WEEK = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+const SENTENCE_BUILDER_RELATIVE_MOMENTS = [
+  'Yesterday',
+  'Earlier today',
+  'This morning',
+  'This afternoon',
+  'This evening',
+  'Tonight',
+  'Last night',
+  'First thing this morning',
+];
+
+const SENTENCE_BUILDER_CALENDAR_DATES = [
+  'March 2',
+  'April 18',
+  'June 1',
+  'July 12',
+  'September 15',
+  '2024-09-15',
+];
+
+const SENTENCE_BUILDER_TIMES_OF_DAY = [
+  '7:30 a.m.',
+  '9:00 a.m.',
+  '11:30 a.m.',
+  '2:00 p.m.',
+  '4:45 p.m.',
+  '7:00 p.m.',
+  '8:45 p.m.',
+];
+
+const SENTENCE_BUILDER_SEEDED_MOMENTS = [
   'Yesterday at 9:00 a.m.',
   'This morning at 8:30 a.m.',
-  'On Monday around noon',
+  "On Monday around noon",
   'Last night at 10:15 p.m.',
-  'During Tuesday\'s 2:00 p.m. meeting',
+  "During Tuesday's 2:00 p.m. meeting",
   'Earlier today at 4:45 p.m.',
   'On 2024-09-15 at 11:00 a.m.',
   'First thing this morning',
@@ -87,7 +127,48 @@ const SENTENCE_BUILDER_WHEN_OPTIONS = [
   'At 3:30 p.m. last Wednesday',
 ];
 
-const SENTENCE_BUILDER_WHERE_OPTIONS = [
+const SENTENCE_BUILDER_CONTEXT_LOCATIONS = [
+  'in the conference room',
+  'at home in the kitchen',
+  'on our Zoom call',
+  'in the classroom',
+  'at the grocery store checkout',
+  'in the hospital waiting room',
+  'on the phone',
+  'at the park',
+  'on the group chat',
+  'in the living room',
+  'at the coffee shop counter',
+  'in the break room',
+  'on the project channel',
+];
+
+const SENTENCE_BUILDER_CONTEXT_COMPANIONS = [
+  '',
+  'with my team',
+  'with my family',
+  'with the client',
+  'with the students',
+  'with my coworkers',
+  'with my manager',
+  'with my partner',
+  'by myself',
+  'with my dad',
+  'with the support agent',
+  'with my kids',
+  'with the vendor',
+];
+
+const SENTENCE_BUILDER_CONTEXT_MODIFIERS = [
+  '',
+  'during our check-in',
+  'during the meeting',
+  'while we reviewed the agenda',
+  'while we waited for updates',
+  'as we wrapped up for the day',
+];
+
+const SENTENCE_BUILDER_SEEDED_CONTEXTS = [
   'in the conference room with my team',
   'at home in the kitchen with my family',
   'on our Zoom call with the client',
@@ -99,6 +180,9 @@ const SENTENCE_BUILDER_WHERE_OPTIONS = [
   'on the group chat with my coworkers',
   'in the living room with my partner',
 ];
+
+const SENTENCE_BUILDER_MAX_COMBINED_COMPANIONS = 4;
+const SENTENCE_BUILDER_MAX_COMBINED_MODIFIERS = 3;
 
 const HEARD_VERB_KEYWORDS = [
   'said',
@@ -141,6 +225,28 @@ function createEmptySentenceBuilderState() {
     selectedSentence: '',
     selectedActionSummary: '',
     selectedActionModule: '',
+    customMoments: [],
+    momentLexicon: createSentenceBuilderMomentLexicon(),
+    contextLexicon: createSentenceBuilderContextLexicon(),
+  };
+}
+
+function createSentenceBuilderMomentLexicon() {
+  return {
+    daysOfWeek: [...SENTENCE_BUILDER_DAYS_OF_WEEK],
+    relative: [...SENTENCE_BUILDER_RELATIVE_MOMENTS],
+    calendarDates: [...SENTENCE_BUILDER_CALENDAR_DATES],
+    timesOfDay: [...SENTENCE_BUILDER_TIMES_OF_DAY],
+    seeded: [...SENTENCE_BUILDER_SEEDED_MOMENTS],
+  };
+}
+
+function createSentenceBuilderContextLexicon() {
+  return {
+    locations: [...SENTENCE_BUILDER_CONTEXT_LOCATIONS],
+    companions: [...SENTENCE_BUILDER_CONTEXT_COMPANIONS],
+    modifiers: [...SENTENCE_BUILDER_CONTEXT_MODIFIERS],
+    seeded: [...SENTENCE_BUILDER_SEEDED_CONTEXTS],
   };
 }
 
@@ -309,28 +415,25 @@ function initializeSentenceBuilder(blueprints) {
       ? blueprints
       : [];
 
-  builder.whenOptions = SENTENCE_BUILDER_WHEN_OPTIONS.map(value => ({ value, label: value }));
-  builder.whereOptions = SENTENCE_BUILDER_WHERE_OPTIONS.map(value => ({
-    value,
-    label: formatBuilderSegmentLabel(value),
-  }));
+  if (!Array.isArray(builder.customMoments)) {
+    builder.customMoments = [];
+  }
+  if (!builder.momentLexicon) {
+    builder.momentLexicon = createSentenceBuilderMomentLexicon();
+  }
+  if (!builder.contextLexicon) {
+    builder.contextLexicon = createSentenceBuilderContextLexicon();
+  }
 
   const actions = buildSentenceBuilderActions(blueprintModules, cueMap);
   builder.actions = actions;
   builder.actionLookup = new Map(actions.map(action => [action.id, action]));
-  const corpus = buildSentenceBuilderCorpus(builder.whenOptions, builder.whereOptions, actions);
-  builder.sentences = corpus;
-  builder.trie = buildSentenceBuilderTrie(corpus);
-  builder.sentenceLookup = new Map(corpus.map(entry => [entry.sentence, entry]));
-  builder.sequenceLookup = new Map(
-    corpus.map(entry => [composeSentenceBuilderSequenceKey(entry.tokens), entry]),
-  );
-  builder.selectedTokens = [];
-  builder.selectedSentenceId = '';
-  builder.selectedSentence = '';
-  builder.selectedActionSummary = '';
-  builder.selectedActionModule = '';
-  builder.ready = corpus.length > 0;
+  refreshSentenceBuilderCorpus(builder);
+  builder.selectedTokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
+  builder.selectedSentenceId = builder.selectedSentenceId || '';
+  builder.selectedSentence = builder.selectedSentence || '';
+  builder.selectedActionSummary = builder.selectedActionSummary || '';
+  builder.selectedActionModule = builder.selectedActionModule || '';
 
   renderSentenceBuilder();
   syncSentenceBuilderToText(state.text);
@@ -338,6 +441,218 @@ function initializeSentenceBuilder(blueprints) {
   if (state.inputMode === INPUT_MODE_BUILDER) {
     applySentenceBuilderSelection({ focus: false, immediate: false });
   }
+}
+
+function refreshSentenceBuilderCorpus(builder) {
+  if (!builder) {
+    return;
+  }
+
+  builder.whenOptions = buildSentenceBuilderWhenOptionsFromLexicon(builder).map(option => ({
+    value: option,
+    label: option,
+  }));
+
+  builder.whereOptions = buildSentenceBuilderWhereOptionsFromLexicon(builder).map(option => ({
+    value: option,
+    label: formatBuilderSegmentLabel(option),
+  }));
+
+  if (!Array.isArray(builder.actions) || !builder.actions.length) {
+    builder.sentences = [];
+    builder.trie = createEmptySentenceBuilderTrieNode();
+    builder.sentenceLookup = new Map();
+    builder.sequenceLookup = new Map();
+    builder.ready = false;
+    builder.selectedTokens = [];
+    builder.selectedSentenceId = '';
+    builder.selectedSentence = '';
+    builder.selectedActionSummary = '';
+    builder.selectedActionModule = '';
+    return;
+  }
+
+  const corpus = buildSentenceBuilderCorpus(builder.whenOptions, builder.whereOptions, builder.actions);
+  builder.sentences = corpus;
+  builder.trie = buildSentenceBuilderTrie(corpus);
+  builder.sentenceLookup = new Map(corpus.map(entry => [entry.sentence, entry]));
+  builder.sequenceLookup = new Map(
+    corpus.map(entry => [composeSentenceBuilderSequenceKey(entry.tokens), entry]),
+  );
+  builder.ready = corpus.length > 0;
+  normalizeSentenceBuilderSelection(builder);
+}
+
+function buildSentenceBuilderWhenOptionsFromLexicon(builder) {
+  const lexicon = builder?.momentLexicon || createSentenceBuilderMomentLexicon();
+  const options = new Map();
+
+  const addOption = value => {
+    const normalized = normalizeBuilderSegment(value);
+    if (!normalized) {
+      return;
+    }
+    const key = normalized.toLowerCase();
+    if (!options.has(key)) {
+      options.set(key, capitalizeFirst(normalized));
+    }
+  };
+
+  if (Array.isArray(lexicon.seeded)) {
+    lexicon.seeded.forEach(addOption);
+  }
+
+  const timesOfDay = Array.isArray(lexicon.timesOfDay) ? lexicon.timesOfDay : [];
+  const relativeTimes = timesOfDay.slice(0, Math.max(4, Math.min(6, timesOfDay.length)));
+  const dayTimes = timesOfDay.slice(0, Math.max(3, Math.min(5, timesOfDay.length)));
+  const calendarTimes = timesOfDay.slice(0, Math.max(2, Math.min(4, timesOfDay.length)));
+
+  if (Array.isArray(lexicon.relative)) {
+    lexicon.relative.forEach(relative => {
+      const base = normalizeBuilderSegment(relative);
+      if (base) {
+        addOption(base);
+      }
+      relativeTimes.forEach(time => {
+        addOption(`${relative} at ${time}`);
+      });
+    });
+  }
+
+  if (Array.isArray(lexicon.daysOfWeek)) {
+    lexicon.daysOfWeek.forEach(day => {
+      addOption(`On ${day}`);
+      dayTimes.forEach(time => {
+        addOption(`On ${day} at ${time}`);
+      });
+    });
+  }
+
+  if (Array.isArray(lexicon.calendarDates)) {
+    lexicon.calendarDates.forEach(date => {
+      addOption(`On ${date}`);
+      calendarTimes.forEach(time => {
+        addOption(`On ${date} at ${time}`);
+      });
+    });
+  }
+
+  if (Array.isArray(builder?.customMoments)) {
+    builder.customMoments.forEach(addOption);
+  }
+
+  return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
+}
+
+function buildSentenceBuilderWhereOptionsFromLexicon(builder) {
+  const lexicon = builder?.contextLexicon || createSentenceBuilderContextLexicon();
+  const options = new Map();
+
+  const addOption = value => {
+    const normalized = normalizeBuilderSegment(value);
+    if (!normalized) {
+      return;
+    }
+    const key = normalized.toLowerCase();
+    if (!options.has(key)) {
+      options.set(key, normalized);
+    }
+  };
+
+  if (Array.isArray(lexicon.seeded)) {
+    lexicon.seeded.forEach(addOption);
+  }
+
+  const companions = Array.isArray(lexicon.companions) ? lexicon.companions : [''];
+  const modifiers = Array.isArray(lexicon.modifiers) ? lexicon.modifiers : [''];
+  const companionCombos = companions.filter(Boolean);
+  const modifierCombos = modifiers.filter(Boolean);
+  const generalCompanions = companionCombos.slice(0, Math.max(SENTENCE_BUILDER_MAX_COMBINED_COMPANIONS * 2, SENTENCE_BUILDER_MAX_COMBINED_COMPANIONS));
+  const generalModifiers = modifierCombos.slice(0, Math.max(SENTENCE_BUILDER_MAX_COMBINED_MODIFIERS + 1, SENTENCE_BUILDER_MAX_COMBINED_MODIFIERS));
+  const limitedCompanions = companionCombos.slice(0, SENTENCE_BUILDER_MAX_COMBINED_COMPANIONS);
+  const limitedModifiers = modifierCombos.slice(0, SENTENCE_BUILDER_MAX_COMBINED_MODIFIERS);
+
+  if (Array.isArray(lexicon.locations)) {
+    lexicon.locations.forEach(location => {
+      const base = normalizeBuilderSegment(location);
+      if (!base) {
+        return;
+      }
+      addOption(base);
+      generalCompanions.forEach(companion => {
+        addOption(`${base} ${companion}`);
+      });
+      generalModifiers.forEach(modifier => {
+        addOption(`${base} ${modifier}`);
+      });
+      limitedCompanions.forEach(companion => {
+        limitedModifiers.forEach(modifier => {
+          addOption(`${base} ${companion} ${modifier}`);
+        });
+      });
+    });
+  }
+
+  return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
+}
+
+function ensureMomentPrefix(source) {
+  const text = typeof source === 'string' ? source.trim() : '';
+  if (!text) {
+    return '';
+  }
+  if (/^(?:on|during|this|that|yesterday|earlier|today|tonight|last|at|around|by)\b/i.test(text)) {
+    return capitalizeFirst(text);
+  }
+  return `On ${text}`;
+}
+
+function formatCustomMomentInput(dayOrDate, timeOfDay) {
+  const dayText = typeof dayOrDate === 'string' ? dayOrDate.trim() : '';
+  const timeText = typeof timeOfDay === 'string' ? timeOfDay.trim() : '';
+
+  if (!dayText && !timeText) {
+    return '';
+  }
+
+  if (dayText && timeText) {
+    const base = ensureMomentPrefix(dayText);
+    const needsJoiner = !/(?:\bat\b|\baround\b|\bby\b|\bfor\b)\s+[^\s]+$/i.test(base);
+    const joiner = needsJoiner ? 'at' : '';
+    const combined = [base, joiner, timeText].filter(Boolean).join(' ');
+    return combined.replace(/\s+/g, ' ').trim();
+  }
+
+  if (dayText) {
+    return ensureMomentPrefix(dayText);
+  }
+
+  if (/^(?:at|around|by|for)\b/i.test(timeText)) {
+    return capitalizeFirst(timeText);
+  }
+
+  return `At ${timeText}`.trim();
+}
+
+function registerSentenceBuilderCustomMoment(momentText) {
+  const builder = state.builder;
+  if (!builder) {
+    return false;
+  }
+  const normalized = normalizeBuilderSegment(momentText);
+  if (!normalized) {
+    return false;
+  }
+  if (!Array.isArray(builder.customMoments)) {
+    builder.customMoments = [];
+  }
+  const exists = builder.customMoments.some(entry => entry.toLowerCase() === normalized.toLowerCase());
+  if (exists) {
+    return false;
+  }
+  builder.customMoments.push(capitalizeFirst(normalized));
+  refreshSentenceBuilderCorpus(builder);
+  return true;
 }
 
 function buildSentenceBuilderActions(modules, cueMap) {
@@ -704,6 +1019,39 @@ function bindSentenceBuilder() {
       event.preventDefault();
       applySentenceBuilderSelection({ focus: state.inputMode !== INPUT_MODE_BUILDER });
     });
+  }
+
+  const customMomentForm = document.getElementById('observation-builder-custom-moment');
+  if (customMomentForm && !customMomentForm.dataset.bound) {
+    customMomentForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const dayInput = customMomentForm.querySelector('input[name="custom-moment-day"]');
+      const timeInput = customMomentForm.querySelector('input[name="custom-moment-time"]');
+      const status = document.getElementById('observation-builder-custom-moment-status');
+      const formatted = formatCustomMomentInput(dayInput?.value || '', timeInput?.value || '');
+      if (!formatted) {
+        if (status) {
+          status.textContent = 'Enter a day, date, or time to add it to the builder.';
+          status.removeAttribute('hidden');
+        }
+        return;
+      }
+      const added = registerSentenceBuilderCustomMoment(formatted);
+      if (status) {
+        if (added) {
+          status.textContent = `Added “${formatted}” to the “when” selectors.`;
+          status.removeAttribute('hidden');
+        } else {
+          status.textContent = `“${formatted}” is already available.`;
+          status.removeAttribute('hidden');
+        }
+      }
+      if (added) {
+        customMomentForm.reset();
+        renderSentenceBuilder();
+      }
+    });
+    customMomentForm.dataset.bound = 'true';
   }
 }
 
