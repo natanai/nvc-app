@@ -279,6 +279,61 @@ function checkBodySignals(feeling) {
   });
 }
 
+function checkObservationVocabularyList(list, map, { type, context }) {
+  if (!Array.isArray(list)) {
+    return;
+  }
+
+  list.forEach((slug, index) => {
+    const normalized = typeof slug === 'string' ? slug.trim() : '';
+    if (!normalized) {
+      return;
+    }
+    if (!map.has(normalized)) {
+      const descriptor = context ? `${context}` : `entry ${index}`;
+      issues.push(`Observation ${descriptor} references missing ${type} slug "${normalized}".`);
+    }
+  });
+}
+
+function verifyObservationCueLibraryVocabulary(library, { feelingsMap, needsMap }) {
+  if (!library || typeof library !== 'object') {
+    issues.push('Observation cue library JSON is missing or invalid.');
+    return;
+  }
+
+  const cues = Array.isArray(library.cues) ? library.cues : [];
+  cues.forEach((cue, index) => {
+    const identifier = cue?.id || cue?.cue || `cue index ${index}`;
+    const context = `cue library entry "${identifier}"`;
+    checkObservationVocabularyList(cue?.feelings, feelingsMap, { type: 'feeling', context });
+    checkObservationVocabularyList(cue?.needs, needsMap, { type: 'need', context });
+  });
+
+  const modules = Array.isArray(library.modules) ? library.modules : [];
+  modules.forEach((module, index) => {
+    const identifier = module?.id || module?.label || `module index ${index}`;
+    const context = `cue library module "${identifier}"`;
+    checkObservationVocabularyList(module?.feelings, feelingsMap, { type: 'feeling', context });
+    checkObservationVocabularyList(module?.needs, needsMap, { type: 'need', context });
+  });
+}
+
+function verifyObservationBlueprintVocabulary(dataset, { feelingsMap, needsMap }) {
+  if (!dataset || typeof dataset !== 'object') {
+    issues.push('Observation module blueprint JSON is missing or invalid.');
+    return;
+  }
+
+  const modules = Array.isArray(dataset.modules) ? dataset.modules : [];
+  modules.forEach((module, index) => {
+    const identifier = module?.id || module?.label || `module index ${index}`;
+    const context = `module blueprint "${identifier}"`;
+    checkObservationVocabularyList(module?.feelings, feelingsMap, { type: 'feeling', context });
+    checkObservationVocabularyList(module?.needs, needsMap, { type: 'need', context });
+  });
+}
+
 // Some reverse inference entries are intentionally absent while data is collected.
 // Track those keys explicitly so the integrity check still passes but we can
 // continue catching unexpected omissions if new feelings point to missing data.
@@ -322,6 +377,18 @@ try {
     directory: 'faux-feelings',
   });
   const strategiesBySlug = createSlugIndex(strategies, { label: 'Strategy' });
+
+  const observationCueLibrary = readJsonFile('data/observation_cue_library.json');
+  verifyObservationCueLibraryVocabulary(observationCueLibrary, {
+    feelingsMap: feelingsBySlug,
+    needsMap: needsBySlug,
+  });
+
+  const observationBlueprints = readJsonFile('data/observation_module_blueprints.json');
+  verifyObservationBlueprintVocabulary(observationBlueprints, {
+    feelingsMap: feelingsBySlug,
+    needsMap: needsBySlug,
+  });
 
   const needsByTitle = buildTitleIndex(needsBySlug);
   const feelingsByTitle = buildTitleIndex(feelingsBySlug);
