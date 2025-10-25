@@ -261,7 +261,8 @@ const MODULE_BLUEPRINTS = [
         id: 'gesture-smirk',
         lexiconKeys: ['dismissive_smirk'],
         phrases: ['smirked at me'],
-        example: 'During (event) at (location), (person-peer) smirked at (person-general) right after (statement).',
+        example:
+          'During (event) at (location), (person-peer) smirked at (person-general) while repeating "(statement)" back at them.',
       },
       {
         id: 'gesture-group-laugh',
@@ -306,7 +307,8 @@ const MODULE_BLUEPRINTS = [
         id: 'invalidating-calm-down',
         lexiconKeys: ['invalidating_calmdown'],
         phrases: ['told me to calm down'],
-        example: 'During (event), (person-peer) told (person-general) to calm down instead of addressing (object).',
+        example:
+          'During (event), (person-peer) said "Calm down" instead of responding to (statement) about (object).',
       },
       {
         id: 'invalidating-made-up',
@@ -318,7 +320,8 @@ const MODULE_BLUEPRINTS = [
         id: 'invalidating-never-happened',
         lexiconKeys: ['invalidating_never_happened'],
         phrases: ['insisted it never happened'],
-        example: 'After (event) at (location), (person-peer) said "(statement)" insisting it never happened.',
+        example:
+          'After (event) at (location), (person-peer) said "(statement)" insisting nothing like that ever happened.',
       },
     ],
   },
@@ -350,19 +353,22 @@ const MODULE_BLUEPRINTS = [
         id: 'interruption-talk-over',
         lexiconKeys: ['interrupting_talk_over'],
         phrases: ['talked over me'],
-        example: 'At (location) during (event), (person-authority) talked over (person-general) as they shared (statement).',
+        example:
+          'At (location) during (event), (person-authority) kept talking while (person-general) said "(statement)" about (object).',
       },
       {
         id: 'interruption-muted',
         lexiconKeys: ['interrupting_muted'],
         phrases: ['muted my mic'],
-        example: 'On (channel) during (event), (person-peer) muted (person-general) right as they started describing (object).',
+        example:
+          'On (channel) during (event), (person-peer) muted (person-general)\'s mic while they began sharing "(statement)" about (object).',
       },
       {
         id: 'interruption-ignored-hand',
         lexiconKeys: ['interrupting_ignored_hand'],
         phrases: ['ignored my raised hand'],
-        example: 'During (event), (person-authority) ignored (person-general) even though their hand was raised to share (statement).',
+        example:
+          "During (event) in (location), (person-authority) skipped (person-general) even though their hand was raised to share an update about (object).",
       },
     ],
   },
@@ -386,13 +392,15 @@ const MODULE_BLUEPRINTS = [
         id: 'blame-your-fault',
         lexiconKeys: ['blame_your_fault'],
         phrases: ['said it was my fault'],
-        example: 'During (event) at (location), (person-authority) said "(statement)" blaming (person-general) for the situation.',
+        example:
+          'During (event) at (location), (person-authority) told (person-general) "(statement)" saying they caused the problem.',
       },
       {
         id: 'blame-should-have',
         lexiconKeys: ['blame_should_have'],
         phrases: ['said I should have done more'],
-        example: 'At (location) after (event), (person-peer) said "(statement)" that (person-general) should have prevented the issue.',
+        example:
+          'After (event) at (location), (person-peer) said "(statement)" telling (person-general) they had to handle (object) alone.',
       },
       {
         id: 'blame-causing-problem',
@@ -459,7 +467,8 @@ const MODULE_BLUEPRINTS = [
         id: 'support-no-followup',
         lexiconKeys: ['support_no_followup'],
         phrases: ['never followed up'],
-        example: 'After (event), (person-peer) never followed up about (object) even though we agreed at (location).',
+        example:
+          'After (event), (person-peer) did not follow up about (object) even though we set a check-in at (location).',
       },
       {
         id: 'support-left-on-read',
@@ -507,7 +516,8 @@ const MODULE_BLUEPRINTS = [
         id: 'exclusion-left-out',
         lexiconKeys: ['exclusion_left_out'],
         phrases: ['left me out of the discussion'],
-        example: 'During (event), (person-peer) left (person-general) out of the conversation about (object).',
+        example:
+          'During (event) in (location), (person-peer) left (person-general) out of the planning conversation about (object) despite their reminders.',
       },
     ],
   },
@@ -531,19 +541,22 @@ const MODULE_BLUEPRINTS = [
         id: 'threat-consequence',
         lexiconKeys: ['threats_consequence'],
         phrases: ['said there would be consequences'],
-        example: 'During (event) at (location), (person-authority) said "(statement)" warning (person-general) there would be consequences.',
+        example:
+          'During (event) at (location), (person-authority) said "(statement)" warning (person-general) there would be consequences if they kept reporting it.',
       },
       {
         id: 'threat-job-security',
         lexiconKeys: ['threats_job_security'],
         phrases: ['threatened my job'],
-        example: 'At (location) after (event), (person-authority) said "(statement)" that (person-general) could lose their job.',
+        example:
+          'At (location) after (event), (person-authority) said "(statement)" that (person-general) could lose their job if they didn\'t drop (object).',
       },
       {
         id: 'threat-retaliation',
         lexiconKeys: ['threats_retaliate'],
         phrases: ['promised retaliation'],
-        example: 'During (event), (person-authority) said "(statement)" promising they would make (person-general) regret speaking up.',
+        example:
+          'During (event), (person-authority) said "(statement)" promising they would make (person-general) regret speaking up to HR.',
       },
     ],
   },
@@ -603,7 +616,8 @@ const MODULE_BLUEPRINTS = [
         id: 'boundary-ignored',
         lexiconKeys: ['boundary_ignored'],
         phrases: ['ignored my boundary'],
-        example: 'During (event), (person-partner) ignored the boundary (person-general) set about (object).',
+        example:
+          'After (event) at (location), (person-partner) did (object) even though (person-general) had set that boundary moments earlier.',
       },
       {
         id: 'boundary-shared-private',
@@ -725,19 +739,22 @@ const MODULE_BLUEPRINTS = [
         id: 'surveillance-camera',
         lexiconKeys: ['surveillance_camera'],
         phrases: ['checked the cameras on me'],
-        example: 'After (event), (person-authority) checked the cameras to watch (person-general) at (location).',
+        example:
+          'After (event), (person-authority) checked the cameras to watch (person-general) at (location) instead of speaking with them directly.',
       },
       {
         id: 'surveillance-logs',
         lexiconKeys: ['surveillance_logs'],
         phrases: ['pulled my activity logs'],
-        example: 'During (event), (person-peer) pulled the logs to monitor how (person-general) worked on (object).',
+        example:
+          'During (event), (person-peer) pulled the logs to monitor how (person-general) worked on (object) minute by minute.',
       },
       {
         id: 'surveillance-screenshare',
         lexiconKeys: ['surveillance_screenshare'],
         phrases: ['forced me to share my screen'],
-        example: 'On (channel), (person-authority) forced (person-general) to share their screen during (event).',
+        example:
+          'On (channel), (person-authority) forced (person-general) to share their screen during (event) so they could watch every click.',
       },
     ],
   },
@@ -809,7 +826,8 @@ const MODULE_BLUEPRINTS = [
         id: 'retaliation-reviews',
         lexiconKeys: ['retaliation_reviews'],
         phrases: ['threatened my review'],
-        example: 'After (event) at (location), (person-authority) said "(statement)" threatening (person-general)\'s review.',
+        example:
+          'After (event) at (location), (person-authority) said "(statement)" saying they would mark (person-general)\'s review as unsatisfactory.',
       },
     ],
   },

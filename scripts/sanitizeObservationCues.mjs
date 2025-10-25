@@ -35,6 +35,7 @@ export function sanitizeObservationCues({
   const seenExamples = new Set();
 
   const exampleIndex = header.findIndex(col => col.toLowerCase().startsWith('example'));
+  const patternIndex = header.findIndex(col => col.toLowerCase().startsWith('patterns'));
   const cueIndex = header.findIndex(col => col.toLowerCase().startsWith('cue'));
 
   if (exampleIndex === -1) {
@@ -42,6 +43,16 @@ export function sanitizeObservationCues({
   }
 
   const fauxFeelingMatchers = buildFauxFeelingMatchers(catalog.fauxFeelings);
+  const allowedFeelingTokens = new Set(
+    [...catalog.feelings.keys()].map(token => (typeof token === 'string' ? token.toLowerCase() : '')).filter(Boolean),
+  );
+  const fauxSkipIndexes = new Set();
+  if (cueIndex !== -1) {
+    fauxSkipIndexes.add(cueIndex);
+  }
+  if (patternIndex !== -1) {
+    fauxSkipIndexes.add(patternIndex);
+  }
 
   dataRows.forEach(row => {
     if (!Array.isArray(row)) {
@@ -57,7 +68,7 @@ export function sanitizeObservationCues({
       return;
     }
 
-    if (containsFauxFeeling(row, fauxFeelingMatchers)) {
+    if (containsFauxFeeling(row, fauxFeelingMatchers, { skipIndexes: fauxSkipIndexes, allowedTokens: allowedFeelingTokens })) {
       dropped += 1;
       fauxFeelingDrops += 1;
       return;
@@ -257,7 +268,10 @@ function buildFauxFeelingMatcher(slug, title) {
   }
 
   const pattern = tokens.join('(?:[-\s]+)');
-  return new RegExp(`\\b${pattern}\\b`, 'i');
+  return {
+    regex: new RegExp(`\\b${pattern}\\b`, 'i'),
+    token: baseSlug.toLowerCase(),
+  };
 }
 
 function escapeRegExpLiteral(str) {
@@ -267,16 +281,46 @@ function escapeRegExpLiteral(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function containsFauxFeeling(row, matchers) {
+function containsFauxFeeling(row, matchers, options = {}) {
   if (!Array.isArray(row) || !Array.isArray(matchers) || !matchers.length) {
     return false;
   }
 
-  return row.some(cell => {
-    if (typeof cell !== 'string' || !cell) {
+  const skipIndexes = options.skipIndexes instanceof Set ? options.skipIndexes : new Set(options.skipIndexes || []);
+  const allowedTokens = new Set(
+    Array.isArray(options.allowedTokens)
+      ? options.allowedTokens.map(token => (typeof token === 'string' ? token.toLowerCase() : '')).filter(Boolean)
+      : options.allowedTokens instanceof Set
+      ? [...options.allowedTokens].map(token => (typeof token === 'string' ? token.toLowerCase() : '')).filter(Boolean)
+      : [],
+  );
+
+  return row.some((cell, index) => {
+    if (skipIndexes.has(index) || typeof cell !== 'string' || !cell) {
       return false;
     }
-    return matchers.some(regex => regex.test(cell));
+    return matchers.some(({ regex, token }) => {
+      if (!regex || typeof regex.test !== 'function') {
+        return false;
+      }
+
+      if (!regex.test(cell)) {
+        return false;
+      }
+
+      if (allowedTokens.has(token)) {
+        const tokens = cell
+          .toLowerCase()
+          .split(/[^a-z0-9-]+/)
+          .filter(Boolean);
+
+        if (tokens.length && tokens.every(value => allowedTokens.has(value))) {
+          return false;
+        }
+      }
+
+      return true;
+    });
   });
 }
 
