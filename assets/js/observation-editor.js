@@ -69,7 +69,8 @@ const DETECTION_MIN_WORDS = 2;
 const DETECTION_MATCH_LIMIT = 1;
 const DETECTION_NEAR_LIMIT = 6;
 
-const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
+const OBSERVATION_GUIDELINE_INTRO =
+  'Use these prompts—starting with the sentence builder—to keep your statement observational.';
 const OBSERVATION_GUIDELINE_COMPLETE =
   'All observation anchors are covered. Load possible matches when you’re ready.';
 const OBSERVATION_GUIDELINE_NOTE =
@@ -501,7 +502,7 @@ function buildAnchorRewriteHelper(lint, missingEntries) {
 
   const title = document.createElement('p');
   title.className = 'observation-editor__recipe-helper-title';
-  title.textContent = 'Pin this moment to a single scene.';
+  title.textContent = 'Observation sentence builder';
   helper.appendChild(title);
 
   const summary = document.createElement('p');
@@ -593,11 +594,7 @@ function shouldOfferAnchorRewrite(lint, missingEntries) {
   if (!missingIds.includes('time') && !missingIds.includes('context')) {
     return false;
   }
-  const flagged = Array.isArray(lint?.flaggedGroups) ? lint.flaggedGroups : [];
-  if (!flagged.length) {
-    return false;
-  }
-  return flagged.some(group => group && ['globalLanguage', 'comparisonStories'].includes(group.key));
+  return true;
 }
 
 function getMissingSlotIds(entries) {
