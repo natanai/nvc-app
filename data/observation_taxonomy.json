@@ -79,7 +79,6 @@
           "feelings": [
             "Anxious",
             "Disappointment",
-            "Anxious",
             "Irritated"
           ],
           "needs": [
@@ -261,7 +260,6 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Anxious",
             "Frustrated"
           ],
           "needs": [
@@ -551,7 +549,6 @@
           "feelings": [
             "Confused",
             "Lonely",
-            "Anxious",
             "Anxious"
           ],
           "needs": [
@@ -915,8 +912,7 @@
           "feelings": [
             "Anxious",
             "Frustrated",
-            "Tense",
-            "Anxious"
+            "Tense"
           ],
           "needs": [
             "Support",
@@ -1080,8 +1076,7 @@
           "feelings": [
             "Bewildered",
             "Anxious",
-            "Irritated",
-            "Anxious"
+            "Irritated"
           ],
           "needs": [
             "Honesty",
@@ -1245,7 +1240,6 @@
           "feelings": [
             "Irritated",
             "Anxious",
-            "Irritated",
             "Tense"
           ],
           "needs": [
@@ -1319,7 +1313,6 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Anxious",
             "Frustrated"
           ],
           "needs": [
@@ -1376,8 +1369,7 @@
           "feelings": [
             "Anxious",
             "Tired",
-            "Irritated",
-            "Anxious"
+            "Irritated"
           ],
           "needs": [
             "Respect",
@@ -1448,7 +1440,6 @@
           "label": "Missed agreed payback date",
           "example": "The agreed payback date passed without payment or message.",
           "feelings": [
-            "Anxious",
             "Anxious",
             "Irritated",
             "Disappointment"
@@ -1524,8 +1515,7 @@
           "feelings": [
             "Anxious",
             "Hurt",
-            "Irritated",
-            "Anxious"
+            "Irritated"
           ],
           "needs": [
             "Privacy",
@@ -1597,8 +1587,6 @@
           "example": "Items were placed on my shelf without checking with me.",
           "feelings": [
             "Irritated",
-            "Tense",
-            "Tense",
             "Tense"
           ],
           "needs": [
@@ -1729,7 +1717,6 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Anxious",
             "Tense"
           ],
           "needs": [
@@ -1746,7 +1733,6 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Anxious",
             "Hurt"
           ],
           "needs": [
@@ -1801,7 +1787,7 @@
           "label": "Took calls during our time together",
           "example": "During dinner, two calls were answered at the table.",
           "feelings": [
-            "Annoyed",
+            "Irritated",
             "Lonely",
             "Tense",
             "Sad"
@@ -1841,9 +1827,8 @@
           "label": "Shared chore not done by agreed time",
           "example": "Trash day passed and the bins were still at the side of the house at 8:00 am.",
           "feelings": [
-            "Annoyed",
-            "Tired",
             "Irritated",
+            "Tired",
             "Tense"
           ],
           "needs": [
@@ -1861,7 +1846,7 @@
             "Tired",
             "Frustrated",
             "Irritated",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Dependability",
@@ -1875,10 +1860,9 @@
           "label": "Asked me to plan last minute after agreeing earlier",
           "example": "At 5 pm you asked me to pick and book a restaurant for 6 pm after saying you'd handle plans.",
           "feelings": [
-            "Stressed",
+            "Overwhelmed",
             "Irritated",
-            "Tense",
-            "Overwhelmed"
+            "Tense"
           ],
           "needs": [
             "Mutuality",
@@ -1898,9 +1882,8 @@
           "label": "Added item to split I didn’t order",
           "example": "The split bill included a drink I didn’t have.",
           "feelings": [
-            "Annoyed",
             "Irritated",
-            "Concerned",
+            "Anxious",
             "Tense"
           ],
           "needs": [
@@ -1917,7 +1900,6 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Concerned",
             "Disappointment"
           ],
           "needs": [
@@ -1932,7 +1914,6 @@
           "label": "Used shared funds without checking",
           "example": "The joint account was used for a purchase without a message beforehand.",
           "feelings": [
-            "Concerned",
             "Anxious",
             "Irritated",
             "Tense"
@@ -1955,9 +1936,8 @@
           "label": "Plan changed without telling me",
           "example": "You said you'd be home after the gym, and later texted from a bar without a heads-up.",
           "feelings": [
-            "Concerned",
-            "Hurt",
             "Anxious",
+            "Hurt",
             "Irritated"
           ],
           "needs": [
@@ -1990,9 +1970,8 @@
           "example": "Yesterday you said, “I didn’t message them,” and today you said, “I sent one reply.”",
           "feelings": [
             "Confused",
-            "Concerned",
-            "Hurt",
-            "Anxious"
+            "Anxious",
+            "Hurt"
           ],
           "needs": [
             "Honesty",
@@ -2070,7 +2049,7 @@
           "example": "At the party, you left and I learned from someone else after 20 minutes.",
           "feelings": [
             "Confused",
-            "Concerned",
+            "Anxious",
             "Hurt",
             "Tense"
           ],
@@ -2395,7 +2374,6 @@
           "example": "My desk items were rearranged while I was out.",
           "feelings": [
             "Irritated",
-            "Uncomfortable",
             "Tense",
             "Anxious"
           ],
@@ -2419,7 +2397,6 @@
           "feelings": [
             "Scared",
             "Tense",
-            "Concerned",
             "Anxious"
           ],
           "needs": [
@@ -2436,8 +2413,7 @@
           "feelings": [
             "Anxious",
             "Embarrassed",
-            "Tense",
-            "Concerned"
+            "Tense"
           ],
           "needs": [
             "Respect",
@@ -2510,7 +2486,7 @@
           "feelings": [
             "Tired",
             "Irritated",
-            "Startled",
+            "Alarmed",
             "Tense"
           ],
           "needs": [
@@ -2531,9 +2507,8 @@
           "label": "Dishes left in sink past agreed time",
           "example": "Dirty dishes remained in the sink the morning after the agreed cleanup time.",
           "feelings": [
-            "Annoyed",
-            "Tired",
             "Irritated",
+            "Tired",
             "Tense"
           ],
           "needs": [
@@ -2550,7 +2525,7 @@
           "feelings": [
             "Frustrated",
             "Irritated",
-            "Concerned",
+            "Anxious",
             "Tense"
           ],
           "needs": [
@@ -2568,7 +2543,7 @@
             "Irritated",
             "Overwhelmed",
             "Tense",
-            "Distracted"
+            "Confused"
           ],
           "needs": [
             "Order",
@@ -2606,9 +2581,9 @@
           "example": "While I was sharing about my day, the other person scrolled on their phone.",
           "feelings": [
             "Hurt",
-            "Annoyed",
+            "Irritated",
             "Tense",
-            "Unsure"
+            "Confused"
           ],
           "needs": [
             "To be heard",
@@ -2662,8 +2637,8 @@
           "label": "Arrived ~30 minutes after start",
           "example": "The scheduled lunch at 12:00 pm started at 12:30 pm.",
           "feelings": [
-            "Annoyed",
-            "Concerned",
+            "Irritated",
+            "Anxious",
             "Tense",
             "Disappointment"
           ],
@@ -2681,8 +2656,7 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Tense",
-            "Concerned"
+            "Tense"
           ],
           "needs": [
             "Clarity",
@@ -2738,7 +2712,7 @@
           "feelings": [
             "Hurt",
             "Lonely",
-            "Annoyed",
+            "Irritated",
             "Tired"
           ],
           "needs": [
@@ -2761,7 +2735,6 @@
           "feelings": [
             "Anxious",
             "Frustrated",
-            "Concerned",
             "Disappointment"
           ],
           "needs": [
@@ -2777,7 +2750,6 @@
           "example": "The form was submitted after three reminders.",
           "feelings": [
             "Tired",
-            "Annoyed",
             "Irritated",
             "Tense"
           ],
@@ -2794,7 +2766,7 @@
           "example": "The requested steps were half-finished and no message explained the status.",
           "feelings": [
             "Confused",
-            "Concerned",
+            "Anxious",
             "Irritated",
             "Tense"
           ],
@@ -2817,7 +2789,7 @@
           "example": "In a separate chat, a comment about my work was shared without me present.",
           "feelings": [
             "Hurt",
-            "Unsure",
+            "Confused",
             "Anxious",
             "Irritated"
           ],
@@ -2835,8 +2807,7 @@
           "feelings": [
             "Embarrassed",
             "Hurt",
-            "Anxious",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Privacy",
@@ -2850,10 +2821,9 @@
           "label": "Speculative claims about me",
           "example": "A guess about my intentions was posted in the team chat.",
           "feelings": [
-            "Uncomfortable",
+            "Tense",
             "Hurt",
-            "Concerned",
-            "Tense"
+            "Anxious"
           ],
           "needs": [
             "Honesty",
@@ -2890,7 +2860,7 @@
           "label": "Left out of info channel",
           "example": "The new project channel didn’t include my account.",
           "feelings": [
-            "Unsure",
+            "Confused",
             "Anxious",
             "Irritated",
             "Hurt"
@@ -2931,9 +2901,8 @@
           "example": "The same issue was explained to three different agents.",
           "feelings": [
             "Tired",
-            "Annoyed",
-            "Sad",
-            "Irritated"
+            "Irritated",
+            "Sad"
           ],
           "needs": [
             "Understanding",
@@ -2949,7 +2918,6 @@
           "feelings": [
             "Anxious",
             "Irritated",
-            "Concerned",
             "Disappointment"
           ],
           "needs": [
@@ -2987,7 +2955,7 @@
           "label": "Steps changed mid-task",
           "example": "Instructions were changed while I was executing the plan.",
           "feelings": [
-            "Stressed",
+            "Overwhelmed",
             "Anxious",
             "Tense",
             "Frustrated"
@@ -3007,7 +2975,7 @@
             "Overwhelmed",
             "Tense",
             "Irritated",
-            "Distracted"
+            "Confused"
           ],
           "needs": [
             "Trust",
@@ -3029,7 +2997,7 @@
           "feelings": [
             "Scared",
             "Tense",
-            "Alert",
+            "Alarmed",
             "Anxious"
           ],
           "needs": [
@@ -3046,7 +3014,6 @@
           "feelings": [
             "Scared",
             "Tense",
-            "Worried",
             "Anxious"
           ],
           "needs": [
@@ -3063,8 +3030,7 @@
           "feelings": [
             "Anxious",
             "Scared",
-            "Tense",
-            "Concerned"
+            "Tense"
           ],
           "needs": [
             "Safety",
@@ -3085,9 +3051,8 @@
           "example": "A dog ran free where a leash sign was posted.",
           "feelings": [
             "Anxious",
-            "Concerned",
             "Tense",
-            "Startled"
+            "Alarmed"
           ],
           "needs": [
             "Safety",
@@ -3118,7 +3083,6 @@
           "label": "Pet waste not cleaned",
           "example": "Pet waste remained on the shared sidewalk.",
           "feelings": [
-            "Annoyed",
             "Irritated",
             "Sad",
             "Tense"
@@ -3142,9 +3106,8 @@
           "example": "A speakerphone call continued in the library for five minutes.",
           "feelings": [
             "Irritated",
-            "Distracted",
-            "Tense",
-            "Annoyed"
+            "Confused",
+            "Tense"
           ],
           "needs": [
             "Peace",
@@ -3158,8 +3121,8 @@
           "label": "Music played without headphones",
           "example": "Music played out loud on the bus during the ride.",
           "feelings": [
-            "Annoyed",
-            "Distracted",
+            "Irritated",
+            "Confused",
             "Tense",
             "Overwhelmed"
           ],
@@ -3175,7 +3138,7 @@
           "label": "Very loud conversation next to me",
           "example": "Two people spoke loudly beside my seat for 15 minutes.",
           "feelings": [
-            "Distracted",
+            "Confused",
             "Irritated",
             "Tense",
             "Tired"
@@ -3200,7 +3163,6 @@
           "feelings": [
             "Irritated",
             "Hurt",
-            "Annoyed",
             "Angry"
           ],
           "needs": [
@@ -3215,10 +3177,10 @@
           "label": "Holding places for late arrivals",
           "example": "Three people joined a friend at the front of the line.",
           "feelings": [
-            "Annoyed",
+            "Irritated",
             "Frustrated",
             "Tense",
-            "Concerned"
+            "Anxious"
           ],
           "needs": [
             "Fairness",
@@ -3257,7 +3219,7 @@
           "feelings": [
             "Frustrated",
             "Anxious",
-            "Annoyed",
+            "Irritated",
             "Tense"
           ],
           "needs": [
@@ -3273,9 +3235,8 @@
           "example": "The package was left without ringing the bell while I was home.",
           "feelings": [
             "Irritated",
-            "Concerned",
-            "Unsure",
-            "Annoyed"
+            "Anxious",
+            "Confused"
           ],
           "needs": [
             "Consideration",
@@ -3291,8 +3252,8 @@
           "feelings": [
             "Frustrated",
             "Tense",
-            "Concerned",
-            "Annoyed"
+            "Anxious",
+            "Irritated"
           ],
           "needs": [
             "Accountability",
@@ -3312,9 +3273,8 @@
           "label": "Charged after cancellation",
           "example": "A charge posted after I received a cancellation confirmation email.",
           "feelings": [
-            "Concerned",
-            "Irritated",
             "Anxious",
+            "Irritated",
             "Sad"
           ],
           "needs": [
@@ -3329,10 +3289,8 @@
           "label": "Fee not shown upfront",
           "example": "A service fee appeared at checkout that wasn’t listed on the menu.",
           "feelings": [
-            "Concerned",
-            "Irritated",
             "Anxious",
-            "Annoyed"
+            "Irritated"
           ],
           "needs": [
             "Honesty",
@@ -3348,7 +3306,6 @@
           "feelings": [
             "Irritated",
             "Anxious",
-            "Concerned",
             "Frustrated"
           ],
           "needs": [
@@ -3371,7 +3328,7 @@
           "feelings": [
             "Frustrated",
             "Tense",
-            "Distracted",
+            "Confused",
             "Anxious"
           ],
           "needs": [
@@ -3387,7 +3344,7 @@
           "example": "Echo persisted for five minutes after the meeting started.",
           "feelings": [
             "Irritated",
-            "Distracted",
+            "Confused",
             "Tense",
             "Overwhelmed"
           ],
@@ -3426,9 +3383,8 @@
           "label": "Homework not started by agreed time",
           "example": "At 7:30 pm the homework page was still blank after our 7:00 pm start agreement.",
           "feelings": [
-            "Concerned",
-            "Irritated",
             "Anxious",
+            "Irritated",
             "Tense"
           ],
           "needs": [
@@ -3445,7 +3401,7 @@
           "feelings": [
             "Frustrated",
             "Tense",
-            "Concerned",
+            "Anxious",
             "Irritated"
           ],
           "needs": [
@@ -3460,7 +3416,7 @@
           "label": "Morning routine steps skipped",
           "example": "Shoes and backpack were not by the door at the agreed time.",
           "feelings": [
-            "Stressed",
+            "Overwhelmed",
             "Tense",
             "Anxious",
             "Irritated"
@@ -3500,7 +3456,7 @@
           "label": "Notifications after quiet time",
           "example": "Phone notifications sounded after 11:00 pm on the nightstand.",
           "feelings": [
-            "Startled",
+            "Alarmed",
             "Irritated",
             "Tired",
             "Tense"
@@ -3517,7 +3473,7 @@
           "label": "Came in loudly late at night",
           "example": "The door closed loudly and footsteps were heavy at 1:10 am.",
           "feelings": [
-            "Startled",
+            "Alarmed",
             "Irritated",
             "Tired",
             "Tense"
@@ -3540,7 +3496,7 @@
           "label": "Posted photo of me without asking",
           "example": "A photo of me at the event was posted without checking first.",
           "feelings": [
-            "Uncomfortable",
+            "Tense",
             "Anxious",
             "Hurt",
             "Irritated"
@@ -3558,7 +3514,6 @@
           "example": "The post included my street name.",
           "feelings": [
             "Anxious",
-            "Concerned",
             "Tense",
             "Angry"
           ],
