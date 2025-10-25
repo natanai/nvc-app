@@ -3138,6 +3138,33 @@ body.has-support-journal-open {
   border-color: var(--outline);
 }
 
+.inventory-message__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.75rem;
+  padding: 0.25rem 0.85rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 40%, transparent);
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: color-mix(in srgb, #ffffff 78%, var(--mint) 22%);
+  color: inherit;
+  cursor: pointer;
+  min-width: 0;
+  min-height: 0;
+  text-decoration: none;
+}
+
+.inventory-message__action:hover {
+  background: color-mix(in srgb, #ffffff 65%, var(--mint) 35%);
+}
+
+.inventory-message__action:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
 .inventory-button {
   font-family: var(--font-display);
   font-size: 0.8rem;

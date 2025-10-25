@@ -5783,7 +5783,7 @@ function showInventoryMessage(message, type) {
   if (!state.inventoryMessageEl) {
     return;
   }
-  state.inventoryMessageEl.textContent = message;
+  state.inventoryMessageEl.textContent = '';
   state.inventoryMessageEl.hidden = false;
   state.inventoryMessageEl.classList.remove(
     'inventory-message--error',
@@ -5797,6 +5797,15 @@ function showInventoryMessage(message, type) {
       ? 'inventory-message--warning'
       : 'inventory-message--success';
   state.inventoryMessageEl.classList.add(className);
+  if (typeof message === 'string') {
+    state.inventoryMessageEl.textContent = message;
+    return;
+  }
+  if (typeof Node !== 'undefined' && message instanceof Node) {
+    state.inventoryMessageEl.appendChild(message);
+    return;
+  }
+  state.inventoryMessageEl.textContent = String(message);
 }
 
 function showFeedback(element, message, type = 'success') {
@@ -6431,13 +6440,34 @@ function handleEmailPersonalStrategies() {
   }
 
   const successMessage = `Personal strategies exported! Email the downloaded file to ${PERSONAL_STRATEGIES_EMAIL_ADDRESS} with the subject “${PERSONAL_STRATEGIES_EMAIL_SUBJECT}”.`;
-  showInventoryMessage(successMessage, 'success');
 
-  if (typeof window !== 'undefined') {
-    window.setTimeout(() => {
-      openPersonalStrategiesEmailDraft();
-    }, 300);
+  if (typeof document === 'undefined') {
+    showInventoryMessage(successMessage, 'success');
+    return;
   }
+
+  const messageContent = document.createDocumentFragment();
+  const instructions = document.createElement('span');
+  instructions.textContent = successMessage;
+  messageContent.appendChild(instructions);
+
+  const spacer = document.createTextNode(' ');
+  messageContent.appendChild(spacer);
+
+  const startEmailButton = document.createElement('button');
+  startEmailButton.type = 'button';
+  startEmailButton.className = 'inventory-message__action';
+  startEmailButton.textContent = 'Start an email for me';
+  startEmailButton.setAttribute(
+    'aria-label',
+    `Start an email draft addressed to ${PERSONAL_STRATEGIES_EMAIL_ADDRESS} with the recommended subject line.`
+  );
+  startEmailButton.addEventListener('click', () => {
+    openPersonalStrategiesEmailDraft();
+  });
+  messageContent.appendChild(startEmailButton);
+
+  showInventoryMessage(messageContent, 'success');
 }
 
 function handleImportInventory(file) {
