@@ -1816,9 +1816,9 @@ function createDetectionEntry(kind, slug) {
     return null;
   }
 
-  const title = resolveDetectionTitle(kind, normalized);
+  const title = resolveDetectionTitle(kind, normalized) || formatTitle(normalized);
   const base = DETECTION_BASE_PATHS[kind];
-  if (!base || !title) {
+  if (!base) {
     return null;
   }
 
@@ -2242,29 +2242,17 @@ function createSuggestionEntry(kind, slug) {
 
 function resolveFeelingTitle(slug) {
   const entry = state.catalog?.feelings?.get?.(slug);
-  if (!entry) {
-    return '';
-  }
-  const title = entry.title || formatTitle(entry.slug || slug);
-  return title || '';
+  return entry?.title || formatTitle(slug);
 }
 
 function resolveNeedTitle(slug) {
   const entry = state.catalog?.needs?.get?.(slug);
-  if (!entry) {
-    return '';
-  }
-  const title = entry.title || formatTitle(entry.slug || slug);
-  return title || '';
+  return entry?.title || formatTitle(slug);
 }
 
 function resolveFauxFeelingTitle(slug) {
   const entry = state.catalog?.fauxFeelings?.get?.(slug);
-  if (!entry) {
-    return '';
-  }
-  const title = entry.title || formatTitle(entry.slug || slug);
-  return title || '';
+  return entry?.title || formatTitle(slug);
 }
 
 function formatCueLabel(value) {
