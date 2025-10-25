@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2025-10-25T17:27:48.029Z",
+  "generatedAt": "2025-10-25T18:18:06.708Z",
   "cues": [
     {
       "id": "bias-just-a-joke",
@@ -14,13 +14,13 @@
         "dismissed\\s+it\\s+as\\s+a\\s+joke"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "slotCoverage": [
@@ -188,13 +188,13 @@
         "asked\\s+where\\s+I\\s+am\\s+really\\s+from"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "slotCoverage": [
@@ -350,13 +350,13 @@
         "kept\\s+mispronouncing\\s+my\\s+name"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "slotCoverage": [],
@@ -505,13 +505,13 @@
         "made\\s+a\\s+stereotype\\s+about\\s+me"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "slotCoverage": [
@@ -637,13 +637,13 @@
         "called\\s+me\\s+a\\s+diversity\\s+hire"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "slotCoverage": [
@@ -777,8 +777,8 @@
       ],
       "feelings": [
         "angry",
-        "defensive",
-        "hurt"
+        "hurt",
+        "resentful"
       ],
       "needs": [
         "fairness",
@@ -895,6 +895,725 @@
             "general",
             "caus",
             "problem"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boundary-shared-private",
+      "cue": "boundary-shared-private",
+      "label": "Boundary Shared Private",
+      "example": "At (location), (person-peer) shared (person-general)'s private story during (event).",
+      "phrase": "shared\\s+my\\s+private\\s+story",
+      "phrases": [
+        "shared\\s+my\\s+(?:personal|private)\\s+(?:story|information|details)",
+        "told\\s+everyone\\s+what\\s+I\\s+said",
+        "shared\\s+my\\s+private\\s+story"
+      ],
+      "feelings": [
+        "angry",
+        "humiliated",
+        "tense"
+      ],
+      "needs": [
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "boundary-crossing",
+      "patterns": [
+        {
+          "source": "\\bshared\\s+my\\s+(?:personal|private)\\s+(?:story|information|details)\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\btold\\s+everyone\\s+what\\s+I\\s+said\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bshared\\s+my\\s+private\\s+story\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "bshar|personal|private|story|information|detail",
+          "regex": {
+            "source": "\\bbshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpersonal\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstory\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binformation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdetail\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bshar",
+            "personal",
+            "private",
+            "story",
+            "information",
+            "detail"
+          ],
+          "tokenSet": [
+            "bshar",
+            "personal",
+            "private",
+            "story",
+            "information",
+            "detail"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "btold|everyone|what|said",
+          "regex": {
+            "source": "\\bbtold\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beveryone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhat\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btold",
+            "everyone",
+            "what",
+            "said"
+          ],
+          "tokenSet": [
+            "btold",
+            "everyone",
+            "what",
+            "said"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bshar|private|story",
+          "regex": {
+            "source": "\\bbshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstory\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bshar",
+            "private",
+            "story"
+          ],
+          "tokenSet": [
+            "bshar",
+            "private",
+            "story"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "person|peer|shar|general|dur|event",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "shar",
+            "general",
+            "private",
+            "story",
+            "dur",
+            "event"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "shar",
+            "general",
+            "private",
+            "story",
+            "dur",
+            "event"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boundary-touch",
+      "cue": "boundary-touch",
+      "label": "Boundary Touch",
+      "example": "During (event) at (location), (person-peer) touched (person-general) without permission.",
+      "phrase": "touched\\s+me\\s+without\\s+permission",
+      "phrases": [
+        "hugged\\s+(?:me|us)\\s+without\\s+asking",
+        "touched\\s+(?:me|us)\\s+without\\s+permission",
+        "touched\\s+me\\s+without\\s+permission"
+      ],
+      "feelings": [
+        "angry",
+        "humiliated",
+        "tense"
+      ],
+      "needs": [
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "boundary-crossing",
+      "patterns": [
+        {
+          "source": "\\bhugged\\s+(?:me|us)\\s+without\\s+asking\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\btouched\\s+(?:me|us)\\s+without\\s+permission\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\btouched\\s+me\\s+without\\s+permission\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "bhugg|without|ask",
+          "regex": {
+            "source": "\\bbhugg\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bhugg",
+            "without",
+            "ask"
+          ],
+          "tokenSet": [
+            "bhugg",
+            "without",
+            "ask"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "btouch|without|permission",
+          "regex": {
+            "source": "\\bbtouch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpermission\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btouch",
+            "without",
+            "permission"
+          ],
+          "tokenSet": [
+            "btouch",
+            "without",
+            "permission"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event|location",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blocation\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenSet": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|touch|person|without|permission",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btouch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpermission\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "touch",
+            "general",
+            "without",
+            "permission"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "touch",
+            "general",
+            "without",
+            "permission"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "credit-erased-role",
+      "cue": "credit-erased-role",
+      "label": "Credit Erased Role",
+      "example": "During (event), (person-peer) shared (object) but left (person-general) off the credits.",
+      "phrase": "left\\s+my\\s+name\\s+off",
+      "phrases": [
+        "left\\s+(?:my|our)\\s+name\\s+off",
+        "removed\\s+(?:me|us)\\s+from\\s+the\\s+credits?",
+        "left\\s+my\\s+name\\s+off"
+      ],
+      "feelings": [
+        "disappointment",
+        "hurt",
+        "resentful"
+      ],
+      "needs": [
+        "acknowledgement",
+        "fairness",
+        "respect"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "credit-and-recognition",
+      "patterns": [
+        {
+          "source": "\\bleft\\s+(?:my|our)\\s+name\\s+off\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bremoved\\s+(?:me|us)\\s+from\\s+the\\s+credits?\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bleft\\s+my\\s+name\\s+off\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "bleft|name",
+          "regex": {
+            "source": "\\bbleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bname\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bleft",
+            "name"
+          ],
+          "tokenSet": [
+            "bleft",
+            "name"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bremov|credit",
+          "regex": {
+            "source": "\\bbremov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bremov",
+            "credit"
+          ],
+          "tokenSet": [
+            "bremov",
+            "credit"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event"
+          ],
+          "tokenSet": [
+            "dur",
+            "event"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|shar|object",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "shar",
+            "object"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "shar",
+            "object"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "left|person|general|credit",
+          "regex": {
+            "source": "\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "left",
+            "person",
+            "general",
+            "credit"
+          ],
+          "tokenSet": [
+            "left",
+            "person",
+            "general",
+            "credit"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "credit-presented-as-their",
+      "cue": "credit-presented-as-their",
+      "label": "Credit Presented As Their",
+      "example": "At (location) during (event), (person-authority) presented (object) as their own work.",
+      "phrase": "called\\s+it\\s+their\\s+idea",
+      "phrases": [
+        "called\\s+it\\s+their\\s+idea",
+        "presented\\s+(?:my|our)\\s+work\\s+as\\s+(?:their|his|her)\\s+own",
+        "presented\\s+my\\s+work\\s+as\\s+theirs"
+      ],
+      "feelings": [
+        "disappointment",
+        "hurt",
+        "resentful"
+      ],
+      "needs": [
+        "acknowledgement",
+        "fairness",
+        "respect"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "credit-and-recognition",
+      "patterns": [
+        {
+          "source": "\\bcalled\\s+it\\s+their\\s+idea\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bpresented\\s+(?:my|our)\\s+work\\s+as\\s+(?:their|his|her)\\s+own\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bpresented\\s+my\\s+work\\s+as\\s+theirs\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "bcall|idea",
+          "regex": {
+            "source": "\\bbcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bidea\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bcall",
+            "idea"
+          ],
+          "tokenSet": [
+            "bcall",
+            "idea"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bpresent|work|own",
+          "regex": {
+            "source": "\\bbpresent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bown\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bpresent",
+            "work",
+            "own"
+          ],
+          "tokenSet": [
+            "bpresent",
+            "work",
+            "own"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bpresent|work",
+          "regex": {
+            "source": "\\bbpresent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bpresent",
+            "work"
+          ],
+          "tokenSet": [
+            "bpresent",
+            "work"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "location|dur|event",
+          "regex": {
+            "source": "\\blocation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "location",
+            "dur",
+            "event"
+          ],
+          "tokenSet": [
+            "location",
+            "dur",
+            "event"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|authority|present|object|own|work",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bauthority\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpresent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bown\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "authority",
+            "present",
+            "object",
+            "own",
+            "work"
+          ],
+          "tokenSet": [
+            "person",
+            "authority",
+            "present",
+            "object",
+            "own",
+            "work"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "credit-took-credit",
+      "cue": "credit-took-credit",
+      "label": "Credit Took Credit",
+      "example": "During (event) at (location), (person-peer) took credit for (object) that (person-general) created.",
+      "phrase": "took\\s+credit",
+      "phrases": [
+        "claimed\\s+(?:it\\s+was|it\\s+as)",
+        "took\\s+credit",
+        "took\\s+credit\\s+for\\s+my\\s+work"
+      ],
+      "feelings": [
+        "disappointment",
+        "hurt",
+        "resentful"
+      ],
+      "needs": [
+        "acknowledgement",
+        "fairness",
+        "respect"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "credit-and-recognition",
+      "patterns": [
+        {
+          "source": "\\bclaimed\\s+(?:it\\s+was|it\\s+as)\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\btook\\s+credit\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\btook\\s+credit\\s+for\\s+my\\s+work\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "btook|credit",
+          "regex": {
+            "source": "\\bbtook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btook",
+            "credit"
+          ],
+          "tokenSet": [
+            "btook",
+            "credit"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "btook|credit|work",
+          "regex": {
+            "source": "\\bbtook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btook",
+            "credit",
+            "work"
+          ],
+          "tokenSet": [
+            "btook",
+            "credit",
+            "work"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event|location",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blocation\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenSet": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|took|object|general|creat",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcreat\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "took",
+            "credit",
+            "object",
+            "general",
+            "creat"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "took",
+            "credit",
+            "object",
+            "general",
+            "creat"
           ],
           "tokenThreshold": 5,
           "sourceType": "example",
@@ -1921,7 +2640,7 @@
       ],
       "feelings": [
         "embarrassed",
-        "exposed",
+        "humiliated",
         "hurt"
       ],
       "needs": [
@@ -2054,7 +2773,7 @@
       ],
       "feelings": [
         "embarrassed",
-        "exposed",
+        "humiliated",
         "hurt"
       ],
       "needs": [
@@ -2182,7 +2901,7 @@
       ],
       "feelings": [
         "embarrassed",
-        "exposed",
+        "humiliated",
         "hurt"
       ],
       "needs": [
@@ -2294,9 +3013,9 @@
         "kept\\s+cutting\\s+me\\s+off"
       ],
       "feelings": [
-        "annoyed",
-        "discouraged",
-        "dismissed"
+        "frustrated",
+        "humiliated",
+        "irritated"
       ],
       "needs": [
         "consideration",
@@ -2894,6 +3613,328 @@
       ]
     },
     {
+      "id": "support-left-on-read",
+      "cue": "support-left-on-read",
+      "label": "Support Left On Read",
+      "example": "On (channel) after (event), (person-authority) left (person-general) on read when they shared (statement).",
+      "phrase": "ignored\\s+my\\s+message",
+      "phrases": [
+        "ignored\\s+my\\s+message",
+        "left\\s+(?:me|us)\\s+on\\s+read",
+        "left\\s+my\\s+message\\s+on\\s+read"
+      ],
+      "feelings": [
+        "hurt",
+        "lonely",
+        "powerless"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "trust"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "lack-of-support",
+      "patterns": [
+        {
+          "source": "\\bignored\\s+my\\s+message\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bleft\\s+(?:me|us)\\s+on\\s+read\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bleft\\s+my\\s+message\\s+on\\s+read\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "bignor|message",
+          "regex": {
+            "source": "\\bbignor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessage\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bignor",
+            "message"
+          ],
+          "tokenSet": [
+            "bignor",
+            "message"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bleft|read",
+          "regex": {
+            "source": "\\bbleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bleft",
+            "read"
+          ],
+          "tokenSet": [
+            "bleft",
+            "read"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bleft|message|read",
+          "regex": {
+            "source": "\\bbleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bleft",
+            "message",
+            "read"
+          ],
+          "tokenSet": [
+            "bleft",
+            "message",
+            "read"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "channel|event",
+          "regex": {
+            "source": "\\bchannel\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "channel",
+            "event"
+          ],
+          "tokenSet": [
+            "channel",
+            "event"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|authority|left|person|general|read",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bauthority\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "authority",
+            "left",
+            "general",
+            "read"
+          ],
+          "tokenSet": [
+            "person",
+            "authority",
+            "left",
+            "general",
+            "read"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "shar|statement",
+          "regex": {
+            "source": "\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstatement\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "shar",
+            "statement"
+          ],
+          "tokenSet": [
+            "shar",
+            "statement"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "support-no-backup",
+      "cue": "support-no-backup",
+      "label": "Support No Backup",
+      "example": "During (event) at (location), (person-peer) stayed silent instead of backing (person-general) up about (object).",
+      "phrase": "did\\s+not\\s+back\\s+me\\s+up",
+      "phrases": [
+        "didn't\\s+back\\s+(?:me|us)\\s+up",
+        "stood\\s+by[^\\n]{0,30}silent",
+        "did\\s+not\\s+back\\s+me\\s+up"
+      ],
+      "feelings": [
+        "hurt",
+        "lonely",
+        "powerless"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "trust"
+      ],
+      "slotCoverage": [],
+      "slotSummary": "",
+      "moduleId": "lack-of-support",
+      "patterns": [
+        {
+          "source": "\\bdidn't\\s+back\\s+(?:me|us)\\s+up\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bstood\\s+by\\b[^\\n]{0,30}\\bsilent\\b",
+          "flags": "i"
+        },
+        {
+          "source": "\\bdid\\s+not\\s+back\\s+me\\s+up\\b",
+          "flags": "i"
+        }
+      ],
+      "matchers": [
+        {
+          "key": "bstood|0",
+          "regex": {
+            "source": "\\bbstood\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bstood",
+            "0"
+          ],
+          "tokenSet": [
+            "bstood",
+            "0"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "30|bsilent",
+          "regex": {
+            "source": "\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbsilent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "30",
+            "bsilent"
+          ],
+          "tokenSet": [
+            "30",
+            "bsilent"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bdid|not",
+          "regex": {
+            "source": "\\bbdid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnot\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bdid",
+            "not"
+          ],
+          "tokenSet": [
+            "bdid",
+            "not"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event|location",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blocation\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenSet": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|stay|instead|general|object",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "stay",
+            "silent",
+            "instead",
+            "general",
+            "object"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "stay",
+            "silent",
+            "instead",
+            "general",
+            "object"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
       "id": "micromanage-hover",
       "cue": "micromanage-hover",
       "label": "Micromanage Hover",
@@ -2905,9 +3946,9 @@
         "hovered\\s+over\\s+my\\s+work"
       ],
       "feelings": [
-        "demoralized",
         "frustrated",
-        "restricted"
+        "powerless",
+        "thwarted"
       ],
       "needs": [
         "autonomy",
@@ -3052,9 +4093,9 @@
         "overrode\\s+my\\s+decision"
       ],
       "feelings": [
-        "demoralized",
         "frustrated",
-        "restricted"
+        "powerless",
+        "thwarted"
       ],
       "needs": [
         "autonomy",
@@ -3205,9 +4246,9 @@
         "rewrote\\s+my\\s+work"
       ],
       "feelings": [
-        "demoralized",
         "frustrated",
-        "restricted"
+        "powerless",
+        "thwarted"
       ],
       "needs": [
         "autonomy",
@@ -3316,9 +4357,9 @@
         "loaded\\s+me\\s+with\\s+busy\\s+work"
       ],
       "feelings": [
-        "demoralized",
-        "unsafe",
-        "worried"
+        "anxious",
+        "powerless",
+        "scared"
       ],
       "needs": [
         "fairness",
@@ -3476,9 +4517,9 @@
         "gave\\s+me\\s+the\\s+worst\\s+shift"
       ],
       "feelings": [
-        "demoralized",
-        "unsafe",
-        "worried"
+        "anxious",
+        "powerless",
+        "scared"
       ],
       "needs": [
         "fairness",
@@ -3586,13 +4627,13 @@
       ],
       "feelings": [
         "confused",
-        "dismissed",
+        "hurt",
         "lonely"
       ],
       "needs": [
-        "communication",
         "consideration",
-        "respect"
+        "respect",
+        "to-be-heard"
       ],
       "slotCoverage": [],
       "slotSummary": "",
@@ -3721,13 +4762,13 @@
       ],
       "feelings": [
         "confused",
-        "dismissed",
+        "hurt",
         "lonely"
       ],
       "needs": [
-        "communication",
         "consideration",
-        "respect"
+        "respect",
+        "to-be-heard"
       ],
       "slotCoverage": [],
       "slotSummary": "",
@@ -3853,13 +4894,13 @@
       ],
       "feelings": [
         "confused",
-        "dismissed",
+        "hurt",
         "lonely"
       ],
       "needs": [
-        "communication",
         "consideration",
-        "respect"
+        "respect",
+        "to-be-heard"
       ],
       "slotCoverage": [],
       "slotSummary": "",
@@ -3967,13 +5008,13 @@
         "bias-tokenizing"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "examples": [
@@ -4646,8 +5687,8 @@
       ],
       "feelings": [
         "angry",
-        "defensive",
-        "hurt"
+        "hurt",
+        "resentful"
       ],
       "needs": [
         "fairness",
@@ -4836,6 +5877,759 @@
             "general",
             "caus",
             "problem"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boundary-crossing",
+      "label": "Boundary crossing actions",
+      "summary": "Moments where requests for boundaries are ignored.",
+      "slotIds": [
+        "context",
+        "sensory",
+        "time"
+      ],
+      "slotSummary": "setting or people, sensory detail, and time anchor slots",
+      "cueIds": [
+        "boundary-shared-private",
+        "boundary-touch"
+      ],
+      "feelings": [
+        "angry",
+        "humiliated",
+        "tense"
+      ],
+      "needs": [
+        "autonomy",
+        "respect",
+        "safety"
+      ],
+      "examples": [
+        "At (location) during (event), (person-peer) ignored the boundary (person-general) had set."
+      ],
+      "guidance": [
+        "Where and with whom",
+        "What you directly sensed",
+        "When it happened"
+      ],
+      "matchers": [
+        {
+          "key": "regex:\\bblew\\s+past\\s+my\\s+boundary\\b/iu",
+          "regex": {
+            "source": "\\bblew\\s+past\\s+my\\s+boundary\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bignored\\s+my\\s+boundary\\b/iu",
+          "regex": {
+            "source": "\\bignored\\s+my\\s+boundary\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bshared\\s+my\\s+(?:personal|private)\\s+(?:story|information|details)\\b/iu",
+          "regex": {
+            "source": "\\bshared\\s+my\\s+(?:personal|private)\\s+(?:story|information|details)\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\btold\\s+everyone\\s+what\\s+I\\s+said\\b/iu",
+          "regex": {
+            "source": "\\btold\\s+everyone\\s+what\\s+I\\s+said\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bhugged\\s+(?:me|us)\\s+without\\s+asking\\b/iu",
+          "regex": {
+            "source": "\\bhugged\\s+(?:me|us)\\s+without\\s+asking\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\btouched\\s+(?:me|us)\\s+without\\s+permission\\b/iu",
+          "regex": {
+            "source": "\\btouched\\s+(?:me|us)\\s+without\\s+permission\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "bshar|personal|private|story|information|detail",
+          "regex": {
+            "source": "\\bbshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpersonal\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstory\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binformation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdetail\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bshar",
+            "personal",
+            "private",
+            "story",
+            "information",
+            "detail"
+          ],
+          "tokenSet": [
+            "bshar",
+            "personal",
+            "private",
+            "story",
+            "information",
+            "detail"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "btold|everyone|what|said",
+          "regex": {
+            "source": "\\bbtold\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beveryone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhat\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btold",
+            "everyone",
+            "what",
+            "said"
+          ],
+          "tokenSet": [
+            "btold",
+            "everyone",
+            "what",
+            "said"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bshar|private|story",
+          "regex": {
+            "source": "\\bbshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstory\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bshar",
+            "private",
+            "story"
+          ],
+          "tokenSet": [
+            "bshar",
+            "private",
+            "story"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "person|peer|shar|general|dur|event",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "shar",
+            "general",
+            "private",
+            "story",
+            "dur",
+            "event"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "shar",
+            "general",
+            "private",
+            "story",
+            "dur",
+            "event"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "bhugg|without|ask",
+          "regex": {
+            "source": "\\bbhugg\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bhugg",
+            "without",
+            "ask"
+          ],
+          "tokenSet": [
+            "bhugg",
+            "without",
+            "ask"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "btouch|without|permission",
+          "regex": {
+            "source": "\\bbtouch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpermission\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btouch",
+            "without",
+            "permission"
+          ],
+          "tokenSet": [
+            "btouch",
+            "without",
+            "permission"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event|location",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blocation\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenSet": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|touch|person|without|permission",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btouch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpermission\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "touch",
+            "general",
+            "without",
+            "permission"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "touch",
+            "general",
+            "without",
+            "permission"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "credit-and-recognition",
+      "label": "Recognition and credit taking",
+      "summary": "Moments where contributions are minimized or taken.",
+      "slotIds": [
+        "context",
+        "sensory",
+        "time"
+      ],
+      "slotSummary": "setting or people, sensory detail, and time anchor slots",
+      "cueIds": [
+        "credit-erased-role",
+        "credit-presented-as-their",
+        "credit-took-credit"
+      ],
+      "feelings": [
+        "disappointment",
+        "hurt",
+        "resentful"
+      ],
+      "needs": [
+        "acknowledgement",
+        "fairness",
+        "respect"
+      ],
+      "examples": [
+        "During (event), (person-peer) presented (object) as their idea even though (person-general) created it."
+      ],
+      "guidance": [
+        "Where and with whom",
+        "What you directly sensed",
+        "When it happened"
+      ],
+      "matchers": [
+        {
+          "key": "regex:\\bleft\\s+(?:my|our)\\s+name\\s+off\\b/iu",
+          "regex": {
+            "source": "\\bleft\\s+(?:my|our)\\s+name\\s+off\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bremoved\\s+(?:me|us)\\s+from\\s+the\\s+credits?\\b/iu",
+          "regex": {
+            "source": "\\bremoved\\s+(?:me|us)\\s+from\\s+the\\s+credits?\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bcalled\\s+it\\s+their\\s+idea\\b/iu",
+          "regex": {
+            "source": "\\bcalled\\s+it\\s+their\\s+idea\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bpresented\\s+(?:my|our)\\s+work\\s+as\\s+(?:their|his|her)\\s+own\\b/iu",
+          "regex": {
+            "source": "\\bpresented\\s+(?:my|our)\\s+work\\s+as\\s+(?:their|his|her)\\s+own\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bclaimed\\s+(?:it\\s+was|it\\s+as)\\b/iu",
+          "regex": {
+            "source": "\\bclaimed\\s+(?:it\\s+was|it\\s+as)\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\btook\\s+credit\\b/iu",
+          "regex": {
+            "source": "\\btook\\s+credit\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "bleft|name",
+          "regex": {
+            "source": "\\bbleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bname\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bleft",
+            "name"
+          ],
+          "tokenSet": [
+            "bleft",
+            "name"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bremov|credit",
+          "regex": {
+            "source": "\\bbremov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bremov",
+            "credit"
+          ],
+          "tokenSet": [
+            "bremov",
+            "credit"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event"
+          ],
+          "tokenSet": [
+            "dur",
+            "event"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|shar|object",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "shar",
+            "object"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "shar",
+            "object"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "left|person|general|credit",
+          "regex": {
+            "source": "\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "left",
+            "person",
+            "general",
+            "credit"
+          ],
+          "tokenSet": [
+            "left",
+            "person",
+            "general",
+            "credit"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "bcall|idea",
+          "regex": {
+            "source": "\\bbcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bidea\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bcall",
+            "idea"
+          ],
+          "tokenSet": [
+            "bcall",
+            "idea"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bpresent|work|own",
+          "regex": {
+            "source": "\\bbpresent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bown\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bpresent",
+            "work",
+            "own"
+          ],
+          "tokenSet": [
+            "bpresent",
+            "work",
+            "own"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bpresent|work",
+          "regex": {
+            "source": "\\bbpresent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bpresent",
+            "work"
+          ],
+          "tokenSet": [
+            "bpresent",
+            "work"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "location|dur|event",
+          "regex": {
+            "source": "\\blocation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "location",
+            "dur",
+            "event"
+          ],
+          "tokenSet": [
+            "location",
+            "dur",
+            "event"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|authority|present|object|own|work",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bauthority\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpresent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bown\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "authority",
+            "present",
+            "object",
+            "own",
+            "work"
+          ],
+          "tokenSet": [
+            "person",
+            "authority",
+            "present",
+            "object",
+            "own",
+            "work"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "btook|credit",
+          "regex": {
+            "source": "\\bbtook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btook",
+            "credit"
+          ],
+          "tokenSet": [
+            "btook",
+            "credit"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "btook|credit|work",
+          "regex": {
+            "source": "\\bbtook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcredit\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "btook",
+            "credit",
+            "work"
+          ],
+          "tokenSet": [
+            "btook",
+            "credit",
+            "work"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event|location",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blocation\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenSet": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|took|object|general|creat",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcreat\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "took",
+            "credit",
+            "object",
+            "general",
+            "creat"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "took",
+            "credit",
+            "object",
+            "general",
+            "creat"
           ],
           "tokenThreshold": 5,
           "sourceType": "example",
@@ -5895,7 +7689,7 @@
       ],
       "feelings": [
         "embarrassed",
-        "exposed",
+        "humiliated",
         "hurt"
       ],
       "needs": [
@@ -6266,9 +8060,9 @@
         "interruption-cut-off"
       ],
       "feelings": [
-        "annoyed",
-        "discouraged",
-        "dismissed"
+        "frustrated",
+        "humiliated",
+        "irritated"
       ],
       "needs": [
         "consideration",
@@ -7015,6 +8809,366 @@
       ]
     },
     {
+      "id": "lack-of-support",
+      "label": "Lack of follow-through or support",
+      "summary": "Moments where promised support did not arrive.",
+      "slotIds": [
+        "context",
+        "sensory",
+        "time"
+      ],
+      "slotSummary": "setting or people, sensory detail, and time anchor slots",
+      "cueIds": [
+        "support-left-on-read",
+        "support-no-backup"
+      ],
+      "feelings": [
+        "hurt",
+        "lonely",
+        "powerless"
+      ],
+      "needs": [
+        "reliability",
+        "support",
+        "trust"
+      ],
+      "examples": [
+        "After (event), (person-peer) never followed up about (object).",
+        "On (channel), (person-authority) left my message on read when I shared (statement)."
+      ],
+      "guidance": [
+        "Where and with whom",
+        "What you directly sensed",
+        "When it happened"
+      ],
+      "matchers": [
+        {
+          "key": "regex:\\bignored\\s+my\\s+message\\b/iu",
+          "regex": {
+            "source": "\\bignored\\s+my\\s+message\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bleft\\s+(?:me|us)\\s+on\\s+read\\b/iu",
+          "regex": {
+            "source": "\\bleft\\s+(?:me|us)\\s+on\\s+read\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bdidn't\\s+back\\s+(?:me|us)\\s+up\\b/iu",
+          "regex": {
+            "source": "\\bdidn't\\s+back\\s+(?:me|us)\\s+up\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bstood\\s+by\\b[^\\n]{0,30}\\bsilent\\b/iu",
+          "regex": {
+            "source": "\\bstood\\s+by\\b[^\\n]{0,30}\\bsilent\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bdidn't\\s+follow\\s+up\\b/iu",
+          "regex": {
+            "source": "\\bdidn't\\s+follow\\s+up\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "regex:\\bnever\\s+followed\\s+up\\b/iu",
+          "regex": {
+            "source": "\\bnever\\s+followed\\s+up\\b",
+            "flags": "giu"
+          },
+          "tokens": [],
+          "tokenSet": [],
+          "tokenThreshold": 0,
+          "sourceType": "detector",
+          "sources": [
+            "detector"
+          ]
+        },
+        {
+          "key": "bignor|message",
+          "regex": {
+            "source": "\\bbignor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessage\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bignor",
+            "message"
+          ],
+          "tokenSet": [
+            "bignor",
+            "message"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bleft|read",
+          "regex": {
+            "source": "\\bbleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bleft",
+            "read"
+          ],
+          "tokenSet": [
+            "bleft",
+            "read"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bleft|message|read",
+          "regex": {
+            "source": "\\bbleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bleft",
+            "message",
+            "read"
+          ],
+          "tokenSet": [
+            "bleft",
+            "message",
+            "read"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "channel|event",
+          "regex": {
+            "source": "\\bchannel\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "channel",
+            "event"
+          ],
+          "tokenSet": [
+            "channel",
+            "event"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|authority|left|person|general|read",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bauthority\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "authority",
+            "left",
+            "general",
+            "read"
+          ],
+          "tokenSet": [
+            "person",
+            "authority",
+            "left",
+            "general",
+            "read"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "shar|statement",
+          "regex": {
+            "source": "\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstatement\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "shar",
+            "statement"
+          ],
+          "tokenSet": [
+            "shar",
+            "statement"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "bstood|0",
+          "regex": {
+            "source": "\\bbstood\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bstood",
+            "0"
+          ],
+          "tokenSet": [
+            "bstood",
+            "0"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "30|bsilent",
+          "regex": {
+            "source": "\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbsilent\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "30",
+            "bsilent"
+          ],
+          "tokenSet": [
+            "30",
+            "bsilent"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "bdid|not",
+          "regex": {
+            "source": "\\bbdid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnot\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "bdid",
+            "not"
+          ],
+          "tokenSet": [
+            "bdid",
+            "not"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "pattern",
+          "sources": [
+            "pattern"
+          ]
+        },
+        {
+          "key": "dur|event|location",
+          "regex": {
+            "source": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blocation\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenSet": [
+            "dur",
+            "event",
+            "location"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        },
+        {
+          "key": "person|peer|stay|instead|general|object",
+          "regex": {
+            "source": "\\bperson\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgeneral\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bobject\\b",
+            "flags": "iu"
+          },
+          "tokens": [
+            "person",
+            "peer",
+            "stay",
+            "silent",
+            "instead",
+            "general",
+            "object"
+          ],
+          "tokenSet": [
+            "person",
+            "peer",
+            "stay",
+            "silent",
+            "instead",
+            "general",
+            "object"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "example",
+          "sources": [
+            "example"
+          ]
+        }
+      ]
+    },
+    {
       "id": "micromanagement",
       "label": "Micromanagement and overriding work",
       "summary": "Moments where someone takes over or constantly checks work.",
@@ -7030,9 +9184,9 @@
         "micromanage-rewrite"
       ],
       "feelings": [
-        "demoralized",
         "frustrated",
-        "restricted"
+        "powerless",
+        "thwarted"
       ],
       "needs": [
         "autonomy",
@@ -7437,9 +9591,9 @@
         "retaliation-schedule"
       ],
       "feelings": [
-        "demoralized",
-        "unsafe",
-        "worried"
+        "anxious",
+        "powerless",
+        "scared"
       ],
       "needs": [
         "fairness",
@@ -7750,13 +9904,13 @@
       ],
       "feelings": [
         "confused",
-        "dismissed",
+        "hurt",
         "lonely"
       ],
       "needs": [
-        "communication",
         "consideration",
-        "respect"
+        "respect",
+        "to-be-heard"
       ],
       "examples": [
         "During (event), (person-partner) walked away while (person-general) was sharing (statement)."
@@ -8114,11 +10268,14 @@
     "context": [
       "bias-and-microaggressions",
       "blame-and-shame",
+      "boundary-crossing",
+      "credit-and-recognition",
       "dismissive-gestures",
       "exclusion-moments",
       "gossip-and-rumors",
       "interrupting-dynamics",
       "invalidating-responses",
+      "lack-of-support",
       "micromanagement",
       "retaliation-patterns",
       "stonewalling-and-silence"
@@ -8126,11 +10283,14 @@
     "sensory": [
       "bias-and-microaggressions",
       "blame-and-shame",
+      "boundary-crossing",
+      "credit-and-recognition",
       "dismissive-gestures",
       "exclusion-moments",
       "gossip-and-rumors",
       "interrupting-dynamics",
       "invalidating-responses",
+      "lack-of-support",
       "micromanagement",
       "retaliation-patterns",
       "stonewalling-and-silence"
@@ -8138,11 +10298,14 @@
     "time": [
       "bias-and-microaggressions",
       "blame-and-shame",
+      "boundary-crossing",
+      "credit-and-recognition",
       "dismissive-gestures",
       "exclusion-moments",
       "gossip-and-rumors",
       "interrupting-dynamics",
       "invalidating-responses",
+      "lack-of-support",
       "micromanagement",
       "retaliation-patterns",
       "stonewalling-and-silence"

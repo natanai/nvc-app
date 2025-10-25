@@ -6,6 +6,7 @@ const DATA_DIR = path.join(ROOT_DIR, 'data');
 
 const LEXICON_OUTPUT_PATH = path.join(DATA_DIR, 'observation_lexicon.json');
 const MODULE_OUTPUT_PATH = path.join(DATA_DIR, 'observation_module_blueprints.json');
+const SITE_INDEX_PATH = path.join(DATA_DIR, 'index.json');
 
 const LEXICON_DEFINITIONS = {
   dismissive_eye_roll: [
@@ -332,7 +333,7 @@ const MODULE_BLUEPRINTS = [
       'interrupting_muted',
       'interrupting_ignored_hand',
     ],
-    feelings: ['discouraged', 'annoyed', 'dismissed'],
+    feelings: ['frustrated', 'irritated', 'humiliated'],
     needs: ['respect', 'consideration', 'space'],
     examples: [
       'During (event) on (channel), (person-peer) cut me off while I described (object).',
@@ -375,7 +376,7 @@ const MODULE_BLUEPRINTS = [
       'blame_should_have',
       'blame_cause_problem',
     ],
-    feelings: ['hurt', 'angry', 'defensive'],
+    feelings: ['hurt', 'angry', 'resentful'],
     needs: ['understanding', 'support', 'fairness'],
     examples: [
       'During (event) at (location), (person-authority) said "(statement)" telling (person-general) it was their fault.',
@@ -411,7 +412,7 @@ const MODULE_BLUEPRINTS = [
       'credit_presented_as_their',
       'credit_erased_role',
     ],
-    feelings: ['resentful', 'disappointed', 'invisible'],
+    feelings: ['resentful', 'disappointment', 'hurt'],
     needs: ['acknowledgement', 'fairness', 'respect'],
     examples: [
       'During (event), (person-peer) presented (object) as their idea even though (person-general) created it.',
@@ -447,7 +448,7 @@ const MODULE_BLUEPRINTS = [
       'support_left_on_read',
       'support_no_backup',
     ],
-    feelings: ['let-down', 'disappointed', 'unsupported'],
+    feelings: ['hurt', 'lonely', 'powerless'],
     needs: ['support', 'reliability', 'trust'],
     examples: [
       'After (event), (person-peer) never followed up about (object).',
@@ -556,7 +557,7 @@ const MODULE_BLUEPRINTS = [
       'micromanage_rewrite',
       'micromanage_override',
     ],
-    feelings: ['frustrated', 'restricted', 'demoralized'],
+    feelings: ['frustrated', 'thwarted', 'powerless'],
     needs: ['trust', 'autonomy', 'respect'],
     examples: [
       'During (event), (person-authority) hovered over (person-general) while they worked on (object).',
@@ -592,7 +593,7 @@ const MODULE_BLUEPRINTS = [
       'boundary_shared_private',
       'boundary_touch',
     ],
-    feelings: ['violated', 'uncomfortable', 'angry'],
+    feelings: ['humiliated', 'tense', 'angry'],
     needs: ['safety', 'respect', 'autonomy'],
     examples: [
       'At (location) during (event), (person-peer) ignored the boundary (person-general) had set.',
@@ -628,8 +629,8 @@ const MODULE_BLUEPRINTS = [
       'stonewall_cancelled',
       'stonewall_walked_away',
     ],
-    feelings: ['lonely', 'confused', 'dismissed'],
-    needs: ['communication', 'consideration', 'respect'],
+    feelings: ['lonely', 'confused', 'hurt'],
+    needs: ['to-be-heard', 'consideration', 'respect'],
     examples: [
       'During (event), (person-partner) walked away while (person-general) was sharing (statement).',
     ],
@@ -666,8 +667,8 @@ const MODULE_BLUEPRINTS = [
       'bias_comment_mispronounce',
       'bias_comment_microaggression',
     ],
-    feelings: ['angry', 'alienated', 'exhausted'],
-    needs: ['respect', 'equity', 'belonging'],
+    feelings: ['angry', 'humiliated', 'tired'],
+    needs: ['respect', 'justice', 'belonging'],
     examples: [
       'During (event) at (location), (person-peer) said "(statement)" relying on a stereotype.',
     ],
@@ -714,7 +715,7 @@ const MODULE_BLUEPRINTS = [
       'surveillance_logs',
       'surveillance_screenshare',
     ],
-    feelings: ['uneasy', 'violated', 'pressured'],
+    feelings: ['anxious', 'humiliated', 'pressured'],
     needs: ['privacy', 'trust', 'autonomy'],
     examples: [
       'During (event), (person-authority) forced (person-general) to share their screen.',
@@ -750,7 +751,7 @@ const MODULE_BLUEPRINTS = [
       'gossip_shared_private',
       'gossip_public_chat',
     ],
-    feelings: ['exposed', 'embarrassed', 'hurt'],
+    feelings: ['humiliated', 'embarrassed', 'hurt'],
     needs: ['trust', 'privacy', 'respect'],
     examples: [
       'During (event), (person-peer) spread a rumor about (person-general) in (location).',
@@ -786,7 +787,7 @@ const MODULE_BLUEPRINTS = [
       'retaliation_assignments',
       'retaliation_reviews',
     ],
-    feelings: ['worried', 'unsafe', 'demoralized'],
+    feelings: ['anxious', 'scared', 'powerless'],
     needs: ['safety', 'fairness', 'support'],
     examples: [
       'After (event), (person-authority) changed (person-general)\'s schedule as retaliation.',
@@ -813,6 +814,121 @@ const MODULE_BLUEPRINTS = [
     ],
   },
 ];
+
+async function loadSupportedVocabulary() {
+  let contents;
+  try {
+    contents = await fs.readFile(SITE_INDEX_PATH, 'utf8');
+  } catch (error) {
+    const relativePath = path.relative(ROOT_DIR, SITE_INDEX_PATH);
+    throw new Error(`Unable to read ${relativePath}: ${error.message}`);
+  }
+
+  let data;
+  try {
+    data = JSON.parse(contents);
+  } catch (error) {
+    const relativePath = path.relative(ROOT_DIR, SITE_INDEX_PATH);
+    throw new Error(`Unable to parse ${relativePath}: ${error.message}`);
+  }
+
+  const feelings = new Set();
+  const needs = new Set();
+
+  (Array.isArray(data?.feelings) ? data.feelings : []).forEach(entry => {
+    if (entry && typeof entry.slug === 'string' && entry.slug.trim()) {
+      feelings.add(entry.slug.trim());
+    }
+  });
+
+  (Array.isArray(data?.needs) ? data.needs : []).forEach(entry => {
+    if (entry && typeof entry.slug === 'string' && entry.slug.trim()) {
+      needs.add(entry.slug.trim());
+    }
+  });
+
+  return { feelings, needs };
+}
+
+function normalizeModuleBlueprint(module, vocabulary) {
+  const moduleId = module?.id || module?.label || 'module';
+  const normalized = { ...module };
+
+  if (Array.isArray(module?.feelings)) {
+    normalized.feelings = normalizeSlugList(module.feelings, vocabulary.feelings, {
+      kind: 'feeling',
+      context: `module "${moduleId}"`,
+    });
+  }
+
+  if (Array.isArray(module?.needs)) {
+    normalized.needs = normalizeSlugList(module.needs, vocabulary.needs, {
+      kind: 'need',
+      context: `module "${moduleId}"`,
+    });
+  }
+
+  if (Array.isArray(module?.cues)) {
+    normalized.cues = module.cues.map(cue => normalizeCueBlueprint(cue, vocabulary, moduleId));
+  }
+
+  return normalized;
+}
+
+function normalizeCueBlueprint(cue, vocabulary, moduleId) {
+  const cueId = cue?.id || cue?.label || 'cue';
+  const context = `cue "${cueId}" in module "${moduleId}"`;
+  const normalized = { ...cue };
+
+  if (Array.isArray(cue?.feelings)) {
+    normalized.feelings = normalizeSlugList(cue.feelings, vocabulary.feelings, {
+      kind: 'feeling',
+      context,
+    });
+  } else if ('feelings' in normalized) {
+    delete normalized.feelings;
+  }
+
+  if (Array.isArray(cue?.needs)) {
+    normalized.needs = normalizeSlugList(cue.needs, vocabulary.needs, {
+      kind: 'need',
+      context,
+    });
+  } else if ('needs' in normalized) {
+    delete normalized.needs;
+  }
+
+  return normalized;
+}
+
+function normalizeSlugList(list, allowedSet, { kind, context }) {
+  if (!Array.isArray(list) || list.length === 0) {
+    return [];
+  }
+
+  const normalized = [];
+  const seen = new Set();
+
+  list.forEach(entry => {
+    const slug = typeof entry === 'string' ? entry.trim() : '';
+    if (!slug) {
+      return;
+    }
+
+    if (!allowedSet.has(slug)) {
+      throw new Error(
+        `Observation ${context} references unknown ${kind} slug "${slug}". Add a supported ${kind} entry or update the blueprint.`,
+      );
+    }
+
+    if (!seen.has(slug)) {
+      seen.add(slug);
+      normalized.push(slug);
+    }
+  });
+
+  return normalized;
+}
 
 function sortLexicon(definitions) {
   const sortedKeys = Object.keys(definitions).sort();
@@ -865,7 +981,11 @@ async function writeJson(filePath, data) {
 
 async function main() {
   const lexicon = sortLexicon(LEXICON_DEFINITIONS);
-  const modules = MODULE_BLUEPRINTS.map(sortModule).sort((a, b) => a.id.localeCompare(b.id));
+  const vocabulary = await loadSupportedVocabulary();
+  const modules = MODULE_BLUEPRINTS
+    .map(module => normalizeModuleBlueprint(module, vocabulary))
+    .map(sortModule)
+    .sort((a, b) => a.id.localeCompare(b.id));
 
   await writeJson(LEXICON_OUTPUT_PATH, lexicon);
   await writeJson(MODULE_OUTPUT_PATH, { modules });

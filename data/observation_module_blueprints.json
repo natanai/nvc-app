@@ -17,13 +17,13 @@
         "bias_comment_token"
       ],
       "feelings": [
-        "alienated",
         "angry",
-        "exhausted"
+        "humiliated",
+        "tired"
       ],
       "needs": [
         "belonging",
-        "equity",
+        "justice",
         "respect"
       ],
       "examples": [
@@ -98,8 +98,8 @@
       ],
       "feelings": [
         "angry",
-        "defensive",
-        "hurt"
+        "hurt",
+        "resentful"
       ],
       "needs": [
         "fairness",
@@ -158,8 +158,8 @@
       ],
       "feelings": [
         "angry",
-        "uncomfortable",
-        "violated"
+        "humiliated",
+        "tense"
       ],
       "needs": [
         "autonomy",
@@ -217,8 +217,8 @@
         "credit_took_credit"
       ],
       "feelings": [
-        "disappointed",
-        "invisible",
+        "disappointment",
+        "hurt",
         "resentful"
       ],
       "needs": [
@@ -421,7 +421,7 @@
       ],
       "feelings": [
         "embarrassed",
-        "exposed",
+        "humiliated",
         "hurt"
       ],
       "needs": [
@@ -481,9 +481,9 @@
         "interrupting_talk_over"
       ],
       "feelings": [
-        "annoyed",
-        "discouraged",
-        "dismissed"
+        "frustrated",
+        "humiliated",
+        "irritated"
       ],
       "needs": [
         "consideration",
@@ -635,9 +635,9 @@
         "support_no_followup"
       ],
       "feelings": [
-        "disappointed",
-        "let-down",
-        "unsupported"
+        "hurt",
+        "lonely",
+        "powerless"
       ],
       "needs": [
         "reliability",
@@ -696,9 +696,9 @@
         "micromanage_rewrite"
       ],
       "feelings": [
-        "demoralized",
         "frustrated",
-        "restricted"
+        "powerless",
+        "thwarted"
       ],
       "needs": [
         "autonomy",
@@ -756,9 +756,9 @@
         "retaliation_schedule"
       ],
       "feelings": [
-        "demoralized",
-        "unsafe",
-        "worried"
+        "anxious",
+        "powerless",
+        "scared"
       ],
       "needs": [
         "fairness",
@@ -817,13 +817,13 @@
       ],
       "feelings": [
         "confused",
-        "dismissed",
+        "hurt",
         "lonely"
       ],
       "needs": [
-        "communication",
         "consideration",
-        "respect"
+        "respect",
+        "to-be-heard"
       ],
       "examples": [
         "During (event), (person-partner) walked away while (person-general) was sharing (statement)."
@@ -876,9 +876,9 @@
         "surveillance_screenshare"
       ],
       "feelings": [
-        "pressured",
-        "uneasy",
-        "violated"
+        "anxious",
+        "humiliated",
+        "pressured"
       ],
       "needs": [
         "autonomy",

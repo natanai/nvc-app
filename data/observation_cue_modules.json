@@ -71,13 +71,13 @@
       "bias-tokenizing"
     ],
     "feelings": [
-      "alienated",
       "angry",
-      "exhausted"
+      "humiliated",
+      "tired"
     ],
     "needs": [
       "belonging",
-      "equity",
+      "justice",
       "respect"
     ]
   },
@@ -132,8 +132,8 @@
     ],
     "feelings": [
       "angry",
-      "defensive",
-      "hurt"
+      "hurt",
+      "resentful"
     ],
     "needs": [
       "fairness",
@@ -192,8 +192,8 @@
     ],
     "feelings": [
       "angry",
-      "uncomfortable",
-      "violated"
+      "humiliated",
+      "tense"
     ],
     "needs": [
       "autonomy",
@@ -251,8 +251,8 @@
       "credit-took-credit"
     ],
     "feelings": [
-      "disappointed",
-      "invisible",
+      "disappointment",
+      "hurt",
       "resentful"
     ],
     "needs": [
@@ -455,7 +455,7 @@
     ],
     "feelings": [
       "embarrassed",
-      "exposed",
+      "humiliated",
       "hurt"
     ],
     "needs": [
@@ -526,9 +526,9 @@
       "interruption-talk-over"
     ],
     "feelings": [
-      "annoyed",
-      "discouraged",
-      "dismissed"
+      "frustrated",
+      "humiliated",
+      "irritated"
     ],
     "needs": [
       "consideration",
@@ -670,9 +670,9 @@
       "support-no-followup"
     ],
     "feelings": [
-      "disappointed",
-      "let-down",
-      "unsupported"
+      "hurt",
+      "lonely",
+      "powerless"
     ],
     "needs": [
       "reliability",
@@ -730,9 +730,9 @@
       "micromanage-rewrite"
     ],
     "feelings": [
-      "demoralized",
       "frustrated",
-      "restricted"
+      "powerless",
+      "thwarted"
     ],
     "needs": [
       "autonomy",
@@ -790,9 +790,9 @@
       "retaliation-schedule"
     ],
     "feelings": [
-      "demoralized",
-      "unsafe",
-      "worried"
+      "anxious",
+      "powerless",
+      "scared"
     ],
     "needs": [
       "fairness",
@@ -851,13 +851,13 @@
     ],
     "feelings": [
       "confused",
-      "dismissed",
+      "hurt",
       "lonely"
     ],
     "needs": [
-      "communication",
       "consideration",
-      "respect"
+      "respect",
+      "to-be-heard"
     ]
   },
   {
@@ -910,9 +910,9 @@
       "surveillance-screenshare"
     ],
     "feelings": [
-      "pressured",
-      "uneasy",
-      "violated"
+      "anxious",
+      "humiliated",
+      "pressured"
     ],
     "needs": [
       "autonomy",
