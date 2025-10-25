@@ -89,6 +89,13 @@ const SENTENCE_BUILDER_CONTEXT_COMPANIONS = [
   'with the vendor',
 ];
 
+const SENTENCE_BUILDER_WHERE_RELATIONSHIP_PLACEHOLDERS = [
+  '(person-partner)',
+  '(person-peer)',
+  '(person-authority)',
+  '(person-general)',
+];
+
 const SENTENCE_BUILDER_CONTEXT_MODIFIERS = [
   '',
   'during our check-in',
@@ -432,18 +439,27 @@ function buildSentenceBuilderWhereOptionsFromLexicon(lexicon) {
     'in (location)',
     'in the (location)',
     'on (channel)',
-    'with (person)',
     'with (people)',
     'with (role)',
     'with (group)',
-    'at (location) with (person)',
-    'on (channel) with (person)',
     'during (event)',
     'at (location) during (event)',
-    'during (event) with (person)',
-    'at (location) with (person) during (event)',
     'on (channel) during (event)',
   ].forEach(addOption);
+
+  const relationshipTemplates = [
+    'with {placeholder}',
+    'at (location) with {placeholder}',
+    'on (channel) with {placeholder}',
+    'during (event) with {placeholder}',
+    'at (location) with {placeholder} during (event)',
+  ];
+
+  SENTENCE_BUILDER_WHERE_RELATIONSHIP_PLACEHOLDERS.forEach(placeholder => {
+    relationshipTemplates.forEach(template => {
+      addOption(template.replace('{placeholder}', placeholder));
+    });
+  });
 
   return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
 }

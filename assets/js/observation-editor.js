@@ -90,6 +90,26 @@ const SENTENCE_BUILDER_PLACEHOLDER_DEFINITIONS = {
     prompt: 'Enter who was there (name, role, or relationship).',
     example: 'my manager',
   },
+  'person-partner': {
+    label: '(partner or loved one)',
+    prompt: 'Enter the partner, family member, or loved one who was there.',
+    example: 'my partner',
+  },
+  'person-peer': {
+    label: '(peer or teammate)',
+    prompt: 'Enter the coworker, classmate, or peer who was there.',
+    example: 'my coworker',
+  },
+  'person-authority': {
+    label: '(authority figure)',
+    prompt: 'Enter the manager, teacher, supervisor, or official who was there.',
+    example: 'my manager',
+  },
+  'person-general': {
+    label: '(person – other)',
+    prompt: 'Enter who was there (name, role, or relationship).',
+    example: 'the neighbor',
+  },
   people: {
     label: '(people)',
     prompt: 'Enter who was there (group or people).',
@@ -178,8 +198,6 @@ function createEmptySentenceBuilderState() {
     selectedSentence: '',
     selectedActionSummary: '',
     selectedActionModule: '',
-    customMoments: [],
-    customCounter: 0,
     tokenInputs: new Map(),
     lastAppliedText: '',
     lastAppliedTokens: [],
@@ -485,7 +503,6 @@ function initializeSentenceBuilder(dataset) {
   builder.whenTrie = cloneSentenceBuilderTrie(dataset?.when?.trie);
   builder.whereTrie = cloneSentenceBuilderTrie(dataset?.where?.trie);
   builder.actionTrie = cloneSentenceBuilderTrie(dataset?.actions?.trie);
-  builder.customMoments = Array.isArray(builder.customMoments) ? builder.customMoments : [];
   builder.selectedTokens = Array.isArray(builder.selectedTokens) ? builder.selectedTokens : [];
   builder.selectedWhenId = builder.selectedWhenId || '';
   builder.selectedWhereId = builder.selectedWhereId || '';
@@ -506,53 +523,6 @@ function initializeSentenceBuilder(dataset) {
   if (state.inputMode === INPUT_MODE_BUILDER) {
     applySentenceBuilderSelection({ focus: false, immediate: false });
   }
-}
-
-function insertSentenceBuilderSequence(trie, sequence) {
-  if (!trie || !sequence) {
-    return;
-  }
-  const tokens = Array.isArray(sequence.tokens) ? sequence.tokens : [];
-  if (!tokens.length) {
-    return;
-  }
-  let node = trie;
-  tokens.forEach(token => {
-    if (!token) {
-      return;
-    }
-    if (!Array.isArray(node.options)) {
-      node.options = [];
-    }
-    let option = node.options.find(entry => entry.token === token);
-    if (!option) {
-      option = { token, node: createEmptySentenceBuilderTrie() };
-      node.options.push(option);
-      node.options.sort((a, b) => a.token.localeCompare(b.token));
-    }
-    node = option.node;
-  });
-  if (!Array.isArray(node.ids)) {
-    node.ids = [];
-  }
-  if (!node.ids.includes(sequence.id)) {
-    node.ids.push(sequence.id);
-  }
-}
-
-function tokenizeSentenceBuilderMoment(text) {
-  const normalized = normalizeBuilderSegment(text);
-  if (!normalized) {
-    return null;
-  }
-  const value = capitalizeFirst(normalized);
-  const tokens = value.split(/\s+/).filter(Boolean);
-  if (!tokens.length) {
-    return null;
-  }
-  const lastIndex = tokens.length - 1;
-  tokens[lastIndex] = `${tokens[lastIndex].replace(/,+$/, '')},`;
-  return { value, raw: normalized, tokens };
 }
 
 function consumeSentenceBuilderStage(trie, tokens, startIndex) {
@@ -623,71 +593,6 @@ function populateSentenceBuilderStageSelectors(trie, tokens, offset, selectors, 
 
   const complete = Array.isArray(node?.ids) && node.ids.length > 0;
   return { complete, nextIndex: index };
-}
-
-function ensureMomentPrefix(source) {
-  const text = typeof source === 'string' ? source.trim() : '';
-  if (!text) {
-    return '';
-  }
-  if (/^(?:on|during|this|that|yesterday|earlier|today|tonight|last|at|around|by)\b/i.test(text)) {
-    return capitalizeFirst(text);
-  }
-  return `On ${text}`;
-}
-
-function formatCustomMomentInput(dayOrDate, timeOfDay) {
-  const dayText = typeof dayOrDate === 'string' ? dayOrDate.trim() : '';
-  const timeText = typeof timeOfDay === 'string' ? timeOfDay.trim() : '';
-
-  if (!dayText && !timeText) {
-    return '';
-  }
-
-  if (dayText && timeText) {
-    const base = ensureMomentPrefix(dayText);
-    const needsJoiner = !/(?:\bat\b|\baround\b|\bby\b|\bfor\b)\s+[^\s]+$/i.test(base);
-    const joiner = needsJoiner ? 'at' : '';
-    const combined = [base, joiner, timeText].filter(Boolean).join(' ');
-    return combined.replace(/\s+/g, ' ').trim();
-  }
-
-  if (dayText) {
-    return ensureMomentPrefix(dayText);
-  }
-
-  if (/^(?:at|around|by|for)\b/i.test(timeText)) {
-    return capitalizeFirst(timeText);
-  }
-
-  return `At ${timeText}`.trim();
-}
-
-function registerSentenceBuilderCustomMoment(momentText) {
-  const builder = state.builder;
-  if (!builder) {
-    return false;
-  }
-  const sequence = tokenizeSentenceBuilderMoment(momentText);
-  if (!sequence) {
-    return false;
-  }
-  const exists = Array.isArray(builder.whenSequences)
-    ? builder.whenSequences.some(entry => entry?.value?.toLowerCase() === sequence.value.toLowerCase())
-    : false;
-  if (exists) {
-    return false;
-  }
-  builder.customMoments = Array.isArray(builder.customMoments) ? builder.customMoments : [];
-  builder.customCounter = (builder.customCounter || 0) + 1;
-  const id = `custom-when-${builder.customCounter}`;
-  const entry = { id, value: sequence.value, raw: sequence.raw, tokens: sequence.tokens };
-  builder.customMoments.push(entry);
-  builder.whenSequences.push(entry);
-  builder.whenIndex.set(entry.id, entry);
-  insertSentenceBuilderSequence(builder.whenTrie, entry);
-  builder.ready = builder.whenSequences.length > 0 && builder.whereSequences.length > 0 && builder.actions.length > 0;
-  return true;
 }
 
 function ensureSentencePunctuation(text) {
@@ -948,38 +853,6 @@ function bindSentenceBuilder() {
     });
   }
 
-  const customMomentForm = document.getElementById('observation-builder-custom-moment');
-  if (customMomentForm && !customMomentForm.dataset.bound) {
-    customMomentForm.addEventListener('submit', event => {
-      event.preventDefault();
-      const dayInput = customMomentForm.querySelector('input[name="custom-moment-day"]');
-      const timeInput = customMomentForm.querySelector('input[name="custom-moment-time"]');
-      const status = document.getElementById('observation-builder-custom-moment-status');
-      const formatted = formatCustomMomentInput(dayInput?.value || '', timeInput?.value || '');
-      if (!formatted) {
-        if (status) {
-          status.textContent = 'Enter a day, date, or time to add it to the builder.';
-          status.removeAttribute('hidden');
-        }
-        return;
-      }
-      const added = registerSentenceBuilderCustomMoment(formatted);
-      if (status) {
-        if (added) {
-          status.textContent = `Added “${formatted}” to the “when” selectors.`;
-          status.removeAttribute('hidden');
-        } else {
-          status.textContent = `“${formatted}” is already available.`;
-          status.removeAttribute('hidden');
-        }
-      }
-      if (added) {
-        customMomentForm.reset();
-        renderSentenceBuilder();
-      }
-    });
-    customMomentForm.dataset.bound = 'true';
-  }
 }
 
 function setEditorMode(mode) {

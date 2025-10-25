@@ -1682,67 +1682,6 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--outline) 68%, transparent);
   }
 
-  .observation-sentence-builder__custom {
-    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
-    border-radius: var(--radius-2xl);
-    background: color-mix(in srgb, #ffffff 90%, var(--outline) 10%);
-    padding: 0.85rem 1rem;
-    display: grid;
-    gap: 0.65rem;
-  }
-
-  .observation-sentence-builder__custom-help {
-    margin: 0;
-    font-size: 0.8rem;
-    color: color-mix(in srgb, var(--outline) 68%, transparent);
-  }
-
-  .observation-sentence-builder__custom-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    align-items: flex-end;
-  }
-
-  .observation-sentence-builder__custom-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 14rem;
-    min-width: 12rem;
-  }
-
-  .observation-sentence-builder__custom-label {
-    margin-bottom: 0.25rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--outline) 72%, transparent);
-  }
-
-  .observation-sentence-builder__custom-input {
-    border-radius: var(--radius-2xl);
-    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
-    padding: 0.6rem 0.75rem;
-    font: inherit;
-    line-height: 1.4;
-  }
-
-  .observation-sentence-builder__custom-input:focus {
-    outline: none;
-    border-color: color-mix(in srgb, var(--sky) 34%, transparent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 20%, transparent);
-  }
-
-  .observation-sentence-builder__custom-submit {
-    margin-left: auto;
-    white-space: nowrap;
-  }
-
-  .observation-sentence-builder__custom-status {
-    margin: 0;
-    font-size: 0.8rem;
-    color: color-mix(in srgb, var(--outline) 65%, transparent);
-  }
-
   .observation-sentence-builder__controls {
     display: flex;
     justify-content: flex-end;
@@ -3192,64 +3131,6 @@ button.site-nav__magnet {
                       class="observation-sentence-builder__summary"
                       hidden
                     ></p>
-                    <div class="observation-sentence-builder__custom">
-                      <p
-                        id="observation-builder-custom-moment-help"
-                        class="observation-sentence-builder__custom-help"
-                      >
-                        Need a different “when”? Add your own day, date, or time and we’ll include it in the dropdowns.
-                      </p>
-                      <form
-                        id="observation-builder-custom-moment"
-                        class="observation-sentence-builder__custom-form"
-                        aria-describedby="observation-builder-custom-moment-help"
-                      >
-                        <div class="observation-sentence-builder__custom-group">
-                          <label
-                            class="observation-sentence-builder__custom-label"
-                            for="observation-builder-custom-moment-day"
-                          >
-                            Day or date
-                          </label>
-                          <input
-                            id="observation-builder-custom-moment-day"
-                            class="observation-sentence-builder__custom-input"
-                            type="text"
-                            name="custom-moment-day"
-                            placeholder="e.g., March 3 or next Tuesday"
-                            autocomplete="off"
-                          />
-                        </div>
-                        <div class="observation-sentence-builder__custom-group">
-                          <label
-                            class="observation-sentence-builder__custom-label"
-                            for="observation-builder-custom-moment-time"
-                          >
-                            Time (optional)
-                          </label>
-                          <input
-                            id="observation-builder-custom-moment-time"
-                            class="observation-sentence-builder__custom-input"
-                            type="text"
-                            name="custom-moment-time"
-                            placeholder="e.g., 2:15 p.m."
-                            autocomplete="off"
-                          />
-                        </div>
-                        <button
-                          type="submit"
-                          class="support-button support-button--ghost observation-sentence-builder__custom-submit"
-                        >
-                          Add to “when” menu
-                        </button>
-                      </form>
-                      <p
-                        id="observation-builder-custom-moment-status"
-                        class="observation-sentence-builder__custom-status"
-                        hidden
-                        aria-live="polite"
-                      ></p>
-                    </div>
                     <div class="observation-sentence-builder__controls">
                       <button
                         type="button"
