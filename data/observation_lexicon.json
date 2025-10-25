@@ -1,283 +1,522 @@
 {
-  "eye_roll": [
+  "bias_comment_joke": [
     {
-      "pattern": "\\broll(?:ed|s|ing)?\\b[^\\n]{0,40}\\beyes?\\b"
+      "pattern": "\\bcan't\\s+you\\s+take\\s+a\\s+joke\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\beye[-\\s]?roll(?:ed|s|ing)?\\b"
+      "pattern": "\\bjust\\s+a\\s+joke\\b",
+      "flags": "iu"
     }
   ],
-  "whatever_door": [
+  "bias_comment_microaggression": [
     {
-      "pattern": "\\b(?:said|muttered|snapped)\\b[^\\n]{0,40}\"?whatever\"?\\b[^\\n]{0,60}\\b(?:slamm(?:ed|ing)|shut|closed)\\b[^\\n]{0,30}\\bdoor\\b"
-    }
-  ],
-  "too_sensitive": [
-    {
-      "pattern": "\\b(?:you(?:'|\\s*are)|you're|ya)\\s+too\\s+sensitive\\b"
+      "pattern": "\\bwhere\\s+are\\s+you\\s+really\\s+from\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\b(?:called|said)\\b[^\\n]{0,40}\\btoo\\s+sensitive\\b"
+      "pattern": "\\byou\\s+speak\\s+english\\s+so\\s+well\\b",
+      "flags": "iu"
     }
   ],
-  "mocking_whisper": [
+  "bias_comment_mispronounce": [
     {
-      "pattern": "\\bwhisper(?:ed|ing)?\\b[^\\n]{0,80}\\b(?:laughed|giggl(?:ed|ing)|snicker(?:ed|ing))\\b"
-    }
-  ],
-  "never_listen": [
-    {
-      "pattern": "\\b(?:you|ya|u)\\s+never\\s+listen\\b"
+      "pattern": "\\bkept\\s+mispronounc(?:e|ing)\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\b(?:you|ya|u)\\s+(?:don(?:'|o)t|do\\s+not)\\s+listen\\b"
+      "pattern": "\\brefused\\s+to\\s+say\\s+my\\s+name\\b",
+      "flags": "iu"
     }
   ],
-  "client_interrupt": [
+  "bias_comment_stereotype": [
     {
-      "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:talk(?:ed)?|spoke)\\s+over\\b"
+      "pattern": "\\bbecause\\s+you're\\s+a\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:cut\\s+me\\s+off|interrup(?:ted|ting))\\b"
+      "pattern": "\\bstereotyp(?:e|ed|ing)\\b",
+      "flags": "iu"
     }
   ],
-  "left_presentation": [
+  "bias_comment_token": [
     {
-      "pattern": "\\b(?:walked|stormed|strode)\\s+out\\b[^\\n]{0,80}\\b(?:presentation|talk|briefing|update)\\b"
+      "pattern": "\\bdiversity\\s+hire\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\bslamm(?:ed|ing)\\b[^\\n]{0,40}\\b(?:notebook|laptop|binder)\\b[^\\n]{0,80}\\b(?:left|walked\\s+out)\\b"
+      "pattern": "\\btoken\\s+hire\\b",
+      "flags": "iu"
     }
   ],
-  "referee_missed_foul": [
+  "blame_cause_problem": [
     {
-      "pattern": "\\b(?:ref|referee|ump)\\b[^\\n]{0,120}\\b(?:miss(?:ed)?|ignor(?:ed|ing)|skipped)\\b[^\\n]{0,60}\\b(?:foul|penalty|call)\\b"
+      "pattern": "\\bcausing\\s+(?:a\\s+)?problem\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\bno\\s+call\\b"
+      "pattern": "\\bcreating\\s+(?:issues?|problems?)\\b",
+      "flags": "iu"
     }
   ],
-  "barista_skipped": [
+  "blame_should_have": [
     {
-      "pattern": "\\b(?:barista|server|cashier|clerk|agent)\\b[^\\n]{0,120}\\b(?:skip(?:ped)?|served)\\b[^\\n]{0,60}\\b(?:before|ahead\\s+of)\\b[^\\n]{0,40}\\bme\\b"
+      "pattern": "\\byou\\s+never\\s+should\\s+have\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\b(?:skip(?:ped)?|cut)\\s+(?:the\\s+)?(?:line|queue)\\b"
+      "pattern": "\\byou\\s+should\\s+have\\b",
+      "flags": "iu"
     }
   ],
-  "reach_over": [
+  "blame_your_fault": [
     {
-      "pattern": "\\breach(?:ed)?\\s+over\\b[^\\n]{0,60}\\b(?:me|my\\s+shoulder)\\b"
+      "pattern": "\\bit\\s*(?:'s|s+is)\\s+your\\s+fault\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\bgrab(?:bed|bing)\\b[^\\n]{0,60}\\b(?:last|final)\\s+(?:carton|item|package|box)\\b"
+      "pattern": "\\byou\\s+caused\\s+this\\b",
+      "flags": "iu"
     }
   ],
-  "dishes_again": [
+  "boundary_ignored": [
     {
-      "pattern": "\\b(?:sink|counter)\\b[^\\n]{0,120}\\b(?:stacked|piled|filled)\\b[^\\n]{0,60}\\b(?:dishes|plates|cups)\\b[^\\n]{0,60}\\b(?:again|still)\\b"
-    }
-  ],
-  "borrowed_car": [
-    {
-      "pattern": "\\bborrow(?:ed|ing)\\b[^\\n]{0,120}\\bcar\\b[^\\n]{0,120}\\b(?:empty|no|without)\\s+(?:gas|fuel|a\\s+tank)\\b"
-    }
-  ],
-  "contract_not_renewed": [
-    {
-      "pattern": "\\b(?:contract|agreement|deal)\\b[^\\n]{0,120}\\b(?:was(?:n't)?|is(?:n't)?|won't\\s+be|not)\\s+(?:renew(?:ed)?|extended|continued)\\b"
-    }
-  ],
-  "landlord_no_reply": [
-    {
-      "pattern": "\\b(?:landlord|property\\s+(?:manager|office)|superintendent|building\\s+(?:manager|office))\\b[^\\n]{0,160}\\b(?:hasn'?t|still\\s+hasn't|never|won't)\\s+(?:respond(?:ed)?|repl(?:ied|y)|called|texted|gotten\\s+back)\\b"
-    }
-  ],
-  "contractor_no_show": [
-    {
-      "pattern": "\\b(?:contractor|repair\\s+(?:tech|person)|plumber|electrician|installer|handyman)\\b[^\\n]{0,160}\\b(?:no[-\\s]?show|never\\s+showed|miss(?:ed)?\\s+(?:the\\s+)?(?:appointment|visit|slot)|didn'?t\\s+(?:come|arrive))\\b"
-    }
-  ],
-  "doctor_clock": [
-    {
-      "pattern": "\\b(?:doctor|physician|provider)\\b[^\\n]{0,120}\\b(?:kept\\s+)?(?:checking|glancing|looking)\\b[^\\n]{0,40}\\bclock\\b"
-    }
-  ],
-  "followups_stacked": [
-    {
-      "pattern": "\\bassign(?:ed|ing)\\b[^\\n]{0,160}\\b(?:all|every|entire|whole)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?up|action\\s+item|task)s?\\b"
-    }
-  ],
-  "boss_late_pings": [
-    {
-      "pattern": "\\b(?:boss|manager|lead|supervisor)\\b[^\\n]{0,160}\\b(?:slack|teams|message|dm|ping|text|email)\\b[^\\n]{0,120}\\b(?:11\\s?p\\.?m\\.?|midnight|late\\s+at\\s+night|after\\s+hours)\\b"
-    }
-  ],
-  "review_no_examples": [
-    {
-      "pattern": "\\b(?:performance\\s+review|feedback|evaluation)\\b[^\\n]{0,160}\\b(?:only|just|mostly)\\b[^\\n]{0,80}\\b(?:mistakes|issues|problems|faults)\\b[^\\n]{0,120}\\b(?:no|without)\\s+(?:examples|specifics|details)\\b"
-    }
-  ],
-  "teacher_sloppy": [
-    {
-      "pattern": "\\b(?:teacher|instructor)\\b[^\\n]{0,120}\\b(?:wrote|scribbled|marked)\\b[^\\n]{0,80}\\b(?:sloppy|messy|careless|lazy)\\b"
-    }
-  ],
-  "dog_barking": [
-    {
-      "pattern": "\\b(?:neighbor'?s|next\\s+door)\\s+dog\\b[^\\n]{0,160}\\b(?:bark(?:ed|ing))\\b[^\\n]{0,120}\\b(?:6\\s?a\\.?m\\.?|five\\s?(?:thirty|30)\\s?a\\.?m\\.?|before\\s+sunrise|early\\s+morning)\\b"
-    }
-  ],
-  "driver_speakerphone": [
-    {
-      "pattern": "\\b(?:driver|rideshare|uber|lyft|cab)\\b[^\\n]{0,120}\\b(?:speaker\\s*phone|speakerphone|on\\s+speaker)\\b"
-    }
-  ],
-  "cyclist_red": [
-    {
-      "pattern": "\\b(?:cyclist|bike\\s+rider|bicyclist)\\b[^\\n]{0,160}\\b(?:blew|ran|sped)\\b[^\\n]{0,80}\\b(?:red\\s+light|red\\s+signal|stop\\s+light)\\b"
-    }
-  ],
-  "phone_dinner": [
-    {
-      "pattern": "\\b(?:during|at)\\s+(?:dinner|the\\s+meal|our\\s+meal)\\b[^\\n]{0,120}\\b(?:phone|scroll(?:ed|ing)|looking\\s+down\\s+at\\s+their\\s+screen)\\b"
-    }
-  ],
-  "scroll_instead": [
-    {
-      "pattern": "\\bscroll(?:ed|ing)\\b[^\\n]{0,120}\\b(?:instead\\s+of|rather\\s+than)\\b[^\\n]{0,120}\\b(?:call(?:ing)?|phone|reach(?:ing)?\\s+out|text(?:ing)?)\\b"
-    }
-  ],
-  "coworker_caught_error": [
-    {
-      "pattern": "\\b(?:coworker|colleague|teammate)\\b[^\\n]{0,160}\\b(?:double[-\\s]?checked|caught|spotted|flagged)\\b[^\\n]{0,120}\\b(?:mistake|error|issue)\\b"
-    }
-  ],
-  "trainer_high_five": [
-    {
-      "pattern": "\\b(?:trainer|coach)\\b[^\\n]{0,160}\\b(?:high[-\\s]?fiv(?:ed|e)|celebrat(?:ed|ing)|cheered)\\b[^\\n]{0,120}\\b(?:personal\\s+best|milestone|record)\\b"
-    }
-  ],
-  "neighbor_shoveled": [
-    {
-      "pattern": "\\b(?:neighbor|next\\s+door)\\b[^\\n]{0,160}\\b(?:shovel(?:ed|ing)|cleared|snow[-\\s]?blow(?:ed|ing))\\b[^\\n]{0,120}\\b(?:sidewalk|driveway|walkway|steps)\\b"
-    }
-  ],
-  "appreciation_specific": [
-    {
-      "pattern": "\\b(?:thank[-\\s]*you|appreciat(?:e|ed|ion)|grateful)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|how\\s+you|what\\s+you\\s+did|made\\s+a\\s+big\\s+difference|the\\s+way\\s+you\\s+helped|calling\\s+out\\s+each)\\b"
+      "pattern": "\\bblew\\s+past\\s+my\\s+boundary\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\b(?:highlighted|called\\s+out|named|listed|spelled\\s+out|detailed)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|individual|each)\\b[^\\n]{0,120}\\b(?:ways?\\s+(?:I|we|you)\\s+helped|tasks?\\s+I\\s+handled|moments?\\s+you\\s+showed\\s+up|contributions?|shifts?)\\b"
+      "pattern": "\\bignored\\s+my\\s+boundary\\b",
+      "flags": "iu"
+    }
+  ],
+  "boundary_shared_private": [
+    {
+      "pattern": "\\bshared\\s+my\\s+(?:personal|private)\\s+(?:story|information|details)\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\b(?:my|your|our)\\s+(?:volunteer\\s+hours|support|help|time|efforts?|contribution|work)\\b[^\\n]{0,120}\\b(?:made|makes|making)\\s+(?:such\\s+)?a\\s+big\\s+difference\\b"
+      "pattern": "\\btold\\s+everyone\\s+what\\s+I\\s+said\\b",
+      "flags": "iu"
     }
   ],
-  "counselor_reflection": [
+  "boundary_touch": [
     {
-      "pattern": "\\b(?:counselor|therap(?:ist|y)|coach|facilitator)\\b[^\\n]{0,160}\\b(?:reflected|mirrored|paraphrased|summarized)\\b[^\\n]{0,120}\\b(?:back|what\\s+I\\s+said|my\\s+words)\\b"
-    }
-  ],
-  "partner_cooked_cleaned": [
-    {
-      "pattern": "\\b(?:partner|spouse|husband|wife|roommate)\\b[^\\n]{0,160}\\b(?:cooked|made|prepared)\\b[^\\n]{0,80}\\b(?:dinner|meal|supper)\\b[^\\n]{0,120}\\b(?:cleaned|did|handled)\\b[^\\n]{0,60}\\b(?:dishes|kitchen|cleanup)\\b"
-    }
-  ],
-  "manager_balanced_workload": [
-    {
-      "pattern": "\\b(?:manager|lead|supervisor|project\\s+manager|pm)\\b[^\\n]{0,160}\\b(?:balanced|redistribut(?:ed|ing)|spread|limited|shared)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?ups|follow\\s*ups|tasks|workload|assignments)\\b"
-    }
-  ],
-  "wallet_returned": [
-    {
-      "pattern": "\\b(?:returned|brought\\s+back|handed\\s+back|gave\\s+back)\\b[^\\n]{0,120}\\b(?:wallet|phone|purse|bag|keys)\\b[^\\n]{0,120}\\b(?:with|with\\s+all|still\\s+had|everything|cash)\\b[^\\n]{0,80}\\b(?:inside|intact|still\\s+there)\\b"
-    }
-  ],
-  "vacation_approved_quick": [
-    {
-      "pattern": "\\b(?:approved|okayed|cleared|green[-\\s]?lit|signed\\s+off\\s+on)\\b[^\\n]{0,120}\\b(?:vacation|pto|time\\s+off|leave)\\b[^\\n]{0,120}\\b(?:same\\s+day|right\\s+away|within\\s+(?:the\\s+)?day|within\\s+hours)\\b"
-    }
-  ],
-  "night_nurse_checkin": [
-    {
-      "pattern": "\\b(?:nurse|caregiver)\\b[^\\n]{0,120}\\b(?:checked\\s+in|stopped\\s+in|came\\s+by|looked\\s+in|made\\s+rounds)\\b[^\\n]{0,120}\\b(?:night|overnight|late\\s+at\\s+night)\\b"
-    }
-  ],
-  "delivery_marked_missing": [
-    {
-      "pattern": "\\b(?:delivery|order|package|parcel)\\b[^\\n]{0,160}\\b(?:marked|showed|said)\\b[^\\n]{0,120}\\bdelivered\\b[^\\n]{0,160}\\b(?:nothing|not\\s+at\\s+my\\s+door|never\\s+arrived|missing)\\b"
-    }
-  ],
-  "friend_late_no_text": [
-    {
-      "pattern": "\\b(?:friend|buddy|pal|coworker|guest)\\b[^\\n]{0,120}\\b(?:arrived|showed\\s+up)\\b[^\\n]{0,80}\\b(?:\\d+\\s+(?:minutes|min|mins)|half\\s+an\\s+hour|thirty\\s+minutes)\\s+late\\b[^\\n]{0,120}\\b(?:no|without|never)\\s+(?:text|message|call|warning|heads?-?up)\\b"
-    }
-  ],
-  "hoa_warning_letter": [
-    {
-      "pattern": "\\b(?:hoa|association|board|management)\\b[^\\n]{0,160}\\b(?:warning|violation|notice|letter)\\b[^\\n]{0,120}\\b(?:lawn|yard|grass|weeds)\\b"
-    }
-  ],
-  "colleague_took_credit": [
-    {
-      "pattern": "\\b(?:colleague|coworker|teammate|manager)\\b[^\\n]{0,160}\\b(?:took|claimed|grabbed|accepted)\\b[^\\n]{0,80}\\b(?:credit|ownership|recognition)\\b[^\\n]{0,120}\\b(?:idea|work|proposal|plan|suggestion)\\b"
-    }
-  ],
-  "daycare_no_call": [
-    {
-      "pattern": "\\b(?:daycare|pre[-\\s]?school|school|child\\s*care|nursery)\\b[^\\n]{0,160}\\b(?:didn'?t|never|forgot\\s+to)\\s+(?:call|notify|let\\s+me\\s+know|text|reach\\s+out)\\b"
+      "pattern": "\\bhugged\\s+(?:me|us)\\s+without\\s+asking\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\b(?:fever|sick|ill|temperature)\\b[^\\n]{0,120}\\b(?:no\\s+call|without\\s+calling|without\\s+telling\\s+me)\\b"
+      "pattern": "\\btouched\\s+(?:me|us)\\s+without\\s+permission\\b",
+      "flags": "iu"
     }
   ],
-  "dentist_explained_steps": [
+  "credit_erased_role": [
     {
-      "pattern": "\\b(?:dentist|hygienist|doctor|provider)\\b[^\\n]{0,160}\\b(?:explained|walked\\s+me\\s+through|described|talked\\s+through)\\b[^\\n]{0,120}\\b(?:each|every|the)\\s+step\\b"
-    }
-  ],
-  "bus_driver_waited": [
-    {
-      "pattern": "\\b(?:bus\\s+driver|driver)\\b[^\\n]{0,120}\\b(?:waited|held\\s+the\\s+bus|kept\\s+the\\s+doors\\s+open|paused)\\b[^\\n]{0,120}\\b(?:while\\s+I\\s+ran|as\\s+I\\s+was\\s+running|for\\s+me)\\b"
-    }
-  ],
-  "teammate_ignored_updates": [
-    {
-      "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|ignor(?:ed|ing)|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b"
-    }
-  ],
-  "landlord_quick_fix": [
-    {
-      "pattern": "\\b(?:landlord|property\\s+manager|superintendent|maintenance)\\b[^\\n]{0,160}\\b(?:fixed|repaired|sent\\s+someone|took\\s+care|handled)\\b[^\\n]{0,120}\\b(?:same\\s+day|next\\s+day|within\\s+24\\s+hours|right\\s+away)\\b"
-    }
-  ],
-  "sibling_unpaid": [
-    {
-      "pattern": "\\b(?:sibling|brother|sister|friend|roommate)\\b[^\\n]{0,160}\\b(?:promised|said)\\b[^\\n]{0,120}\\b(?:pay\\s+me\\s+back|return\\s+the\\s+money|send\\s+the\\s+payment)\\b[^\\n]{0,120}\\b(?:still|yet)\\b[^\\n]{0,80}\\b(?:hasn'?t|has\\s+not|didn'?t)\\s+(?:paid|sent|transferred)\\b"
-    }
-  ],
-  "allergy_ignored": [
-    {
-      "pattern": "\\b(?:restaurant|server|kitchen|staff)\\b[^\\n]{0,160}\\b(?:served|brought|delivered|sent)\\b[^\\n]{0,160}\\b(?:peanut|nut|nuts|allergen|dairy|gluten|egg)\\b[^\\n]{0,160}\\b(?:after|even\\s+though|although)\\b[^\\n]{0,160}\\b(?:allergy|told\\s+them|noted|flagged)\\b"
-    }
-  ],
-  "meeting_over_lunch": [
-    {
-      "pattern": "\\b(?:meeting|call|sync|check[-\\s]?in|one[-\\s]?on[-\\s]?one)\\b[^\\n]{0,160}\\b(?:scheduled|booked|set|put)\\b[^\\n]{0,120}\\b(?:over|during|on)\\s+(?:my\\s+)?(?:lunch|meal|break|lunchtime)\\b"
-    }
-  ],
-  "support_agent_followup": [
-    {
-      "pattern": "\\b(?:support|service|help\\s*desk|agent|representative|rep)\\b[^\\n]{0,160}\\b(?:follow(?:ed)?\\s+up|checked\\s+back|emailed\\s+the\\s+next\\s+day|reached\\s+out\\s+after)\\b"
+      "pattern": "\\bleft\\s+(?:my|our)\\s+name\\s+off\\b",
+      "flags": "iu"
     },
     {
-      "pattern": "\\bwalk(?:ed)?\\s+me\\s+through\\b"
+      "pattern": "\\bremoved\\s+(?:me|us)\\s+from\\s+the\\s+credits?\\b",
+      "flags": "iu"
     }
   ],
-  "streetlight_fixed": [
+  "credit_presented_as_their": [
     {
-      "pattern": "\\b(?:city|municipal|public\\s+works|council)\\b[^\\n]{0,160}\\b(?:fixed|repaired|replaced)\\b[^\\n]{0,120}\\b(?:street\\s*light|streetlight|lamp)\\b[^\\n]{0,160}\\b(?:after|following|finally|eventually)\\b[^\\n]{0,160}\\b(?:months|weeks|several|many)\\s+(?:emails|requests|reports|complaints)\\b"
+      "pattern": "\\bcalled\\s+it\\s+their\\s+idea\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bpresented\\s+(?:my|our)\\s+work\\s+as\\s+(?:their|his|her)\\s+own\\b",
+      "flags": "iu"
+    }
+  ],
+  "credit_took_credit": [
+    {
+      "pattern": "\\bclaimed\\s+(?:it\\s+was|it\\s+as)\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\btook\\s+credit\\b",
+      "flags": "iu"
+    }
+  ],
+  "dismissive_eye_roll": [
+    {
+      "pattern": "\\beye[-\\s]?roll(?:ed|s|ing)?\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\broll(?:ed|s|ing)\\b[^\\n]{0,40}\\beyes?\\b",
+      "flags": "iu"
+    }
+  ],
+  "dismissive_headshake": [
+    {
+      "pattern": "\\bhead\\s*shake\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bshook\\b[^\\n]{0,30}\\bhead\\b",
+      "flags": "iu"
+    }
+  ],
+  "dismissive_laugh": [
+    {
+      "pattern": "\\blaugh(?:ed|s|ing)\\b[^\\n]{0,40}\\b(?:at|about)\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bsnicker(?:ed|s|ing)?\\b",
+      "flags": "iu"
+    }
+  ],
+  "dismissive_sigh": [
+    {
+      "pattern": "\\bheavy\\s+sigh\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bsigh(?:ed|s|ing)\\b",
+      "flags": "iu"
+    }
+  ],
+  "dismissive_smirk": [
+    {
+      "pattern": "\\bsmirk(?:ed|s|ing)\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bsmirking\\b",
+      "flags": "iu"
+    }
+  ],
+  "exclusion_closed_door": [
+    {
+      "pattern": "\\bclosed\\s+door\\b[^\\n]{0,30}\\bmeeting\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bclosed\\s+the\\s+door\\s+on\\s+(?:me|us)\\b",
+      "flags": "iu"
+    }
+  ],
+  "exclusion_left_out": [
+    {
+      "pattern": "\\bkept\\s+(?:me|us)\\s+out\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bleft\\s+(?:me|us)\\s+out\\b",
+      "flags": "iu"
+    }
+  ],
+  "exclusion_not_invited": [
+    {
+      "pattern": "\\bleft\\s+(?:me|us)\\s+off\\s+the\\s+invite\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bwasn't\\s+invited\\b",
+      "flags": "iu"
+    }
+  ],
+  "gossip_public_chat": [
+    {
+      "pattern": "\\bblasted\\s+(?:me|us)\\s+in\\s+the\\s+channel\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bposted\\s+about\\s+(?:me|us)\\s+in\\s+(?:the|our)\\s+chat\\b",
+      "flags": "iu"
+    }
+  ],
+  "gossip_rumor": [
+    {
+      "pattern": "\\bspread\\s+(?:a\\s+)?rumor\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bstarting\\s+rumors\\b",
+      "flags": "iu"
+    }
+  ],
+  "gossip_shared_private": [
+    {
+      "pattern": "\\bshared\\s+my\\s+business\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\btold\\s+everyone\\s+my\\s+news\\b",
+      "flags": "iu"
+    }
+  ],
+  "interrupting_cutoff": [
+    {
+      "pattern": "\\bcut\\s+(?:me|us|them)\\s+off\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bkept\\s+cutting\\s+(?:me|us|them)\\s+off\\b",
+      "flags": "iu"
+    }
+  ],
+  "interrupting_ignored_hand": [
+    {
+      "pattern": "\\bdidn't\\s+call\\s+on\\s+me\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bignored\\s+(?:my|the)\\s+(?:hand|hands?)\\s+raise\\b",
+      "flags": "iu"
+    }
+  ],
+  "interrupting_muted": [
+    {
+      "pattern": "\\bmuted\\b[^\\n]{0,40}\\bmic\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bmuted\\s+(?:me|us)\\b",
+      "flags": "iu"
+    }
+  ],
+  "interrupting_talk_over": [
+    {
+      "pattern": "\\btalk(?:ed|s|ing)\\s+over\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\btalking\\s+over\\s+(?:me|us|them)\\b",
+      "flags": "iu"
+    }
+  ],
+  "invalidating_calmdown": [
+    {
+      "pattern": "\\b(?:relax|chill)\\s+out\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bcalm\\s+down\\b",
+      "flags": "iu"
+    }
+  ],
+  "invalidating_imagining": [
+    {
+      "pattern": "\\b(?:imagining|making\\s+up|misremembering)\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\byou\\s+made\\s+that\\s+up\\b",
+      "flags": "iu"
+    }
+  ],
+  "invalidating_never_happened": [
+    {
+      "pattern": "\\bi\\s+never\\s+said\\s+that\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bthat\\s+never\\s+happened\\b",
+      "flags": "iu"
+    }
+  ],
+  "invalidating_overreacting": [
+    {
+      "pattern": "\\bmaking\\s+too\\s+big\\s+a\\s+deal\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\boverreact(?:ing|ed)?\\b",
+      "flags": "iu"
+    }
+  ],
+  "invalidating_too_sensitive": [
+    {
+      "pattern": "\\boverly\\s+sensitive\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\btoo\\s+sensitive\\b",
+      "flags": "iu"
+    }
+  ],
+  "micromanage_hover": [
+    {
+      "pattern": "\\bhover(?:ed|s|ing)\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bstood\\s+over\\s+(?:me|us)\\b",
+      "flags": "iu"
+    }
+  ],
+  "micromanage_override": [
+    {
+      "pattern": "\\bchanged\\s+my\\s+decision\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\boverrid(?:e|ing|es)\\b",
+      "flags": "iu"
+    }
+  ],
+  "micromanage_rewrite": [
+    {
+      "pattern": "\\bredid\\s+my\\s+work\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\brewrote\\b",
+      "flags": "iu"
+    }
+  ],
+  "retaliation_assignments": [
+    {
+      "pattern": "\\bassign(?:ed|ing)\\s+busy\\s+work\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bloaded\\s+me\\s+with\\s+extra\\s+work\\b",
+      "flags": "iu"
+    }
+  ],
+  "retaliation_reviews": [
+    {
+      "pattern": "\\bput\\s+me\\s+on\\s+notice\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bthreatened\\s+my\\s+review\\b",
+      "flags": "iu"
+    }
+  ],
+  "retaliation_schedule": [
+    {
+      "pattern": "\\bcut\\s+my\\s+hours\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bgave\\s+me\\s+the\\s+worst\\s+shift\\b",
+      "flags": "iu"
+    }
+  ],
+  "stonewall_cancelled": [
+    {
+      "pattern": "\\bcancelled\\s+at\\s+the\\s+last\\s+minute\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bkept\\s+canceling\\s+our\\s+check-ins\\b",
+      "flags": "iu"
+    }
+  ],
+  "stonewall_silent": [
+    {
+      "pattern": "\\brefused\\s+to\\s+talk\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bsilent\\s+treatment\\b",
+      "flags": "iu"
+    }
+  ],
+  "stonewall_walked_away": [
+    {
+      "pattern": "\\bleft\\s+the\\s+conversation\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bwalked\\s+away\\s+while\\s+I\\s+was\\s+talking\\b",
+      "flags": "iu"
+    }
+  ],
+  "support_left_on_read": [
+    {
+      "pattern": "\\bignored\\s+my\\s+message\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bleft\\s+(?:me|us)\\s+on\\s+read\\b",
+      "flags": "iu"
+    }
+  ],
+  "support_no_backup": [
+    {
+      "pattern": "\\bdidn't\\s+back\\s+(?:me|us)\\s+up\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bstood\\s+by\\b[^\\n]{0,30}\\bsilent\\b",
+      "flags": "iu"
+    }
+  ],
+  "support_no_followup": [
+    {
+      "pattern": "\\bdidn't\\s+follow\\s+up\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bnever\\s+followed\\s+up\\b",
+      "flags": "iu"
+    }
+  ],
+  "surveillance_camera": [
+    {
+      "pattern": "\\bchecked\\s+the\\s+cameras\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bwatched\\s+me\\s+on\\s+camera\\b",
+      "flags": "iu"
+    }
+  ],
+  "surveillance_logs": [
+    {
+      "pattern": "\\bpulled\\s+the\\s+logs\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\btracked\\s+my\\s+activity\\b",
+      "flags": "iu"
+    }
+  ],
+  "surveillance_screenshare": [
+    {
+      "pattern": "\\bforced\\s+me\\s+to\\s+share\\s+my\\s+screen\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bmade\\s+me\\s+turn\\s+on\\s+my\\s+camera\\b",
+      "flags": "iu"
+    }
+  ],
+  "threats_consequence": [
+    {
+      "pattern": "\\bor\\s+else\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bthere\\s+will\\s+be\\s+consequences\\b",
+      "flags": "iu"
+    }
+  ],
+  "threats_job_security": [
+    {
+      "pattern": "\\bfire\\s+you\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bjob\\s+(?:is|was)\\s+on\\s+the\\s+line\\b",
+      "flags": "iu"
+    }
+  ],
+  "threats_retaliate": [
+    {
+      "pattern": "\\bmake\\s+sure\\s+you\\s+regret\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bpay\\s+for\\s+this\\b",
+      "flags": "iu"
     }
   ]
 }

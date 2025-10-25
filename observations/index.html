@@ -1417,6 +1417,60 @@ button.site-nav__magnet {
     gap: clamp(0.5rem, 2.4vw, 1rem);
   }
 
+  .observation-editor__label-stack {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+
+  .observation-editor__mode-toggle {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .observation-editor__mode-button {
+    border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    color: color-mix(in srgb, var(--outline) 78%, var(--ink) 22%);
+    font: inherit;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    padding: 0.45rem 0.85rem;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-editor__mode-button.is-active {
+    background: color-mix(in srgb, var(--sky) 20%, #ffffff 80%);
+    color: color-mix(in srgb, var(--ink) 92%, #ffffff 8%);
+    border-color: color-mix(in srgb, var(--sky) 46%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--sky) 38%, transparent);
+  }
+
+  .observation-editor__mode-button:focus-visible {
+    outline: 3px dashed color-mix(in srgb, var(--sky) 58%, transparent);
+    outline-offset: 3px;
+  }
+
+  .observation-editor__mode-button:not(.is-active):hover,
+  .observation-editor__mode-button:not(.is-active):active {
+    background: color-mix(in srgb, var(--outline) 8%, #ffffff 92%);
+    color: color-mix(in srgb, var(--ink) 90%, #ffffff 10%);
+    border-color: color-mix(in srgb, var(--outline) 26%, transparent);
+  }
+
+  .observation-editor__mode-badge {
+    display: inline-block;
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--nvc-color-text-muted);
+  }
+
   @media (max-width: 380px) {
     .observation-editor__label-row {
       grid-template-columns: minmax(0, 1fr);
@@ -1539,6 +1593,138 @@ button.site-nav__magnet {
 
   .observation-editor__input:focus {
     outline: none;
+  }
+
+  .observation-editor__input-wrapper[data-mode='builder'] .observation-editor__input {
+    display: none;
+  }
+
+  .observation-editor__input-wrapper[data-mode='builder'] .observation-editor__highlight,
+  .observation-editor__input-wrapper[data-mode='builder'] .observation-editor__formula,
+  .observation-editor__input-wrapper[data-mode='builder'] .observation-editor__highlight-details {
+    display: none;
+  }
+
+  .observation-sentence-builder {
+    display: none;
+    position: relative;
+    z-index: 3;
+    padding: 1.15rem 1.2rem;
+    min-height: 10rem;
+    gap: 1rem;
+  }
+
+  .observation-editor__input-wrapper[data-mode='builder'] .observation-sentence-builder:not([hidden]) {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .observation-sentence-builder__intro {
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
+  }
+
+  .observation-sentence-builder__sequence {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.65rem;
+  }
+
+  .observation-sentence-builder__token {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 6.2rem;
+  }
+
+  .observation-sentence-builder__token-label {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 72%, transparent);
+  }
+
+  .observation-sentence-builder__token-select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-2xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+    background: #ffffff;
+    font: inherit;
+    line-height: 1.5;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-sentence-builder__token-select:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--sky) 34%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 22%, transparent);
+  }
+
+  .observation-sentence-builder__token-select:disabled {
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
+    background: color-mix(in srgb, var(--outline) 6%, #ffffff 94%);
+  }
+
+  .observation-sentence-builder__token-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+    background: #ffffff;
+    font: inherit;
+    line-height: 1.45;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-sentence-builder__token-input:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--sky) 34%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 22%, transparent);
+  }
+
+  .observation-sentence-builder__summary {
+    margin: 0;
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
+  }
+
+  .observation-sentence-builder__loading {
+    margin: 0;
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
+  }
+
+  .observation-sentence-builder__preview {
+    border-radius: var(--radius-2xl);
+    border: 1px solid color-mix(in srgb, var(--mint) 28%, transparent);
+    background: color-mix(in srgb, #ffffff 94%, var(--mint) 6%);
+    padding: 0.85rem 1rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .observation-sentence-builder__preview-label {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
+  }
+
+  .observation-sentence-builder__preview-text {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .observation-sentence-builder__preview-note {
+    margin: 0;
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--outline) 66%, transparent);
   }
 
   .observation-editor__highlight {
@@ -2880,7 +3066,31 @@ button.site-nav__magnet {
             <div class="observation-editor__grid">
               <div class="observation-editor__field">
                 <div class="observation-editor__label-row">
-                  <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                  <div class="observation-editor__label-stack">
+                    <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                    <div
+                      class="observation-editor__mode-toggle"
+                      role="group"
+                      aria-label="Choose input method"
+                    >
+                      <button
+                        type="button"
+                        class="observation-editor__mode-button is-active"
+                        data-observation-mode="freeform"
+                        aria-pressed="true"
+                      >
+                        Type freely
+                      </button>
+                      <button
+                        type="button"
+                        class="observation-editor__mode-button"
+                        data-observation-mode="builder"
+                        aria-pressed="false"
+                      >
+                        Sentence builder <span class="observation-editor__mode-badge">(beta)</span>
+                      </button>
+                    </div>
+                  </div>
                   <div
                     id="observation-guidelines-inline"
                     class="observation-editor__inline-detection"
@@ -2902,6 +3112,32 @@ button.site-nav__magnet {
                     rows="7"
                     aria-describedby="observation-guidelines-summary"
                   ></textarea>
+                  <div
+                    id="observation-sentence-builder"
+                    class="observation-sentence-builder"
+                    hidden
+                    aria-live="polite"
+                  >
+                    <p class="observation-sentence-builder__intro">
+                      Select each word from left to right to follow the “when + where/with whom + what I saw or heard” formula.
+                    </p>
+                    <div
+                      id="observation-builder-sequence"
+                      class="observation-sentence-builder__sequence"
+                      aria-live="polite"
+                    ></div>
+                    <p
+                      id="observation-builder-action-summary"
+                      class="observation-sentence-builder__summary"
+                      hidden
+                    ></p>
+                    <div
+                      id="observation-builder-preview"
+                      class="observation-sentence-builder__preview"
+                      hidden
+                      aria-live="polite"
+                    ></div>
+                  </div>
                   <div
                     id="observation-highlight-details"
                     class="observation-editor__highlight-details"
@@ -3634,6 +3870,7 @@ button.site-nav__magnet {
     <script src="../assets/js/journal/store.js" type="module"></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/magnets.js" type="module"></script>
+    <script id="observation-sentence-builder-data" src="../data/observation_sentence_builder_data.js"></script>
     <script type="module" src="../assets/js/observation-editor.js"></script>
   </body>
 </html>
