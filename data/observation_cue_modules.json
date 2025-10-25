@@ -318,7 +318,7 @@
     ],
     "feelings": [
       "anxious",
-      "sad",
+      "distressed",
       "confused"
     ],
     "needs": [
@@ -360,7 +360,7 @@
     ],
     "feelings": [
       "confused",
-      "sad",
+      "distressed",
       "defiant"
     ],
     "needs": [
@@ -403,12 +403,12 @@
     "feelings": [
       "anxious",
       "frustrated",
-      "afraid"
+      "powerless"
     ],
     "needs": [
       "safety",
       "support",
-      "reliability",
+      "dependability",
       "reliability"
     ]
   },
@@ -442,7 +442,7 @@
       "hurt"
     ],
     "needs": [
-      "love-caring",
+      "nurturing",
       "respect",
       "consideration",
       "to-be-heard"
@@ -484,7 +484,7 @@
       "resentful"
     ],
     "needs": [
-      "autonomy",
+      "space",
       "rest",
       "fairness",
       "support"
@@ -622,13 +622,13 @@
     ],
     "feelings": [
       "alarmed",
-      "alarmed",
-      "scared"
+      "scared",
+      "afraid"
     ],
     "needs": [
       "safety",
       "predictability",
-      "love-caring"
+      "consideration"
     ]
   },
   {
@@ -689,13 +689,13 @@
       "coworker-caught-mistake"
     ],
     "feelings": [
-      "peaceful",
       "relieved",
-      "relieved"
+      "hopeful",
+      "calm"
     ],
     "needs": [
       "reliability",
-      "clarity",
+      "integrity",
       "mutuality"
     ]
   },
@@ -731,7 +731,7 @@
     "needs": [
       "acknowledgement",
       "growth",
-      "appreciation"
+      "recognition"
     ]
   },
   {
@@ -759,13 +759,13 @@
       "neighbor-shoveled-sidewalk"
     ],
     "feelings": [
-      "peaceful",
-      "peaceful",
-      "peaceful"
+      "joyful",
+      "contented",
+      "hopeful"
     ],
     "needs": [
       "community",
-      "love-caring",
+      "nurturing",
       "support"
     ]
   },
@@ -798,15 +798,15 @@
     "examples": [
       "At 4 p.m., the coordinator emailed naming the volunteer shifts I covered on Saturday.",
       "The principal highlighted the exact stations I staffed during the fundraiser.",
-      "A manager DM\u2019d the timestamps where I stepped in during the launch."
+      "A manager DM’d the timestamps where I stepped in during the launch."
     ],
     "cueIds": [
       "appreciation-specific-note"
     ],
     "feelings": [
-      "peaceful",
-      "relaxed",
-      "energized"
+      "proud",
+      "energized",
+      "hopeful"
     ],
     "needs": [
       "acknowledgement",
@@ -840,8 +840,8 @@
     ],
     "feelings": [
       "calm",
-      "calm",
-      "relieved"
+      "relieved",
+      "hopeful"
     ],
     "needs": [
       "to-be-heard",
@@ -881,12 +881,12 @@
     ],
     "feelings": [
       "relieved",
-      "relieved",
-      "peaceful"
+      "hopeful",
+      "contented"
     ],
     "needs": [
-      "love-caring",
-      "serenity",
+      "support",
+      "fairness",
       "mutuality"
     ]
   },
@@ -916,7 +916,7 @@
     ],
     "feelings": [
       "relieved",
-      "peaceful"
+      "hopeful"
     ],
     "needs": [
       "safety",
@@ -950,7 +950,7 @@
     ],
     "feelings": [
       "relieved",
-      "peaceful"
+      "contented"
     ],
     "needs": [
       "rest",
@@ -991,13 +991,13 @@
     ],
     "feelings": [
       "relieved",
-      "peaceful",
-      "calm"
+      "calm",
+      "hopeful"
     ],
     "needs": [
-      "love-caring",
+      "nurturing",
       "clarity",
-      "rest"
+      "serenity"
     ]
   },
   {
@@ -1030,7 +1030,7 @@
     ],
     "needs": [
       "reliability",
-      "connection",
+      "clarity",
       "accountability"
     ]
   },
@@ -1060,12 +1060,12 @@
     ],
     "feelings": [
       "irritated",
-      "sad"
+      "hurt"
     ],
     "needs": [
       "respect",
       "reliability",
-      "connection"
+      "consideration"
     ]
   },
   {
@@ -1093,12 +1093,12 @@
       "hoa-lawn-warning"
     ],
     "feelings": [
-      "defiant",
+      "irritated",
       "confused"
     ],
     "needs": [
       "fairness",
-      "connection",
+      "clarity",
       "respect"
     ]
   },
@@ -1129,7 +1129,7 @@
     "feelings": [
       "hurt",
       "angry",
-      "lonely"
+      "resentful"
     ],
     "needs": [
       "acknowledgement",
@@ -1173,7 +1173,7 @@
     ],
     "needs": [
       "safety",
-      "connection",
+      "clarity",
       "trust"
     ]
   },
@@ -1202,13 +1202,13 @@
       "bus-driver-waited"
     ],
     "feelings": [
-      "peaceful",
+      "joyful",
       "relieved"
     ],
     "needs": [
       "consideration",
       "support",
-      "peace"
+      "relaxation"
     ]
   },
   {
@@ -1223,7 +1223,7 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|left\\s+(?:items|cards)\\s+untouched|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b",
+        "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|ignor(?:ed|ing)|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b",
         "flags": "iu"
       }
     ],
@@ -1236,8 +1236,9 @@
       "teammate-sprint-update-gap"
     ],
     "feelings": [
-      "overwhelmed",
-      "anxious"
+      "anxious",
+      "frustrated",
+      "overwhelmed"
     ],
     "needs": [
       "clarity",
@@ -1271,12 +1272,12 @@
     ],
     "feelings": [
       "relieved",
-      "peaceful"
+      "hopeful"
     ],
     "needs": [
       "safety",
-      "reliability",
-      "love-caring"
+      "dependability",
+      "support"
     ]
   },
   {
@@ -1344,8 +1345,8 @@
     ],
     "needs": [
       "safety",
-      "love-caring",
-      "consideration"
+      "consideration",
+      "trust"
     ]
   },
   {
@@ -1412,8 +1413,8 @@
       "support-agent-followed-up"
     ],
     "feelings": [
-      "peaceful",
-      "relieved"
+      "relieved",
+      "hopeful"
     ],
     "needs": [
       "clarity",
@@ -1447,8 +1448,8 @@
     ],
     "feelings": [
       "relieved",
-      "peaceful",
-      "relaxed"
+      "hopeful",
+      "calm"
     ],
     "needs": [
       "safety",
@@ -1457,9 +1458,9 @@
     ]
   },
   {
-    "id": "last-minute-scope-shifts",
-    "label": "Last-minute scope changes",
-    "summary": "Moments where leaders add urgent scope hours before delivery.",
+    "id": "audit-login-breaches",
+    "label": "Audit logs show unauthorized logins",
+    "summary": "System logs reveal multiple unauthorized sign-ins in a short window.",
     "slotIds": [
       "time",
       "context",
@@ -1469,25 +1470,24 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bneed\\s+to\\s+redo\\b[^\\n]{0,60}\\bdeck\\b\\s+tonight\\b",
+        "pattern": "\\baudit\\s+logs?\\b[^\\n]{0,60}\\bunauthorized\\s+logins\\b",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Yesterday at 4:15 p.m. in the war room with Jenna, I heard my manager say \"We need to redo the launch deck tonight.\""
+      "At 8:20 a.m. today in the SOC, the audit logs listed five unauthorized logins this week."
     ],
     "cueIds": [
-      "last-minute-scope-shifts"
+      "audit-login-breaches"
     ],
     "feelings": [
       "alarmed",
-      "anxious",
-      "overwhelmed"
+      "anxious"
     ],
     "needs": [
-      "predictability",
-      "consideration",
-      "clarity"
+      "security",
+      "safety",
+      "predictability"
     ]
   },
   {
@@ -1525,6 +1525,40 @@
     ]
   },
   {
+    "id": "budget-freeze-alerts",
+    "label": "Budget freeze announcements",
+    "summary": "Finance posts sudden budget freezes without advance notice.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 3:45 p.m. today in the finance Slack channel, Finance posted \"Budget freeze effective immediately.\""
+    ],
+    "cueIds": [
+      "budget-freeze-alerts"
+    ],
+    "feelings": [
+      "alarmed",
+      "anxious",
+      "overwhelmed"
+    ],
+    "needs": [
+      "security",
+      "clarity",
+      "predictability"
+    ]
+  },
+  {
     "id": "civic-nonresponse",
     "label": "Civic offices not responding",
     "summary": "City staff acknowledge community emails are still unanswered.",
@@ -1556,6 +1590,409 @@
       "accountability",
       "inclusion",
       "participation"
+    ]
+  },
+  {
+    "id": "courtroom-delays",
+    "label": "Court hearings postponed",
+    "summary": "Judges postpone hearings without prior explanation.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bjudge\\b[^\\n]{0,80}\\breconvene\\s+next\\s+month\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 10 a.m. in courtroom 2B with my client, the judge postponed our hearing and said \"We'll reconvene next month.\""
+    ],
+    "cueIds": [
+      "courtroom-delays"
+    ],
+    "feelings": [
+      "frustrated",
+      "sad",
+      "tired"
+    ],
+    "needs": [
+      "justice",
+      "clarity",
+      "support"
+    ]
+  },
+  {
+    "id": "customer-mess-followup",
+    "label": "Customers leaving lobby messes",
+    "summary": "Staff find abandoned tables piled high right before closing.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bcounted\\s+four\\s+tables\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Yesterday at 6 p.m. in the cafe lobby with our closing crew, I counted four tables left covered in cups."
+    ],
+    "cueIds": [
+      "customer-mess-followup"
+    ],
+    "feelings": [
+      "irritated",
+      "tired",
+      "frustrated"
+    ],
+    "needs": [
+      "order",
+      "respect",
+      "support"
+    ]
+  },
+  {
+    "id": "delivery-exposure",
+    "label": "Deliveries left exposed to weather",
+    "summary": "Doorbell cams capture packages left in the rain instead of sheltered.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bdoorbell\\s+cam\\b[^\\n]{0,60}\\bleaving\\s+the\\s+package\\b[^\\n]{0,40}\\b\\d+\\s+minutes\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 5 p.m. yesterday on our porch, the doorbell cam captured the delivery driver leaving the package in the rain for 12 minutes."
+    ],
+    "cueIds": [
+      "delivery-exposure"
+    ],
+    "feelings": [
+      "frustrated",
+      "irritated",
+      "anxious"
+    ],
+    "needs": [
+      "reliability",
+      "consideration",
+      "safety"
+    ]
+  },
+  {
+    "id": "divorce-paper-silence",
+    "label": "Family processing divorce papers",
+    "summary": "Family members quietly stare at divorce paperwork during visits.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bdivorce\\s+papers\\b[^\\n]{0,60}\\b30\\s+seconds\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "This afternoon at my parents' dining table with my brother, I saw him stare silently at the divorce papers for 30 seconds."
+    ],
+    "cueIds": [
+      "divorce-paper-silence"
+    ],
+    "feelings": [
+      "sad",
+      "lonely",
+      "anxious"
+    ],
+    "needs": [
+      "support",
+      "love-caring",
+      "connection"
+    ]
+  },
+  {
+    "id": "ensemble-dropoff",
+    "label": "Ensemble members disengaging",
+    "summary": "Group singers go quiet and withdraw during rehearsal.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bboth\\s+tenors\\b[^\\n]{0,60}\\bstare\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "During tonight's rehearsal at the arts center, I watched both tenors stare at the floor for 10 seconds."
+    ],
+    "cueIds": [
+      "ensemble-dropoff"
+    ],
+    "feelings": [
+      "anxious",
+      "disappointment"
+    ],
+    "needs": [
+      "participation",
+      "support",
+      "connection"
+    ]
+  },
+  {
+    "id": "housing-eviction-notices",
+    "label": "Eviction warning letters",
+    "summary": "Tenants receive mailed eviction warnings without personal contact.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bEviction\\s+warning\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Yesterday at noon in my apartment, the landlord mailed a letter stamped \"Eviction warning.\""
+    ],
+    "cueIds": [
+      "housing-eviction-notices"
+    ],
+    "feelings": [
+      "alarmed",
+      "anxious",
+      "fear"
+    ],
+    "needs": [
+      "security",
+      "support",
+      "predictability"
+    ]
+  },
+  {
+    "id": "intake-walkaways",
+    "label": "Intake coordinators walking away",
+    "summary": "Shelter coordinators close the clipboard and leave people waiting.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bcoordinator\\b[^\\n]{0,60}\\bclipboard\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 4 p.m. today in the shelter intake room, I noticed the coordinator close the intake clipboard and walk away for two minutes."
+    ],
+    "cueIds": [
+      "intake-walkaways"
+    ],
+    "feelings": [
+      "anxious",
+      "frustrated"
+    ],
+    "needs": [
+      "accountability",
+      "support",
+      "reliability"
+    ]
+  },
+  {
+    "id": "irrigation-pump-alarms",
+    "label": "Irrigation pump alarms",
+    "summary": "Irrigation alarms halt watering cycles at critical times.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bpump\\s+alarm\\b[^\\n]{0,60}\\bstopped\\s+the\\s+watering\\s+cycle\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At dawn today out by the west field with Luis, the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes."
+    ],
+    "cueIds": [
+      "irrigation-pump-alarms"
+    ],
+    "feelings": [
+      "anxious",
+      "overwhelmed"
+    ],
+    "needs": [
+      "reliability",
+      "safety",
+      "support"
+    ]
+  },
+  {
+    "id": "lab-fluorescence-variance",
+    "label": "Assays show inconsistent fluorescence",
+    "summary": "Lab assays return mismatched fluorescence readings against controls.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bassay\\b[^\\n]{0,60}\\b0\\\\.42\\b[^\\n]{0,60}\\b0\\\\.91\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 9 a.m. today in the lab with Priya, the assay produced inconsistent fluorescence versus the control plate with readings of 0.42 and 0.91."
+    ],
+    "cueIds": [
+      "lab-fluorescence-variance"
+    ],
+    "feelings": [
+      "anxious",
+      "confused"
+    ],
+    "needs": [
+      "understanding",
+      "clarity",
+      "reliability"
+    ]
+  },
+  {
+    "id": "last-minute-scope-shifts",
+    "label": "Last-minute scope changes",
+    "summary": "Moments where leaders add urgent scope hours before delivery.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bneed\\s+to\\s+redo\\b[^\\n]{0,60}\\bdeck\\b\\s+tonight\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Yesterday at 4:15 p.m. in the war room with Jenna, I heard my manager say \"We need to redo the launch deck tonight.\""
+    ],
+    "cueIds": [
+      "last-minute-scope-shifts"
+    ],
+    "feelings": [
+      "alarmed",
+      "anxious",
+      "overwhelmed"
+    ],
+    "needs": [
+      "predictability",
+      "consideration",
+      "clarity"
+    ]
+  },
+  {
+    "id": "maintenance-dashboard-alerts",
+    "label": "Maintenance dashboard flashing alerts",
+    "summary": "Dashboards stay red through the night on critical equipment.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bmaintenance\\s+dashboard\\b[^\\n]{0,60}\\bflashed\\s+red\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "Last night the maintenance dashboard flashed red for three hours."
+    ],
+    "cueIds": [
+      "maintenance-dashboard-alerts"
+    ],
+    "feelings": [
+      "anxious",
+      "overwhelmed",
+      "alarmed"
+    ],
+    "needs": [
+      "reliability",
+      "support",
+      "safety"
+    ]
+  },
+  {
+    "id": "mediation-body-language",
+    "label": "Closed-off body language in mediation",
+    "summary": "Both parties fold their arms and hold tension during sessions.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bboth\\s+partners\\b[^\\n]{0,60}\\bfive\\s+seconds\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "During tonight's mediation session in room B with both partners, I watched both partners fold their arms for five seconds."
+    ],
+    "cueIds": [
+      "mediation-body-language"
+    ],
+    "feelings": [
+      "anxious",
+      "tense"
+    ],
+    "needs": [
+      "peace",
+      "understanding",
+      "connection"
     ]
   },
   {
@@ -1593,6 +2030,38 @@
     ]
   },
   {
+    "id": "monitor-distress-alerts",
+    "label": "Monitors capture distress",
+    "summary": "Baby monitors or sensors record prolonged distress without response.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bbaby\\s+monitor\\b[^\\n]{0,60}\\b20\\s+minutes\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 2 a.m. this morning in the nursery, the baby monitor recorded crying for 20 minutes straight."
+    ],
+    "cueIds": [
+      "monitor-distress-alerts"
+    ],
+    "feelings": [
+      "anxious"
+    ],
+    "needs": [
+      "support",
+      "rest",
+      "safety"
+    ]
+  },
+  {
     "id": "on-call-chaos",
     "label": "Chaotic on-call shifts",
     "summary": "Late-night coverage snowballs when the on-call doctor triggers a rush of pages.",
@@ -1627,9 +2096,9 @@
     ]
   },
   {
-    "id": "customer-mess-followup",
-    "label": "Customers leaving lobby messes",
-    "summary": "Staff find abandoned tables piled high right before closing.",
+    "id": "orchestra-cuts",
+    "label": "Conductors cut sections mid-performance",
+    "summary": "Conductors cut instrument entrances in the middle of concerts.",
     "slotIds": [
       "time",
       "context",
@@ -1639,25 +2108,292 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bcounted\\s+four\\s+tables\\b",
+        "pattern": "\\bconductor\\b[^\\n]{0,60}\\bpercussion\\s+entrance\\b",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Yesterday at 6 p.m. in the cafe lobby with our closing crew, I counted four tables left covered in cups."
+      "During tonight's concert at the civic hall with the orchestra, the conductor cut the percussion entrance after two measures."
     ],
     "cueIds": [
-      "customer-mess-followup"
+      "orchestra-cuts"
     ],
     "feelings": [
-      "irritated",
-      "tired",
+      "embarrassed",
+      "hurt",
+      "disappointment"
+    ],
+    "needs": [
+      "respect",
+      "recognition",
+      "belonging"
+    ]
+  },
+  {
+    "id": "performance-reassignment",
+    "label": "Performance solos reassigned",
+    "summary": "Directors reassign promised solos to someone else in rehearsal.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bsolo\\b[^\\n]{0,60}\\bMaya\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 3 p.m. during rehearsal in studio A with the cast, I heard the choreographer say \"I'm giving your solo to Maya.\""
+    ],
+    "cueIds": [
+      "performance-reassignment"
+    ],
+    "feelings": [
+      "hurt",
+      "disappointment",
       "frustrated"
     ],
     "needs": [
-      "order",
       "respect",
-      "support"
+      "consideration",
+      "belonging"
+    ]
+  },
+  {
+    "id": "radar-unknown-transponder",
+    "label": "Radar flags unknown transponders",
+    "summary": "Air traffic radar highlights unidentified transponder IDs mid-shift.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bradar\\b[^\\n]{0,60}\\bunknown\\s+transponder\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 02:14 during tonight's shift in the tower, radar flagged an unknown transponder ID 5487."
+    ],
+    "cueIds": [
+      "radar-unknown-transponder"
+    ],
+    "feelings": [
+      "anxious",
+      "alarmed"
+    ],
+    "needs": [
+      "safety",
+      "clarity",
+      "predictability"
+    ]
+  },
+  {
+    "id": "relationship-breakup-text",
+    "label": "Breakup texts",
+    "summary": "Partners end the relationship over text without a conversation.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bwe'?re\\s+done\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 6:15 p.m. tonight on our sofa with my partner, I read a text that said \"We're done.\""
+    ],
+    "cueIds": [
+      "relationship-breakup-text"
+    ],
+    "feelings": [
+      "sad",
+      "hurt",
+      "alarmed"
+    ],
+    "needs": [
+      "connection",
+      "support",
+      "clarity"
+    ]
+  },
+  {
+    "id": "school-discipline-calls",
+    "label": "School calls about disruption",
+    "summary": "Principals phone caregivers about classroom disruptions right away.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bphoned\\s+me\\b[^\\n]{0,60}\\bdisrupted\\s+class\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "This morning at 7:30 a.m. in my kitchen with the speakerphone on, the principal phoned me saying \"Your kid disrupted class.\""
+    ],
+    "cueIds": [
+      "school-discipline-calls"
+    ],
+    "feelings": [
+      "anxious"
+    ],
+    "needs": [
+      "clarity",
+      "support",
+      "understanding"
+    ]
+  },
+  {
+    "id": "security-footage-breach",
+    "label": "Security footage catches breaches",
+    "summary": "Cameras record unauthorized people crossing boundaries.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bfootage\\s+shows\\b[^\\n]{0,60}\\btwo\\s+contractors\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 9 p.m. last night in the security office, the footage shows two contractors climbing the fence."
+    ],
+    "cueIds": [
+      "security-footage-breach"
+    ],
+    "feelings": [
+      "alarmed",
+      "anxious"
+    ],
+    "needs": [
+      "safety",
+      "security",
+      "trust"
+    ]
+  },
+  {
+    "id": "session-silent-sighs",
+    "label": "Clients sighing without words",
+    "summary": "A client releases an audible sigh instead of speaking.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bsigh\\b[^\\n]{0,60}\\bwithout\\s+saying\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 11 a.m. today in my office with my client, I heard them sigh for eight seconds without saying a word."
+    ],
+    "cueIds": [
+      "session-silent-sighs"
+    ],
+    "feelings": [
+      "anxious",
+      "calm"
+    ],
+    "needs": [
+      "connection",
+      "understanding",
+      "trust"
+    ]
+  },
+  {
+    "id": "shelter-capacity-turnaway",
+    "label": "Shelter turns families away",
+    "summary": "Shelter volunteers announce there are no beds left for incoming families.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bno\\s+beds\\b[^\\n]{0,60}\\btwo\\s+families\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 7 p.m. yesterday in the shelter gym with our intake team, I heard the volunteer say \"We have no beds for the next two families.\""
+    ],
+    "cueIds": [
+      "shelter-capacity-turnaway"
+    ],
+    "feelings": [
+      "sad",
+      "powerless",
+      "anxious"
+    ],
+    "needs": [
+      "support",
+      "community",
+      "safety"
+    ]
+  },
+  {
+    "id": "telescope-double-book",
+    "label": "Telescope bookings double-booked",
+    "summary": "Observatory schedulers admit to double-booking reserved telescope time.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bdouble[-\\s]?booked\\b[^\\n]{0,60}\\btelescope\\b",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At 11 p.m. last night at the observatory with the scheduler, I heard them say \"I double-booked the telescope you reserved.\""
+    ],
+    "cueIds": [
+      "telescope-double-book"
+    ],
+    "feelings": [
+      "frustrated",
+      "disappointment",
+      "irritated"
+    ],
+    "needs": [
+      "consideration",
+      "fairness",
+      "reliability"
     ]
   },
   {
@@ -1729,9 +2465,9 @@
     ]
   },
   {
-    "id": "school-discipline-calls",
-    "label": "School calls about disruption",
-    "summary": "Principals phone caregivers about classroom disruptions right away.",
+    "id": "structured-direct-quote",
+    "label": "Direct words captured",
+    "summary": "The observation records the exact words that were spoken.",
     "slotIds": [
       "time",
       "context",
@@ -1741,167 +2477,37 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bphoned\\s+me\\b[^\\n]{0,60}\\bdisrupted\\s+class\\b",
+        "pattern": "\\bI\\s+heard\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+say\\s+\"[^\\n]+\"",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "This morning at 7:30 a.m. in my kitchen with the speakerphone on, the principal phoned me saying \"Your kid disrupted class.\""
-    ],
-    "cueIds": [
-      "school-discipline-calls"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "clarity",
-      "support",
-      "understanding"
-    ]
-  },
-  {
-    "id": "budget-freeze-alerts",
-    "label": "Budget freeze announcements",
-    "summary": "Finance posts sudden budget freezes without advance notice.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b",
+        "pattern": "\\bI\\s+heard\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+say\\s+“[^”\\n]+”",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 3:45 p.m. today in the finance Slack channel, Finance posted \"Budget freeze effective immediately.\""
+      "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
     ],
     "cueIds": [
-      "budget-freeze-alerts"
+      "structured-direct-quote"
     ],
     "feelings": [
-      "alarmed",
-      "anxious",
-      "overwhelmed"
-    ],
-    "needs": [
-      "security",
-      "clarity",
-      "predictability"
-    ]
-  },
-  {
-    "id": "housing-eviction-notices",
-    "label": "Eviction warning letters",
-    "summary": "Tenants receive mailed eviction warnings without personal contact.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bEviction\\s+warning\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday at noon in my apartment, the landlord mailed a letter stamped \"Eviction warning.\""
-    ],
-    "cueIds": [
-      "housing-eviction-notices"
-    ],
-    "feelings": [
-      "alarmed",
-      "anxious",
-      "fear"
-    ],
-    "needs": [
-      "security",
-      "support",
-      "predictability"
-    ]
-  },
-  {
-    "id": "relationship-breakup-text",
-    "label": "Breakup texts",
-    "summary": "Partners end the relationship over text without a conversation.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bwe'?re\\s+done\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 6:15 p.m. tonight on our sofa with my partner, I read a text that said \"We're done.\""
-    ],
-    "cueIds": [
-      "relationship-breakup-text"
-    ],
-    "feelings": [
-      "sad",
+      "bewildered",
       "hurt",
-      "alarmed"
+      "hopeful"
     ],
     "needs": [
-      "connection",
-      "support",
-      "clarity"
-    ]
-  },
-  {
-    "id": "security-footage-breach",
-    "label": "Security footage catches breaches",
-    "summary": "Cameras record unauthorized people crossing boundaries.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bfootage\\s+shows\\b[^\\n]{0,60}\\btwo\\s+contractors\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9 p.m. last night in the security office, the footage shows two contractors climbing the fence."
-    ],
-    "cueIds": [
-      "security-footage-breach"
-    ],
-    "feelings": [
-      "alarmed",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "safety",
-      "security",
+      "clarity",
+      "to-be-heard",
+      "respect",
       "trust"
     ]
   },
   {
-    "id": "monitor-distress-alerts",
-    "label": "Monitors capture distress",
-    "summary": "Baby monitors or sensors record prolonged distress without response.",
+    "id": "structured-interruption",
+    "label": "Spoken interruption",
+    "summary": "Someone interrupts or talks over the speaker during the moment.",
     "slotIds": [
       "time",
       "context",
@@ -1911,65 +2517,31 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bbaby\\s+monitor\\b[^\\n]{0,60}\\b20\\s+minutes\\b",
+        "pattern": "\\bI\\s+(?:heard|saw)\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:interrupt(?:ed)?|cut\\s+me\\s+off|talk(?:ed)?\\s+over\\s+me|speak\\s+over\\s+me)\\b[^.?!]*",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 2 a.m. this morning in the nursery, the baby monitor recorded crying for 20 minutes straight."
+      "When on Monday morning, with my teammate in our standup, I heard them interrupt me mid-sentence."
     ],
     "cueIds": [
-      "monitor-distress-alerts"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "support",
-      "rest",
-      "safety"
-    ]
-  },
-  {
-    "id": "delivery-exposure",
-    "label": "Deliveries left exposed to weather",
-    "summary": "Doorbell cams capture packages left in the rain instead of sheltered.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdoorbell\\s+cam\\b[^\\n]{0,60}\\bleaving\\s+the\\s+package\\b[^\\n]{0,40}\\b\\d+\\s+minutes\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 5 p.m. yesterday on our porch, the doorbell cam captured the delivery driver leaving the package in the rain for 12 minutes."
-    ],
-    "cueIds": [
-      "delivery-exposure"
+      "structured-interruption"
     ],
     "feelings": [
       "frustrated",
       "irritated",
-      "anxious"
+      "hurt"
     ],
     "needs": [
-      "reliability",
-      "consideration",
-      "safety"
+      "respect",
+      "to-be-heard",
+      "consideration"
     ]
   },
   {
-    "id": "audit-login-breaches",
-    "label": "Audit logs show unauthorized logins",
-    "summary": "System logs reveal multiple unauthorized sign-ins in a short window.",
+    "id": "structured-boundary-crossing",
+    "label": "Boundary crossed",
+    "summary": "A named boundary or agreement is ignored or violated.",
     "slotIds": [
       "time",
       "context",
@@ -1979,31 +2551,31 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\baudit\\s+logs?\\b[^\\n]{0,60}\\bunauthorized\\s+logins\\b",
+        "pattern": "\\bI\\s+saw\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:cross(?:ed)?\\s+the\\s+boundary|ignore(?:d)?\\s+the\\s+limit|break(?:ing)?\\s+the\\s+agreement)\\b[^.?!]*",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 8:20 a.m. today in the SOC, the audit logs listed five unauthorized logins this week."
+      "When after dinner, with my brother in the living room, I saw him cross the boundary about talking over medical decisions."
     ],
     "cueIds": [
-      "audit-login-breaches"
+      "structured-boundary-crossing"
     ],
     "feelings": [
       "alarmed",
-      "anxious",
+      "angry",
       "anxious"
     ],
     "needs": [
-      "security",
+      "respect",
       "safety",
-      "predictability"
+      "autonomy"
     ]
   },
   {
-    "id": "maintenance-dashboard-alerts",
-    "label": "Maintenance dashboard flashing alerts",
-    "summary": "Dashboards stay red through the night on critical equipment.",
+    "id": "structured-late-arrival",
+    "label": "Late arrival noted",
+    "summary": "The observation highlights someone arriving after the agreed time.",
     "slotIds": [
       "time",
       "context",
@@ -2013,65 +2585,31 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bmaintenance\\s+dashboard\\b[^\\n]{0,60}\\bflashed\\s+red\\b",
+        "pattern": "\\bI\\s+saw\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+arrive\\b[^.?!]+\\blate\\b",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Last night the maintenance dashboard flashed red for three hours."
+      "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes late."
     ],
     "cueIds": [
-      "maintenance-dashboard-alerts"
+      "structured-late-arrival"
     ],
     "feelings": [
-      "anxious",
-      "overwhelmed",
-      "alarmed"
-    ],
-    "needs": [
-      "reliability",
-      "support",
-      "safety"
-    ]
-  },
-  {
-    "id": "ensemble-dropoff",
-    "label": "Ensemble members disengaging",
-    "summary": "Group singers go quiet and withdraw during rehearsal.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bboth\\s+tenors\\b[^\\n]{0,60}\\bstare\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's rehearsal at the arts center, I watched both tenors stare at the floor for 10 seconds."
-    ],
-    "cueIds": [
-      "ensemble-dropoff"
-    ],
-    "feelings": [
-      "anxious",
+      "frustrated",
       "anxious",
       "disappointment"
     ],
     "needs": [
-      "participation",
-      "support",
-      "connection"
+      "reliability",
+      "consideration",
+      "predictability"
     ]
   },
   {
-    "id": "session-silent-sighs",
-    "label": "Clients sighing without words",
-    "summary": "A client releases an audible sigh instead of speaking.",
+    "id": "structured-left-early",
+    "label": "Left before it ended",
+    "summary": "Someone leaves before the shared activity or conversation concludes.",
     "slotIds": [
       "time",
       "context",
@@ -2081,31 +2619,99 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bsigh\\b[^\\n]{0,60}\\bwithout\\s+saying\\b",
+        "pattern": "\\bI\\s+saw\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:leave\\s+before\\s+we\\s+finished|walk\\s+out\\s+before\\s+it\\s+ended|head\\s+out\\s+before\\s+we\\s+wrapped\\s+up|step\\s+away\\s+before\\s+the\\s+decision)\\b[^.?!]*",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 11 a.m. today in my office with my client, I heard them sigh for eight seconds without saying a word."
+      "When last night, with my partner on the couch, I saw them leave before we finished talking."
     ],
     "cueIds": [
-      "session-silent-sighs"
+      "structured-left-early"
     ],
     "feelings": [
-      "anxious",
-      "calm",
+      "confused",
+      "hurt",
       "anxious"
     ],
     "needs": [
-      "connection",
+      "trust",
+      "support",
+      "reliability"
+    ]
+  },
+  {
+    "id": "structured-no-response",
+    "label": "No response given",
+    "summary": "A request or question receives silence or no acknowledgement.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bI\\s+noticed\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:stay\\s+silent\\s+after\\s+I\\s+asked|not\\s+respond\\s+to\\s+my\\s+question|say\\s+nothing\\s+when\\s+I\\s+invited\\s+ideas|leave\\s+my\\s+request\\s+unanswered)\\b[^.?!]*",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
+    ],
+    "cueIds": [
+      "structured-no-response"
+    ],
+    "feelings": [
+      "anxious",
+      "hurt",
+      "lonely"
+    ],
+    "needs": [
+      "to-be-heard",
       "understanding",
+      "connection"
+    ]
+  },
+  {
+    "id": "structured-support-offered",
+    "label": "Support offered",
+    "summary": "The observation captures someone offering help or collaboration.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory",
+      "measure"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\bI\\s+(?:heard|saw)\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:offer\\s+to\\s+help|promise\\s+to\\s+support|volunteer\\s+to\\s+join|say\\s+they\\s+could\\s+cover)\\b[^.?!]*",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "When this afternoon, with my neighbor on the porch, I heard them say they'd cover the childcare swap rotation."
+    ],
+    "cueIds": [
+      "structured-support-offered"
+    ],
+    "feelings": [
+      "relieved",
+      "hopeful",
+      "joyful"
+    ],
+    "needs": [
+      "support",
+      "mutuality",
       "trust"
     ]
   },
   {
-    "id": "divorce-paper-silence",
-    "label": "Family processing divorce papers",
-    "summary": "Family members quietly stare at divorce paperwork during visits.",
+    "id": "structured-digital-message",
+    "label": "Digital message captured",
+    "summary": "The observation notes the exact wording from a written message.",
     "slotIds": [
       "time",
       "context",
@@ -2115,365 +2721,30 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bdivorce\\s+papers\\b[^\\n]{0,60}\\b30\\s+seconds\\b",
+        "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+\"[^\\n]+\"",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "This afternoon at my parents' dining table with my brother, I saw him stare silently at the divorce papers for 30 seconds."
-    ],
-    "cueIds": [
-      "divorce-paper-silence"
-    ],
-    "feelings": [
-      "sad",
-      "lonely",
-      "anxious"
-    ],
-    "needs": [
-      "support",
-      "love-caring",
-      "connection"
-    ]
-  },
-  {
-    "id": "intake-walkaways",
-    "label": "Intake coordinators walking away",
-    "summary": "Shelter coordinators close the clipboard and leave people waiting.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\bcoordinator\\b[^\\n]{0,60}\\bclipboard\\b",
+        "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+“[^”\\n]+”",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 4 p.m. today in the shelter intake room, I noticed the coordinator close the intake clipboard and walk away for two minutes."
+      "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
     ],
     "cueIds": [
-      "intake-walkaways"
+      "structured-digital-message"
     ],
     "feelings": [
-      "anxious",
-      "frustrated",
-      "anxious"
-    ],
-    "needs": [
-      "accountability",
-      "support",
-      "reliability"
-    ]
-  },
-  {
-    "id": "mediation-body-language",
-    "label": "Closed-off body language in mediation",
-    "summary": "Both parties fold their arms and hold tension during sessions.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bboth\\s+partners\\b[^\\n]{0,60}\\bfive\\s+seconds\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's mediation session in room B with both partners, I watched both partners fold their arms for five seconds."
-    ],
-    "cueIds": [
-      "mediation-body-language"
-    ],
-    "feelings": [
-      "anxious",
-      "tense",
-      "anxious"
-    ],
-    "needs": [
-      "peace",
-      "understanding",
-      "connection"
-    ]
-  },
-  {
-    "id": "radar-unknown-transponder",
-    "label": "Radar flags unknown transponders",
-    "summary": "Air traffic radar highlights unidentified transponder IDs mid-shift.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bradar\\b[^\\n]{0,60}\\bunknown\\s+transponder\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 02:14 during tonight's shift in the tower, radar flagged an unknown transponder ID 5487."
-    ],
-    "cueIds": [
-      "radar-unknown-transponder"
-    ],
-    "feelings": [
-      "anxious",
       "alarmed",
-      "anxious"
-    ],
-    "needs": [
-      "safety",
-      "clarity",
-      "predictability"
-    ]
-  },
-  {
-    "id": "lab-fluorescence-variance",
-    "label": "Assays show inconsistent fluorescence",
-    "summary": "Lab assays return mismatched fluorescence readings against controls.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bassay\\b[^\\n]{0,60}\\b0\\\\.42\\b[^\\n]{0,60}\\b0\\\\.91\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9 a.m. today in the lab with Priya, the assay produced inconsistent fluorescence versus the control plate with readings of 0.42 and 0.91."
-    ],
-    "cueIds": [
-      "lab-fluorescence-variance"
-    ],
-    "feelings": [
       "anxious",
-      "confused",
-      "anxious"
+      "tense"
     ],
     "needs": [
-      "understanding",
       "clarity",
-      "reliability"
-    ]
-  },
-  {
-    "id": "performance-reassignment",
-    "label": "Performance solos reassigned",
-    "summary": "Directors reassign promised solos to someone else in rehearsal.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bsolo\\b[^\\n]{0,60}\\bMaya\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 3 p.m. during rehearsal in studio A with the cast, I heard the choreographer say \"I'm giving your solo to Maya.\""
-    ],
-    "cueIds": [
-      "performance-reassignment"
-    ],
-    "feelings": [
-      "hurt",
-      "disappointment",
-      "frustrated"
-    ],
-    "needs": [
-      "respect",
-      "consideration",
-      "belonging"
-    ]
-  },
-  {
-    "id": "courtroom-delays",
-    "label": "Court hearings postponed",
-    "summary": "Judges postpone hearings without prior explanation.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bjudge\\b[^\\n]{0,80}\\breconvene\\s+next\\s+month\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 10 a.m. in courtroom 2B with my client, the judge postponed our hearing and said \"We'll reconvene next month.\""
-    ],
-    "cueIds": [
-      "courtroom-delays"
-    ],
-    "feelings": [
-      "frustrated",
-      "sad",
-      "tired"
-    ],
-    "needs": [
-      "justice",
-      "clarity",
-      "support"
-    ]
-  },
-  {
-    "id": "shelter-capacity-turnaway",
-    "label": "Shelter turns families away",
-    "summary": "Shelter volunteers announce there are no beds left for incoming families.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bno\\s+beds\\b[^\\n]{0,60}\\btwo\\s+families\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 7 p.m. yesterday in the shelter gym with our intake team, I heard the volunteer say \"We have no beds for the next two families.\""
-    ],
-    "cueIds": [
-      "shelter-capacity-turnaway"
-    ],
-    "feelings": [
-      "sad",
-      "powerless",
-      "anxious"
-    ],
-    "needs": [
-      "support",
-      "community",
-      "safety"
-    ]
-  },
-  {
-    "id": "irrigation-pump-alarms",
-    "label": "Irrigation pump alarms",
-    "summary": "Irrigation alarms halt watering cycles at critical times.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bpump\\s+alarm\\b[^\\n]{0,60}\\bstopped\\s+the\\s+watering\\s+cycle\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At dawn today out by the west field with Luis, the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes."
-    ],
-    "cueIds": [
-      "irrigation-pump-alarms"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "overwhelmed"
-    ],
-    "needs": [
-      "reliability",
-      "safety",
-      "support"
-    ]
-  },
-  {
-    "id": "orchestra-cuts",
-    "label": "Conductors cut sections mid-performance",
-    "summary": "Conductors cut instrument entrances in the middle of concerts.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bconductor\\b[^\\n]{0,60}\\bpercussion\\s+entrance\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's concert at the civic hall with the orchestra, the conductor cut the percussion entrance after two measures."
-    ],
-    "cueIds": [
-      "orchestra-cuts"
-    ],
-    "feelings": [
-      "embarrassed",
-      "hurt",
-      "disappointment"
-    ],
-    "needs": [
-      "respect",
-      "recognition",
-      "belonging"
-    ]
-  },
-  {
-    "id": "telescope-double-book",
-    "label": "Telescope bookings double-booked",
-    "summary": "Observatory schedulers admit to double-booking reserved telescope time.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdouble[-\\s]?booked\\b[^\\n]{0,60}\\btelescope\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11 p.m. last night at the observatory with the scheduler, I heard them say \"I double-booked the telescope you reserved.\""
-    ],
-    "cueIds": [
-      "telescope-double-book"
-    ],
-    "feelings": [
-      "frustrated",
-      "disappointment",
-      "irritated"
-    ],
-    "needs": [
-      "consideration",
-      "fairness",
-      "reliability"
+      "predictability",
+      "consideration"
     ]
   }
 ]

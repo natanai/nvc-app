@@ -1639,8 +1639,9 @@
         "teammate_ignored_updates"
       ],
       "feelings": [
-        "pressured",
-        "anxious"
+        "anxious",
+        "frustrated",
+        "overwhelmed"
       ],
       "needs": [
         "clarity",
@@ -1658,10 +1659,11 @@
           "lexiconKeys": [
             "teammate_ignored_updates"
           ],
-          "feelings": [
-            "pressured",
-            "anxious"
-          ],
+  "feelings": [
+    "anxious",
+    "frustrated",
+    "overwhelmed"
+  ],
           "needs": [
             "clarity",
             "accountability",
@@ -3500,6 +3502,175 @@
           "patterns": [
             "\\bvoicemail\\b[^\\n]{0,40}\\byou're\\s+useless\\b"
           ]
+        }
+      ]
+    }
+  ,
+    {
+      "id": "structured-direct-quote",
+      "label": "Direct words captured",
+      "summary": "The observation records the exact words that were spoken.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_direct_quote"],
+      "feelings": ["bewildered", "hurt", "hopeful"],
+      "needs": ["clarity", "to-be-heard", "respect", "trust"],
+      "examples": [
+        "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
+      ],
+      "cues": [
+        {
+          "id": "structured-direct-quote",
+          "lexiconKeys": ["structured_direct_quote"],
+          "feelings": ["bewildered", "hurt", "hopeful"],
+          "needs": ["clarity", "to-be-heard", "consideration"],
+          "example": "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
+        }
+      ]
+    },
+    {
+      "id": "structured-interruption",
+      "label": "Spoken interruption",
+      "summary": "Someone interrupts or talks over the speaker during the moment.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_interruption"],
+      "feelings": ["frustrated", "irritated", "hurt"],
+      "needs": ["respect", "to-be-heard", "consideration"],
+      "examples": [
+        "When on Monday morning, with my teammate in our standup, I heard them interrupt me mid-sentence."
+      ],
+      "cues": [
+        {
+          "id": "structured-interruption",
+          "lexiconKeys": ["structured_interruption"],
+          "feelings": ["frustrated", "irritated", "hurt"],
+          "needs": ["respect", "to-be-heard", "consideration"],
+          "example": "When on Monday morning, with my teammate in our standup, I heard them interrupt me mid-sentence."
+        }
+      ]
+    },
+    {
+      "id": "structured-boundary-crossing",
+      "label": "Boundary crossed",
+      "summary": "A named boundary or agreement is ignored or violated.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_boundary_cross"],
+      "feelings": ["alarmed", "angry", "anxious"],
+      "needs": ["respect", "safety", "autonomy"],
+      "examples": [
+        "When after dinner, with my brother in the living room, I saw him cross the boundary about talking over medical decisions."
+      ],
+      "cues": [
+        {
+          "id": "structured-boundary-crossing",
+          "lexiconKeys": ["structured_boundary_cross"],
+          "feelings": ["alarmed", "angry", "anxious"],
+          "needs": ["respect", "safety", "autonomy"],
+          "example": "When after dinner, with my brother in the living room, I saw him cross the boundary about talking over medical decisions."
+        }
+      ]
+    },
+    {
+      "id": "structured-late-arrival",
+      "label": "Late arrival noted",
+      "summary": "The observation highlights someone arriving after the agreed time.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_late_arrival"],
+      "feelings": ["frustrated", "anxious", "disappointment"],
+      "needs": ["reliability", "consideration", "predictability"],
+      "examples": [
+        "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes late."
+      ],
+      "cues": [
+        {
+          "id": "structured-late-arrival",
+          "lexiconKeys": ["structured_late_arrival"],
+          "feelings": ["frustrated", "anxious", "disappointment"],
+          "needs": ["reliability", "consideration", "predictability"],
+          "example": "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes late."
+        }
+      ]
+    },
+    {
+      "id": "structured-left-early",
+      "label": "Left before it ended",
+      "summary": "Someone leaves before the shared activity or conversation concludes.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_left_early"],
+      "feelings": ["confused", "hurt", "anxious"],
+      "needs": ["trust", "support", "reliability"],
+      "examples": [
+        "When last night, with my partner on the couch, I saw them leave before we finished talking."
+      ],
+      "cues": [
+        {
+          "id": "structured-left-early",
+          "lexiconKeys": ["structured_left_early"],
+          "feelings": ["confused", "hurt", "anxious"],
+          "needs": ["trust", "support", "reliability"],
+          "example": "When last night, with my partner on the couch, I saw them leave before we finished talking."
+        }
+      ]
+    },
+    {
+      "id": "structured-no-response",
+      "label": "No response given",
+      "summary": "A request or question receives silence or no acknowledgement.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_no_response"],
+      "feelings": ["anxious", "hurt", "lonely"],
+      "needs": ["to-be-heard", "understanding", "connection"],
+      "examples": [
+        "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
+      ],
+      "cues": [
+        {
+          "id": "structured-no-response",
+          "lexiconKeys": ["structured_no_response"],
+          "feelings": ["anxious", "hurt", "lonely"],
+          "needs": ["to-be-heard", "understanding", "connection"],
+          "example": "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
+        }
+      ]
+    },
+    {
+      "id": "structured-support-offered",
+      "label": "Support offered",
+      "summary": "The observation captures someone offering help or collaboration.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_support_offered"],
+      "feelings": ["relieved", "hopeful", "joyful"],
+      "needs": ["support", "mutuality", "trust"],
+      "examples": [
+        "When this afternoon, with my neighbor on the porch, I heard them say they'd cover the childcare swap rotation."
+      ],
+      "cues": [
+        {
+          "id": "structured-support-offered",
+          "lexiconKeys": ["structured_support_offered"],
+          "feelings": ["relieved", "hopeful", "joyful"],
+          "needs": ["support", "mutuality", "trust"],
+          "example": "When this afternoon, with my neighbor on the porch, I heard them say they'd cover the childcare swap rotation."
+        }
+      ]
+    },
+    {
+      "id": "structured-digital-message",
+      "label": "Digital message captured",
+      "summary": "The observation notes the exact wording from a written message.",
+      "slotIds": ["time", "context", "sensory", "measure"],
+      "lexiconKeys": ["structured_digital_message"],
+      "feelings": ["alarmed", "anxious", "tense"],
+      "needs": ["clarity", "predictability", "consideration"],
+      "examples": [
+        "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
+      ],
+      "cues": [
+        {
+          "id": "structured-digital-message",
+          "lexiconKeys": ["structured_digital_message"],
+          "feelings": ["alarmed", "anxious", "tense"],
+          "needs": ["clarity", "predictability", "consideration"],
+          "example": "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
         }
       ]
     }

@@ -1507,6 +1507,149 @@ button.site-nav__magnet {
     letter-spacing: 0.12em;
   }
 
+  .observation-editor__mode {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+  }
+
+  .observation-editor__mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .observation-editor__mode-button {
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 7.25rem;
+    white-space: nowrap;
+  }
+
+  .sentence-builder__container {
+    margin-top: 1rem;
+    padding: 1.1rem 1.2rem 1.4rem;
+    border-radius: var(--radius-3xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    background: color-mix(in srgb, #ffffff 92%, var(--sky) 8%);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--outline) 10%, transparent);
+  }
+
+  .sentence-builder__intro {
+    margin: 0 0 1.1rem;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--outline) 65%, transparent);
+  }
+
+  .sentence-builder {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .sentence-builder__slot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sentence-builder__slot-title {
+    margin: 0;
+    font-size: 1rem;
+    font-family: var(--font-display);
+  }
+
+  .sentence-builder__slot-summary {
+    margin: 0;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
+  }
+
+  .sentence-builder__segments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .sentence-builder__segments--action {
+    gap: 0.7rem;
+  }
+
+  .sentence-builder__control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .sentence-builder__token {
+    font-weight: 700;
+  }
+
+  .sentence-builder__select {
+    font: inherit;
+    font-weight: 600;
+    color: var(--ink);
+    border-radius: var(--radius-md);
+    border: 2px solid color-mix(in srgb, var(--outline) 24%, transparent);
+    background: color-mix(in srgb, #ffffff 80%, var(--mint) 20%);
+    padding: 0.45rem 0.7rem;
+    min-width: 9.5rem;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .sentence-builder__select:focus {
+    outline: 3px solid color-mix(in srgb, var(--outline) 25%, transparent);
+    outline-offset: 2px;
+  }
+
+  .sentence-builder__input {
+    font: inherit;
+    border-radius: var(--radius-md);
+    border: 2px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    padding: 0.45rem 0.65rem;
+    min-width: 10rem;
+    background: #ffffff;
+  }
+
+  .sentence-builder__input:focus {
+    outline: 3px solid color-mix(in srgb, var(--sky) 32%, transparent);
+    outline-offset: 1px;
+  }
+
+  .sentence-builder__control-input {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .sentence-builder__branch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-left: 1.2rem;
+    border-left: 2px solid color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .sentence-builder__context-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .sentence-builder__context-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .sentence-builder__beta {
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--outline) 58%, transparent);
+  }
+
   .observation-editor__input-wrapper {
     position: relative;
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
@@ -2881,6 +3024,27 @@ button.site-nav__magnet {
               <div class="observation-editor__field">
                 <div class="observation-editor__label-row">
                   <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                  <div class="observation-editor__mode" role="group" aria-label="Observation input mode">
+                    <div class="segmented observation-editor__mode-toggle">
+                      <button
+                        type="button"
+                        id="observation-mode-text"
+                        class="observation-editor__mode-button"
+                        aria-pressed="true"
+                      >
+                        Text
+                      </button>
+                      <button
+                        type="button"
+                        id="observation-mode-builder"
+                        class="observation-editor__mode-button"
+                        aria-pressed="false"
+                        disabled
+                      >
+                        Sentence builder <span class="sentence-builder__beta" aria-hidden="true">(beta)</span>
+                      </button>
+                    </div>
+                  </div>
                   <div
                     id="observation-guidelines-inline"
                     class="observation-editor__inline-detection"
@@ -2888,7 +3052,7 @@ button.site-nav__magnet {
                     aria-live="polite"
                   ></div>
                 </div>
-                <div class="observation-editor__input-wrapper">
+                <div id="observation-input-wrapper" class="observation-editor__input-wrapper">
                   <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
                   <div
                     id="observation-formula"
@@ -2908,6 +3072,12 @@ button.site-nav__magnet {
                     hidden
                     aria-live="polite"
                   ></div>
+                </div>
+                <div id="observation-builder-container" class="sentence-builder__container" hidden>
+                  <p class="sentence-builder__intro">
+                    Use the dropdowns to build the observation one phrase at a time. Add your own names, places, and exact words wherever it helps the story stay observational.
+                  </p>
+                  <div id="observation-builder" class="sentence-builder" aria-live="polite"></div>
                 </div>
                 <div class="observation-editor__status observation-editor__status--inline">
                   <div

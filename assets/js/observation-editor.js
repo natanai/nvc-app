@@ -37,6 +37,7 @@ const state = {
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
   anchorRewrite: { when: '', where: '' },
+  builder: createEmptySentenceBuilderState(),
 };
 
 let guideNavigationBound = false;
@@ -77,6 +78,17 @@ const OBSERVATION_GUIDELINE_NOTE =
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 
+function createEmptySentenceBuilderState() {
+  return {
+    active: false,
+    mode: 'text',
+    data: null,
+    slotState: {},
+    sentence: '',
+    lastSyncedText: '',
+  };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   bind();
   renderPanels();
@@ -92,12 +104,21 @@ document.addEventListener('DOMContentLoaded', () => {
       return createEmptyCueLibrary();
     }),
     loadDetectorStats('/data/observation_detector_stats.json'),
+    loadSentenceBuilderData('/data/observation_sentence_builder.json').catch(error => {
+      console.warn('Unable to load sentence builder data', error);
+      return null;
+    }),
   ])
-    .then(([catalog, cueLibrary, detectorStats]) => {
+    .then(([catalog, cueLibrary, detectorStats, builderData]) => {
       state.catalog = catalog;
       state.cueLibrary = cueLibrary;
       state.cues = Array.isArray(cueLibrary?.cues) ? cueLibrary.cues : [];
       state.detectorStats = detectorStats;
+      if (builderData) {
+        initializeSentenceBuilder(builderData);
+      } else {
+        state.builder = { ...state.builder, data: null };
+      }
       if (!state.text.trim()) {
         state.detectionStatus = 'idle';
         state.detectionMatches = 0;
@@ -166,6 +187,8 @@ function bind() {
       startFallbackSearch();
     });
   }
+
+  bindSentenceBuilderControls();
 
   bindGuideNavigation();
 
@@ -1264,6 +1287,23 @@ async function loadCatalog(url) {
   }
 }
 
+async function loadSentenceBuilderData(url) {
+  if (!url) {
+    return null;
+  }
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    return data && typeof data === 'object' ? data : null;
+  } catch (error) {
+    console.warn('Failed to load sentence builder definition', error);
+    return null;
+  }
+}
+
 async function loadDetectorStats(url) {
   if (!url) {
     return null;
@@ -1358,6 +1398,1299 @@ function createEmptySuggestionSet() {
   return { feelings: [], needs: [], cues: [], modules: [], slotSummary: null, overflow: 0, total: 0 };
 }
 
+function initializeSentenceBuilder(data) {
+  const normalized = data && typeof data === 'object' ? data : null;
+  const slotState = createInitialBuilderState(normalized);
+  state.builder = {
+    ...createEmptySentenceBuilderState(),
+    data: normalized,
+    slotState,
+    sentence: typeof state.text === 'string' ? state.text : '',
+    lastSyncedText: typeof state.text === 'string' ? state.text : '',
+    mode: 'text',
+  };
+  renderSentenceBuilderMode();
+  renderSentenceBuilder();
+}
+
+function bindSentenceBuilderControls() {
+  const textButton = document.getElementById('observation-mode-text');
+  if (textButton && !textButton.dataset.bound) {
+    textButton.addEventListener('click', () => {
+      setSentenceBuilderMode('text');
+    });
+    textButton.dataset.bound = 'true';
+  }
+
+  const builderButton = document.getElementById('observation-mode-builder');
+  if (builderButton && !builderButton.dataset.bound) {
+    builderButton.addEventListener('click', () => {
+      setSentenceBuilderMode('builder');
+    });
+    builderButton.dataset.bound = 'true';
+  }
+}
+
+function setSentenceBuilderMode(mode) {
+  const hasBuilder = Boolean(state.builder?.data);
+  const nextMode = mode === 'builder' && hasBuilder ? 'builder' : 'text';
+  if (state.builder.mode === nextMode) {
+    return;
+  }
+
+  if (!hasBuilder) {
+    state.builder.mode = 'text';
+    state.builder.active = false;
+    renderSentenceBuilderMode();
+    return;
+  }
+
+  if (nextMode === 'builder') {
+    if (!state.builder.slotState || !Object.keys(state.builder.slotState).length) {
+      state.builder.slotState = createInitialBuilderState(state.builder.data);
+    }
+    syncBuilderFromCurrentText();
+  }
+
+  state.builder.mode = nextMode;
+  state.builder.active = nextMode === 'builder';
+  renderSentenceBuilderMode();
+  if (state.builder.active) {
+    renderSentenceBuilder();
+    updateSentenceBuilderSentence({ immediate: true, force: true });
+  }
+}
+
+function renderSentenceBuilderMode() {
+  const mode = state.builder?.mode === 'builder' ? 'builder' : 'text';
+  const textButton = document.getElementById('observation-mode-text');
+  const builderButton = document.getElementById('observation-mode-builder');
+  const textareaWrapper = document.getElementById('observation-input-wrapper');
+  const builderContainer = document.getElementById('observation-builder-container');
+
+  if (textButton) {
+    textButton.setAttribute('aria-pressed', mode === 'text' ? 'true' : 'false');
+  }
+  if (builderButton) {
+    const hasBuilder = Boolean(state.builder?.data);
+    builderButton.disabled = !hasBuilder;
+    builderButton.setAttribute('aria-pressed', mode === 'builder' ? 'true' : 'false');
+    builderButton.setAttribute('data-state', mode === 'builder' ? 'active' : 'idle');
+  }
+
+  if (textareaWrapper) {
+    if (mode === 'builder') {
+      textareaWrapper.setAttribute('hidden', '');
+    } else {
+      textareaWrapper.removeAttribute('hidden');
+    }
+  }
+
+  if (builderContainer) {
+    if (mode === 'builder') {
+      builderContainer.removeAttribute('hidden');
+    } else {
+      builderContainer.setAttribute('hidden', '');
+    }
+  }
+}
+
+function renderSentenceBuilder() {
+  const container = document.getElementById('observation-builder');
+  if (!container) {
+    return;
+  }
+
+  const data = state.builder?.data;
+  if (!data) {
+    container.innerHTML = '';
+    const message = document.createElement('p');
+    message.className = 'sentence-builder__empty';
+    message.textContent = 'Sentence builder is unavailable.';
+    container.appendChild(message);
+    return;
+  }
+
+  container.innerHTML = '';
+  const slots = data.slots || {};
+
+  const timeSlot = buildSentenceBuilderTrackSection('time', slots.time, state.builder.slotState?.time, 'Time anchor');
+  if (timeSlot) {
+    container.appendChild(timeSlot);
+  }
+
+  const contextSlot = buildSentenceBuilderContextSection(slots.context, state.builder.slotState?.context);
+  if (contextSlot) {
+    container.appendChild(contextSlot);
+  }
+
+  const sensorySlot = buildSentenceBuilderActionSection(slots.sensory, state.builder.slotState?.sensory);
+  if (sensorySlot) {
+    container.appendChild(sensorySlot);
+  }
+
+  const measureSlot = buildSentenceBuilderTrackSection('measure', slots.measure, state.builder.slotState?.measure, 'Counts and quotes');
+  if (measureSlot) {
+    container.appendChild(measureSlot);
+  }
+}
+
+function createInitialBuilderState(data) {
+  const slots = data?.slots || {};
+  return {
+    time: createInitialTrackState(slots.time, data),
+    context: createInitialContextState(slots.context),
+    sensory: createInitialActionState(slots.sensory, data),
+    measure: createInitialTrackState(slots.measure, data),
+  };
+}
+
+function createInitialTrackState(slotDef, data) {
+  const tracks = Array.isArray(slotDef?.tracks) ? slotDef.tracks : [];
+  const firstTrack = tracks[0] || null;
+  if (!firstTrack) {
+    return { trackId: '', segments: {}, branches: {} };
+  }
+  return buildTrackState(firstTrack, slotDef, data);
+}
+
+function buildTrackState(track, slotDef, data) {
+  const segments = {};
+  const branches = {};
+  const trackSegments = Array.isArray(track?.segments) ? track.segments : [];
+  trackSegments.forEach(segment => {
+    if (!segment || !segment.id) {
+      return;
+    }
+    if (segment.type === 'select') {
+      const options = resolveBuilderOptions(segment.options, data, slotDef);
+      const firstOption = options.length ? options[0] : { value: '' };
+      segments[segment.id] = typeof firstOption.value === 'string' ? firstOption.value : '';
+      if (firstOption.branch && track?.branches?.[firstOption.branch]) {
+        branches[firstOption.branch] = buildBranchState(track.branches[firstOption.branch], data, slotDef);
+      }
+    } else if (segment.type === 'input') {
+      segments[segment.id] = '';
+    }
+  });
+  return { trackId: track?.id || '', segments, branches };
+}
+
+function buildBranchState(branchSegments, data, slotDef) {
+  const values = {};
+  const segments = Array.isArray(branchSegments) ? branchSegments : [];
+  segments.forEach(segment => {
+    if (!segment || !segment.id) {
+      return;
+    }
+    if (segment.type === 'select') {
+      const options = resolveBuilderOptions(segment.options, data, slotDef);
+      const firstOption = options.length ? options[0] : { value: '' };
+      values[segment.id] = typeof firstOption.value === 'string' ? firstOption.value : '';
+    } else if (segment.type === 'input') {
+      values[segment.id] = '';
+    }
+  });
+  return values;
+}
+
+function createInitialContextState(slotDef) {
+  const details = Array.isArray(slotDef?.details) ? slotDef.details : [];
+  return {
+    details: details.map(detail => {
+      const introOptions = Array.isArray(detail?.introOptions) ? detail.introOptions : [];
+      const detailOptions = Array.isArray(detail?.detailOptions) ? detail.detailOptions : [];
+      const introValue = introOptions.length ? normalizeOption(introOptions[0]).value : '';
+      const detailValue = detail?.optional ? '' : detailOptions.length ? normalizeOption(detailOptions[0]).value : '';
+      return {
+        id: detail?.id || '',
+        optional: Boolean(detail?.optional),
+        intro: introValue,
+        detail: detailValue,
+        detailInput: '',
+      };
+    }),
+  };
+}
+
+function createInitialActionState(slotDef, data) {
+  const actions = Array.isArray(slotDef?.actions) ? slotDef.actions : [];
+  const firstAction = actions[0] || null;
+  if (!firstAction) {
+    return { actionId: '', segments: {}, branches: {} };
+  }
+  return buildActionState(firstAction, slotDef, data);
+}
+
+function buildActionState(action, slotDef, data) {
+  const segments = {};
+  const branches = {};
+  const actionSegments = Array.isArray(action?.segments) ? action.segments : [];
+  actionSegments.forEach(segment => {
+    if (!segment || !segment.id) {
+      return;
+    }
+    if (segment.type === 'select') {
+      const options = resolveBuilderOptions(segment.options, data, slotDef);
+      const firstOption = options.length ? options[0] : { value: '' };
+      segments[segment.id] = typeof firstOption.value === 'string' ? firstOption.value : '';
+      if (firstOption.branch && action?.branches?.[firstOption.branch]) {
+        branches[firstOption.branch] = buildBranchState(action.branches[firstOption.branch], data, slotDef);
+      }
+    } else if (segment.type === 'input') {
+      segments[segment.id] = '';
+    }
+  });
+  return { actionId: action?.id || '', segments, branches };
+}
+
+function resolveBuilderOptions(options, data, slotDef) {
+  if (typeof options === 'string') {
+    if (options.startsWith('@subjects.')) {
+      const groupId = options.slice('@subjects.'.length);
+      const groups = data?.slots?.sensory?.subjectGroups || {};
+      const groupOptions = Array.isArray(groups[groupId]) ? groups[groupId] : [];
+      return groupOptions.map(entry => normalizeOption(entry));
+    }
+    return [];
+  }
+  if (!Array.isArray(options)) {
+    return [];
+  }
+  return options.map(entry => normalizeOption(entry));
+}
+
+function normalizeOption(option) {
+  if (!option || typeof option === 'number' || typeof option === 'boolean') {
+    return { value: String(option), label: String(option) };
+  }
+  if (typeof option === 'string') {
+    return { value: option, label: option };
+  }
+  const value = typeof option.value === 'string' ? option.value : '';
+  const label = typeof option.label === 'string' ? option.label : value;
+  const normalized = { value, label };
+  if (option.branch) {
+    normalized.branch = option.branch;
+  }
+  if (option.input) {
+    normalized.input = option.input;
+  }
+  if (option.ariaLabel) {
+    normalized.ariaLabel = option.ariaLabel;
+  }
+  return normalized;
+}
+
+function findTrackDefinition(slotDef, trackId) {
+  if (!trackId) {
+    return null;
+  }
+  const tracks = Array.isArray(slotDef?.tracks) ? slotDef.tracks : [];
+  return tracks.find(entry => entry?.id === trackId) || null;
+}
+
+function findActionDefinition(slotDef, actionId) {
+  if (!actionId) {
+    return null;
+  }
+  const actions = Array.isArray(slotDef?.actions) ? slotDef.actions : [];
+  return actions.find(entry => entry?.id === actionId) || null;
+}
+
+function syncBuilderFromCurrentText() {
+  const current = typeof state.text === 'string' ? state.text.trim() : '';
+  const builderSentence = typeof state.builder?.sentence === 'string' ? state.builder.sentence.trim() : '';
+  if (!current) {
+    state.builder.sentence = '';
+    state.builder.lastSyncedText = '';
+    return;
+  }
+  if (!builderSentence) {
+    state.builder.sentence = current;
+    state.builder.lastSyncedText = current;
+    return;
+  }
+  if (normalizeWhitespace(builderSentence) === normalizeWhitespace(current)) {
+    state.builder.lastSyncedText = builderSentence;
+    return;
+  }
+  state.builder.lastSyncedText = current;
+}
+
+function buildSentenceBuilderTrackSection(slotId, slotDef, slotState, fallbackTitle) {
+  const tracks = Array.isArray(slotDef?.tracks) ? slotDef.tracks : [];
+  if (!tracks.length) {
+    return null;
+  }
+
+  const section = document.createElement('section');
+  section.className = `sentence-builder__slot sentence-builder__slot--${slotId}`;
+
+  const title = document.createElement('h3');
+  title.className = 'sentence-builder__slot-title';
+  title.textContent = slotDef?.title || fallbackTitle || formatTitle(slotId);
+  section.appendChild(title);
+
+  if (slotDef?.summary) {
+    const summary = document.createElement('p');
+    summary.className = 'sentence-builder__slot-summary';
+    summary.textContent = slotDef.summary;
+    section.appendChild(summary);
+  }
+
+  const trackSelect = document.createElement('select');
+  trackSelect.className = 'sentence-builder__select sentence-builder__select--track';
+  trackSelect.setAttribute('aria-label', `${title.textContent} option`);
+
+  tracks.forEach(track => {
+    const option = document.createElement('option');
+    option.value = track?.id || '';
+    option.textContent = track?.label || formatTitle(track?.id || '');
+    trackSelect.appendChild(option);
+  });
+
+  const currentTrackId = slotState?.trackId && tracks.some(track => track?.id === slotState.trackId)
+    ? slotState.trackId
+    : tracks[0].id;
+  trackSelect.value = currentTrackId;
+  trackSelect.addEventListener('change', event => {
+    handleBuilderTrackChange(slotId, event.target.value);
+  });
+
+  section.appendChild(trackSelect);
+
+  const trackDef = findTrackDefinition(slotDef, currentTrackId) || tracks[0];
+  const ensuredState = ensureTrackState(slotId, slotState, trackDef, slotDef);
+  const segmentsContainer = document.createElement('div');
+  segmentsContainer.className = 'sentence-builder__segments';
+  renderTrackSegments(slotId, slotDef, trackDef, ensuredState, segmentsContainer);
+  section.appendChild(segmentsContainer);
+
+  return section;
+}
+
+function ensureTrackState(slotId, slotState, trackDef, slotDef) {
+  if (!trackDef) {
+    return { trackId: '', segments: {}, branches: {} };
+  }
+  if (!slotState || slotState.trackId !== trackDef.id) {
+    const nextState = buildTrackState(trackDef, slotDef, state.builder?.data);
+    state.builder.slotState = { ...state.builder.slotState, [slotId]: nextState };
+    return nextState;
+  }
+  return slotState;
+}
+
+function renderTrackSegments(slotId, slotDef, trackDef, trackState, container) {
+  const segments = Array.isArray(trackDef?.segments) ? trackDef.segments : [];
+  segments.forEach(segment => {
+    const element = createTrackSegmentControl(slotId, slotDef, trackDef, trackState, segment);
+    if (element) {
+      container.appendChild(element);
+    }
+
+    if (segment.type === 'select') {
+      const selectedValue = trackState?.segments?.[segment.id] || '';
+      const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+      const selectedOption = options.find(option => option.value === selectedValue) || null;
+      if (selectedOption?.branch && trackDef?.branches?.[selectedOption.branch]) {
+        const branchContainer = document.createElement('div');
+        branchContainer.className = 'sentence-builder__branch';
+        const branchSegments = trackDef.branches[selectedOption.branch];
+        const branchState = trackState.branches[selectedOption.branch]
+          || (trackState.branches[selectedOption.branch] = buildBranchState(
+            trackDef.branches[selectedOption.branch],
+            state.builder?.data,
+            slotDef,
+          ));
+        branchSegments.forEach(branchSegment => {
+          const branchElement = createTrackSegmentControl(
+            slotId,
+            slotDef,
+            trackDef,
+            trackState,
+            branchSegment,
+            selectedOption.branch,
+          );
+          if (branchElement) {
+            branchContainer.appendChild(branchElement);
+          }
+        });
+        container.appendChild(branchContainer);
+      }
+    }
+  });
+}
+
+function createTrackSegmentControl(slotId, slotDef, trackDef, trackState, segment, branchId) {
+  if (!segment) {
+    return null;
+  }
+  const wrapper = document.createElement('div');
+  wrapper.className = 'sentence-builder__control';
+
+  if (segment.type === 'fixed') {
+    const token = document.createElement('span');
+    token.className = 'sentence-builder__token';
+    token.textContent = segment.value || '';
+    wrapper.appendChild(token);
+    return wrapper;
+  }
+
+  if (segment.type === 'select') {
+    const select = document.createElement('select');
+    select.className = 'sentence-builder__select';
+    if (segment.ariaLabel) {
+      select.setAttribute('aria-label', segment.ariaLabel);
+    }
+    const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+    options.forEach(option => {
+      const choice = document.createElement('option');
+      choice.value = option.value || '';
+      choice.textContent = option.label || option.value || '';
+      select.appendChild(choice);
+    });
+    const stateSource = branchId
+      ? (trackState.branches[branchId] = trackState.branches[branchId] || {})
+      : trackState.segments;
+    const defaultValue = options.length ? options[0].value || '' : '';
+    const currentValue = typeof stateSource[segment.id] === 'string' ? stateSource[segment.id] : defaultValue;
+    stateSource[segment.id] = currentValue;
+    select.value = currentValue;
+    const inputKey = `${segment.id}__input`;
+    const inputWrapper = document.createElement('div');
+    inputWrapper.className = 'sentence-builder__control-input';
+
+    function renderOptionInput(option) {
+      inputWrapper.innerHTML = '';
+      if (!option || !option.input) {
+        delete stateSource[inputKey];
+        if (inputWrapper.parentElement) {
+          inputWrapper.parentElement.removeChild(inputWrapper);
+        }
+        return;
+      }
+      if (typeof stateSource[inputKey] !== 'string') {
+        stateSource[inputKey] = '';
+      }
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'sentence-builder__input';
+      const placeholder = option.input.placeholder || 'add detail';
+      input.placeholder = placeholder;
+      if (option.input.ariaLabel) {
+        input.setAttribute('aria-label', option.input.ariaLabel);
+      }
+      input.value = stateSource[inputKey];
+      input.addEventListener('input', event => {
+        stateSource[inputKey] = event.target.value;
+        updateSentenceBuilderSentence({ immediate: false });
+      });
+      inputWrapper.appendChild(input);
+      if (!inputWrapper.parentElement) {
+        wrapper.appendChild(inputWrapper);
+      }
+    }
+
+    select.addEventListener('change', event => {
+      handleBuilderSegmentSelectChange(slotId, trackDef.id, segment, branchId, event.target.value);
+      const updatedOption = options.find(option => option.value === event.target.value) || null;
+      renderOptionInput(updatedOption);
+    });
+    wrapper.appendChild(select);
+    const initialOption = options.find(option => option.value === currentValue) || options[0] || null;
+    renderOptionInput(initialOption);
+    return wrapper;
+  }
+
+  if (segment.type === 'input') {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'sentence-builder__input';
+    if (segment.placeholder) {
+      input.placeholder = segment.placeholder;
+    }
+    if (segment.ariaLabel) {
+      input.setAttribute('aria-label', segment.ariaLabel);
+    }
+    const stateSource = branchId
+      ? (trackState.branches[branchId] = trackState.branches[branchId] || {})
+      : trackState.segments;
+    if (typeof stateSource[segment.id] !== 'string') {
+      stateSource[segment.id] = '';
+    }
+    input.value = stateSource[segment.id];
+    input.addEventListener('input', event => {
+      handleBuilderInputChange(slotId, trackDef.id, segment, branchId, event.target.value);
+    });
+    wrapper.appendChild(input);
+    return wrapper;
+  }
+
+  return null;
+}
+
+function handleBuilderTrackChange(slotId, nextTrackId) {
+  const slots = state.builder?.data?.slots || {};
+  const slotDef = slots[slotId];
+  if (!slotDef) {
+    return;
+  }
+  const track = findTrackDefinition(slotDef, nextTrackId) || null;
+  const nextState = track ? buildTrackState(track, slotDef, state.builder?.data) : { trackId: '', segments: {}, branches: {} };
+  nextState.trackId = track?.id || '';
+  state.builder.slotState = {
+    ...state.builder.slotState,
+    [slotId]: nextState,
+  };
+  renderSentenceBuilder();
+  updateSentenceBuilderSentence({ immediate: true, force: true });
+}
+
+function handleBuilderSegmentSelectChange(slotId, trackId, segment, branchId, value) {
+  const slots = state.builder?.data?.slots || {};
+  const slotDef = slots[slotId];
+  if (!slotDef) {
+    return;
+  }
+  const trackState = state.builder?.slotState?.[slotId];
+  if (!trackState) {
+    return;
+  }
+  const trackDef = findTrackDefinition(slotDef, trackId);
+  if (!trackDef) {
+    return;
+  }
+
+  if (branchId) {
+    const branchState = trackState.branches[branchId] || (trackState.branches[branchId] = {});
+    branchState[segment.id] = value;
+    const branchOptions = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+    const branchSelected = branchOptions.find(option => option.value === value) || null;
+    const inputKey = `${segment.id}__input`;
+    if (branchSelected?.input) {
+      if (typeof branchState[inputKey] !== 'string') {
+        branchState[inputKey] = '';
+      }
+    } else if (inputKey in branchState) {
+      delete branchState[inputKey];
+    }
+  } else {
+    trackState.segments[segment.id] = value;
+    Object.keys(trackState.branches).forEach(key => {
+      if (!trackState.branches[key]) {
+        return;
+      }
+      if (!value || !trackDef?.branches?.[key]) {
+        delete trackState.branches[key];
+      }
+    });
+    const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+    const selectedOption = options.find(option => option.value === value) || null;
+    if (selectedOption?.branch && trackDef?.branches?.[selectedOption.branch]) {
+      trackState.branches[selectedOption.branch] = trackState.branches[selectedOption.branch]
+        || buildBranchState(trackDef.branches[selectedOption.branch], state.builder?.data, slotDef);
+    }
+    const stateSource = trackState.segments;
+    const inputKey = `${segment.id}__input`;
+    if (selectedOption?.input) {
+      if (typeof stateSource[inputKey] !== 'string') {
+        stateSource[inputKey] = '';
+      }
+    } else if (inputKey in stateSource) {
+      delete stateSource[inputKey];
+    }
+  }
+
+  renderSentenceBuilder();
+  updateSentenceBuilderSentence({ immediate: true });
+}
+
+function handleBuilderInputChange(slotId, trackId, segment, branchId, value) {
+  const slotState = state.builder?.slotState?.[slotId];
+  if (!slotState) {
+    return;
+  }
+  if (branchId) {
+    const branchState = slotState.branches[branchId] || (slotState.branches[branchId] = {});
+    branchState[segment.id] = value;
+  } else {
+    slotState.segments[segment.id] = value;
+  }
+  updateSentenceBuilderSentence({ immediate: false });
+}
+
+function buildSentenceBuilderContextSection(slotDef, contextState) {
+  const details = Array.isArray(slotDef?.details) ? slotDef.details : [];
+  if (!details.length) {
+    return null;
+  }
+
+  const section = document.createElement('section');
+  section.className = 'sentence-builder__slot sentence-builder__slot--context';
+
+  const title = document.createElement('h3');
+  title.className = 'sentence-builder__slot-title';
+  title.textContent = slotDef?.title || 'People and setting';
+  section.appendChild(title);
+
+  if (slotDef?.summary) {
+    const summary = document.createElement('p');
+    summary.className = 'sentence-builder__slot-summary';
+    summary.textContent = slotDef.summary;
+    section.appendChild(summary);
+  }
+
+  let ensuredState = contextState;
+  if (!ensuredState) {
+    ensuredState = createInitialContextState(slotDef);
+    state.builder.slotState = { ...state.builder.slotState, context: ensuredState };
+  }
+
+  const list = document.createElement('div');
+  list.className = 'sentence-builder__context-list';
+
+  ensuredState.details.forEach(detailState => {
+    const detailDef = details.find(entry => entry?.id === detailState.id) || null;
+    if (!detailDef) {
+      return;
+    }
+    const row = document.createElement('div');
+    row.className = 'sentence-builder__context-row';
+
+    const introSelect = document.createElement('select');
+    introSelect.className = 'sentence-builder__select';
+    introSelect.setAttribute('aria-label', `${detailDef.label || 'Context detail'} introduction`);
+    const introOptions = Array.isArray(detailDef.introOptions) ? detailDef.introOptions.map(normalizeOption) : [];
+    introOptions.forEach(option => {
+      const opt = document.createElement('option');
+      opt.value = option.value || '';
+      opt.textContent = option.label || option.value || '';
+      introSelect.appendChild(opt);
+    });
+    if (!introOptions.some(option => option.value === detailState.intro)) {
+      detailState.intro = introOptions.length ? introOptions[0].value : '';
+    }
+    introSelect.value = detailState.intro || '';
+    introSelect.addEventListener('change', event => {
+      handleContextIntroChange(detailState.id, event.target.value);
+    });
+    row.appendChild(introSelect);
+
+    const detailSelect = document.createElement('select');
+    detailSelect.className = 'sentence-builder__select';
+    detailSelect.setAttribute('aria-label', `${detailDef.label || 'Context detail'} selection`);
+    if (detailDef.optional) {
+      const skipOption = document.createElement('option');
+      skipOption.value = '';
+      skipOption.textContent = 'skip detail';
+      detailSelect.appendChild(skipOption);
+    }
+    const detailOptions = Array.isArray(detailDef.detailOptions) ? detailDef.detailOptions.map(normalizeOption) : [];
+    detailOptions.forEach(option => {
+      const opt = document.createElement('option');
+      opt.value = option.value || '';
+      opt.textContent = option.label || option.value || '';
+      if (option.input) {
+        opt.dataset.requiresInput = 'true';
+      }
+      detailSelect.appendChild(opt);
+    });
+    if (!detailDef.optional && !detailOptions.some(option => option.value === detailState.detail)) {
+      detailState.detail = detailOptions.length ? detailOptions[0].value : '';
+    }
+    detailSelect.value = detailState.detail || '';
+    detailSelect.addEventListener('change', event => {
+      handleContextDetailChange(detailState.id, event.target.value);
+      renderSentenceBuilder();
+      updateSentenceBuilderSentence({ immediate: true });
+    });
+    row.appendChild(detailSelect);
+
+    const selectedOption = detailOptions.find(option => option.value === detailState.detail) || null;
+    if (selectedOption && selectedOption.input) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'sentence-builder__input';
+      const placeholder = selectedOption?.input?.placeholder || 'add detail';
+      input.placeholder = placeholder;
+      if (selectedOption?.input?.ariaLabel) {
+        input.setAttribute('aria-label', selectedOption.input.ariaLabel);
+      }
+      input.value = detailState.detailInput || '';
+      input.addEventListener('input', event => {
+        handleContextDetailInput(detailState.id, event.target.value);
+      });
+      row.appendChild(input);
+    }
+
+    list.appendChild(row);
+  });
+
+  section.appendChild(list);
+  return section;
+}
+
+function handleContextIntroChange(detailId, value) {
+  const contextState = state.builder?.slotState?.context;
+  if (!contextState) {
+    return;
+  }
+  const detailState = contextState.details.find(entry => entry.id === detailId);
+  if (!detailState) {
+    return;
+  }
+  detailState.intro = value;
+  updateSentenceBuilderSentence({ immediate: true });
+}
+
+function handleContextDetailChange(detailId, value) {
+  const contextState = state.builder?.slotState?.context;
+  if (!contextState) {
+    return;
+  }
+  const detailState = contextState.details.find(entry => entry.id === detailId);
+  if (!detailState) {
+    return;
+  }
+  detailState.detail = value;
+  if (!value) {
+    detailState.detailInput = '';
+  }
+}
+
+function handleContextDetailInput(detailId, value) {
+  const contextState = state.builder?.slotState?.context;
+  if (!contextState) {
+    return;
+  }
+  const detailState = contextState.details.find(entry => entry.id === detailId);
+  if (!detailState) {
+    return;
+  }
+  detailState.detailInput = value;
+  updateSentenceBuilderSentence({ immediate: false });
+}
+
+function buildSentenceBuilderActionSection(slotDef, actionState) {
+  const actions = Array.isArray(slotDef?.actions) ? slotDef.actions : [];
+  if (!actions.length) {
+    return null;
+  }
+
+  const section = document.createElement('section');
+  section.className = 'sentence-builder__slot sentence-builder__slot--sensory';
+
+  const title = document.createElement('h3');
+  title.className = 'sentence-builder__slot-title';
+  title.textContent = slotDef?.title || 'Sensory detail';
+  section.appendChild(title);
+
+  if (slotDef?.summary) {
+    const summary = document.createElement('p');
+    summary.className = 'sentence-builder__slot-summary';
+    summary.textContent = slotDef.summary;
+    section.appendChild(summary);
+  }
+
+  let ensuredState = actionState;
+  if (!ensuredState) {
+    ensuredState = createInitialActionState(slotDef, state.builder?.data);
+    state.builder.slotState = { ...state.builder.slotState, sensory: ensuredState };
+  }
+
+  const actionSelect = document.createElement('select');
+  actionSelect.className = 'sentence-builder__select sentence-builder__select--action';
+  actionSelect.setAttribute('aria-label', 'Observation action type');
+
+  actions.forEach(action => {
+    const option = document.createElement('option');
+    option.value = action?.id || '';
+    option.textContent = action?.label || formatTitle(action?.id || '');
+    actionSelect.appendChild(option);
+  });
+
+  const currentActionId = ensuredState?.actionId && actions.some(action => action?.id === ensuredState.actionId)
+    ? ensuredState.actionId
+    : actions[0].id;
+  actionSelect.value = currentActionId;
+  actionSelect.addEventListener('change', event => {
+    handleBuilderActionChange(slotDef, event.target.value);
+  });
+  section.appendChild(actionSelect);
+
+  const actionDef = findActionDefinition(slotDef, currentActionId) || actions[0];
+  const ensuredActionState = ensureActionState(actionDef, slotDef, ensuredState);
+
+  const segmentsContainer = document.createElement('div');
+  segmentsContainer.className = 'sentence-builder__segments sentence-builder__segments--action';
+  renderActionSegments(slotDef, actionDef, ensuredActionState, segmentsContainer);
+  section.appendChild(segmentsContainer);
+
+  return section;
+}
+
+function ensureActionState(actionDef, slotDef, actionState) {
+  if (!actionDef) {
+    return { actionId: '', segments: {}, branches: {} };
+  }
+  if (!actionState || actionState.actionId !== actionDef.id) {
+    const nextState = buildActionState(actionDef, slotDef, state.builder?.data);
+    nextState.actionId = actionDef.id;
+    state.builder.slotState = { ...state.builder.slotState, sensory: nextState };
+    return nextState;
+  }
+  return actionState;
+}
+
+function renderActionSegments(slotDef, actionDef, actionState, container) {
+  const segments = Array.isArray(actionDef?.segments) ? actionDef.segments : [];
+  segments.forEach(segment => {
+    const element = createActionSegmentControl(slotDef, actionDef, actionState, segment);
+    if (element) {
+      container.appendChild(element);
+    }
+
+    if (segment.type === 'select') {
+      const selectedValue = actionState?.segments?.[segment.id] || '';
+      const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+      const selectedOption = options.find(option => option.value === selectedValue) || null;
+      if (selectedOption?.branch && actionDef?.branches?.[selectedOption.branch]) {
+        const branchContainer = document.createElement('div');
+        branchContainer.className = 'sentence-builder__branch';
+        const branchSegments = actionDef.branches[selectedOption.branch];
+        const branchState = actionState.branches[selectedOption.branch]
+          || (actionState.branches[selectedOption.branch] = buildBranchState(
+            actionDef.branches[selectedOption.branch],
+            state.builder?.data,
+            slotDef,
+          ));
+        branchSegments.forEach(branchSegment => {
+          const branchElement = createActionSegmentControl(
+            slotDef,
+            actionDef,
+            actionState,
+            branchSegment,
+            selectedOption.branch,
+          );
+          if (branchElement) {
+            branchContainer.appendChild(branchElement);
+          }
+        });
+        container.appendChild(branchContainer);
+      }
+    }
+  });
+}
+
+function createActionSegmentControl(slotDef, actionDef, actionState, segment, branchId) {
+  if (!segment) {
+    return null;
+  }
+  const wrapper = document.createElement('div');
+  wrapper.className = 'sentence-builder__control';
+
+  if (segment.type === 'fixed') {
+    const token = document.createElement('span');
+    token.className = 'sentence-builder__token';
+    token.textContent = segment.value || '';
+    wrapper.appendChild(token);
+    return wrapper;
+  }
+
+  if (segment.type === 'select') {
+    const select = document.createElement('select');
+    select.className = 'sentence-builder__select';
+    if (segment.ariaLabel) {
+      select.setAttribute('aria-label', segment.ariaLabel);
+    }
+    const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+    options.forEach(option => {
+      const choice = document.createElement('option');
+      choice.value = option.value || '';
+      choice.textContent = option.label || option.value || '';
+      select.appendChild(choice);
+    });
+    const stateSource = branchId
+      ? (actionState.branches[branchId] = actionState.branches[branchId] || {})
+      : actionState.segments;
+    const defaultValue = options.length ? options[0].value || '' : '';
+    const currentValue = typeof stateSource[segment.id] === 'string' ? stateSource[segment.id] : defaultValue;
+    stateSource[segment.id] = currentValue;
+    select.value = currentValue;
+    const inputKey = `${segment.id}__input`;
+    const inputWrapper = document.createElement('div');
+    inputWrapper.className = 'sentence-builder__control-input';
+
+    function renderOptionInput(option) {
+      inputWrapper.innerHTML = '';
+      if (!option || !option.input) {
+        delete stateSource[inputKey];
+        if (inputWrapper.parentElement) {
+          inputWrapper.parentElement.removeChild(inputWrapper);
+        }
+        return;
+      }
+      if (typeof stateSource[inputKey] !== 'string') {
+        stateSource[inputKey] = '';
+      }
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'sentence-builder__input';
+      const placeholder = option.input.placeholder || 'add detail';
+      input.placeholder = placeholder;
+      if (option.input.ariaLabel) {
+        input.setAttribute('aria-label', option.input.ariaLabel);
+      }
+      input.value = stateSource[inputKey];
+      input.addEventListener('input', event => {
+        stateSource[inputKey] = event.target.value;
+        updateSentenceBuilderSentence({ immediate: false });
+      });
+      inputWrapper.appendChild(input);
+      if (!inputWrapper.parentElement) {
+        wrapper.appendChild(inputWrapper);
+      }
+    }
+
+    select.addEventListener('change', event => {
+      handleBuilderActionSegmentSelectChange(slotDef, actionDef, segment, branchId, event.target.value);
+      const updatedOption = options.find(option => option.value === event.target.value) || null;
+      renderOptionInput(updatedOption);
+    });
+    wrapper.appendChild(select);
+    const initialOption = options.find(option => option.value === currentValue) || options[0] || null;
+    renderOptionInput(initialOption);
+    return wrapper;
+  }
+
+  if (segment.type === 'input') {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'sentence-builder__input';
+    if (segment.placeholder) {
+      input.placeholder = segment.placeholder;
+    }
+    if (segment.ariaLabel) {
+      input.setAttribute('aria-label', segment.ariaLabel);
+    }
+    const stateSource = branchId
+      ? (actionState.branches[branchId] = actionState.branches[branchId] || {})
+      : actionState.segments;
+    if (typeof stateSource[segment.id] !== 'string') {
+      stateSource[segment.id] = '';
+    }
+    input.value = stateSource[segment.id];
+    input.addEventListener('input', event => {
+      handleBuilderActionInputChange(slotDef, actionDef, segment, branchId, event.target.value);
+    });
+    wrapper.appendChild(input);
+    return wrapper;
+  }
+
+  return null;
+}
+
+function handleBuilderActionChange(slotDef, actionId) {
+  const actionDef = findActionDefinition(slotDef, actionId) || null;
+  const nextState = actionDef ? buildActionState(actionDef, slotDef, state.builder?.data) : { actionId: '', segments: {}, branches: {} };
+  nextState.actionId = actionDef?.id || '';
+  state.builder.slotState = { ...state.builder.slotState, sensory: nextState };
+  renderSentenceBuilder();
+  updateSentenceBuilderSentence({ immediate: true, force: true });
+}
+
+function handleBuilderActionSegmentSelectChange(slotDef, actionDef, segment, branchId, value) {
+  const actionState = state.builder?.slotState?.sensory;
+  if (!actionState || actionState.actionId !== actionDef?.id) {
+    return;
+  }
+
+  if (branchId) {
+    const branchState = actionState.branches[branchId] || (actionState.branches[branchId] = {});
+    branchState[segment.id] = value;
+    const branchOptions = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+    const branchSelected = branchOptions.find(option => option.value === value) || null;
+    const inputKey = `${segment.id}__input`;
+    if (branchSelected?.input) {
+      if (typeof branchState[inputKey] !== 'string') {
+        branchState[inputKey] = '';
+      }
+    } else if (inputKey in branchState) {
+      delete branchState[inputKey];
+    }
+  } else {
+    actionState.segments[segment.id] = value;
+    Object.keys(actionState.branches).forEach(key => {
+      if (!actionState.branches[key]) {
+        return;
+      }
+      if (!value || !actionDef?.branches?.[key]) {
+        delete actionState.branches[key];
+      }
+    });
+    const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+    const selectedOption = options.find(option => option.value === value) || null;
+    if (selectedOption?.branch && actionDef?.branches?.[selectedOption.branch]) {
+      actionState.branches[selectedOption.branch] = actionState.branches[selectedOption.branch]
+        || buildBranchState(actionDef.branches[selectedOption.branch], state.builder?.data, slotDef);
+    }
+    const inputKey = `${segment.id}__input`;
+    if (selectedOption?.input) {
+      if (typeof actionState.segments[inputKey] !== 'string') {
+        actionState.segments[inputKey] = '';
+      }
+    } else if (inputKey in actionState.segments) {
+      delete actionState.segments[inputKey];
+    }
+  }
+
+  renderSentenceBuilder();
+  updateSentenceBuilderSentence({ immediate: true });
+}
+
+function handleBuilderActionInputChange(slotDef, actionDef, segment, branchId, value) {
+  const actionState = state.builder?.slotState?.sensory;
+  if (!actionState || actionState.actionId !== actionDef?.id) {
+    return;
+  }
+  if (branchId) {
+    const branchState = actionState.branches[branchId] || (actionState.branches[branchId] = {});
+    branchState[segment.id] = value;
+  } else {
+    actionState.segments[segment.id] = value;
+  }
+  updateSentenceBuilderSentence({ immediate: false });
+}
+
+function updateSentenceBuilderSentence(options = {}) {
+  if (!state.builder?.data) {
+    return;
+  }
+  const sentence = buildSentenceFromBuilder();
+  state.builder.sentence = sentence;
+
+  if (state.builder.mode !== 'builder') {
+    state.builder.lastSyncedText = sentence;
+    return;
+  }
+
+  if (!options.force && sentence === state.builder.lastSyncedText) {
+    return;
+  }
+
+  state.builder.lastSyncedText = sentence;
+  updateObservationText(sentence, {
+    reason: 'builder',
+    immediate: options.immediate !== false,
+    focus: false,
+  });
+}
+
+function buildSentenceFromBuilder() {
+  const slots = state.builder?.slotState || {};
+  const definitions = state.builder?.data?.slots || {};
+
+  const timeText = buildTimeText(slots.time, definitions.time);
+  const contextText = buildContextText(slots.context, definitions.context);
+  const actionText = buildActionText(slots.sensory, definitions.sensory);
+  const measureText = buildMeasureText(slots.measure, definitions.measure);
+
+  const parts = [];
+  if (timeText) {
+    parts.push(timeText);
+  }
+  if (contextText) {
+    parts.push(contextText);
+  }
+  if (actionText) {
+    parts.push(actionText);
+  }
+
+  let sentence = joinBuilderTokens(parts, ', ');
+  if (measureText) {
+    sentence = sentence ? `${sentence}, ${measureText}` : measureText;
+  }
+
+  sentence = sentence.replace(/\s+/g, ' ').trim();
+  if (sentence && !/[.!?]"?$/.test(sentence)) {
+    sentence += '.';
+  }
+  return sentence;
+}
+
+function buildTimeText(trackState, slotDef) {
+  if (!trackState?.trackId) {
+    return '';
+  }
+  const trackDef = findTrackDefinition(slotDef, trackState.trackId);
+  if (!trackDef) {
+    return '';
+  }
+  const tokens = collectSegmentTokens(
+    trackDef.segments,
+    trackState.segments,
+    slotDef,
+    trackDef,
+    trackState.branches,
+  );
+  return joinBuilderTokens(tokens);
+}
+
+function buildContextText(contextState, slotDef) {
+  if (!contextState) {
+    return '';
+  }
+  const details = Array.isArray(contextState.details) ? contextState.details : [];
+  if (!details.length) {
+    return '';
+  }
+
+  const definitions = Array.isArray(slotDef?.details) ? slotDef.details : [];
+  const segments = [];
+  details.forEach(detailState => {
+    const detailDef = definitions.find(entry => entry?.id === detailState.id);
+    if (!detailDef) {
+      return;
+    }
+    const intro = (detailState.intro || '').trim();
+    let detailValue = (detailState.detail || '').trim();
+    const detailOptions = Array.isArray(detailDef.detailOptions) ? detailDef.detailOptions.map(normalizeOption) : [];
+    const selectedOption = detailOptions.find(option => option.value === detailState.detail) || null;
+    if (selectedOption?.input) {
+      const custom = (detailState.detailInput || '').trim();
+      detailValue = custom || (selectedOption.value || selectedOption.label || '');
+    }
+    if (detailDef.optional && !detailValue) {
+      return;
+    }
+    if (!intro && !detailValue) {
+      return;
+    }
+    const phrase = joinBuilderTokens([intro, detailValue]);
+    if (phrase) {
+      segments.push(phrase);
+    }
+  });
+
+  return joinBuilderTokens(segments);
+}
+
+function buildActionText(actionState, slotDef) {
+  if (!actionState?.actionId) {
+    return '';
+  }
+  const actionDef = findActionDefinition(slotDef, actionState.actionId);
+  if (!actionDef) {
+    return '';
+  }
+  const tokens = collectSegmentTokens(
+    actionDef.segments,
+    actionState.segments,
+    slotDef,
+    actionDef,
+    actionState.branches,
+  );
+  return joinBuilderTokens(tokens);
+}
+
+function buildMeasureText(trackState, slotDef) {
+  if (!trackState?.trackId) {
+    return '';
+  }
+  const trackDef = findTrackDefinition(slotDef, trackState.trackId);
+  if (!trackDef) {
+    return '';
+  }
+  const tokens = collectSegmentTokens(
+    trackDef.segments,
+    trackState.segments,
+    slotDef,
+    trackDef,
+    trackState.branches,
+  );
+  return joinBuilderTokens(tokens);
+}
+
+function collectSegmentTokens(segments, stateSource, slotDef, ownerDef, branchStateMap) {
+  const tokens = [];
+  const list = Array.isArray(segments) ? segments : [];
+  list.forEach(segment => {
+    if (!segment) {
+      return;
+    }
+    if (segment.type === 'fixed') {
+      if (segment.value) {
+        tokens.push(segment.value);
+      }
+      return;
+    }
+    if (segment.type === 'select') {
+      const options = resolveBuilderOptions(segment.options, state.builder?.data, slotDef);
+      const value = stateSource?.[segment.id] || '';
+      const selected = options.find(option => option.value === value) || null;
+      const inputKey = `${segment.id}__input`;
+    if (selected?.input) {
+      const custom = (stateSource?.[inputKey] || '').trim();
+      if (custom) {
+        tokens.push(custom);
+      } else if (selected.value) {
+        tokens.push(selected.value);
+      }
+    } else if (value) {
+      tokens.push(value);
+    }
+
+    if (selected?.branch && ownerDef?.branches?.[selected.branch]) {
+      const branchState = branchStateMap?.[selected.branch] || {};
+        const branchTokens = collectSegmentTokens(
+          ownerDef.branches[selected.branch],
+          branchState,
+          slotDef,
+          ownerDef,
+          branchStateMap,
+        );
+        if (branchTokens.length) {
+          tokens.push(...branchTokens);
+        }
+      }
+      return;
+    }
+    if (segment.type === 'input') {
+      const raw = (stateSource?.[segment.id] || '').trim();
+      if (raw) {
+        tokens.push(formatInputValue(segment, raw));
+      }
+      return;
+    }
+  });
+  return tokens;
+}
+
+function formatInputValue(segment, raw) {
+  if (!raw) {
+    return '';
+  }
+  if (segment.wrap === 'doubleQuotes') {
+    return raw.startsWith('"') && raw.endsWith('"') ? raw : `"${raw}"`;
+  }
+  return raw;
+}
+
+function joinBuilderTokens(tokens, joiner = ' ') {
+  const list = Array.isArray(tokens) ? tokens.filter(Boolean) : [];
+  if (!list.length) {
+    return '';
+  }
+  const text = list.join(joiner);
+  return text.replace(/\s+,/g, ',').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeWhitespace(value) {
+  return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
+}
+
 function createEmptyCueLibrary() {
   return { cues: [], modules: [], slotIndex: {} };
 }
@@ -1447,6 +2780,18 @@ function handleClear() {
   if (field) {
     field.value = '';
     field.focus();
+  }
+
+  if (state.builder) {
+    state.builder.sentence = '';
+    state.builder.lastSyncedText = '';
+    if (state.builder.data) {
+      state.builder.slotState = createInitialBuilderState(state.builder.data);
+    }
+    if (state.builder.mode === 'builder') {
+      renderSentenceBuilder();
+      updateSentenceBuilderSentence({ immediate: true, force: true });
+    }
   }
 
   scheduleAnalysis('clear', { immediate: true, text: '' });

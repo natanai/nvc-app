@@ -1,0 +1,666 @@
+{
+  "version": 1,
+  "slots": {
+    "time": {
+      "title": "Time anchor",
+      "summary": "Choose when the observation happened.",
+      "tracks": [
+        {
+          "id": "time-when",
+          "label": "When…",
+          "segments": [
+            { "type": "fixed", "value": "When" },
+            {
+              "type": "select",
+              "id": "time-when-detail",
+              "ariaLabel": "Time reference",
+              "options": [
+                { "value": "yesterday", "label": "yesterday" },
+                { "value": "today", "label": "today" },
+                { "value": "this morning", "label": "this morning" },
+                { "value": "this afternoon", "label": "this afternoon" },
+                { "value": "this evening", "label": "this evening" },
+                { "value": "last night", "label": "last night" },
+                { "value": "earlier today", "label": "earlier today" },
+                { "value": "earlier this week", "label": "earlier this week" },
+                { "value": "earlier this month", "label": "earlier this month" },
+                { "value": "earlier this year", "label": "earlier this year" },
+                {
+                  "value": "",
+                  "label": "custom time…",
+                  "branch": "time-when-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "time-when-custom": [
+              {
+                "type": "input",
+                "id": "time-when-custom-text",
+                "placeholder": "add your exact time or day",
+                "ariaLabel": "Custom time description"
+              }
+            ]
+          }
+        },
+        {
+          "id": "time-on",
+          "label": "On…",
+          "segments": [
+            { "type": "fixed", "value": "On" },
+            {
+              "type": "select",
+              "id": "time-on-detail",
+              "ariaLabel": "Calendar anchor",
+              "options": [
+                { "value": "Monday", "label": "Monday" },
+                { "value": "Tuesday", "label": "Tuesday" },
+                { "value": "Wednesday", "label": "Wednesday" },
+                { "value": "Thursday", "label": "Thursday" },
+                { "value": "Friday", "label": "Friday" },
+                { "value": "Saturday", "label": "Saturday" },
+                { "value": "Sunday", "label": "Sunday" },
+                { "value": "the 1st", "label": "the 1st" },
+                { "value": "the 5th", "label": "the 5th" },
+                { "value": "the 12th", "label": "the 12th" },
+                { "value": "January 4", "label": "January 4" },
+                { "value": "March 2", "label": "March 2" },
+                { "value": "June 10", "label": "June 10" },
+                { "value": "September 18", "label": "September 18" },
+                {
+                  "value": "",
+                  "label": "custom date or time…",
+                  "branch": "time-on-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "time-on-custom": [
+              {
+                "type": "input",
+                "id": "time-on-custom-text",
+                "placeholder": "write the exact date or time",
+                "ariaLabel": "Custom date or time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "time-around",
+          "label": "Around…",
+          "segments": [
+            { "type": "fixed", "value": "Around" },
+            {
+              "type": "select",
+              "id": "time-around-detail",
+              "ariaLabel": "Time of day",
+              "options": [
+                { "value": "sunrise", "label": "sunrise" },
+                { "value": "noon", "label": "noon" },
+                { "value": "sunset", "label": "sunset" },
+                { "value": "midnight", "label": "midnight" },
+                { "value": "dawn", "label": "dawn" },
+                { "value": "dusk", "label": "dusk" },
+                {
+                  "value": "",
+                  "label": "a specific time…",
+                  "branch": "time-around-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "time-around-custom": [
+              {
+                "type": "input",
+                "id": "time-around-custom-text",
+                "placeholder": "for example: 3:15 p.m.",
+                "ariaLabel": "Custom around time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "time-after",
+          "label": "After…",
+          "segments": [
+            { "type": "fixed", "value": "After" },
+            {
+              "type": "select",
+              "id": "time-after-detail",
+              "ariaLabel": "After what",
+              "options": [
+                { "value": "work", "label": "work" },
+                { "value": "the meeting", "label": "the meeting" },
+                { "value": "school", "label": "school" },
+                { "value": "practice", "label": "practice" },
+                { "value": "the appointment", "label": "the appointment" },
+                {
+                  "value": "",
+                  "label": "a specific event…",
+                  "branch": "time-after-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "time-after-custom": [
+              {
+                "type": "input",
+                "id": "time-after-custom-text",
+                "placeholder": "describe the event",
+                "ariaLabel": "Custom after event"
+              }
+            ]
+          }
+        },
+        {
+          "id": "time-during",
+          "label": "During…",
+          "segments": [
+            { "type": "fixed", "value": "During" },
+            {
+              "type": "select",
+              "id": "time-during-detail",
+              "ariaLabel": "During what",
+              "options": [
+                { "value": "our meeting", "label": "our meeting" },
+                { "value": "the call", "label": "the call" },
+                { "value": "the shift", "label": "the shift" },
+                { "value": "the appointment", "label": "the appointment" },
+                { "value": "the game", "label": "the game" },
+                {
+                  "value": "",
+                  "label": "a specific event…",
+                  "branch": "time-during-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "time-during-custom": [
+              {
+                "type": "input",
+                "id": "time-during-custom-text",
+                "placeholder": "name the gathering or activity",
+                "ariaLabel": "Custom during event"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "context": {
+      "title": "People and setting",
+      "summary": "Name who was there and where it happened.",
+      "details": [
+        {
+          "id": "context-people",
+          "label": "People involved",
+          "optional": false,
+          "introOptions": [
+            { "value": "with", "label": "with" },
+            { "value": "alongside", "label": "alongside" },
+            { "value": "next to", "label": "next to" },
+            { "value": "on a call with", "label": "on a call with" }
+          ],
+          "detailOptions": [
+            { "value": "my manager", "label": "my manager" },
+            { "value": "my teammate", "label": "my teammate" },
+            { "value": "my partner", "label": "my partner" },
+            { "value": "my family member", "label": "my family member" },
+            { "value": "my friend", "label": "my friend" },
+            { "value": "my client", "label": "my client" },
+            { "value": "my therapist", "label": "my therapist" },
+            { "value": "my doctor", "label": "my doctor" },
+            { "value": "my teacher", "label": "my teacher" },
+            { "value": "my student", "label": "my student" },
+            {
+              "value": "",
+              "label": "someone else…",
+              "input": {
+                "placeholder": "describe who",
+                "ariaLabel": "Custom person description"
+              }
+            }
+          ]
+        },
+        {
+          "id": "context-place",
+          "label": "Location",
+          "optional": true,
+          "introOptions": [
+            { "value": "in", "label": "in" },
+            { "value": "at", "label": "at" },
+            { "value": "inside", "label": "inside" },
+            { "value": "outside", "label": "outside" },
+            { "value": "over", "label": "over" }
+          ],
+          "detailOptions": [
+            { "value": "the conference room", "label": "the conference room" },
+            { "value": "the kitchen", "label": "the kitchen" },
+            { "value": "the living room", "label": "the living room" },
+            { "value": "the office", "label": "the office" },
+            { "value": "the clinic", "label": "the clinic" },
+            { "value": "the classroom", "label": "the classroom" },
+            { "value": "the hallway", "label": "the hallway" },
+            { "value": "the parking lot", "label": "the parking lot" },
+            { "value": "the warehouse", "label": "the warehouse" },
+            { "value": "a video call", "label": "a video call" },
+            { "value": "a phone call", "label": "a phone call" },
+            {
+              "value": "",
+              "label": "somewhere else…",
+              "input": {
+                "placeholder": "describe the place",
+                "ariaLabel": "Custom location description"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "sensory": {
+      "title": "Sensory detail",
+      "summary": "Describe what you saw, heard, or read.",
+      "subjectGroups": {
+        "default": [
+          { "value": "them", "label": "them" },
+          { "value": "my manager", "label": "my manager" },
+          { "value": "my teammate", "label": "my teammate" },
+          { "value": "my partner", "label": "my partner" },
+          { "value": "my family member", "label": "my family member" },
+          { "value": "my friend", "label": "my friend" },
+          { "value": "my client", "label": "my client" },
+          { "value": "my supervisor", "label": "my supervisor" },
+          { "value": "my doctor", "label": "my doctor" },
+          {
+            "value": "",
+            "label": "someone else…",
+            "input": {
+              "placeholder": "describe the person",
+              "ariaLabel": "Custom person for sensory detail"
+            }
+          }
+        ],
+        "self": [
+          { "value": "my coworker", "label": "my coworker" },
+          { "value": "my child", "label": "my child" },
+          { "value": "my partner", "label": "my partner" },
+          {
+            "value": "",
+            "label": "someone else…",
+            "input": {
+              "placeholder": "describe who",
+              "ariaLabel": "Custom person"
+            }
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "structured-direct-quote",
+          "label": "they said exact words",
+          "cueId": "structured-direct-quote",
+          "lexiconKey": "structured_direct_quote",
+          "segments": [
+            { "type": "fixed", "value": "I heard" },
+            {
+              "type": "select",
+              "id": "action-direct-quote-subject",
+              "ariaLabel": "Who spoke",
+              "options": "@subjects.default"
+            },
+            { "type": "fixed", "value": "say" },
+            {
+              "type": "input",
+              "id": "action-direct-quote-quote",
+              "placeholder": "exact words",
+              "ariaLabel": "Exact words",
+              "wrap": "doubleQuotes"
+            }
+          ]
+        },
+        {
+          "id": "structured-interruption",
+          "label": "they interrupted",
+          "cueId": "structured-interruption",
+          "lexiconKey": "structured_interruption",
+          "segments": [
+            { "type": "fixed", "value": "I heard" },
+            {
+              "type": "select",
+              "id": "action-interruption-subject",
+              "ariaLabel": "Who interrupted",
+              "options": "@subjects.default"
+            },
+            {
+              "type": "select",
+              "id": "action-interruption-phrase",
+              "ariaLabel": "How they interrupted",
+              "options": [
+                { "value": "interrupt me mid-sentence", "label": "interrupt me mid-sentence" },
+                { "value": "cut me off before I finished", "label": "cut me off before I finished" },
+                { "value": "talk over me while I was sharing", "label": "talk over me while I was sharing" },
+                { "value": "speak over the top of me", "label": "speak over the top of me" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "structured-boundary-crossing",
+          "label": "they crossed a boundary",
+          "cueId": "structured-boundary-crossing",
+          "lexiconKey": "structured_boundary_cross",
+          "segments": [
+            { "type": "fixed", "value": "I saw" },
+            {
+              "type": "select",
+              "id": "action-boundary-subject",
+              "ariaLabel": "Who crossed the boundary",
+              "options": "@subjects.default"
+            },
+            {
+              "type": "select",
+              "id": "action-boundary-verb",
+              "ariaLabel": "Boundary action",
+              "options": [
+                { "value": "cross the boundary about", "label": "cross the boundary about" },
+                { "value": "ignore the limit about", "label": "ignore the limit about" },
+                { "value": "break the agreement about", "label": "break the agreement about" }
+              ]
+            },
+            {
+              "type": "input",
+              "id": "action-boundary-topic",
+              "placeholder": "the topic",
+              "ariaLabel": "Boundary topic"
+            }
+          ]
+        },
+        {
+          "id": "structured-late-arrival",
+          "label": "they arrived late",
+          "cueId": "structured-late-arrival",
+          "lexiconKey": "structured_late_arrival",
+          "segments": [
+            { "type": "fixed", "value": "I saw" },
+            {
+              "type": "select",
+              "id": "action-late-subject",
+              "ariaLabel": "Who arrived late",
+              "options": "@subjects.default"
+            },
+            { "type": "fixed", "value": "arrive" },
+            {
+              "type": "select",
+              "id": "action-late-amount",
+              "ariaLabel": "How late",
+              "options": [
+                { "value": "five minutes", "label": "five minutes" },
+                { "value": "ten minutes", "label": "ten minutes" },
+                { "value": "twenty minutes", "label": "twenty minutes" },
+                { "value": "half an hour", "label": "half an hour" },
+                {
+                  "value": "",
+                  "label": "a custom amount…",
+                  "branch": "action-late-custom"
+                }
+              ]
+            },
+            {
+              "type": "fixed",
+              "value": "late",
+              "noLeadingSpace": false
+            }
+          ],
+          "branches": {
+            "action-late-custom": [
+              {
+                "type": "input",
+                "id": "action-late-custom-text",
+                "placeholder": "describe how late",
+                "ariaLabel": "Custom lateness"
+              }
+            ]
+          }
+        },
+        {
+          "id": "structured-left-early",
+          "label": "they left before it ended",
+          "cueId": "structured-left-early",
+          "lexiconKey": "structured_left_early",
+          "segments": [
+            { "type": "fixed", "value": "I saw" },
+            {
+              "type": "select",
+              "id": "action-left-subject",
+              "ariaLabel": "Who left early",
+              "options": "@subjects.default"
+            },
+            {
+              "type": "select",
+              "id": "action-left-detail",
+              "ariaLabel": "How they left",
+              "options": [
+                { "value": "leave before we finished", "label": "leave before we finished" },
+                { "value": "walk out before it ended", "label": "walk out before it ended" },
+                { "value": "head out before we wrapped up", "label": "head out before we wrapped up" },
+                { "value": "step away before the decision", "label": "step away before the decision" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "structured-no-response",
+          "label": "they stayed silent",
+          "cueId": "structured-no-response",
+          "lexiconKey": "structured_no_response",
+          "segments": [
+            { "type": "fixed", "value": "I noticed" },
+            {
+              "type": "select",
+              "id": "action-silence-subject",
+              "ariaLabel": "Who stayed silent",
+              "options": "@subjects.default"
+            },
+            {
+              "type": "select",
+              "id": "action-silence-detail",
+              "ariaLabel": "What they did",
+              "options": [
+                { "value": "stay silent after I asked for feedback", "label": "stay silent after I asked for feedback" },
+                { "value": "not respond to my question", "label": "not respond to my question" },
+                { "value": "say nothing when I invited ideas", "label": "say nothing when I invited ideas" },
+                { "value": "leave my request unanswered", "label": "leave my request unanswered" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "structured-support-offered",
+          "label": "they offered help",
+          "cueId": "structured-support-offered",
+          "lexiconKey": "structured_support_offered",
+          "segments": [
+            { "type": "fixed", "value": "I heard" },
+            {
+              "type": "select",
+              "id": "action-support-subject",
+              "ariaLabel": "Who offered support",
+              "options": "@subjects.default"
+            },
+            {
+              "type": "select",
+              "id": "action-support-verb",
+              "ariaLabel": "How they offered",
+              "options": [
+                { "value": "offer to help with", "label": "offer to help with" },
+                { "value": "promise to support", "label": "promise to support" },
+                { "value": "volunteer to join", "label": "volunteer to join" },
+                { "value": "say they could cover", "label": "say they could cover" }
+              ]
+            },
+            {
+              "type": "input",
+              "id": "action-support-topic",
+              "placeholder": "what they offered to help with",
+              "ariaLabel": "Support topic"
+            }
+          ]
+        },
+        {
+          "id": "structured-digital-message",
+          "label": "I read a message",
+          "cueId": "structured-digital-message",
+          "lexiconKey": "structured_digital_message",
+          "segments": [
+            { "type": "fixed", "value": "I read" },
+            {
+              "type": "select",
+              "id": "action-digital-medium",
+              "ariaLabel": "Message type",
+              "options": [
+                { "value": "a message that said", "label": "a message that said" },
+                { "value": "an email that said", "label": "an email that said" },
+                { "value": "a text that said", "label": "a text that said" },
+                { "value": "a note that said", "label": "a note that said" }
+              ]
+            },
+            {
+              "type": "input",
+              "id": "action-digital-quote",
+              "placeholder": "exact wording",
+              "ariaLabel": "Message text",
+              "wrap": "doubleQuotes"
+            }
+          ]
+        }
+      ]
+    },
+    "measure": {
+      "title": "Counts and quotes",
+      "summary": "Optionally add measurable details.",
+      "tracks": [
+        {
+          "id": "measure-none",
+          "label": "No additional measurement",
+          "segments": [
+            {
+              "type": "select",
+              "id": "measure-none-choice",
+              "ariaLabel": "Measurement choice",
+              "options": [
+                { "value": "", "label": "skip measurement" },
+                { "value": "and kept it observational", "label": "and kept it observational" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "measure-count",
+          "label": "Count something",
+          "segments": [
+            { "type": "fixed", "value": "and counted" },
+            {
+              "type": "select",
+              "id": "measure-count-value",
+              "ariaLabel": "Count value",
+              "options": [
+                { "value": "two times", "label": "two times" },
+                { "value": "three times", "label": "three times" },
+                { "value": "five times", "label": "five times" },
+                { "value": "seven times", "label": "seven times" },
+                { "value": "ten times", "label": "ten times" },
+                {
+                  "value": "",
+                  "label": "a custom count…",
+                  "branch": "measure-count-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "measure-count-custom": [
+              {
+                "type": "input",
+                "id": "measure-count-custom-text",
+                "placeholder": "describe the count",
+                "ariaLabel": "Custom count"
+              }
+            ]
+          }
+        },
+        {
+          "id": "measure-quote",
+          "label": "Save the exact words",
+          "segments": [
+            { "type": "fixed", "value": "and saved the exact words" },
+            {
+              "type": "select",
+              "id": "measure-quote-where",
+              "ariaLabel": "Where saved",
+              "options": [
+                { "value": "in my notes", "label": "in my notes" },
+                { "value": "in the shared document", "label": "in the shared document" },
+                { "value": "in the transcript", "label": "in the transcript" },
+                { "value": "in our log", "label": "in our log" },
+                {
+                  "value": "",
+                  "label": "somewhere else…",
+                  "branch": "measure-quote-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "measure-quote-custom": [
+              {
+                "type": "input",
+                "id": "measure-quote-custom-text",
+                "placeholder": "describe where",
+                "ariaLabel": "Custom quote storage"
+              }
+            ]
+          }
+        },
+        {
+          "id": "measure-time",
+          "label": "Note the exact time",
+          "segments": [
+            { "type": "fixed", "value": "and noted the time at" },
+            {
+              "type": "select",
+              "id": "measure-time-value",
+              "ariaLabel": "Time noted",
+              "options": [
+                { "value": "7:00 a.m.", "label": "7:00 a.m." },
+                { "value": "9:30 a.m.", "label": "9:30 a.m." },
+                { "value": "noon", "label": "noon" },
+                { "value": "3:45 p.m.", "label": "3:45 p.m." },
+                { "value": "8:15 p.m.", "label": "8:15 p.m." },
+                {
+                  "value": "",
+                  "label": "a specific time…",
+                  "branch": "measure-time-custom"
+                }
+              ]
+            }
+          ],
+          "branches": {
+            "measure-time-custom": [
+              {
+                "type": "input",
+                "id": "measure-time-custom-text",
+                "placeholder": "enter the time",
+                "ariaLabel": "Custom time noted"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
