@@ -22,54 +22,55 @@ const SENTENCE_BUILDER_RELATIVE_MOMENTS = [
   'This evening',
   'Tonight',
   'Last night',
-  'First thing this morning',
+  'Earlier this week',
+  'Over the weekend',
 ];
 
-const SENTENCE_BUILDER_CALENDAR_DATES = [
-  'March 2',
-  'April 18',
-  'June 1',
-  'July 12',
-  'September 15',
-  '2024-09-15',
+const SENTENCE_BUILDER_CALENDAR_REFERENCES = [
+  'early this month',
+  'mid-month',
+  'later this month',
+  'early this quarter',
+  'mid-year',
+  'late this year',
 ];
 
 const SENTENCE_BUILDER_TIMES_OF_DAY = [
-  '7:30 a.m.',
-  '9:00 a.m.',
-  '11:30 a.m.',
-  '2:00 p.m.',
-  '4:45 p.m.',
-  '7:00 p.m.',
-  '8:45 p.m.',
+  'early morning',
+  'mid-morning',
+  'midday',
+  'early afternoon',
+  'late afternoon',
+  'early evening',
+  'late evening',
+  'midnight',
 ];
 
 const SENTENCE_BUILDER_SEEDED_MOMENTS = [
-  'Yesterday at 9:00 a.m.',
-  'This morning at 8:30 a.m.',
-  "On Monday around noon",
-  'Last night at 10:15 p.m.',
-  "During Tuesday's 2:00 p.m. meeting",
-  'Earlier today at 4:45 p.m.',
-  'On 2024-09-15 at 11:00 a.m.',
-  'First thing this morning',
-  'On Friday evening around 7 p.m.',
-  'At 3:30 p.m. last Wednesday',
+  'During the weekly check-in',
+  'During the staff meeting',
+  'Right after the call ended',
+  'Right before the handoff',
+  'While we reviewed updates',
+  'As we wrapped up for the day',
+  'While we waited for feedback',
+  'During the morning standup',
+  'During the afternoon sync',
 ];
 
 const SENTENCE_BUILDER_CONTEXT_LOCATIONS = [
-  'in the conference room',
-  'at home in the kitchen',
-  'on our Zoom call',
+  'at work',
+  'at home',
+  'in the meeting room',
   'in the classroom',
-  'at the grocery store checkout',
-  'in the hospital waiting room',
+  'on a video call',
   'on the phone',
-  'at the park',
-  'on the group chat',
-  'in the living room',
-  'at the coffee shop counter',
-  'in the break room',
+  'in the group chat',
+  'in the hallway',
+  'in the lobby',
+  'at the event space',
+  'at the coffee area',
+  'in the workshop',
   'on the project channel',
 ];
 
@@ -77,15 +78,15 @@ const SENTENCE_BUILDER_CONTEXT_COMPANIONS = [
   '',
   'with my team',
   'with my family',
-  'with the client',
+  'with a client',
   'with the students',
-  'with my coworkers',
-  'with my manager',
-  'with my partner',
-  'by myself',
-  'with my dad',
-  'with the support agent',
-  'with my kids',
+  'with coworkers',
+  'with a manager',
+  'with a partner',
+  'on my own',
+  'with a facilitator',
+  'with a support agent',
+  'with the group',
   'with the vendor',
 ];
 
@@ -100,22 +101,133 @@ const SENTENCE_BUILDER_CONTEXT_MODIFIERS = [
   '',
   'during our check-in',
   'during the meeting',
-  'while we reviewed the agenda',
-  'while we waited for updates',
+  'while we reviewed updates',
+  'while we planned next steps',
   'as we wrapped up for the day',
 ];
 
 const SENTENCE_BUILDER_SEEDED_CONTEXTS = [
-  'in the conference room with my team',
-  'at home in the kitchen with my family',
-  'on our Zoom call with the client',
+  'at work with my team',
+  'at home with my family',
+  'on a video call with a client',
   'in the classroom with the students',
-  'at the grocery store checkout',
-  'in the hospital waiting room with my dad',
-  'on the phone with the support agent',
-  'at the park with my kids',
-  'on the group chat with my coworkers',
-  'in the living room with my partner',
+  'at the event space with the group',
+  'in the lobby on my own',
+  'on the phone with a support agent',
+  'in the hallway with coworkers',
+  'on the project channel with the team',
+  'in the meeting room with a manager',
+];
+
+const SENTENCE_BUILDER_WHEN_TEMPLATE_TOKENS = [
+  ['When', '(moment)'],
+  ['When', 'I', '(moment)'],
+  ['When', 'we', '(moment)'],
+  ['When', 'the', '(event)'],
+  ['While', '(moment)'],
+  ['While', 'I', '(moment)'],
+  ['While', 'we', '(moment)'],
+  ['While', '(moment)', 'during', '(event)'],
+  ['As', 'soon', 'as', '(event)'],
+  ['As', 'we', '(moment)'],
+  ['As', 'I', '(moment)'],
+  ['After', '(event)'],
+  ['After', '(event)', 'at', '(location)'],
+  ['After', '(event)', 'with', '(person-general)'],
+  ['Before', '(event)'],
+  ['Before', '(event)', 'at', '(location)'],
+  ['Before', '(event)', 'with', '(person-general)'],
+  ['Right', 'after', '(event)'],
+  ['Right', 'before', '(event)'],
+  ['Right', 'after', '(event)', 'at', '(location)'],
+  ['Right', 'before', '(event)', 'at', '(location)'],
+  ['During', '(event)'],
+  ['During', '(event)', 'at', '(location)'],
+  ['During', '(event)', 'with', '(person-general)'],
+  ['Throughout', '(event)'],
+  ['Throughout', '(event)', 'at', '(location)'],
+  ['Throughout', '(event)', 'with', '(group)'],
+  ['On', '(day)'],
+  ['On', '(day)', 'morning'],
+  ['On', '(day)', 'afternoon'],
+  ['On', '(day)', 'evening'],
+  ['On', '(day)', 'during', '(event)'],
+  ['On', '(day)', 'at', '(time)'],
+  ['On', '(date)'],
+  ['On', '(date)', 'at', '(time)'],
+  ['On', '(date)', 'during', '(event)'],
+  ['At', '(time)'],
+  ['At', '(time)', 'during', '(event)'],
+  ['At', '(time)', 'with', '(person-general)'],
+  ['Later', 'that', '(day)'],
+  ['Later', 'in', '(moment)'],
+  ['Earlier', 'that', '(day)'],
+  ['Earlier', 'in', '(moment)'],
+  ['In', 'the', 'middle', 'of', '(event)'],
+  ['Moments', 'after', '(event)'],
+  ['Moments', 'before', '(event)'],
+  ['Heading', 'into', '(event)'],
+  ['Heading', 'out', 'of', '(event)'],
+  ['Immediately', 'after', '(event)'],
+  ['Immediately', 'before', '(event)'],
+];
+
+const SENTENCE_BUILDER_WHERE_TEMPLATE_TOKENS = [
+  ['at', '(location)'],
+  ['at', '(location)', 'with', '(person-general)'],
+  ['at', '(location)', 'with', '(person-partner)'],
+  ['at', '(location)', 'with', '(person-peer)'],
+  ['at', '(location)', 'with', '(person-authority)'],
+  ['at', '(location)', 'with', '(group)'],
+  ['at', '(location)', 'with', '(people)'],
+  ['at', '(location)', 'during', '(event)'],
+  ['at', '(location)', 'about', '(object)'],
+  ['at', '(location)', 'discussing', '(object)'],
+  ['at', '(location)', 'reviewing', '(object)'],
+  ['in', '(location)'],
+  ['in', '(location)', 'with', '(person-general)'],
+  ['in', '(location)', 'with', '(group)'],
+  ['in', '(location)', 'with', '(people)'],
+  ['in', '(location)', 'during', '(event)'],
+  ['in', '(location)', 'about', '(object)'],
+  ['in', '(location)', 'reviewing', '(object)'],
+  ['in', 'conversation', 'with', '(person-general)'],
+  ['in', 'conversation', 'with', '(group)'],
+  ['on', '(channel)'],
+  ['on', '(channel)', 'with', '(person-general)'],
+  ['on', '(channel)', 'with', '(group)'],
+  ['on', '(channel)', 'about', '(object)'],
+  ['on', '(channel)', 'during', '(event)'],
+  ['over', '(channel)'],
+  ['over', '(channel)', 'with', '(person-general)'],
+  ['with', '(person-general)'],
+  ['with', '(person-partner)'],
+  ['with', '(person-peer)'],
+  ['with', '(person-authority)'],
+  ['with', '(role)'],
+  ['with', '(group)'],
+  ['with', '(people)'],
+  ['with', '(person-general)', 'about', '(object)'],
+  ['with', '(person-general)', 'during', '(event)'],
+  ['with', '(group)', 'during', '(event)'],
+  ['during', '(event)'],
+  ['during', '(event)', 'with', '(person-general)'],
+  ['during', '(event)', 'with', '(group)'],
+  ['during', '(event)', 'on', '(channel)'],
+  ['near', '(location)'],
+  ['outside', '(location)'],
+  ['inside', '(location)'],
+  ['around', '(location)'],
+  ['across', '(channel)'],
+  ['across', '(channel)', 'with', '(person-general)'],
+  ['between', '(location)', 'and', '(location)'],
+  ['from', '(location)'],
+  ['alongside', '(person-peer)'],
+  ['alongside', '(person-general)'],
+  ['alongside', '(group)'],
+  ['in', 'front', 'of', '(location)'],
+  ['next', 'to', '(person-general)'],
+  ['next', 'to', '(group)'],
 ];
 
 const HEARD_VERB_KEYWORDS = [
@@ -139,7 +251,7 @@ function createSentenceBuilderMomentLexicon() {
   return {
     daysOfWeek: [...SENTENCE_BUILDER_DAYS_OF_WEEK],
     relative: [...SENTENCE_BUILDER_RELATIVE_MOMENTS],
-    calendarDates: [...SENTENCE_BUILDER_CALENDAR_DATES],
+    calendarDates: [...SENTENCE_BUILDER_CALENDAR_REFERENCES],
     timesOfDay: [...SENTENCE_BUILDER_TIMES_OF_DAY],
     seeded: [...SENTENCE_BUILDER_SEEDED_MOMENTS],
   };
@@ -324,160 +436,134 @@ function buildSentenceBuilderActions(modules, cueMap) {
   });
 }
 
-function buildSentenceBuilderWhenOptionsFromLexicon(lexicon) {
-  const options = new Map();
-
-  const addOption = value => {
-    const normalized = normalizeBuilderSegment(value);
-    if (!normalized) {
-      return;
-    }
-    const key = normalized.toLowerCase();
-    if (!options.has(key)) {
-      options.set(key, capitalizeFirst(normalized));
-    }
-  };
-
-  if (Array.isArray(lexicon.seeded)) {
-    lexicon.seeded.forEach(addOption);
+function coerceSentenceBuilderTokens(template) {
+  if (Array.isArray(template)) {
+    return template
+      .map(token => (typeof token === 'string' ? token.trim() : ''))
+      .filter(Boolean);
   }
-
-  const timesOfDay = Array.isArray(lexicon.timesOfDay) ? lexicon.timesOfDay : [];
-  const relativeTimes = timesOfDay.slice(0, Math.max(4, Math.min(6, timesOfDay.length)));
-  const dayTimes = timesOfDay.slice(0, Math.max(3, Math.min(5, timesOfDay.length)));
-  const calendarTimes = timesOfDay.slice(0, Math.max(2, Math.min(4, timesOfDay.length)));
-
-  if (Array.isArray(lexicon.relative)) {
-    lexicon.relative.forEach(relative => {
-      const base = normalizeBuilderSegment(relative);
-      if (base) {
-        addOption(base);
-      }
-      relativeTimes.forEach(time => {
-        addOption(`${relative} at ${time}`);
-      });
-    });
+  if (typeof template === 'string') {
+    return template
+      .split(/\s+/)
+      .map(token => token.trim())
+      .filter(Boolean);
   }
-
-  if (Array.isArray(lexicon.daysOfWeek)) {
-    lexicon.daysOfWeek.forEach(day => {
-      addOption(`On ${day}`);
-      dayTimes.forEach(time => {
-        addOption(`On ${day} at ${time}`);
-      });
-    });
-  }
-
-  if (Array.isArray(lexicon.calendarDates)) {
-    lexicon.calendarDates.forEach(date => {
-      addOption(`On ${date}`);
-      calendarTimes.forEach(time => {
-        addOption(`On ${date} at ${time}`);
-      });
-    });
-  }
-
-  [
-    'On (day)',
-    'On (date)',
-    'At (time)',
-    'On (date) at (time)',
-    '(moment)',
-  ].forEach(addOption);
-
-  return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
+  return [];
 }
 
-function buildSentenceBuilderWhereOptionsFromLexicon(lexicon) {
-  const options = new Map();
+function collectSentenceBuilderSequences({ templates = [], extras = [], idPrefix, capitalize }) {
+  const sequences = [];
+  const seen = new Set();
 
-  const addOption = value => {
-    const normalized = normalizeBuilderSegment(value);
+  const addTokens = tokens => {
+    const tokenList = coerceSentenceBuilderTokens(tokens);
+    if (!tokenList.length) {
+      return;
+    }
+    const normalized = normalizeBuilderSegment(tokenList.join(' '));
     if (!normalized) {
       return;
     }
-    const key = normalized.toLowerCase();
-    if (!options.has(key)) {
-      options.set(key, normalized);
+    const key = tokenList.map(token => token.toLowerCase()).join('|');
+    if (seen.has(key)) {
+      return;
     }
+    seen.add(key);
+    sequences.push({
+      id: `${idPrefix}-${sequences.length}`,
+      value: capitalize ? capitalizeFirst(normalized) : normalized,
+      raw: normalized,
+      tokens: tokenList,
+    });
   };
 
-  if (Array.isArray(lexicon.seeded)) {
-    lexicon.seeded.forEach(addOption);
+  templates.forEach(addTokens);
+  extras.forEach(addTokens);
+
+  sequences.sort((a, b) => a.value.localeCompare(b.value));
+  sequences.forEach((sequence, index) => {
+    sequence.id = `${idPrefix}-${index}`;
+  });
+  return sequences;
+}
+
+function buildSentenceBuilderWhenSequences(lexicon) {
+  const extras = [];
+
+  if (Array.isArray(lexicon?.seeded)) {
+    lexicon.seeded.forEach(value => extras.push(value));
   }
 
-  const companions = Array.isArray(lexicon.companions) ? lexicon.companions : [''];
-  const modifiers = Array.isArray(lexicon.modifiers) ? lexicon.modifiers : [''];
-  const companionCombos = companions.filter(Boolean);
-  const modifierCombos = modifiers.filter(Boolean);
-  const limitedCompanions = companionCombos.slice(0, 6);
-  const limitedModifiers = modifierCombos.slice(0, 5);
+  if (Array.isArray(lexicon?.relative)) {
+    lexicon.relative.forEach(value => extras.push(value));
+  }
 
-  if (Array.isArray(lexicon.locations)) {
-    lexicon.locations.forEach(location => {
-      const base = normalizeBuilderSegment(location);
-      if (!base) {
-        return;
-      }
-      addOption(base);
-      limitedCompanions.forEach(companion => {
-        addOption(`${base} ${companion}`);
-      });
-      limitedModifiers.forEach(modifier => {
-        addOption(`${base} ${modifier}`);
-      });
-      limitedCompanions.forEach(companion => {
-        limitedModifiers.forEach(modifier => {
-          addOption(`${base} ${companion} ${modifier}`);
-        });
-      });
+  if (Array.isArray(lexicon?.daysOfWeek)) {
+    const dayParts = ['morning', 'afternoon', 'evening'];
+    lexicon.daysOfWeek.forEach(day => {
+      extras.push(['On', day]);
+      dayParts.forEach(part => extras.push(['On', day, part]));
     });
   }
 
-  [
-    'at (location)',
-    'in (location)',
-    'in the (location)',
-    'on (channel)',
-    'with (people)',
-    'with (role)',
-    'with (group)',
-    'during (event)',
-    'at (location) during (event)',
-    'on (channel) during (event)',
-  ].forEach(addOption);
+  if (Array.isArray(lexicon?.timesOfDay)) {
+    const limitedTimes = lexicon.timesOfDay.slice(0, Math.max(5, Math.min(8, lexicon.timesOfDay.length)));
+    limitedTimes.forEach(time => {
+      extras.push(['At', time]);
+      extras.push(['In', 'the', time]);
+      extras.push(['Around', time]);
+    });
+  }
 
-  const relationshipTemplates = [
-    'with {placeholder}',
-    'at (location) with {placeholder}',
-    'on (channel) with {placeholder}',
-    'during (event) with {placeholder}',
-    'at (location) with {placeholder} during (event)',
-  ];
+  if (Array.isArray(lexicon?.calendarDates)) {
+    lexicon.calendarDates.forEach(reference => {
+      extras.push(reference);
+    });
+  }
+
+  extras.push(['(moment)']);
+
+  return collectSentenceBuilderSequences({
+    templates: SENTENCE_BUILDER_WHEN_TEMPLATE_TOKENS,
+    extras,
+    idPrefix: 'when',
+    capitalize: true,
+  });
+}
+
+function buildSentenceBuilderWhereSequences(lexicon) {
+  const extras = [];
+
+  if (Array.isArray(lexicon?.seeded)) {
+    lexicon.seeded.forEach(value => extras.push(value));
+  }
+
+  if (Array.isArray(lexicon?.locations)) {
+    lexicon.locations.forEach(location => extras.push(location));
+  }
+
+  if (Array.isArray(lexicon?.companions)) {
+    lexicon.companions
+      .filter(Boolean)
+      .forEach(companion => extras.push(companion));
+  }
+
+  if (Array.isArray(lexicon?.modifiers)) {
+    lexicon.modifiers
+      .filter(Boolean)
+      .forEach(modifier => extras.push(modifier));
+  }
 
   SENTENCE_BUILDER_WHERE_RELATIONSHIP_PLACEHOLDERS.forEach(placeholder => {
-    relationshipTemplates.forEach(template => {
-      addOption(template.replace('{placeholder}', placeholder));
-    });
+    extras.push(['with', placeholder]);
   });
 
-  return Array.from(options.values()).sort((a, b) => a.localeCompare(b));
-}
-
-function tokenizeWithTrailingComma(source, { capitalize } = {}) {
-  const normalized = normalizeBuilderSegment(source);
-  if (!normalized) {
-    return { value: '', tokens: [] };
-  }
-  const text = capitalize ? capitalizeFirst(normalized) : normalized;
-  const tokens = text.split(/\s+/).filter(Boolean);
-  if (!tokens.length) {
-    return { value: text, tokens: [] };
-  }
-  const lastIndex = tokens.length - 1;
-  const lastToken = tokens[lastIndex].replace(/,+$/g, '');
-  tokens[lastIndex] = `${lastToken},`;
-  return { value: text, tokens };
+  return collectSentenceBuilderSequences({
+    templates: SENTENCE_BUILDER_WHERE_TEMPLATE_TOKENS,
+    extras,
+    idPrefix: 'where',
+    capitalize: false,
+  });
 }
 
 function buildSequenceTrie(sequences) {
@@ -619,30 +705,6 @@ async function loadCueMap() {
   return loadCueLibrary(text);
 }
 
-function buildWhenSequences(whenOptions) {
-  return whenOptions.map((option, index) => {
-    const { value, tokens } = tokenizeWithTrailingComma(option, { capitalize: true });
-    return {
-      id: `when-${index}`,
-      value,
-      raw: normalizeBuilderSegment(option),
-      tokens,
-    };
-  });
-}
-
-function buildWhereSequences(whereOptions) {
-  return whereOptions.map((option, index) => {
-    const { value, tokens } = tokenizeWithTrailingComma(option, { capitalize: false });
-    return {
-      id: `where-${index}`,
-      value,
-      raw: normalizeBuilderSegment(option),
-      tokens,
-    };
-  });
-}
-
 function buildActionItems(actions) {
   return actions.map(action => {
     const sentence = ensureSentencePunctuation(action.text);
@@ -687,12 +749,10 @@ async function main() {
 
   const lexiconMoment = createSentenceBuilderMomentLexicon();
   const lexiconContext = createSentenceBuilderContextLexicon();
-  const whenOptions = buildSentenceBuilderWhenOptionsFromLexicon(lexiconMoment);
-  const whereOptions = buildSentenceBuilderWhereOptionsFromLexicon(lexiconContext);
   const actions = buildSentenceBuilderActions(modules, cueMap);
 
-  const whenSequences = buildWhenSequences(whenOptions);
-  const whereSequences = buildWhereSequences(whereOptions);
+  const whenSequences = buildSentenceBuilderWhenSequences(lexiconMoment);
+  const whereSequences = buildSentenceBuilderWhereSequences(lexiconContext);
   const actionItems = buildActionItems(actions);
 
   const dataset = buildExportDataset({
