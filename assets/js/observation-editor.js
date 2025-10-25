@@ -809,9 +809,12 @@ function handleSentenceBuilderTokenInputChange(index, value, element) {
   normalizeSentenceBuilderSelection(builder);
   if (element && element instanceof HTMLInputElement) {
     const currentValue = element.value;
-    if (formatted !== currentValue) {
-      const position = formatted.length;
-      element.value = formatted;
+    const trailingWhitespaceMatch = typeof value === 'string' ? value.match(/\s+$/) : null;
+    const trailingWhitespace = trailingWhitespaceMatch ? trailingWhitespaceMatch[0] : '';
+    const displayValue = formatted ? `${formatted}${trailingWhitespace}` : trailingWhitespace;
+    if (displayValue !== currentValue) {
+      const position = displayValue.length;
+      element.value = displayValue;
       if (typeof element.setSelectionRange === 'function') {
         element.setSelectionRange(position, position);
       }
