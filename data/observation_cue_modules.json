@@ -150,12 +150,12 @@
     "feelings": [
       "hurt",
       "anxious",
-      "alarmed"
+      "startled"
     ],
     "needs": [
       "respect",
       "support",
-      "predictability"
+      "stability"
     ]
   },
   {
@@ -289,7 +289,7 @@
     "needs": [
       "consideration",
       "respect",
-      "accountability",
+      "responsibility",
       "reliability"
     ]
   },
@@ -318,7 +318,7 @@
     ],
     "feelings": [
       "anxious",
-      "distressed",
+      "disheartened",
       "confused"
     ],
     "needs": [
@@ -360,8 +360,8 @@
     ],
     "feelings": [
       "confused",
-      "distressed",
-      "defiant"
+      "discouraged",
+      "protective"
     ],
     "needs": [
       "clarity",
@@ -403,12 +403,12 @@
     "feelings": [
       "anxious",
       "frustrated",
-      "powerless"
+      "vulnerable"
     ],
     "needs": [
       "safety",
       "support",
-      "dependability",
+      "responsiveness",
       "reliability"
     ]
   },
@@ -439,12 +439,12 @@
     ],
     "feelings": [
       "anxious",
-      "hurt"
+      "dismissed"
     ],
     "needs": [
-      "nurturing",
+      "care",
       "respect",
-      "consideration",
+      "attention",
       "to-be-heard"
     ]
   },
@@ -484,7 +484,7 @@
       "resentful"
     ],
     "needs": [
-      "space",
+      "boundaries",
       "rest",
       "fairness",
       "support"
@@ -517,11 +517,11 @@
     "feelings": [
       "lonely",
       "hurt",
-      "disappointment"
+      "disappointed"
     ],
     "needs": [
       "connection",
-      "consideration",
+      "attention",
       "respect"
     ]
   },
@@ -622,13 +622,13 @@
     ],
     "feelings": [
       "alarmed",
-      "scared",
-      "afraid"
+      "startled",
+      "unsafe"
     ],
     "needs": [
       "safety",
       "predictability",
-      "consideration"
+      "care"
     ]
   },
   {
@@ -655,13 +655,13 @@
       "self-delayed-call"
     ],
     "feelings": [
-      "sad",
-      "disappointment"
+      "regretful",
+      "disappointed"
     ],
     "needs": [
       "integrity",
       "connection",
-      "accountability"
+      "follow-through"
     ]
   },
   {
@@ -689,14 +689,14 @@
       "coworker-caught-mistake"
     ],
     "feelings": [
-      "relieved",
-      "hopeful",
-      "calm"
+      "grateful",
+      "reassured",
+      "supported"
     ],
     "needs": [
       "reliability",
-      "integrity",
-      "mutuality"
+      "accuracy",
+      "teamwork"
     ]
   },
   {
@@ -726,12 +726,12 @@
     "feelings": [
       "proud",
       "energized",
-      "hopeful"
+      "encouraged"
     ],
     "needs": [
-      "acknowledgement",
+      "acknowledgment",
       "growth",
-      "recognition"
+      "celebration"
     ]
   },
   {
@@ -759,13 +759,13 @@
       "neighbor-shoveled-sidewalk"
     ],
     "feelings": [
-      "joyful",
-      "contented",
-      "hopeful"
+      "grateful",
+      "touched",
+      "connected"
     ],
     "needs": [
       "community",
-      "nurturing",
+      "care",
       "support"
     ]
   },
@@ -804,12 +804,12 @@
       "appreciation-specific-note"
     ],
     "feelings": [
-      "proud",
-      "energized",
-      "hopeful"
+      "appreciated",
+      "seen",
+      "motivated"
     ],
     "needs": [
-      "acknowledgement",
+      "acknowledgment",
       "contribution",
       "belonging"
     ]
@@ -839,9 +839,9 @@
       "counselor-reflected"
     ],
     "feelings": [
+      "understood",
       "calm",
-      "relieved",
-      "hopeful"
+      "supported"
     ],
     "needs": [
       "to-be-heard",
@@ -880,14 +880,14 @@
       "manager-balanced-followups"
     ],
     "feelings": [
+      "supported",
       "relieved",
-      "hopeful",
-      "contented"
+      "grateful"
     ],
     "needs": [
-      "support",
-      "fairness",
-      "mutuality"
+      "care",
+      "balance",
+      "collaboration"
     ]
   },
   {
@@ -916,7 +916,7 @@
     ],
     "feelings": [
       "relieved",
-      "hopeful"
+      "grateful"
     ],
     "needs": [
       "safety",
@@ -950,12 +950,12 @@
     ],
     "feelings": [
       "relieved",
-      "contented"
+      "valued"
     ],
     "needs": [
       "rest",
       "respect",
-      "reliability"
+      "responsiveness"
     ]
   },
   {
@@ -990,14 +990,14 @@
       "dentist-explained-steps"
     ],
     "feelings": [
-      "relieved",
-      "calm",
-      "hopeful"
+      "reassured",
+      "cared-for",
+      "calm"
     ],
     "needs": [
-      "nurturing",
+      "care",
       "clarity",
-      "serenity"
+      "comfort"
     ]
   },
   {
@@ -1030,8 +1030,8 @@
     ],
     "needs": [
       "reliability",
-      "clarity",
-      "accountability"
+      "communication",
+      "follow-through"
     ]
   },
   {
@@ -1060,12 +1060,12 @@
     ],
     "feelings": [
       "irritated",
-      "hurt"
+      "unimportant"
     ],
     "needs": [
       "respect",
       "reliability",
-      "consideration"
+      "communication"
     ]
   },
   {
@@ -1093,12 +1093,12 @@
       "hoa-lawn-warning"
     ],
     "feelings": [
-      "irritated",
+      "defensive",
       "confused"
     ],
     "needs": [
       "fairness",
-      "clarity",
+      "communication",
       "respect"
     ]
   },
@@ -1129,10 +1129,10 @@
     "feelings": [
       "hurt",
       "angry",
-      "resentful"
+      "unseen"
     ],
     "needs": [
-      "acknowledgement",
+      "acknowledgment",
       "fairness",
       "integrity"
     ]
@@ -1173,7 +1173,7 @@
     ],
     "needs": [
       "safety",
-      "clarity",
+      "communication",
       "trust"
     ]
   },
@@ -1202,13 +1202,13 @@
       "bus-driver-waited"
     ],
     "feelings": [
-      "joyful",
+      "grateful",
       "relieved"
     ],
     "needs": [
       "consideration",
       "support",
-      "relaxation"
+      "ease"
     ]
   },
   {
@@ -1236,13 +1236,13 @@
       "teammate-sprint-update-gap"
     ],
     "feelings": [
-      "overwhelmed",
+      "stressed",
       "anxious"
     ],
     "needs": [
       "clarity",
       "accountability",
-      "mutuality"
+      "teamwork"
     ]
   },
   {
@@ -1271,12 +1271,12 @@
     ],
     "feelings": [
       "relieved",
-      "hopeful"
+      "thankful"
     ],
     "needs": [
       "safety",
-      "dependability",
-      "support"
+      "responsiveness",
+      "care"
     ]
   },
   {
@@ -1305,7 +1305,7 @@
     ],
     "feelings": [
       "frustrated",
-      "disappointment"
+      "disappointed"
     ],
     "needs": [
       "trust",
@@ -1344,8 +1344,8 @@
     ],
     "needs": [
       "safety",
-      "consideration",
-      "trust"
+      "care",
+      "attentiveness"
     ]
   },
   {
@@ -1373,8 +1373,8 @@
       "meeting-over-lunch"
     ],
     "feelings": [
-      "irritated",
-      "hurt"
+      "annoyed",
+      "disregarded"
     ],
     "needs": [
       "respect",
@@ -1412,13 +1412,13 @@
       "support-agent-followed-up"
     ],
     "feelings": [
-      "relieved",
-      "hopeful"
+      "grateful",
+      "supported"
     ],
     "needs": [
       "clarity",
       "support",
-      "accountability"
+      "follow-through"
     ]
   },
   {
@@ -1447,12 +1447,12 @@
     ],
     "feelings": [
       "relieved",
-      "hopeful",
-      "calm"
+      "grateful",
+      "safer"
     ],
     "needs": [
       "safety",
-      "reliability",
+      "responsiveness",
       "community"
     ]
   }
