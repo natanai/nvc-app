@@ -765,7 +765,7 @@ function handleSentenceBuilderTokenChange(index, value) {
   applySentenceBuilderSelection({ focus: false });
 }
 
-function handleSentenceBuilderTokenInputChange(index, value) {
+function handleSentenceBuilderTokenInputChange(index, value, element) {
   const builder = state.builder;
   if (!builder?.ready || index < 0) {
     return;
@@ -787,19 +787,17 @@ function handleSentenceBuilderTokenInputChange(index, value) {
     builder.tokenInputs.delete(index);
   }
   normalizeSentenceBuilderSelection(builder);
-  renderSentenceBuilder();
-  if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
-    window.requestAnimationFrame(() => {
-      const input = document.querySelector(
-        `input.observation-sentence-builder__token-input[data-token-index="${index}"]`,
-      );
-      if (input && input instanceof HTMLInputElement) {
-        const length = input.value.length;
-        input.focus();
-        input.setSelectionRange(length, length);
+  if (element && element instanceof HTMLInputElement) {
+    const currentValue = element.value;
+    if (formatted !== currentValue) {
+      const position = formatted.length;
+      element.value = formatted;
+      if (typeof element.setSelectionRange === 'function') {
+        element.setSelectionRange(position, position);
       }
-    });
+    }
   }
+  updateSentenceBuilderOutputs();
   applySentenceBuilderSelection({ focus: false });
 }
 
@@ -840,7 +838,7 @@ function bindSentenceBuilder() {
       if (Number.isNaN(index) || index < 0) {
         return;
       }
-      handleSentenceBuilderTokenInputChange(index, target.value || '');
+      handleSentenceBuilderTokenInputChange(index, target.value || '', target);
     });
     builderHost.dataset.bound = 'true';
   }
@@ -925,11 +923,51 @@ function renderEditorMode() {
   });
 }
 
+function updateSentenceBuilderOutputs() {
+  const builder = state.builder || createEmptySentenceBuilderState();
+  const actionSummary = document.getElementById('observation-builder-action-summary');
+  const applyButton = document.getElementById('observation-builder-apply');
+
+  if (!builder.ready) {
+    if (actionSummary) {
+      actionSummary.textContent = '';
+      actionSummary.setAttribute('hidden', 'hidden');
+    }
+    if (applyButton) {
+      applyButton.disabled = true;
+    }
+    renderSentenceBuilderPreview();
+    return;
+  }
+
+  if (actionSummary) {
+    const noteParts = [];
+    if (builder.selectedActionModule) {
+      noteParts.push(`Library: ${builder.selectedActionModule}.`);
+    }
+    if (builder.selectedActionSummary) {
+      noteParts.push(`Structure covers ${builder.selectedActionSummary}.`);
+    }
+    const noteText = noteParts.join(' ').trim();
+    if (noteText) {
+      actionSummary.textContent = noteText;
+      actionSummary.removeAttribute('hidden');
+    } else {
+      actionSummary.textContent = '';
+      actionSummary.setAttribute('hidden', 'hidden');
+    }
+  }
+
+  if (applyButton) {
+    applyButton.disabled = !builder.selectedSentence;
+  }
+
+  renderSentenceBuilderPreview();
+}
+
 function renderSentenceBuilder() {
   const builder = state.builder || createEmptySentenceBuilderState();
   const sequenceHost = document.getElementById('observation-builder-sequence');
-  const actionSummary = document.getElementById('observation-builder-action-summary');
-  const applyButton = document.getElementById('observation-builder-apply');
 
   if (!sequenceHost) {
     return;
@@ -941,17 +979,10 @@ function renderSentenceBuilder() {
     loading.className = 'observation-sentence-builder__loading';
     loading.textContent = 'Loading the observation library…';
     sequenceHost.appendChild(loading);
-    if (actionSummary) {
-      actionSummary.textContent = '';
-      actionSummary.setAttribute('hidden', 'hidden');
-    }
-    if (applyButton) {
-      applyButton.disabled = true;
-    }
     builder.selectedSentence = '';
     builder.selectedActionSummary = '';
     builder.selectedActionModule = '';
-    renderSentenceBuilderPreview();
+    updateSentenceBuilderOutputs();
     return;
   }
 
@@ -1018,29 +1049,7 @@ function renderSentenceBuilder() {
     });
   }
 
-  if (actionSummary) {
-    const noteParts = [];
-    if (builder.selectedActionModule) {
-      noteParts.push(`Library: ${builder.selectedActionModule}.`);
-    }
-    if (builder.selectedActionSummary) {
-      noteParts.push(`Structure covers ${builder.selectedActionSummary}.`);
-    }
-    const noteText = noteParts.join(' ').trim();
-    if (noteText) {
-      actionSummary.textContent = noteText;
-      actionSummary.removeAttribute('hidden');
-    } else {
-      actionSummary.textContent = '';
-      actionSummary.setAttribute('hidden', 'hidden');
-    }
-  }
-
-  if (applyButton) {
-    applyButton.disabled = !builder.selectedSentence;
-  }
-
-  renderSentenceBuilderPreview();
+  updateSentenceBuilderOutputs();
 }
 
 function renderSentenceBuilderPreview() {
