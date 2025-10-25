@@ -1462,6 +1462,15 @@ button.site-nav__magnet {
     border-color: color-mix(in srgb, var(--outline) 26%, transparent);
   }
 
+  .observation-editor__mode-badge {
+    display: inline-block;
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--nvc-color-text-muted);
+  }
+
   @media (max-width: 380px) {
     .observation-editor__label-row {
       grid-template-columns: minmax(0, 1fr);
@@ -3087,7 +3096,7 @@ button.site-nav__magnet {
                         data-observation-mode="builder"
                         aria-pressed="false"
                       >
-                        Sentence builder
+                        Sentence builder <span class="observation-editor__mode-badge">(beta)</span>
                       </button>
                     </div>
                   </div>
