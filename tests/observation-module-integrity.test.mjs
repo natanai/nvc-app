@@ -24,6 +24,12 @@ async function loadLibrary() {
   return compileObservationCueLibrary({ cues, modules: moduleDefs });
 }
 
+async function loadTaxonomy() {
+  const taxonomyPath = path.join(rootDir, 'data', 'observation_taxonomy.json');
+  const text = await fs.readFile(taxonomyPath, 'utf8');
+  return JSON.parse(text);
+}
+
 async function loadBlueprint() {
   const blueprintPath = path.join(rootDir, 'data', 'observation_module_blueprints.json');
   const text = await fs.readFile(blueprintPath, 'utf8');
@@ -31,8 +37,65 @@ async function loadBlueprint() {
   return Array.isArray(parsed?.modules) ? parsed.modules : Array.isArray(parsed) ? parsed : [];
 }
 
+async function listLandingPageSlugs(directory) {
+  const absolute = path.join(rootDir, directory);
+  const entries = await fs.readdir(absolute, { withFileTypes: true });
+  const slugs = new Set();
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+
+    const slug = entry.name;
+    const landingPagePath = path.join(absolute, slug, 'index.html');
+
+    try {
+      await fs.access(landingPagePath);
+      slugs.add(slug);
+    } catch {
+      // ignore directories without landing pages
+    }
+  }
+
+  return slugs;
+}
+
+function slugify(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function assertVocabulary({
+  values,
+  slugSet,
+  context,
+  kind,
+  transform = value => value,
+}) {
+  for (const rawValue of values ?? []) {
+    assert.strictEqual(
+      typeof rawValue,
+      'string',
+      `${context} lists a ${kind} value that is not a string`,
+    );
+
+    const slug = transform(rawValue);
+    assert.ok(slug, `${context} lists a ${kind} value without a slug`);
+    assert.ok(
+      slugSet.has(slug),
+      `${context} references ${kind} "${rawValue}" (slug "${slug}") without a landing page`,
+    );
+  }
+}
+
 async function run() {
-  const [library, blueprintModules] = await Promise.all([loadLibrary(), loadBlueprint()]);
+  const [library, blueprintModules, taxonomy, feelingSlugs, needSlugs] = await Promise.all([
+    loadLibrary(),
+    loadBlueprint(),
+    loadTaxonomy(),
+    listLandingPageSlugs('feelings'),
+    listLandingPageSlugs('needs'),
+  ]);
   const { modules, cues } = library;
 
   assert.ok(modules.length > 0, 'Expected compiled modules');
@@ -73,6 +136,19 @@ async function run() {
     assert.ok(Array.isArray(module.feelings) && module.feelings.length > 0, `module ${module.id} missing feelings`);
     assert.ok(Array.isArray(module.needs) && module.needs.length > 0, `module ${module.id} missing needs`);
 
+    assertVocabulary({
+      values: module.feelings,
+      slugSet: feelingSlugs,
+      context: `compiled module ${module.id}`,
+      kind: 'feeling',
+    });
+    assertVocabulary({
+      values: module.needs,
+      slugSet: needSlugs,
+      context: `compiled module ${module.id}`,
+      kind: 'need',
+    });
+
     const expectedCueIds = new Set(
       (Array.isArray(expectedModule.cues) ? expectedModule.cues : []).map(cue => cue.id).filter(Boolean),
     );
@@ -91,6 +167,44 @@ async function run() {
     assert.ok(assigned.has(cue.id), `cue ${cue.id} was not assigned to a module`);
     assert.ok(cue.moduleId, `cue ${cue.id} missing moduleId`);
     assert.ok(blueprintCueIds.has(cue.id), `cue ${cue.id} not defined in blueprint`);
+  });
+
+  blueprintModules.forEach(module => {
+    const context = `blueprint module ${module?.id ?? '(missing id)'}`;
+    assertVocabulary({
+      values: module?.feelings,
+      slugSet: feelingSlugs,
+      context,
+      kind: 'feeling',
+    });
+    assertVocabulary({
+      values: module?.needs,
+      slugSet: needSlugs,
+      context,
+      kind: 'need',
+    });
+  });
+
+  const families = Array.isArray(taxonomy?.families) ? taxonomy.families : [];
+  families.forEach(family => {
+    const patterns = Array.isArray(family?.patterns) ? family.patterns : [];
+    patterns.forEach(pattern => {
+      const context = `taxonomy ${family?.id ?? '(missing id)'} pattern ${pattern?.id ?? '(missing id)'}`;
+      assertVocabulary({
+        values: pattern?.feelings,
+        slugSet: feelingSlugs,
+        context,
+        kind: 'feeling',
+        transform: slugify,
+      });
+      assertVocabulary({
+        values: pattern?.needs,
+        slugSet: needSlugs,
+        context,
+        kind: 'need',
+        transform: slugify,
+      });
+    });
   });
 
   const fallbackModules = modules.filter(module => module.id.startsWith('module-'));
