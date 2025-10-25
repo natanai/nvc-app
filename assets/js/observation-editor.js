@@ -12,68 +12,6 @@ import { loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.
 const INPUT_MODE_FREEFORM = 'freeform';
 const INPUT_MODE_BUILDER = 'builder';
 
-const state = {
-  text: '',
-  catalog: createEmptyCatalog(),
-  cueLibrary: createEmptyCueLibrary(),
-  cues: [],
-  analysis: null,
-  mode: 'editing',
-  lastSubmitted: '',
-  directSuggestions: createEmptySuggestionSet(),
-  detectionStatus: 'loading',
-  detectionMatches: 0,
-  detectionFallbacks: 0,
-  detectionFallbackQueue: [],
-  detectionSource: '',
-  detectionHasFlagged: false,
-  cueHighlightRanges: [],
-  positiveHighlightRanges: [],
-  activeHighlightKey: '',
-  detectionMatchLimit: 1,
-  detectionNearLimit: 6,
-  detectorStats: null,
-  validityStatus: 'idle',
-  validityMessage: 'No matches yet.',
-  fallback: createFallbackState(),
-  scrolledToSuggestions: false,
-  formula: createEmptyObservationFormulaState(),
-  formulaMissing: [],
-  anchorRewrite: { when: '', where: '' },
-  inputMode: INPUT_MODE_FREEFORM,
-  builder: createEmptySentenceBuilderState(),
-};
-
-let guideNavigationBound = false;
-let highlightPopoverBound = false;
-let analysisTimer = 0;
-let analysisIdleHandle = null;
-
-const ANALYSIS_DEBOUNCE_MS = 140;
-
-const SUGGESTION_BASE_PATHS = {
-  feeling: '../feelings/',
-  need: '../needs/',
-};
-
-const SUGGESTION_SLUG_PATTERN = /^[a-z0-9-]+$/i;
-
-const DETECTION_BASE_PATHS = {
-  feeling: '../feelings/',
-  need: '../needs/',
-  fauxFeeling: '../faux-feelings/',
-};
-
-const DETECTION_LABELS = {
-  feeling: { singular: 'feeling word', plural: 'feeling words' },
-  need: { singular: 'need word', plural: 'need words' },
-  fauxFeeling: { singular: 'story word', plural: 'story words' },
-};
-
-const DETECTION_MIN_WORDS = 2;
-const DETECTION_MATCH_LIMIT = 1;
-const DETECTION_NEAR_LIMIT = 6;
-
 const SENTENCE_BUILDER_DAYS_OF_WEEK = [
   'Monday',
   'Tuesday',
@@ -200,6 +138,68 @@ const HEARD_VERB_KEYWORDS = [
   'sang',
   'reported',
 ];
+
+const state = {
+  text: '',
+  catalog: createEmptyCatalog(),
+  cueLibrary: createEmptyCueLibrary(),
+  cues: [],
+  analysis: null,
+  mode: 'editing',
+  lastSubmitted: '',
+  directSuggestions: createEmptySuggestionSet(),
+  detectionStatus: 'loading',
+  detectionMatches: 0,
+  detectionFallbacks: 0,
+  detectionFallbackQueue: [],
+  detectionSource: '',
+  detectionHasFlagged: false,
+  cueHighlightRanges: [],
+  positiveHighlightRanges: [],
+  activeHighlightKey: '',
+  detectionMatchLimit: 1,
+  detectionNearLimit: 6,
+  detectorStats: null,
+  validityStatus: 'idle',
+  validityMessage: 'No matches yet.',
+  fallback: createFallbackState(),
+  scrolledToSuggestions: false,
+  formula: createEmptyObservationFormulaState(),
+  formulaMissing: [],
+  anchorRewrite: { when: '', where: '' },
+  inputMode: INPUT_MODE_FREEFORM,
+  builder: createEmptySentenceBuilderState(),
+};
+
+let guideNavigationBound = false;
+let highlightPopoverBound = false;
+let analysisTimer = 0;
+let analysisIdleHandle = null;
+
+const ANALYSIS_DEBOUNCE_MS = 140;
+
+const SUGGESTION_BASE_PATHS = {
+  feeling: '../feelings/',
+  need: '../needs/',
+};
+
+const SUGGESTION_SLUG_PATTERN = /^[a-z0-9-]+$/i;
+
+const DETECTION_BASE_PATHS = {
+  feeling: '../feelings/',
+  need: '../needs/',
+  fauxFeeling: '../faux-feelings/',
+};
+
+const DETECTION_LABELS = {
+  feeling: { singular: 'feeling word', plural: 'feeling words' },
+  need: { singular: 'need word', plural: 'need words' },
+  fauxFeeling: { singular: 'story word', plural: 'story words' },
+};
+
+const DETECTION_MIN_WORDS = 2;
+const DETECTION_MATCH_LIMIT = 1;
+const DETECTION_NEAR_LIMIT = 6;
 
 const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
 const OBSERVATION_GUIDELINE_COMPLETE =
