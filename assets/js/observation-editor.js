@@ -14,6 +14,7 @@ const INPUT_MODE_BUILDER = 'builder';
 
 const state = {
   text: '',
+  freeformText: '',
   catalog: createEmptyCatalog(),
   cueLibrary: createEmptyCueLibrary(),
   cues: [],
@@ -219,14 +220,29 @@ function createEmptySentenceBuilderState() {
     selectedActionSummary: '',
     selectedActionModule: '',
     tokenInputs: new Map(),
-    lastAppliedText: '',
-    lastAppliedTokens: [],
-    lastAppliedTokenInputs: [],
   };
 }
 
 function createEmptySentenceBuilderTrie() {
   return { options: [] };
+}
+
+function resetSentenceBuilderSelection(builder) {
+  if (!builder) {
+    return;
+  }
+  builder.selectedTokens = [];
+  builder.selectedWhenId = '';
+  builder.selectedWhereId = '';
+  builder.selectedActionId = '';
+  builder.selectedSentence = '';
+  builder.selectedActionSummary = '';
+  builder.selectedActionModule = '';
+  if (builder.tokenInputs instanceof Map) {
+    builder.tokenInputs.clear();
+  } else {
+    builder.tokenInputs = new Map();
+  }
 }
 
 function parseSentenceBuilderPlaceholderToken(token) {
@@ -394,7 +410,9 @@ function bind() {
   const textarea = document.getElementById('observation-text');
   if (textarea) {
     textarea.addEventListener('input', event => {
-      state.text = event.target.value || '';
+      const value = event.target.value || '';
+      state.text = value;
+      state.freeformText = value;
       state.scrolledToSuggestions = false;
       renderHighlightDetails(null);
       if (state.mode !== 'editing') {
@@ -423,6 +441,10 @@ function bind() {
     textarea.addEventListener('blur', () => {
       renderHighlightDetails(null);
     });
+
+    const initialValue = textarea.value || '';
+    state.text = initialValue;
+    state.freeformText = initialValue;
   }
 
   const submit = document.getElementById('observation-submit');
@@ -532,16 +554,14 @@ function initializeSentenceBuilder(dataset) {
   builder.selectedActionModule = builder.selectedActionModule || '';
   builder.tokenInputs = builder.tokenInputs instanceof Map ? builder.tokenInputs : new Map();
   builder.tokenInputs.clear();
-  builder.lastAppliedText = '';
-  builder.lastAppliedTokens = [];
-  builder.lastAppliedTokenInputs = [];
   builder.ready = builder.whenSequences.length > 0 && builder.whereSequences.length > 0 && builder.actions.length > 0;
 
   renderSentenceBuilder();
-  syncSentenceBuilderToText(state.text);
+  const syncSource = state.inputMode === INPUT_MODE_BUILDER ? state.text : state.freeformText;
+  syncSentenceBuilderToText(syncSource);
 
   if (state.inputMode === INPUT_MODE_BUILDER) {
-    applySentenceBuilderSelection({ focus: false, immediate: false });
+    refreshSentenceBuilderActiveText({ immediate: false });
   }
 }
 
@@ -782,7 +802,7 @@ function handleSentenceBuilderTokenChange(index, value) {
   }
   normalizeSentenceBuilderSelection(builder);
   renderSentenceBuilder();
-  applySentenceBuilderSelection({ focus: false });
+  refreshSentenceBuilderActiveText();
 }
 
 function handleSentenceBuilderTokenInputChange(index, value, element) {
@@ -821,7 +841,7 @@ function handleSentenceBuilderTokenInputChange(index, value, element) {
     }
   }
   updateSentenceBuilderOutputs();
-  applySentenceBuilderSelection({ focus: false });
+  refreshSentenceBuilderActiveText();
 }
 
 function bindSentenceBuilder() {
@@ -866,46 +886,39 @@ function bindSentenceBuilder() {
     builderHost.dataset.bound = 'true';
   }
 
-  const applyButton = document.getElementById('observation-builder-apply');
-  if (applyButton) {
-    applyButton.addEventListener('click', event => {
-      event.preventDefault();
-      applySentenceBuilderSelection({ focus: state.inputMode !== INPUT_MODE_BUILDER });
-    });
-  }
-
 }
 
 function setEditorMode(mode) {
   const next = mode === INPUT_MODE_BUILDER ? INPUT_MODE_BUILDER : INPUT_MODE_FREEFORM;
   if (state.inputMode === next) {
+    renderSentenceBuilder();
+    renderEditorMode();
     if (next === INPUT_MODE_BUILDER) {
-      syncSentenceBuilderToText(state.text);
-      renderSentenceBuilder();
+      refreshSentenceBuilderActiveText();
     } else {
       focusObservationTextarea();
     }
-    renderEditorMode();
     return;
   }
 
-  state.inputMode = next;
+  const previousMode = state.inputMode === INPUT_MODE_BUILDER ? INPUT_MODE_BUILDER : INPUT_MODE_FREEFORM;
 
   if (next === INPUT_MODE_BUILDER) {
-    const previousText = typeof state.text === 'string' ? state.text.trim() : '';
-    syncSentenceBuilderToText(state.text);
-    renderSentenceBuilder();
-    renderEditorMode();
-    const selectedSentence = typeof state.builder?.selectedSentence === 'string'
-      ? state.builder.selectedSentence.trim()
-      : '';
-    if ((!previousText && selectedSentence) || (previousText && previousText === selectedSentence)) {
-      applySentenceBuilderSelection({ focus: false });
+    if (previousMode === INPUT_MODE_FREEFORM) {
+      state.freeformText = typeof state.text === 'string' ? state.text : state.freeformText;
+      syncSentenceBuilderToText(state.freeformText);
     }
-  } else {
+    state.inputMode = INPUT_MODE_BUILDER;
     renderEditorMode();
-    focusObservationTextarea();
+    renderSentenceBuilder();
+    refreshSentenceBuilderActiveText();
+    return;
   }
+
+  state.inputMode = INPUT_MODE_FREEFORM;
+  renderEditorMode();
+  const freeform = typeof state.freeformText === 'string' ? state.freeformText : '';
+  updateObservationText(freeform, { reason: 'mode-switch' });
 }
 
 function renderEditorMode() {
@@ -949,15 +962,11 @@ function renderEditorMode() {
 function updateSentenceBuilderOutputs() {
   const builder = state.builder || createEmptySentenceBuilderState();
   const actionSummary = document.getElementById('observation-builder-action-summary');
-  const applyButton = document.getElementById('observation-builder-apply');
 
   if (!builder.ready) {
     if (actionSummary) {
       actionSummary.textContent = '';
       actionSummary.setAttribute('hidden', 'hidden');
-    }
-    if (applyButton) {
-      applyButton.disabled = true;
     }
     renderSentenceBuilderPreview();
     return;
@@ -979,10 +988,6 @@ function updateSentenceBuilderOutputs() {
       actionSummary.textContent = '';
       actionSummary.setAttribute('hidden', 'hidden');
     }
-  }
-
-  if (applyButton) {
-    applyButton.disabled = !builder.selectedSentence;
   }
 
   renderSentenceBuilderPreview();
@@ -1119,31 +1124,19 @@ function renderSentenceBuilderPreview() {
   preview.removeAttribute('hidden');
 }
 
-function applySentenceBuilderSelection(options = {}) {
-  const sentence = typeof state.builder?.selectedSentence === 'string' ? state.builder.selectedSentence.trim() : '';
-  if (!sentence) {
+function refreshSentenceBuilderActiveText(options = {}) {
+  if (state.inputMode !== INPUT_MODE_BUILDER) {
     return;
   }
-  const focus = Object.prototype.hasOwnProperty.call(options, 'focus')
-    ? options.focus
-    : state.inputMode !== INPUT_MODE_BUILDER;
+  const sentence = typeof state.builder?.selectedSentence === 'string' ? state.builder.selectedSentence.trim() : '';
   const immediate = Object.prototype.hasOwnProperty.call(options, 'immediate') ? options.immediate : true;
   updateObservationText(sentence, {
     reason: 'sentence-builder',
     immediate,
-    focus,
+    focus: false,
+    skipTextarea: true,
+    preserveFreeform: true,
   });
-
-  if (state.builder?.ready) {
-    const builder = state.builder;
-    builder.lastAppliedText = sentence;
-    builder.lastAppliedTokens = Array.isArray(builder.selectedTokens)
-      ? builder.selectedTokens.slice()
-      : [];
-    builder.lastAppliedTokenInputs = builder.tokenInputs instanceof Map
-      ? Array.from(builder.tokenInputs.entries())
-      : [];
-  }
 }
 
 function syncSentenceBuilderToText(text) {
@@ -1151,47 +1144,22 @@ function syncSentenceBuilderToText(text) {
   if (!builder?.ready) {
     return;
   }
-  const source = typeof text === 'string' ? text.trim() : '';
-  if (builder.lastAppliedText && source === builder.lastAppliedText) {
-    builder.selectedTokens = Array.isArray(builder.lastAppliedTokens)
-      ? builder.lastAppliedTokens.slice()
-      : [];
-    builder.tokenInputs = new Map(
-      Array.isArray(builder.lastAppliedTokenInputs) ? builder.lastAppliedTokenInputs : [],
-    );
-    normalizeSentenceBuilderSelection(builder);
+  if ((Array.isArray(builder.selectedTokens) && builder.selectedTokens.length) ||
+      (builder.tokenInputs instanceof Map && builder.tokenInputs.size)) {
     renderSentenceBuilder();
     return;
   }
+
+  const source = typeof text === 'string' ? text.trim() : '';
   if (!source) {
-    builder.selectedTokens = [];
-    builder.selectedWhenId = '';
-    builder.selectedWhereId = '';
-    builder.selectedActionId = '';
-    builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
-    builder.tokenInputs = new Map();
-    builder.lastAppliedText = '';
-    builder.lastAppliedTokens = [];
-    builder.lastAppliedTokenInputs = [];
+    resetSentenceBuilderSelection(builder);
     renderSentenceBuilder();
     return;
   }
 
   const tokens = source.split(/\s+/).filter(Boolean);
   if (!tokens.length) {
-    builder.selectedTokens = [];
-    builder.selectedWhenId = '';
-    builder.selectedWhereId = '';
-    builder.selectedActionId = '';
-    builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
-    builder.tokenInputs = new Map();
-    builder.lastAppliedText = '';
-    builder.lastAppliedTokens = [];
-    builder.lastAppliedTokenInputs = [];
+    resetSentenceBuilderSelection(builder);
     renderSentenceBuilder();
     return;
   }
@@ -1199,17 +1167,7 @@ function syncSentenceBuilderToText(text) {
   let index = 0;
   const whenResult = consumeSentenceBuilderStage(builder.whenTrie, tokens, index);
   if (!whenResult.complete) {
-    builder.selectedTokens = [];
-    builder.selectedWhenId = '';
-    builder.selectedWhereId = '';
-    builder.selectedActionId = '';
-    builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
-    builder.tokenInputs = new Map();
-    builder.lastAppliedText = '';
-    builder.lastAppliedTokens = [];
-    builder.lastAppliedTokenInputs = [];
+    resetSentenceBuilderSelection(builder);
     renderSentenceBuilder();
     return;
   }
@@ -1217,17 +1175,7 @@ function syncSentenceBuilderToText(text) {
 
   const whereResult = consumeSentenceBuilderStage(builder.whereTrie, tokens, index);
   if (!whereResult.complete) {
-    builder.selectedTokens = [];
-    builder.selectedWhenId = '';
-    builder.selectedWhereId = '';
-    builder.selectedActionId = '';
-    builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
-    builder.tokenInputs = new Map();
-    builder.lastAppliedText = '';
-    builder.lastAppliedTokens = [];
-    builder.lastAppliedTokenInputs = [];
+    resetSentenceBuilderSelection(builder);
     renderSentenceBuilder();
     return;
   }
@@ -1235,17 +1183,7 @@ function syncSentenceBuilderToText(text) {
 
   const actionResult = consumeSentenceBuilderStage(builder.actionTrie, tokens, index);
   if (!actionResult.complete || actionResult.nextIndex !== tokens.length) {
-    builder.selectedTokens = [];
-    builder.selectedWhenId = '';
-    builder.selectedWhereId = '';
-    builder.selectedActionId = '';
-    builder.selectedSentence = '';
-    builder.selectedActionSummary = '';
-    builder.selectedActionModule = '';
-    builder.tokenInputs = new Map();
-    builder.lastAppliedText = '';
-    builder.lastAppliedTokens = [];
-    builder.lastAppliedTokenInputs = [];
+    resetSentenceBuilderSelection(builder);
     renderSentenceBuilder();
     return;
   }
@@ -1293,11 +1231,15 @@ function focusObservationTextarea() {
 function updateObservationText(value, options = {}) {
   const textarea = document.getElementById('observation-text');
   const next = typeof value === 'string' ? value : '';
-  if (textarea && textarea.value !== next) {
+  const shouldUpdateTextarea = !options.skipTextarea;
+  if (textarea && shouldUpdateTextarea && textarea.value !== next) {
     textarea.value = next;
   }
 
   state.text = next;
+  if (!options.preserveFreeform) {
+    state.freeformText = next;
+  }
   state.scrolledToSuggestions = false;
   renderHighlightDetails(null);
 
@@ -1315,7 +1257,7 @@ function updateObservationText(value, options = {}) {
   scheduleAnalysis(options.reason || 'rewrite', { immediate: options.immediate !== false });
   renderSuggestions();
 
-  if (textarea && options.focus !== false) {
+  if (textarea && shouldUpdateTextarea && options.focus !== false) {
     requestAnimationFrame(() => {
       const position = next.length;
       textarea.focus();
@@ -2517,6 +2459,7 @@ function handleSubmit() {
 
 function handleClear() {
   state.text = '';
+  state.freeformText = '';
   state.mode = 'editing';
   state.analysis = null;
   state.lastSubmitted = '';
