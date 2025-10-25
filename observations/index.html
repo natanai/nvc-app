@@ -3084,39 +3084,29 @@ button.site-nav__magnet {
                     aria-live="polite"
                   >
                     <div class="observation-sentence-builder__field">
-                      <label class="observation-sentence-builder__label" for="observation-builder-module">Library topic</label>
+                      <label class="observation-sentence-builder__label" for="observation-builder-when">When did it happen?</label>
                       <select
-                        id="observation-builder-module"
+                        id="observation-builder-when"
                         class="observation-sentence-builder__select"
                         disabled
                       >
-                        <option value="">Loading observation library…</option>
+                        <option value="">Loading time anchors…</option>
                       </select>
-                      <p
-                        id="observation-builder-module-summary"
-                        class="observation-sentence-builder__summary"
-                        hidden
-                      ></p>
                     </div>
                     <div class="observation-sentence-builder__field">
-                      <label class="observation-sentence-builder__label" for="observation-builder-cue">Observation focus</label>
+                      <label class="observation-sentence-builder__label" for="observation-builder-where">Where or with whom?</label>
                       <select
-                        id="observation-builder-cue"
+                        id="observation-builder-where"
                         class="observation-sentence-builder__select"
                         disabled
                       >
-                        <option value="">Choose a library above</option>
+                        <option value="">Select when first</option>
                       </select>
-                      <p
-                        id="observation-builder-cue-summary"
-                        class="observation-sentence-builder__summary"
-                        hidden
-                      ></p>
                     </div>
                     <div class="observation-sentence-builder__field">
                       <div class="observation-sentence-builder__label-row">
-                        <label class="observation-sentence-builder__label" for="observation-builder-sentence">
-                          Exact sentence
+                        <label class="observation-sentence-builder__label" for="observation-builder-action">
+                          I saw/heard…
                         </label>
                         <button
                           type="button"
@@ -3128,12 +3118,17 @@ button.site-nav__magnet {
                         </button>
                       </div>
                       <select
-                        id="observation-builder-sentence"
+                        id="observation-builder-action"
                         class="observation-sentence-builder__select"
                         disabled
                       >
-                        <option value="">Select a sentence focus first</option>
+                        <option value="">Add time and setting first</option>
                       </select>
+                      <p
+                        id="observation-builder-action-summary"
+                        class="observation-sentence-builder__summary"
+                        hidden
+                      ></p>
                     </div>
                     <div
                       id="observation-builder-preview"

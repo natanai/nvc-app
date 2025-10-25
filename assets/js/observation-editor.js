@@ -74,6 +74,49 @@ const DETECTION_MIN_WORDS = 2;
 const DETECTION_MATCH_LIMIT = 1;
 const DETECTION_NEAR_LIMIT = 6;
 
+const SENTENCE_BUILDER_WHEN_OPTIONS = [
+  'Yesterday at 9:00 a.m.',
+  'This morning at 8:30 a.m.',
+  'On Monday around noon',
+  'Last night at 10:15 p.m.',
+  'During Tuesday\'s 2:00 p.m. meeting',
+  'Earlier today at 4:45 p.m.',
+  'On 2024-09-15 at 11:00 a.m.',
+  'First thing this morning',
+  'On Friday evening around 7 p.m.',
+  'At 3:30 p.m. last Wednesday',
+];
+
+const SENTENCE_BUILDER_WHERE_OPTIONS = [
+  'in the conference room with my team',
+  'at home in the kitchen with my family',
+  'on our Zoom call with the client',
+  'in the classroom with the students',
+  'at the grocery store checkout',
+  'in the hospital waiting room with my dad',
+  'on the phone with the support agent',
+  'at the park with my kids',
+  'on the group chat with my coworkers',
+  'in the living room with my partner',
+];
+
+const HEARD_VERB_KEYWORDS = [
+  'said',
+  'told',
+  'asked',
+  'yelled',
+  'shouted',
+  'whispered',
+  'muttered',
+  'texted',
+  'emailed',
+  'messaged',
+  'called',
+  'announced',
+  'sang',
+  'reported',
+];
+
 const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
 const OBSERVATION_GUIDELINE_COMPLETE =
   'All observation anchors are covered. Load possible matches when you’re ready.';
@@ -85,15 +128,16 @@ const OBSERVATION_DETECTION_NOTE =
 function createEmptySentenceBuilderState() {
   return {
     ready: false,
-    modules: [],
-    moduleLookup: new Map(),
-    cueLookup: new Map(),
-    sentencesByCueId: new Map(),
-    selectedModuleId: '',
-    selectedCueId: '',
+    whenOptions: [],
+    whereOptions: [],
+    actions: [],
+    actionLookup: new Map(),
+    selectedWhen: '',
+    selectedWhere: '',
+    selectedActionId: '',
     selectedSentence: '',
-    selectedCueSummary: '',
-    selectedModuleSummary: '',
+    selectedActionSummary: '',
+    selectedActionModule: '',
   };
 }
 
@@ -256,253 +300,257 @@ function initializeSentenceBuilder(blueprints) {
   const builder = state.builder;
   const cueList = Array.isArray(state.cues) ? state.cues : [];
   const cueMap = new Map(cueList.map(cue => [cue.id, cue]));
-  const libraryModules = Array.isArray(state.cueLibrary?.modules) ? state.cueLibrary.modules : [];
-  const moduleSources = mergeBlueprintWithLibraryModules(blueprints, libraryModules, cueMap);
-
-  const normalizedModules = moduleSources
-    .map(module => normalizeBuilderModule(module, cueMap))
-    .filter(Boolean);
-
-  builder.modules = normalizedModules;
-  builder.moduleLookup = new Map(normalizedModules.map(module => [module.id, module]));
-  builder.cueLookup = new Map();
-  builder.sentencesByCueId = new Map();
-
-  normalizedModules.forEach(module => {
-    module.cues.forEach(cue => {
-      builder.cueLookup.set(cue.id, cue);
-      builder.sentencesByCueId.set(cue.id, cue.sentences);
-    });
-  });
-
-  builder.ready = normalizedModules.length > 0;
-
-  if (builder.ready) {
-    if (!builder.selectedModuleId || !builder.moduleLookup.has(builder.selectedModuleId)) {
-      builder.selectedModuleId = normalizedModules[0].id;
-    }
-    const activeModule = builder.moduleLookup.get(builder.selectedModuleId);
-    if (!builder.selectedCueId || !builder.cueLookup.has(builder.selectedCueId)) {
-      builder.selectedCueId = activeModule?.cues?.[0]?.id || '';
-    }
-    const activeCue = builder.cueLookup.get(builder.selectedCueId);
-    const sentences = builder.sentencesByCueId.get(builder.selectedCueId) || [];
-    if (!sentences.includes(builder.selectedSentence)) {
-      builder.selectedSentence = sentences[0] || '';
-    }
-    builder.selectedCueSummary = activeCue?.summary || activeModule?.slotSummary || '';
-    builder.selectedModuleSummary = activeModule?.slotSummary || '';
-  } else {
-    builder.selectedModuleId = '';
-    builder.selectedCueId = '';
-    builder.selectedSentence = '';
-    builder.selectedCueSummary = '';
-    builder.selectedModuleSummary = '';
-  }
-
-  renderSentenceBuilder();
-  const trimmedText = typeof state.text === 'string' ? state.text.trim() : '';
-  syncSentenceBuilderToText(state.text);
-  const selectedSentence = typeof builder.selectedSentence === 'string' ? builder.selectedSentence.trim() : '';
-  if (state.inputMode === INPUT_MODE_BUILDER) {
-    if ((!trimmedText && selectedSentence) || (trimmedText && trimmedText === selectedSentence)) {
-      applySentenceBuilderSelection({ focus: false });
-    }
-  }
-}
-
-function mergeBlueprintWithLibraryModules(blueprints, libraryModules, cueMap) {
-  const modules = [];
-  const blueprintList = Array.isArray(blueprints?.modules)
+  const blueprintModules = Array.isArray(blueprints?.modules)
     ? blueprints.modules
     : Array.isArray(blueprints)
       ? blueprints
       : [];
-  const moduleIndex = new Map();
 
-  blueprintList.forEach(entry => {
+  builder.whenOptions = SENTENCE_BUILDER_WHEN_OPTIONS.map(value => ({ value, label: value }));
+  builder.whereOptions = SENTENCE_BUILDER_WHERE_OPTIONS.map(value => ({
+    value,
+    label: formatBuilderSegmentLabel(value),
+  }));
+
+  const actions = buildSentenceBuilderActions(blueprintModules, cueMap);
+  builder.actions = actions;
+  builder.actionLookup = new Map(actions.map(action => [action.id, action]));
+  builder.ready = builder.whenOptions.length > 0 && builder.whereOptions.length > 0 && actions.length > 0;
+
+  if (!builder.ready) {
+    builder.selectedWhen = '';
+    builder.selectedWhere = '';
+    builder.selectedActionId = '';
+    builder.selectedSentence = '';
+    builder.selectedActionSummary = '';
+    builder.selectedActionModule = '';
+  }
+
+  renderSentenceBuilder();
+  syncSentenceBuilderToText(state.text);
+
+  if (state.inputMode === INPUT_MODE_BUILDER) {
+    applySentenceBuilderSelection({ focus: false, immediate: false });
+  }
+}
+
+function buildSentenceBuilderActions(modules, cueMap) {
+  const actions = [];
+  const addedCueIds = new Set();
+  const moduleList = Array.isArray(modules) ? modules : [];
+
+  moduleList.forEach(entry => {
     if (!entry || typeof entry !== 'object') {
       return;
     }
-    const id = typeof entry.id === 'string' ? entry.id.trim() : '';
-    if (!id) {
+    const moduleId = typeof entry.id === 'string' ? entry.id.trim() : '';
+    if (!moduleId) {
       return;
     }
-    const module = {
-      id,
-      label: typeof entry.label === 'string' ? entry.label.trim() : '',
-      summary: typeof entry.summary === 'string' ? entry.summary.trim() : '',
-      slotSummary: typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '',
-      cues: Array.isArray(entry.cues) ? entry.cues.slice() : [],
-    };
-    moduleIndex.set(id, module);
-    modules.push(module);
-  });
+    const moduleLabel = typeof entry.label === 'string' && entry.label.trim() ? entry.label.trim() : formatBuilderTitle(moduleId);
+    const moduleSummary = typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '';
+    const cueEntries = Array.isArray(entry.cues) ? entry.cues : [];
 
-  (Array.isArray(libraryModules) ? libraryModules : []).forEach(entry => {
-    if (!entry || typeof entry !== 'object') {
-      return;
-    }
-    const id = typeof entry.id === 'string' ? entry.id.trim() : '';
-    if (!id) {
-      return;
-    }
-    const existing = moduleIndex.get(id);
-    if (existing) {
-      if (!existing.label && typeof entry.label === 'string') {
-        existing.label = entry.label.trim();
+    cueEntries.forEach(cueEntry => {
+      const cueId = typeof cueEntry?.id === 'string' ? cueEntry.id.trim() : '';
+      if (!cueId || addedCueIds.has(cueId)) {
+        return;
       }
-      if (!existing.summary && typeof entry.summary === 'string') {
-        existing.summary = entry.summary.trim();
+      const cueMeta = cueMap.get(cueId);
+      const example = resolveCueExample(cueEntry, cueMeta);
+      const actionText = buildBuilderActionText(example);
+      if (!actionText) {
+        return;
       }
-      if (!existing.slotSummary && typeof entry.slotSummary === 'string') {
-        existing.slotSummary = entry.slotSummary.trim();
-      }
-      const existingCueIds = new Set(
-        Array.isArray(existing.cues)
-          ? existing.cues
-              .map(cue => (typeof cue?.id === 'string' ? cue.id.trim() : ''))
-              .filter(Boolean)
-          : [],
-      );
-      (Array.isArray(entry.cueIds) ? entry.cueIds : []).forEach(cueId => {
-        const trimmedCueId = typeof cueId === 'string' ? cueId.trim() : '';
-        if (!trimmedCueId || existingCueIds.has(trimmedCueId)) {
-          return;
-        }
-        const cueMeta = cueMap.get(trimmedCueId);
-        if (!existing.cues) {
-          existing.cues = [];
-        }
-        existing.cues.push({ id: trimmedCueId, example: cueMeta?.example || '' });
-        existingCueIds.add(trimmedCueId);
+      const label = (cueMeta?.phrase || cueMeta?.label || formatBuilderTitle(cueId)).trim();
+      const summary = (cueMeta?.slotSummary || moduleSummary || '').trim();
+      actions.push({
+        id: cueId,
+        moduleId,
+        moduleLabel,
+        moduleSummary,
+        label,
+        summary,
+        text: actionText,
       });
-    } else {
-      const cues = (Array.isArray(entry.cueIds) ? entry.cueIds : [])
-        .map(cueId => {
-          const trimmedCueId = typeof cueId === 'string' ? cueId.trim() : '';
-          if (!trimmedCueId) {
-            return null;
-          }
-          const cueMeta = cueMap.get(trimmedCueId);
-          return { id: trimmedCueId, example: cueMeta?.example || '' };
-        })
-        .filter(Boolean);
-      const module = {
-        id,
-        label: typeof entry.label === 'string' ? entry.label.trim() : '',
-        summary: typeof entry.summary === 'string' ? entry.summary.trim() : '',
-        slotSummary: typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '',
-        cues,
-      };
-      modules.push(module);
-      moduleIndex.set(id, module);
-    }
+      addedCueIds.add(cueId);
+    });
   });
 
-  return modules;
+  if (!actions.length && cueMap.size) {
+    cueMap.forEach((cueMeta, cueId) => {
+      if (addedCueIds.has(cueId)) {
+        return;
+      }
+      const example = resolveCueExample({}, cueMeta);
+      const actionText = buildBuilderActionText(example);
+      if (!actionText) {
+        return;
+      }
+      const label = (cueMeta?.phrase || cueMeta?.label || formatBuilderTitle(cueId)).trim();
+      const summary = (cueMeta?.slotSummary || '').trim();
+      actions.push({
+        id: cueId,
+        moduleId: cueMeta?.moduleId || '',
+        moduleLabel: cueMeta?.moduleId ? formatBuilderTitle(cueMeta.moduleId) : '',
+        moduleSummary: '',
+        label,
+        summary,
+        text: actionText,
+      });
+      addedCueIds.add(cueId);
+    });
+  }
+
+  return actions.sort((a, b) => {
+    const moduleCompare = (a.moduleLabel || '').localeCompare(b.moduleLabel || '');
+    if (moduleCompare !== 0) {
+      return moduleCompare;
+    }
+    return (a.label || '').localeCompare(b.label || '');
+  });
 }
 
-function normalizeBuilderModule(entry, cueMap) {
-  if (!entry || typeof entry !== 'object') {
-    return null;
+function resolveCueExample(cueEntry, cueMeta) {
+  const candidates = [];
+  if (typeof cueEntry?.example === 'string') {
+    candidates.push(cueEntry.example.trim());
   }
-  const id = typeof entry.id === 'string' ? entry.id.trim() : '';
-  if (!id) {
-    return null;
-  }
-  const label = typeof entry.label === 'string' && entry.label.trim() ? entry.label.trim() : formatBuilderTitle(id);
-  const summary = typeof entry.summary === 'string' ? entry.summary.trim() : '';
-  const slotSummary = typeof entry.slotSummary === 'string' ? entry.slotSummary.trim() : '';
-  const cues = Array.isArray(entry.cues) ? entry.cues : [];
-  const normalizedCues = cues
-    .map(cue => normalizeBuilderCue(cue, cueMap, slotSummary))
-    .filter(Boolean);
-  if (!normalizedCues.length) {
-    return null;
-  }
-  return {
-    id,
-    label,
-    summary,
-    slotSummary,
-    cues: normalizedCues,
-  };
-}
-
-function normalizeBuilderCue(entry, cueMap, moduleSlotSummary) {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-  const id = typeof entry.id === 'string' ? entry.id.trim() : '';
-  if (!id) {
-    return null;
-  }
-  const cueMeta = cueMap.get(id);
-  const label = cueMeta?.label || formatBuilderTitle(id);
-  const exampleCandidates = [];
-  if (typeof entry.example === 'string') {
-    exampleCandidates.push(entry.example.trim());
-  }
-  if (Array.isArray(entry.examples)) {
-    entry.examples.forEach(example => {
+  if (Array.isArray(cueEntry?.examples)) {
+    cueEntry.examples.forEach(example => {
       if (typeof example === 'string') {
-        exampleCandidates.push(example.trim());
+        candidates.push(example.trim());
       }
     });
   }
-  if (cueMeta?.example) {
-    exampleCandidates.push(cueMeta.example.trim());
+  if (typeof cueMeta?.example === 'string') {
+    candidates.push(cueMeta.example.trim());
   }
-  const uniqueSentences = [];
-  const seen = new Set();
-  exampleCandidates.forEach(sentence => {
-    const trimmed = typeof sentence === 'string' ? sentence.trim() : '';
-    if (!trimmed || seen.has(trimmed)) {
-      return;
-    }
-    seen.add(trimmed);
-    uniqueSentences.push(trimmed);
-  });
-  if (!uniqueSentences.length) {
-    return null;
+  return candidates.find(candidate => candidate && candidate.trim()) || '';
+}
+
+function buildBuilderActionText(example) {
+  const trimmed = typeof example === 'string' ? example.trim() : '';
+  if (!trimmed) {
+    return '';
   }
-  const cueSlotSummary = typeof cueMeta?.slotSummary === 'string' ? cueMeta.slotSummary.trim() : '';
-  return {
-    id,
-    label,
-    summary: cueSlotSummary || moduleSlotSummary,
-    sentences: uniqueSentences,
-  };
+  if (/^I\s+(?:saw|see|heard|hear|notice|noticed|observe|observed|watch|watched|record|recorded|smell|smelled|taste|tasted)\b/i.test(trimmed)) {
+    return ensureSentencePunctuation(trimmed);
+  }
+  const sense = determineBuilderSense(trimmed);
+  const suffix = /[.!?]$/.test(trimmed) ? '' : '.';
+  if (sense === 'heard') {
+    return `I heard this: ${trimmed}${suffix}`;
+  }
+  if (sense === 'saw') {
+    return `I saw this happen: ${trimmed}${suffix}`;
+  }
+  return `I noticed this: ${trimmed}${suffix}`;
+}
+
+function determineBuilderSense(example) {
+  const lower = typeof example === 'string' ? example.toLowerCase() : '';
+  if (!lower) {
+    return 'saw';
+  }
+  if (/["“”]/.test(example)) {
+    return 'heard';
+  }
+  if (HEARD_VERB_KEYWORDS.some(keyword => lower.includes(` ${keyword} `) || lower.startsWith(`${keyword} `))) {
+    return 'heard';
+  }
+  if (lower.includes('voicemail') || lower.includes('audio') || lower.includes('call')) {
+    return 'heard';
+  }
+  return 'saw';
+}
+
+function ensureSentencePunctuation(text) {
+  const source = typeof text === 'string' ? text.trim() : '';
+  if (!source) {
+    return '';
+  }
+  return /[.!?]$/.test(source) ? source : `${source}.`;
+}
+
+function formatBuilderSegmentLabel(value) {
+  const text = typeof value === 'string' ? value.trim() : '';
+  if (!text) {
+    return '';
+  }
+  return text[0].toUpperCase() + text.slice(1);
+}
+
+function formatBuilderActionOptionLabel(action) {
+  if (!action) {
+    return '';
+  }
+  const moduleLabel = typeof action.moduleLabel === 'string' ? action.moduleLabel.trim() : '';
+  const detailSource = typeof action.label === 'string' && action.label.trim()
+    ? action.label.trim()
+    : typeof action.text === 'string'
+      ? action.text.replace(/\s+/g, ' ').trim()
+      : '';
+  const detail = detailSource.length > 120 ? `${detailSource.slice(0, 117)}…` : detailSource;
+  const fallback = detail || moduleLabel || 'Observation cue';
+  return moduleLabel ? `${moduleLabel} — ${fallback}` : fallback;
+}
+
+function normalizeBuilderSegment(value) {
+  const text = typeof value === 'string' ? value.trim() : '';
+  if (!text) {
+    return '';
+  }
+  return text.replace(/[\s]+/g, ' ').replace(/[;,:.]+$/g, '').trim();
+}
+
+function capitalizeFirst(text) {
+  if (!text) {
+    return '';
+  }
+  return text[0].toUpperCase() + text.slice(1);
+}
+
+function composeObservationBuilderSentence(when, where, actionText) {
+  const whenSegment = normalizeBuilderSegment(when);
+  const whereSegment = normalizeBuilderSegment(where);
+  const actionSegment = ensureSentencePunctuation(actionText);
+  if (!whenSegment || !whereSegment || !actionSegment) {
+    return '';
+  }
+  const start = capitalizeFirst(whenSegment);
+  return `${start}, ${whereSegment}, ${actionSegment}`;
 }
 
 function bindSentenceBuilder() {
-  const moduleSelect = document.getElementById('observation-builder-module');
-  if (moduleSelect) {
-    moduleSelect.addEventListener('change', event => {
-      state.builder.selectedModuleId = event.target.value || '';
-      state.builder.selectedCueId = '';
+  const whenSelect = document.getElementById('observation-builder-when');
+  if (whenSelect) {
+    whenSelect.addEventListener('change', event => {
+      state.builder.selectedWhen = event.target.value || '';
+      state.builder.selectedWhere = '';
+      state.builder.selectedActionId = '';
       state.builder.selectedSentence = '';
       renderSentenceBuilder();
       applySentenceBuilderSelection({ focus: false });
     });
   }
 
-  const cueSelect = document.getElementById('observation-builder-cue');
-  if (cueSelect) {
-    cueSelect.addEventListener('change', event => {
-      state.builder.selectedCueId = event.target.value || '';
+  const whereSelect = document.getElementById('observation-builder-where');
+  if (whereSelect) {
+    whereSelect.addEventListener('change', event => {
+      state.builder.selectedWhere = event.target.value || '';
+      state.builder.selectedActionId = '';
       state.builder.selectedSentence = '';
       renderSentenceBuilder();
       applySentenceBuilderSelection({ focus: false });
     });
   }
 
-  const sentenceSelect = document.getElementById('observation-builder-sentence');
-  if (sentenceSelect) {
-    sentenceSelect.addEventListener('change', event => {
-      state.builder.selectedSentence = event.target.value || '';
-      renderSentenceBuilderPreview();
+  const actionSelect = document.getElementById('observation-builder-action');
+  if (actionSelect) {
+    actionSelect.addEventListener('change', event => {
+      state.builder.selectedActionId = event.target.value || '';
+      renderSentenceBuilder();
       applySentenceBuilderSelection({ focus: false });
     });
   }
@@ -588,155 +636,113 @@ function renderEditorMode() {
 
 function renderSentenceBuilder() {
   const builder = state.builder || createEmptySentenceBuilderState();
-  const moduleSelect = document.getElementById('observation-builder-module');
-  const moduleSummary = document.getElementById('observation-builder-module-summary');
-  const cueSelect = document.getElementById('observation-builder-cue');
-  const cueSummary = document.getElementById('observation-builder-cue-summary');
-  const sentenceSelect = document.getElementById('observation-builder-sentence');
+  const whenSelect = document.getElementById('observation-builder-when');
+  const whereSelect = document.getElementById('observation-builder-where');
+  const actionSelect = document.getElementById('observation-builder-action');
+  const actionSummary = document.getElementById('observation-builder-action-summary');
   const applyButton = document.getElementById('observation-builder-apply');
 
-  if (!builder.ready || !builder.modules.length) {
-    if (moduleSelect) {
-      populateSentenceBuilderSelect(moduleSelect, [], { placeholder: 'Loading observation library…' });
+  if (!builder.ready) {
+    if (whenSelect) {
+      populateSentenceBuilderSelect(whenSelect, [], { placeholder: 'Loading time anchors…', disabled: true });
     }
-    if (moduleSummary) {
-      moduleSummary.textContent = '';
-      moduleSummary.setAttribute('hidden', 'hidden');
+    if (whereSelect) {
+      populateSentenceBuilderSelect(whereSelect, [], { placeholder: 'Select when first', disabled: true });
     }
-    if (cueSelect) {
-      populateSentenceBuilderSelect(cueSelect, [], { placeholder: 'Choose a library above' });
+    if (actionSelect) {
+      populateSentenceBuilderSelect(actionSelect, [], { placeholder: 'Add time and setting first', disabled: true });
     }
-    if (cueSummary) {
-      cueSummary.textContent = '';
-      cueSummary.setAttribute('hidden', 'hidden');
-    }
-    if (sentenceSelect) {
-      populateSentenceBuilderSelect(sentenceSelect, [], { placeholder: 'Pick a focus to see sentences' });
+    if (actionSummary) {
+      actionSummary.textContent = '';
+      actionSummary.setAttribute('hidden', 'hidden');
     }
     if (applyButton) {
       applyButton.disabled = true;
     }
+    builder.selectedSentence = '';
     renderSentenceBuilderPreview();
     return;
   }
 
-  const modules = builder.modules;
-  let activeModule = builder.moduleLookup.get(builder.selectedModuleId);
-  if (!activeModule) {
-    activeModule = modules[0];
-    builder.selectedModuleId = activeModule ? activeModule.id : '';
-  }
-
-  if (moduleSelect) {
-    const moduleOptions = modules.map(module => ({
-      value: module.id,
-      label: module.label || formatBuilderTitle(module.id),
-    }));
-    populateSentenceBuilderSelect(moduleSelect, moduleOptions, {
-      selected: builder.selectedModuleId,
-      placeholder: 'Select a library topic',
+  if (whenSelect) {
+    populateSentenceBuilderSelect(whenSelect, builder.whenOptions, {
+      selected: builder.selectedWhen,
+      placeholder: 'Choose when it happened',
     });
   }
 
-  if (moduleSummary) {
-    const summaryParts = [];
-    if (activeModule?.summary) {
-      summaryParts.push(activeModule.summary);
+  const hasWhen = Boolean(builder.selectedWhen);
+
+  if (whereSelect) {
+    populateSentenceBuilderSelect(whereSelect, builder.whereOptions, {
+      selected: builder.selectedWhere,
+      placeholder: hasWhen ? 'Choose where or with whom' : 'Select when first',
+      disabled: !hasWhen,
+    });
+  }
+
+  const hasWhere = hasWhen && Boolean(builder.selectedWhere);
+
+  const actionOptions = builder.actions.map(action => ({
+    value: action.id,
+    label: formatBuilderActionOptionLabel(action),
+  }));
+
+  if (actionSelect) {
+    populateSentenceBuilderSelect(actionSelect, actionOptions, {
+      selected: hasWhere ? builder.selectedActionId : '',
+      placeholder: hasWhere ? 'Choose what you saw or heard' : 'Select a setting first',
+      disabled: !hasWhere,
+    });
+  }
+
+  const activeAction = hasWhere ? builder.actionLookup.get(builder.selectedActionId) : null;
+  const sentence = activeAction
+    ? composeObservationBuilderSentence(builder.selectedWhen, builder.selectedWhere, activeAction.text)
+    : '';
+
+  builder.selectedSentence = sentence;
+  builder.selectedActionSummary = activeAction?.summary || '';
+  builder.selectedActionModule = activeAction?.moduleLabel || '';
+
+  if (actionSummary) {
+    const noteParts = [];
+    if (builder.selectedActionModule) {
+      noteParts.push(`Library: ${builder.selectedActionModule}.`);
     }
-    if (activeModule?.slotSummary) {
-      summaryParts.push(`Structure covers ${activeModule.slotSummary}.`);
+    if (builder.selectedActionSummary) {
+      noteParts.push(`Structure covers ${builder.selectedActionSummary}.`);
     }
-    const summaryText = summaryParts.join(' ').trim();
-    if (summaryText) {
-      moduleSummary.textContent = summaryText;
-      moduleSummary.removeAttribute('hidden');
+    const noteText = noteParts.join(' ').trim();
+    if (noteText) {
+      actionSummary.textContent = noteText;
+      actionSummary.removeAttribute('hidden');
     } else {
-      moduleSummary.textContent = '';
-      moduleSummary.setAttribute('hidden', 'hidden');
+      actionSummary.textContent = '';
+      actionSummary.setAttribute('hidden', 'hidden');
     }
-    builder.selectedModuleSummary = activeModule?.slotSummary || '';
-  }
-
-  const cues = Array.isArray(activeModule?.cues) ? activeModule.cues : [];
-  if (cues.length) {
-    if (!cues.some(cue => cue.id === builder.selectedCueId)) {
-      builder.selectedCueId = cues[0].id;
-    }
-  } else {
-    builder.selectedCueId = '';
-  }
-
-  const activeCue = cues.find(cue => cue.id === builder.selectedCueId) || null;
-
-  if (cueSelect) {
-    const cueOptions = cues.map(cue => ({
-      value: cue.id,
-      label: cue.label || formatBuilderTitle(cue.id),
-    }));
-    populateSentenceBuilderSelect(cueSelect, cueOptions, {
-      selected: builder.selectedCueId,
-      placeholder: activeModule ? 'Select a sentence focus' : 'Choose a library topic first',
-    });
-  }
-
-  if (cueSummary) {
-    const summaryText = activeCue?.summary && activeCue.summary !== activeModule?.slotSummary
-      ? `Focus covers ${activeCue.summary}.`
-      : '';
-    if (summaryText) {
-      cueSummary.textContent = summaryText;
-      cueSummary.removeAttribute('hidden');
-    } else {
-      cueSummary.textContent = '';
-      cueSummary.setAttribute('hidden', 'hidden');
-    }
-  }
-
-  builder.selectedCueSummary = activeCue?.summary || activeModule?.slotSummary || '';
-
-  const sentences = activeCue ? activeCue.sentences.filter(Boolean) : [];
-  if (sentences.length && !sentences.includes(builder.selectedSentence)) {
-    builder.selectedSentence = sentences[0];
-  } else if (!sentences.length) {
-    builder.selectedSentence = '';
-  }
-
-  if (sentenceSelect) {
-    const sentenceOptions = sentences.map((sentence, index) => ({
-      value: sentence,
-      label: formatSentenceOptionLabel(sentence, index),
-    }));
-    populateSentenceBuilderSelect(sentenceSelect, sentenceOptions, {
-      selected: builder.selectedSentence,
-      placeholder: activeCue ? 'No example sentences available yet' : 'Select a sentence focus first',
-    });
   }
 
   if (applyButton) {
-    applyButton.disabled = !builder.selectedSentence;
+    applyButton.disabled = !sentence;
   }
 
   renderSentenceBuilderPreview();
 }
 
-function populateSentenceBuilderSelect(select, options, { selected = '', placeholder = '' } = {}) {
+function populateSentenceBuilderSelect(select, options, { selected = '', placeholder = '', disabled = false } = {}) {
   if (!select) {
     return;
   }
   while (select.firstChild) {
     select.removeChild(select.firstChild);
   }
-  const list = Array.isArray(options) ? options : [];
-  if (!list.length) {
-    if (placeholder) {
-      const option = document.createElement('option');
-      option.value = '';
-      option.textContent = placeholder;
-      select.appendChild(option);
-    }
-    select.value = '';
-    select.disabled = true;
-    return;
+  const list = Array.isArray(options) ? options.filter(Boolean) : [];
+  if (placeholder) {
+    const placeholderOption = document.createElement('option');
+    placeholderOption.value = '';
+    placeholderOption.textContent = placeholder;
+    select.appendChild(placeholderOption);
   }
 
   list.forEach(entry => {
@@ -747,20 +753,10 @@ function populateSentenceBuilderSelect(select, options, { selected = '', placeho
   });
 
   const hasSelected = list.some(entry => entry.value === selected);
-  const nextValue = hasSelected ? selected : list[0].value;
+  const nextValue = hasSelected ? selected : '';
   select.value = nextValue;
-  select.disabled = false;
-}
-
-function formatSentenceOptionLabel(sentence, index) {
-  const normalized = typeof sentence === 'string' ? sentence.replace(/\s+/g, ' ').trim() : '';
-  if (!normalized) {
-    return `Sentence ${index + 1}`;
-  }
-  if (normalized.length <= 120) {
-    return normalized;
-  }
-  return `${normalized.slice(0, 117)}…`;
+  const shouldDisable = disabled || (!list.length && !placeholder);
+  select.disabled = shouldDisable;
 }
 
 function renderSentenceBuilderPreview() {
@@ -787,11 +783,20 @@ function renderSentenceBuilderPreview() {
   text.textContent = sentence;
   preview.appendChild(text);
 
-  const summary = state.builder?.selectedCueSummary || state.builder?.selectedModuleSummary || '';
+  const moduleLabel = state.builder?.selectedActionModule || '';
+  const summary = state.builder?.selectedActionSummary || '';
+  const noteParts = [];
+  if (moduleLabel) {
+    noteParts.push(`Library: ${moduleLabel}.`);
+  }
   if (summary) {
+    noteParts.push(`Structure covers ${summary}.`);
+  }
+  const noteText = noteParts.join(' ').trim();
+  if (noteText) {
     const note = document.createElement('p');
     note.className = 'observation-sentence-builder__preview-note';
-    note.textContent = `Structure covers ${summary}.`;
+    note.textContent = noteText;
     preview.appendChild(note);
   }
 
@@ -823,22 +828,36 @@ function syncSentenceBuilderToText(text) {
   if (!source) {
     return;
   }
-  for (const module of builder.modules) {
-    if (!module || !Array.isArray(module.cues)) {
+  if (builder.selectedSentence && builder.selectedSentence === source) {
+    return;
+  }
+
+  const whenOptions = Array.isArray(builder.whenOptions) ? builder.whenOptions : [];
+  const whereOptions = Array.isArray(builder.whereOptions) ? builder.whereOptions : [];
+  const actions = Array.isArray(builder.actions) ? builder.actions : [];
+
+  for (const whenOption of whenOptions) {
+    const whenValue = whenOption?.value || '';
+    if (!whenValue) {
       continue;
     }
-    for (const cue of module.cues) {
-      if (!cue || !Array.isArray(cue.sentences)) {
+    for (const whereOption of whereOptions) {
+      const whereValue = whereOption?.value || '';
+      if (!whereValue) {
         continue;
       }
-      if (cue.sentences.includes(source)) {
-        builder.selectedModuleId = module.id;
-        builder.selectedCueId = cue.id;
-        builder.selectedSentence = source;
-        builder.selectedCueSummary = cue.summary || module.slotSummary || '';
-        builder.selectedModuleSummary = module.slotSummary || '';
-        renderSentenceBuilder();
-        return;
+      for (const action of actions) {
+        const candidate = composeObservationBuilderSentence(whenValue, whereValue, action?.text || '');
+        if (candidate && candidate === source) {
+          builder.selectedWhen = whenValue;
+          builder.selectedWhere = whereValue;
+          builder.selectedActionId = action.id;
+          builder.selectedSentence = candidate;
+          builder.selectedActionSummary = action.summary || '';
+          builder.selectedActionModule = action.moduleLabel || '';
+          renderSentenceBuilder();
+          return;
+        }
       }
     }
   }
