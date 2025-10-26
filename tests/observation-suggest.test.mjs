@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 
 import { createCueMatchers } from '../lib/observationCueMatcher.js';
 import { compileObservationCueLibrary } from '../lib/observationCueData.js';
-import { suggestFromObservation } from '../lib/observationSuggest.js';
+import { collectCatalogFeelings, suggestFromObservation } from '../lib/observationSuggest.js';
+import { computeFallbackSuggestion } from '../lib/observationFallback.js';
 
 const tests = [];
 
@@ -43,6 +44,54 @@ test('limits module hits and reports overflow', () => {
   assert.equal(result.hits.length, 2);
   assert.equal(result.totalHits, 3);
   assert.equal(result.overflow, 1);
+});
+
+test('limits suggestions to four needs and aligned feelings', () => {
+  const observation =
+    'Yesterday in the lab they skipped asking me for input, they cut off maya mid sentence, we went three shifts without a break, the handoff instructions were unclear, and the sensor kept glitching.';
+  const library = createNeedHeavyCueLibrary();
+
+  const result = suggestFromObservation(observation, library);
+
+  assert.equal(result.needs.length, 4);
+  assert.deepEqual(result.needs, ['autonomy', 'consideration', 'rest', 'clarity']);
+  assert.equal(result.feelings.length, 4);
+  const allowedFeelings = new Set(['frustrated', 'tense', 'annoyed', 'hurt', 'drained', 'confused']);
+  result.feelings.forEach(feeling => {
+    assert.ok(allowedFeelings.has(feeling), `Unexpected feeling suggestion ${feeling}`);
+  });
+  assert.ok(!result.feelings.includes('scared'));
+  assert.ok(!result.needs.includes('stability'));
+});
+
+test('fallback suggestion aggregates top needs and feelings', () => {
+  const observation =
+    'Yesterday in the lab they skipped asking me for input, they cut off maya mid sentence, we went three shifts without a break, the handoff instructions were unclear, and the sensor kept glitching.';
+  const library = createNeedHeavyCueLibrary();
+
+  const fallback = computeFallbackSuggestion(observation, library.cues, { needLimit: 4, feelingLimit: 4 });
+
+  assert.ok(fallback);
+  assert.deepEqual(new Set(fallback.needSlugs), new Set(['autonomy', 'rest', 'clarity', 'stability']));
+  assert.equal(fallback.feelingSlugs.length, 4);
+  assert.deepEqual(new Set(fallback.feelingSlugs), new Set(['frustrated', 'tense', 'drained', 'confused']));
+});
+
+test('collectCatalogFeelings favors overlapping needs and caps the limit', () => {
+  const catalog = {
+    feelingsByNeed: new Map([
+      ['autonomy', { unmet: ['frustrated', 'tense'], met: ['empowered', 'free'] }],
+      ['consideration', { unmet: ['hurt'], met: ['appreciated'] }],
+      ['rest', { unmet: ['drained'], met: ['rested'] }],
+      ['clarity', { unmet: ['confused'], met: ['clear', 'certain'] }],
+    ]),
+  };
+
+  const unmet = collectCatalogFeelings(catalog, ['autonomy', 'rest', 'clarity', 'consideration'], 'unmet', 4);
+  assert.deepEqual(unmet, ['frustrated', 'drained', 'confused', 'hurt']);
+
+  const met = collectCatalogFeelings(catalog, ['autonomy', 'rest'], 'met', 3);
+  assert.deepEqual(met, ['empowered', 'rested', 'free']);
 });
 
 function createMockCueLibrary() {
@@ -106,6 +155,111 @@ function createMockCueLibrary() {
       slotIds: ['measure'],
       detectors: [{ type: 'regex', pattern: 'emailed me 5 times', flags: 'i' }],
       cueIds: ['measure-cue'],
+    },
+  ];
+
+  return compileObservationCueLibrary({ cues, modules: moduleDefs });
+}
+
+function createNeedHeavyCueLibrary() {
+  const cues = [
+    {
+      id: 'autonomy-cue',
+      cue: 'autonomy prompt',
+      label: 'Autonomy prompt',
+      feelings: ['frustrated', 'tense'],
+      needs: ['autonomy'],
+      slotCoverage: [],
+      matchers: createCueMatchers({ patterns: ['skipped asking me for input'] }),
+      example: 'They skipped asking me for input.',
+      phrases: ['skipped asking me for input'],
+    },
+    {
+      id: 'consideration-cue',
+      cue: 'consideration prompt',
+      label: 'Consideration prompt',
+      feelings: ['hurt', 'annoyed'],
+      needs: ['consideration'],
+      slotCoverage: [],
+      matchers: createCueMatchers({ patterns: ['cut off maya'] }),
+      example: 'They cut off Maya.',
+      phrases: ['cut off maya'],
+    },
+    {
+      id: 'rest-cue',
+      cue: 'rest prompt',
+      label: 'Rest prompt',
+      feelings: ['drained'],
+      needs: ['rest'],
+      slotCoverage: [],
+      matchers: createCueMatchers({ patterns: ['three shifts without a break'] }),
+      example: 'We went three shifts without a break.',
+      phrases: ['three shifts without a break'],
+    },
+    {
+      id: 'clarity-cue',
+      cue: 'clarity prompt',
+      label: 'Clarity prompt',
+      feelings: ['confused'],
+      needs: ['clarity'],
+      slotCoverage: [],
+      matchers: createCueMatchers({ patterns: ['handoff instructions were unclear'] }),
+      example: 'The handoff instructions were unclear.',
+      phrases: ['handoff instructions were unclear'],
+    },
+    {
+      id: 'stability-cue',
+      cue: 'stability prompt',
+      label: 'Stability prompt',
+      feelings: ['scared'],
+      needs: ['stability'],
+      slotCoverage: [],
+      matchers: createCueMatchers({ patterns: ['sensor kept glitching'] }),
+      example: 'The sensor kept glitching.',
+      phrases: ['sensor kept glitching'],
+    },
+  ];
+
+  const moduleDefs = [
+    {
+      id: 'autonomy-module',
+      label: 'A autonomy cue',
+      summary: 'Supports autonomy.',
+      slotIds: [],
+      detectors: [{ type: 'regex', pattern: 'skipped asking me for input', flags: 'i' }],
+      cueIds: ['autonomy-cue'],
+    },
+    {
+      id: 'consideration-module',
+      label: 'B consideration cue',
+      summary: 'Supports consideration.',
+      slotIds: [],
+      detectors: [{ type: 'regex', pattern: 'cut off maya', flags: 'i' }],
+      cueIds: ['consideration-cue'],
+    },
+    {
+      id: 'rest-module',
+      label: 'C rest cue',
+      summary: 'Supports rest.',
+      slotIds: [],
+      detectors: [{ type: 'regex', pattern: 'three shifts without a break', flags: 'i' }],
+      cueIds: ['rest-cue'],
+    },
+    {
+      id: 'clarity-module',
+      label: 'D clarity cue',
+      summary: 'Supports clarity.',
+      slotIds: [],
+      detectors: [{ type: 'regex', pattern: 'handoff instructions were unclear', flags: 'i' }],
+      cueIds: ['clarity-cue'],
+    },
+    {
+      id: 'stability-module',
+      label: 'E stability cue',
+      summary: 'Supports stability.',
+      slotIds: [],
+      detectors: [{ type: 'regex', pattern: 'sensor kept glitching', flags: 'i' }],
+      cueIds: ['stability-cue'],
     },
   ];
 
