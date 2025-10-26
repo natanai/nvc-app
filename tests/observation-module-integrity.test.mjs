@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 async function loadLibrary() {
-  const csvPath = path.join(rootDir, 'data', 'observation_cues.sanitized.csv');
+  const csvPath = path.join(rootDir, 'data', 'observation_cues.csv');
   const modulesPath = path.join(rootDir, 'data', 'observation_cue_modules.json');
   const [csvText, modulesText] = await Promise.all([
     fs.readFile(csvPath, 'utf8'),

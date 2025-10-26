@@ -67,7 +67,8 @@ export function sanitizeObservationCues({
       changed += 1;
     }
 
-    const exampleKey = sanitizedExample.toLowerCase();
+    const cueId = cueIndex !== -1 ? (row[cueIndex] || '') : '';
+    const exampleKey = `${cueId.trim().toLowerCase()}::${sanitizedExample.toLowerCase()}`;
     if (seenExamples.has(exampleKey)) {
       dropped += 1;
       duplicateDrops += 1;

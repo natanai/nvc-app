@@ -1,2479 +1,3431 @@
 [
   {
-    "id": "dismissive-responses",
-    "label": "Dismissive responses and gestures",
-    "summary": "Moments where gestures or comments dismiss the speaker in front of others.",
+    "id": "love-caring",
+    "label": "Love/Caring",
+    "summary": "Affectionate, reliable bonds can support development and stress recovery across the lifespan. This need may motivate warmth, protection, responsiveness, and generosity. Caring relationships are a durable pathway to health and meaning.",
     "slotIds": [
       "time",
       "context",
-      "sensory"
+      "social",
+      "actions"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\broll(?:ed|s|ing)?\\b[^\\n]{0,40}\\beyes?\\b",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
         "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\beye[-\\s]?roll(?:ed|s|ing)?\\b",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
         "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\b(?:said|muttered|snapped)\\b[^\\n]{0,40}\"?whatever\"?\\b[^\\n]{0,60}\\b(?:slamm(?:ed|ing)|shut|closed)\\b[^\\n]{0,30}\\bdoor\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:you(?:'|\\s*are)|you're|ya)\\s+too\\s+sensitive\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:called|said)\\b[^\\n]{0,40}\\btoo\\s+sensitive\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bwhisper(?:ed|ing)?\\b[^\\n]{0,80}\\b(?:laughed|giggl(?:ed|ing)|snicker(?:ed|ing))\\b",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "My manager rolled his eyes when I asked about the budget.",
-      "My teenager muttered \"whatever\" and slammed the bedroom door.",
-      "A teammate whispered to another person and laughed after I spoke."
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
     ],
     "cueIds": [
-      "dismissive-eye-roll",
-      "dismissive-whatever-door",
-      "dismissive-too-sensitive",
-      "dismissive-whisper-laugh"
+      "love-caring-comfort-turned-away",
+      "love-caring-no-check-in",
+      "love-caring-ignored-distress"
     ],
     "feelings": [
+      "terrified",
       "hurt",
-      "embarrassed",
+      "bewildered",
+      "sad",
+      "frightened",
+      "lonely",
+      "angry",
+      "frustrated",
+      "scared",
+      "tired",
+      "anxious"
+    ],
+    "needs": [
+      "love-caring"
+    ]
+  },
+  {
+    "id": "nurturing",
+    "label": "Nurturing",
+    "summary": "Providing and receiving care can maintain the capacity of individuals and communities. This need may motivate offering support, inviting rest, and resourcing recovery. Nurturing replenishes systems so they remain workable over time.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
+    ],
+    "cueIds": [
+      "nurturing-comfort-turned-away",
+      "nurturing-no-check-in",
+      "nurturing-ignored-distress"
+    ],
+    "feelings": [
+      "terrified",
+      "hurt",
+      "bewildered",
+      "sad",
+      "frightened",
       "lonely",
       "angry",
       "frustrated"
     ],
     "needs": [
-      "respect",
-      "consideration",
-      "connection",
-      "acceptance",
-      "to-be-heard"
+      "nurturing"
     ]
   },
   {
-    "id": "listening-boundaries",
-    "label": "When listening feels one-sided",
-    "summary": "Moments where partners or clients talk over you or insist you never listen.",
+    "id": "connection",
+    "label": "Connection",
+    "summary": "As highly social creatures, humans often thrive on close relationships that provide mutual care. This need may drive us to spend meaningful time with others, share experiences, and cultivate trust and empathy. When we foster genuine connection, we gain emotional support and joy in companionship, and we build resilience through having others to lean on during difficult times.",
     "slotIds": [
       "time",
       "context",
-      "sensory"
+      "social"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:you|ya|u)\\s+never\\s+listen\\b",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
         "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\b(?:you|ya|u)\\s+(?:don(?:'|o)t|do\\s+not)\\s+listen\\b",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
         "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:talk(?:ed)?|spoke)\\s+over\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:cut\\s+me\\s+off|interrup(?:ted|ting))\\b",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "My partner said I never listen when we talked about chores.",
-      "During the call, the client talked over every proposal.",
-      "The conversation kept looping because my input was interrupted."
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
     ],
     "cueIds": [
-      "accused-never-listen",
-      "client-talked-over"
+      "connection-meeting-without",
+      "connection-door-closed-outside",
+      "connection-thread-without"
     ],
     "feelings": [
-      "frustrated",
-      "anxious",
-      "hurt"
-    ],
-    "needs": [
-      "respect",
-      "to-be-heard",
-      "mutuality",
-      "understanding"
-    ]
-  },
-  {
-    "id": "presentation-departures",
-    "label": "Walkouts during presentations",
-    "summary": "Abandoning the room mid-presentation or slamming notebooks while someone shares.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:walked|stormed|strode)\\s+out\\b[^\\n]{0,80}\\b(?:presentation|talk|briefing|update)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bslamm(?:ed|ing)\\b[^\\n]{0,40}\\b(?:notebook|laptop|binder)\\b[^\\n]{0,80}\\b(?:left|walked\\s+out)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A coworker slammed her notebook and left during the presentation.",
-      "Someone walked out as I showed the final slide.",
-      "The room fell silent after the door closed behind them."
-    ],
-    "cueIds": [
-      "presentation-walkout"
-    ],
-    "feelings": [
+      "terrified",
       "hurt",
-      "anxious",
-      "alarmed"
-    ],
-    "needs": [
-      "respect",
-      "support",
-      "predictability"
-    ]
-  },
-  {
-    "id": "sports-officiating",
-    "label": "Missed fouls and officiating gaps",
-    "summary": "Referees overlooking fouls or making no-calls that impact fairness and safety.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:ref|referee|ump)\\b[^\\n]{0,120}\\b(?:miss(?:ed)?|ignor(?:ed|ing)|skipped)\\b[^\\n]{0,60}\\b(?:foul|penalty|call)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bno\\s+call\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The referee missed three fouls in a row.",
-      "No whistle blew when our player was shoved.",
-      "The bench kept shouting about the no-call."
-    ],
-    "cueIds": [
-      "referee-missed-fouls"
-    ],
-    "feelings": [
-      "frustrated",
-      "powerless",
-      "anxious"
-    ],
-    "needs": [
-      "fairness",
-      "safety",
-      "respect"
-    ]
-  },
-  {
-    "id": "queue-respect",
-    "label": "Fairness in lines and shared resources",
-    "summary": "When service staff or shoppers bypass the queue or reach over you for the last item.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:barista|server|cashier|clerk|agent)\\b[^\\n]{0,120}\\b(?:skip(?:ped)?|served)\\b[^\\n]{0,60}\\b(?:before|ahead\\s+of)\\b[^\\n]{0,40}\\bme\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:skip(?:ped)?|cut)\\s+(?:the\\s+)?(?:line|queue)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\breach(?:ed)?\\s+over\\b[^\\n]{0,60}\\b(?:me|my\\s+shoulder)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bgrab(?:bed|bing)\\b[^\\n]{0,60}\\b(?:last|final)\\s+(?:carton|item|package|box)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The barista served someone who arrived after me.",
-      "Another shopper reached over my shoulder for the last carton.",
-      "I stayed in line but others jumped ahead."
-    ],
-    "cueIds": [
-      "service-line-skip",
-      "reached-over-last-item"
-    ],
-    "feelings": [
-      "irritated",
-      "hurt",
-      "alarmed"
-    ],
-    "needs": [
-      "fairness",
-      "respect",
-      "order",
-      "safety"
-    ]
-  },
-  {
-    "id": "shared-upkeep",
-    "label": "Shared space upkeep and boundaries",
-    "summary": "Living with others who leave messes or return shared items without care.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:sink|counter)\\b[^\\n]{0,120}\\b(?:stacked|piled|filled)\\b[^\\n]{0,60}\\b(?:dishes|plates|cups)\\b[^\\n]{0,60}\\b(?:again|still)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bborrow(?:ed|ing)\\b[^\\n]{0,120}\\bcar\\b[^\\n]{0,120}\\b(?:empty|no|without)\\s+(?:gas|fuel|a\\s+tank)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Dishes piled up again in the sink before work.",
-      "A borrowed car came back with an empty tank.",
-      "Shared chores keep getting skipped."
-    ],
-    "cueIds": [
-      "roommate-dishes-repeated",
-      "borrowed-car-empty"
-    ],
-    "feelings": [
-      "irritated",
-      "hurt",
-      "anxious"
-    ],
-    "needs": [
-      "consideration",
-      "respect",
-      "accountability",
-      "reliability"
-    ]
-  },
-  {
-    "id": "job-security",
-    "label": "Employment status surprises",
-    "summary": "Contract endings or renewals delivered without context or warning.",
-    "slotIds": [
-      "time",
-      "context"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:contract|agreement|deal)\\b[^\\n]{0,120}\\b(?:was(?:n't)?|is(?:n't)?|won't\\s+be|not)\\s+(?:renew(?:ed)?|extended|continued)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "HR emailed that my contract wasn't renewed without a reason.",
-      "A contract ended without anyone explaining why.",
-      "Employment status shifted with no warning."
-    ],
-    "cueIds": [
-      "contract-not-renewed"
-    ],
-    "feelings": [
-      "anxious",
+      "bewildered",
       "sad",
-      "confused"
-    ],
-    "needs": [
-      "security",
-      "clarity",
-      "respect"
-    ]
-  },
-  {
-    "id": "feedback-clarity",
-    "label": "Feedback without specifics",
-    "summary": "Critiques that label work as sloppy or list mistakes without examples.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:teacher|instructor)\\b[^\\n]{0,120}\\b(?:wrote|scribbled|marked)\\b[^\\n]{0,80}\\b(?:sloppy|messy|careless|lazy)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:performance\\s+review|feedback|evaluation)\\b[^\\n]{0,160}\\b(?:only|just|mostly)\\b[^\\n]{0,80}\\b(?:mistakes|issues|problems|faults)\\b[^\\n]{0,120}\\b(?:no|without)\\s+(?:examples|specifics|details)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A teacher wrote 'sloppy' across the assignment.",
-      "A review listed mistakes without concrete examples.",
-      "Feedback lacked specifics about what to adjust."
-    ],
-    "cueIds": [
-      "teacher-derogatory-feedback",
-      "review-no-examples"
-    ],
-    "feelings": [
-      "confused",
-      "sad",
-      "defiant"
-    ],
-    "needs": [
-      "clarity",
-      "support",
-      "growth",
-      "respect"
-    ]
-  },
-  {
-    "id": "housing-reliability",
-    "label": "Maintenance requests with no follow-up",
-    "summary": "Landlords or contractors who ignore repairs or miss appointments without notice.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:landlord|property\\s+(?:manager|office)|superintendent|building\\s+(?:manager|office))\\b[^\\n]{0,160}\\b(?:hasn'?t|still\\s+hasn't|never|won't)\\s+(?:respond(?:ed)?|repl(?:ied|y)|called|texted|gotten\\s+back)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:contractor|repair\\s+(?:tech|person)|plumber|electrician|installer|handyman)\\b[^\\n]{0,160}\\b(?:no[-\\s]?show|never\\s+showed|miss(?:ed)?\\s+(?:the\\s+)?(?:appointment|visit|slot)|didn'?t\\s+(?:come|arrive))\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Messages about the leak went unanswered.",
-      "A contractor missed the appointment and never called.",
-      "Maintenance issues linger without updates."
-    ],
-    "cueIds": [
-      "landlord-no-response",
-      "contractor-no-show"
-    ],
-    "feelings": [
-      "anxious",
-      "frustrated",
-      "afraid"
-    ],
-    "needs": [
-      "safety",
-      "support",
-      "reliability",
-      "reliability"
-    ]
-  },
-  {
-    "id": "care-attention",
-    "label": "Care visits that feel rushed",
-    "summary": "Providers who glance at the clock or otherwise signal impatience while you explain symptoms.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:doctor|physician|provider)\\b[^\\n]{0,120}\\b(?:kept\\s+)?(?:checking|glancing|looking)\\b[^\\n]{0,40}\\bclock\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The doctor kept checking the clock mid-appointment.",
-      "A provider glanced at the clock while I spoke.",
-      "The visit felt rushed instead of attentive."
-    ],
-    "cueIds": [
-      "doctor-checked-clock"
-    ],
-    "feelings": [
-      "anxious",
-      "hurt"
-    ],
-    "needs": [
-      "love-caring",
-      "respect",
-      "consideration",
-      "to-be-heard"
-    ]
-  },
-  {
-    "id": "workload-boundaries",
-    "label": "Workload stacking and late-night pings",
-    "summary": "Teams that hand you every follow-up task or bosses who ping late at night without regard for rest.",
-    "slotIds": [
-      "time",
-      "context",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bassign(?:ed|ing)\\b[^\\n]{0,160}\\b(?:all|every|entire|whole)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?up|action\\s+item|task)s?\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:boss|manager|lead|supervisor)\\b[^\\n]{0,160}\\b(?:slack|teams|message|dm|ping|text|email)\\b[^\\n]{0,120}\\b(?:11\\s?p\\.?m\\.?|midnight|late\\s+at\\s+night|after\\s+hours)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "All the follow-up tasks landed on my plate again.",
-      "Slack pings came in around midnight from my boss.",
-      "I keep getting the action items after every meeting."
-    ],
-    "cueIds": [
-      "assigned-all-followups",
-      "boss-late-night-pings"
-    ],
-    "feelings": [
-      "overwhelmed",
-      "tense",
-      "resentful"
-    ],
-    "needs": [
-      "autonomy",
-      "rest",
-      "fairness",
-      "support"
-    ]
-  },
-  {
-    "id": "connection-presence",
-    "label": "Disconnected dinners",
-    "summary": "Shared meals where someone stays on their phone instead of engaging.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:during|at)\\s+(?:dinner|the\\s+meal|our\\s+meal)\\b[^\\n]{0,120}\\b(?:phone|scroll(?:ed|ing)|looking\\s+down\\s+at\\s+their\\s+screen)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Phones stayed on the table during dinner.",
-      "Conversation faded while someone scrolled.",
-      "I looked up and saw them on their screen instead of with me."
-    ],
-    "cueIds": [
-      "partner-phone-during-dinner"
-    ],
-    "feelings": [
+      "frightened",
       "lonely",
-      "hurt",
-      "disappointment"
-    ],
-    "needs": [
-      "connection",
-      "consideration",
-      "respect"
-    ]
-  },
-  {
-    "id": "ride-environment",
-    "label": "Noisy rideshares",
-    "summary": "Drivers who fill the car with loud speakerphone calls or chatter during the ride.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:driver|rideshare|uber|lyft|cab)\\b[^\\n]{0,120}\\b(?:speaker\\s*phone|speakerphone|on\\s+speaker)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A driver talked loudly on speakerphone the whole trip.",
-      "The car felt like a call center during the ride.",
-      "Noise filled the ride instead of quiet."
-    ],
-    "cueIds": [
-      "driver-speakerphone-entire-trip"
-    ],
-    "feelings": [
-      "overwhelmed",
-      "irritated",
-      "tense"
-    ],
-    "needs": [
-      "calm",
-      "respect",
-      "consideration"
-    ]
-  },
-  {
-    "id": "noise-disturbance",
-    "label": "Early-morning noise",
-    "summary": "Neighbors or surroundings that create loud noise before the day starts.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:neighbor'?s|next\\s+door)\\s+dog\\b[^\\n]{0,160}\\b(?:bark(?:ed|ing))\\b[^\\n]{0,120}\\b(?:6\\s?a\\.?m\\.?|five\\s?(?:thirty|30)\\s?a\\.?m\\.?|before\\s+sunrise|early\\s+morning)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A dog barked for thirty minutes at 6 a.m.",
-      "Weekend mornings start with loud barking next door.",
-      "Noise woke me up before sunrise."
-    ],
-    "cueIds": [
-      "neighbor-dog-morning"
-    ],
-    "feelings": [
-      "tired",
-      "irritated",
+      "upset",
+      "scared",
+      "embarrassed",
+      "anxious",
+      "angry",
+      "powerless",
+      "thwarted",
+      "frustrated",
+      "defiant",
       "overwhelmed"
     ],
     "needs": [
-      "rest",
-      "peace",
-      "consideration"
-    ]
-  },
-  {
-    "id": "safety-commute",
-    "label": "Traffic safety scares",
-    "summary": "Cyclists or others rushing through red lights where pedestrians cross.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:cyclist|bike\\s+rider|bicyclist)\\b[^\\n]{0,160}\\b(?:blew|ran|sped)\\b[^\\n]{0,80}\\b(?:red\\s+light|red\\s+signal|stop\\s+light)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A cyclist ran the red light through the crosswalk.",
-      "Bikes sped through while the walk signal was on.",
-      "Someone on a bike ignored the traffic signal next to me."
-    ],
-    "cueIds": [
-      "cyclist-ran-red"
-    ],
-    "feelings": [
-      "alarmed",
-      "alarmed",
-      "scared"
-    ],
-    "needs": [
-      "safety",
-      "predictability",
-      "love-caring"
-    ]
-  },
-  {
-    "id": "self-accountability",
-    "label": "Noticing my own delays",
-    "summary": "Recognizing when you scroll or stall instead of following through on your plans.",
-    "slotIds": [
-      "time",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bscroll(?:ed|ing)\\b[^\\n]{0,120}\\b(?:instead\\s+of|rather\\s+than)\\b[^\\n]{0,120}\\b(?:call(?:ing)?|phone|reach(?:ing)?\\s+out|text(?:ing)?)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "I scrolled instead of returning an important call.",
-      "An hour went by on my phone before I reached out.",
-      "I delayed following through because I kept scrolling."
-    ],
-    "cueIds": [
-      "self-delayed-call"
-    ],
-    "feelings": [
-      "sad",
-      "disappointment"
-    ],
-    "needs": [
-      "integrity",
-      "connection",
-      "accountability"
-    ]
-  },
-  {
-    "id": "collaboration-safeguards",
-    "label": "Teammates catching mistakes before they spread",
-    "summary": "When coworkers double-check work and spot errors before they reach others.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:coworker|colleague|teammate)\\b[^\\n]{0,160}\\b(?:double[-\\s]?checked|caught|spotted|flagged)\\b[^\\n]{0,120}\\b(?:mistake|error|issue)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A teammate double-checked an expense report and caught an error before it went out.",
-      "Someone on the team spotted a calculation mistake and flagged it before the client saw it.",
-      "A coworker reviewed my draft and found a typo in the headline."
-    ],
-    "cueIds": [
-      "coworker-caught-mistake"
-    ],
-    "feelings": [
-      "peaceful",
-      "relieved",
-      "relieved"
-    ],
-    "needs": [
-      "reliability",
-      "clarity",
-      "mutuality"
-    ]
-  },
-  {
-    "id": "milestone-celebration",
-    "label": "Celebrations of personal milestones",
-    "summary": "Coaches or teammates who visibly celebrate your progress or new personal bests.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:trainer|coach)\\b[^\\n]{0,160}\\b(?:high[-\\s]?fiv(?:ed|e)|celebrat(?:ed|ing)|cheered)\\b[^\\n]{0,120}\\b(?:personal\\s+best|milestone|record)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At the 8 a.m. session, the trainer high-fived me after I racked 185 pounds on squats.",
-      "The coach paused practice to high-five me when the board showed my new record.",
-      "Teammates clapped while the trainer called out the weight I just logged."
-    ],
-    "cueIds": [
-      "trainer-celebrated-progress"
-    ],
-    "feelings": [
-      "proud",
-      "energized",
-      "hopeful"
-    ],
-    "needs": [
-      "acknowledgement",
-      "growth",
-      "appreciation"
-    ]
-  },
-  {
-    "id": "neighbor-support",
-    "label": "Neighbors lending a hand",
-    "summary": "Neighbors who step in to clear a path or help with home care while you are away.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:neighbor|next\\s+door)\\b[^\\n]{0,160}\\b(?:shovel(?:ed|ing)|cleared|snow[-\\s]?blow(?:ed|ing))\\b[^\\n]{0,120}\\b(?:sidewalk|driveway|walkway|steps)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A neighbor shoveled our sidewalk while we were gone.",
-      "Someone next door cleared the driveway before we got home.",
-      "Our neighbor salted the steps so we wouldn't slip."
-    ],
-    "cueIds": [
-      "neighbor-shoveled-sidewalk"
-    ],
-    "feelings": [
-      "peaceful",
-      "peaceful",
-      "peaceful"
-    ],
-    "needs": [
-      "community",
-      "love-caring",
-      "support"
-    ]
-  },
-  {
-    "id": "specific-appreciation",
-    "label": "Specific appreciation and thank-yous",
-    "summary": "Heartfelt notes or emails that name what you contributed and why it mattered.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:thank[-\\s]*you|appreciat(?:e|ed|ion)|grateful)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|how\\s+you|what\\s+you\\s+did|made\\s+a\\s+big\\s+difference|the\\s+way\\s+you\\s+helped|calling\\s+out\\s+each)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:highlighted|called\\s+out|named|listed|spelled\\s+out|detailed)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|individual|each)\\b[^\\n]{0,120}\\b(?:ways?\\s+(?:I|we|you)\\s+helped|tasks?\\s+I\\s+handled|moments?\\s+you\\s+showed\\s+up|contributions?|shifts?)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:my|your|our)\\s+(?:volunteer\\s+hours|support|help|time|efforts?|contribution|work)\\b[^\\n]{0,120}\\b(?:made|makes|making)\\s+(?:such\\s+)?a\\s+big\\s+difference\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 4 p.m., the coordinator emailed naming the volunteer shifts I covered on Saturday.",
-      "The principal highlighted the exact stations I staffed during the fundraiser.",
-      "A manager DM\u2019d the timestamps where I stepped in during the launch."
-    ],
-    "cueIds": [
-      "appreciation-specific-note"
-    ],
-    "feelings": [
-      "peaceful",
-      "relaxed",
-      "energized"
-    ],
-    "needs": [
-      "acknowledgement",
-      "contribution",
-      "belonging"
-    ]
-  },
-  {
-    "id": "reflective-presence",
-    "label": "Reflective listening during support sessions",
-    "summary": "Counselors or listeners who mirror your words before offering input so you feel heard.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:counselor|therap(?:ist|y)|coach|facilitator)\\b[^\\n]{0,160}\\b(?:reflected|mirrored|paraphrased|summarized)\\b[^\\n]{0,120}\\b(?:back|what\\s+I\\s+said|my\\s+words)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A therapist reflected my words before sharing ideas.",
-      "A counselor paused to mirror back what I said.",
-      "A support group facilitator summarized my message first."
-    ],
-    "cueIds": [
-      "counselor-reflected"
-    ],
-    "feelings": [
-      "calm",
-      "calm",
-      "relieved"
-    ],
-    "needs": [
-      "to-be-heard",
-      "understanding",
-      "trust"
-    ]
-  },
-  {
-    "id": "supportive-rebalancing",
-    "label": "Loved ones and leads sharing the load",
-    "summary": "Partners or managers who redistribute tasks so responsibilities feel shared.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:partner|spouse|husband|wife|roommate)\\b[^\\n]{0,160}\\b(?:cooked|made|prepared)\\b[^\\n]{0,80}\\b(?:dinner|meal|supper)\\b[^\\n]{0,120}\\b(?:cleaned|did|handled)\\b[^\\n]{0,60}\\b(?:dishes|kitchen|cleanup)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:manager|lead|supervisor|project\\s+manager|pm)\\b[^\\n]{0,160}\\b(?:balanced|redistribut(?:ed|ing)|spread|limited|shared)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?ups|follow\\s*ups|tasks|workload|assignments)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My partner handled dinner and dishes so I could finish a deadline.",
-      "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate.",
-      "A friend swapped shifts so we split the weekend coverage."
-    ],
-    "cueIds": [
-      "partner-covered-dinner",
-      "manager-balanced-followups"
-    ],
-    "feelings": [
-      "relieved",
-      "relieved",
-      "peaceful"
-    ],
-    "needs": [
-      "love-caring",
-      "serenity",
-      "mutuality"
-    ]
-  },
-  {
-    "id": "integrity-returns",
-    "label": "Strangers returning lost items intact",
-    "summary": "Moments when someone brings back what you dropped with nothing missing.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:returned|brought\\s+back|handed\\s+back|gave\\s+back)\\b[^\\n]{0,120}\\b(?:wallet|phone|purse|bag|keys)\\b[^\\n]{0,120}\\b(?:with|with\\s+all|still\\s+had|everything|cash)\\b[^\\n]{0,80}\\b(?:inside|intact|still\\s+there)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside.",
-      "Security called me to pick up my phone after a customer turned it in at the front desk.",
-      "A passerby jogged over with the keys I dropped on the sidewalk."
-    ],
-    "cueIds": [
-      "wallet-returned-intact"
-    ],
-    "feelings": [
-      "relieved",
-      "peaceful"
-    ],
-    "needs": [
-      "safety",
-      "trust",
-      "integrity"
-    ]
-  },
-  {
-    "id": "responsive-approvals",
-    "label": "Quick responses to time-off requests",
-    "summary": "Leaders who respond promptly when you ask for time away from work.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:approved|okayed|cleared|green[-\\s]?lit|signed\\s+off\\s+on)\\b[^\\n]{0,120}\\b(?:vacation|pto|time\\s+off|leave)\\b[^\\n]{0,120}\\b(?:same\\s+day|right\\s+away|within\\s+(?:the\\s+)?day|within\\s+hours)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My manager approved my vacation request the same day.",
-      "HR confirmed my PTO within a few hours.",
-      "A supervisor okayed my time off without delay."
-    ],
-    "cueIds": [
-      "vacation-approved-quickly"
-    ],
-    "feelings": [
-      "relieved",
-      "peaceful"
-    ],
-    "needs": [
-      "rest",
-      "respect",
-      "reliability"
-    ]
-  },
-  {
-    "id": "care-attentive-support",
-    "label": "Care teams offering calm, attentive updates",
-    "summary": "Medical staff who explain steps or check in to reassure you and your loved ones.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:nurse|caregiver)\\b[^\\n]{0,120}\\b(?:checked\\s+in|stopped\\s+in|came\\s+by|looked\\s+in|made\\s+rounds)\\b[^\\n]{0,120}\\b(?:night|overnight|late\\s+at\\s+night)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:dentist|hygienist|doctor|provider)\\b[^\\n]{0,160}\\b(?:explained|walked\\s+me\\s+through|described|talked\\s+through)\\b[^\\n]{0,120}\\b(?:each|every|the)\\s+step\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A nurse checked in overnight to make sure my dad was comfortable.",
-      "A dentist explained each step before starting the procedure.",
-      "A tech walked us through the test process in advance."
-    ],
-    "cueIds": [
-      "nurse-night-check",
-      "dentist-explained-steps"
-    ],
-    "feelings": [
-      "relieved",
-      "peaceful",
-      "calm"
-    ],
-    "needs": [
-      "love-caring",
-      "clarity",
-      "rest"
-    ]
-  },
-  {
-    "id": "delivery-gaps",
-    "label": "Deliveries marked complete with nothing there",
-    "summary": "Orders showing as delivered when no package actually arrived.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:delivery|order|package|parcel)\\b[^\\n]{0,160}\\b(?:marked|showed|said)\\b[^\\n]{0,120}\\bdelivered\\b[^\\n]{0,160}\\b(?:nothing|not\\s+at\\s+my\\s+door|never\\s+arrived|missing)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 7 p.m. the app marked my dinner order delivered while the porch camera still showed an empty doorstep.",
-      "The tracker pinged \"delivered\" even though the hallway camera never recorded a drop-off.",
-      "Courier status flipped to delivered, but the lobby shelf stayed empty all night."
-    ],
-    "cueIds": [
-      "delivery-marked-delivered"
-    ],
-    "feelings": [
-      "frustrated",
-      "confused"
-    ],
-    "needs": [
-      "reliability",
-      "connection",
-      "accountability"
-    ]
-  },
-  {
-    "id": "punctuality-boundaries",
-    "label": "Late arrivals without notice",
-    "summary": "Friends or contacts who show up far past the meeting time without sending a heads-up.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:friend|buddy|pal|coworker|guest)\\b[^\\n]{0,120}\\b(?:arrived|showed\\s+up)\\b[^\\n]{0,80}\\b(?:\\d+\\s+(?:minutes|min|mins)|half\\s+an\\s+hour|thirty\\s+minutes)\\s+late\\b[^\\n]{0,120}\\b(?:no|without|never)\\s+(?:text|message|call|warning|heads?-?up)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A friend arrived half an hour late with no text.",
-      "Someone showed up late to lunch without a heads-up.",
-      "My date was 30 minutes late and never messaged."
-    ],
-    "cueIds": [
-      "friend-late-no-text"
-    ],
-    "feelings": [
-      "irritated",
-      "sad"
-    ],
-    "needs": [
-      "respect",
-      "reliability",
       "connection"
     ]
   },
   {
-    "id": "policy-warnings",
-    "label": "Unexpected policy warning letters",
-    "summary": "Associations or boards that send a warning without first talking it through.",
+    "id": "belonging",
+    "label": "Belonging",
+    "summary": "Humans may have evolved in cooperative groups where being part of the tribe meant safety and support. This need may motivate us to seek acceptance in communities and relationships that embrace us as we are. Valuing belonging provides a secure sense of identity and a social safety net, which increases psychological security and resilience under stress.",
     "slotIds": [
       "time",
       "context",
-      "sensory"
+      "social"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:hoa|association|board|management)\\b[^\\n]{0,160}\\b(?:warning|violation|notice|letter)\\b[^\\n]{0,120}\\b(?:lawn|yard|grass|weeds)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The HOA sent a lawn warning letter without asking first.",
-      "A board left a notice about hedge height with no conversation.",
-      "Management posted a warning about patio chairs without talking to us."
-    ],
-    "cueIds": [
-      "hoa-lawn-warning"
-    ],
-    "feelings": [
-      "defiant",
-      "confused"
-    ],
-    "needs": [
-      "fairness",
-      "connection",
-      "respect"
-    ]
-  },
-  {
-    "id": "recognition-boundaries",
-    "label": "Credit given to the wrong person",
-    "summary": "Moments when someone else claims your idea or contribution in front of others.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:colleague|coworker|teammate|manager)\\b[^\\n]{0,160}\\b(?:took|claimed|grabbed|accepted)\\b[^\\n]{0,80}\\b(?:credit|ownership|recognition)\\b[^\\n]{0,120}\\b(?:idea|work|proposal|plan|suggestion)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A colleague took credit for my idea in the pitch.",
-      "Someone presented my work as theirs during the meeting.",
-      "An editor left my name off the project summary."
-    ],
-    "cueIds": [
-      "colleague-took-credit"
-    ],
-    "feelings": [
-      "hurt",
-      "angry",
-      "lonely"
-    ],
-    "needs": [
-      "acknowledgement",
-      "fairness",
-      "integrity"
-    ]
-  },
-  {
-    "id": "care-communication-gaps",
-    "label": "Care teams that miss critical updates",
-    "summary": "Childcare or health providers who forget to call about urgent symptoms.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:daycare|pre[-\\s]?school|school|child\\s*care|nursery)\\b[^\\n]{0,160}\\b(?:didn'?t|never|forgot\\s+to)\\s+(?:call|notify|let\\s+me\\s+know|text|reach\\s+out)\\b",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
         "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\b(?:fever|sick|ill|temperature)\\b[^\\n]{0,120}\\b(?:no\\s+call|without\\s+calling|without\\s+telling\\s+me)\\b",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Daycare forgot to call when my child had a fever.",
-      "The clinic didn't phone about a concerning result.",
-      "Camp missed letting us know about an injury."
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
     ],
     "cueIds": [
-      "daycare-no-call"
+      "belonging-meeting-without",
+      "belonging-door-closed-outside",
+      "belonging-thread-without"
     ],
     "feelings": [
+      "terrified",
+      "hurt",
+      "bewildered",
+      "sad",
+      "frightened",
+      "lonely",
+      "upset",
       "scared",
-      "alarmed"
+      "embarrassed",
+      "angry",
+      "afraid",
+      "anxious",
+      "defiant",
+      "frustrated"
     ],
     "needs": [
-      "safety",
-      "connection",
-      "trust"
+      "belonging"
     ]
   },
   {
-    "id": "commute-kindness",
-    "label": "Transit drivers who wait for you",
-    "summary": "Drivers who pause the route so you can catch up and ride.",
+    "id": "support",
+    "label": "Support",
+    "summary": "No one survives alone; humans often rely on each other especially in times of adversity. This need may compel us to seek help, comfort, and collaboration when we face challenges or stress. Offering and receiving support strengthens bonds and confidence, allowing individuals and groups to recover from difficulties more effectively and to know that help will be there when it’s needed.",
     "slotIds": [
       "time",
       "context",
-      "sensory"
+      "actions"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:bus\\s+driver|driver)\\b[^\\n]{0,120}\\b(?:waited|held\\s+the\\s+bus|kept\\s+the\\s+doors\\s+open|paused)\\b[^\\n]{0,120}\\b(?:while\\s+I\\s+ran|as\\s+I\\s+was\\s+running|for\\s+me)\\b",
+        "pattern": "\\b(?:back-?to-?back|no\\s+breaks?|without\\s+breaks?)\\b[^\\n]{0,80}\\b(?:shift|shifts|meetings?|appointments?|lessons?|cases?)",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A bus driver waited as I ran toward the stop.",
-      "The train conductor held the doors when I called out.",
-      "A shuttle driver paused so I could board."
-    ],
-    "cueIds": [
-      "bus-driver-waited"
-    ],
-    "feelings": [
-      "peaceful",
-      "relieved"
-    ],
-    "needs": [
-      "consideration",
-      "support",
-      "peace"
-    ]
-  },
-  {
-    "id": "collaboration-visibility",
-    "label": "Team updates that go missing",
-    "summary": "Moments when teammates skip shared boards or updates for days at a time.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|left\\s+(?:items|cards)\\s+untouched|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b",
+        "pattern": "\\b(?:skipp(?:ed|ing)|miss(?:ed|ing)|delayed)\\b[^\\n]{0,80}\\b(?:meal|lunch|dinner|breakfast|snack)\\b",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "From Monday through Friday, no cards under Jordan's initials moved on the shared sprint board.",
-      "The kanban view shows five tasks assigned to Sam untouched since last Tuesday.",
-      "Our tracker still lists Casey's items in \"In Progress\" after a full week."
-    ],
-    "cueIds": [
-      "teammate-sprint-update-gap"
-    ],
-    "feelings": [
-      "overwhelmed",
-      "anxious"
-    ],
-    "needs": [
-      "clarity",
-      "accountability",
-      "mutuality"
-    ]
-  },
-  {
-    "id": "housing-responsiveness",
-    "label": "Repairs handled right away",
-    "summary": "Landlords or maintenance crews who respond quickly to repair requests.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\b(?:landlord|property\\s+manager|superintendent|maintenance)\\b[^\\n]{0,160}\\b(?:fixed|repaired|sent\\s+someone|took\\s+care|handled)\\b[^\\n]{0,120}\\b(?:same\\s+day|next\\s+day|within\\s+24\\s+hours|right\\s+away)\\b",
+        "pattern": "\\b(?:asked|request(?:ed)?)\\b[^\\n]{0,80}\\b(?:cover|relief|backup|break)\\b[^\\n]{0,80}\\b(?:no\\s+one|nobody|none)\\b[^\\n]{0,80}\\b(?:available|free|responded|could)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Maintenance fixed the leak the day after we reported it.",
-      "Our landlord scheduled a plumber the next morning.",
-      "The repair team showed up within 24 hours."
+      "After three (context detail) in a row there still was no time for a break.",
+      "We skipped (context detail) to finish (context detail).",
+      "I asked for cover so I could rest and nobody was available."
     ],
     "cueIds": [
-      "landlord-fixed-quickly"
+      "support-no-breaks",
+      "support-skipped-meal",
+      "support-no-cover"
     ],
     "feelings": [
-      "relieved",
-      "peaceful"
-    ],
-    "needs": [
-      "safety",
-      "reliability",
-      "love-caring"
-    ]
-  },
-  {
-    "id": "commitment-followthrough",
-    "label": "When repayment promises slip",
-    "summary": "Friends or relatives who miss the payback they said was coming soon.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:sibling|brother|sister|friend|roommate)\\b[^\\n]{0,160}\\b(?:promised|said)\\b[^\\n]{0,120}\\b(?:pay\\s+me\\s+back|return\\s+the\\s+money|send\\s+the\\s+payment)\\b[^\\n]{0,120}\\b(?:still|yet)\\b[^\\n]{0,80}\\b(?:hasn'?t|has\\s+not|didn'?t)\\s+(?:paid|sent|transferred)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A sibling missed the repayment they promised Friday.",
-      "A friend still hasn't paid me back after saying they would.",
-      "Someone delayed sending the money again."
-    ],
-    "cueIds": [
-      "sibling-did-not-pay"
-    ],
-    "feelings": [
+      "terrified",
+      "hurt",
+      "bewildered",
+      "sad",
+      "frightened",
+      "lonely",
+      "angry",
       "frustrated",
-      "disappointment"
+      "resentful"
     ],
     "needs": [
-      "trust",
-      "reliability",
-      "fairness"
+      "support"
     ]
   },
   {
-    "id": "food-safety",
-    "label": "Allergy instructions ignored",
-    "summary": "Restaurants that serve allergens even after you clearly note them.",
+    "id": "consideration",
+    "label": "Consideration",
+    "summary": "Feeling thoughtfully regarded by others can reassure us that we matter. This need may inspire courteous communication, attentive listening, and taking others’ feelings into account. When people treat each other with consideration, it builds mutual respect and trust, reducing friction in groups and helping everyone feel valued.",
     "slotIds": [
       "time",
       "context",
-      "sensory",
-      "measure"
+      "social",
+      "actions"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:restaurant|server|kitchen|staff)\\b[^\\n]{0,160}\\b(?:served|brought|delivered|sent)\\b[^\\n]{0,160}\\b(?:peanut|nut|nuts|allergen|dairy|gluten|egg)\\b[^\\n]{0,160}\\b(?:after|even\\s+though|although)\\b[^\\n]{0,160}\\b(?:allergy|told\\s+them|noted|flagged)\\b",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "The restaurant served my meal with peanuts after I flagged my allergy.",
-      "Catering included dairy even though I mentioned the allergy.",
-      "A cafe added walnuts despite my warning."
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
     ],
     "cueIds": [
-      "allergy-served-peanuts"
+      "consideration-interrupted",
+      "consideration-dismissed-feelings",
+      "consideration-ignored-clarify"
     ],
     "feelings": [
+      "angry",
+      "frustrated",
+      "frightened",
       "scared",
-      "angry"
+      "pressured",
+      "overwhelmed",
+      "embarrassed",
+      "resentful",
+      "hurt",
+      "lonely",
+      "tired",
+      "anxious",
+      "hostile",
+      "antagonistic",
+      "disappointment",
+      "sad"
     ],
     "needs": [
-      "safety",
-      "love-caring",
       "consideration"
     ]
   },
   {
-    "id": "schedule-respect",
-    "label": "Meetings scheduled over breaks",
-    "summary": "Managers who drop meetings onto your lunch or rest time without asking.",
+    "id": "need-for-all-living-things-to-flourish",
+    "label": "Need for all living things to flourish",
+    "summary": "Concern that extends beyond the self can support sustainable systems. This need may motivate stewardship, protection of vulnerable beings, and choices oriented toward long-term viability. Attending to broad flourishing links personal meaning with planetary health.",
     "slotIds": [
       "time",
       "context",
-      "sensory"
+      "actions"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:meeting|call|sync|check[-\\s]?in|one[-\\s]?on[-\\s]?one)\\b[^\\n]{0,160}\\b(?:scheduled|booked|set|put)\\b[^\\n]{0,120}\\b(?:over|during|on)\\s+(?:my\\s+)?(?:lunch|meal|break|lunchtime)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My manager scheduled a meeting over my lunch break without asking.",
-      "A lead booked a call during my only break.",
-      "Someone added a meeting right over my dinner time."
-    ],
-    "cueIds": [
-      "meeting-over-lunch"
-    ],
-    "feelings": [
-      "irritated",
-      "hurt"
-    ],
-    "needs": [
-      "respect",
-      "rest",
-      "autonomy"
-    ]
-  },
-  {
-    "id": "support-followthrough",
-    "label": "Support staff who follow up",
-    "summary": "Helpers who guide you through a fix and check back afterward.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:support|service|help\\s*desk|agent|representative|rep)\\b[^\\n]{0,160}\\b(?:follow(?:ed)?\\s+up|checked\\s+back|emailed\\s+the\\s+next\\s+day|reached\\s+out\\s+after)\\b",
+        "pattern": "\\b(?:report|deck|presentation|announcement|summary)\\b[^\\n]{0,80}\\b(?:left|omitted|without|missing)\\b[^\\n]{0,80}\\b(?:my\\s+name|credit|attribution)",
         "flags": "iu"
       },
       {
         "type": "regex",
-        "pattern": "\\bwalk(?:ed)?\\s+me\\s+through\\b",
+        "pattern": "\\b(?:idea|proposal|plan|draft|contribution)\\b[^\\n]{0,80}\\b(?:ignored|dismissed|set\\s+aside|shelved)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:discussion|feedback)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:redo|rework|start\\s+over|scrap)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:explanation|reason|context)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
-      "IT kept the remote session open until the app loaded and sent a ticket update at 9 a.m.",
-      "Customer service called back the next day after guiding me through the reset."
+      "The project announcement went out without my name on the contributors list.",
+      "They set my proposal aside without any discussion.",
+      "We reworked the plan without explaining why the initial work did not count."
     ],
     "cueIds": [
-      "support-agent-followed-up"
+      "need-for-all-living-things-to-flourish-credit-omitted",
+      "need-for-all-living-things-to-flourish-idea-set-aside",
+      "need-for-all-living-things-to-flourish-redo-without-why"
     ],
     "feelings": [
-      "peaceful",
-      "relieved"
+      "angry",
+      "frustrated",
+      "frightened"
     ],
     "needs": [
-      "clarity",
-      "support",
-      "accountability"
+      "need-for-all-living-things-to-flourish"
     ]
   },
   {
-    "id": "infrastructure-response",
-    "label": "City fixes after persistent outreach",
-    "summary": "Public works teams that finally resolve an issue after repeated contact.",
+    "id": "inclusion",
+    "label": "Inclusion",
+    "summary": "Exclusion can carry measurable psychological and physiological costs; inclusive norms may counteract those risks. This need may motivate widening participation, adjusting access, and designing for difference. Inclusion increases creativity and collective intelligence.",
     "slotIds": [
       "time",
       "context",
-      "sensory"
+      "social"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\b(?:city|municipal|public\\s+works|council)\\b[^\\n]{0,160}\\b(?:fixed|repaired|replaced)\\b[^\\n]{0,120}\\b(?:street\\s*light|streetlight|lamp)\\b[^\\n]{0,160}\\b(?:after|following|finally|eventually)\\b[^\\n]{0,160}\\b(?:months|weeks|several|many)\\s+(?:emails|requests|reports|complaints)\\b",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "The city fixed the streetlight after months of emails.",
-      "Public works repaired the pothole we kept reporting.",
-      "The utilities crew finally addressed the outage after persistent follow-up."
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
     ],
     "cueIds": [
-      "city-fixed-streetlight"
+      "inclusion-meeting-without",
+      "inclusion-door-closed-outside",
+      "inclusion-thread-without"
     ],
     "feelings": [
-      "relieved",
-      "peaceful",
-      "relaxed"
+      "upset",
+      "scared",
+      "lonely",
+      "hurt",
+      "angry",
+      "embarrassed",
+      "frustrated",
+      "sad",
+      "afraid",
+      "anxious",
+      "defiant",
+      "jealous"
     ],
     "needs": [
-      "safety",
-      "reliability",
+      "inclusion"
+    ]
+  },
+  {
+    "id": "community",
+    "label": "Community",
+    "summary": "Cooperative groups may have been the primary context of human survival and culture. This need may motivate joining, contributing, and maintaining shared identity and mutual aid. Healthy community distributes risk and multiplies capacity.",
+    "slotIds": [
+      "time",
+      "context",
+      "social"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
+    ],
+    "cueIds": [
+      "community-meeting-without",
+      "community-door-closed-outside",
+      "community-thread-without"
+    ],
+    "feelings": [
+      "upset",
+      "scared",
+      "lonely",
+      "hurt",
+      "sad",
+      "embarrassed",
+      "angry",
+      "afraid",
+      "anxious",
+      "frustrated",
+      "overwhelmed"
+    ],
+    "needs": [
       "community"
     ]
   },
   {
-    "id": "last-minute-scope-shifts",
-    "label": "Last-minute scope changes",
-    "summary": "Moments where leaders add urgent scope hours before delivery.",
+    "id": "safety",
+    "label": "Safety",
+    "summary": "Threat detection and protection may be conserved across species and remain foundational for human functioning. This need may motivate building stable environments, establishing boundaries, and choosing trustworthy relationships. With safety present, exploration and learning become viable.",
     "slotIds": [
       "time",
       "context",
-      "sensory",
-      "measure"
+      "actions"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bneed\\s+to\\s+redo\\b[^\\n]{0,60}\\bdeck\\b\\s+tonight\\b",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "Yesterday at 4:15 p.m. in the war room with Jenna, I heard my manager say \"We need to redo the launch deck tonight.\""
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
     ],
     "cueIds": [
-      "last-minute-scope-shifts"
+      "safety-door-unsecured",
+      "safety-alarm-offline",
+      "safety-protocol-skipped"
     ],
     "feelings": [
+      "scared",
+      "angry",
+      "pressured",
+      "anxiety",
+      "frightened",
       "alarmed",
-      "anxious",
-      "overwhelmed"
+      "agitated",
+      "defiant",
+      "helpless",
+      "sad",
+      "hurt",
+      "resentful",
+      "irritated"
     ],
     "needs": [
-      "predictability",
-      "consideration",
-      "clarity"
+      "safety"
     ]
   },
   {
-    "id": "bedtime-load-gaps",
-    "label": "Bedtime routine load gaps",
-    "summary": "When one partner ends up solo on bedtime again despite asking for help.",
+    "id": "contribution",
+    "label": "Contribution",
+    "summary": "Contributing to something beyond oneself can enhance purpose and cohesion. This need may motivate service, knowledge-sharing, and creative work that benefits others. Channeling contribution converts personal energy into collective gains.",
     "slotIds": [
       "time",
       "context",
-      "sensory",
-      "measure"
+      "actions"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bbedtime\\b[^\\n]{0,60}\\bagain\\b",
+        "pattern": "\\b(?:report|deck|presentation|announcement|summary)\\b[^\\n]{0,80}\\b(?:left|omitted|without|missing)\\b[^\\n]{0,80}\\b(?:my\\s+name|credit|attribution)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:idea|proposal|plan|draft|contribution)\\b[^\\n]{0,80}\\b(?:ignored|dismissed|set\\s+aside|shelved)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:discussion|feedback)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:redo|rework|start\\s+over|scrap)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:explanation|reason|context)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 8:30 p.m. last night in the nursery with our twins, I heard my partner say \"You're on bedtime again.\""
+      "The project announcement went out without my name on the contributors list.",
+      "They set my proposal aside without any discussion.",
+      "We reworked the plan without explaining why the initial work did not count."
     ],
     "cueIds": [
-      "bedtime-load-gaps"
+      "contribution-credit-omitted",
+      "contribution-idea-set-aside",
+      "contribution-redo-without-why"
     ],
     "feelings": [
+      "upset",
+      "scared",
+      "lonely",
+      "afraid"
+    ],
+    "needs": [
+      "contribution"
+    ]
+  },
+  {
+    "id": "peer-respect",
+    "label": "Peer Respect",
+    "summary": "Standing with equals on fair terms can support morale and cooperation. This need may motivate demonstrating competence, acknowledging others, and addressing status threats constructively. Peer respect keeps teamwork functional and dignified.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "peer-respect-interrupted",
+      "peer-respect-dismissed-feelings",
+      "peer-respect-ignored-clarify"
+    ],
+    "feelings": [
+      "upset",
+      "scared",
+      "lonely"
+    ],
+    "needs": [
+      "peer-respect"
+    ]
+  },
+  {
+    "id": "respect",
+    "label": "Respect",
+    "summary": "Mutual regard can reduce conflict costs and support equitable collaboration. This need may motivate clear boundaries, considerate language, and acknowledgment of value. Respect maintains dignity and workable relationships.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "respect-interrupted",
+      "respect-dismissed-feelings",
+      "respect-ignored-clarify"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "tense",
+      "distressed",
+      "hurt",
+      "embarrassed",
+      "overwhelmed",
+      "pressured",
+      "frightened",
+      "resentful",
       "tired",
+      "hostile",
+      "antagonistic",
+      "sad",
+      "agitated",
+      "anxiety",
+      "irritated"
+    ],
+    "needs": [
+      "respect"
+    ]
+  },
+  {
+    "id": "autonomy",
+    "label": "Autonomy",
+    "summary": "Robust evidence (e.g., self-determination theory) suggests autonomy may be a universal psychological nutrient for motivation and well-being. This need may motivate expressing preferences, making self-directed decisions, and setting boundaries. When autonomy is supported, persistence and quality of engagement typically increase.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "autonomy-forced-decision",
+      "autonomy-schedule-overwrite",
+      "autonomy-permission-for-routine"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "tense",
+      "distressed",
+      "scared",
+      "pressured",
+      "thwarted",
+      "anxious",
+      "frightened",
+      "irritated",
+      "powerless",
+      "impotent",
+      "helpless",
+      "confused",
+      "fear",
+      "desperation",
+      "alarmed",
+      "agitated",
+      "defiant",
+      "sad",
+      "resentful"
+    ],
+    "needs": [
+      "autonomy"
+    ]
+  },
+  {
+    "id": "to-be-seen",
+    "label": "To be seen",
+    "summary": "Social visibility can confirm presence and role within a group. This need may motivate showing up authentically and inviting acknowledgement. Being seen anchors identity and belonging.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "to-be-seen-interrupted",
+      "to-be-seen-dismissed-feelings",
+      "to-be-seen-ignored-clarify"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "tense",
+      "distressed",
+      "sad",
+      "lonely",
+      "scared",
+      "hurt",
+      "defiant",
+      "overwhelmed"
+    ],
+    "needs": [
+      "to-be-seen"
+    ]
+  },
+  {
+    "id": "acknowledgement",
+    "label": "Acknowledgement",
+    "summary": "Recognizing contribution can reinforce cooperative behavior in human groups. This need may motivate requesting or offering specific feedback and making results visible. Reliable acknowledgement sustains morale and signals that effort matters.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "acknowledgement-interrupted",
+      "acknowledgement-dismissed-feelings",
+      "acknowledgement-ignored-clarify"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "tense",
+      "distressed",
+      "in-pain",
+      "scared",
+      "anxious",
+      "humiliated",
+      "embarrassed",
+      "hurt",
+      "sad",
+      "lonely",
+      "resentful",
+      "defiant",
+      "disappointment",
+      "overwhelmed"
+    ],
+    "needs": [
+      "acknowledgement"
+    ]
+  },
+  {
+    "id": "appreciation",
+    "label": "Appreciation",
+    "summary": "Gratitude can strengthen social bonds and increase prosocial behavior across cultures. This need may motivate noticing value, naming what worked, and reciprocating care. Practiced appreciation maintains trust and energizes ongoing collaboration.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fluorescent|harsh|blaring|flickering)\\b[^\\n]{0,80}\\b(?:lights?|lighting)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:constant|steady|continuous|loud)\\b[^\\n]{0,80}\\b(?:noise|hum|buzz|clatter|din|drone)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:canceled|cancelled|cut|stopped|skipped)\\b[^\\n]{0,80}\\b(?:game|practice|music|break|art|recess|play)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The fluorescent lights flickered through the entire evening.",
+      "There was a steady hum from the generator all night.",
+      "Our music break was canceled to squeeze in another briefing."
+    ],
+    "cueIds": [
+      "appreciation-harsh-lighting",
+      "appreciation-constant-noise",
+      "appreciation-play-canceled"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "tense",
+      "distressed",
+      "sad",
+      "lonely",
+      "hurt",
+      "resentful",
+      "disappointment",
+      "bewildered",
+      "anxious"
+    ],
+    "needs": [
+      "appreciation"
+    ]
+  },
+  {
+    "id": "trust",
+    "label": "Trust",
+    "summary": "Confidence in others’ intentions and competence can reduce transaction costs and stress. This need may motivate transparency, reliability, and incremental risk-taking. Trust enlarges what groups can do together.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
+    ],
+    "cueIds": [
+      "trust-door-unsecured",
+      "trust-alarm-offline",
+      "trust-protocol-skipped"
+    ],
+    "feelings": [
+      "angry",
+      "hurt",
+      "disappointment",
+      "enraged",
+      "resentful",
+      "sad",
+      "frustrated",
+      "frightened",
+      "scared",
+      "powerless",
+      "thwarted",
+      "embarrassed",
+      "agitated",
+      "anxiety",
+      "irritated"
+    ],
+    "needs": [
+      "trust"
+    ]
+  },
+  {
+    "id": "dependability",
+    "label": "Dependability",
+    "summary": "Reliability can reduce monitoring costs and enable complex cooperation. This need may motivate keeping agreements, building robust processes, and choosing trustworthy partners. Dependability is the infrastructure of interpersonal and institutional trust.",
+    "slotIds": [
+      "time",
+      "context",
+      "social"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
+    ],
+    "cueIds": [
+      "dependability-meeting-without",
+      "dependability-door-closed-outside",
+      "dependability-thread-without"
+    ],
+    "feelings": [
+      "angry",
+      "hurt",
+      "disappointment",
+      "enraged",
+      "sad",
+      "frightened"
+    ],
+    "needs": [
+      "dependability"
+    ]
+  },
+  {
+    "id": "honesty",
+    "label": "Honesty",
+    "summary": "Transparent information can enable accurate coordination and reduce relational risk. This need may motivate factual clarity, timely disclosure, and correction of errors. Honesty is a stable basis for trust.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|told)\\b[^\\n]{0,80}\\b(?:tone\\s+down|hide|mask|pretend|act\\s+like|smile\\s+through)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:edited|rewrote|changed|revised)\\b[^\\n]{0,80}\\b(?:statement|testimony|draft|bio)\\b[^\\n]{0,80}\\b(?:without|before)\\b[^\\n]{0,80}\\b(?:asking|my\\s+ok|my\\s+consent)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:wasn'?t|not)\\b[^\\n]{0,80}\\b(?:allowed|permitted)\\b[^\\n]{0,80}\\b(?:to\\s+share|to\\s+say|to\\s+mention|to\\s+name)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to tone down my description before the meeting.",
+      "My statement was edited without checking with me.",
+      "I was not allowed to mention the actual numbers during the briefing."
+    ],
+    "cueIds": [
+      "honesty-tone-it-down",
+      "honesty-edited-without-ok",
+      "honesty-blocked-sharing"
+    ],
+    "feelings": [
+      "angry",
+      "hurt",
+      "disappointment",
+      "enraged",
+      "resentful",
+      "sad",
+      "frustrated",
+      "embarrassed"
+    ],
+    "needs": [
+      "honesty"
+    ]
+  },
+  {
+    "id": "honor",
+    "label": "Honor",
+    "summary": "When the need for Honor is alive, we may want our personhood, boundaries, identities, or work to be held in high regard and given appropriate, non-coercive space. This need orients us toward attentive, non-judgmental witnessing, accurate reflection, and restraint from managing or correcting. Philosophers describe this stance as recognition respect—owed regard grounded in status rather than reputation or achievement. In care settings, autonomy-supportive conduct (clear information, genuine choice, avoidance of undue influence) is associated with better motivation and health behaviors.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
+    ],
+    "cueIds": [
+      "honor-comfort-turned-away",
+      "honor-no-check-in",
+      "honor-ignored-distress"
+    ],
+    "feelings": [
+      "angry",
+      "hurt",
+      "disappointment",
+      "enraged"
+    ],
+    "needs": [
+      "honor"
+    ]
+  },
+  {
+    "id": "commitment",
+    "label": "Commitment",
+    "summary": "Stable investment in people and projects can allow long-term goals to be realized. This need may motivate planning, prioritizing, and sustaining effort across setbacks. Sound commitment breeds reliability and shared momentum.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
+    ],
+    "cueIds": [
+      "commitment-door-unsecured",
+      "commitment-alarm-offline",
+      "commitment-protocol-skipped"
+    ],
+    "feelings": [
+      "angry",
+      "hurt",
+      "disappointment",
+      "enraged"
+    ],
+    "needs": [
+      "commitment"
+    ]
+  },
+  {
+    "id": "clarity",
+    "label": "Clarity",
+    "summary": "Clear information can lower cognitive load and prevent costly misunderstandings. This need may motivate simplifying, summarizing, and verifying meanings. Reliable clarity enhances coordination and confidence.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "clarity-interrupted",
+      "clarity-dismissed-feelings",
+      "clarity-ignored-clarify"
+    ],
+    "feelings": [
+      "angry",
+      "hurt",
+      "disappointment",
+      "enraged",
+      "upset",
+      "frustrated",
+      "anxious",
       "resentful",
       "overwhelmed"
     ],
     "needs": [
-      "support",
-      "rest",
-      "love-caring"
-    ]
-  },
-  {
-    "id": "civic-nonresponse",
-    "label": "Civic offices not responding",
-    "summary": "City staff acknowledge community emails are still unanswered.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bhaven't\\s+replied\\s+to\\s+your\\s+emails\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "On Monday at 2 p.m. at city hall with the clerk, I heard the staffer say \"We still haven't replied to your emails.\""
-    ],
-    "cueIds": [
-      "civic-nonresponse"
-    ],
-    "feelings": [
-      "sad",
-      "frustrated",
-      "powerless"
-    ],
-    "needs": [
-      "accountability",
-      "inclusion",
-      "participation"
-    ]
-  },
-  {
-    "id": "meeting-overflow",
-    "label": "Meetings running over",
-    "summary": "Agendas spill past the scheduled end despite the time box.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\brun\\s+\\d+\\s+minutes\\s+past\\s+dismissal\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During Tuesday's advisory meeting in room 214 with the grade-level team, I saw the agenda run 12 minutes past dismissal."
-    ],
-    "cueIds": [
-      "meeting-overflow"
-    ],
-    "feelings": [
-      "frustrated",
-      "overwhelmed",
-      "tired"
-    ],
-    "needs": [
-      "predictability",
-      "consideration",
-      "peace"
-    ]
-  },
-  {
-    "id": "on-call-chaos",
-    "label": "Chaotic on-call shifts",
-    "summary": "Late-night coverage snowballs when the on-call doctor triggers a rush of pages.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bDr\\\\.\\s+Lee\\b[^\\n]{0,80}\\bthree\\s+pages\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11:45 p.m. on last night's ICU shift with Dr. Lee, I heard three pages come through after the schedule changed."
-    ],
-    "cueIds": [
-      "on-call-chaos"
-    ],
-    "feelings": [
-      "overwhelmed",
-      "anxious",
-      "tired"
-    ],
-    "needs": [
-      "support",
-      "consistency",
-      "rest"
-    ]
-  },
-  {
-    "id": "customer-mess-followup",
-    "label": "Customers leaving lobby messes",
-    "summary": "Staff find abandoned tables piled high right before closing.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bcounted\\s+four\\s+tables\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday at 6 p.m. in the cafe lobby with our closing crew, I counted four tables left covered in cups."
-    ],
-    "cueIds": [
-      "customer-mess-followup"
-    ],
-    "feelings": [
-      "irritated",
-      "tired",
-      "frustrated"
-    ],
-    "needs": [
-      "order",
-      "respect",
-      "support"
-    ]
-  },
-  {
-    "id": "urgent-email-demands",
-    "label": "Urgent evening email demands",
-    "summary": "Supervisors email for same-day turnarounds late in the morning.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bemailed\\b[^\\n]{0,60}\\bneed\\s+that\\s+deck\\s+tonight\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9:05 a.m. today at my desk, my boss emailed \"I need that deck tonight.\""
-    ],
-    "cueIds": [
-      "urgent-email-demands"
-    ],
-    "feelings": [
-      "tense",
-      "anxious",
-      "overwhelmed"
-    ],
-    "needs": [
-      "consideration",
-      "clarity",
-      "peace"
-    ]
-  },
-  {
-    "id": "voicemail-insults",
-    "label": "Voicemail insults from customers",
-    "summary": "Customer leaves an abusive voicemail for staff to find.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bvoicemail\\b[^\\n]{0,60}\\byou're\\s+useless\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 10:12 a.m. today in the back office, a customer left a voicemail saying \"You're useless.\""
-    ],
-    "cueIds": [
-      "voicemail-insults"
-    ],
-    "feelings": [
-      "hurt",
-      "angry",
-      "alarmed"
-    ],
-    "needs": [
-      "respect",
-      "safety",
-      "consideration"
-    ]
-  },
-  {
-    "id": "school-discipline-calls",
-    "label": "School calls about disruption",
-    "summary": "Principals phone caregivers about classroom disruptions right away.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bphoned\\s+me\\b[^\\n]{0,60}\\bdisrupted\\s+class\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "This morning at 7:30 a.m. in my kitchen with the speakerphone on, the principal phoned me saying \"Your kid disrupted class.\""
-    ],
-    "cueIds": [
-      "school-discipline-calls"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "clarity",
-      "support",
-      "understanding"
-    ]
-  },
-  {
-    "id": "budget-freeze-alerts",
-    "label": "Budget freeze announcements",
-    "summary": "Finance posts sudden budget freezes without advance notice.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 3:45 p.m. today in the finance Slack channel, Finance posted \"Budget freeze effective immediately.\""
-    ],
-    "cueIds": [
-      "budget-freeze-alerts"
-    ],
-    "feelings": [
-      "alarmed",
-      "anxious",
-      "overwhelmed"
-    ],
-    "needs": [
-      "security",
-      "clarity",
-      "predictability"
-    ]
-  },
-  {
-    "id": "housing-eviction-notices",
-    "label": "Eviction warning letters",
-    "summary": "Tenants receive mailed eviction warnings without personal contact.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bEviction\\s+warning\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday at noon in my apartment, the landlord mailed a letter stamped \"Eviction warning.\""
-    ],
-    "cueIds": [
-      "housing-eviction-notices"
-    ],
-    "feelings": [
-      "alarmed",
-      "anxious",
-      "fear"
-    ],
-    "needs": [
-      "security",
-      "support",
-      "predictability"
-    ]
-  },
-  {
-    "id": "relationship-breakup-text",
-    "label": "Breakup texts",
-    "summary": "Partners end the relationship over text without a conversation.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bwe'?re\\s+done\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 6:15 p.m. tonight on our sofa with my partner, I read a text that said \"We're done.\""
-    ],
-    "cueIds": [
-      "relationship-breakup-text"
-    ],
-    "feelings": [
-      "sad",
-      "hurt",
-      "alarmed"
-    ],
-    "needs": [
-      "connection",
-      "support",
       "clarity"
     ]
   },
   {
-    "id": "security-footage-breach",
-    "label": "Security footage catches breaches",
-    "summary": "Cameras record unauthorized people crossing boundaries.",
+    "id": "accountability",
+    "label": "Accountability",
+    "summary": "Groups often function best when intentions and actions align, making reliability a core social currency. This need may motivate clarifying expectations, repairing misses, and creating follow-through systems. Consistent accountability stabilizes trust and turns shared aims into predictable outcomes.",
     "slotIds": [
       "time",
       "context",
-      "sensory",
-      "measure"
+      "social"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bfootage\\s+shows\\b[^\\n]{0,60}\\btwo\\s+contractors\\b",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9 p.m. last night in the security office, the footage shows two contractors climbing the fence."
-    ],
-    "cueIds": [
-      "security-footage-breach"
-    ],
-    "feelings": [
-      "alarmed",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "safety",
-      "security",
-      "trust"
-    ]
-  },
-  {
-    "id": "monitor-distress-alerts",
-    "label": "Monitors capture distress",
-    "summary": "Baby monitors or sensors record prolonged distress without response.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\bbaby\\s+monitor\\b[^\\n]{0,60}\\b20\\s+minutes\\b",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 2 a.m. this morning in the nursery, the baby monitor recorded crying for 20 minutes straight."
-    ],
-    "cueIds": [
-      "monitor-distress-alerts"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "support",
-      "rest",
-      "safety"
-    ]
-  },
-  {
-    "id": "delivery-exposure",
-    "label": "Deliveries left exposed to weather",
-    "summary": "Doorbell cams capture packages left in the rain instead of sheltered.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\bdoorbell\\s+cam\\b[^\\n]{0,60}\\bleaving\\s+the\\s+package\\b[^\\n]{0,40}\\b\\d+\\s+minutes\\b",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 5 p.m. yesterday on our porch, the doorbell cam captured the delivery driver leaving the package in the rain for 12 minutes."
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
     ],
     "cueIds": [
-      "delivery-exposure"
+      "accountability-meeting-without",
+      "accountability-door-closed-outside",
+      "accountability-thread-without"
     ],
     "feelings": [
-      "frustrated",
-      "irritated",
-      "anxious"
-    ],
-    "needs": [
-      "reliability",
-      "consideration",
-      "safety"
-    ]
-  },
-  {
-    "id": "audit-login-breaches",
-    "label": "Audit logs show unauthorized logins",
-    "summary": "System logs reveal multiple unauthorized sign-ins in a short window.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\baudit\\s+logs?\\b[^\\n]{0,60}\\bunauthorized\\s+logins\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 8:20 a.m. today in the SOC, the audit logs listed five unauthorized logins this week."
-    ],
-    "cueIds": [
-      "audit-login-breaches"
-    ],
-    "feelings": [
-      "alarmed",
-      "anxious",
-      "anxious"
-    ],
-    "needs": [
-      "security",
-      "safety",
-      "predictability"
-    ]
-  },
-  {
-    "id": "maintenance-dashboard-alerts",
-    "label": "Maintenance dashboard flashing alerts",
-    "summary": "Dashboards stay red through the night on critical equipment.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bmaintenance\\s+dashboard\\b[^\\n]{0,60}\\bflashed\\s+red\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Last night the maintenance dashboard flashed red for three hours."
-    ],
-    "cueIds": [
-      "maintenance-dashboard-alerts"
-    ],
-    "feelings": [
-      "anxious",
-      "overwhelmed",
-      "alarmed"
-    ],
-    "needs": [
-      "reliability",
-      "support",
-      "safety"
-    ]
-  },
-  {
-    "id": "ensemble-dropoff",
-    "label": "Ensemble members disengaging",
-    "summary": "Group singers go quiet and withdraw during rehearsal.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bboth\\s+tenors\\b[^\\n]{0,60}\\bstare\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's rehearsal at the arts center, I watched both tenors stare at the floor for 10 seconds."
-    ],
-    "cueIds": [
-      "ensemble-dropoff"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "disappointment"
-    ],
-    "needs": [
-      "participation",
-      "support",
-      "connection"
-    ]
-  },
-  {
-    "id": "session-silent-sighs",
-    "label": "Clients sighing without words",
-    "summary": "A client releases an audible sigh instead of speaking.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bsigh\\b[^\\n]{0,60}\\bwithout\\s+saying\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11 a.m. today in my office with my client, I heard them sigh for eight seconds without saying a word."
-    ],
-    "cueIds": [
-      "session-silent-sighs"
-    ],
-    "feelings": [
-      "anxious",
-      "calm",
-      "anxious"
-    ],
-    "needs": [
-      "connection",
-      "understanding",
-      "trust"
-    ]
-  },
-  {
-    "id": "divorce-paper-silence",
-    "label": "Family processing divorce papers",
-    "summary": "Family members quietly stare at divorce paperwork during visits.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdivorce\\s+papers\\b[^\\n]{0,60}\\b30\\s+seconds\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "This afternoon at my parents' dining table with my brother, I saw him stare silently at the divorce papers for 30 seconds."
-    ],
-    "cueIds": [
-      "divorce-paper-silence"
-    ],
-    "feelings": [
-      "sad",
-      "lonely",
-      "anxious"
-    ],
-    "needs": [
-      "support",
-      "love-caring",
-      "connection"
-    ]
-  },
-  {
-    "id": "intake-walkaways",
-    "label": "Intake coordinators walking away",
-    "summary": "Shelter coordinators close the clipboard and leave people waiting.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bcoordinator\\b[^\\n]{0,60}\\bclipboard\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 4 p.m. today in the shelter intake room, I noticed the coordinator close the intake clipboard and walk away for two minutes."
-    ],
-    "cueIds": [
-      "intake-walkaways"
-    ],
-    "feelings": [
-      "anxious",
-      "frustrated",
-      "anxious"
-    ],
-    "needs": [
-      "accountability",
-      "support",
-      "reliability"
-    ]
-  },
-  {
-    "id": "mediation-body-language",
-    "label": "Closed-off body language in mediation",
-    "summary": "Both parties fold their arms and hold tension during sessions.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bboth\\s+partners\\b[^\\n]{0,60}\\bfive\\s+seconds\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's mediation session in room B with both partners, I watched both partners fold their arms for five seconds."
-    ],
-    "cueIds": [
-      "mediation-body-language"
-    ],
-    "feelings": [
-      "anxious",
-      "tense",
-      "anxious"
-    ],
-    "needs": [
-      "peace",
-      "understanding",
-      "connection"
-    ]
-  },
-  {
-    "id": "radar-unknown-transponder",
-    "label": "Radar flags unknown transponders",
-    "summary": "Air traffic radar highlights unidentified transponder IDs mid-shift.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bradar\\b[^\\n]{0,60}\\bunknown\\s+transponder\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 02:14 during tonight's shift in the tower, radar flagged an unknown transponder ID 5487."
-    ],
-    "cueIds": [
-      "radar-unknown-transponder"
-    ],
-    "feelings": [
-      "anxious",
-      "alarmed",
-      "anxious"
-    ],
-    "needs": [
-      "safety",
-      "clarity",
-      "predictability"
-    ]
-  },
-  {
-    "id": "lab-fluorescence-variance",
-    "label": "Assays show inconsistent fluorescence",
-    "summary": "Lab assays return mismatched fluorescence readings against controls.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bassay\\b[^\\n]{0,60}\\b0\\\\.42\\b[^\\n]{0,60}\\b0\\\\.91\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9 a.m. today in the lab with Priya, the assay produced inconsistent fluorescence versus the control plate with readings of 0.42 and 0.91."
-    ],
-    "cueIds": [
-      "lab-fluorescence-variance"
-    ],
-    "feelings": [
-      "anxious",
+      "angry",
+      "scared",
       "confused",
-      "anxious"
-    ],
-    "needs": [
-      "understanding",
-      "clarity",
-      "reliability"
-    ]
-  },
-  {
-    "id": "performance-reassignment",
-    "label": "Performance solos reassigned",
-    "summary": "Directors reassign promised solos to someone else in rehearsal.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bsolo\\b[^\\n]{0,60}\\bMaya\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 3 p.m. during rehearsal in studio A with the cast, I heard the choreographer say \"I'm giving your solo to Maya.\""
-    ],
-    "cueIds": [
-      "performance-reassignment"
-    ],
-    "feelings": [
+      "antagonistic",
+      "hostile",
+      "bewildered",
       "hurt",
-      "disappointment",
-      "frustrated"
-    ],
-    "needs": [
-      "respect",
-      "consideration",
-      "belonging"
-    ]
-  },
-  {
-    "id": "courtroom-delays",
-    "label": "Court hearings postponed",
-    "summary": "Judges postpone hearings without prior explanation.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bjudge\\b[^\\n]{0,80}\\breconvene\\s+next\\s+month\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 10 a.m. in courtroom 2B with my client, the judge postponed our hearing and said \"We'll reconvene next month.\""
-    ],
-    "cueIds": [
-      "courtroom-delays"
-    ],
-    "feelings": [
+      "in-pain",
+      "anxious",
       "frustrated",
-      "sad",
-      "tired"
+      "humiliated",
+      "embarrassed"
     ],
     "needs": [
-      "justice",
-      "clarity",
-      "support"
+      "accountability"
     ]
   },
   {
-    "id": "shelter-capacity-turnaway",
-    "label": "Shelter turns families away",
-    "summary": "Shelter volunteers announce there are no beds left for incoming families.",
+    "id": "causality",
+    "label": "Causality",
+    "summary": "Accurate mental models of ‘what leads to what’ can reduce uncertainty and error. This need may motivate investigation, testing assumptions, and building shared explanations. Clarity about causality improves prediction and effective action.",
     "slotIds": [
       "time",
       "context",
-      "sensory",
-      "measure"
+      "social"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bno\\s+beds\\b[^\\n]{0,60}\\btwo\\s+families\\b",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "At 7 p.m. yesterday in the shelter gym with our intake team, I heard the volunteer say \"We have no beds for the next two families.\""
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
     ],
     "cueIds": [
-      "shelter-capacity-turnaway"
+      "causality-meeting-without",
+      "causality-door-closed-outside",
+      "causality-thread-without"
     ],
     "feelings": [
-      "sad",
-      "powerless",
-      "anxious"
+      "angry",
+      "scared",
+      "confused",
+      "antagonistic",
+      "hostile",
+      "bewildered",
+      "hurt"
     ],
     "needs": [
-      "support",
-      "community",
-      "safety"
+      "causality"
     ]
   },
   {
-    "id": "irrigation-pump-alarms",
-    "label": "Irrigation pump alarms",
-    "summary": "Irrigation alarms halt watering cycles at critical times.",
+    "id": "fairness",
+    "label": "Fairness",
+    "summary": "Reciprocity and norm enforcement are widely observed stabilizers of social life. This need may motivate clarifying rules, correcting bias, and distributing benefits and burdens more equitably. Fairness sustains cooperation over time.",
     "slotIds": [
       "time",
       "context",
-      "sensory",
-      "measure"
+      "social"
     ],
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bpump\\s+alarm\\b[^\\n]{0,60}\\bstopped\\s+the\\s+watering\\s+cycle\\b",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
         "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At dawn today out by the west field with Luis, the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes."
-    ],
-    "cueIds": [
-      "irrigation-pump-alarms"
-    ],
-    "feelings": [
-      "anxious",
-      "anxious",
-      "overwhelmed"
-    ],
-    "needs": [
-      "reliability",
-      "safety",
-      "support"
-    ]
-  },
-  {
-    "id": "orchestra-cuts",
-    "label": "Conductors cut sections mid-performance",
-    "summary": "Conductors cut instrument entrances in the middle of concerts.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
+      },
       {
         "type": "regex",
-        "pattern": "\\bconductor\\b[^\\n]{0,60}\\bpercussion\\s+entrance\\b",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
         "flags": "iu"
       }
     ],
     "examples": [
-      "During tonight's concert at the civic hall with the orchestra, the conductor cut the percussion entrance after two measures."
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
     ],
     "cueIds": [
-      "orchestra-cuts"
+      "fairness-meeting-without",
+      "fairness-door-closed-outside",
+      "fairness-thread-without"
     ],
     "feelings": [
-      "embarrassed",
+      "angry",
+      "scared",
+      "confused",
+      "antagonistic",
+      "hostile",
+      "bewildered",
       "hurt",
-      "disappointment"
-    ],
-    "needs": [
-      "respect",
-      "recognition",
-      "belonging"
-    ]
-  },
-  {
-    "id": "telescope-double-book",
-    "label": "Telescope bookings double-booked",
-    "summary": "Observatory schedulers admit to double-booking reserved telescope time.",
-    "slotIds": [
-      "time",
-      "context",
-      "sensory",
-      "measure"
-    ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdouble[-\\s]?booked\\b[^\\n]{0,60}\\btelescope\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11 p.m. last night at the observatory with the scheduler, I heard them say \"I double-booked the telescope you reserved.\""
-    ],
-    "cueIds": [
-      "telescope-double-book"
-    ],
-    "feelings": [
-      "frustrated",
+      "resentful",
       "disappointment",
       "irritated"
     ],
     "needs": [
-      "consideration",
-      "fairness",
+      "fairness"
+    ]
+  },
+  {
+    "id": "justice",
+    "label": "Justice",
+    "summary": "Correcting harm and preventing exploitation can sustain social order. This need may motivate advocacy, accountability processes, and restorative or protective policies. Justice preserves trust in shared systems.",
+    "slotIds": [
+      "time",
+      "context",
+      "social"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
+    ],
+    "cueIds": [
+      "justice-meeting-without",
+      "justice-door-closed-outside",
+      "justice-thread-without"
+    ],
+    "feelings": [
+      "angry",
+      "scared",
+      "confused",
+      "antagonistic",
+      "hostile",
+      "bewildered",
+      "hurt",
+      "resentful",
+      "impotent",
+      "helpless",
+      "disappointment",
+      "frightened",
+      "irritated"
+    ],
+    "needs": [
+      "justice"
+    ]
+  },
+  {
+    "id": "choice",
+    "label": "Choice",
+    "summary": "Access to options can enable better fit between values and behavior. This need may motivate generating alternatives, evaluating trade-offs, and selecting a path. Supporting choice increases perceived control and adaptive responding.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "choice-forced-decision",
+      "choice-schedule-overwrite",
+      "choice-permission-for-routine"
+    ],
+    "feelings": [
+      "angry",
+      "scared",
+      "pressured",
+      "thwarted",
+      "anxious",
+      "frustrated",
+      "frightened"
+    ],
+    "needs": [
+      "choice"
+    ]
+  },
+  {
+    "id": "freedom",
+    "label": "Freedom",
+    "summary": "Exploration and voluntary engagement can foster innovation and problem solving. This need may motivate opening options, loosening unnecessary constraints, and encouraging initiative. Respecting freedom keeps systems responsive and creative.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "freedom-forced-decision",
+      "freedom-schedule-overwrite",
+      "freedom-permission-for-routine"
+    ],
+    "feelings": [
+      "angry",
+      "thwarted",
+      "scared",
+      "anxious",
+      "frustrated",
+      "frightened",
+      "powerless",
+      "impotent",
+      "helpless",
+      "confused",
+      "fear",
+      "desperation"
+    ],
+    "needs": [
+      "freedom"
+    ]
+  },
+  {
+    "id": "reliability",
+    "label": "Reliability",
+    "summary": "Consistency across time and context may be essential for complex coordination. This need may motivate redundancies, maintenance, and realistic commitments. Reliability lowers friction and builds dependable systems.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
+    ],
+    "cueIds": [
+      "reliability-comfort-turned-away",
+      "reliability-no-check-in",
+      "reliability-ignored-distress"
+    ],
+    "feelings": [
+      "resentful",
+      "hurt",
+      "angry"
+    ],
+    "needs": [
       "reliability"
+    ]
+  },
+  {
+    "id": "act-freely",
+    "label": "Act Freely",
+    "summary": "Flexibility and voluntary action can improve adaptation when conditions change. This need may motivate proposing alternatives, selecting methods that fit one’s style, and declining unnecessary constraints. Supporting free action preserves creativity and responsible choice.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "act-freely-forced-decision",
+      "act-freely-schedule-overwrite",
+      "act-freely-permission-for-routine"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "frightened",
+      "thwarted",
+      "scared"
+    ],
+    "needs": [
+      "act-freely"
+    ]
+  },
+  {
+    "id": "choose-freely",
+    "label": "Choose Freely",
+    "summary": "The ability to make one’s own choices can offer flexibility and adaptation when circumstances change. This need may motivate questioning or resisting unnecessary restraints, exploring alternative options, and asserting personal preferences. Supporting free choice preserves individual creativity and responsibility, leading to more wholehearted engagement in tasks and decisions.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "choose-freely-forced-decision",
+      "choose-freely-schedule-overwrite",
+      "choose-freely-permission-for-routine"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "frightened",
+      "thwarted",
+      "scared",
+      "powerless"
+    ],
+    "needs": [
+      "choose-freely"
+    ]
+  },
+  {
+    "id": "understanding",
+    "label": "Understanding",
+    "summary": "Shared meaning can lower error and conflict during complex tasks. This need may motivate inquiry, paraphrasing, and constructing common models. Understanding aligns action and strengthens relationships.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "understanding-interrupted",
+      "understanding-dismissed-feelings",
+      "understanding-ignored-clarify"
+    ],
+    "feelings": [
+      "in-pain",
+      "scared",
+      "anxious",
+      "frustrated",
+      "humiliated",
+      "angry",
+      "embarrassed",
+      "sad",
+      "lonely",
+      "hurt",
+      "upset",
+      "hostile",
+      "resentful"
+    ],
+    "needs": [
+      "understanding"
+    ]
+  },
+  {
+    "id": "recognition",
+    "label": "Recognition",
+    "summary": "Naming value and impact can reinforce effective behavior. This need may motivate sharing outcomes, inviting review, and honoring contributions publicly. Thoughtful recognition strengthens engagement and retention.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "recognition-interrupted",
+      "recognition-dismissed-feelings",
+      "recognition-ignored-clarify"
+    ],
+    "feelings": [
+      "in-pain",
+      "scared",
+      "anxious",
+      "frustrated",
+      "humiliated",
+      "angry",
+      "embarrassed",
+      "hurt",
+      "resentful",
+      "sad",
+      "disappointment"
+    ],
+    "needs": [
+      "recognition"
+    ]
+  },
+  {
+    "id": "non-judgmental-communication",
+    "label": "Non-judgmental Communication",
+    "summary": "Descriptive, curiosity-based dialogue can reduce defensiveness and improve problem solving. This need may motivate observing without labels, checking interpretations, and separating facts from evaluations. Non-judgmental exchange creates conditions for learning and repair.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "non-judgmental-communication-interrupted",
+      "non-judgmental-communication-dismissed-feelings",
+      "non-judgmental-communication-ignored-clarify"
+    ],
+    "feelings": [
+      "in-pain",
+      "scared",
+      "anxious",
+      "frustrated",
+      "humiliated",
+      "angry",
+      "embarrassed"
+    ],
+    "needs": [
+      "non-judgmental-communication"
+    ]
+  },
+  {
+    "id": "need-to-matter",
+    "label": "Need to matter",
+    "summary": "Closely related to ‘mattering,’ this may emphasize recognition of one’s significance in specific contexts. It motivates seeking roles with visible impact and inviting concrete acknowledgment. When mattering is explicit, motivation and loyalty increase.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
+    ],
+    "cueIds": [
+      "need-to-matter-comfort-turned-away",
+      "need-to-matter-no-check-in",
+      "need-to-matter-ignored-distress"
+    ],
+    "feelings": [
+      "hurt",
+      "angry",
+      "embarrassed",
+      "frustrated",
+      "jealous"
+    ],
+    "needs": [
+      "need-to-matter"
+    ]
+  },
+  {
+    "id": "friendship",
+    "label": "Friendship",
+    "summary": "Enduring affiliative bonds are often associated with better health and longevity. This need may motivate companionship, shared activity, and reciprocal care. Friendship supplies steady social buffering and joy.",
+    "slotIds": [
+      "time",
+      "context",
+      "social"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
+    ],
+    "cueIds": [
+      "friendship-meeting-without",
+      "friendship-door-closed-outside",
+      "friendship-thread-without"
+    ],
+    "feelings": [
+      "sad",
+      "lonely",
+      "hurt"
+    ],
+    "needs": [
+      "friendship"
+    ]
+  },
+  {
+    "id": "space",
+    "label": "Space",
+    "summary": "Physical and cognitive room can reduce overload and permit autonomy. This need may motivate creating distance, scheduling pauses, and limiting simultaneous demands. Space preserves clarity and choice.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "space-forced-decision",
+      "space-schedule-overwrite",
+      "space-permission-for-routine"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "pressured",
+      "frightened",
+      "irritated",
+      "distressed",
+      "anxious",
+      "resentful",
+      "overwhelmed",
+      "fear",
+      "desperation",
+      "sad",
+      "agitated",
+      "anxiety"
+    ],
+    "needs": [
+      "space"
+    ]
+  },
+  {
+    "id": "peace",
+    "label": "Peace",
+    "summary": "Low-conflict conditions can allow resources to shift from defense to development. This need may motivate de-escalation, boundary agreements, and restorative practices. Peace enables sustained focus, trust, and growth.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fluorescent|harsh|blaring|flickering)\\b[^\\n]{0,80}\\b(?:lights?|lighting)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:constant|steady|continuous|loud)\\b[^\\n]{0,80}\\b(?:noise|hum|buzz|clatter|din|drone)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:canceled|cancelled|cut|stopped|skipped)\\b[^\\n]{0,80}\\b(?:game|practice|music|break|art|recess|play)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The fluorescent lights flickered through the entire evening.",
+      "There was a steady hum from the generator all night.",
+      "Our music break was canceled to squeeze in another briefing."
+    ],
+    "cueIds": [
+      "peace-harsh-lighting",
+      "peace-constant-noise",
+      "peace-play-canceled"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "pressured",
+      "frightened"
+    ],
+    "needs": [
+      "peace"
+    ]
+  },
+  {
+    "id": "serenity",
+    "label": "Serenity",
+    "summary": "Low-arousal states can aid recovery and perspective taking. This need may motivate simplifying inputs, protecting quiet, and pacing attention. Serenity supports judgment and sustainable engagement.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fluorescent|harsh|blaring|flickering)\\b[^\\n]{0,80}\\b(?:lights?|lighting)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:constant|steady|continuous|loud)\\b[^\\n]{0,80}\\b(?:noise|hum|buzz|clatter|din|drone)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:canceled|cancelled|cut|stopped|skipped)\\b[^\\n]{0,80}\\b(?:game|practice|music|break|art|recess|play)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The fluorescent lights flickered through the entire evening.",
+      "There was a steady hum from the generator all night.",
+      "Our music break was canceled to squeeze in another briefing."
+    ],
+    "cueIds": [
+      "serenity-harsh-lighting",
+      "serenity-constant-noise",
+      "serenity-play-canceled"
+    ],
+    "feelings": [
+      "irritated",
+      "distressed",
+      "angry",
+      "frightened"
+    ],
+    "needs": [
+      "serenity"
+    ]
+  },
+  {
+    "id": "do-things-at-my-own-pace-and-in-my-own-way",
+    "label": "Do things at my own pace and in my own way",
+    "summary": "Individually tuned pacing can support learning, accuracy, and sustainability. This need may motivate customizing timelines, sequencing tasks, and aligning methods with personal rhythms. Honoring pace preserves quality and reduces burnout.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "do-things-at-my-own-pace-and-in-my-own-way-forced-decision",
+      "do-things-at-my-own-pace-and-in-my-own-way-schedule-overwrite",
+      "do-things-at-my-own-pace-and-in-my-own-way-permission-for-routine"
+    ],
+    "feelings": [
+      "irritated",
+      "distressed",
+      "angry",
+      "frightened"
+    ],
+    "needs": [
+      "do-things-at-my-own-pace-and-in-my-own-way"
+    ]
+  },
+  {
+    "id": "calm",
+    "label": "Calm",
+    "summary": "Recovery states can allow learning, immune function, and executive control to rebound after stress. This need may motivate reducing stimulation, pacing demands, and building rhythmic routines. Restoring calm supports regulation and higher-order thinking.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fluorescent|harsh|blaring|flickering)\\b[^\\n]{0,80}\\b(?:lights?|lighting)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:constant|steady|continuous|loud)\\b[^\\n]{0,80}\\b(?:noise|hum|buzz|clatter|din|drone)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:canceled|cancelled|cut|stopped|skipped)\\b[^\\n]{0,80}\\b(?:game|practice|music|break|art|recess|play)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The fluorescent lights flickered through the entire evening.",
+      "There was a steady hum from the generator all night.",
+      "Our music break was canceled to squeeze in another briefing."
+    ],
+    "cueIds": [
+      "calm-harsh-lighting",
+      "calm-constant-noise",
+      "calm-play-canceled"
+    ],
+    "feelings": [
+      "irritated",
+      "distressed",
+      "angry",
+      "frightened"
+    ],
+    "needs": [
+      "calm"
+    ]
+  },
+  {
+    "id": "participation",
+    "label": "Participation",
+    "summary": "Active involvement can increase commitment and quality of outcomes. This need may motivate joining deliberations, sharing responsibility, and contributing skills. Participation distributes ownership and builds durable solutions.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:report|deck|presentation|announcement|summary)\\b[^\\n]{0,80}\\b(?:left|omitted|without|missing)\\b[^\\n]{0,80}\\b(?:my\\s+name|credit|attribution)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:idea|proposal|plan|draft|contribution)\\b[^\\n]{0,80}\\b(?:ignored|dismissed|set\\s+aside|shelved)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:discussion|feedback)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:redo|rework|start\\s+over|scrap)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:explanation|reason|context)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The project announcement went out without my name on the contributors list.",
+      "They set my proposal aside without any discussion.",
+      "We reworked the plan without explaining why the initial work did not count."
+    ],
+    "cueIds": [
+      "participation-credit-omitted",
+      "participation-idea-set-aside",
+      "participation-redo-without-why"
+    ],
+    "feelings": [
+      "lonely",
+      "scared",
+      "hurt",
+      "sad",
+      "embarrassed"
+    ],
+    "needs": [
+      "participation"
+    ]
+  },
+  {
+    "id": "to-be-heard",
+    "label": "To be heard",
+    "summary": "Being accurately understood can improve regulation and coordination. This need may motivate precise articulation and practices of attentive listening. When people are heard, collaboration and goodwill tend to rise.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "to-be-heard-interrupted",
+      "to-be-heard-dismissed-feelings",
+      "to-be-heard-ignored-clarify"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "resentful",
+      "hurt",
+      "sad",
+      "lonely",
+      "scared",
+      "upset",
+      "anxious"
+    ],
+    "needs": [
+      "to-be-heard"
+    ]
+  },
+  {
+    "id": "equality",
+    "label": "Equality",
+    "summary": "Fair access and voice can improve cooperation and reduce conflict in groups. This need may motivate rebalancing opportunities, adjusting procedures, and monitoring outcomes. Valuing equality builds psychological safety and legitimacy.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "equality-interrupted",
+      "equality-dismissed-feelings",
+      "equality-ignored-clarify"
+    ],
+    "feelings": [
+      "scared",
+      "anxiety",
+      "angry",
+      "powerless",
+      "thwarted",
+      "frustrated",
+      "impotent",
+      "helpless",
+      "confused",
+      "resentful",
+      "overwhelmed",
+      "sad"
+    ],
+    "needs": [
+      "equality"
+    ]
+  },
+  {
+    "id": "empowerment",
+    "label": "Empowerment",
+    "summary": "Efficacy and access to resources can increase resilience and health outcomes. This need may motivate skill-building, shared decision-making, and removing needless barriers. Empowerment expands what is possible for individuals and systems.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "empowerment-forced-decision",
+      "empowerment-schedule-overwrite",
+      "empowerment-permission-for-routine"
+    ],
+    "feelings": [
+      "scared",
+      "anxiety",
+      "angry",
+      "powerless",
+      "thwarted",
+      "frustrated",
+      "overwhelmed",
+      "frightened",
+      "helpless"
+    ],
+    "needs": [
+      "empowerment"
+    ]
+  },
+  {
+    "id": "consistency",
+    "label": "Consistency",
+    "summary": "Predictable patterns can free attention for creativity and problem solving. This need may motivate establishing routines, standards, and stable cues. Consistency provides a dependable platform for growth.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "consistency-forced-decision",
+      "consistency-schedule-overwrite",
+      "consistency-permission-for-routine"
+    ],
+    "feelings": [
+      "sad",
+      "disappointment",
+      "frightened"
+    ],
+    "needs": [
+      "consistency"
+    ]
+  },
+  {
+    "id": "genuineness",
+    "label": "Genuineness",
+    "summary": "Straightforward signaling can prevent confusion and build credibility. This need may motivate honest disclosure, consistency between words and actions, and corrective feedback. Genuineness maintains clear, dependable relationships.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|told)\\b[^\\n]{0,80}\\b(?:tone\\s+down|hide|mask|pretend|act\\s+like|smile\\s+through)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:edited|rewrote|changed|revised)\\b[^\\n]{0,80}\\b(?:statement|testimony|draft|bio)\\b[^\\n]{0,80}\\b(?:without|before)\\b[^\\n]{0,80}\\b(?:asking|my\\s+ok|my\\s+consent)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:wasn'?t|not)\\b[^\\n]{0,80}\\b(?:allowed|permitted)\\b[^\\n]{0,80}\\b(?:to\\s+share|to\\s+say|to\\s+mention|to\\s+name)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to tone down my description before the meeting.",
+      "My statement was edited without checking with me.",
+      "I was not allowed to mention the actual numbers during the briefing."
+    ],
+    "cueIds": [
+      "genuineness-tone-it-down",
+      "genuineness-edited-without-ok",
+      "genuineness-blocked-sharing"
+    ],
+    "feelings": [
+      "angry",
+      "scared",
+      "powerless",
+      "thwarted",
+      "frustrated"
+    ],
+    "needs": [
+      "genuineness"
+    ]
+  },
+  {
+    "id": "mattering",
+    "label": "Mattering",
+    "summary": "Feeling significant to others may predict well-being and engagement. This need may motivate meaningful roles, feedback about impact, and participation where presence counts. Centering mattering reinforces purpose for both individuals and groups.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
+    ],
+    "cueIds": [
+      "mattering-comfort-turned-away",
+      "mattering-no-check-in",
+      "mattering-ignored-distress"
+    ],
+    "feelings": [
+      "lonely",
+      "scared",
+      "jealous"
+    ],
+    "needs": [
+      "mattering"
+    ]
+  },
+  {
+    "id": "rest",
+    "label": "Rest",
+    "summary": "Periodic disengagement and sleep can consolidate memory and repair biological systems. This need may motivate protecting sleep windows and creating low-demand intervals. Adequate rest sustains clarity, mood, and health.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:back-?to-?back|no\\s+breaks?|without\\s+breaks?)\\b[^\\n]{0,80}\\b(?:shift|shifts|meetings?|appointments?|lessons?|cases?)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipp(?:ed|ing)|miss(?:ed|ing)|delayed)\\b[^\\n]{0,80}\\b(?:meal|lunch|dinner|breakfast|snack)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|request(?:ed)?)\\b[^\\n]{0,80}\\b(?:cover|relief|backup|break)\\b[^\\n]{0,80}\\b(?:no\\s+one|nobody|none)\\b[^\\n]{0,80}\\b(?:available|free|responded|could)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "After three (context detail) in a row there still was no time for a break.",
+      "We skipped (context detail) to finish (context detail).",
+      "I asked for cover so I could rest and nobody was available."
+    ],
+    "cueIds": [
+      "rest-no-breaks",
+      "rest-skipped-meal",
+      "rest-no-cover"
+    ],
+    "feelings": [
+      "angry",
+      "tired",
+      "frustrated"
+    ],
+    "needs": [
+      "rest"
+    ]
+  },
+  {
+    "id": "mutuality",
+    "label": "Mutuality",
+    "summary": "Balanced exchange can prevent burnout and resentful feelings in ongoing relationships. This need may motivate negotiation of roles, explicit reciprocity, and rebalancing when loads shift. Mutuality maintains dignity and stability on all sides.",
+    "slotIds": [
+      "time",
+      "context",
+      "social"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:meeting|call|gathering|hangout)\\b[^\\n]{0,80}\\b(?:started|held|scheduled|happened)\\b[^\\n]{0,80}\\b(?:without|w\\/o|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|us|them)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bdoor\\b[^\\n]{0,80}\\b(?:closed|shut|locked)\\b[^\\n]{0,80}\\b(?:while|with)\\b[^\\n]{0,80}\\b(?:still\\s+outside|in\\s+the\\s+hall|on\\s+the\\s+stairs)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:group\\s+chat|thread|channel)\\b[^\\n]{0,80}\\b(?:without|minus|excluding)\\b[^\\n]{0,80}\\b(?:me|them|inviting)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They started a meeting in (context detail) without adding me to the invite.",
+      "The door closed while I was still in the hallway.",
+      "A group chat about (context detail) went on without my name anywhere."
+    ],
+    "cueIds": [
+      "mutuality-meeting-without",
+      "mutuality-door-closed-outside",
+      "mutuality-thread-without"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "resentful",
+      "sad",
+      "frightened",
+      "helpless"
+    ],
+    "needs": [
+      "mutuality"
+    ]
+  },
+  {
+    "id": "relaxation",
+    "label": "Relaxation",
+    "summary": "Deliberate down-shifting can restore cognitive flexibility and interpersonal patience. This need may motivate quiet leisure, gentle movement, and mind-uncluttering practices. Relaxation renews capacity for sustained effort.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:back-?to-?back|no\\s+breaks?|without\\s+breaks?)\\b[^\\n]{0,80}\\b(?:shift|shifts|meetings?|appointments?|lessons?|cases?)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipp(?:ed|ing)|miss(?:ed|ing)|delayed)\\b[^\\n]{0,80}\\b(?:meal|lunch|dinner|breakfast|snack)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|request(?:ed)?)\\b[^\\n]{0,80}\\b(?:cover|relief|backup|break)\\b[^\\n]{0,80}\\b(?:no\\s+one|nobody|none)\\b[^\\n]{0,80}\\b(?:available|free|responded|could)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "After three (context detail) in a row there still was no time for a break.",
+      "We skipped (context detail) to finish (context detail).",
+      "I asked for cover so I could rest and nobody was available."
+    ],
+    "cueIds": [
+      "relaxation-no-breaks",
+      "relaxation-skipped-meal",
+      "relaxation-no-cover"
+    ],
+    "feelings": [
+      "anxious",
+      "resentful",
+      "overwhelmed"
+    ],
+    "needs": [
+      "relaxation"
+    ]
+  },
+  {
+    "id": "closeness",
+    "label": "Closeness",
+    "summary": "Attachment theory and cross-cultural research identify emotionally attuned proximity as potentially protective for development and stress recovery. This need may motivate shared time, attentive presence, and mutual responsiveness. Closeness strengthens resilience through co-regulation and trust.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:reached|leaned|offered)\\b[^\\n]{0,80}\\b(?:hug|hand|embrace|touch|hold)\\b[^\\n]{0,80}\\b(?:pulled\\s+away|stepp(?:ed|ing)\\s+back|turned\\s+away|kept\\s+(?:arms|hands)\\s+(?:at\\s+their\\s+sides|still))\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:no\\s+one|nobody)\\b[^\\n]{0,80}\\b(?:checked|asked|looked\\s+in)\\b[^\\n]{0,80}\\b(?:how|if)\\b[^\\n]{0,80}\\b(?:doing|feeling|holding\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:crying|sobbing|shaking|tearing\\s+up|wiping\\s+their\\s+eyes)\\b[^\\n]{0,80}\\b(?:kept|continued|stayed)\\b[^\\n]{0,80}\\b(?:typing|talking|scrolling|working|reviewing)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "At (time detail) I reached to hug (other person) and they stepped back toward the doorway.",
+      "During (context detail) nobody checked how (other person) was holding up.",
+      "While (other person) wiped their eyes, the group kept typing on (object detail)."
+    ],
+    "cueIds": [
+      "closeness-comfort-turned-away",
+      "closeness-no-check-in",
+      "closeness-ignored-distress"
+    ],
+    "feelings": [
+      "hurt",
+      "scared",
+      "angry",
+      "defiant"
+    ],
+    "needs": [
+      "closeness"
+    ]
+  },
+  {
+    "id": "authenticity",
+    "label": "Authenticity",
+    "summary": "Congruence between inner experience and outer behavior can support clarity and reduce social ambiguity. This need may motivate transparent communication and value-consistent choices. Respecting authenticity preserves self-coherence and dependable signaling in relationships.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|told)\\b[^\\n]{0,80}\\b(?:tone\\s+down|hide|mask|pretend|act\\s+like|smile\\s+through)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:edited|rewrote|changed|revised)\\b[^\\n]{0,80}\\b(?:statement|testimony|draft|bio)\\b[^\\n]{0,80}\\b(?:without|before)\\b[^\\n]{0,80}\\b(?:asking|my\\s+ok|my\\s+consent)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:wasn'?t|not)\\b[^\\n]{0,80}\\b(?:allowed|permitted)\\b[^\\n]{0,80}\\b(?:to\\s+share|to\\s+say|to\\s+mention|to\\s+name)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to tone down my description before the meeting.",
+      "My statement was edited without checking with me.",
+      "I was not allowed to mention the actual numbers during the briefing."
+    ],
+    "cueIds": [
+      "authenticity-tone-it-down",
+      "authenticity-edited-without-ok",
+      "authenticity-blocked-sharing"
+    ],
+    "feelings": [
+      "frustrated",
+      "fear",
+      "desperation"
+    ],
+    "needs": [
+      "authenticity"
+    ]
+  },
+  {
+    "id": "self-expression",
+    "label": "Self expression",
+    "summary": "Externalizing inner experience can clarify thinking and support mutual understanding. This need may motivate writing, speaking, making, or otherwise communicating authentically. Expression integrates identity and connects people.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:report|deck|presentation|announcement|summary)\\b[^\\n]{0,80}\\b(?:left|omitted|without|missing)\\b[^\\n]{0,80}\\b(?:my\\s+name|credit|attribution)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:idea|proposal|plan|draft|contribution)\\b[^\\n]{0,80}\\b(?:ignored|dismissed|set\\s+aside|shelved)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:discussion|feedback)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:redo|rework|start\\s+over|scrap)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:explanation|reason|context)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The project announcement went out without my name on the contributors list.",
+      "They set my proposal aside without any discussion.",
+      "We reworked the plan without explaining why the initial work did not count."
+    ],
+    "cueIds": [
+      "self-expression-credit-omitted",
+      "self-expression-idea-set-aside",
+      "self-expression-redo-without-why"
+    ],
+    "feelings": [
+      "frustrated",
+      "fear",
+      "desperation"
+    ],
+    "needs": [
+      "self-expression"
+    ]
+  },
+  {
+    "id": "integrity",
+    "label": "Integrity",
+    "summary": "Coherence between values and behavior can reduce internal conflict and external confusion. This need may motivate alignment, boundary maintenance, and principled action under pressure. Integrity supports self-respect and predictability for others.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "integrity-forced-decision",
+      "integrity-schedule-overwrite",
+      "integrity-permission-for-routine"
+    ],
+    "feelings": [
+      "embarrassed",
+      "angry",
+      "resentful"
+    ],
+    "needs": [
+      "integrity"
+    ]
+  },
+  {
+    "id": "empathy",
+    "label": "Empathy",
+    "summary": "Accurately grasping another’s inner world can improve coordination and repair; some autistic people may prefer concrete language for this process. This need may motivate perspective-taking, reflective listening, and iterative checking for understanding. Practiced well, it reduces misinterpretation and supports relational alignment.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "empathy-interrupted",
+      "empathy-dismissed-feelings",
+      "empathy-ignored-clarify"
+    ],
+    "feelings": [
+      "sad",
+      "hostile",
+      "frustrated",
+      "bewildered"
+    ],
+    "needs": [
+      "empathy"
+    ]
+  },
+  {
+    "id": "privacy",
+    "label": "Privacy",
+    "summary": "Periods of seclusion and control over information can protect autonomy and processing time. This need may motivate retreat, selective disclosure, and environmental boundaries. Privacy supports reflection, integration, and self-definition.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:told|forced|required|had\\s+to)\\b[^\\n]{0,80}\\b(?:sign|agree|commit|decide)\\b[^\\n]{0,80}\\b(?:immediately|on\\s+the\\s+spot|right\\s+away|without\\s+review)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:calendar|schedule|availability)\\b[^\\n]{0,80}\\b(?:overridden|overrode|replaced|ignored)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:had\\s+to|needed\\s+to)\\b[^\\n]{0,80}\\b(?:ask|get)\\b[^\\n]{0,80}\\b(?:permission|approval)\\b[^\\n]{0,80}\\b(?:before|to)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "They asked me to sign immediately without time to review.",
+      "My calendar block was overwritten with another meeting.",
+      "I had to get permission before sending a routine update."
+    ],
+    "cueIds": [
+      "privacy-forced-decision",
+      "privacy-schedule-overwrite",
+      "privacy-permission-for-routine"
+    ],
+    "feelings": [
+      "sad",
+      "angry",
+      "agitated",
+      "anxiety"
+    ],
+    "needs": [
+      "privacy"
+    ]
+  },
+  {
+    "id": "order",
+    "label": "Order",
+    "summary": "Structure and organization can reduce error and cognitive strain. This need may motivate sorting, sequencing, standardizing, and documenting. Order frees attention for creativity and nuanced thinking.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
+    ],
+    "cueIds": [
+      "order-door-unsecured",
+      "order-alarm-offline",
+      "order-protocol-skipped"
+    ],
+    "feelings": [
+      "scared",
+      "angry",
+      "pressured",
+      "anxiety",
+      "frightened",
+      "alarmed",
+      "agitated",
+      "defiant",
+      "helpless",
+      "sad",
+      "hurt",
+      "resentful",
+      "irritated",
+      "disappointment",
+      "enraged",
+      "frustrated",
+      "powerless",
+      "thwarted",
+      "embarrassed",
+      "tense",
+      "anxious",
+      "distressed",
+      "lonely"
+    ],
+    "needs": [
+      "order"
+    ]
+  },
+  {
+    "id": "beauty",
+    "label": "Beauty",
+    "summary": "Humans can be sensitive to pattern, harmony, and environmental cues associated with safety and resources. This need may motivate attending to nature, art, and design that promote orientation and calm. Investing in beauty improves attention, mood, and restorative experience.",
+    "slotIds": [
+      "time",
+      "context",
+      "sensory"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:fluorescent|harsh|blaring|flickering)\\b[^\\n]{0,80}\\b(?:lights?|lighting)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:constant|steady|continuous|loud)\\b[^\\n]{0,80}\\b(?:noise|hum|buzz|clatter|din|drone)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:canceled|cancelled|cut|stopped|skipped)\\b[^\\n]{0,80}\\b(?:game|practice|music|break|art|recess|play)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The fluorescent lights flickered through the entire evening.",
+      "There was a steady hum from the generator all night.",
+      "Our music break was canceled to squeeze in another briefing."
+    ],
+    "cueIds": [
+      "beauty-harsh-lighting",
+      "beauty-constant-noise",
+      "beauty-play-canceled"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "tense",
+      "distressed",
+      "sad",
+      "lonely",
+      "hurt",
+      "resentful",
+      "disappointment",
+      "bewildered",
+      "anxious",
+      "pressured",
+      "frightened",
+      "irritated"
+    ],
+    "needs": [
+      "beauty"
+    ]
+  },
+  {
+    "id": "control",
+    "label": "Control",
+    "summary": "Influence over conditions can reduce threat and improve outcomes in uncertain environments. This need may motivate setting parameters, using contingency plans, and shaping contexts. Appropriate control promotes safety and effective agency.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
+    ],
+    "cueIds": [
+      "control-door-unsecured",
+      "control-alarm-offline",
+      "control-protocol-skipped"
+    ],
+    "feelings": [
+      "scared",
+      "angry",
+      "pressured",
+      "anxiety",
+      "frightened",
+      "alarmed",
+      "agitated",
+      "defiant",
+      "helpless",
+      "sad",
+      "hurt",
+      "resentful",
+      "irritated",
+      "disappointment",
+      "enraged",
+      "frustrated",
+      "powerless",
+      "thwarted",
+      "embarrassed",
+      "tense",
+      "anxious",
+      "distressed",
+      "lonely"
+    ],
+    "needs": [
+      "control"
+    ]
+  },
+  {
+    "id": "predictability",
+    "label": "Predictability",
+    "summary": "Reliable patterns can make planning possible and reduce vigilance. This need may motivate clear schedules, transparent protocols, and advance notice of change. Predictability stabilizes attention and performance.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
+    ],
+    "cueIds": [
+      "predictability-door-unsecured",
+      "predictability-alarm-offline",
+      "predictability-protocol-skipped"
+    ],
+    "feelings": [
+      "scared",
+      "angry",
+      "pressured",
+      "anxiety",
+      "frightened",
+      "alarmed",
+      "agitated",
+      "defiant",
+      "helpless",
+      "sad",
+      "hurt",
+      "resentful",
+      "irritated",
+      "disappointment",
+      "enraged",
+      "frustrated",
+      "powerless",
+      "thwarted",
+      "embarrassed",
+      "tense",
+      "anxious",
+      "distressed",
+      "lonely"
+    ],
+    "needs": [
+      "predictability"
+    ]
+  },
+  {
+    "id": "accomplishment",
+    "label": "Accomplishment",
+    "summary": "Mastery and efficacy can be intrinsically rewarding and have clear adaptive value in variable environments. This need may motivate goal formation, deliberate practice, and tracking progress. Honoring accomplishment channels effort into competence that benefits both the individual and the group.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:report|deck|presentation|announcement|summary)\\b[^\\n]{0,80}\\b(?:left|omitted|without|missing)\\b[^\\n]{0,80}\\b(?:my\\s+name|credit|attribution)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:idea|proposal|plan|draft|contribution)\\b[^\\n]{0,80}\\b(?:ignored|dismissed|set\\s+aside|shelved)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:discussion|feedback)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:redo|rework|start\\s+over|scrap)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:explanation|reason|context)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The project announcement went out without my name on the contributors list.",
+      "They set my proposal aside without any discussion.",
+      "We reworked the plan without explaining why the initial work did not count."
+    ],
+    "cueIds": [
+      "accomplishment-credit-omitted",
+      "accomplishment-idea-set-aside",
+      "accomplishment-redo-without-why"
+    ],
+    "feelings": [
+      "frustrated",
+      "sad",
+      "disappointment",
+      "powerless"
+    ],
+    "needs": [
+      "accomplishment"
+    ]
+  },
+  {
+    "id": "physical-fitness",
+    "label": "Physical Fitness",
+    "summary": "Capacity for movement can underpin health, safety, and daily functioning. This need may motivate activity, strength and endurance practices, and balanced recovery. Fitness supports mood, cognition, and independence.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:back-?to-?back|no\\s+breaks?|without\\s+breaks?)\\b[^\\n]{0,80}\\b(?:shift|shifts|meetings?|appointments?|lessons?|cases?)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipp(?:ed|ing)|miss(?:ed|ing)|delayed)\\b[^\\n]{0,80}\\b(?:meal|lunch|dinner|breakfast|snack)\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|request(?:ed)?)\\b[^\\n]{0,80}\\b(?:cover|relief|backup|break)\\b[^\\n]{0,80}\\b(?:no\\s+one|nobody|none)\\b[^\\n]{0,80}\\b(?:available|free|responded|could)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "After three (context detail) in a row there still was no time for a break.",
+      "We skipped (context detail) to finish (context detail).",
+      "I asked for cover so I could rest and nobody was available."
+    ],
+    "cueIds": [
+      "physical-fitness-no-breaks",
+      "physical-fitness-skipped-meal",
+      "physical-fitness-no-cover"
+    ],
+    "feelings": [
+      "distressed",
+      "sad"
+    ],
+    "needs": [
+      "physical-fitness"
+    ]
+  },
+  {
+    "id": "acceptance",
+    "label": "Acceptance",
+    "summary": "In social species, inclusion can confer safety and access to resources, so human attention is often tuned to signals of being welcomed as we are. This need may motivate seeking contexts where differences are received without correction, inviting feedback, and building norms that reduce social threat. Valuing acceptance sustains psychological security and strengthens long-term cooperation.",
+    "slotIds": [
+      "time",
+      "context",
+      "social",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:said|told)\\b[^\\n]{0,80}\\b(?:you'?re|I'?m|they're)\\s+(?:overreacting|too\\s+sensitive|fine|dramatic|making\\s+it\\s+up)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:asked|requested)\\b[^\\n]{0,80}\\b(?:repeat|say\\s+back|clarify|explain)\\b[^\\n]{0,80}\\b(?:they\\s+kept|they\\s+continued|they\\s+didn'?t)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
+      "I asked them to repeat what they heard and they kept reading from their notes."
+    ],
+    "cueIds": [
+      "acceptance-interrupted",
+      "acceptance-dismissed-feelings",
+      "acceptance-ignored-clarify"
+    ],
+    "feelings": [
+      "angry",
+      "frustrated",
+      "frightened",
+      "scared",
+      "pressured",
+      "overwhelmed",
+      "embarrassed",
+      "resentful",
+      "hurt",
+      "lonely",
+      "tired",
+      "anxious",
+      "hostile",
+      "antagonistic",
+      "disappointment",
+      "sad",
+      "upset",
+      "tense",
+      "distressed",
+      "agitated",
+      "anxiety",
+      "irritated",
+      "defiant",
+      "in-pain",
+      "humiliated",
+      "enraged",
+      "powerless",
+      "thwarted",
+      "impotent",
+      "helpless",
+      "confused",
+      "bewildered"
+    ],
+    "needs": [
+      "acceptance"
+    ]
+  },
+  {
+    "id": "growth",
+    "label": "Growth",
+    "summary": "Learning and adaptation may be central to human development and cultural evolution. This need may motivate seeking feedback, practicing new skills, and gradually increasing challenge. Prioritizing growth enhances flexibility and long-term competence.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:report|deck|presentation|announcement|summary)\\b[^\\n]{0,80}\\b(?:left|omitted|without|missing)\\b[^\\n]{0,80}\\b(?:my\\s+name|credit|attribution)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:idea|proposal|plan|draft|contribution)\\b[^\\n]{0,80}\\b(?:ignored|dismissed|set\\s+aside|shelved)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:discussion|feedback)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:redo|rework|start\\s+over|scrap)\\b[^\\n]{0,80}\\b(?:without|no)\\b[^\\n]{0,80}\\b(?:explanation|reason|context)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The project announcement went out without my name on the contributors list.",
+      "They set my proposal aside without any discussion.",
+      "We reworked the plan without explaining why the initial work did not count."
+    ],
+    "cueIds": [
+      "growth-credit-omitted",
+      "growth-idea-set-aside",
+      "growth-redo-without-why"
+    ],
+    "feelings": [
+      "frustrated",
+      "tense",
+      "helpless",
+      "defiant"
+    ],
+    "needs": [
+      "growth"
+    ]
+  },
+  {
+    "id": "security",
+    "label": "Security",
+    "summary": "Resource and relationship stability can allow planning and long-term investment. This need may motivate saving, redundancy, and dependable support networks. Security frees attention for growth and creativity.",
+    "slotIds": [
+      "time",
+      "context",
+      "actions"
+    ],
+    "detectors": [
+      {
+        "type": "regex",
+        "pattern": "\\b(?:door|gate|entrance|exit)\\b[^\\n]{0,80}\\b(?:propped|left|kept)\\b[^\\n]{0,80}\\b(?:open|unlocked|ajar)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:alarm|detector|safety\\s+system|sensor)\\b[^\\n]{0,80}\\b(?:fault|offline|not\\s+working|failed|silenced)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:skipped|ignored|bypassed)\\b[^\\n]{0,80}\\b(?:safety|security|checklist|protocol|inspection)",
+        "flags": "iu"
+      }
+    ],
+    "examples": [
+      "The security door was propped open all evening.",
+      "The alarm panel showed the sensor offline and nobody addressed it.",
+      "They skipped the safety check before starting (context detail)."
+    ],
+    "cueIds": [
+      "security-door-unsecured",
+      "security-alarm-offline",
+      "security-protocol-skipped"
+    ],
+    "feelings": [
+      "frightened",
+      "tense",
+      "anxious",
+      "distressed",
+      "scared",
+      "lonely"
+    ],
+    "needs": [
+      "security"
     ]
   }
 ]

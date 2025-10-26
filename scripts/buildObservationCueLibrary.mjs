@@ -2,6 +2,8 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { normalizeObservationPlaceholders } from '../lib/observationPlaceholders.js';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 
@@ -87,7 +89,7 @@ function compileFromBlueprint({ lexicon, blueprint }) {
       const cueNeeds = uniqueStrings(
         cueDef.needs && cueDef.needs.length ? cueDef.needs : normalizedModule.needs,
       );
-      const example = sanitizeSentence(cueDef.example || '');
+      const example = cueDef.example || '';
       if (!example) {
         throw new Error(`Cue ${cueDef.id} is missing an example.`);
       }
@@ -145,7 +147,11 @@ function normalizeModule(def) {
   const lexiconKeys = Array.isArray(def.lexiconKeys) ? def.lexiconKeys.filter(Boolean) : [];
   const feelings = uniqueStrings(Array.isArray(def.feelings) ? def.feelings : []);
   const needs = uniqueStrings(Array.isArray(def.needs) ? def.needs : []);
-  const examples = Array.isArray(def.examples) ? def.examples.filter(Boolean).map(sanitizeSentence) : [];
+  const examples = Array.isArray(def.examples)
+    ? def.examples
+        .filter(Boolean)
+        .map(example => normalizeObservationPlaceholders(sanitizeSentence(example)))
+    : [];
   const detectors = Array.isArray(def.detectors) ? def.detectors : [];
   const cues = Array.isArray(def.cues)
     ? def.cues.map(cue => normalizeCue(cue, id)).filter(Boolean)
@@ -164,7 +170,7 @@ function normalizeCue(def, moduleId) {
   const lexiconKeys = Array.isArray(def.lexiconKeys) ? def.lexiconKeys.filter(Boolean) : [];
   const feelings = uniqueStrings(Array.isArray(def.feelings) ? def.feelings : []);
   const needs = uniqueStrings(Array.isArray(def.needs) ? def.needs : []);
-  const example = def.example ? sanitizeSentence(def.example) : '';
+  const example = def.example ? normalizeObservationPlaceholders(sanitizeSentence(def.example)) : '';
   const patterns = normalizePatterns(def.patterns || []);
   const phrases = Array.isArray(def.phrases) ? def.phrases.filter(Boolean) : [];
   return { id, lexiconKeys, feelings, needs, example, patterns, phrases };
