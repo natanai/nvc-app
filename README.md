@@ -78,28 +78,24 @@ elsewhere.
 
 ## Observation cue module system
 
-All observation feedback now comes from a modular cue library that is generated from two source files:
+All observation feedback now comes from a modular cue library that is generated from three data sources:
 
+- `data/Needs.csv` lists each published need together with a short summary and related feelings.
+- `data/observation_need_templates.json` maps need categories to reusable cue templates (slot configuration, cue suffixes, examples, and regex patterns). Updating this file is the primary way to add or tweak cues.
 - `data/observation_lexicon.json` collects reusable vocabulary. Each entry defines a regular-expression `pattern` or a `tokens` array (with an optional `threshold`) plus an optional `phrase` hint that appears in the editor. Build scripts normalize the tokens so common inflections ("listened," "listening") map to the same matcher.
-- `data/observation_module_blueprints.json` describes every module. A module bundles:
-  - metadata (`id`, `label`, `summary`, optional `slotIds`, and up to three representative `examples`),
-  - `lexiconKeys` that pull in the shared vocabulary,
-  - optional custom `detectors` for edge cases,
-  - default `feelings` and `needs`, and
-  - a `cues` collection. Each cue references lexicon keys (or inherits the module’s keys), can extend the feeling/need lists, and must provide an `example`. Patterns are assembled automatically from the lexicon plus any cue-level `phrases` or `patterns`.
 
-The build pipeline consumes those source files and emits the artifacts used by the site:
+`npm run build:observation-cues` first runs `scripts/generateNeedObservationBlueprint.mjs`, which reads the needs CSV and category templates to write an updated `data/observation_module_blueprints.json`. It then executes `scripts/buildObservationCueLibrary.mjs`, which compiles the lexicon and blueprint into sanitized outputs:
 
 ```bash
 npm run build:observation-cues
 ```
 
-This command runs `scripts/buildObservationCueLibrary.mjs` to generate:
+The build writes:
 
 - `data/observation_cue_modules.json` – the compiled module definitions consumed by the observation editor, and
-- `data/observation_cues.csv` – the cue list with merged pattern sets.
+- `data/observation_cues.csv` – the cue list with merged pattern sets and normalized examples.
 
-It then calls `scripts/sanitizeObservationCues.mjs` to produce the derived `data/observation_cues.sanitized.csv`. **Do not edit any of the generated files directly**—always modify the lexicon or module blueprint and rebuild.
+**Do not edit any of the generated files directly**—always modify the needs data, templates, or lexicon and rebuild.
 
 After updating the lexicon or blueprint, run the focused tests to confirm coverage and structural integrity:
 

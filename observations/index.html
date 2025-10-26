@@ -997,6 +997,7 @@ button.site-nav__magnet {
 
   .observation-guide__section-content a {
     overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   .observation-guide__mobile {
@@ -2187,6 +2188,12 @@ button.site-nav__magnet {
     gap: clamp(1.25rem, 3vw, 1.75rem);
   }
 
+  .observation-suggestions__feelings {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
   .observation-editor__field > .observation-suggestions {
     padding-block-start: clamp(1.25rem, 3vw, 1.75rem);
     padding-block-end: clamp(1rem, 2.5vw, 1.4rem);
@@ -2197,6 +2204,10 @@ button.site-nav__magnet {
     .observation-suggestions__panels {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1.25rem 2rem;
+    }
+
+    .observation-suggestions__feelings {
+      grid-column: span 1;
     }
   }
 
@@ -2211,8 +2222,52 @@ button.site-nav__magnet {
   }
 
   .observation-panel__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .observation-panel__header-main {
     display: grid;
     gap: 0.35rem;
+  }
+
+  .observation-feelings-toggle {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+  }
+
+  .observation-feelings-toggle__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.25rem;
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    background: color-mix(in srgb, #ffffff 95%, transparent);
+    color: color-mix(in srgb, var(--outline) 65%, var(--ink) 35%);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    cursor: pointer;
+  }
+
+  .observation-feelings-toggle__button.is-on {
+    background: color-mix(in srgb, var(--mint) 16%, transparent);
+    border-color: color-mix(in srgb, var(--mint) 35%, transparent);
+    color: color-mix(in srgb, var(--ink) 78%, var(--outline) 22%);
+  }
+
+  .observation-feelings-toggle__button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--mint) 55%, transparent);
+    outline-offset: 3px;
   }
 
   .observation-panel__title {
@@ -2264,7 +2319,8 @@ button.site-nav__magnet {
     min-width: 44px;
     min-height: 44px;
     max-width: min(100%, 18rem);
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
     text-align: center;
     line-height: 1.2;
     cursor: pointer;
@@ -2940,18 +2996,36 @@ button.site-nav__magnet {
                   </header>
                   <p id="suggested-why" class="observation-suggestions__why"></p>
                   <div class="observation-suggestions__panels">
-                    <section class="observation-panel observation-panel--feelings" aria-live="polite">
-                      <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Possible feelings</h3>
-                      </header>
+                    <div class="observation-suggestions__feelings">
+                      <div class="observation-feelings-toggle" role="presentation">
+                        <button
+                          type="button"
+                          class="observation-feelings-toggle__button"
+                          role="switch"
+                          aria-checked="false"
+                          aria-label="Toggle between feelings for when needs aren’t met and when needs are met"
+                          data-feelings-switch
+                        >
+                          Unmet
+                        </button>
+                      </div>
+                      <section class="observation-panel observation-panel--feelings" aria-live="polite">
+                        <header class="observation-panel__header">
+                          <div class="observation-panel__header-main">
+                            <h3 class="observation-panel__title">Possible feelings</h3>
+                          </div>
+                        </header>
                       <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
                       <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
                         We’ll list possible feelings here once we pick up observational cues.
                       </p>
-                    </section>
+                      </section>
+                    </div>
                     <section class="observation-panel observation-panel--needs" aria-live="polite">
                       <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                        <div class="observation-panel__header-main">
+                          <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                        </div>
                       </header>
                       <div id="suggested-needs" class="observation-chip-list" role="list"></div>
                       <p id="suggested-needs-empty" class="observation-panel__empty" hidden>
@@ -3024,16 +3098,16 @@ button.site-nav__magnet {
                     </span>
                   </div>
                   <div class="observation-editor__match-summary-row">
-                    <span class="observation-editor__match-summary-label">Near matches queued</span>
+                    <span class="observation-editor__match-summary-label">Nearest needs queued</span>
                     <span
                       id="observation-detection-near"
                       class="observation-editor__match-summary-value"
                     >
-                      0/6
+                      0/4
                     </span>
                   </div>
                   <p id="observation-detection-note" class="observation-editor__match-summary-note">
-                    We’ll scan for cues as you type. We review up to 6 nearest cues at a time to keep things focused.
+                    We’ll scan for cues as you type. Load possible matches to review up to 4 nearby needs with aligned feelings.
                   </p>
                   <p
                     id="observation-detection-coverage"
