@@ -2211,8 +2211,50 @@ button.site-nav__magnet {
   }
 
   .observation-panel__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .observation-panel__header-main {
     display: grid;
     gap: 0.35rem;
+  }
+
+  .observation-panel__controls {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .observation-panel__toggle {
+    appearance: none;
+    border: 1px solid color-mix(in srgb, var(--outline) 36%, transparent);
+    background: transparent;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--outline) 72%, var(--ink) 28%);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .observation-panel__toggle.is-active {
+    background: color-mix(in srgb, #ffffff 82%, var(--mint) 18%);
+    border-color: color-mix(in srgb, var(--mint) 55%, transparent);
+    color: color-mix(in srgb, var(--mint) 60%, var(--ink) 40%);
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--mint) 22%, transparent);
+  }
+
+  .observation-panel__toggle:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--mint) 55%, transparent);
+    outline-offset: 2px;
   }
 
   .observation-panel__title {
@@ -2942,7 +2984,27 @@ button.site-nav__magnet {
                   <div class="observation-suggestions__panels">
                     <section class="observation-panel observation-panel--feelings" aria-live="polite">
                       <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Possible feelings</h3>
+                        <div class="observation-panel__header-main">
+                          <h3 class="observation-panel__title">Possible feelings</h3>
+                        </div>
+                        <div class="observation-panel__controls" role="group" aria-label="Toggle possible feelings">
+                          <button
+                            type="button"
+                            class="observation-panel__toggle"
+                            data-feelings-mode="unmet"
+                            aria-pressed="true"
+                          >
+                            When needs aren’t met
+                          </button>
+                          <button
+                            type="button"
+                            class="observation-panel__toggle"
+                            data-feelings-mode="met"
+                            aria-pressed="false"
+                          >
+                            When needs are met
+                          </button>
+                        </div>
                       </header>
                       <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
                       <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
@@ -2951,7 +3013,9 @@ button.site-nav__magnet {
                     </section>
                     <section class="observation-panel observation-panel--needs" aria-live="polite">
                       <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                        <div class="observation-panel__header-main">
+                          <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                        </div>
                       </header>
                       <div id="suggested-needs" class="observation-chip-list" role="list"></div>
                       <p id="suggested-needs-empty" class="observation-panel__empty" hidden>
