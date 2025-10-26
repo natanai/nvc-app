@@ -997,6 +997,7 @@ button.site-nav__magnet {
 
   .observation-guide__section-content a {
     overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   .observation-guide__mobile {
@@ -2187,6 +2188,13 @@ button.site-nav__magnet {
     gap: clamp(1.25rem, 3vw, 1.75rem);
   }
 
+  .observation-suggestions__feelings,
+  .observation-suggestions__needs {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
   .observation-editor__field > .observation-suggestions {
     padding-block-start: clamp(1.25rem, 3vw, 1.75rem);
     padding-block-end: clamp(1rem, 2.5vw, 1.4rem);
@@ -2197,6 +2205,11 @@ button.site-nav__magnet {
     .observation-suggestions__panels {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1.25rem 2rem;
+    }
+
+    .observation-suggestions__feelings,
+    .observation-suggestions__needs {
+      grid-column: span 1;
     }
   }
 
@@ -2211,8 +2224,116 @@ button.site-nav__magnet {
   }
 
   .observation-panel__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .observation-panel__header-main {
     display: grid;
     gap: 0.35rem;
+  }
+
+  .observation-switch {
+    --switch-width: 2.9rem;
+    --switch-height: 1.4rem;
+    --switch-padding: 0.2rem;
+    --thumb-size: 1rem;
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 78%, transparent);
+    width: var(--switch-width);
+    height: var(--switch-height);
+    padding: var(--switch-padding);
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+
+  .observation-switch--compact {
+    gap: 0.45rem;
+    padding: 0.25rem 0.55rem;
+    width: auto;
+    height: auto;
+    background: color-mix(in srgb, #ffffff 86%, transparent);
+    border-radius: 999px;
+  }
+
+  .observation-switch--compact .observation-switch__base {
+    width: var(--switch-width);
+    height: var(--switch-height);
+    flex: 0 0 var(--switch-width);
+  }
+
+  .observation-switch__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 55%, var(--ink) 45%);
+    line-height: 1;
+  }
+
+  .observation-switch__base {
+    position: relative;
+    flex: 1 1 auto;
+    height: 100%;
+    border-radius: calc(var(--switch-height) / 2);
+    background: color-mix(in srgb, var(--outline) 12%, transparent);
+    overflow: hidden;
+  }
+
+  .observation-switch__thumb {
+    position: absolute;
+    top: 50%;
+    left: var(--switch-padding);
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    border-radius: 50%;
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 2px 4px color-mix(in srgb, var(--ink) 18%, transparent);
+    transform: translateY(-50%);
+    transition: left 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .observation-switch.is-on {
+    background: color-mix(in srgb, var(--mint) 18%, transparent);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--mint) 28%, transparent);
+  }
+
+  .observation-switch.is-on .observation-switch__base {
+    background: color-mix(in srgb, var(--mint) 28%, transparent);
+  }
+
+  .observation-switch.is-on .observation-switch__thumb {
+    left: calc(100% - var(--switch-padding) - var(--thumb-size));
+    background: #ffffff;
+    box-shadow: 0 2px 4px color-mix(in srgb, var(--mint) 35%, transparent);
+  }
+
+  .observation-switch.is-on .observation-switch__label {
+    color: var(--ink);
+  }
+
+  .observation-switch:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--mint) 55%, transparent);
+    outline-offset: 3px;
+  }
+
+  .observation-feelings-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0.35rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 94%, transparent);
+    border: none;
   }
 
   .observation-panel__title {
@@ -2264,7 +2385,8 @@ button.site-nav__magnet {
     min-width: 44px;
     min-height: 44px;
     max-width: min(100%, 18rem);
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
     text-align: center;
     line-height: 1.2;
     cursor: pointer;
@@ -2940,24 +3062,51 @@ button.site-nav__magnet {
                   </header>
                   <p id="suggested-why" class="observation-suggestions__why"></p>
                   <div class="observation-suggestions__panels">
-                    <section class="observation-panel observation-panel--feelings" aria-live="polite">
-                      <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Possible feelings</h3>
-                      </header>
-                      <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
-                      <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
-                        We’ll list possible feelings here once we pick up observational cues.
-                      </p>
-                    </section>
-                    <section class="observation-panel observation-panel--needs" aria-live="polite">
-                      <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Needs that may be alive in you</h3>
-                      </header>
-                      <div id="suggested-needs" class="observation-chip-list" role="list"></div>
-                      <p id="suggested-needs-empty" class="observation-panel__empty" hidden>
-                        We’ll list needs that may be alive in you once we pick up observational cues.
-                      </p>
-                    </section>
+                    <div class="observation-suggestions__needs">
+                      <div
+                        class="observation-feelings-toggle"
+                        role="group"
+                        aria-label="Toggle possible feelings"
+                      >
+                        <button
+                          type="button"
+                          class="observation-switch observation-switch--compact"
+                          role="switch"
+                          aria-checked="false"
+                          aria-label="Toggle between feelings for when needs aren’t met and when needs are met"
+                          data-feelings-switch
+                        >
+                          <span class="observation-switch__base" aria-hidden="true">
+                            <span class="observation-switch__thumb"></span>
+                          </span>
+                          <span class="observation-switch__label" data-feelings-switch-label>Unmet</span>
+                        </button>
+                      </div>
+                      <section class="observation-panel observation-panel--needs" aria-live="polite">
+                        <header class="observation-panel__header">
+                          <div class="observation-panel__header-main">
+                            <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                          </div>
+                        </header>
+                        <div id="suggested-needs" class="observation-chip-list" role="list"></div>
+                        <p id="suggested-needs-empty" class="observation-panel__empty" hidden>
+                          We’ll list needs that may be alive in you once we pick up observational cues.
+                        </p>
+                      </section>
+                    </div>
+                    <div class="observation-suggestions__feelings">
+                      <section class="observation-panel observation-panel--feelings" aria-live="polite">
+                        <header class="observation-panel__header">
+                          <div class="observation-panel__header-main">
+                            <h3 class="observation-panel__title">Possible feelings</h3>
+                          </div>
+                        </header>
+                        <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
+                        <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
+                          We’ll list possible feelings here once we pick up observational cues.
+                        </p>
+                      </section>
+                    </div>
                   </div>
                   <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
                     <p class="observation-suggestions__fallback-text">
@@ -3024,16 +3173,16 @@ button.site-nav__magnet {
                     </span>
                   </div>
                   <div class="observation-editor__match-summary-row">
-                    <span class="observation-editor__match-summary-label">Near matches queued</span>
+                    <span class="observation-editor__match-summary-label">Nearest needs queued</span>
                     <span
                       id="observation-detection-near"
                       class="observation-editor__match-summary-value"
                     >
-                      0/6
+                      0/4
                     </span>
                   </div>
                   <p id="observation-detection-note" class="observation-editor__match-summary-note">
-                    We’ll scan for cues as you type. We review up to 6 nearest cues at a time to keep things focused.
+                    We’ll scan for cues as you type. Load possible matches to review up to 4 nearby needs with aligned feelings.
                   </p>
                   <p
                     id="observation-detection-coverage"
