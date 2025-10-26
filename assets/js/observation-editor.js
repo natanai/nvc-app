@@ -7,7 +7,8 @@ import {
   getObservationFormulaSlotById,
   resolveObservationFormulaSlotsForHighlightKey,
 } from '/lib/observationFormula.js';
-import { loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
+import { collectCatalogFeelings, loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
+import { computeFallbackSuggestion } from '/lib/observationFallback.js';
 
 const state = {
   text: '',
@@ -28,7 +29,7 @@ const state = {
   positiveHighlightRanges: [],
   activeHighlightKey: '',
   detectionMatchLimit: 1,
-  detectionNearLimit: 6,
+  detectionNearLimit: 1,
   detectorStats: null,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
@@ -37,6 +38,7 @@ const state = {
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
   anchorRewrite: { when: '', where: '' },
+  feelingsMode: 'unmet',
 };
 
 let guideNavigationBound = false;
@@ -67,7 +69,7 @@ const DETECTION_LABELS = {
 
 const DETECTION_MIN_WORDS = 2;
 const DETECTION_MATCH_LIMIT = 1;
-const DETECTION_NEAR_LIMIT = 6;
+const DETECTION_NEAR_LIMIT = 1;
 
 const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
 const OBSERVATION_GUIDELINE_COMPLETE =
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Promise.all([
     loadCatalog('/data/index.json'),
-    loadCueLibrary('/data/observation_cues.sanitized.csv').catch(error => {
+    loadCueLibrary('/data/observation_cues.csv').catch(error => {
       console.warn('Unable to load observation cue map', error);
       return createEmptyCueLibrary();
     }),
@@ -164,6 +166,14 @@ function bind() {
   if (fallbackStart) {
     fallbackStart.addEventListener('click', () => {
       startFallbackSearch();
+    });
+  }
+
+  const feelingsSwitch = document.getElementById('observation-feelings-switch');
+  if (feelingsSwitch) {
+    feelingsSwitch.addEventListener('click', () => {
+      state.feelingsMode = state.feelingsMode === 'met' ? 'unmet' : 'met';
+      renderSuggestions();
     });
   }
 
@@ -880,9 +890,27 @@ function renderSuggestions() {
   const fallbackRunning = document.getElementById('observation-fallback-running');
   const actionButton = document.getElementById('observation-submit');
   const fallbackStart = document.getElementById('observation-fallback-start');
+  const feelingsSwitchRoot = document.querySelector('[data-feelings-switch]');
+  const feelingsSwitchControl = document.getElementById('observation-feelings-switch');
 
   if (!feelingsHost || !needsHost || !whyHost || !preview) {
     return;
+  }
+
+  if (feelingsSwitchRoot) {
+    feelingsSwitchRoot.dataset.mode = state.feelingsMode === 'met' ? 'met' : 'unmet';
+  }
+
+  if (feelingsSwitchControl) {
+    const isMet = state.feelingsMode === 'met';
+    feelingsSwitchControl.setAttribute('aria-checked', isMet ? 'true' : 'false');
+    feelingsSwitchControl.classList.toggle('is-on', isMet);
+  }
+
+  if (feelingsEmpty) {
+    const unmetMessage = 'We’ll list possible feelings here once we pick up observational cues.';
+    const metMessage = 'We’ll list possible feelings here once we spot how those needs feel when met.';
+    feelingsEmpty.textContent = state.feelingsMode === 'met' ? metMessage : unmetMessage;
   }
 
   preview.textContent = state.lastSubmitted ? `“${state.lastSubmitted}”` : '';
@@ -893,7 +921,8 @@ function renderSuggestions() {
     ? state.fallback.queue[state.fallback.index] || createEmptySuggestionSet()
     : direct;
 
-  populateChipList(feelingsHost, feelingsEmpty, current.feelings || []);
+  const feelings = resolveSuggestionFeelings(current);
+  populateChipList(feelingsHost, feelingsEmpty, feelings);
   populateChipList(needsHost, needsEmpty, current.needs || []);
 
   const slotSupportSummary = typeof current.slotSummary?.supportSummary === 'string'
@@ -977,10 +1006,18 @@ function renderSuggestions() {
 
   if (actionButton) {
     const hasNextFallback = fallbackActive && state.fallback.queue.length > 1;
-    if (hasNextFallback) {
+    if (state.fallback.running) {
+      actionButton.textContent = 'Loading matches…';
+      actionButton.dataset.action = 'submit';
+      actionButton.disabled = true;
+    } else if (hasNextFallback) {
       actionButton.textContent = 'Next match';
       actionButton.dataset.action = 'next';
       actionButton.disabled = false;
+    } else if (state.mode === 'results' && (hasDirect || fallbackActive)) {
+      actionButton.textContent = 'Matches loaded';
+      actionButton.dataset.action = 'submit';
+      actionButton.disabled = true;
     } else {
       actionButton.textContent = 'Load possible matches';
       actionButton.dataset.action = 'submit';
@@ -1133,9 +1170,13 @@ function buildSuggestions(text) {
     return createEmptySuggestionSet();
   }
   const suggestion = suggestFromObservation(text, state.cueLibrary || state.cues || [], 8);
+  const needs = buildSuggestionEntries(suggestion.needs, 'need');
+  const feelings = buildSuggestionEntries(suggestion.feelings, 'feeling');
+  const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
   return {
-    feelings: buildSuggestionEntries(suggestion.feelings, 'feeling'),
-    needs: buildSuggestionEntries(suggestion.needs, 'need'),
+    feelings,
+    metFeelings,
+    needs,
     cues: suggestion.why || [],
     modules: Array.isArray(suggestion.modules) ? suggestion.modules : [],
     slotSummary: suggestion.slots || null,
@@ -1146,6 +1187,37 @@ function buildSuggestions(text) {
         ? suggestion.hits.length
         : 0,
   };
+}
+
+function deriveCatalogFeelings(needs, mode, limit) {
+  const entries = Array.isArray(needs) ? needs : [];
+  if (!entries.length) {
+    return [];
+  }
+  const slugs = collectCatalogFeelings(
+    state.catalog,
+    entries.map(entry => entry?.slug),
+    mode,
+    limit,
+  );
+  return buildSuggestionEntries(slugs, 'feeling');
+}
+
+function resolveSuggestionFeelings(suggestion) {
+  const mode = state.feelingsMode === 'met' ? 'met' : 'unmet';
+  if (!suggestion) {
+    return [];
+  }
+  if (mode === 'met') {
+    if (Array.isArray(suggestion.metFeelings) && suggestion.metFeelings.length) {
+      return suggestion.metFeelings;
+    }
+    return deriveCatalogFeelings(suggestion.needs, 'met', 4);
+  }
+  if (Array.isArray(suggestion.feelings) && suggestion.feelings.length) {
+    return suggestion.feelings;
+  }
+  return deriveCatalogFeelings(suggestion.needs, 'unmet', 4);
 }
 
 function buildSuggestionEntries(slugs, kind) {
@@ -1247,6 +1319,7 @@ function createEmptyCatalog() {
     feelings: new Map(),
     needs: new Map(),
     fauxFeelings: new Map(),
+    feelingsByNeed: new Map(),
   };
 }
 
@@ -1311,15 +1384,47 @@ function buildCatalog(data) {
   const feelings = new Map();
   const needs = new Map();
   const fauxFeelings = new Map();
+  const feelingsByNeed = new Map();
 
   if (Array.isArray(data?.feelings)) {
     data.feelings.forEach(item => {
       if (item?.slug) {
-        feelings.set(item.slug, {
-          title: item.title || formatTitle(item.slug),
-          slug: item.slug,
+        const slug = item.slug;
+        const fauxFeelingsList = Array.isArray(item.fauxFeelings)
+          ? item.fauxFeelings.map(entry => entry.slug).filter(Boolean)
+          : [];
+        feelings.set(slug, {
+          title: item.title || formatTitle(slug),
+          slug,
           aliases: item.aliases || [],
-          fauxFeelings: Array.isArray(item.fauxFeelings) ? item.fauxFeelings.map(entry => entry.slug).filter(Boolean) : [],
+          fauxFeelings: fauxFeelingsList,
+        });
+
+        const needSlugs = Array.isArray(item.needs)
+          ? item.needs.map(entry => entry.slug).filter(Boolean)
+          : [];
+        const stateOverrides = item.needStates && typeof item.needStates === 'object' ? item.needStates : {};
+        const defaultState = fauxFeelingsList.length ? 'unmet' : 'met';
+        const combinedNeedSlugs = new Set([
+          ...needSlugs,
+          ...Object.keys(stateOverrides || {}),
+        ]);
+
+        combinedNeedSlugs.forEach(needSlug => {
+          if (!needSlug) {
+            return;
+          }
+          if (!feelingsByNeed.has(needSlug)) {
+            feelingsByNeed.set(needSlug, { unmet: new Set(), met: new Set() });
+          }
+          const bucket = feelingsByNeed.get(needSlug);
+          const states = resolveNeedStates(stateOverrides[needSlug], defaultState);
+          if (states.has('unmet')) {
+            bucket.unmet.add(slug);
+          }
+          if (states.has('met')) {
+            bucket.met.add(slug);
+          }
         });
       }
     });
@@ -1351,11 +1456,55 @@ function buildCatalog(data) {
     });
   }
 
-  return { feelings, needs, fauxFeelings };
+  const normalizedFeelingsByNeed = new Map();
+  feelingsByNeed.forEach((value, needSlug) => {
+    const unmet = sortSlugsByFeelingTitle(Array.from(value.unmet || []), feelings);
+    const met = sortSlugsByFeelingTitle(Array.from(value.met || []), feelings);
+    normalizedFeelingsByNeed.set(needSlug, { unmet, met });
+  });
+
+  return { feelings, needs, fauxFeelings, feelingsByNeed: normalizedFeelingsByNeed };
+}
+
+function resolveNeedStates(value, fallback) {
+  const states = new Set();
+  const fallbackState = fallback === 'met' ? 'met' : 'unmet';
+  const entries = Array.isArray(value)
+    ? value
+    : typeof value === 'string'
+      ? [value]
+      : [];
+
+  entries.forEach(entry => {
+    const token = typeof entry === 'string' ? entry.trim().toLowerCase() : '';
+    if (!token) {
+      return;
+    }
+    if (token === 'both') {
+      states.add('met');
+      states.add('unmet');
+    } else if (token === 'met' || token === 'unmet') {
+      states.add(token);
+    }
+  });
+
+  if (!states.size) {
+    states.add(fallbackState);
+  }
+
+  return states;
+}
+
+function sortSlugsByFeelingTitle(slugs, feelingsMap) {
+  return (Array.isArray(slugs) ? slugs : [])
+    .map(slug => ({ slug, title: feelingsMap.get(slug)?.title || formatTitle(slug) }))
+    .filter(entry => entry.slug && entry.title)
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .map(entry => entry.slug);
 }
 
 function createEmptySuggestionSet() {
-  return { feelings: [], needs: [], cues: [], modules: [], slotSummary: null, overflow: 0, total: 0 };
+  return { feelings: [], metFeelings: [], needs: [], cues: [], modules: [], slotSummary: null, overflow: 0, total: 0 };
 }
 
 function createEmptyCueLibrary() {
@@ -1534,70 +1683,26 @@ function computeFallbackQueue(text) {
   if (!text || !state.cues.length) {
     return [];
   }
-
-  const tokens = tokenizeForScore(text);
-  const tokenSet = new Set(tokens);
-  const normalized = text.toLowerCase();
-
-  const candidates = state.cues
-    .map(cue => {
-      const feelings = buildSuggestionEntries(cue.feelings, 'feeling');
-      const needs = buildSuggestionEntries(cue.needs, 'need');
-      if (!feelings.length && !needs.length) {
-        return null;
-      }
-      const score = scoreCueMatch(tokenSet, normalized, cue);
-      return { cue, feelings, needs, score };
-    })
-    .filter(Boolean);
-
-  if (!candidates.length) {
+  const fallback = computeFallbackSuggestion(text, state.cues, { needLimit: 4, feelingLimit: 4 });
+  if (!fallback) {
     return [];
   }
-
-  const positive = candidates.filter(item => item.score > 0);
-  const pool = positive.length ? positive : candidates;
-
-  pool.sort((a, b) => {
-    if (b.score !== a.score) {
-      return b.score - a.score;
-    }
-    const aCount = a.feelings.length + a.needs.length;
-    const bCount = b.feelings.length + b.needs.length;
-    if (bCount !== aCount) {
-      return bCount - aCount;
-    }
-    const aLabel = a.cue?.label || a.cue?.cue || '';
-    const bLabel = b.cue?.label || b.cue?.cue || '';
-    return aLabel.localeCompare(bLabel);
-  });
-
-  const seen = new Set();
-  const results = [];
-  for (const entry of pool) {
-    const key = `${entry.feelings.map(item => item.slug || item.title).join('|')}|${entry.needs.map(item => item.slug || item.title).join('|')}`;
-    if (!key.trim()) {
-      continue;
-    }
-    if (seen.has(key)) {
-      continue;
-    }
-    seen.add(key);
-    results.push({
-      feelings: entry.feelings,
-      needs: entry.needs,
-      cues: [],
-      modules: [],
-      slotSummary: null,
-      overflow: 0,
-      total: entry.feelings.length + entry.needs.length,
-    });
-    if (results.length >= 6) {
-      break;
-    }
+  const needs = buildSuggestionEntries(fallback.needSlugs, 'need');
+  if (!needs.length) {
+    return [];
   }
-
-  return results;
+  const feelings = buildSuggestionEntries(fallback.feelingSlugs, 'feeling');
+  const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
+  return [{
+    feelings,
+    metFeelings,
+    needs,
+    cues: [],
+    modules: [],
+    slotSummary: null,
+    overflow: 0,
+    total: needs.length + feelings.length,
+  }];
 }
 
 function countFlaggedTokens(lint) {
@@ -1613,60 +1718,6 @@ function countWords(value) {
   }
   const matches = String(value).toLowerCase().match(/[a-z0-9'’]+/g);
   return matches ? matches.length : 0;
-}
-
-function tokenizeForScore(text) {
-  return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
-}
-
-function scoreCueMatch(tokenSet, normalizedText, cue) {
-  const sources = [];
-  if (Array.isArray(cue?.phrases)) {
-    sources.push(...cue.phrases);
-  }
-  if (cue?.phrase) {
-    sources.push(cue.phrase);
-  }
-  if (cue?.example) {
-    sources.push(cue.example);
-  }
-  if (cue?.label) {
-    sources.push(cue.label);
-  }
-  if (cue?.cue) {
-    sources.push(cue.cue);
-  }
-
-  let best = 0;
-  sources.forEach(source => {
-    const value = typeof source === 'string' ? source.trim() : '';
-    if (!value) {
-      return;
-    }
-    const sourceTokens = tokenizeForScore(value);
-    if (!sourceTokens.length) {
-      return;
-    }
-    let matches = 0;
-    sourceTokens.forEach(token => {
-      if (tokenSet.has(token)) {
-        matches += 1;
-      }
-    });
-    let score = matches;
-    if (matches) {
-      score += matches / sourceTokens.length;
-    }
-    const lower = value.toLowerCase();
-    if (normalizedText.includes(lower)) {
-      score += Math.min(4, lower.length / 12);
-    }
-    if (score > best) {
-      best = score;
-    }
-  });
-
-  return best;
 }
 
 function setValidityStatus(status, message) {
@@ -1884,84 +1935,41 @@ function renderDetectionSummary() {
   summary.setAttribute('data-state', flagged ? 'flagged' : status);
 
   if (note) {
-    const limitMessage = nearLimit
-      ? `We review up to ${nearLimit} nearest cues at a time to keep things focused.`
-      : '';
+    const needSummary = 'We surface up to four needs at a time and pair them with four related feelings.';
+    const fallbackSummary = 'We queue the nearest need cluster for review when exact matches are missing.';
     let message = '';
     switch (status) {
       case 'loading':
         message = 'Warming up the detector…';
         break;
       case 'idle':
-        message = limitMessage
-          ? `We’ll scan for cues as you type. ${limitMessage}`
-          : 'We’ll scan for cues as you type.';
+        message = `We’ll scan for cues as you type. ${needSummary}`;
         break;
       case 'short':
-        message = limitMessage
-          ? `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
-          : `Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
+        message = `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${needSummary}`;
         break;
       case 'match':
-        message = limitMessage
-          ? `Exact matches are ready when you are. ${limitMessage}`
-          : 'Exact matches are ready when you are.';
+        message = `Need matches are ready when you are. ${needSummary}`;
         break;
       case 'near':
-        message = limitMessage || 'Nearest matches are queued when you need them.';
+        message = `We’ve queued the closest need cluster we can find. ${fallbackSummary}`;
         break;
       case 'none':
-        message = limitMessage
-          ? `We didn’t spot an exact match yet. ${limitMessage}`
-          : 'We didn’t spot an exact match yet.';
+        message = `We didn’t spot an exact match yet. ${needSummary}`;
         break;
       default:
-        message = limitMessage || 'We’re preparing the detector…';
+        message = `We’re preparing the detector. ${needSummary}`;
         break;
     }
 
     if (flagged) {
-      switch (status) {
-        case 'idle':
-          message = limitMessage
-            ? `Flagged language detected. We’ll scan for cues as you type. ${limitMessage}`
-            : 'Flagged language detected. We’ll scan for cues as you type.';
-          break;
-        case 'short':
-          message = limitMessage
-            ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
-            : `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
-          break;
-        case 'match':
-          message = limitMessage
-            ? `Flagged language detected. Exact matches are ready when you are. ${limitMessage}`
-            : 'Flagged language detected. Exact matches are ready when you are.';
-          break;
-        case 'near':
-          message = limitMessage
-            ? `Flagged language detected. Nearest matches are queued when you need them. ${limitMessage}`
-            : 'Flagged language detected. Nearest matches are queued when you need them.';
-          break;
-        case 'none':
-          message = limitMessage
-            ? `Flagged language detected. We didn’t spot an exact match yet. ${limitMessage}`
-            : 'Flagged language detected. We didn’t spot an exact match yet.';
-          break;
-        default:
-          message = limitMessage
-            ? `Flagged language detected. ${limitMessage}`
-            : 'Flagged language detected.';
-          break;
-      }
+      message = `Flagged language detected. ${message}`;
     }
 
     if (status === 'match' && Number(state.detectionMatches) > matchLimit) {
-      message = `${message} We surface the strongest exact match first.`;
-    } else if (
-      matchLimit === 1 &&
-      (status === 'match' || status === 'near' || status === 'none')
-    ) {
-      message = `${message} We surface the strongest exact match first.`;
+      message = `${message} We surface the strongest need match first.`;
+    } else if (matchLimit === 1 && (status === 'match' || status === 'near' || status === 'none')) {
+      message = `${message} We surface the strongest need match first.`;
     }
 
     note.textContent = message.trim();
@@ -1969,7 +1977,7 @@ function renderDetectionSummary() {
 
   if (coverage) {
     if (cuesCount) {
-      coverage.textContent = `Our detector currently covers ${cuesCount.toLocaleString()} cues.`;
+      coverage.textContent = `Our detector currently covers ${cuesCount.toLocaleString()} observation cues.`;
       coverage.removeAttribute('hidden');
     } else {
       coverage.textContent = '';
@@ -1990,7 +1998,7 @@ function renderDetectionSummary() {
         ? `${formatCount(matchedCount)}/${formatCount(uniqueCount)}`
         : formatCount(matchedCount);
 
-      let message = `Exact feeling matches cover ${matchText} feeling${matchedCount === 1 ? '' : 's'}`;
+      let message = `Need-aligned feelings cover ${matchText} feeling${matchedCount === 1 ? '' : 's'}`;
       if (uniqueCount !== matchedCount && exactPercent) {
         message += ` (${exactPercent}%)`;
       }

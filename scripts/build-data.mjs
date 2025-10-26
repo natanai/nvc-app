@@ -79,6 +79,26 @@ function splitMultiline(value) {
     .filter(Boolean);
 }
 
+function normalizeNeedStateValue(value) {
+  const tokens = splitList(value).map((entry) => entry.toLowerCase());
+  const states = new Set();
+  tokens.forEach((token) => {
+    if (token === 'both') {
+      states.add('met');
+      states.add('unmet');
+    } else if (token === 'met' || token === 'unmet') {
+      states.add(token);
+    }
+  });
+  if (states.size >= 2) {
+    return 'both';
+  }
+  if (states.has('unmet')) {
+    return 'unmet';
+  }
+  return 'met';
+}
+
 function slugify(text) {
   return text
     .toLowerCase()
@@ -178,6 +198,7 @@ function filterDuplicateNeeds(rows) {
 
 const rawFeelingsSheet = readCsv('data/Feelings.csv');
 const rawPoemText = readFileSync(join(ROOT, 'data', 'poems_formatted.txt'), 'utf8').replace(/\ufeff/g, '');
+const rawFeelingNeedStates = readCsv('data/FeelingNeedStates.csv');
 
 function parseFormattedPoems(text) {
   const lines = text.split(/\r?\n/);
@@ -349,6 +370,7 @@ const feelings = rawFeelings.map((row) => {
     bodySignals: splitList(row['Body Signal Notes']),
     poemQuote: poemEntry.poemQuote,
     poemUrl: poemEntry.poemUrl,
+    needStates: {},
   };
 });
 
@@ -418,6 +440,8 @@ const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), it
 const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slug]));
 const fauxFeelingsMap = new Map(fauxFeelings.map((item) => [item.title.toLowerCase(), item.slug]));
 const strategiesMap = new Map(strategies.map((item) => [item.title.toLowerCase(), item.slug]));
+const feelingsBySlug = new Map(feelings.map((item) => [item.slug, item]));
+const needsBySlug = new Map(needs.map((item) => [item.slug, item]));
 
 function attachRelationshipSlugs(collection, listKey, slugMap, { parentType, relatedType }) {
   collection.forEach((item) => {
@@ -453,6 +477,43 @@ attachRelationshipSlugs(fauxFeelings, 'needs', needsMap, {
   relatedType: 'Need',
 });
 attachRelationshipSlugs(strategies, 'needs', needsMap, { parentType: 'Strategy', relatedType: 'Need' });
+
+rawFeelingNeedStates.forEach((row, index) => {
+  const feelingSlug = (row['Feeling Slug'] || '').trim();
+  const needSlug = (row['Need Slug'] || '').trim();
+  if (!feelingSlug || !needSlug) {
+    return;
+  }
+  const feeling = feelingsBySlug.get(feelingSlug);
+  if (!feeling) {
+    throw new Error(
+      `data/FeelingNeedStates.csv row ${index + 2} references unknown feeling slug "${feelingSlug}". Update the spreadsheet entry to continue.`,
+    );
+  }
+  const need = needsBySlug.get(needSlug);
+  if (!need) {
+    throw new Error(
+      `data/FeelingNeedStates.csv row ${index + 2} references unknown need slug "${needSlug}". Update the spreadsheet entry to continue.`,
+    );
+  }
+  const normalizedState = normalizeNeedStateValue(row['States']);
+  feeling.needStates[need.slug] = normalizedState;
+  if (!feeling.needs.some((entry) => entry.slug === need.slug)) {
+    feeling.needs.push({ title: need.title, slug: need.slug });
+  }
+});
+
+feelings.forEach((feeling) => {
+  if (!feeling.needStates || typeof feeling.needStates !== 'object') {
+    feeling.needStates = {};
+  }
+  const baseState = feeling.fauxFeelings.length ? 'unmet' : 'met';
+  feeling.needs.forEach((entry) => {
+    if (!feeling.needStates[entry.slug]) {
+      feeling.needStates[entry.slug] = baseState;
+    }
+  });
+});
 
 mkdirSync(DATA_DIR, { recursive: true });
 

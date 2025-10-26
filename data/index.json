@@ -192,7 +192,40 @@
         "Dull ache across the chest or heart area; Throat tightening like tears might rise; Shoulders curling inward to guard the torso"
       ],
       "poemQuote": "\"Of many reasons I love you here is one\n\nthe way you write me from the gate at the airport\nso I can tell you everything will be alright\n\nso you can tell me there is a bird\ntrapped in the terminal      all the people\nignoring it...\"\n- Craig Arnold",
-      "poemUrl": "https://www.poetryfoundation.org/poems/52207/bird-understander"
+      "poemUrl": "https://www.poetryfoundation.org/poems/52207/bird-understander",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "consideration": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "safety": "unmet",
+        "respect": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "trust": "unmet",
+        "dependability": "unmet",
+        "honesty": "unmet",
+        "honor": "unmet",
+        "commitment": "unmet",
+        "clarity": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "reliability": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "need-to-matter": "unmet",
+        "friendship": "unmet",
+        "participation": "unmet",
+        "to-be-heard": "unmet",
+        "closeness": "unmet"
+      }
     },
     {
       "title": "Terrified",
@@ -231,7 +264,14 @@
         "trembling hands or legs ready to bolt; Wide eyes with breath caught high in the chest"
       ],
       "poemQuote": "\"My soul leaps up at the sound.\nWhat is the question I cannot answer,\nThat must be answered?\nWhat is the blank face I must fill in with features?\" \n- Evelyn Scott",
-      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/browse?volume=15&issue=2&page=18"
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/browse?volume=15&issue=2&page=18",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet"
+      }
     },
     {
       "title": "Bewildered",
@@ -301,7 +341,20 @@
         "Brows knit with a light squeeze around the eyes; Head tilting or turning as if searching for focus; Light flutter in the stomach or chest while processing"
       ],
       "poemQuote": "\"Those nights when nothing catches, nothing also is artless.\" \n- Joanna Kirk",
-      "poemUrl": "https://poets.org/poem/3-bewildered-landscapes"
+      "poemUrl": "https://poets.org/poem/3-bewildered-landscapes",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "appreciation": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "empathy": "unmet"
+      }
     },
     {
       "title": "Sad",
@@ -508,7 +561,39 @@
         "weighted movements and sighs; Moist eyes or a lump just behind the eyes"
       ],
       "poemQuote": "\"Someone was saying\nsomething about shadows covering the field, about\nhow things pass, how one sleeps towards morning\nand the morning goes.\"\n- Mark Strand",
-      "poemUrl": "https://poets.org/poem/long-sad-party"
+      "poemUrl": "https://poets.org/poem/long-sad-party",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "consideration": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "trust": "unmet",
+        "dependability": "unmet",
+        "honesty": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "friendship": "unmet",
+        "space": "unmet",
+        "participation": "unmet",
+        "to-be-heard": "unmet",
+        "equality": "unmet",
+        "consistency": "unmet",
+        "mutuality": "unmet",
+        "empathy": "unmet",
+        "privacy": "unmet",
+        "accomplishment": "unmet",
+        "physical-fitness": "unmet"
+      }
     },
     {
       "title": "Frightened",
@@ -659,7 +744,35 @@
         "ready to hide or flee"
       ],
       "poemQuote": "\"My fingers grow numb and I fumble. Let me fumble with\nThe miracle. I will doubt\nThat anything will come of it.\" \n- M.F. Dodson",
-      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/browse?volume=81&issue=3&page=10"
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/browse?volume=81&issue=3&page=10",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "consideration": "unmet",
+        "need-for-all-living-things-to-flourish": "unmet",
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "trust": "unmet",
+        "dependability": "unmet",
+        "justice": "unmet",
+        "choice": "unmet",
+        "freedom": "unmet",
+        "act-freely": "unmet",
+        "choose-freely": "unmet",
+        "space": "unmet",
+        "peace": "unmet",
+        "serenity": "unmet",
+        "do-things-at-my-own-pace-and-in-my-own-way": "unmet",
+        "calm": "unmet",
+        "empowerment": "unmet",
+        "consistency": "unmet",
+        "mutuality": "unmet",
+        "security": "unmet"
+      }
     },
     {
       "title": "Lonely",
@@ -781,7 +894,28 @@
         "Hollow feeling in the chest or stomach; Arms instinctively wrapping around the body; Eyes searching for connection or softening with tears"
       ],
       "poemQuote": "\"a variation in the season,\nor giving friends the room\nnext door, in stubborn panic\nto fix this happiness in place\nby escaping from it.\" - Nate Klug",
-      "poemUrl": "https://poets.org/poem/lonely-planet"
+      "poemUrl": "https://poets.org/poem/lonely-planet",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "consideration": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "contribution": "unmet",
+        "peer-respect": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "understanding": "unmet",
+        "friendship": "unmet",
+        "participation": "unmet",
+        "to-be-heard": "unmet",
+        "mattering": "unmet",
+        "security": "unmet"
+      }
     },
     {
       "title": "Angry",
@@ -1131,7 +1265,57 @@
         "Heat rising through the face or neck; Jaw clenching and fists tightening; Breath getting faster and more forceful"
       ],
       "poemQuote": "“Spray down the perimeter\nwith wolf piss\nto keep the deer away.”\n\n              No, but I can\n              certainly relate\n              on an emotional level.\n-Sean Singer",
-      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/1710597/poem"
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/1710597/poem",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "consideration": "unmet",
+        "need-for-all-living-things-to-flourish": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "trust": "unmet",
+        "dependability": "unmet",
+        "honesty": "unmet",
+        "honor": "unmet",
+        "commitment": "unmet",
+        "clarity": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "choice": "unmet",
+        "freedom": "unmet",
+        "reliability": "unmet",
+        "act-freely": "unmet",
+        "choose-freely": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet",
+        "need-to-matter": "unmet",
+        "space": "unmet",
+        "peace": "unmet",
+        "serenity": "unmet",
+        "do-things-at-my-own-pace-and-in-my-own-way": "unmet",
+        "calm": "unmet",
+        "to-be-heard": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "genuineness": "unmet",
+        "rest": "unmet",
+        "mutuality": "unmet",
+        "closeness": "unmet",
+        "integrity": "unmet",
+        "privacy": "unmet"
+      }
     },
     {
       "title": "Frustrated",
@@ -1381,7 +1565,48 @@
         "Jaw or temples tightening with pressure; Hands fidgeting or gripping objects harder; Chest constricting with repeated sighs"
       ],
       "poemQuote": "\"...it’s clear then\n\nthe distance between\n              my affections and ability\nto touch their sinuosity \n              is itself a felt silence\" \n- Ted Mathys",
-      "poemUrl": "https://poets.org/poem/let-muddy-water-sit-and-it-grows-clear"
+      "poemUrl": "https://poets.org/poem/let-muddy-water-sit-and-it-grows-clear",
+      "needStates": {
+        "love-caring": "unmet",
+        "nurturing": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "support": "unmet",
+        "consideration": "unmet",
+        "need-for-all-living-things-to-flourish": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "trust": "unmet",
+        "honesty": "unmet",
+        "clarity": "unmet",
+        "accountability": "unmet",
+        "choice": "unmet",
+        "freedom": "unmet",
+        "act-freely": "unmet",
+        "choose-freely": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet",
+        "need-to-matter": "unmet",
+        "space": "unmet",
+        "peace": "unmet",
+        "to-be-heard": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "genuineness": "unmet",
+        "rest": "unmet",
+        "mutuality": "unmet",
+        "authenticity": "unmet",
+        "self-expression": "unmet",
+        "empathy": "unmet",
+        "accomplishment": "unmet",
+        "growth": "unmet"
+      }
     },
     {
       "title": "Scared",
@@ -1587,7 +1812,41 @@
         "Skin feeling prickly or chilled; Muscles tightening around the shoulders; Eyes widening while scanning surroundings"
       ],
       "poemQuote": "\"That would eclipse this \n\nNew-found complication\n\nHow can I not be scared \n\nOf being scared she asks\"\n- Noah Eli Gordon",
-      "poemUrl": "https://poets.org/poem/vesuvius"
+      "poemUrl": "https://poets.org/poem/vesuvius",
+      "needStates": {
+        "love-caring": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "consideration": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "safety": "unmet",
+        "contribution": "unmet",
+        "peer-respect": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "trust": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "choice": "unmet",
+        "freedom": "unmet",
+        "act-freely": "unmet",
+        "choose-freely": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet",
+        "participation": "unmet",
+        "to-be-heard": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "genuineness": "unmet",
+        "mattering": "unmet",
+        "closeness": "unmet",
+        "security": "unmet"
+      }
     },
     {
       "title": "Upset",
@@ -1645,7 +1904,18 @@
         "Restless energy pacing through limbs; Tense stomach that flips or churns; Voice catching or rising unexpectedly"
       ],
       "poemQuote": "\"Besides, everything is better now. Not us\nbut implants, blenders, children, heart attacks.\nThere’s never been a better time to be alive\nthan when you are. If you are.\" \n- D. A. Powell",
-      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/161692/positivity"
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/161692/positivity",
+      "needStates": {
+        "connection": "unmet",
+        "belonging": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "contribution": "unmet",
+        "peer-respect": "unmet",
+        "clarity": "unmet",
+        "understanding": "unmet",
+        "to-be-heard": "unmet"
+      }
     },
     {
       "title": "Tense",
@@ -1691,7 +1961,16 @@
         "Shoulders inching up toward the ears; Clenched jaw or teeth grinding quietly; Shallow breathing that barely moves the ribs"
       ],
       "poemQuote": "\"A window, but it’s closed\nA mirror, but it's fogged\nA mind full of thoughts\nA heart of love that feels clogged\" \n- Johnny",
-      "poemUrl": "https://poets.org/poem/cell"
+      "poemUrl": "https://poets.org/poem/cell",
+      "needStates": {
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "security": "unmet",
+        "growth": "unmet"
+      }
     },
     {
       "title": "Distressed",
@@ -1757,7 +2036,20 @@
         "Tight band-like feeling around the chest; Hands wringing or gripping for relief; Tearful eyes and uneven breathing"
       ],
       "poemQuote": "\"We are a journey of distressed shapes,\nred essence on parchment, occupying a life.\"\n-Lois Red Elk",
-      "poemUrl": "https://www.poetryfoundation.org/poems/149801/game-5cb7792a41b36"
+      "poemUrl": "https://www.poetryfoundation.org/poems/149801/game-5cb7792a41b36",
+      "needStates": {
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "space": "unmet",
+        "serenity": "unmet",
+        "do-things-at-my-own-pace-and-in-my-own-way": "unmet",
+        "calm": "unmet",
+        "physical-fitness": "unmet",
+        "security": "unmet"
+      }
     },
     {
       "title": "Disappointment",
@@ -1844,7 +2136,23 @@
         "deflated sighs leaving the body; Gaze dropping toward the floor or away"
       ],
       "poemQuote": "\"Each time I hear that word\nI recall the disappointments\nthat were committed in its name:\nthe children who don’t return,\nthe ailments that are never cured...\"\n-Maya Abu Al-Hayyat",
-      "poemUrl": "https://poets.org/poem/i-suffer-phobia-called-hope"
+      "poemUrl": "https://poets.org/poem/i-suffer-phobia-called-hope",
+      "needStates": {
+        "consideration": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "trust": "unmet",
+        "dependability": "unmet",
+        "honesty": "unmet",
+        "honor": "unmet",
+        "commitment": "unmet",
+        "clarity": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "recognition": "unmet",
+        "consistency": "unmet",
+        "accomplishment": "unmet"
+      }
     },
     {
       "title": "Enraged",
@@ -1886,7 +2194,15 @@
         "Hot surge pulsing through the entire body; Face flushed with jaw locked tight; Voice wanting to roar or push forcefully outward"
       ],
       "poemQuote": "\"The enraged swimmer\nWet from a hundred waves and the tails of fishes,\nFinds his eyes like a sea-beat,\nHis shoulders everywhere...\"\n- Marie Graybeal",
-      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/browse?volume=93&issue=2&page=12"
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/browse?volume=93&issue=2&page=12",
+      "needStates": {
+        "trust": "unmet",
+        "dependability": "unmet",
+        "honesty": "unmet",
+        "honor": "unmet",
+        "commitment": "unmet",
+        "clarity": "unmet"
+      }
     },
     {
       "title": "Confused",
@@ -1936,7 +2252,16 @@
         "Forehead wrinkling with squinting eyes; Head tilting or shaking slightly; Stomach fluttering as thoughts loop"
       ],
       "poemQuote": "\"above those eternally seeking salvation\nin the all-night rap rooms\nsoaking abscesses   in patience   in stupor\nconfusion and hot water\nup against the church \nbetween the gray \nwalls and the low branches \nyou had to crawl\"\n- Annie Petrie-Sauter",
-      "poemUrl": "https://poets.org/poem/outside-church"
+      "poemUrl": "https://poets.org/poem/outside-church",
+      "needStates": {
+        "autonomy": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "freedom": "unmet",
+        "equality": "unmet"
+      }
     },
     {
       "title": "Antagonistic",
@@ -1982,7 +2307,15 @@
         "Chest puffing or leaning forward aggressively; Jaw jutting with lips pressed thin; Hands ready to point or push away"
       ],
       "poemQuote": "\"Hello, little god,\ncornered in this world of insignificance;\nbetween sips of too-cold raspberry tea\"\n- Emma Hage",
-      "poemUrl": "https://hellopoetry.com/poem/209618/but-each-bite-inspired-new-words/"
+      "poemUrl": "https://hellopoetry.com/poem/209618/but-each-bite-inspired-new-words/",
+      "needStates": {
+        "consideration": "unmet",
+        "respect": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet"
+      }
     },
     {
       "title": "Hostile",
@@ -2041,7 +2374,17 @@
         "ready to strike"
       ],
       "poemQuote": "\"i like the beach is when it's cold hostile and gray. i feel\nkin to it then. or at night. when it speaks a somber tongue\nonly the enlightened perceive.\"\n- Wanda Coleman",
-      "poemUrl": "https://www.poetryfoundation.org/poems/155699/beaches-why-i-dont-care-for-them"
+      "poemUrl": "https://www.poetryfoundation.org/poems/155699/beaches-why-i-dont-care-for-them",
+      "needStates": {
+        "consideration": "unmet",
+        "respect": "unmet",
+        "accountability": "unmet",
+        "causality": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "understanding": "unmet",
+        "empathy": "unmet"
+      }
     },
     {
       "title": "Pressured",
@@ -2091,7 +2434,16 @@
         "Tight band of tension circling the temples; Breath held high as if time is squeezing; Hands tapping or bouncing to release urgency"
       ],
       "poemQuote": "\"push-pulling me away and toward \nthe shore of knowing what is \nto come—which pressure \ncauses metamorphoses,\nprotostar pre-nucleosynthesis,\nand which pressure produces fissures...\"\n- Chet’la Sebree",
-      "poemUrl": "https://poets.org/poem/end-4"
+      "poemUrl": "https://poets.org/poem/end-4",
+      "needStates": {
+        "consideration": "unmet",
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "choice": "unmet",
+        "space": "unmet",
+        "peace": "unmet"
+      }
     },
     {
       "title": "Thwarted",
@@ -2161,7 +2513,19 @@
         "Chest tightening as momentum slams to a halt; Brows furrowing with a forceful exhale; Hands clenching or pushing against surfaces"
       ],
       "poemQuote": "\"What happens to a dream deferred?\n\n      Does it dry up\n      like a raisin in the sun?\n      Or fester like a sore—\n      And then run?\"\n- Langston Hughes",
-      "poemUrl": "https://www.poetryfoundation.org/poems/46548/harlem?utm_source=chatgpt.com"
+      "poemUrl": "https://www.poetryfoundation.org/poems/46548/harlem?utm_source=chatgpt.com",
+      "needStates": {
+        "connection": "unmet",
+        "autonomy": "unmet",
+        "trust": "unmet",
+        "choice": "unmet",
+        "freedom": "unmet",
+        "act-freely": "unmet",
+        "choose-freely": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "genuineness": "unmet"
+      }
     },
     {
       "title": "Anxious",
@@ -2284,7 +2648,29 @@
         "shallow breaths; Hands or feet fidgeting to discharge nerves"
       ],
       "poemQuote": "\"When despair for the world grows in me\nand I wake in the night at the least sound\"\n- Wendell Berry",
-      "poemUrl": "https://www.scottishpoetrylibrary.org.uk/poem/peace-wild-things-0/"
+      "poemUrl": "https://www.scottishpoetrylibrary.org.uk/poem/peace-wild-things-0/",
+      "needStates": {
+        "love-caring": "unmet",
+        "connection": "unmet",
+        "belonging": "unmet",
+        "consideration": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "autonomy": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "clarity": "unmet",
+        "accountability": "unmet",
+        "choice": "unmet",
+        "freedom": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet",
+        "space": "unmet",
+        "to-be-heard": "unmet",
+        "relaxation": "unmet",
+        "security": "unmet"
+      }
     },
     {
       "title": "Resentful",
@@ -2422,7 +2808,30 @@
         "Arms crossing tightly over the chest; Jaw setting with a bitter taste in the mouth; Heat simmering low in the gut"
       ],
       "poemQuote": "\"the hot water in\nthe abandoned kettle\nslowly cools\nstill carrying the resentment\nof colder water\"\n- Tada Chimako",
-      "poemUrl": "https://poets.org/poem/spray-water-tanka-hot-water"
+      "poemUrl": "https://poets.org/poem/spray-water-tanka-hot-water",
+      "needStates": {
+        "support": "unmet",
+        "consideration": "unmet",
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "acknowledgement": "unmet",
+        "appreciation": "unmet",
+        "trust": "unmet",
+        "honesty": "unmet",
+        "clarity": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "reliability": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "space": "unmet",
+        "to-be-heard": "unmet",
+        "equality": "unmet",
+        "mutuality": "unmet",
+        "relaxation": "unmet",
+        "integrity": "unmet"
+      }
     },
     {
       "title": "In pain",
@@ -2460,7 +2869,14 @@
         "Protective hunching around the sore area; Face tightening or wincing reflexively; Breathing becoming shallow to brace discomfort"
       ],
       "poemQuote": "\"And could you keep your heart in wonder at the daily miracles of your life your pain would not seem less wondrous than your joy;\n     And you would accept the seasons of your heart, even as you have always accepted the seasons that pass over your fields.\"\n- Kahlil Gibran",
-      "poemUrl": "https://poets.org/poem/pain-1"
+      "poemUrl": "https://poets.org/poem/pain-1",
+      "needStates": {
+        "acknowledgement": "unmet",
+        "accountability": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet"
+      }
     },
     {
       "title": "Humiliated",
@@ -2498,7 +2914,14 @@
         "Face flushing hot while eyes want to look away; Stomach dropping as if on a roller coaster; Body shrinking or folding inward to hide"
       ],
       "poemQuote": "\"Vain to fish \nwith unbaited hook, \nthe proverb says. I fished that way...\"\n- Bruce Beasley",
-      "poemUrl": "https://poets.org/poem/fishers"
+      "poemUrl": "https://poets.org/poem/fishers",
+      "needStates": {
+        "acknowledgement": "unmet",
+        "accountability": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet"
+      }
     },
     {
       "title": "Embarrassed",
@@ -2600,7 +3023,25 @@
         "Cheeks warming or blushing; Hands wanting to cover the face or mouth; Nervous laughter or fidgeting in place"
       ],
       "poemQuote": "\"It’s a wave, isn’t it? Not a particle.\nA fresh, cool wave, so why am I flushed\nand not washed?\"\n- Brenda Shaughnessy",
-      "poemUrl": "https://www.poetryfoundation.org/poems/52244/embarrassment"
+      "poemUrl": "https://www.poetryfoundation.org/poems/52244/embarrassment",
+      "needStates": {
+        "connection": "unmet",
+        "belonging": "unmet",
+        "consideration": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "respect": "unmet",
+        "acknowledgement": "unmet",
+        "trust": "unmet",
+        "honesty": "unmet",
+        "accountability": "unmet",
+        "understanding": "unmet",
+        "recognition": "unmet",
+        "non-judgmental-communication": "unmet",
+        "need-to-matter": "unmet",
+        "participation": "unmet",
+        "integrity": "unmet"
+      }
     },
     {
       "title": "Overwhelmed",
@@ -2670,7 +3111,20 @@
         "Tightness spreading across head and shoulders; Chest feeling compressed by invisible weight; Urge to close eyes or press palms against temples"
       ],
       "poemQuote": "\"The grass is beneath my head;\nand I gaze\nat the thronging stars\nin the night.\n\nThey fall… they fall…\"\n- F. S. Flint",
-      "poemUrl": "https://poets.org/poem/grass-beneath-my-head"
+      "poemUrl": "https://poets.org/poem/grass-beneath-my-head",
+      "needStates": {
+        "connection": "unmet",
+        "consideration": "unmet",
+        "community": "unmet",
+        "respect": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "clarity": "unmet",
+        "space": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "relaxation": "unmet"
+      }
     },
     {
       "title": "Irritated",
@@ -2732,7 +3186,19 @@
         "Twitching muscles in the jaw or around the eyes; Shoulders stiffening with quick exhales; Hands flicking or tapping with impatience"
       ],
       "poemQuote": "\"Has it coming, the pest. Gets irritated, the stuck up. Gets approval, the dimpled. Gets cold, the talk.\"\n- Anthony Madrid",
-      "poemUrl": "https://www.poetryfoundation.org/poems/143678/maxims-2"
+      "poemUrl": "https://www.poetryfoundation.org/poems/143678/maxims-2",
+      "needStates": {
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "trust": "unmet",
+        "fairness": "unmet",
+        "justice": "unmet",
+        "space": "unmet",
+        "serenity": "unmet",
+        "do-things-at-my-own-pace-and-in-my-own-way": "unmet",
+        "calm": "unmet"
+      }
     },
     {
       "title": "Anxiety",
@@ -2782,7 +3248,16 @@
         "Heart fluttering faster than usual; Nervous tension coiling in the belly; Breath catching high in the throat"
       ],
       "poemQuote": "\"I am much too alone in this world, yet not alone\n    enough\nto truly consecrate the hour.\"\n- Rainer Maria Rilke",
-      "poemUrl": "https://poets.org/poem/i-am-much-too-alone-world-yet-not-alone"
+      "poemUrl": "https://poets.org/poem/i-am-much-too-alone-world-yet-not-alone",
+      "needStates": {
+        "safety": "unmet",
+        "respect": "unmet",
+        "trust": "unmet",
+        "space": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "privacy": "unmet"
+      }
     },
     {
       "title": "Afraid",
@@ -2816,7 +3291,13 @@
         "Cold rush moving through arms and legs; Body crouching or leaning away from the trigger; Eyes widening with breath stuck mid-inhale"
       ],
       "poemQuote": "\"I was so small, so very much afraid.\nI prayed my father might turn into light.\nThere was no price that I would not have paid\"-\n- Marilyn Krysl",
-      "poemUrl": "https://poets.org/poem/villanelle-violin"
+      "poemUrl": "https://poets.org/poem/villanelle-violin",
+      "needStates": {
+        "belonging": "unmet",
+        "inclusion": "unmet",
+        "community": "unmet",
+        "contribution": "unmet"
+      }
     },
     {
       "title": "Powerless",
@@ -2870,7 +3351,18 @@
         "Limbs feeling heavy or drained of strength; Chest collapsing inward with shallow breath; Hands falling open without energy to grip"
       ],
       "poemQuote": "\"Someone, and no matter who, inhabits my head like it’s an empty house, he enters, he leaves, he bangs each door behind him, powerless I put up with this ruckus.\"\n- Claude Esteban",
-      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/54744/someone-and-no-matter"
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/54744/someone-and-no-matter",
+      "needStates": {
+        "connection": "unmet",
+        "autonomy": "unmet",
+        "trust": "unmet",
+        "freedom": "unmet",
+        "choose-freely": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "genuineness": "unmet",
+        "accomplishment": "unmet"
+      }
     },
     {
       "title": "Impotent",
@@ -2905,7 +3397,13 @@
         "unsure where to act"
       ],
       "poemQuote": "\"You are as bare \nas the day you were born \nand that is beautiful, \nbut you gotta get the hell \noff my porch.\"\n- Jennifer Hasegawa",
-      "poemUrl": "https://www.poetryfoundation.org/poems/154796/the-international-order-of-door-to-door-salesmen"
+      "poemUrl": "https://www.poetryfoundation.org/poems/154796/the-international-order-of-door-to-door-salesmen",
+      "needStates": {
+        "autonomy": "unmet",
+        "justice": "unmet",
+        "freedom": "unmet",
+        "equality": "unmet"
+      }
     },
     {
       "title": "Helpless",
@@ -2959,7 +3457,17 @@
         "Weight settling into the hips or knees; Arms hanging limp at the sides; Eyes glazing or looking to others for cues"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "safety": "unmet",
+        "autonomy": "unmet",
+        "justice": "unmet",
+        "freedom": "unmet",
+        "equality": "unmet",
+        "empowerment": "unmet",
+        "mutuality": "unmet",
+        "growth": "unmet"
+      }
     },
     {
       "title": "Tired",
@@ -2993,7 +3501,13 @@
         "Eyelids feeling heavy and slow to lift; Limbs dragging with low muscle tone; Yawns stretching the jaw repeatedly"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "love-caring": "unmet",
+        "consideration": "unmet",
+        "respect": "unmet",
+        "rest": "unmet"
+      }
     },
     {
       "title": "Defiant",
@@ -3051,7 +3565,18 @@
         "Spine straightening with chin lifted high; Hands planted firmly or fists on hips; Eyes fixed in an unwavering stare"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "connection": "unmet",
+        "belonging": "unmet",
+        "inclusion": "unmet",
+        "safety": "unmet",
+        "autonomy": "unmet",
+        "to-be-seen": "unmet",
+        "acknowledgement": "unmet",
+        "closeness": "unmet",
+        "growth": "unmet"
+      }
     },
     {
       "title": "Fear",
@@ -3089,7 +3614,14 @@
         "Heart thudding loudly in the chest; Muscles bracing as if for impact; Breath shortening with each scan of the room"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "autonomy": "unmet",
+        "freedom": "unmet",
+        "space": "unmet",
+        "authenticity": "unmet",
+        "self-expression": "unmet"
+      }
     },
     {
       "title": "Desperation",
@@ -3127,7 +3659,14 @@
         "Chest heaving as breath becomes ragged; Hands grasping or pleading toward others; Restless pacing or frantic movement in the limbs"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "autonomy": "unmet",
+        "freedom": "unmet",
+        "space": "unmet",
+        "authenticity": "unmet",
+        "self-expression": "unmet"
+      }
     },
     {
       "title": "Alarmed",
@@ -3153,7 +3692,11 @@
         "Sudden jolt of adrenaline across the body; Eyes snapping wide with eyebrows raised; Hands instinctively lifting in defense"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "safety": "unmet",
+        "autonomy": "unmet"
+      }
     },
     {
       "title": "Agitated",
@@ -3199,7 +3742,15 @@
         "Energy buzzing through arms and legs; Breath quickening with sharp exhales; Constant shifting weight from foot to foot"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "safety": "unmet",
+        "respect": "unmet",
+        "autonomy": "unmet",
+        "trust": "unmet",
+        "space": "unmet",
+        "privacy": "unmet"
+      }
     },
     {
       "title": "Jealous",
@@ -3229,7 +3780,12 @@
         "Chest tightening with a pinch in the heart area; Eyes narrowing while tracking the rival; Hands clenching subtly as thoughts churn"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "need-to-matter": "unmet",
+        "mattering": "unmet",
+        "inclusion": "unmet"
+      }
     },
     {
       "title": "Calm",
@@ -3256,6 +3812,10 @@
         {
           "title": "Safety",
           "slug": "safety"
+        },
+        {
+          "title": "Do things at my own pace and in my own way",
+          "slug": "do-things-at-my-own-pace-and-in-my-own-way"
         }
       ],
       "bodySignals": [
@@ -3263,7 +3823,15 @@
         "even breaths expanding through the belly; Shoulders settling away from the ears; Jaw unclenching with the tongue resting gently"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "do-things-at-my-own-pace-and-in-my-own-way": "met",
+        "calm": "met",
+        "peace": "met",
+        "serenity": "met",
+        "rest": "met",
+        "safety": "met"
+      }
     },
     {
       "title": "Inspired",
@@ -3290,13 +3858,25 @@
         {
           "title": "Freedom",
           "slug": "freedom"
+        },
+        {
+          "title": "Genuineness",
+          "slug": "genuineness"
         }
       ],
       "bodySignals": [
         "Eyes widening toward new possibilities; Spine lengthening with an energized lift; Hands reaching or sketching shapes midair"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "genuineness": "met",
+        "growth": "met",
+        "contribution": "met",
+        "autonomy": "met",
+        "self-expression": "met",
+        "freedom": "met"
+      }
     },
     {
       "title": "Proud",
@@ -3323,13 +3903,25 @@
         {
           "title": "Appreciation",
           "slug": "appreciation"
+        },
+        {
+          "title": "Authenticity",
+          "slug": "authenticity"
         }
       ],
       "bodySignals": [
         "Chest expanding with a gentle lift; Chin tilting slightly upward with a soft smile; Warmth spreading across the face and shoulders"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "authenticity": "met",
+        "accomplishment": "met",
+        "recognition": "met",
+        "acknowledgement": "met",
+        "respect": "met",
+        "appreciation": "met"
+      }
     },
     {
       "title": "Hopeful",
@@ -3356,13 +3948,25 @@
         {
           "title": "Connection",
           "slug": "connection"
+        },
+        {
+          "title": "Honesty",
+          "slug": "honesty"
         }
       ],
       "bodySignals": [
         "Eyes focusing toward a future point; Heartbeat lifting with gentle energy; Breath filling the chest with buoyant steadiness"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "honesty": "met",
+        "trust": "met",
+        "support": "met",
+        "need-for-all-living-things-to-flourish": "met",
+        "growth": "met",
+        "connection": "met"
+      }
     },
     {
       "title": "Contented",
@@ -3389,13 +3993,35 @@
         {
           "title": "Safety",
           "slug": "safety"
+        },
+        {
+          "title": "Do things at my own pace and in my own way",
+          "slug": "do-things-at-my-own-pace-and-in-my-own-way"
+        },
+        {
+          "title": "Honesty",
+          "slug": "honesty"
+        },
+        {
+          "title": "Authenticity",
+          "slug": "authenticity"
         }
       ],
       "bodySignals": [
         "Breath moving deep into the abdomen; Body leaning back into supportive surfaces; A soft sigh releasing remaining tension"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "do-things-at-my-own-pace-and-in-my-own-way": "met",
+        "honesty": "met",
+        "authenticity": "met",
+        "relaxation": "met",
+        "rest": "met",
+        "appreciation": "met",
+        "peace": "met",
+        "safety": "met"
+      }
     },
     {
       "title": "Peaceful",
@@ -3422,13 +4048,30 @@
         {
           "title": "Safety",
           "slug": "safety"
+        },
+        {
+          "title": "Do things at my own pace and in my own way",
+          "slug": "do-things-at-my-own-pace-and-in-my-own-way"
+        },
+        {
+          "title": "Honesty",
+          "slug": "honesty"
         }
       ],
       "bodySignals": [
         "Eyelids relaxing with a gentle gaze; Shoulders draping downward evenly; Breath flowing in a quiet rhythmic pattern"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "do-things-at-my-own-pace-and-in-my-own-way": "met",
+        "honesty": "met",
+        "peace": "met",
+        "serenity": "met",
+        "calm": "met",
+        "space": "met",
+        "safety": "met"
+      }
     },
     {
       "title": "Relieved",
@@ -3455,13 +4098,25 @@
         {
           "title": "Relaxation",
           "slug": "relaxation"
+        },
+        {
+          "title": "Honesty",
+          "slug": "honesty"
         }
       ],
       "bodySignals": [
         "Extended exhale spilling from the lungs; Shoulders dropping as tension drains; Belly loosening while the jaw softens"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "honesty": "met",
+        "safety": "met",
+        "support": "met",
+        "trust": "met",
+        "rest": "met",
+        "relaxation": "met"
+      }
     },
     {
       "title": "Relaxed",
@@ -3488,13 +4143,25 @@
         {
           "title": "Serenity",
           "slug": "serenity"
+        },
+        {
+          "title": "Do things at my own pace and in my own way",
+          "slug": "do-things-at-my-own-pace-and-in-my-own-way"
         }
       ],
       "bodySignals": [
         "Limbs resting with comfortable heaviness; Breathing slowing with easy pauses; Hands lying open without gripping"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "do-things-at-my-own-pace-and-in-my-own-way": "met",
+        "relaxation": "met",
+        "rest": "met",
+        "space": "met",
+        "calm": "met",
+        "serenity": "met"
+      }
     },
     {
       "title": "Joyful",
@@ -3521,13 +4188,30 @@
         {
           "title": "Closeness",
           "slug": "closeness"
+        },
+        {
+          "title": "Genuineness",
+          "slug": "genuineness"
+        },
+        {
+          "title": "Authenticity",
+          "slug": "authenticity"
         }
       ],
       "bodySignals": [
         "Smile radiating across the face; Body swaying or bouncing with lightness; Laughter bubbling up through the chest"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "genuineness": "met",
+        "authenticity": "met",
+        "connection": "met",
+        "belonging": "met",
+        "love-caring": "met",
+        "support": "met",
+        "closeness": "met"
+      }
     },
     {
       "title": "Playful",
@@ -3554,13 +4238,25 @@
         {
           "title": "Self expression",
           "slug": "self-expression"
+        },
+        {
+          "title": "Genuineness",
+          "slug": "genuineness"
         }
       ],
       "bodySignals": [
         "Eyes sparkling with curiosity; Movements darting in spontaneous patterns; Voice hopping between tones or laughter"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "genuineness": "met",
+        "freedom": "met",
+        "choose-freely": "met",
+        "connection": "met",
+        "belonging": "met",
+        "self-expression": "met"
+      }
     },
     {
       "title": "Excited",
@@ -3593,7 +4289,14 @@
         "Heartbeat thumping with eager energy; Feet bouncing or shifting in place; Breath quickening while staying open"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "growth": "met",
+        "freedom": "met",
+        "participation": "met",
+        "autonomy": "met",
+        "self-expression": "met"
+      }
     },
     {
       "title": "Energized",
@@ -3620,13 +4323,30 @@
         {
           "title": "Empowerment",
           "slug": "empowerment"
+        },
+        {
+          "title": "Genuineness",
+          "slug": "genuineness"
+        },
+        {
+          "title": "Authenticity",
+          "slug": "authenticity"
         }
       ],
       "bodySignals": [
         "Muscles humming with lively readiness; Posture aligning upright with ease; Steps landing with springy momentum"
       ],
       "poemQuote": "",
-      "poemUrl": ""
+      "poemUrl": "",
+      "needStates": {
+        "genuineness": "met",
+        "authenticity": "met",
+        "physical-fitness": "met",
+        "growth": "met",
+        "accomplishment": "met",
+        "rest": "met",
+        "empowerment": "met"
+      }
     }
   ],
   "needs": [
@@ -8965,6 +9685,10 @@
         {
           "url": "https://www.cdc.gov/violenceprevention/about/social-ecologicalmodel.html",
           "description": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts"
+        },
+        {
+          "url": "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(10)00185-3 (Humans have an intrinsic need for control/choice: integrative review showing control and choice are fundamental",
+          "description": ""
         }
       ]
     },

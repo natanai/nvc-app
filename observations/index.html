@@ -2211,8 +2211,78 @@ button.site-nav__magnet {
   }
 
   .observation-panel__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .observation-panel__header-main {
     display: grid;
     gap: 0.35rem;
+  }
+
+  .observation-panel__controls {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.45rem;
+  }
+
+  .observation-panel__switch-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    color: color-mix(in srgb, var(--outline) 60%, var(--ink) 40%);
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .observation-panel__switch-control {
+    appearance: none;
+    position: relative;
+    width: 3rem;
+    height: 1.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 80%, var(--outline) 20%);
+    box-shadow: inset 0 2px 4px color-mix(in srgb, var(--outline) 25%, transparent);
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .observation-panel__switch-control::after {
+    content: '';
+    position: absolute;
+    top: 0.2rem;
+    left: 0.22rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 0.45rem;
+    background: #ffffff;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .observation-panel__switch-control.is-on {
+    background: color-mix(in srgb, #ffffff 55%, var(--mint) 45%);
+    box-shadow: inset 0 2px 4px color-mix(in srgb, var(--mint) 35%, transparent);
+  }
+
+  .observation-panel__switch-control.is-on::after {
+    transform: translateX(1.48rem);
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--mint) 35%, transparent);
+  }
+
+  .observation-panel__switch-control:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--mint) 60%, transparent);
+    outline-offset: 2px;
+  }
+
+  [data-feelings-switch][data-mode='unmet'] .observation-panel__switch-label--unmet,
+  [data-feelings-switch][data-mode='met'] .observation-panel__switch-label--met {
+    color: var(--ink);
   }
 
   .observation-panel__title {
@@ -2264,7 +2334,8 @@ button.site-nav__magnet {
     min-width: 44px;
     min-height: 44px;
     max-width: min(100%, 18rem);
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
     text-align: center;
     line-height: 1.2;
     cursor: pointer;
@@ -2942,7 +3013,30 @@ button.site-nav__magnet {
                   <div class="observation-suggestions__panels">
                     <section class="observation-panel observation-panel--feelings" aria-live="polite">
                       <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Possible feelings</h3>
+                        <div class="observation-panel__header-main">
+                          <h3 class="observation-panel__title">Possible feelings</h3>
+                        </div>
+                        <div
+                          class="observation-panel__controls"
+                          data-feelings-switch
+                          data-mode="unmet"
+                          aria-label="Toggle feelings when needs are and aren’t met"
+                        >
+                          <span class="observation-panel__switch-label observation-panel__switch-label--unmet"
+                            >Needs aren’t met</span
+                          >
+                          <button
+                            type="button"
+                            id="observation-feelings-switch"
+                            class="observation-panel__switch-control"
+                            role="switch"
+                            aria-checked="false"
+                            aria-label="Switch between feelings when needs aren’t met and when they are met"
+                          ></button>
+                          <span class="observation-panel__switch-label observation-panel__switch-label--met"
+                            >Needs are met</span
+                          >
+                        </div>
                       </header>
                       <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
                       <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
@@ -2951,7 +3045,9 @@ button.site-nav__magnet {
                     </section>
                     <section class="observation-panel observation-panel--needs" aria-live="polite">
                       <header class="observation-panel__header">
-                        <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                        <div class="observation-panel__header-main">
+                          <h3 class="observation-panel__title">Needs that may be alive in you</h3>
+                        </div>
                       </header>
                       <div id="suggested-needs" class="observation-chip-list" role="list"></div>
                       <p id="suggested-needs-empty" class="observation-panel__empty" hidden>
@@ -3015,7 +3111,7 @@ button.site-nav__magnet {
                   aria-live="polite"
                 >
                   <div class="observation-editor__match-summary-row">
-                    <span class="observation-editor__match-summary-label">Exact matches ready</span>
+                    <span class="observation-editor__match-summary-label">Need matches ready</span>
                     <span
                       id="observation-detection-exact"
                       class="observation-editor__match-summary-value"
@@ -3024,16 +3120,17 @@ button.site-nav__magnet {
                     </span>
                   </div>
                   <div class="observation-editor__match-summary-row">
-                    <span class="observation-editor__match-summary-label">Near matches queued</span>
+                    <span class="observation-editor__match-summary-label">Nearest clusters queued</span>
                     <span
                       id="observation-detection-near"
                       class="observation-editor__match-summary-value"
                     >
-                      0/6
+                      0/1
                     </span>
                   </div>
                   <p id="observation-detection-note" class="observation-editor__match-summary-note">
-                    We’ll scan for cues as you type. We review up to 6 nearest cues at a time to keep things focused.
+                    We’ll scan for cues as you type and surface up to four needs with four related feelings when we spot a
+                    pattern.
                   </p>
                   <p
                     id="observation-detection-coverage"

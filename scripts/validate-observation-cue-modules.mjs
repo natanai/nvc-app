@@ -11,7 +11,7 @@ import {
 
 async function main() {
   const rootDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-  const csvPath = path.join(rootDir, 'data', 'observation_cues.sanitized.csv');
+  const csvPath = path.join(rootDir, 'data', 'observation_cues.csv');
   const modulesPath = path.join(rootDir, 'data', 'observation_cue_modules.json');
 
   const [csvText, modulesText] = await Promise.all([
