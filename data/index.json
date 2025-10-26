@@ -188,6 +188,7 @@
           "slug": "closeness"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Dull ache across the chest or heart area; Throat tightening like tears might rise; Shoulders curling inward to guard the torso"
       ],
@@ -226,6 +227,7 @@
           "slug": "support"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Body stiffening or frozen in place; Cold",
         "trembling hands or legs ready to bolt; Wide eyes with breath caught high in the chest"
@@ -297,6 +299,7 @@
           "slug": "empathy"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Brows knit with a light squeeze around the eyes; Head tilting or turning as if searching for focus; Light flutter in the stomach or chest while processing"
       ],
@@ -503,6 +506,7 @@
           "slug": "physical-fitness"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Heavy sensation in the chest or throat; Slow",
         "weighted movements and sighs; Moist eyes or a lump just behind the eyes"
@@ -654,6 +658,7 @@
           "slug": "security"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Heart pounding against the ribs; Breath quick and shallow high in the chest; Muscles tensing",
         "ready to hide or flee"
@@ -777,6 +782,7 @@
           "slug": "security"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Hollow feeling in the chest or stomach; Arms instinctively wrapping around the body; Eyes searching for connection or softening with tears"
       ],
@@ -1127,6 +1133,7 @@
           "slug": "privacy"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Heat rising through the face or neck; Jaw clenching and fists tightening; Breath getting faster and more forceful"
       ],
@@ -1377,6 +1384,7 @@
           "slug": "growth"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Jaw or temples tightening with pressure; Hands fidgeting or gripping objects harder; Chest constricting with repeated sighs"
       ],
@@ -1583,6 +1591,7 @@
           "slug": "security"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Skin feeling prickly or chilled; Muscles tightening around the shoulders; Eyes widening while scanning surroundings"
       ],
@@ -1641,6 +1650,7 @@
           "slug": "to-be-heard"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Restless energy pacing through limbs; Tense stomach that flips or churns; Voice catching or rising unexpectedly"
       ],
@@ -1687,6 +1697,7 @@
           "slug": "growth"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Shoulders inching up toward the ears; Clenched jaw or teeth grinding quietly; Shallow breathing that barely moves the ribs"
       ],
@@ -1753,6 +1764,7 @@
           "slug": "security"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Tight band-like feeling around the chest; Hands wringing or gripping for relief; Tearful eyes and uneven breathing"
       ],
@@ -1839,6 +1851,7 @@
           "slug": "accomplishment"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Chest sinking and posture slumping; Soft",
         "deflated sighs leaving the body; Gaze dropping toward the floor or away"
@@ -1882,6 +1895,7 @@
           "slug": "clarity"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Hot surge pulsing through the entire body; Face flushed with jaw locked tight; Voice wanting to roar or push forcefully outward"
       ],
@@ -1932,6 +1946,7 @@
           "slug": "equality"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Forehead wrinkling with squinting eyes; Head tilting or shaking slightly; Stomach fluttering as thoughts loop"
       ],
@@ -1978,6 +1993,7 @@
           "slug": "justice"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Chest puffing or leaning forward aggressively; Jaw jutting with lips pressed thin; Hands ready to point or push away"
       ],
@@ -2036,6 +2052,7 @@
           "slug": "empathy"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Muscles coiled like a spring across shoulders; Eyes narrowing into a hard stare; Voice sharpening",
         "ready to strike"
@@ -2087,6 +2104,7 @@
           "slug": "peace"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Tight band of tension circling the temples; Breath held high as if time is squeezing; Hands tapping or bouncing to release urgency"
       ],
@@ -2157,6 +2175,7 @@
           "slug": "genuineness"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Chest tightening as momentum slams to a halt; Brows furrowing with a forceful exhale; Hands clenching or pushing against surfaces"
       ],
@@ -2279,6 +2298,7 @@
           "slug": "security"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Fluttering or buzzing energy in the stomach; Chest feeling tight with quick",
         "shallow breaths; Hands or feet fidgeting to discharge nerves"
@@ -2418,6 +2438,7 @@
           "slug": "integrity"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Arms crossing tightly over the chest; Jaw setting with a bitter taste in the mouth; Heat simmering low in the gut"
       ],
@@ -2456,6 +2477,7 @@
           "slug": "non-judgmental-communication"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Protective hunching around the sore area; Face tightening or wincing reflexively; Breathing becoming shallow to brace discomfort"
       ],
@@ -2494,6 +2516,7 @@
           "slug": "non-judgmental-communication"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Face flushing hot while eyes want to look away; Stomach dropping as if on a roller coaster; Body shrinking or folding inward to hide"
       ],
@@ -2596,6 +2619,7 @@
           "slug": "integrity"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Cheeks warming or blushing; Hands wanting to cover the face or mouth; Nervous laughter or fidgeting in place"
       ],
@@ -2666,6 +2690,7 @@
           "slug": "relaxation"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Tightness spreading across head and shoulders; Chest feeling compressed by invisible weight; Urge to close eyes or press palms against temples"
       ],
@@ -2728,6 +2753,7 @@
           "slug": "calm"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Twitching muscles in the jaw or around the eyes; Shoulders stiffening with quick exhales; Hands flicking or tapping with impatience"
       ],
@@ -2778,6 +2804,7 @@
           "slug": "privacy"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Heart fluttering faster than usual; Nervous tension coiling in the belly; Breath catching high in the throat"
       ],
@@ -2812,6 +2839,7 @@
           "slug": "contribution"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Cold rush moving through arms and legs; Body crouching or leaning away from the trigger; Eyes widening with breath stuck mid-inhale"
       ],
@@ -2866,6 +2894,7 @@
           "slug": "accomplishment"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Limbs feeling heavy or drained of strength; Chest collapsing inward with shallow breath; Hands falling open without energy to grip"
       ],
@@ -2900,6 +2929,7 @@
           "slug": "equality"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Stomach knotting with a hollow drop; Shoulders slumping as energy drains; Hands loosening",
         "unsure where to act"
@@ -2955,6 +2985,7 @@
           "slug": "growth"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Weight settling into the hips or knees; Arms hanging limp at the sides; Eyes glazing or looking to others for cues"
       ],
@@ -2989,6 +3020,7 @@
           "slug": "rest"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Eyelids feeling heavy and slow to lift; Limbs dragging with low muscle tone; Yawns stretching the jaw repeatedly"
       ],
@@ -3047,6 +3079,7 @@
           "slug": "growth"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Spine straightening with chin lifted high; Hands planted firmly or fists on hips; Eyes fixed in an unwavering stare"
       ],
@@ -3085,6 +3118,7 @@
           "slug": "self-expression"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Heart thudding loudly in the chest; Muscles bracing as if for impact; Breath shortening with each scan of the room"
       ],
@@ -3123,6 +3157,7 @@
           "slug": "self-expression"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Chest heaving as breath becomes ragged; Hands grasping or pleading toward others; Restless pacing or frantic movement in the limbs"
       ],
@@ -3149,6 +3184,7 @@
           "slug": "autonomy"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Sudden jolt of adrenaline across the body; Eyes snapping wide with eyebrows raised; Hands instinctively lifting in defense"
       ],
@@ -3195,6 +3231,7 @@
           "slug": "privacy"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Energy buzzing through arms and legs; Breath quickening with sharp exhales; Constant shifting weight from foot to foot"
       ],
@@ -3225,6 +3262,7 @@
           "slug": "inclusion"
         }
       ],
+      "needSatisfaction": "unmet",
       "bodySignals": [
         "Chest tightening with a pinch in the heart area; Eyes narrowing while tracking the rival; Hands clenching subtly as thoughts churn"
       ],
@@ -3258,6 +3296,7 @@
           "slug": "safety"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Slow",
         "even breaths expanding through the belly; Shoulders settling away from the ears; Jaw unclenching with the tongue resting gently"
@@ -3292,6 +3331,7 @@
           "slug": "freedom"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Eyes widening toward new possibilities; Spine lengthening with an energized lift; Hands reaching or sketching shapes midair"
       ],
@@ -3325,6 +3365,7 @@
           "slug": "appreciation"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Chest expanding with a gentle lift; Chin tilting slightly upward with a soft smile; Warmth spreading across the face and shoulders"
       ],
@@ -3358,6 +3399,7 @@
           "slug": "connection"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Eyes focusing toward a future point; Heartbeat lifting with gentle energy; Breath filling the chest with buoyant steadiness"
       ],
@@ -3391,6 +3433,7 @@
           "slug": "safety"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Breath moving deep into the abdomen; Body leaning back into supportive surfaces; A soft sigh releasing remaining tension"
       ],
@@ -3424,6 +3467,7 @@
           "slug": "safety"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Eyelids relaxing with a gentle gaze; Shoulders draping downward evenly; Breath flowing in a quiet rhythmic pattern"
       ],
@@ -3457,6 +3501,7 @@
           "slug": "relaxation"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Extended exhale spilling from the lungs; Shoulders dropping as tension drains; Belly loosening while the jaw softens"
       ],
@@ -3490,6 +3535,7 @@
           "slug": "serenity"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Limbs resting with comfortable heaviness; Breathing slowing with easy pauses; Hands lying open without gripping"
       ],
@@ -3523,6 +3569,7 @@
           "slug": "closeness"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Smile radiating across the face; Body swaying or bouncing with lightness; Laughter bubbling up through the chest"
       ],
@@ -3556,6 +3603,7 @@
           "slug": "self-expression"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Eyes sparkling with curiosity; Movements darting in spontaneous patterns; Voice hopping between tones or laughter"
       ],
@@ -3589,6 +3637,7 @@
           "slug": "self-expression"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Heartbeat thumping with eager energy; Feet bouncing or shifting in place; Breath quickening while staying open"
       ],
@@ -3622,6 +3671,7 @@
           "slug": "empowerment"
         }
       ],
+      "needSatisfaction": "met",
       "bodySignals": [
         "Muscles humming with lively readiness; Posture aligning upright with ease; Steps landing with springy momentum"
       ],
