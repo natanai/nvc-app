@@ -6,7 +6,7 @@ import { parseObservationCueCSV } from '../lib/observationCueData.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
-const sanitizedCuePath = path.join(rootDir, 'data', 'observation_cues.sanitized.csv');
+const sanitizedCuePath = path.join(rootDir, 'data', 'observation_cues.csv');
 const indexPath = path.join(rootDir, 'data', 'index.json');
 const outputPath = path.join(rootDir, 'data', 'observation_detector_stats.json');
 
