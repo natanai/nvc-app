@@ -128,6 +128,7 @@ function compileFromBlueprint({ lexicon, blueprint }) {
       cueIds: moduleCues.map(cue => cue.id),
       feelings: moduleFeelings,
       needs: moduleNeeds,
+      builderActionIds: normalizedModule.builderActionIds,
     });
   });
 
@@ -153,7 +154,8 @@ function normalizeModule(def) {
   if (!cues.length) {
     throw new Error(`Module ${id} must define at least one cue.`);
   }
-  return { id, label, summary, slotIds, lexiconKeys, feelings, needs, examples, detectors, cues };
+  const builderActionIds = uniqueStrings(Array.isArray(def.builderActionIds) ? def.builderActionIds : []);
+  return { id, label, summary, slotIds, lexiconKeys, feelings, needs, examples, detectors, cues, builderActionIds };
 }
 
 function normalizeCue(def, moduleId) {

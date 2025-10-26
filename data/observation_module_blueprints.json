@@ -103,6 +103,9 @@
           ],
           "example": "During Tuesday's 2 p.m. planning stand-up, my colleague whispered to Taylor and they both laughed right after I described the roadmap change."
         }
+      ],
+      "builderActionIds": [
+        "dismissive-responses"
       ]
     },
     {
@@ -167,6 +170,9 @@
           ],
           "example": "During this morning's 10 a.m. project video call, the client's audio overlapped mine three times when I proposed a change."
         }
+      ],
+      "builderActionIds": [
+        "listening-boundaries"
       ]
     },
     {
@@ -214,6 +220,9 @@
           ],
           "example": "A coworker slammed her notebook shut and walked out during my presentation yesterday."
         }
+      ],
+      "builderActionIds": [
+        "presentation-departures"
       ]
     },
     {
@@ -262,6 +271,9 @@
           ],
           "example": "During last night's game, the referee missed three fouls against our team."
         }
+      ],
+      "builderActionIds": [
+        "sports-officiating"
       ]
     },
     {
@@ -326,6 +338,9 @@
           ],
           "example": "At the grocery store, another shopper reached over me to grab the last carton of eggs."
         }
+      ],
+      "builderActionIds": [
+        "queue-respect"
       ]
     },
     {
@@ -390,6 +405,9 @@
           ],
           "example": "My sibling borrowed my car without asking and returned it with the tank empty."
         }
+      ],
+      "builderActionIds": [
+        "shared-upkeep"
       ]
     },
     {
@@ -435,6 +453,9 @@
           ],
           "example": "The email from HR said my contract wasn't renewed with no explanation."
         }
+      ],
+      "builderActionIds": [
+        "job-security"
       ]
     },
     {
@@ -500,6 +521,9 @@
           ],
           "example": "I received a performance review that only listed mistakes without any concrete examples."
         }
+      ],
+      "builderActionIds": [
+        "feedback-clarity"
       ]
     },
     {
@@ -564,6 +588,9 @@
           ],
           "example": "The contractor missed today's 8 a.m. appointment and hasn't texted or called."
         }
+      ],
+      "builderActionIds": [
+        "housing-reliability"
       ]
     },
     {
@@ -611,6 +638,9 @@
           ],
           "example": "My doctor glanced at the clock twice while I was describing my symptoms today."
         }
+      ],
+      "builderActionIds": [
+        "care-attention"
       ]
     },
     {
@@ -675,6 +705,9 @@
           ],
           "example": "My boss sent me three Slack messages between 11 p.m. and midnight about tomorrow's report."
         }
+      ],
+      "builderActionIds": [
+        "workload-boundaries"
       ]
     },
     {
@@ -721,6 +754,9 @@
           ],
           "example": "My partner scrolled through their phone during dinner instead of looking up."
         }
+      ],
+      "builderActionIds": [
+        "connection-presence"
       ]
     },
     {
@@ -767,6 +803,9 @@
           ],
           "example": "The rideshare driver talked loudly on speakerphone for the entire trip yesterday."
         }
+      ],
+      "builderActionIds": [
+        "ride-environment"
       ]
     },
     {
@@ -814,6 +853,9 @@
           ],
           "example": "My neighbor's dog barked loudly for 30 minutes starting at 6 a.m. on Saturday."
         }
+      ],
+      "builderActionIds": [
+        "noise-disturbance"
       ]
     },
     {
@@ -860,6 +902,9 @@
           ],
           "example": "A cyclist sped through the crosswalk even though the light was red this morning."
         }
+      ],
+      "builderActionIds": [
+        "safety-commute"
       ]
     },
     {
@@ -904,6 +949,9 @@
           ],
           "example": "I caught myself scrolling for an hour instead of calling my grandmother back."
         }
+      ],
+      "builderActionIds": [
+        "self-accountability"
       ]
     },
     {
@@ -950,6 +998,9 @@
           ],
           "example": "My coworker double-checked the expense report and caught a mistake before we sent it."
         }
+      ],
+      "builderActionIds": [
+        "collaboration-safeguards"
       ]
     },
     {
@@ -996,6 +1047,9 @@
           ],
           "example": "At the 8 a.m. session, the gym trainer high-fived me right after I racked 185 pounds on squats."
         }
+      ],
+      "builderActionIds": [
+        "milestone-celebration"
       ]
     },
     {
@@ -1042,6 +1096,9 @@
           ],
           "example": "My neighbor shoveled our sidewalk after the snowstorm while we were at work."
         }
+      ],
+      "builderActionIds": [
+        "neighbor-support"
       ]
     },
     {
@@ -1089,6 +1146,9 @@
           ],
           "example": "At 4 p.m., the coordinator emailed me listing the volunteer shifts I covered during the fundraiser."
         }
+      ],
+      "builderActionIds": [
+        "specific-appreciation"
       ]
     },
     {
@@ -1135,6 +1195,9 @@
           ],
           "example": "During therapy, my counselor paused and reflected back exactly what I said before offering input."
         }
+      ],
+      "builderActionIds": [
+        "reflective-presence"
       ]
     },
     {
@@ -1198,6 +1261,9 @@
           ],
           "example": "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate."
         }
+      ],
+      "builderActionIds": [
+        "supportive-rebalancing"
       ]
     },
     {
@@ -1243,6 +1309,9 @@
           ],
           "example": "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside the billfold."
         }
+      ],
+      "builderActionIds": [
+        "integrity-returns"
       ]
     },
     {
@@ -1288,6 +1357,9 @@
           ],
           "example": "My boss approved my vacation request the same day I submitted it."
         }
+      ],
+      "builderActionIds": [
+        "responsive-approvals"
       ]
     },
     {
@@ -1352,6 +1424,9 @@
           ],
           "example": "My dentist explained each step before starting the procedure."
         }
+      ],
+      "builderActionIds": [
+        "care-attentive-support"
       ]
     },
     {
@@ -1397,6 +1472,9 @@
           ],
           "example": "At 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep."
         }
+      ],
+      "builderActionIds": [
+        "delivery-gaps"
       ]
     },
     {
@@ -1442,6 +1520,9 @@
           ],
           "example": "My friend arrived 30 minutes late to lunch without texting."
         }
+      ],
+      "builderActionIds": [
+        "punctuality-boundaries"
       ]
     },
     {
@@ -1487,6 +1568,9 @@
           ],
           "example": "Our HOA sent a warning letter about lawn length without asking first."
         }
+      ],
+      "builderActionIds": [
+        "policy-warnings"
       ]
     },
     {
@@ -1533,6 +1617,9 @@
           ],
           "example": "My colleague took credit for my idea during the pitch meeting."
         }
+      ],
+      "builderActionIds": [
+        "recognition-boundaries"
       ]
     },
     {
@@ -1579,6 +1666,9 @@
           ],
           "example": "The daycare forgot to call when my child had a fever."
         }
+      ],
+      "builderActionIds": [
+        "care-communication-gaps"
       ]
     },
     {
@@ -1624,6 +1714,9 @@
           ],
           "example": "The bus driver waited for me when I was running toward the stop."
         }
+      ],
+      "builderActionIds": [
+        "commute-kindness"
       ]
     },
     {
@@ -1659,11 +1752,11 @@
           "lexiconKeys": [
             "teammate_ignored_updates"
           ],
-  "feelings": [
-    "anxious",
-    "frustrated",
-    "overwhelmed"
-  ],
+          "feelings": [
+            "anxious",
+            "frustrated",
+            "overwhelmed"
+          ],
           "needs": [
             "clarity",
             "accountability",
@@ -1671,6 +1764,9 @@
           ],
           "example": "From Monday through Friday, no cards under my teammate's initials moved on the shared sprint board."
         }
+      ],
+      "builderActionIds": [
+        "collaboration-visibility"
       ]
     },
     {
@@ -1716,6 +1812,9 @@
           ],
           "example": "Our landlord repaired the leaky faucet the day after we reported it."
         }
+      ],
+      "builderActionIds": [
+        "housing-responsiveness"
       ]
     },
     {
@@ -1761,6 +1860,9 @@
           ],
           "example": "My sibling promised to pay me back Friday but still hasn't sent anything."
         }
+      ],
+      "builderActionIds": [
+        "commitment-followthrough"
       ]
     },
     {
@@ -1807,6 +1909,9 @@
           ],
           "example": "The restaurant served my meal with peanuts after I noted my allergy."
         }
+      ],
+      "builderActionIds": [
+        "food-safety"
       ]
     },
     {
@@ -1852,6 +1957,9 @@
           ],
           "example": "My manager scheduled a meeting over my lunch break without asking."
         }
+      ],
+      "builderActionIds": [
+        "schedule-respect"
       ]
     },
     {
@@ -1897,6 +2005,9 @@
           ],
           "example": "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix."
         }
+      ],
+      "builderActionIds": [
+        "support-followthrough"
       ]
     },
     {
@@ -1943,6 +2054,9 @@
           ],
           "example": "The city finally fixed the streetlight after months of emails."
         }
+      ],
+      "builderActionIds": [
+        "infrastructure-response"
       ]
     },
     {
@@ -1995,6 +2109,9 @@
             "\\baudit\\s+logs?\\b[^\\n]{0,40}\\bunauthorized\\s+logins\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "audit-login-breaches"
       ]
     },
     {
@@ -2047,6 +2164,9 @@
             "\\bbedtime\\b[^\\n]{0,40}\\bagain\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "bedtime-load-gaps"
       ]
     },
     {
@@ -2099,6 +2219,9 @@
             "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "budget-freeze-alerts"
       ]
     },
     {
@@ -2151,6 +2274,9 @@
             "\\bhaven't\\s+replied\\s+to\\s+your\\s+emails\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "civic-nonresponse"
       ]
     },
     {
@@ -2203,6 +2329,9 @@
             "\\bjudge\\b[^\\n]{0,60}\\breconvene\\s+next\\s+month\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "courtroom-delays"
       ]
     },
     {
@@ -2255,6 +2384,9 @@
             "\\bcounted\\s+four\\s+tables\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "customer-mess-followup"
       ]
     },
     {
@@ -2307,6 +2439,9 @@
             "\\bdoorbell\\s+cam\\b[^\\n]{0,40}\\bleaving\\s+the\\s+package\\b[^\\n]{0,30}\\b\\d+\\s+minutes\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "delivery-exposure"
       ]
     },
     {
@@ -2359,6 +2494,9 @@
             "\\bdivorce\\s+papers\\b[^\\n]{0,40}\\b30\\s+seconds\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "divorce-paper-silence"
       ]
     },
     {
@@ -2411,6 +2549,9 @@
             "\\bboth\\s+tenors\\b[^\\n]{0,40}\\bstare\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "ensemble-dropoff"
       ]
     },
     {
@@ -2463,6 +2604,9 @@
             "\\bEviction\\s+warning\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "housing-eviction-notices"
       ]
     },
     {
@@ -2515,6 +2659,9 @@
             "\\bcoordinator\\b[^\\n]{0,40}\\bclipboard\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "intake-walkaways"
       ]
     },
     {
@@ -2567,6 +2714,9 @@
             "\\bpump\\s+alarm\\b[^\\n]{0,40}\\bstopped\\s+the\\s+watering\\s+cycle\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "irrigation-pump-alarms"
       ]
     },
     {
@@ -2619,6 +2769,9 @@
             "\\bassay\\b[^\\n]{0,40}\\b0\\.42\\b[^\\n]{0,40}\\b0\\.91\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "lab-fluorescence-variance"
       ]
     },
     {
@@ -2671,6 +2824,9 @@
             "\\bneed\\s+to\\s+redo\\b[^\\n]{0,40}\\bdeck\\b\\s+tonight\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "last-minute-scope-shifts"
       ]
     },
     {
@@ -2723,6 +2879,9 @@
             "\\bmaintenance\\s+dashboard\\b[^\\n]{0,40}\\bflashed\\s+red\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "maintenance-dashboard-alerts"
       ]
     },
     {
@@ -2775,6 +2934,9 @@
             "\\bboth\\s+partners\\b[^\\n]{0,40}\\bfive\\s+seconds\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "mediation-body-language"
       ]
     },
     {
@@ -2827,6 +2989,9 @@
             "\\brun\\s+\\d+\\s+minutes\\s+past\\s+dismissal\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "meeting-overflow"
       ]
     },
     {
@@ -2879,6 +3044,9 @@
             "\\bbaby\\s+monitor\\b[^\\n]{0,40}\\b20\\s+minutes\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "monitor-distress-alerts"
       ]
     },
     {
@@ -2931,6 +3099,9 @@
             "\\bDr\\.\\s+Lee\\b[^\\n]{0,80}\\bthree\\s+pages\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "on-call-chaos"
       ]
     },
     {
@@ -2983,6 +3154,9 @@
             "\\bconductor\\b[^\\n]{0,40}\\bpercussion\\s+entrance\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "orchestra-cuts"
       ]
     },
     {
@@ -3035,6 +3209,9 @@
             "\\bsolo\\b[^\\n]{0,40}\\bMaya\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "performance-reassignment"
       ]
     },
     {
@@ -3087,6 +3264,9 @@
             "\\bradar\\b[^\\n]{0,40}\\bunknown\\s+transponder\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "radar-unknown-transponder"
       ]
     },
     {
@@ -3139,6 +3319,9 @@
             "\\btext\\b[^\\n]{0,40}\\bwe'?re\\s+done\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "relationship-breakup-text"
       ]
     },
     {
@@ -3191,6 +3374,9 @@
             "\\bphoned\\s+me\\b[^\\n]{0,40}\\bdisrupted\\s+class\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "school-discipline-calls"
       ]
     },
     {
@@ -3243,6 +3429,9 @@
             "\\bfootage\\s+shows\\b[^\\n]{0,40}\\btwo\\s+contractors\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "security-footage-breach"
       ]
     },
     {
@@ -3295,6 +3484,9 @@
             "\\bsigh\\b[^\\n]{0,40}\\bwithout\\s+saying\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "session-silent-sighs"
       ]
     },
     {
@@ -3347,6 +3539,9 @@
             "\\bno\\s+beds\\b[^\\n]{0,40}\\btwo\\s+families\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "shelter-capacity-turnaway"
       ]
     },
     {
@@ -3399,6 +3594,9 @@
             "\\bdouble[-\\s]?booked\\b[^\\n]{0,40}\\btelescope\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "telescope-double-book"
       ]
     },
     {
@@ -3451,6 +3649,9 @@
             "\\bemailed\\b[^\\n]{0,40}\\bneed\\s+that\\s+deck\\s+tonight\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "urgent-email-demands"
       ]
     },
     {
@@ -3503,175 +3704,402 @@
             "\\bvoicemail\\b[^\\n]{0,40}\\byou're\\s+useless\\b"
           ]
         }
+      ],
+      "builderActionIds": [
+        "voicemail-insults"
       ]
-    }
-  ,
+    },
     {
       "id": "structured-direct-quote",
       "label": "Direct words captured",
       "summary": "The observation records the exact words that were spoken.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_direct_quote"],
-      "feelings": ["bewildered", "hurt", "hopeful"],
-      "needs": ["clarity", "to-be-heard", "respect", "trust"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_direct_quote"
+      ],
+      "feelings": [
+        "bewildered",
+        "hurt",
+        "hopeful"
+      ],
+      "needs": [
+        "clarity",
+        "to-be-heard",
+        "respect",
+        "trust"
+      ],
       "examples": [
         "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
       ],
       "cues": [
         {
           "id": "structured-direct-quote",
-          "lexiconKeys": ["structured_direct_quote"],
-          "feelings": ["bewildered", "hurt", "hopeful"],
-          "needs": ["clarity", "to-be-heard", "consideration"],
+          "lexiconKeys": [
+            "structured_direct_quote"
+          ],
+          "feelings": [
+            "bewildered",
+            "hurt",
+            "hopeful"
+          ],
+          "needs": [
+            "clarity",
+            "to-be-heard",
+            "consideration"
+          ],
           "example": "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
         }
+      ],
+      "builderActionIds": [
+        "structured-direct-quote"
       ]
     },
     {
       "id": "structured-interruption",
       "label": "Spoken interruption",
       "summary": "Someone interrupts or talks over the speaker during the moment.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_interruption"],
-      "feelings": ["frustrated", "irritated", "hurt"],
-      "needs": ["respect", "to-be-heard", "consideration"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_interruption"
+      ],
+      "feelings": [
+        "frustrated",
+        "irritated",
+        "hurt"
+      ],
+      "needs": [
+        "respect",
+        "to-be-heard",
+        "consideration"
+      ],
       "examples": [
-        "When on Monday morning, with my teammate in our standup, I heard them interrupt me mid-sentence."
+        "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence."
       ],
       "cues": [
         {
           "id": "structured-interruption",
-          "lexiconKeys": ["structured_interruption"],
-          "feelings": ["frustrated", "irritated", "hurt"],
-          "needs": ["respect", "to-be-heard", "consideration"],
-          "example": "When on Monday morning, with my teammate in our standup, I heard them interrupt me mid-sentence."
+          "lexiconKeys": [
+            "structured_interruption"
+          ],
+          "feelings": [
+            "frustrated",
+            "irritated",
+            "hurt"
+          ],
+          "needs": [
+            "respect",
+            "to-be-heard",
+            "consideration"
+          ],
+          "example": "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence."
         }
+      ],
+      "builderActionIds": [
+        "structured-interruption"
       ]
     },
     {
       "id": "structured-boundary-crossing",
       "label": "Boundary crossed",
       "summary": "A named boundary or agreement is ignored or violated.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_boundary_cross"],
-      "feelings": ["alarmed", "angry", "anxious"],
-      "needs": ["respect", "safety", "autonomy"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_boundary_cross"
+      ],
+      "feelings": [
+        "alarmed",
+        "angry",
+        "anxious"
+      ],
+      "needs": [
+        "respect",
+        "safety",
+        "autonomy"
+      ],
       "examples": [
-        "When after dinner, with my brother in the living room, I saw him cross the boundary about talking over medical decisions."
+        "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private."
       ],
       "cues": [
         {
           "id": "structured-boundary-crossing",
-          "lexiconKeys": ["structured_boundary_cross"],
-          "feelings": ["alarmed", "angry", "anxious"],
-          "needs": ["respect", "safety", "autonomy"],
-          "example": "When after dinner, with my brother in the living room, I saw him cross the boundary about talking over medical decisions."
+          "lexiconKeys": [
+            "structured_boundary_cross"
+          ],
+          "feelings": [
+            "alarmed",
+            "angry",
+            "anxious"
+          ],
+          "needs": [
+            "respect",
+            "safety",
+            "autonomy"
+          ],
+          "example": "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private."
         }
+      ],
+      "builderActionIds": [
+        "structured-boundary-crossing"
       ]
     },
     {
       "id": "structured-late-arrival",
       "label": "Late arrival noted",
       "summary": "The observation highlights someone arriving after the agreed time.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_late_arrival"],
-      "feelings": ["frustrated", "anxious", "disappointment"],
-      "needs": ["reliability", "consideration", "predictability"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_late_arrival"
+      ],
+      "feelings": [
+        "frustrated",
+        "anxious",
+        "disappointment"
+      ],
+      "needs": [
+        "reliability",
+        "consideration",
+        "predictability"
+      ],
       "examples": [
-        "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes late."
+        "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time."
       ],
       "cues": [
         {
           "id": "structured-late-arrival",
-          "lexiconKeys": ["structured_late_arrival"],
-          "feelings": ["frustrated", "anxious", "disappointment"],
-          "needs": ["reliability", "consideration", "predictability"],
-          "example": "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes late."
+          "lexiconKeys": [
+            "structured_late_arrival"
+          ],
+          "feelings": [
+            "frustrated",
+            "anxious",
+            "disappointment"
+          ],
+          "needs": [
+            "reliability",
+            "consideration",
+            "predictability"
+          ],
+          "example": "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time."
         }
+      ],
+      "builderActionIds": [
+        "structured-late-arrival"
       ]
     },
     {
       "id": "structured-left-early",
       "label": "Left before it ended",
       "summary": "Someone leaves before the shared activity or conversation concludes.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_left_early"],
-      "feelings": ["confused", "hurt", "anxious"],
-      "needs": ["trust", "support", "reliability"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_left_early"
+      ],
+      "feelings": [
+        "confused",
+        "hurt",
+        "anxious"
+      ],
+      "needs": [
+        "trust",
+        "support",
+        "reliability"
+      ],
       "examples": [
-        "When last night, with my partner on the couch, I saw them leave before we finished talking."
+        "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation."
       ],
       "cues": [
         {
           "id": "structured-left-early",
-          "lexiconKeys": ["structured_left_early"],
-          "feelings": ["confused", "hurt", "anxious"],
-          "needs": ["trust", "support", "reliability"],
-          "example": "When last night, with my partner on the couch, I saw them leave before we finished talking."
+          "lexiconKeys": [
+            "structured_left_early"
+          ],
+          "feelings": [
+            "confused",
+            "hurt",
+            "anxious"
+          ],
+          "needs": [
+            "trust",
+            "support",
+            "reliability"
+          ],
+          "example": "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation."
         }
+      ],
+      "builderActionIds": [
+        "structured-left-early"
       ]
     },
     {
       "id": "structured-no-response",
       "label": "No response given",
       "summary": "A request or question receives silence or no acknowledgement.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_no_response"],
-      "feelings": ["anxious", "hurt", "lonely"],
-      "needs": ["to-be-heard", "understanding", "connection"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_no_response"
+      ],
+      "feelings": [
+        "anxious",
+        "hurt",
+        "lonely"
+      ],
+      "needs": [
+        "to-be-heard",
+        "understanding",
+        "connection"
+      ],
       "examples": [
         "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
       ],
       "cues": [
         {
           "id": "structured-no-response",
-          "lexiconKeys": ["structured_no_response"],
-          "feelings": ["anxious", "hurt", "lonely"],
-          "needs": ["to-be-heard", "understanding", "connection"],
+          "lexiconKeys": [
+            "structured_no_response"
+          ],
+          "feelings": [
+            "anxious",
+            "hurt",
+            "lonely"
+          ],
+          "needs": [
+            "to-be-heard",
+            "understanding",
+            "connection"
+          ],
           "example": "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
         }
+      ],
+      "builderActionIds": [
+        "structured-no-response"
       ]
     },
     {
       "id": "structured-support-offered",
       "label": "Support offered",
       "summary": "The observation captures someone offering help or collaboration.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_support_offered"],
-      "feelings": ["relieved", "hopeful", "joyful"],
-      "needs": ["support", "mutuality", "trust"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_support_offered"
+      ],
+      "feelings": [
+        "relieved",
+        "hopeful",
+        "joyful"
+      ],
+      "needs": [
+        "support",
+        "mutuality",
+        "trust"
+      ],
       "examples": [
-        "When this afternoon, with my neighbor on the porch, I heard them say they'd cover the childcare swap rotation."
+        "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week."
       ],
       "cues": [
         {
           "id": "structured-support-offered",
-          "lexiconKeys": ["structured_support_offered"],
-          "feelings": ["relieved", "hopeful", "joyful"],
-          "needs": ["support", "mutuality", "trust"],
-          "example": "When this afternoon, with my neighbor on the porch, I heard them say they'd cover the childcare swap rotation."
+          "lexiconKeys": [
+            "structured_support_offered"
+          ],
+          "feelings": [
+            "relieved",
+            "hopeful",
+            "joyful"
+          ],
+          "needs": [
+            "support",
+            "mutuality",
+            "trust"
+          ],
+          "example": "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week."
         }
+      ],
+      "builderActionIds": [
+        "structured-support-offered"
       ]
     },
     {
       "id": "structured-digital-message",
       "label": "Digital message captured",
       "summary": "The observation notes the exact wording from a written message.",
-      "slotIds": ["time", "context", "sensory", "measure"],
-      "lexiconKeys": ["structured_digital_message"],
-      "feelings": ["alarmed", "anxious", "tense"],
-      "needs": ["clarity", "predictability", "consideration"],
+      "slotIds": [
+        "time",
+        "context",
+        "sensory",
+        "measure"
+      ],
+      "lexiconKeys": [
+        "structured_digital_message"
+      ],
+      "feelings": [
+        "alarmed",
+        "anxious",
+        "tense"
+      ],
+      "needs": [
+        "clarity",
+        "predictability",
+        "consideration"
+      ],
       "examples": [
         "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
       ],
       "cues": [
         {
           "id": "structured-digital-message",
-          "lexiconKeys": ["structured_digital_message"],
-          "feelings": ["alarmed", "anxious", "tense"],
-          "needs": ["clarity", "predictability", "consideration"],
+          "lexiconKeys": [
+            "structured_digital_message"
+          ],
+          "feelings": [
+            "alarmed",
+            "anxious",
+            "tense"
+          ],
+          "needs": [
+            "clarity",
+            "predictability",
+            "consideration"
+          ],
           "example": "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
         }
+      ],
+      "builderActionIds": [
+        "structured-digital-message"
       ]
     }
   ]

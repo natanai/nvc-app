@@ -6,6 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const builderPath = path.join(rootDir, 'data', 'observation_sentence_builder.json');
 const actionsPath = path.join(rootDir, 'data', 'observation_sentence_actions.json');
+const blueprintPath = path.join(rootDir, 'data', 'observation_module_blueprints.json');
 
 const SUBJECT_GROUPS = {
   default: [
@@ -114,9 +115,42 @@ async function main() {
   builder.slots.sensory.actions = actions;
 
   await fs.writeFile(builderPath, `${JSON.stringify(builder, null, 2)}\n`, 'utf8');
+  await syncBlueprintWithActions(actions);
 }
 
 main().catch(error => {
   console.error(error);
   process.exitCode = 1;
 });
+
+async function syncBlueprintWithActions(actions) {
+  const actionMap = buildModuleActionMap(actions);
+  const raw = await fs.readFile(blueprintPath, 'utf8');
+  const parsed = JSON.parse(raw);
+  const modules = Array.isArray(parsed?.modules) ? parsed.modules : [];
+  const updatedModules = modules.map(module => {
+    const fromActions = actionMap.get(module.id) || [];
+    if (!Array.isArray(module.builderActionIds) && !fromActions.length) {
+      return module;
+    }
+    return { ...module, builderActionIds: fromActions };
+  });
+  const next = Array.isArray(parsed?.modules)
+    ? { ...parsed, modules: updatedModules }
+    : { modules: updatedModules };
+  await fs.writeFile(blueprintPath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
+}
+
+function buildModuleActionMap(actions) {
+  const map = new Map();
+  (Array.isArray(actions) ? actions : []).forEach(action => {
+    if (!action || !action.moduleId) {
+      return;
+    }
+    if (!map.has(action.moduleId)) {
+      map.set(action.moduleId, []);
+    }
+    map.get(action.moduleId).push(action.id);
+  });
+  return map;
+}

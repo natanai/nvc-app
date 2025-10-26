@@ -64,6 +64,9 @@
       "connection",
       "acceptance",
       "to-be-heard"
+    ],
+    "builderActionIds": [
+      "dismissive-responses"
     ]
   },
   {
@@ -116,6 +119,9 @@
       "to-be-heard",
       "mutuality",
       "understanding"
+    ],
+    "builderActionIds": [
+      "listening-boundaries"
     ]
   },
   {
@@ -156,6 +162,9 @@
       "respect",
       "support",
       "predictability"
+    ],
+    "builderActionIds": [
+      "presentation-departures"
     ]
   },
   {
@@ -197,6 +206,9 @@
       "fairness",
       "safety",
       "respect"
+    ],
+    "builderActionIds": [
+      "sports-officiating"
     ]
   },
   {
@@ -249,6 +261,9 @@
       "respect",
       "order",
       "safety"
+    ],
+    "builderActionIds": [
+      "queue-respect"
     ]
   },
   {
@@ -291,6 +306,9 @@
       "respect",
       "accountability",
       "reliability"
+    ],
+    "builderActionIds": [
+      "shared-upkeep"
     ]
   },
   {
@@ -325,6 +343,9 @@
       "security",
       "clarity",
       "respect"
+    ],
+    "builderActionIds": [
+      "job-security"
     ]
   },
   {
@@ -368,6 +389,9 @@
       "support",
       "growth",
       "respect"
+    ],
+    "builderActionIds": [
+      "feedback-clarity"
     ]
   },
   {
@@ -410,6 +434,9 @@
       "support",
       "dependability",
       "reliability"
+    ],
+    "builderActionIds": [
+      "housing-reliability"
     ]
   },
   {
@@ -446,6 +473,9 @@
       "respect",
       "consideration",
       "to-be-heard"
+    ],
+    "builderActionIds": [
+      "care-attention"
     ]
   },
   {
@@ -488,6 +518,9 @@
       "rest",
       "fairness",
       "support"
+    ],
+    "builderActionIds": [
+      "workload-boundaries"
     ]
   },
   {
@@ -523,6 +556,9 @@
       "connection",
       "consideration",
       "respect"
+    ],
+    "builderActionIds": [
+      "connection-presence"
     ]
   },
   {
@@ -558,6 +594,9 @@
       "calm",
       "respect",
       "consideration"
+    ],
+    "builderActionIds": [
+      "ride-environment"
     ]
   },
   {
@@ -594,6 +633,9 @@
       "rest",
       "peace",
       "consideration"
+    ],
+    "builderActionIds": [
+      "noise-disturbance"
     ]
   },
   {
@@ -629,6 +671,9 @@
       "safety",
       "predictability",
       "consideration"
+    ],
+    "builderActionIds": [
+      "safety-commute"
     ]
   },
   {
@@ -662,6 +707,9 @@
       "integrity",
       "connection",
       "accountability"
+    ],
+    "builderActionIds": [
+      "self-accountability"
     ]
   },
   {
@@ -697,6 +745,9 @@
       "reliability",
       "integrity",
       "mutuality"
+    ],
+    "builderActionIds": [
+      "collaboration-safeguards"
     ]
   },
   {
@@ -732,6 +783,9 @@
       "acknowledgement",
       "growth",
       "recognition"
+    ],
+    "builderActionIds": [
+      "milestone-celebration"
     ]
   },
   {
@@ -767,6 +821,9 @@
       "community",
       "nurturing",
       "support"
+    ],
+    "builderActionIds": [
+      "neighbor-support"
     ]
   },
   {
@@ -812,6 +869,9 @@
       "acknowledgement",
       "contribution",
       "belonging"
+    ],
+    "builderActionIds": [
+      "specific-appreciation"
     ]
   },
   {
@@ -847,6 +907,9 @@
       "to-be-heard",
       "understanding",
       "trust"
+    ],
+    "builderActionIds": [
+      "reflective-presence"
     ]
   },
   {
@@ -888,6 +951,9 @@
       "support",
       "fairness",
       "mutuality"
+    ],
+    "builderActionIds": [
+      "supportive-rebalancing"
     ]
   },
   {
@@ -922,6 +988,9 @@
       "safety",
       "trust",
       "integrity"
+    ],
+    "builderActionIds": [
+      "integrity-returns"
     ]
   },
   {
@@ -956,6 +1025,9 @@
       "rest",
       "respect",
       "reliability"
+    ],
+    "builderActionIds": [
+      "responsive-approvals"
     ]
   },
   {
@@ -998,6 +1070,9 @@
       "nurturing",
       "clarity",
       "serenity"
+    ],
+    "builderActionIds": [
+      "care-attentive-support"
     ]
   },
   {
@@ -1032,6 +1107,9 @@
       "reliability",
       "clarity",
       "accountability"
+    ],
+    "builderActionIds": [
+      "delivery-gaps"
     ]
   },
   {
@@ -1066,6 +1144,9 @@
       "respect",
       "reliability",
       "consideration"
+    ],
+    "builderActionIds": [
+      "punctuality-boundaries"
     ]
   },
   {
@@ -1100,6 +1181,9 @@
       "fairness",
       "clarity",
       "respect"
+    ],
+    "builderActionIds": [
+      "policy-warnings"
     ]
   },
   {
@@ -1135,6 +1219,9 @@
       "acknowledgement",
       "fairness",
       "integrity"
+    ],
+    "builderActionIds": [
+      "recognition-boundaries"
     ]
   },
   {
@@ -1175,6 +1262,9 @@
       "safety",
       "clarity",
       "trust"
+    ],
+    "builderActionIds": [
+      "care-communication-gaps"
     ]
   },
   {
@@ -1209,6 +1299,9 @@
       "consideration",
       "support",
       "relaxation"
+    ],
+    "builderActionIds": [
+      "commute-kindness"
     ]
   },
   {
@@ -1244,6 +1337,9 @@
       "clarity",
       "accountability",
       "mutuality"
+    ],
+    "builderActionIds": [
+      "collaboration-visibility"
     ]
   },
   {
@@ -1278,6 +1374,9 @@
       "safety",
       "dependability",
       "support"
+    ],
+    "builderActionIds": [
+      "housing-responsiveness"
     ]
   },
   {
@@ -1312,6 +1411,9 @@
       "trust",
       "reliability",
       "fairness"
+    ],
+    "builderActionIds": [
+      "commitment-followthrough"
     ]
   },
   {
@@ -1347,6 +1449,9 @@
       "safety",
       "consideration",
       "trust"
+    ],
+    "builderActionIds": [
+      "food-safety"
     ]
   },
   {
@@ -1381,6 +1486,9 @@
       "respect",
       "rest",
       "autonomy"
+    ],
+    "builderActionIds": [
+      "schedule-respect"
     ]
   },
   {
@@ -1420,6 +1528,9 @@
       "clarity",
       "support",
       "accountability"
+    ],
+    "builderActionIds": [
+      "support-followthrough"
     ]
   },
   {
@@ -1455,6 +1566,9 @@
       "safety",
       "reliability",
       "community"
+    ],
+    "builderActionIds": [
+      "infrastructure-response"
     ]
   },
   {
@@ -1488,6 +1602,9 @@
       "security",
       "safety",
       "predictability"
+    ],
+    "builderActionIds": [
+      "audit-login-breaches"
     ]
   },
   {
@@ -1522,6 +1639,9 @@
       "support",
       "rest",
       "love-caring"
+    ],
+    "builderActionIds": [
+      "bedtime-load-gaps"
     ]
   },
   {
@@ -1556,6 +1676,9 @@
       "security",
       "clarity",
       "predictability"
+    ],
+    "builderActionIds": [
+      "budget-freeze-alerts"
     ]
   },
   {
@@ -1590,6 +1713,9 @@
       "accountability",
       "inclusion",
       "participation"
+    ],
+    "builderActionIds": [
+      "civic-nonresponse"
     ]
   },
   {
@@ -1624,6 +1750,9 @@
       "justice",
       "clarity",
       "support"
+    ],
+    "builderActionIds": [
+      "courtroom-delays"
     ]
   },
   {
@@ -1658,6 +1787,9 @@
       "order",
       "respect",
       "support"
+    ],
+    "builderActionIds": [
+      "customer-mess-followup"
     ]
   },
   {
@@ -1692,6 +1824,9 @@
       "reliability",
       "consideration",
       "safety"
+    ],
+    "builderActionIds": [
+      "delivery-exposure"
     ]
   },
   {
@@ -1726,6 +1861,9 @@
       "support",
       "love-caring",
       "connection"
+    ],
+    "builderActionIds": [
+      "divorce-paper-silence"
     ]
   },
   {
@@ -1759,6 +1897,9 @@
       "participation",
       "support",
       "connection"
+    ],
+    "builderActionIds": [
+      "ensemble-dropoff"
     ]
   },
   {
@@ -1793,6 +1934,9 @@
       "security",
       "support",
       "predictability"
+    ],
+    "builderActionIds": [
+      "housing-eviction-notices"
     ]
   },
   {
@@ -1826,6 +1970,9 @@
       "accountability",
       "support",
       "reliability"
+    ],
+    "builderActionIds": [
+      "intake-walkaways"
     ]
   },
   {
@@ -1859,6 +2006,9 @@
       "reliability",
       "safety",
       "support"
+    ],
+    "builderActionIds": [
+      "irrigation-pump-alarms"
     ]
   },
   {
@@ -1892,6 +2042,9 @@
       "understanding",
       "clarity",
       "reliability"
+    ],
+    "builderActionIds": [
+      "lab-fluorescence-variance"
     ]
   },
   {
@@ -1926,6 +2079,9 @@
       "predictability",
       "consideration",
       "clarity"
+    ],
+    "builderActionIds": [
+      "last-minute-scope-shifts"
     ]
   },
   {
@@ -1960,6 +2116,9 @@
       "reliability",
       "support",
       "safety"
+    ],
+    "builderActionIds": [
+      "maintenance-dashboard-alerts"
     ]
   },
   {
@@ -1993,6 +2152,9 @@
       "peace",
       "understanding",
       "connection"
+    ],
+    "builderActionIds": [
+      "mediation-body-language"
     ]
   },
   {
@@ -2027,6 +2189,9 @@
       "predictability",
       "consideration",
       "peace"
+    ],
+    "builderActionIds": [
+      "meeting-overflow"
     ]
   },
   {
@@ -2059,6 +2224,9 @@
       "support",
       "rest",
       "safety"
+    ],
+    "builderActionIds": [
+      "monitor-distress-alerts"
     ]
   },
   {
@@ -2093,6 +2261,9 @@
       "support",
       "consistency",
       "rest"
+    ],
+    "builderActionIds": [
+      "on-call-chaos"
     ]
   },
   {
@@ -2127,6 +2298,9 @@
       "respect",
       "recognition",
       "belonging"
+    ],
+    "builderActionIds": [
+      "orchestra-cuts"
     ]
   },
   {
@@ -2161,6 +2335,9 @@
       "respect",
       "consideration",
       "belonging"
+    ],
+    "builderActionIds": [
+      "performance-reassignment"
     ]
   },
   {
@@ -2194,6 +2371,9 @@
       "safety",
       "clarity",
       "predictability"
+    ],
+    "builderActionIds": [
+      "radar-unknown-transponder"
     ]
   },
   {
@@ -2228,6 +2408,9 @@
       "connection",
       "support",
       "clarity"
+    ],
+    "builderActionIds": [
+      "relationship-breakup-text"
     ]
   },
   {
@@ -2260,6 +2443,9 @@
       "clarity",
       "support",
       "understanding"
+    ],
+    "builderActionIds": [
+      "school-discipline-calls"
     ]
   },
   {
@@ -2293,6 +2479,9 @@
       "safety",
       "security",
       "trust"
+    ],
+    "builderActionIds": [
+      "security-footage-breach"
     ]
   },
   {
@@ -2326,6 +2515,9 @@
       "connection",
       "understanding",
       "trust"
+    ],
+    "builderActionIds": [
+      "session-silent-sighs"
     ]
   },
   {
@@ -2360,6 +2552,9 @@
       "support",
       "community",
       "safety"
+    ],
+    "builderActionIds": [
+      "shelter-capacity-turnaway"
     ]
   },
   {
@@ -2394,6 +2589,9 @@
       "consideration",
       "fairness",
       "reliability"
+    ],
+    "builderActionIds": [
+      "telescope-double-book"
     ]
   },
   {
@@ -2428,6 +2626,9 @@
       "consideration",
       "clarity",
       "peace"
+    ],
+    "builderActionIds": [
+      "urgent-email-demands"
     ]
   },
   {
@@ -2462,6 +2663,9 @@
       "respect",
       "safety",
       "consideration"
+    ],
+    "builderActionIds": [
+      "voicemail-insults"
     ]
   },
   {
@@ -2502,6 +2706,9 @@
       "to-be-heard",
       "respect",
       "trust"
+    ],
+    "builderActionIds": [
+      "structured-direct-quote"
     ]
   },
   {
@@ -2517,12 +2724,17 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bI\\s+(?:heard|saw)\\s+[^\\n]+?\\s+(?:interrupt(?:ed)?|cut\\s+me\\s+off|talk(?:ed)?\\s+over\\s+me|speak\\s+over\\s+me)\\b[^.?!]*",
+        "pattern": "\\bstart(?:ed)?\\s+speaking\\s+(?:while|before)\\s+i\\s+(?:was\\s+still\\s+(?:mid-?sentence|sharing|talking)|finished|was\\s+finished)\\b[^.?!]*",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bspeak(?:ing)?\\s+over\\s+my\\s+(?:update|words?|sentence)\\b[^.?!]*",
         "flags": "iu"
       }
     ],
     "examples": [
-      "When on Monday morning, with my teammate in our standup, I heard them interrupt me mid-sentence."
+      "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence."
     ],
     "cueIds": [
       "structured-interruption"
@@ -2536,6 +2748,9 @@
       "respect",
       "to-be-heard",
       "consideration"
+    ],
+    "builderActionIds": [
+      "structured-interruption"
     ]
   },
   {
@@ -2551,12 +2766,17 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+(?:cross(?:ed)?\\s+the\\s+boundary|ignore(?:d)?\\s+the\\s+limit|break(?:ing)?\\s+the\\s+agreement)\\b[^.?!]*",
+        "pattern": "\\bopen(?:ed)?\\s+the\\s+file\\s+we\\s+agreed\\s+to\\s+keep\\s+private\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bwalk(?:ed)?\\s+into\\s+the\\s+lab\\s+without\\s+the\\s+badge\\s+we\\s+said\\s+was\\s+required\\b",
         "flags": "iu"
       }
     ],
     "examples": [
-      "When after dinner, with my brother in the living room, I saw him cross the boundary about talking over medical decisions."
+      "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private."
     ],
     "cueIds": [
       "structured-boundary-crossing"
@@ -2570,6 +2790,9 @@
       "respect",
       "safety",
       "autonomy"
+    ],
+    "builderActionIds": [
+      "structured-boundary-crossing"
     ]
   },
   {
@@ -2585,12 +2808,17 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+arrive\\b[^.?!]+\\blate\\b",
+        "pattern": "\\barriv(?:ed|es|ing)?\\s+[0-9]+\\s*(?:minutes?|mins?)\\s+after\\s+our\\s+agreed\\s+start\\s+time\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bwalk(?:ed)?\\s+in\\s+after\\s+we\\s+had\\s+already\\s+begun\\b[^.?!]*",
         "flags": "iu"
       }
     ],
     "examples": [
-      "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes late."
+      "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time."
     ],
     "cueIds": [
       "structured-late-arrival"
@@ -2604,6 +2832,9 @@
       "reliability",
       "consideration",
       "predictability"
+    ],
+    "builderActionIds": [
+      "structured-late-arrival"
     ]
   },
   {
@@ -2619,12 +2850,17 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+(?:leave\\s+before\\s+we\\s+finished|walk\\s+out\\s+before\\s+it\\s+ended|head\\s+out\\s+before\\s+we\\s+wrapped\\s+up|step\\s+away\\s+before\\s+the\\s+decision)\\b[^.?!]*",
+        "pattern": "\\bpack(?:ed)?\\s+up\\s+and\\s+leave\\s+before\\s+we\\s+finished\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bstep(?:ped)?\\s+out\\s+while\\s+i\\s+was\\s+still\\s+sharing\\b",
         "flags": "iu"
       }
     ],
     "examples": [
-      "When last night, with my partner on the couch, I saw them leave before we finished talking."
+      "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation."
     ],
     "cueIds": [
       "structured-left-early"
@@ -2638,6 +2874,9 @@
       "trust",
       "support",
       "reliability"
+    ],
+    "builderActionIds": [
+      "structured-left-early"
     ]
   },
   {
@@ -2672,6 +2911,9 @@
       "to-be-heard",
       "understanding",
       "connection"
+    ],
+    "builderActionIds": [
+      "structured-no-response"
     ]
   },
   {
@@ -2687,12 +2929,17 @@
     "detectors": [
       {
         "type": "regex",
-        "pattern": "\\bI\\s+(?:heard|saw)\\s+[^\\n]+?\\s+(?:offer\\s+to\\s+help|promise\\s+to\\s+support|volunteer\\s+to\\s+join|say\\s+they\\s+could\\s+cover)\\b[^.?!]*",
+        "pattern": "\\bsay\\s+they\\s+would\\s+cover\\s+the\\s+childcare\\s+swap\\s+rotation\\s+this\\s+week\\b",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\boffer(?:ed)?\\s+to\\s+take\\s+the\\s+next\\s+shift\\s+so\\s+i\\s+could\\s+rest\\b",
         "flags": "iu"
       }
     ],
     "examples": [
-      "When this afternoon, with my neighbor on the porch, I heard them say they'd cover the childcare swap rotation."
+      "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week."
     ],
     "cueIds": [
       "structured-support-offered"
@@ -2706,6 +2953,9 @@
       "support",
       "mutuality",
       "trust"
+    ],
+    "builderActionIds": [
+      "structured-support-offered"
     ]
   },
   {
@@ -2745,6 +2995,9 @@
       "clarity",
       "predictability",
       "consideration"
+    ],
+    "builderActionIds": [
+      "structured-digital-message"
     ]
   }
 ]

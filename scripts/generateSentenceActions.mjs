@@ -81,6 +81,89 @@ const ACTION_OVERRIDES = new Map([
       ],
     },
   ],
+  [
+    'structured-direct-quote',
+    {
+      verb: 'I heard',
+      detailAriaLabel: 'Exact words you heard',
+      details: [
+        { value: 'them say "We need this done today."' },
+        { value: 'them say "Let\'s wrap this up now."' },
+      ],
+    },
+  ],
+  [
+    'structured-interruption',
+    {
+      verb: 'I heard',
+      detailAriaLabel: 'What started while you were speaking',
+      details: [
+        { value: 'them start speaking while I was still mid-sentence' },
+        { value: 'them speak over my update before I finished sharing' },
+      ],
+    },
+  ],
+  [
+    'structured-boundary-crossing',
+    {
+      verb: 'I saw',
+      details: [
+        { value: 'them open the file we agreed to keep private' },
+        { value: 'them walk into the lab without the badge we said was required' },
+      ],
+    },
+  ],
+  [
+    'structured-late-arrival',
+    {
+      verb: 'I saw',
+      details: [
+        { value: 'them arrive ten minutes after our agreed start time' },
+        { value: 'them walk in after we had already begun the 9 a.m. check-in' },
+      ],
+    },
+  ],
+  [
+    'structured-left-early',
+    {
+      verb: 'I saw',
+      details: [
+        { value: 'them pack up and leave before we finished the conversation' },
+        { value: 'them step out while I was still sharing my update' },
+      ],
+    },
+  ],
+  [
+    'structured-no-response',
+    {
+      verb: 'I noticed',
+      details: [
+        { value: 'them stay silent after I asked for feedback' },
+        { value: 'them look away and offer no response to my question' },
+      ],
+    },
+  ],
+  [
+    'structured-support-offered',
+    {
+      verb: 'I heard',
+      details: [
+        { value: 'them say they would cover the childcare swap rotation this week' },
+        { value: 'them offer to take the next shift so I could rest' },
+      ],
+    },
+  ],
+  [
+    'structured-digital-message',
+    {
+      verb: 'I read',
+      detailAriaLabel: 'What the message said',
+      details: [
+        { value: 'a message that said "Please finish the report tonight."' },
+        { value: 'a message that said "Reminder: please submit the forms today."' },
+      ],
+    },
+  ],
 ]);
 
 

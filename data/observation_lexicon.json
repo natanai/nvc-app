@@ -292,25 +292,41 @@
   ],
   "structured_interruption": [
     {
-      "pattern": "\\bI\\s+(?:heard|saw)\\s+[^\\n]+?\\s+(?:interrupt(?:ed)?|cut\\s+me\\s+off|talk(?:ed)?\\s+over\\s+me|speak\\s+over\\s+me)\\b[^.?!]*",
+      "pattern": "\\bstart(?:ed)?\\s+speaking\\s+(?:while|before)\\s+i\\s+(?:was\\s+still\\s+(?:mid-?sentence|sharing|talking)|finished|was\\s+finished)\\b[^.?!]*",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bspeak(?:ing)?\\s+over\\s+my\\s+(?:update|words?|sentence)\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_boundary_cross": [
     {
-      "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+(?:cross(?:ed)?\\s+the\\s+boundary|ignore(?:d)?\\s+the\\s+limit|break(?:ing)?\\s+the\\s+agreement)\\b[^.?!]*",
+      "pattern": "\\bopen(?:ed)?\\s+the\\s+file\\s+we\\s+agreed\\s+to\\s+keep\\s+private\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bwalk(?:ed)?\\s+into\\s+the\\s+lab\\s+without\\s+the\\s+badge\\s+we\\s+said\\s+was\\s+required\\b",
       "flags": "iu"
     }
   ],
   "structured_late_arrival": [
     {
-      "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+arrive\\b[^.?!]+\\blate\\b",
+      "pattern": "\\barriv(?:ed|es|ing)?\\s+[0-9]+\\s*(?:minutes?|mins?)\\s+after\\s+our\\s+agreed\\s+start\\s+time\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bwalk(?:ed)?\\s+in\\s+after\\s+we\\s+had\\s+already\\s+begun\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_left_early": [
     {
-      "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+(?:leave\\s+before\\s+we\\s+finished|walk\\s+out\\s+before\\s+it\\s+ended|head\\s+out\\s+before\\s+we\\s+wrapped\\s+up|step\\s+away\\s+before\\s+the\\s+decision)\\b[^.?!]*",
+      "pattern": "\\bpack(?:ed)?\\s+up\\s+and\\s+leave\\s+before\\s+we\\s+finished\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\bstep(?:ped)?\\s+out\\s+while\\s+i\\s+was\\s+still\\s+sharing\\b",
       "flags": "iu"
     }
   ],
@@ -322,7 +338,11 @@
   ],
   "structured_support_offered": [
     {
-      "pattern": "\\bI\\s+(?:heard|saw)\\s+[^\\n]+?\\s+(?:offer\\s+to\\s+help|promise\\s+to\\s+support|volunteer\\s+to\\s+join|say\\s+they\\s+could\\s+cover)\\b[^.?!]*",
+      "pattern": "\\bsay\\s+they\\s+would\\s+cover\\s+the\\s+childcare\\s+swap\\s+rotation\\s+this\\s+week\\b",
+      "flags": "iu"
+    },
+    {
+      "pattern": "\\boffer(?:ed)?\\s+to\\s+take\\s+the\\s+next\\s+shift\\s+so\\s+i\\s+could\\s+rest\\b",
       "flags": "iu"
     }
   ],

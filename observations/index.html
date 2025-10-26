@@ -1570,6 +1570,9 @@ button.site-nav__magnet {
     border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
     background: color-mix(in srgb, #ffffff 92%, var(--sky) 8%);
     box-shadow: 0 6px 18px color-mix(in srgb, var(--outline) 10%, transparent);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .sentence-builder__intro {
@@ -1582,6 +1585,17 @@ button.site-nav__magnet {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+
+  .sentence-builder__slot-mount {
+    display: contents;
+  }
+
+  .sentence-builder__slot-mount > .sentence-builder__slot {
+    width: 100%;
   }
 
   .sentence-builder__slot {

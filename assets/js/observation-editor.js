@@ -86,6 +86,19 @@ function createEmptySentenceBuilderState() {
     slotState: {},
     sentence: '',
     lastSyncedText: '',
+    metadata: createEmptyBuilderMetadata(),
+    sections: null,
+  };
+}
+
+function createEmptyBuilderMetadata() {
+  return {
+    actionId: '',
+    moduleId: '',
+    detailId: '',
+    detailValue: '',
+    segments: {},
+    branches: {},
   };
 }
 
@@ -1508,31 +1521,78 @@ function renderSentenceBuilder() {
     message.className = 'sentence-builder__empty';
     message.textContent = 'Sentence builder is unavailable.';
     container.appendChild(message);
+    state.builder.sections = null;
     return;
   }
 
+  const mounts = ensureSentenceBuilderMounts(container);
+  updateSentenceBuilderSlot('time', mounts);
+  updateSentenceBuilderSlot('context', mounts);
+  updateSentenceBuilderSlot('sensory', mounts);
+  updateSentenceBuilderSlot('measure', mounts);
+}
+
+function ensureSentenceBuilderMounts(container) {
+  const existing = state.builder?.sections;
+  if (existing && existing.container === container) {
+    return existing;
+  }
+
   container.innerHTML = '';
+  const order = ['time', 'context', 'sensory', 'measure'];
+  const mounts = {};
+  order.forEach(slotId => {
+    const mount = document.createElement('div');
+    mount.className = 'sentence-builder__slot-mount';
+    mount.dataset.slotId = slotId;
+    container.appendChild(mount);
+    mounts[slotId] = mount;
+  });
+
+  const next = { container, order, mounts };
+  state.builder.sections = next;
+  return next;
+}
+
+function updateSentenceBuilderSlot(slotId, mounts) {
+  if (!slotId) {
+    return;
+  }
+  const sections = mounts || state.builder?.sections;
+  const data = state.builder?.data;
+  if (!sections || !data) {
+    return;
+  }
+  const mount = sections.mounts?.[slotId];
+  if (!mount) {
+    return;
+  }
+
   const slots = data.slots || {};
-
-  const timeSlot = buildSentenceBuilderTrackSection('time', slots.time, state.builder.slotState?.time, 'Time anchor');
-  if (timeSlot) {
-    container.appendChild(timeSlot);
+  let nextSection = null;
+  switch (slotId) {
+    case 'time':
+      nextSection = buildSentenceBuilderTrackSection('time', slots.time, state.builder.slotState?.time, 'Time anchor');
+      break;
+    case 'context':
+      nextSection = buildSentenceBuilderContextSection(slots.context, state.builder.slotState?.context);
+      break;
+    case 'sensory':
+      nextSection = buildSentenceBuilderActionSection(slots.sensory, state.builder.slotState?.sensory);
+      break;
+    case 'measure':
+      nextSection = buildSentenceBuilderTrackSection('measure', slots.measure, state.builder.slotState?.measure, 'Counts and quotes');
+      break;
+    default:
+      break;
   }
 
-  const contextSlot = buildSentenceBuilderContextSection(slots.context, state.builder.slotState?.context);
-  if (contextSlot) {
-    container.appendChild(contextSlot);
+  if (!nextSection) {
+    mount.innerHTML = '';
+    return;
   }
 
-  const sensorySlot = buildSentenceBuilderActionSection(slots.sensory, state.builder.slotState?.sensory);
-  if (sensorySlot) {
-    container.appendChild(sensorySlot);
-  }
-
-  const measureSlot = buildSentenceBuilderTrackSection('measure', slots.measure, state.builder.slotState?.measure, 'Counts and quotes');
-  if (measureSlot) {
-    container.appendChild(measureSlot);
-  }
+  mount.replaceChildren(nextSection);
 }
 
 function createInitialBuilderState(data) {
@@ -1944,7 +2004,7 @@ function handleBuilderTrackChange(slotId, nextTrackId) {
     ...state.builder.slotState,
     [slotId]: nextState,
   };
-  renderSentenceBuilder();
+  updateSentenceBuilderSlot(slotId);
   updateSentenceBuilderSentence({ immediate: true, force: true });
 }
 
@@ -2003,7 +2063,7 @@ function handleBuilderSegmentSelectChange(slotId, trackId, segment, branchId, va
     }
   }
 
-  renderSentenceBuilder();
+  updateSentenceBuilderSlot(slotId);
   updateSentenceBuilderSentence({ immediate: true });
 }
 
@@ -2103,7 +2163,7 @@ function buildSentenceBuilderContextSection(slotDef, contextState) {
     detailSelect.value = detailState.detail || '';
     detailSelect.addEventListener('change', event => {
       handleContextDetailChange(detailState.id, event.target.value);
-      renderSentenceBuilder();
+      updateSentenceBuilderSlot('context');
       updateSentenceBuilderSentence({ immediate: true });
     });
     row.appendChild(detailSelect);
@@ -2397,7 +2457,7 @@ function handleBuilderActionChange(slotDef, actionId) {
   const nextState = actionDef ? buildActionState(actionDef, slotDef, state.builder?.data) : { actionId: '', segments: {}, branches: {} };
   nextState.actionId = actionDef?.id || '';
   state.builder.slotState = { ...state.builder.slotState, sensory: nextState };
-  renderSentenceBuilder();
+  updateSentenceBuilderSlot('sensory');
   updateSentenceBuilderSentence({ immediate: true, force: true });
 }
 
@@ -2446,7 +2506,7 @@ function handleBuilderActionSegmentSelectChange(slotDef, actionDef, segment, bra
     }
   }
 
-  renderSentenceBuilder();
+  updateSentenceBuilderSlot('sensory');
   updateSentenceBuilderSentence({ immediate: true });
 }
 
@@ -2468,8 +2528,10 @@ function updateSentenceBuilderSentence(options = {}) {
   if (!state.builder?.data) {
     return;
   }
-  const sentence = buildSentenceFromBuilder();
+  const result = buildSentenceFromBuilder();
+  const sentence = result.text;
   state.builder.sentence = sentence;
+  state.builder.metadata = result.metadata;
 
   if (state.builder.mode !== 'builder') {
     state.builder.lastSyncedText = sentence;
@@ -2517,7 +2579,83 @@ function buildSentenceFromBuilder() {
   if (sentence && !/[.!?]"?$/.test(sentence)) {
     sentence += '.';
   }
-  return sentence;
+
+  const metadata = extractBuilderActionMetadata(slots.sensory, definitions.sensory);
+  return { text: sentence, metadata };
+}
+
+function extractBuilderActionMetadata(actionState, slotDef) {
+  const metadata = createEmptyBuilderMetadata();
+  if (!actionState) {
+    return metadata;
+  }
+  const actionDef = findActionDefinition(slotDef, actionState.actionId);
+  if (!actionDef) {
+    return metadata;
+  }
+
+  metadata.actionId = actionDef.id || '';
+  metadata.moduleId = actionDef.moduleId || actionDef.id || '';
+  metadata.segments = cloneBuilderSegments(actionState.segments);
+  metadata.branches = cloneBuilderBranches(actionState.branches);
+
+  const detailSegment = findActionDetailSegment(actionDef);
+  if (detailSegment) {
+    metadata.detailId = detailSegment.id || '';
+    const segments = actionState.segments || {};
+    const rawValue = typeof segments[detailSegment.id] === 'string' ? segments[detailSegment.id] : '';
+    const inputKey = `${detailSegment.id}__input`;
+    const customValue = typeof segments[inputKey] === 'string' ? segments[inputKey] : '';
+    let detailValue = customValue || rawValue;
+    if (!detailValue) {
+      const options = resolveBuilderOptions(detailSegment.options, state.builder?.data, slotDef);
+      const selectedOption = options.find(option => option.value === rawValue) || null;
+      if (selectedOption && selectedOption.label) {
+        detailValue = selectedOption.label;
+      }
+    }
+    metadata.detailValue = (detailValue || '').trim();
+  }
+
+  return metadata;
+}
+
+function cloneBuilderSegments(source) {
+  const target = {};
+  if (!source || typeof source !== 'object') {
+    return target;
+  }
+  Object.entries(source).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      target[key] = value;
+    }
+  });
+  return target;
+}
+
+function cloneBuilderBranches(source) {
+  const target = {};
+  if (!source || typeof source !== 'object') {
+    return target;
+  }
+  Object.entries(source).forEach(([branchId, entries]) => {
+    if (!entries || typeof entries !== 'object') {
+      return;
+    }
+    target[branchId] = cloneBuilderSegments(entries);
+  });
+  return target;
+}
+
+function findActionDetailSegment(actionDef) {
+  const segments = Array.isArray(actionDef?.segments) ? actionDef.segments : [];
+  for (let index = segments.length - 1; index >= 0; index -= 1) {
+    const segment = segments[index];
+    if (segment && segment.type === 'select') {
+      return segment;
+    }
+  }
+  return null;
 }
 
 function buildTimeText(trackState, slotDef) {
@@ -2785,6 +2923,8 @@ function handleClear() {
   if (state.builder) {
     state.builder.sentence = '';
     state.builder.lastSyncedText = '';
+    state.builder.metadata = createEmptyBuilderMetadata();
+    state.builder.sections = null;
     if (state.builder.data) {
       state.builder.slotState = createInitialBuilderState(state.builder.data);
     }
@@ -3078,6 +3218,26 @@ function defaultValidityMessage(status) {
   }
 }
 
+function deriveBuilderOverride(currentInput) {
+  const metadata = state.builder?.metadata || null;
+  const sentence = typeof state.builder?.sentence === 'string' ? state.builder.sentence.trim() : '';
+  const comparison = typeof currentInput === 'string' ? currentInput : '';
+  if (!metadata || !metadata.moduleId || !sentence || !comparison) {
+    return null;
+  }
+  if (normalizeWhitespace(sentence) !== normalizeWhitespace(comparison)) {
+    return null;
+  }
+  return {
+    moduleId: metadata.moduleId,
+    actionId: metadata.actionId,
+    detailId: metadata.detailId,
+    detailValue: metadata.detailValue,
+    segments: cloneBuilderSegments(metadata.segments),
+    branches: cloneBuilderBranches(metadata.branches),
+  };
+}
+
 function updateDetectionStatus(rawInput, trimmedInput) {
   const sourceText = typeof rawInput === 'string' ? rawInput : '';
   const trimmed = typeof trimmedInput === 'string' ? trimmedInput : sourceText.trim();
@@ -3126,7 +3286,8 @@ function updateDetectionStatus(rawInput, trimmedInput) {
   }
 
   const suggestionSource = hasCueLibrary ? library : state.cues || [];
-  const suggestion = suggestFromObservation(trimmed, suggestionSource, 4);
+  const builderOverride = deriveBuilderOverride(trimmed);
+  const suggestion = suggestFromObservation(trimmed, suggestionSource, 4, { builderOverride });
   const hits = Array.isArray(suggestion.hits) ? suggestion.hits : [];
   state.cueHighlightRanges = buildCueHighlightRanges(sourceText, hits);
   state.detectionMatches = hits.length;

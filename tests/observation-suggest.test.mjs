@@ -45,6 +45,40 @@ test('limits module hits and reports overflow', () => {
   assert.equal(result.overflow, 1);
 });
 
+test('honors builder override when matchers are absent', () => {
+  const observation =
+    'When yesterday afternoon, with my teammate in the conference room, I heard them start speaking while I was still mid-sentence.';
+  const library = {
+    cues: [],
+    modules: [
+      {
+        id: 'structured-interruption',
+        label: 'Spoken interruption',
+        summary: 'Someone begins speaking before the first speaker has finished.',
+        slotIds: ['time', 'context', 'sensory'],
+        matchers: [],
+        feelings: ['frustrated'],
+        needs: ['respect'],
+      },
+    ],
+  };
+
+  const builderOverride = {
+    moduleId: 'structured-interruption',
+    actionId: 'structured-interruption',
+    detailId: 'structured-interruption-detail',
+    detailValue: 'them start speaking while I was still mid-sentence',
+  };
+
+  const result = suggestFromObservation(observation, library, 6, { builderOverride });
+
+  assert.equal(result.hits.length, 1);
+  assert.equal(result.hits[0].module.id, 'structured-interruption');
+  assert.equal(result.hits[0].match.type, 'builder');
+  assert.deepEqual(new Set(result.slots.coveredIds), new Set(['time', 'context', 'sensory']));
+  assert.equal(result.overflow, 0);
+});
+
 function createMockCueLibrary() {
   const cues = [
     {

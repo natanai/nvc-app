@@ -3102,7 +3102,7 @@
           "segments": [
             {
               "type": "fixed",
-              "value": "I saw"
+              "value": "I heard"
             },
             {
               "type": "select",
@@ -3113,11 +3113,15 @@
             {
               "type": "select",
               "id": "structured-direct-quote-detail",
-              "ariaLabel": "What happened",
+              "ariaLabel": "Exact words you heard",
               "options": [
                 {
                   "value": "them say \"We need this done today.\"",
                   "label": "Them say \"We need this done today.\""
+                },
+                {
+                  "value": "them say \"Let's wrap this up now.\"",
+                  "label": "Them say \"Let's wrap this up now.\""
                 },
                 {
                   "value": "",
@@ -3139,7 +3143,7 @@
           "segments": [
             {
               "type": "fixed",
-              "value": "I saw"
+              "value": "I heard"
             },
             {
               "type": "select",
@@ -3150,11 +3154,15 @@
             {
               "type": "select",
               "id": "structured-interruption-detail",
-              "ariaLabel": "What happened",
+              "ariaLabel": "What started while you were speaking",
               "options": [
                 {
-                  "value": "them interrupt me mid-sentence",
-                  "label": "Them interrupt me mid-sentence"
+                  "value": "them start speaking while I was still mid-sentence",
+                  "label": "Them start speaking while I was still mid-sentence"
+                },
+                {
+                  "value": "them speak over my update before I finished sharing",
+                  "label": "Them speak over my update before I finished sharing"
                 },
                 {
                   "value": "",
@@ -3190,8 +3198,12 @@
               "ariaLabel": "What happened",
               "options": [
                 {
-                  "value": "them cross the boundary about talking over medical decisions",
-                  "label": "Them cross the boundary about talking over medical decisions"
+                  "value": "them open the file we agreed to keep private",
+                  "label": "Them open the file we agreed to keep private"
+                },
+                {
+                  "value": "them walk into the lab without the badge we said was required",
+                  "label": "Them walk into the lab without the badge we said was required"
                 },
                 {
                   "value": "",
@@ -3227,8 +3239,12 @@
               "ariaLabel": "What happened",
               "options": [
                 {
-                  "value": "them arrive ten minutes late",
-                  "label": "Them arrive ten minutes late"
+                  "value": "them arrive ten minutes after our agreed start time",
+                  "label": "Them arrive ten minutes after our agreed start time"
+                },
+                {
+                  "value": "them walk in after we had already begun the 9 a.m. check-in",
+                  "label": "Them walk in after we had already begun the 9 a.m. check-in"
                 },
                 {
                   "value": "",
@@ -3264,8 +3280,12 @@
               "ariaLabel": "What happened",
               "options": [
                 {
-                  "value": "them leave before we finished talking",
-                  "label": "Them leave before we finished talking"
+                  "value": "them pack up and leave before we finished the conversation",
+                  "label": "Them pack up and leave before we finished the conversation"
+                },
+                {
+                  "value": "them step out while I was still sharing my update",
+                  "label": "Them step out while I was still sharing my update"
                 },
                 {
                   "value": "",
@@ -3305,6 +3325,10 @@
                   "label": "Them stay silent after I asked for feedback"
                 },
                 {
+                  "value": "them look away and offer no response to my question",
+                  "label": "Them look away and offer no response to my question"
+                },
+                {
                   "value": "",
                   "label": "describe another detail…",
                   "input": {
@@ -3324,7 +3348,7 @@
           "segments": [
             {
               "type": "fixed",
-              "value": "I saw"
+              "value": "I heard"
             },
             {
               "type": "select",
@@ -3338,8 +3362,12 @@
               "ariaLabel": "What happened",
               "options": [
                 {
-                  "value": "them say they'd cover the childcare swap rotation",
-                  "label": "Them say they'd cover the childcare swap rotation"
+                  "value": "them say they would cover the childcare swap rotation this week",
+                  "label": "Them say they would cover the childcare swap rotation this week"
+                },
+                {
+                  "value": "them offer to take the next shift so I could rest",
+                  "label": "Them offer to take the next shift so I could rest"
                 },
                 {
                   "value": "",
@@ -3372,11 +3400,15 @@
             {
               "type": "select",
               "id": "structured-digital-message-detail",
-              "ariaLabel": "What happened",
+              "ariaLabel": "What the message said",
               "options": [
                 {
-                  "value": "said \"Please finish the report tonight.\"",
-                  "label": "Said \"Please finish the report tonight.\""
+                  "value": "a message that said \"Please finish the report tonight.\"",
+                  "label": "A message that said \"Please finish the report tonight.\""
+                },
+                {
+                  "value": "a message that said \"Reminder: please submit the forms today.\"",
+                  "label": "A message that said \"Reminder: please submit the forms today.\""
                 },
                 {
                   "value": "",
