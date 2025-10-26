@@ -2,7 +2,6 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { sanitizeObservationCues } from './sanitizeObservationCues.mjs';
 import { updateObservationGuidePage } from './observation-guide.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
@@ -2116,7 +2115,6 @@ function updateSupportLaneNav() {
 }
 
 function build() {
-  sanitizeObservationCues();
   renderHome();
   renderCategory('faux-feelings', data.fauxFeelings);
   renderCategory('feelings', data.feelings);
