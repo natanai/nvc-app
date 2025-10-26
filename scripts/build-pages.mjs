@@ -12,6 +12,93 @@ const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
 const MAX_VISIBLE_SUPPORTING_SOURCES = 2;
 
+const KNOWN_SCOPES = new Set([
+  'home',
+  'faux-feelings',
+  'feelings',
+  'needs',
+  'inventory',
+  'observation-guide',
+  'support-lane',
+]);
+
+const DEFAULT_SCOPES = [
+  'home',
+  'faux-feelings',
+  'feelings',
+  'needs',
+  'inventory',
+  'observation-guide',
+  'support-lane',
+];
+
+const DIRECTORIES_BY_SCOPE = new Map([
+  ['faux-feelings', ['faux-feelings']],
+  ['feelings', ['feelings']],
+  ['needs', ['needs']],
+  ['inventory', ['inventory']],
+]);
+
+function parseScopeArgs(argv) {
+  let scopeValue = null;
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+
+    if (arg === '--scope') {
+      const next = argv[index + 1];
+      if (!next || next.startsWith('-')) {
+        console.error('Missing value for --scope option.');
+        process.exit(1);
+      }
+      scopeValue = next;
+      index += 1;
+    } else if (arg.startsWith('--scope=')) {
+      scopeValue = arg.slice('--scope='.length);
+    }
+  }
+
+  if (scopeValue == null) {
+    return null;
+  }
+
+  const scopes = scopeValue
+    .split(',')
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (scopes.length === 0) {
+    console.error('The --scope option requires at least one scope name.');
+    process.exit(1);
+  }
+
+  const invalidScopes = scopes.filter((scope) => !KNOWN_SCOPES.has(scope));
+
+  if (invalidScopes.length > 0) {
+    console.error(`Unknown scope(s): ${invalidScopes.join(', ')}`);
+    console.error(`Valid scopes: ${Array.from(KNOWN_SCOPES).join(', ')}`);
+    process.exit(1);
+  }
+
+  return new Set(scopes);
+}
+
+const requestedScopes = parseScopeArgs(process.argv.slice(2));
+const activeScopes = requestedScopes ? Array.from(requestedScopes) : DEFAULT_SCOPES;
+const directoriesToResetSet = new Set();
+
+for (const scope of activeScopes) {
+  const directories = DIRECTORIES_BY_SCOPE.get(scope);
+  if (!directories) {
+    continue;
+  }
+  for (const directory of directories) {
+    directoriesToResetSet.add(directory);
+  }
+}
+
+const directoriesToReset = Array.from(directoriesToResetSet);
+
 const HOME_ICON_INLINE = (basePath = '') => {
   const normalizedBase = basePath || '';
   return `
@@ -654,7 +741,6 @@ const themePreloadScript = (basePath) => {
       })();
     </script>`;
 };
-const directoriesToReset = ['faux-feelings', 'feelings', 'needs', 'inventory'];
 for (const dir of directoriesToReset) {
   rmSync(join(rootDir, dir), { recursive: true, force: true });
 }
@@ -1778,6 +1864,15 @@ function renderInventoryPage() {
             </button>
             <button
               type="button"
+              id="inventory-email-personal"
+              class="inventory-button inventory-button--compact"
+              aria-label="Email a personal strategies export"
+            >
+              <span class="inventory-button__glyph" aria-hidden="true">✉</span>
+              <span class="inventory-button__text">Email me my strategies</span>
+            </button>
+            <button
+              type="button"
               id="inventory-import-trigger"
               class="inventory-button inventory-button--ghost inventory-button--compact"
               aria-label="Import localStorage JSON"
@@ -2114,31 +2209,65 @@ function updateSupportLaneNav() {
   }
 }
 
-function build() {
-  renderHome();
-  renderCategory('faux-feelings', data.fauxFeelings);
-  renderCategory('feelings', data.feelings);
-  renderBodyCuesPage();
-  renderCategory('needs', data.needs);
-  renderInventoryPage();
-  renderInventoryJournalPage(data.needs);
+function build(scopeSet) {
+  const shouldBuild = (scope) => !scopeSet || scopeSet.has(scope);
 
-  const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
+  const buildHome = shouldBuild('home');
+  const buildFauxFeelings = shouldBuild('faux-feelings');
+  const buildFeelings = shouldBuild('feelings');
+  const buildNeeds = shouldBuild('needs');
+  const buildInventory = shouldBuild('inventory');
+  const buildObservationGuide = shouldBuild('observation-guide');
+  const buildSupportLane = shouldBuild('support-lane');
 
-  for (const fauxFeeling of data.fauxFeelings) {
-    renderFauxFeeling(fauxFeeling);
+  if (buildHome) {
+    renderHome();
   }
 
-  for (const feeling of data.feelings) {
-    renderFeeling(feeling);
+  if (buildFauxFeelings) {
+    renderCategory('faux-feelings', data.fauxFeelings);
   }
 
-  for (const need of data.needs) {
-    renderNeed(need, strategyLookup);
+  if (buildFeelings) {
+    renderCategory('feelings', data.feelings);
+    renderBodyCuesPage();
   }
 
-  updateObservationGuidePage();
-  updateSupportLaneNav();
+  if (buildNeeds) {
+    renderCategory('needs', data.needs);
+  }
+
+  if (buildInventory) {
+    renderInventoryPage();
+    renderInventoryJournalPage(data.needs);
+  }
+
+  if (buildFauxFeelings) {
+    for (const fauxFeeling of data.fauxFeelings) {
+      renderFauxFeeling(fauxFeeling);
+    }
+  }
+
+  if (buildFeelings) {
+    for (const feeling of data.feelings) {
+      renderFeeling(feeling);
+    }
+  }
+
+  if (buildNeeds) {
+    const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
+    for (const need of data.needs) {
+      renderNeed(need, strategyLookup);
+    }
+  }
+
+  if (buildObservationGuide) {
+    updateObservationGuidePage();
+  }
+
+  if (buildSupportLane) {
+    updateSupportLaneNav();
+  }
 }
 
-build();
+build(requestedScopes);
