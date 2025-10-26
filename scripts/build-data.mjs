@@ -86,6 +86,17 @@ function slugify(text) {
     .replace(/^-+|-+$/g, '');
 }
 
+function normalizeNeedSatisfaction(value) {
+  if (typeof value !== 'string') {
+    return 'unmet';
+  }
+  const text = value.trim().toLowerCase();
+  if (text === 'met' || text === 'unmet' || text === 'both') {
+    return text;
+  }
+  return 'unmet';
+}
+
 function parseSupportingSources(value) {
   const bulletRegex = /(?:[-•]\s*)?https?:\/\/\S+(?:[^-•]|-(?!\s*https?:\/\/))*/g;
 
@@ -339,6 +350,7 @@ const feelings = rawFeelings.map((row) => {
   const slugOverride = (row['Slug Override'] || '').trim();
   const slug = slugOverride || baseSlug;
   const poemEntry = poemLookup.get(slug) || poemLookup.get(baseSlug) || { poemQuote: '', poemUrl: '' };
+  const needSatisfaction = normalizeNeedSatisfaction(row['Need Satisfaction']);
 
   return {
     title,
@@ -346,6 +358,7 @@ const feelings = rawFeelings.map((row) => {
     description: row['Page Summary'] || '',
     fauxFeelings: uniqueByTitle(splitList(row['Related Faux Feelings']).map((title) => ({ title }))),
     needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
+    needSatisfaction,
     bodySignals: splitList(row['Body Signal Notes']),
     poemQuote: poemEntry.poemQuote,
     poemUrl: poemEntry.poemUrl,

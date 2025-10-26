@@ -7,7 +7,8 @@ import {
   getObservationFormulaSlotById,
   resolveObservationFormulaSlotsForHighlightKey,
 } from '/lib/observationFormula.js';
-import { loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
+import { collectCatalogFeelings, loadCueLibrary, suggestFromObservation } from '/lib/observationSuggest.js';
+import { computeFallbackSuggestion } from '/lib/observationFallback.js';
 
 const state = {
   text: '',
@@ -28,7 +29,7 @@ const state = {
   positiveHighlightRanges: [],
   activeHighlightKey: '',
   detectionMatchLimit: 1,
-  detectionNearLimit: 6,
+  detectionNearLimit: 4,
   detectorStats: null,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
@@ -37,6 +38,7 @@ const state = {
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
   anchorRewrite: { when: '', where: '' },
+  feelingsMode: 'unmet',
 };
 
 let guideNavigationBound = false;
@@ -67,7 +69,7 @@ const DETECTION_LABELS = {
 
 const DETECTION_MIN_WORDS = 2;
 const DETECTION_MATCH_LIMIT = 1;
-const DETECTION_NEAR_LIMIT = 6;
+const DETECTION_NEAR_LIMIT = 4;
 
 const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
 const OBSERVATION_GUIDELINE_COMPLETE =
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Promise.all([
     loadCatalog('/data/index.json'),
-    loadCueLibrary('/data/observation_cues.sanitized.csv').catch(error => {
+    loadCueLibrary('/data/observation_cues.csv').catch(error => {
       console.warn('Unable to load observation cue map', error);
       return createEmptyCueLibrary();
     }),
@@ -110,6 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Unable to load observation helpers', error);
     });
 });
+
+function setFeelingsMode(mode) {
+  const normalized = mode === 'met' ? 'met' : 'unmet';
+  if (state.feelingsMode !== normalized) {
+    state.feelingsMode = normalized;
+    renderSuggestions();
+  }
+}
 
 function bind() {
   const textarea = document.getElementById('observation-text');
@@ -166,6 +176,43 @@ function bind() {
       startFallbackSearch();
     });
   }
+
+  const feelingsSwitch = document.querySelector('[data-feelings-switch]');
+  if (feelingsSwitch) {
+    const toggleMode = () => {
+      setFeelingsMode(state.feelingsMode === 'met' ? 'unmet' : 'met');
+    };
+    feelingsSwitch.addEventListener('click', event => {
+      event.preventDefault();
+      toggleMode();
+    });
+    feelingsSwitch.addEventListener('keydown', event => {
+      if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'Enter') {
+        event.preventDefault();
+        toggleMode();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        setFeelingsMode('unmet');
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        setFeelingsMode('met');
+      }
+    });
+  }
+
+  const feelingsSwitchTargets = document.querySelectorAll('[data-feelings-switch-mode]');
+  feelingsSwitchTargets.forEach(target => {
+    const mode = target?.dataset?.feelingsSwitchMode === 'met' ? 'met' : 'unmet';
+    target.addEventListener('click', () => {
+      setFeelingsMode(mode);
+    });
+    target.addEventListener('keydown', event => {
+      if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'Enter') {
+        event.preventDefault();
+        setFeelingsMode(mode);
+      }
+    });
+  });
 
   bindGuideNavigation();
 
@@ -282,7 +329,9 @@ function renderAnalysis() {
   }
 
   if (submitButton) {
-    submitButton.disabled = !canSubmitMatches();
+    if (state.mode !== 'results') {
+      submitButton.disabled = !canSubmitMatches();
+    }
   }
 
   if (editor) {
@@ -880,9 +929,28 @@ function renderSuggestions() {
   const fallbackRunning = document.getElementById('observation-fallback-running');
   const actionButton = document.getElementById('observation-submit');
   const fallbackStart = document.getElementById('observation-fallback-start');
+  const feelingsSwitch = document.querySelector('[data-feelings-switch]');
+  const feelingsSwitchLabels = document.querySelectorAll('[data-feelings-switch-label]');
 
   if (!feelingsHost || !needsHost || !whyHost || !preview) {
     return;
+  }
+
+  if (feelingsSwitch) {
+    const isMet = state.feelingsMode === 'met';
+    feelingsSwitch.setAttribute('aria-checked', isMet ? 'true' : 'false');
+    feelingsSwitch.classList.toggle('is-on', isMet);
+  }
+
+  feelingsSwitchLabels.forEach(label => {
+    const mode = label?.dataset?.feelingsSwitchLabel === 'met' ? 'met' : 'unmet';
+    label.classList.toggle('is-active', state.feelingsMode === mode);
+  });
+
+  if (feelingsEmpty) {
+    const unmetMessage = 'We’ll list possible feelings here once we pick up observational cues.';
+    const metMessage = 'We’ll list possible feelings here once we spot how those needs feel when met.';
+    feelingsEmpty.textContent = state.feelingsMode === 'met' ? metMessage : unmetMessage;
   }
 
   preview.textContent = state.lastSubmitted ? `“${state.lastSubmitted}”` : '';
@@ -893,7 +961,8 @@ function renderSuggestions() {
     ? state.fallback.queue[state.fallback.index] || createEmptySuggestionSet()
     : direct;
 
-  populateChipList(feelingsHost, feelingsEmpty, current.feelings || []);
+  const feelings = resolveSuggestionFeelings(current);
+  populateChipList(feelingsHost, feelingsEmpty, feelings);
   populateChipList(needsHost, needsEmpty, current.needs || []);
 
   const slotSupportSummary = typeof current.slotSummary?.supportSummary === 'string'
@@ -981,6 +1050,10 @@ function renderSuggestions() {
       actionButton.textContent = 'Next match';
       actionButton.dataset.action = 'next';
       actionButton.disabled = false;
+    } else if (state.mode === 'results') {
+      actionButton.textContent = 'Matches loaded';
+      actionButton.dataset.action = 'done';
+      actionButton.disabled = true;
     } else {
       actionButton.textContent = 'Load possible matches';
       actionButton.dataset.action = 'submit';
@@ -1133,9 +1206,13 @@ function buildSuggestions(text) {
     return createEmptySuggestionSet();
   }
   const suggestion = suggestFromObservation(text, state.cueLibrary || state.cues || [], 8);
+  const needs = buildSuggestionEntries(suggestion.needs, 'need');
+  const feelings = buildSuggestionEntries(suggestion.feelings, 'feeling');
+  const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
   return {
-    feelings: buildSuggestionEntries(suggestion.feelings, 'feeling'),
-    needs: buildSuggestionEntries(suggestion.needs, 'need'),
+    feelings,
+    metFeelings,
+    needs,
     cues: suggestion.why || [],
     modules: Array.isArray(suggestion.modules) ? suggestion.modules : [],
     slotSummary: suggestion.slots || null,
@@ -1146,6 +1223,37 @@ function buildSuggestions(text) {
         ? suggestion.hits.length
         : 0,
   };
+}
+
+function deriveCatalogFeelings(needs, mode, limit) {
+  const entries = Array.isArray(needs) ? needs : [];
+  if (!entries.length) {
+    return [];
+  }
+  const slugs = collectCatalogFeelings(
+    state.catalog,
+    entries.map(entry => entry?.slug),
+    mode,
+    limit,
+  );
+  return buildSuggestionEntries(slugs, 'feeling');
+}
+
+function resolveSuggestionFeelings(suggestion) {
+  const mode = state.feelingsMode === 'met' ? 'met' : 'unmet';
+  if (!suggestion) {
+    return [];
+  }
+  if (mode === 'met') {
+    if (Array.isArray(suggestion.metFeelings) && suggestion.metFeelings.length) {
+      return suggestion.metFeelings;
+    }
+    return deriveCatalogFeelings(suggestion.needs, 'met', 4);
+  }
+  if (Array.isArray(suggestion.feelings) && suggestion.feelings.length) {
+    return suggestion.feelings;
+  }
+  return deriveCatalogFeelings(suggestion.needs, 'unmet', 4);
 }
 
 function buildSuggestionEntries(slugs, kind) {
@@ -1247,7 +1355,39 @@ function createEmptyCatalog() {
     feelings: new Map(),
     needs: new Map(),
     fauxFeelings: new Map(),
+    feelingsByNeed: new Map(),
   };
+}
+
+function normalizeCatalogNeedSatisfaction(value) {
+  if (typeof value !== 'string') {
+    return 'unmet';
+  }
+  const text = value.trim().toLowerCase();
+  if (text === 'met' || text === 'unmet' || text === 'both') {
+    return text;
+  }
+  return 'unmet';
+}
+
+const CATEGORY_MET_FEELING_FALLBACKS = new Map([
+  ['autonomy-supportive care', ['calm', 'relieved', 'contented', 'hopeful']],
+  ['authenticity', ['inspired', 'proud', 'energized', 'joyful']],
+  ['autonomy/freedom', ['hopeful', 'energized', 'playful', 'excited']],
+  ['beauty/peace/play', ['peaceful', 'joyful', 'relaxed', 'playful']],
+  ['community/belonging', ['contented', 'peaceful', 'relaxed', 'joyful']],
+  ['empathy/understanding', ['hopeful', 'calm', 'contented', 'inspired']],
+  ['hurt', ['relieved', 'calm', 'peaceful', 'contented']],
+  ['love/caring', ['relaxed', 'peaceful', 'joyful', 'contented']],
+  ['meaning/contribution', ['inspired', 'proud', 'energized', 'hopeful']],
+  ['safety/security', ['calm', 'relieved', 'peaceful', 'contented']],
+  ['sustenance/health', ['calm', 'relaxed', 'energized', 'contented']],
+  ['default', ['calm', 'hopeful', 'contented', 'joyful']],
+]);
+
+function resolveCategoryMetFallbacks(category) {
+  const key = typeof category === 'string' ? category.trim().toLowerCase() : '';
+  return CATEGORY_MET_FEELING_FALLBACKS.get(key) || CATEGORY_MET_FEELING_FALLBACKS.get('default') || [];
 }
 
 async function loadCatalog(url) {
@@ -1311,15 +1451,40 @@ function buildCatalog(data) {
   const feelings = new Map();
   const needs = new Map();
   const fauxFeelings = new Map();
+  const feelingsByNeed = new Map();
 
   if (Array.isArray(data?.feelings)) {
     data.feelings.forEach(item => {
       if (item?.slug) {
-        feelings.set(item.slug, {
-          title: item.title || formatTitle(item.slug),
-          slug: item.slug,
+        const slug = item.slug;
+        const fauxFeelingsList = Array.isArray(item.fauxFeelings)
+          ? item.fauxFeelings.map(entry => entry.slug).filter(Boolean)
+          : [];
+        const needSatisfaction = normalizeCatalogNeedSatisfaction(item.needSatisfaction);
+        const satisfactionBuckets = needSatisfaction === 'both'
+          ? ['unmet', 'met']
+          : needSatisfaction === 'met'
+            ? ['met']
+            : ['unmet'];
+        feelings.set(slug, {
+          title: item.title || formatTitle(slug),
+          slug,
           aliases: item.aliases || [],
-          fauxFeelings: Array.isArray(item.fauxFeelings) ? item.fauxFeelings.map(entry => entry.slug).filter(Boolean) : [],
+          fauxFeelings: fauxFeelingsList,
+          needSatisfaction,
+        });
+
+        const needSlugs = Array.isArray(item.needs)
+          ? item.needs.map(entry => entry.slug).filter(Boolean)
+          : [];
+        needSlugs.forEach(needSlug => {
+          if (!feelingsByNeed.has(needSlug)) {
+            feelingsByNeed.set(needSlug, { unmet: new Set(), met: new Set() });
+          }
+          const bucket = feelingsByNeed.get(needSlug);
+          satisfactionBuckets.forEach(bucketKey => {
+            bucket[bucketKey].add(slug);
+          });
         });
       }
     });
@@ -1332,6 +1497,7 @@ function buildCatalog(data) {
           title: item.title || formatTitle(item.slug),
           slug: item.slug,
           aliases: item.aliases || [],
+          category: item.category || '',
         });
       }
     });
@@ -1351,11 +1517,48 @@ function buildCatalog(data) {
     });
   }
 
-  return { feelings, needs, fauxFeelings };
+  needs.forEach((needEntry, needSlug) => {
+    if (!feelingsByNeed.has(needSlug)) {
+      feelingsByNeed.set(needSlug, { unmet: new Set(), met: new Set() });
+    }
+    const entry = feelingsByNeed.get(needSlug);
+    if (!(entry.unmet instanceof Set)) {
+      entry.unmet = new Set(Array.isArray(entry.unmet) ? entry.unmet : []);
+    }
+    if (!(entry.met instanceof Set)) {
+      entry.met = new Set(Array.isArray(entry.met) ? entry.met : []);
+    }
+    if (entry.met.size < 4) {
+      const fallbackSlugs = resolveCategoryMetFallbacks(needEntry?.category);
+      fallbackSlugs.forEach(slug => {
+        const record = feelings.get(slug);
+        if (record && record.needSatisfaction !== 'unmet') {
+          entry.met.add(slug);
+        }
+      });
+    }
+  });
+
+  const normalizedFeelingsByNeed = new Map();
+  feelingsByNeed.forEach((value, needSlug) => {
+    const unmet = sortSlugsByFeelingTitle(Array.from(value.unmet || []), feelings);
+    const met = sortSlugsByFeelingTitle(Array.from(value.met || []), feelings);
+    normalizedFeelingsByNeed.set(needSlug, { unmet, met });
+  });
+
+  return { feelings, needs, fauxFeelings, feelingsByNeed: normalizedFeelingsByNeed };
+}
+
+function sortSlugsByFeelingTitle(slugs, feelingsMap) {
+  return (Array.isArray(slugs) ? slugs : [])
+    .map(slug => ({ slug, title: feelingsMap.get(slug)?.title || formatTitle(slug) }))
+    .filter(entry => entry.slug && entry.title)
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .map(entry => entry.slug);
 }
 
 function createEmptySuggestionSet() {
-  return { feelings: [], needs: [], cues: [], modules: [], slotSummary: null, overflow: 0, total: 0 };
+  return { feelings: [], metFeelings: [], needs: [], cues: [], modules: [], slotSummary: null, overflow: 0, total: 0 };
 }
 
 function createEmptyCueLibrary() {
@@ -1401,6 +1604,10 @@ function hasSuggestions(set) {
 }
 
 function handlePrimaryAction() {
+  const submitButton = document.getElementById('observation-submit');
+  if (submitButton?.dataset?.action === 'done') {
+    return;
+  }
   if (state.mode === 'results' && state.fallback.active && state.fallback.queue.length > 1) {
     advanceFallback();
     return;
@@ -1534,70 +1741,26 @@ function computeFallbackQueue(text) {
   if (!text || !state.cues.length) {
     return [];
   }
-
-  const tokens = tokenizeForScore(text);
-  const tokenSet = new Set(tokens);
-  const normalized = text.toLowerCase();
-
-  const candidates = state.cues
-    .map(cue => {
-      const feelings = buildSuggestionEntries(cue.feelings, 'feeling');
-      const needs = buildSuggestionEntries(cue.needs, 'need');
-      if (!feelings.length && !needs.length) {
-        return null;
-      }
-      const score = scoreCueMatch(tokenSet, normalized, cue);
-      return { cue, feelings, needs, score };
-    })
-    .filter(Boolean);
-
-  if (!candidates.length) {
+  const fallback = computeFallbackSuggestion(text, state.cues, { needLimit: 4, feelingLimit: 4 });
+  if (!fallback) {
     return [];
   }
-
-  const positive = candidates.filter(item => item.score > 0);
-  const pool = positive.length ? positive : candidates;
-
-  pool.sort((a, b) => {
-    if (b.score !== a.score) {
-      return b.score - a.score;
-    }
-    const aCount = a.feelings.length + a.needs.length;
-    const bCount = b.feelings.length + b.needs.length;
-    if (bCount !== aCount) {
-      return bCount - aCount;
-    }
-    const aLabel = a.cue?.label || a.cue?.cue || '';
-    const bLabel = b.cue?.label || b.cue?.cue || '';
-    return aLabel.localeCompare(bLabel);
-  });
-
-  const seen = new Set();
-  const results = [];
-  for (const entry of pool) {
-    const key = `${entry.feelings.map(item => item.slug || item.title).join('|')}|${entry.needs.map(item => item.slug || item.title).join('|')}`;
-    if (!key.trim()) {
-      continue;
-    }
-    if (seen.has(key)) {
-      continue;
-    }
-    seen.add(key);
-    results.push({
-      feelings: entry.feelings,
-      needs: entry.needs,
-      cues: [],
-      modules: [],
-      slotSummary: null,
-      overflow: 0,
-      total: entry.feelings.length + entry.needs.length,
-    });
-    if (results.length >= 6) {
-      break;
-    }
+  const needs = buildSuggestionEntries(fallback.needSlugs, 'need');
+  if (!needs.length) {
+    return [];
   }
-
-  return results;
+  const feelings = buildSuggestionEntries(fallback.feelingSlugs, 'feeling');
+  const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
+  return [{
+    feelings,
+    metFeelings,
+    needs,
+    cues: [],
+    modules: [],
+    slotSummary: null,
+    overflow: 0,
+    total: needs.length + feelings.length,
+  }];
 }
 
 function countFlaggedTokens(lint) {
@@ -1613,60 +1776,6 @@ function countWords(value) {
   }
   const matches = String(value).toLowerCase().match(/[a-z0-9'’]+/g);
   return matches ? matches.length : 0;
-}
-
-function tokenizeForScore(text) {
-  return (text || '').toLowerCase().match(/[a-z0-9'’]+/g) || [];
-}
-
-function scoreCueMatch(tokenSet, normalizedText, cue) {
-  const sources = [];
-  if (Array.isArray(cue?.phrases)) {
-    sources.push(...cue.phrases);
-  }
-  if (cue?.phrase) {
-    sources.push(cue.phrase);
-  }
-  if (cue?.example) {
-    sources.push(cue.example);
-  }
-  if (cue?.label) {
-    sources.push(cue.label);
-  }
-  if (cue?.cue) {
-    sources.push(cue.cue);
-  }
-
-  let best = 0;
-  sources.forEach(source => {
-    const value = typeof source === 'string' ? source.trim() : '';
-    if (!value) {
-      return;
-    }
-    const sourceTokens = tokenizeForScore(value);
-    if (!sourceTokens.length) {
-      return;
-    }
-    let matches = 0;
-    sourceTokens.forEach(token => {
-      if (tokenSet.has(token)) {
-        matches += 1;
-      }
-    });
-    let score = matches;
-    if (matches) {
-      score += matches / sourceTokens.length;
-    }
-    const lower = value.toLowerCase();
-    if (normalizedText.includes(lower)) {
-      score += Math.min(4, lower.length / 12);
-    }
-    if (score > best) {
-      best = score;
-    }
-  });
-
-  return best;
 }
 
 function setValidityStatus(status, message) {
@@ -1885,7 +1994,7 @@ function renderDetectionSummary() {
 
   if (note) {
     const limitMessage = nearLimit
-      ? `We review up to ${nearLimit} nearest cues at a time to keep things focused.`
+      ? `We surface up to ${nearLimit} nearby needs with aligned feelings when you load possible matches.`
       : '';
     let message = '';
     switch (status) {
@@ -1905,7 +2014,7 @@ function renderDetectionSummary() {
       case 'match':
         message = limitMessage
           ? `Exact matches are ready when you are. ${limitMessage}`
-          : 'Exact matches are ready when you are.';
+          : 'Exact matches are ready when you are. Load possible matches to explore nearby needs.';
         break;
       case 'near':
         message = limitMessage || 'Nearest matches are queued when you need them.';
@@ -1913,7 +2022,7 @@ function renderDetectionSummary() {
       case 'none':
         message = limitMessage
           ? `We didn’t spot an exact match yet. ${limitMessage}`
-          : 'We didn’t spot an exact match yet.';
+          : 'We didn’t spot an exact match yet. Load possible matches to explore nearby needs.';
         break;
       default:
         message = limitMessage || 'We’re preparing the detector…';
@@ -1997,7 +2106,7 @@ function renderDetectionSummary() {
       if (totalLibraryCount > 0 && coveragePercent) {
         message += ` (~${coveragePercent}% of our feelings library)`;
       }
-      feelingsCoverage.textContent = `${message}.`;
+      feelingsCoverage.textContent = `${message}. We also surface satisfied-state feelings when they overlap with those needs.`;
       feelingsCoverage.removeAttribute('hidden');
     } else {
       feelingsCoverage.textContent = '';
