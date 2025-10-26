@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 
 import { createCueMatchers } from '../lib/observationCueMatcher.js';
 import { compileObservationCueLibrary } from '../lib/observationCueData.js';
+import { aggregateFallbackSuggestions } from '../lib/observationFallback.js';
+import { chooseFeelingsForNeeds } from '../lib/observationFeelingSelector.js';
 import { suggestFromObservation } from '../lib/observationSuggest.js';
 
 const tests = [];
@@ -61,6 +63,100 @@ test('limits suggestions to four needs and aligned feelings', () => {
   });
   assert.ok(!result.feelings.includes('scared'));
   assert.ok(!result.needs.includes('stability'));
+});
+
+test('aggregates fallback suggestions into four needs with aligned feelings', () => {
+  const observation =
+    'Yesterday they skipped my update, talked over the briefing, cancelled our break, and gave confusing instructions while alarms kept flashing.';
+  const cues = [
+    {
+      id: 'connection-fallback',
+      label: 'Connection fallback',
+      cue: 'connection fallback',
+      feelings: ['lonely'],
+      needs: ['connection'],
+      phrases: ['skipped my update'],
+      example: 'They skipped my update.',
+    },
+    {
+      id: 'respect-fallback',
+      label: 'Respect fallback',
+      cue: 'respect fallback',
+      feelings: ['angry'],
+      needs: ['respect'],
+      phrases: ['talked over the briefing'],
+      example: 'They talked over the briefing.',
+    },
+    {
+      id: 'rest-fallback',
+      label: 'Rest fallback',
+      cue: 'rest fallback',
+      feelings: ['drained'],
+      needs: ['rest'],
+      phrases: ['cancelled our break'],
+      example: 'They cancelled our break.',
+    },
+    {
+      id: 'clarity-fallback',
+      label: 'Clarity fallback',
+      cue: 'clarity fallback',
+      feelings: ['confused'],
+      needs: ['clarity'],
+      phrases: ['confusing instructions'],
+      example: 'They gave confusing instructions.',
+    },
+    {
+      id: 'safety-fallback',
+      label: 'Safety fallback',
+      cue: 'safety fallback',
+      feelings: ['alarmed'],
+      needs: ['safety'],
+      phrases: ['sirens blaring'],
+      example: 'Sirens were blaring.',
+    },
+  ];
+
+  const results = aggregateFallbackSuggestions(observation, cues, { needLimit: 4, feelingLimit: 4 });
+
+  assert.equal(results.length, 1);
+  const fallback = results[0];
+  assert.equal(fallback.needs.length, 4);
+  assert.equal(new Set(fallback.needs).size, 4);
+  const expectedNeeds = new Set(['clarity', 'connection', 'respect', 'rest']);
+  fallback.needs.forEach(need => {
+    assert.ok(expectedNeeds.has(need), `Unexpected fallback need ${need}`);
+  });
+  assert.ok(!fallback.needs.includes('safety'));
+
+  assert.equal(fallback.feelings.length, 4);
+  assert.equal(new Set(fallback.feelings).size, 4);
+  const allowedFeelings = new Set(['confused', 'lonely', 'angry', 'drained', 'alarmed']);
+  fallback.feelings.forEach(feeling => {
+    assert.ok(allowedFeelings.has(feeling), `Unexpected fallback feeling ${feeling}`);
+  });
+  assert.ok(!fallback.feelings.includes('alarmed'));
+});
+
+test('chooseFeelingsForNeeds returns distinct slugs by mode', () => {
+  const index = new Map([
+    ['connection', { unmet: ['lonely', 'hurt'], met: ['warm', 'connected'] }],
+    ['rest', { unmet: ['tired'], met: ['rested', 'relaxed'] }],
+  ]);
+
+  assert.deepEqual(
+    chooseFeelingsForNeeds(index, ['connection', 'rest'], 'met', 4),
+    ['warm', 'connected', 'rested', 'relaxed'],
+  );
+
+  assert.deepEqual(
+    chooseFeelingsForNeeds(index, ['connection', 'rest'], 'unmet', 3),
+    ['lonely', 'hurt', 'tired'],
+  );
+
+  assert.deepEqual(
+    chooseFeelingsForNeeds(index, ['connection', 'rest', 'connection'], 'met', 2),
+    ['warm', 'connected'],
+  );
 });
 
 function createMockCueLibrary() {

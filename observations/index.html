@@ -2211,8 +2211,46 @@ button.site-nav__magnet {
   }
 
   .observation-panel__header {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+  }
+
+  .observation-panel__mode {
+    display: inline-flex;
+    align-items: center;
     gap: 0.35rem;
+  }
+
+  .observation-panel__mode-button {
+    border: 1px solid color-mix(in srgb, var(--outline) 28%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 0.15rem 0.65rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
+    cursor: pointer;
+    transition: color 140ms ease, background 140ms ease, border-color 140ms ease;
+  }
+
+  .observation-panel__mode-button.is-active {
+    border-color: color-mix(in srgb, var(--mint) 48%, transparent);
+    background: color-mix(in srgb, #ffffff 92%, var(--mint) 8%);
+    color: color-mix(in srgb, var(--ink) 85%, transparent);
+  }
+
+  .observation-panel__mode-button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--mint) 60%, transparent);
+    outline-offset: 2px;
+  }
+
+  .observation-panel__mode-divider {
+    font-size: 0.7rem;
+    color: color-mix(in srgb, var(--outline) 58%, transparent);
   }
 
   .observation-panel__title {
@@ -2943,6 +2981,30 @@ button.site-nav__magnet {
                     <section class="observation-panel observation-panel--feelings" aria-live="polite">
                       <header class="observation-panel__header">
                         <h3 class="observation-panel__title">Possible feelings</h3>
+                        <div
+                          id="suggested-feelings-toggle"
+                          class="observation-panel__mode"
+                          role="group"
+                          aria-label="Toggle feelings for when needs are unmet or met"
+                        >
+                          <button
+                            type="button"
+                            class="observation-panel__mode-button is-active"
+                            data-feelings-mode="unmet"
+                            aria-pressed="true"
+                          >
+                            Needs unmet
+                          </button>
+                          <span class="observation-panel__mode-divider" aria-hidden="true">/</span>
+                          <button
+                            type="button"
+                            class="observation-panel__mode-button"
+                            data-feelings-mode="met"
+                            aria-pressed="false"
+                          >
+                            Needs met
+                          </button>
+                        </div>
                       </header>
                       <div id="suggested-feelings" class="observation-chip-list" role="list"></div>
                       <p id="suggested-feelings-empty" class="observation-panel__empty" hidden>
