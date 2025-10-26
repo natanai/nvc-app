@@ -37,7 +37,7 @@ jobs:
 
       - name: Rebuild static pages
         if: ${{ github.event.inputs.run_build_pages != 'false' }}
-        run: npm run build:pages
+        run: node scripts/build-pages.mjs --scope=feelings,faux-feelings
 
       - name: Commit and push updates
         id: commit
