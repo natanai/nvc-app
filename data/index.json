@@ -1843,8 +1843,8 @@
         "Chest sinking and posture slumping; Soft",
         "deflated sighs leaving the body; Gaze dropping toward the floor or away"
       ],
-      "poemQuote": "\"Each time I hear that word\nI recall the disappointments\nthat were committed in its name:\nthe children who don’t return,\nthe ailments that are never cured...\"\n-Maya Abu Al-Hayyat",
-      "poemUrl": "https://poets.org/poem/i-suffer-phobia-called-hope"
+      "poemQuote": "",
+      "poemUrl": ""
     },
     {
       "title": "Enraged",
@@ -2958,8 +2958,8 @@
       "bodySignals": [
         "Weight settling into the hips or knees; Arms hanging limp at the sides; Eyes glazing or looking to others for cues"
       ],
-      "poemQuote": "",
-      "poemUrl": ""
+      "poemQuote": "\"At this hour, what is dead is helpless, kind\nand helpless. While the Lord lives.\n\nSomeone tell the Lord to leave me alone.\"\n-Li-Young Lee",
+      "poemUrl": "https://poets.org/poem/hour-and-what-dead"
     },
     {
       "title": "Tired",
@@ -2992,8 +2992,8 @@
       "bodySignals": [
         "Eyelids feeling heavy and slow to lift; Limbs dragging with low muscle tone; Yawns stretching the jaw repeatedly"
       ],
-      "poemQuote": "",
-      "poemUrl": ""
+      "poemQuote": "\"Pluck the stars out of the heavens. The stars mark our destiny. The stars marked my destiny.\n\nI am tired of civilization.\"\n- Fenton Johnson",
+      "poemUrl": "https://poets.org/poem/tired"
     },
     {
       "title": "Defiant",
@@ -3050,8 +3050,8 @@
       "bodySignals": [
         "Spine straightening with chin lifted high; Hands planted firmly or fists on hips; Eyes fixed in an unwavering stare"
       ],
-      "poemQuote": "",
-      "poemUrl": ""
+      "poemQuote": "\"The apricot parrot // Sings the same song of struggle.\n\nAnti-capitalism means // The rich can no longer // Control us with their laws.\n\n\nThis whole fucking zoo will burst like a // Molotov cocktail...\"\n- Christopher Soto",
+      "poemUrl": "https://www.poetryfoundation.org/poetrymagazine/poems/151755/ive-been-yearning-for-a-riot"
     },
     {
       "title": "Fear",
@@ -3088,8 +3088,8 @@
       "bodySignals": [
         "Heart thudding loudly in the chest; Muscles bracing as if for impact; Breath shortening with each scan of the room"
       ],
-      "poemQuote": "",
-      "poemUrl": ""
+      "poemQuote": "\"Google says God\nthen says holes\nlong words\nheights\n\nbeing alone...\"\nLauren Camp",
+      "poemUrl": "https://poets.org/poem/fear-3"
     },
     {
       "title": "Desperation",
@@ -3126,8 +3126,8 @@
       "bodySignals": [
         "Chest heaving as breath becomes ragged; Hands grasping or pleading toward others; Restless pacing or frantic movement in the limbs"
       ],
-      "poemQuote": "",
-      "poemUrl": ""
+      "poemQuote": "\"There is so little\nto hold, I said\n\nas I held it. Each \nbloom...\"\n- Andrés Cerpa",
+      "poemUrl": "https://poets.org/poem/vault"
     },
     {
       "title": "Alarmed",
@@ -8965,6 +8965,10 @@
         {
           "url": "https://www.cdc.gov/violenceprevention/about/social-ecologicalmodel.html",
           "description": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts"
+        },
+        {
+          "url": "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(10)00185-3 (Humans have an intrinsic need for control/choice: integrative review showing control and choice are fundamental",
+          "description": ""
         }
       ]
     },
