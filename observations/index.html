@@ -2235,107 +2235,84 @@ button.site-nav__magnet {
   }
 
   .observation-switch {
-    --switch-width: 68px;
-    --switch-height: 32px;
-    --switch-padding: 6px;
-    --lever-width: 30px;
-    --lever-height: 20px;
+    --switch-width: 2.9rem;
+    --switch-height: 1.4rem;
+    --switch-padding: 0.2rem;
+    --thumb-size: 1rem;
     appearance: none;
-    border: 1px solid color-mix(in srgb, var(--outline) 44%, transparent);
-    border-radius: calc(var(--switch-height) / 2 + 8px);
-    background: linear-gradient(160deg, color-mix(in srgb, #ffffff 90%, var(--outline) 10%), color-mix(in srgb, #ffffff 70%, var(--outline) 30%));
+    border: 1px solid color-mix(in srgb, var(--outline) 35%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 78%, transparent);
     width: var(--switch-width);
     height: var(--switch-height);
     padding: var(--switch-padding);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     position: relative;
     cursor: pointer;
-    box-shadow: inset 0 -2px 4px color-mix(in srgb, var(--ink) 14%, transparent);
-    transition: background 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 12%, transparent);
   }
 
   .observation-switch__base {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
+    flex: 1 1 auto;
     height: 100%;
     border-radius: calc(var(--switch-height) / 2);
-    background: linear-gradient(180deg, color-mix(in srgb, #ffffff 96%, var(--outline) 4%), color-mix(in srgb, #ffffff 78%, var(--outline) 22%));
-    box-shadow:
-      inset 0 2px 4px color-mix(in srgb, #ffffff 80%, transparent),
-      inset 0 -3px 6px color-mix(in srgb, var(--outline) 20%, transparent);
-  }
-
-  .observation-switch__base::after {
-    content: '';
-    position: absolute;
-    inset: 16% 30%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--outline) 18%, transparent), color-mix(in srgb, #ffffff 86%, transparent));
-    opacity: 0.45;
-    pointer-events: none;
+    background: color-mix(in srgb, var(--outline) 12%, transparent);
+    overflow: hidden;
   }
 
   .observation-switch__thumb {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    width: var(--lever-width);
-    height: var(--lever-height);
-    border-radius: calc(var(--lever-height) / 2);
-    background: linear-gradient(160deg, color-mix(in srgb, #ffffff 90%, transparent), color-mix(in srgb, var(--outline) 26%, transparent));
-    box-shadow:
-      inset 0 2px 3px color-mix(in srgb, #ffffff 80%, transparent),
-      inset 0 -3px 3px color-mix(in srgb, var(--outline) 24%, transparent),
-      0 4px 6px color-mix(in srgb, var(--ink) 18%, transparent);
-    transform: translateX(2px) rotate(-10deg);
-    transform-origin: center;
-    transition: transform 0.24s ease;
+    position: absolute;
+    top: 50%;
+    left: var(--switch-padding);
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    border-radius: 50%;
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 2px 4px color-mix(in srgb, var(--ink) 18%, transparent);
+    transform: translateY(-50%);
+    transition: left 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
   }
 
   .observation-switch.is-on {
-    border-color: color-mix(in srgb, var(--mint) 52%, transparent);
-    background: linear-gradient(150deg, color-mix(in srgb, #ffffff 94%, var(--mint) 6%), color-mix(in srgb, #ffffff 72%, var(--mint) 28%));
-    box-shadow:
-      inset 0 -2px 6px color-mix(in srgb, var(--mint) 24%, transparent),
-      0 4px 0 color-mix(in srgb, var(--mint) 26%, transparent);
+    border-color: color-mix(in srgb, var(--mint) 42%, transparent);
+    background: color-mix(in srgb, var(--mint) 18%, transparent);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--mint) 28%, transparent);
   }
 
   .observation-switch.is-on .observation-switch__base {
-    justify-content: flex-end;
+    background: color-mix(in srgb, var(--mint) 28%, transparent);
   }
 
   .observation-switch.is-on .observation-switch__thumb {
-    transform: translateX(-2px) rotate(10deg);
+    left: calc(100% - var(--switch-padding) - var(--thumb-size));
+    background: #ffffff;
+    box-shadow: 0 2px 4px color-mix(in srgb, var(--mint) 35%, transparent);
   }
 
   .observation-switch:focus-visible {
     outline: 2px solid color-mix(in srgb, var(--mint) 55%, transparent);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 
   .observation-feelings-toggle {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.85rem;
-    flex-wrap: wrap;
-    padding: 0.3rem 0.6rem;
-    border-radius: var(--radius-2xl);
-    background: linear-gradient(180deg, color-mix(in srgb, #ffffff 90%, var(--outline) 10%), color-mix(in srgb, #ffffff 80%, var(--outline) 20%));
-    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
-    box-shadow: 0 8px 20px color-mix(in srgb, var(--outline) 18%, transparent);
+    gap: 0.5rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 92%, transparent);
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
   }
 
   .observation-feelings-toggle__label {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    color: color-mix(in srgb, var(--outline) 64%, var(--ink) 36%);
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--outline) 58%, var(--ink) 42%);
     text-transform: uppercase;
     text-align: center;
     transition: color 0.2s ease;
