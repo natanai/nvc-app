@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Promise.all([
     loadCatalog('/data/index.json'),
-    loadCueLibrary('/data/observation_cues.sanitized.csv').catch(error => {
+    loadCueLibrary('/data/observation_cues.csv').catch(error => {
       console.warn('Unable to load observation cue map', error);
       return createEmptyCueLibrary();
     }),

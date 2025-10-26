@@ -662,7 +662,7 @@
         "consideration"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -708,7 +708,7 @@
           "needs": [
             "consideration"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -1360,7 +1360,7 @@
         "peer-respect"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -1393,7 +1393,7 @@
           "needs": [
             "peer-respect"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -1466,7 +1466,7 @@
         "respect"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -1513,7 +1513,7 @@
           "needs": [
             "respect"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -1770,7 +1770,7 @@
         "to-be-seen"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -1810,7 +1810,7 @@
           "needs": [
             "to-be-seen"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -1896,7 +1896,7 @@
         "acknowledgement"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -1942,7 +1942,7 @@
           "needs": [
             "acknowledgement"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -2700,7 +2700,7 @@
         "clarity"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -2739,7 +2739,7 @@
           "needs": [
             "clarity"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -3832,7 +3832,7 @@
         "understanding"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -3875,7 +3875,7 @@
           "needs": [
             "understanding"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -3962,7 +3962,7 @@
         "recognition"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -4003,7 +4003,7 @@
           "needs": [
             "recognition"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -4082,7 +4082,7 @@
         "non-judgmental-communication"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -4119,7 +4119,7 @@
           "needs": [
             "non-judgmental-communication"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -4997,7 +4997,7 @@
         "to-be-heard"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -5036,7 +5036,7 @@
           "needs": [
             "to-be-heard"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -5116,7 +5116,7 @@
         "equality"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -5158,7 +5158,7 @@
           "needs": [
             "equality"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -6287,7 +6287,7 @@
         "empathy"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -6321,7 +6321,7 @@
           "needs": [
             "empathy"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]
@@ -7336,7 +7336,7 @@
         "acceptance"
       ],
       "examples": [
-        "While I was finishing a sentence, (other person) interrupted to change the subject.",
+        "While I was finishing a sentence, (other person) started talking about a different topic.",
         "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
         "I asked them to repeat what they heard and they kept reading from their notes."
       ],
@@ -7398,7 +7398,7 @@
           "needs": [
             "acceptance"
           ],
-          "example": "While I was finishing a sentence, (other person) interrupted to change the subject.",
+          "example": "While I was finishing a sentence, (other person) started talking about a different topic.",
           "patterns": [
             "\\b(?:interrupted|cut\\s+me\\s+off|talked\\s+over)\\b[^\\n]{0,80}\\b(?:while|as)\\b[^\\n]{0,80}\\b(?:I\\s+was|we\\s+were)"
           ]

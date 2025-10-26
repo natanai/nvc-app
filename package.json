@@ -20,6 +20,6 @@
     "replace:needs-sources": "node scripts/replace-needs-sources.mjs",
     "validate:taxonomy": "node scripts/validateTaxonomy.mjs",
     "validate:observation-cues": "node scripts/validateObservationCues.mjs",
-    "build:observation-cues": "node scripts/generateNeedObservationBlueprint.mjs && node scripts/buildObservationCueLibrary.mjs && node scripts/sanitizeObservationCues.mjs"
+    "build:observation-cues": "node scripts/generateNeedObservationBlueprint.mjs && node scripts/buildObservationCueLibrary.mjs"
   }
 }

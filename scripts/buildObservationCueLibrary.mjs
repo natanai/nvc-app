@@ -3,6 +3,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { normalizeObservationPlaceholders } from '../lib/observationPlaceholders.js';
+import { sanitizeObservationText } from '../lib/observationSanitize.js';
+import { slugify } from '../lib/slugify.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
@@ -11,29 +13,44 @@ const DEFAULT_LEXICON_PATH = join(rootDir, 'data', 'observation_lexicon.json');
 const DEFAULT_BLUEPRINT_PATH = join(rootDir, 'data', 'observation_module_blueprints.json');
 const DEFAULT_CUE_OUTPUT = join(rootDir, 'data', 'observation_cues.csv');
 const DEFAULT_MODULE_OUTPUT = join(rootDir, 'data', 'observation_cue_modules.json');
+const DEFAULT_INDEX_PATH = join(rootDir, 'data', 'index.json');
 
 export function buildObservationCueLibrary({
   lexiconPath = DEFAULT_LEXICON_PATH,
   blueprintPath = DEFAULT_BLUEPRINT_PATH,
   cueOutputPath = DEFAULT_CUE_OUTPUT,
   moduleOutputPath = DEFAULT_MODULE_OUTPUT,
+  indexPath = DEFAULT_INDEX_PATH,
   logger = console,
 } = {}) {
   const lexicon = loadLexicon(lexiconPath);
   const blueprint = loadBlueprint(blueprintPath);
 
-  const { modules, cues } = compileFromBlueprint({ lexicon, blueprint });
+  const compiled = compileFromBlueprint({ lexicon, blueprint });
+  const sanitized = sanitizeCompiledLibrary({ ...compiled, indexPath, logger });
 
-  writeCueCsv(cues, cueOutputPath);
-  writeModuleJson(modules, moduleOutputPath);
+  writeCueCsv(sanitized.cues, cueOutputPath);
+  writeModuleJson(sanitized.modules, moduleOutputPath);
 
   if (logger && typeof logger.info === 'function') {
     logger.info(
-      `Observation cue library rebuilt with ${modules.length} modules and ${cues.length} cues.`,
+      `Observation cue library rebuilt with ${sanitized.modules.length} modules and ${sanitized.cues.length} cues (sanitized ${sanitized.stats.changed} examples, dropped ${sanitized.stats.dropped}${
+        sanitized.stats.droppedFauxFeelings > 0
+          ? ` including ${sanitized.stats.droppedFauxFeelings} faux feelings`
+          : ''
+      }${
+        sanitized.stats.droppedDuplicates > 0 ? ` and ${sanitized.stats.droppedDuplicates} duplicates` : ''
+      }).`,
     );
   }
 
-  return { modules, cues, cueOutputPath, moduleOutputPath };
+  return {
+    modules: sanitized.modules,
+    cues: sanitized.cues,
+    cueOutputPath,
+    moduleOutputPath,
+    stats: sanitized.stats,
+  };
 }
 
 function loadLexicon(path) {
@@ -472,6 +489,206 @@ function serializeCuePatterns(patterns) {
     .filter(Boolean)
     .map(pattern => pattern.replace(/([\\|])/g, '\\$1'))
     .join('|');
+}
+
+function sanitizeCompiledLibrary({ modules, cues, indexPath, logger }) {
+  const catalog = loadObservationCatalog(indexPath);
+  const fauxFeelingMatchers = buildFauxFeelingMatchers(catalog.fauxFeelings);
+  const seenExamples = new Set();
+  const keptCueIds = new Set();
+  const sanitizedCues = [];
+  let dropped = 0;
+  let changed = 0;
+  let droppedFauxFeelings = 0;
+  let droppedDuplicates = 0;
+
+  cues.forEach(cue => {
+    const sanitizedExample = sanitizeObservationText(cue.example || '', catalog);
+    const exampleSource = sanitizedExample || cue.example || '';
+    const normalizedExample = sanitizeWhitespace(exampleSource);
+    if (!normalizedExample) {
+      dropped += 1;
+      return;
+    }
+
+    const sanitizedFeelings = filterOutFauxFeelingValues(cue.feelings, fauxFeelingMatchers);
+
+    if (cueContainsFauxFeeling({ ...cue, example: normalizedExample, feelings: sanitizedFeelings }, fauxFeelingMatchers)) {
+      dropped += 1;
+      droppedFauxFeelings += 1;
+      return;
+    }
+
+    const exampleKey = `${cue.id.trim().toLowerCase()}::${normalizedExample.toLowerCase()}`;
+    if (seenExamples.has(exampleKey)) {
+      dropped += 1;
+      droppedDuplicates += 1;
+      return;
+    }
+
+    if (sanitizeWhitespace(cue.example || '') !== normalizedExample) {
+      changed += 1;
+    }
+
+    seenExamples.add(exampleKey);
+    keptCueIds.add(cue.id);
+    sanitizedCues.push({
+      ...cue,
+      example: normalizedExample,
+      feelings: sanitizedFeelings,
+    });
+  });
+
+  const cueMap = new Map(sanitizedCues.map(cue => [cue.id, cue]));
+  const sanitizedModules = modules
+    .map(module => {
+      const filteredCueIds = module.cueIds.filter(id => cueMap.has(id));
+      if (!filteredCueIds.length) {
+        if (logger && typeof logger.warn === 'function') {
+          logger.warn(`Dropping module ${module.id} because all cues were filtered.`);
+        }
+        return null;
+      }
+      const sanitizedExamples = filteredCueIds
+        .map(id => cueMap.get(id)?.example)
+        .filter(Boolean)
+        .slice(0, 3);
+      const sanitizedModuleFeelings = filterOutFauxFeelingValues(module.feelings, fauxFeelingMatchers);
+      return {
+        ...module,
+        cueIds: filteredCueIds,
+        examples: sanitizedExamples.length ? sanitizedExamples : module.examples.slice(0, 3),
+        feelings: sanitizedModuleFeelings,
+      };
+    })
+    .filter(Boolean);
+
+  return {
+    modules: sanitizedModules,
+    cues: sanitizedCues,
+    stats: {
+      kept: sanitizedCues.length,
+      dropped,
+      changed,
+      droppedFauxFeelings,
+      droppedDuplicates,
+    },
+  };
+}
+
+function loadObservationCatalog(indexPath) {
+  const text = readFileSync(indexPath, 'utf8');
+  const data = JSON.parse(text);
+  const feelings = new Map();
+  const needs = new Map();
+  const fauxFeelings = new Map();
+
+  if (Array.isArray(data?.feelings)) {
+    data.feelings.forEach(item => {
+      if (item?.slug) {
+        feelings.set(item.slug, {
+          slug: item.slug,
+          title: item.title || item.slug,
+        });
+      }
+    });
+  }
+
+  if (Array.isArray(data?.needs)) {
+    data.needs.forEach(item => {
+      if (item?.slug) {
+        needs.set(item.slug, {
+          slug: item.slug,
+          title: item.title || item.slug,
+        });
+      }
+    });
+  }
+
+  if (Array.isArray(data?.fauxFeelings)) {
+    data.fauxFeelings.forEach(item => {
+      if (item?.slug) {
+        fauxFeelings.set(item.slug, {
+          slug: item.slug,
+          title: item.title || item.slug,
+          feelings: Array.isArray(item.feelings) ? item.feelings.map(f => f.slug).filter(Boolean) : [],
+          needs: Array.isArray(item.needs) ? item.needs.map(n => n.slug).filter(Boolean) : [],
+        });
+      }
+    });
+  }
+
+  return { feelings, needs, fauxFeelings };
+}
+
+function buildFauxFeelingMatchers(fauxFeelings) {
+  if (!(fauxFeelings instanceof Map)) {
+    return [];
+  }
+  return [...fauxFeelings.values()]
+    .map(item => buildFauxFeelingMatcher(item?.slug, item?.title))
+    .filter(Boolean);
+}
+
+function buildFauxFeelingMatcher(slug, title) {
+  const baseSlug = typeof slug === 'string' && slug ? slug : slugify(title || '');
+  if (!baseSlug) {
+    return null;
+  }
+  const tokens = baseSlug
+    .split('-')
+    .map(token => token.trim())
+    .filter(Boolean)
+    .map(escapeRegExpLiteral);
+  if (!tokens.length) {
+    return null;
+  }
+  const pattern = tokens.join('(?:[-\s]+)');
+  return new RegExp(`\\b${pattern}\\b`, 'i');
+}
+
+function escapeRegExpLiteral(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function cueContainsFauxFeeling(cue, matchers) {
+  if (!Array.isArray(matchers) || !matchers.length) {
+    return false;
+  }
+  const cells = [
+    cue.example,
+    ...(Array.isArray(cue.feelings) ? cue.feelings : []),
+  ];
+  return cells.some(cell => {
+    if (typeof cell !== 'string' || !cell) {
+      return false;
+    }
+    return matchers.some(regex => regex.test(cell));
+  });
+}
+
+function filterOutFauxFeelingValues(values, matchers) {
+  if (!Array.isArray(values) || !matchers || !matchers.length) {
+    return Array.isArray(values) ? values.filter(Boolean) : [];
+  }
+  return values.filter(value => !matchesAnyFauxFeeling(value, matchers));
+}
+
+function matchesAnyFauxFeeling(value, matchers) {
+  if (typeof value !== 'string' || !value) {
+    return false;
+  }
+  return matchers.some(regex => regex.test(value));
+}
+
+function sanitizeWhitespace(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+  return value.trim().replace(/\s+/g, ' ');
 }
 
 function writeModuleJson(modules, outputPath) {

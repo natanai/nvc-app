@@ -297,7 +297,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -311,7 +311,6 @@
       "frustrated",
       "frightened",
       "scared",
-      "pressured",
       "overwhelmed",
       "embarrassed",
       "resentful",
@@ -357,7 +356,7 @@
     "examples": [
       "The project announcement went out without my name on the contributors list.",
       "They set my proposal aside without any discussion.",
-      "We reworked the plan without explaining why the initial work did not count."
+      "We reworked the plan without explaining why the initial work did not."
     ],
     "cueIds": [
       "need-for-all-living-things-to-flourish-credit-omitted",
@@ -519,7 +518,6 @@
     "feelings": [
       "scared",
       "angry",
-      "pressured",
       "anxiety",
       "frightened",
       "alarmed",
@@ -564,7 +562,7 @@
     "examples": [
       "The project announcement went out without my name on the contributors list.",
       "They set my proposal aside without any discussion.",
-      "We reworked the plan without explaining why the initial work did not count."
+      "We reworked the plan without explaining why the initial work did not."
     ],
     "cueIds": [
       "contribution-credit-omitted",
@@ -609,7 +607,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -655,7 +653,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -672,7 +670,6 @@
       "hurt",
       "embarrassed",
       "overwhelmed",
-      "pressured",
       "frightened",
       "resentful",
       "tired",
@@ -729,7 +726,6 @@
       "tense",
       "distressed",
       "scared",
-      "pressured",
       "thwarted",
       "anxious",
       "frightened",
@@ -778,7 +774,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -831,7 +827,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -1191,7 +1187,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -1464,7 +1460,6 @@
     "feelings": [
       "angry",
       "scared",
-      "pressured",
       "thwarted",
       "anxious",
       "frustrated",
@@ -1697,7 +1692,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -1753,7 +1748,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -1807,7 +1802,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -1961,7 +1956,6 @@
     "feelings": [
       "angry",
       "frustrated",
-      "pressured",
       "frightened",
       "irritated",
       "distressed",
@@ -2017,7 +2011,6 @@
     "feelings": [
       "angry",
       "frustrated",
-      "pressured",
       "frightened"
     ],
     "needs": [
@@ -2191,7 +2184,7 @@
     "examples": [
       "The project announcement went out without my name on the contributors list.",
       "They set my proposal aside without any discussion.",
-      "We reworked the plan without explaining why the initial work did not count."
+      "We reworked the plan without explaining why the initial work did not."
     ],
     "cueIds": [
       "participation-credit-omitted",
@@ -2237,7 +2230,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -2289,7 +2282,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -2764,7 +2757,7 @@
     "examples": [
       "The project announcement went out without my name on the contributors list.",
       "They set my proposal aside without any discussion.",
-      "We reworked the plan without explaining why the initial work did not count."
+      "We reworked the plan without explaining why the initial work did not."
     ],
     "cueIds": [
       "self-expression-credit-omitted",
@@ -2853,7 +2846,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -2957,7 +2950,6 @@
     "feelings": [
       "scared",
       "angry",
-      "pressured",
       "anxiety",
       "frightened",
       "alarmed",
@@ -3031,7 +3023,6 @@
       "disappointment",
       "bewildered",
       "anxious",
-      "pressured",
       "frightened",
       "irritated"
     ],
@@ -3078,7 +3069,6 @@
     "feelings": [
       "scared",
       "angry",
-      "pressured",
       "anxiety",
       "frightened",
       "alarmed",
@@ -3143,7 +3133,6 @@
     "feelings": [
       "scared",
       "angry",
-      "pressured",
       "anxiety",
       "frightened",
       "alarmed",
@@ -3198,7 +3187,7 @@
     "examples": [
       "The project announcement went out without my name on the contributors list.",
       "They set my proposal aside without any discussion.",
-      "We reworked the plan without explaining why the initial work did not count."
+      "We reworked the plan without explaining why the initial work did not."
     ],
     "cueIds": [
       "accomplishment-credit-omitted",
@@ -3287,7 +3276,7 @@
       }
     ],
     "examples": [
-      "While I was finishing a sentence, (other person) interrupted to change the subject.",
+      "While I was finishing a sentence, (other person) started talking about a different topic.",
       "When I said I was hurt, they replied \"you're overreacting\" without asking more.",
       "I asked them to repeat what they heard and they kept reading from their notes."
     ],
@@ -3301,7 +3290,6 @@
       "frustrated",
       "frightened",
       "scared",
-      "pressured",
       "overwhelmed",
       "embarrassed",
       "resentful",
@@ -3363,7 +3351,7 @@
     "examples": [
       "The project announcement went out without my name on the contributors list.",
       "They set my proposal aside without any discussion.",
-      "We reworked the plan without explaining why the initial work did not count."
+      "We reworked the plan without explaining why the initial work did not."
     ],
     "cueIds": [
       "growth-credit-omitted",
