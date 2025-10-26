@@ -8,43 +8,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\broll(?:ed|s|ing)?\\b[^\\n]{0,40}\\beyes?\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\beye[-\\s]?roll(?:ed|s|ing)?\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:said|muttered|snapped)\\b[^\\n]{0,40}\"?whatever\"?\\b[^\\n]{0,60}\\b(?:slamm(?:ed|ing)|shut|closed)\\b[^\\n]{0,30}\\bdoor\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:you(?:'|\\s*are)|you're|ya)\\s+too\\s+sensitive\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:called|said)\\b[^\\n]{0,40}\\btoo\\s+sensitive\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bwhisper(?:ed|ing)?\\b[^\\n]{0,80}\\b(?:laughed|giggl(?:ed|ing)|snicker(?:ed|ing))\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My manager rolled his eyes when I asked about the budget.",
-      "My teenager muttered \"whatever\" and slammed the bedroom door.",
-      "A teammate whispered to another person and laughed after I spoke."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "dismissive-eye-roll",
       "dismissive-whatever-door",
@@ -65,6 +29,129 @@
       "acceptance",
       "to-be-heard"
     ],
+    "examples": [
+      "My manager rolled his eyes when I asked about the budget.",
+      "My teenager muttered \"whatever\" and slammed the bedroom door.",
+      "A teammate whispered to another person and laughed after I spoke."
+    ],
+    "matchers": [
+      {
+        "key": "roll|eyes|right",
+        "pattern": "\\broll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beyes\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bright\\b",
+        "flags": "iu",
+        "tokens": [
+          "roll",
+          "eyes",
+          "right"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "ask|spreadsheet|update",
+        "pattern": "\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspreadsheet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+        "flags": "iu",
+        "tokens": [
+          "ask",
+          "spreadsheet",
+          "update"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "mutter|whatever",
+        "pattern": "\\bmutter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhatever\\b",
+        "flags": "iu",
+        "tokens": [
+          "mutter",
+          "whatever"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "slamm|bedroom|door",
+        "pattern": "\\bslamm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbedroom\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdoor\\b",
+        "flags": "iu",
+        "tokens": [
+          "slamm",
+          "bedroom",
+          "door"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "ask|homework|tonight",
+        "pattern": "\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhomework\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+        "flags": "iu",
+        "tokens": [
+          "ask",
+          "homework",
+          "tonight"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "said|too|sensitive|declin|joke",
+        "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsensitive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeclin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bjoke\\b",
+        "flags": "iu",
+        "tokens": [
+          "said",
+          "too",
+          "sensitive",
+          "declin",
+          "joke"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "whisper|someone",
+        "pattern": "\\bwhisper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsomeone\\b",
+        "flags": "iu",
+        "tokens": [
+          "whisper",
+          "someone"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "both|laugh|right",
+        "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blaugh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bright\\b",
+        "flags": "iu",
+        "tokens": [
+          "both",
+          "laugh",
+          "right"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "describ|roadmap|change",
+        "pattern": "\\bdescrib\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\broadmap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchange\\b",
+        "flags": "iu",
+        "tokens": [
+          "describ",
+          "roadmap",
+          "change"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "rolled their eyes right after I asked for the spreadsheet update",
+      "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+      "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+      "said \"You're too sensitive\" when I declined the joke",
+      "said You're too sensitive when I declined the joke",
+      "whispered to someone else and they both laughed right after I described the roadmap change"
+    ],
     "builderActionIds": [
       "dismissive-responses"
     ]
@@ -78,33 +165,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:you|ya|u)\\s+never\\s+listen\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:you|ya|u)\\s+(?:don(?:'|o)t|do\\s+not)\\s+listen\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:talk(?:ed)?|spoke)\\s+over\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bclient\\b[^\\n]{0,80}\\b(?:cut\\s+me\\s+off|interrup(?:ted|ting))\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My partner said I never listen when we talked about chores.",
-      "During the call, the client talked over every proposal.",
-      "The conversation kept looping because my input was interrupted."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "accused-never-listen",
       "client-talked-over"
@@ -120,6 +181,47 @@
       "mutuality",
       "understanding"
     ],
+    "examples": [
+      "My partner said I never listen when we talked about chores.",
+      "During the call, the client talked over every proposal.",
+      "The conversation kept looping because my input was interrupted."
+    ],
+    "matchers": [
+      {
+        "key": "said|never|listen|talk|chor",
+        "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnever\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blisten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchor\\b",
+        "flags": "iu",
+        "tokens": [
+          "said",
+          "never",
+          "listen",
+          "talk",
+          "chor"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "overlapp|mine|three|tim|propos|change",
+        "pattern": "\\boverlapp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmine\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btim\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpropos\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchange\\b",
+        "flags": "iu",
+        "tokens": [
+          "overlapp",
+          "mine",
+          "three",
+          "tim",
+          "propos",
+          "change"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "said \"You never listen\" when we talked about chores",
+      "said You never listen when we talked about chores",
+      "overlapped mine three times when I proposed a change"
+    ],
     "builderActionIds": [
       "listening-boundaries"
     ]
@@ -133,23 +235,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:walked|stormed|strode)\\s+out\\b[^\\n]{0,80}\\b(?:presentation|talk|briefing|update)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bslamm(?:ed|ing)\\b[^\\n]{0,40}\\b(?:notebook|laptop|binder)\\b[^\\n]{0,80}\\b(?:left|walked\\s+out)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A coworker slammed her notebook and left during the presentation.",
-      "Someone walked out as I showed the final slide.",
-      "The room fell silent after the door closed behind them."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "presentation-walkout"
     ],
@@ -162,6 +248,41 @@
       "respect",
       "support",
       "predictability"
+    ],
+    "examples": [
+      "A coworker slammed her notebook and left during the presentation.",
+      "Someone walked out as I showed the final slide.",
+      "The room fell silent after the door closed behind them."
+    ],
+    "matchers": [
+      {
+        "key": "slamm|notebook|shut",
+        "pattern": "\\bslamm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnotebook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshut\\b",
+        "flags": "iu",
+        "tokens": [
+          "slamm",
+          "notebook",
+          "shut"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "walk|dur|presentation|yesterday",
+        "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpresentation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+        "flags": "iu",
+        "tokens": [
+          "walk",
+          "dur",
+          "presentation",
+          "yesterday"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "slammed their notebook shut and walked out during my presentation yesterday"
     ],
     "builderActionIds": [
       "presentation-departures"
@@ -177,23 +298,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:ref|referee|ump)\\b[^\\n]{0,120}\\b(?:miss(?:ed)?|ignor(?:ed|ing)|skipped)\\b[^\\n]{0,60}\\b(?:foul|penalty|call)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bno\\s+call\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The referee missed three fouls in a row.",
-      "No whistle blew when our player was shoved.",
-      "The bench kept shouting about the no-call."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "referee-missed-fouls"
     ],
@@ -206,6 +311,30 @@
       "fairness",
       "safety",
       "respect"
+    ],
+    "examples": [
+      "The referee missed three fouls in a row.",
+      "No whistle blew when our player was shoved.",
+      "The bench kept shouting about the no-call."
+    ],
+    "matchers": [
+      {
+        "key": "miss|three|foul|against|team",
+        "pattern": "\\bmiss\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfoul\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagainst\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteam\\b",
+        "flags": "iu",
+        "tokens": [
+          "miss",
+          "three",
+          "foul",
+          "against",
+          "team"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "missed three fouls against our team"
     ],
     "builderActionIds": [
       "sports-officiating"
@@ -220,33 +349,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:barista|server|cashier|clerk|agent)\\b[^\\n]{0,120}\\b(?:skip(?:ped)?|served)\\b[^\\n]{0,60}\\b(?:before|ahead\\s+of)\\b[^\\n]{0,40}\\bme\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:skip(?:ped)?|cut)\\s+(?:the\\s+)?(?:line|queue)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\breach(?:ed)?\\s+over\\b[^\\n]{0,60}\\b(?:me|my\\s+shoulder)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bgrab(?:bed|bing)\\b[^\\n]{0,60}\\b(?:last|final)\\s+(?:carton|item|package|box)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The barista served someone who arrived after me.",
-      "Another shopper reached over my shoulder for the last carton.",
-      "I stayed in line but others jumped ahead."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "service-line-skip",
       "reached-over-last-item"
@@ -262,6 +365,50 @@
       "order",
       "safety"
     ],
+    "examples": [
+      "The barista served someone who arrived after me.",
+      "Another shopper reached over my shoulder for the last carton.",
+      "I stayed in line but others jumped ahead."
+    ],
+    "matchers": [
+      {
+        "key": "serv|two|people|arriv|line|afternoon",
+        "pattern": "\\bserv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeople\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barriv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bline\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bafternoon\\b",
+        "flags": "iu",
+        "tokens": [
+          "serv",
+          "two",
+          "people",
+          "who",
+          "arriv",
+          "later",
+          "line",
+          "afternoon"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "another|shopper|reach|grab|carton|eggs",
+        "pattern": "\\banother\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshopper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgrab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcarton\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beggs\\b",
+        "flags": "iu",
+        "tokens": [
+          "another",
+          "shopper",
+          "reach",
+          "grab",
+          "last",
+          "carton",
+          "eggs"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "skipped me and served two people who arrived later in line this afternoon",
+      "another shopper reached over me to grab the last carton of eggs"
+    ],
     "builderActionIds": [
       "queue-respect"
     ]
@@ -275,23 +422,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:sink|counter)\\b[^\\n]{0,120}\\b(?:stacked|piled|filled)\\b[^\\n]{0,60}\\b(?:dishes|plates|cups)\\b[^\\n]{0,60}\\b(?:again|still)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bborrow(?:ed|ing)\\b[^\\n]{0,120}\\bcar\\b[^\\n]{0,120}\\b(?:empty|no|without)\\s+(?:gas|fuel|a\\s+tank)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Dishes piled up again in the sink before work.",
-      "A borrowed car came back with an empty tank.",
-      "Shared chores keep getting skipped."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "roommate-dishes-repeated",
       "borrowed-car-empty"
@@ -307,6 +438,56 @@
       "accountability",
       "reliability"
     ],
+    "examples": [
+      "Dishes piled up again in the sink before work.",
+      "A borrowed car came back with an empty tank.",
+      "Shared chores keep getting skipped."
+    ],
+    "matchers": [
+      {
+        "key": "dish|pil|sink|leav|work",
+        "pattern": "\\bdish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpil\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsink\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleav\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+        "flags": "iu",
+        "tokens": [
+          "dish",
+          "pil",
+          "sink",
+          "leav",
+          "work"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "borrow|car|without|ask",
+        "pattern": "\\bborrow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+        "flags": "iu",
+        "tokens": [
+          "borrow",
+          "car",
+          "without",
+          "ask"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "return|tank|empty",
+        "pattern": "\\breturn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btank\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bempty\\b",
+        "flags": "iu",
+        "tokens": [
+          "return",
+          "tank",
+          "empty"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "dishes piled in the sink again before leaving for work",
+      "borrowed my car without asking and returned it with the tank empty"
+    ],
     "builderActionIds": [
       "shared-upkeep"
     ]
@@ -319,18 +500,7 @@
       "time",
       "context"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:contract|agreement|deal)\\b[^\\n]{0,120}\\b(?:was(?:n't)?|is(?:n't)?|won't\\s+be|not)\\s+(?:renew(?:ed)?|extended|continued)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "HR emailed that my contract wasn't renewed without a reason.",
-      "A contract ended without anyone explaining why.",
-      "Employment status shifted with no warning."
-    ],
+    "slotSummary": "time anchor and setting or people slots",
     "cueIds": [
       "contract-not-renewed"
     ],
@@ -343,6 +513,31 @@
       "security",
       "clarity",
       "respect"
+    ],
+    "examples": [
+      "HR emailed that my contract wasn't renewed without a reason.",
+      "A contract ended without anyone explaining why.",
+      "Employment status shifted with no warning."
+    ],
+    "matchers": [
+      {
+        "key": "said|contract|wasnt|renew|no|explanation",
+        "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontract\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brenew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+        "flags": "iu",
+        "tokens": [
+          "said",
+          "contract",
+          "wasnt",
+          "renew",
+          "no",
+          "explanation"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "said my contract wasn't renewed with no explanation"
     ],
     "builderActionIds": [
       "job-security"
@@ -358,23 +553,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:teacher|instructor)\\b[^\\n]{0,120}\\b(?:wrote|scribbled|marked)\\b[^\\n]{0,80}\\b(?:sloppy|messy|careless|lazy)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:performance\\s+review|feedback|evaluation)\\b[^\\n]{0,160}\\b(?:only|just|mostly)\\b[^\\n]{0,80}\\b(?:mistakes|issues|problems|faults)\\b[^\\n]{0,120}\\b(?:no|without)\\s+(?:examples|specifics|details)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A teacher wrote 'sloppy' across the assignment.",
-      "A review listed mistakes without concrete examples.",
-      "Feedback lacked specifics about what to adjust."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "teacher-derogatory-feedback",
       "review-no-examples"
@@ -390,6 +569,52 @@
       "growth",
       "respect"
     ],
+    "examples": [
+      "A teacher wrote 'sloppy' across the assignment.",
+      "A review listed mistakes without concrete examples.",
+      "Feedback lacked specifics about what to adjust."
+    ],
+    "matchers": [
+      {
+        "key": "hand|child|assignment|sloppy|across|top",
+        "pattern": "\\bhand\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchild\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bassignment\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsloppy\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bacross\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btop\\b",
+        "flags": "iu",
+        "tokens": [
+          "hand",
+          "child",
+          "assignment",
+          "sloppy",
+          "written",
+          "across",
+          "top"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "receiv|performance|review|mistak|concrete|exampl",
+        "pattern": "\\breceiv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperformance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breview\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmistak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconcrete\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexampl\\b",
+        "flags": "iu",
+        "tokens": [
+          "receiv",
+          "performance",
+          "review",
+          "list",
+          "mistak",
+          "without",
+          "any",
+          "concrete",
+          "exampl"
+        ],
+        "tokenThreshold": 6,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "handed back my child's assignment with \"sloppy\" written across the top",
+      "handed back my child's assignment with sloppy written across the top",
+      "i received a performance review that only listed mistakes without any concrete examples"
+    ],
     "builderActionIds": [
       "feedback-clarity"
     ]
@@ -403,23 +628,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:landlord|property\\s+(?:manager|office)|superintendent|building\\s+(?:manager|office))\\b[^\\n]{0,160}\\b(?:hasn'?t|still\\s+hasn't|never|won't)\\s+(?:respond(?:ed)?|repl(?:ied|y)|called|texted|gotten\\s+back)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:contractor|repair\\s+(?:tech|person)|plumber|electrician|installer|handyman)\\b[^\\n]{0,160}\\b(?:no[-\\s]?show|never\\s+showed|miss(?:ed)?\\s+(?:the\\s+)?(?:appointment|visit|slot)|didn'?t\\s+(?:come|arrive))\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Messages about the leak went unanswered.",
-      "A contractor missed the appointment and never called.",
-      "Maintenance issues linger without updates."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "landlord-no-response",
       "contractor-no-show"
@@ -435,6 +644,56 @@
       "dependability",
       "reliability"
     ],
+    "examples": [
+      "Messages about the leak went unanswered.",
+      "A contractor missed the appointment and never called.",
+      "Maintenance issues linger without updates."
+    ],
+    "matchers": [
+      {
+        "key": "respond|three|messag|leak|week",
+        "pattern": "\\brespond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+        "flags": "iu",
+        "tokens": [
+          "respond",
+          "three",
+          "messag",
+          "leak",
+          "week"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "miss|today|8",
+        "pattern": "\\bmiss\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b8\\b",
+        "flags": "iu",
+        "tokens": [
+          "miss",
+          "today",
+          "8"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "appointment|hasnt|text|call",
+        "pattern": "\\bappointment\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b",
+        "flags": "iu",
+        "tokens": [
+          "appointment",
+          "hasnt",
+          "text",
+          "call"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "responded to three messages about the leak this week",
+      "missed today's 8 a.m. appointment and hasn't texted or called"
+    ],
     "builderActionIds": [
       "housing-reliability"
     ]
@@ -449,18 +708,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:doctor|physician|provider)\\b[^\\n]{0,120}\\b(?:kept\\s+)?(?:checking|glancing|looking)\\b[^\\n]{0,40}\\bclock\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The doctor kept checking the clock mid-appointment.",
-      "A provider glanced at the clock while I spoke.",
-      "The visit felt rushed instead of attentive."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "doctor-checked-clock"
     ],
@@ -473,6 +721,40 @@
       "respect",
       "consideration",
       "to-be-heard"
+    ],
+    "examples": [
+      "The doctor kept checking the clock mid-appointment.",
+      "A provider glanced at the clock while I spoke.",
+      "The visit felt rushed instead of attentive."
+    ],
+    "matchers": [
+      {
+        "key": "glanc|clock|twice",
+        "pattern": "\\bglanc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclock\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwice\\b",
+        "flags": "iu",
+        "tokens": [
+          "glanc",
+          "clock",
+          "twice"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "describ|symptom|today",
+        "pattern": "\\bdescrib\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsymptom\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+        "flags": "iu",
+        "tokens": [
+          "describ",
+          "symptom",
+          "today"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "glanced at the clock twice while I was describing my symptoms today"
     ],
     "builderActionIds": [
       "care-attention"
@@ -487,23 +769,7 @@
       "context",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bassign(?:ed|ing)\\b[^\\n]{0,160}\\b(?:all|every|entire|whole)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?up|action\\s+item|task)s?\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:boss|manager|lead|supervisor)\\b[^\\n]{0,160}\\b(?:slack|teams|message|dm|ping|text|email)\\b[^\\n]{0,120}\\b(?:11\\s?p\\.?m\\.?|midnight|late\\s+at\\s+night|after\\s+hours)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "All the follow-up tasks landed on my plate again.",
-      "Slack pings came in around midnight from my boss.",
-      "I keep getting the action items after every meeting."
-    ],
+    "slotSummary": "time anchor, setting or people, and measurement slots",
     "cueIds": [
       "assigned-all-followups",
       "boss-late-night-pings"
@@ -519,6 +785,56 @@
       "fairness",
       "support"
     ],
+    "examples": [
+      "All the follow-up tasks landed on my plate again.",
+      "Slack pings came in around midnight from my boss.",
+      "I keep getting the action items after every meeting."
+    ],
+    "matchers": [
+      {
+        "key": "assign|every|follow|action|item",
+        "pattern": "\\bassign\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfollow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\baction\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bitem\\b",
+        "flags": "iu",
+        "tokens": [
+          "assign",
+          "every",
+          "follow",
+          "action",
+          "item"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "slack|messag|between|11",
+        "pattern": "\\bslack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbetween\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b11\\b",
+        "flags": "iu",
+        "tokens": [
+          "slack",
+          "messag",
+          "between",
+          "11"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "midnight|tomorrow|report",
+        "pattern": "\\bmidnight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btomorrow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b",
+        "flags": "iu",
+        "tokens": [
+          "midnight",
+          "tomorrow",
+          "report"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "assigned me every follow-up action item again",
+      "slack messages between 11 p.m. and midnight about tomorrow's report"
+    ],
     "builderActionIds": [
       "workload-boundaries"
     ]
@@ -532,18 +848,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:during|at)\\s+(?:dinner|the\\s+meal|our\\s+meal)\\b[^\\n]{0,120}\\b(?:phone|scroll(?:ed|ing)|looking\\s+down\\s+at\\s+their\\s+screen)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Phones stayed on the table during dinner.",
-      "Conversation faded while someone scrolled.",
-      "I looked up and saw them on their screen instead of with me."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "partner-phone-during-dinner"
     ],
@@ -556,6 +861,32 @@
       "connection",
       "consideration",
       "respect"
+    ],
+    "examples": [
+      "Phones stayed on the table during dinner.",
+      "Conversation faded while someone scrolled.",
+      "I looked up and saw them on their screen instead of with me."
+    ],
+    "matchers": [
+      {
+        "key": "scroll|through|phone|dur|instead|look",
+        "pattern": "\\bscroll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bphone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blook\\b",
+        "flags": "iu",
+        "tokens": [
+          "scroll",
+          "through",
+          "phone",
+          "dur",
+          "dinner",
+          "instead",
+          "look"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "scrolled through their phone during dinner instead of looking up"
     ],
     "builderActionIds": [
       "connection-presence"
@@ -570,18 +901,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:driver|rideshare|uber|lyft|cab)\\b[^\\n]{0,120}\\b(?:speaker\\s*phone|speakerphone|on\\s+speaker)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A driver talked loudly on speakerphone the whole trip.",
-      "The car felt like a call center during the ride.",
-      "Noise filled the ride instead of quiet."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "driver-speakerphone-entire-trip"
     ],
@@ -594,6 +914,31 @@
       "calm",
       "respect",
       "consideration"
+    ],
+    "examples": [
+      "A driver talked loudly on speakerphone the whole trip.",
+      "The car felt like a call center during the ride.",
+      "Noise filled the ride instead of quiet."
+    ],
+    "matchers": [
+      {
+        "key": "talk|loudly|speakerphone|entire|trip|yesterday",
+        "pattern": "\\btalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bloudly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeakerphone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bentire\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btrip\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+        "flags": "iu",
+        "tokens": [
+          "talk",
+          "loudly",
+          "speakerphone",
+          "entire",
+          "trip",
+          "yesterday"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "talked loudly on speakerphone for the entire trip yesterday"
     ],
     "builderActionIds": [
       "ride-environment"
@@ -609,18 +954,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:neighbor'?s|next\\s+door)\\s+dog\\b[^\\n]{0,160}\\b(?:bark(?:ed|ing))\\b[^\\n]{0,120}\\b(?:6\\s?a\\.?m\\.?|five\\s?(?:thirty|30)\\s?a\\.?m\\.?|before\\s+sunrise|early\\s+morning)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A dog barked for thirty minutes at 6 a.m.",
-      "Weekend mornings start with loud barking next door.",
-      "Noise woke me up before sunrise."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "neighbor-dog-morning"
     ],
@@ -633,6 +967,31 @@
       "rest",
       "peace",
       "consideration"
+    ],
+    "examples": [
+      "A dog barked for thirty minutes at 6 a.m.",
+      "Weekend mornings start with loud barking next door.",
+      "Noise woke me up before sunrise."
+    ],
+    "matchers": [
+      {
+        "key": "bark|loudly|30|minut|start|6",
+        "pattern": "\\bbark\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bloudly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b6\\b",
+        "flags": "iu",
+        "tokens": [
+          "bark",
+          "loudly",
+          "30",
+          "minut",
+          "start",
+          "6"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "barked loudly for 30 minutes starting at 6 a.m. on Saturday"
     ],
     "builderActionIds": [
       "noise-disturbance"
@@ -647,18 +1006,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:cyclist|bike\\s+rider|bicyclist)\\b[^\\n]{0,160}\\b(?:blew|ran|sped)\\b[^\\n]{0,80}\\b(?:red\\s+light|red\\s+signal|stop\\s+light)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A cyclist ran the red light through the crosswalk.",
-      "Bikes sped through while the walk signal was on.",
-      "Someone on a bike ignored the traffic signal next to me."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "cyclist-ran-red"
     ],
@@ -672,6 +1020,40 @@
       "predictability",
       "consideration"
     ],
+    "examples": [
+      "A cyclist ran the red light through the crosswalk.",
+      "Bikes sped through while the walk signal was on.",
+      "Someone on a bike ignored the traffic signal next to me."
+    ],
+    "matchers": [
+      {
+        "key": "sped|through|crosswalk",
+        "pattern": "\\bsped\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcrosswalk\\b",
+        "flags": "iu",
+        "tokens": [
+          "sped",
+          "through",
+          "crosswalk"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "light|red|morn",
+        "pattern": "\\blight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bred\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmorn\\b",
+        "flags": "iu",
+        "tokens": [
+          "light",
+          "red",
+          "morn"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "sped through the crosswalk even though the light was red this morning"
+    ],
     "builderActionIds": [
       "safety-commute"
     ]
@@ -684,18 +1066,7 @@
       "time",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bscroll(?:ed|ing)\\b[^\\n]{0,120}\\b(?:instead\\s+of|rather\\s+than)\\b[^\\n]{0,120}\\b(?:call(?:ing)?|phone|reach(?:ing)?\\s+out|text(?:ing)?)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "I scrolled instead of returning an important call.",
-      "An hour went by on my phone before I reached out.",
-      "I delayed following through because I kept scrolling."
-    ],
+    "slotSummary": "time anchor and sensory detail slots",
     "cueIds": [
       "self-delayed-call"
     ],
@@ -707,6 +1078,31 @@
       "integrity",
       "connection",
       "accountability"
+    ],
+    "examples": [
+      "I scrolled instead of returning an important call.",
+      "An hour went by on my phone before I reached out.",
+      "I delayed following through because I kept scrolling."
+    ],
+    "matchers": [
+      {
+        "key": "myself|scroll|hour|instead|call|grandmother",
+        "pattern": "\\bmyself\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bscroll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgrandmother\\b",
+        "flags": "iu",
+        "tokens": [
+          "myself",
+          "scroll",
+          "hour",
+          "instead",
+          "call",
+          "grandmother"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "myself scrolling for an hour instead of calling my grandmother back"
     ],
     "builderActionIds": [
       "self-accountability"
@@ -721,18 +1117,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:coworker|colleague|teammate)\\b[^\\n]{0,160}\\b(?:double[-\\s]?checked|caught|spotted|flagged)\\b[^\\n]{0,120}\\b(?:mistake|error|issue)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A teammate double-checked an expense report and caught an error before it went out.",
-      "Someone on the team spotted a calculation mistake and flagged it before the client saw it.",
-      "A coworker reviewed my draft and found a typo in the headline."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "coworker-caught-mistake"
     ],
@@ -745,6 +1130,29 @@
       "reliability",
       "integrity",
       "mutuality"
+    ],
+    "examples": [
+      "A teammate double-checked an expense report and caught an error before it went out.",
+      "Someone on the team spotted a calculation mistake and flagged it before the client saw it.",
+      "A coworker reviewed my draft and found a typo in the headline."
+    ],
+    "matchers": [
+      {
+        "key": "report|caught|mistake|sent",
+        "pattern": "\\breport\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcaught\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmistake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsent\\b",
+        "flags": "iu",
+        "tokens": [
+          "report",
+          "caught",
+          "mistake",
+          "sent"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "report and caught a mistake before we sent it"
     ],
     "builderActionIds": [
       "collaboration-safeguards"
@@ -759,18 +1167,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:trainer|coach)\\b[^\\n]{0,160}\\b(?:high[-\\s]?fiv(?:ed|e)|celebrat(?:ed|ing)|cheered)\\b[^\\n]{0,120}\\b(?:personal\\s+best|milestone|record)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At the 8 a.m. session, the trainer high-fived me after I racked 185 pounds on squats.",
-      "The coach paused practice to high-five me when the board showed my new record.",
-      "Teammates clapped while the trainer called out the weight I just logged."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "trainer-celebrated-progress"
     ],
@@ -783,6 +1180,30 @@
       "acknowledgement",
       "growth",
       "recognition"
+    ],
+    "examples": [
+      "At the 8 a.m. session, the trainer high-fived me after I racked 185 pounds on squats.",
+      "The coach paused practice to high-five me when the board showed my new record.",
+      "Teammates clapped while the trainer called out the weight I just logged."
+    ],
+    "matchers": [
+      {
+        "key": "right|rack|185|pound|squat",
+        "pattern": "\\bright\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b185\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpound\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsquat\\b",
+        "flags": "iu",
+        "tokens": [
+          "right",
+          "rack",
+          "185",
+          "pound",
+          "squat"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "right after I racked 185 pounds on squats"
     ],
     "builderActionIds": [
       "milestone-celebration"
@@ -797,18 +1218,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:neighbor|next\\s+door)\\b[^\\n]{0,160}\\b(?:shovel(?:ed|ing)|cleared|snow[-\\s]?blow(?:ed|ing))\\b[^\\n]{0,120}\\b(?:sidewalk|driveway|walkway|steps)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A neighbor shoveled our sidewalk while we were gone.",
-      "Someone next door cleared the driveway before we got home.",
-      "Our neighbor salted the steps so we wouldn't slip."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "neighbor-shoveled-sidewalk"
     ],
@@ -821,6 +1231,27 @@
       "community",
       "nurturing",
       "support"
+    ],
+    "examples": [
+      "A neighbor shoveled our sidewalk while we were gone.",
+      "Someone next door cleared the driveway before we got home.",
+      "Our neighbor salted the steps so we wouldn't slip."
+    ],
+    "matchers": [
+      {
+        "key": "shovel|sidewalk",
+        "pattern": "\\bshovel\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsidewalk\\b",
+        "flags": "iu",
+        "tokens": [
+          "shovel",
+          "sidewalk"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "shoveled our sidewalk after the snowstorm while we were at work"
     ],
     "builderActionIds": [
       "neighbor-support"
@@ -835,28 +1266,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:thank[-\\s]*you|appreciat(?:e|ed|ion)|grateful)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|how\\s+you|what\\s+you\\s+did|made\\s+a\\s+big\\s+difference|the\\s+way\\s+you\\s+helped|calling\\s+out\\s+each)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:highlighted|called\\s+out|named|listed|spelled\\s+out|detailed)\\b[^\\n]{0,160}\\b(?:specific|particular|exact|individual|each)\\b[^\\n]{0,120}\\b(?:ways?\\s+(?:I|we|you)\\s+helped|tasks?\\s+I\\s+handled|moments?\\s+you\\s+showed\\s+up|contributions?|shifts?)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:my|your|our)\\s+(?:volunteer\\s+hours|support|help|time|efforts?|contribution|work)\\b[^\\n]{0,120}\\b(?:made|makes|making)\\s+(?:such\\s+)?a\\s+big\\s+difference\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 4 p.m., the coordinator emailed naming the volunteer shifts I covered on Saturday.",
-      "The principal highlighted the exact stations I staffed during the fundraiser.",
-      "A manager DM’d the timestamps where I stepped in during the launch."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "appreciation-specific-note"
     ],
@@ -869,6 +1279,32 @@
       "acknowledgement",
       "contribution",
       "belonging"
+    ],
+    "examples": [
+      "At 4 p.m., the coordinator emailed naming the volunteer shifts I covered on Saturday.",
+      "The principal highlighted the exact stations I staffed during the fundraiser.",
+      "A manager DM’d the timestamps where I stepped in during the launch."
+    ],
+    "matchers": [
+      {
+        "key": "email|list|volunteer|shift|dur|fundraiser",
+        "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bvolunteer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfundraiser\\b",
+        "flags": "iu",
+        "tokens": [
+          "email",
+          "list",
+          "volunteer",
+          "shift",
+          "cover",
+          "dur",
+          "fundraiser"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "emailed me listing the volunteer shifts I covered during the fundraiser"
     ],
     "builderActionIds": [
       "specific-appreciation"
@@ -883,18 +1319,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:counselor|therap(?:ist|y)|coach|facilitator)\\b[^\\n]{0,160}\\b(?:reflected|mirrored|paraphrased|summarized)\\b[^\\n]{0,120}\\b(?:back|what\\s+I\\s+said|my\\s+words)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A therapist reflected my words before sharing ideas.",
-      "A counselor paused to mirror back what I said.",
-      "A support group facilitator summarized my message first."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "counselor-reflected"
     ],
@@ -907,6 +1332,40 @@
       "to-be-heard",
       "understanding",
       "trust"
+    ],
+    "examples": [
+      "A therapist reflected my words before sharing ideas.",
+      "A counselor paused to mirror back what I said.",
+      "A support group facilitator summarized my message first."
+    ],
+    "matchers": [
+      {
+        "key": "reflect|exactly|what|said",
+        "pattern": "\\breflect\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexactly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhat\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b",
+        "flags": "iu",
+        "tokens": [
+          "reflect",
+          "exactly",
+          "what",
+          "said"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "offer|input",
+        "pattern": "\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binput\\b",
+        "flags": "iu",
+        "tokens": [
+          "offer",
+          "input"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "paused and reflected back exactly what I said before offering input"
     ],
     "builderActionIds": [
       "reflective-presence"
@@ -921,23 +1380,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:partner|spouse|husband|wife|roommate)\\b[^\\n]{0,160}\\b(?:cooked|made|prepared)\\b[^\\n]{0,80}\\b(?:dinner|meal|supper)\\b[^\\n]{0,120}\\b(?:cleaned|did|handled)\\b[^\\n]{0,60}\\b(?:dishes|kitchen|cleanup)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:manager|lead|supervisor|project\\s+manager|pm)\\b[^\\n]{0,160}\\b(?:balanced|redistribut(?:ed|ing)|spread|limited|shared)\\b[^\\n]{0,120}\\b(?:follow[-\\s]?ups|follow\\s*ups|tasks|workload|assignments)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My partner handled dinner and dishes so I could finish a deadline.",
-      "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate.",
-      "A friend swapped shifts so we split the weekend coverage."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "partner-covered-dinner",
       "manager-balanced-followups"
@@ -952,6 +1395,65 @@
       "fairness",
       "mutuality"
     ],
+    "examples": [
+      "My partner handled dinner and dishes so I could finish a deadline.",
+      "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate.",
+      "A friend swapped shifts so we split the weekend coverage."
+    ],
+    "matchers": [
+      {
+        "key": "cook|dinner",
+        "pattern": "\\bcook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdinner\\b",
+        "flags": "iu",
+        "tokens": [
+          "cook",
+          "dinner"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "clean|kitchen",
+        "pattern": "\\bclean\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkitchen\\b",
+        "flags": "iu",
+        "tokens": [
+          "clean",
+          "kitchen"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "finish|deadline",
+        "pattern": "\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeadline\\b",
+        "flags": "iu",
+        "tokens": [
+          "finish",
+          "deadline"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "assign|two|follow|task|each|teammate",
+        "pattern": "\\bassign\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfollow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteammate\\b",
+        "flags": "iu",
+        "tokens": [
+          "assign",
+          "two",
+          "follow",
+          "task",
+          "each",
+          "teammate"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "cooked dinner and cleaned the kitchen while I finished my deadline",
+      "assigned two follow-up tasks to each teammate"
+    ],
     "builderActionIds": [
       "supportive-rebalancing"
     ]
@@ -965,18 +1467,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:returned|brought\\s+back|handed\\s+back|gave\\s+back)\\b[^\\n]{0,120}\\b(?:wallet|phone|purse|bag|keys)\\b[^\\n]{0,120}\\b(?:with|with\\s+all|still\\s+had|everything|cash)\\b[^\\n]{0,80}\\b(?:inside|intact|still\\s+there)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside.",
-      "Security called me to pick up my phone after a customer turned it in at the front desk.",
-      "A passerby jogged over with the keys I dropped on the sidewalk."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "wallet-returned-intact"
     ],
@@ -988,6 +1479,30 @@
       "safety",
       "trust",
       "integrity"
+    ],
+    "examples": [
+      "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside.",
+      "Security called me to pick up my phone after a customer turned it in at the front desk.",
+      "A passerby jogged over with the keys I dropped on the sidewalk."
+    ],
+    "matchers": [
+      {
+        "key": "hand|wallet|cash|inside|billfold",
+        "pattern": "\\bhand\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwallet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcash\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binside\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbillfold\\b",
+        "flags": "iu",
+        "tokens": [
+          "hand",
+          "wallet",
+          "cash",
+          "inside",
+          "billfold"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "handed back my wallet with the cash still inside the billfold"
     ],
     "builderActionIds": [
       "integrity-returns"
@@ -1002,18 +1517,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:approved|okayed|cleared|green[-\\s]?lit|signed\\s+off\\s+on)\\b[^\\n]{0,120}\\b(?:vacation|pto|time\\s+off|leave)\\b[^\\n]{0,120}\\b(?:same\\s+day|right\\s+away|within\\s+(?:the\\s+)?day|within\\s+hours)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My manager approved my vacation request the same day.",
-      "HR confirmed my PTO within a few hours.",
-      "A supervisor okayed my time off without delay."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "vacation-approved-quickly"
     ],
@@ -1025,6 +1529,31 @@
       "rest",
       "respect",
       "reliability"
+    ],
+    "examples": [
+      "My manager approved my vacation request the same day.",
+      "HR confirmed my PTO within a few hours.",
+      "A supervisor okayed my time off without delay."
+    ],
+    "matchers": [
+      {
+        "key": "approv|vacation|request|same|day|submitt",
+        "pattern": "\\bapprov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bvacation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequest\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsame\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsubmitt\\b",
+        "flags": "iu",
+        "tokens": [
+          "approv",
+          "vacation",
+          "request",
+          "same",
+          "day",
+          "submitt"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "approved my vacation request the same day I submitted it"
     ],
     "builderActionIds": [
       "responsive-approvals"
@@ -1040,23 +1569,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:nurse|caregiver)\\b[^\\n]{0,120}\\b(?:checked\\s+in|stopped\\s+in|came\\s+by|looked\\s+in|made\\s+rounds)\\b[^\\n]{0,120}\\b(?:night|overnight|late\\s+at\\s+night)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:dentist|hygienist|doctor|provider)\\b[^\\n]{0,160}\\b(?:explained|walked\\s+me\\s+through|described|talked\\s+through)\\b[^\\n]{0,120}\\b(?:each|every|the)\\s+step\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A nurse checked in overnight to make sure my dad was comfortable.",
-      "A dentist explained each step before starting the procedure.",
-      "A tech walked us through the test process in advance."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "nurse-night-check",
       "dentist-explained-steps"
@@ -1071,6 +1584,48 @@
       "clarity",
       "serenity"
     ],
+    "examples": [
+      "A nurse checked in overnight to make sure my dad was comfortable.",
+      "A dentist explained each step before starting the procedure.",
+      "A tech walked us through the test process in advance."
+    ],
+    "matchers": [
+      {
+        "key": "check|twice|dur|make|dad|comfortable",
+        "pattern": "\\bcheck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwice\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdad\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcomfortable\\b",
+        "flags": "iu",
+        "tokens": [
+          "check",
+          "twice",
+          "dur",
+          "night",
+          "make",
+          "sure",
+          "dad",
+          "comfortable"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "explain|each|step|start|procedure",
+        "pattern": "\\bexplain\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprocedure\\b",
+        "flags": "iu",
+        "tokens": [
+          "explain",
+          "each",
+          "step",
+          "start",
+          "procedure"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "checked in twice during the night to make sure my dad was comfortable",
+      "explained each step before starting the procedure"
+    ],
     "builderActionIds": [
       "care-attentive-support"
     ]
@@ -1084,18 +1639,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:delivery|order|package|parcel)\\b[^\\n]{0,160}\\b(?:marked|showed|said)\\b[^\\n]{0,120}\\bdelivered\\b[^\\n]{0,160}\\b(?:nothing|not\\s+at\\s+my\\s+door|never\\s+arrived|missing)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 7 p.m. the app marked my dinner order delivered while the porch camera still showed an empty doorstep.",
-      "The tracker pinged \"delivered\" even though the hallway camera never recorded a drop-off.",
-      "Courier status flipped to delivered, but the lobby shelf stayed empty all night."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "delivery-marked-delivered"
     ],
@@ -1107,6 +1651,54 @@
       "reliability",
       "clarity",
       "accountability"
+    ],
+    "examples": [
+      "At 7 p.m. the app marked my dinner order delivered while the porch camera still showed an empty doorstep.",
+      "The tracker pinged \"delivered\" even though the hallway camera never recorded a drop-off.",
+      "Courier status flipped to delivered, but the lobby shelf stayed empty all night."
+    ],
+    "matchers": [
+      {
+        "key": "7",
+        "pattern": "\\b7\\b",
+        "flags": "iu",
+        "tokens": [
+          "7"
+        ],
+        "tokenThreshold": 1,
+        "sourceType": "builder"
+      },
+      {
+        "key": "delivery|app|mark|order|deliver",
+        "pattern": "\\bdelivery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bapp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmark\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\border\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeliver\\b",
+        "flags": "iu",
+        "tokens": [
+          "delivery",
+          "app",
+          "mark",
+          "order",
+          "deliver"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "porch|camera|show|empty|doorstep",
+        "pattern": "\\bporch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcamera\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bempty\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdoorstep\\b",
+        "flags": "iu",
+        "tokens": [
+          "porch",
+          "camera",
+          "show",
+          "empty",
+          "doorstep"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "at 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep"
     ],
     "builderActionIds": [
       "delivery-gaps"
@@ -1121,18 +1713,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:friend|buddy|pal|coworker|guest)\\b[^\\n]{0,120}\\b(?:arrived|showed\\s+up)\\b[^\\n]{0,80}\\b(?:\\d+\\s+(?:minutes|min|mins)|half\\s+an\\s+hour|thirty\\s+minutes)\\s+late\\b[^\\n]{0,120}\\b(?:no|without|never)\\s+(?:text|message|call|warning|heads?-?up)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A friend arrived half an hour late with no text.",
-      "Someone showed up late to lunch without a heads-up.",
-      "My date was 30 minutes late and never messaged."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "friend-late-no-text"
     ],
@@ -1144,6 +1725,32 @@
       "respect",
       "reliability",
       "consideration"
+    ],
+    "examples": [
+      "A friend arrived half an hour late with no text.",
+      "Someone showed up late to lunch without a heads-up.",
+      "My date was 30 minutes late and never messaged."
+    ],
+    "matchers": [
+      {
+        "key": "arriv|30|minut|late|without|text",
+        "pattern": "\\barriv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btext\\b",
+        "flags": "iu",
+        "tokens": [
+          "arriv",
+          "30",
+          "minut",
+          "late",
+          "lunch",
+          "without",
+          "text"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "arrived 30 minutes late to lunch without texting"
     ],
     "builderActionIds": [
       "punctuality-boundaries"
@@ -1158,18 +1765,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:hoa|association|board|management)\\b[^\\n]{0,160}\\b(?:warning|violation|notice|letter)\\b[^\\n]{0,120}\\b(?:lawn|yard|grass|weeds)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The HOA sent a lawn warning letter without asking first.",
-      "A board left a notice about hedge height with no conversation.",
-      "Management posted a warning about patio chairs without talking to us."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "hoa-lawn-warning"
     ],
@@ -1181,6 +1777,32 @@
       "fairness",
       "clarity",
       "respect"
+    ],
+    "examples": [
+      "The HOA sent a lawn warning letter without asking first.",
+      "A board left a notice about hedge height with no conversation.",
+      "Management posted a warning about patio chairs without talking to us."
+    ],
+    "matchers": [
+      {
+        "key": "warn|letter|lawn|length|ask|first",
+        "pattern": "\\bwarn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bletter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blawn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blength\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfirst\\b",
+        "flags": "iu",
+        "tokens": [
+          "warn",
+          "letter",
+          "lawn",
+          "length",
+          "without",
+          "ask",
+          "first"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "warning letter about lawn length without asking first"
     ],
     "builderActionIds": [
       "policy-warnings"
@@ -1195,18 +1817,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:colleague|coworker|teammate|manager)\\b[^\\n]{0,160}\\b(?:took|claimed|grabbed|accepted)\\b[^\\n]{0,80}\\b(?:credit|ownership|recognition)\\b[^\\n]{0,120}\\b(?:idea|work|proposal|plan|suggestion)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A colleague took credit for my idea in the pitch.",
-      "Someone presented my work as theirs during the meeting.",
-      "An editor left my name off the project summary."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "colleague-took-credit"
     ],
@@ -1219,6 +1830,42 @@
       "acknowledgement",
       "fairness",
       "integrity"
+    ],
+    "examples": [
+      "A colleague took credit for my idea in the pitch.",
+      "Someone presented my work as theirs during the meeting.",
+      "An editor left my name off the project summary."
+    ],
+    "matchers": [
+      {
+        "key": "idea|dur|pitch|meet",
+        "pattern": "\\bidea\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpitch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b",
+        "flags": "iu",
+        "tokens": [
+          "idea",
+          "dur",
+          "pitch",
+          "meet"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "dur|pitch|meet",
+        "pattern": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpitch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b",
+        "flags": "iu",
+        "tokens": [
+          "dur",
+          "pitch",
+          "meet"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "my idea during the pitch meeting",
+      "during the pitch meeting"
     ],
     "builderActionIds": [
       "recognition-boundaries"
@@ -1234,23 +1881,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:daycare|pre[-\\s]?school|school|child\\s*care|nursery)\\b[^\\n]{0,160}\\b(?:didn'?t|never|forgot\\s+to)\\s+(?:call|notify|let\\s+me\\s+know|text|reach\\s+out)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\b(?:fever|sick|ill|temperature)\\b[^\\n]{0,120}\\b(?:no\\s+call|without\\s+calling|without\\s+telling\\s+me)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Daycare forgot to call when my child had a fever.",
-      "The clinic didn't phone about a concerning result.",
-      "Camp missed letting us know about an injury."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "daycare-no-call"
     ],
@@ -1262,6 +1893,27 @@
       "safety",
       "clarity",
       "trust"
+    ],
+    "examples": [
+      "Daycare forgot to call when my child had a fever.",
+      "The clinic didn't phone about a concerning result.",
+      "Camp missed letting us know about an injury."
+    ],
+    "matchers": [
+      {
+        "key": "child|fever",
+        "pattern": "\\bchild\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfever\\b",
+        "flags": "iu",
+        "tokens": [
+          "child",
+          "fever"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "when my child had a fever"
     ],
     "builderActionIds": [
       "care-communication-gaps"
@@ -1276,18 +1928,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:bus\\s+driver|driver)\\b[^\\n]{0,120}\\b(?:waited|held\\s+the\\s+bus|kept\\s+the\\s+doors\\s+open|paused)\\b[^\\n]{0,120}\\b(?:while\\s+I\\s+ran|as\\s+I\\s+was\\s+running|for\\s+me)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A bus driver waited as I ran toward the stop.",
-      "The train conductor held the doors when I called out.",
-      "A shuttle driver paused so I could board."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "bus-driver-waited"
     ],
@@ -1299,6 +1940,29 @@
       "consideration",
       "support",
       "relaxation"
+    ],
+    "examples": [
+      "A bus driver waited as I ran toward the stop.",
+      "The train conductor held the doors when I called out.",
+      "A shuttle driver paused so I could board."
+    ],
+    "matchers": [
+      {
+        "key": "wait|runn|toward|stop",
+        "pattern": "\\bwait\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brunn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoward\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstop\\b",
+        "flags": "iu",
+        "tokens": [
+          "wait",
+          "runn",
+          "toward",
+          "stop"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "waited for me when I was running toward the stop"
     ],
     "builderActionIds": [
       "commute-kindness"
@@ -1313,18 +1977,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:teammate|coworker|dev|engineer|designer)\\b[^\\n]{0,200}\\b(?:skipped|stopped\\s+updating|never\\s+checked|ignor(?:ed|ing)|overlook(?:ed|ing))\\b[^\\n]{0,200}\\b(?:board|tracker|kanban|sprint|jira|project\\s+board)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "From Monday through Friday, no cards under Jordan's initials moved on the shared sprint board.",
-      "The kanban view shows five tasks assigned to Sam untouched since last Tuesday.",
-      "Our tracker still lists Casey's items in \"In Progress\" after a full week."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "teammate-sprint-update-gap"
     ],
@@ -1337,6 +1990,33 @@
       "clarity",
       "accountability",
       "mutuality"
+    ],
+    "examples": [
+      "From Monday through Friday, no cards under Jordan's initials moved on the shared sprint board.",
+      "The kanban view shows five tasks assigned to Sam untouched since last Tuesday.",
+      "Our tracker still lists Casey's items in \"In Progress\" after a full week."
+    ],
+    "matchers": [
+      {
+        "key": "no|card|teammate|mov|sprint|board",
+        "pattern": "\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteammate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsprint\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bboard\\b",
+        "flags": "iu",
+        "tokens": [
+          "no",
+          "card",
+          "teammate",
+          "initial",
+          "mov",
+          "shar",
+          "sprint",
+          "board"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "no cards under my teammate's initials moved on the shared sprint board"
     ],
     "builderActionIds": [
       "collaboration-visibility"
@@ -1351,18 +2031,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:landlord|property\\s+manager|superintendent|maintenance)\\b[^\\n]{0,160}\\b(?:fixed|repaired|sent\\s+someone|took\\s+care|handled)\\b[^\\n]{0,120}\\b(?:same\\s+day|next\\s+day|within\\s+24\\s+hours|right\\s+away)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Maintenance fixed the leak the day after we reported it.",
-      "Our landlord scheduled a plumber the next morning.",
-      "The repair team showed up within 24 hours."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "landlord-fixed-quickly"
     ],
@@ -1374,6 +2043,30 @@
       "safety",
       "dependability",
       "support"
+    ],
+    "examples": [
+      "Maintenance fixed the leak the day after we reported it.",
+      "Our landlord scheduled a plumber the next morning.",
+      "The repair team showed up within 24 hours."
+    ],
+    "matchers": [
+      {
+        "key": "repair|leaky|faucet|day|report",
+        "pattern": "\\brepair\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleaky\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfaucet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b",
+        "flags": "iu",
+        "tokens": [
+          "repair",
+          "leaky",
+          "faucet",
+          "day",
+          "report"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "repaired the leaky faucet the day after we reported it"
     ],
     "builderActionIds": [
       "housing-responsiveness"
@@ -1388,18 +2081,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:sibling|brother|sister|friend|roommate)\\b[^\\n]{0,160}\\b(?:promised|said)\\b[^\\n]{0,120}\\b(?:pay\\s+me\\s+back|return\\s+the\\s+money|send\\s+the\\s+payment)\\b[^\\n]{0,120}\\b(?:still|yet)\\b[^\\n]{0,80}\\b(?:hasn'?t|has\\s+not|didn'?t)\\s+(?:paid|sent|transferred)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "A sibling missed the repayment they promised Friday.",
-      "A friend still hasn't paid me back after saying they would.",
-      "Someone delayed sending the money again."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "sibling-did-not-pay"
     ],
@@ -1411,6 +2093,40 @@
       "trust",
       "reliability",
       "fairness"
+    ],
+    "examples": [
+      "A sibling missed the repayment they promised Friday.",
+      "A friend still hasn't paid me back after saying they would.",
+      "Someone delayed sending the money again."
+    ],
+    "matchers": [
+      {
+        "key": "promis|pay|friday",
+        "pattern": "\\bpromis\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfriday\\b",
+        "flags": "iu",
+        "tokens": [
+          "promis",
+          "pay",
+          "friday"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "hasnt|sent|anyth",
+        "pattern": "\\bhasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\banyth\\b",
+        "flags": "iu",
+        "tokens": [
+          "hasnt",
+          "sent",
+          "anyth"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "promised to pay me back Friday but still hasn't sent anything"
     ],
     "builderActionIds": [
       "commitment-followthrough"
@@ -1426,18 +2142,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:restaurant|server|kitchen|staff)\\b[^\\n]{0,160}\\b(?:served|brought|delivered|sent)\\b[^\\n]{0,160}\\b(?:peanut|nut|nuts|allergen|dairy|gluten|egg)\\b[^\\n]{0,160}\\b(?:after|even\\s+though|although)\\b[^\\n]{0,160}\\b(?:allergy|told\\s+them|noted|flagged)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The restaurant served my meal with peanuts after I flagged my allergy.",
-      "Catering included dairy even though I mentioned the allergy.",
-      "A cafe added walnuts despite my warning."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "allergy-served-peanuts"
     ],
@@ -1449,6 +2154,30 @@
       "safety",
       "consideration",
       "trust"
+    ],
+    "examples": [
+      "The restaurant served my meal with peanuts after I flagged my allergy.",
+      "Catering included dairy even though I mentioned the allergy.",
+      "A cafe added walnuts despite my warning."
+    ],
+    "matchers": [
+      {
+        "key": "serv|meal|peanut|not|allergy",
+        "pattern": "\\bserv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeal\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeanut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnot\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\ballergy\\b",
+        "flags": "iu",
+        "tokens": [
+          "serv",
+          "meal",
+          "peanut",
+          "not",
+          "allergy"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "served my meal with peanuts after I noted my allergy"
     ],
     "builderActionIds": [
       "food-safety"
@@ -1463,18 +2192,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:meeting|call|sync|check[-\\s]?in|one[-\\s]?on[-\\s]?one)\\b[^\\n]{0,160}\\b(?:scheduled|booked|set|put)\\b[^\\n]{0,120}\\b(?:over|during|on)\\s+(?:my\\s+)?(?:lunch|meal|break|lunchtime)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "My manager scheduled a meeting over my lunch break without asking.",
-      "A lead booked a call during my only break.",
-      "Someone added a meeting right over my dinner time."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "meeting-over-lunch"
     ],
@@ -1486,6 +2204,31 @@
       "respect",
       "rest",
       "autonomy"
+    ],
+    "examples": [
+      "My manager scheduled a meeting over my lunch break without asking.",
+      "A lead booked a call during my only break.",
+      "Someone added a meeting right over my dinner time."
+    ],
+    "matchers": [
+      {
+        "key": "schedul|meet|lunch|break|without|ask",
+        "pattern": "\\bschedul\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blunch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbreak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+        "flags": "iu",
+        "tokens": [
+          "schedul",
+          "meet",
+          "lunch",
+          "break",
+          "without",
+          "ask"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "scheduled a meeting over my lunch break without asking"
     ],
     "builderActionIds": [
       "schedule-respect"
@@ -1500,23 +2243,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:support|service|help\\s*desk|agent|representative|rep)\\b[^\\n]{0,160}\\b(?:follow(?:ed)?\\s+up|checked\\s+back|emailed\\s+the\\s+next\\s+day|reached\\s+out\\s+after)\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bwalk(?:ed)?\\s+me\\s+through\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
-      "IT kept the remote session open until the app loaded and sent a ticket update at 9 a.m.",
-      "Customer service called back the next day after guiding me through the reset."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "support-agent-followed-up"
     ],
@@ -1528,6 +2255,46 @@
       "clarity",
       "support",
       "accountability"
+    ],
+    "examples": [
+      "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
+      "IT kept the remote session open until the app loaded and sent a ticket update at 9 a.m.",
+      "Customer service called back the next day after guiding me through the reset."
+    ],
+    "matchers": [
+      {
+        "key": "yesterday|service|agent|call|troubleshoot|step",
+        "pattern": "\\byesterday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bservice\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btroubleshoot\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b",
+        "flags": "iu",
+        "tokens": [
+          "yesterday",
+          "service",
+          "agent",
+          "stay",
+          "call",
+          "each",
+          "troubleshoot",
+          "step"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "email|morn|confirm|fix",
+        "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmorn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconfirm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfix\\b",
+        "flags": "iu",
+        "tokens": [
+          "email",
+          "morn",
+          "confirm",
+          "fix"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix"
     ],
     "builderActionIds": [
       "support-followthrough"
@@ -1542,18 +2309,7 @@
       "context",
       "sensory"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\b(?:city|municipal|public\\s+works|council)\\b[^\\n]{0,160}\\b(?:fixed|repaired|replaced)\\b[^\\n]{0,120}\\b(?:street\\s*light|streetlight|lamp)\\b[^\\n]{0,160}\\b(?:after|following|finally|eventually)\\b[^\\n]{0,160}\\b(?:months|weeks|several|many)\\s+(?:emails|requests|reports|complaints)\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "The city fixed the streetlight after months of emails.",
-      "Public works repaired the pothole we kept reporting.",
-      "The utilities crew finally addressed the outage after persistent follow-up."
-    ],
+    "slotSummary": "time anchor, setting or people, and sensory detail slots",
     "cueIds": [
       "city-fixed-streetlight"
     ],
@@ -1566,6 +2322,29 @@
       "safety",
       "reliability",
       "community"
+    ],
+    "examples": [
+      "The city fixed the streetlight after months of emails.",
+      "Public works repaired the pothole we kept reporting.",
+      "The utilities crew finally addressed the outage after persistent follow-up."
+    ],
+    "matchers": [
+      {
+        "key": "fix|streetlight|month|email",
+        "pattern": "\\bfix\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstreetlight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bemail\\b",
+        "flags": "iu",
+        "tokens": [
+          "fix",
+          "streetlight",
+          "month",
+          "email"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "fixed the streetlight after months of emails"
     ],
     "builderActionIds": [
       "infrastructure-response"
@@ -1581,16 +2360,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\baudit\\s+logs?\\b[^\\n]{0,60}\\bunauthorized\\s+logins\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 8:20 a.m. today in the SOC, the audit logs listed five unauthorized logins this week."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "audit-login-breaches"
     ],
@@ -1602,6 +2372,46 @@
       "security",
       "safety",
       "predictability"
+    ],
+    "examples": [
+      "At 8:20 a.m. today in the SOC, the audit logs listed five unauthorized logins this week."
+    ],
+    "matchers": [
+      {
+        "key": "audit|logs|list|five|login|week",
+        "pattern": "\\baudit\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogs\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+        "flags": "iu",
+        "tokens": [
+          "audit",
+          "logs",
+          "list",
+          "five",
+          "unauthoriz",
+          "login",
+          "week"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "logs|list|five|unauthoriz|login|week",
+        "pattern": "\\blogs\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bunauthoriz\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+        "flags": "iu",
+        "tokens": [
+          "logs",
+          "list",
+          "five",
+          "unauthoriz",
+          "login",
+          "week"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the audit logs listed five unauthorized logins this week",
+      "logs listed five unauthorized logins this week"
     ],
     "builderActionIds": [
       "audit-login-breaches"
@@ -1617,16 +2427,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bbedtime\\b[^\\n]{0,60}\\bagain\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 8:30 p.m. last night in the nursery with our twins, I heard my partner say \"You're on bedtime again.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "bedtime-load-gaps"
     ],
@@ -1639,6 +2440,26 @@
       "support",
       "rest",
       "love-caring"
+    ],
+    "examples": [
+      "At 8:30 p.m. last night in the nursery with our twins, I heard my partner say \"You're on bedtime again.\""
+    ],
+    "matchers": [
+      {
+        "key": "say|bedtime",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbedtime\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "bedtime"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "say \"You're on bedtime again.\"",
+      "say You're on bedtime again."
     ],
     "builderActionIds": [
       "bedtime-load-gaps"
@@ -1654,16 +2475,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 3:45 p.m. today in the finance Slack channel, Finance posted \"Budget freeze effective immediately.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "budget-freeze-alerts"
     ],
@@ -1676,6 +2488,30 @@
       "security",
       "clarity",
       "predictability"
+    ],
+    "examples": [
+      "At 3:45 p.m. today in the finance Slack channel, Finance posted \"Budget freeze effective immediately.\""
+    ],
+    "matchers": [
+      {
+        "key": "finance|post|budget|freeze|effective|immediately",
+        "pattern": "\\bfinance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpost\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbudget\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfreeze\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beffective\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bimmediately\\b",
+        "flags": "iu",
+        "tokens": [
+          "finance",
+          "post",
+          "budget",
+          "freeze",
+          "effective",
+          "immediately"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "finance posted \"Budget freeze effective immediately.\"",
+      "finance posted Budget freeze effective immediately."
     ],
     "builderActionIds": [
       "budget-freeze-alerts"
@@ -1691,16 +2527,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bhaven't\\s+replied\\s+to\\s+your\\s+emails\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "On Monday at 2 p.m. at city hall with the clerk, I heard the staffer say \"We still haven't replied to your emails.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "civic-nonresponse"
     ],
@@ -1713,6 +2540,28 @@
       "accountability",
       "inclusion",
       "participation"
+    ],
+    "examples": [
+      "On Monday at 2 p.m. at city hall with the clerk, I heard the staffer say \"We still haven't replied to your emails.\""
+    ],
+    "matchers": [
+      {
+        "key": "say|havent|repli|email",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhavent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brepli\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bemail\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "havent",
+          "repli",
+          "email"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "say \"We still haven't replied to your emails.\"",
+      "say We still haven't replied to your emails."
     ],
     "builderActionIds": [
       "civic-nonresponse"
@@ -1728,16 +2577,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bjudge\\b[^\\n]{0,80}\\breconvene\\s+next\\s+month\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 10 a.m. in courtroom 2B with my client, the judge postponed our hearing and said \"We'll reconvene next month.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "courtroom-delays"
     ],
@@ -1750,6 +2590,85 @@
       "justice",
       "clarity",
       "support"
+    ],
+    "examples": [
+      "At 10 a.m. in courtroom 2B with my client, the judge postponed our hearing and said \"We'll reconvene next month.\""
+    ],
+    "matchers": [
+      {
+        "key": "judge|said|would|next|new|date",
+        "pattern": "\\bjudge\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdate\\b",
+        "flags": "iu",
+        "tokens": [
+          "judge",
+          "said",
+          "would",
+          "reconvene",
+          "next",
+          "month",
+          "no",
+          "new",
+          "date"
+        ],
+        "tokenThreshold": 6,
+        "sourceType": "builder"
+      },
+      {
+        "key": "said|would|reconvene|month|new|date",
+        "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breconvene\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdate\\b",
+        "flags": "iu",
+        "tokens": [
+          "said",
+          "would",
+          "reconvene",
+          "next",
+          "month",
+          "no",
+          "new",
+          "date"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "clerk|announc|hear|next|without|explanation",
+        "pattern": "\\bclerk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bannounc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhear\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+        "flags": "iu",
+        "tokens": [
+          "clerk",
+          "announc",
+          "hear",
+          "push",
+          "next",
+          "month",
+          "without",
+          "explanation"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "announc|hear|push|next|without|explanation",
+        "pattern": "\\bannounc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhear\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpush\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+        "flags": "iu",
+        "tokens": [
+          "announc",
+          "hear",
+          "push",
+          "next",
+          "month",
+          "without",
+          "explanation"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the judge said we would reconvene next month with no new date",
+      "said we would reconvene next month with no new date",
+      "the clerk announced our hearing was pushed to next month without an explanation",
+      "announced our hearing was pushed to next month without an explanation"
     ],
     "builderActionIds": [
       "courtroom-delays"
@@ -1765,16 +2684,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bcounted\\s+four\\s+tables\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday at 6 p.m. in the cafe lobby with our closing crew, I counted four tables left covered in cups."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "customer-mess-followup"
     ],
@@ -1787,6 +2697,28 @@
       "order",
       "respect",
       "support"
+    ],
+    "examples": [
+      "Yesterday at 6 p.m. in the cafe lobby with our closing crew, I counted four tables left covered in cups."
+    ],
+    "matchers": [
+      {
+        "key": "four|tabl|left|cover|cups",
+        "pattern": "\\bfour\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btabl\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcover\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcups\\b",
+        "flags": "iu",
+        "tokens": [
+          "four",
+          "tabl",
+          "left",
+          "cover",
+          "cups"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "four tables left covered in cups"
     ],
     "builderActionIds": [
       "customer-mess-followup"
@@ -1802,16 +2734,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdoorbell\\s+cam\\b[^\\n]{0,60}\\bleaving\\s+the\\s+package\\b[^\\n]{0,40}\\b\\d+\\s+minutes\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 5 p.m. yesterday on our porch, the doorbell cam captured the delivery driver leaving the package in the rain for 12 minutes."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "delivery-exposure"
     ],
@@ -1824,6 +2747,31 @@
       "reliability",
       "consideration",
       "safety"
+    ],
+    "examples": [
+      "At 5 p.m. yesterday on our porch, the doorbell cam captured the delivery driver leaving the package in the rain for 12 minutes."
+    ],
+    "matchers": [
+      {
+        "key": "captur|delivery|driver|package|12|minut",
+        "pattern": "\\bcaptur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdelivery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdriver\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpackage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b",
+        "flags": "iu",
+        "tokens": [
+          "captur",
+          "delivery",
+          "driver",
+          "leav",
+          "package",
+          "rain",
+          "12",
+          "minut"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "captured the delivery driver leaving the package in the rain for 12 minutes"
     ],
     "builderActionIds": [
       "delivery-exposure"
@@ -1839,16 +2787,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdivorce\\s+papers\\b[^\\n]{0,60}\\b30\\s+seconds\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "This afternoon at my parents' dining table with my brother, I saw him stare silently at the divorce papers for 30 seconds."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "divorce-paper-silence"
     ],
@@ -1861,6 +2800,46 @@
       "support",
       "love-caring",
       "connection"
+    ],
+    "examples": [
+      "This afternoon at my parents' dining table with my brother, I saw him stare silently at the divorce papers for 30 seconds."
+    ],
+    "matchers": [
+      {
+        "key": "them|stare|silently|divorce|30|second",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilently\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdivorce\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "stare",
+          "silently",
+          "divorce",
+          "paper",
+          "30",
+          "second"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "stare|silently|divorce|paper|30|second",
+        "pattern": "\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilently\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdivorce\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpaper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+        "flags": "iu",
+        "tokens": [
+          "stare",
+          "silently",
+          "divorce",
+          "paper",
+          "30",
+          "second"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them stare silently at the divorce papers for 30 seconds",
+      "stare silently at the divorce papers for 30 seconds"
     ],
     "builderActionIds": [
       "divorce-paper-silence"
@@ -1876,16 +2855,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bboth\\s+tenors\\b[^\\n]{0,60}\\bstare\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's rehearsal at the arts center, I watched both tenors stare at the floor for 10 seconds."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "ensemble-dropoff"
     ],
@@ -1897,6 +2867,29 @@
       "participation",
       "support",
       "connection"
+    ],
+    "examples": [
+      "During tonight's rehearsal at the arts center, I watched both tenors stare at the floor for 10 seconds."
+    ],
+    "matchers": [
+      {
+        "key": "both|tenor|stare|floor|10|second",
+        "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btenor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfloor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b10\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+        "flags": "iu",
+        "tokens": [
+          "both",
+          "tenor",
+          "stare",
+          "floor",
+          "10",
+          "second"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "both tenors stare at the floor for 10 seconds"
     ],
     "builderActionIds": [
       "ensemble-dropoff"
@@ -1912,16 +2905,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bEviction\\s+warning\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday at noon in my apartment, the landlord mailed a letter stamped \"Eviction warning.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "housing-eviction-notices"
     ],
@@ -1934,6 +2918,29 @@
       "security",
       "support",
       "predictability"
+    ],
+    "examples": [
+      "Yesterday at noon in my apartment, the landlord mailed a letter stamped \"Eviction warning.\""
+    ],
+    "matchers": [
+      {
+        "key": "mail|letter|stamp|eviction|warn",
+        "pattern": "\\bmail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bletter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstamp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beviction\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwarn\\b",
+        "flags": "iu",
+        "tokens": [
+          "mail",
+          "letter",
+          "stamp",
+          "eviction",
+          "warn"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "mailed a letter stamped \"Eviction warning.\"",
+      "mailed a letter stamped Eviction warning."
     ],
     "builderActionIds": [
       "housing-eviction-notices"
@@ -1949,16 +2956,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bcoordinator\\b[^\\n]{0,60}\\bclipboard\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 4 p.m. today in the shelter intake room, I noticed the coordinator close the intake clipboard and walk away for two minutes."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "intake-walkaways"
     ],
@@ -1970,6 +2968,91 @@
       "accountability",
       "support",
       "reliability"
+    ],
+    "examples": [
+      "At 4 p.m. today in the shelter intake room, I noticed the coordinator close the intake clipboard and walk away for two minutes."
+    ],
+    "matchers": [
+      {
+        "key": "coordinator|walk|clipboard",
+        "pattern": "\\bcoordinator\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b",
+        "flags": "iu",
+        "tokens": [
+          "coordinator",
+          "walk",
+          "clipboard"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "finish|intake",
+        "pattern": "\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bintake\\b",
+        "flags": "iu",
+        "tokens": [
+          "finish",
+          "intake"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "walk|clipboard|finish|intake",
+        "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bintake\\b",
+        "flags": "iu",
+        "tokens": [
+          "walk",
+          "clipboard",
+          "finish",
+          "intake"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "coordinator|set|clipboard",
+        "pattern": "\\bcoordinator\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bset\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b",
+        "flags": "iu",
+        "tokens": [
+          "coordinator",
+          "set",
+          "clipboard"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "left|family|wait",
+        "pattern": "\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwait\\b",
+        "flags": "iu",
+        "tokens": [
+          "left",
+          "family",
+          "wait"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "set|clipboard|left|family|wait",
+        "pattern": "\\bset\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwait\\b",
+        "flags": "iu",
+        "tokens": [
+          "set",
+          "clipboard",
+          "left",
+          "family",
+          "wait"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the coordinator walked off with the clipboard before finishing our intake",
+      "walked off with the clipboard before finishing our intake",
+      "the coordinator set the clipboard down and left the families waiting",
+      "set the clipboard down and left the families waiting"
     ],
     "builderActionIds": [
       "intake-walkaways"
@@ -1985,16 +3068,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bpump\\s+alarm\\b[^\\n]{0,60}\\bstopped\\s+the\\s+watering\\s+cycle\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At dawn today out by the west field with Luis, the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "irrigation-pump-alarms"
     ],
@@ -2006,6 +3080,63 @@
       "reliability",
       "safety",
       "support"
+    ],
+    "examples": [
+      "At dawn today out by the west field with Luis, the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes."
+    ],
+    "matchers": [
+      {
+        "key": "irrigation|pump|alarm|sound",
+        "pattern": "\\birrigation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpump\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\balarm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsound\\b",
+        "flags": "iu",
+        "tokens": [
+          "irrigation",
+          "pump",
+          "alarm",
+          "sound"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "stopp|water|cycle",
+        "pattern": "\\bstopp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwater\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcycle\\b",
+        "flags": "iu",
+        "tokens": [
+          "stopp",
+          "water",
+          "cycle"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "4|minut",
+        "pattern": "\\b4\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b",
+        "flags": "iu",
+        "tokens": [
+          "4",
+          "minut"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "pump|alarm|sound",
+        "pattern": "\\bpump\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\balarm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsound\\b",
+        "flags": "iu",
+        "tokens": [
+          "pump",
+          "alarm",
+          "sound"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes",
+      "pump alarm sounded and stopped the watering cycle after 4 minutes"
     ],
     "builderActionIds": [
       "irrigation-pump-alarms"
@@ -2021,16 +3152,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bassay\\b[^\\n]{0,60}\\b0\\\\.42\\b[^\\n]{0,60}\\b0\\\\.91\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9 a.m. today in the lab with Priya, the assay produced inconsistent fluorescence versus the control plate with readings of 0.42 and 0.91."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "lab-fluorescence-variance"
     ],
@@ -2042,6 +3164,57 @@
       "understanding",
       "clarity",
       "reliability"
+    ],
+    "examples": [
+      "At 9 a.m. today in the lab with Priya, the assay produced inconsistent fluorescence versus the control plate with readings of 0.42 and 0.91."
+    ],
+    "matchers": [
+      {
+        "key": "assay|read|0|42|yesterday",
+        "pattern": "\\bassay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b42\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+        "flags": "iu",
+        "tokens": [
+          "assay",
+          "read",
+          "0",
+          "42",
+          "yesterday"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "0|91|today|same|sample|set",
+        "pattern": "\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b91\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsame\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsample\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bset\\b",
+        "flags": "iu",
+        "tokens": [
+          "0",
+          "91",
+          "today",
+          "same",
+          "sample",
+          "set"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "read|0|42|yesterday",
+        "pattern": "\\bread\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b42\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+        "flags": "iu",
+        "tokens": [
+          "read",
+          "0",
+          "42",
+          "yesterday"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the assay read 0.42 yesterday and 0.91 today on the same sample set",
+      "read 0.42 yesterday and 0.91 today on the same sample set"
     ],
     "builderActionIds": [
       "lab-fluorescence-variance"
@@ -2057,16 +3230,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bneed\\s+to\\s+redo\\b[^\\n]{0,60}\\bdeck\\b\\s+tonight\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Yesterday at 4:15 p.m. in the war room with Jenna, I heard my manager say \"We need to redo the launch deck tonight.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "last-minute-scope-shifts"
     ],
@@ -2079,6 +3243,30 @@
       "predictability",
       "consideration",
       "clarity"
+    ],
+    "examples": [
+      "Yesterday at 4:15 p.m. in the war room with Jenna, I heard my manager say \"We need to redo the launch deck tonight.\""
+    ],
+    "matchers": [
+      {
+        "key": "say|need|redo|launch|deck|tonight",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bredo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blaunch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "need",
+          "redo",
+          "launch",
+          "deck",
+          "tonight"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "say \"We need to redo the launch deck tonight.\"",
+      "say We need to redo the launch deck tonight."
     ],
     "builderActionIds": [
       "last-minute-scope-shifts"
@@ -2094,16 +3282,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bmaintenance\\s+dashboard\\b[^\\n]{0,60}\\bflashed\\s+red\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "Last night the maintenance dashboard flashed red for three hours."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "maintenance-dashboard-alerts"
     ],
@@ -2116,6 +3295,31 @@
       "reliability",
       "support",
       "safety"
+    ],
+    "examples": [
+      "Last night the maintenance dashboard flashed red for three hours."
+    ],
+    "matchers": [
+      {
+        "key": "last|night|maintenance|flash|three|hour",
+        "pattern": "\\blast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmaintenance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bflash\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b",
+        "flags": "iu",
+        "tokens": [
+          "last",
+          "night",
+          "maintenance",
+          "dashboard",
+          "flash",
+          "red",
+          "three",
+          "hour"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "last night the maintenance dashboard flashed red for three hours"
     ],
     "builderActionIds": [
       "maintenance-dashboard-alerts"
@@ -2131,16 +3335,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bboth\\s+partners\\b[^\\n]{0,60}\\bfive\\s+seconds\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's mediation session in room B with both partners, I watched both partners fold their arms for five seconds."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "mediation-body-language"
     ],
@@ -2152,6 +3347,29 @@
       "peace",
       "understanding",
       "connection"
+    ],
+    "examples": [
+      "During tonight's mediation session in room B with both partners, I watched both partners fold their arms for five seconds."
+    ],
+    "matchers": [
+      {
+        "key": "both|partner|fold|arms|five|second",
+        "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpartner\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfold\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barms\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+        "flags": "iu",
+        "tokens": [
+          "both",
+          "partner",
+          "fold",
+          "arms",
+          "five",
+          "second"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "both partners fold their arms for five seconds"
     ],
     "builderActionIds": [
       "mediation-body-language"
@@ -2167,16 +3385,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\brun\\s+\\d+\\s+minutes\\s+past\\s+dismissal\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During Tuesday's advisory meeting in room 214 with the grade-level team, I saw the agenda run 12 minutes past dismissal."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "meeting-overflow"
     ],
@@ -2189,6 +3398,44 @@
       "predictability",
       "consideration",
       "peace"
+    ],
+    "examples": [
+      "During Tuesday's advisory meeting in room 214 with the grade-level team, I saw the agenda run 12 minutes past dismissal."
+    ],
+    "matchers": [
+      {
+        "key": "agenda|run|12|minut|past|dismissal",
+        "pattern": "\\bagenda\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdismissal\\b",
+        "flags": "iu",
+        "tokens": [
+          "agenda",
+          "run",
+          "12",
+          "minut",
+          "past",
+          "dismissal"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "run|12|minut|past|dismissal",
+        "pattern": "\\brun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdismissal\\b",
+        "flags": "iu",
+        "tokens": [
+          "run",
+          "12",
+          "minut",
+          "past",
+          "dismissal"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the agenda run 12 minutes past dismissal",
+      "run 12 minutes past dismissal"
     ],
     "builderActionIds": [
       "meeting-overflow"
@@ -2204,16 +3451,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bbaby\\s+monitor\\b[^\\n]{0,60}\\b20\\s+minutes\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 2 a.m. this morning in the nursery, the baby monitor recorded crying for 20 minutes straight."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "monitor-distress-alerts"
     ],
@@ -2224,6 +3462,46 @@
       "support",
       "rest",
       "safety"
+    ],
+    "examples": [
+      "At 2 a.m. this morning in the nursery, the baby monitor recorded crying for 20 minutes straight."
+    ],
+    "matchers": [
+      {
+        "key": "baby|monitor|record|cry|minut|straight",
+        "pattern": "\\bbaby\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonitor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brecord\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcry\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstraight\\b",
+        "flags": "iu",
+        "tokens": [
+          "baby",
+          "monitor",
+          "record",
+          "cry",
+          "20",
+          "minut",
+          "straight"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "monitor|record|cry|20|minut|straight",
+        "pattern": "\\bmonitor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brecord\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcry\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b20\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstraight\\b",
+        "flags": "iu",
+        "tokens": [
+          "monitor",
+          "record",
+          "cry",
+          "20",
+          "minut",
+          "straight"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the baby monitor recorded crying for 20 minutes straight",
+      "monitor recorded crying for 20 minutes straight"
     ],
     "builderActionIds": [
       "monitor-distress-alerts"
@@ -2239,16 +3517,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bDr\\\\.\\s+Lee\\b[^\\n]{0,80}\\bthree\\s+pages\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11:45 p.m. on last night's ICU shift with Dr. Lee, I heard three pages come through after the schedule changed."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "on-call-chaos"
     ],
@@ -2261,6 +3530,29 @@
       "support",
       "consistency",
       "rest"
+    ],
+    "examples": [
+      "At 11:45 p.m. on last night's ICU shift with Dr. Lee, I heard three pages come through after the schedule changed."
+    ],
+    "matchers": [
+      {
+        "key": "three|pag|come|through|schedule|chang",
+        "pattern": "\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcome\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bschedule\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchang\\b",
+        "flags": "iu",
+        "tokens": [
+          "three",
+          "pag",
+          "come",
+          "through",
+          "schedule",
+          "chang"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "three pages come through after the schedule changed"
     ],
     "builderActionIds": [
       "on-call-chaos"
@@ -2276,16 +3568,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bconductor\\b[^\\n]{0,60}\\bpercussion\\s+entrance\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "During tonight's concert at the civic hall with the orchestra, the conductor cut the percussion entrance after two measures."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "orchestra-cuts"
     ],
@@ -2298,6 +3581,26 @@
       "respect",
       "recognition",
       "belonging"
+    ],
+    "examples": [
+      "During tonight's concert at the civic hall with the orchestra, the conductor cut the percussion entrance after two measures."
+    ],
+    "matchers": [
+      {
+        "key": "entrance|two|measur",
+        "pattern": "\\bentrance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeasur\\b",
+        "flags": "iu",
+        "tokens": [
+          "entrance",
+          "two",
+          "measur"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "entrance after two measures"
     ],
     "builderActionIds": [
       "orchestra-cuts"
@@ -2313,16 +3616,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bsolo\\b[^\\n]{0,60}\\bMaya\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 3 p.m. during rehearsal in studio A with the cast, I heard the choreographer say \"I'm giving your solo to Maya.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "performance-reassignment"
     ],
@@ -2335,6 +3629,28 @@
       "respect",
       "consideration",
       "belonging"
+    ],
+    "examples": [
+      "At 3 p.m. during rehearsal in studio A with the cast, I heard the choreographer say \"I'm giving your solo to Maya.\""
+    ],
+    "matchers": [
+      {
+        "key": "say|giv|solo|someone",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgiv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsolo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsomeone\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "giv",
+          "solo",
+          "someone"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "say \"I'm giving your solo to someone else.\"",
+      "say I'm giving your solo to someone else."
     ],
     "builderActionIds": [
       "performance-reassignment"
@@ -2350,16 +3666,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bradar\\b[^\\n]{0,60}\\bunknown\\s+transponder\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 02:14 during tonight's shift in the tower, radar flagged an unknown transponder ID 5487."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "radar-unknown-transponder"
     ],
@@ -2371,6 +3678,29 @@
       "safety",
       "clarity",
       "predictability"
+    ],
+    "examples": [
+      "At 02:14 during tonight's shift in the tower, radar flagged an unknown transponder ID 5487."
+    ],
+    "matchers": [
+      {
+        "key": "radar|flagg|unknown|transponder|id|5487",
+        "pattern": "\\bradar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bflagg\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bunknown\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btransponder\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b5487\\b",
+        "flags": "iu",
+        "tokens": [
+          "radar",
+          "flagg",
+          "unknown",
+          "transponder",
+          "id",
+          "5487"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "radar flagged an unknown transponder ID 5487"
     ],
     "builderActionIds": [
       "radar-unknown-transponder"
@@ -2386,16 +3716,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bwe'?re\\s+done\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 6:15 p.m. tonight on our sofa with my partner, I read a text that said \"We're done.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "relationship-breakup-text"
     ],
@@ -2408,6 +3729,14 @@
       "connection",
       "support",
       "clarity"
+    ],
+    "examples": [
+      "At 6:15 p.m. tonight on our sofa with my partner, I read a text that said \"We're done.\""
+    ],
+    "matchers": [],
+    "matchPhrases": [
+      "said \"We're done.\"",
+      "said We're done."
     ],
     "builderActionIds": [
       "relationship-breakup-text"
@@ -2423,16 +3752,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bphoned\\s+me\\b[^\\n]{0,60}\\bdisrupted\\s+class\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "This morning at 7:30 a.m. in my kitchen with the speakerphone on, the principal phoned me saying \"Your kid disrupted class.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "school-discipline-calls"
     ],
@@ -2443,6 +3763,29 @@
       "clarity",
       "support",
       "understanding"
+    ],
+    "examples": [
+      "This morning at 7:30 a.m. in my kitchen with the speakerphone on, the principal phoned me saying \"Your kid disrupted class.\""
+    ],
+    "matchers": [
+      {
+        "key": "phon|say|kid|disrupt|class",
+        "pattern": "\\bphon\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdisrupt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclass\\b",
+        "flags": "iu",
+        "tokens": [
+          "phon",
+          "say",
+          "kid",
+          "disrupt",
+          "class"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "phoned me saying \"Your kid disrupted class.\"",
+      "phoned me saying Your kid disrupted class."
     ],
     "builderActionIds": [
       "school-discipline-calls"
@@ -2458,16 +3801,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bfootage\\s+shows\\b[^\\n]{0,60}\\btwo\\s+contractors\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9 p.m. last night in the security office, the footage shows two contractors climbing the fence."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "security-footage-breach"
     ],
@@ -2479,6 +3813,82 @@
       "safety",
       "security",
       "trust"
+    ],
+    "examples": [
+      "At 9 p.m. last night in the security office, the footage shows two contractors climbing the fence."
+    ],
+    "matchers": [
+      {
+        "key": "footage|show|two|contractor|restrict|lab",
+        "pattern": "\\bfootage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brestrict\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b",
+        "flags": "iu",
+        "tokens": [
+          "footage",
+          "show",
+          "two",
+          "contractor",
+          "inside",
+          "restrict",
+          "lab"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "show|two|contractor|inside|lab|hour",
+        "pattern": "\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binside\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b",
+        "flags": "iu",
+        "tokens": [
+          "show",
+          "two",
+          "contractor",
+          "inside",
+          "restrict",
+          "lab",
+          "hour"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "footage|show|two|walk|lock|stairwell",
+        "pattern": "\\bfootage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\block\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstairwell\\b",
+        "flags": "iu",
+        "tokens": [
+          "footage",
+          "show",
+          "two",
+          "contractor",
+          "walk",
+          "through",
+          "lock",
+          "stairwell"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "show|two|contractor|walk|lock|stairwell",
+        "pattern": "\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\block\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstairwell\\b",
+        "flags": "iu",
+        "tokens": [
+          "show",
+          "two",
+          "contractor",
+          "walk",
+          "through",
+          "lock",
+          "stairwell"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "the footage shows two contractors inside the restricted lab after hours",
+      "shows two contractors inside the restricted lab after hours",
+      "the footage shows two contractors walk through the locked stairwell",
+      "shows two contractors walk through the locked stairwell"
     ],
     "builderActionIds": [
       "security-footage-breach"
@@ -2494,16 +3904,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bsigh\\b[^\\n]{0,60}\\bwithout\\s+saying\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11 a.m. today in my office with my client, I heard them sigh for eight seconds without saying a word."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "session-silent-sighs"
     ],
@@ -2515,6 +3916,46 @@
       "connection",
       "understanding",
       "trust"
+    ],
+    "examples": [
+      "At 11 a.m. today in my office with my client, I heard them sigh for eight seconds without saying a word."
+    ],
+    "matchers": [
+      {
+        "key": "them|sigh|eight|second|say|word",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsigh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bword\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "sigh",
+          "eight",
+          "second",
+          "without",
+          "say",
+          "word"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "sigh|eight|second|without|say|word",
+        "pattern": "\\bsigh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bword\\b",
+        "flags": "iu",
+        "tokens": [
+          "sigh",
+          "eight",
+          "second",
+          "without",
+          "say",
+          "word"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them sigh for eight seconds without saying a word",
+      "sigh for eight seconds without saying a word"
     ],
     "builderActionIds": [
       "session-silent-sighs"
@@ -2530,16 +3971,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bno\\s+beds\\b[^\\n]{0,60}\\btwo\\s+families\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 7 p.m. yesterday in the shelter gym with our intake team, I heard the volunteer say \"We have no beds for the next two families.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "shelter-capacity-turnaway"
     ],
@@ -2552,6 +3984,30 @@
       "support",
       "community",
       "safety"
+    ],
+    "examples": [
+      "At 7 p.m. yesterday in the shelter gym with our intake team, I heard the volunteer say \"We have no beds for the next two families.\""
+    ],
+    "matchers": [
+      {
+        "key": "say|no|beds|next|two|family",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbeds\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "no",
+          "beds",
+          "next",
+          "two",
+          "family"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "say \"We have no beds for the next two families.\"",
+      "say We have no beds for the next two families."
     ],
     "builderActionIds": [
       "shelter-capacity-turnaway"
@@ -2567,16 +4023,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bdouble[-\\s]?booked\\b[^\\n]{0,60}\\btelescope\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 11 p.m. last night at the observatory with the scheduler, I heard them say \"I double-booked the telescope you reserved.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "telescope-double-book"
     ],
@@ -2589,6 +4036,45 @@
       "consideration",
       "fairness",
       "reliability"
+    ],
+    "examples": [
+      "At 11 p.m. last night at the observatory with the scheduler, I heard them say \"I double-booked the telescope you reserved.\""
+    ],
+    "matchers": [
+      {
+        "key": "them|say|double|book|telescope|reserv",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdouble\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btelescope\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breserv\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "say",
+          "double",
+          "book",
+          "telescope",
+          "reserv"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "say|double|book|telescope|reserv",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdouble\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btelescope\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breserv\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "double",
+          "book",
+          "telescope",
+          "reserv"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them say \"I double-booked the telescope you reserved.\"",
+      "say \"I double-booked the telescope you reserved.\"",
+      "them say I double-booked the telescope you reserved."
     ],
     "builderActionIds": [
       "telescope-double-book"
@@ -2604,16 +4090,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bemailed\\b[^\\n]{0,60}\\bneed\\s+that\\s+deck\\s+tonight\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 9:05 a.m. today at my desk, my boss emailed \"I need that deck tonight.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "urgent-email-demands"
     ],
@@ -2626,6 +4103,28 @@
       "consideration",
       "clarity",
       "peace"
+    ],
+    "examples": [
+      "At 9:05 a.m. today at my desk, my boss emailed \"I need that deck tonight.\""
+    ],
+    "matchers": [
+      {
+        "key": "email|need|deck|tonight",
+        "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+        "flags": "iu",
+        "tokens": [
+          "email",
+          "need",
+          "deck",
+          "tonight"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "emailed \"I need that deck tonight.\"",
+      "emailed I need that deck tonight."
     ],
     "builderActionIds": [
       "urgent-email-demands"
@@ -2641,16 +4140,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bvoicemail\\b[^\\n]{0,60}\\byou're\\s+useless\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "At 10:12 a.m. today in the back office, a customer left a voicemail saying \"You're useless.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "voicemail-insults"
     ],
@@ -2663,6 +4153,26 @@
       "respect",
       "safety",
       "consideration"
+    ],
+    "examples": [
+      "At 10:12 a.m. today in the back office, a customer left a voicemail saying \"You're useless.\""
+    ],
+    "matchers": [
+      {
+        "key": "say|useless",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\buseless\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "useless"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "saying \"You're useless.\"",
+      "saying You're useless."
     ],
     "builderActionIds": [
       "voicemail-insults"
@@ -2678,21 +4188,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bI\\s+heard\\s+[^\\n]+?\\s+say\\s+\\x22[^\\n]+\\x22",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bI\\s+heard\\s+[^\\n]+?\\s+say\\s+\\u201c[^\\u201d\\n]+\\u201d",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-direct-quote"
     ],
@@ -2706,6 +4202,71 @@
       "to-be-heard",
       "respect",
       "trust"
+    ],
+    "examples": [
+      "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
+    ],
+    "matchers": [
+      {
+        "key": "them|say|need|today",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "say",
+          "need",
+          "today"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "say|need|today",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "need",
+          "today"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|say|let|wrap|now",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwrap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnow\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "say",
+          "let",
+          "wrap",
+          "now"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "say|let|wrap|now",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwrap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnow\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "let",
+          "wrap",
+          "now"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them say \"We need this done today.\"",
+      "say \"We need this done today.\"",
+      "them say We need this done today.",
+      "them say \"Let's wrap this up now.\"",
+      "say \"Let's wrap this up now.\"",
+      "them say Let's wrap this up now."
     ],
     "builderActionIds": [
       "structured-direct-quote"
@@ -2721,21 +4282,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bstart(?:ed)?\\s+speaking\\s+(?:while|before)\\s+i\\s+(?:was\\s+still\\s+(?:mid-?sentence|sharing|talking)|finished|was\\s+finished)\\b[^.?!]*",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bspeak(?:ing)?\\s+over\\s+my\\s+(?:update|words?|sentence)\\b[^.?!]*",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-interruption"
     ],
@@ -2748,6 +4295,71 @@
       "respect",
       "to-be-heard",
       "consideration"
+    ],
+    "examples": [
+      "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence."
+    ],
+    "matchers": [
+      {
+        "key": "them|start|speak|mid|sentence",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsentence\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "start",
+          "speak",
+          "mid",
+          "sentence"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "start|speak|mid|sentence",
+        "pattern": "\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsentence\\b",
+        "flags": "iu",
+        "tokens": [
+          "start",
+          "speak",
+          "mid",
+          "sentence"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|speak|update|finish|shar",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "speak",
+          "update",
+          "finish",
+          "shar"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "speak|update|finish|shar",
+        "pattern": "\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b",
+        "flags": "iu",
+        "tokens": [
+          "speak",
+          "update",
+          "finish",
+          "shar"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them start speaking while I was still mid-sentence",
+      "start speaking while I was still mid-sentence",
+      "them speak over my update before I finished sharing",
+      "speak over my update before I finished sharing"
     ],
     "builderActionIds": [
       "structured-interruption"
@@ -2763,21 +4375,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bopen(?:ed)?\\s+the\\s+file\\s+we\\s+agreed\\s+to\\s+keep\\s+private\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bwalk(?:ed)?\\s+into\\s+the\\s+lab\\s+without\\s+the\\s+badge\\s+we\\s+said\\s+was\\s+required\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-boundary-crossing"
     ],
@@ -2790,6 +4388,77 @@
       "respect",
       "safety",
       "autonomy"
+    ],
+    "examples": [
+      "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private."
+    ],
+    "matchers": [
+      {
+        "key": "them|open|file|agre|keep|private",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bopen\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfile\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkeep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "open",
+          "file",
+          "agre",
+          "keep",
+          "private"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "open|file|agre|keep|private",
+        "pattern": "\\bopen\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfile\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkeep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b",
+        "flags": "iu",
+        "tokens": [
+          "open",
+          "file",
+          "agre",
+          "keep",
+          "private"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|walk|lab|without|said|requir",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequir\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "walk",
+          "lab",
+          "without",
+          "badge",
+          "said",
+          "requir"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "walk|lab|without|badge|said|requir",
+        "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbadge\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequir\\b",
+        "flags": "iu",
+        "tokens": [
+          "walk",
+          "lab",
+          "without",
+          "badge",
+          "said",
+          "requir"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them open the file we agreed to keep private",
+      "open the file we agreed to keep private",
+      "them walk into the lab without the badge we said was required",
+      "walk into the lab without the badge we said was required"
     ],
     "builderActionIds": [
       "structured-boundary-crossing"
@@ -2805,21 +4474,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\barriv(?:ed|es|ing)?\\s+[0-9]+\\s*(?:minutes?|mins?)\\s+after\\s+our\\s+agreed\\s+start\\s+time\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bwalk(?:ed)?\\s+in\\s+after\\s+we\\s+had\\s+already\\s+begun\\b[^.?!]*",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-late-arrival"
     ],
@@ -2832,6 +4487,71 @@
       "reliability",
       "consideration",
       "predictability"
+    ],
+    "examples": [
+      "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time."
+    ],
+    "matchers": [
+      {
+        "key": "them|arrive|ten|minut|start|time",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barrive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btime\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "arrive",
+          "ten",
+          "minut",
+          "agre",
+          "start",
+          "time"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "arrive|ten|minut|agre|start|time",
+        "pattern": "\\barrive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btime\\b",
+        "flags": "iu",
+        "tokens": [
+          "arrive",
+          "ten",
+          "minut",
+          "agre",
+          "start",
+          "time"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|walk",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "walk"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "already|begun|9",
+        "pattern": "\\balready\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbegun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b9\\b",
+        "flags": "iu",
+        "tokens": [
+          "already",
+          "begun",
+          "9"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them arrive ten minutes after our agreed start time",
+      "arrive ten minutes after our agreed start time",
+      "them walk in after we had already begun the 9 a.m. check-in",
+      "walk in after we had already begun the 9 a.m. check-in"
     ],
     "builderActionIds": [
       "structured-late-arrival"
@@ -2847,21 +4567,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bpack(?:ed)?\\s+up\\s+and\\s+leave\\s+before\\s+we\\s+finished\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bstep(?:ped)?\\s+out\\s+while\\s+i\\s+was\\s+still\\s+sharing\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-left-early"
     ],
@@ -2874,6 +4580,69 @@
       "trust",
       "support",
       "reliability"
+    ],
+    "examples": [
+      "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation."
+    ],
+    "matchers": [
+      {
+        "key": "them|pack|leave|finish|conversation",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleave\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconversation\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "pack",
+          "leave",
+          "finish",
+          "conversation"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "pack|leave|finish|conversation",
+        "pattern": "\\bpack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleave\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconversation\\b",
+        "flags": "iu",
+        "tokens": [
+          "pack",
+          "leave",
+          "finish",
+          "conversation"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|step|shar|update",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "step",
+          "shar",
+          "update"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "step|shar|update",
+        "pattern": "\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+        "flags": "iu",
+        "tokens": [
+          "step",
+          "shar",
+          "update"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them pack up and leave before we finished the conversation",
+      "pack up and leave before we finished the conversation",
+      "them step out while I was still sharing my update",
+      "step out while I was still sharing my update"
     ],
     "builderActionIds": [
       "structured-left-early"
@@ -2889,16 +4658,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bI\\s+noticed\\s+[^\\n]+?\\s+(?:stay\\s+silent\\s+after\\s+I\\s+asked|not\\s+respond\\s+to\\s+my\\s+question|say\\s+nothing\\s+when\\s+I\\s+invited\\s+ideas|leave\\s+my\\s+request\\s+unanswered)\\b[^.?!]*",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-no-response"
     ],
@@ -2911,6 +4671,73 @@
       "to-be-heard",
       "understanding",
       "connection"
+    ],
+    "examples": [
+      "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
+    ],
+    "matchers": [
+      {
+        "key": "them|stay|silent|ask|feedback",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfeedback\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "stay",
+          "silent",
+          "ask",
+          "feedback"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "stay|silent|ask|feedback",
+        "pattern": "\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfeedback\\b",
+        "flags": "iu",
+        "tokens": [
+          "stay",
+          "silent",
+          "ask",
+          "feedback"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|look|offer|no|response|question",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bresponse\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bquestion\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "look",
+          "offer",
+          "no",
+          "response",
+          "question"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "look|offer|no|response|question",
+        "pattern": "\\blook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bresponse\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bquestion\\b",
+        "flags": "iu",
+        "tokens": [
+          "look",
+          "offer",
+          "no",
+          "response",
+          "question"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them stay silent after I asked for feedback",
+      "stay silent after I asked for feedback",
+      "them look away and offer no response to my question",
+      "look away and offer no response to my question"
     ],
     "builderActionIds": [
       "structured-no-response"
@@ -2926,21 +4753,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bsay\\s+they\\s+would\\s+cover\\s+the\\s+childcare\\s+swap\\s+rotation\\s+this\\s+week\\b",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\boffer(?:ed)?\\s+to\\s+take\\s+the\\s+next\\s+shift\\s+so\\s+i\\s+could\\s+rest\\b",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week."
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-support-offered"
     ],
@@ -2953,6 +4766,90 @@
       "support",
       "mutuality",
       "trust"
+    ],
+    "examples": [
+      "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week."
+    ],
+    "matchers": [
+      {
+        "key": "them|say|would|childcare|rotation|week",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchildcare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brotation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "say",
+          "would",
+          "cover",
+          "childcare",
+          "swap",
+          "rotation",
+          "week"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "say|would|cover|childcare|rotation|week",
+        "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcover\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchildcare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brotation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+        "flags": "iu",
+        "tokens": [
+          "say",
+          "would",
+          "cover",
+          "childcare",
+          "swap",
+          "rotation",
+          "week"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      },
+      {
+        "key": "them|offer|take|next|shift",
+        "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b",
+        "flags": "iu",
+        "tokens": [
+          "them",
+          "offer",
+          "take",
+          "next",
+          "shift"
+        ],
+        "tokenThreshold": 3,
+        "sourceType": "builder"
+      },
+      {
+        "key": "could|rest",
+        "pattern": "\\bcould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brest\\b",
+        "flags": "iu",
+        "tokens": [
+          "could",
+          "rest"
+        ],
+        "tokenThreshold": 2,
+        "sourceType": "builder"
+      },
+      {
+        "key": "offer|take|next|shift|could|rest",
+        "pattern": "\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brest\\b",
+        "flags": "iu",
+        "tokens": [
+          "offer",
+          "take",
+          "next",
+          "shift",
+          "could",
+          "rest"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "them say they would cover the childcare swap rotation this week",
+      "say they would cover the childcare swap rotation this week",
+      "them offer to take the next shift so I could rest",
+      "offer to take the next shift so I could rest"
     ],
     "builderActionIds": [
       "structured-support-offered"
@@ -2968,21 +4865,7 @@
       "sensory",
       "measure"
     ],
-    "detectors": [
-      {
-        "type": "regex",
-        "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+\\x22[^\\n]+\\x22",
-        "flags": "iu"
-      },
-      {
-        "type": "regex",
-        "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+\\u201c[^\\u201d\\n]+\\u201d",
-        "flags": "iu"
-      }
-    ],
-    "examples": [
-      "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
-    ],
+    "slotSummary": "time anchor, setting or people, sensory detail, and measurement slots",
     "cueIds": [
       "structured-digital-message"
     ],
@@ -2995,6 +4878,48 @@
       "clarity",
       "predictability",
       "consideration"
+    ],
+    "examples": [
+      "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
+    ],
+    "matchers": [
+      {
+        "key": "message|said|please|finish|report|tonight",
+        "pattern": "\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bplease\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+        "flags": "iu",
+        "tokens": [
+          "message",
+          "said",
+          "please",
+          "finish",
+          "report",
+          "tonight"
+        ],
+        "tokenThreshold": 4,
+        "sourceType": "builder"
+      },
+      {
+        "key": "message|said|reminder|please|form|today",
+        "pattern": "\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breminder\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bplease\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bform\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+        "flags": "iu",
+        "tokens": [
+          "message",
+          "said",
+          "reminder",
+          "please",
+          "submit",
+          "form",
+          "today"
+        ],
+        "tokenThreshold": 5,
+        "sourceType": "builder"
+      }
+    ],
+    "matchPhrases": [
+      "a message that said \"Please finish the report tonight.\"",
+      "a message that said Please finish the report tonight.",
+      "a message that said \"Reminder: please submit the forms today.\"",
+      "a message that said Reminder: please submit the forms today."
     ],
     "builderActionIds": [
       "structured-digital-message"

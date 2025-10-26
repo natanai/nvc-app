@@ -624,7 +624,152 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "rolled their eyes right after I asked for the spreadsheet update",
+            "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+            "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+            "said \"You're too sensitive\" when I declined the joke",
+            "said You're too sensitive when I declined the joke",
+            "whispered to someone else and they both laughed right after I described the roadmap change"
+          ],
+          "matchers": [
+            {
+              "key": "roll|eyes|right",
+              "pattern": "\\broll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beyes\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bright\\b",
+              "flags": "iu",
+              "tokens": [
+                "roll",
+                "eyes",
+                "right"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "ask|spreadsheet|update",
+              "pattern": "\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspreadsheet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+              "flags": "iu",
+              "tokens": [
+                "ask",
+                "spreadsheet",
+                "update"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "mutter|whatever",
+              "pattern": "\\bmutter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhatever\\b",
+              "flags": "iu",
+              "tokens": [
+                "mutter",
+                "whatever"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "slamm|bedroom|door",
+              "pattern": "\\bslamm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbedroom\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdoor\\b",
+              "flags": "iu",
+              "tokens": [
+                "slamm",
+                "bedroom",
+                "door"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "ask|homework|tonight",
+              "pattern": "\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhomework\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+              "flags": "iu",
+              "tokens": [
+                "ask",
+                "homework",
+                "tonight"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "said|too|sensitive|declin|joke",
+              "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsensitive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeclin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bjoke\\b",
+              "flags": "iu",
+              "tokens": [
+                "said",
+                "too",
+                "sensitive",
+                "declin",
+                "joke"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "whisper|someone",
+              "pattern": "\\bwhisper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsomeone\\b",
+              "flags": "iu",
+              "tokens": [
+                "whisper",
+                "someone"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "both|laugh|right",
+              "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blaugh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bright\\b",
+              "flags": "iu",
+              "tokens": [
+                "both",
+                "laugh",
+                "right"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "describ|roadmap|change",
+              "pattern": "\\bdescrib\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\broadmap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchange\\b",
+              "flags": "iu",
+              "tokens": [
+                "describ",
+                "roadmap",
+                "change"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "listening-boundaries",
@@ -665,7 +810,49 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "said \"You never listen\" when we talked about chores",
+            "said You never listen when we talked about chores",
+            "overlapped mine three times when I proposed a change"
+          ],
+          "matchers": [
+            {
+              "key": "said|never|listen|talk|chor",
+              "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnever\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blisten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchor\\b",
+              "flags": "iu",
+              "tokens": [
+                "said",
+                "never",
+                "listen",
+                "talk",
+                "chor"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "overlapp|mine|three|tim|propos|change",
+              "pattern": "\\boverlapp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmine\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btim\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpropos\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchange\\b",
+              "flags": "iu",
+              "tokens": [
+                "overlapp",
+                "mine",
+                "three",
+                "tim",
+                "propos",
+                "change"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "presentation-departures",
@@ -702,7 +889,43 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "slammed their notebook shut and walked out during my presentation yesterday"
+          ],
+          "matchers": [
+            {
+              "key": "slamm|notebook|shut",
+              "pattern": "\\bslamm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnotebook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshut\\b",
+              "flags": "iu",
+              "tokens": [
+                "slamm",
+                "notebook",
+                "shut"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "walk|dur|presentation|yesterday",
+              "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpresentation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+              "flags": "iu",
+              "tokens": [
+                "walk",
+                "dur",
+                "presentation",
+                "yesterday"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "sports-officiating",
@@ -739,7 +962,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "missed three fouls against our team"
+          ],
+          "matchers": [
+            {
+              "key": "miss|three|foul|against|team",
+              "pattern": "\\bmiss\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfoul\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagainst\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteam\\b",
+              "flags": "iu",
+              "tokens": [
+                "miss",
+                "three",
+                "foul",
+                "against",
+                "team"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "queue-respect",
@@ -780,7 +1025,52 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "skipped me and served two people who arrived later in line this afternoon",
+            "another shopper reached over me to grab the last carton of eggs"
+          ],
+          "matchers": [
+            {
+              "key": "serv|two|people|arriv|line|afternoon",
+              "pattern": "\\bserv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeople\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barriv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bline\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bafternoon\\b",
+              "flags": "iu",
+              "tokens": [
+                "serv",
+                "two",
+                "people",
+                "who",
+                "arriv",
+                "later",
+                "line",
+                "afternoon"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "another|shopper|reach|grab|carton|eggs",
+              "pattern": "\\banother\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshopper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgrab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcarton\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beggs\\b",
+              "flags": "iu",
+              "tokens": [
+                "another",
+                "shopper",
+                "reach",
+                "grab",
+                "last",
+                "carton",
+                "eggs"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "shared-upkeep",
@@ -821,7 +1111,61 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "dishes piled in the sink again before leaving for work",
+            "borrowed my car without asking and returned it with the tank empty"
+          ],
+          "matchers": [
+            {
+              "key": "dish|pil|sink|leav|work",
+              "pattern": "\\bdish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpil\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsink\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleav\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+              "flags": "iu",
+              "tokens": [
+                "dish",
+                "pil",
+                "sink",
+                "leav",
+                "work"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "borrow|car|without|ask",
+              "pattern": "\\bborrow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+              "flags": "iu",
+              "tokens": [
+                "borrow",
+                "car",
+                "without",
+                "ask"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "return|tank|empty",
+              "pattern": "\\breturn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btank\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bempty\\b",
+              "flags": "iu",
+              "tokens": [
+                "return",
+                "tank",
+                "empty"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "job-security",
@@ -858,7 +1202,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "said my contract wasn't renewed with no explanation"
+          ],
+          "matchers": [
+            {
+              "key": "said|contract|wasnt|renew|no|explanation",
+              "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontract\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brenew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+              "flags": "iu",
+              "tokens": [
+                "said",
+                "contract",
+                "wasnt",
+                "renew",
+                "no",
+                "explanation"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "feedback-clarity",
@@ -899,7 +1266,54 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "handed back my child's assignment with \"sloppy\" written across the top",
+            "handed back my child's assignment with sloppy written across the top",
+            "i received a performance review that only listed mistakes without any concrete examples"
+          ],
+          "matchers": [
+            {
+              "key": "hand|child|assignment|sloppy|across|top",
+              "pattern": "\\bhand\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchild\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bassignment\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsloppy\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bacross\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btop\\b",
+              "flags": "iu",
+              "tokens": [
+                "hand",
+                "child",
+                "assignment",
+                "sloppy",
+                "written",
+                "across",
+                "top"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "receiv|performance|review|mistak|concrete|exampl",
+              "pattern": "\\breceiv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperformance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breview\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmistak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconcrete\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexampl\\b",
+              "flags": "iu",
+              "tokens": [
+                "receiv",
+                "performance",
+                "review",
+                "list",
+                "mistak",
+                "without",
+                "any",
+                "concrete",
+                "exampl"
+              ],
+              "tokenThreshold": 6,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "housing-reliability",
@@ -940,7 +1354,61 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "responded to three messages about the leak this week",
+            "missed today's 8 a.m. appointment and hasn't texted or called"
+          ],
+          "matchers": [
+            {
+              "key": "respond|three|messag|leak|week",
+              "pattern": "\\brespond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+              "flags": "iu",
+              "tokens": [
+                "respond",
+                "three",
+                "messag",
+                "leak",
+                "week"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "miss|today|8",
+              "pattern": "\\bmiss\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b8\\b",
+              "flags": "iu",
+              "tokens": [
+                "miss",
+                "today",
+                "8"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "appointment|hasnt|text|call",
+              "pattern": "\\bappointment\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b",
+              "flags": "iu",
+              "tokens": [
+                "appointment",
+                "hasnt",
+                "text",
+                "call"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "care-attention",
@@ -977,7 +1445,42 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "glanced at the clock twice while I was describing my symptoms today"
+          ],
+          "matchers": [
+            {
+              "key": "glanc|clock|twice",
+              "pattern": "\\bglanc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclock\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwice\\b",
+              "flags": "iu",
+              "tokens": [
+                "glanc",
+                "clock",
+                "twice"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "describ|symptom|today",
+              "pattern": "\\bdescrib\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsymptom\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+              "flags": "iu",
+              "tokens": [
+                "describ",
+                "symptom",
+                "today"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "workload-boundaries",
@@ -1018,7 +1521,61 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "assigned me every follow-up action item again",
+            "slack messages between 11 p.m. and midnight about tomorrow's report"
+          ],
+          "matchers": [
+            {
+              "key": "assign|every|follow|action|item",
+              "pattern": "\\bassign\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfollow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\baction\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bitem\\b",
+              "flags": "iu",
+              "tokens": [
+                "assign",
+                "every",
+                "follow",
+                "action",
+                "item"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "slack|messag|between|11",
+              "pattern": "\\bslack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbetween\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b11\\b",
+              "flags": "iu",
+              "tokens": [
+                "slack",
+                "messag",
+                "between",
+                "11"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "midnight|tomorrow|report",
+              "pattern": "\\bmidnight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btomorrow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b",
+              "flags": "iu",
+              "tokens": [
+                "midnight",
+                "tomorrow",
+                "report"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "connection-presence",
@@ -1055,7 +1612,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "scrolled through their phone during dinner instead of looking up"
+          ],
+          "matchers": [
+            {
+              "key": "scroll|through|phone|dur|instead|look",
+              "pattern": "\\bscroll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bphone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blook\\b",
+              "flags": "iu",
+              "tokens": [
+                "scroll",
+                "through",
+                "phone",
+                "dur",
+                "dinner",
+                "instead",
+                "look"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "ride-environment",
@@ -1092,7 +1673,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "talked loudly on speakerphone for the entire trip yesterday"
+          ],
+          "matchers": [
+            {
+              "key": "talk|loudly|speakerphone|entire|trip|yesterday",
+              "pattern": "\\btalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bloudly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeakerphone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bentire\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btrip\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+              "flags": "iu",
+              "tokens": [
+                "talk",
+                "loudly",
+                "speakerphone",
+                "entire",
+                "trip",
+                "yesterday"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "noise-disturbance",
@@ -1129,7 +1733,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "barked loudly for 30 minutes starting at 6 a.m. on Saturday"
+          ],
+          "matchers": [
+            {
+              "key": "bark|loudly|30|minut|start|6",
+              "pattern": "\\bbark\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bloudly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b6\\b",
+              "flags": "iu",
+              "tokens": [
+                "bark",
+                "loudly",
+                "30",
+                "minut",
+                "start",
+                "6"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "safety-commute",
@@ -1166,7 +1793,42 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "sped through the crosswalk even though the light was red this morning"
+          ],
+          "matchers": [
+            {
+              "key": "sped|through|crosswalk",
+              "pattern": "\\bsped\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcrosswalk\\b",
+              "flags": "iu",
+              "tokens": [
+                "sped",
+                "through",
+                "crosswalk"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "light|red|morn",
+              "pattern": "\\blight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bred\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmorn\\b",
+              "flags": "iu",
+              "tokens": [
+                "light",
+                "red",
+                "morn"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "self-accountability",
@@ -1203,7 +1865,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "myself scrolling for an hour instead of calling my grandmother back"
+          ],
+          "matchers": [
+            {
+              "key": "myself|scroll|hour|instead|call|grandmother",
+              "pattern": "\\bmyself\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bscroll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgrandmother\\b",
+              "flags": "iu",
+              "tokens": [
+                "myself",
+                "scroll",
+                "hour",
+                "instead",
+                "call",
+                "grandmother"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "collaboration-safeguards",
@@ -1240,7 +1925,28 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "report and caught a mistake before we sent it"
+          ],
+          "matchers": [
+            {
+              "key": "report|caught|mistake|sent",
+              "pattern": "\\breport\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcaught\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmistake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsent\\b",
+              "flags": "iu",
+              "tokens": [
+                "report",
+                "caught",
+                "mistake",
+                "sent"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "milestone-celebration",
@@ -1277,7 +1983,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "right after I racked 185 pounds on squats"
+          ],
+          "matchers": [
+            {
+              "key": "right|rack|185|pound|squat",
+              "pattern": "\\bright\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b185\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpound\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsquat\\b",
+              "flags": "iu",
+              "tokens": [
+                "right",
+                "rack",
+                "185",
+                "pound",
+                "squat"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "neighbor-support",
@@ -1314,7 +2042,26 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "shoveled our sidewalk after the snowstorm while we were at work"
+          ],
+          "matchers": [
+            {
+              "key": "shovel|sidewalk",
+              "pattern": "\\bshovel\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsidewalk\\b",
+              "flags": "iu",
+              "tokens": [
+                "shovel",
+                "sidewalk"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "specific-appreciation",
@@ -1351,7 +2098,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "emailed me listing the volunteer shifts I covered during the fundraiser"
+          ],
+          "matchers": [
+            {
+              "key": "email|list|volunteer|shift|dur|fundraiser",
+              "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bvolunteer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfundraiser\\b",
+              "flags": "iu",
+              "tokens": [
+                "email",
+                "list",
+                "volunteer",
+                "shift",
+                "cover",
+                "dur",
+                "fundraiser"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "reflective-presence",
@@ -1388,7 +2159,42 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "paused and reflected back exactly what I said before offering input"
+          ],
+          "matchers": [
+            {
+              "key": "reflect|exactly|what|said",
+              "pattern": "\\breflect\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexactly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhat\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b",
+              "flags": "iu",
+              "tokens": [
+                "reflect",
+                "exactly",
+                "what",
+                "said"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "offer|input",
+              "pattern": "\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binput\\b",
+              "flags": "iu",
+              "tokens": [
+                "offer",
+                "input"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "supportive-rebalancing",
@@ -1429,7 +2235,73 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "cooked dinner and cleaned the kitchen while I finished my deadline",
+            "assigned two follow-up tasks to each teammate"
+          ],
+          "matchers": [
+            {
+              "key": "cook|dinner",
+              "pattern": "\\bcook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdinner\\b",
+              "flags": "iu",
+              "tokens": [
+                "cook",
+                "dinner"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "clean|kitchen",
+              "pattern": "\\bclean\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkitchen\\b",
+              "flags": "iu",
+              "tokens": [
+                "clean",
+                "kitchen"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "finish|deadline",
+              "pattern": "\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeadline\\b",
+              "flags": "iu",
+              "tokens": [
+                "finish",
+                "deadline"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "assign|two|follow|task|each|teammate",
+              "pattern": "\\bassign\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfollow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteammate\\b",
+              "flags": "iu",
+              "tokens": [
+                "assign",
+                "two",
+                "follow",
+                "task",
+                "each",
+                "teammate"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "integrity-returns",
@@ -1466,7 +2338,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "handed back my wallet with the cash still inside the billfold"
+          ],
+          "matchers": [
+            {
+              "key": "hand|wallet|cash|inside|billfold",
+              "pattern": "\\bhand\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwallet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcash\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binside\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbillfold\\b",
+              "flags": "iu",
+              "tokens": [
+                "hand",
+                "wallet",
+                "cash",
+                "inside",
+                "billfold"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "responsive-approvals",
@@ -1503,7 +2397,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "approved my vacation request the same day I submitted it"
+          ],
+          "matchers": [
+            {
+              "key": "approv|vacation|request|same|day|submitt",
+              "pattern": "\\bapprov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bvacation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequest\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsame\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsubmitt\\b",
+              "flags": "iu",
+              "tokens": [
+                "approv",
+                "vacation",
+                "request",
+                "same",
+                "day",
+                "submitt"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "care-attentive-support",
@@ -1544,7 +2461,50 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "checked in twice during the night to make sure my dad was comfortable",
+            "explained each step before starting the procedure"
+          ],
+          "matchers": [
+            {
+              "key": "check|twice|dur|make|dad|comfortable",
+              "pattern": "\\bcheck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwice\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdad\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcomfortable\\b",
+              "flags": "iu",
+              "tokens": [
+                "check",
+                "twice",
+                "dur",
+                "night",
+                "make",
+                "sure",
+                "dad",
+                "comfortable"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "explain|each|step|start|procedure",
+              "pattern": "\\bexplain\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprocedure\\b",
+              "flags": "iu",
+              "tokens": [
+                "explain",
+                "each",
+                "step",
+                "start",
+                "procedure"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "delivery-gaps",
@@ -1575,7 +2535,59 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "at 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep"
+          ],
+          "matchers": [
+            {
+              "key": "7",
+              "pattern": "\\b7\\b",
+              "flags": "iu",
+              "tokens": [
+                "7"
+              ],
+              "tokenThreshold": 1,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "delivery|app|mark|order|deliver",
+              "pattern": "\\bdelivery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bapp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmark\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\border\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeliver\\b",
+              "flags": "iu",
+              "tokens": [
+                "delivery",
+                "app",
+                "mark",
+                "order",
+                "deliver"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "porch|camera|show|empty|doorstep",
+              "pattern": "\\bporch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcamera\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bempty\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdoorstep\\b",
+              "flags": "iu",
+              "tokens": [
+                "porch",
+                "camera",
+                "show",
+                "empty",
+                "doorstep"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "punctuality-boundaries",
@@ -1612,7 +2624,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "arrived 30 minutes late to lunch without texting"
+          ],
+          "matchers": [
+            {
+              "key": "arriv|30|minut|late|without|text",
+              "pattern": "\\barriv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btext\\b",
+              "flags": "iu",
+              "tokens": [
+                "arriv",
+                "30",
+                "minut",
+                "late",
+                "lunch",
+                "without",
+                "text"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "policy-warnings",
@@ -1649,7 +2685,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "warning letter about lawn length without asking first"
+          ],
+          "matchers": [
+            {
+              "key": "warn|letter|lawn|length|ask|first",
+              "pattern": "\\bwarn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bletter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blawn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blength\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfirst\\b",
+              "flags": "iu",
+              "tokens": [
+                "warn",
+                "letter",
+                "lawn",
+                "length",
+                "without",
+                "ask",
+                "first"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "recognition-boundaries",
@@ -1686,7 +2746,44 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "my idea during the pitch meeting",
+            "during the pitch meeting"
+          ],
+          "matchers": [
+            {
+              "key": "idea|dur|pitch|meet",
+              "pattern": "\\bidea\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpitch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b",
+              "flags": "iu",
+              "tokens": [
+                "idea",
+                "dur",
+                "pitch",
+                "meet"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "dur|pitch|meet",
+              "pattern": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpitch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b",
+              "flags": "iu",
+              "tokens": [
+                "dur",
+                "pitch",
+                "meet"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "care-communication-gaps",
@@ -1723,7 +2820,26 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "when my child had a fever"
+          ],
+          "matchers": [
+            {
+              "key": "child|fever",
+              "pattern": "\\bchild\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfever\\b",
+              "flags": "iu",
+              "tokens": [
+                "child",
+                "fever"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "commute-kindness",
@@ -1760,7 +2876,28 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "waited for me when I was running toward the stop"
+          ],
+          "matchers": [
+            {
+              "key": "wait|runn|toward|stop",
+              "pattern": "\\bwait\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brunn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoward\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstop\\b",
+              "flags": "iu",
+              "tokens": [
+                "wait",
+                "runn",
+                "toward",
+                "stop"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "collaboration-visibility",
@@ -1791,7 +2928,32 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "no cards under my teammate's initials moved on the shared sprint board"
+          ],
+          "matchers": [
+            {
+              "key": "no|card|teammate|mov|sprint|board",
+              "pattern": "\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteammate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsprint\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bboard\\b",
+              "flags": "iu",
+              "tokens": [
+                "no",
+                "card",
+                "teammate",
+                "initial",
+                "mov",
+                "shar",
+                "sprint",
+                "board"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "housing-responsiveness",
@@ -1828,7 +2990,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "repaired the leaky faucet the day after we reported it"
+          ],
+          "matchers": [
+            {
+              "key": "repair|leaky|faucet|day|report",
+              "pattern": "\\brepair\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleaky\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfaucet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b",
+              "flags": "iu",
+              "tokens": [
+                "repair",
+                "leaky",
+                "faucet",
+                "day",
+                "report"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "commitment-followthrough",
@@ -1865,7 +3049,42 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "promised to pay me back Friday but still hasn't sent anything"
+          ],
+          "matchers": [
+            {
+              "key": "promis|pay|friday",
+              "pattern": "\\bpromis\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfriday\\b",
+              "flags": "iu",
+              "tokens": [
+                "promis",
+                "pay",
+                "friday"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "hasnt|sent|anyth",
+              "pattern": "\\bhasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\banyth\\b",
+              "flags": "iu",
+              "tokens": [
+                "hasnt",
+                "sent",
+                "anyth"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "food-safety",
@@ -1902,7 +3121,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "served my meal with peanuts after I noted my allergy"
+          ],
+          "matchers": [
+            {
+              "key": "serv|meal|peanut|not|allergy",
+              "pattern": "\\bserv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeal\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeanut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnot\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\ballergy\\b",
+              "flags": "iu",
+              "tokens": [
+                "serv",
+                "meal",
+                "peanut",
+                "not",
+                "allergy"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "schedule-respect",
@@ -1939,7 +3180,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "scheduled a meeting over my lunch break without asking"
+          ],
+          "matchers": [
+            {
+              "key": "schedul|meet|lunch|break|without|ask",
+              "pattern": "\\bschedul\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blunch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbreak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+              "flags": "iu",
+              "tokens": [
+                "schedul",
+                "meet",
+                "lunch",
+                "break",
+                "without",
+                "ask"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "support-followthrough",
@@ -1976,7 +3240,48 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix"
+          ],
+          "matchers": [
+            {
+              "key": "yesterday|service|agent|call|troubleshoot|step",
+              "pattern": "\\byesterday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bservice\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btroubleshoot\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b",
+              "flags": "iu",
+              "tokens": [
+                "yesterday",
+                "service",
+                "agent",
+                "stay",
+                "call",
+                "each",
+                "troubleshoot",
+                "step"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "email|morn|confirm|fix",
+              "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmorn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconfirm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfix\\b",
+              "flags": "iu",
+              "tokens": [
+                "email",
+                "morn",
+                "confirm",
+                "fix"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "infrastructure-response",
@@ -2013,7 +3318,28 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "fixed the streetlight after months of emails"
+          ],
+          "matchers": [
+            {
+              "key": "fix|streetlight|month|email",
+              "pattern": "\\bfix\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstreetlight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bemail\\b",
+              "flags": "iu",
+              "tokens": [
+                "fix",
+                "streetlight",
+                "month",
+                "email"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "audit-login-breaches",
@@ -2044,7 +3370,50 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the audit logs listed five unauthorized logins this week",
+            "logs listed five unauthorized logins this week"
+          ],
+          "matchers": [
+            {
+              "key": "audit|logs|list|five|login|week",
+              "pattern": "\\baudit\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogs\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+              "flags": "iu",
+              "tokens": [
+                "audit",
+                "logs",
+                "list",
+                "five",
+                "unauthoriz",
+                "login",
+                "week"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "logs|list|five|unauthoriz|login|week",
+              "pattern": "\\blogs\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bunauthoriz\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+              "flags": "iu",
+              "tokens": [
+                "logs",
+                "list",
+                "five",
+                "unauthoriz",
+                "login",
+                "week"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "bedtime-load-gaps",
@@ -2081,7 +3450,27 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "say \"You're on bedtime again.\"",
+            "say You're on bedtime again."
+          ],
+          "matchers": [
+            {
+              "key": "say|bedtime",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbedtime\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "bedtime"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "budget-freeze-alerts",
@@ -2118,7 +3507,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "finance posted \"Budget freeze effective immediately.\"",
+            "finance posted Budget freeze effective immediately."
+          ],
+          "matchers": [
+            {
+              "key": "finance|post|budget|freeze|effective|immediately",
+              "pattern": "\\bfinance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpost\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbudget\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfreeze\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beffective\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bimmediately\\b",
+              "flags": "iu",
+              "tokens": [
+                "finance",
+                "post",
+                "budget",
+                "freeze",
+                "effective",
+                "immediately"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "civic-nonresponse",
@@ -2155,7 +3568,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "say \"We still haven't replied to your emails.\"",
+            "say We still haven't replied to your emails."
+          ],
+          "matchers": [
+            {
+              "key": "say|havent|repli|email",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhavent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brepli\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bemail\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "havent",
+                "repli",
+                "email"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "courtroom-delays",
@@ -2196,7 +3631,95 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the judge said we would reconvene next month with no new date",
+            "said we would reconvene next month with no new date",
+            "the clerk announced our hearing was pushed to next month without an explanation",
+            "announced our hearing was pushed to next month without an explanation"
+          ],
+          "matchers": [
+            {
+              "key": "judge|said|would|next|new|date",
+              "pattern": "\\bjudge\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdate\\b",
+              "flags": "iu",
+              "tokens": [
+                "judge",
+                "said",
+                "would",
+                "reconvene",
+                "next",
+                "month",
+                "no",
+                "new",
+                "date"
+              ],
+              "tokenThreshold": 6,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "said|would|reconvene|month|new|date",
+              "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breconvene\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdate\\b",
+              "flags": "iu",
+              "tokens": [
+                "said",
+                "would",
+                "reconvene",
+                "next",
+                "month",
+                "no",
+                "new",
+                "date"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "clerk|announc|hear|next|without|explanation",
+              "pattern": "\\bclerk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bannounc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhear\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+              "flags": "iu",
+              "tokens": [
+                "clerk",
+                "announc",
+                "hear",
+                "push",
+                "next",
+                "month",
+                "without",
+                "explanation"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "announc|hear|push|next|without|explanation",
+              "pattern": "\\bannounc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhear\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpush\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+              "flags": "iu",
+              "tokens": [
+                "announc",
+                "hear",
+                "push",
+                "next",
+                "month",
+                "without",
+                "explanation"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "customer-mess-followup",
@@ -2233,7 +3756,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "four tables left covered in cups"
+          ],
+          "matchers": [
+            {
+              "key": "four|tabl|left|cover|cups",
+              "pattern": "\\bfour\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btabl\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcover\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcups\\b",
+              "flags": "iu",
+              "tokens": [
+                "four",
+                "tabl",
+                "left",
+                "cover",
+                "cups"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "delivery-exposure",
@@ -2270,7 +3815,32 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "captured the delivery driver leaving the package in the rain for 12 minutes"
+          ],
+          "matchers": [
+            {
+              "key": "captur|delivery|driver|package|12|minut",
+              "pattern": "\\bcaptur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdelivery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdriver\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpackage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b",
+              "flags": "iu",
+              "tokens": [
+                "captur",
+                "delivery",
+                "driver",
+                "leav",
+                "package",
+                "rain",
+                "12",
+                "minut"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "divorce-paper-silence",
@@ -2307,7 +3877,50 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them stare silently at the divorce papers for 30 seconds",
+            "stare silently at the divorce papers for 30 seconds"
+          ],
+          "matchers": [
+            {
+              "key": "them|stare|silently|divorce|30|second",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilently\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdivorce\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "stare",
+                "silently",
+                "divorce",
+                "paper",
+                "30",
+                "second"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "stare|silently|divorce|paper|30|second",
+              "pattern": "\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilently\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdivorce\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpaper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+              "flags": "iu",
+              "tokens": [
+                "stare",
+                "silently",
+                "divorce",
+                "paper",
+                "30",
+                "second"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "ensemble-dropoff",
@@ -2344,7 +3957,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "both tenors stare at the floor for 10 seconds"
+          ],
+          "matchers": [
+            {
+              "key": "both|tenor|stare|floor|10|second",
+              "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btenor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfloor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b10\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+              "flags": "iu",
+              "tokens": [
+                "both",
+                "tenor",
+                "stare",
+                "floor",
+                "10",
+                "second"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "housing-eviction-notices",
@@ -2381,7 +4017,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "mailed a letter stamped \"Eviction warning.\"",
+            "mailed a letter stamped Eviction warning."
+          ],
+          "matchers": [
+            {
+              "key": "mail|letter|stamp|eviction|warn",
+              "pattern": "\\bmail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bletter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstamp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beviction\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwarn\\b",
+              "flags": "iu",
+              "tokens": [
+                "mail",
+                "letter",
+                "stamp",
+                "eviction",
+                "warn"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "intake-walkaways",
@@ -2422,7 +4081,107 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the coordinator walked off with the clipboard before finishing our intake",
+            "walked off with the clipboard before finishing our intake",
+            "the coordinator set the clipboard down and left the families waiting",
+            "set the clipboard down and left the families waiting"
+          ],
+          "matchers": [
+            {
+              "key": "coordinator|walk|clipboard",
+              "pattern": "\\bcoordinator\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b",
+              "flags": "iu",
+              "tokens": [
+                "coordinator",
+                "walk",
+                "clipboard"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "finish|intake",
+              "pattern": "\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bintake\\b",
+              "flags": "iu",
+              "tokens": [
+                "finish",
+                "intake"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "walk|clipboard|finish|intake",
+              "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bintake\\b",
+              "flags": "iu",
+              "tokens": [
+                "walk",
+                "clipboard",
+                "finish",
+                "intake"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "coordinator|set|clipboard",
+              "pattern": "\\bcoordinator\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bset\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b",
+              "flags": "iu",
+              "tokens": [
+                "coordinator",
+                "set",
+                "clipboard"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "left|family|wait",
+              "pattern": "\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwait\\b",
+              "flags": "iu",
+              "tokens": [
+                "left",
+                "family",
+                "wait"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "set|clipboard|left|family|wait",
+              "pattern": "\\bset\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwait\\b",
+              "flags": "iu",
+              "tokens": [
+                "set",
+                "clipboard",
+                "left",
+                "family",
+                "wait"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "irrigation-pump-alarms",
@@ -2453,7 +4212,73 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes",
+            "pump alarm sounded and stopped the watering cycle after 4 minutes"
+          ],
+          "matchers": [
+            {
+              "key": "irrigation|pump|alarm|sound",
+              "pattern": "\\birrigation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpump\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\balarm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsound\\b",
+              "flags": "iu",
+              "tokens": [
+                "irrigation",
+                "pump",
+                "alarm",
+                "sound"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "stopp|water|cycle",
+              "pattern": "\\bstopp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwater\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcycle\\b",
+              "flags": "iu",
+              "tokens": [
+                "stopp",
+                "water",
+                "cycle"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "4|minut",
+              "pattern": "\\b4\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b",
+              "flags": "iu",
+              "tokens": [
+                "4",
+                "minut"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "pump|alarm|sound",
+              "pattern": "\\bpump\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\balarm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsound\\b",
+              "flags": "iu",
+              "tokens": [
+                "pump",
+                "alarm",
+                "sound"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "lab-fluorescence-variance",
@@ -2484,7 +4309,64 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the assay read 0.42 yesterday and 0.91 today on the same sample set",
+            "read 0.42 yesterday and 0.91 today on the same sample set"
+          ],
+          "matchers": [
+            {
+              "key": "assay|read|0|42|yesterday",
+              "pattern": "\\bassay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b42\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+              "flags": "iu",
+              "tokens": [
+                "assay",
+                "read",
+                "0",
+                "42",
+                "yesterday"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "0|91|today|same|sample|set",
+              "pattern": "\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b91\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsame\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsample\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bset\\b",
+              "flags": "iu",
+              "tokens": [
+                "0",
+                "91",
+                "today",
+                "same",
+                "sample",
+                "set"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "read|0|42|yesterday",
+              "pattern": "\\bread\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b42\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+              "flags": "iu",
+              "tokens": [
+                "read",
+                "0",
+                "42",
+                "yesterday"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "last-minute-scope-shifts",
@@ -2521,7 +4403,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "say \"We need to redo the launch deck tonight.\"",
+            "say We need to redo the launch deck tonight."
+          ],
+          "matchers": [
+            {
+              "key": "say|need|redo|launch|deck|tonight",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bredo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blaunch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "need",
+                "redo",
+                "launch",
+                "deck",
+                "tonight"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "maintenance-dashboard-alerts",
@@ -2552,7 +4458,32 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "last night the maintenance dashboard flashed red for three hours"
+          ],
+          "matchers": [
+            {
+              "key": "last|night|maintenance|flash|three|hour",
+              "pattern": "\\blast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmaintenance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bflash\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b",
+              "flags": "iu",
+              "tokens": [
+                "last",
+                "night",
+                "maintenance",
+                "dashboard",
+                "flash",
+                "red",
+                "three",
+                "hour"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "mediation-body-language",
@@ -2589,7 +4520,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "both partners fold their arms for five seconds"
+          ],
+          "matchers": [
+            {
+              "key": "both|partner|fold|arms|five|second",
+              "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpartner\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfold\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barms\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+              "flags": "iu",
+              "tokens": [
+                "both",
+                "partner",
+                "fold",
+                "arms",
+                "five",
+                "second"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "meeting-overflow",
@@ -2620,7 +4574,48 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the agenda run 12 minutes past dismissal",
+            "run 12 minutes past dismissal"
+          ],
+          "matchers": [
+            {
+              "key": "agenda|run|12|minut|past|dismissal",
+              "pattern": "\\bagenda\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdismissal\\b",
+              "flags": "iu",
+              "tokens": [
+                "agenda",
+                "run",
+                "12",
+                "minut",
+                "past",
+                "dismissal"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "run|12|minut|past|dismissal",
+              "pattern": "\\brun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdismissal\\b",
+              "flags": "iu",
+              "tokens": [
+                "run",
+                "12",
+                "minut",
+                "past",
+                "dismissal"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "monitor-distress-alerts",
@@ -2651,7 +4646,50 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the baby monitor recorded crying for 20 minutes straight",
+            "monitor recorded crying for 20 minutes straight"
+          ],
+          "matchers": [
+            {
+              "key": "baby|monitor|record|cry|minut|straight",
+              "pattern": "\\bbaby\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonitor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brecord\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcry\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstraight\\b",
+              "flags": "iu",
+              "tokens": [
+                "baby",
+                "monitor",
+                "record",
+                "cry",
+                "20",
+                "minut",
+                "straight"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "monitor|record|cry|20|minut|straight",
+              "pattern": "\\bmonitor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brecord\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcry\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b20\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstraight\\b",
+              "flags": "iu",
+              "tokens": [
+                "monitor",
+                "record",
+                "cry",
+                "20",
+                "minut",
+                "straight"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "on-call-chaos",
@@ -2688,7 +4726,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "three pages come through after the schedule changed"
+          ],
+          "matchers": [
+            {
+              "key": "three|pag|come|through|schedule|chang",
+              "pattern": "\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcome\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bschedule\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchang\\b",
+              "flags": "iu",
+              "tokens": [
+                "three",
+                "pag",
+                "come",
+                "through",
+                "schedule",
+                "chang"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "orchestra-cuts",
@@ -2725,7 +4786,27 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "entrance after two measures"
+          ],
+          "matchers": [
+            {
+              "key": "entrance|two|measur",
+              "pattern": "\\bentrance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeasur\\b",
+              "flags": "iu",
+              "tokens": [
+                "entrance",
+                "two",
+                "measur"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "performance-reassignment",
@@ -2762,7 +4843,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "say \"I'm giving your solo to someone else.\"",
+            "say I'm giving your solo to someone else."
+          ],
+          "matchers": [
+            {
+              "key": "say|giv|solo|someone",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgiv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsolo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsomeone\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "giv",
+                "solo",
+                "someone"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "radar-unknown-transponder",
@@ -2793,7 +4896,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "radar flagged an unknown transponder ID 5487"
+          ],
+          "matchers": [
+            {
+              "key": "radar|flagg|unknown|transponder|id|5487",
+              "pattern": "\\bradar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bflagg\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bunknown\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btransponder\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b5487\\b",
+              "flags": "iu",
+              "tokens": [
+                "radar",
+                "flagg",
+                "unknown",
+                "transponder",
+                "id",
+                "5487"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "relationship-breakup-text",
@@ -2830,7 +4956,12 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "said \"We're done.\"",
+            "said We're done."
+          ],
+          "matchers": []
         },
         {
           "id": "school-discipline-calls",
@@ -2867,7 +4998,30 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "phoned me saying \"Your kid disrupted class.\"",
+            "phoned me saying Your kid disrupted class."
+          ],
+          "matchers": [
+            {
+              "key": "phon|say|kid|disrupt|class",
+              "pattern": "\\bphon\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdisrupt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclass\\b",
+              "flags": "iu",
+              "tokens": [
+                "phon",
+                "say",
+                "kid",
+                "disrupt",
+                "class"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "security-footage-breach",
@@ -2908,7 +5062,92 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "the footage shows two contractors inside the restricted lab after hours",
+            "shows two contractors inside the restricted lab after hours",
+            "the footage shows two contractors walk through the locked stairwell",
+            "shows two contractors walk through the locked stairwell"
+          ],
+          "matchers": [
+            {
+              "key": "footage|show|two|contractor|restrict|lab",
+              "pattern": "\\bfootage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brestrict\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b",
+              "flags": "iu",
+              "tokens": [
+                "footage",
+                "show",
+                "two",
+                "contractor",
+                "inside",
+                "restrict",
+                "lab"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "show|two|contractor|inside|lab|hour",
+              "pattern": "\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binside\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b",
+              "flags": "iu",
+              "tokens": [
+                "show",
+                "two",
+                "contractor",
+                "inside",
+                "restrict",
+                "lab",
+                "hour"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "footage|show|two|walk|lock|stairwell",
+              "pattern": "\\bfootage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\block\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstairwell\\b",
+              "flags": "iu",
+              "tokens": [
+                "footage",
+                "show",
+                "two",
+                "contractor",
+                "walk",
+                "through",
+                "lock",
+                "stairwell"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "show|two|contractor|walk|lock|stairwell",
+              "pattern": "\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\block\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstairwell\\b",
+              "flags": "iu",
+              "tokens": [
+                "show",
+                "two",
+                "contractor",
+                "walk",
+                "through",
+                "lock",
+                "stairwell"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "session-silent-sighs",
@@ -2945,7 +5184,50 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them sigh for eight seconds without saying a word",
+            "sigh for eight seconds without saying a word"
+          ],
+          "matchers": [
+            {
+              "key": "them|sigh|eight|second|say|word",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsigh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bword\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "sigh",
+                "eight",
+                "second",
+                "without",
+                "say",
+                "word"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "sigh|eight|second|without|say|word",
+              "pattern": "\\bsigh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bword\\b",
+              "flags": "iu",
+              "tokens": [
+                "sigh",
+                "eight",
+                "second",
+                "without",
+                "say",
+                "word"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "shelter-capacity-turnaway",
@@ -2982,7 +5264,31 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "say \"We have no beds for the next two families.\"",
+            "say We have no beds for the next two families."
+          ],
+          "matchers": [
+            {
+              "key": "say|no|beds|next|two|family",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbeds\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "no",
+                "beds",
+                "next",
+                "two",
+                "family"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "telescope-double-book",
@@ -3019,7 +5325,49 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them say \"I double-booked the telescope you reserved.\"",
+            "say \"I double-booked the telescope you reserved.\"",
+            "them say I double-booked the telescope you reserved."
+          ],
+          "matchers": [
+            {
+              "key": "them|say|double|book|telescope|reserv",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdouble\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btelescope\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breserv\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "say",
+                "double",
+                "book",
+                "telescope",
+                "reserv"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "say|double|book|telescope|reserv",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdouble\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btelescope\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breserv\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "double",
+                "book",
+                "telescope",
+                "reserv"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "urgent-email-demands",
@@ -3056,7 +5404,29 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "emailed \"I need that deck tonight.\"",
+            "emailed I need that deck tonight."
+          ],
+          "matchers": [
+            {
+              "key": "email|need|deck|tonight",
+              "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+              "flags": "iu",
+              "tokens": [
+                "email",
+                "need",
+                "deck",
+                "tonight"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "voicemail-insults",
@@ -3093,7 +5463,27 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "saying \"You're useless.\"",
+            "saying You're useless."
+          ],
+          "matchers": [
+            {
+              "key": "say|useless",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\buseless\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "useless"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-direct-quote",
@@ -3134,7 +5524,81 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them say \"We need this done today.\"",
+            "say \"We need this done today.\"",
+            "them say We need this done today.",
+            "them say \"Let's wrap this up now.\"",
+            "say \"Let's wrap this up now.\"",
+            "them say Let's wrap this up now."
+          ],
+          "matchers": [
+            {
+              "key": "them|say|need|today",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "say",
+                "need",
+                "today"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "say|need|today",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "need",
+                "today"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|say|let|wrap|now",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwrap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnow\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "say",
+                "let",
+                "wrap",
+                "now"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "say|let|wrap|now",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwrap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnow\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "let",
+                "wrap",
+                "now"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-interruption",
@@ -3175,7 +5639,81 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them start speaking while I was still mid-sentence",
+            "start speaking while I was still mid-sentence",
+            "them speak over my update before I finished sharing",
+            "speak over my update before I finished sharing"
+          ],
+          "matchers": [
+            {
+              "key": "them|start|speak|mid|sentence",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsentence\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "start",
+                "speak",
+                "mid",
+                "sentence"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "start|speak|mid|sentence",
+              "pattern": "\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsentence\\b",
+              "flags": "iu",
+              "tokens": [
+                "start",
+                "speak",
+                "mid",
+                "sentence"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|speak|update|finish|shar",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "speak",
+                "update",
+                "finish",
+                "shar"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "speak|update|finish|shar",
+              "pattern": "\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b",
+              "flags": "iu",
+              "tokens": [
+                "speak",
+                "update",
+                "finish",
+                "shar"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-boundary-crossing",
@@ -3216,7 +5754,87 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them open the file we agreed to keep private",
+            "open the file we agreed to keep private",
+            "them walk into the lab without the badge we said was required",
+            "walk into the lab without the badge we said was required"
+          ],
+          "matchers": [
+            {
+              "key": "them|open|file|agre|keep|private",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bopen\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfile\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkeep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "open",
+                "file",
+                "agre",
+                "keep",
+                "private"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "open|file|agre|keep|private",
+              "pattern": "\\bopen\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfile\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkeep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b",
+              "flags": "iu",
+              "tokens": [
+                "open",
+                "file",
+                "agre",
+                "keep",
+                "private"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|walk|lab|without|said|requir",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequir\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "walk",
+                "lab",
+                "without",
+                "badge",
+                "said",
+                "requir"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "walk|lab|without|badge|said|requir",
+              "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbadge\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequir\\b",
+              "flags": "iu",
+              "tokens": [
+                "walk",
+                "lab",
+                "without",
+                "badge",
+                "said",
+                "requir"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-late-arrival",
@@ -3257,7 +5875,81 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them arrive ten minutes after our agreed start time",
+            "arrive ten minutes after our agreed start time",
+            "them walk in after we had already begun the 9 a.m. check-in",
+            "walk in after we had already begun the 9 a.m. check-in"
+          ],
+          "matchers": [
+            {
+              "key": "them|arrive|ten|minut|start|time",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barrive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btime\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "arrive",
+                "ten",
+                "minut",
+                "agre",
+                "start",
+                "time"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "arrive|ten|minut|agre|start|time",
+              "pattern": "\\barrive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btime\\b",
+              "flags": "iu",
+              "tokens": [
+                "arrive",
+                "ten",
+                "minut",
+                "agre",
+                "start",
+                "time"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|walk",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "walk"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "already|begun|9",
+              "pattern": "\\balready\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbegun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b9\\b",
+              "flags": "iu",
+              "tokens": [
+                "already",
+                "begun",
+                "9"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-left-early",
@@ -3298,7 +5990,79 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them pack up and leave before we finished the conversation",
+            "pack up and leave before we finished the conversation",
+            "them step out while I was still sharing my update",
+            "step out while I was still sharing my update"
+          ],
+          "matchers": [
+            {
+              "key": "them|pack|leave|finish|conversation",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleave\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconversation\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "pack",
+                "leave",
+                "finish",
+                "conversation"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "pack|leave|finish|conversation",
+              "pattern": "\\bpack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleave\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconversation\\b",
+              "flags": "iu",
+              "tokens": [
+                "pack",
+                "leave",
+                "finish",
+                "conversation"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|step|shar|update",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "step",
+                "shar",
+                "update"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "step|shar|update",
+              "pattern": "\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+              "flags": "iu",
+              "tokens": [
+                "step",
+                "shar",
+                "update"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-no-response",
@@ -3339,7 +6103,83 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them stay silent after I asked for feedback",
+            "stay silent after I asked for feedback",
+            "them look away and offer no response to my question",
+            "look away and offer no response to my question"
+          ],
+          "matchers": [
+            {
+              "key": "them|stay|silent|ask|feedback",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfeedback\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "stay",
+                "silent",
+                "ask",
+                "feedback"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "stay|silent|ask|feedback",
+              "pattern": "\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfeedback\\b",
+              "flags": "iu",
+              "tokens": [
+                "stay",
+                "silent",
+                "ask",
+                "feedback"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|look|offer|no|response|question",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bresponse\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bquestion\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "look",
+                "offer",
+                "no",
+                "response",
+                "question"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "look|offer|no|response|question",
+              "pattern": "\\blook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bresponse\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bquestion\\b",
+              "flags": "iu",
+              "tokens": [
+                "look",
+                "offer",
+                "no",
+                "response",
+                "question"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-support-offered",
@@ -3380,7 +6220,103 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "them say they would cover the childcare swap rotation this week",
+            "say they would cover the childcare swap rotation this week",
+            "them offer to take the next shift so I could rest",
+            "offer to take the next shift so I could rest"
+          ],
+          "matchers": [
+            {
+              "key": "them|say|would|childcare|rotation|week",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchildcare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brotation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "say",
+                "would",
+                "cover",
+                "childcare",
+                "swap",
+                "rotation",
+                "week"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "say|would|cover|childcare|rotation|week",
+              "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcover\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchildcare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brotation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+              "flags": "iu",
+              "tokens": [
+                "say",
+                "would",
+                "cover",
+                "childcare",
+                "swap",
+                "rotation",
+                "week"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "them|offer|take|next|shift",
+              "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b",
+              "flags": "iu",
+              "tokens": [
+                "them",
+                "offer",
+                "take",
+                "next",
+                "shift"
+              ],
+              "tokenThreshold": 3,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "could|rest",
+              "pattern": "\\bcould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brest\\b",
+              "flags": "iu",
+              "tokens": [
+                "could",
+                "rest"
+              ],
+              "tokenThreshold": 2,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "offer|take|next|shift|could|rest",
+              "pattern": "\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brest\\b",
+              "flags": "iu",
+              "tokens": [
+                "offer",
+                "take",
+                "next",
+                "shift",
+                "could",
+                "rest"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         },
         {
           "id": "structured-digital-message",
@@ -3421,7 +6357,52 @@
               ]
             }
           ],
-          "branches": {}
+          "branches": {},
+          "phrases": [
+            "a message that said \"Please finish the report tonight.\"",
+            "a message that said Please finish the report tonight.",
+            "a message that said \"Reminder: please submit the forms today.\"",
+            "a message that said Reminder: please submit the forms today."
+          ],
+          "matchers": [
+            {
+              "key": "message|said|please|finish|report|tonight",
+              "pattern": "\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bplease\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+              "flags": "iu",
+              "tokens": [
+                "message",
+                "said",
+                "please",
+                "finish",
+                "report",
+                "tonight"
+              ],
+              "tokenThreshold": 4,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            },
+            {
+              "key": "message|said|reminder|please|form|today",
+              "pattern": "\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breminder\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bplease\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bform\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+              "flags": "iu",
+              "tokens": [
+                "message",
+                "said",
+                "reminder",
+                "please",
+                "submit",
+                "form",
+                "today"
+              ],
+              "tokenThreshold": 5,
+              "sourceType": "builder",
+              "sources": [
+                "builder"
+              ]
+            }
+          ]
         }
       ]
     },

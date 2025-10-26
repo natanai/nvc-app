@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { createCueMatchers } from '../lib/observationCueMatcher.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const blueprintPath = path.join(rootDir, 'data', 'observation_module_blueprints.json');
@@ -242,6 +244,7 @@ const actions = modules.map(module => {
           : 'default';
   const cues = Array.isArray(module?.cues) ? module.cues : [];
   const details = [];
+  const phrases = new Set();
 
   if (Array.isArray(override.details) && override.details.length) {
     override.details.forEach(detail => {
@@ -250,6 +253,7 @@ const actions = modules.map(module => {
       }
       const normalized = { value: detail.value, label: detail.label || buildLabel(detail.value) };
       details.push(normalized);
+      expandDetailPhrases(normalized.value, phrases);
     });
   } else {
     cues.forEach(cue => {
@@ -265,6 +269,7 @@ const actions = modules.map(module => {
         value: cleaned,
         label: buildLabel(cleaned),
       });
+      expandDetailPhrases(cleaned, phrases);
     });
   }
 
@@ -273,6 +278,7 @@ const actions = modules.map(module => {
       value: `describe ${module.id.replace(/-/g, ' ')}`,
       label: `Describe ${module.label.toLowerCase()}`,
     });
+    expandDetailPhrases(`describe ${module.id.replace(/-/g, ' ')}`, phrases);
   }
 
   const customPlaceholder = subjectless
@@ -288,6 +294,8 @@ const actions = modules.map(module => {
     },
   });
 
+  const matcherList = buildActionMatchers(Array.from(phrases));
+
   return {
     id: module.id,
     label: module.label,
@@ -296,7 +304,68 @@ const actions = modules.map(module => {
     subjectGroup,
     detailAriaLabel: override.detailAriaLabel || 'What happened',
     details,
+    phrases: Array.from(phrases),
+    matchers: matcherList,
   };
 });
 
 fs.writeFileSync(outputPath, `${JSON.stringify({ actions }, null, 2)}\n`);
+
+function expandDetailPhrases(detail, target) {
+  if (!target || typeof target.add !== 'function') {
+    return;
+  }
+  const raw = typeof detail === 'string' ? detail.trim() : '';
+  if (!raw) {
+    return;
+  }
+  target.add(raw);
+  const withoutPrefix = raw.replace(/^(?:them|they|someone|somebody|my\s+[a-z]+|the\s+[a-z]+)\s+/i, '').trim();
+  if (withoutPrefix && withoutPrefix.length > 4) {
+    target.add(withoutPrefix);
+  }
+  const withoutQuotes = raw.replace(/["“”]/g, '').trim();
+  if (withoutQuotes && withoutQuotes !== raw) {
+    target.add(withoutQuotes);
+  }
+}
+
+function buildActionMatchers(phrases) {
+  const matchers = createCueMatchers({ patterns: phrases, sourceType: 'builder' });
+  return dedupeSerializedMatchers(matchers.map(serializeMatcher));
+}
+
+function serializeMatcher(matcher) {
+  if (!matcher) {
+    return null;
+  }
+  const pattern = matcher.regex ? matcher.regex.source : '';
+  const flags = matcher.regex ? matcher.regex.flags : 'iu';
+  const tokens = Array.isArray(matcher.tokens) ? matcher.tokens.slice() : [];
+  return {
+    key: matcher.key || tokens.join('|'),
+    pattern,
+    flags,
+    tokens,
+    tokenThreshold: matcher.tokenThreshold || (tokens.length >= 2 ? 2 : tokens.length === 1 ? 1 : 0),
+    sourceType: matcher.sourceType || 'builder',
+    sources: Array.isArray(matcher.sources) ? matcher.sources.slice() : [],
+  };
+}
+
+function dedupeSerializedMatchers(matchers) {
+  const seen = new Set();
+  const result = [];
+  (Array.isArray(matchers) ? matchers : []).forEach(matcher => {
+    if (!matcher) {
+      return;
+    }
+    const key = matcher.key || `${matcher.pattern}/${matcher.flags}`;
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    result.push(matcher);
+  });
+  return result;
+}

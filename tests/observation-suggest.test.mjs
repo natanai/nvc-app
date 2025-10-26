@@ -122,7 +122,7 @@ function createMockCueLibrary() {
       label: 'Formula coverage: time and context slots',
       summary: 'Supports the time and context slots.',
       slotIds: ['time', 'context'],
-      detectors: [{ type: 'regex', pattern: 'conference room', flags: 'i' }],
+      matchers: createCueMatchers({ patterns: ['conference room'], sourceType: 'builder' }),
       cueIds: ['time-context-cue'],
     },
     {
@@ -130,7 +130,7 @@ function createMockCueLibrary() {
       label: 'Formula coverage: sensory slot',
       summary: 'Supports the sensory slot.',
       slotIds: ['sensory'],
-      detectors: [{ type: 'regex', pattern: 'heard him say', flags: 'i' }],
+      matchers: createCueMatchers({ patterns: ['heard him say'], sourceType: 'builder' }),
       cueIds: ['sensory-cue'],
     },
     {
@@ -138,7 +138,7 @@ function createMockCueLibrary() {
       label: 'Formula coverage: measurement slot',
       summary: 'Supports the measurement slot.',
       slotIds: ['measure'],
-      detectors: [{ type: 'regex', pattern: 'emailed me 5 times', flags: 'i' }],
+      matchers: createCueMatchers({ patterns: ['emailed me 5 times'], sourceType: 'builder' }),
       cueIds: ['measure-cue'],
     },
   ];

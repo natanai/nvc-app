@@ -9,12 +9,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "eye_roll",
-        "whatever_door",
-        "too_sensitive",
-        "mocking_whisper"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "hurt",
         "embarrassed",
@@ -37,9 +32,7 @@
       "cues": [
         {
           "id": "dismissive-eye-roll",
-          "lexiconKeys": [
-            "eye_roll"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "hurt",
             "irritated",
@@ -50,13 +43,19 @@
             "to-be-heard",
             "consideration"
           ],
-          "example": "At today's 9 a.m. budget review in conference room B, my manager rolled his eyes right after I asked for the spreadsheet update."
+          "example": "At today's 9 a.m. budget review in conference room B, my manager rolled his eyes right after I asked for the spreadsheet update.",
+          "phrases": [
+            "rolled their eyes right after I asked for the spreadsheet update",
+            "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+            "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+            "said \"You're too sensitive\" when I declined the joke",
+            "said You're too sensitive when I declined the joke",
+            "whispered to someone else and they both laughed right after I described the roadmap change"
+          ]
         },
         {
           "id": "dismissive-whatever-door",
-          "lexiconKeys": [
-            "whatever_door"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "hurt",
             "angry",
@@ -67,13 +66,19 @@
             "connection",
             "consideration"
           ],
-          "example": "My teenager muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight."
+          "example": "My teenager muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight.",
+          "phrases": [
+            "rolled their eyes right after I asked for the spreadsheet update",
+            "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+            "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+            "said \"You're too sensitive\" when I declined the joke",
+            "said You're too sensitive when I declined the joke",
+            "whispered to someone else and they both laughed right after I described the roadmap change"
+          ]
         },
         {
           "id": "dismissive-too-sensitive",
-          "lexiconKeys": [
-            "too_sensitive"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "embarrassed",
             "hurt",
@@ -84,13 +89,19 @@
             "respect",
             "to-be-seen"
           ],
-          "example": "At dinner tonight at Sam's Diner, a friend said \"You're too sensitive\" when I declined the joke."
+          "example": "At dinner tonight at Sam's Diner, a friend said \"You're too sensitive\" when I declined the joke.",
+          "phrases": [
+            "rolled their eyes right after I asked for the spreadsheet update",
+            "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+            "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+            "said \"You're too sensitive\" when I declined the joke",
+            "said You're too sensitive when I declined the joke",
+            "whispered to someone else and they both laughed right after I described the roadmap change"
+          ]
         },
         {
           "id": "dismissive-whisper-laugh",
-          "lexiconKeys": [
-            "mocking_whisper"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "embarrassed",
             "hurt",
@@ -101,11 +112,164 @@
             "belonging",
             "consideration"
           ],
-          "example": "During Tuesday's 2 p.m. planning stand-up, my colleague whispered to Taylor and they both laughed right after I described the roadmap change."
+          "example": "During Tuesday's 2 p.m. planning stand-up, my colleague whispered to Taylor and they both laughed right after I described the roadmap change.",
+          "phrases": [
+            "rolled their eyes right after I asked for the spreadsheet update",
+            "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+            "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+            "said \"You're too sensitive\" when I declined the joke",
+            "said You're too sensitive when I declined the joke",
+            "whispered to someone else and they both laughed right after I described the roadmap change"
+          ]
         }
       ],
       "builderActionIds": [
         "dismissive-responses"
+      ],
+      "matchPhrases": [
+        "rolled their eyes right after I asked for the spreadsheet update",
+        "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+        "muttered whatever and slammed the bedroom door after I asked about homework tonight",
+        "said \"You're too sensitive\" when I declined the joke",
+        "said You're too sensitive when I declined the joke",
+        "whispered to someone else and they both laughed right after I described the roadmap change"
+      ],
+      "builderMatchers": [
+        {
+          "key": "roll|eyes|right",
+          "pattern": "\\broll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beyes\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bright\\b",
+          "flags": "iu",
+          "tokens": [
+            "roll",
+            "eyes",
+            "right"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "ask|spreadsheet|update",
+          "pattern": "\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspreadsheet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+          "flags": "iu",
+          "tokens": [
+            "ask",
+            "spreadsheet",
+            "update"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "mutter|whatever",
+          "pattern": "\\bmutter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhatever\\b",
+          "flags": "iu",
+          "tokens": [
+            "mutter",
+            "whatever"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "slamm|bedroom|door",
+          "pattern": "\\bslamm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbedroom\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdoor\\b",
+          "flags": "iu",
+          "tokens": [
+            "slamm",
+            "bedroom",
+            "door"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "ask|homework|tonight",
+          "pattern": "\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhomework\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+          "flags": "iu",
+          "tokens": [
+            "ask",
+            "homework",
+            "tonight"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "said|too|sensitive|declin|joke",
+          "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsensitive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeclin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bjoke\\b",
+          "flags": "iu",
+          "tokens": [
+            "said",
+            "too",
+            "sensitive",
+            "declin",
+            "joke"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "whisper|someone",
+          "pattern": "\\bwhisper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsomeone\\b",
+          "flags": "iu",
+          "tokens": [
+            "whisper",
+            "someone"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "both|laugh|right",
+          "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blaugh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bright\\b",
+          "flags": "iu",
+          "tokens": [
+            "both",
+            "laugh",
+            "right"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "describ|roadmap|change",
+          "pattern": "\\bdescrib\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\broadmap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchange\\b",
+          "flags": "iu",
+          "tokens": [
+            "describ",
+            "roadmap",
+            "change"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -117,10 +281,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "never_listen",
-        "client_interrupt"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "frustrated",
         "anxious",
@@ -140,9 +301,7 @@
       "cues": [
         {
           "id": "accused-never-listen",
-          "lexiconKeys": [
-            "never_listen"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "hurt",
             "frustrated"
@@ -152,13 +311,16 @@
             "understanding",
             "mutuality"
           ],
-          "example": "Yesterday evening in the kitchen, my partner said \"You never listen\" when we talked about chores."
+          "example": "Yesterday evening in the kitchen, my partner said \"You never listen\" when we talked about chores.",
+          "phrases": [
+            "said \"You never listen\" when we talked about chores",
+            "said You never listen when we talked about chores",
+            "overlapped mine three times when I proposed a change"
+          ]
         },
         {
           "id": "client-talked-over",
-          "lexiconKeys": [
-            "client_interrupt"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "frustrated",
             "anxious"
@@ -168,11 +330,58 @@
             "to-be-heard",
             "mutuality"
           ],
-          "example": "During this morning's 10 a.m. project video call, the client's audio overlapped mine three times when I proposed a change."
+          "example": "During this morning's 10 a.m. project video call, the client's audio overlapped mine three times when I proposed a change.",
+          "phrases": [
+            "said \"You never listen\" when we talked about chores",
+            "said You never listen when we talked about chores",
+            "overlapped mine three times when I proposed a change"
+          ]
         }
       ],
       "builderActionIds": [
         "listening-boundaries"
+      ],
+      "matchPhrases": [
+        "said \"You never listen\" when we talked about chores",
+        "said You never listen when we talked about chores",
+        "overlapped mine three times when I proposed a change"
+      ],
+      "builderMatchers": [
+        {
+          "key": "said|never|listen|talk|chor",
+          "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnever\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blisten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchor\\b",
+          "flags": "iu",
+          "tokens": [
+            "said",
+            "never",
+            "listen",
+            "talk",
+            "chor"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "overlapp|mine|three|tim|propos|change",
+          "pattern": "\\boverlapp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmine\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btim\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpropos\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchange\\b",
+          "flags": "iu",
+          "tokens": [
+            "overlapp",
+            "mine",
+            "three",
+            "tim",
+            "propos",
+            "change"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -184,9 +393,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "left_presentation"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "hurt",
         "anxious",
@@ -205,9 +412,7 @@
       "cues": [
         {
           "id": "presentation-walkout",
-          "lexiconKeys": [
-            "left_presentation"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "hurt",
             "anxious",
@@ -218,11 +423,50 @@
             "support",
             "predictability"
           ],
-          "example": "A coworker slammed her notebook shut and walked out during my presentation yesterday."
+          "example": "A coworker slammed her notebook shut and walked out during my presentation yesterday.",
+          "phrases": [
+            "slammed their notebook shut and walked out during my presentation yesterday"
+          ]
         }
       ],
       "builderActionIds": [
         "presentation-departures"
+      ],
+      "matchPhrases": [
+        "slammed their notebook shut and walked out during my presentation yesterday"
+      ],
+      "builderMatchers": [
+        {
+          "key": "slamm|notebook|shut",
+          "pattern": "\\bslamm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnotebook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshut\\b",
+          "flags": "iu",
+          "tokens": [
+            "slamm",
+            "notebook",
+            "shut"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "walk|dur|presentation|yesterday",
+          "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpresentation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+          "flags": "iu",
+          "tokens": [
+            "walk",
+            "dur",
+            "presentation",
+            "yesterday"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -235,9 +479,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "referee_missed_foul"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "frustrated",
         "powerless",
@@ -256,9 +498,7 @@
       "cues": [
         {
           "id": "referee-missed-fouls",
-          "lexiconKeys": [
-            "referee_missed_foul"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "frustrated",
             "powerless",
@@ -269,11 +509,36 @@
             "safety",
             "respect"
           ],
-          "example": "During last night's game, the referee missed three fouls against our team."
+          "example": "During last night's game, the referee missed three fouls against our team.",
+          "phrases": [
+            "missed three fouls against our team"
+          ]
         }
       ],
       "builderActionIds": [
         "sports-officiating"
+      ],
+      "matchPhrases": [
+        "missed three fouls against our team"
+      ],
+      "builderMatchers": [
+        {
+          "key": "miss|three|foul|against|team",
+          "pattern": "\\bmiss\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfoul\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagainst\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteam\\b",
+          "flags": "iu",
+          "tokens": [
+            "miss",
+            "three",
+            "foul",
+            "against",
+            "team"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -285,10 +550,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "barista_skipped",
-        "reach_over"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "irritated",
         "hurt",
@@ -308,9 +570,7 @@
       "cues": [
         {
           "id": "service-line-skip",
-          "lexiconKeys": [
-            "barista_skipped"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "irritated",
             "hurt"
@@ -320,13 +580,15 @@
             "respect",
             "order"
           ],
-          "example": "The barista skipped me and served two people who arrived later in line this afternoon."
+          "example": "The barista skipped me and served two people who arrived later in line this afternoon.",
+          "phrases": [
+            "skipped me and served two people who arrived later in line this afternoon",
+            "another shopper reached over me to grab the last carton of eggs"
+          ]
         },
         {
           "id": "reached-over-last-item",
-          "lexiconKeys": [
-            "reach_over"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "alarmed",
             "irritated"
@@ -336,11 +598,60 @@
             "respect",
             "fairness"
           ],
-          "example": "At the grocery store, another shopper reached over me to grab the last carton of eggs."
+          "example": "At the grocery store, another shopper reached over me to grab the last carton of eggs.",
+          "phrases": [
+            "skipped me and served two people who arrived later in line this afternoon",
+            "another shopper reached over me to grab the last carton of eggs"
+          ]
         }
       ],
       "builderActionIds": [
         "queue-respect"
+      ],
+      "matchPhrases": [
+        "skipped me and served two people who arrived later in line this afternoon",
+        "another shopper reached over me to grab the last carton of eggs"
+      ],
+      "builderMatchers": [
+        {
+          "key": "serv|two|people|arriv|line|afternoon",
+          "pattern": "\\bserv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeople\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barriv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bline\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bafternoon\\b",
+          "flags": "iu",
+          "tokens": [
+            "serv",
+            "two",
+            "people",
+            "who",
+            "arriv",
+            "later",
+            "line",
+            "afternoon"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "another|shopper|reach|grab|carton|eggs",
+          "pattern": "\\banother\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshopper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgrab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcarton\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beggs\\b",
+          "flags": "iu",
+          "tokens": [
+            "another",
+            "shopper",
+            "reach",
+            "grab",
+            "last",
+            "carton",
+            "eggs"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -352,10 +663,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "dishes_again",
-        "borrowed_car"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "irritated",
         "hurt",
@@ -375,9 +683,7 @@
       "cues": [
         {
           "id": "roommate-dishes-repeated",
-          "lexiconKeys": [
-            "dishes_again"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "irritated",
             "tired"
@@ -387,13 +693,15 @@
             "order",
             "support"
           ],
-          "example": "My roommate left dirty dishes piled in the sink again before leaving for work."
+          "example": "My roommate left dirty dishes piled in the sink again before leaving for work.",
+          "phrases": [
+            "dishes piled in the sink again before leaving for work",
+            "borrowed my car without asking and returned it with the tank empty"
+          ]
         },
         {
           "id": "borrowed-car-empty",
-          "lexiconKeys": [
-            "borrowed_car"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "hurt",
             "anxious"
@@ -403,11 +711,69 @@
             "accountability",
             "consideration"
           ],
-          "example": "My sibling borrowed my car without asking and returned it with the tank empty."
+          "example": "My sibling borrowed my car without asking and returned it with the tank empty.",
+          "phrases": [
+            "dishes piled in the sink again before leaving for work",
+            "borrowed my car without asking and returned it with the tank empty"
+          ]
         }
       ],
       "builderActionIds": [
         "shared-upkeep"
+      ],
+      "matchPhrases": [
+        "dishes piled in the sink again before leaving for work",
+        "borrowed my car without asking and returned it with the tank empty"
+      ],
+      "builderMatchers": [
+        {
+          "key": "dish|pil|sink|leav|work",
+          "pattern": "\\bdish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpil\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsink\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleav\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwork\\b",
+          "flags": "iu",
+          "tokens": [
+            "dish",
+            "pil",
+            "sink",
+            "leav",
+            "work"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "borrow|car|without|ask",
+          "pattern": "\\bborrow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+          "flags": "iu",
+          "tokens": [
+            "borrow",
+            "car",
+            "without",
+            "ask"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "return|tank|empty",
+          "pattern": "\\breturn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btank\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bempty\\b",
+          "flags": "iu",
+          "tokens": [
+            "return",
+            "tank",
+            "empty"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -418,9 +784,7 @@
         "time",
         "context"
       ],
-      "lexiconKeys": [
-        "contract_not_renewed"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "anxious",
         "distressed",
@@ -439,9 +803,7 @@
       "cues": [
         {
           "id": "contract-not-renewed",
-          "lexiconKeys": [
-            "contract_not_renewed"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "anxious",
             "distressed"
@@ -451,11 +813,37 @@
             "clarity",
             "respect"
           ],
-          "example": "The email from HR said my contract wasn't renewed with no explanation."
+          "example": "The email from HR said my contract wasn't renewed with no explanation.",
+          "phrases": [
+            "said my contract wasn't renewed with no explanation"
+          ]
         }
       ],
       "builderActionIds": [
         "job-security"
+      ],
+      "matchPhrases": [
+        "said my contract wasn't renewed with no explanation"
+      ],
+      "builderMatchers": [
+        {
+          "key": "said|contract|wasnt|renew|no|explanation",
+          "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontract\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brenew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+          "flags": "iu",
+          "tokens": [
+            "said",
+            "contract",
+            "wasnt",
+            "renew",
+            "no",
+            "explanation"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -468,10 +856,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "teacher_sloppy",
-        "review_no_examples"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "confused",
         "distressed",
@@ -491,9 +876,7 @@
       "cues": [
         {
           "id": "teacher-derogatory-feedback",
-          "lexiconKeys": [
-            "teacher_sloppy"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "defiant",
             "hurt"
@@ -503,13 +886,16 @@
             "respect",
             "appreciation"
           ],
-          "example": "The teacher handed back my child's assignment with \"sloppy\" written across the top."
+          "example": "The teacher handed back my child's assignment with \"sloppy\" written across the top.",
+          "phrases": [
+            "handed back my child's assignment with \"sloppy\" written across the top",
+            "handed back my child's assignment with sloppy written across the top",
+            "i received a performance review that only listed mistakes without any concrete examples"
+          ]
         },
         {
           "id": "review-no-examples",
-          "lexiconKeys": [
-            "review_no_examples"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "confused",
             "anxious"
@@ -519,11 +905,63 @@
             "growth",
             "respect"
           ],
-          "example": "I received a performance review that only listed mistakes without any concrete examples."
+          "example": "I received a performance review that only listed mistakes without any concrete examples.",
+          "phrases": [
+            "handed back my child's assignment with \"sloppy\" written across the top",
+            "handed back my child's assignment with sloppy written across the top",
+            "i received a performance review that only listed mistakes without any concrete examples"
+          ]
         }
       ],
       "builderActionIds": [
         "feedback-clarity"
+      ],
+      "matchPhrases": [
+        "handed back my child's assignment with \"sloppy\" written across the top",
+        "handed back my child's assignment with sloppy written across the top",
+        "i received a performance review that only listed mistakes without any concrete examples"
+      ],
+      "builderMatchers": [
+        {
+          "key": "hand|child|assignment|sloppy|across|top",
+          "pattern": "\\bhand\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchild\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bassignment\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsloppy\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bacross\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btop\\b",
+          "flags": "iu",
+          "tokens": [
+            "hand",
+            "child",
+            "assignment",
+            "sloppy",
+            "written",
+            "across",
+            "top"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "receiv|performance|review|mistak|concrete|exampl",
+          "pattern": "\\breceiv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bperformance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breview\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmistak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconcrete\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexampl\\b",
+          "flags": "iu",
+          "tokens": [
+            "receiv",
+            "performance",
+            "review",
+            "list",
+            "mistak",
+            "without",
+            "any",
+            "concrete",
+            "exampl"
+          ],
+          "tokenThreshold": 6,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -535,10 +973,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "landlord_no_reply",
-        "contractor_no_show"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "anxious",
         "frustrated",
@@ -558,9 +993,7 @@
       "cues": [
         {
           "id": "landlord-no-response",
-          "lexiconKeys": [
-            "landlord_no_reply"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "anxious",
             "frustrated"
@@ -570,13 +1003,15 @@
             "support",
             "dependability"
           ],
-          "example": "The landlord hasn't responded to three messages about the leak this week."
+          "example": "The landlord hasn't responded to three messages about the leak this week.",
+          "phrases": [
+            "responded to three messages about the leak this week",
+            "missed today's 8 a.m. appointment and hasn't texted or called"
+          ]
         },
         {
           "id": "contractor-no-show",
-          "lexiconKeys": [
-            "contractor_no_show"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "anxious",
             "frustrated"
@@ -586,11 +1021,69 @@
             "clarity",
             "predictability"
           ],
-          "example": "The contractor missed today's 8 a.m. appointment and hasn't texted or called."
+          "example": "The contractor missed today's 8 a.m. appointment and hasn't texted or called.",
+          "phrases": [
+            "responded to three messages about the leak this week",
+            "missed today's 8 a.m. appointment and hasn't texted or called"
+          ]
         }
       ],
       "builderActionIds": [
         "housing-reliability"
+      ],
+      "matchPhrases": [
+        "responded to three messages about the leak this week",
+        "missed today's 8 a.m. appointment and hasn't texted or called"
+      ],
+      "builderMatchers": [
+        {
+          "key": "respond|three|messag|leak|week",
+          "pattern": "\\brespond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+          "flags": "iu",
+          "tokens": [
+            "respond",
+            "three",
+            "messag",
+            "leak",
+            "week"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "miss|today|8",
+          "pattern": "\\bmiss\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b8\\b",
+          "flags": "iu",
+          "tokens": [
+            "miss",
+            "today",
+            "8"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "appointment|hasnt|text|call",
+          "pattern": "\\bappointment\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b",
+          "flags": "iu",
+          "tokens": [
+            "appointment",
+            "hasnt",
+            "text",
+            "call"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -603,9 +1096,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "doctor_clock"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "anxious",
         "hurt"
@@ -624,9 +1115,7 @@
       "cues": [
         {
           "id": "doctor-checked-clock",
-          "lexiconKeys": [
-            "doctor_clock"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "anxious",
             "hurt"
@@ -636,11 +1125,49 @@
             "respect",
             "consideration"
           ],
-          "example": "My doctor glanced at the clock twice while I was describing my symptoms today."
+          "example": "My doctor glanced at the clock twice while I was describing my symptoms today.",
+          "phrases": [
+            "glanced at the clock twice while I was describing my symptoms today"
+          ]
         }
       ],
       "builderActionIds": [
         "care-attention"
+      ],
+      "matchPhrases": [
+        "glanced at the clock twice while I was describing my symptoms today"
+      ],
+      "builderMatchers": [
+        {
+          "key": "glanc|clock|twice",
+          "pattern": "\\bglanc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclock\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwice\\b",
+          "flags": "iu",
+          "tokens": [
+            "glanc",
+            "clock",
+            "twice"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "describ|symptom|today",
+          "pattern": "\\bdescrib\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsymptom\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+          "flags": "iu",
+          "tokens": [
+            "describ",
+            "symptom",
+            "today"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -652,10 +1179,7 @@
         "context",
         "measure"
       ],
-      "lexiconKeys": [
-        "followups_stacked",
-        "boss_late_pings"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "overwhelmed",
         "tense",
@@ -675,9 +1199,7 @@
       "cues": [
         {
           "id": "assigned-all-followups",
-          "lexiconKeys": [
-            "followups_stacked"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "overwhelmed",
             "resentful"
@@ -687,13 +1209,15 @@
             "mutuality",
             "support"
           ],
-          "example": "In last Thursday's sprint retrospective, the project lead assigned me every follow-up action item again."
+          "example": "In last Thursday's sprint retrospective, the project lead assigned me every follow-up action item again.",
+          "phrases": [
+            "assigned me every follow-up action item again",
+            "slack messages between 11 p.m. and midnight about tomorrow's report"
+          ]
         },
         {
           "id": "boss-late-night-pings",
-          "lexiconKeys": [
-            "boss_late_pings"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "tense",
             "tired"
@@ -703,11 +1227,69 @@
             "rest",
             "respect"
           ],
-          "example": "My boss sent me three Slack messages between 11 p.m. and midnight about tomorrow's report."
+          "example": "My boss sent me three Slack messages between 11 p.m. and midnight about tomorrow's report.",
+          "phrases": [
+            "assigned me every follow-up action item again",
+            "slack messages between 11 p.m. and midnight about tomorrow's report"
+          ]
         }
       ],
       "builderActionIds": [
         "workload-boundaries"
+      ],
+      "matchPhrases": [
+        "assigned me every follow-up action item again",
+        "slack messages between 11 p.m. and midnight about tomorrow's report"
+      ],
+      "builderMatchers": [
+        {
+          "key": "assign|every|follow|action|item",
+          "pattern": "\\bassign\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bevery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfollow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\baction\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bitem\\b",
+          "flags": "iu",
+          "tokens": [
+            "assign",
+            "every",
+            "follow",
+            "action",
+            "item"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "slack|messag|between|11",
+          "pattern": "\\bslack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmessag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbetween\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b11\\b",
+          "flags": "iu",
+          "tokens": [
+            "slack",
+            "messag",
+            "between",
+            "11"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "midnight|tomorrow|report",
+          "pattern": "\\bmidnight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btomorrow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b",
+          "flags": "iu",
+          "tokens": [
+            "midnight",
+            "tomorrow",
+            "report"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -719,9 +1301,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "phone_dinner"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "lonely",
         "hurt",
@@ -740,9 +1320,7 @@
       "cues": [
         {
           "id": "partner-phone-during-dinner",
-          "lexiconKeys": [
-            "phone_dinner"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "lonely",
             "hurt"
@@ -752,11 +1330,38 @@
             "consideration",
             "respect"
           ],
-          "example": "My partner scrolled through their phone during dinner instead of looking up."
+          "example": "My partner scrolled through their phone during dinner instead of looking up.",
+          "phrases": [
+            "scrolled through their phone during dinner instead of looking up"
+          ]
         }
       ],
       "builderActionIds": [
         "connection-presence"
+      ],
+      "matchPhrases": [
+        "scrolled through their phone during dinner instead of looking up"
+      ],
+      "builderMatchers": [
+        {
+          "key": "scroll|through|phone|dur|instead|look",
+          "pattern": "\\bscroll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bphone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blook\\b",
+          "flags": "iu",
+          "tokens": [
+            "scroll",
+            "through",
+            "phone",
+            "dur",
+            "dinner",
+            "instead",
+            "look"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -768,9 +1373,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "driver_speakerphone"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "overwhelmed",
         "irritated",
@@ -789,9 +1392,7 @@
       "cues": [
         {
           "id": "driver-speakerphone-entire-trip",
-          "lexiconKeys": [
-            "driver_speakerphone"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "overwhelmed",
             "irritated"
@@ -801,11 +1402,37 @@
             "consideration",
             "respect"
           ],
-          "example": "The rideshare driver talked loudly on speakerphone for the entire trip yesterday."
+          "example": "The rideshare driver talked loudly on speakerphone for the entire trip yesterday.",
+          "phrases": [
+            "talked loudly on speakerphone for the entire trip yesterday"
+          ]
         }
       ],
       "builderActionIds": [
         "ride-environment"
+      ],
+      "matchPhrases": [
+        "talked loudly on speakerphone for the entire trip yesterday"
+      ],
+      "builderMatchers": [
+        {
+          "key": "talk|loudly|speakerphone|entire|trip|yesterday",
+          "pattern": "\\btalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bloudly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeakerphone\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bentire\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btrip\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+          "flags": "iu",
+          "tokens": [
+            "talk",
+            "loudly",
+            "speakerphone",
+            "entire",
+            "trip",
+            "yesterday"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -818,9 +1445,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "dog_barking"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "tired",
         "irritated",
@@ -839,9 +1464,7 @@
       "cues": [
         {
           "id": "neighbor-dog-morning",
-          "lexiconKeys": [
-            "dog_barking"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "tired",
             "irritated"
@@ -851,11 +1474,37 @@
             "peace",
             "consideration"
           ],
-          "example": "My neighbor's dog barked loudly for 30 minutes starting at 6 a.m. on Saturday."
+          "example": "My neighbor's dog barked loudly for 30 minutes starting at 6 a.m. on Saturday.",
+          "phrases": [
+            "barked loudly for 30 minutes starting at 6 a.m. on Saturday"
+          ]
         }
       ],
       "builderActionIds": [
         "noise-disturbance"
+      ],
+      "matchPhrases": [
+        "barked loudly for 30 minutes starting at 6 a.m. on Saturday"
+      ],
+      "builderMatchers": [
+        {
+          "key": "bark|loudly|30|minut|start|6",
+          "pattern": "\\bbark\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bloudly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b6\\b",
+          "flags": "iu",
+          "tokens": [
+            "bark",
+            "loudly",
+            "30",
+            "minut",
+            "start",
+            "6"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -867,9 +1516,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "cyclist_red"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "alarmed",
         "scared",
@@ -888,9 +1535,7 @@
       "cues": [
         {
           "id": "cyclist-ran-red",
-          "lexiconKeys": [
-            "cyclist_red"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "alarmed",
             "scared"
@@ -900,11 +1545,49 @@
             "predictability",
             "consideration"
           ],
-          "example": "A cyclist sped through the crosswalk even though the light was red this morning."
+          "example": "A cyclist sped through the crosswalk even though the light was red this morning.",
+          "phrases": [
+            "sped through the crosswalk even though the light was red this morning"
+          ]
         }
       ],
       "builderActionIds": [
         "safety-commute"
+      ],
+      "matchPhrases": [
+        "sped through the crosswalk even though the light was red this morning"
+      ],
+      "builderMatchers": [
+        {
+          "key": "sped|through|crosswalk",
+          "pattern": "\\bsped\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcrosswalk\\b",
+          "flags": "iu",
+          "tokens": [
+            "sped",
+            "through",
+            "crosswalk"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "light|red|morn",
+          "pattern": "\\blight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bred\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmorn\\b",
+          "flags": "iu",
+          "tokens": [
+            "light",
+            "red",
+            "morn"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -915,9 +1598,7 @@
         "time",
         "sensory"
       ],
-      "lexiconKeys": [
-        "scroll_instead"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "sad",
         "disappointment"
@@ -935,9 +1616,7 @@
       "cues": [
         {
           "id": "self-delayed-call",
-          "lexiconKeys": [
-            "scroll_instead"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "sad",
             "disappointment"
@@ -947,11 +1626,37 @@
             "connection",
             "accountability"
           ],
-          "example": "I caught myself scrolling for an hour instead of calling my grandmother back."
+          "example": "I caught myself scrolling for an hour instead of calling my grandmother back.",
+          "phrases": [
+            "myself scrolling for an hour instead of calling my grandmother back"
+          ]
         }
       ],
       "builderActionIds": [
         "self-accountability"
+      ],
+      "matchPhrases": [
+        "myself scrolling for an hour instead of calling my grandmother back"
+      ],
+      "builderMatchers": [
+        {
+          "key": "myself|scroll|hour|instead|call|grandmother",
+          "pattern": "\\bmyself\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bscroll\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binstead\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgrandmother\\b",
+          "flags": "iu",
+          "tokens": [
+            "myself",
+            "scroll",
+            "hour",
+            "instead",
+            "call",
+            "grandmother"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -963,9 +1668,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "coworker_caught_error"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful",
@@ -984,9 +1687,7 @@
       "cues": [
         {
           "id": "coworker-caught-mistake",
-          "lexiconKeys": [
-            "coworker_caught_error"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful"
@@ -996,11 +1697,35 @@
             "reliability",
             "integrity"
           ],
-          "example": "My coworker double-checked the expense report and caught a mistake before we sent it."
+          "example": "My coworker double-checked the expense report and caught a mistake before we sent it.",
+          "phrases": [
+            "report and caught a mistake before we sent it"
+          ]
         }
       ],
       "builderActionIds": [
         "collaboration-safeguards"
+      ],
+      "matchPhrases": [
+        "report and caught a mistake before we sent it"
+      ],
+      "builderMatchers": [
+        {
+          "key": "report|caught|mistake|sent",
+          "pattern": "\\breport\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcaught\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmistake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsent\\b",
+          "flags": "iu",
+          "tokens": [
+            "report",
+            "caught",
+            "mistake",
+            "sent"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1012,9 +1737,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "trainer_high_five"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "proud",
         "energized",
@@ -1033,9 +1756,7 @@
       "cues": [
         {
           "id": "trainer-celebrated-progress",
-          "lexiconKeys": [
-            "trainer_high_five"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "proud",
             "hopeful"
@@ -1045,11 +1766,36 @@
             "acknowledgement",
             "growth"
           ],
-          "example": "At the 8 a.m. session, the gym trainer high-fived me right after I racked 185 pounds on squats."
+          "example": "At the 8 a.m. session, the gym trainer high-fived me right after I racked 185 pounds on squats.",
+          "phrases": [
+            "right after I racked 185 pounds on squats"
+          ]
         }
       ],
       "builderActionIds": [
         "milestone-celebration"
+      ],
+      "matchPhrases": [
+        "right after I racked 185 pounds on squats"
+      ],
+      "builderMatchers": [
+        {
+          "key": "right|rack|185|pound|squat",
+          "pattern": "\\bright\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b185\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpound\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsquat\\b",
+          "flags": "iu",
+          "tokens": [
+            "right",
+            "rack",
+            "185",
+            "pound",
+            "squat"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1061,9 +1807,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "neighbor_shoveled"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "joyful",
         "contented",
@@ -1082,9 +1826,7 @@
       "cues": [
         {
           "id": "neighbor-shoveled-sidewalk",
-          "lexiconKeys": [
-            "neighbor_shoveled"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "joyful",
             "contented"
@@ -1094,11 +1836,33 @@
             "nurturing",
             "support"
           ],
-          "example": "My neighbor shoveled our sidewalk after the snowstorm while we were at work."
+          "example": "My neighbor shoveled our sidewalk after the snowstorm while we were at work.",
+          "phrases": [
+            "shoveled our sidewalk after the snowstorm while we were at work"
+          ]
         }
       ],
       "builderActionIds": [
         "neighbor-support"
+      ],
+      "matchPhrases": [
+        "shoveled our sidewalk after the snowstorm while we were at work"
+      ],
+      "builderMatchers": [
+        {
+          "key": "shovel|sidewalk",
+          "pattern": "\\bshovel\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsidewalk\\b",
+          "flags": "iu",
+          "tokens": [
+            "shovel",
+            "sidewalk"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1110,9 +1874,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "appreciation_specific"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "proud",
         "energized",
@@ -1131,9 +1893,7 @@
       "cues": [
         {
           "id": "appreciation-specific-note",
-          "lexiconKeys": [
-            "appreciation_specific"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "proud",
             "energized",
@@ -1144,11 +1904,38 @@
             "belonging",
             "contribution"
           ],
-          "example": "At 4 p.m., the coordinator emailed me listing the volunteer shifts I covered during the fundraiser."
+          "example": "At 4 p.m., the coordinator emailed me listing the volunteer shifts I covered during the fundraiser.",
+          "phrases": [
+            "emailed me listing the volunteer shifts I covered during the fundraiser"
+          ]
         }
       ],
       "builderActionIds": [
         "specific-appreciation"
+      ],
+      "matchPhrases": [
+        "emailed me listing the volunteer shifts I covered during the fundraiser"
+      ],
+      "builderMatchers": [
+        {
+          "key": "email|list|volunteer|shift|dur|fundraiser",
+          "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bvolunteer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfundraiser\\b",
+          "flags": "iu",
+          "tokens": [
+            "email",
+            "list",
+            "volunteer",
+            "shift",
+            "cover",
+            "dur",
+            "fundraiser"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1160,9 +1947,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "counselor_reflection"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "calm",
         "relieved",
@@ -1181,9 +1966,7 @@
       "cues": [
         {
           "id": "counselor-reflected",
-          "lexiconKeys": [
-            "counselor_reflection"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "calm",
             "relieved"
@@ -1193,11 +1976,49 @@
             "understanding",
             "trust"
           ],
-          "example": "During therapy, my counselor paused and reflected back exactly what I said before offering input."
+          "example": "During therapy, my counselor paused and reflected back exactly what I said before offering input.",
+          "phrases": [
+            "paused and reflected back exactly what I said before offering input"
+          ]
         }
       ],
       "builderActionIds": [
         "reflective-presence"
+      ],
+      "matchPhrases": [
+        "paused and reflected back exactly what I said before offering input"
+      ],
+      "builderMatchers": [
+        {
+          "key": "reflect|exactly|what|said",
+          "pattern": "\\breflect\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexactly\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwhat\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b",
+          "flags": "iu",
+          "tokens": [
+            "reflect",
+            "exactly",
+            "what",
+            "said"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "offer|input",
+          "pattern": "\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binput\\b",
+          "flags": "iu",
+          "tokens": [
+            "offer",
+            "input"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1209,10 +2030,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "partner_cooked_cleaned",
-        "manager_balanced_workload"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful",
@@ -1231,9 +2049,7 @@
       "cues": [
         {
           "id": "partner-covered-dinner",
-          "lexiconKeys": [
-            "partner_cooked_cleaned"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful"
@@ -1243,13 +2059,15 @@
             "rest",
             "mutuality"
           ],
-          "example": "My partner cooked dinner and cleaned the kitchen while I finished my deadline."
+          "example": "My partner cooked dinner and cleaned the kitchen while I finished my deadline.",
+          "phrases": [
+            "cooked dinner and cleaned the kitchen while I finished my deadline",
+            "assigned two follow-up tasks to each teammate"
+          ]
         },
         {
           "id": "manager-balanced-followups",
-          "lexiconKeys": [
-            "manager_balanced_workload"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful"
@@ -1259,11 +2077,81 @@
             "support",
             "mutuality"
           ],
-          "example": "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate."
+          "example": "During Monday's sprint review, the project manager assigned two follow-up tasks to each teammate.",
+          "phrases": [
+            "cooked dinner and cleaned the kitchen while I finished my deadline",
+            "assigned two follow-up tasks to each teammate"
+          ]
         }
       ],
       "builderActionIds": [
         "supportive-rebalancing"
+      ],
+      "matchPhrases": [
+        "cooked dinner and cleaned the kitchen while I finished my deadline",
+        "assigned two follow-up tasks to each teammate"
+      ],
+      "builderMatchers": [
+        {
+          "key": "cook|dinner",
+          "pattern": "\\bcook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdinner\\b",
+          "flags": "iu",
+          "tokens": [
+            "cook",
+            "dinner"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "clean|kitchen",
+          "pattern": "\\bclean\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkitchen\\b",
+          "flags": "iu",
+          "tokens": [
+            "clean",
+            "kitchen"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "finish|deadline",
+          "pattern": "\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeadline\\b",
+          "flags": "iu",
+          "tokens": [
+            "finish",
+            "deadline"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "assign|two|follow|task|each|teammate",
+          "pattern": "\\bassign\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfollow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteammate\\b",
+          "flags": "iu",
+          "tokens": [
+            "assign",
+            "two",
+            "follow",
+            "task",
+            "each",
+            "teammate"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1275,9 +2163,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "wallet_returned"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful"
@@ -1295,9 +2181,7 @@
       "cues": [
         {
           "id": "wallet-returned-intact",
-          "lexiconKeys": [
-            "wallet_returned"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful"
@@ -1307,11 +2191,36 @@
             "trust",
             "integrity"
           ],
-          "example": "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside the billfold."
+          "example": "Outside the market at 3 p.m., a stranger handed back my wallet with the cash still inside the billfold.",
+          "phrases": [
+            "handed back my wallet with the cash still inside the billfold"
+          ]
         }
       ],
       "builderActionIds": [
         "integrity-returns"
+      ],
+      "matchPhrases": [
+        "handed back my wallet with the cash still inside the billfold"
+      ],
+      "builderMatchers": [
+        {
+          "key": "hand|wallet|cash|inside|billfold",
+          "pattern": "\\bhand\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwallet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcash\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binside\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbillfold\\b",
+          "flags": "iu",
+          "tokens": [
+            "hand",
+            "wallet",
+            "cash",
+            "inside",
+            "billfold"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1323,9 +2232,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "vacation_approved_quick"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "contented"
@@ -1343,9 +2250,7 @@
       "cues": [
         {
           "id": "vacation-approved-quickly",
-          "lexiconKeys": [
-            "vacation_approved_quick"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "contented"
@@ -1355,11 +2260,37 @@
             "respect",
             "reliability"
           ],
-          "example": "My boss approved my vacation request the same day I submitted it."
+          "example": "My boss approved my vacation request the same day I submitted it.",
+          "phrases": [
+            "approved my vacation request the same day I submitted it"
+          ]
         }
       ],
       "builderActionIds": [
         "responsive-approvals"
+      ],
+      "matchPhrases": [
+        "approved my vacation request the same day I submitted it"
+      ],
+      "builderMatchers": [
+        {
+          "key": "approv|vacation|request|same|day|submitt",
+          "pattern": "\\bapprov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bvacation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequest\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsame\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsubmitt\\b",
+          "flags": "iu",
+          "tokens": [
+            "approv",
+            "vacation",
+            "request",
+            "same",
+            "day",
+            "submitt"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1372,10 +2303,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "night_nurse_checkin",
-        "dentist_explained_steps"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "calm",
@@ -1394,9 +2322,7 @@
       "cues": [
         {
           "id": "nurse-night-check",
-          "lexiconKeys": [
-            "night_nurse_checkin"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "calm"
@@ -1406,13 +2332,15 @@
             "serenity",
             "support"
           ],
-          "example": "The nurse checked in twice during the night to make sure my dad was comfortable."
+          "example": "The nurse checked in twice during the night to make sure my dad was comfortable.",
+          "phrases": [
+            "checked in twice during the night to make sure my dad was comfortable",
+            "explained each step before starting the procedure"
+          ]
         },
         {
           "id": "dentist-explained-steps",
-          "lexiconKeys": [
-            "dentist_explained_steps"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "calm",
             "relieved"
@@ -1422,11 +2350,58 @@
             "nurturing",
             "trust"
           ],
-          "example": "My dentist explained each step before starting the procedure."
+          "example": "My dentist explained each step before starting the procedure.",
+          "phrases": [
+            "checked in twice during the night to make sure my dad was comfortable",
+            "explained each step before starting the procedure"
+          ]
         }
       ],
       "builderActionIds": [
         "care-attentive-support"
+      ],
+      "matchPhrases": [
+        "checked in twice during the night to make sure my dad was comfortable",
+        "explained each step before starting the procedure"
+      ],
+      "builderMatchers": [
+        {
+          "key": "check|twice|dur|make|dad|comfortable",
+          "pattern": "\\bcheck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwice\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdad\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcomfortable\\b",
+          "flags": "iu",
+          "tokens": [
+            "check",
+            "twice",
+            "dur",
+            "night",
+            "make",
+            "sure",
+            "dad",
+            "comfortable"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "explain|each|step|start|procedure",
+          "pattern": "\\bexplain\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beach\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprocedure\\b",
+          "flags": "iu",
+          "tokens": [
+            "explain",
+            "each",
+            "step",
+            "start",
+            "procedure"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1438,9 +2413,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "delivery_marked_missing"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "frustrated",
         "confused"
@@ -1458,9 +2431,7 @@
       "cues": [
         {
           "id": "delivery-marked-delivered",
-          "lexiconKeys": [
-            "delivery_marked_missing"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "frustrated",
             "confused"
@@ -1470,11 +2441,66 @@
             "accountability",
             "reliability"
           ],
-          "example": "At 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep."
+          "example": "At 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep.",
+          "phrases": [
+            "at 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep"
+          ]
         }
       ],
       "builderActionIds": [
         "delivery-gaps"
+      ],
+      "matchPhrases": [
+        "at 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep"
+      ],
+      "builderMatchers": [
+        {
+          "key": "7",
+          "pattern": "\\b7\\b",
+          "flags": "iu",
+          "tokens": [
+            "7"
+          ],
+          "tokenThreshold": 1,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "delivery|app|mark|order|deliver",
+          "pattern": "\\bdelivery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bapp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmark\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\border\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeliver\\b",
+          "flags": "iu",
+          "tokens": [
+            "delivery",
+            "app",
+            "mark",
+            "order",
+            "deliver"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "porch|camera|show|empty|doorstep",
+          "pattern": "\\bporch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcamera\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bempty\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdoorstep\\b",
+          "flags": "iu",
+          "tokens": [
+            "porch",
+            "camera",
+            "show",
+            "empty",
+            "doorstep"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1486,9 +2512,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "friend_late_no_text"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "irritated",
         "hurt"
@@ -1506,9 +2530,7 @@
       "cues": [
         {
           "id": "friend-late-no-text",
-          "lexiconKeys": [
-            "friend_late_no_text"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "irritated",
             "hurt"
@@ -1518,11 +2540,38 @@
             "consideration",
             "reliability"
           ],
-          "example": "My friend arrived 30 minutes late to lunch without texting."
+          "example": "My friend arrived 30 minutes late to lunch without texting.",
+          "phrases": [
+            "arrived 30 minutes late to lunch without texting"
+          ]
         }
       ],
       "builderActionIds": [
         "punctuality-boundaries"
+      ],
+      "matchPhrases": [
+        "arrived 30 minutes late to lunch without texting"
+      ],
+      "builderMatchers": [
+        {
+          "key": "arriv|30|minut|late|without|text",
+          "pattern": "\\barriv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btext\\b",
+          "flags": "iu",
+          "tokens": [
+            "arriv",
+            "30",
+            "minut",
+            "late",
+            "lunch",
+            "without",
+            "text"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1534,9 +2583,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "hoa_warning_letter"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "irritated",
         "confused"
@@ -1554,9 +2601,7 @@
       "cues": [
         {
           "id": "hoa-lawn-warning",
-          "lexiconKeys": [
-            "hoa_warning_letter"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "irritated",
             "confused"
@@ -1566,11 +2611,38 @@
             "clarity",
             "respect"
           ],
-          "example": "Our HOA sent a warning letter about lawn length without asking first."
+          "example": "Our HOA sent a warning letter about lawn length without asking first.",
+          "phrases": [
+            "warning letter about lawn length without asking first"
+          ]
         }
       ],
       "builderActionIds": [
         "policy-warnings"
+      ],
+      "matchPhrases": [
+        "warning letter about lawn length without asking first"
+      ],
+      "builderMatchers": [
+        {
+          "key": "warn|letter|lawn|length|ask|first",
+          "pattern": "\\bwarn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bletter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blawn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blength\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfirst\\b",
+          "flags": "iu",
+          "tokens": [
+            "warn",
+            "letter",
+            "lawn",
+            "length",
+            "without",
+            "ask",
+            "first"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1582,9 +2654,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "colleague_took_credit"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "hurt",
         "angry",
@@ -1603,9 +2673,7 @@
       "cues": [
         {
           "id": "colleague-took-credit",
-          "lexiconKeys": [
-            "colleague_took_credit"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "hurt",
             "angry"
@@ -1615,11 +2683,52 @@
             "integrity",
             "fairness"
           ],
-          "example": "My colleague took credit for my idea during the pitch meeting."
+          "example": "My colleague took credit for my idea during the pitch meeting.",
+          "phrases": [
+            "my idea during the pitch meeting",
+            "during the pitch meeting"
+          ]
         }
       ],
       "builderActionIds": [
         "recognition-boundaries"
+      ],
+      "matchPhrases": [
+        "my idea during the pitch meeting",
+        "during the pitch meeting"
+      ],
+      "builderMatchers": [
+        {
+          "key": "idea|dur|pitch|meet",
+          "pattern": "\\bidea\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpitch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b",
+          "flags": "iu",
+          "tokens": [
+            "idea",
+            "dur",
+            "pitch",
+            "meet"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "dur|pitch|meet",
+          "pattern": "\\bdur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpitch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b",
+          "flags": "iu",
+          "tokens": [
+            "dur",
+            "pitch",
+            "meet"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1632,9 +2741,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "daycare_no_call"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "scared",
         "alarmed"
@@ -1652,9 +2759,7 @@
       "cues": [
         {
           "id": "daycare-no-call",
-          "lexiconKeys": [
-            "daycare_no_call"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "scared",
             "alarmed"
@@ -1664,11 +2769,33 @@
             "clarity",
             "trust"
           ],
-          "example": "The daycare forgot to call when my child had a fever."
+          "example": "The daycare forgot to call when my child had a fever.",
+          "phrases": [
+            "when my child had a fever"
+          ]
         }
       ],
       "builderActionIds": [
         "care-communication-gaps"
+      ],
+      "matchPhrases": [
+        "when my child had a fever"
+      ],
+      "builderMatchers": [
+        {
+          "key": "child|fever",
+          "pattern": "\\bchild\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfever\\b",
+          "flags": "iu",
+          "tokens": [
+            "child",
+            "fever"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1680,9 +2807,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "bus_driver_waited"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "joyful",
         "relieved"
@@ -1700,9 +2825,7 @@
       "cues": [
         {
           "id": "bus-driver-waited",
-          "lexiconKeys": [
-            "bus_driver_waited"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "joyful",
             "relieved"
@@ -1712,11 +2835,35 @@
             "support",
             "relaxation"
           ],
-          "example": "The bus driver waited for me when I was running toward the stop."
+          "example": "The bus driver waited for me when I was running toward the stop.",
+          "phrases": [
+            "waited for me when I was running toward the stop"
+          ]
         }
       ],
       "builderActionIds": [
         "commute-kindness"
+      ],
+      "matchPhrases": [
+        "waited for me when I was running toward the stop"
+      ],
+      "builderMatchers": [
+        {
+          "key": "wait|runn|toward|stop",
+          "pattern": "\\bwait\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brunn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoward\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstop\\b",
+          "flags": "iu",
+          "tokens": [
+            "wait",
+            "runn",
+            "toward",
+            "stop"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1728,9 +2875,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "teammate_ignored_updates"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "anxious",
         "frustrated",
@@ -1749,9 +2894,7 @@
       "cues": [
         {
           "id": "teammate-sprint-update-gap",
-          "lexiconKeys": [
-            "teammate_ignored_updates"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "anxious",
             "frustrated",
@@ -1762,11 +2905,39 @@
             "accountability",
             "mutuality"
           ],
-          "example": "From Monday through Friday, no cards under my teammate's initials moved on the shared sprint board."
+          "example": "From Monday through Friday, no cards under my teammate's initials moved on the shared sprint board.",
+          "phrases": [
+            "no cards under my teammate's initials moved on the shared sprint board"
+          ]
         }
       ],
       "builderActionIds": [
         "collaboration-visibility"
+      ],
+      "matchPhrases": [
+        "no cards under my teammate's initials moved on the shared sprint board"
+      ],
+      "builderMatchers": [
+        {
+          "key": "no|card|teammate|mov|sprint|board",
+          "pattern": "\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bteammate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmov\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsprint\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bboard\\b",
+          "flags": "iu",
+          "tokens": [
+            "no",
+            "card",
+            "teammate",
+            "initial",
+            "mov",
+            "shar",
+            "sprint",
+            "board"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1778,9 +2949,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "landlord_quick_fix"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful"
@@ -1798,9 +2967,7 @@
       "cues": [
         {
           "id": "landlord-fixed-quickly",
-          "lexiconKeys": [
-            "landlord_quick_fix"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful"
@@ -1810,11 +2977,36 @@
             "safety",
             "support"
           ],
-          "example": "Our landlord repaired the leaky faucet the day after we reported it."
+          "example": "Our landlord repaired the leaky faucet the day after we reported it.",
+          "phrases": [
+            "repaired the leaky faucet the day after we reported it"
+          ]
         }
       ],
       "builderActionIds": [
         "housing-responsiveness"
+      ],
+      "matchPhrases": [
+        "repaired the leaky faucet the day after we reported it"
+      ],
+      "builderMatchers": [
+        {
+          "key": "repair|leaky|faucet|day|report",
+          "pattern": "\\brepair\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleaky\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfaucet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b",
+          "flags": "iu",
+          "tokens": [
+            "repair",
+            "leaky",
+            "faucet",
+            "day",
+            "report"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1826,9 +3018,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "sibling_unpaid"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "frustrated",
         "disappointment"
@@ -1846,9 +3036,7 @@
       "cues": [
         {
           "id": "sibling-did-not-pay",
-          "lexiconKeys": [
-            "sibling_unpaid"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "frustrated",
             "disappointment"
@@ -1858,11 +3046,49 @@
             "reliability",
             "fairness"
           ],
-          "example": "My sibling promised to pay me back Friday but still hasn't sent anything."
+          "example": "My sibling promised to pay me back Friday but still hasn't sent anything.",
+          "phrases": [
+            "promised to pay me back Friday but still hasn't sent anything"
+          ]
         }
       ],
       "builderActionIds": [
         "commitment-followthrough"
+      ],
+      "matchPhrases": [
+        "promised to pay me back Friday but still hasn't sent anything"
+      ],
+      "builderMatchers": [
+        {
+          "key": "promis|pay|friday",
+          "pattern": "\\bpromis\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfriday\\b",
+          "flags": "iu",
+          "tokens": [
+            "promis",
+            "pay",
+            "friday"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "hasnt|sent|anyth",
+          "pattern": "\\bhasnt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\banyth\\b",
+          "flags": "iu",
+          "tokens": [
+            "hasnt",
+            "sent",
+            "anyth"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1875,9 +3101,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "allergy_ignored"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "scared",
         "angry"
@@ -1895,9 +3119,7 @@
       "cues": [
         {
           "id": "allergy-served-peanuts",
-          "lexiconKeys": [
-            "allergy_ignored"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "scared",
             "angry"
@@ -1907,11 +3129,36 @@
             "consideration",
             "trust"
           ],
-          "example": "The restaurant served my meal with peanuts after I noted my allergy."
+          "example": "The restaurant served my meal with peanuts after I noted my allergy.",
+          "phrases": [
+            "served my meal with peanuts after I noted my allergy"
+          ]
         }
       ],
       "builderActionIds": [
         "food-safety"
+      ],
+      "matchPhrases": [
+        "served my meal with peanuts after I noted my allergy"
+      ],
+      "builderMatchers": [
+        {
+          "key": "serv|meal|peanut|not|allergy",
+          "pattern": "\\bserv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeal\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpeanut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnot\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\ballergy\\b",
+          "flags": "iu",
+          "tokens": [
+            "serv",
+            "meal",
+            "peanut",
+            "not",
+            "allergy"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1923,9 +3170,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "meeting_over_lunch"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "irritated",
         "hurt"
@@ -1943,9 +3188,7 @@
       "cues": [
         {
           "id": "meeting-over-lunch",
-          "lexiconKeys": [
-            "meeting_over_lunch"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "irritated",
             "hurt"
@@ -1955,11 +3198,37 @@
             "rest",
             "autonomy"
           ],
-          "example": "My manager scheduled a meeting over my lunch break without asking."
+          "example": "My manager scheduled a meeting over my lunch break without asking.",
+          "phrases": [
+            "scheduled a meeting over my lunch break without asking"
+          ]
         }
       ],
       "builderActionIds": [
         "schedule-respect"
+      ],
+      "matchPhrases": [
+        "scheduled a meeting over my lunch break without asking"
+      ],
+      "builderMatchers": [
+        {
+          "key": "schedul|meet|lunch|break|without|ask",
+          "pattern": "\\bschedul\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blunch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbreak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b",
+          "flags": "iu",
+          "tokens": [
+            "schedul",
+            "meet",
+            "lunch",
+            "break",
+            "without",
+            "ask"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -1971,9 +3240,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "support_agent_followup"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful"
@@ -1991,9 +3258,7 @@
       "cues": [
         {
           "id": "support-agent-followed-up",
-          "lexiconKeys": [
-            "support_agent_followup"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful"
@@ -2003,11 +3268,55 @@
             "support",
             "accountability"
           ],
-          "example": "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix."
+          "example": "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix.",
+          "phrases": [
+            "yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix"
+          ]
         }
       ],
       "builderActionIds": [
         "support-followthrough"
+      ],
+      "matchPhrases": [
+        "yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix"
+      ],
+      "builderMatchers": [
+        {
+          "key": "yesterday|service|agent|call|troubleshoot|step",
+          "pattern": "\\byesterday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bservice\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcall\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btroubleshoot\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b",
+          "flags": "iu",
+          "tokens": [
+            "yesterday",
+            "service",
+            "agent",
+            "stay",
+            "call",
+            "each",
+            "troubleshoot",
+            "step"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "email|morn|confirm|fix",
+          "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmorn\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconfirm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfix\\b",
+          "flags": "iu",
+          "tokens": [
+            "email",
+            "morn",
+            "confirm",
+            "fix"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2019,9 +3328,7 @@
         "context",
         "sensory"
       ],
-      "lexiconKeys": [
-        "streetlight_fixed"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful",
@@ -2040,9 +3347,7 @@
       "cues": [
         {
           "id": "city-fixed-streetlight",
-          "lexiconKeys": [
-            "streetlight_fixed"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "calm"
@@ -2052,11 +3357,35 @@
             "reliability",
             "community"
           ],
-          "example": "The city finally fixed the streetlight after months of emails."
+          "example": "The city finally fixed the streetlight after months of emails.",
+          "phrases": [
+            "fixed the streetlight after months of emails"
+          ]
         }
       ],
       "builderActionIds": [
         "infrastructure-response"
+      ],
+      "matchPhrases": [
+        "fixed the streetlight after months of emails"
+      ],
+      "builderMatchers": [
+        {
+          "key": "fix|streetlight|month|email",
+          "pattern": "\\bfix\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstreetlight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bemail\\b",
+          "flags": "iu",
+          "tokens": [
+            "fix",
+            "streetlight",
+            "month",
+            "email"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2070,13 +3399,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\baudit\\s+logs?\\b[^\\n]{0,60}\\bunauthorized\\s+logins\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "alarmed",
         "anxious",
@@ -2107,11 +3429,58 @@
           "example": "At 8:20 a.m. today in the SOC, the audit logs listed five unauthorized logins this week.",
           "patterns": [
             "\\baudit\\s+logs?\\b[^\\n]{0,40}\\bunauthorized\\s+logins\\b"
+          ],
+          "phrases": [
+            "the audit logs listed five unauthorized logins this week",
+            "logs listed five unauthorized logins this week"
           ]
         }
       ],
       "builderActionIds": [
         "audit-login-breaches"
+      ],
+      "matchPhrases": [
+        "the audit logs listed five unauthorized logins this week",
+        "logs listed five unauthorized logins this week"
+      ],
+      "builderMatchers": [
+        {
+          "key": "audit|logs|list|five|login|week",
+          "pattern": "\\baudit\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogs\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+          "flags": "iu",
+          "tokens": [
+            "audit",
+            "logs",
+            "list",
+            "five",
+            "unauthoriz",
+            "login",
+            "week"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "logs|list|five|unauthoriz|login|week",
+          "pattern": "\\blogs\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blist\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bunauthoriz\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blogin\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+          "flags": "iu",
+          "tokens": [
+            "logs",
+            "list",
+            "five",
+            "unauthoriz",
+            "login",
+            "week"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2125,13 +3494,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bbedtime\\b[^\\n]{0,60}\\bagain\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "tired",
         "resentful",
@@ -2162,11 +3524,35 @@
           "example": "At 8:30 p.m. last night in the nursery with our twins, I heard my partner say \"You're on bedtime again.\"",
           "patterns": [
             "\\bbedtime\\b[^\\n]{0,40}\\bagain\\b"
+          ],
+          "phrases": [
+            "say \"You're on bedtime again.\"",
+            "say You're on bedtime again."
           ]
         }
       ],
       "builderActionIds": [
         "bedtime-load-gaps"
+      ],
+      "matchPhrases": [
+        "say \"You're on bedtime again.\"",
+        "say You're on bedtime again."
+      ],
+      "builderMatchers": [
+        {
+          "key": "say|bedtime",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbedtime\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "bedtime"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2180,13 +3566,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "alarmed",
         "anxious",
@@ -2217,11 +3596,39 @@
           "example": "At 3:45 p.m. today in the finance Slack channel, Finance posted \"Budget freeze effective immediately.\"",
           "patterns": [
             "\\bBudget\\s+freeze\\s+effective\\s+immediately\\b"
+          ],
+          "phrases": [
+            "finance posted \"Budget freeze effective immediately.\"",
+            "finance posted Budget freeze effective immediately."
           ]
         }
       ],
       "builderActionIds": [
         "budget-freeze-alerts"
+      ],
+      "matchPhrases": [
+        "finance posted \"Budget freeze effective immediately.\"",
+        "finance posted Budget freeze effective immediately."
+      ],
+      "builderMatchers": [
+        {
+          "key": "finance|post|budget|freeze|effective|immediately",
+          "pattern": "\\bfinance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpost\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbudget\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfreeze\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beffective\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bimmediately\\b",
+          "flags": "iu",
+          "tokens": [
+            "finance",
+            "post",
+            "budget",
+            "freeze",
+            "effective",
+            "immediately"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2235,13 +3642,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bhaven't\\s+replied\\s+to\\s+your\\s+emails\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "sad",
         "frustrated",
@@ -2272,11 +3672,37 @@
           "example": "On Monday at 2 p.m. at city hall with the clerk, I heard the staffer say \"We still haven't replied to your emails.\"",
           "patterns": [
             "\\bhaven't\\s+replied\\s+to\\s+your\\s+emails\\b"
+          ],
+          "phrases": [
+            "say \"We still haven't replied to your emails.\"",
+            "say We still haven't replied to your emails."
           ]
         }
       ],
       "builderActionIds": [
         "civic-nonresponse"
+      ],
+      "matchPhrases": [
+        "say \"We still haven't replied to your emails.\"",
+        "say We still haven't replied to your emails."
+      ],
+      "builderMatchers": [
+        {
+          "key": "say|havent|repli|email",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhavent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brepli\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bemail\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "havent",
+            "repli",
+            "email"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2290,13 +3716,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bjudge\\b[^\\n]{0,80}\\breconvene\\s+next\\s+month\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "frustrated",
         "sad",
@@ -2327,11 +3746,105 @@
           "example": "At 10 a.m.",
           "patterns": [
             "\\bjudge\\b[^\\n]{0,60}\\breconvene\\s+next\\s+month\\b"
+          ],
+          "phrases": [
+            "the judge said we would reconvene next month with no new date",
+            "said we would reconvene next month with no new date",
+            "the clerk announced our hearing was pushed to next month without an explanation",
+            "announced our hearing was pushed to next month without an explanation"
           ]
         }
       ],
       "builderActionIds": [
         "courtroom-delays"
+      ],
+      "matchPhrases": [
+        "the judge said we would reconvene next month with no new date",
+        "said we would reconvene next month with no new date",
+        "the clerk announced our hearing was pushed to next month without an explanation",
+        "announced our hearing was pushed to next month without an explanation"
+      ],
+      "builderMatchers": [
+        {
+          "key": "judge|said|would|next|new|date",
+          "pattern": "\\bjudge\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdate\\b",
+          "flags": "iu",
+          "tokens": [
+            "judge",
+            "said",
+            "would",
+            "reconvene",
+            "next",
+            "month",
+            "no",
+            "new",
+            "date"
+          ],
+          "tokenThreshold": 6,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "said|would|reconvene|month|new|date",
+          "pattern": "\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breconvene\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnew\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdate\\b",
+          "flags": "iu",
+          "tokens": [
+            "said",
+            "would",
+            "reconvene",
+            "next",
+            "month",
+            "no",
+            "new",
+            "date"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "clerk|announc|hear|next|without|explanation",
+          "pattern": "\\bclerk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bannounc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhear\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+          "flags": "iu",
+          "tokens": [
+            "clerk",
+            "announc",
+            "hear",
+            "push",
+            "next",
+            "month",
+            "without",
+            "explanation"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "announc|hear|push|next|without|explanation",
+          "pattern": "\\bannounc\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhear\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpush\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bexplanation\\b",
+          "flags": "iu",
+          "tokens": [
+            "announc",
+            "hear",
+            "push",
+            "next",
+            "month",
+            "without",
+            "explanation"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2345,13 +3858,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bcounted\\s+four\\s+tables\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "irritated",
         "tired",
@@ -2382,11 +3888,36 @@
           "example": "Yesterday at 6 p.m. in the cafe lobby with our closing crew, I counted four tables left covered in cups.",
           "patterns": [
             "\\bcounted\\s+four\\s+tables\\b"
+          ],
+          "phrases": [
+            "four tables left covered in cups"
           ]
         }
       ],
       "builderActionIds": [
         "customer-mess-followup"
+      ],
+      "matchPhrases": [
+        "four tables left covered in cups"
+      ],
+      "builderMatchers": [
+        {
+          "key": "four|tabl|left|cover|cups",
+          "pattern": "\\bfour\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btabl\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcover\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcups\\b",
+          "flags": "iu",
+          "tokens": [
+            "four",
+            "tabl",
+            "left",
+            "cover",
+            "cups"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2400,13 +3931,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bdoorbell\\s+cam\\b[^\\n]{0,60}\\bleaving\\s+the\\s+package\\b[^\\n]{0,40}\\b\\d+\\s+minutes\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "frustrated",
         "irritated",
@@ -2437,11 +3961,39 @@
           "example": "At 5 p.m. yesterday on our porch, the doorbell cam captured the delivery driver leaving the package in the rain for 12 minutes.",
           "patterns": [
             "\\bdoorbell\\s+cam\\b[^\\n]{0,40}\\bleaving\\s+the\\s+package\\b[^\\n]{0,30}\\b\\d+\\s+minutes\\b"
+          ],
+          "phrases": [
+            "captured the delivery driver leaving the package in the rain for 12 minutes"
           ]
         }
       ],
       "builderActionIds": [
         "delivery-exposure"
+      ],
+      "matchPhrases": [
+        "captured the delivery driver leaving the package in the rain for 12 minutes"
+      ],
+      "builderMatchers": [
+        {
+          "key": "captur|delivery|driver|package|12|minut",
+          "pattern": "\\bcaptur\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdelivery\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdriver\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpackage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b",
+          "flags": "iu",
+          "tokens": [
+            "captur",
+            "delivery",
+            "driver",
+            "leav",
+            "package",
+            "rain",
+            "12",
+            "minut"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2455,13 +4007,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bdivorce\\s+papers\\b[^\\n]{0,60}\\b30\\s+seconds\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "sad",
         "lonely",
@@ -2492,11 +4037,58 @@
           "example": "This afternoon at my parents' dining table with my brother, I saw him stare silently at the divorce papers for 30 seconds.",
           "patterns": [
             "\\bdivorce\\s+papers\\b[^\\n]{0,40}\\b30\\s+seconds\\b"
+          ],
+          "phrases": [
+            "them stare silently at the divorce papers for 30 seconds",
+            "stare silently at the divorce papers for 30 seconds"
           ]
         }
       ],
       "builderActionIds": [
         "divorce-paper-silence"
+      ],
+      "matchPhrases": [
+        "them stare silently at the divorce papers for 30 seconds",
+        "stare silently at the divorce papers for 30 seconds"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|stare|silently|divorce|30|second",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilently\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdivorce\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "stare",
+            "silently",
+            "divorce",
+            "paper",
+            "30",
+            "second"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "stare|silently|divorce|paper|30|second",
+          "pattern": "\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilently\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdivorce\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpaper\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b30\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+          "flags": "iu",
+          "tokens": [
+            "stare",
+            "silently",
+            "divorce",
+            "paper",
+            "30",
+            "second"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2510,13 +4102,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bboth\\s+tenors\\b[^\\n]{0,60}\\bstare\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "anxious",
@@ -2547,11 +4132,37 @@
           "example": "During tonight's rehearsal at the arts center, I watched both tenors stare at the floor for 10 seconds.",
           "patterns": [
             "\\bboth\\s+tenors\\b[^\\n]{0,40}\\bstare\\b"
+          ],
+          "phrases": [
+            "both tenors stare at the floor for 10 seconds"
           ]
         }
       ],
       "builderActionIds": [
         "ensemble-dropoff"
+      ],
+      "matchPhrases": [
+        "both tenors stare at the floor for 10 seconds"
+      ],
+      "builderMatchers": [
+        {
+          "key": "both|tenor|stare|floor|10|second",
+          "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btenor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfloor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b10\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+          "flags": "iu",
+          "tokens": [
+            "both",
+            "tenor",
+            "stare",
+            "floor",
+            "10",
+            "second"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2565,13 +4176,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bEviction\\s+warning\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "alarmed",
         "anxious",
@@ -2602,11 +4206,38 @@
           "example": "Yesterday at noon in my apartment, the landlord mailed a letter stamped \"Eviction warning.\"",
           "patterns": [
             "\\bEviction\\s+warning\\b"
+          ],
+          "phrases": [
+            "mailed a letter stamped \"Eviction warning.\"",
+            "mailed a letter stamped Eviction warning."
           ]
         }
       ],
       "builderActionIds": [
         "housing-eviction-notices"
+      ],
+      "matchPhrases": [
+        "mailed a letter stamped \"Eviction warning.\"",
+        "mailed a letter stamped Eviction warning."
+      ],
+      "builderMatchers": [
+        {
+          "key": "mail|letter|stamp|eviction|warn",
+          "pattern": "\\bmail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bletter\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstamp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beviction\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwarn\\b",
+          "flags": "iu",
+          "tokens": [
+            "mail",
+            "letter",
+            "stamp",
+            "eviction",
+            "warn"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2620,13 +4251,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bcoordinator\\b[^\\n]{0,60}\\bclipboard\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "frustrated",
@@ -2657,11 +4281,117 @@
           "example": "At 4 p.m.",
           "patterns": [
             "\\bcoordinator\\b[^\\n]{0,40}\\bclipboard\\b"
+          ],
+          "phrases": [
+            "the coordinator walked off with the clipboard before finishing our intake",
+            "walked off with the clipboard before finishing our intake",
+            "the coordinator set the clipboard down and left the families waiting",
+            "set the clipboard down and left the families waiting"
           ]
         }
       ],
       "builderActionIds": [
         "intake-walkaways"
+      ],
+      "matchPhrases": [
+        "the coordinator walked off with the clipboard before finishing our intake",
+        "walked off with the clipboard before finishing our intake",
+        "the coordinator set the clipboard down and left the families waiting",
+        "set the clipboard down and left the families waiting"
+      ],
+      "builderMatchers": [
+        {
+          "key": "coordinator|walk|clipboard",
+          "pattern": "\\bcoordinator\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b",
+          "flags": "iu",
+          "tokens": [
+            "coordinator",
+            "walk",
+            "clipboard"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "finish|intake",
+          "pattern": "\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bintake\\b",
+          "flags": "iu",
+          "tokens": [
+            "finish",
+            "intake"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "walk|clipboard|finish|intake",
+          "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bintake\\b",
+          "flags": "iu",
+          "tokens": [
+            "walk",
+            "clipboard",
+            "finish",
+            "intake"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "coordinator|set|clipboard",
+          "pattern": "\\bcoordinator\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bset\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b",
+          "flags": "iu",
+          "tokens": [
+            "coordinator",
+            "set",
+            "clipboard"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "left|family|wait",
+          "pattern": "\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwait\\b",
+          "flags": "iu",
+          "tokens": [
+            "left",
+            "family",
+            "wait"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "set|clipboard|left|family|wait",
+          "pattern": "\\bset\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclipboard\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleft\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwait\\b",
+          "flags": "iu",
+          "tokens": [
+            "set",
+            "clipboard",
+            "left",
+            "family",
+            "wait"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2675,13 +4405,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bpump\\s+alarm\\b[^\\n]{0,60}\\bstopped\\s+the\\s+watering\\s+cycle\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "anxious",
@@ -2712,11 +4435,81 @@
           "example": "At dawn today out by the west field with Luis, the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes.",
           "patterns": [
             "\\bpump\\s+alarm\\b[^\\n]{0,40}\\bstopped\\s+the\\s+watering\\s+cycle\\b"
+          ],
+          "phrases": [
+            "the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes",
+            "pump alarm sounded and stopped the watering cycle after 4 minutes"
           ]
         }
       ],
       "builderActionIds": [
         "irrigation-pump-alarms"
+      ],
+      "matchPhrases": [
+        "the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes",
+        "pump alarm sounded and stopped the watering cycle after 4 minutes"
+      ],
+      "builderMatchers": [
+        {
+          "key": "irrigation|pump|alarm|sound",
+          "pattern": "\\birrigation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpump\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\balarm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsound\\b",
+          "flags": "iu",
+          "tokens": [
+            "irrigation",
+            "pump",
+            "alarm",
+            "sound"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "stopp|water|cycle",
+          "pattern": "\\bstopp\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwater\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcycle\\b",
+          "flags": "iu",
+          "tokens": [
+            "stopp",
+            "water",
+            "cycle"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "4|minut",
+          "pattern": "\\b4\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b",
+          "flags": "iu",
+          "tokens": [
+            "4",
+            "minut"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "pump|alarm|sound",
+          "pattern": "\\bpump\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\balarm\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsound\\b",
+          "flags": "iu",
+          "tokens": [
+            "pump",
+            "alarm",
+            "sound"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2730,13 +4523,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bassay\\b[^\\n]{0,60}\\b0\\\\.42\\b[^\\n]{0,60}\\b0\\\\.91\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "confused",
@@ -2767,11 +4553,72 @@
           "example": "At 9 a.m.",
           "patterns": [
             "\\bassay\\b[^\\n]{0,40}\\b0\\.42\\b[^\\n]{0,40}\\b0\\.91\\b"
+          ],
+          "phrases": [
+            "the assay read 0.42 yesterday and 0.91 today on the same sample set",
+            "read 0.42 yesterday and 0.91 today on the same sample set"
           ]
         }
       ],
       "builderActionIds": [
         "lab-fluorescence-variance"
+      ],
+      "matchPhrases": [
+        "the assay read 0.42 yesterday and 0.91 today on the same sample set",
+        "read 0.42 yesterday and 0.91 today on the same sample set"
+      ],
+      "builderMatchers": [
+        {
+          "key": "assay|read|0|42|yesterday",
+          "pattern": "\\bassay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bread\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b42\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+          "flags": "iu",
+          "tokens": [
+            "assay",
+            "read",
+            "0",
+            "42",
+            "yesterday"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "0|91|today|same|sample|set",
+          "pattern": "\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b91\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsame\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsample\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bset\\b",
+          "flags": "iu",
+          "tokens": [
+            "0",
+            "91",
+            "today",
+            "same",
+            "sample",
+            "set"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "read|0|42|yesterday",
+          "pattern": "\\bread\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b0\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b42\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\byesterday\\b",
+          "flags": "iu",
+          "tokens": [
+            "read",
+            "0",
+            "42",
+            "yesterday"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2785,13 +4632,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bneed\\s+to\\s+redo\\b[^\\n]{0,60}\\bdeck\\b\\s+tonight\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "alarmed",
         "anxious",
@@ -2822,11 +4662,39 @@
           "example": "Yesterday at 4:15 p.m. in the war room with Jenna, I heard my manager say \"We need to redo the launch deck tonight.\"",
           "patterns": [
             "\\bneed\\s+to\\s+redo\\b[^\\n]{0,40}\\bdeck\\b\\s+tonight\\b"
+          ],
+          "phrases": [
+            "say \"We need to redo the launch deck tonight.\"",
+            "say We need to redo the launch deck tonight."
           ]
         }
       ],
       "builderActionIds": [
         "last-minute-scope-shifts"
+      ],
+      "matchPhrases": [
+        "say \"We need to redo the launch deck tonight.\"",
+        "say We need to redo the launch deck tonight."
+      ],
+      "builderMatchers": [
+        {
+          "key": "say|need|redo|launch|deck|tonight",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bredo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blaunch\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "need",
+            "redo",
+            "launch",
+            "deck",
+            "tonight"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2840,13 +4708,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bmaintenance\\s+dashboard\\b[^\\n]{0,60}\\bflashed\\s+red\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "overwhelmed",
@@ -2877,11 +4738,39 @@
           "example": "Last night the maintenance dashboard flashed red for three hours.",
           "patterns": [
             "\\bmaintenance\\s+dashboard\\b[^\\n]{0,40}\\bflashed\\s+red\\b"
+          ],
+          "phrases": [
+            "last night the maintenance dashboard flashed red for three hours"
           ]
         }
       ],
       "builderActionIds": [
         "maintenance-dashboard-alerts"
+      ],
+      "matchPhrases": [
+        "last night the maintenance dashboard flashed red for three hours"
+      ],
+      "builderMatchers": [
+        {
+          "key": "last|night|maintenance|flash|three|hour",
+          "pattern": "\\blast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmaintenance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bflash\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b",
+          "flags": "iu",
+          "tokens": [
+            "last",
+            "night",
+            "maintenance",
+            "dashboard",
+            "flash",
+            "red",
+            "three",
+            "hour"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2895,13 +4784,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bboth\\s+partners\\b[^\\n]{0,60}\\bfive\\s+seconds\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "tense",
@@ -2932,11 +4814,37 @@
           "example": "During tonight's mediation session in room B with both partners, I watched both partners fold their arms for five seconds.",
           "patterns": [
             "\\bboth\\s+partners\\b[^\\n]{0,40}\\bfive\\s+seconds\\b"
+          ],
+          "phrases": [
+            "both partners fold their arms for five seconds"
           ]
         }
       ],
       "builderActionIds": [
         "mediation-body-language"
+      ],
+      "matchPhrases": [
+        "both partners fold their arms for five seconds"
+      ],
+      "builderMatchers": [
+        {
+          "key": "both|partner|fold|arms|five|second",
+          "pattern": "\\bboth\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpartner\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfold\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barms\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b",
+          "flags": "iu",
+          "tokens": [
+            "both",
+            "partner",
+            "fold",
+            "arms",
+            "five",
+            "second"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -2950,13 +4858,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\brun\\s+\\d+\\s+minutes\\s+past\\s+dismissal\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "frustrated",
         "overwhelmed",
@@ -2987,11 +4888,56 @@
           "example": "During Tuesday's advisory meeting in room 214 with the grade-level team, I saw the agenda run 12 minutes past dismissal.",
           "patterns": [
             "\\brun\\s+\\d+\\s+minutes\\s+past\\s+dismissal\\b"
+          ],
+          "phrases": [
+            "the agenda run 12 minutes past dismissal",
+            "run 12 minutes past dismissal"
           ]
         }
       ],
       "builderActionIds": [
         "meeting-overflow"
+      ],
+      "matchPhrases": [
+        "the agenda run 12 minutes past dismissal",
+        "run 12 minutes past dismissal"
+      ],
+      "builderMatchers": [
+        {
+          "key": "agenda|run|12|minut|past|dismissal",
+          "pattern": "\\bagenda\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdismissal\\b",
+          "flags": "iu",
+          "tokens": [
+            "agenda",
+            "run",
+            "12",
+            "minut",
+            "past",
+            "dismissal"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "run|12|minut|past|dismissal",
+          "pattern": "\\brun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b12\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpast\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdismissal\\b",
+          "flags": "iu",
+          "tokens": [
+            "run",
+            "12",
+            "minut",
+            "past",
+            "dismissal"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3005,13 +4951,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bbaby\\s+monitor\\b[^\\n]{0,60}\\b20\\s+minutes\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "anxious",
@@ -3042,11 +4981,58 @@
           "example": "At 2 a.m. this morning in the nursery, the baby monitor recorded crying for 20 minutes straight.",
           "patterns": [
             "\\bbaby\\s+monitor\\b[^\\n]{0,40}\\b20\\s+minutes\\b"
+          ],
+          "phrases": [
+            "the baby monitor recorded crying for 20 minutes straight",
+            "monitor recorded crying for 20 minutes straight"
           ]
         }
       ],
       "builderActionIds": [
         "monitor-distress-alerts"
+      ],
+      "matchPhrases": [
+        "the baby monitor recorded crying for 20 minutes straight",
+        "monitor recorded crying for 20 minutes straight"
+      ],
+      "builderMatchers": [
+        {
+          "key": "baby|monitor|record|cry|minut|straight",
+          "pattern": "\\bbaby\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmonitor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brecord\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcry\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstraight\\b",
+          "flags": "iu",
+          "tokens": [
+            "baby",
+            "monitor",
+            "record",
+            "cry",
+            "20",
+            "minut",
+            "straight"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "monitor|record|cry|20|minut|straight",
+          "pattern": "\\bmonitor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brecord\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcry\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b20\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstraight\\b",
+          "flags": "iu",
+          "tokens": [
+            "monitor",
+            "record",
+            "cry",
+            "20",
+            "minut",
+            "straight"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3060,13 +5046,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bDr\\\\.\\s+Lee\\b[^\\n]{0,80}\\bthree\\s+pages\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "overwhelmed",
         "anxious",
@@ -3097,11 +5076,37 @@
           "example": "At 11:45 p.m. on last night's ICU shift with Dr. Lee, I heard three pages come through after the schedule changed.",
           "patterns": [
             "\\bDr\\.\\s+Lee\\b[^\\n]{0,80}\\bthree\\s+pages\\b"
+          ],
+          "phrases": [
+            "three pages come through after the schedule changed"
           ]
         }
       ],
       "builderActionIds": [
         "on-call-chaos"
+      ],
+      "matchPhrases": [
+        "three pages come through after the schedule changed"
+      ],
+      "builderMatchers": [
+        {
+          "key": "three|pag|come|through|schedule|chang",
+          "pattern": "\\bthree\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpag\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcome\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bthrough\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bschedule\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchang\\b",
+          "flags": "iu",
+          "tokens": [
+            "three",
+            "pag",
+            "come",
+            "through",
+            "schedule",
+            "chang"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3115,13 +5120,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bconductor\\b[^\\n]{0,60}\\bpercussion\\s+entrance\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "embarrassed",
         "hurt",
@@ -3152,11 +5150,34 @@
           "example": "During tonight's concert at the civic hall with the orchestra, the conductor cut the percussion entrance after two measures.",
           "patterns": [
             "\\bconductor\\b[^\\n]{0,40}\\bpercussion\\s+entrance\\b"
+          ],
+          "phrases": [
+            "entrance after two measures"
           ]
         }
       ],
       "builderActionIds": [
         "orchestra-cuts"
+      ],
+      "matchPhrases": [
+        "entrance after two measures"
+      ],
+      "builderMatchers": [
+        {
+          "key": "entrance|two|measur",
+          "pattern": "\\bentrance\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmeasur\\b",
+          "flags": "iu",
+          "tokens": [
+            "entrance",
+            "two",
+            "measur"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3170,13 +5191,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bsolo\\b[^\\n]{0,60}\\bMaya\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "hurt",
         "disappointment",
@@ -3207,11 +5221,37 @@
           "example": "At 3 p.m. during rehearsal in studio A with the cast, I heard the choreographer say \"I'm giving your solo to Maya.\"",
           "patterns": [
             "\\bsolo\\b[^\\n]{0,40}\\bMaya\\b"
+          ],
+          "phrases": [
+            "say \"I'm giving your solo to someone else.\"",
+            "say I'm giving your solo to someone else."
           ]
         }
       ],
       "builderActionIds": [
         "performance-reassignment"
+      ],
+      "matchPhrases": [
+        "say \"I'm giving your solo to someone else.\"",
+        "say I'm giving your solo to someone else."
+      ],
+      "builderMatchers": [
+        {
+          "key": "say|giv|solo|someone",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bgiv\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsolo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsomeone\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "giv",
+            "solo",
+            "someone"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3225,13 +5265,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bradar\\b[^\\n]{0,60}\\bunknown\\s+transponder\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "alarmed",
@@ -3262,11 +5295,37 @@
           "example": "At 02:14 during tonight's shift in the tower, radar flagged an unknown transponder ID 5487.",
           "patterns": [
             "\\bradar\\b[^\\n]{0,40}\\bunknown\\s+transponder\\b"
+          ],
+          "phrases": [
+            "radar flagged an unknown transponder ID 5487"
           ]
         }
       ],
       "builderActionIds": [
         "radar-unknown-transponder"
+      ],
+      "matchPhrases": [
+        "radar flagged an unknown transponder ID 5487"
+      ],
+      "builderMatchers": [
+        {
+          "key": "radar|flagg|unknown|transponder|id|5487",
+          "pattern": "\\bradar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bflagg\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bunknown\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btransponder\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b5487\\b",
+          "flags": "iu",
+          "tokens": [
+            "radar",
+            "flagg",
+            "unknown",
+            "transponder",
+            "id",
+            "5487"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3280,13 +5339,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bwe'?re\\s+done\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "sad",
         "hurt",
@@ -3317,11 +5369,19 @@
           "example": "At 6:15 p.m. tonight on our sofa with my partner, I read a text that said \"We're done.\"",
           "patterns": [
             "\\btext\\b[^\\n]{0,40}\\bwe'?re\\s+done\\b"
+          ],
+          "phrases": [
+            "said \"We're done.\"",
+            "said We're done."
           ]
         }
       ],
       "builderActionIds": [
         "relationship-breakup-text"
+      ],
+      "matchPhrases": [
+        "said \"We're done.\"",
+        "said We're done."
       ]
     },
     {
@@ -3335,13 +5395,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bphoned\\s+me\\b[^\\n]{0,60}\\bdisrupted\\s+class\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "anxious",
@@ -3372,11 +5425,38 @@
           "example": "This morning at 7:30 a.m. in my kitchen with the speakerphone on, the principal phoned me saying \"Your kid disrupted class.\"",
           "patterns": [
             "\\bphoned\\s+me\\b[^\\n]{0,40}\\bdisrupted\\s+class\\b"
+          ],
+          "phrases": [
+            "phoned me saying \"Your kid disrupted class.\"",
+            "phoned me saying Your kid disrupted class."
           ]
         }
       ],
       "builderActionIds": [
         "school-discipline-calls"
+      ],
+      "matchPhrases": [
+        "phoned me saying \"Your kid disrupted class.\"",
+        "phoned me saying Your kid disrupted class."
+      ],
+      "builderMatchers": [
+        {
+          "key": "phon|say|kid|disrupt|class",
+          "pattern": "\\bphon\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdisrupt\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bclass\\b",
+          "flags": "iu",
+          "tokens": [
+            "phon",
+            "say",
+            "kid",
+            "disrupt",
+            "class"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3390,13 +5470,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bfootage\\s+shows\\b[^\\n]{0,60}\\btwo\\s+contractors\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "alarmed",
         "anxious",
@@ -3427,11 +5500,102 @@
           "example": "At 9 p.m.",
           "patterns": [
             "\\bfootage\\s+shows\\b[^\\n]{0,40}\\btwo\\s+contractors\\b"
+          ],
+          "phrases": [
+            "the footage shows two contractors inside the restricted lab after hours",
+            "shows two contractors inside the restricted lab after hours",
+            "the footage shows two contractors walk through the locked stairwell",
+            "shows two contractors walk through the locked stairwell"
           ]
         }
       ],
       "builderActionIds": [
         "security-footage-breach"
+      ],
+      "matchPhrases": [
+        "the footage shows two contractors inside the restricted lab after hours",
+        "shows two contractors inside the restricted lab after hours",
+        "the footage shows two contractors walk through the locked stairwell",
+        "shows two contractors walk through the locked stairwell"
+      ],
+      "builderMatchers": [
+        {
+          "key": "footage|show|two|contractor|restrict|lab",
+          "pattern": "\\bfootage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brestrict\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b",
+          "flags": "iu",
+          "tokens": [
+            "footage",
+            "show",
+            "two",
+            "contractor",
+            "inside",
+            "restrict",
+            "lab"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "show|two|contractor|inside|lab|hour",
+          "pattern": "\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\binside\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bhour\\b",
+          "flags": "iu",
+          "tokens": [
+            "show",
+            "two",
+            "contractor",
+            "inside",
+            "restrict",
+            "lab",
+            "hour"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "footage|show|two|walk|lock|stairwell",
+          "pattern": "\\bfootage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\block\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstairwell\\b",
+          "flags": "iu",
+          "tokens": [
+            "footage",
+            "show",
+            "two",
+            "contractor",
+            "walk",
+            "through",
+            "lock",
+            "stairwell"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "show|two|contractor|walk|lock|stairwell",
+          "pattern": "\\bshow\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcontractor\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\block\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstairwell\\b",
+          "flags": "iu",
+          "tokens": [
+            "show",
+            "two",
+            "contractor",
+            "walk",
+            "through",
+            "lock",
+            "stairwell"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3445,13 +5609,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bsigh\\b[^\\n]{0,60}\\bwithout\\s+saying\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "anxious",
         "calm",
@@ -3482,11 +5639,58 @@
           "example": "At 11 a.m. today in my office with my client, I heard them sigh for eight seconds without saying a word.",
           "patterns": [
             "\\bsigh\\b[^\\n]{0,40}\\bwithout\\s+saying\\b"
+          ],
+          "phrases": [
+            "them sigh for eight seconds without saying a word",
+            "sigh for eight seconds without saying a word"
           ]
         }
       ],
       "builderActionIds": [
         "session-silent-sighs"
+      ],
+      "matchPhrases": [
+        "them sigh for eight seconds without saying a word",
+        "sigh for eight seconds without saying a word"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|sigh|eight|second|say|word",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsigh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bword\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "sigh",
+            "eight",
+            "second",
+            "without",
+            "say",
+            "word"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "sigh|eight|second|without|say|word",
+          "pattern": "\\bsigh\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\beight\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsecond\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bword\\b",
+          "flags": "iu",
+          "tokens": [
+            "sigh",
+            "eight",
+            "second",
+            "without",
+            "say",
+            "word"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3500,13 +5704,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bno\\s+beds\\b[^\\n]{0,60}\\btwo\\s+families\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "sad",
         "powerless",
@@ -3537,11 +5734,39 @@
           "example": "At 7 p.m. yesterday in the shelter gym with our intake team, I heard the volunteer say \"We have no beds for the next two families.\"",
           "patterns": [
             "\\bno\\s+beds\\b[^\\n]{0,40}\\btwo\\s+families\\b"
+          ],
+          "phrases": [
+            "say \"We have no beds for the next two families.\"",
+            "say We have no beds for the next two families."
           ]
         }
       ],
       "builderActionIds": [
         "shelter-capacity-turnaway"
+      ],
+      "matchPhrases": [
+        "say \"We have no beds for the next two families.\"",
+        "say We have no beds for the next two families."
+      ],
+      "builderMatchers": [
+        {
+          "key": "say|no|beds|next|two|family",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbeds\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btwo\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfamily\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "no",
+            "beds",
+            "next",
+            "two",
+            "family"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3555,13 +5780,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bdouble[-\\s]?booked\\b[^\\n]{0,60}\\btelescope\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "frustrated",
         "disappointment",
@@ -3592,11 +5810,58 @@
           "example": "At 11 p.m. last night at the observatory with the scheduler, I heard them say \"I double-booked the telescope you reserved.\"",
           "patterns": [
             "\\bdouble[-\\s]?booked\\b[^\\n]{0,40}\\btelescope\\b"
+          ],
+          "phrases": [
+            "them say \"I double-booked the telescope you reserved.\"",
+            "say \"I double-booked the telescope you reserved.\"",
+            "them say I double-booked the telescope you reserved."
           ]
         }
       ],
       "builderActionIds": [
         "telescope-double-book"
+      ],
+      "matchPhrases": [
+        "them say \"I double-booked the telescope you reserved.\"",
+        "say \"I double-booked the telescope you reserved.\"",
+        "them say I double-booked the telescope you reserved."
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|say|double|book|telescope|reserv",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdouble\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btelescope\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breserv\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "say",
+            "double",
+            "book",
+            "telescope",
+            "reserv"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "say|double|book|telescope|reserv",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdouble\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btelescope\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breserv\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "double",
+            "book",
+            "telescope",
+            "reserv"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3610,13 +5875,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bemailed\\b[^\\n]{0,60}\\bneed\\s+that\\s+deck\\s+tonight\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "tense",
         "anxious",
@@ -3647,11 +5905,37 @@
           "example": "At 9:05 a.m. today at my desk, my boss emailed \"I need that deck tonight.\"",
           "patterns": [
             "\\bemailed\\b[^\\n]{0,40}\\bneed\\s+that\\s+deck\\s+tonight\\b"
+          ],
+          "phrases": [
+            "emailed \"I need that deck tonight.\"",
+            "emailed I need that deck tonight."
           ]
         }
       ],
       "builderActionIds": [
         "urgent-email-demands"
+      ],
+      "matchPhrases": [
+        "emailed \"I need that deck tonight.\"",
+        "emailed I need that deck tonight."
+      ],
+      "builderMatchers": [
+        {
+          "key": "email|need|deck|tonight",
+          "pattern": "\\bemail\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bdeck\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+          "flags": "iu",
+          "tokens": [
+            "email",
+            "need",
+            "deck",
+            "tonight"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3665,13 +5949,6 @@
         "measure"
       ],
       "lexiconKeys": [],
-      "detectors": [
-        {
-          "type": "regex",
-          "pattern": "\\bvoicemail\\b[^\\n]{0,60}\\byou're\\s+useless\\b",
-          "flags": "iu"
-        }
-      ],
       "feelings": [
         "hurt",
         "angry",
@@ -3702,11 +5979,35 @@
           "example": "At 10:12 a.m. today in the back office, a customer left a voicemail saying \"You're useless.\"",
           "patterns": [
             "\\bvoicemail\\b[^\\n]{0,40}\\byou're\\s+useless\\b"
+          ],
+          "phrases": [
+            "saying \"You're useless.\"",
+            "saying You're useless."
           ]
         }
       ],
       "builderActionIds": [
         "voicemail-insults"
+      ],
+      "matchPhrases": [
+        "saying \"You're useless.\"",
+        "saying You're useless."
+      ],
+      "builderMatchers": [
+        {
+          "key": "say|useless",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\buseless\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "useless"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3719,9 +6020,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_direct_quote"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "bewildered",
         "hurt",
@@ -3739,9 +6038,7 @@
       "cues": [
         {
           "id": "structured-direct-quote",
-          "lexiconKeys": [
-            "structured_direct_quote"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "bewildered",
             "hurt",
@@ -3752,11 +6049,93 @@
             "to-be-heard",
             "consideration"
           ],
-          "example": "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\""
+          "example": "When around noon, with my manager in the conference room, I heard them say \"We need this done today.\"",
+          "phrases": [
+            "them say \"We need this done today.\"",
+            "say \"We need this done today.\"",
+            "them say We need this done today.",
+            "them say \"Let's wrap this up now.\"",
+            "say \"Let's wrap this up now.\"",
+            "them say Let's wrap this up now."
+          ]
         }
       ],
       "builderActionIds": [
         "structured-direct-quote"
+      ],
+      "matchPhrases": [
+        "them say \"We need this done today.\"",
+        "say \"We need this done today.\"",
+        "them say We need this done today.",
+        "them say \"Let's wrap this up now.\"",
+        "say \"Let's wrap this up now.\"",
+        "them say Let's wrap this up now."
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|say|need|today",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "say",
+            "need",
+            "today"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "say|need|today",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bneed\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "need",
+            "today"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|say|let|wrap|now",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwrap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnow\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "say",
+            "let",
+            "wrap",
+            "now"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "say|let|wrap|now",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blet\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwrap\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnow\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "let",
+            "wrap",
+            "now"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3769,9 +6148,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_interruption"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "frustrated",
         "irritated",
@@ -3788,9 +6165,7 @@
       "cues": [
         {
           "id": "structured-interruption",
-          "lexiconKeys": [
-            "structured_interruption"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "frustrated",
             "irritated",
@@ -3801,11 +6176,91 @@
             "to-be-heard",
             "consideration"
           ],
-          "example": "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence."
+          "example": "When on Monday morning, with my teammate in our standup, I heard them start speaking while I was still mid-sentence.",
+          "phrases": [
+            "them start speaking while I was still mid-sentence",
+            "start speaking while I was still mid-sentence",
+            "them speak over my update before I finished sharing",
+            "speak over my update before I finished sharing"
+          ]
         }
       ],
       "builderActionIds": [
         "structured-interruption"
+      ],
+      "matchPhrases": [
+        "them start speaking while I was still mid-sentence",
+        "start speaking while I was still mid-sentence",
+        "them speak over my update before I finished sharing",
+        "speak over my update before I finished sharing"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|start|speak|mid|sentence",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsentence\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "start",
+            "speak",
+            "mid",
+            "sentence"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "start|speak|mid|sentence",
+          "pattern": "\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bmid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsentence\\b",
+          "flags": "iu",
+          "tokens": [
+            "start",
+            "speak",
+            "mid",
+            "sentence"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|speak|update|finish|shar",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "speak",
+            "update",
+            "finish",
+            "shar"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "speak|update|finish|shar",
+          "pattern": "\\bspeak\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b",
+          "flags": "iu",
+          "tokens": [
+            "speak",
+            "update",
+            "finish",
+            "shar"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3818,9 +6273,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_boundary_cross"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "alarmed",
         "angry",
@@ -3837,9 +6290,7 @@
       "cues": [
         {
           "id": "structured-boundary-crossing",
-          "lexiconKeys": [
-            "structured_boundary_cross"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "alarmed",
             "angry",
@@ -3850,11 +6301,97 @@
             "safety",
             "autonomy"
           ],
-          "example": "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private."
+          "example": "When after dinner, with my brother in the living room, I saw him open the file we agreed to keep private.",
+          "phrases": [
+            "them open the file we agreed to keep private",
+            "open the file we agreed to keep private",
+            "them walk into the lab without the badge we said was required",
+            "walk into the lab without the badge we said was required"
+          ]
         }
       ],
       "builderActionIds": [
         "structured-boundary-crossing"
+      ],
+      "matchPhrases": [
+        "them open the file we agreed to keep private",
+        "open the file we agreed to keep private",
+        "them walk into the lab without the badge we said was required",
+        "walk into the lab without the badge we said was required"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|open|file|agre|keep|private",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bopen\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfile\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkeep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "open",
+            "file",
+            "agre",
+            "keep",
+            "private"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "open|file|agre|keep|private",
+          "pattern": "\\bopen\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfile\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bkeep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bprivate\\b",
+          "flags": "iu",
+          "tokens": [
+            "open",
+            "file",
+            "agre",
+            "keep",
+            "private"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|walk|lab|without|said|requir",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequir\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "walk",
+            "lab",
+            "without",
+            "badge",
+            "said",
+            "requir"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "walk|lab|without|badge|said|requir",
+          "pattern": "\\bwalk\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blab\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwithout\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbadge\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brequir\\b",
+          "flags": "iu",
+          "tokens": [
+            "walk",
+            "lab",
+            "without",
+            "badge",
+            "said",
+            "requir"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3867,9 +6404,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_late_arrival"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "frustrated",
         "anxious",
@@ -3886,9 +6421,7 @@
       "cues": [
         {
           "id": "structured-late-arrival",
-          "lexiconKeys": [
-            "structured_late_arrival"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "frustrated",
             "anxious",
@@ -3899,11 +6432,91 @@
             "consideration",
             "predictability"
           ],
-          "example": "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time."
+          "example": "When during our 9 a.m. check-in, with my project partner at the office, I saw them arrive ten minutes after our agreed start time.",
+          "phrases": [
+            "them arrive ten minutes after our agreed start time",
+            "arrive ten minutes after our agreed start time",
+            "them walk in after we had already begun the 9 a.m. check-in",
+            "walk in after we had already begun the 9 a.m. check-in"
+          ]
         }
       ],
       "builderActionIds": [
         "structured-late-arrival"
+      ],
+      "matchPhrases": [
+        "them arrive ten minutes after our agreed start time",
+        "arrive ten minutes after our agreed start time",
+        "them walk in after we had already begun the 9 a.m. check-in",
+        "walk in after we had already begun the 9 a.m. check-in"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|arrive|ten|minut|start|time",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\barrive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btime\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "arrive",
+            "ten",
+            "minut",
+            "agre",
+            "start",
+            "time"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "arrive|ten|minut|agre|start|time",
+          "pattern": "\\barrive\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bten\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bminut\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bagre\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstart\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btime\\b",
+          "flags": "iu",
+          "tokens": [
+            "arrive",
+            "ten",
+            "minut",
+            "agre",
+            "start",
+            "time"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|walk",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwalk\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "walk"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "already|begun|9",
+          "pattern": "\\balready\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bbegun\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\b9\\b",
+          "flags": "iu",
+          "tokens": [
+            "already",
+            "begun",
+            "9"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3916,9 +6529,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_left_early"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "confused",
         "hurt",
@@ -3935,9 +6546,7 @@
       "cues": [
         {
           "id": "structured-left-early",
-          "lexiconKeys": [
-            "structured_left_early"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "confused",
             "hurt",
@@ -3948,11 +6557,89 @@
             "support",
             "reliability"
           ],
-          "example": "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation."
+          "example": "When last night, with my partner on the couch, I saw them pack up and leave before we finished the conversation.",
+          "phrases": [
+            "them pack up and leave before we finished the conversation",
+            "pack up and leave before we finished the conversation",
+            "them step out while I was still sharing my update",
+            "step out while I was still sharing my update"
+          ]
         }
       ],
       "builderActionIds": [
         "structured-left-early"
+      ],
+      "matchPhrases": [
+        "them pack up and leave before we finished the conversation",
+        "pack up and leave before we finished the conversation",
+        "them step out while I was still sharing my update",
+        "step out while I was still sharing my update"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|pack|leave|finish|conversation",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bpack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleave\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconversation\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "pack",
+            "leave",
+            "finish",
+            "conversation"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "pack|leave|finish|conversation",
+          "pattern": "\\bpack\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bleave\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bconversation\\b",
+          "flags": "iu",
+          "tokens": [
+            "pack",
+            "leave",
+            "finish",
+            "conversation"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|step|shar|update",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "step",
+            "shar",
+            "update"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "step|shar|update",
+          "pattern": "\\bstep\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshar\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bupdate\\b",
+          "flags": "iu",
+          "tokens": [
+            "step",
+            "shar",
+            "update"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -3965,9 +6652,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_no_response"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "anxious",
         "hurt",
@@ -3984,9 +6669,7 @@
       "cues": [
         {
           "id": "structured-no-response",
-          "lexiconKeys": [
-            "structured_no_response"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "anxious",
             "hurt",
@@ -3997,11 +6680,93 @@
             "understanding",
             "connection"
           ],
-          "example": "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback."
+          "example": "When earlier today, with my team on a video call, I noticed them stay silent after I asked for feedback.",
+          "phrases": [
+            "them stay silent after I asked for feedback",
+            "stay silent after I asked for feedback",
+            "them look away and offer no response to my question",
+            "look away and offer no response to my question"
+          ]
         }
       ],
       "builderActionIds": [
         "structured-no-response"
+      ],
+      "matchPhrases": [
+        "them stay silent after I asked for feedback",
+        "stay silent after I asked for feedback",
+        "them look away and offer no response to my question",
+        "look away and offer no response to my question"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|stay|silent|ask|feedback",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfeedback\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "stay",
+            "silent",
+            "ask",
+            "feedback"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "stay|silent|ask|feedback",
+          "pattern": "\\bstay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsilent\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bask\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfeedback\\b",
+          "flags": "iu",
+          "tokens": [
+            "stay",
+            "silent",
+            "ask",
+            "feedback"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|look|offer|no|response|question",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\blook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bresponse\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bquestion\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "look",
+            "offer",
+            "no",
+            "response",
+            "question"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "look|offer|no|response|question",
+          "pattern": "\\blook\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bno\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bresponse\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bquestion\\b",
+          "flags": "iu",
+          "tokens": [
+            "look",
+            "offer",
+            "no",
+            "response",
+            "question"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -4014,9 +6779,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_support_offered"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "relieved",
         "hopeful",
@@ -4033,9 +6796,7 @@
       "cues": [
         {
           "id": "structured-support-offered",
-          "lexiconKeys": [
-            "structured_support_offered"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "relieved",
             "hopeful",
@@ -4046,11 +6807,113 @@
             "mutuality",
             "trust"
           ],
-          "example": "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week."
+          "example": "When this afternoon, with my neighbor on the porch, I heard them say they would cover the childcare swap rotation this week.",
+          "phrases": [
+            "them say they would cover the childcare swap rotation this week",
+            "say they would cover the childcare swap rotation this week",
+            "them offer to take the next shift so I could rest",
+            "offer to take the next shift so I could rest"
+          ]
         }
       ],
       "builderActionIds": [
         "structured-support-offered"
+      ],
+      "matchPhrases": [
+        "them say they would cover the childcare swap rotation this week",
+        "say they would cover the childcare swap rotation this week",
+        "them offer to take the next shift so I could rest",
+        "offer to take the next shift so I could rest"
+      ],
+      "builderMatchers": [
+        {
+          "key": "them|say|would|childcare|rotation|week",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchildcare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brotation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "say",
+            "would",
+            "cover",
+            "childcare",
+            "swap",
+            "rotation",
+            "week"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "say|would|cover|childcare|rotation|week",
+          "pattern": "\\bsay\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bwould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcover\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bchildcare\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brotation\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bweek\\b",
+          "flags": "iu",
+          "tokens": [
+            "say",
+            "would",
+            "cover",
+            "childcare",
+            "swap",
+            "rotation",
+            "week"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "them|offer|take|next|shift",
+          "pattern": "\\bthem\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b",
+          "flags": "iu",
+          "tokens": [
+            "them",
+            "offer",
+            "take",
+            "next",
+            "shift"
+          ],
+          "tokenThreshold": 3,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "could|rest",
+          "pattern": "\\bcould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brest\\b",
+          "flags": "iu",
+          "tokens": [
+            "could",
+            "rest"
+          ],
+          "tokenThreshold": 2,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "offer|take|next|shift|could|rest",
+          "pattern": "\\boffer\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btake\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bnext\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bshift\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bcould\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\brest\\b",
+          "flags": "iu",
+          "tokens": [
+            "offer",
+            "take",
+            "next",
+            "shift",
+            "could",
+            "rest"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     },
     {
@@ -4063,9 +6926,7 @@
         "sensory",
         "measure"
       ],
-      "lexiconKeys": [
-        "structured_digital_message"
-      ],
+      "lexiconKeys": [],
       "feelings": [
         "alarmed",
         "anxious",
@@ -4082,9 +6943,7 @@
       "cues": [
         {
           "id": "structured-digital-message",
-          "lexiconKeys": [
-            "structured_digital_message"
-          ],
+          "lexiconKeys": [],
           "feelings": [
             "alarmed",
             "anxious",
@@ -4095,11 +6954,62 @@
             "predictability",
             "consideration"
           ],
-          "example": "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\""
+          "example": "When yesterday evening, on our team chat, I read a message that said \"Please finish the report tonight.\"",
+          "phrases": [
+            "a message that said \"Please finish the report tonight.\"",
+            "a message that said Please finish the report tonight.",
+            "a message that said \"Reminder: please submit the forms today.\"",
+            "a message that said Reminder: please submit the forms today."
+          ]
         }
       ],
       "builderActionIds": [
         "structured-digital-message"
+      ],
+      "matchPhrases": [
+        "a message that said \"Please finish the report tonight.\"",
+        "a message that said Please finish the report tonight.",
+        "a message that said \"Reminder: please submit the forms today.\"",
+        "a message that said Reminder: please submit the forms today."
+      ],
+      "builderMatchers": [
+        {
+          "key": "message|said|please|finish|report|tonight",
+          "pattern": "\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bplease\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bfinish\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breport\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btonight\\b",
+          "flags": "iu",
+          "tokens": [
+            "message",
+            "said",
+            "please",
+            "finish",
+            "report",
+            "tonight"
+          ],
+          "tokenThreshold": 4,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        },
+        {
+          "key": "message|said|reminder|please|form|today",
+          "pattern": "\\bmessage\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bsaid\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\breminder\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bplease\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\bform\\b(?:[^\\p{L}\\p{N}']+[\\p{L}\\p{N}']+){0,3}?[^\\p{L}\\p{N}']+\\btoday\\b",
+          "flags": "iu",
+          "tokens": [
+            "message",
+            "said",
+            "reminder",
+            "please",
+            "submit",
+            "form",
+            "today"
+          ],
+          "tokenThreshold": 5,
+          "sourceType": "builder",
+          "sources": [
+            "builder"
+          ]
+        }
       ]
     }
   ]

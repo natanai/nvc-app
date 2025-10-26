@@ -127,8 +127,8 @@ async function run() {
     assert.ok(Array.isArray(module.matchers), `module ${module.id} missing matchers array`);
     assert.ok(module.matchers.length > 0, `module ${module.id} should expose matchers`);
     assert.ok(
-      module.matchers.some(matcher => matcher?.sourceType === 'detector'),
-      `module ${module.id} should include lexicon detectors`,
+      module.matchers.some(matcher => matcher?.sourceType === 'builder'),
+      `module ${module.id} should include builder-derived matchers`,
     );
     if (Array.isArray(module.slotIds) && module.slotIds.length) {
       assert.ok(module.slotSummary && module.slotSummary.length > 0, `module ${module.id} missing slot summary`);

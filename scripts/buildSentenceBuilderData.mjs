@@ -65,6 +65,8 @@ function buildAction(definition) {
       moduleId: definition.moduleId || definition.id,
       segments: definition.segments,
       branches: definition.branches || {},
+      phrases: dedupeStrings(Array.isArray(definition.phrases) ? definition.phrases : []),
+      matchers: Array.isArray(definition.matchers) ? definition.matchers : [],
     };
   }
 
@@ -97,6 +99,8 @@ function buildAction(definition) {
     moduleId: definition.moduleId || definition.id,
     segments,
     branches: definition.branches || {},
+    phrases: dedupeStrings(Array.isArray(definition.phrases) ? definition.phrases : []),
+    matchers: Array.isArray(definition.matchers) ? definition.matchers : [],
   };
 }
 
@@ -128,13 +132,7 @@ async function syncBlueprintWithActions(actions) {
   const raw = await fs.readFile(blueprintPath, 'utf8');
   const parsed = JSON.parse(raw);
   const modules = Array.isArray(parsed?.modules) ? parsed.modules : [];
-  const updatedModules = modules.map(module => {
-    const fromActions = actionMap.get(module.id) || [];
-    if (!Array.isArray(module.builderActionIds) && !fromActions.length) {
-      return module;
-    }
-    return { ...module, builderActionIds: fromActions };
-  });
+  const updatedModules = modules.map(module => applyActionDataToModule(module, actionMap));
   const next = Array.isArray(parsed?.modules)
     ? { ...parsed, modules: updatedModules }
     : { modules: updatedModules };
@@ -150,7 +148,84 @@ function buildModuleActionMap(actions) {
     if (!map.has(action.moduleId)) {
       map.set(action.moduleId, []);
     }
-    map.get(action.moduleId).push(action.id);
+    map.get(action.moduleId).push(action);
   });
   return map;
+}
+
+function applyActionDataToModule(module, actionMap) {
+  const actions = actionMap.get(module.id) || [];
+  const builderActionIds = actions.map(action => action.id);
+  const phrases = dedupeStrings(actions.flatMap(action => Array.isArray(action.phrases) ? action.phrases : []));
+  const matchers = dedupeMatchers(actions.flatMap(action => Array.isArray(action.matchers) ? action.matchers : []));
+
+  const nextModule = {
+    ...module,
+    builderActionIds,
+    lexiconKeys: [],
+  };
+  delete nextModule.detectors;
+
+  if (!phrases.length && Array.isArray(module.matchPhrases)) {
+    phrases.push(...module.matchPhrases);
+  }
+
+  if (phrases.length) {
+    nextModule.matchPhrases = phrases;
+  } else {
+    delete nextModule.matchPhrases;
+  }
+
+  if (matchers.length) {
+    nextModule.builderMatchers = matchers;
+  } else {
+    delete nextModule.builderMatchers;
+  }
+
+  nextModule.cues = (Array.isArray(module.cues) ? module.cues : []).map(cue => applyActionDataToCue(cue, phrases));
+
+  return nextModule;
+}
+
+function applyActionDataToCue(cue, phrases) {
+  const next = { ...cue, lexiconKeys: [] };
+  const existing = Array.isArray(cue.phrases) ? cue.phrases : [];
+  const combined = dedupeStrings([...existing, ...phrases]);
+  if (combined.length) {
+    next.phrases = combined;
+  } else {
+    delete next.phrases;
+  }
+  return next;
+}
+
+function dedupeStrings(values) {
+  const seen = new Set();
+  const result = [];
+  (Array.isArray(values) ? values : []).forEach(value => {
+    const trimmed = typeof value === 'string' ? value.trim() : '';
+    if (!trimmed || seen.has(trimmed)) {
+      return;
+    }
+    seen.add(trimmed);
+    result.push(trimmed);
+  });
+  return result;
+}
+
+function dedupeMatchers(matchers) {
+  const seen = new Set();
+  const result = [];
+  (Array.isArray(matchers) ? matchers : []).forEach(matcher => {
+    if (!matcher) {
+      return;
+    }
+    const key = matcher.key || `${matcher.pattern}/${matcher.flags}`;
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    result.push(matcher);
+  });
+  return result;
 }
