@@ -71,6 +71,35 @@ test('detects virtual locations introduced with varied prepositions', () => {
   );
 });
 
+test('detects context anchors from free-form locations', () => {
+  const museumEvaluation = evaluateObservationFormula('At the museum I saw the docent unlock the gallery.');
+  const museumContext = museumEvaluation.slots.context;
+  assert.ok(museumContext.satisfied);
+  assert.ok(
+    museumContext.matches.some(
+      match => match.detectorId === 'location-generic' && /\bat the museum\b/i.test(match.value),
+    ),
+  );
+
+  const restaurantEvaluation = evaluateObservationFormula("In Niko's Taproom I heard the manager announce “We close in 10 minutes.”");
+  const restaurantContext = restaurantEvaluation.slots.context;
+  assert.ok(restaurantContext.satisfied);
+  assert.ok(
+    restaurantContext.matches.some(
+      match => match.detectorId === 'location-generic' && /\bIn Niko's Taproom\b/.test(match.value),
+    ),
+  );
+});
+
+test('does not confuse time anchors for free-form locations', () => {
+  const evaluation = evaluateObservationFormula('At 3 p.m. I heard the service bell ring twice.');
+  const context = evaluation.slots.context;
+  assert.ok(
+    !context.matches.some(match => match.detectorId === 'location-generic'),
+    'time phrases should not satisfy the generic location detector',
+  );
+});
+
 test('honours highlight keys when evaluating formula slots', () => {
   const text = 'At noon I saw the note on the door.';
   const evaluation = evaluateObservationFormula(text, {
