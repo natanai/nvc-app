@@ -1,0 +1,1732 @@
+{
+  "actions": [
+    {
+      "id": "dismissive-responses",
+      "label": "Dismissive responses and gestures",
+      "moduleId": "dismissive-responses",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "rolled their eyes right after I asked for the spreadsheet update",
+          "label": "Rolled their eyes right after I asked for the spreadsheet update"
+        },
+        {
+          "value": "muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight",
+          "label": "Muttered \"whatever\" and slammed the bedroom door after I asked about homework tonight"
+        },
+        {
+          "value": "said \"You're too sensitive\" when I declined the joke",
+          "label": "Said \"You're too sensitive\" when I declined the joke"
+        },
+        {
+          "value": "whispered to someone else and they both laughed right after I described the roadmap change",
+          "label": "Whispered to someone else and they both laughed right after I described the roadmap change"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Dismissive responses and gestures custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "listening-boundaries",
+      "label": "When listening feels one-sided",
+      "moduleId": "listening-boundaries",
+      "verb": "I heard",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "said \"You never listen\" when we talked about chores",
+          "label": "Said \"You never listen\" when we talked about chores"
+        },
+        {
+          "value": "overlapped mine three times when I proposed a change",
+          "label": "Overlapped mine three times when I proposed a change"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "When listening feels one-sided custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "presentation-departures",
+      "label": "Walkouts during presentations",
+      "moduleId": "presentation-departures",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "slammed their notebook shut and walked out during my presentation yesterday",
+          "label": "Slammed their notebook shut and walked out during my presentation yesterday"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Walkouts during presentations custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sports-officiating",
+      "label": "Missed fouls and officiating gaps",
+      "moduleId": "sports-officiating",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "missed three fouls against our team",
+          "label": "Missed three fouls against our team"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Missed fouls and officiating gaps custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "queue-respect",
+      "label": "Fairness in lines and shared resources",
+      "moduleId": "queue-respect",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "skipped me and served two people who arrived later in line this afternoon",
+          "label": "Skipped me and served two people who arrived later in line this afternoon"
+        },
+        {
+          "value": "another shopper reached over me to grab the last carton of eggs",
+          "label": "Another shopper reached over me to grab the last carton of eggs"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Fairness in lines and shared resources custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "shared-upkeep",
+      "label": "Shared space upkeep and boundaries",
+      "moduleId": "shared-upkeep",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "dishes piled in the sink again before leaving for work",
+          "label": "Dishes piled in the sink again before leaving for work"
+        },
+        {
+          "value": "borrowed my car without asking and returned it with the tank empty",
+          "label": "Borrowed my car without asking and returned it with the tank empty"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Shared space upkeep and boundaries custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "job-security",
+      "label": "Employment status surprises",
+      "moduleId": "job-security",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "said my contract wasn't renewed with no explanation",
+          "label": "Said my contract wasn't renewed with no explanation"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Employment status surprises custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "feedback-clarity",
+      "label": "Feedback without specifics",
+      "moduleId": "feedback-clarity",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "handed back my child's assignment with \"sloppy\" written across the top",
+          "label": "Handed back my child's assignment with \"sloppy\" written across the top"
+        },
+        {
+          "value": "i received a performance review that only listed mistakes without any concrete examples",
+          "label": "I received a performance review that only listed mistakes without any concrete examples"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Feedback without specifics custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "housing-reliability",
+      "label": "Maintenance requests with no follow-up",
+      "moduleId": "housing-reliability",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "responded to three messages about the leak this week",
+          "label": "Responded to three messages about the leak this week"
+        },
+        {
+          "value": "missed today's 8 a.m. appointment and hasn't texted or called",
+          "label": "Missed today's 8 a.m. appointment and hasn't texted or called"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Maintenance requests with no follow-up custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "care-attention",
+      "label": "Care visits that feel rushed",
+      "moduleId": "care-attention",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "glanced at the clock twice while I was describing my symptoms today",
+          "label": "Glanced at the clock twice while I was describing my symptoms today"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Care visits that feel rushed custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "workload-boundaries",
+      "label": "Workload stacking and late-night pings",
+      "moduleId": "workload-boundaries",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "assigned me every follow-up action item again",
+          "label": "Assigned me every follow-up action item again"
+        },
+        {
+          "value": "slack messages between 11 p.m. and midnight about tomorrow's report",
+          "label": "Slack messages between 11 p.m. and midnight about tomorrow's report"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Workload stacking and late-night pings custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "connection-presence",
+      "label": "Disconnected dinners",
+      "moduleId": "connection-presence",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "scrolled through their phone during dinner instead of looking up",
+          "label": "Scrolled through their phone during dinner instead of looking up"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Disconnected dinners custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ride-environment",
+      "label": "Noisy rideshares",
+      "moduleId": "ride-environment",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "talked loudly on speakerphone for the entire trip yesterday",
+          "label": "Talked loudly on speakerphone for the entire trip yesterday"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Noisy rideshares custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "noise-disturbance",
+      "label": "Early-morning noise",
+      "moduleId": "noise-disturbance",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "barked loudly for 30 minutes starting at 6 a.m. on Saturday",
+          "label": "Barked loudly for 30 minutes starting at 6 a.m. on Saturday"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Early-morning noise custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety-commute",
+      "label": "Traffic safety scares",
+      "moduleId": "safety-commute",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "sped through the crosswalk even though the light was red this morning",
+          "label": "Sped through the crosswalk even though the light was red this morning"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Traffic safety scares custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "self-accountability",
+      "label": "Noticing my own delays",
+      "moduleId": "self-accountability",
+      "verb": "I saw",
+      "subjectGroup": "self",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "myself scrolling for an hour instead of calling my grandmother back",
+          "label": "Myself scrolling for an hour instead of calling my grandmother back"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Noticing my own delays custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "collaboration-safeguards",
+      "label": "Teammates catching mistakes before they spread",
+      "moduleId": "collaboration-safeguards",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "report and caught a mistake before we sent it",
+          "label": "Report and caught a mistake before we sent it"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Teammates catching mistakes before they spread custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "milestone-celebration",
+      "label": "Celebrations of personal milestones",
+      "moduleId": "milestone-celebration",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "right after I racked 185 pounds on squats",
+          "label": "Right after I racked 185 pounds on squats"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Celebrations of personal milestones custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "neighbor-support",
+      "label": "Neighbors lending a hand",
+      "moduleId": "neighbor-support",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "shoveled our sidewalk after the snowstorm while we were at work",
+          "label": "Shoveled our sidewalk after the snowstorm while we were at work"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Neighbors lending a hand custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "specific-appreciation",
+      "label": "Specific appreciation and thank-yous",
+      "moduleId": "specific-appreciation",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "emailed me listing the volunteer shifts I covered during the fundraiser",
+          "label": "Emailed me listing the volunteer shifts I covered during the fundraiser"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Specific appreciation and thank-yous custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "reflective-presence",
+      "label": "Reflective listening during support sessions",
+      "moduleId": "reflective-presence",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "paused and reflected back exactly what I said before offering input",
+          "label": "Paused and reflected back exactly what I said before offering input"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Reflective listening during support sessions custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "supportive-rebalancing",
+      "label": "Loved ones and leads sharing the load",
+      "moduleId": "supportive-rebalancing",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "cooked dinner and cleaned the kitchen while I finished my deadline",
+          "label": "Cooked dinner and cleaned the kitchen while I finished my deadline"
+        },
+        {
+          "value": "assigned two follow-up tasks to each teammate",
+          "label": "Assigned two follow-up tasks to each teammate"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Loved ones and leads sharing the load custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "integrity-returns",
+      "label": "Strangers returning lost items intact",
+      "moduleId": "integrity-returns",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "handed back my wallet with the cash still inside the billfold",
+          "label": "Handed back my wallet with the cash still inside the billfold"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Strangers returning lost items intact custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "responsive-approvals",
+      "label": "Quick responses to time-off requests",
+      "moduleId": "responsive-approvals",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "approved my vacation request the same day I submitted it",
+          "label": "Approved my vacation request the same day I submitted it"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Quick responses to time-off requests custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "care-attentive-support",
+      "label": "Care teams offering calm, attentive updates",
+      "moduleId": "care-attentive-support",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "checked in twice during the night to make sure my dad was comfortable",
+          "label": "Checked in twice during the night to make sure my dad was comfortable"
+        },
+        {
+          "value": "explained each step before starting the procedure",
+          "label": "Explained each step before starting the procedure"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Care teams offering calm, attentive updates custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "delivery-gaps",
+      "label": "Deliveries marked complete with nothing there",
+      "moduleId": "delivery-gaps",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "at 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep",
+          "label": "At 7 p.m. the delivery app marked my order as delivered while the porch camera still showed an empty doorstep"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Deliveries marked complete with nothing there custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "punctuality-boundaries",
+      "label": "Late arrivals without notice",
+      "moduleId": "punctuality-boundaries",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "arrived 30 minutes late to lunch without texting",
+          "label": "Arrived 30 minutes late to lunch without texting"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Late arrivals without notice custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "policy-warnings",
+      "label": "Unexpected policy warning letters",
+      "moduleId": "policy-warnings",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "warning letter about lawn length without asking first",
+          "label": "Warning letter about lawn length without asking first"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Unexpected policy warning letters custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "recognition-boundaries",
+      "label": "Credit given to the wrong person",
+      "moduleId": "recognition-boundaries",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "my idea during the pitch meeting",
+          "label": "My idea during the pitch meeting"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Credit given to the wrong person custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "care-communication-gaps",
+      "label": "Care teams that miss critical updates",
+      "moduleId": "care-communication-gaps",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "when my child had a fever",
+          "label": "When my child had a fever"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Care teams that miss critical updates custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "commute-kindness",
+      "label": "Transit drivers who wait for you",
+      "moduleId": "commute-kindness",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "waited for me when I was running toward the stop",
+          "label": "Waited for me when I was running toward the stop"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Transit drivers who wait for you custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "collaboration-visibility",
+      "label": "Team updates that go missing",
+      "moduleId": "collaboration-visibility",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "no cards under my teammate's initials moved on the shared sprint board",
+          "label": "No cards under my teammate's initials moved on the shared sprint board"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Team updates that go missing custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "housing-responsiveness",
+      "label": "Repairs handled right away",
+      "moduleId": "housing-responsiveness",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "repaired the leaky faucet the day after we reported it",
+          "label": "Repaired the leaky faucet the day after we reported it"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Repairs handled right away custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "commitment-followthrough",
+      "label": "When repayment promises slip",
+      "moduleId": "commitment-followthrough",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "promised to pay me back Friday but still hasn't sent anything",
+          "label": "Promised to pay me back Friday but still hasn't sent anything"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "When repayment promises slip custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "food-safety",
+      "label": "Allergy instructions ignored",
+      "moduleId": "food-safety",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "served my meal with peanuts after I noted my allergy",
+          "label": "Served my meal with peanuts after I noted my allergy"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Allergy instructions ignored custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "schedule-respect",
+      "label": "Meetings scheduled over breaks",
+      "moduleId": "schedule-respect",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "scheduled a meeting over my lunch break without asking",
+          "label": "Scheduled a meeting over my lunch break without asking"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Meetings scheduled over breaks custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "support-followthrough",
+      "label": "Support staff who follow up",
+      "moduleId": "support-followthrough",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix",
+          "label": "Yesterday the service agent stayed on the call for each troubleshooting step and emailed this morning to confirm the fix"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Support staff who follow up custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "infrastructure-response",
+      "label": "City fixes after persistent outreach",
+      "moduleId": "infrastructure-response",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "fixed the streetlight after months of emails",
+          "label": "Fixed the streetlight after months of emails"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "City fixes after persistent outreach custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "audit-login-breaches",
+      "label": "Audit logs show unauthorized logins",
+      "moduleId": "audit-login-breaches",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the audit logs listed five unauthorized logins this week",
+          "label": "The audit logs listed five unauthorized logins this week"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Audit logs show unauthorized logins custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bedtime-load-gaps",
+      "label": "Bedtime routine load gaps",
+      "moduleId": "bedtime-load-gaps",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "say \"You're on bedtime again.\"",
+          "label": "Say \"You're on bedtime again.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Bedtime routine load gaps custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "budget-freeze-alerts",
+      "label": "Budget freeze announcements",
+      "moduleId": "budget-freeze-alerts",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "finance posted \"Budget freeze effective immediately.\"",
+          "label": "Finance posted \"Budget freeze effective immediately.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Budget freeze announcements custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "civic-nonresponse",
+      "label": "Civic offices not responding",
+      "moduleId": "civic-nonresponse",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "say \"We still haven't replied to your emails.\"",
+          "label": "Say \"We still haven't replied to your emails.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Civic offices not responding custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "courtroom-delays",
+      "label": "Court hearings postponed",
+      "moduleId": "courtroom-delays",
+      "verb": "I heard",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What the court announced",
+      "details": [
+        {
+          "value": "the judge said we would reconvene next month with no new date",
+          "label": "The judge said we would reconvene next month with no new date"
+        },
+        {
+          "value": "the clerk announced our hearing was pushed to next month without an explanation",
+          "label": "The clerk announced our hearing was pushed to next month without an explanation"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Court hearings postponed custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "customer-mess-followup",
+      "label": "Customers leaving lobby messes",
+      "moduleId": "customer-mess-followup",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "four tables left covered in cups",
+          "label": "Four tables left covered in cups"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Customers leaving lobby messes custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "delivery-exposure",
+      "label": "Deliveries left exposed to weather",
+      "moduleId": "delivery-exposure",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "captured the delivery driver leaving the package in the rain for 12 minutes",
+          "label": "Captured the delivery driver leaving the package in the rain for 12 minutes"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Deliveries left exposed to weather custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "divorce-paper-silence",
+      "label": "Family processing divorce papers",
+      "moduleId": "divorce-paper-silence",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them stare silently at the divorce papers for 30 seconds",
+          "label": "Them stare silently at the divorce papers for 30 seconds"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Family processing divorce papers custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ensemble-dropoff",
+      "label": "Ensemble members disengaging",
+      "moduleId": "ensemble-dropoff",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "both tenors stare at the floor for 10 seconds",
+          "label": "Both tenors stare at the floor for 10 seconds"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Ensemble members disengaging custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "housing-eviction-notices",
+      "label": "Eviction warning letters",
+      "moduleId": "housing-eviction-notices",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "mailed a letter stamped \"Eviction warning.\"",
+          "label": "Mailed a letter stamped \"Eviction warning.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Eviction warning letters custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "intake-walkaways",
+      "label": "Intake coordinators walking away",
+      "moduleId": "intake-walkaways",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the coordinator walked off with the clipboard before finishing our intake",
+          "label": "The coordinator walked off with the clipboard before finishing our intake"
+        },
+        {
+          "value": "the coordinator set the clipboard down and left the families waiting",
+          "label": "The coordinator set the clipboard down and left the families waiting"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Intake coordinators walking away custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "irrigation-pump-alarms",
+      "label": "Irrigation pump alarms",
+      "moduleId": "irrigation-pump-alarms",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the irrigation pump alarm sounded and stopped the watering cycle after 4 minutes",
+          "label": "The irrigation pump alarm sounded and stopped the watering cycle after 4 minutes"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Irrigation pump alarms custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lab-fluorescence-variance",
+      "label": "Assays show inconsistent fluorescence",
+      "moduleId": "lab-fluorescence-variance",
+      "verb": "I noticed",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the assay read 0.42 yesterday and 0.91 today on the same sample set",
+          "label": "The assay read 0.42 yesterday and 0.91 today on the same sample set"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Assays show inconsistent fluorescence custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "last-minute-scope-shifts",
+      "label": "Last-minute scope changes",
+      "moduleId": "last-minute-scope-shifts",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "say \"We need to redo the launch deck tonight.\"",
+          "label": "Say \"We need to redo the launch deck tonight.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Last-minute scope changes custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "maintenance-dashboard-alerts",
+      "label": "Maintenance dashboard flashing alerts",
+      "moduleId": "maintenance-dashboard-alerts",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "last night the maintenance dashboard flashed red for three hours",
+          "label": "Last night the maintenance dashboard flashed red for three hours"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Maintenance dashboard flashing alerts custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mediation-body-language",
+      "label": "Closed-off body language in mediation",
+      "moduleId": "mediation-body-language",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "both partners fold their arms for five seconds",
+          "label": "Both partners fold their arms for five seconds"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Closed-off body language in mediation custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "meeting-overflow",
+      "label": "Meetings running over",
+      "moduleId": "meeting-overflow",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the agenda run 12 minutes past dismissal",
+          "label": "The agenda run 12 minutes past dismissal"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Meetings running over custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "monitor-distress-alerts",
+      "label": "Monitors capture distress",
+      "moduleId": "monitor-distress-alerts",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the baby monitor recorded crying for 20 minutes straight",
+          "label": "The baby monitor recorded crying for 20 minutes straight"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Monitors capture distress custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "on-call-chaos",
+      "label": "Chaotic on-call shifts",
+      "moduleId": "on-call-chaos",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "three pages come through after the schedule changed",
+          "label": "Three pages come through after the schedule changed"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Chaotic on-call shifts custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "orchestra-cuts",
+      "label": "Conductors cut sections mid-performance",
+      "moduleId": "orchestra-cuts",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "entrance after two measures",
+          "label": "Entrance after two measures"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Conductors cut sections mid-performance custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "performance-reassignment",
+      "label": "Performance solos reassigned",
+      "moduleId": "performance-reassignment",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "say \"I'm giving your solo to someone else.\"",
+          "label": "Say \"I'm giving your solo to someone else.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Performance solos reassigned custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "radar-unknown-transponder",
+      "label": "Radar flags unknown transponders",
+      "moduleId": "radar-unknown-transponder",
+      "verb": "I saw",
+      "subjectGroup": null,
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "radar flagged an unknown transponder ID 5487",
+          "label": "Radar flagged an unknown transponder ID 5487"
+        },
+        {
+          "value": "",
+          "label": "describe what you observed…",
+          "input": {
+            "placeholder": "describe what happened",
+            "ariaLabel": "Radar flags unknown transponders custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "relationship-breakup-text",
+      "label": "Breakup texts",
+      "moduleId": "relationship-breakup-text",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "said \"We're done.\"",
+          "label": "Said \"We're done.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Breakup texts custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "school-discipline-calls",
+      "label": "School calls about disruption",
+      "moduleId": "school-discipline-calls",
+      "verb": "I heard",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "phoned me saying \"Your kid disrupted class.\"",
+          "label": "Phoned me saying \"Your kid disrupted class.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "School calls about disruption custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "security-footage-breach",
+      "label": "Security footage catches breaches",
+      "moduleId": "security-footage-breach",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "the footage shows two contractors inside the restricted lab after hours",
+          "label": "The footage shows two contractors inside the restricted lab after hours"
+        },
+        {
+          "value": "the footage shows two contractors walk through the locked stairwell",
+          "label": "The footage shows two contractors walk through the locked stairwell"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Security footage catches breaches custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "session-silent-sighs",
+      "label": "Clients sighing without words",
+      "moduleId": "session-silent-sighs",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them sigh for eight seconds without saying a word",
+          "label": "Them sigh for eight seconds without saying a word"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Clients sighing without words custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "shelter-capacity-turnaway",
+      "label": "Shelter turns families away",
+      "moduleId": "shelter-capacity-turnaway",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "say \"We have no beds for the next two families.\"",
+          "label": "Say \"We have no beds for the next two families.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Shelter turns families away custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "telescope-double-book",
+      "label": "Telescope bookings double-booked",
+      "moduleId": "telescope-double-book",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them say \"I double-booked the telescope you reserved.\"",
+          "label": "Them say \"I double-booked the telescope you reserved.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Telescope bookings double-booked custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "urgent-email-demands",
+      "label": "Urgent evening email demands",
+      "moduleId": "urgent-email-demands",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "emailed \"I need that deck tonight.\"",
+          "label": "Emailed \"I need that deck tonight.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Urgent evening email demands custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "voicemail-insults",
+      "label": "Voicemail insults from customers",
+      "moduleId": "voicemail-insults",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "saying \"You're useless.\"",
+          "label": "Saying \"You're useless.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Voicemail insults from customers custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-direct-quote",
+      "label": "Direct words captured",
+      "moduleId": "structured-direct-quote",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them say \"We need this done today.\"",
+          "label": "Them say \"We need this done today.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Direct words captured custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-interruption",
+      "label": "Spoken interruption",
+      "moduleId": "structured-interruption",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them interrupt me mid-sentence",
+          "label": "Them interrupt me mid-sentence"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Spoken interruption custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-boundary-crossing",
+      "label": "Boundary crossed",
+      "moduleId": "structured-boundary-crossing",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them cross the boundary about talking over medical decisions",
+          "label": "Them cross the boundary about talking over medical decisions"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Boundary crossed custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-late-arrival",
+      "label": "Late arrival noted",
+      "moduleId": "structured-late-arrival",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them arrive ten minutes late",
+          "label": "Them arrive ten minutes late"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Late arrival noted custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-left-early",
+      "label": "Left before it ended",
+      "moduleId": "structured-left-early",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them leave before we finished talking",
+          "label": "Them leave before we finished talking"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Left before it ended custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-no-response",
+      "label": "No response given",
+      "moduleId": "structured-no-response",
+      "verb": "I noticed",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them stay silent after I asked for feedback",
+          "label": "Them stay silent after I asked for feedback"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "No response given custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-support-offered",
+      "label": "Support offered",
+      "moduleId": "structured-support-offered",
+      "verb": "I saw",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "them say they'd cover the childcare swap rotation",
+          "label": "Them say they'd cover the childcare swap rotation"
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Support offered custom detail"
+          }
+        }
+      ]
+    },
+    {
+      "id": "structured-digital-message",
+      "label": "Digital message captured",
+      "moduleId": "structured-digital-message",
+      "verb": "I read",
+      "subjectGroup": "default",
+      "detailAriaLabel": "What happened",
+      "details": [
+        {
+          "value": "said \"Please finish the report tonight.\"",
+          "label": "Said \"Please finish the report tonight.\""
+        },
+        {
+          "value": "",
+          "label": "describe another detail…",
+          "input": {
+            "placeholder": "describe what they did",
+            "ariaLabel": "Digital message captured custom detail"
+          }
+        }
+      ]
+    }
+  ]
+}

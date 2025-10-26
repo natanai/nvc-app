@@ -282,57 +282,57 @@
   ],
   "structured_direct_quote": [
     {
-      "pattern": "\\bI\\s+heard\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+say\\s+\"[^\\n]+\"",
+      "pattern": "\\bI\\s+heard\\s+[^\\n]+?\\s+say\\s+\\x22[^\\n]+\\x22",
       "flags": "iu"
     },
     {
-      "pattern": "\\bI\\s+heard\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+say\\s+“[^”\\n]+”",
+      "pattern": "\\bI\\s+heard\\s+[^\\n]+?\\s+say\\s+\\u201c[^\\u201d\\n]+\\u201d",
       "flags": "iu"
     }
   ],
   "structured_interruption": [
     {
-      "pattern": "\\bI\\s+(?:heard|saw)\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:interrupt(?:ed)?|cut\\s+me\\s+off|talk(?:ed)?\\s+over\\s+me|speak\\s+over\\s+me)\\b[^.?!]*",
+      "pattern": "\\bI\\s+(?:heard|saw)\\s+[^\\n]+?\\s+(?:interrupt(?:ed)?|cut\\s+me\\s+off|talk(?:ed)?\\s+over\\s+me|speak\\s+over\\s+me)\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_boundary_cross": [
     {
-      "pattern": "\\bI\\s+saw\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:cross(?:ed)?\\s+the\\s+boundary|ignore(?:d)?\\s+the\\s+limit|break(?:ing)?\\s+the\\s+agreement)\\b[^.?!]*",
+      "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+(?:cross(?:ed)?\\s+the\\s+boundary|ignore(?:d)?\\s+the\\s+limit|break(?:ing)?\\s+the\\s+agreement)\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_late_arrival": [
     {
-      "pattern": "\\bI\\s+saw\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+arrive\\b[^.?!]+\\blate\\b",
+      "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+arrive\\b[^.?!]+\\blate\\b",
       "flags": "iu"
     }
   ],
   "structured_left_early": [
     {
-      "pattern": "\\bI\\s+saw\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:leave\\s+before\\s+we\\s+finished|walk\\s+out\\s+before\\s+it\\s+ended|head\\s+out\\s+before\\s+we\\s+wrapped\\s+up|step\\s+away\\s+before\\s+the\\s+decision)\\b[^.?!]*",
+      "pattern": "\\bI\\s+saw\\s+[^\\n]+?\\s+(?:leave\\s+before\\s+we\\s+finished|walk\\s+out\\s+before\\s+it\\s+ended|head\\s+out\\s+before\\s+we\\s+wrapped\\s+up|step\\s+away\\s+before\\s+the\\s+decision)\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_no_response": [
     {
-      "pattern": "\\bI\\s+noticed\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:stay\\s+silent\\s+after\\s+I\\s+asked|not\\s+respond\\s+to\\s+my\\s+question|say\\s+nothing\\s+when\\s+I\\s+invited\\s+ideas|leave\\s+my\\s+request\\s+unanswered)\\b[^.?!]*",
+      "pattern": "\\bI\\s+noticed\\s+[^\\n]+?\\s+(?:stay\\s+silent\\s+after\\s+I\\s+asked|not\\s+respond\\s+to\\s+my\\s+question|say\\s+nothing\\s+when\\s+I\\s+invited\\s+ideas|leave\\s+my\\s+request\\s+unanswered)\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_support_offered": [
     {
-      "pattern": "\\bI\\s+(?:heard|saw)\\s+(?:them|someone|my\\s+[a-z]+|[A-Z][^,]+)\\s+(?:offer\\s+to\\s+help|promise\\s+to\\s+support|volunteer\\s+to\\s+join|say\\s+they\\s+could\\s+cover)\\b[^.?!]*",
+      "pattern": "\\bI\\s+(?:heard|saw)\\s+[^\\n]+?\\s+(?:offer\\s+to\\s+help|promise\\s+to\\s+support|volunteer\\s+to\\s+join|say\\s+they\\s+could\\s+cover)\\b[^.?!]*",
       "flags": "iu"
     }
   ],
   "structured_digital_message": [
     {
-      "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+\"[^\\n]+\"",
+      "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+\\x22[^\\n]+\\x22",
       "flags": "iu"
     },
     {
-      "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+“[^”\\n]+”",
+      "pattern": "\\bI\\s+read\\s+(?:a\\s+message|an\\s+email|a\\s+text|a\\s+note)\\s+(?:that\\s+)?(?:said|stated)\\s+\\u201c[^\\u201d\\n]+\\u201d",
       "flags": "iu"
     }
   ]
