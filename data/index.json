@@ -5677,6 +5677,18 @@
         {
           "title": "Five gratitudes by need",
           "slug": "five-gratitudes-by-need"
+        },
+        {
+          "title": "Ambient Postcard",
+          "slug": "ambient-postcard"
+        },
+        {
+          "title": "Scent Caption",
+          "slug": "scent-caption"
+        },
+        {
+          "title": "Window Quarter",
+          "slug": "window-quarter"
         }
       ],
       "fauxFeelings": [
@@ -6253,10 +6265,6 @@
         {
           "title": "Ask for channel shift",
           "slug": "ask-for-channel-shift"
-        },
-        {
-          "title": "Ask for specifics",
-          "slug": "ask-for-specifics"
         },
         {
           "title": "Name → need link",
@@ -7495,14 +7503,6 @@
           "slug": "go-on-walk"
         },
         {
-          "title": "Window minute",
-          "slug": "window-minute"
-        },
-        {
-          "title": "Step outside briefly",
-          "slug": "step-outside-briefly"
-        },
-        {
           "title": "Ask for a pause",
           "slug": "ask-for-a-pause"
         },
@@ -7685,6 +7685,14 @@
         {
           "title": "Grain Trace",
           "slug": "grain-trace"
+        },
+        {
+          "title": "Shadow Line",
+          "slug": "shadow-line"
+        },
+        {
+          "title": "Corner Count",
+          "slug": "corner-count"
         }
       ],
       "fauxFeelings": [
@@ -7745,6 +7753,10 @@
         {
           "title": "Read a poem you like aloud",
           "slug": "read-a-poem-you-like-aloud"
+        },
+        {
+          "title": "Grain Trace",
+          "slug": "grain-trace"
         }
       ],
       "fauxFeelings": [
@@ -7869,6 +7881,22 @@
         {
           "title": "Exit Count",
           "slug": "exit-count"
+        },
+        {
+          "title": "Align x3",
+          "slug": "align-x3"
+        },
+        {
+          "title": "Shadow Line",
+          "slug": "shadow-line"
+        },
+        {
+          "title": "Window Quarter",
+          "slug": "window-quarter"
+        },
+        {
+          "title": "Seat Press",
+          "slug": "seat-press"
         }
       ],
       "fauxFeelings": [
@@ -8757,6 +8785,10 @@
         {
           "title": "Scent Caption",
           "slug": "scent-caption"
+        },
+        {
+          "title": "Ambient Postcard",
+          "slug": "ambient-postcard"
         }
       ],
       "fauxFeelings": [
@@ -8857,6 +8889,10 @@
         {
           "title": "View previous things you've written or made",
           "slug": "view-previous-things-you-ve-written-or-made"
+        },
+        {
+          "title": "Inanimate Interview",
+          "slug": "inanimate-interview"
         }
       ],
       "fauxFeelings": [
@@ -8993,6 +9029,10 @@
         {
           "title": "Corner Count",
           "slug": "corner-count"
+        },
+        {
+          "title": "Nearest Job",
+          "slug": "nearest-job"
         }
       ],
       "fauxFeelings": [],
@@ -9051,6 +9091,10 @@
         {
           "title": "Scent Caption",
           "slug": "scent-caption"
+        },
+        {
+          "title": "Grain Trace",
+          "slug": "grain-trace"
         }
       ],
       "fauxFeelings": [],
@@ -9089,6 +9133,14 @@
         {
           "title": "Sing",
           "slug": "sing"
+        },
+        {
+          "title": "Align x3",
+          "slug": "align-x3"
+        },
+        {
+          "title": "Exit Count",
+          "slug": "exit-count"
         }
       ],
       "fauxFeelings": [],
@@ -9123,6 +9175,14 @@
         {
           "title": "Calendar one thing",
           "slug": "calendar-one-thing"
+        },
+        {
+          "title": "Exit Count",
+          "slug": "exit-count"
+        },
+        {
+          "title": "Corner Count",
+          "slug": "corner-count"
         }
       ],
       "fauxFeelings": [],
@@ -9366,6 +9426,10 @@
         {
           "title": "Exit Count",
           "slug": "exit-count"
+        },
+        {
+          "title": "Seat Press",
+          "slug": "seat-press"
         }
       ],
       "fauxFeelings": [
@@ -12714,18 +12778,6 @@
       }
     },
     {
-      "title": "Sip water slowly",
-      "slug": "sip-water-slowly",
-      "description": "Pause and take ten tiny sips, noticing the temperature and sensation.",
-      "needs": []
-    },
-    {
-      "title": "Neck release",
-      "slug": "neck-release",
-      "description": "Roll your head in small circles; then tilt ear to shoulder for three breaths each side.",
-      "needs": []
-    },
-    {
       "title": "Shoulder rolls",
       "slug": "shoulder-rolls",
       "description": "Roll shoulders forward ten times, then back ten times, noticing any change.",
@@ -12898,28 +12950,6 @@
       "slug": "color-hunt",
       "description": "Pick one color and find five items of that color around you.",
       "needs": []
-    },
-    {
-      "title": "Window minute",
-      "slug": "window-minute",
-      "description": "Open a window and take five fuller breaths of outside air.",
-      "needs": [
-        {
-          "title": "Space",
-          "slug": "space"
-        }
-      ]
-    },
-    {
-      "title": "Step outside briefly",
-      "slug": "step-outside-briefly",
-      "description": "Step outside (or to a doorway) and notice temperature and light.",
-      "needs": [
-        {
-          "title": "Space",
-          "slug": "space"
-        }
-      ]
     },
     {
       "title": "Feel your feet",
@@ -13160,17 +13190,6 @@
       ]
     },
     {
-      "title": "Ask for specifics",
-      "slug": "ask-for-specifics",
-      "description": "Say: “What would this look like in concrete steps?”",
-      "needs": [
-        {
-          "title": "Clarity",
-          "slug": "clarity"
-        }
-      ]
-    },
-    {
       "title": "Turn on Do Not Disturb",
       "slug": "turn-on-do-not-disturb",
       "description": "Set DND for 10 minutes; return when the timer ends.",
@@ -13316,12 +13335,6 @@
       "needs": []
     },
     {
-      "title": "Posture reset",
-      "slug": "posture-reset",
-      "description": "Sit or stand tall; lengthen spine; soften shoulders.",
-      "needs": []
-    },
-    {
       "title": "One kind text",
       "slug": "one-kind-text",
       "description": "Send “Thinking of you—no need to reply.” to someone you trust.",
@@ -13384,12 +13397,6 @@
           "slug": "respect"
         }
       ]
-    },
-    {
-      "title": "Count backward from 30",
-      "slug": "count-backward-from-30",
-      "description": "Count down slowly; notice your breath syncing with the count.",
-      "needs": []
     },
     {
       "title": "Name → need link",
@@ -13753,6 +13760,10 @@
         {
           "title": "Self expression",
           "slug": "self-expression"
+        },
+        {
+          "title": "Empathy",
+          "slug": "empathy"
         }
       ]
     },
@@ -13768,6 +13779,14 @@
         {
           "title": "Connection",
           "slug": "connection"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
         }
       ]
     },
@@ -13783,6 +13802,14 @@
         {
           "title": "Peace",
           "slug": "peace"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Control",
+          "slug": "control"
         }
       ]
     },
@@ -13798,6 +13825,14 @@
         {
           "title": "Order",
           "slug": "order"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
         }
       ]
     },
@@ -13817,6 +13852,14 @@
         {
           "title": "Calm",
           "slug": "calm"
+        },
+        {
+          "title": "Control",
+          "slug": "control"
+        },
+        {
+          "title": "Predictability",
+          "slug": "predictability"
         }
       ]
     },
@@ -13832,6 +13875,14 @@
         {
           "title": "Peace",
           "slug": "peace"
+        },
+        {
+          "title": "Serenity",
+          "slug": "serenity"
+        },
+        {
+          "title": "Beauty",
+          "slug": "beauty"
         }
       ]
     },
@@ -13847,6 +13898,14 @@
         {
           "title": "Clarity",
           "slug": "clarity"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
         }
       ]
     },
@@ -13862,6 +13921,10 @@
         {
           "title": "Self expression",
           "slug": "self-expression"
+        },
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
         }
       ]
     },
@@ -13877,6 +13940,14 @@
         {
           "title": "Calm",
           "slug": "calm"
+        },
+        {
+          "title": "Predictability",
+          "slug": "predictability"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
         }
       ]
     },
@@ -13892,6 +13963,14 @@
         {
           "title": "Space",
           "slug": "space"
+        },
+        {
+          "title": "Security",
+          "slug": "security"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
         }
       ]
     },
@@ -13907,6 +13986,10 @@
         {
           "title": "Clarity",
           "slug": "clarity"
+        },
+        {
+          "title": "Order",
+          "slug": "order"
         }
       ]
     }
