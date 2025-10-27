@@ -3897,6 +3897,10 @@
         {
           "title": "Specific thank-you",
           "slug": "specific-thank-you"
+        },
+        {
+          "title": "Ambient Postcard",
+          "slug": "ambient-postcard"
         }
       ],
       "fauxFeelings": [
@@ -4045,6 +4049,10 @@
         {
           "title": "Read a poem you like aloud",
           "slug": "read-a-poem-you-like-aloud"
+        },
+        {
+          "title": "Ambient Postcard",
+          "slug": "ambient-postcard"
         }
       ],
       "fauxFeelings": [
@@ -4761,6 +4769,14 @@
         {
           "title": "Name support options",
           "slug": "name-support-options"
+        },
+        {
+          "title": "Exit Count",
+          "slug": "exit-count"
+        },
+        {
+          "title": "Seat Press",
+          "slug": "seat-press"
         }
       ],
       "fauxFeelings": [
@@ -6269,6 +6285,14 @@
         {
           "title": "Name a want & a don’t",
           "slug": "name-a-want-a-don-t"
+        },
+        {
+          "title": "Window Quarter",
+          "slug": "window-quarter"
+        },
+        {
+          "title": "Nearest Job",
+          "slug": "nearest-job"
         }
       ],
       "fauxFeelings": [
@@ -7069,6 +7093,14 @@
         {
           "title": "Listen to music",
           "slug": "listen-to-music"
+        },
+        {
+          "title": "Inanimate Interview",
+          "slug": "inanimate-interview"
+        },
+        {
+          "title": "Nearest Job",
+          "slug": "nearest-job"
         }
       ],
       "fauxFeelings": [
@@ -7477,6 +7509,10 @@
         {
           "title": "Phone face-down",
           "slug": "phone-face-down"
+        },
+        {
+          "title": "Seat Press",
+          "slug": "seat-press"
         }
       ],
       "fauxFeelings": [
@@ -7641,6 +7677,14 @@
         {
           "title": "Three breaths before reply",
           "slug": "three-breaths-before-reply"
+        },
+        {
+          "title": "Align x3",
+          "slug": "align-x3"
+        },
+        {
+          "title": "Grain Trace",
+          "slug": "grain-trace"
         }
       ],
       "fauxFeelings": [
@@ -7813,6 +7857,18 @@
         {
           "title": "Listen to music",
           "slug": "listen-to-music"
+        },
+        {
+          "title": "Grain Trace",
+          "slug": "grain-trace"
+        },
+        {
+          "title": "Corner Count",
+          "slug": "corner-count"
+        },
+        {
+          "title": "Exit Count",
+          "slug": "exit-count"
         }
       ],
       "fauxFeelings": [
@@ -8693,6 +8749,14 @@
         {
           "title": "Sing",
           "slug": "sing"
+        },
+        {
+          "title": "Inanimate Interview",
+          "slug": "inanimate-interview"
+        },
+        {
+          "title": "Scent Caption",
+          "slug": "scent-caption"
         }
       ],
       "fauxFeelings": [
@@ -8917,6 +8981,18 @@
         {
           "title": "Put it on paper",
           "slug": "put-it-on-paper"
+        },
+        {
+          "title": "Align x3",
+          "slug": "align-x3"
+        },
+        {
+          "title": "Shadow Line",
+          "slug": "shadow-line"
+        },
+        {
+          "title": "Corner Count",
+          "slug": "corner-count"
         }
       ],
       "fauxFeelings": [],
@@ -8963,6 +9039,18 @@
         {
           "title": "Open the blinds",
           "slug": "open-the-blinds"
+        },
+        {
+          "title": "Shadow Line",
+          "slug": "shadow-line"
+        },
+        {
+          "title": "Window Quarter",
+          "slug": "window-quarter"
+        },
+        {
+          "title": "Scent Caption",
+          "slug": "scent-caption"
         }
       ],
       "fauxFeelings": [],
@@ -9274,6 +9362,10 @@
         {
           "title": "Crunch the numbers",
           "slug": "crunch-the-numbers"
+        },
+        {
+          "title": "Exit Count",
+          "slug": "exit-count"
         }
       ],
       "fauxFeelings": [
@@ -13648,6 +13740,175 @@
       "slug": "return-to-body-cue",
       "description": "Set a simple cue (e.g., every doorframe = one deep breath) for today only.",
       "needs": []
+    },
+    {
+      "title": "Inanimate Interview",
+      "slug": "inanimate-interview",
+      "description": "Pick a nearby object and ask it one question (\"what's your job here?\"). Answer in its voice in one sentence. Smile at whatever comes out.",
+      "needs": [
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        }
+      ]
+    },
+    {
+      "title": "Ambient Postcard",
+      "slug": "ambient-postcard",
+      "description": "On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your \"right now\"; optionally send it to one person.",
+      "needs": [
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        }
+      ]
+    },
+    {
+      "title": "Align x3",
+      "slug": "align-x3",
+      "description": "Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.",
+      "needs": [
+        {
+          "title": "Order",
+          "slug": "order"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        }
+      ]
+    },
+    {
+      "title": "Shadow Line",
+      "slug": "shadow-line",
+      "description": "Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.",
+      "needs": [
+        {
+          "title": "Beauty",
+          "slug": "beauty"
+        },
+        {
+          "title": "Order",
+          "slug": "order"
+        }
+      ]
+    },
+    {
+      "title": "Exit Count",
+      "slug": "exit-count",
+      "description": "Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.",
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Security",
+          "slug": "security"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        }
+      ]
+    },
+    {
+      "title": "Grain Trace",
+      "slug": "grain-trace",
+      "description": "Run a fingertip along a visible line (wood grain, tile grout, fabric seam, etc.) until it ends, and let that completion register.",
+      "needs": [
+        {
+          "title": "Calm",
+          "slug": "calm"
+        },
+        {
+          "title": "Peace",
+          "slug": "peace"
+        }
+      ]
+    },
+    {
+      "title": "Window Quarter",
+      "slug": "window-quarter",
+      "description": "Use the window frame to pick one small quadrant of the view and give it a one-line title you like; hold that title for a moment.",
+      "needs": [
+        {
+          "title": "Beauty",
+          "slug": "beauty"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        }
+      ]
+    },
+    {
+      "title": "Scent Caption",
+      "slug": "scent-caption",
+      "description": "Open a spice, soap, or leaf, take one brief sniff, and write a one-word caption for the scent before closing it.",
+      "needs": [
+        {
+          "title": "Beauty",
+          "slug": "beauty"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        }
+      ]
+    },
+    {
+      "title": "Corner Count",
+      "slug": "corner-count",
+      "description": "Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.",
+      "needs": [
+        {
+          "title": "Order",
+          "slug": "order"
+        },
+        {
+          "title": "Calm",
+          "slug": "calm"
+        }
+      ]
+    },
+    {
+      "title": "Seat Press",
+      "slug": "seat-press",
+      "description": "Press the surface you're on (chair, floor, bed) firmly once with your palm or thigh and say \"held\" quietly; note the contact, then stop.",
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        }
+      ]
+    },
+    {
+      "title": "Nearest Job",
+      "slug": "nearest-job",
+      "description": "Pick the nearest object and state its job in two words (e.g., \"mug—holds\", \"pen—marks\"); enjoy the tidy accuracy and you're done.",
+      "needs": [
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        }
+      ]
     }
   ]
 }
