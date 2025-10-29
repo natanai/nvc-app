@@ -2945,7 +2945,9 @@ body.has-support-journal-open {
 
 .strategy-deck[data-enhanced='true'] .strategy-deck__stack .strategy-card {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  left: 0;
   width: 100%;
   pointer-events: none;
   transform: translate3d(0, var(--strategy-deck-offset, 0px), 0);

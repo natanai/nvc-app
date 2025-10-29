@@ -80,7 +80,16 @@ function initStrategyDeck(deck) {
       return;
     }
 
-    const heights = currentCards.map((card) => card.offsetHeight || card.getBoundingClientRect().height || 0);
+    const heights = currentCards.map((card) => {
+      if (!card) {
+        return 0;
+      }
+      const rect = card.getBoundingClientRect();
+      const rectHeight = Number.isFinite(rect?.height) ? rect.height : 0;
+      const offsetHeight = Number.isFinite(card.offsetHeight) ? card.offsetHeight : 0;
+      const scrollHeight = Number.isFinite(card.scrollHeight) ? card.scrollHeight : 0;
+      return Math.max(rectHeight, offsetHeight, scrollHeight, 0);
+    });
     const nextHeight = Math.max(0, ...heights);
     if (!Number.isFinite(nextHeight) || nextHeight <= 0) {
       return;
