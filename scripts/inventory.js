@@ -6786,7 +6786,8 @@ function initializeStrategyStack(main) {
       const clones = getClones();
       const visibleCount = Math.min(4, clones.length);
       const animate = options.animate !== false;
-      let topHeight = 0;
+
+      state.stackList.style.height = '';
 
       clones.forEach((clone, index) => {
         const offsetIndex = Math.min(index, visibleCount - 1);
@@ -6796,10 +6797,6 @@ function initializeStrategyStack(main) {
         const baseTransform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
         clone.dataset.stackIndex = String(index);
         clone.dataset.stackTransform = baseTransform;
-        clone.style.position = 'absolute';
-        clone.style.top = '0';
-        clone.style.left = '0';
-        clone.style.right = '0';
         clone.style.transition = state.reduceMotion || !animate ? 'none' : 'transform 0.3s ease, opacity 0.3s ease';
         clone.style.transform = baseTransform;
         clone.style.opacity = index < visibleCount ? '1' : '0';
@@ -6809,7 +6806,6 @@ function initializeStrategyStack(main) {
           clone.style.pointerEvents = state.isExpanded ? 'none' : 'auto';
           clone.style.cursor = state.isExpanded ? 'default' : 'grab';
           clone.setAttribute('aria-hidden', state.isExpanded ? 'true' : 'false');
-          topHeight = Math.max(topHeight, clone.offsetHeight);
         } else {
           clone.dataset.stackActive = 'false';
           clone.style.pointerEvents = 'none';
@@ -6817,12 +6813,6 @@ function initializeStrategyStack(main) {
           clone.setAttribute('aria-hidden', 'true');
         }
       });
-
-      if (topHeight) {
-        state.stackList.style.height = `${topHeight + 24}px`;
-      } else {
-        state.stackList.style.height = '0px';
-      }
     };
 
     let resizeFrame = null;
@@ -6855,6 +6845,7 @@ function initializeStrategyStack(main) {
       state.expandButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
       state.expandButton.textContent = expanded ? 'Collapse' : 'Expand all';
       state.expandedWrapper.hidden = !expanded;
+      state.expandedWrapper.setAttribute('aria-hidden', expanded ? 'false' : 'true');
       state.expandedList.setAttribute('aria-hidden', expanded ? 'false' : 'true');
       state.stackList.setAttribute('aria-hidden', expanded ? 'true' : 'false');
       state.stackList.tabIndex = expanded ? -1 : 0;

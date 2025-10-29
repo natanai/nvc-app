@@ -2929,6 +2929,10 @@ body.has-support-journal-open {
 
 .strategy-stack__expanded {
   margin-top: 1.5rem;
+  display: none;
+}
+
+.strategy-stack[data-expanded='true'] + .strategy-stack__expanded {
   display: block;
 }
 
@@ -3000,13 +3004,16 @@ body.has-support-journal-open {
 
 .strategy-list--stack .strategy-card {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   pointer-events: none;
   touch-action: pan-y;
   transition: transform 0.32s ease, opacity 0.32s ease;
 }
 
 .strategy-list--stack .strategy-card[data-stack-active='true'] {
+  position: relative;
   pointer-events: auto;
 }
 
