@@ -1667,11 +1667,11 @@ function renderNeed(item, strategyLookup) {
     const noscriptFallback = `
           <noscript>
             <style>
-              #${listId}[data-hidden='true'] { display: grid; }
+              #${listId}[data-hidden='true'] { display: grid !important; }
             </style>
           </noscript>`;
     const listHtml = `
-          <div class="strategy-list" data-strategy-list id="${escapedListId}" data-hidden="true" hidden>
+          <div class="strategy-list" data-strategy-list id="${escapedListId}" data-hidden="true">
             ${cardsHtml}
           </div>${noscriptFallback}`;
 

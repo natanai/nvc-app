@@ -47,6 +47,14 @@ function initStrategyDeck(deck) {
   let lastY = 0;
   let deckHeight = 0;
 
+  function getVisibleCount() {
+    const total = currentCards.length;
+    if (!Number.isFinite(total) || total <= 0) {
+      return 0;
+    }
+    return Math.min(MAX_VISIBLE_CARDS, total);
+  }
+
   const observer = typeof ResizeObserver === 'function'
     ? new ResizeObserver(() => {
         window.requestAnimationFrame(updateDeckHeight);
@@ -62,17 +70,34 @@ function initStrategyDeck(deck) {
   }
 
   function updateDeckHeight() {
+    const visibleCount = getVisibleCount();
+    if (!visibleCount) {
+      if (deckHeight !== 0) {
+        deckHeight = 0;
+        stack.style.height = '';
+        stack.style.setProperty('--strategy-deck-height', '');
+      }
+      return;
+    }
+
     const heights = currentCards.map((card) => card.offsetHeight || card.getBoundingClientRect().height || 0);
     const nextHeight = Math.max(0, ...heights);
     if (!Number.isFinite(nextHeight) || nextHeight <= 0) {
       return;
     }
-    if (Math.abs(nextHeight - deckHeight) < 0.5) {
+
+    const offsetPadding = Math.max(0, visibleCount - 1) * OFFSET_STEP_PX;
+    const totalHeight = nextHeight + offsetPadding;
+    if (!Number.isFinite(totalHeight) || totalHeight <= 0) {
       return;
     }
-    deckHeight = nextHeight;
-    stack.style.height = `${nextHeight}px`;
-    stack.style.setProperty('--strategy-deck-height', `${nextHeight}px`);
+
+    if (Math.abs(totalHeight - deckHeight) < 0.5) {
+      return;
+    }
+    deckHeight = totalHeight;
+    stack.style.height = `${totalHeight}px`;
+    stack.style.setProperty('--strategy-deck-height', `${totalHeight}px`);
   }
 
   function attachPointer(card) {
@@ -93,7 +118,7 @@ function initStrategyDeck(deck) {
 
   function layout(options = {}) {
     const immediate = Boolean(options.immediate);
-    const visibleCount = Math.min(MAX_VISIBLE_CARDS, currentCards.length);
+    const visibleCount = getVisibleCount();
 
     currentCards.forEach((card, index) => {
       if (!card) {
