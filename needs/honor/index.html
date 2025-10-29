@@ -1190,7 +1190,30 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar">
+              <div class="strategy-deck__toolbar-group">
+                <button type="button" class="shuffle-button strategy-deck__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              </div>
+              <button type="button" class="strategy-deck__show-all" data-strategy-show-all aria-controls="honor-strategy-list" aria-expanded="false">Show all</button>
+            </div>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                  <article class="strategy-card" data-strategy-slug="honor-reflection-meditation" data-strategy-tags="honor|recognition" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">(Honor) Reflection Meditation</h3>
+                    <p class="strategy-card__description">Reflect on moments this need has been met in the past. Was it an award you received? Verbal affirmation from a loved one? Consider calling a trusted friend and making a very vulnerable and specific request. &quot;I&#39;m wondering if you could tell me that even though I haven&#39;t accomplished some of my dreams, I am still beautiful person whose existence adds value to the world?&quot; 
+Consider also if you can validate that in yourself sometimes, perhaps regularly. Reflect on art your proud of, or the children your proud to have raised, the obstacles you&#39;re overcome in life, and see if you can honor yourself in some way by meditating on those things.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+            </div>
+          </div>
+
+          <div class="strategy-list" data-strategy-list id="honor-strategy-list" data-hidden="true" hidden>
             
                   <article class="strategy-card" data-strategy-slug="honor-reflection-meditation" data-strategy-tags="honor|recognition" data-first-name="Nat" data-location="Missouri">
                     <h3 class="strategy-card__title">(Honor) Reflection Meditation</h3>
@@ -1203,6 +1226,11 @@ Consider also if you can validate that in yourself sometimes, perhaps regularly.
                   </article>
                 
           </div>
+          <noscript>
+            <style>
+              #honor-strategy-list[data-hidden='true'] { display: grid; }
+            </style>
+          </noscript>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1266,5 +1294,6 @@ Consider also if you can validate that in yourself sometimes, perhaps regularly.
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-deck.js" type="module"></script>
   </body>
 </html>

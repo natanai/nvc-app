@@ -752,6 +752,53 @@ function basePathFromDepth(depth) {
 const localStorageReminderHtml =
   '<p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>';
 
+function renderStrategyCard(strategy) {
+  if (!strategy) {
+    return '';
+  }
+
+  const tags = Array.isArray(strategy.needs)
+    ? strategy.needs.map((need) => need.slug).join('|')
+    : '';
+  const contributor = strategy.contributor || {};
+  const firstName = sanitizeContributorName(contributor.name);
+  const location = sanitizeLocation(contributor.location);
+  const contributorParts = [];
+  if (firstName) {
+    contributorParts.push(firstName);
+  }
+  if (location) {
+    contributorParts.push(location);
+  }
+  const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
+  const contributorHtml = contributorText ? `<p class="strategy-card__meta">${contributorText}</p>` : '';
+  const dataAttrs = [
+    `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
+    `data-strategy-tags="${escapeHtml(tags)}"`,
+  ];
+  if (firstName) {
+    dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
+  }
+  if (location) {
+    dataAttrs.push(`data-location="${escapeHtml(location)}"`);
+  }
+  const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+
+  const title = strategy.title ? escapeHtml(strategy.title) : 'Untitled strategy';
+  const description = strategy.description ? escapeHtml(strategy.description) : '';
+
+  return `
+                  <article class="strategy-card"${dataAttrString}>
+                    <h3 class="strategy-card__title">${title}</h3>
+                    <p class="strategy-card__description">${description}</p>
+                    ${contributorHtml}
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                `;
+}
+
 function normalizeScripts(scripts) {
   const baseScripts = [
     { src: 'assets/js/journal/store.js', module: true },
@@ -1600,59 +1647,48 @@ function renderNeed(item, strategyLookup) {
 
   const strategiesNote = `          ${localStorageReminderHtml}`;
 
-  const strategiesHtml = strategies.length
-    ? `<section class="strategy-section" aria-labelledby="strategy-heading">
+  let strategiesHtml = '';
+  if (strategies.length) {
+    const cardsHtml = strategies.map((strategy) => renderStrategyCard(strategy)).join('');
+    const listId = `${item.slug}-strategy-list`;
+    const escapedListId = escapeHtml(listId);
+    const deckHtml = `
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar">
+              <div class="strategy-deck__toolbar-group">
+                <button type="button" class="shuffle-button strategy-deck__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              </div>
+              <button type="button" class="strategy-deck__show-all" data-strategy-show-all aria-controls="${escapedListId}" aria-expanded="false">Show all</button>
+            </div>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              ${cardsHtml}
+            </div>
+          </div>`;
+    const noscriptFallback = `
+          <noscript>
+            <style>
+              #${listId}[data-hidden='true'] { display: grid; }
+            </style>
+          </noscript>`;
+    const listHtml = `
+          <div class="strategy-list" data-strategy-list id="${escapedListId}" data-hidden="true" hidden>
+            ${cardsHtml}
+          </div>${noscriptFallback}`;
+
+    strategiesHtml = `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
-          <div class="strategy-list">
-            ${strategies
-              .map((strategy) => {
-                const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
-                const contributor = strategy.contributor || {};
-                const firstName = sanitizeContributorName(contributor.name);
-                const location = sanitizeLocation(contributor.location);
-                const contributorParts = [];
-                if (firstName) {
-                  contributorParts.push(firstName);
-                }
-                if (location) {
-                  contributorParts.push(location);
-                }
-                const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
-                const contributorHtml = contributorText
-                  ? `<p class="strategy-card__meta">${contributorText}</p>`
-                  : '';
-                const dataAttrs = [
-                  `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
-                  `data-strategy-tags="${escapeHtml(tags)}"`,
-                ];
-                if (firstName) {
-                  dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
-                }
-                if (location) {
-                  dataAttrs.push(`data-location="${escapeHtml(location)}"`);
-                }
-                const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
-                return `
-                  <article class="strategy-card"${dataAttrString}>
-                    <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
-                    <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
-                    ${contributorHtml}
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                `;
-              })
-              .join('')}
-          </div>
+${deckHtml}
+${listHtml}
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
-        </section>`
-    : `<section class="strategy-section" aria-labelledby="strategy-heading">
+        </section>`;
+  } else {
+    strategiesHtml = `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
           <p class="empty-state">Strategies for this need are coming soon.</p>
         </section>`;
+  }
 
   const descriptionHtml = item.description
     ? `<p class="page-description">${escapeHtml(item.description)}</p>`
@@ -1707,7 +1743,7 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+    scripts: [{ src: 'scripts/strategy-deck.js', module: true }],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,

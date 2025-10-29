@@ -1190,7 +1190,83 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar">
+              <div class="strategy-deck__toolbar-group">
+                <button type="button" class="shuffle-button strategy-deck__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              </div>
+              <button type="button" class="strategy-deck__show-all" data-strategy-show-all aria-controls="appreciation-strategy-list" aria-expanded="false">Show all</button>
+            </div>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                  <article class="strategy-card" data-strategy-slug="view-previous-things-you-ve-written-or-made" data-strategy-tags="to-be-seen|to-be-heard|understanding|empathy|appreciation|honesty" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">View previous things you&#39;ve written or made</h3>
+                    <p class="strategy-card__description">To no one&#39;s surprise I often understand myself better than anyone else. Sometimes in a crisis I&#39;ll read something I wrote a month ago and think &quot;yes that&#39;s exactly it!&quot; - like past me is giving empathy to future me.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="view-art-that-you-connect-to" data-strategy-tags="appreciation|respect" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">View art that you connect to</h3>
+                    <p class="strategy-card__description">Whether it’s in your house, online, or at an exhibit sometimes you find a piece of art that moves you - like it understands you on a profound level.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="specific-thank-you" data-strategy-tags="appreciation|recognition|connection">
+                    <h3 class="strategy-card__title">Specific thank-you</h3>
+                    <p class="strategy-card__description">Send a short note naming one action someone did and how it supported you.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="five-gratitudes-by-need" data-strategy-tags="appreciation">
+                    <h3 class="strategy-card__title">Five gratitudes by need</h3>
+                    <p class="strategy-card__description">List five gratitudes and tag each with the need it tended.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="ambient-postcard" data-strategy-tags="belonging|connection|self-expression|appreciation">
+                    <h3 class="strategy-card__title">Ambient Postcard</h3>
+                    <p class="strategy-card__description">On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your &quot;right now&quot;; optionally send it to one person.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="scent-caption" data-strategy-tags="beauty|self-expression|appreciation">
+                    <h3 class="strategy-card__title">Scent Caption</h3>
+                    <p class="strategy-card__description">Open a spice, soap, or leaf, take one brief sniff, and write a one-word caption for the scent before closing it.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="window-quarter" data-strategy-tags="beauty|clarity|calm|appreciation">
+                    <h3 class="strategy-card__title">Window Quarter</h3>
+                    <p class="strategy-card__description">Use the window frame to pick one small quadrant of the view and give it a one-line title you like; hold that title for a moment.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+            </div>
+          </div>
+
+          <div class="strategy-list" data-strategy-list id="appreciation-strategy-list" data-hidden="true" hidden>
             
                   <article class="strategy-card" data-strategy-slug="view-previous-things-you-ve-written-or-made" data-strategy-tags="to-be-seen|to-be-heard|understanding|empathy|appreciation|honesty" data-first-name="Nat" data-location="Missouri">
                     <h3 class="strategy-card__title">View previous things you&#39;ve written or made</h3>
@@ -1256,6 +1332,11 @@ button.site-nav__magnet {
                   </article>
                 
           </div>
+          <noscript>
+            <style>
+              #appreciation-strategy-list[data-hidden='true'] { display: grid; }
+            </style>
+          </noscript>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1319,5 +1400,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-deck.js" type="module"></script>
   </body>
 </html>

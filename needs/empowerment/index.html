@@ -1190,7 +1190,47 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar">
+              <div class="strategy-deck__toolbar-group">
+                <button type="button" class="shuffle-button strategy-deck__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              </div>
+              <button type="button" class="strategy-deck__show-all" data-strategy-show-all aria-controls="empowerment-strategy-list" aria-expanded="false">Show all</button>
+            </div>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                  <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Listen to music</h3>
+                    <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="sing" data-strategy-tags="to-be-heard|self-expression|autonomy|to-be-seen|empowerment|mattering|need-to-matter|control" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Sing</h3>
+                    <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="stand-largely" data-strategy-tags="empowerment" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Stand Largely</h3>
+                    <p class="strategy-card__description">Take a wide stance, place your arms up high and apart. Making a sort of X shape with your arms and legs take up as much space as possible. Trying this for about 30 seconds. We know that the postures our bodies takes often represent our emotional state and, interestingly, research suggests that this system can also work in reverse. Give your body space and see if it helps give your psychological date space too.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+            </div>
+          </div>
+
+          <div class="strategy-list" data-strategy-list id="empowerment-strategy-list" data-hidden="true" hidden>
             
                   <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
                     <h3 class="strategy-card__title">Listen to music</h3>
@@ -1220,6 +1260,11 @@ button.site-nav__magnet {
                   </article>
                 
           </div>
+          <noscript>
+            <style>
+              #empowerment-strategy-list[data-hidden='true'] { display: grid; }
+            </style>
+          </noscript>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1283,5 +1328,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-deck.js" type="module"></script>
   </body>
 </html>
