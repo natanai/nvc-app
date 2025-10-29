@@ -102,15 +102,9 @@ function redirectLegacyJournalHash() {
     const candidates = [];
     const errors = [];
 
-    if (typeof window === 'undefined') {
-      return { candidates, errors };
-    } catch (error) {
-      markFallback();
-      if (typeof console !== 'undefined' && typeof console.error === 'function') {
-        console.error('Failed to initialize strategy stack', error);
-      }
-      return null;
-    }
+  if (typeof window === 'undefined') {
+    return { candidates, errors };
+  }
     }
 
     try {
