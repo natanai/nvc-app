@@ -231,6 +231,9 @@ const navPrefillScript = () => String.raw`
         })();
       </script>`;
 
+const JS_ENABLED_HEAD_SCRIPT =
+  '<script>(function(){try{var root=document.documentElement;if(root){root.dataset.js="enabled";}}catch(error){}})();</script>';
+
 const navVisibilityBootstrapScript = () => String.raw`
       <script>
         (function() {
@@ -808,6 +811,7 @@ function htmlPage({
   socialImage = SOCIAL_CARD_SRC,
   twitterImage = TWITTER_CARD_SRC,
   socialAlt = 'Three colorful doorways symbolizing allneeds.app',
+  headExtras = '',
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
@@ -883,6 +887,7 @@ function htmlPage({
   const normalizedMainAttrs = mainAttributes ? ` ${mainAttributes.trim()}` : '';
   const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
   const criticalStyles = navCriticalCss ? `    <style>${navCriticalCss}</style>` : '';
+  const normalizedHeadExtras = headExtras ? `${headExtras}\n` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -922,7 +927,7 @@ function htmlPage({
     <meta name="twitter:url" content="${canonicalUrl}" />
     <meta name="twitter:image" content="${twitterImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
-        ${themePreloadScript(basePath)}
+${normalizedHeadExtras}        ${themePreloadScript(basePath)}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
     <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />
   </head>
@@ -1601,9 +1606,9 @@ function renderNeed(item, strategyLookup) {
   const strategiesNote = `          ${localStorageReminderHtml}`;
 
   const strategiesHtml = strategies.length
-    ? `<section class="strategy-section" aria-labelledby="strategy-heading">
+    ? `<section class="strategy-section" data-stack-ready="pending" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
-${strategiesNote}
+          ${strategiesNote}
           <div class="strategy-list">
             ${strategies
               .map((strategy) => {
@@ -1709,6 +1714,7 @@ ${strategiesNote}
     main,
     scripts: [],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
+    headExtras: JS_ENABLED_HEAD_SCRIPT,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,
   });

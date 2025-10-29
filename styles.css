@@ -2876,9 +2876,147 @@ body.has-support-journal-open {
   }
 }
 
+html[data-js='enabled'] .strategy-section[data-stack-ready='pending'] > .strategy-list {
+  display: none;
+}
+
+html[data-js='enabled'] .strategy-section[data-stack-ready='pending'] .strategy-stack,
+html[data-js='enabled'] .strategy-section[data-stack-ready='pending'] .strategy-stack__expanded {
+  display: none;
+}
+
+.strategy-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.strategy-stack__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.strategy-stack__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.strategy-stack__hint {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.strategy-stack__viewport {
+  position: relative;
+}
+
+.strategy-stack__expand {
+  display: flex;
+  justify-content: center;
+}
+
+.strategy-stack__expanded {
+  margin-top: 1.5rem;
+  display: block;
+}
+
+.strategy-stack[data-expanded='true'] {
+  margin-bottom: 0;
+}
+
+.strategy-stack[data-expanded='true'] .strategy-stack__controls,
+.strategy-stack[data-expanded='true'] .strategy-stack__hint,
+.strategy-stack[data-expanded='true'] .strategy-stack__viewport {
+  display: none;
+}
+
+.strategy-stack[data-expanded='true'] + .strategy-stack__expanded {
+  margin-top: 1rem;
+}
+
+.strategy-stack__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--mint) 70%, #fff 30%);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 0 10px 0 var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  cursor: pointer;
+}
+
+.strategy-stack__button:hover,
+.strategy-stack__button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 45%, transparent);
+  outline: 3px solid var(--outline);
+  outline-offset: 3px;
+}
+
+.strategy-stack__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+}
+
+.strategy-stack__button--expand {
+  width: 100%;
+  max-width: 20rem;
+}
+
+@media (max-width: 720px) {
+  .strategy-stack__controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .strategy-stack__nav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .strategy-stack__nav .strategy-stack__button {
+    flex: 1;
+  }
+}
+
 .strategy-list {
   display: grid;
   gap: 1rem;
+}
+
+.strategy-list--stack {
+  position: relative;
+  display: block;
+  min-height: 14rem;
+}
+
+.strategy-list--stack .strategy-card {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  touch-action: pan-y;
+  transition: transform 0.32s ease, opacity 0.32s ease;
+}
+
+.strategy-list--stack .strategy-card[data-stack-active='true'] {
+  pointer-events: auto;
 }
 
 .strategy-card {
