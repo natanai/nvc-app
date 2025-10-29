@@ -741,6 +741,15 @@ const themePreloadScript = (basePath) => {
       })();
     </script>`;
 };
+
+const jsCapabilityFlagScript = () => String.raw`    <script>
+      (function(doc) {
+        if (!doc || !doc.documentElement || !doc.documentElement.classList) {
+          return;
+        }
+        doc.documentElement.classList.add('has-js');
+      })(document);
+    </script>`;
 for (const dir of directoriesToReset) {
   rmSync(join(rootDir, dir), { recursive: true, force: true });
 }
@@ -922,6 +931,7 @@ function htmlPage({
     <meta name="twitter:url" content="${canonicalUrl}" />
     <meta name="twitter:image" content="${twitterImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
+        ${jsCapabilityFlagScript()}
         ${themePreloadScript(basePath)}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
     <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />
@@ -1601,7 +1611,7 @@ function renderNeed(item, strategyLookup) {
   const strategiesNote = `          ${localStorageReminderHtml}`;
 
   const strategiesHtml = strategies.length
-    ? `<section class="strategy-section" aria-labelledby="strategy-heading">
+    ? `<section class="strategy-section" aria-labelledby="strategy-heading" data-stack-ready="pending">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
           <div class="strategy-list">
