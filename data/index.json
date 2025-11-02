@@ -2061,57 +2061,6 @@
       "poemUrl": "https://www.poetryfoundation.org/poems/155699/beaches-why-i-dont-care-for-them"
     },
     {
-      "title": "Pressured",
-      "slug": "pressured",
-      "description": "Your neck or shoulders may tense, your breath shorten, and time may feel scarce. This state may arise when external expectations exceed your current capacity. Pressure activates stress systems that may have evolved to prioritize urgent tasks but can overwhelm if prolonged.",
-      "fauxFeelings": [
-        {
-          "title": "Bullied",
-          "slug": "bullied"
-        },
-        {
-          "title": "Harassed",
-          "slug": "harassed"
-        }
-      ],
-      "needs": [
-        {
-          "title": "Consideration",
-          "slug": "consideration"
-        },
-        {
-          "title": "Safety",
-          "slug": "safety"
-        },
-        {
-          "title": "Respect",
-          "slug": "respect"
-        },
-        {
-          "title": "Autonomy",
-          "slug": "autonomy"
-        },
-        {
-          "title": "Choice",
-          "slug": "choice"
-        },
-        {
-          "title": "Space",
-          "slug": "space"
-        },
-        {
-          "title": "Peace",
-          "slug": "peace"
-        }
-      ],
-      "needSatisfaction": "unmet",
-      "bodySignals": [
-        "Tight band of tension circling the temples; Breath held high as if time is squeezing; Hands tapping or bouncing to release urgency"
-      ],
-      "poemQuote": "\"push-pulling me away and toward \nthe shore of knowing what is \nto come—which pressure \ncauses metamorphoses,\nprotostar pre-nucleosynthesis,\nand which pressure produces fissures...\"\n- Chet’la Sebree",
-      "poemUrl": "https://poets.org/poem/end-4"
-    },
-    {
       "title": "Thwarted",
       "slug": "thwarted",
       "description": "Your body may lurch forward while something blocks progress, leaving lingering agitation. This feeling may come when effort meets resistance. It may have evolved to motivate persistence or creative problem-solving until the goal is met.",
@@ -2483,45 +2432,6 @@
       ],
       "poemQuote": "\"And could you keep your heart in wonder at the daily miracles of your life your pain would not seem less wondrous than your joy;\n     And you would accept the seasons of your heart, even as you have always accepted the seasons that pass over your fields.\"\n- Kahlil Gibran",
       "poemUrl": "https://poets.org/poem/pain-1"
-    },
-    {
-      "title": "Humiliated",
-      "slug": "humiliated",
-      "description": "Your face may burn, your chest constrict, and you may wish to disappear. This feeling may arise when you perceive a deep loss of respect or dignity. Anthropologists often note humiliation may have evolved as a social alarm that helps maintain status and cooperation.",
-      "fauxFeelings": [
-        {
-          "title": "Criticized",
-          "slug": "criticized"
-        }
-      ],
-      "needs": [
-        {
-          "title": "Acknowledgement",
-          "slug": "acknowledgement"
-        },
-        {
-          "title": "Accountability",
-          "slug": "accountability"
-        },
-        {
-          "title": "Understanding",
-          "slug": "understanding"
-        },
-        {
-          "title": "Recognition",
-          "slug": "recognition"
-        },
-        {
-          "title": "Non-judgmental Communication",
-          "slug": "non-judgmental-communication"
-        }
-      ],
-      "needSatisfaction": "unmet",
-      "bodySignals": [
-        "Face flushing hot while eyes want to look away; Stomach dropping as if on a roller coaster; Body shrinking or folding inward to hide"
-      ],
-      "poemQuote": "\"Vain to fish \nwith unbaited hook, \nthe proverb says. I fished that way...\"\n- Bruce Beasley",
-      "poemUrl": "https://poets.org/poem/fishers"
     },
     {
       "title": "Embarrassed",
@@ -4363,10 +4273,6 @@
           "slug": "scared"
         },
         {
-          "title": "Pressured",
-          "slug": "pressured"
-        },
-        {
           "title": "Overwhelmed",
           "slug": "overwhelmed"
         },
@@ -4807,6 +4713,10 @@
         {
           "title": "Wronged",
           "slug": "wronged"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
         }
       ],
       "feelings": [
@@ -4817,10 +4727,6 @@
         {
           "title": "Angry",
           "slug": "angry"
-        },
-        {
-          "title": "Pressured",
-          "slug": "pressured"
         },
         {
           "title": "Anxiety",
@@ -4861,6 +4767,14 @@
         {
           "title": "Irritated",
           "slug": "irritated"
+        },
+        {
+          "title": "Anxious",
+          "slug": "anxious"
+        },
+        {
+          "title": "Overwhelmed",
+          "slug": "overwhelmed"
         }
       ],
       "originalClaim": "Threat detection and protection may be conserved across species and remain foundational for human functioning. This need may motivate building stable environments, establishing boundaries, and choosing trustworthy relationships. With safety present, exploration and learning become viable.",
@@ -5087,6 +5001,10 @@
         {
           "title": "Wronged",
           "slug": "wronged"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
         }
       ],
       "feelings": [
@@ -5117,10 +5035,6 @@
         {
           "title": "Overwhelmed",
           "slug": "overwhelmed"
-        },
-        {
-          "title": "Pressured",
-          "slug": "pressured"
         },
         {
           "title": "Frightened",
@@ -5157,6 +5071,10 @@
         {
           "title": "Irritated",
           "slug": "irritated"
+        },
+        {
+          "title": "Anxious",
+          "slug": "anxious"
         }
       ],
       "originalClaim": "Mutual regard can reduce conflict costs and support equitable collaboration. This need may motivate clear boundaries, considerate language, and acknowledgment of value. Respect maintains dignity and workable relationships.",
@@ -5299,6 +5217,10 @@
         {
           "title": "Used",
           "slug": "used"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
         }
       ],
       "feelings": [
@@ -5321,10 +5243,6 @@
         {
           "title": "Scared",
           "slug": "scared"
-        },
-        {
-          "title": "Pressured",
-          "slug": "pressured"
         },
         {
           "title": "Thwarted",
@@ -5385,6 +5303,10 @@
         {
           "title": "Resentful",
           "slug": "resentful"
+        },
+        {
+          "title": "Overwhelmed",
+          "slug": "overwhelmed"
         }
       ],
       "originalClaim": "Robust evidence (e.g., self-determination theory) suggests autonomy may be a universal psychological nutrient for motivation and well-being. This need may motivate expressing preferences, making self-directed decisions, and setting boundaries. When autonomy is supported, persistence and quality of engagement typically increase.",
@@ -5575,6 +5497,10 @@
         {
           "title": "Unseen",
           "slug": "unseen"
+        },
+        {
+          "title": "Humiliated",
+          "slug": "humiliated"
         }
       ],
       "feelings": [
@@ -5605,10 +5531,6 @@
         {
           "title": "Anxious",
           "slug": "anxious"
-        },
-        {
-          "title": "Humiliated",
-          "slug": "humiliated"
         },
         {
           "title": "Embarrassed",
@@ -6387,6 +6309,10 @@
         {
           "title": "Criticized",
           "slug": "criticized"
+        },
+        {
+          "title": "Humiliated",
+          "slug": "humiliated"
         }
       ],
       "feelings": [
@@ -6431,12 +6357,12 @@
           "slug": "frustrated"
         },
         {
-          "title": "Humiliated",
-          "slug": "humiliated"
-        },
-        {
           "title": "Embarrassed",
           "slug": "embarrassed"
+        },
+        {
+          "title": "Sad",
+          "slug": "sad"
         }
       ],
       "originalClaim": "Groups often function best when intentions and actions align, making reliability a core social currency. This need may motivate clarifying expectations, repairing misses, and creating follow-through systems. Consistent accountability stabilizes trust and turns shared aims into predictable outcomes.",
@@ -6759,6 +6685,10 @@
         {
           "title": "Coerced",
           "slug": "coerced"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
         }
       ],
       "feelings": [
@@ -6769,10 +6699,6 @@
         {
           "title": "Scared",
           "slug": "scared"
-        },
-        {
-          "title": "Pressured",
-          "slug": "pressured"
         },
         {
           "title": "Thwarted",
@@ -6789,6 +6715,14 @@
         {
           "title": "Frightened",
           "slug": "frightened"
+        },
+        {
+          "title": "Resentful",
+          "slug": "resentful"
+        },
+        {
+          "title": "Overwhelmed",
+          "slug": "overwhelmed"
         }
       ],
       "originalClaim": "Access to options can enable better fit between values and behavior. This need may motivate generating alternatives, evaluating trade-offs, and selecting a path. Supporting choice increases perceived control and adaptive responding.",
@@ -7135,6 +7069,10 @@
         {
           "title": "Unsupported",
           "slug": "unsupported"
+        },
+        {
+          "title": "Humiliated",
+          "slug": "humiliated"
         }
       ],
       "feelings": [
@@ -7153,10 +7091,6 @@
         {
           "title": "Frustrated",
           "slug": "frustrated"
-        },
-        {
-          "title": "Humiliated",
-          "slug": "humiliated"
         },
         {
           "title": "Angry",
@@ -7255,6 +7189,10 @@
         {
           "title": "Taken for granted",
           "slug": "taken-for-granted"
+        },
+        {
+          "title": "Humiliated",
+          "slug": "humiliated"
         }
       ],
       "feelings": [
@@ -7273,10 +7211,6 @@
         {
           "title": "Frustrated",
           "slug": "frustrated"
-        },
-        {
-          "title": "Humiliated",
-          "slug": "humiliated"
         },
         {
           "title": "Angry",
@@ -7335,6 +7269,10 @@
         {
           "title": "Criticized",
           "slug": "criticized"
+        },
+        {
+          "title": "Humiliated",
+          "slug": "humiliated"
         }
       ],
       "feelings": [
@@ -7355,16 +7293,20 @@
           "slug": "frustrated"
         },
         {
-          "title": "Humiliated",
-          "slug": "humiliated"
-        },
-        {
           "title": "Angry",
           "slug": "angry"
         },
         {
           "title": "Embarrassed",
           "slug": "embarrassed"
+        },
+        {
+          "title": "Hurt",
+          "slug": "hurt"
+        },
+        {
+          "title": "Sad",
+          "slug": "sad"
         }
       ],
       "originalClaim": "Descriptive, curiosity-based dialogue can reduce defensiveness and improve problem solving. This need may motivate observing without labels, checking interpretations, and separating facts from evaluations. Non-judgmental exchange creates conditions for learning and repair.",
@@ -7547,10 +7489,6 @@
           "slug": "frustrated"
         },
         {
-          "title": "Pressured",
-          "slug": "pressured"
-        },
-        {
           "title": "Frightened",
           "slug": "frightened"
         },
@@ -7699,6 +7637,10 @@
         {
           "title": "Harassed",
           "slug": "harassed"
+        },
+        {
+          "title": "Pressured",
+          "slug": "pressured"
         }
       ],
       "feelings": [
@@ -7711,12 +7653,20 @@
           "slug": "frustrated"
         },
         {
-          "title": "Pressured",
-          "slug": "pressured"
-        },
-        {
           "title": "Frightened",
           "slug": "frightened"
+        },
+        {
+          "title": "Anxious",
+          "slug": "anxious"
+        },
+        {
+          "title": "Resentful",
+          "slug": "resentful"
+        },
+        {
+          "title": "Overwhelmed",
+          "slug": "overwhelmed"
         }
       ],
       "originalClaim": "Low-conflict conditions can allow resources to shift from defense to development. This need may motivate de-escalation, boundary agreements, and restorative practices. Peace enables sustained focus, trust, and growth.",
@@ -9796,8 +9746,8 @@
           "slug": "scared"
         },
         {
-          "title": "Pressured",
-          "slug": "pressured"
+          "title": "Overwhelmed",
+          "slug": "overwhelmed"
         }
       ],
       "needs": [
@@ -9996,10 +9946,6 @@
           "slug": "frustrated"
         },
         {
-          "title": "Humiliated",
-          "slug": "humiliated"
-        },
-        {
           "title": "Angry",
           "slug": "angry"
         },
@@ -10180,8 +10126,8 @@
           "slug": "frustrated"
         },
         {
-          "title": "Pressured",
-          "slug": "pressured"
+          "title": "Overwhelmed",
+          "slug": "overwhelmed"
         },
         {
           "title": "Frightened",
@@ -10248,6 +10194,50 @@
         {
           "title": "Space",
           "slug": "space"
+        }
+      ]
+    },
+    {
+      "title": "Humiliated",
+      "slug": "humiliated",
+      "feelings": [
+        {
+          "title": "Embarrassed",
+          "slug": "embarrassed"
+        },
+        {
+          "title": "Hurt",
+          "slug": "hurt"
+        },
+        {
+          "title": "Sad",
+          "slug": "sad"
+        },
+        {
+          "title": "Angry",
+          "slug": "angry"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        },
+        {
+          "title": "Accountability",
+          "slug": "accountability"
+        },
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Recognition",
+          "slug": "recognition"
+        },
+        {
+          "title": "Non-judgmental Communication",
+          "slug": "non-judgmental-communication"
         }
       ]
     },
