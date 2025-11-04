@@ -1345,6 +1345,35 @@ ${cards}
   writePage('index.html', html);
 }
 
+function renderMagnetLink({ type, slug, title, href, iconBasePath, indent = '' }) {
+  const safeSlug = typeof slug === 'string' ? slug.trim() : '';
+  if (!safeSlug) {
+    return '';
+  }
+  const label = escapeHtml(title || '');
+  const magnetId = `${type}-${safeSlug}`;
+  const classes = ['pill', 'magnet'];
+  const lines = [];
+  const useIcon = type === 'feelings';
+  if (useIcon) {
+    classes.push('magnet--with-icon');
+  }
+  lines.push(`${indent}<a class="${classes.join(' ')}" data-magnet-id="${magnetId}" href="${href}">`);
+  if (useIcon) {
+    const rawBase = typeof iconBasePath === 'string' ? iconBasePath.trim() : '';
+    const base = rawBase ? (rawBase.endsWith('/') ? rawBase : `${rawBase}/`) : '';
+    const iconHref = `${base}${safeSlug}.svg`;
+    lines.push(`${indent}  <span class="magnet__icon" aria-hidden="true">`);
+    lines.push(
+      `${indent}    <img src="${iconHref}" alt="" loading="lazy" decoding="async" width="120" height="60" />`,
+    );
+    lines.push(`${indent}  </span>`);
+  }
+  lines.push(`${indent}  <span class="magnet__label">${label}</span>`);
+  lines.push(`${indent}</a>`);
+  return lines.join('\n');
+}
+
 function renderCategory(type, items) {
   const title = type
     .replace(/-/g, ' ')
@@ -1365,14 +1394,22 @@ function renderCategory(type, items) {
         </div>`
       : '';
 
+  const iconBasePath =
+    type === 'feelings' ? `${basePathFromDepth(1)}icons/feelings/` : '';
   const magnets = items
-    .map(
-      (item) =>
-        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/">${escapeHtml(
-          item.title,
-        )}</a>`,
+    .map((item) =>
+      renderMagnetLink({
+        type,
+        slug: item.slug,
+        title: item.title,
+        href: `${item.slug}/`,
+        iconBasePath,
+        indent: '            ',
+      }),
     )
-    .join('');
+    .filter(Boolean)
+    .join('\n');
+  const magnetsBlock = magnets ? `\n${magnets}\n          ` : '\n';
 
   const searchAltLink =
     type === 'feelings'
@@ -1419,9 +1456,7 @@ function renderCategory(type, items) {
           </div>
         </div>
         <div class="magnet-board-wrapper">
-          <div class="pill-grid magnet-board" data-magnet-board>
-            ${magnets}
-          </div>
+          <div class="pill-grid magnet-board" data-magnet-board>${magnetsBlock}</div>
           <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
             <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
             <span class="magnet-play-toggle__track" aria-hidden="true">
@@ -2138,14 +2173,22 @@ function renderPillGroup(label, items, type) {
     return '';
   }
 
+  const basePath = '../../';
+  const iconBasePath = type === 'feelings' ? `${basePath}icons/feelings/` : '';
   const magnets = items
-    .map(
-      (item) =>
-        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="../../${type}/${item.slug}/">${escapeHtml(
-          item.title,
-        )}</a>`,
+    .map((item) =>
+      renderMagnetLink({
+        type,
+        slug: item.slug,
+        title: item.title,
+        href: `${basePath}${type}/${item.slug}/`,
+        iconBasePath,
+        indent: '          ',
+      }),
     )
-    .join('');
+    .filter(Boolean)
+    .join('\n');
+  const magnetsBlock = magnets ? `\n${magnets}\n        ` : '\n        ';
 
   return `<section class="pill-section magnet-section" aria-labelledby="${slugify(label)}-heading" data-magnet-root>
       <div class="magnet-section__header">
@@ -2153,9 +2196,7 @@ function renderPillGroup(label, items, type) {
         <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
       </div>
       <div class="magnet-board-wrapper">
-        <div class="pill-grid magnet-board" data-magnet-board>
-          ${magnets}
-        </div>
+        <div class="pill-grid magnet-board" data-magnet-board>${magnetsBlock}</div>
           <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
             <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
             <span class="magnet-play-toggle__track" aria-hidden="true">

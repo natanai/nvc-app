@@ -1178,7 +1178,18 @@ button.site-nav__magnet {
       </div>
       <div class="magnet-board-wrapper">
         <div class="pill-grid magnet-board" data-magnet-board>
-          <a class="pill magnet" data-magnet-id="feelings-sad" href="../../feelings/sad/">Sad</a><a class="pill magnet" data-magnet-id="feelings-angry" href="../../feelings/angry/">Angry</a>
+          <a class="pill magnet magnet--with-icon" data-magnet-id="feelings-sad" href="../../feelings/sad/">
+            <span class="magnet__icon" aria-hidden="true">
+              <img src="../../icons/feelings/sad.svg" alt="" loading="lazy" decoding="async" width="120" height="60" />
+            </span>
+            <span class="magnet__label">Sad</span>
+          </a>
+          <a class="pill magnet magnet--with-icon" data-magnet-id="feelings-angry" href="../../feelings/angry/">
+            <span class="magnet__icon" aria-hidden="true">
+              <img src="../../icons/feelings/angry.svg" alt="" loading="lazy" decoding="async" width="120" height="60" />
+            </span>
+            <span class="magnet__label">Angry</span>
+          </a>
         </div>
           <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
             <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
@@ -1196,7 +1207,9 @@ button.site-nav__magnet {
       </div>
       <div class="magnet-board-wrapper">
         <div class="pill-grid magnet-board" data-magnet-board>
-          <a class="pill magnet" data-magnet-id="needs-trust" href="../../needs/trust/">Trust</a>
+          <a class="pill magnet" data-magnet-id="needs-trust" href="../../needs/trust/">
+            <span class="magnet__label">Trust</span>
+          </a>
         </div>
           <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
             <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>

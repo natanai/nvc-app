@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Antagonistic</title>
+  <desc>Decorative magnet illustration generated for the feeling “Antagonistic”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-antagonistic" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-18 60 30)">
+      <stop offset="0%" stop-color="#BBDEFB" />
+      <stop offset="100%" stop-color="#64B5F6" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-antagonistic" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DAEDFD" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#DAEDFD" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-antagonistic)" stroke="#0F3D91" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#4B88B9" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-antagonistic)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <g opacity="0.82">
+      <circle cx="32" cy="22" r="8" fill="#EC407A" />
+      <circle cx="77" cy="42" r="6" fill="#F383A9" />
+    </g>
+  <path d="M18 28 C 36 22, 84 22, 94 28" fill="none" stroke="#5091C5" stroke-width="3.5" stroke-linecap="round" opacity="0.35" />
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Proud</title>
+  <desc>Decorative magnet illustration generated for the feeling “Proud”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-proud" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(14 60 30)">
+      <stop offset="0%" stop-color="#FFE0B2" />
+      <stop offset="100%" stop-color="#FB8C00" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-proud" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFEED5" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#FFEED5" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-proud)" stroke="#5C2B00" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#BC6900" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-proud)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <g opacity="0.82">
+      <circle cx="37" cy="19" r="9" fill="#26C6DA" />
+      <circle cx="86" cy="39" r="7" fill="#72DAE7" />
+    </g>
+  <ellipse cx="41" cy="41" rx="17" ry="8" fill="#9DE5EE" fill-opacity="0.28" />
+</svg>

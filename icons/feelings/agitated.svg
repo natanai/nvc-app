@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Agitated</title>
+  <desc>Decorative magnet illustration generated for the feeling “Agitated”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-agitated" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-3 60 30)">
+      <stop offset="0%" stop-color="#FFCCBC" />
+      <stop offset="100%" stop-color="#FF7043" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-agitated" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFE3DA" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#FFE3DA" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-agitated)" stroke="#7C2800" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#BF5432" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-agitated)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <g opacity="0.65">
+      <path d="M27 23 l54.99 0.96" stroke="#419B92" stroke-width="4" stroke-linecap="round" />
+      <path d="M33 31 l38.49 0.67" stroke="#9DD7D1" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 7" />
+    </g>
+  <path d="M18 27 C 36 21, 84 21, 94 27" fill="none" stroke="#CC5A36" stroke-width="3.5" stroke-linecap="round" opacity="0.35" />
+</svg>

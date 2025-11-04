@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Tired</title>
+  <desc>Decorative magnet illustration generated for the feeling “Tired”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-tired" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(26 60 30)">
+      <stop offset="0%" stop-color="#B2EBF2" />
+      <stop offset="100%" stop-color="#4DD0E1" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-tired" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D5F4F8" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#D5F4F8" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-tired)" stroke="#005260" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#3A9CA9" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-tired)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <g opacity="0.82">
+      <circle cx="37" cy="27" r="9" fill="#FF8A65" />
+      <circle cx="86" cy="45" r="7" fill="#FFB39B" />
+    </g>
+  <ellipse cx="41" cy="43" rx="17" ry="6" fill="#FFCABA" fill-opacity="0.28" />
+</svg>
