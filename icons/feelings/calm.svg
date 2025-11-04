@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Calm</title>
+  <desc>Decorative magnet illustration generated for the feeling “Calm”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-calm" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-7 60 30)">
+      <stop offset="0%" stop-color="#F8BBD0" />
+      <stop offset="100%" stop-color="#F06292" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-calm" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FBDAE5" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#FBDAE5" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-calm)" stroke="#7A1E4D" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#B44A6E" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-calm)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <g opacity="0.65">
+      <path d="M27 31 l61.08 22.23" stroke="#4E5BA3" stroke-width="4" stroke-linecap="round" />
+      <path d="M33 39 l42.76 15.56" stroke="#A5AEDC" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 4" />
+    </g>
+  <ellipse cx="30" cy="47" rx="17" ry="9" fill="#B6BCE3" fill-opacity="0.28" />
+</svg>

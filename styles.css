@@ -2232,6 +2232,35 @@ body.has-support-journal-open {
   transform: none;
 }
 
+.magnet--with-icon {
+  gap: clamp(0.35rem, 1.2vw, 0.65rem);
+  padding-inline-start: clamp(0.55rem, 1.3vw, 0.85rem);
+  padding-inline-end: clamp(0.55rem, 1.2vw, 0.9rem);
+}
+
+.magnet__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2.4rem, 8vw, 3rem);
+  height: clamp(1.6rem, 5vw, 2.2rem);
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
+.magnet__icon img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.magnet__label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.15;
+  text-align: left;
+}
+
 .body-cues-page {
   display: flex;
   flex-direction: column;

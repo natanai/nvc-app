@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Inspired</title>
+  <desc>Decorative magnet illustration generated for the feeling “Inspired”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-inspired" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(16 60 30)">
+      <stop offset="0%" stop-color="#B2EBF2" />
+      <stop offset="100%" stop-color="#4DD0E1" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-inspired" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D5F4F8" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#D5F4F8" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-inspired)" stroke="#005260" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#3A9CA9" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-inspired)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <path d="M28 34.25 Q 58 15, 88 34.25 L 82 44.25 Q 58 51.25, 34 44.25 Z" fill="#FF8A65" fill-opacity="0.68" stroke="#FFB9A3" stroke-width="2" stroke-linejoin="round" />
+  <path d="M20 16 C 36 12, 72 12, 88 18" fill="none" stroke="#D9F5F9" stroke-width="3" stroke-linecap="round" opacity="0.55" />
+</svg>

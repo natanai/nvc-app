@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" role="img">
+  <title>Feeling magnet for Powerless</title>
+  <desc>Decorative magnet illustration generated for the feeling “Powerless”.</desc>
+  <defs>
+    <linearGradient id="magnet-grad-powerless" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse" gradientTransform="rotate(24 60 30)">
+      <stop offset="0%" stop-color="#FFE0B2" />
+      <stop offset="100%" stop-color="#FB8C00" />
+    </linearGradient>
+    <linearGradient id="magnet-sheen-powerless" x1="24" y1="12" x2="96" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFEED5" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#FFEED5" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path d="M18 6h84a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12H18A12 12 0 0 1 6 42V18A12 12 0 0 1 18 6Z" fill="url(#magnet-grad-powerless)" stroke="#5C2B00" stroke-width="4" stroke-linejoin="round" />
+  <path d="M22 46c12 8 64 8 76 0" fill="none" stroke="#BC6900" stroke-width="5" stroke-linecap="round" opacity="0.28" />
+  <path d="M24 18c10-6 62-6 72 0" fill="none" stroke="url(#magnet-sheen-powerless)" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+  <path d="M24 34.5 Q 59 14, 94 34.5 L 88 44.1 Q 59 50.9, 30 44.1 Z" fill="#26C6DA" fill-opacity="0.68" stroke="#7DDDE9" stroke-width="2" stroke-linejoin="round" />
+  <path d="M18 22 C 36 16, 84 16, 94 22" fill="none" stroke="#C97000" stroke-width="3.5" stroke-linecap="round" opacity="0.35" />
+</svg>
