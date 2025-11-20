@@ -570,8 +570,7 @@ const waitForStableBoard = async (board, { fontsBarrier = true } = {}) => {
   }
 };
 
-const createMagnetStates = (board, elements) => {
-  const boardRect = board.getBoundingClientRect();
+const createMagnetStates = (board, elements, boardRect = board.getBoundingClientRect()) => {
   return elements.map((element) => {
     const rect = element.getBoundingClientRect();
     const styles = window.getComputedStyle(element);
@@ -1280,6 +1279,9 @@ const enterSearchMode = (state) => {
 
 const exitSearchMode = (state) => {
   if (!state || !state.searchActive) {
+    if (state) {
+      state.lastSearchQuery = '';
+    }
     if (state?.searchResults) {
       state.searchResults.hidden = true;
     }
@@ -1293,6 +1295,7 @@ const exitSearchMode = (state) => {
     return;
   }
   state.searchActive = false;
+  state.lastSearchQuery = '';
   if (state.root) {
     state.root.removeAttribute('data-magnet-search-active');
   }
@@ -1386,10 +1389,15 @@ const applySearchQuery = (state, queryRaw) => {
   }
   const query = typeof queryRaw === 'string' ? queryRaw.trim() : '';
   if (!query) {
+    state.lastSearchQuery = '';
     exitSearchMode(state);
     return;
   }
   const normalized = query.toLocaleLowerCase();
+  if (state.lastSearchQuery === normalized) {
+    return;
+  }
+  state.lastSearchQuery = normalized;
   const matches = state.magnets.filter((magnet) => {
     if (!magnet || typeof magnet.searchValue !== 'string') {
       return false;
@@ -1447,7 +1455,7 @@ const initializeBoard = async (root, index) => {
   });
 
   const boardRect = await waitForStableBoard(board, { fontsBarrier: !fastInit });
-  const measured = createMagnetStates(board, magnetElements);
+  const measured = createMagnetStates(board, magnetElements, boardRect);
   const boardWrapper = root.querySelector('.magnet-board-wrapper');
   const searchContainer = root.querySelector('[data-magnet-search]');
   const searchInput = searchContainer?.querySelector('[data-magnet-search-input]');
@@ -1491,6 +1499,7 @@ const initializeBoard = async (root, index) => {
     searchResults,
     searchCount,
     searchList,
+    lastSearchQuery: '',
     storageKey: resolvedStorageKey,
     magnets: measured,
     magnetMap: new Map(),
