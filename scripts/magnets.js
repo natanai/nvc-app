@@ -63,6 +63,8 @@ const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
+const FEELINGS_LAYOUT_GAP_X = 8;
+const FEELINGS_LAYOUT_GAP_Y = 10;
 const BOARD_PADDING = 16;
 const CLICK_SUPPRESS_WINDOW = 150;
 const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
@@ -102,6 +104,33 @@ const clamp = (value, min, max) => {
   if (value < min) return min;
   if (value > max) return max;
   return value;
+};
+
+const parseGapValue = (value) => {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+};
+
+const resolveLayoutGaps = (root, magnets = []) => {
+  const customX = parseGapValue(root?.dataset?.magnetGapX);
+  const customY = parseGapValue(root?.dataset?.magnetGapY);
+  if (customX != null || customY != null) {
+    return {
+      x: customX ?? LAYOUT_GAP_X,
+      y: customY ?? LAYOUT_GAP_Y,
+    };
+  }
+
+  const allFeelings = magnets.length > 0 && magnets.every((magnet) => {
+    const id = magnet?.id || magnet?.dataset?.magnetId || magnet?.element?.dataset?.magnetId || '';
+    return typeof id === 'string' && id.startsWith('feelings-');
+  });
+
+  if (allFeelings) {
+    return { x: FEELINGS_LAYOUT_GAP_X, y: FEELINGS_LAYOUT_GAP_Y };
+  }
+
+  return { x: LAYOUT_GAP_X, y: LAYOUT_GAP_Y };
 };
 
 const fontsReady = typeof document !== 'undefined' && document.fonts && document.fonts.ready
@@ -948,8 +977,8 @@ const restoreLayoutFromPercentages = (state, { persist = false } = {}) => {
 const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   console.info('[magnets] reseed CALLED', 'applyRowPackedLayout');
   const width = Math.max(state.boardWidth || 0, 1);
-  const startX = LAYOUT_GAP_X;
-  const startY = LAYOUT_GAP_Y;
+  const startX = state.layoutGapX || LAYOUT_GAP_X;
+  const startY = state.layoutGapY || LAYOUT_GAP_Y;
   let cursorX = startX;
   let cursorY = startY;
   let rowHeight = 0;
@@ -963,15 +992,15 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
     const marginBottom = magnet.marginBottom || 0;
     const footprintWidth = magnet.width + marginLeft + marginRight;
     const footprintHeight = magnet.height + marginTop + marginBottom;
-    if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
+    if (cursorX > startX && cursorX + footprintWidth + state.layoutGapX > width) {
       cursorX = startX;
-      cursorY += rowHeight + LAYOUT_GAP_Y;
+      cursorY += rowHeight + state.layoutGapY;
       rowHeight = 0;
     }
     const maxX = Math.max(width - magnet.width, 0);
     const x = clamp(cursorX + marginLeft, 0, maxX);
     const y = cursorY + marginTop;
-    cursorX += footprintWidth + LAYOUT_GAP_X;
+    cursorX += footprintWidth + state.layoutGapX;
     rowHeight = Math.max(rowHeight, footprintHeight);
     maxBottom = Math.max(maxBottom, y + magnet.height + marginBottom);
     return { magnet, x, y };
@@ -1215,6 +1244,7 @@ const setPlayState = (state, active) => {
       board: state.board,
       magnets: magnetElements,
       config: physicsConfig,
+      layoutGaps: { x: state.layoutGapX, y: state.layoutGapY },
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),
@@ -1492,6 +1522,7 @@ const initializeBoard = async (root, index) => {
   const searchResults = searchContainer?.querySelector('[data-magnet-search-results]');
   const searchCount = searchContainer?.querySelector('[data-magnet-search-count]');
   const searchList = searchContainer?.querySelector('[data-magnet-search-list]');
+  const layoutGaps = resolveLayoutGaps(root, magnetElements);
 
   measured.forEach((magnet) => {
     const label = (magnet.element.textContent || '').trim();
@@ -1529,6 +1560,8 @@ const initializeBoard = async (root, index) => {
     searchResults,
     searchCount,
     searchList,
+    layoutGapX: layoutGaps.x,
+    layoutGapY: layoutGaps.y,
     storageKey: resolvedStorageKey,
     magnets: measured,
     magnetMap: new Map(),
@@ -1652,8 +1685,8 @@ const initializeBoard = async (root, index) => {
       shouldSeed = true;
     } else if (newMagnets.length) {
       const width = Math.max(state.boardWidth || 0, 1);
-      const startX = LAYOUT_GAP_X;
-      const startY = maxBottom ? maxBottom + LAYOUT_GAP_Y : LAYOUT_GAP_Y;
+      const startX = state.layoutGapX || LAYOUT_GAP_X;
+      const startY = maxBottom ? maxBottom + state.layoutGapY : state.layoutGapY;
       let cursorX = startX;
       let cursorY = startY;
       let rowHeight = 0;
@@ -1664,9 +1697,9 @@ const initializeBoard = async (root, index) => {
         const marginBottom = magnet.marginBottom || 0;
         const footprintWidth = magnet.width + marginLeft + marginRight;
         const footprintHeight = magnet.height + marginTop + marginBottom;
-        if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
+        if (cursorX > startX && cursorX + footprintWidth + state.layoutGapX > width) {
           cursorX = startX;
-          cursorY += rowHeight + LAYOUT_GAP_Y;
+          cursorY += rowHeight + state.layoutGapY;
           rowHeight = 0;
         }
         const maxX = Math.max(width - magnet.width, 0);
@@ -1675,7 +1708,7 @@ const initializeBoard = async (root, index) => {
         magnet.x = x;
         magnet.y = y;
         setMagnetTransform(magnet);
-        cursorX += footprintWidth + LAYOUT_GAP_X;
+        cursorX += footprintWidth + state.layoutGapX;
         rowHeight = Math.max(rowHeight, footprintHeight);
         const bottom = magnet.y + magnet.height + marginBottom;
         maxBottom = Math.max(maxBottom, bottom);

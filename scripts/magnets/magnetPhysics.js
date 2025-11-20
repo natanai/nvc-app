@@ -19,6 +19,8 @@ const DRAG_DISTANCE_THRESHOLD = 6;
 const DRAG_TIME_THRESHOLD = 150;
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
+const FEELINGS_LAYOUT_GAP_X = 8;
+const FEELINGS_LAYOUT_GAP_Y = 10;
 const BOARD_PADDING = 24;
 const SHUFFLE_DEBOUNCE_MS = 500;
 const TILT_RESPONSE_RATE = 10;
@@ -69,6 +71,26 @@ const waitForAnimationFrames = async (count = 1) => {
 const delay = (ms) => new Promise((resolve) => {
   window.setTimeout(resolve, ms);
 });
+
+const resolveLayoutGaps = (magnets, overrides = {}) => {
+  const fallback = {
+    x: Number.isFinite(overrides?.x) ? Number(overrides?.x) : LAYOUT_GAP_X,
+    y: Number.isFinite(overrides?.y) ? Number(overrides?.y) : LAYOUT_GAP_Y,
+  };
+
+  if (overrides && (overrides.x != null || overrides.y != null)) {
+    return fallback;
+  }
+
+  const allFeelings =
+    magnets.length > 0 && magnets.every((magnet) => typeof magnet?.id === 'string' && magnet.id.startsWith('feelings-'));
+
+  if (allFeelings) {
+    return { x: FEELINGS_LAYOUT_GAP_X, y: FEELINGS_LAYOUT_GAP_Y };
+  }
+
+  return fallback;
+};
 
 const supportsDeviceOrientation = () => typeof window !== 'undefined' && 'DeviceOrientationEvent' in window;
 
@@ -728,8 +750,8 @@ const shuffleMagnets = async (state) => {
         [order[i], order[j]] = [order[j], order[i]];
       }
 
-      const startX = LAYOUT_GAP_X;
-      const startY = LAYOUT_GAP_Y;
+      const startX = state.layoutGapX;
+      const startY = state.layoutGapY;
       let cursorX = startX;
       let cursorY = startY;
       let rowHeight = 0;
@@ -743,15 +765,15 @@ const shuffleMagnets = async (state) => {
         const marginBottom = parsePx(styles.marginBottom);
         const footprintWidth = magnet.w + marginLeft + marginRight;
         const footprintHeight = magnet.h + marginTop + marginBottom;
-        if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
+        if (cursorX > startX && cursorX + footprintWidth + state.layoutGapX > width) {
           cursorX = startX;
-          cursorY += rowHeight + LAYOUT_GAP_Y;
+          cursorY += rowHeight + state.layoutGapY;
           rowHeight = 0;
         }
         const maxX = Math.max(width - magnet.w, 0);
         const x = clamp(cursorX + marginLeft, 0, maxX);
         const y = cursorY + marginTop;
-        cursorX += footprintWidth + LAYOUT_GAP_X;
+        cursorX += footprintWidth + state.layoutGapX;
         rowHeight = Math.max(rowHeight, footprintHeight);
         maxBottom = Math.max(maxBottom, y + magnet.h + marginBottom);
         return { magnet, x, y };
@@ -808,10 +830,13 @@ const shuffleMagnets = async (state) => {
 export function startPhysics(options) {
   const boardRect = options.board.getBoundingClientRect();
   const magnetStates = options.magnets.map((element) => measureMagnet(boardRect, element));
+  const layoutGaps = resolveLayoutGaps(magnetStates, options.layoutGaps);
   const config = { ...DEFAULT_CONFIG, ...options.config };
   const state = {
     board: options.board,
     magnets: magnetStates,
+    layoutGapX: layoutGaps.x,
+    layoutGapY: layoutGaps.y,
     config,
     animationFrame: null,
     lastTimestamp: null,
