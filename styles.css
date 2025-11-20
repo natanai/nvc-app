@@ -2248,6 +2248,9 @@ body.has-support-journal-open {
 }
 
 .magnet[data-magnet-id^='feelings-'] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   gap: 0.55rem;
   padding-inline-start: 0.85rem;
 }
@@ -2258,17 +2261,32 @@ body.has-support-journal-open {
   display: inline-block;
   width: 1.85rem;
   aspect-ratio: 1;
+  opacity: 0;
+}
+
+.magnet[data-magnet-id^='feelings-']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
   background-image: var(--magnet-icon);
-  background-size: contain;
+  background-size: 120%;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 2px 0 color-mix(in srgb, var(--outline) 18%, transparent));
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
 }
 
 @media (max-width: 520px) {
   .magnet[data-magnet-id^='feelings-']::before {
     width: 1.6rem;
   }
+}
+
+.magnet[data-magnet-id^='feelings-'] > * {
+  position: relative;
+  z-index: 1;
 }
 
 .body-cues-page {
