@@ -121,6 +121,14 @@ const parsePx = (value: string | null | undefined) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const parseOptionalPx = (value: string | null | undefined) => {
+  if (!value) {
+    return null;
+  }
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
 const createDriftVector = () => {
   let x = 0;
   let y = 0;
@@ -334,9 +342,24 @@ const notifyPositions = (state: InternalState) => {
 
 const measureMagnet = (boardRect: DOMRect, element: HTMLElement): InternalMagnetState => {
   const rect = element.getBoundingClientRect();
+  const styles = window.getComputedStyle(element);
+  const widthOverride =
+    parseOptionalPx(element.dataset.magnetFootprintWidth) ??
+    parseOptionalPx(styles.getPropertyValue('--magnet-footprint-width'));
+  const heightOverride =
+    parseOptionalPx(element.dataset.magnetFootprintHeight) ??
+    parseOptionalPx(styles.getPropertyValue('--magnet-footprint-height'));
+  const inlineExtra =
+    parseOptionalPx(element.dataset.magnetFootprintInlineExtra) ??
+    parseOptionalPx(styles.getPropertyValue('--magnet-footprint-inline-extra')) ??
+    0;
+  const blockExtra =
+    parseOptionalPx(element.dataset.magnetFootprintBlockExtra) ??
+    parseOptionalPx(styles.getPropertyValue('--magnet-footprint-block-extra')) ??
+    0;
   const id = element.dataset.magnetId || element.id || element.textContent || '';
-  const width = rect.width || element.offsetWidth || 0;
-  const height = rect.height || element.offsetHeight || 0;
+  const width = (widthOverride ?? (rect.width || element.offsetWidth || 0)) + inlineExtra;
+  const height = (heightOverride ?? (rect.height || element.offsetHeight || 0)) + blockExtra;
   const navHidden =
     element.hidden ||
     element.dataset.navHidden === 'true' ||

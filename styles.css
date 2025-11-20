@@ -2251,6 +2251,11 @@ body.has-support-journal-open {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  padding: 0.65rem 1.05rem;
+  padding-inline-start: calc(1.05rem + 1.65rem);
+  gap: 0.4rem;
+  --magnet-footprint-inline-extra: 18px;
+  --magnet-footprint-block-extra: 6px;
 }
 
 .magnet[data-magnet-id^='feelings-']::before {
