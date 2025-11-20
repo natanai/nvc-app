@@ -30,6 +30,34 @@ const NAV_PHYSICS_CONFIG = {
   tiltDriftScale: 0.2,
 };
 
+const navBoardStates = new Set();
+
+const ensureNavLayoutApi = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  if (!window.NVCNavLayout) {
+    window.NVCNavLayout = {};
+  }
+  return window.NVCNavLayout;
+};
+
+const flushPendingNavLayoutRequests = () => {
+  if (typeof window === 'undefined' || !Array.isArray(window.__pendingNavLayoutRequests)) {
+    return;
+  }
+  const pending = window.__pendingNavLayoutRequests.splice(0);
+  pending.forEach((task) => {
+    if (typeof task === 'function') {
+      try {
+        task();
+      } catch (error) {
+        console.error('[magnets] nav layout task failed', error);
+      }
+    }
+  });
+};
+
 const TILT_OPTIONS = [-2, -1, 0, 1, 2];
 const OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
 
@@ -966,6 +994,16 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   state.lastLayoutType = 'seed';
 };
 
+const reseedNavBoardLayouts = () => {
+  navBoardStates.forEach((state) => {
+    if (!state || !state.board) {
+      return;
+    }
+    remeasureMagnets(state);
+    applyRowPackedLayout(state, state.magnets, { persist: true });
+  });
+};
+
 const clampMagnetToBoard = (state, magnet) => {
   if (!magnet || magnet.navHidden) {
     return false;
@@ -1520,6 +1558,16 @@ const initializeBoard = async (root, index) => {
     searchWasPlaying: false,
     cleanupSearch: null,
   };
+
+  if (isNavBoardState(state)) {
+    const api = ensureNavLayoutApi();
+    if (api) {
+      api.reseed = reseedNavBoardLayouts;
+      api.reseedNavLayouts = reseedNavBoardLayouts;
+    }
+    navBoardStates.add(state);
+    flushPendingNavLayoutRequests();
+  }
 
   state.setClickSuppress = () => {
     state.suppressUntil = getNow() + CLICK_SUPPRESS_WINDOW;

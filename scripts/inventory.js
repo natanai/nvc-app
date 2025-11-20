@@ -865,8 +865,15 @@ function ensureNavItemElement(id) {
 
 function setNavItemVisibility(element, enabled) {
   if (!(element instanceof HTMLElement)) {
-    return;
+    return { becameVisible: false, visibilityChanged: false };
   }
+
+  const wasVisible = element.dataset?.navEnabled === 'true'
+    || (element.getAttribute('data-nav-hidden') !== 'true'
+      && element.getAttribute('aria-hidden') !== 'true'
+      && element.hidden !== true
+      && element.style.visibility !== 'hidden');
+
   if (enabled) {
     if (Object.prototype.hasOwnProperty.call(element.dataset, 'navStoredTabIndex')) {
       const stored = element.dataset.navStoredTabIndex;
@@ -898,6 +905,41 @@ function setNavItemVisibility(element, enabled) {
     element.style.visibility = 'hidden';
     element.style.pointerEvents = 'none';
   }
+
+  return { becameVisible: !wasVisible && enabled, visibilityChanged: wasVisible !== enabled };
+}
+
+function scheduleNavLayoutReseed() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const scheduleNavLayout = () => {
+    if (window.NVCNavLayout && typeof window.NVCNavLayout.reseed === 'function') {
+      window.NVCNavLayout.reseed();
+      return true;
+    }
+    return false;
+  };
+
+  const enqueueNavLayout = () => {
+    if (!Array.isArray(window.__pendingNavLayoutRequests)) {
+      window.__pendingNavLayoutRequests = [];
+    }
+    window.__pendingNavLayoutRequests.push(scheduleNavLayout);
+  };
+
+  const triggerNavLayout = () => {
+    if (!scheduleNavLayout()) {
+      enqueueNavLayout();
+    }
+  };
+
+  if (typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(triggerNavLayout);
+  } else {
+    window.setTimeout(triggerNavLayout, 0);
+  }
 }
 
 function applyNavSettings() {
@@ -907,6 +949,7 @@ function applyNavSettings() {
 
   const { order, enabled } = navState.settings;
   let hasSupplementalItems = false;
+  let navItemsBecameVisible = false;
   const fragment = document.createDocumentFragment();
 
   order.forEach((id) => {
@@ -916,7 +959,10 @@ function applyNavSettings() {
       return;
     }
     const isEnabled = definition.alwaysEnabled ? true : enabled[id] !== false;
-    setNavItemVisibility(element, isEnabled);
+    const { becameVisible } = setNavItemVisibility(element, isEnabled);
+    if (becameVisible) {
+      navItemsBecameVisible = true;
+    }
     element.dataset.navEnabled = isEnabled ? 'true' : 'false';
     if (definition.isSupplemental && isEnabled) {
       hasSupplementalItems = true;
@@ -939,6 +985,10 @@ function applyNavSettings() {
   }
 
   updateNavControlStates();
+
+  if (navItemsBecameVisible) {
+    scheduleNavLayoutReseed();
+  }
 }
 
 function setNavItemEnabled(id, enabled) {
