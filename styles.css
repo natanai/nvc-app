@@ -2248,26 +2248,30 @@ body.has-support-journal-open {
 }
 
 .magnet[data-magnet-id^='feelings-'] {
-  gap: 0.55rem;
-  padding-inline-start: 0.85rem;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+  z-index: 0;
+  padding: 0.6rem 1.1rem;
 }
 
 .magnet[data-magnet-id^='feelings-']::before {
   content: '';
-  flex: 0 0 auto;
-  display: inline-block;
-  width: 1.85rem;
-  aspect-ratio: 1;
+  position: absolute;
+  inset: -3px;
+  z-index: 0;
+  border-radius: inherit;
   background-image: var(--magnet-icon);
-  background-size: contain;
+  background-size: 190% 150%;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 2px 0 color-mix(in srgb, var(--outline) 18%, transparent));
+  filter: drop-shadow(0 3px 0 color-mix(in srgb, var(--outline) 18%, transparent));
 }
 
 @media (max-width: 520px) {
-  .magnet[data-magnet-id^='feelings-']::before {
-    width: 1.6rem;
+  .magnet[data-magnet-id^='feelings-'] {
+    padding: 0.55rem 1rem;
   }
 }
 
