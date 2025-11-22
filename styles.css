@@ -1850,14 +1850,12 @@ body.has-support-journal-open {
 
   .door-card__label {
     width: 100%;
-  }
-
-  .door-card__label {
     padding-inline: 0.35rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     line-height: 1.2;
+    text-align: center;
   }
 
   .door-card__support {
