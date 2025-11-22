@@ -1190,7 +1190,65 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar">
+              <div class="strategy-deck__toolbar-group">
+                <button type="button" class="shuffle-button strategy-deck__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              </div>
+              <button type="button" class="strategy-deck__show-all" data-strategy-show-all aria-controls="consideration-strategy-list" aria-expanded="false">Show all</button>
+            </div>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                  <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Call a friend</h3>
+                    <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="volunteering-acts-of-kindness" data-strategy-tags="consideration" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Volunteering / Acts of Kindness</h3>
+                    <p class="strategy-card__description">Tend to the life in others. Looks for ways that seem like trustworthy strategies to truly make life more wonderful for others. Sometimes we find that serving life in others turns out to serve life in us as well. Be careful to truly hear and identify what someone is needing before you try to do something you think they&#39;d enjoy as it can turn out to be especially discouraging to have tried to make life wonderful for someone only to realize they were needing something else altogether. Make space for them to share their needs and make a clear request or seek out volunteer work that are confident really is doing good work.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="ask-for-a-pause" data-strategy-tags="mutuality|consideration|space">
+                    <h3 class="strategy-card__title">Ask for a pause</h3>
+                    <p class="strategy-card__description">Say: “Could we take a 5-minute pause and return at :15?”</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="ask-for-channel-shift" data-strategy-tags="autonomy|clarity|consideration">
+                    <h3 class="strategy-card__title">Ask for channel shift</h3>
+                    <p class="strategy-card__description">Say: “Could we move this to text so I can think?”</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="three-breaths-before-reply" data-strategy-tags="consideration|peace">
+                    <h3 class="strategy-card__title">Three breaths before reply</h3>
+                    <p class="strategy-card__description">Take three breaths before sending your next message.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+            </div>
+          </div>
+
+          <div class="strategy-list" data-strategy-list id="consideration-strategy-list" data-hidden="true">
             
                   <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
                     <h3 class="strategy-card__title">Call a friend</h3>
@@ -1238,6 +1296,11 @@ button.site-nav__magnet {
                   </article>
                 
           </div>
+          <noscript>
+            <style>
+              #consideration-strategy-list[data-hidden='true'] { display: grid !important; }
+            </style>
+          </noscript>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1301,5 +1364,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-deck.js" type="module"></script>
   </body>
 </html>

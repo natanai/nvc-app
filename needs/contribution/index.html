@@ -1190,7 +1190,84 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar">
+              <div class="strategy-deck__toolbar-group">
+                <button type="button" class="shuffle-button strategy-deck__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              </div>
+              <button type="button" class="strategy-deck__show-all" data-strategy-show-all aria-controls="contribution-strategy-list" aria-expanded="false">Show all</button>
+            </div>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                  <article class="strategy-card" data-strategy-slug="listen" data-strategy-tags="contribution" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Listen</h3>
+                    <p class="strategy-card__description">Listen to someone speak and before you answer, try to get in touch with their underlying need first. Often I find when the help I offer doesn&#39;t *actually help* my need for contribution is frustrated. Try to avoid offering help until it&#39;s be explicitly requested. Instead, listen for their underlying need and try to connect to that.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="share-your-strategies" data-strategy-tags="need-for-all-living-things-to-flourish|contribution" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Share your strategies!</h3>
+                    <p class="strategy-card__description">No one likes unsolicited advise (unfortunately), but you can share your strategies here for others to find when they are looking for them ;)
+It would make our lives so much more wonderful if you did!</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Play a video game</h3>
+                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="request-a-clear-request" data-strategy-tags="contribution" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Request a clear request</h3>
+                    <p class="strategy-card__description">Consider asking someone to share a vulnerable and specific request with you? Call a friend or loved one and vulnerably share that you really are just wanting to make life wonderful for them but you&#39;re unsure how. Make clear that you are looking for requests that leave out all ambiguity. Ask if they would share what needs are alive in them and imagine ways you could contribute to *one* of them.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="charity-work" data-strategy-tags="contribution" data-first-name="Nat" data-location="Missouri">
+                    <h3 class="strategy-card__title">Charity work</h3>
+                    <p class="strategy-card__description">Consider looking for charity work in your area. Find a soup kitchen for the homeless or a local nonprofit doing work you believe in. Even just walking along picking up trash truly does make life more wonderful for your entire community - even if only in some small and sacred way.</p>
+                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="kind-comment-online" data-strategy-tags="contribution|community">
+                    <h3 class="strategy-card__title">Kind comment online</h3>
+                    <p class="strategy-card__description">Leave a brief, sincere encouragement on a post.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+                  <article class="strategy-card" data-strategy-slug="name-one-help-to-ask" data-strategy-tags="support|mutuality|contribution">
+                    <h3 class="strategy-card__title">Name one help to ask</h3>
+                    <p class="strategy-card__description">Write a concrete, doable request you could ask someone this week.</p>
+                    
+                    <div class="strategy-card__actions strategy-card__actions--stacked">
+                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                    </div>
+                  </article>
+                
+            </div>
+          </div>
+
+          <div class="strategy-list" data-strategy-list id="contribution-strategy-list" data-hidden="true">
             
                   <article class="strategy-card" data-strategy-slug="listen" data-strategy-tags="contribution" data-first-name="Nat" data-location="Missouri">
                     <h3 class="strategy-card__title">Listen</h3>
@@ -1257,6 +1334,11 @@ It would make our lives so much more wonderful if you did!</p>
                   </article>
                 
           </div>
+          <noscript>
+            <style>
+              #contribution-strategy-list[data-hidden='true'] { display: grid !important; }
+            </style>
+          </noscript>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1320,5 +1402,6 @@ It would make our lives so much more wonderful if you did!</p>
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-deck.js" type="module"></script>
   </body>
 </html>
