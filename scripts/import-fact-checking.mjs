@@ -260,6 +260,30 @@ async function restoreObservationGuide() {
   console.log("• restored data/observation-guide.json from fact-checking/observation-guide.csv");
 }
 
+async function restorePoems() {
+  const rows = await readCsvFile("poems.csv");
+  const chunks = rows.map((row) => {
+    const title = row.title?.trim();
+    const poemQuote = row.poemQuote || "";
+    const poemUrl = row.poemUrl?.trim();
+    if (!title) return "";
+
+    const lines = [title];
+    if (poemQuote) {
+      lines.push(...poemQuote.split(/\n/));
+    }
+    if (poemUrl) {
+      lines.push("", poemUrl);
+    }
+    lines.push("", "-");
+    return lines.join("\n");
+  });
+
+  const content = chunks.filter(Boolean).join("\n\n");
+  await fs.writeFile(path.join(DATA_DIR, "poems_formatted.txt"), `${content}\n`);
+  console.log("• restored data/poems_formatted.txt from fact-checking/poems.csv");
+}
+
 async function copyCsvBack(name, targetPath) {
   const source = path.join(INPUT_DIR, name);
   await fs.access(source);
@@ -273,7 +297,6 @@ async function run() {
   await copyCsvBack("Feelings.csv", path.join(DATA_DIR, "Feelings.csv"));
   await copyCsvBack("Faux Feelings.csv", path.join(DATA_DIR, "Faux Feelings.csv"));
   await copyCsvBack("Strategies.csv", path.join(DATA_DIR, "Strategies.csv"));
-  await copyCsvBack("color-palettes.csv", path.join(DATA_DIR, "color-palettes.csv"));
   await copyCsvBack("citations.csv", path.join(EVIDENCE_DIR, "citations.csv"));
   console.log("• copied core CSVs and citations back into place");
 
@@ -285,6 +308,7 @@ async function run() {
   await restoreObservationModules();
   await restoreDetectorStats();
   await restoreObservationGuide();
+  await restorePoems();
 
   console.log("Fact-checking spreadsheets applied. Re-run npm run build:data && npm run build:pages to regenerate the site.");
 }

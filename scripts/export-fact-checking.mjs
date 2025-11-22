@@ -117,6 +117,58 @@ function flattenReverseInference(data) {
   return rows;
 }
 
+function parseFormattedPoems(text) {
+  const lines = text.split(/\r?\n/);
+  const entries = [];
+  let current = null;
+
+  const finishCurrent = () => {
+    if (!current) return;
+    const rawQuote = current.lines.join("\n").replace(/[\s\u00A0]+$/u, "");
+    entries.push({
+      title: current.title.trim(),
+      poemQuote: rawQuote,
+      poemUrl: current.url.trim()
+    });
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (!current) {
+      if (!trimmed) continue;
+      current = { title: trimmed, lines: [], url: "" };
+      continue;
+    }
+
+    if (!trimmed && !current.url) {
+      current.lines.push("");
+      continue;
+    }
+
+    if (!trimmed && current.url) {
+      continue;
+    }
+
+    if (trimmed === "-") {
+      finishCurrent();
+      continue;
+    }
+
+    if (!current.url && /^https?:\/\//i.test(trimmed)) {
+      current.url = trimmed;
+      continue;
+    }
+
+    current.lines.push(line.replace(/\r$/, ""));
+  }
+
+  finishCurrent();
+
+  return entries;
+}
+
 function flattenBodyRegions(regions) {
   const rows = [];
   for (const region of regions) {
@@ -226,9 +278,15 @@ async function run() {
   await copyCsv(path.join(DATA_DIR, "Feelings.csv"), "Feelings.csv");
   await copyCsv(path.join(DATA_DIR, "Faux Feelings.csv"), "Faux Feelings.csv");
   await copyCsv(path.join(DATA_DIR, "Strategies.csv"), "Strategies.csv");
-  await copyCsv(path.join(DATA_DIR, "color-palettes.csv"), "color-palettes.csv");
   await copyCsv(path.join(EVIDENCE_DIR, "citations.csv"), "citations.csv");
   console.log("• copied core CSV sources and citations");
+
+  const poemText = await fs.readFile(path.join(DATA_DIR, "poems_formatted.txt"), "utf8");
+  await exportJsonCsv(
+    "poems_formatted.txt",
+    parseFormattedPoems(poemText),
+    "poems.csv"
+  );
 
   const reverseInference = JSON.parse(await fs.readFile(path.join(DATA_DIR, "reverse-inference.json"), "utf8"));
   await exportJsonCsv("reverse-inference.json", flattenReverseInference(reverseInference), "reverse-inference.csv");
