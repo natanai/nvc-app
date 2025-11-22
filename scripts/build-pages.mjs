@@ -1365,14 +1365,13 @@ function renderCategory(type, items) {
         </div>`
       : '';
 
-  const magnets = items
-    .map(
-      (item) =>
-        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/">${escapeHtml(
-          item.title,
-        )}</a>`,
-    )
-    .join('');
+  // Wrap each label in a <span class="magnet__label"> so CSS can style it.
++ const magnets = items
++   .map((item) => {
++     const label = escapeHtml(item.title);
++     return `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/"><span class="magnet__label">${label}</span></a>`;
++   })
++   .join('');
 
   const searchAltLink =
     type === 'feelings'
