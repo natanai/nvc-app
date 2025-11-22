@@ -3576,7 +3576,7 @@ button.site-nav__magnet {
                     </span>
                   </div>
                   <p id="observation-detection-note" class="observation-editor__match-summary-note">
-                    We’ll scan for cues as you type. Load possible matches to review up to 4 nearby needs with aligned feelings.
+                    We’ll scan for cues as you type. Load possible matches to open exact matches and nearby needs with aligned feelings.
                   </p>
                   <p
                     id="observation-detection-coverage"
@@ -3601,19 +3601,28 @@ button.site-nav__magnet {
                     No matches yet.
                   </span>
                 </div>
+                <button
+                  id="observation-journal-convert"
+                  class="observation-editor__next-link observation-editor__next-link--cta"
+                  type="button"
+                  aria-hidden="true"
+                  hidden
+                >
+                  Convert into journal entry
+                </button>
               </div>
               <div class="observation-editor__next-prompts">
-                <span class="observation-editor__next-label">Next steps:</span>
+                <span class="observation-editor__next-label">Keep going:</span>
                 <div class="observation-editor__next-actions">
                   <a
                     id="observation-next-feelings"
                     class="observation-editor__next-link"
                     href="../feelings/"
                   >
-                    Next: Feelings magnets
+                    Feelings magnets
                   </a>
                   <a id="observation-next-needs" class="observation-editor__next-link" href="../needs/">
-                    Next: Needs magnets
+                    Needs magnets
                   </a>
                 </div>
               </div>

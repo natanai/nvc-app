@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderValidityStatus();
   renderDetectionStatus();
   renderSuggestions();
+  renderJournalConversion();
   scheduleAnalysis('init', { immediate: true });
 
   Promise.all([
@@ -170,6 +171,14 @@ function bind() {
   if (clearButton) {
     clearButton.addEventListener('click', () => {
       handleClear();
+    });
+  }
+
+  const journalConvert = document.getElementById('observation-journal-convert');
+  if (journalConvert) {
+    journalConvert.addEventListener('click', event => {
+      event.preventDefault();
+      convertObservationToJournal();
     });
   }
 
@@ -915,6 +924,7 @@ function finalizeObservation() {
   }
   renderPanels();
   renderSuggestions();
+  renderJournalConversion();
 }
 
 function renderPanels() {
@@ -1661,10 +1671,52 @@ function handleSubmit() {
     setValidityStatus('invalid', 'Keep refining.');
     renderHighlight();
   } else {
-    setValidityStatus('valid', 'Observation saved.');
+    setValidityStatus('valid', 'Observation ready to convert.');
   }
 
   finalizeObservation();
+}
+
+function renderJournalConversion() {
+  const convertButton = document.getElementById('observation-journal-convert');
+  if (!convertButton) {
+    return;
+  }
+  const hasSubmission = Boolean((state.lastSubmitted || '').trim());
+  const isReady = hasSubmission && state.validityStatus === 'valid';
+  convertButton.hidden = !isReady;
+  convertButton.tabIndex = isReady ? 0 : -1;
+  convertButton.ariaHidden = isReady ? 'false' : 'true';
+  convertButton.disabled = !isReady;
+}
+
+function convertObservationToJournal() {
+  const convertButton = document.getElementById('observation-journal-convert');
+  const notes = (state.lastSubmitted || '').trim();
+  if (!convertButton || !notes) {
+    return;
+  }
+  convertButton.disabled = true;
+  convertButton.textContent = 'Opening journal…';
+
+  const journalButton = document.querySelector('[data-support-journal-open]');
+  const applyNotesToJournal = () => {
+    const notesField = document.querySelector('[data-journal-notes]');
+    if (notesField instanceof HTMLTextAreaElement) {
+      notesField.value = notes;
+      notesField.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  };
+
+  applyNotesToJournal();
+  if (journalButton instanceof HTMLElement) {
+    journalButton.click();
+  }
+  window.setTimeout(() => {
+    applyNotesToJournal();
+    convertButton.textContent = 'Convert into journal entry';
+    convertButton.disabled = false;
+  }, 200);
 }
 
 function handleClear() {
@@ -1688,6 +1740,7 @@ function handleClear() {
   setValidityStatus('idle');
   renderPanels();
   renderSuggestions();
+  renderJournalConversion();
 }
 
 function scheduleAnalysis(reason, options = {}) {
@@ -1828,6 +1881,7 @@ function renderValidityStatus() {
   const status = state.validityStatus || 'idle';
   container.setAttribute('data-state', status);
   label.textContent = state.validityMessage || defaultValidityMessage(status);
+  renderJournalConversion();
 }
 
 function autoResolveValidity() {
@@ -1858,7 +1912,7 @@ function autoResolveValidity() {
 function defaultValidityMessage(status) {
   switch (status) {
     case 'valid':
-      return 'Observation saved.';
+      return 'Observation ready to convert.';
     case 'invalid':
       return 'Needs more detail.';
     case 'error':
@@ -2028,7 +2082,7 @@ function renderDetectionSummary() {
 
   if (note) {
     const limitMessage = nearLimit
-      ? `We surface up to ${nearLimit} nearby needs with aligned feelings when you load possible matches.`
+      ? `Load possible matches to review up to ${nearLimit} nearby needs with aligned feelings.`
       : '';
     let message = '';
     switch (status) {
@@ -2140,7 +2194,7 @@ function renderDetectionSummary() {
       if (totalLibraryCount > 0 && coveragePercent) {
         message += ` (~${coveragePercent}% of our feelings library)`;
       }
-      feelingsCoverage.textContent = `${message}. We also surface satisfied-state feelings when they overlap with those needs.`;
+      feelingsCoverage.textContent = `${message}. Overlapping satisfied-state feelings are included.`;
       feelingsCoverage.removeAttribute('hidden');
     } else {
       feelingsCoverage.textContent = '';
