@@ -78,6 +78,8 @@ const OBSERVATION_GUIDELINE_NOTE =
   'Need a refresher? Visit the <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a> below for principles, steps, and examples.';
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
+const OBSERVATION_EXAMPLE_TEXT =
+  "Last Thursday, two days after my partner and I had agreed to have dinner together at home at 7 p.m., I arrived back at the apartment at 6:50 p.m. and started setting the table. At 7:15 p.m. my partner was not home yet, and at 7:20 p.m. I saw a message on my phone sent at 6:55 p.m. that said, 'I decided to stay late at work and will eat here tonight.'";
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
@@ -149,6 +151,7 @@ function bind() {
       }
     });
     textarea.addEventListener('scroll', () => {
+      syncObservationHighlightScroll();
       renderHighlightDetails(null);
     });
     textarea.addEventListener('blur', () => {
@@ -200,6 +203,19 @@ function bind() {
     });
   }
 
+  const exampleToggle = document.getElementById('observation-example-toggle');
+  if (exampleToggle) {
+    exampleToggle.addEventListener('click', () => toggleObservationExample());
+  }
+  const exampleApply = document.getElementById('observation-example-apply');
+  if (exampleApply) {
+    exampleApply.addEventListener('click', () => applyObservationExample());
+  }
+  toggleObservationExample(false);
+
+  bindGuideOpener();
+  updateNextNavigationLinks();
+
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -214,6 +230,8 @@ function bind() {
     });
     highlightPopoverBound = true;
   }
+
+  syncObservationHighlightScroll();
 }
 
 function updateObservationText(value, options = {}) {
@@ -240,6 +258,7 @@ function updateObservationText(value, options = {}) {
   state.fallback = createFallbackState();
   scheduleAnalysis(options.reason || 'rewrite', { immediate: options.immediate !== false });
   renderSuggestions();
+  syncObservationHighlightScroll();
 
   if (textarea && options.focus !== false) {
     requestAnimationFrame(() => {
@@ -250,6 +269,27 @@ function updateObservationText(value, options = {}) {
       }
     });
   }
+}
+
+function toggleObservationExample(forceOpen) {
+  const container = document.getElementById('observation-example');
+  const toggle = document.getElementById('observation-example-toggle');
+  if (!container || !toggle) {
+    return;
+  }
+  const shouldShow = typeof forceOpen === 'boolean' ? forceOpen : container.hasAttribute('hidden');
+  if (shouldShow) {
+    container.removeAttribute('hidden');
+    toggle.setAttribute('aria-expanded', 'true');
+  } else {
+    container.setAttribute('hidden', 'hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function applyObservationExample() {
+  toggleObservationExample(true);
+  updateObservationText(OBSERVATION_EXAMPLE_TEXT, { reason: 'example', immediate: true });
 }
 
 function analyze(raw, options = {}) {
@@ -290,6 +330,7 @@ function analyze(raw, options = {}) {
   renderHighlight();
   renderDetectionStatus();
   renderObservationFormula();
+  renderObservationSlotStatus(state.formula);
   autoResolveValidity();
 }
 
@@ -1104,7 +1145,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Evaluation words',
       lint.evaluationMarkers,
-      'Swap judgments for what a camera would capture (quotes, actions, counts).',
+      'I’m seeing judgment words. Try naming what a camera or microphone would catch instead.',
     );
     if (entry) {
       issues.push(entry);
@@ -1114,7 +1155,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Interpretations to revisit',
       lint.agentiveMarkers,
-      'Stick with what happened without adding cause-and-effect language.',
+      'Let’s keep to what happened without guessing cause and effect.',
     );
     if (entry) {
       issues.push(entry);
@@ -1134,7 +1175,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Story words',
       lint.fauxFeelings,
-      'Name the observable action or quote instead of story shorthand.',
+      'Try describing the specific action or quote instead of story shorthand.',
     );
     if (entry) {
       issues.push(entry);
@@ -1144,7 +1185,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Feeling words',
       lint.feelings,
-      'Save feelings for the next step; the observation just covers what happened.',
+      'Feelings can come next—this line is just about what happened.',
     );
     if (entry) {
       issues.push(entry);
@@ -1154,7 +1195,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Need words',
       lint.needs,
-      'Needs come after the observation—focus on the concrete moment first.',
+      'Needs can be named afterward; here we’re just noting the concrete moment.',
     );
     if (entry) {
       issues.push(entry);
@@ -1910,29 +1951,35 @@ function renderDetectionStatus() {
   let message = 'Warming up the language detector…';
   switch (status) {
     case 'idle':
-      message = flagged ? 'Flagged language detected. Language detector ready.' : 'Language detector ready.';
+      message = flagged
+        ? 'We noticed flagged language. The detector is ready when you are.'
+        : 'Language helper ready when you are.';
       break;
     case 'short':
       message = flagged
-        ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words to start matching.`
-        : `Add at least ${DETECTION_MIN_WORDS} words to start matching.`;
+        ? `We noticed flagged language. Add about ${DETECTION_MIN_WORDS} more words so we can look for cues.`
+        : `Add about ${DETECTION_MIN_WORDS} more words so we can look for cues.`;
       break;
     case 'none':
-      message = flagged ? 'Flagged language detected. No cue matches detected yet.' : 'No cue matches detected yet.';
+      message = flagged
+        ? 'We noticed flagged language. I’m not seeing timing or place cues yet—try adding when and where.'
+        : 'I’m not seeing timing or place cues yet—try adding when and where.';
       break;
     case 'near': {
-      message = flagged ? 'Flagged language detected. Near matches detected.' : 'Near matches detected.';
+      message = flagged
+        ? 'Flagged language detected. We have a few close matches—add a bit more detail to tighten it up.'
+        : 'We have a few close matches—add a bit more detail to tighten it up.';
       break;
     }
     case 'match':
       if (flagged) {
         message = state.detectionMatches > 1
-          ? `Flagged language detected. ${state.detectionMatches} exact cue matches detected.`
-          : 'Flagged language detected. Exact cue match detected.';
+          ? `Flagged language detected. ${state.detectionMatches} exact cue matches ready to open.`
+          : 'Flagged language detected. An exact cue match is ready to open.';
       } else {
         message = state.detectionMatches > 1
-          ? `${state.detectionMatches} exact cue matches detected.`
-          : 'Exact cue match detected.';
+          ? `${state.detectionMatches} exact cue matches ready to open.`
+          : 'An exact cue match is ready to open.';
       }
       break;
     default:
@@ -2137,6 +2184,7 @@ function renderObservationFormula() {
   host.innerHTML = `${currentMarkup}${ghostMarkup}`;
   host.removeAttribute('hidden');
   renderObservationFormulaGuidance(missing);
+  renderObservationSlotStatus(formula);
 }
 
 function renderObservationFormulaGuidance(missingEntries) {
@@ -2149,6 +2197,30 @@ function renderObservationFormulaGuidance(missingEntries) {
     host.innerHTML = '';
     host.setAttribute('hidden', 'hidden');
   }
+}
+
+function renderObservationSlotStatus(formulaState) {
+  const host = document.getElementById('observation-slot-row');
+  if (!host) {
+    return;
+  }
+  const formula = formulaState || state.formula || createEmptyObservationFormulaState();
+  const slots = formula?.slots || {};
+  const items = host.querySelectorAll('[data-slot-id]');
+  items.forEach(item => {
+    if (!item || !item.dataset) {
+      return;
+    }
+    const slotId = item.dataset.slotId;
+    const satisfied = Boolean(slots?.[slotId]?.satisfied);
+    const optional = slotId === 'measure';
+    const state = satisfied ? 'complete' : optional ? 'optional' : 'missing';
+    item.setAttribute('data-state', state);
+    const status = item.querySelector('[data-slot-status]');
+    if (status) {
+      status.textContent = satisfied ? 'Complete' : optional ? 'Optional' : 'Missing';
+    }
+  });
 }
 
 function buildObservationFormulaGuidanceList(entries) {
@@ -2260,6 +2332,7 @@ function renderHighlight() {
   if (host) {
     host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...okRanges, ...cueRanges]);
   }
+  syncObservationHighlightScroll();
 
   const positiveRanges = okRanges
     .map(range => {
@@ -2282,6 +2355,61 @@ function renderHighlight() {
     ? state.positiveHighlightRanges.find(range => buildHighlightKey(range) === state.activeHighlightKey)
     : null;
   renderHighlightDetails(activeRange || null);
+}
+
+function syncObservationHighlightScroll() {
+  syncObservationHighlightLayout();
+  const textarea = document.getElementById('observation-text');
+  const highlight = document.getElementById('observation-highlight');
+  const formula = document.getElementById('observation-formula');
+  const scrollTop = textarea ? textarea.scrollTop : 0;
+
+  const applyTransform = element => {
+    if (!element) {
+      return;
+    }
+    if (scrollTop) {
+      element.style.transform = `translateY(${-scrollTop}px)`;
+    } else {
+      element.style.transform = '';
+    }
+  };
+
+  applyTransform(highlight);
+  applyTransform(formula);
+}
+
+function syncObservationHighlightLayout() {
+  const textarea = document.getElementById('observation-text');
+  if (!textarea || typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+    return;
+  }
+
+  const highlight = document.getElementById('observation-highlight');
+  const formula = document.getElementById('observation-formula');
+  const layers = [highlight, formula].filter(Boolean);
+  if (!layers.length) {
+    return;
+  }
+
+  const styles = window.getComputedStyle(textarea);
+  const paddingTop = styles.paddingTop || '';
+  const paddingBottom = styles.paddingBottom || '';
+  const paddingLeft = styles.paddingLeft || '';
+  const paddingRightPx = parseFloat(styles.paddingRight || '0');
+  const scrollbarWidth = Math.max(0, (textarea.offsetWidth || 0) - (textarea.clientWidth || 0));
+  const paddingRight = `${paddingRightPx + scrollbarWidth}px`;
+  const height = Math.max(textarea.scrollHeight || 0, textarea.clientHeight || 0);
+
+  layers.forEach(layer => {
+    layer.style.height = `${height}px`;
+    layer.style.paddingTop = paddingTop;
+    layer.style.paddingBottom = paddingBottom;
+    layer.style.paddingLeft = paddingLeft;
+    layer.style.paddingRight = paddingRight;
+    layer.style.lineHeight = styles.lineHeight || '';
+    layer.style.font = styles.font || '';
+  });
 }
 
 function inspectHighlightAtCursor(textarea) {
@@ -3008,6 +3136,56 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function bindGuideOpener() {
+  const triggers = document.querySelectorAll('[data-open-observation-guide]');
+  if (!triggers.length) {
+    return;
+  }
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', event => {
+      event.preventDefault();
+      openObservationGuide();
+    });
+  });
+}
+
+function openObservationGuide() {
+  const guide = document.getElementById('observation-guide');
+  if (!guide) {
+    return;
+  }
+  guide.setAttribute('open', 'open');
+  if (typeof guide.scrollIntoView === 'function') {
+    guide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const summary = guide.querySelector('summary');
+  if (summary && typeof summary.focus === 'function') {
+    summary.focus({ preventScroll: true });
+  }
+}
+
+function updateNextNavigationLinks() {
+  const setState = (linkId, magnetId) => {
+    const link = document.getElementById(linkId);
+    if (!link) {
+      return;
+    }
+    const magnet = document.querySelector(`[data-magnet-id="${magnetId}"]`);
+    const hidden = !magnet
+      || magnet.getAttribute('aria-hidden') === 'true'
+      || magnet.dataset.navHidden === 'true';
+    if (hidden) {
+      link.setAttribute('aria-disabled', 'true');
+      link.setAttribute('tabindex', '-1');
+    } else {
+      link.removeAttribute('aria-disabled');
+      link.removeAttribute('tabindex');
+    }
+  };
+  setState('observation-next-feelings', 'nav-feelings');
+  setState('observation-next-needs', 'nav-needs');
 }
 
 function bindGuideNavigation() {

@@ -763,9 +763,126 @@ button.site-nav__magnet {
     text-align: left;
   }
 
+  .observations-title {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    letter-spacing: 0.035em;
+    margin: 0;
+  }
+
   .observations-description {
     max-width: 65ch;
     margin: 0;
+  }
+
+  .observation-overview {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.25rem;
+    padding: clamp(1.2rem, 3vw, 1.8rem);
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: var(--radius-3xl);
+    background: color-mix(in srgb, var(--mint) 12%, #ffffff 92%);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--outline) 10%, transparent);
+    align-items: start;
+  }
+
+  @media (max-width: 720px) {
+    .observation-overview {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .observation-overview__title {
+    margin: 0;
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
+    letter-spacing: 0.035em;
+  }
+
+  .observation-overview__summary {
+    margin: 0;
+    color: color-mix(in srgb, var(--outline) 72%, transparent);
+  }
+
+  .observation-overview__why {
+    margin: 0.4rem 0 0;
+    color: color-mix(in srgb, var(--outline) 76%, transparent);
+  }
+
+  .observation-overview__slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .observation-overview__slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, #ffffff 90%, var(--mint) 18%);
+    border: 1px dashed color-mix(in srgb, var(--outline) 28%, transparent);
+    font-size: 0.95rem;
+  }
+
+  .observation-overview__actions {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: end;
+  }
+
+  .observation-overview__learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--ink) 6%, #ffffff 94%);
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 8%, transparent);
+  }
+
+  .observation-overview__learn-more:hover,
+  .observation-overview__learn-more:focus-visible {
+    background: color-mix(in srgb, var(--mint) 12%, #ffffff 88%);
+    border-color: color-mix(in srgb, var(--mint) 30%, transparent);
+  }
+
+  .observation-guide__summary {
+    display: block;
+  }
+
+  .observation-guide__summary-card {
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: var(--radius-3xl);
+    padding: clamp(1.15rem, 3vw, 1.6rem);
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--outline) 10%, transparent);
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .observation-guide__summary-eyebrow {
+    margin: 0;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.76rem;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
+  }
+
+  .observation-guide__summary-title {
+    margin: 0;
+    font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+    letter-spacing: 0.035em;
+  }
+
+  .observation-guide__summary-text {
+    margin: 0;
+    color: color-mix(in srgb, var(--outline) 72%, transparent);
   }
 
   .observation-guide {
@@ -1365,6 +1482,48 @@ button.site-nav__magnet {
     }
   }
 
+  .observation-editor__slot-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.6rem;
+    margin: 0 0 0.35rem;
+    padding: 0.4rem;
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
+    border: 1px dashed color-mix(in srgb, var(--outline) 22%, transparent);
+  }
+
+  .observation-editor__slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, #ffffff 92%, transparent);
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    min-height: 2.5rem;
+  }
+
+  .observation-editor__slot-indicator {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+    border: 2px solid color-mix(in srgb, var(--outline) 42%, transparent);
+    background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .observation-editor__slot-label {
+    font-weight: 600;
+    color: color-mix(in srgb, var(--outline) 90%, transparent);
+  }
+
+  .observation-editor__slot[data-state='complete'] .observation-editor__slot-indicator {
+    border-color: color-mix(in srgb, var(--mint) 60%, transparent);
+    background: color-mix(in srgb, var(--mint) 36%, #ffffff 64%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 40%, transparent);
+  }
+
   .observation-editor__status {
     display: grid;
     gap: 0.5rem;
@@ -1501,6 +1660,70 @@ button.site-nav__magnet {
     gap: 0.75rem;
   }
 
+  .observation-editor__example {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .observation-editor__example-toggle {
+    align-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
+    color: inherit;
+    font-weight: 600;
+  }
+
+  .observation-editor__example-toggle:hover,
+  .observation-editor__example-toggle:focus-visible {
+    background: color-mix(in srgb, var(--mint) 12%, #ffffff 88%);
+    border-color: color-mix(in srgb, var(--mint) 32%, transparent);
+  }
+
+  .observation-editor__example-body {
+    border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+    border-radius: var(--radius-xl);
+    padding: 0.75rem 0.9rem;
+    background: color-mix(in srgb, #ffffff 96%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 8%, transparent);
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .observation-editor__example-body[hidden] {
+    display: none;
+  }
+
+  .observation-editor__example-text {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .observation-editor__example-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .observation-editor__example-apply {
+    border: 1px solid color-mix(in srgb, var(--mint) 38%, transparent);
+    background: color-mix(in srgb, var(--mint) 24%, #ffffff 76%);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    color: color-mix(in srgb, var(--ink) 90%, transparent);
+  }
+
+  .observation-editor__example-apply:hover,
+  .observation-editor__example-apply:focus-visible {
+    background: color-mix(in srgb, var(--mint) 32%, #ffffff 68%);
+    border-color: color-mix(in srgb, var(--mint) 50%, transparent);
+  }
+
   .observation-editor__label {
     font-family: var(--font-display);
     font-size: 0.95rem;
@@ -1552,6 +1775,8 @@ button.site-nav__magnet {
     word-break: break-word;
     color: transparent;
     pointer-events: none;
+    height: 100%;
+    overflow: hidden;
     z-index: 1;
   }
 
@@ -2038,6 +2263,52 @@ button.site-nav__magnet {
     font-size: 0.9rem;
     color: color-mix(in srgb, var(--ink) 72%, transparent);
     max-width: 40ch;
+  }
+
+  .observation-editor__next-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.75rem;
+    align-items: center;
+    padding: 0.35rem 0;
+    border-top: 1px dashed color-mix(in srgb, var(--outline) 18%, transparent);
+    margin-top: 0.35rem;
+  }
+
+  .observation-editor__next-label {
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: color-mix(in srgb, var(--outline) 78%, transparent);
+  }
+
+  .observation-editor__next-actions {
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+
+  .observation-editor__next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--sky) 12%, #ffffff 88%);
+    border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+    text-decoration: none;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--ink) 90%, transparent);
+  }
+
+  .observation-editor__next-link[aria-disabled='true'] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .observation-editor__next-link:hover,
+  .observation-editor__next-link:focus-visible {
+    background: color-mix(in srgb, var(--sky) 18%, #ffffff 82%);
+    border-color: color-mix(in srgb, var(--sky) 30%, transparent);
   }
 
   .observation-editor__match-summary-row {
@@ -2996,6 +3267,58 @@ button.site-nav__magnet {
         </ol>
       </nav>
             <main id="main" class="page observations-page" role="main">
+        <header class="observations-header">
+          <h1 class="observations-title">Observations</h1>
+          <p class="observations-description">
+            Capture what you noticed in a moment without judgments or labels so it is easier to connect feelings and
+            needs later.
+          </p>
+        </header>
+
+        <section id="observation-overview" class="observation-overview" aria-labelledby="observation-overview-title">
+          <div class="observation-overview__content">
+            <h2 id="observation-overview-title" class="observation-overview__title">What is an Observation?</h2>
+            <p class="observation-overview__summary">
+              An observation is a plain description of what happened—what you saw or heard, where it occurred, and when it
+              took place.
+            </p>
+            <p class="observation-overview__summary">
+              Keeping to time/place/sensory details avoids judgments and makes it easier to talk about feelings and needs
+              afterward.
+            </p>
+            <p class="observation-overview__why">
+              <strong>Why try this?</strong> Concrete, time-and-place notes reduce misinterpretation and improve comprehension
+              <a
+                class="observation-overview__citation"
+                href="https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                [2]
+              </a>.
+              Putting what you noticed into words can also lower emotional intensity
+              <a
+                class="observation-overview__citation"
+                href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                [4]
+              </a>.
+            </p>
+            <div class="observation-overview__slots" role="list" aria-label="Observation ingredients">
+              <span class="observation-overview__slot" role="listitem">Time</span>
+              <span class="observation-overview__slot" role="listitem">Place</span>
+              <span class="observation-overview__slot" role="listitem">What you saw/heard</span>
+              <span class="observation-overview__slot" role="listitem">Measurement/quote (optional)</span>
+            </div>
+          </div>
+          <div class="observation-overview__actions">
+            <a class="observation-overview__learn-more" href="#observation-guide" data-open-observation-guide>
+              Learn more
+            </a>
+          </div>
+        </section>
 
         <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
           <div class="observation-editor__card">
@@ -3009,6 +3332,53 @@ button.site-nav__magnet {
                     hidden
                     aria-live="polite"
                   ></div>
+                </div>
+                <div
+                  id="observation-slot-row"
+                  class="observation-editor__slot-row"
+                  role="list"
+                  aria-label="Observation slots"
+                >
+                  <div
+                    class="observation-editor__slot"
+                    data-slot-id="time"
+                    role="listitem"
+                    title="Anchor your sentence to a specific time, like ‘Yesterday at 3 p.m.’"
+                  >
+                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
+                    <span class="observation-editor__slot-label">When?</span>
+                    <span class="visually-hidden" data-slot-status>Missing</span>
+                  </div>
+                  <div
+                    class="observation-editor__slot"
+                    data-slot-id="context"
+                    role="listitem"
+                    title="Include where it happened, like ‘In the classroom’ or ‘On the playground.’"
+                  >
+                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
+                    <span class="observation-editor__slot-label">Where?</span>
+                    <span class="visually-hidden" data-slot-status>Missing</span>
+                  </div>
+                  <div
+                    class="observation-editor__slot"
+                    data-slot-id="sensory"
+                    role="listitem"
+                    title="Name what you saw or heard, like ‘I heard you say…’ or ‘I saw the door close.’"
+                  >
+                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
+                    <span class="observation-editor__slot-label">What did you see/hear?</span>
+                    <span class="visually-hidden" data-slot-status>Missing</span>
+                  </div>
+                  <div
+                    class="observation-editor__slot"
+                    data-slot-id="measure"
+                    role="listitem"
+                    title="Add a count or quote for clarity, like ‘twice’ or ‘You said, “Let’s leave.”’"
+                  >
+                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
+                    <span class="observation-editor__slot-label">Measurement or quote (optional)</span>
+                    <span class="visually-hidden" data-slot-status>Missing</span>
+                  </div>
                 </div>
                 <div class="observation-editor__input-wrapper">
                   <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
@@ -3030,6 +3400,30 @@ button.site-nav__magnet {
                     hidden
                     aria-live="polite"
                   ></div>
+                </div>
+                <div class="observation-editor__example">
+                  <button
+                    id="observation-example-toggle"
+                    class="observation-editor__example-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="observation-example"
+                  >
+                    Show an example sentence
+                  </button>
+                  <div id="observation-example" class="observation-editor__example-body" hidden>
+                    <p class="observation-editor__example-text">
+                      “Last Thursday, two days after my partner and I had agreed to have dinner together at home at 7
+                      p.m., I arrived back at the apartment at 6:50 p.m. and started setting the table. At 7:15 p.m.
+                      my partner was not home yet, and at 7:20 p.m. I saw a message on my phone sent at 6:55 p.m. that
+                      said, ‘I decided to stay late at work and will eat here tonight.’”
+                    </p>
+                    <div class="observation-editor__example-actions">
+                      <button id="observation-example-apply" class="observation-editor__example-apply" type="button">
+                        Insert this example
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div class="observation-editor__status observation-editor__status--inline">
                   <div
@@ -3208,6 +3602,21 @@ button.site-nav__magnet {
                   </span>
                 </div>
               </div>
+              <div class="observation-editor__next-prompts">
+                <span class="observation-editor__next-label">Next steps:</span>
+                <div class="observation-editor__next-actions">
+                  <a
+                    id="observation-next-feelings"
+                    class="observation-editor__next-link"
+                    href="../feelings/"
+                  >
+                    Next: Feelings magnets
+                  </a>
+                  <a id="observation-next-needs" class="observation-editor__next-link" href="../needs/">
+                    Next: Needs magnets
+                  </a>
+                </div>
+              </div>
             </footer>
           </div>
         </section>
@@ -3217,7 +3626,7 @@ button.site-nav__magnet {
           <summary class="observation-guide__toggle">
             <span class="observation-guide__toggle-text">
               <span class="observation-guide__eyebrow">Research-grounded (open-access links)</span>
-              <span class="observation-guide__toggle-title">Observation Guide: Low-Inference Description</span>
+              <span class="observation-guide__toggle-title">Open the full Observation Guide</span>
             </span>
             <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
           </summary>
@@ -3487,24 +3896,24 @@ button.site-nav__magnet {
                 <h3 class="observation-guide__section-title">References</h3>
                 <div class="observation-guide__section-content">
                   <ol>
-                    <li><a id="observation-guide-ref-1" href="https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf" rel="noopener noreferrer" target="_blank">uni-muenster.de – Linguistic abstraction and inference study (1989)</a></li>
-                    <li><a id="observation-guide-ref-2" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/" rel="noopener noreferrer" target="_blank">PMC6353691 – Concreteness and comprehension research</a></li>
-                    <li><a id="observation-guide-ref-3" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/" rel="noopener noreferrer" target="_blank">PMC8773921 – Measurement-focused language guidance</a></li>
-                    <li><a id="observation-guide-ref-4" href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf" rel="noopener noreferrer" target="_blank">Lieberman et al. (2007) – Affect labeling reduces limbic response</a></li>
-                    <li><a id="observation-guide-ref-5" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/" rel="noopener noreferrer" target="_blank">PMC5961625 – Perspective-taking and I-language outcomes</a></li>
-                    <li><a id="observation-guide-ref-6" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/" rel="noopener noreferrer" target="_blank">PMC5050353 – Autonomy and competence needs review</a></li>
-                    <li><a id="observation-guide-ref-7" href="https://selfdeterminationtheory.org/topics/basic-psychological-needs/" rel="noopener noreferrer" target="_blank">Self-Determination Theory – Basic psychological needs overview</a></li>
-                    <li><a id="observation-guide-ref-8" href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" rel="noopener noreferrer" target="_blank">U.S. Surgeon General – Social connection advisory</a></li>
-                    <li><a id="observation-guide-ref-9" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/" rel="noopener noreferrer" target="_blank">PMC4766977 – Behavioral observation reliability guidance</a></li>
-                    <li><a id="observation-guide-ref-10" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/" rel="noopener noreferrer" target="_blank">PMC4243523 – Hostile attribution and aggression analysis</a></li>
-                    <li><a id="observation-guide-ref-11" href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full" rel="noopener noreferrer" target="_blank">Frontiers in Psychology – Hostile attribution coaching study</a></li>
-                    <li><a id="observation-guide-ref-12" href="https://doi.org/10.3758/PBR.17.5.644" rel="noopener noreferrer" target="_blank">Psychonomic Bulletin &amp; Review – Language framing and blame study</a></li>
-                    <li><a id="observation-guide-ref-13" href="https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/" rel="noopener noreferrer" target="_blank">opentext.wsu.edu – ABC recording overview</a></li>
-                    <li><a id="observation-guide-ref-14" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/" rel="noopener noreferrer" target="_blank">PMC4841258 – Functional assessment measurement research</a></li>
-                    <li><a id="observation-guide-ref-15" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/" rel="noopener noreferrer" target="_blank">PMC10098472 – Observer agreement calibration study</a></li>
-                    <li><a id="observation-guide-ref-16" href="https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf" rel="noopener noreferrer" target="_blank">edpsychassociates.com – Kappa statistic primer</a></li>
-                    <li><a id="observation-guide-ref-17" href="https://pubmed.ncbi.nlm.nih.gov/21058850/" rel="noopener noreferrer" target="_blank">PubMed 21058850 – Interpersonal trust and stress pathways</a></li>
-                    <li><a id="observation-guide-ref-18" href="https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress" rel="noopener noreferrer" target="_blank">Dignity Health – Human connection and stress relief</a></li>
+                    <li><a id="observation-guide-ref-1" href="https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf" rel="noopener noreferrer" target="_blank">[1] https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf</a></li>
+                    <li><a id="observation-guide-ref-2" href="https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34" rel="noopener noreferrer" target="_blank">[2] https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34</a></li>
+                    <li><a id="observation-guide-ref-3" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/" rel="noopener noreferrer" target="_blank">[3] https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/</a></li>
+                    <li><a id="observation-guide-ref-4" href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf" rel="noopener noreferrer" target="_blank">[4] https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf</a></li>
+                    <li><a id="observation-guide-ref-5" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/" rel="noopener noreferrer" target="_blank">[5] https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/</a></li>
+                    <li><a id="observation-guide-ref-6" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/" rel="noopener noreferrer" target="_blank">[6] https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/</a></li>
+                    <li><a id="observation-guide-ref-7" href="https://selfdeterminationtheory.org/topics/basic-psychological-needs/" rel="noopener noreferrer" target="_blank">[7] https://selfdeterminationtheory.org/topics/basic-psychological-needs/</a></li>
+                    <li><a id="observation-guide-ref-8" href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" rel="noopener noreferrer" target="_blank">[8] https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf</a></li>
+                    <li><a id="observation-guide-ref-9" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/" rel="noopener noreferrer" target="_blank">[9] https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/</a></li>
+                    <li><a id="observation-guide-ref-10" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/" rel="noopener noreferrer" target="_blank">[10] https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/</a></li>
+                    <li><a id="observation-guide-ref-11" href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full" rel="noopener noreferrer" target="_blank">[11] https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full</a></li>
+                    <li><a id="observation-guide-ref-12" href="https://doi.org/10.3758/PBR.17.5.644" rel="noopener noreferrer" target="_blank">[12] https://doi.org/10.3758/PBR.17.5.644</a></li>
+                    <li><a id="observation-guide-ref-13" href="https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/" rel="noopener noreferrer" target="_blank">[13] https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/</a></li>
+                    <li><a id="observation-guide-ref-14" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/" rel="noopener noreferrer" target="_blank">[14] https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/</a></li>
+                    <li><a id="observation-guide-ref-15" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/" rel="noopener noreferrer" target="_blank">[15] https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/</a></li>
+                    <li><a id="observation-guide-ref-16" href="https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf" rel="noopener noreferrer" target="_blank">[16] https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf</a></li>
+                    <li><a id="observation-guide-ref-17" href="https://pubmed.ncbi.nlm.nih.gov/21058850/" rel="noopener noreferrer" target="_blank">[17] https://pubmed.ncbi.nlm.nih.gov/21058850/</a></li>
+                    <li><a id="observation-guide-ref-18" href="https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress" rel="noopener noreferrer" target="_blank">[18] https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress</a></li>
                   </ol>
                 </div>
               </section>
@@ -3641,24 +4050,24 @@ button.site-nav__magnet {
                 </summary>
                 <div class="observation-guide__mobile-content">
                   <ol>
-                    <li><a href="https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf" rel="noopener noreferrer" target="_blank">Linguistic abstraction &amp; inference (1989)</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/" rel="noopener noreferrer" target="_blank">Concreteness improves comprehension</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/" rel="noopener noreferrer" target="_blank">Measurement-focused language guidance</a></li>
-                    <li><a href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf" rel="noopener noreferrer" target="_blank">Affect labeling &amp; limbic response</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/" rel="noopener noreferrer" target="_blank">Perspective-taking &amp; I-language outcomes</a></li>
-                    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/" rel="noopener noreferrer" target="_blank">Autonomy &amp; competence needs review</a></li>
-                    <li><a href="https://selfdeterminationtheory.org/topics/basic-psychological-needs/" rel="noopener noreferrer" target="_blank">Basic psychological needs overview</a></li>
-                    <li><a href="https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf" rel="noopener noreferrer" target="_blank">Social connection advisory</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/" rel="noopener noreferrer" target="_blank">Behavioral observation reliability guidance</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/" rel="noopener noreferrer" target="_blank">Hostile attribution &amp; aggression analysis</a></li>
-                    <li><a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full" rel="noopener noreferrer" target="_blank">Hostile attribution coaching study</a></li>
-                    <li><a href="https://doi.org/10.3758/PBR.17.5.644" rel="noopener noreferrer" target="_blank">Language framing &amp; blame study</a></li>
-                    <li><a href="https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/" rel="noopener noreferrer" target="_blank">ABC recording overview</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/" rel="noopener noreferrer" target="_blank">Functional assessment measurement research</a></li>
-                    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/" rel="noopener noreferrer" target="_blank">Observer agreement calibration study</a></li>
-                    <li><a href="https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf" rel="noopener noreferrer" target="_blank">Kappa statistic primer</a></li>
-                    <li><a href="https://pubmed.ncbi.nlm.nih.gov/21058850/" rel="noopener noreferrer" target="_blank">Interpersonal trust &amp; stress pathways</a></li>
-                    <li><a href="https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress" rel="noopener noreferrer" target="_blank">Human connection &amp; stress relief</a></li>
+                    <li><a href="#observation-guide-ref-1">[1]</a> Linguistic abstraction &amp; inference (1989)</li>
+                    <li><a href="#observation-guide-ref-2">[2]</a> Concreteness improves comprehension</li>
+                    <li><a href="#observation-guide-ref-3">[3]</a> Measurement-focused language guidance</li>
+                    <li><a href="#observation-guide-ref-4">[4]</a> Affect labeling &amp; limbic response</li>
+                    <li><a href="#observation-guide-ref-5">[5]</a> Perspective-taking &amp; I-language outcomes</li>
+                    <li><a href="#observation-guide-ref-6">[6]</a> Autonomy &amp; competence needs review</li>
+                    <li><a href="#observation-guide-ref-7">[7]</a> Basic psychological needs overview</li>
+                    <li><a href="#observation-guide-ref-8">[8]</a> Social connection advisory</li>
+                    <li><a href="#observation-guide-ref-9">[9]</a> Behavioral observation reliability guidance</li>
+                    <li><a href="#observation-guide-ref-10">[10]</a> Hostile attribution &amp; aggression analysis</li>
+                    <li><a href="#observation-guide-ref-11">[11]</a> Hostile attribution coaching study</li>
+                    <li><a href="#observation-guide-ref-12">[12]</a> Language framing &amp; blame study</li>
+                    <li><a href="#observation-guide-ref-13">[13]</a> ABC recording overview</li>
+                    <li><a href="#observation-guide-ref-14">[14]</a> Functional assessment measurement research</li>
+                    <li><a href="#observation-guide-ref-15">[15]</a> Observer agreement calibration study</li>
+                    <li><a href="#observation-guide-ref-16">[16]</a> Kappa statistic primer</li>
+                    <li><a href="#observation-guide-ref-17">[17]</a> Interpersonal trust &amp; stress pathways</li>
+                    <li><a href="#observation-guide-ref-18">[18]</a> Human connection &amp; stress relief</li>
                   </ol>
                 </div>
               </details>
