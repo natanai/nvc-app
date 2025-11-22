@@ -1,0 +1,411 @@
+json
+"{
+  ""summary"": {
+    ""eyebrow"": ""Research-grounded (open-access links)"",
+    ""title"": ""Observation Guide: Low-Inference Description""
+  },
+  ""intro"": {
+    ""eyebrow"": ""Abstract"",
+    ""title"": ""Constructing Low-Inference, Time-Bound Observations"",
+    ""paragraphs"": [
+      ""This guide formalizes a fill-in-the-blank process for producing low-inference observational statements: descriptions restricted to verifiable sensory data (what was seen/heard), anchored to concrete time and context, and free of trait labels or motive attributions. The approach synthesizes findings from behavioral observation, psycholinguistics, and affect-regulation research. Linguistic abstraction increases biased social inference <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-1\"">[1]</a></sup>; concreteness improves comprehension <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>; and affect labeling is associated with reduced limbic reactivity <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-4\"">[4]</a></sup>."",
+      ""Perspective-taking and I-language are linked to lower perceived hostility in communication contexts <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-5\"">[5]</a></sup>. Research on basic psychological needs provides relevant context for why clear description may matter in interpersonal settings: autonomy/competence <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-6\"">[6]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-7\"">[7]</a></sup> and belonging/social connection <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-8\"">[8]</a></sup>.""
+    ]
+  },
+  ""desktop"": {
+    ""sections"": [
+    {
+      ""id"": ""observation-guide-definition"",
+      ""label"": ""Definition"",
+      ""title"": ""Operational Definition & Evidence Context"",
+      ""content"": [
+        {
+          ""type"": ""list"",
+          ""style"": ""unordered"",
+          ""items"": [
+            ""Recorder criterion: report only what a camera/microphone could capture (verbatim words, visible actions, measurable outcomes). Behavioral observation emphasizes observable units to aid reliability <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+            ""Time- and context-bound: specify when/where (e.g., “On Tue 15:10 in the team room…”). Concreteness improves comprehension and reduces ambiguity <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>."",
+            ""Avoid absolutes (“always/never/constantly”): prefer frequency, duration, or counts <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>."",
+            ""No mind-reading or motive attributions (e.g., “to hurt me,” “on purpose”): hostile-attribution tendencies relate to aggressive/negative responding <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-11\"">[11]</a></sup>."",
+            ""Quantify when feasible: counts, durations, latency, intensity (e.g., decibels). Linguistic abstraction inflates inference; measurables support shared description <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-1\"">[1]</a></sup>.""
+          ]
+        },
+        {
+          ""type"": ""callout"",
+          ""html"": ""Observations describe events; other components (feelings/needs/requests) are handled elsewhere in the app. Separating description from evaluation aligns with evidence on perspective-taking/I-language <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-5\"">[5]</a></sup>.""
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-method"",
+      ""label"": ""Method"",
+      ""title"": ""Fill-in-the-Blank Procedure (Low-Inference Observation)"",
+      ""content"": [
+        {
+          ""type"": ""list"",
+          ""style"": ""ordered"",
+          ""items"": [
+            ""Anchor the scene: “On [DATE] at [TIME] in [PLACE], …”. Concreteness advantage <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>."",
+            ""Describe only what was sensed: “I saw/heard [ACTOR] [ACTION/WORDS].” Behavioral observation favors observable units <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+            ""Quote verbatim when feasible: “[Exact words].” Wording influences blame inferences; direct quotes minimize reinterpretation <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>."",
+            ""Quantify: “[N times / for M minutes / on D dates / ~latency].” Replace vague adverbs with measurable data <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>."",
+            ""Remove evaluations: omit trait adjectives and “too/should” adverbs; substitute the underlying observable behavior. Language framing affects judgment <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>."",
+            ""Remove intent clauses (e.g., “to annoy me”). Hostile intent attributions are linked with negative responding; keep to what occurred <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>.""
+          ]
+        },
+        {
+          ""type"": ""callout"",
+          ""html"": ""<strong>Template:</strong> “On [DATE] at [TIME] in [PLACE], I saw/heard [ACTOR] [ACTION/WORDS]. This occurred [COUNT/DURATION/LATENCY].”""
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-heuristics"",
+      ""label"": ""Heuristics"",
+      ""title"": ""Automated Flags & Coaching Prompts"",
+      ""content"": [
+        {
+          ""type"": ""list"",
+          ""style"": ""unordered"",
+          ""items"": [
+            ""Absolutes: flag “always/never/constantly/every time.” Prompt for timeframe and count <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>."",
+            ""Trait labels: flag “rude, selfish, careless, disrespectful, aggressive, lazy,” etc. Prompt: “Describe the exact behavior instead” <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>."",
+            ""Mind-reading: flag “on purpose,” “to hurt me,” “because you don’t care.” Prompt: “Omit intent; report the observable act” <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>."",
+            ""Causation claims without evidence: flag “for no reason,” “made me,” unless tied to a measurable outcome. Encourage sticking to recorded events."",
+            ""Perspective-taking for later steps: I-language and checking understanding are associated with less defensive escalation <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-5\"">[5]</a></sup>.""
+          ]
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-examples"",
+      ""label"": ""Examples"",
+      ""title"": ""Evaluation → Observation (Worked Examples)"",
+      ""content"": [
+        {
+          ""type"": ""examples"",
+          ""items"": [
+            {
+              ""evaluation"": ""“You’re always late and inconsiderate.”"",
+              ""observation"": ""“In the past two weeks, you arrived 5–15 minutes after our agreed time on three occasions.”"",
+              ""why"": ""Replaces global language with time-bound frequency; concreteness improves agreement <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>.""
+            },
+            {
+              ""evaluation"": ""“Janice works too much.”"",
+              ""observation"": ""“Janice logged 62 on-site hours this week, including Saturday.”"",
+              ""why"": ""Removes evaluative adverb; supplies measurable quantity <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>.""
+            },
+            {
+              ""evaluation"": ""“He left the party to hurt me.”"",
+              ""observation"": ""“He left the party without saying goodbye at 9:10 p.m.”"",
+              ""why"": ""Strips motive attribution; hostile-attribution research cautions against inferred intent <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>.""
+            },
+            {
+              ""evaluation"": ""“You were rude in the meeting.”"",
+              ""observation"": ""“During the 2:00–2:15 agenda item, while I was speaking, you interrupted twice (timestamps 08:12 and 09:47).”"",
+              ""why"": ""Replaces trait with event-bounded counts; wording shapes perceived blame <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>.""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-data"",
+      ""label"": ""Measurement"",
+      ""title"": ""Measurement Concepts: Operational Definitions, ABC, Agreement"",
+      ""content"": [
+        {
+          ""type"": ""paragraph"",
+          ""text"": ""This section summarizes commonly used measurement concepts that may inform personal or professional record-keeping in observational work.""
+        },
+        {
+          ""type"": ""list"",
+          ""style"": ""ordered"",
+          ""items"": [
+            ""Operational definitions with exemplars/non-examples <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+            ""ABC recording with timestamps; where feasible, use continuous measures (count, duration, latency) <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-13\"">[13]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-14\"">[14]</a></sup>."",
+            ""Inter-observer agreement (IOA) on a sample of observations; consider statistics appropriate to the data (e.g., kappa) <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-15\"">[15]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-16\"">[16]</a></sup>."",
+            ""Audit for observer drift and recalibrate using reference clips/exemplars <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-15\"">[15]</a></sup>.""
+          ]
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-needs"",
+      ""label"": ""Needs link"",
+      ""title"": ""Context: Research on Psychological Needs"",
+      ""content"": [
+        {
+          ""type"": ""callout"",
+          ""html"": ""<strong>Why this tab exists.</strong> Writing low-inference observations is easier when users understand <em>why</em> neutral, time-bound description matters in relationships. This tab collates open-access research on frequently studied psychological needs. It does not prescribe which needs you have. Its purpose is to show how clear description can support later steps (like identifying feelings/needs) by creating a shared factual baseline. For related evidence on perspective-taking and language use in communication, see: https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/.""
+        },
+        {
+          ""type"": ""list"",
+          ""style"": ""unordered"",
+          ""items"": [
+            ""<strong>What you’re looking at.</strong> Short summaries plus raw-URL links to readable, evidence-based sources (open-access reviews/advisories/articles). The full URLs are included so you can verify them yourself."",
+            ""<strong>How this connects to observational skill.</strong> Neutral, time-bound description can reduce ambiguity and perceived social threat, which may make collaboration on next steps easier. This general idea aligns with research on needs commonly discussed in interpersonal settings—autonomy, competence, belonging, trust, and safety. See: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/; https://selfdeterminationtheory.org/topics/basic-psychological-needs/; https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf; https://pubmed.ncbi.nlm.nih.gov/21058850/; https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress.""
+          ]
+        },
+        {
+          ""type"": ""paragraph"",
+          ""text"": ""Autonomy & competence. Research on basic psychological needs suggests people benefit when they can make informed, self-directed choices and feel effective in their actions. Clear, low-inference description helps establish a shared situation model that can support agency and planning. Sources: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/; https://selfdeterminationtheory.org/topics/basic-psychological-needs/.""
+        },
+        {
+          ""type"": ""paragraph"",
+          ""text"": ""Belonging / social connection. Neutral description can lower perceived social threat and open space for cooperation, which is relevant given public-health summaries linking social connection to well-being. Source: https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf.""
+        },
+        {
+          ""type"": ""paragraph"",
+          ""text"": ""Trust & safety. Language that avoids motive attributions and global labels is less likely to be received as threatening. Evidence connecting interpersonal trust with stress physiology provides useful context for why non-judging description can feel safer. Sources: https://pubmed.ncbi.nlm.nih.gov/21058850/; https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress.""
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-limitations"",
+      ""label"": ""Limitations"",
+      ""title"": ""Limitations & Scope Notes"",
+      ""content"": [
+        {
+          ""type"": ""list"",
+          ""style"": ""unordered"",
+          ""items"": [
+            ""Memory/measurement: observations depend on recall or recording fidelity; contemporaneous notes/quotes provide clearer records <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+            ""Intent is not adjudicated by observation: avoid hostile attributions <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>."",
+            ""Cultural/linguistic nuance: perceptions of “neutral” phrasing can vary; invite verification of wording."",
+            ""Scope: this guide summarizes research and provides structured prompts; it does not determine clinical reliability or outcomes.""
+          ]
+        }
+      ]
+    },
+    {
+      ""id"": ""observation-guide-references"",
+      ""label"": ""References"",
+      ""title"": ""References"",
+      ""content"": [
+        {
+          ""type"": ""list"",
+          ""style"": ""ordered"",
+          ""items"": [
+            ""<a id=\""observation-guide-ref-1\"" href=\""https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">uni-muenster.de – Linguistic abstraction and inference study (1989)</a>"",
+            ""<a id=\""observation-guide-ref-2\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC6353691 – Concreteness and comprehension research</a>"",
+            ""<a id=\""observation-guide-ref-3\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC8773921 – Measurement-focused language guidance</a>"",
+            ""<a id=\""observation-guide-ref-4\"" href=\""https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Lieberman et al. (2007) – Affect labeling reduces limbic response</a>"",
+            ""<a id=\""observation-guide-ref-5\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC5961625 – Perspective-taking and I-language outcomes</a>"",
+            ""<a id=\""observation-guide-ref-6\"" href=\""https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC5050353 – Autonomy and competence needs review</a>"",
+            ""<a id=\""observation-guide-ref-7\"" href=\""https://selfdeterminationtheory.org/topics/basic-psychological-needs/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Self-Determination Theory – Basic psychological needs overview</a>"",
+            ""<a id=\""observation-guide-ref-8\"" href=\""https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">U.S. Surgeon General – Social connection advisory</a>"",
+            ""<a id=\""observation-guide-ref-9\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC4766977 – Behavioral observation reliability guidance</a>"",
+            ""<a id=\""observation-guide-ref-10\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC4243523 – Hostile attribution and aggression analysis</a>"",
+            ""<a id=\""observation-guide-ref-11\"" href=\""https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Frontiers in Psychology – Hostile attribution coaching study</a>"",
+            ""<a id=\""observation-guide-ref-12\"" href=\""https://doi.org/10.3758/PBR.17.5.644\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Psychonomic Bulletin &amp; Review – Language framing and blame study</a>"",
+            ""<a id=\""observation-guide-ref-13\"" href=\""https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">opentext.wsu.edu – ABC recording overview</a>"",
+            ""<a id=\""observation-guide-ref-14\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC4841258 – Functional assessment measurement research</a>"",
+            ""<a id=\""observation-guide-ref-15\"" href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PMC10098472 – Observer agreement calibration study</a>"",
+            ""<a id=\""observation-guide-ref-16\"" href=\""https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">edpsychassociates.com – Kappa statistic primer</a>"",
+            ""<a id=\""observation-guide-ref-17\"" href=\""https://pubmed.ncbi.nlm.nih.gov/21058850/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">PubMed 21058850 – Interpersonal trust and stress pathways</a>"",
+            ""<a id=\""observation-guide-ref-18\"" href=\""https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Dignity Health – Human connection and stress relief</a>""
+          ]
+        }
+      ]
+    }
+    ]
+  },
+  ""mobile"": {
+    ""eyebrow"": ""Quick mobile reference"",
+    ""title"": ""Observation mini-guide"",
+    ""intro"": [
+      ""Tap a card for research-backed pointers. The full desktop guide stays available if you rotate or switch to a larger screen.""
+    ],
+    ""sections"": [
+      {
+        ""id"": ""observation-guide-mobile-definition"",
+        ""eyebrow"": ""Start here"",
+        ""title"": ""What counts as an observation"",
+        ""description"": ""Stick to verifiable sights and sounds."",
+        ""content"": [
+          {
+            ""type"": ""list"",
+            ""style"": ""unordered"",
+            ""items"": [
+              ""Camera-ready facts only—words, actions, measurable results <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+              ""Anchor the time and location to keep statements concrete <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>."",
+              ""Swap absolutes for counts, durations, or frequencies <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>."",
+              ""Drop motive guesses or labels; stay with what happened <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>.""
+            ]
+          },
+          {
+            ""type"": ""callout"",
+            ""html"": ""Observations cover events; feelings, needs, and requests have their own steps.""
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-method"",
+        ""eyebrow"": ""Write it out"",
+        ""title"": ""Fill-in-the-blank recipe"",
+        ""description"": ""Use this structure when you capture a moment."",
+        ""content"": [
+          {
+            ""type"": ""list"",
+            ""style"": ""ordered"",
+            ""items"": [
+              ""Scene setter: “On [DATE] at [TIME] in [PLACE]…” <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>."",
+              ""What you sensed: “I saw/heard [ACTOR] [ACTION/WORDS].” <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+              ""Exact words when possible. Quotes reduce interpretation <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>."",
+              ""Measurements beat vague adverbs (how many times, how long) <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>."",
+              ""Drop value judgments or intent guesses; stick to what occurred <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>.""
+            ]
+          },
+          {
+            ""type"": ""callout"",
+            ""html"": ""<strong>Quick template:</strong> “On [DATE] at [TIME] in [PLACE], I saw/heard [ACTOR] [ACTION/WORDS] [COUNT/DURATION].”""
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-heuristics"",
+        ""eyebrow"": ""Spot checks"",
+        ""title"": ""When the app will nudge you"",
+        ""description"": ""Flags catch language that drifts from low-inference wording."",
+        ""content"": [
+          {
+            ""type"": ""list"",
+            ""style"": ""unordered"",
+            ""items"": [
+              ""Absolutes like “always/never”—expect a prompt for specific counts <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>."",
+              ""Trait labels (rude, careless, disrespectful)—swap for what was seen <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>."",
+              ""Mind-reading (“on purpose,” “because you don’t care”)—return to observable facts <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>."",
+              ""Unbacked causation (“made me,” “for no reason”)—tie claims to measurable effects when you have them."",
+              ""Future steps: I-language and perspective checks lower defensiveness later on <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-5\"">[5]</a></sup>.""
+            ]
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-examples"",
+        ""eyebrow"": ""See it in action"",
+        ""title"": ""From evaluation to observation"",
+        ""description"": ""Compare a judgment with a low-inference rewrite."",
+        ""content"": [
+          {
+            ""type"": ""examples"",
+            ""items"": [
+              {
+                ""evaluation"": ""“You’re always late and inconsiderate.”"",
+                ""observation"": ""“In the past two weeks, you arrived 5–15 minutes after our agreed time on three occasions.”"",
+                ""why"": ""Replaces global language with time-bound frequency <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-2\"">[2]</a></sup>.""
+              },
+              {
+                ""evaluation"": ""“Janice works too much.”"",
+                ""observation"": ""“Janice logged 62 on-site hours this week, including Saturday.”"",
+                ""why"": ""Removes evaluative adverb; supplies measurable quantity <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-3\"">[3]</a></sup>.""
+              },
+              {
+                ""evaluation"": ""“He left the party to hurt me.”"",
+                ""observation"": ""“He left the party without saying goodbye at 9:10 p.m.”"",
+                ""why"": ""Strips motive attribution; hostile-attribution research cautions against inferred intent <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>.""
+              },
+              {
+                ""evaluation"": ""“You were rude in the meeting.”"",
+                ""observation"": ""“During the 2:00–2:15 agenda item, while I was speaking, you interrupted twice (timestamps 08:12 and 09:47).”"",
+                ""why"": ""Replaces trait with event-bounded counts <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-12\"">[12]</a></sup>.""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-measurement"",
+        ""eyebrow"": ""Research practice"",
+        ""title"": ""If you need stronger evidence"",
+        ""description"": ""Useful for programs, facilitation, or research settings."",
+        ""content"": [
+          {
+            ""type"": ""list"",
+            ""style"": ""unordered"",
+            ""items"": [
+              ""Define behaviors with examples and non-examples <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+              ""Use ABC logs with timestamps; capture counts, durations, or latency <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-13\"">[13]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-14\"">[14]</a></sup>."",
+              ""Calibrate observers with agreement checks (kappa, % agreement) <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-15\"">[15]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-16\"">[16]</a></sup>."",
+              ""Watch for observer drift; schedule refreshers with sample clips <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-15\"">[15]</a></sup>.""
+            ]
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-why"",
+        ""eyebrow"": ""Why it matters"",
+        ""title"": ""Link to needs & nervous systems"",
+        ""description"": ""Neutral description keeps the door open for collaboration."",
+        ""content"": [
+          {
+            ""type"": ""paragraph"",
+            ""text"": ""Clear, time-bound language supports autonomy and competence because everyone sees the same scenario to solve <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-6\"">[6]</a></sup>.""
+          },
+          {
+            ""type"": ""paragraph"",
+            ""text"": ""Lowering ambiguity builds belonging and social safety <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-8\"">[8]</a></sup> and buffers stress responses tied to trust <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-17\"">[17]</a></sup>, <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-18\"">[18]</a></sup>.""
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-limitations"",
+        ""eyebrow"": ""Scope check"",
+        ""title"": ""Limits to remember"",
+        ""description"": ""Use observations as inputs—not verdicts."",
+        ""content"": [
+          {
+            ""type"": ""list"",
+            ""style"": ""unordered"",
+            ""items"": [
+              ""Memories fade; jot notes or quote quickly when accuracy matters <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-9\"">[9]</a></sup>."",
+              ""Observations do not prove intent—skip hostile attributions <sup class=\""observation-guide__citation\""><a href=\""#observation-guide-ref-10\"">[10]</a></sup>."",
+              ""Language norms shift; invite people to sanity-check phrasing across cultures."",
+              ""This guide summarizes research, not clinical or legal rulings.""
+            ]
+          }
+        ]
+      },
+      {
+        ""id"": ""observation-guide-mobile-references"",
+        ""eyebrow"": ""Want the studies?"",
+        ""title"": ""Reference library"",
+        ""description"": ""Tap to browse full links in a single list."",
+        ""defaultOpen"": false,
+        ""content"": [
+          {
+            ""type"": ""list"",
+            ""style"": ""ordered"",
+            ""items"": [
+              ""<a href=\""https://www.uni-muenster.de/imperia/md/content/psyifp/aeechterhoff/vorlesungkommunikation/semin_fiedler_cogfunctoflingcategor_jpsp_1989.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Linguistic abstraction &amp; inference (1989)</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC6353691/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Concreteness improves comprehension</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC8773921/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Measurement-focused language guidance</a>"",
+              ""<a href=\""https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Affect labeling &amp; limbic response</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Perspective-taking &amp; I-language outcomes</a>"",
+              ""<a href=\""https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5050353/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Autonomy &amp; competence needs review</a>"",
+              ""<a href=\""https://selfdeterminationtheory.org/topics/basic-psychological-needs/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Basic psychological needs overview</a>"",
+              ""<a href=\""https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Social connection advisory</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC4766977/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Behavioral observation reliability guidance</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC4243523/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Hostile attribution &amp; aggression analysis</a>"",
+              ""<a href=\""https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.778695/full\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Hostile attribution coaching study</a>"",
+              ""<a href=\""https://doi.org/10.3758/PBR.17.5.644\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Language framing &amp; blame study</a>"",
+              ""<a href=\""https://opentext.wsu.edu/ldaffin/chapter/module-5-determining-the-abcs-of-behavior-via-a-functional-assessment/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">ABC recording overview</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC4841258/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Functional assessment measurement research</a>"",
+              ""<a href=\""https://pmc.ncbi.nlm.nih.gov/articles/PMC10098472/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Observer agreement calibration study</a>"",
+              ""<a href=\""https://edpsychassociates.com/Papers/Kappa%28JEIBI%2C2004%29.pdf\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Kappa statistic primer</a>"",
+              ""<a href=\""https://pubmed.ncbi.nlm.nih.gov/21058850/\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Interpersonal trust &amp; stress pathways</a>"",
+              ""<a href=\""https://www.dignityhealth.org/articles/how-human-connection-can-relieve-stress\"" rel=\""noopener noreferrer\"" target=\""_blank\"">Human connection &amp; stress relief</a>""
+            ]
+          }
+        ]
+      }
+    ],
+    ""footer"": [
+      {
+        ""type"": ""paragraph"",
+        ""text"": ""Need the tabbed layout? Rotate your device or open this page on desktop to switch back to the full research view.""
+      }
+    ]
+  }
+}"
