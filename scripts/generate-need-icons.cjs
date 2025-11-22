@@ -12,11 +12,11 @@ const keywords = {
 };
 
 const presets = {
-  ascend: { points: 9, noise: 0.26, stretchX: 0.92, stretchY: 1.2, bias: 'upper', smooth: true, lean: -2 },
-  embrace: { points: 8, noise: 0.18, stretchX: 0.98, stretchY: 1.05, bias: 'center', smooth: true, lean: 0 },
-  grounded: { points: 7, noise: 0.16, stretchX: 1.08, stretchY: 0.9, bias: 'lower', smooth: false, lean: 0 },
-  clarity: { points: 6, noise: 0.12, stretchX: 1, stretchY: 1, bias: 'balanced', smooth: false, lean: 0 },
-  balanced: { points: 8, noise: 0.2, stretchX: 1, stretchY: 1, bias: 'balanced', smooth: true, lean: 0 }
+  ascend: { points: 9, noise: 0.35, stretchX: 0.86, stretchY: 1.3, bias: 'upper', smooth: true, lean: -3, waveAmp: 0.24 },
+  embrace: { points: 8, noise: 0.22, stretchX: 1.08, stretchY: 1.08, bias: 'center', smooth: true, lean: 0, waveAmp: 0.18 },
+  grounded: { points: 7, noise: 0.14, stretchX: 1.12, stretchY: 0.86, bias: 'lower', smooth: false, lean: 0, waveAmp: 0.12 },
+  clarity: { points: 6, noise: 0.08, stretchX: 1, stretchY: 1, bias: 'balanced', smooth: false, lean: 0, waveAmp: 0.28 },
+  balanced: { points: 8, noise: 0.2, stretchX: 1, stretchY: 1, bias: 'balanced', smooth: true, lean: 0, waveAmp: 0.16 }
 };
 
 function slugStyle(slug) {
@@ -43,24 +43,31 @@ function generatePoints(slug, preset) {
   const rand = seedRandom(slug);
   const points = [];
   const center = { x: 32 + preset.lean, y: 32 };
-  const baseRadius = 18 + rand() * 6;
+  const baseRadius = 18 + rand() * 8;
   const start = -Math.PI / 2 + rand() * 0.6 - 0.3;
+  const harmonic = 2 + Math.floor(rand() * 4);
+  const dipPhase = rand() * Math.PI * 2;
 
   for (let i = 0; i < preset.points; i += 1) {
     const angle = start + (i / preset.points) * Math.PI * 2;
     const bias = (() => {
       switch (preset.bias) {
         case 'upper':
-          return 1 + 0.2 * Math.cos(angle);
+          return 1 + 0.28 * Math.cos(angle);
         case 'lower':
-          return 1 - 0.18 * Math.cos(angle);
+          return 1 - 0.25 * Math.cos(angle);
         case 'center':
-          return 1 + 0.12 * Math.sin(angle * 2);
+          return 1 + 0.14 * Math.sin(angle * 2);
         default:
           return 1;
       }
     })();
-    const radius = baseRadius * (1 + (rand() - 0.5) * preset.noise * 2) * bias;
+
+    const wave = 1 + Math.sin(angle * harmonic + dipPhase) * preset.waveAmp;
+    const notch = 1 - 0.2 * Math.exp(-((angle - dipPhase) ** 2) / 0.6);
+    const variance = 1 + (rand() - 0.5) * preset.noise * 2;
+    const radius = baseRadius * bias * wave * variance * notch;
+
     const x = center.x + Math.cos(angle) * radius * preset.stretchX;
     const y = center.y + Math.sin(angle) * radius * preset.stretchY;
     points.push({ x: Number(x.toFixed(2)), y: Number(y.toFixed(2)) });
