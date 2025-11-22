@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&family=Manrope:wght@500;600;700&display=swap');
 @import url('styles/feelings-magnet-icons.css');
+@import url('styles/needs-magnet-icons.css');
 
 :root {
   --plum: #74569b;
@@ -2246,7 +2247,8 @@ body.has-support-journal-open {
   transform: none;
 }
 
-.magnet[data-magnet-id^='feelings-'] {
+.magnet[data-magnet-id^='feelings-'],
+.magnet[data-magnet-id^='needs-'] {
   overflow: hidden;
   isolation: isolate;
   justify-content: center;
@@ -2254,7 +2256,8 @@ body.has-support-journal-open {
   padding-inline: 0.65rem;
 }
 
-.magnet[data-magnet-id^='feelings-']::before {
+.magnet[data-magnet-id^='feelings-']::before,
+.magnet[data-magnet-id^='needs-']::before {
   content: none;
   display: none;
 }
@@ -2274,12 +2277,30 @@ body.has-support-journal-open {
   mix-blend-mode: normal;
 }
 
-.magnet[data-magnet-id^='feelings-'] > * {
+.magnet[data-magnet-id^='needs-']::after {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  border-radius: inherit;
+  background-image: var(--magnet-icon);
+  background-size: 120%;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.magnet[data-magnet-id^='feelings-'] > *,
+.magnet[data-magnet-id^='needs-'] > * {
   position: relative;
   z-index: 1;
 }
 
-.magnet[data-magnet-id^='feelings-'] .magnet__label {
+.magnet[data-magnet-id^='feelings-'] .magnet__label,
+.magnet[data-magnet-id^='needs-'] .magnet__label {
   color: #000;
   position: relative;
   z-index: 2;

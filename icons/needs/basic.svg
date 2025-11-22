@@ -1,0 +1,17 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Symbolic grayscale art representing foundational human needs">
+  <defs>
+    <linearGradient id="halo" x1="40" y1="30" x2="170" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8f8f8" />
+      <stop offset="1" stop-color="#bcbcbc" />
+    </linearGradient>
+    <linearGradient id="pillar" x1="80" y1="70" x2="120" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f2f2f2" />
+      <stop offset="1" stop-color="#565656" />
+    </linearGradient>
+  </defs>
+  <rect x="22" y="22" width="156" height="156" rx="28" fill="url(#halo)" stroke="#2f2f2f" stroke-width="6" />
+  <circle cx="100" cy="82" r="32" fill="#e6e6e6" stroke="#3c3c3c" stroke-width="6" />
+  <path d="M64 176h72c6.6 0 12-5.4 12-12v-30c0-15.5-12.5-28-28-28H80c-15.5 0-28 12.5-28 28v30c0 6.6 5.4 12 12 12Z" fill="url(#pillar)" stroke="#1f1f1f" stroke-width="6" />
+  <path d="M82 126c0-10 8-18 18-18s18 8 18 18v22H82z" fill="#d9d9d9" stroke="#1a1a1a" stroke-width="5" />
+  <path d="M88 90c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#1f1f1f" stroke-width="6" stroke-linecap="round" />
+</svg>
