@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&family=Manrope:wght@500;600;700&display=swap');
 @import url('styles/feelings-magnet-icons.css');
+@import url('styles/needs-magnet-icons.css');
 
 :root {
   --plum: #74569b;
@@ -2244,6 +2245,70 @@ body.has-support-journal-open {
 .magnet-board[data-ready='1'] .pill:hover,
 .magnet-board[data-ready='1'] .pill:focus-visible {
   transform: none;
+}
+
+.magnet[data-magnet-id^='needs-'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.9rem;
+}
+
+.magnet[data-magnet-id^='needs-']::before {
+  content: '';
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  background: #000;
+  opacity: var(--need-icon-visible, 0);
+  mask-image: var(--need-icon);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--need-icon);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+main[data-need-slug] .page-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+main[data-need-slug] .page-title::before {
+  content: '';
+  width: 2.2rem;
+  height: 2.2rem;
+  background: #000;
+  opacity: var(--need-icon-visible, 0);
+  mask-image: var(--need-icon);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--need-icon);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .magnet[data-magnet-id^='needs-'] {
+    gap: 0.45rem;
+    padding-inline: 0.8rem;
+  }
+
+  .magnet[data-magnet-id^='needs-']::before {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  main[data-need-slug] .page-title::before {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
 }
 
 .magnet[data-magnet-id^='feelings-'] {
