@@ -1604,36 +1604,49 @@ function renderNeed(item, strategyLookup) {
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
-          <div class="strategy-list">
-            ${strategies
-              .map((strategy) => {
-                const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
-                const contributor = strategy.contributor || {};
-                const firstName = sanitizeContributorName(contributor.name);
-                const location = sanitizeLocation(contributor.location);
-                const contributorParts = [];
-                if (firstName) {
-                  contributorParts.push(firstName);
-                }
-                if (location) {
-                  contributorParts.push(location);
-                }
-                const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
-                const contributorHtml = contributorText
-                  ? `<p class="strategy-card__meta">${contributorText}</p>`
-                  : '';
-                const dataAttrs = [
-                  `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
-                  `data-strategy-tags="${escapeHtml(tags)}"`,
-                ];
-                if (firstName) {
-                  dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
-                }
-                if (location) {
-                  dataAttrs.push(`data-location="${escapeHtml(location)}"`);
-                }
-                const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
-                return `
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__toolbar" role="group" aria-label="Strategy controls">
+              <button type="button" class="strategy-deck__control strategy-deck__control--previous" data-strategy-deck-prev>
+                <span class="strategy-deck__control-label">Previous</span>
+              </button>
+              <button type="button" class="strategy-deck__control strategy-deck__control--shuffle" data-strategy-deck-shuffle>
+                <span class="strategy-deck__control-label">Shuffle</span>
+              </button>
+              <button type="button" class="strategy-deck__control strategy-deck__control--next" data-strategy-deck-next>
+                <span class="strategy-deck__control-label">Next</span>
+              </button>
+            </div>
+            <div class="strategy-deck__viewport" data-strategy-deck-viewport>
+              <div class="strategy-list" data-strategy-deck-list>
+                ${strategies
+                  .map((strategy) => {
+                    const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
+                    const contributor = strategy.contributor || {};
+                    const firstName = sanitizeContributorName(contributor.name);
+                    const location = sanitizeLocation(contributor.location);
+                    const contributorParts = [];
+                    if (firstName) {
+                      contributorParts.push(firstName);
+                    }
+                    if (location) {
+                      contributorParts.push(location);
+                    }
+                    const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
+                    const contributorHtml = contributorText
+                      ? `<p class="strategy-card__meta">${contributorText}</p>`
+                      : '';
+                    const dataAttrs = [
+                      `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
+                      `data-strategy-tags="${escapeHtml(tags)}"`,
+                    ];
+                    if (firstName) {
+                      dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
+                    }
+                    if (location) {
+                      dataAttrs.push(`data-location="${escapeHtml(location)}"`);
+                    }
+                    const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+                    return `
                   <article class="strategy-card"${dataAttrString}>
                     <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                     <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
@@ -1643,8 +1656,11 @@ ${strategiesNote}
                     </div>
                   </article>
                 `;
-              })
-              .join('')}
+                  })
+                  .join('')}
+              </div>
+            </div>
+            <p class="strategy-deck__status" data-strategy-deck-status></p>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>`
@@ -1707,7 +1723,7 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+    scripts: [{ src: 'scripts/strategy-deck.js', module: true }],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,
