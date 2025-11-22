@@ -78,6 +78,8 @@ const OBSERVATION_GUIDELINE_NOTE =
   'Need a refresher? Visit the <a href="#observation-guide-foundations" data-guide-target="observation-guide-foundations">full observation guide</a> below for principles, steps, and examples.';
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
+const OBSERVATION_EXAMPLE_TEXT =
+  'Yesterday at lunch in the classroom, I saw you gently push your plate off the table twice.';
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
@@ -200,6 +202,18 @@ function bind() {
     });
   }
 
+  const exampleToggle = document.getElementById('observation-example-toggle');
+  if (exampleToggle) {
+    exampleToggle.addEventListener('click', () => toggleObservationExample());
+  }
+  const exampleApply = document.getElementById('observation-example-apply');
+  if (exampleApply) {
+    exampleApply.addEventListener('click', () => applyObservationExample());
+  }
+
+  bindGuideOpener();
+  updateNextNavigationLinks();
+
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -252,6 +266,27 @@ function updateObservationText(value, options = {}) {
   }
 }
 
+function toggleObservationExample(forceOpen) {
+  const container = document.getElementById('observation-example');
+  const toggle = document.getElementById('observation-example-toggle');
+  if (!container || !toggle) {
+    return;
+  }
+  const shouldShow = typeof forceOpen === 'boolean' ? forceOpen : container.hasAttribute('hidden');
+  if (shouldShow) {
+    container.removeAttribute('hidden');
+    toggle.setAttribute('aria-expanded', 'true');
+  } else {
+    container.setAttribute('hidden', 'hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function applyObservationExample() {
+  toggleObservationExample(true);
+  updateObservationText(OBSERVATION_EXAMPLE_TEXT, { reason: 'example', immediate: true });
+}
+
 function analyze(raw, options = {}) {
   const source = typeof raw === 'string' ? raw : '';
   const trimmed = source.trim();
@@ -290,6 +325,7 @@ function analyze(raw, options = {}) {
   renderHighlight();
   renderDetectionStatus();
   renderObservationFormula();
+  renderObservationSlotStatus(state.formula);
   autoResolveValidity();
 }
 
@@ -1910,29 +1946,35 @@ function renderDetectionStatus() {
   let message = 'Warming up the language detector…';
   switch (status) {
     case 'idle':
-      message = flagged ? 'Flagged language detected. Language detector ready.' : 'Language detector ready.';
+      message = flagged
+        ? 'We noticed flagged language. The detector is ready when you are.'
+        : 'Language helper ready when you are.';
       break;
     case 'short':
       message = flagged
-        ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words to start matching.`
-        : `Add at least ${DETECTION_MIN_WORDS} words to start matching.`;
+        ? `We noticed flagged language. Add about ${DETECTION_MIN_WORDS} more words so we can look for cues.`
+        : `Add about ${DETECTION_MIN_WORDS} more words so we can look for cues.`;
       break;
     case 'none':
-      message = flagged ? 'Flagged language detected. No cue matches detected yet.' : 'No cue matches detected yet.';
+      message = flagged
+        ? 'We noticed flagged language. I’m not seeing timing or place cues yet—try adding when and where.'
+        : 'I’m not seeing timing or place cues yet—try adding when and where.';
       break;
     case 'near': {
-      message = flagged ? 'Flagged language detected. Near matches detected.' : 'Near matches detected.';
+      message = flagged
+        ? 'Flagged language detected. We have a few close matches—add a bit more detail to tighten it up.'
+        : 'We have a few close matches—add a bit more detail to tighten it up.';
       break;
     }
     case 'match':
       if (flagged) {
         message = state.detectionMatches > 1
-          ? `Flagged language detected. ${state.detectionMatches} exact cue matches detected.`
-          : 'Flagged language detected. Exact cue match detected.';
+          ? `Flagged language detected. ${state.detectionMatches} exact cue matches ready to open.`
+          : 'Flagged language detected. An exact cue match is ready to open.';
       } else {
         message = state.detectionMatches > 1
-          ? `${state.detectionMatches} exact cue matches detected.`
-          : 'Exact cue match detected.';
+          ? `${state.detectionMatches} exact cue matches ready to open.`
+          : 'An exact cue match is ready to open.';
       }
       break;
     default:
@@ -2137,6 +2179,7 @@ function renderObservationFormula() {
   host.innerHTML = `${currentMarkup}${ghostMarkup}`;
   host.removeAttribute('hidden');
   renderObservationFormulaGuidance(missing);
+  renderObservationSlotStatus(formula);
 }
 
 function renderObservationFormulaGuidance(missingEntries) {
@@ -2149,6 +2192,30 @@ function renderObservationFormulaGuidance(missingEntries) {
     host.innerHTML = '';
     host.setAttribute('hidden', 'hidden');
   }
+}
+
+function renderObservationSlotStatus(formulaState) {
+  const host = document.getElementById('observation-slot-row');
+  if (!host) {
+    return;
+  }
+  const formula = formulaState || state.formula || createEmptyObservationFormulaState();
+  const slots = formula?.slots || {};
+  const items = host.querySelectorAll('[data-slot-id]');
+  items.forEach(item => {
+    if (!item || !item.dataset) {
+      return;
+    }
+    const slotId = item.dataset.slotId;
+    const satisfied = Boolean(slots?.[slotId]?.satisfied);
+    const optional = slotId === 'measure';
+    const state = satisfied ? 'complete' : optional ? 'optional' : 'missing';
+    item.setAttribute('data-state', state);
+    const status = item.querySelector('[data-slot-status]');
+    if (status) {
+      status.textContent = satisfied ? 'Complete' : optional ? 'Optional' : 'Missing';
+    }
+  });
 }
 
 function buildObservationFormulaGuidanceList(entries) {
@@ -3008,6 +3075,56 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function bindGuideOpener() {
+  const triggers = document.querySelectorAll('[data-open-observation-guide]');
+  if (!triggers.length) {
+    return;
+  }
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', event => {
+      event.preventDefault();
+      openObservationGuide();
+    });
+  });
+}
+
+function openObservationGuide() {
+  const guide = document.getElementById('observation-guide');
+  if (!guide) {
+    return;
+  }
+  guide.setAttribute('open', 'open');
+  if (typeof guide.scrollIntoView === 'function') {
+    guide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const summary = guide.querySelector('summary');
+  if (summary && typeof summary.focus === 'function') {
+    summary.focus({ preventScroll: true });
+  }
+}
+
+function updateNextNavigationLinks() {
+  const setState = (linkId, magnetId) => {
+    const link = document.getElementById(linkId);
+    if (!link) {
+      return;
+    }
+    const magnet = document.querySelector(`[data-magnet-id="${magnetId}"]`);
+    const hidden = !magnet
+      || magnet.getAttribute('aria-hidden') === 'true'
+      || magnet.dataset.navHidden === 'true';
+    if (hidden) {
+      link.setAttribute('aria-disabled', 'true');
+      link.setAttribute('tabindex', '-1');
+    } else {
+      link.removeAttribute('aria-disabled');
+      link.removeAttribute('tabindex');
+    }
+  };
+  setState('observation-next-feelings', 'nav-feelings');
+  setState('observation-next-needs', 'nav-needs');
 }
 
 function bindGuideNavigation() {
