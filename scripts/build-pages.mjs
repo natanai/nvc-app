@@ -1365,13 +1365,13 @@ function renderCategory(type, items) {
         </div>`
       : '';
 
-  // Wrap each label in a <span class="magnet__label"> so CSS can style it.
-+ const magnets = items
-+   .map((item) => {
-+     const label = escapeHtml(item.title);
-+     return `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/"><span class="magnet__label">${label}</span></a>`;
-+   })
-+   .join('');
+  const magnets = items
+  .map((item) => {
+    const label = escapeHtml(item.title);
+    return `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/"><span class="magnet__label">${label}</span></a>`;
+  })
+  .join('');
+
 
   const searchAltLink =
     type === 'feelings'
@@ -2138,13 +2138,12 @@ function renderPillGroup(label, items, type) {
   }
 
   const magnets = items
-    .map(
-      (item) =>
-        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="../../${type}/${item.slug}/">${escapeHtml(
-          item.title,
-        )}</a>`,
-    )
-    .join('');
+  .map((item) => {
+    const label = escapeHtml(item.title);
+    return `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="../../${type}/${item.slug}/"><span class="magnet__label">${label}</span></a>`;
+  })
+  .join('');
+
 
   return `<section class="pill-section magnet-section" aria-labelledby="${slugify(label)}-heading" data-magnet-root>
       <div class="magnet-section__header">
