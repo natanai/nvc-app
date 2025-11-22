@@ -104,6 +104,58 @@ const clamp = (value, min, max) => {
   return value;
 };
 
+const getBasePath = () => {
+  const raw = document?.body?.dataset?.basePath;
+  return typeof raw === 'string' && raw.trim() ? raw : './';
+};
+
+const setNeedMagnetIcon = (element, magnetId) => {
+  if (!element || typeof magnetId !== 'string' || !magnetId.startsWith('needs-')) {
+    return;
+  }
+  const slug = magnetId.slice('needs-'.length);
+  if (!slug) {
+    return;
+  }
+  const basePath = getBasePath();
+  element.style.setProperty('--magnet-icon', `url("${basePath}icons/needs/${slug}.svg")`);
+};
+
+const resolveNeedSlugFromPath = () => {
+  if (typeof window === 'undefined' || typeof window.location?.pathname !== 'string') {
+    return '';
+  }
+  const cleaned = window.location.pathname.replace(/index\.html$/i, '').replace(/\/+$/, '');
+  const parts = cleaned.split('/').filter(Boolean);
+  const needsIndex = parts.lastIndexOf('needs');
+  if (needsIndex === -1 || !parts[needsIndex + 1]) {
+    return '';
+  }
+  return parts[needsIndex + 1];
+};
+
+const enhanceNeedTitle = () => {
+  const slug = resolveNeedSlugFromPath();
+  if (!slug) {
+    return;
+  }
+  const title = document.querySelector('.page-title');
+  if (!title) {
+    return;
+  }
+  const text = (title.textContent || '').trim();
+  title.classList.add('need-title');
+  title.innerHTML = '';
+  const icon = document.createElement('span');
+  icon.className = 'need-title__icon';
+  const label = document.createElement('span');
+  label.className = 'need-title__text';
+  label.textContent = text;
+  title.append(icon, label);
+  const basePath = getBasePath();
+  title.style.setProperty('--need-icon', `url("${basePath}icons/needs/${slug}.svg")`);
+};
+
 const fontsReady = typeof document !== 'undefined' && document.fonts && document.fonts.ready
   ? document.fonts.ready.catch(() => undefined)
   : Promise.resolve();
@@ -1482,6 +1534,7 @@ const initializeBoard = async (root, index) => {
     const id = element.dataset.magnetId || `${index}-${magnetIndex}`;
     element.dataset.magnetId = id;
     applyMagnetDecorations(element, magnetIndex);
+    setNeedMagnetIcon(element, id);
   });
 
   const boardRect = await waitForStableBoard(board, { fontsBarrier: !fastInit });
@@ -1847,11 +1900,16 @@ const setup = async () => {
   }
 };
 
+const start = () => {
+  enhanceNeedTitle();
+  setup();
+};
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    setup();
+    start();
   });
 } else {
-  setup();
+  start();
 }
 
