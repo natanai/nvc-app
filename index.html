@@ -965,7 +965,6 @@ button.site-nav__magnet {
           }
 
           var supplementalEnabled = false;
-          var visibilityChanged = false;
 
           for (var j = 0; j < magnets.length; j += 1) {
             var el = magnets[j];
@@ -981,14 +980,6 @@ button.site-nav__magnet {
             var shouldEnable = Object.prototype.hasOwnProperty.call(magnetEnabled, magnetId)
               ? magnetEnabled[magnetId]
               : !(typeof el.hasAttribute === 'function' && el.hasAttribute('data-nav-hidden'));
-
-            var wasHidden = false;
-            if (typeof el.getAttribute === 'function') {
-              wasHidden =
-                el.getAttribute('data-nav-hidden') === 'true'
-                || el.getAttribute('aria-hidden') === 'true'
-                || el.hidden === true;
-            }
 
             if (shouldEnable) {
               if (el.dataset && Object.prototype.hasOwnProperty.call(el.dataset, 'navStoredTabIndex')) {
@@ -1018,10 +1009,6 @@ button.site-nav__magnet {
               if (isSupplemental) {
                 supplementalEnabled = true;
               }
-
-              if (wasHidden) {
-                visibilityChanged = true;
-              }
             } else {
               if (
                 el.dataset &&
@@ -1049,35 +1036,6 @@ button.site-nav__magnet {
               nav.setAttribute('data-nav-expanded', 'true');
             } else {
               nav.removeAttribute('data-nav-expanded');
-            }
-          }
-
-          if (visibilityChanged && typeof window !== 'undefined') {
-            var scheduleNavLayout = function() {
-              if (window.NVCNavLayout && typeof window.NVCNavLayout.reseed === 'function') {
-                window.NVCNavLayout.reseed();
-                return true;
-              }
-              return false;
-            };
-
-            var enqueueNavLayout = function() {
-              if (!Array.isArray(window.__pendingNavLayoutRequests)) {
-                window.__pendingNavLayoutRequests = [];
-              }
-              window.__pendingNavLayoutRequests.push(scheduleNavLayout);
-            };
-
-            var triggerNavLayout = function() {
-              if (!scheduleNavLayout()) {
-                enqueueNavLayout();
-              }
-            };
-
-            if (typeof window.requestAnimationFrame === 'function') {
-              window.requestAnimationFrame(triggerNavLayout);
-            } else {
-              window.setTimeout(triggerNavLayout, 0);
             }
           }
         })();
@@ -1208,7 +1166,7 @@ button.site-nav__magnet {
         
       <section class="home-doorways" aria-labelledby="doorwaysTitle">
         <h1 id="doorwaysTitle" class="visually-hidden">Choose a doorway</h1>
-        <p class="home-doorways__prompt">Collect strategies for all your needs. Start with any door. </p>
+        <p class="home-doorways__prompt">Collect strategies for all your needs. Start with any door.</p>
         <div class="door-grid">
           <div class="door-card door-card--observations">
             <a class="door-card__link" href="observations/">

@@ -1324,7 +1324,7 @@ ${doorMarkup}
   const main = `
       <section class="home-doorways" aria-labelledby="doorwaysTitle">
         <h1 id="doorwaysTitle" class="visually-hidden">Choose a doorway</h1>
-        <p class="home-doorways__prompt">Step through a doorway to begin exploring.</p>
+        <p class="home-doorways__prompt">Collect strategies for all your needs. Start with any door.</p>
         <div class="door-grid">
 ${cards}
         </div>

@@ -17,11 +17,12 @@ This repo powers a retro, offline-friendly Nonviolent Communication explorer foc
 
 ## Fact-checking the site
 
-1. Open any need page and follow the "Supporting Sources" links to the cited material.
-2. To audit the data locally:
-   - Run `npm run lint:links` to verify every URL under `Source Links` in `data/Needs.csv` responds correctly.
-   - Run `npm run extract:citations` to export `_evidence/citations.csv`, review or edit it, then apply changes with `npm run replace:needs-sources` so the need pages and CSV stay in sync.
-3. If a source is down but valid, add a temporary entry to `scripts/link-suppressions.json` with a brief justification and remove it once the link is stable again.
+- **Spreadsheet-first workflow:** run `npm run export:fact-checking` to populate the `fact-checking/` folder with every dataset as spreadsheets (core CSVs, citations, reverse-inference weights, body-region cues, and observation metadata). After editing those sheets, run `npm run import:fact-checking` to write the changes back into the `data/` and `_evidence/` sources.
+- **Start with the Fact-Checking Playbook:** see `docs/fact-checking-playbook.md` for a single map of every data file, where each set of numbers or citations lives, and how to rebuild pages after edits.
+- **On-page checks:** open any need page and follow the "Supporting Sources" links to the cited material.
+- **Link hygiene:** run `npm run lint:links` to verify every URL under `Source Links` in `data/Needs.csv` responds correctly.
+- **Citations workflow:** run `npm run extract:citations` to export `_evidence/citations.csv`, review or edit it, then apply changes with `npm run replace:needs-sources` so the need pages and CSV stay in sync.
+- **Temporary link suppressions:** if a source is down but valid, add a temporary entry to `scripts/link-suppressions.json` with a brief justification and remove it once the link is stable again.
 
 ## Run the site locally (no prior knowledge needed)
 
@@ -94,7 +95,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 ├── data/
 │   ├── Feelings.csv
 │   ├── Needs.csv
-│   ├── Faux feelings.csv
+│   ├── Faux Feelings.csv
 │   ├── Strategies.csv
 │   └── index.json             # generated dataset
 └── scripts/
@@ -104,11 +105,11 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 
 ### Spreadsheet columns
 
-The three primary spreadsheets (`Feelings.csv`, `Needs.csv`, and `Faux feelings.csv`) own all relationships and reverse-inference cues used across the site.
+The three primary spreadsheets (`Feelings.csv`, `Needs.csv`, and `Faux Feelings.csv`) own all relationships and reverse-inference cues used across the site.
 
 - **Feelings.csv** – each feeling row uses `Row Type = feeling` with fields for `Feeling Title`, `Page Summary`, `Related Faux feelings`, `Related Needs`, `Body Signal Notes`, and optional `Slug Override`. Additional rows with `Row Type = cue` capture reverse-inference body cues through the `Cue Region *` and `Cue Option *` columns so no extra CSV is needed for body-region data.
 - **Needs.csv** – the need copy is organised into `Need Title`, `Category Label`, `Page Summary`, `Related Strategies`, `Related Faux feelings`, `Related Feelings`, and the claim text pair (`Claim Summary`, `Claim Narrative`). Evidence links live under the `Source Links` column.
-- **Faux feelings.csv** – faux feelings list their relationships via `Related Feelings` and `Related Needs`, with an optional `Slug Override` to customise URLs.
+- **Faux Feelings.csv** – faux feelings list their relationships via `Related Feelings` and `Related Needs`, with an optional `Slug Override` to customise URLs.
 - **Strategies.csv** – each row keeps the contributor details inline and offers an optional `Slug Override` column alongside `Strategy Summary`, `Supports Needs`, `Contributor Name`, and `Contributor Location` so editors can lock URLs before renaming a strategy.
 
 The data build validates strategy slugs and every relationship lookup, failing fast when any row references an unknown related item or when two strategies share the same slug. Typos in the spreadsheets cause `npm run build:data` to stop so they can be fixed before publishing.
