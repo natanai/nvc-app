@@ -1,31 +1,56 @@
 # allneeds.app
 
-A retro Nonviolent Communication explorer that keeps every tool on-device. Build an inventory of strategies to tend to your basic human needs, journal through faux feelings and feelings, and explore hubs for each category with playful magnet interactions. The static site runs entirely in the browser, stores preferences and notes in localStorage with import/export controls, and ships with installable PWA metadata for offline use.
+A retro Nonviolent Communication explorer that keeps every tool on-device. Build an inventory of strategies to tend to your basic human needs, journal through faux feelings and feelings, and explore hubs for each category with playful magnet interactions. The static site runs entirely in the browser, stores preferences and notes in `localStorage` with import/export controls, and ships with installable PWA metadata for offline use.
 
-## Getting started
+## What the site offers
+
+- **Interactive magnets:** Feelings, needs, faux feelings, and navigation tiles shuffle around a board that works offline. Preferences for physics, layout, and shuffling stay local to the browser.
+- **Evidence-backed needs:** Each need page pairs a concise claim with a short narrative and links to supporting sources so readers can independently verify the text.
+- **On-device journaling:** Observation cues, faux feelings prompts, and inventory lists never leave the device unless you explicitly export them.
+
+## How the site is built
+
+1. Editors maintain CSV files under `data/` (`Feelings.csv`, `Needs.csv`, `Faux feelings.csv`, and `Strategies.csv`).
+2. `npm run build:data` converts those spreadsheets into `data/index.json` and validates cross-links between rows.
+3. `npm run build:pages` reads the dataset and writes a static HTML page for each feeling, need, faux feeling, strategy, and category hub.
+4. The generated pages plus `styles.css`, `assets/`, and PWA metadata form a static site that any file server can host.
+
+## Run the site locally
 
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-1. (Optional) Regenerate the JSON dataset from the source spreadsheets if they change:
+2. (Optional) Rebuild the dataset if you changed any CSVs:
    ```bash
    npm run build:data
    ```
-   This command parses the CSV exports into `data/index.json`, which the page generator consumes.
 
-2. Build the static pages:
+3. Generate the static pages:
    ```bash
    npm run build:pages
    ```
-   The script produces `index.html`, category hubs, and an `index.html` for each item at `faux feelings/<slug>/`, `feelings/<slug>/`, and `needs/<slug>/`.
 
-3. Serve the repository root with any static file server. For example:
+4. Serve the repository root with any static file server. For example:
    ```bash
    python -m http.server 8000
    ```
    Then open <http://localhost:8000/> in your browser.
+
+## How to fact-check the content
+
+1. Open any need page and scroll to the "Supporting sources" list; every citation comes from the `Source Links` column in `data/Needs.csv`.
+2. Run the automated link checker to confirm the URLs are reachable and not blocked by interstitials:
+   ```bash
+   npm run lint:links
+   ```
+3. Review `_evidence/citations.csv` (exported via `npm run extract:citations`) to see each cited claim, the exact quotation, and the source URL side by side.
+4. If you edit evidence, update `_evidence/citations.csv` and propagate the changes back into the pages and `data/Needs.csv` with:
+   ```bash
+   npm run replace:needs-sources
+   ```
+5. Re-run `npm run build:pages` to regenerate the static pages so the on-site text matches the verified sources.
 
 ## Development workflow
 
