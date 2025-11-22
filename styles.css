@@ -2252,7 +2252,7 @@ body.has-support-journal-open {
   isolation: isolate;
   justify-content: center;
   gap: 0;
-  padding-inline-start: 0;
+  padding-inline: 0.65rem;
 }
 
 .magnet[data-magnet-id^='feelings-']::before {
