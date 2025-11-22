@@ -79,7 +79,7 @@ const OBSERVATION_GUIDELINE_NOTE =
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 const OBSERVATION_EXAMPLE_TEXT =
-  'This morning at 8:15 in the classroom, I saw you place three books on the desk and say, “Let’s start reading.”';
+  'Last Thursday, two days after my partner and I had agreed to have dinner together at home at 7 p.m., I arrived back at the apartment at 6:50 p.m. and started setting the table. At 7:15 p.m. my partner was not home yet, and at 7:20 p.m. I saw a message on my phone sent at 6:55 p.m. saying that they had decided to stay late at work and would eat there instead.';
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
