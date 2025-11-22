@@ -96,39 +96,46 @@ function derivePlantTheme(slug) {
   const leafColor = foliagePalette[randomInt(random, 3, 6)];
   const bloomColor = bloomPalette[randomInt(random, 0, bloomPalette.length - 1)];
   const potColor = foliagePalette[randomInt(random, 0, 2)];
-  const rimColor = foliagePalette[Math.max(0, randomInt(random, 1, 3) - 1)];
-  const accentColor = lightenHex(bloomColor, 0.3);
-  return { stemColor, leafColor, bloomColor, potColor, rimColor, accentColor };
+  const rimColor = lightenHex(potColor, 0.2);
+  const accentColor = lightenHex(bloomColor, 0.28);
+  const centerColor = lightenHex(bloomColor, 0.5);
+  return { stemColor, leafColor, bloomColor, potColor, rimColor, accentColor, centerColor };
 }
 
 function addPot(grid, theme) {
-  const potHeight = 3;
+  const potHeight = 4;
   const potWidth = 10;
   const potTopY = gridSize - potHeight - 1;
   const potStartX = Math.floor((gridSize - potWidth) / 2);
+  const soilY = potTopY + potHeight - 1;
+
   writeRect(grid, potStartX, potTopY + 1, potWidth, potHeight - 1, theme.potColor);
+  writeRect(grid, potStartX + 1, soilY, potWidth - 2, 1, foliagePalette[0]);
   writeRect(grid, potStartX, potTopY, potWidth, 1, theme.rimColor);
   return potTopY;
 }
 
 function addStem(grid, potTopY, theme, random) {
-  const stemHeight = randomInt(random, 6, 9);
+  const stemHeight = randomInt(random, 7, 10);
   const centerX = 7;
   const stemTopY = Math.max(1, potTopY - stemHeight);
   symmetricalRect(grid, centerX, stemTopY, 1, stemHeight, theme.stemColor);
+  setCell(grid, centerX, stemTopY - 1, theme.stemColor);
   return { stemTopY, centerX };
 }
 
 function addLeaves(grid, stemTopY, potTopY, centerX, theme, random) {
   const leaves = randomInt(random, 3, 5);
   for (let i = 0; i < leaves; i += 1) {
-    const leafHeight = randomInt(random, 1, 2);
-    const leafWidth = randomInt(random, 2, 3);
-    const y = randomInt(random, stemTopY + 1, potTopY - 2);
+    const y = randomInt(random, stemTopY + 1, potTopY - 3);
+    const leafSpan = randomInt(random, 2, 3);
     const direction = i % 2 === 0 ? -1 : 1;
-    const startX = centerX + (direction === -1 ? -leafWidth : 1);
-    writeRect(grid, startX, y, leafWidth, leafHeight, theme.leafColor);
-    setCell(grid, centerX, y + leafHeight, theme.stemColor);
+    const startX = centerX + direction * leafSpan;
+    const tipX = centerX + direction * (leafSpan + 1);
+    writeRect(grid, Math.min(centerX, startX), y, Math.abs(startX - centerX) + 1, 1, theme.leafColor);
+    setCell(grid, startX, y + 1, theme.leafColor);
+    setCell(grid, tipX, y + 1, theme.leafColor);
+    setCell(grid, centerX, y + 1, theme.stemColor);
   }
 }
 
@@ -138,30 +145,32 @@ const bloomPatterns = [
     [0, 1],
     [-1, 1],
     [1, 1],
-    [-1, 2],
-    [0, 2],
-    [1, 2],
-  ], // bud
-  [
-    [0, 0],
-    [-1, 1],
-    [1, 1],
     [-2, 2],
     [0, 2],
     [2, 2],
     [-1, 3],
     [1, 3],
-  ], // wide bloom
+  ],
   [
     [0, 0],
     [-1, 0],
     [1, 0],
-    [-1, 1],
-    [0, 1],
-    [1, 1],
+    [-2, 1],
+    [2, 1],
+    [-1, 2],
     [0, 2],
+    [1, 2],
     [0, 3],
-  ], // vertical torch
+  ],
+  [
+    [0, 0],
+    [-1, 1],
+    [1, 1],
+    [-1, 2],
+    [0, 2],
+    [1, 2],
+    [0, 3],
+  ],
 ];
 
 function addBloom(grid, stemTopY, centerX, theme, random) {
@@ -171,7 +180,9 @@ function addBloom(grid, stemTopY, centerX, theme, random) {
     setCell(grid, centerX + dx, bloomTop + dy, theme.bloomColor);
   }
 
-  const sparkleCount = randomInt(random, 1, 2);
+  setCell(grid, centerX, bloomTop + 2, theme.centerColor);
+
+  const sparkleCount = randomInt(random, 1, 3);
   for (let i = 0; i < sparkleCount; i += 1) {
     const sx = centerX + randomInt(random, -2, 2);
     const sy = Math.max(0, bloomTop - randomInt(random, 1, 2));
