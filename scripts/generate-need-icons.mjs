@@ -6,6 +6,16 @@ const needsDir = path.join(rootDir, 'needs');
 const iconsDir = path.join(rootDir, 'icons', 'needs');
 const cssOutputPath = path.join(rootDir, 'styles', 'needs-magnet-icons.css');
 
+const palette = [
+  '#0A2C1C',
+  '#0B3B27',
+  '#13633F',
+  '#1F8757',
+  '#2A9F69',
+  '#49B982',
+  '#63D89D',
+];
+
 function hashSlug(slug) {
   let hash = 0;
   for (const ch of slug) {
@@ -25,22 +35,49 @@ function mulberry32(seed) {
   };
 }
 
-function createRadialPath(slug) {
+function randomInt(random, min, max) {
+  return min + Math.floor(random() * (max - min + 1));
+}
+
+function mirrorWrite(grid, x, y, width, height, color) {
+  const size = grid.length;
+  for (let dy = 0; dy < height; dy += 1) {
+    for (let dx = 0; dx < width; dx += 1) {
+      const leftX = x + dx;
+      const rightX = size - 1 - leftX;
+      grid[y + dy][leftX] = color;
+      grid[y + dy][rightX] = color;
+    }
+  }
+}
+
+function buildGrid(slug) {
   const random = mulberry32(hashSlug(slug));
-  const pointCount = 6 + Math.floor(random() * 6);
-  const wobble = 0.5 + random() * 0.6;
-  const minRadius = 18 + random() * 6;
-  const maxRadius = 26 + random() * 8;
+  const gridSize = 16;
+  const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
 
-  const points = Array.from({ length: pointCount }, (_, index) => {
-    const angle = (Math.PI * 2 * (index / pointCount)) + random() * wobble;
-    const radius = minRadius + random() * (maxRadius - minRadius);
-    const x = 32 + Math.cos(angle) * radius;
-    const y = 32 + Math.sin(angle) * radius;
-    return `${index === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)}`;
-  });
+  const coreHeight = randomInt(random, 4, 9);
+  const startY = randomInt(random, 2, gridSize - coreHeight - 2);
+  const coreColor = palette[randomInt(random, 2, 4)];
+  mirrorWrite(grid, 7, startY, 2, coreHeight, coreColor);
 
-  return `${points.join(' ')} Z`;
+  const capColor = palette[randomInt(random, 3, 6)];
+  mirrorWrite(grid, 6, Math.max(0, startY - 1), 4, 1, capColor);
+
+  const baseColor = palette[randomInt(random, 0, 2)];
+  mirrorWrite(grid, randomInt(random, 4, 7), gridSize - 2, randomInt(random, 2, 4), 2, baseColor);
+
+  const flareCount = randomInt(random, 10, 18);
+  for (let i = 0; i < flareCount; i += 1) {
+    const width = randomInt(random, 1, 3);
+    const height = randomInt(random, 1, 3);
+    const x = randomInt(random, 0, Math.floor(gridSize / 2) - width);
+    const y = randomInt(random, 0, gridSize - height);
+    const color = palette[randomInt(random, 0, palette.length - 1)];
+    mirrorWrite(grid, x, y, width, height, color);
+  }
+
+  return grid;
 }
 
 async function ensureDir(dir) {
@@ -56,15 +93,46 @@ async function readNeedSlugs() {
     .sort((a, b) => a.localeCompare(b));
 }
 
+function gridToRects(grid) {
+  const cell = 2;
+  const rects = [];
+
+  for (let y = 0; y < grid.length; y += 1) {
+    let x = 0;
+    while (x < grid[y].length) {
+      const color = grid[y][x];
+      if (!color) {
+        x += 1;
+        continue;
+      }
+
+      let x2 = x + 1;
+      while (x2 < grid[y].length && grid[y][x2] === color) {
+        x2 += 1;
+      }
+
+      rects.push({
+        x: x * cell,
+        y: y * cell,
+        width: (x2 - x) * cell,
+        height: cell,
+        color,
+      });
+      x = x2;
+    }
+  }
+
+  return rects;
+}
+
 function iconMarkup(slug) {
-  const outlinePath = createRadialPath(slug);
-  const innerRandom = mulberry32(hashSlug(`${slug}-inner`));
-  const innerOffsetX = (innerRandom() - 0.5) * 6;
-  const innerOffsetY = (innerRandom() - 0.5) * 6;
-  const innerRadius = 10 + innerRandom() * 6;
-  const innerCircle = `<circle cx="${(32 + innerOffsetX).toFixed(2)}" cy="${(32 + innerOffsetY).toFixed(2)}" r="${innerRadius.toFixed(2)}" fill="#000" />`;
-  const outerPath = `<path d="${outlinePath}" fill="#000" />`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">${outerPath}${innerCircle}</svg>`;
+  const grid = buildGrid(slug);
+  const rects = gridToRects(grid);
+  const rectMarkup = rects
+    .map((rect) => `<rect x="${rect.x}" y="${rect.y}" width="${rect.width}" height="${rect.height}" fill="${rect.color}"/>`)
+    .join('\n  ');
+
+  return `<svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">\n  ${rectMarkup}\n</svg>`;
 }
 
 async function writeIcons(slugs) {
