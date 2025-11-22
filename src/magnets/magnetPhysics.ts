@@ -303,6 +303,7 @@ const updateTilt = (state: InternalState, dt: number) => {
 
 const getBoardSize = (
   state: InternalState,
+  rect?: DOMRect | DOMRectReadOnly,
 ): { width: number; height: number } => {
   if (state.getBoardSize) {
     const size = state.getBoardSize();
@@ -310,12 +311,13 @@ const getBoardSize = (
       return { width: Math.max(size.width, 0), height: Math.max(size.height, 0) };
     }
   }
-  const rect = state.board.getBoundingClientRect();
-  const width = rect.width || state.board.clientWidth || parseFloat(getComputedStyle(state.board).width || '0');
+  const boardRect = rect ?? state.board.getBoundingClientRect();
+  const computedStyles = state.board instanceof HTMLElement ? getComputedStyle(state.board) : null;
+  const width = boardRect.width || state.board.clientWidth || parseFloat(computedStyles?.width || '0');
   const height =
-    rect.height ||
+    boardRect.height ||
     state.board.clientHeight ||
-    parseFloat((state.board instanceof HTMLElement ? getComputedStyle(state.board).height : '') || '0');
+    parseFloat(computedStyles?.height || '0');
   return { width: Math.max(width, 0), height: Math.max(height, 0) };
 };
 
@@ -398,7 +400,7 @@ const addPointerListeners = (state: InternalState) => {
     if (state.dragging && state.dragging.pointerId === event.pointerId) {
       const magnetState = state.dragging;
       const boardRect = state.board.getBoundingClientRect();
-      const { width, height } = getBoardSize(state);
+      const { width, height } = getBoardSize(state, boardRect);
       const maxX = Math.max(width - magnetState.w, 0);
       const maxY = Math.max(height - magnetState.h, 0);
       const nextX = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
@@ -584,7 +586,11 @@ const applyPointerField = (state: InternalState, dt: number) => {
   });
 };
 
-const integrateMotion = (state: InternalState, dt: number) => {
+const integrateMotion = (
+  state: InternalState,
+  dt: number,
+  boardSize: { width: number; height: number } = getBoardSize(state),
+) => {
   const {
     drift,
     damping,
@@ -592,7 +598,7 @@ const integrateMotion = (state: InternalState, dt: number) => {
     tiltStrength = DEFAULT_CONFIG.tiltStrength,
     tiltDriftScale = DEFAULT_CONFIG.tiltDriftScale,
   } = state.config;
-  const { width, height } = getBoardSize(state);
+  const { width, height } = boardSize;
   const jitterFloor = clamp(
     Number.isFinite(tiltDriftScale) ? tiltDriftScale : DEFAULT_CONFIG.tiltDriftScale,
     0,
@@ -671,11 +677,12 @@ const frameStep = (state: InternalState, timestamp: number) => {
   const step = Math.max(clamped, 0);
   const iterations = Math.ceil(step / 0.016);
   const dt = step / Math.max(iterations, 1);
+  const boardSize = getBoardSize(state);
   for (let i = 0; i < iterations; i += 1) {
     applySeparationForces(state, dt);
     applyPointerField(state, dt);
     updateTilt(state, dt);
-    integrateMotion(state, dt);
+    integrateMotion(state, dt, boardSize);
   }
   state.lastTimestamp = timestamp;
   notifyPositions(state);
