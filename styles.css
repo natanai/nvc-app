@@ -1799,6 +1799,7 @@ body.has-support-journal-open {
   .door-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
+    column-gap: 0.5rem;
   }
 
   .home-doorways {
@@ -1839,7 +1840,7 @@ body.has-support-journal-open {
   .door-card__link {
     gap: 0.35rem;
     min-height: auto;
-    padding: 0.35rem 0 0.75rem;
+    padding: 0.35rem 0.2rem 0.75rem;
     align-items: stretch;
   }
 
