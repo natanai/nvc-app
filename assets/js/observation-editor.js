@@ -151,6 +151,7 @@ function bind() {
       }
     });
     textarea.addEventListener('scroll', () => {
+      syncObservationHighlightScroll();
       renderHighlightDetails(null);
     });
     textarea.addEventListener('blur', () => {
@@ -229,6 +230,8 @@ function bind() {
     });
     highlightPopoverBound = true;
   }
+
+  syncObservationHighlightScroll();
 }
 
 function updateObservationText(value, options = {}) {
@@ -255,6 +258,7 @@ function updateObservationText(value, options = {}) {
   state.fallback = createFallbackState();
   scheduleAnalysis(options.reason || 'rewrite', { immediate: options.immediate !== false });
   renderSuggestions();
+  syncObservationHighlightScroll();
 
   if (textarea && options.focus !== false) {
     requestAnimationFrame(() => {
@@ -2328,6 +2332,7 @@ function renderHighlight() {
   if (host) {
     host.innerHTML = buildHighlightMarkupFromRanges(text, [...warnRanges, ...okRanges, ...cueRanges]);
   }
+  syncObservationHighlightScroll();
 
   const positiveRanges = okRanges
     .map(range => {
@@ -2350,6 +2355,27 @@ function renderHighlight() {
     ? state.positiveHighlightRanges.find(range => buildHighlightKey(range) === state.activeHighlightKey)
     : null;
   renderHighlightDetails(activeRange || null);
+}
+
+function syncObservationHighlightScroll() {
+  const textarea = document.getElementById('observation-text');
+  const highlight = document.getElementById('observation-highlight');
+  const formula = document.getElementById('observation-formula');
+  const scrollTop = textarea ? textarea.scrollTop : 0;
+
+  const applyTransform = element => {
+    if (!element) {
+      return;
+    }
+    if (scrollTop) {
+      element.style.transform = `translateY(${-scrollTop}px)`;
+    } else {
+      element.style.transform = '';
+    }
+  };
+
+  applyTransform(highlight);
+  applyTransform(formula);
 }
 
 function inspectHighlightAtCursor(textarea) {
