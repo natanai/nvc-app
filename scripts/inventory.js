@@ -1626,12 +1626,22 @@ function setupNeedPage() {
     return;
   }
 
+  const stackSetup = initializeStrategyStack(main);
+  if (!stackSetup) {
+    const fallbackSection = main.querySelector('.strategy-section[data-stack-ready]');
+    if (fallbackSection && fallbackSection.dataset.stackReady === 'pending') {
+      fallbackSection.dataset.stackReady = 'fallback';
+    }
+  }
+
   const needSlug = main.dataset.needSlug;
   const needName = main.dataset.needName || main.dataset.needTitle || 'Need';
   const needTitle = main.dataset.needTitle || needName;
   const feedback = main.querySelector('[data-inventory-feedback]');
 
-  const cards = main.querySelectorAll('.strategy-card');
+  const cards = Array.isArray(stackSetup?.cards)
+    ? stackSetup.cards
+    : Array.from(main.querySelectorAll('.strategy-card[data-strategy-slug]'));
   cards.forEach((card) => {
     const saveButton = card.querySelector('.strategy-card__save');
     if (!saveButton) {
@@ -6637,4 +6647,489 @@ function focusNeedSection(slug) {
   window.setTimeout(() => {
     target.classList.remove('inventory-need--highlight');
   }, 1200);
+}
+
+
+function shuffleArray(items) {
+  if (!Array.isArray(items)) {
+    return;
+  }
+  for (let i = items.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = items[i];
+    items[i] = items[j];
+    items[j] = temp;
+  }
+}
+
+function initializeStrategyStack(main) {
+  const strategySection = main.querySelector('.strategy-section');
+  if (!strategySection) {
+    return null;
+  }
+
+  const markFallback = () => {
+    if (strategySection && strategySection.dataset) {
+      strategySection.dataset.stackReady = 'fallback';
+    }
+  };
+
+  const expandedList = strategySection.querySelector('.strategy-list');
+  if (!expandedList) {
+    markFallback();
+    return null;
+  }
+
+  const originalCards = Array.from(expandedList.querySelectorAll('.strategy-card[data-strategy-slug]'));
+  if (!originalCards.length) {
+    markFallback();
+    return null;
+  }
+
+  const reduceMotionQuery =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)')
+      : null;
+
+  const pairs = originalCards.map((card) => ({
+    original: card,
+    clone: card.cloneNode(true),
+  }));
+
+  const stackList = document.createElement('div');
+  stackList.className = 'strategy-list strategy-list--stack';
+  stackList.setAttribute('data-strategy-stack-list', 'true');
+  stackList.tabIndex = 0;
+  stackList.setAttribute('role', 'group');
+  stackList.setAttribute('aria-label', 'Strategy stack');
+  stackList.setAttribute('aria-hidden', 'false');
+
+  pairs.forEach((pair) => {
+    pair.clone.dataset.stackClone = 'true';
+    pair.clone.setAttribute('aria-hidden', 'true');
+  });
+
+  const stackContainer = document.createElement('div');
+  stackContainer.className = 'strategy-stack';
+  stackContainer.dataset.expanded = 'false';
+
+  const controls = document.createElement('div');
+  controls.className = 'strategy-stack__controls';
+
+  const shuffleButton = document.createElement('button');
+  shuffleButton.type = 'button';
+  shuffleButton.className = 'strategy-stack__button strategy-stack__button--shuffle';
+  shuffleButton.textContent = 'Shuffle strategies';
+
+  const nav = document.createElement('div');
+  nav.className = 'strategy-stack__nav';
+
+  const prevButton = document.createElement('button');
+  prevButton.type = 'button';
+  prevButton.className = 'strategy-stack__button strategy-stack__button--previous';
+  prevButton.textContent = 'Previous';
+  prevButton.setAttribute('aria-label', 'Show previous strategy');
+
+  const nextButton = document.createElement('button');
+  nextButton.type = 'button';
+  nextButton.className = 'strategy-stack__button strategy-stack__button--next';
+  nextButton.textContent = 'Next';
+  nextButton.setAttribute('aria-label', 'Show next strategy');
+
+  nav.append(prevButton, nextButton);
+  controls.append(shuffleButton, nav);
+
+  const hint = document.createElement('p');
+  hint.className = 'strategy-stack__hint';
+  hint.textContent = 'Swipe left or right, use the arrow keys, or the buttons below to browse strategies.';
+  hint.setAttribute('aria-hidden', 'false');
+
+  const viewport = document.createElement('div');
+  viewport.className = 'strategy-stack__viewport';
+  viewport.setAttribute('aria-hidden', 'false');
+  viewport.appendChild(stackList);
+
+  const expandContainer = document.createElement('div');
+  expandContainer.className = 'strategy-stack__expand';
+
+  const expandButton = document.createElement('button');
+  expandButton.type = 'button';
+  expandButton.className = 'strategy-stack__button strategy-stack__button--expand';
+  expandButton.textContent = 'Expand all';
+  expandButton.setAttribute('aria-expanded', 'false');
+  expandContainer.appendChild(expandButton);
+
+  stackContainer.append(controls, hint, viewport, expandContainer);
+
+  const parent = expandedList.parentElement;
+  if (!parent) {
+    markFallback();
+    return null;
+  }
+
+  parent.insertBefore(stackContainer, expandedList);
+
+  const expandedWrapper = document.createElement('div');
+  expandedWrapper.className = 'strategy-stack__expanded';
+  expandedWrapper.hidden = true;
+  expandedWrapper.setAttribute('aria-hidden', 'true');
+
+  const expandPanelBaseId = `${main.dataset.needSlug || 'need'}-strategies-expanded`;
+  let expandPanelId = expandPanelBaseId;
+  if (document.getElementById(expandPanelId)) {
+    expandPanelId = `${expandPanelBaseId}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+  expandedWrapper.id = expandPanelId;
+  expandButton.setAttribute('aria-controls', expandPanelId);
+
+  parent.insertBefore(expandedWrapper, expandedList);
+  expandedWrapper.appendChild(expandedList);
+
+  expandedList.classList.add('strategy-list--expanded');
+  expandedList.setAttribute('aria-hidden', 'true');
+
+  const instructionId = `${main.dataset.needSlug || 'need'}-strategy-stack-instructions`;
+  hint.id = instructionId;
+  stackList.setAttribute('aria-describedby', instructionId);
+
+  shuffleArray(pairs);
+
+  const state = {
+    pairs,
+    stackList,
+    expandedList,
+    section: strategySection,
+    container: stackContainer,
+    expandedWrapper,
+    controls,
+    hint,
+    viewport,
+    shuffleButton,
+    prevButton,
+    nextButton,
+    expandButton,
+    reduceMotionQuery,
+    reduceMotion: Boolean(reduceMotionQuery?.matches),
+    isExpanded: false,
+  };
+
+  const applyPairOrder = () => {
+    const cloneFragment = document.createDocumentFragment();
+    const originalFragment = document.createDocumentFragment();
+    state.pairs.forEach((pair) => {
+      cloneFragment.appendChild(pair.clone);
+      originalFragment.appendChild(pair.original);
+    });
+    state.stackList.appendChild(cloneFragment);
+    state.expandedList.appendChild(originalFragment);
+  };
+
+  applyPairOrder();
+
+  const getClones = () => state.pairs.map((pair) => pair.clone);
+
+  const updateControlStates = () => {
+    const hasMultiple = state.pairs.length > 1;
+    state.prevButton.disabled = !hasMultiple;
+    state.nextButton.disabled = !hasMultiple;
+    state.shuffleButton.disabled = !hasMultiple;
+  };
+
+  const updateStack = (options = {}) => {
+    const clones = getClones();
+    const visibleCount = Math.min(4, clones.length);
+    const animate = options.animate !== false;
+    let topHeight = 0;
+
+    clones.forEach((clone, index) => {
+      const offsetIndex = Math.min(index, visibleCount - 1);
+      const translateX = offsetIndex * 16;
+      const translateY = offsetIndex * 12;
+      const scale = Math.max(0.86, 1 - offsetIndex * 0.05);
+      const baseTransform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
+      clone.dataset.stackIndex = String(index);
+      clone.dataset.stackTransform = baseTransform;
+      clone.style.position = 'absolute';
+      clone.style.top = '0';
+      clone.style.left = '0';
+      clone.style.right = '0';
+      clone.style.transition = state.reduceMotion || !animate ? 'none' : 'transform 0.3s ease, opacity 0.3s ease';
+      clone.style.transform = baseTransform;
+      clone.style.opacity = index < visibleCount ? '1' : '0';
+      clone.style.zIndex = String(clones.length - index);
+      if (index === 0) {
+        clone.dataset.stackActive = 'true';
+        clone.style.pointerEvents = state.isExpanded ? 'none' : 'auto';
+        clone.style.cursor = state.isExpanded ? 'default' : 'grab';
+        clone.setAttribute('aria-hidden', state.isExpanded ? 'true' : 'false');
+        topHeight = Math.max(topHeight, clone.offsetHeight);
+      } else {
+        clone.dataset.stackActive = 'false';
+        clone.style.pointerEvents = 'none';
+        clone.style.cursor = '';
+        clone.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    if (topHeight) {
+      state.stackList.style.height = `${topHeight + 24}px`;
+    } else {
+      state.stackList.style.height = '0px';
+    }
+  };
+
+  let resizeFrame = null;
+  const handleResize = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    if (resizeFrame) {
+      window.cancelAnimationFrame(resizeFrame);
+    }
+    resizeFrame = window.requestAnimationFrame(() => {
+      updateStack({ animate: false });
+    });
+  };
+
+  const applyExpandedState = (expanded) => {
+    if (pointerSession) {
+      const activeClone = state.pairs[0]?.clone;
+      if (activeClone) {
+        try {
+          activeClone.releasePointerCapture(pointerSession.id);
+        } catch (error) {
+          // Ignore release errors when the pointer is no longer active.
+        }
+      }
+      pointerSession = null;
+    }
+    state.isExpanded = expanded;
+    state.container.dataset.expanded = expanded ? 'true' : 'false';
+    state.section.dataset.stackReady = expanded ? 'expanded' : 'ready';
+    state.expandButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    state.expandButton.textContent = expanded ? 'Collapse' : 'Expand all';
+    state.stackList.tabIndex = expanded ? -1 : 0;
+    state.stackList.setAttribute('aria-hidden', expanded ? 'true' : 'false');
+    state.controls.hidden = expanded;
+    state.controls.setAttribute('aria-hidden', expanded ? 'true' : 'false');
+    state.hint.hidden = expanded;
+    state.hint.setAttribute('aria-hidden', expanded ? 'true' : 'false');
+    state.viewport.hidden = expanded;
+    state.viewport.setAttribute('aria-hidden', expanded ? 'true' : 'false');
+    state.expandedWrapper.hidden = !expanded;
+    state.expandedWrapper.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+    state.expandedList.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+    updateStack({ animate: false });
+  };
+
+  const showNext = () => {
+    if (state.pairs.length < 2) {
+      return;
+    }
+    const first = state.pairs.shift();
+    state.pairs.push(first);
+    applyPairOrder();
+    updateStack({ animate: !state.isExpanded });
+  };
+
+  const showPrevious = () => {
+    if (state.pairs.length < 2) {
+      return;
+    }
+    const last = state.pairs.pop();
+    state.pairs.unshift(last);
+    applyPairOrder();
+    updateStack({ animate: !state.isExpanded });
+  };
+
+  const shufflePairs = () => {
+    if (state.pairs.length < 2) {
+      return;
+    }
+    shuffleArray(state.pairs);
+    applyPairOrder();
+    updateStack({ animate: false });
+  };
+
+  let pointerSession = null;
+
+  const pointerThreshold = () => {
+    const topCard = state.pairs[0]?.clone;
+    if (!topCard) {
+      return 120;
+    }
+    return Math.max(72, topCard.offsetWidth * 0.25);
+  };
+
+  const resetActiveTransform = (clone) => {
+    if (!clone) {
+      return;
+    }
+    const baseTransform = clone.dataset.stackTransform || '';
+    clone.style.transition = state.reduceMotion ? 'none' : 'transform 0.25s ease';
+    clone.style.transform = baseTransform;
+  };
+
+  const handlePointerDown = (event) => {
+    if (state.isExpanded || state.pairs.length === 0) {
+      return;
+    }
+    if (event.isPrimary === false) {
+      return;
+    }
+    if (typeof event.button === 'number' && event.button !== 0) {
+      return;
+    }
+    if (event.target && event.target.closest && event.target.closest('button, a, input, textarea, select')) {
+      return;
+    }
+    const clone = event.target?.closest?.('.strategy-card');
+    if (!clone || clone !== state.pairs[0].clone) {
+      return;
+    }
+    pointerSession = {
+      id: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      baseTransform: clone.dataset.stackTransform || '',
+    };
+    clone.setPointerCapture(event.pointerId);
+    clone.style.transition = 'none';
+    clone.style.cursor = 'grabbing';
+  };
+
+  const handlePointerMove = (event) => {
+    if (!pointerSession || event.pointerId !== pointerSession.id) {
+      return;
+    }
+    const clone = state.pairs[0]?.clone;
+    if (!clone) {
+      return;
+    }
+    const dx = event.clientX - pointerSession.startX;
+    const dy = event.clientY - pointerSession.startY;
+    pointerSession.dx = dx;
+    pointerSession.dy = dy;
+    const baseTransform = pointerSession.baseTransform || '';
+    clone.style.transform = `${baseTransform} translate3d(${dx}px, ${dy}px, 0) rotate(${dx * 0.02}deg)`;
+  };
+
+  const settlePointerSession = (event, cancelled) => {
+    if (!pointerSession || event.pointerId !== pointerSession.id) {
+      return;
+    }
+    const clone = state.pairs[0]?.clone;
+    const session = pointerSession;
+    pointerSession = null;
+    if (!clone) {
+      return;
+    }
+    clone.releasePointerCapture(event.pointerId);
+    clone.style.cursor = 'grab';
+    if (cancelled) {
+      resetActiveTransform(clone);
+      return;
+    }
+    const dx = event.clientX - session.startX;
+    const dy = event.clientY - session.startY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+    const threshold = pointerThreshold();
+    if (absDx > threshold && absDx > absDy) {
+      const isNext = dx < 0;
+      if (!state.reduceMotion) {
+        clone.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+      } else {
+        clone.style.transition = 'none';
+      }
+      const exitX = isNext ? -clone.offsetWidth * 1.4 : clone.offsetWidth * 1.4;
+      const baseTransform = clone.dataset.stackTransform || '';
+      clone.style.transform = `${baseTransform} translate3d(${exitX}px, 0, 0) rotate(${isNext ? -10 : 10}deg)`;
+      clone.style.opacity = '0';
+      const advance = () => {
+        if (isNext) {
+          showNext();
+        } else {
+          showPrevious();
+        }
+      };
+      if (state.reduceMotion) {
+        advance();
+      } else {
+        window.setTimeout(advance, 200);
+      }
+      return;
+    }
+    resetActiveTransform(clone);
+  };
+
+  const handlePointerUp = (event) => {
+    settlePointerSession(event, false);
+  };
+
+  const handlePointerCancel = (event) => {
+    settlePointerSession(event, true);
+  };
+
+  stackList.addEventListener('pointerdown', handlePointerDown);
+  stackList.addEventListener('pointermove', handlePointerMove);
+  stackList.addEventListener('pointerup', handlePointerUp);
+  stackList.addEventListener('pointercancel', handlePointerCancel);
+
+  stackList.addEventListener('keydown', (event) => {
+    if (state.isExpanded) {
+      return;
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      showNext();
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      showPrevious();
+    }
+  });
+
+  shuffleButton.addEventListener('click', () => {
+    shufflePairs();
+  });
+
+  nextButton.addEventListener('click', () => {
+    showNext();
+  });
+
+  prevButton.addEventListener('click', () => {
+    showPrevious();
+  });
+
+  expandButton.addEventListener('click', () => {
+    applyExpandedState(!state.isExpanded);
+  });
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', handleResize);
+  }
+
+  if (reduceMotionQuery) {
+    const updateReduceMotion = (event) => {
+      state.reduceMotion = Boolean(event.matches);
+    };
+    if (typeof reduceMotionQuery.addEventListener === 'function') {
+      reduceMotionQuery.addEventListener('change', updateReduceMotion);
+    } else if (typeof reduceMotionQuery.addListener === 'function') {
+      reduceMotionQuery.addListener(updateReduceMotion);
+    }
+  }
+
+  updateControlStates();
+  updateStack({ animate: false });
+  strategySection.dataset.stackReady = 'ready';
+  state.stackList.setAttribute('aria-hidden', 'false');
+  state.controls.setAttribute('aria-hidden', 'false');
+  state.hint.setAttribute('aria-hidden', 'false');
+  state.viewport.setAttribute('aria-hidden', 'false');
+  state.expandedWrapper.setAttribute('aria-hidden', 'true');
+
+  return {
+    cards: state.pairs.flatMap((pair) => [pair.clone, pair.original]),
+  };
 }
