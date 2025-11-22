@@ -3,7 +3,7 @@ const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
 const LEGACY_JOURNAL_HASHES = new Set(['#journal-dashboard']);
-const PERSONAL_STRATEGIES_EMAIL_ADDRESS = 'me8fire@gmail.com';
+const PERSONAL_STRATEGIES_EMAIL_ADDRESS = 'ahiccup@gmail.com';
 const PERSONAL_STRATEGIES_EMAIL_SUBJECT = 'Strategies for allneeds.app!';
 const PERSONAL_STRATEGIES_EMAIL_BODY =
   'Hi Nat,\n\nI just exported my personal strategies from allneeds.app and attached the file for you.\n\nWith care,';
