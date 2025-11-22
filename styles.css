@@ -1853,8 +1853,9 @@ body.has-support-journal-open {
   }
 
   .door-card__label {
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
+    padding-inline: 0.35rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     line-height: 1.2;
   }
