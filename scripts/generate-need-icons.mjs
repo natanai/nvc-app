@@ -25,22 +25,95 @@ function mulberry32(seed) {
   };
 }
 
-function createRadialPath(slug) {
+function randomBetween(random, min, max) {
+  return min + random() * (max - min);
+}
+
+function randomInt(random, min, max) {
+  return Math.floor(randomBetween(random, min, max + 1));
+}
+
+function leafPath(cx, cy, length, width) {
+  const x1 = cx - width;
+  const x2 = cx + width;
+  const y1 = cy - length * 0.35;
+  const y2 = cy - length * 0.7;
+  const y3 = cy - length;
+  return `M ${cx.toFixed(2)} ${cy.toFixed(2)} C ${x1.toFixed(2)} ${y1.toFixed(2)}, ${x1.toFixed(2)} ${y2.toFixed(2)}, ${cx.toFixed(2)} ${y3.toFixed(2)} C ${x2.toFixed(2)} ${y2.toFixed(2)}, ${x2.toFixed(2)} ${y1.toFixed(2)}, ${cx.toFixed(2)} ${cy.toFixed(2)} Z`;
+}
+
+function bloomMarkup(random, x, y) {
+  const petals = randomInt(random, 4, 7);
+  const size = randomBetween(random, 7, 11);
+  const width = randomBetween(random, 3, 5.5);
+  const rotationOffset = randomBetween(random, 0, Math.PI * 2);
+
+  const petalsMarkup = Array.from({ length: petals }, (_, index) => {
+    const angle = rotationOffset + (index / petals) * Math.PI * 2;
+    const petalCx = x + Math.cos(angle) * (width * 0.3 + randomBetween(random, 0, 1.5));
+    const petalCy = y + Math.sin(angle) * (width * 0.3 + randomBetween(random, 0, 1.5));
+    const rotation = (angle * 180) / Math.PI + randomBetween(random, -10, 10);
+    return `<path d="${leafPath(petalCx, petalCy, size, width)}" fill="#000" transform="rotate(${rotation.toFixed(2)} ${petalCx.toFixed(2)} ${petalCy.toFixed(2)})" />`;
+  }).join('');
+
+  const centerRadius = randomBetween(random, 2.4, 3.6);
+  const center = `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${centerRadius.toFixed(2)}" fill="#000" />`;
+
+  return `${petalsMarkup}${center}`;
+}
+
+function stemMarkup(random, baseX, baseY, height) {
+  const sway = randomBetween(random, -6, 6);
+  const controlOffset = randomBetween(random, -5, 5);
+  const topX = baseX + sway;
+  const topY = baseY - height;
+  const c1x = baseX + controlOffset;
+  const c1y = baseY - height * 0.35;
+  const c2x = baseX + sway * 0.4;
+  const c2y = baseY - height * 0.7;
+  const path = `<path d="M ${baseX.toFixed(2)} ${baseY.toFixed(2)} C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${topX.toFixed(2)} ${topY.toFixed(2)}" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" />`;
+  return { path, topX, topY };
+}
+
+function leavesMarkup(random, baseX, baseY, height, count) {
+  return Array.from({ length: count }, () => {
+    const progress = randomBetween(random, 0.25, 0.78);
+    const cx = baseX + randomBetween(random, -5.5, 5.5);
+    const cy = baseY - height * progress;
+    const length = randomBetween(random, 9, 15);
+    const width = randomBetween(random, 3.5, 6.5);
+    const rotation = randomBetween(random, -50, 50);
+    return `<path d="${leafPath(cx, cy, length, width)}" fill="#000" transform="rotate(${rotation.toFixed(2)} ${cx.toFixed(2)} ${cy.toFixed(2)})" />`;
+  }).join('');
+}
+
+function groundMarkup(random) {
+  const moundCount = randomInt(random, 1, 2);
+  return Array.from({ length: moundCount }, () => {
+    const cx = randomBetween(random, 24, 40);
+    const rx = randomBetween(random, 10, 16);
+    const ry = randomBetween(random, 3, 5.5);
+    const cy = randomBetween(random, 53, 57);
+    return `<ellipse cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" rx="${rx.toFixed(2)}" ry="${ry.toFixed(2)}" fill="#000" />`;
+  }).join('');
+}
+
+function iconMarkup(slug) {
   const random = mulberry32(hashSlug(slug));
-  const pointCount = 6 + Math.floor(random() * 6);
-  const wobble = 0.5 + random() * 0.6;
-  const minRadius = 18 + random() * 6;
-  const maxRadius = 26 + random() * 8;
+  const stemCount = randomInt(random, 2, 4);
+  const ground = groundMarkup(random);
 
-  const points = Array.from({ length: pointCount }, (_, index) => {
-    const angle = (Math.PI * 2 * (index / pointCount)) + random() * wobble;
-    const radius = minRadius + random() * (maxRadius - minRadius);
-    const x = 32 + Math.cos(angle) * radius;
-    const y = 32 + Math.sin(angle) * radius;
-    return `${index === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)}`;
-  });
+  const stems = Array.from({ length: stemCount }, () => {
+    const baseX = randomBetween(random, 18, 46);
+    const baseY = randomBetween(random, 54, 58);
+    const height = randomBetween(random, 20, 32);
+    const { path, topX, topY } = stemMarkup(random, baseX, baseY, height);
+    const leaves = leavesMarkup(random, baseX, baseY, height, randomInt(random, 1, 3));
+    const bloom = bloomMarkup(random, topX, topY - randomBetween(random, 0, 2));
+    return `${path}${leaves}${bloom}`;
+  }).join('');
 
-  return `${points.join(' ')} Z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">${ground}${stems}</svg>`;
 }
 
 async function ensureDir(dir) {
@@ -54,17 +127,6 @@ async function readNeedSlugs() {
     .map((entry) => entry.name)
     .filter((name) => name !== 'index.html')
     .sort((a, b) => a.localeCompare(b));
-}
-
-function iconMarkup(slug) {
-  const outlinePath = createRadialPath(slug);
-  const innerRandom = mulberry32(hashSlug(`${slug}-inner`));
-  const innerOffsetX = (innerRandom() - 0.5) * 6;
-  const innerOffsetY = (innerRandom() - 0.5) * 6;
-  const innerRadius = 10 + innerRandom() * 6;
-  const innerCircle = `<circle cx="${(32 + innerOffsetX).toFixed(2)}" cy="${(32 + innerOffsetY).toFixed(2)}" r="${innerRadius.toFixed(2)}" fill="#000" />`;
-  const outerPath = `<path d="${outlinePath}" fill="#000" />`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">${outerPath}${innerCircle}</svg>`;
 }
 
 async function writeIcons(slugs) {
