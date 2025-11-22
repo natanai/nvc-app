@@ -79,7 +79,7 @@ const OBSERVATION_GUIDELINE_NOTE =
 const OBSERVATION_DETECTION_NOTE =
   'Magnets open the matching entry so you can work with feelings and needs right away.';
 const OBSERVATION_EXAMPLE_TEXT =
-  'Yesterday at lunch in the classroom, I saw you gently push your plate off the table twice.';
+  'This morning at 8:15 in the classroom, I saw you place three books on the desk and say, “Let’s start reading.”';
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
@@ -210,6 +210,7 @@ function bind() {
   if (exampleApply) {
     exampleApply.addEventListener('click', () => applyObservationExample());
   }
+  toggleObservationExample(false);
 
   bindGuideOpener();
   updateNextNavigationLinks();
@@ -1140,7 +1141,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Evaluation words',
       lint.evaluationMarkers,
-      'Swap judgments for what a camera would capture (quotes, actions, counts).',
+      'I’m seeing judgment words. Try naming what a camera or microphone would catch instead.',
     );
     if (entry) {
       issues.push(entry);
@@ -1150,7 +1151,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Interpretations to revisit',
       lint.agentiveMarkers,
-      'Stick with what happened without adding cause-and-effect language.',
+      'Let’s keep to what happened without guessing cause and effect.',
     );
     if (entry) {
       issues.push(entry);
@@ -1170,7 +1171,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Story words',
       lint.fauxFeelings,
-      'Name the observable action or quote instead of story shorthand.',
+      'Try describing the specific action or quote instead of story shorthand.',
     );
     if (entry) {
       issues.push(entry);
@@ -1180,7 +1181,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Feeling words',
       lint.feelings,
-      'Save feelings for the next step; the observation just covers what happened.',
+      'Feelings can come next—this line is just about what happened.',
     );
     if (entry) {
       issues.push(entry);
@@ -1190,7 +1191,7 @@ function buildIssueList(lint) {
     const entry = formatIssue(
       'Need words',
       lint.needs,
-      'Needs come after the observation—focus on the concrete moment first.',
+      'Needs can be named afterward; here we’re just noting the concrete moment.',
     );
     if (entry) {
       issues.push(entry);
