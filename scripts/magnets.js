@@ -104,6 +104,20 @@ const clamp = (value, min, max) => {
   return value;
 };
 
+const setNeedIconProperty = (element) => {
+  if (!element || !(element instanceof HTMLElement)) {
+    return;
+  }
+  const magnetId = element.dataset.magnetId || '';
+  const match = magnetId.match(/^needs-(.+)$/i);
+  if (!match || !match[1]) {
+    return;
+  }
+  const slug = match[1];
+  element.dataset.magnetId = `needs-${slug}`;
+  element.style.setProperty('--magnet-icon', `url("/icons/needs/${slug}.svg")`);
+};
+
 const fontsReady = typeof document !== 'undefined' && document.fonts && document.fonts.ready
   ? document.fonts.ready.catch(() => undefined)
   : Promise.resolve();
@@ -1481,6 +1495,7 @@ const initializeBoard = async (root, index) => {
   magnetElements.forEach((element, magnetIndex) => {
     const id = element.dataset.magnetId || `${index}-${magnetIndex}`;
     element.dataset.magnetId = id;
+    setNeedIconProperty(element);
     applyMagnetDecorations(element, magnetIndex);
   });
 

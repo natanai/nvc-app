@@ -1368,9 +1368,9 @@ function renderCategory(type, items) {
   const magnets = items
     .map(
       (item) =>
-        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/">${escapeHtml(
+        `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/"><span class="magnet__label">${escapeHtml(
           item.title,
-        )}</a>`,
+        )}</span></a>`,
     )
     .join('');
 
@@ -1686,7 +1686,10 @@ ${strategiesNote}
 
   const main = `
       <header class="page-header">
-        <h1 class="page-title">${escapeHtml(fullTitle)}</h1>
+        <h1 class="page-title need-title">
+          <span class="need-title__icon" aria-hidden="true"></span>
+          <span class="need-title__text">${escapeHtml(fullTitle)}</span>
+        </h1>
         ${descriptionHtml}
       </header>
       ${evidenceHtml}
@@ -1707,7 +1710,9 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+    scripts: [
+      { src: 'scripts/need-page.js', type: 'module' },
+    ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,
