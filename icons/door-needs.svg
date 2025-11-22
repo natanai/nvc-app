@@ -1,15 +1,26 @@
-<svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-  <path d="M11 20h10v4H11z" fill="#13633F"/>
-  <path d="M9 22h14v6H9z" fill="#0B3B27"/>
-  <path d="M13 10h2v6h-2z" fill="#1F8757"/>
-  <path d="M17 10h2v6h-2z" fill="#1F8757"/>
-  <path d="M12 8h4v2h-4z" fill="#49B982"/>
-  <path d="M16 8h4v2h-4z" fill="#49B982"/>
-  <path d="M10 12h4v4h-4z" fill="#2A9F69"/>
-  <path d="M18 12h4v4h-4z" fill="#2A9F69"/>
-  <path d="M12 6h4v2h-4z" fill="#63D89D"/>
-  <path d="M16 6h4v2h-4z" fill="#63D89D"/>
-  <path d="M14 16h4v4h-4z" fill="#1F8757"/>
-  <path d="M8 24h4v4H8z" fill="#0A2C1C"/>
-  <path d="M20 24h4v4h-4z" fill="#0A2C1C"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="doorNeedsBg" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F1FBF6" />
+      <stop offset="65%" stop-color="#D7F2E5" />
+      <stop offset="100%" stop-color="#E5F3FF" />
+    </linearGradient>
+    <linearGradient id="doorNeedsFrame" x1="32" y1="10" x2="32" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2C8A55" />
+      <stop offset="100%" stop-color="#0D4A30" />
+    </linearGradient>
+    <linearGradient id="doorNeedsGlow" x1="32" y1="14" x2="32" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#B7F1D0" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#5DC590" stop-opacity="0.4" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#doorNeedsBg)" />
+  <rect x="12" y="14" width="40" height="36" rx="8" fill="#EAF7EF" stroke="#1B5A39" stroke-width="2.5" />
+  <rect x="18" y="18" width="28" height="28" rx="6" fill="url(#doorNeedsFrame)" />
+  <rect x="20.5" y="20.5" width="23" height="23" rx="5" fill="url(#doorNeedsGlow)" />
+  <path d="M23 46V33c0-3.866 3.134-7 7-7h4c3.866 0 7 3.134 7 7v13" fill="#0F3B26" />
+  <path d="M28 46V32c0-2.21 1.79-4 4-4s4 1.79 4 4v14" fill="#73E0A5" />
+  <rect x="29.5" y="29.5" width="5" height="11" rx="2.5" fill="#E7F8EF" />
+  <circle cx="33.5" cy="37" r="1.2" fill="#0F3B26" />
+  <rect x="12" y="48" width="40" height="4" rx="2" fill="#0F3B26" opacity="0.85" />
 </svg>

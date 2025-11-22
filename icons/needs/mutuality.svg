@@ -1,1 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true"><path d="M51.79 38.90 L42.11 52.83 L33.56 51.70 L24.41 57.37 L9.67 30.28 L12.38 20.25 L24.44 6.73 L29.95 9.68 L47.86 10.31 L48.89 14.12 L49.87 41.63 Z" fill="#000" /><circle cx="31.36" cy="30.93" r="10.20" fill="#000" /></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="doorFeelingsBg" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFF4FA" />
+      <stop offset="60%" stop-color="#FCE5F5" />
+      <stop offset="100%" stop-color="#F2E8FF" />
+    </linearGradient>
+    <linearGradient id="doorFeelingsFrame" x1="32" y1="12" x2="32" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#B03074" />
+      <stop offset="100%" stop-color="#5A0F3B" />
+    </linearGradient>
+    <radialGradient id="doorFeelingsGlow" cx="32" cy="32" r="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFB5DC" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#D45BA1" stop-opacity="0.35" />
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#doorFeelingsBg)" />
+  <rect x="11" y="13" width="42" height="38" rx="9" fill="#FCEEF7" stroke="#74154C" stroke-width="2.5" />
+  <rect x="17" y="17" width="30" height="30" rx="7" fill="url(#doorFeelingsFrame)" />
+  <rect x="19.5" y="19.5" width="25" height="25" rx="6" fill="url(#doorFeelingsGlow)" />
+  <path d="M23.5 30.5c0-3.59 2.91-6.5 6.5-6.5 1.97 0 3.73.9 5 2.33A6.49 6.49 0 0 1 40 24c3.59 0 6.5 2.91 6.5 6.5 0 2.08-.95 3.93-2.43 5.15L32 44 25.93 37.9a6.5 6.5 0 0 1-2.43-5.15Z" fill="#FFE0F0" stroke="#5A0F3B" stroke-width="1.6" stroke-linejoin="round" />
+  <circle cx="27.5" cy="31" r="1.2" fill="#5A0F3B" />
+  <circle cx="36.5" cy="31" r="1.2" fill="#5A0F3B" />
+  <rect x="11" y="49" width="42" height="4" rx="2" fill="#5A0F3B" opacity="0.85" />
+</svg>
