@@ -6,7 +6,7 @@ const needsDir = path.join(rootDir, 'needs');
 const iconsDir = path.join(rootDir, 'icons', 'needs');
 const cssOutputPath = path.join(rootDir, 'styles', 'needs-magnet-icons.css');
 
-const palette = [
+const foliagePalette = [
   '#0A2C1C', // soil
   '#0B3B27',
   '#13633F',
@@ -15,6 +15,21 @@ const palette = [
   '#49B982',
   '#63D89D',
   '#9CE4BF', // highlight
+];
+
+const bloomPalette = [
+  '#E75A7C', // rose
+  '#F48B3F', // marigold
+  '#F6D860', // sunflower
+  '#9C7AE5', // violet
+  '#5BC0EB', // forget-me-not
+  '#7AD7A5', // mint bloom
+  '#FF9F1C', // zinnia
+  '#FFCAD4', // cherry blossom
+  '#9E0059', // fuchsia
+  '#4EA1D3', // bluebell
+  '#D291BC', // lilac
+  '#63E6BE', // succulent bloom
 ];
 
 function hashSlug(slug) {
@@ -40,6 +55,20 @@ function randomInt(random, min, max) {
   return min + Math.floor(random() * (max - min + 1));
 }
 
+function lightenHex(color, amount) {
+  const clamped = Math.min(Math.max(amount, 0), 1);
+  const toChannel = (hex) => parseInt(hex, 16);
+  const fromChannel = (value) => value.toString(16).padStart(2, '0');
+
+  const r = toChannel(color.slice(1, 3));
+  const g = toChannel(color.slice(3, 5));
+  const b = toChannel(color.slice(5, 7));
+
+  const mix = (channel) => Math.round(channel + (255 - channel) * clamped);
+
+  return `#${fromChannel(mix(r))}${fromChannel(mix(g))}${fromChannel(mix(b))}`;
+}
+
 const gridSize = 16;
 
 function setCell(grid, x, y, color) {
@@ -63,12 +92,12 @@ function symmetricalRect(grid, centerX, y, halfWidth, height, color) {
 
 function derivePlantTheme(slug) {
   const random = mulberry32(hashSlug(slug));
-  const stemColor = palette[randomInt(random, 2, 5)];
-  const leafColor = palette[randomInt(random, 3, 6)];
-  const bloomColor = palette[randomInt(random, 4, palette.length - 1)];
-  const potColor = palette[randomInt(random, 0, 2)];
-  const rimColor = palette[Math.max(0, randomInt(random, 1, 3) - 1)];
-  const accentColor = palette[randomInt(random, 5, palette.length - 1)];
+  const stemColor = foliagePalette[randomInt(random, 2, 5)];
+  const leafColor = foliagePalette[randomInt(random, 3, 6)];
+  const bloomColor = bloomPalette[randomInt(random, 0, bloomPalette.length - 1)];
+  const potColor = foliagePalette[randomInt(random, 0, 2)];
+  const rimColor = foliagePalette[Math.max(0, randomInt(random, 1, 3) - 1)];
+  const accentColor = lightenHex(bloomColor, 0.3);
   return { stemColor, leafColor, bloomColor, potColor, rimColor, accentColor };
 }
 

@@ -10,467 +10,467 @@ main[data-need-slug] {
 main[data-need-slug='acceptance'] {
   --need-icon: url('icons/needs/acceptance.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F48B3F;
 }
 
 .magnet[data-magnet-id='needs-accomplishment'],
 main[data-need-slug='accomplishment'] {
   --need-icon: url('icons/needs/accomplishment.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-accountability'],
 main[data-need-slug='accountability'] {
   --need-icon: url('icons/needs/accountability.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-acknowledgement'],
 main[data-need-slug='acknowledgement'] {
   --need-icon: url('icons/needs/acknowledgement.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #9E0059;
 }
 
 .magnet[data-magnet-id='needs-act-freely'],
 main[data-need-slug='act-freely'] {
   --need-icon: url('icons/needs/act-freely.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-appreciation'],
 main[data-need-slug='appreciation'] {
   --need-icon: url('icons/needs/appreciation.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-authenticity'],
 main[data-need-slug='authenticity'] {
   --need-icon: url('icons/needs/authenticity.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-autonomy'],
 main[data-need-slug='autonomy'] {
   --need-icon: url('icons/needs/autonomy.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-beauty'],
 main[data-need-slug='beauty'] {
   --need-icon: url('icons/needs/beauty.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-belonging'],
 main[data-need-slug='belonging'] {
   --need-icon: url('icons/needs/belonging.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-calm'],
 main[data-need-slug='calm'] {
   --need-icon: url('icons/needs/calm.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-causality'],
 main[data-need-slug='causality'] {
   --need-icon: url('icons/needs/causality.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-choice'],
 main[data-need-slug='choice'] {
   --need-icon: url('icons/needs/choice.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FFCAD4;
 }
 
 .magnet[data-magnet-id='needs-choose-freely'],
 main[data-need-slug='choose-freely'] {
   --need-icon: url('icons/needs/choose-freely.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #E75A7C;
 }
 
 .magnet[data-magnet-id='needs-clarity'],
 main[data-need-slug='clarity'] {
   --need-icon: url('icons/needs/clarity.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-closeness'],
 main[data-need-slug='closeness'] {
   --need-icon: url('icons/needs/closeness.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-commitment'],
 main[data-need-slug='commitment'] {
   --need-icon: url('icons/needs/commitment.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-community'],
 main[data-need-slug='community'] {
   --need-icon: url('icons/needs/community.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-connection'],
 main[data-need-slug='connection'] {
   --need-icon: url('icons/needs/connection.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-consideration'],
 main[data-need-slug='consideration'] {
   --need-icon: url('icons/needs/consideration.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FF9F1C;
 }
 
 .magnet[data-magnet-id='needs-consistency'],
 main[data-need-slug='consistency'] {
   --need-icon: url('icons/needs/consistency.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-contribution'],
 main[data-need-slug='contribution'] {
   --need-icon: url('icons/needs/contribution.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-control'],
 main[data-need-slug='control'] {
   --need-icon: url('icons/needs/control.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-dependability'],
 main[data-need-slug='dependability'] {
   --need-icon: url('icons/needs/dependability.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-do-things-at-my-own-pace-and-in-my-own-way'],
 main[data-need-slug='do-things-at-my-own-pace-and-in-my-own-way'] {
   --need-icon: url('icons/needs/do-things-at-my-own-pace-and-in-my-own-way.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F48B3F;
 }
 
 .magnet[data-magnet-id='needs-empathy'],
 main[data-need-slug='empathy'] {
   --need-icon: url('icons/needs/empathy.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-empowerment'],
 main[data-need-slug='empowerment'] {
   --need-icon: url('icons/needs/empowerment.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-equality'],
 main[data-need-slug='equality'] {
   --need-icon: url('icons/needs/equality.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-fairness'],
 main[data-need-slug='fairness'] {
   --need-icon: url('icons/needs/fairness.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #9E0059;
 }
 
 .magnet[data-magnet-id='needs-freedom'],
 main[data-need-slug='freedom'] {
   --need-icon: url('icons/needs/freedom.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #7AD7A5;
 }
 
 .magnet[data-magnet-id='needs-friendship'],
 main[data-need-slug='friendship'] {
   --need-icon: url('icons/needs/friendship.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-genuineness'],
 main[data-need-slug='genuineness'] {
   --need-icon: url('icons/needs/genuineness.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-growth'],
 main[data-need-slug='growth'] {
   --need-icon: url('icons/needs/growth.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-honesty'],
 main[data-need-slug='honesty'] {
   --need-icon: url('icons/needs/honesty.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-honor'],
 main[data-need-slug='honor'] {
   --need-icon: url('icons/needs/honor.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FF9F1C;
 }
 
 .magnet[data-magnet-id='needs-inclusion'],
 main[data-need-slug='inclusion'] {
   --need-icon: url('icons/needs/inclusion.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #E75A7C;
 }
 
 .magnet[data-magnet-id='needs-integrity'],
 main[data-need-slug='integrity'] {
   --need-icon: url('icons/needs/integrity.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FF9F1C;
 }
 
 .magnet[data-magnet-id='needs-justice'],
 main[data-need-slug='justice'] {
   --need-icon: url('icons/needs/justice.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-love-caring'],
 main[data-need-slug='love-caring'] {
   --need-icon: url('icons/needs/love-caring.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #4EA1D3;
 }
 
 .magnet[data-magnet-id='needs-mattering'],
 main[data-need-slug='mattering'] {
   --need-icon: url('icons/needs/mattering.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-mutuality'],
 main[data-need-slug='mutuality'] {
   --need-icon: url('icons/needs/mutuality.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-need-for-all-living-things-to-flourish'],
 main[data-need-slug='need-for-all-living-things-to-flourish'] {
   --need-icon: url('icons/needs/need-for-all-living-things-to-flourish.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F48B3F;
 }
 
 .magnet[data-magnet-id='needs-need-to-matter'],
 main[data-need-slug='need-to-matter'] {
   --need-icon: url('icons/needs/need-to-matter.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #9E0059;
 }
 
 .magnet[data-magnet-id='needs-non-judgmental-communication'],
 main[data-need-slug='non-judgmental-communication'] {
   --need-icon: url('icons/needs/non-judgmental-communication.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FFCAD4;
 }
 
 .magnet[data-magnet-id='needs-nurturing'],
 main[data-need-slug='nurturing'] {
   --need-icon: url('icons/needs/nurturing.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #D291BC;
 }
 
 .magnet[data-magnet-id='needs-order'],
 main[data-need-slug='order'] {
   --need-icon: url('icons/needs/order.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-participation'],
 main[data-need-slug='participation'] {
   --need-icon: url('icons/needs/participation.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-peace'],
 main[data-need-slug='peace'] {
   --need-icon: url('icons/needs/peace.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FF9F1C;
 }
 
 .magnet[data-magnet-id='needs-peer-respect'],
 main[data-need-slug='peer-respect'] {
   --need-icon: url('icons/needs/peer-respect.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-physical-fitness'],
 main[data-need-slug='physical-fitness'] {
   --need-icon: url('icons/needs/physical-fitness.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-predictability'],
 main[data-need-slug='predictability'] {
   --need-icon: url('icons/needs/predictability.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-privacy'],
 main[data-need-slug='privacy'] {
   --need-icon: url('icons/needs/privacy.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F6D860;
 }
 
 .magnet[data-magnet-id='needs-recognition'],
 main[data-need-slug='recognition'] {
   --need-icon: url('icons/needs/recognition.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-relaxation'],
 main[data-need-slug='relaxation'] {
   --need-icon: url('icons/needs/relaxation.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #63E6BE;
 }
 
 .magnet[data-magnet-id='needs-reliability'],
 main[data-need-slug='reliability'] {
   --need-icon: url('icons/needs/reliability.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #F48B3F;
 }
 
 .magnet[data-magnet-id='needs-respect'],
 main[data-need-slug='respect'] {
   --need-icon: url('icons/needs/respect.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #7AD7A5;
 }
 
 .magnet[data-magnet-id='needs-rest'],
 main[data-need-slug='rest'] {
   --need-icon: url('icons/needs/rest.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #9CE4BF;
+  --need-icon-color: #D291BC;
 }
 
 .magnet[data-magnet-id='needs-safety'],
 main[data-need-slug='safety'] {
   --need-icon: url('icons/needs/safety.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FFCAD4;
 }
 
 .magnet[data-magnet-id='needs-security'],
 main[data-need-slug='security'] {
   --need-icon: url('icons/needs/security.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #E75A7C;
 }
 
 .magnet[data-magnet-id='needs-self-expression'],
 main[data-need-slug='self-expression'] {
   --need-icon: url('icons/needs/self-expression.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-serenity'],
 main[data-need-slug='serenity'] {
   --need-icon: url('icons/needs/serenity.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #7AD7A5;
 }
 
 .magnet[data-magnet-id='needs-space'],
 main[data-need-slug='space'] {
   --need-icon: url('icons/needs/space.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FF9F1C;
 }
 
 .magnet[data-magnet-id='needs-support'],
 main[data-need-slug='support'] {
   --need-icon: url('icons/needs/support.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #9C7AE5;
 }
 
 .magnet[data-magnet-id='needs-to-be-heard'],
 main[data-need-slug='to-be-heard'] {
   --need-icon: url('icons/needs/to-be-heard.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #2A9F69;
+  --need-icon-color: #E75A7C;
 }
 
 .magnet[data-magnet-id='needs-to-be-seen'],
 main[data-need-slug='to-be-seen'] {
   --need-icon: url('icons/needs/to-be-seen.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FFCAD4;
 }
 
 .magnet[data-magnet-id='needs-trust'],
 main[data-need-slug='trust'] {
   --need-icon: url('icons/needs/trust.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #49B982;
+  --need-icon-color: #5BC0EB;
 }
 
 .magnet[data-magnet-id='needs-understanding'],
 main[data-need-slug='understanding'] {
   --need-icon: url('icons/needs/understanding.svg');
   --need-icon-visible: 1;
-  --need-icon-color: #63D89D;
+  --need-icon-color: #FFCAD4;
 }
