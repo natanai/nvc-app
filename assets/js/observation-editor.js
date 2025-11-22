@@ -2358,6 +2358,7 @@ function renderHighlight() {
 }
 
 function syncObservationHighlightScroll() {
+  syncObservationHighlightLayout();
   const textarea = document.getElementById('observation-text');
   const highlight = document.getElementById('observation-highlight');
   const formula = document.getElementById('observation-formula');
@@ -2376,6 +2377,39 @@ function syncObservationHighlightScroll() {
 
   applyTransform(highlight);
   applyTransform(formula);
+}
+
+function syncObservationHighlightLayout() {
+  const textarea = document.getElementById('observation-text');
+  if (!textarea || typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+    return;
+  }
+
+  const highlight = document.getElementById('observation-highlight');
+  const formula = document.getElementById('observation-formula');
+  const layers = [highlight, formula].filter(Boolean);
+  if (!layers.length) {
+    return;
+  }
+
+  const styles = window.getComputedStyle(textarea);
+  const paddingTop = styles.paddingTop || '';
+  const paddingBottom = styles.paddingBottom || '';
+  const paddingLeft = styles.paddingLeft || '';
+  const paddingRightPx = parseFloat(styles.paddingRight || '0');
+  const scrollbarWidth = Math.max(0, (textarea.offsetWidth || 0) - (textarea.clientWidth || 0));
+  const paddingRight = `${paddingRightPx + scrollbarWidth}px`;
+  const height = Math.max(textarea.scrollHeight || 0, textarea.clientHeight || 0);
+
+  layers.forEach(layer => {
+    layer.style.height = `${height}px`;
+    layer.style.paddingTop = paddingTop;
+    layer.style.paddingBottom = paddingBottom;
+    layer.style.paddingLeft = paddingLeft;
+    layer.style.paddingRight = paddingRight;
+    layer.style.lineHeight = styles.lineHeight || '';
+    layer.style.font = styles.font || '';
+  });
 }
 
 function inspectHighlightAtCursor(textarea) {
