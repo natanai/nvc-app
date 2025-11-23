@@ -4,13 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       commit-message:
-        description: "Commit message for the generated pull request"
+        description: "Commit message for the generated changes"
         required: false
         default: "Apply fact-checking spreadsheets"
       base-branch:
-        description: "Base branch for the pull request"
+        description: "Branch to apply the fact-checking spreadsheets to"
         required: false
         default: "main"
+      push-directly:
+        description: "Set to true to commit directly to the base branch instead of opening a PR"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   import-fact-checking:
@@ -39,7 +47,15 @@ jobs:
           npm run build:data
           npm run build:pages
 
+      - name: Commit applied data directly
+        if: ${{ github.event.inputs.push-directly == 'true' }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ${{ github.event.inputs.commit-message }}
+          branch: ${{ github.event.inputs.base-branch }}
+
       - name: Create pull request with applied data
+        if: ${{ github.event.inputs.push-directly != 'true' }}
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: ${{ github.event.inputs.commit-message }}
