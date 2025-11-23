@@ -1,0 +1,55 @@
+name: Apply Fact-Checking Spreadsheets
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit-message:
+        description: "Commit message for the generated pull request"
+        required: false
+        default: "Apply fact-checking spreadsheets"
+      base-branch:
+        description: "Base branch for the pull request"
+        required: false
+        default: "main"
+
+jobs:
+  import-fact-checking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.base-branch }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply fact-checking spreadsheets
+        run: npm run import:fact-checking
+
+      - name: Rebuild dataset and pages
+        run: |
+          npm run build:data
+          npm run build:pages
+
+      - name: Create pull request with applied data
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: ${{ github.event.inputs.commit-message }}
+          branch: fact-checking/apply
+          branch-suffix: timestamp
+          title: ${{ github.event.inputs.commit-message }}
+          body: |
+            This pull request was generated automatically from the fact-checking spreadsheets.
+
+            - Imported edited files from `fact-checking/`
+            - Regenerated data and static pages
+          base: ${{ github.event.inputs.base-branch }}
+          delete-branch: true
