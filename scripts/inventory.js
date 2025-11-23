@@ -6695,10 +6695,11 @@ function focusNeedSection(slug) {
 
   function toggleBodyShadow(body) {
     if (!body) return;
-    const hasOverflow = body.scrollHeight > body.clientHeight + 1;
-    const scrolledToBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 1;
 
-    body.classList.toggle('strategy-card__body--shadow', hasOverflow && !scrolledToBottom);
+    const hasOverflow = body.scrollHeight > body.clientHeight + 1;
+    const dismissed = body.dataset.scrollHintDismissed === 'true';
+
+    body.classList.toggle('strategy-card__body--shadow', hasOverflow && !dismissed);
   }
 
   function refreshBodyShadows() {
@@ -6712,6 +6713,9 @@ function focusNeedSection(slug) {
     const body = card.querySelector('.strategy-card__body');
     if (body) {
       body.addEventListener('scroll', function () {
+        if (body.scrollTop > 0) {
+          body.dataset.scrollHintDismissed = 'true';
+        }
         toggleBodyShadow(body);
       });
     }
