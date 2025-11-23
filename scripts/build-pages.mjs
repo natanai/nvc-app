@@ -1210,13 +1210,16 @@ function renderStrategyForm({
     : '';
 
   const multipleAttr = needSelectMultiple ? ' multiple' : '';
+  const needHintId = `${idPrefix}-need-hint`;
+  const needDescribedByAttr = ` aria-describedby="${needHintId}"`;
 
   const needField = includeNeedSelect
     ? `
         <div class="strategy-form__field">
           <label for="${idPrefix}-need">Primary need</label>
+          <p id="${needHintId}" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
           <div class="strategy-card strategy-card--input">
-            <select id="${idPrefix}-need" name="need"${multipleAttr} required>
+            <select id="${idPrefix}-need" name="need"${multipleAttr}${needDescribedByAttr} required>
               ${placeholderOption}
               ${needOptions}
             </select>
