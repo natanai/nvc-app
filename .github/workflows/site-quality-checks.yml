@@ -1,17 +1,25 @@
-name: Navigation Magnet Coverage
+name: Site Quality Checks
 
 on:
   push:
     branches: [main, work]
   pull_request:
     branches: [main, work]
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Branch to run checks against (defaults to main)'
+        required: false
+        default: main
 
 jobs:
-  nav-magnet-coverage:
+  site-quality:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target_branch || github.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -20,13 +28,19 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build site
         run: npm run build
 
       - name: Verify data integrity
         run: npm run test:data-integrity
+
+      - name: Verify customizer preload
+        run: npm run test:customizer
+
+      - name: Run flicker and jitter checker
+        run: npm run test:flicker-jitter
 
       - name: Verify navigation magnets
         run: npm run test:nav-magnets
