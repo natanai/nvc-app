@@ -1190,54 +1190,100 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="clean-something" data-strategy-tags="order|beauty|accomplishment" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Clean something</h3>
-                    <p class="strategy-card__description">Clean your room, your kitchen, anything. Bring order to the chaos :)</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Crunch the numbers</h3>
-                    <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="make-art" data-strategy-tags="to-be-seen|to-be-heard|self-expression|autonomy|choice|accomplishment|acceptance|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Make art</h3>
-                    <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="make-a-list-and-check-things-off" data-strategy-tags="accomplishment" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Make a list and check things off</h3>
-                    <p class="strategy-card__description">If you make the tasks small enough so as to avoid becoming overwhelmed the experience of checking something off a list can be very powerful. Things like “10 minutes playing piano scales” or “10 minutes cleaning the kitchen” are a great start. Set a timer and allow yourself to feel repeat when the ten minutes are up. Don’t force yourself to go past these simple goal. Enjoy having make a goal and achieved it.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <p class="strategy-deck-hint">
+              Swipe left or right (or use the arrows) to see more strategies.
+              Cards also scroll vertically if there’s more text.
+            </p>
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="clean-something" data-strategy-tags="order|beauty|accomplishment" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Clean something</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Clean your room, your kitchen, anything. Bring order to the chaos :)</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Crunch the numbers</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="make-art" data-strategy-tags="to-be-seen|to-be-heard|self-expression|autonomy|choice|accomplishment|acceptance|growth" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Make art</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="make-a-list-and-check-things-off" data-strategy-tags="accomplishment" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Make a list and check things off</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">If you make the tasks small enough so as to avoid becoming overwhelmed the experience of checking something off a list can be very powerful. Things like “10 minutes playing piano scales” or “10 minutes cleaning the kitchen” are a great start. Set a timer and allow yourself to feel repeat when the ten minutes are up. Don’t force yourself to go past these simple goal. Enjoy having make a goal and achieved it.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

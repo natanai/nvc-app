@@ -1190,72 +1190,122 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Call a friend</h3>
-                    <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Listen to music</h3>
-                    <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="read-a-character-driven-novel" data-strategy-tags="connection|belonging" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Read a character driven novel</h3>
-                    <p class="strategy-card__description">When we read a book the world and it’s inhabitants can feel especially personal. We can build very powerful connections this way and can go a long way in helping us feel less alone in the world. It’s okay for those relationships to mean so much to us, that’s why the author worked so hard on them &lt;3</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="play-a-social-video-game" data-strategy-tags="connection|belonging|participation" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a social video game</h3>
-                    <p class="strategy-card__description">Some games involve other human interactions, corporatize games are sometimes called “PVE” (player vs environment) but other games that have compelling fictional characters could also be nice. Similar to reading a book you can build relationships with the characters and find connection in relating to their experience.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="read-a-poem-you-like-aloud" data-strategy-tags="to-be-heard|acknowledgement|belonging|to-be-seen|need-to-matter|serenity|beauty" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Read a poem you like aloud</h3>
-                    <p class="strategy-card__description">Try a search online like poets.org. Search a key word related to what you’re experiencing right now. Find a poem you’re relating to and in the privacy of your room or car or closet (wherever you feel comfortable) and read the poem aloud to yourself. Let it gives you words in a time when you have none. Experience the validation that this artist understands also how you might be feeling right now and sees it as valid too.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="ambient-postcard" data-strategy-tags="belonging|connection|self-expression|appreciation">
-                    <h3 class="strategy-card__title">Ambient Postcard</h3>
-                    <p class="strategy-card__description">On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your &quot;right now&quot;; optionally send it to one person.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <p class="strategy-deck-hint">
+              Swipe left or right (or use the arrows) to see more strategies.
+              Cards also scroll vertically if there’s more text.
+            </p>
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Call a friend</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Listen to music</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="read-a-character-driven-novel" data-strategy-tags="connection|belonging" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Read a character driven novel</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">When we read a book the world and it’s inhabitants can feel especially personal. We can build very powerful connections this way and can go a long way in helping us feel less alone in the world. It’s okay for those relationships to mean so much to us, that’s why the author worked so hard on them &lt;3</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="play-a-social-video-game" data-strategy-tags="connection|belonging|participation" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Play a social video game</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Some games involve other human interactions, corporatize games are sometimes called “PVE” (player vs environment) but other games that have compelling fictional characters could also be nice. Similar to reading a book you can build relationships with the characters and find connection in relating to their experience.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="read-a-poem-you-like-aloud" data-strategy-tags="to-be-heard|acknowledgement|belonging|to-be-seen|need-to-matter|serenity|beauty" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Read a poem you like aloud</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Try a search online like poets.org. Search a key word related to what you’re experiencing right now. Find a poem you’re relating to and in the privacy of your room or car or closet (wherever you feel comfortable) and read the poem aloud to yourself. Let it gives you words in a time when you have none. Experience the validation that this artist understands also how you might be feeling right now and sees it as valid too.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="ambient-postcard" data-strategy-tags="belonging|connection|self-expression|appreciation">
+                      <h3 class="strategy-card__title">Ambient Postcard</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your &quot;right now&quot;; optionally send it to one person.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

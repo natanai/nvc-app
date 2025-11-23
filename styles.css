@@ -3037,6 +3037,174 @@ main[data-need-slug] .page-title::before {
   font-size: 0.95rem;
 }
 
+/* Strategy deck: stacked playing-card layout */
+
+.strategy-section {
+  display: grid;
+  gap: 0.8rem;
+}
+
+/* Header row: hint + shuffle button */
+.strategy-deck-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+}
+
+.strategy-deck-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  max-width: 30rem;
+}
+
+.strategy-deck__shuffle {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--outline);
+  background: color-mix(in srgb, var(--btn-bg) 70%, #ffffff 30%);
+  color: var(--btn-fg);
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 10px 0 var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.strategy-deck__shuffle:hover,
+.strategy-deck__shuffle:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 var(--shadow);
+}
+
+/* Outer deck container */
+.strategy-deck {
+  width: min(520px, 100%);
+  max-width: 100%;
+  margin-inline: auto;
+  margin-bottom: 1.5rem;
+  display: grid;
+  gap: 0.75rem;
+  touch-action: pan-y;
+}
+
+/* The stack area: fixed card frame */
+.strategy-deck__stack {
+  position: relative;
+  height: clamp(22rem, 70vh, 27rem);
+}
+
+/* Base card styling when inside the deck stack */
+.strategy-deck__stack .strategy-card {
+  position: absolute;
+  inset: 0;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-3xl);
+  box-shadow: 0 20px 0 var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(0) scale(0.97);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Scrollable content area inside each card */
+.strategy-card__body {
+  position: relative;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 0.15rem;
+}
+
+/* Subtle gradient at bottom to suggest scrollability */
+.strategy-card__body::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.2rem;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--mint) 30%, #ffffff 70%)
+  );
+  pointer-events: none;
+}
+
+/* Keep actions pinned at bottom */
+.strategy-card__actions {
+  margin-top: 0.75rem;
+}
+
+/* Active / neighboring cards for deck effect */
+.strategy-deck__stack .strategy-card[data-active="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) rotate(0deg) scale(1);
+  z-index: 3;
+}
+
+.strategy-deck__stack .strategy-card[data-position="next"] {
+  opacity: 1;
+  transform: translateX(14px) rotate(2deg) scale(0.98);
+  z-index: 2;
+}
+
+.strategy-deck__stack .strategy-card[data-position="prev"] {
+  opacity: 1;
+  transform: translateX(-14px) rotate(-2deg) scale(0.98);
+  z-index: 2;
+}
+
+/* Controls row (arrow buttons) */
+.strategy-deck__controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.strategy-deck__nav {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--outline);
+  background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
+  color: var(--btn-fg);
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 10px 0 var(--shadow);
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.strategy-deck__nav:hover,
+.strategy-deck__nav:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 var(--shadow);
+}
+
+/* Make deck focusable for keyboard users */
+.strategy-deck:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+/* Optional: on larger screens, slightly widen the deck */
+@media (min-width: 900px) {
+  .strategy-deck {
+    width: min(560px, 100%);
+  }
+}
+
 .strategy-form__container {
   display: grid;
   gap: 0.75rem;

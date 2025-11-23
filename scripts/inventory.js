@@ -6638,3 +6638,128 @@ function focusNeedSection(slug) {
     target.classList.remove('inventory-need--highlight');
   }, 1200);
 }
+
+(function () {
+  const stack = document.querySelector('[data-strategy-stack]');
+  const deck = document.querySelector('[data-strategy-deck]');
+  const nextBtn = document.querySelector('[data-strategy-next]');
+  const prevBtn = document.querySelector('[data-strategy-prev]');
+  const shuffleBtn = document.querySelector('[data-strategy-shuffle]');
+
+  if (!stack) {
+    return;
+  }
+
+  let cards = Array.from(stack.querySelectorAll('.strategy-card'));
+  if (!cards.length) {
+    return;
+  }
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function applyPositions(currentIndex) {
+    const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
+    const nextIndex = (currentIndex + 1) % cards.length;
+
+    cards.forEach((card, index) => {
+      card.removeAttribute('data-active');
+      card.removeAttribute('data-position');
+
+      if (index === currentIndex) {
+        card.setAttribute('data-active', 'true');
+      } else if (index === prevIndex) {
+        card.setAttribute('data-position', 'prev');
+      } else if (index === nextIndex) {
+        card.setAttribute('data-position', 'next');
+      }
+    });
+  }
+
+  let currentIndex = 0;
+
+  function go(offset) {
+    if (!cards.length) return;
+    currentIndex = (currentIndex + offset + cards.length) % cards.length;
+    applyPositions(currentIndex);
+  }
+
+  function performShuffle() {
+    const children = Array.from(stack.children).filter(function (node) {
+      return node.classList && node.classList.contains('strategy-card');
+    });
+
+    const shuffled = shuffleArray(children);
+    shuffled.forEach(function (card) {
+      stack.appendChild(card);
+    });
+
+    cards = Array.from(stack.querySelectorAll('.strategy-card'));
+    currentIndex = 0;
+    applyPositions(currentIndex);
+  }
+
+  performShuffle();
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      go(1);
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      go(-1);
+    });
+  }
+
+  if (shuffleBtn) {
+    shuffleBtn.addEventListener('click', function () {
+      performShuffle();
+    });
+  }
+
+  if (deck && deck.addEventListener) {
+    let startX = null;
+    let isDragging = false;
+
+    deck.addEventListener('pointerdown', function (event) {
+      isDragging = true;
+      startX = event.clientX;
+    });
+
+    deck.addEventListener('pointerup', function (event) {
+      if (!isDragging || startX == null) {
+        return;
+      }
+      const dx = event.clientX - startX;
+      const threshold = 30;
+
+      if (dx > threshold) {
+        go(-1);
+      } else if (dx < -threshold) {
+        go(1);
+      }
+
+      isDragging = false;
+      startX = null;
+    });
+
+    deck.addEventListener('pointerleave', function () {
+      isDragging = false;
+      startX = null;
+    });
+
+    deck.addEventListener('pointercancel', function () {
+      isDragging = false;
+      startX = null;
+    });
+  }
+})();
