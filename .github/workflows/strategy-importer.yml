@@ -47,12 +47,10 @@ jobs:
         env:
           NOTE: ${{ inputs.note }}
           BRANCH_NAME: strategy-import/${{ github.run_id }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B "$BRANCH_NAME"
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
           git add -A
           if [ -n "$NOTE" ]; then
             message="chore: import strategies - $NOTE"

@@ -241,13 +241,33 @@
   },
   {
     "file": "/workspace/nvc-app/needs/calm/index.html",
-    "line": 1180,
+    "line": 750,
     "how": "html_anchor",
-    "label": "APA press release: chronic stress impairs executive function; recovery improves regulation",
-    "url": "https://www.apa.org/news/press/releases/2016/07/chronic-stress",
-    "domain": "www.apa.org",
-    "label_domain_hint": "",
-    "context": "APA press release: chronic stress impairs executive function; recovery improves regulation"
+    "label": "Chronic stress disrupts (and relief can restore) executive control",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19139412/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "calm",
+    "context": "PNAS study: psychosocial stress reversibly impairs prefrontal cortex function and cognitive control—showing why reducing stress supports calm, regulation, and clear thinking."
+  },
+  {
+    "file": "/workspace/nvc-app/needs/calm/index.html",
+    "line": 752,
+    "how": "html_anchor",
+    "label": "Breath regulation lowers stress and anxiety (review)",
+    "url": "https://www.frontiersin.org/articles/10.3389/fnhum.2018.00253/full",
+    "domain": "frontiersin.org",
+    "label_domain_hint": "calm",
+    "context": "Narrative review: slow/regulated breathing shifts autonomic balance and reduces subjective stress/anxiety—mechanistic bridge from practice to calm."
+  },
+  {
+    "file": "/workspace/nvc-app/needs/calm/index.html",
+    "line": 754,
+    "how": "html_anchor",
+    "label": "Meditation programs reduce psychological stress (systematic review & meta-analysis)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/24395196/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "calm",
+    "context": "JAMA Internal Medicine review of randomized trials: mindfulness-based interventions yield small-to-moderate reductions in anxiety, depression, and stress."
   },
   {
     "file": "/workspace/nvc-app/needs/causality/index.html",
