@@ -8,7 +8,10 @@ https://pure.eur.nl/files/73371826/Repub_122313.pdf
 https://onlinelibrary.wiley.com/doi/full/10.1002/job.2624
 https://hbr.org/1998/09/how-to-kill-creativity
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6627190/
-https://pubmed.ncbi.nlm.nih.gov/20451314/
+https://pmc.ncbi.nlm.nih.gov/articles/PMC7265817/
+https://pubmed.ncbi.nlm.nih.gov/28406659/
+https://compass.onlinelibrary.wiley.com/doi/10.1111/j.1751-9004.2012.00439.x
+https://pubmed.ncbi.nlm.nih.gov/16623689/
 https://pmc.ncbi.nlm.nih.gov/articles/PMC8600914/
 https://www.frontiersin.org/articles/10.3389/fpsyg.2016.01052/full
 https://psycnet.apa.org/record/2006-06108-007
@@ -107,7 +110,6 @@ https://www.cdc.gov/sleep/about-sleep/how-much-sleep.html
 https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01143/full
 https://pmc.ncbi.nlm.nih.gov/articles/PMC7213777/
 https://www.jstor.org/stable/41428503
-https://psycnet.apa.org/record/2018-13314-006
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6367117/
 https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01535/full
 https://pmc.ncbi.nlm.nih.gov/articles/PMC7024394/
@@ -128,3 +130,7 @@ https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fullt
 https://journals.sagepub.com/doi/10.1177/00332941221097951
 https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being
 https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf
+https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf
+https://www.tandfonline.com/doi/full/10.1080/02699931.2010.540110
+https://digitalcommons.odu.edu/cgi/viewcontent.cgi?article=1018&context=management_fac_pubs
+https://www.apa.org/pubs/journals/releases/psp-101-2-354.pdf
