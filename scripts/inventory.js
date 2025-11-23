@@ -1510,6 +1510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Unable to set up the customizer', error);
   });
   updateInventoryCount();
+  setupStrategyNeedSelects();
   setupNeedPage();
   setupInventoryPage();
   attachDelegatedJournalOverlayTriggerListener();
@@ -1617,6 +1618,67 @@ function registerStrategySaveButton(slug, button) {
   const buttonSet = state.strategyButtons.get(normalizedSlug);
   buttonSet.add(button);
   updateStrategySaveButton(button, isStrategySaved(normalizedSlug));
+}
+
+const STRATEGY_NEED_POINTER_EVENT =
+  typeof window !== 'undefined' && 'onpointerdown' in window ? 'pointerdown' : 'mousedown';
+
+function handleStrategyNeedPointerToggle(event) {
+  const select = event.currentTarget;
+  if (!(select instanceof HTMLSelectElement) || !select.multiple) {
+    return;
+  }
+
+  const option = event.target;
+  if (!(option instanceof HTMLOptionElement)) {
+    return;
+  }
+
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+    return;
+  }
+
+  if ('pointerType' in event && event.pointerType && event.pointerType !== 'mouse') {
+    return;
+  }
+
+  if (typeof event.button === 'number' && event.button !== 0) {
+    return;
+  }
+
+  if (
+    event.type === 'mousedown' &&
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(pointer: coarse)').matches
+  ) {
+    return;
+  }
+
+  event.preventDefault();
+  option.selected = !option.selected;
+  select.dispatchEvent(new Event('change', { bubbles: true }));
+  requestAnimationFrame(() => {
+    select?.focus();
+  });
+}
+
+function attachStrategyNeedPointerToggle(select) {
+  if (!(select instanceof HTMLSelectElement) || select.dataset.strategyNeedPointerAttached === 'true') {
+    return;
+  }
+
+  select.dataset.strategyNeedPointerAttached = 'true';
+  select.addEventListener(STRATEGY_NEED_POINTER_EVENT, handleStrategyNeedPointerToggle);
+}
+
+function setupStrategyNeedSelects(root = document) {
+  if (!root) {
+    return;
+  }
+
+  const selects = root.querySelectorAll('[data-strategy-need-select]');
+  selects.forEach((select) => attachStrategyNeedPointerToggle(select));
 }
 
 
