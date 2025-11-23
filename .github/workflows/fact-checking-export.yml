@@ -3,9 +3,6 @@ name: Fact-Checking Spreadsheets
 on:
   workflow_dispatch:
     inputs:
-      base-branch:
-        description: "Branch to refresh with regenerated fact-checking spreadsheets (defaults to the triggering branch if omitted)"
-        required: false
       commit-message:
         description: "Commit message for refreshed spreadsheets"
         required: false
@@ -18,7 +15,7 @@ jobs:
   export-fact-checking:
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.ref_name }}
+      TARGET_BRANCH: ${{ github.event.repository.default_branch }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
