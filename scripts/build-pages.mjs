@@ -10,8 +10,6 @@ const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
-const MAX_VISIBLE_SUPPORTING_SOURCES = 2;
-
 const KNOWN_SCOPES = new Set([
   'home',
   'faux-feelings',
@@ -1780,38 +1778,57 @@ function renderNeedEvidence(item) {
 
   let sourcesHtml = '';
   if (sources.length) {
-    const sourceItems = sources.map((source) => {
+    const inlineCitations = sources.map((source, index) => {
+      const number = index + 1;
       if (typeof source === 'string') {
-        return `<li class="need-evidence__item">${escapeHtml(source)}</li>`;
+        return `<span class="need-evidence__citation-ref">[${number}]</span>`;
       }
 
       const url = (source.url || '').trim();
       const description = (source.description || '').trim();
-      const label = description || url;
-      const safeLabel = escapeHtml(label);
+      const title = description || url;
+
       if (url) {
         const safeUrl = escapeHtml(url);
-        const urlNote = description && url
-          ? `<span class="need-evidence__source-url"> (${escapeHtml(url)})</span>`
-          : '';
-        return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a>${urlNote}</li>`;
+        const safeTitle = title ? ` title="${escapeHtml(title)}"` : '';
+        return `<span class="need-evidence__citation-ref">[<a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener"${safeTitle}>${number}</a>]</span>`;
       }
 
-      return `<li class="need-evidence__item">${safeLabel}</li>`;
+      return `<span class="need-evidence__citation-ref">[${number}]</span>`;
     });
 
-    const visibleItems = sourceItems.slice(0, MAX_VISIBLE_SUPPORTING_SOURCES);
-    const additionalItems = sourceItems.slice(MAX_VISIBLE_SUPPORTING_SOURCES);
+    const citationDetails = sources.map((source, index) => {
+      const number = index + 1;
+      const url = typeof source === 'object' && source
+        ? (source.url || '').trim()
+        : '';
+      const description = typeof source === 'object' && source
+        ? (source.description || '').trim()
+        : (typeof source === 'string' ? source.trim() : '');
+      const safeDescription = escapeHtml(description || url || `Source ${number}`);
+      const safeUrl = url ? escapeHtml(url) : '';
+      const urlHtml = url
+        ? `<a class="need-evidence__citation-url" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeUrl}</a>`
+        : '<span class="need-evidence__citation-url need-evidence__citation-url--missing">No URL provided</span>';
 
-    const visibleList = visibleItems.length
-      ? `<ol class="need-evidence__list">${visibleItems.join('')}</ol>`
+      return `<li class="need-evidence__citation-item">`
+        + `<span class="need-evidence__citation-number">${number}</span>`
+        + `<div class="need-evidence__citation-body">`
+        + `<span class="need-evidence__citation-description">${safeDescription}</span>`
+        + `${urlHtml}`
+        + `</div>`
+        + `</li>`;
+    });
+
+    const inlineRow = inlineCitations.length
+      ? `<div class="need-evidence__citation-row" aria-label="Supporting sources">${inlineCitations.join('')}</div>`
       : '';
 
-    const moreList = additionalItems.length
-      ? `<details class="need-evidence__more need-evidence__details"><summary class="need-evidence__details-toggle need-evidence__more-toggle">More sources</summary><ol class="need-evidence__more-list">${additionalItems.join('')}</ol></details>`
+    const detailsList = citationDetails.length
+      ? `<details class="need-evidence__details need-evidence__citations"><summary class="need-evidence__details-toggle need-evidence__citations-toggle">Citations</summary><ol class="need-evidence__citation-list">${citationDetails.join('')}</ol></details>`
       : '';
 
-    sourcesHtml = `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3>${visibleList}${moreList}</div>`;
+    sourcesHtml = `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3>${inlineRow}${detailsList}</div>`;
   } else if (claim || rewrittenClaim) {
     sourcesHtml = '<p class="need-evidence__note">Supporting sources coming soon.</p>';
   }
