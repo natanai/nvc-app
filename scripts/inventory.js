@@ -6638,3 +6638,44 @@ function focusNeedSection(slug) {
     target.classList.remove('inventory-need--highlight');
   }, 1200);
 }
+
+(function () {
+  const deck = document.querySelector('[data-strategy-deck]');
+  const list = document.querySelector('[data-strategy-list]');
+  const shuffleButton = document.querySelector('[data-strategy-shuffle]');
+
+  if (!deck || !list) {
+    return;
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  }
+
+  function shuffleCards() {
+    const cards = Array.from(list.querySelectorAll('.strategy-card'));
+
+    if (!cards.length) {
+      return;
+    }
+
+    cards.forEach((card) => list.removeChild(card));
+
+    const shuffled = shuffleArray(cards);
+    shuffled.forEach((card) => list.appendChild(card));
+
+    deck.scrollTo({ left: 0, behavior: 'smooth' });
+  }
+
+  shuffleCards();
+
+  if (shuffleButton) {
+    shuffleButton.addEventListener('click', shuffleCards);
+  }
+})();
