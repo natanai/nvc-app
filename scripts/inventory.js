@@ -6649,7 +6649,9 @@ function focusNeedSection(slug) {
   const nextBtn = document.querySelector('[data-strategy-next]');
   const prevBtn = document.querySelector('[data-strategy-prev]');
   const shuffleBtn = document.querySelector('[data-strategy-shuffle]');
+  const deckHeader = document.querySelector('.strategy-deck-header');
   const counter = document.querySelector('[data-strategy-count]');
+  let toggleBtn = document.querySelector('[data-strategy-toggle]');
 
   if (!stack) {
     return;
@@ -6658,6 +6660,15 @@ function focusNeedSection(slug) {
   let cards = Array.from(stack.querySelectorAll('.strategy-card'));
   if (!cards.length) {
     return;
+  }
+
+  if (!toggleBtn && deckHeader) {
+    toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.className = 'strategy-deck__toggle';
+    toggleBtn.setAttribute('data-strategy-toggle', '');
+    toggleBtn.textContent = 'View all';
+    deckHeader.appendChild(toggleBtn);
   }
 
   function shuffleArray(arr) {
@@ -6670,7 +6681,23 @@ function focusNeedSection(slug) {
     return arr;
   }
 
+  let viewAll = false;
+
+  function updateToggleButton() {
+    if (!toggleBtn) return;
+    toggleBtn.textContent = viewAll ? 'View one at a time' : 'View all';
+    toggleBtn.setAttribute('aria-pressed', viewAll ? 'true' : 'false');
+  }
+
   function applyPositions(currentIndex) {
+    if (viewAll) {
+      cards.forEach((card) => {
+        card.removeAttribute('data-active');
+        card.removeAttribute('data-position');
+      });
+      return;
+    }
+
     const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
     const nextIndex = (currentIndex + 1) % cards.length;
 
@@ -6694,7 +6721,41 @@ function focusNeedSection(slug) {
 
   function updateCounter(currentIndex) {
     if (!counter) return;
-    counter.textContent = `${currentIndex + 1} of ${cards.length}`;
+    if (viewAll) {
+      counter.textContent = `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`;
+    } else {
+      counter.textContent = `${currentIndex + 1} of ${cards.length}`;
+    }
+  }
+
+  function enableListView() {
+    viewAll = true;
+    if (deck) {
+      deck.classList.add('strategy-deck--list');
+    }
+    applyPositions(currentIndex);
+    updateCounter(currentIndex);
+    updateToggleButton();
+    window.requestAnimationFrame(refreshBodyShadows);
+  }
+
+  function disableListView() {
+    viewAll = false;
+    if (deck) {
+      deck.classList.remove('strategy-deck--list');
+    }
+    applyPositions(currentIndex);
+    updateCounter(currentIndex);
+    updateToggleButton();
+    window.requestAnimationFrame(refreshBodyShadows);
+  }
+
+  function toggleViewMode() {
+    if (viewAll) {
+      disableListView();
+    } else {
+      enableListView();
+    }
   }
 
   function toggleBodyShadow(body) {
@@ -6728,7 +6789,7 @@ function focusNeedSection(slug) {
   let currentIndex = 0;
 
   function go(offset) {
-    if (!cards.length) return;
+    if (!cards.length || viewAll) return;
     currentIndex = (currentIndex + offset + cards.length) % cards.length;
     applyPositions(currentIndex);
     updateCounter(currentIndex);
@@ -6754,6 +6815,7 @@ function focusNeedSection(slug) {
 
   performShuffle();
   updateCounter(currentIndex);
+  updateToggleButton();
   window.requestAnimationFrame(refreshBodyShadows);
 
   window.addEventListener('resize', function () {
@@ -6775,6 +6837,12 @@ function focusNeedSection(slug) {
   if (shuffleBtn) {
     shuffleBtn.addEventListener('click', function () {
       performShuffle();
+    });
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
+      toggleViewMode();
     });
   }
 

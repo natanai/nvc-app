@@ -3096,7 +3096,8 @@ main[data-need-slug] .page-title::before {
   gap: 0.5rem 0.75rem;
 }
 
-.strategy-deck__shuffle {
+.strategy-deck__shuffle,
+.strategy-deck__toggle {
   font-family: var(--font-display);
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -3111,9 +3112,15 @@ main[data-need-slug] .page-title::before {
 }
 
 .strategy-deck__shuffle:hover,
-.strategy-deck__shuffle:focus-visible {
+.strategy-deck__shuffle:focus-visible,
+.strategy-deck__toggle:hover,
+.strategy-deck__toggle:focus-visible {
   transform: translateY(-3px);
   box-shadow: 0 14px 0 var(--shadow);
+}
+
+.strategy-deck__toggle {
+  background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
 }
 
 /* Outer deck container */
@@ -3253,6 +3260,40 @@ main[data-need-slug] .page-title::before {
   .strategy-deck {
     width: min(560px, 100%);
   }
+}
+
+/* List view: show all strategy cards at once */
+.strategy-deck--list {
+  width: 100%;
+}
+
+.strategy-deck--list .strategy-deck__stack {
+  position: static;
+  height: auto;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.strategy-deck--list .strategy-deck__stack .strategy-card {
+  position: static;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition: none;
+  inset: auto;
+}
+
+.strategy-deck--list .strategy-card__body {
+  overflow: visible;
+  padding-right: 0;
+}
+
+.strategy-deck--list .strategy-card__body::after {
+  display: none;
+}
+
+.strategy-deck--list .strategy-deck__controls {
+  display: none;
 }
 
 .strategy-form__container {
