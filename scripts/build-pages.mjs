@@ -448,6 +448,7 @@ const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
 
 const SITE_ORIGIN = 'https://allneeds.app';
+const FACEBOOK_APP_ID = '966242223397117';
 const SOCIAL_ASSET_VERSION = 'v=2';
 const FAVICON_SVG = 'icons/favicon-color.svg';
 const FAVICON_PNG_32 = 'icons/favicon-color-32x32.png';
@@ -909,6 +910,7 @@ function htmlPage({
     <meta name="msapplication-TileImage" content="${tileImageHref}" />
     <meta name="msapplication-config" content="${browserConfigHref}" />
     <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="fb:app_id" content="${FACEBOOK_APP_ID}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${escapedBrand}" />
     <meta property="og:url" content="${canonicalUrl}" />
