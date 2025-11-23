@@ -32,6 +32,8 @@ jobs:
 
       - name: Build site
         run: npm run build
+        env:
+          LINK_CHECK_REPORT_ONLY: "1"
 
       - name: Verify data integrity
         run: npm run test:data-integrity

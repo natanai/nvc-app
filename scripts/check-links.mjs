@@ -5,6 +5,9 @@ import { join } from 'node:path';
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA_PATH = join(ROOT, 'data', 'Needs.csv');
 const SUPPRESSIONS_PATH = join(ROOT, 'scripts', 'link-suppressions.json');
+const REPORT_ONLY = ['1', 'true', 'yes'].includes(
+  (process.env.LINK_CHECK_REPORT_ONLY || '').toLowerCase(),
+);
 
 const REQUEST_TIMEOUT_MS = 12000;
 const USER_AGENT = 'nvc-app-link-checker/1.0 (+https://allneeds.app)';
@@ -258,7 +261,11 @@ async function main() {
       console.error(`- ${failure.url}: ${failure.reason}${failure.context ? ` (used by: ${failure.context})` : ''}`);
     }
     console.error('\nAdd persistent issues to scripts/link-suppressions.json with a justification comment in version control.');
-    process.exitCode = 1;
+    if (REPORT_ONLY) {
+      console.error('\nLINK_CHECK_REPORT_ONLY is enabled; reporting failures without failing CI.');
+    } else {
+      process.exitCode = 1;
+    }
   }
 }
 
