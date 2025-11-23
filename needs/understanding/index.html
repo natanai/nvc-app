@@ -1190,54 +1190,100 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="play-an-instrument" data-strategy-tags="self-expression|to-be-heard|understanding|acceptance|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play an instrument</h3>
-                    <p class="strategy-card__description">Bang a piano or strum a guitar until you&#39;ve expressed all you can with it. Any instrument will do. Let the universe hear you.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="view-previous-things-you-ve-written-or-made" data-strategy-tags="to-be-seen|to-be-heard|understanding|empathy|appreciation|honesty" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">View previous things you&#39;ve written or made</h3>
-                    <p class="strategy-card__description">To no one&#39;s surprise I often understand myself better than anyone else. Sometimes in a crisis I&#39;ll read something I wrote a month ago and think &quot;yes that&#39;s exactly it!&quot; - like past me is giving empathy to future me.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Listen to music</h3>
-                    <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="inanimate-interview" data-strategy-tags="understanding|self-expression|empathy">
-                    <h3 class="strategy-card__title">Inanimate Interview</h3>
-                    <p class="strategy-card__description">Pick a nearby object and ask it one question (&quot;what&#39;s your job here?&quot;). Answer in its voice in one sentence. Smile at whatever comes out.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="nearest-job" data-strategy-tags="understanding|clarity|order">
-                    <h3 class="strategy-card__title">Nearest Job</h3>
-                    <p class="strategy-card__description">Pick the nearest object and state its job in two words (e.g., &quot;mug—holds&quot;, &quot;pen—marks&quot;); enjoy the tidy accuracy and you&#39;re done.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <p class="strategy-deck-hint">
+              Swipe left or right (or use the arrows) to see more strategies.
+              Cards also scroll vertically if there’s more text.
+            </p>
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="play-an-instrument" data-strategy-tags="self-expression|to-be-heard|understanding|acceptance|growth" data-first-name="Nat" data-location="Missouri">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Play an instrument</h3>
+                        <p class="strategy-card__description">Bang a piano or strum a guitar until you&#39;ve expressed all you can with it. Any instrument will do. Let the universe hear you.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="view-previous-things-you-ve-written-or-made" data-strategy-tags="to-be-seen|to-be-heard|understanding|empathy|appreciation|honesty" data-first-name="Nat" data-location="Missouri">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">View previous things you&#39;ve written or made</h3>
+                        <p class="strategy-card__description">To no one&#39;s surprise I often understand myself better than anyone else. Sometimes in a crisis I&#39;ll read something I wrote a month ago and think &quot;yes that&#39;s exactly it!&quot; - like past me is giving empathy to future me.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Listen to music</h3>
+                        <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="inanimate-interview" data-strategy-tags="understanding|self-expression|empathy">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Inanimate Interview</h3>
+                        <p class="strategy-card__description">Pick a nearby object and ask it one question (&quot;what&#39;s your job here?&quot;). Answer in its voice in one sentence. Smile at whatever comes out.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="nearest-job" data-strategy-tags="understanding|clarity|order">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Nearest Job</h3>
+                        <p class="strategy-card__description">Pick the nearest object and state its job in two words (e.g., &quot;mug—holds&quot;, &quot;pen—marks&quot;); enjoy the tidy accuracy and you&#39;re done.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
