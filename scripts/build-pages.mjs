@@ -1196,30 +1196,44 @@ function renderStrategyForm({
   notice = '',
   includeLocalStorageReminder = false,
 }) {
-  const needOptions = data.needs
-    .map(
-      (need) =>
-        `<option value="${escapeHtml(need.slug)}"${
-          need.slug === defaultNeedSlug ? ' selected' : ''
-        }>${escapeHtml(need.title)}</option>`
-    )
+  const needInputType = needSelectMultiple ? 'checkbox' : 'radio';
+  const needHelperId = `${idPrefix}-need-helper`;
+  const needLabelId = `${idPrefix}-need-label`;
+
+  const needChoices = data.needs
+    .map((need) => {
+      const id = `${idPrefix}-need-${need.slug}`;
+      const checked = need.slug === defaultNeedSlug ? ' checked' : '';
+      return `
+            <label class="strategy-form__choice" for="${id}">
+              <input
+                id="${id}"
+                type="${needInputType}"
+                name="need"
+                value="${escapeHtml(need.slug)}"${checked}${needSelectMultiple ? '' : ' required'}
+              />
+              <span class="strategy-form__choice-label" data-need-label>${escapeHtml(need.title)}</span>
+            </label>`;
+    })
     .join('');
-
-  const placeholderOption = includePlaceholderOption
-    ? `<option value="" disabled${!needSelectMultiple && !defaultNeedSlug ? ' selected' : ''}>Select a need</option>`
-    : '';
-
-  const multipleAttr = needSelectMultiple ? ' multiple' : '';
 
   const needField = includeNeedSelect
     ? `
         <div class="strategy-form__field">
-          <label for="${idPrefix}-need">Primary need</label>
-          <div class="strategy-card strategy-card--input">
-            <select id="${idPrefix}-need" name="need"${multipleAttr} required>
-              ${placeholderOption}
-              ${needOptions}
-            </select>
+          <div class="strategy-form__label-row">
+            <span id="${needLabelId}" class="strategy-form__field-label">Primary need</span>
+            <p id="${needHelperId}" class="strategy-form__hint">Select one or more needs — click or press Space/Enter to toggle, no modifier keys needed.</p>
+          </div>
+          <div class="strategy-card strategy-card--input strategy-card--choices">
+            <div
+              class="strategy-form__choices"
+              data-need-picker
+              role="${needSelectMultiple ? 'group' : 'radiogroup'}"
+              aria-labelledby="${needLabelId}"
+              aria-describedby="${needHelperId}"
+            >
+              ${needChoices}
+            </div>
           </div>
         </div>`
     : '';

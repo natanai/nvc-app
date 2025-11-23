@@ -508,6 +508,31 @@ function normalizeNeedSlugValue(value) {
   return trimmed;
 }
 
+function readNeedOptionsFromPicker(picker) {
+  if (!picker) {
+    return [];
+  }
+
+  const options = [];
+
+  picker.querySelectorAll('input[name="need"]').forEach((input) => {
+    const slug = normalizeNeedSlugValue(input.value);
+    if (!slug) {
+      return;
+    }
+
+    const label = input.closest('label');
+    const title =
+      label?.querySelector('[data-need-label]')?.textContent?.trim() ||
+      label?.textContent?.trim() ||
+      slug;
+
+    options.push({ slug, title, selected: input.checked });
+  });
+
+  return options;
+}
+
 function normalizeNeedSlugList(raw) {
   if (raw == null) {
     return [];
@@ -1740,16 +1765,8 @@ function setupNeedPage() {
         return;
       }
 
-      const needSelect = suggestionForm.querySelector('select[name="need"]');
-      const selectedNeedOptions =
-        needSelect instanceof HTMLSelectElement
-          ? Array.from(needSelect.selectedOptions)
-              .map((option) => ({
-                slug: option.value?.toString().trim(),
-                title: option.textContent?.trim() || option.value,
-              }))
-              .filter((item) => item.slug)
-          : [];
+      const needPicker = suggestionForm.querySelector('[data-need-picker]');
+      const selectedNeedOptions = readNeedOptionsFromPicker(needPicker).filter((item) => item.selected);
 
       let selectedNeedSlugs = normalizeNeedSlugList(selectedNeedValues);
       if (!selectedNeedSlugs.length && needSlug) {
@@ -1938,9 +1955,9 @@ function setupInventoryPage() {
         openList: true,
       });
       form.reset();
-      const needSelect = form.querySelector('#inventory-need');
-      if (needSelect) {
-        needSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      const needPicker = form.querySelector('[data-need-picker]');
+      if (needPicker) {
+        needPicker.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
   }
@@ -3421,18 +3438,11 @@ function applyNeedsData(needs) {
 }
 
 function captureNeedsFromForm() {
-  const select = document.getElementById('inventory-need');
   let needs = [];
 
-  if (select) {
-    select.querySelectorAll('option').forEach((option) => {
-      const value = option.value;
-      if (!value) {
-        return;
-      }
-      const title = option.textContent?.trim() || value;
-      needs.push({ slug: value, title });
-    });
+  const picker = document.querySelector('#inventory-form [data-need-picker]');
+  if (picker) {
+    needs = readNeedOptionsFromPicker(picker).map(({ slug, title }) => ({ slug, title }));
   } else {
     const loader = window.NVCJournal?.loadNeedsFromScript;
     if (typeof loader === 'function') {

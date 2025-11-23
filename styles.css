@@ -3065,6 +3065,78 @@ main[data-need-slug] .page-title::before {
   letter-spacing: normal;
 }
 
+.strategy-form__label-row {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.strategy-form__field-label {
+  font: inherit;
+  font-size: 1rem;
+}
+
+.strategy-form__hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.strategy-card--choices {
+  padding: 0.75rem;
+}
+
+.strategy-form__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.strategy-form__choice {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.strategy-form__choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.strategy-form__choice-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--lavender);
+  color: var(--outline);
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.strategy-form__choice input:checked + .strategy-form__choice-label {
+  background: var(--rose);
+  border-color: var(--outline);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rose) 45%, transparent);
+}
+
+.strategy-form__choice input:focus-visible + .strategy-form__choice-label {
+  outline: 3px solid var(--outline);
+  outline-offset: 2px;
+}
+
+.strategy-form__choice-label::before {
+  content: '✓';
+  font-size: 0.95rem;
+  opacity: 0.55;
+}
+
+.strategy-form__choice input:not(:checked) + .strategy-form__choice-label::before {
+  content: '+';
+  opacity: 0.65;
+}
+
 .strategy-form input[type='text'],
 .strategy-form select,
 .strategy-form textarea {
