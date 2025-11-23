@@ -2894,30 +2894,6 @@ main[data-need-slug] .page-title::before {
   letter-spacing: 0.12em;
 }
 
-.need-evidence__list {
-  margin: 0;
-  padding-left: 1.35rem;
-  display: grid;
-  gap: 0.55rem;
-}
-
-.need-evidence__more {
-  margin: 0;
-  margin-top: 0.25rem;
-}
-
-.need-evidence__more-list {
-  margin: 0.75rem 0 0;
-  padding-left: 1.35rem;
-  display: grid;
-  gap: 0.55rem;
-}
-
-.need-evidence__item {
-  color: var(--ink-soft);
-  word-break: break-word;
-}
-
 .need-evidence__link {
   color: var(--ink);
   font-weight: 600;
@@ -2931,15 +2907,82 @@ main[data-need-slug] .page-title::before {
   outline-offset: 3px;
 }
 
-.need-evidence__source-url {
-  display: block;
-  font-size: 0.9rem;
+.need-evidence__note {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.need-evidence__citation-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+}
+
+.need-evidence__citation-ref {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.need-evidence__citation-ref .need-evidence__link {
+  text-decoration: none;
+}
+
+.need-evidence__citation-ref .need-evidence__link:hover {
+  text-decoration: underline;
+}
+
+.need-evidence__citations {
+  margin: 0;
+}
+
+.need-evidence__citation-list {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.need-evidence__citation-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  column-gap: 0.5rem;
+  row-gap: 0.35rem;
+}
+
+.need-evidence__citation-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  padding: 0 0.35rem;
+  border: 2px solid var(--outline);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lavender) 60%, #fff 40%);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.need-evidence__citation-body {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.need-evidence__citation-description {
   color: var(--ink-soft);
   word-break: break-word;
 }
 
-.need-evidence__note {
-  margin: 0;
+.need-evidence__citation-url {
+  word-break: break-word;
+}
+
+.need-evidence__citation-url--missing {
   color: var(--ink-soft);
 }
 
