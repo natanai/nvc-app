@@ -6293,12 +6293,8 @@
       "rewrittenClaim": "People function much better when information is clear – unambiguous communication reduces the mental effort (“cognitive load”) required to understand, and it helps avoid misunderstandings that can be costly. The need for clarity may push us to simplify our messages, summarize key points, and double-check that everyone interprets things the same way. In education and work contexts, research shows that clarity in instructions or feedback lowers confusion and error rates. A dramatic illustration comes from healthcare: about 80% of serious medical errors have been traced to communication failures (unclear or incomplete information) rather than lack of skill. By ensuring reliable clarity – communicating in a straightforward, transparent manner – groups achieve better coordination, and individuals feel more confident in what they’re doing.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1207/S15326985EP3801_01",
-          "description": "Cognitive Load Theory review detailing how clear, well-integrated information (avoiding split-attention/redundancy) lowers extraneous load and improves performance."
-        },
-        {
           "url": "https://doi.org/10.1111/j.2044-8279.1992.tb01017.x",
-          "description": "Experiments show that integrating text and diagrams reduces extraneous load and errors versus split-attention formats."
+          "description": "Experiment: integrating information prevents split-attention errors"
         },
         {
           "url": "https://qualitysafety.bmj.com/content/13/5/330",
@@ -7893,12 +7889,20 @@
       "rewrittenClaim": "Periods of calm and recovery are essential for the brain and body to bounce back after stress. Research suggests that during calm, low-arousal states, processes like memory consolidation, immune system activity, and top-down cognitive control (executive functions) get a chance to recuperate (see e.g. Frontiers in Psychology review on stress recovery and cognitive performance). The need for calm may drive us to dial down excessive stimulation, manage our workload, and establish soothing routines or rhythms in daily life. By restoring a state of calm, we improve our emotional self-regulation and allow higher-order thinking (like problem-solving and impulse control) to function more effectively. In short, regularly seeking calm moments helps counteract stress and supports better learning and decision-making.",
       "supportingSources": [
         {
-          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6438088/",
-          "description": "review on stress recovery and its effects on cognitive function and health"
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19139412/",
+          "description": "Chronic stress disrupts (and relief can restore) executive control"
         },
         {
-          "url": "https://www.apa.org/news/press/releases/2016/07/chronic-stress",
-          "description": "APA press release: chronic stress impairs executive function; recovery improves regulation"
+          "url": "https://www.frontiersin.org/articles/10.3389/fnhum.2018.00253/full",
+          "description": "Breath regulation lowers stress and anxiety (review)"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24395196/",
+          "description": "Meditation programs reduce psychological stress (systematic review & meta-analysis)"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6438088/",
+          "description": "review on stress recovery and its effects on cognitive function and health"
         }
       ]
     },
