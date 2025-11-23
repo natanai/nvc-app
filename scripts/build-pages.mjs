@@ -6,7 +6,9 @@ import { updateObservationGuidePage } from './observation-guide.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
-const data = JSON.parse(readFileSync(dataPath, 'utf8'));
+const indexData = JSON.parse(readFileSync(dataPath, 'utf8'));
+const { strategies } = indexData;
+const data = indexData;
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
@@ -1597,10 +1599,13 @@ function renderFeeling(item) {
   writePage(`feelings/${item.slug}/index.html`, html);
 }
 
-function renderNeed(item, strategyLookup) {
-  const strategies = item.strategies
-    .map((strategy) => strategyLookup.get(strategy.slug))
-    .filter(Boolean);
+function renderNeed(item, allStrategies) {
+  const strategiesForNeed = Array.isArray(allStrategies)
+    ? allStrategies.filter((strategy) =>
+        Array.isArray(strategy.supportsNeeds)
+        && strategy.supportsNeeds.some((needTitle) => needTitle === item.title),
+      )
+    : [];
 
   const hasPrefix = item.title.toLowerCase().startsWith('need for ');
   const displayTitle = hasPrefix ? item.title.replace(/^Need for\s*/i, '') : item.title;
@@ -1608,7 +1613,7 @@ function renderNeed(item, strategyLookup) {
 
   const strategiesNote = `          ${localStorageReminderHtml}`;
 
-  const strategiesHtml = strategies.length
+  const strategiesHtml = strategiesForNeed.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
@@ -1624,9 +1629,14 @@ ${strategiesNote}
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
-              ${strategies
+              ${strategiesForNeed
                 .map((strategy) => {
-                  const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
+                  const tags = Array.isArray(strategy.needs)
+                    ? strategy.needs
+                        .map((need) => need.slug)
+                        .filter(Boolean)
+                        .join('|')
+                    : '';
                   const contributor = strategy.contributor || {};
                   const firstName = sanitizeContributorName(contributor.name);
                   const location = sanitizeLocation(contributor.location);
@@ -1652,11 +1662,13 @@ ${strategiesNote}
                     dataAttrs.push(`data-location="${escapeHtml(location)}"`);
                   }
                   const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+                  const description = strategy.summary || strategy.description || '';
+
                   return `
                     <article class="strategy-card"${dataAttrString}>
                       <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                       <div class="strategy-card__body">
-                        <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
+                        <p class="strategy-card__description">${escapeHtml(description)}</p>
                         ${contributorHtml}
                       </div>
                       <div class="strategy-card__actions strategy-card__actions--stacked">
@@ -2316,9 +2328,8 @@ function build(scopeSet) {
   }
 
   if (buildNeeds) {
-    const strategyLookup = new Map(data.strategies.map((strategy) => [strategy.slug, strategy]));
     for (const need of data.needs) {
-      renderNeed(need, strategyLookup);
+      renderNeed(need, strategies);
     }
   }
 
