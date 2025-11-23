@@ -3037,6 +3037,106 @@ main[data-need-slug] .page-title::before {
   font-size: 0.95rem;
 }
 
+/* Strategy deck: horizontal swipe-like layout */
+
+.strategy-section {
+  display: grid;
+  gap: 0.8rem;
+}
+
+/* Header row for shuffle button */
+.strategy-deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.strategy-deck__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--ink-soft) 80%, #ffffff 20%);
+}
+
+.strategy-deck__shuffle {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--outline);
+  background: color-mix(in srgb, var(--btn-bg) 70%, #ffffff 30%);
+  color: var(--btn-fg);
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 10px 0 var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.strategy-deck__shuffle:hover,
+.strategy-deck__shuffle:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 var(--shadow);
+}
+
+/* Outer deck container: horizontal scrolling lane */
+.strategy-deck {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.strategy-deck:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+/* Inner list becomes a horizontal row of cards */
+.strategy-deck .strategy-list {
+  display: inline-flex;
+  gap: 1rem;
+  align-items: stretch;
+  padding-bottom: 0.25rem;
+}
+
+/* Individual cards as snap points */
+.strategy-deck .strategy-card {
+  flex: 0 0 100%;
+  max-width: 100%;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 20rem;
+  max-height: 22rem;
+  padding: 1rem 1.1rem;
+  overflow: hidden;
+}
+
+/* Content area inside card that can scroll vertically if too tall */
+.strategy-card__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 0.1rem;
+}
+
+/* Actions row stays pinned at bottom of the card */
+.strategy-card__actions {
+  margin-top: 0.75rem;
+}
+
+/* Desktop: show multiple cards at once */
+@media (min-width: 768px) {
+  .strategy-deck .strategy-card {
+    flex: 0 0 min(340px, 32vw);
+    max-width: min(340px, 32vw);
+    scroll-snap-align: start;
+  }
+}
+
 .strategy-form__container {
   display: grid;
   gap: 0.75rem;

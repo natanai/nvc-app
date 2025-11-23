@@ -1190,17 +1190,30 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-deck-header">
+            <p class="strategy-deck__hint" aria-live="polite">Swipe through the cards and scroll inside each card to read everything.</p>
+            <button type="button"
+                    class="strategy-deck__shuffle"
+                    data-strategy-shuffle>
+              Shuffle cards
+            </button>
+          </div>
+
+          <div class="strategy-deck" data-strategy-deck tabindex="0">
+            <div class="strategy-list" data-strategy-list>
+              
                   <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Call a friend</h3>
-                    <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Call a friend</h3>
+                      <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
