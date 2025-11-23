@@ -3056,17 +3056,32 @@ main[data-need-slug] .page-title::before {
   gap: 0.35rem;
 }
 
+.strategy-carousel__hint {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--ink-soft) 80%, #fff 20%);
+  display: none;
+}
+
+@media (max-width: 880px) {
+  .strategy-carousel__hint {
+    display: block;
+  }
+}
+
 .strategy-carousel {
   margin-top: 1rem;
+  --strategy-edge-padding: clamp(0.65rem, 4vw, 1.25rem);
 }
 
 .strategy-carousel__viewport {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 0.25rem;
-  margin: 0 -0.25rem;
+  padding: 0.35rem var(--strategy-edge-padding) 0.75rem;
+  margin: 0;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: var(--strategy-edge-padding);
 }
 
 .strategy-list {
@@ -3075,6 +3090,7 @@ main[data-need-slug] .page-title::before {
   display: flex;
   gap: var(--strategy-carousel-gap);
   min-height: 100%;
+  padding-inline: 0.1rem;
 }
 
 .strategy-carousel__track .strategy-card {
@@ -3097,8 +3113,8 @@ main[data-need-slug] .page-title::before {
 }
 
 .strategy-card:not(.strategy-card--form):not(.strategy-card--input) {
-  min-height: 18.5rem;
-  max-height: 18.5rem;
+  min-height: 22rem;
+  max-height: 22rem;
 }
 
 .strategy-card__content {
@@ -3110,13 +3126,46 @@ main[data-need-slug] .page-title::before {
 }
 
 .strategy-card__body {
+  position: relative;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding-right: 0.25rem;
+  padding-right: 0.35rem;
+  scrollbar-color: color-mix(in srgb, var(--outline) 55%, transparent) color-mix(in srgb, #fff 85%, var(--mint) 15%);
+  scrollbar-width: thin;
+}
+
+.strategy-card__body::before,
+.strategy-card__body::after {
+  content: '';
+  position: sticky;
+  left: 0;
+  right: 0;
+  height: 1.4rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.strategy-card__body::before {
+  top: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--mint) 92%, #fff 8%), transparent);
+}
+
+.strategy-card__body::after {
+  content: 'Scroll for more';
+  bottom: 0;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--mint) 92%, #fff 8%));
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 0.35rem 0.15rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--outline) 82%, #fff 18%);
 }
 
 .strategy-card__body:focus-visible {

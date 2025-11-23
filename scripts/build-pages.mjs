@@ -1598,6 +1598,8 @@ function renderNeed(item, strategyLookup) {
   const fullTitle = `Need for ${displayTitle}`;
 
   const strategiesNote = `          ${localStorageReminderHtml}`;
+  const swipeHint =
+    '          <p class="strategy-carousel__hint" role="note">Swipe or drag to browse cards, or use shuffle to reshuffle them.</p>';
 
   const strategiesHtml = strategies.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
@@ -1612,6 +1614,7 @@ function renderNeed(item, strategyLookup) {
             </div>
           </div>
 ${strategiesNote}
+${swipeHint}
           <div class="strategy-carousel" data-strategy-carousel>
             <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
               <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
