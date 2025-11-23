@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "exportedAt": "2025-11-23T20:00:16.547Z",
+  "personalStrategies": [
+    {
+      "id": "inv-mic4zs7d-lgj0q7",
+      "title": "Dance",
+      "description": "have a dance party!",
+      "need": "Physical Fitness",
+      "needSlug": "physical-fitness",
+      "needSlugs": [
+        "physical-fitness"
+      ],
+      "tags": [
+        "physical-fitness"
+      ],
+      "personal": true,
+      "sourceNeedPage": "",
+      "strategySlug": "",
+      "createdAt": "2025-11-23T19:54:34.249Z",
+      "contributor": {
+        "name": "Paige",
+        "location": "USA"
+      },
+      "firstName": "Paige",
+      "location": "USA"
+    },
+    {
+      "id": "inv-mic50cqs-65dtbv",
+      "title": "Yoga",
+      "description": "Do some yoga",
+      "need": "Physical Fitness",
+      "needSlug": "physical-fitness",
+      "needSlugs": [
+        "physical-fitness"
+      ],
+      "tags": [
+        "physical-fitness"
+      ],
+      "personal": true,
+      "sourceNeedPage": "",
+      "strategySlug": "",
+      "createdAt": "2025-11-23T19:55:00.868Z",
+      "contributor": {
+        "name": "Paige",
+        "location": "USA"
+      },
+      "firstName": "Paige",
+      "location": "USA"
+    },
+    {
+      "id": "inv-mic548xn-0aqoay",
+      "title": "Hike",
+      "description": "go hiking",
+      "need": "Physical Fitness",
+      "needSlug": "physical-fitness",
+      "needSlugs": [
+        "physical-fitness"
+      ],
+      "tags": [
+        "physical-fitness"
+      ],
+      "personal": true,
+      "sourceNeedPage": "",
+      "strategySlug": "",
+      "createdAt": "2025-11-23T19:58:02.555Z"
+    }
+  ]
+}
