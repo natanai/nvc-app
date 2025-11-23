@@ -169,11 +169,12 @@ function buildNeedSourcesMap(records) {
   return bySlug;
 }
 
-function buildListItem({ label, url }) {
+function buildListItem({ label, url }, index = 0) {
   const safeLabel = escapeHtml(label);
   const safeUrl = escapeAttr(url);
   const displayUrl = escapeHtml(url);
-  return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a><span class="need-evidence__source-url"> (${displayUrl})</span></li>`;
+  const citationNumber = `<span class="need-evidence__citation-number">[${index + 1}]</span>`;
+  return `<li class="need-evidence__item">${citationNumber}<a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a><span class="need-evidence__source-url">${displayUrl}</span></li>`;
 }
 
 async function updateNeedsPage(slug, entries) {
@@ -186,7 +187,7 @@ async function updateNeedsPage(slug, entries) {
     return false;
   }
 
-  const listPattern = /(<ol class="need-evidence__list">)([\s\S]*?)(<\/ol>)/;
+  const listPattern = /(<ol class="need-evidence__more-list need-evidence__citations-list">)([\s\S]*?)(<\/ol>)/;
   const match = listPattern.exec(html);
   if (!match) {
     console.warn(`Skipping ${slug}: supporting sources list not found in ${filePath}`);
@@ -201,7 +202,7 @@ async function updateNeedsPage(slug, entries) {
     );
   }
 
-  const updatedList = entries.map(buildListItem).join("");
+  const updatedList = entries.map((entry, index) => buildListItem(entry, index)).join("");
   const updatedHtml = html.slice(0, match.index + start.length) + updatedList + end + html.slice(match.index + match[0].length);
 
   if (updatedHtml !== html) {

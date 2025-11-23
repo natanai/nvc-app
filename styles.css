@@ -2783,12 +2783,25 @@ main[data-need-slug] .page-title::before {
   box-shadow: 0 14px 0 var(--shadow);
   display: grid;
   gap: 0.9rem;
+  grid-template-areas:
+    "title"
+    "claim"
+    "details"
+    "sources";
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.need-evidence > .section-title {
+  grid-area: title;
+  margin: 0;
 }
 
 .need-evidence__claim {
   margin: 0;
   display: grid;
   gap: 0.35rem;
+  grid-area: claim;
 }
 
 .need-evidence__label {
@@ -2807,6 +2820,7 @@ main[data-need-slug] .page-title::before {
   margin: 0;
   padding: 0;
   border: 0;
+  grid-area: details;
 }
 
 .need-evidence__details-toggle {
@@ -2884,6 +2898,57 @@ main[data-need-slug] .page-title::before {
 .need-evidence__sources {
   display: grid;
   gap: 0.5rem;
+  grid-area: sources;
+}
+
+.need-evidence__citation-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.need-evidence__citation-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: auto;
+  padding: 0;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.need-evidence__citation-link:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
+.need-evidence__citation-link--plain {
+  cursor: default;
+}
+
+@media (min-width: 900px) {
+  .need-evidence {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-areas:
+      "title title"
+      "claim sources"
+      "details sources";
+    column-gap: clamp(1.25rem, 3vw, 2.5rem);
+    row-gap: 1rem;
+  }
+
+  .need-evidence__sources {
+    align-self: start;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--outline);
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--lavender) 70%, #fff 30%);
+    box-shadow: 0 10px 0 var(--shadow);
+  }
 }
 
 .need-evidence__subheading {
@@ -2913,9 +2978,17 @@ main[data-need-slug] .page-title::before {
   gap: 0.55rem;
 }
 
+.need-evidence__citations-list {
+  margin-top: 0.5rem;
+}
+
 .need-evidence__item {
   color: var(--ink-soft);
   word-break: break-word;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem;
+  align-items: start;
 }
 
 .need-evidence__link {
@@ -2924,6 +2997,16 @@ main[data-need-slug] .page-title::before {
   text-decoration: underline;
   text-decoration-thickness: 0.12em;
   text-underline-offset: 0.25em;
+}
+
+.need-evidence__citation-number {
+  color: var(--ink);
+  font-weight: 700;
+  min-width: 2rem;
+}
+
+.need-evidence__citation-text {
+  color: var(--ink-soft);
 }
 
 .need-evidence__link:focus-visible {
