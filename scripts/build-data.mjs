@@ -164,6 +164,66 @@ function sanitizeLocation(value) {
   return value.trim();
 }
 
+function buildStrategies(rows) {
+  const seenStrategySlugs = new Map();
+
+  return rows
+    .map((row, index) => {
+      const title = (row['Strategy Title'] || '').trim();
+      const summary = (row['Strategy Summary'] || '').trim();
+      const slugOverride = (row['Slug Override'] || '').trim();
+      const supportsNeeds = Array.from(new Set(splitList(row['Supports Needs'] || '')));
+      const contributorName = sanitizeContributorName(row['Contributor Name']);
+      const contributorLocation = sanitizeLocation(row['Contributor Location']);
+
+      if (!title) {
+        throw new Error(
+          `data/Strategies.csv row ${index + 2} must include a Strategy Title before it can be published.`,
+        );
+      }
+
+      const slug = slugOverride || slugify(title);
+
+      if (!slug) {
+        throw new Error(
+          `Strategy "${title}" resolved to an empty slug. Add a value to the "Slug Override" column to continue.`,
+        );
+      }
+
+      const existingOwner = seenStrategySlugs.get(slug);
+      if (existingOwner) {
+        throw new Error(
+          `Duplicate strategy slug "${slug}" found for "${existingOwner}" and "${title}". Supply a unique "Slug Override" to resolve the collision.`,
+        );
+      }
+      seenStrategySlugs.set(slug, title);
+
+      const strategy = {
+        title,
+        slug,
+        summary,
+        description: summary,
+        supportsNeeds,
+        needs: supportsNeeds.map((needTitle) => ({ title: needTitle })),
+        contributorName,
+        contributorLocation,
+      };
+
+      if (contributorName || contributorLocation) {
+        strategy.contributor = {};
+        if (contributorName) {
+          strategy.contributor.name = contributorName;
+        }
+        if (contributorLocation) {
+          strategy.contributor.location = contributorLocation;
+        }
+      }
+
+      return strategy;
+    })
+    .filter(Boolean);
+}
+
 function filterDuplicateNeeds(rows) {
   const seen = new Set();
   return rows.filter((row) => {
@@ -267,7 +327,7 @@ for (const entry of formattedPoems) {
 }
 const rawNeeds = filterDuplicateNeeds(readCsv('data/Needs.csv'));
 const rawFauxFeelings = readCsv('data/Faux Feelings.csv');
-const rawStrategies = readCsv('data/Strategies.csv');
+const rawStrategiesSheet = readCsv('data/Strategies.csv');
 
 function partitionFeelingsSheet(rows) {
   const feelingRows = [];
@@ -385,47 +445,7 @@ const fauxFeelings = rawFauxFeelings.map((row) => ({
   needs: uniqueByTitle(splitList(row['Related Needs']).map((title) => ({ title }))),
 }));
 
-const seenStrategySlugs = new Map();
-
-const strategies = rawStrategies.map((row, index) => {
-  const name = sanitizeContributorName(row['Contributor Name']);
-  const location = sanitizeLocation(row['Contributor Location']);
-  const title = (row['Strategy Title'] || '').trim();
-  const slugOverride = (row['Slug Override'] || '').trim();
-
-  if (!title) {
-    throw new Error(
-      `data/Strategies.csv row ${index + 2} must include a Strategy Title before it can be published.`,
-    );
-  }
-
-  const slug = slugOverride || slugify(title);
-
-  if (!slug) {
-    throw new Error(
-      `Strategy "${title}" resolved to an empty slug. Add a value to the "Slug Override" column to continue.`,
-    );
-  }
-
-  const existingOwner = seenStrategySlugs.get(slug);
-  if (existingOwner) {
-    throw new Error(
-      `Duplicate strategy slug "${slug}" found for "${existingOwner}" and "${title}". Supply a unique "Slug Override" to resolve the collision.`,
-    );
-  }
-  seenStrategySlugs.set(slug, title);
-
-  const entry = {
-    title,
-    slug,
-    description: row['Strategy Summary'] || '',
-    needs: uniqueByTitle(splitList(row['Supports Needs']).map((value) => ({ title: value }))),
-  };
-  if (name || location) {
-    entry.contributor = { name, location };
-  }
-  return entry;
-});
+const strategies = buildStrategies(rawStrategiesSheet);
 
 const feelingsMap = new Map(feelings.map((item) => [item.title.toLowerCase(), item.slug]));
 const needsMap = new Map(needs.map((item) => [item.title.toLowerCase(), item.slug]));
@@ -466,6 +486,10 @@ attachRelationshipSlugs(fauxFeelings, 'needs', needsMap, {
   relatedType: 'Need',
 });
 attachRelationshipSlugs(strategies, 'needs', needsMap, { parentType: 'Strategy', relatedType: 'Need' });
+
+strategies.forEach((strategy) => {
+  strategy.supportsNeeds = strategy.needs.map(({ title }) => title);
+});
 
 mkdirSync(DATA_DIR, { recursive: true });
 

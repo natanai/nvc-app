@@ -11678,7 +11678,22 @@
     {
       "title": "Call a friend",
       "slug": "call-a-friend",
+      "summary": "Trust us, they want to hear from you <3",
       "description": "Trust us, they want to hear from you <3",
+      "supportsNeeds": [
+        "Love/Caring",
+        "Connection",
+        "Consideration",
+        "Belonging",
+        "Support",
+        "Friendship",
+        "Peer Respect",
+        "Respect",
+        "Closeness",
+        "Mutuality",
+        "Participation",
+        "Non-judgmental Communication"
+      ],
       "needs": [
         {
           "title": "Love/Caring",
@@ -11729,6 +11744,8 @@
           "slug": "non-judgmental-communication"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11737,7 +11754,13 @@
     {
       "title": "Snuggle a pet",
       "slug": "snuggle-a-pet",
+      "summary": "Don't have one? Go get one and make a day of it!",
       "description": "Don't have one? Go get one and make a day of it!",
+      "supportsNeeds": [
+        "Love/Caring",
+        "Safety",
+        "Nurturing"
+      ],
       "needs": [
         {
           "title": "Love/Caring",
@@ -11752,6 +11775,8 @@
           "slug": "nurturing"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11760,7 +11785,12 @@
     {
       "title": "Cuddle your favorite stuffed animal",
       "slug": "cuddle-your-favorite-stuffed-animal",
+      "summary": "Why do we rob ourselves of this freedom as adult? Reclaim the beauty of your inner child.",
       "description": "Why do we rob ourselves of this freedom as adult? Reclaim the beauty of your inner child.",
+      "supportsNeeds": [
+        "Love/Caring",
+        "Closeness"
+      ],
       "needs": [
         {
           "title": "Love/Caring",
@@ -11771,6 +11801,8 @@
           "slug": "closeness"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11779,7 +11811,12 @@
     {
       "title": "Self holding",
       "slug": "self-holding",
+      "summary": "Place your hands on the opposite sides of your face and breathe deeply",
       "description": "Place your hands on the opposite sides of your face and breathe deeply",
+      "supportsNeeds": [
+        "Love/Caring",
+        "Safety"
+      ],
       "needs": [
         {
           "title": "Love/Caring",
@@ -11790,6 +11827,8 @@
           "slug": "safety"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11798,7 +11837,15 @@
     {
       "title": "Play an instrument",
       "slug": "play-an-instrument",
+      "summary": "Bang a piano or strum a guitar until you've expressed all you can with it. Any instrument will do. Let the universe hear you.",
       "description": "Bang a piano or strum a guitar until you've expressed all you can with it. Any instrument will do. Let the universe hear you.",
+      "supportsNeeds": [
+        "Self expression",
+        "To be heard",
+        "Understanding",
+        "Acceptance",
+        "Growth"
+      ],
       "needs": [
         {
           "title": "Self expression",
@@ -11821,6 +11868,8 @@
           "slug": "growth"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11829,13 +11878,19 @@
     {
       "title": "Smell something",
       "slug": "smell-something",
+      "summary": "Take in a deep breath of a smell you like. At the grocery store approaching a panic attack a once stopped to smell an orange for a few seconds. It wasn't magic, but it helped.",
       "description": "Take in a deep breath of a smell you like. At the grocery store approaching a panic attack a once stopped to smell an orange for a few seconds. It wasn't magic, but it helped.",
+      "supportsNeeds": [
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Rest",
           "slug": "rest"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11844,7 +11899,14 @@
     {
       "title": "Call a parent",
       "slug": "call-a-parent",
+      "summary": "If you have a parent you trust, consider calling them. It's awkward at first but I like to ask \"will you still love me if x...\" and then I share the anxiety inducing thought I'm struggling with. Even though you both know what their answer is, let them say it. Let yourself hear it. I promise they will love saying it, give them a chance to.",
       "description": "If you have a parent you trust, consider calling them. It's awkward at first but I like to ask \"will you still love me if x...\" and then I share the anxiety inducing thought I'm struggling with. Even though you both know what their answer is, let them say it. Let yourself hear it. I promise they will love saying it, give them a chance to.",
+      "supportsNeeds": [
+        "Nurturing",
+        "Support",
+        "Closeness",
+        "Non-judgmental Communication"
+      ],
       "needs": [
         {
           "title": "Nurturing",
@@ -11863,6 +11925,8 @@
           "slug": "non-judgmental-communication"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11871,7 +11935,12 @@
     {
       "title": "Tend to a plant",
       "slug": "tend-to-a-plant",
+      "summary": "Water a plant. Research how to care for your specific plant. Don't have a plant? Do you want one? Consider making an event of getting one.",
       "description": "Water a plant. Research how to care for your specific plant. Don't have a plant? Do you want one? Consider making an event of getting one.",
+      "supportsNeeds": [
+        "Need for all living things to flourish",
+        "Nurturing"
+      ],
       "needs": [
         {
           "title": "Need for all living things to flourish",
@@ -11882,6 +11951,8 @@
           "slug": "nurturing"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11890,7 +11961,12 @@
     {
       "title": "Share your strategies!",
       "slug": "share-your-strategies",
+      "summary": "No one likes unsolicited advise (unfortunately), but you can share your strategies here for others to find when they are looking for them ;)\nIt would make our lives so much more wonderful if you did!",
       "description": "No one likes unsolicited advise (unfortunately), but you can share your strategies here for others to find when they are looking for them ;)\nIt would make our lives so much more wonderful if you did!",
+      "supportsNeeds": [
+        "Need for all living things to flourish",
+        "Contribution"
+      ],
       "needs": [
         {
           "title": "Need for all living things to flourish",
@@ -11901,6 +11977,8 @@
           "slug": "contribution"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11909,7 +11987,13 @@
     {
       "title": "Try Meetup",
       "slug": "try-meetup",
+      "summary": "Meetup is a website that tries to connect you to people with similar interests. Worth a shot?",
       "description": "Meetup is a website that tries to connect you to people with similar interests. Worth a shot?",
+      "supportsNeeds": [
+        "Inclusion",
+        "Community",
+        "Participation"
+      ],
       "needs": [
         {
           "title": "Inclusion",
@@ -11924,6 +12008,8 @@
           "slug": "participation"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11932,7 +12018,15 @@
     {
       "title": "Crunch the numbers",
       "slug": "crunch-the-numbers",
+      "summary": "This isn't for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.",
       "description": "This isn't for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.",
+      "supportsNeeds": [
+        "Safety",
+        "Clarity",
+        "Accomplishment",
+        "Commitment",
+        "Security"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -11955,6 +12049,8 @@
           "slug": "security"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11963,7 +12059,13 @@
     {
       "title": "Stare off",
       "slug": "stare-off",
+      "summary": "Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I'm just staring off. Reminding myself where I am in the world.",
       "description": "Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I'm just staring off. Reminding myself where I am in the world.",
+      "supportsNeeds": [
+        "Safety",
+        "Peace",
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -11978,6 +12080,8 @@
           "slug": "rest"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -11986,13 +12090,19 @@
     {
       "title": "Listen",
       "slug": "listen",
+      "summary": "Listen to someone speak and before you answer, try to get in touch with their underlying need first. Often I find when the help I offer doesn't *actually help* my need for contribution is frustrated. Try to avoid offering help until it's be explicitly requested. Instead, listen for their underlying need and try to connect to that.",
       "description": "Listen to someone speak and before you answer, try to get in touch with their underlying need first. Often I find when the help I offer doesn't *actually help* my need for contribution is frustrated. Try to avoid offering help until it's be explicitly requested. Instead, listen for their underlying need and try to connect to that.",
+      "supportsNeeds": [
+        "Contribution"
+      ],
       "needs": [
         {
           "title": "Contribution",
           "slug": "contribution"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12001,7 +12111,20 @@
     {
       "title": "Write",
       "slug": "write",
+      "summary": "I like to get some kind of words on a page. Even if it's garbage I find the process can help.",
       "description": "I like to get some kind of words on a page. Even if it's garbage I find the process can help.",
+      "supportsNeeds": [
+        "Self expression",
+        "To be seen",
+        "To be heard",
+        "Need to matter",
+        "Autonomy",
+        "Authenticity",
+        "Integrity",
+        "Acceptance",
+        "Honesty",
+        "Growth"
+      ],
       "needs": [
         {
           "title": "Self expression",
@@ -12044,6 +12167,8 @@
           "slug": "growth"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12052,7 +12177,16 @@
     {
       "title": "View previous things you've written or made",
       "slug": "view-previous-things-you-ve-written-or-made",
+      "summary": "To no one's surprise I often understand myself better than anyone else. Sometimes in a crisis I'll read something I wrote a month ago and think \"yes that's exactly it!\" - like past me is giving empathy to future me.",
       "description": "To no one's surprise I often understand myself better than anyone else. Sometimes in a crisis I'll read something I wrote a month ago and think \"yes that's exactly it!\" - like past me is giving empathy to future me.",
+      "supportsNeeds": [
+        "To be seen",
+        "To be heard",
+        "Understanding",
+        "Empathy",
+        "Appreciation",
+        "Honesty"
+      ],
       "needs": [
         {
           "title": "To be seen",
@@ -12079,6 +12213,8 @@
           "slug": "honesty"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12087,7 +12223,18 @@
     {
       "title": "Make art",
       "slug": "make-art",
+      "summary": "Whatever kind. A scribble, a drawing, a painting, a piece of music.",
       "description": "Whatever kind. A scribble, a drawing, a painting, a piece of music.",
+      "supportsNeeds": [
+        "To be seen",
+        "To be heard",
+        "Self expression",
+        "Autonomy",
+        "Choice",
+        "Accomplishment",
+        "Acceptance",
+        "Growth"
+      ],
       "needs": [
         {
           "title": "To be seen",
@@ -12122,6 +12269,8 @@
           "slug": "growth"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12130,7 +12279,13 @@
     {
       "title": "Clean something",
       "slug": "clean-something",
+      "summary": "Clean your room, your kitchen, anything. Bring order to the chaos :)",
       "description": "Clean your room, your kitchen, anything. Bring order to the chaos :)",
+      "supportsNeeds": [
+        "Order",
+        "Beauty",
+        "Accomplishment"
+      ],
       "needs": [
         {
           "title": "Order",
@@ -12145,6 +12300,8 @@
           "slug": "accomplishment"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12153,7 +12310,18 @@
     {
       "title": "Go on walk",
       "slug": "go-on-walk",
+      "summary": "I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.",
       "description": "I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.",
+      "supportsNeeds": [
+        "Clarity",
+        "Peace",
+        "Calm",
+        "Freedom",
+        "Beauty",
+        "Autonomy",
+        "Choice",
+        "Space"
+      ],
       "needs": [
         {
           "title": "Clarity",
@@ -12188,6 +12356,8 @@
           "slug": "space"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12196,7 +12366,20 @@
     {
       "title": "Listen to music",
       "slug": "listen-to-music",
+      "summary": "A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)",
       "description": "A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)",
+      "supportsNeeds": [
+        "Peace",
+        "Self expression",
+        "To be seen",
+        "Belonging",
+        "Understanding",
+        "Serenity",
+        "Calm",
+        "Empowerment",
+        "Genuineness",
+        "Honesty"
+      ],
       "needs": [
         {
           "title": "Peace",
@@ -12239,6 +12422,8 @@
           "slug": "honesty"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12247,7 +12432,15 @@
     {
       "title": "Make a request in conversation",
       "slug": "make-a-request-in-conversation",
+      "summary": "Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.",
       "description": "Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.",
+      "supportsNeeds": [
+        "Autonomy",
+        "Freedom",
+        "Choice",
+        "Choose Freely",
+        "Mutuality"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -12270,6 +12463,8 @@
           "slug": "mutuality"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12278,7 +12473,12 @@
     {
       "title": "View art that you connect to",
       "slug": "view-art-that-you-connect-to",
+      "summary": "Whether it’s in your house, online, or at an exhibit sometimes you find a piece of art that moves you - like it understands you on a profound level.",
       "description": "Whether it’s in your house, online, or at an exhibit sometimes you find a piece of art that moves you - like it understands you on a profound level.",
+      "supportsNeeds": [
+        "Appreciation",
+        "Respect"
+      ],
       "needs": [
         {
           "title": "Appreciation",
@@ -12289,6 +12489,8 @@
           "slug": "respect"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12297,7 +12499,34 @@
     {
       "title": "Play a video game",
       "slug": "play-a-video-game",
+      "summary": "There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.",
       "description": "There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.",
+      "supportsNeeds": [
+        "Acknowledgement",
+        "Freedom",
+        "Belonging",
+        "Inclusion",
+        "Community",
+        "Contribution",
+        "Control",
+        "Choice",
+        "Clarity",
+        "Causality",
+        "Act Freely",
+        "Need to matter",
+        "Friendship",
+        "Relaxation",
+        "Authenticity",
+        "Autonomy",
+        "Rest",
+        "Mattering",
+        "Beauty",
+        "To be seen",
+        "To be heard",
+        "Do things at my own pace and in my own way",
+        "Accomplishment",
+        "Growth"
+      ],
       "needs": [
         {
           "title": "Acknowledgement",
@@ -12396,6 +12625,8 @@
           "slug": "growth"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12404,7 +12635,19 @@
     {
       "title": "Road trip",
       "slug": "road-trip",
+      "summary": "Long or short it doesn't matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.",
       "description": "Long or short it doesn't matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.",
+      "supportsNeeds": [
+        "Freedom",
+        "Act Freely",
+        "Choose Freely",
+        "Autonomy",
+        "Control",
+        "Choice",
+        "Safety",
+        "Do things at my own pace and in my own way",
+        "Privacy"
+      ],
       "needs": [
         {
           "title": "Freedom",
@@ -12443,6 +12686,8 @@
           "slug": "privacy"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12451,7 +12696,14 @@
     {
       "title": "No Man's Sky",
       "slug": "no-man-s-sky",
+      "summary": "For me this game is calming. Just go harvest resources and float through space. I like to name things to as a way to feel like I'm making a difference or matter because there is a tiny chance someone someday will land on the planet and see all the names.",
       "description": "For me this game is calming. Just go harvest resources and float through space. I like to name things to as a way to feel like I'm making a difference or matter because there is a tiny chance someone someday will land on the planet and see all the names.",
+      "supportsNeeds": [
+        "Relaxation",
+        "Rest",
+        "Self expression",
+        "Mattering"
+      ],
       "needs": [
         {
           "title": "Relaxation",
@@ -12470,6 +12722,8 @@
           "slug": "mattering"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12478,7 +12732,19 @@
     {
       "title": "Schedule your day",
       "slug": "schedule-your-day",
+      "summary": "Consider using pictures if lists are unhelpful. Could draw them or print them. It's not perfect but having some kind of a plan can help me",
       "description": "Consider using pictures if lists are unhelpful. Could draw them or print them. It's not perfect but having some kind of a plan can help me",
+      "supportsNeeds": [
+        "Predictability",
+        "Control",
+        "Consistency",
+        "Order",
+        "Trust",
+        "Dependability",
+        "Commitment",
+        "Accountability",
+        "Reliability"
+      ],
       "needs": [
         {
           "title": "Predictability",
@@ -12517,6 +12783,8 @@
           "slug": "reliability"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12525,13 +12793,19 @@
     {
       "title": "Reduce Mental Tasks",
       "slug": "reduce-mental-tasks",
+      "summary": "If you end up with a list that is overwhelming then see if you can give yourself freedom to reduce or combine tasks. For example if you can’t seem to work out regularly because of the anxiety of counting reps or planning routines consider watching a guided youtube video or finding a gym that offers a trainer. Be honest and try to let any shame leave your body if you can. We can’t all do everything like everyone else :)",
       "description": "If you end up with a list that is overwhelming then see if you can give yourself freedom to reduce or combine tasks. For example if you can’t seem to work out regularly because of the anxiety of counting reps or planning routines consider watching a guided youtube video or finding a gym that offers a trainer. Be honest and try to let any shame leave your body if you can. We can’t all do everything like everyone else :)",
+      "supportsNeeds": [
+        "Physical Fitness"
+      ],
       "needs": [
         {
           "title": "Physical Fitness",
           "slug": "physical-fitness"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12540,7 +12814,13 @@
     {
       "title": "Play a social video game",
       "slug": "play-a-social-video-game",
+      "summary": "Some games involve other human interactions, corporatize games are sometimes called “PVE” (player vs environment) but other games that have compelling fictional characters could also be nice. Similar to reading a book you can build relationships with the characters and find connection in relating to their experience.",
       "description": "Some games involve other human interactions, corporatize games are sometimes called “PVE” (player vs environment) but other games that have compelling fictional characters could also be nice. Similar to reading a book you can build relationships with the characters and find connection in relating to their experience.",
+      "supportsNeeds": [
+        "Connection",
+        "Belonging",
+        "Participation"
+      ],
       "needs": [
         {
           "title": "Connection",
@@ -12555,6 +12835,8 @@
           "slug": "participation"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12563,7 +12845,12 @@
     {
       "title": "Read a character driven novel",
       "slug": "read-a-character-driven-novel",
+      "summary": "When we read a book the world and it’s inhabitants can feel especially personal. We can build very powerful connections this way and can go a long way in helping us feel less alone in the world. It’s okay for those relationships to mean so much to us, that’s why the author worked so hard on them <3",
       "description": "When we read a book the world and it’s inhabitants can feel especially personal. We can build very powerful connections this way and can go a long way in helping us feel less alone in the world. It’s okay for those relationships to mean so much to us, that’s why the author worked so hard on them <3",
+      "supportsNeeds": [
+        "Connection",
+        "Belonging"
+      ],
       "needs": [
         {
           "title": "Connection",
@@ -12574,6 +12861,8 @@
           "slug": "belonging"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12582,7 +12871,12 @@
     {
       "title": "Mindfulness (Trust)",
       "slug": "mindfulness-trust",
+      "summary": "Reflect on moments you’ve reliably done what you intended to. From things like getting out of bed (eventually) to doing chores or keeping a promise to a friend. Every moment you make it through, each next breath you take, you prove to your friends and family that you can be trusted to keep living. If someone is not able to extend trust to you it doesn’t have to mean you are untrustworthy. It just means they have a need too which is not being met for some reason. I find when I engage my thoughts this way it’s easier to have compassion on myself and others.",
       "description": "Reflect on moments you’ve reliably done what you intended to. From things like getting out of bed (eventually) to doing chores or keeping a promise to a friend. Every moment you make it through, each next breath you take, you prove to your friends and family that you can be trusted to keep living. If someone is not able to extend trust to you it doesn’t have to mean you are untrustworthy. It just means they have a need too which is not being met for some reason. I find when I engage my thoughts this way it’s easier to have compassion on myself and others.",
+      "supportsNeeds": [
+        "Trust",
+        "Dependability"
+      ],
       "needs": [
         {
           "title": "Trust",
@@ -12593,6 +12887,8 @@
           "slug": "dependability"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12601,7 +12897,13 @@
     {
       "title": "Write a letter",
       "slug": "write-a-letter",
+      "summary": "To a friend or a senator. Advocate for yourself or others.",
       "description": "To a friend or a senator. Advocate for yourself or others.",
+      "supportsNeeds": [
+        "Equality",
+        "Fairness",
+        "Justice"
+      ],
       "needs": [
         {
           "title": "Equality",
@@ -12616,6 +12918,8 @@
           "slug": "justice"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12624,13 +12928,19 @@
     {
       "title": "Compassionate meditation",
       "slug": "compassionate-meditation",
+      "summary": "Reflect on decision you made that you regret and listen for the need you were trying to meet. Leave room to grieve how tragic it is that in that moment no better strategies came to mind. \nDo the same exercise reflecting on past pains you’ve endured from others. Consider what need was not met for you when they did or did not do a specific thing. Honor the need that wasn’t met. Consider what need they have had and grieve how tragic it is that no better strategies came to mind for them in that moment - strategies that could have included your needs.",
       "description": "Reflect on decision you made that you regret and listen for the need you were trying to meet. Leave room to grieve how tragic it is that in that moment no better strategies came to mind. \nDo the same exercise reflecting on past pains you’ve endured from others. Consider what need was not met for you when they did or did not do a specific thing. Honor the need that wasn’t met. Consider what need they have had and grieve how tragic it is that no better strategies came to mind for them in that moment - strategies that could have included your needs.",
+      "supportsNeeds": [
+        "Fairness"
+      ],
       "needs": [
         {
           "title": "Fairness",
           "slug": "fairness"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12639,13 +12949,19 @@
     {
       "title": "Make a list and check things off",
       "slug": "make-a-list-and-check-things-off",
+      "summary": "If you make the tasks small enough so as to avoid becoming overwhelmed the experience of checking something off a list can be very powerful. Things like “10 minutes playing piano scales” or “10 minutes cleaning the kitchen” are a great start. Set a timer and allow yourself to feel repeat when the ten minutes are up. Don’t force yourself to go past these simple goal. Enjoy having make a goal and achieved it.",
       "description": "If you make the tasks small enough so as to avoid becoming overwhelmed the experience of checking something off a list can be very powerful. Things like “10 minutes playing piano scales” or “10 minutes cleaning the kitchen” are a great start. Set a timer and allow yourself to feel repeat when the ten minutes are up. Don’t force yourself to go past these simple goal. Enjoy having make a goal and achieved it.",
+      "supportsNeeds": [
+        "Accomplishment"
+      ],
       "needs": [
         {
           "title": "Accomplishment",
           "slug": "accomplishment"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12654,7 +12970,12 @@
     {
       "title": "Watch a comfort show",
       "slug": "watch-a-comfort-show",
+      "summary": "Try to make space to watch a tv show or movie that feels something like home for you.",
       "description": "Try to make space to watch a tv show or movie that feels something like home for you.",
+      "supportsNeeds": [
+        "Security",
+        "Safety"
+      ],
       "needs": [
         {
           "title": "Security",
@@ -12665,6 +12986,8 @@
           "slug": "safety"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12673,7 +12996,12 @@
     {
       "title": "(Honor) Reflection Meditation",
       "slug": "honor-reflection-meditation",
+      "summary": "Reflect on moments this need has been met in the past. Was it an award you received? Verbal affirmation from a loved one? Consider calling a trusted friend and making a very vulnerable and specific request. \"I'm wondering if you could tell me that even though I haven't accomplished some of my dreams, I am still beautiful person whose existence adds value to the world?\" \nConsider also if you can validate that in yourself sometimes, perhaps regularly. Reflect on art your proud of, or the children your proud to have raised, the obstacles you're overcome in life, and see if you can honor yourself in some way by meditating on those things.",
       "description": "Reflect on moments this need has been met in the past. Was it an award you received? Verbal affirmation from a loved one? Consider calling a trusted friend and making a very vulnerable and specific request. \"I'm wondering if you could tell me that even though I haven't accomplished some of my dreams, I am still beautiful person whose existence adds value to the world?\" \nConsider also if you can validate that in yourself sometimes, perhaps regularly. Reflect on art your proud of, or the children your proud to have raised, the obstacles you're overcome in life, and see if you can honor yourself in some way by meditating on those things.",
+      "supportsNeeds": [
+        "Honor",
+        "Recognition"
+      ],
       "needs": [
         {
           "title": "Honor",
@@ -12684,6 +13012,8 @@
           "slug": "recognition"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12692,13 +13022,19 @@
     {
       "title": "Request a clear request",
       "slug": "request-a-clear-request",
+      "summary": "Consider asking someone to share a vulnerable and specific request with you? Call a friend or loved one and vulnerably share that you really are just wanting to make life wonderful for them but you're unsure how. Make clear that you are looking for requests that leave out all ambiguity. Ask if they would share what needs are alive in them and imagine ways you could contribute to *one* of them.",
       "description": "Consider asking someone to share a vulnerable and specific request with you? Call a friend or loved one and vulnerably share that you really are just wanting to make life wonderful for them but you're unsure how. Make clear that you are looking for requests that leave out all ambiguity. Ask if they would share what needs are alive in them and imagine ways you could contribute to *one* of them.",
+      "supportsNeeds": [
+        "Contribution"
+      ],
       "needs": [
         {
           "title": "Contribution",
           "slug": "contribution"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12707,13 +13043,19 @@
     {
       "title": "Charity work",
       "slug": "charity-work",
+      "summary": "Consider looking for charity work in your area. Find a soup kitchen for the homeless or a local nonprofit doing work you believe in. Even just walking along picking up trash truly does make life more wonderful for your entire community - even if only in some small and sacred way.",
       "description": "Consider looking for charity work in your area. Find a soup kitchen for the homeless or a local nonprofit doing work you believe in. Even just walking along picking up trash truly does make life more wonderful for your entire community - even if only in some small and sacred way.",
+      "supportsNeeds": [
+        "Contribution"
+      ],
       "needs": [
         {
           "title": "Contribution",
           "slug": "contribution"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12722,7 +13064,18 @@
     {
       "title": "Sing",
       "slug": "sing",
+      "summary": "Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.",
       "description": "Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.",
+      "supportsNeeds": [
+        "To be heard",
+        "Self expression",
+        "Autonomy",
+        "To be seen",
+        "Empowerment",
+        "Mattering",
+        "Need to matter",
+        "Control"
+      ],
       "needs": [
         {
           "title": "To be heard",
@@ -12757,6 +13110,8 @@
           "slug": "control"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12765,7 +13120,17 @@
     {
       "title": "Read a poem you like aloud",
       "slug": "read-a-poem-you-like-aloud",
+      "summary": "Try a search online like poets.org. Search a key word related to what you’re experiencing right now. Find a poem you’re relating to and in the privacy of your room or car or closet (wherever you feel comfortable) and read the poem aloud to yourself. Let it gives you words in a time when you have none. Experience the validation that this artist understands also how you might be feeling right now and sees it as valid too.",
       "description": "Try a search online like poets.org. Search a key word related to what you’re experiencing right now. Find a poem you’re relating to and in the privacy of your room or car or closet (wherever you feel comfortable) and read the poem aloud to yourself. Let it gives you words in a time when you have none. Experience the validation that this artist understands also how you might be feeling right now and sees it as valid too.",
+      "supportsNeeds": [
+        "To be heard",
+        "Acknowledgement",
+        "Belonging",
+        "To be seen",
+        "Need to matter",
+        "Serenity",
+        "Beauty"
+      ],
       "needs": [
         {
           "title": "To be heard",
@@ -12796,6 +13161,8 @@
           "slug": "beauty"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12804,13 +13171,19 @@
     {
       "title": "Stand Largely",
       "slug": "stand-largely",
+      "summary": "Take a wide stance, place your arms up high and apart. Making a sort of X shape with your arms and legs take up as much space as possible. Trying this for about 30 seconds. We know that the postures our bodies takes often represent our emotional state and, interestingly, research suggests that this system can also work in reverse. Give your body space and see if it helps give your psychological date space too.",
       "description": "Take a wide stance, place your arms up high and apart. Making a sort of X shape with your arms and legs take up as much space as possible. Trying this for about 30 seconds. We know that the postures our bodies takes often represent our emotional state and, interestingly, research suggests that this system can also work in reverse. Give your body space and see if it helps give your psychological date space too.",
+      "supportsNeeds": [
+        "Empowerment"
+      ],
       "needs": [
         {
           "title": "Empowerment",
           "slug": "empowerment"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12819,13 +13192,19 @@
     {
       "title": "Volunteering / Acts of Kindness",
       "slug": "volunteering-acts-of-kindness",
+      "summary": "Tend to the life in others. Looks for ways that seem like trustworthy strategies to truly make life more wonderful for others. Sometimes we find that serving life in others turns out to serve life in us as well. Be careful to truly hear and identify what someone is needing before you try to do something you think they'd enjoy as it can turn out to be especially discouraging to have tried to make life wonderful for someone only to realize they were needing something else altogether. Make space for them to share their needs and make a clear request or seek out volunteer work that are confident really is doing good work.",
       "description": "Tend to the life in others. Looks for ways that seem like trustworthy strategies to truly make life more wonderful for others. Sometimes we find that serving life in others turns out to serve life in us as well. Be careful to truly hear and identify what someone is needing before you try to do something you think they'd enjoy as it can turn out to be especially discouraging to have tried to make life wonderful for someone only to realize they were needing something else altogether. Make space for them to share their needs and make a clear request or seek out volunteer work that are confident really is doing good work.",
+      "supportsNeeds": [
+        "Consideration"
+      ],
       "needs": [
         {
           "title": "Consideration",
           "slug": "consideration"
         }
       ],
+      "contributorName": "Nat",
+      "contributorLocation": "Missouri",
       "contributor": {
         "name": "Nat",
         "location": "Missouri"
@@ -12834,41 +13213,66 @@
     {
       "title": "Shoulder rolls",
       "slug": "shoulder-rolls",
+      "summary": "Roll shoulders forward ten times, then back ten times, noticing any change.",
       "description": "Roll shoulders forward ten times, then back ten times, noticing any change.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Shake for 30 seconds",
       "slug": "shake-for-30-seconds",
+      "summary": "Set a timer and gently shake arms, hands, and legs to discharge tension.",
       "description": "Set a timer and gently shake arms, hands, and legs to discharge tension.",
+      "supportsNeeds": [
+        "Freedom"
+      ],
       "needs": [
         {
           "title": "Freedom",
           "slug": "freedom"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Wall push-ups",
       "slug": "wall-push-ups",
+      "summary": "Do five slow wall push-ups; feel your strength and breathing.",
       "description": "Do five slow wall push-ups; feel your strength and breathing.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Back to wall lean",
       "slug": "back-to-wall-lean",
+      "summary": "Press your spine to a wall and breathe into your back for 5 breaths.",
       "description": "Press your spine to a wall and breathe into your back for 5 breaths.",
+      "supportsNeeds": [
+        "Safety"
+      ],
       "needs": [
         {
           "title": "Safety",
           "slug": "safety"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Butterfly taps",
       "slug": "butterfly-taps",
+      "summary": "Cross arms over chest and tap alternately left/right for 60 seconds.",
       "description": "Cross arms over chest and tap alternately left/right for 60 seconds.",
+      "supportsNeeds": [
+        "Safety",
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -12878,12 +13282,19 @@
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Hand on heart breaths",
       "slug": "hand-on-heart-breaths",
+      "summary": "Place a palm on your chest; inhale for 4, exhale for 6, five times.",
       "description": "Place a palm on your chest; inhale for 4, exhale for 6, five times.",
+      "supportsNeeds": [
+        "Safety",
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -12893,23 +13304,36 @@
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Box breathing",
       "slug": "box-breathing",
+      "summary": "Trace a square with your finger: inhale 4, hold 4, exhale 4, hold 4 (4 rounds).",
       "description": "Trace a square with your finger: inhale 4, hold 4, exhale 4, hold 4 (4 rounds).",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "4-7-8 breathing",
       "slug": "4-7-8-breathing",
+      "summary": "Inhale 4, hold 7, exhale 8 (four cycles).",
       "description": "Inhale 4, hold 7, exhale 8 (four cycles).",
+      "supportsNeeds": [
+        "Peace",
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Peace",
@@ -12919,45 +13343,71 @@
           "title": "Rest",
           "slug": "rest"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Alternate-nostril breaths",
       "slug": "alternate-nostril-breaths",
+      "summary": "Gently alternate closing nostrils; breathe through one, then the other.",
       "description": "Gently alternate closing nostrils; breathe through one, then the other.",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Count 20 exhalations",
       "slug": "count-20-exhalations",
+      "summary": "Silently count only the out-breaths from 1 to 20. If you lose count, restart.",
       "description": "Silently count only the out-breaths from 1 to 20. If you lose count, restart.",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Legs up the wall",
       "slug": "legs-up-the-wall",
+      "summary": "Lay with calves on a chair or wall for two minutes.",
       "description": "Lay with calves on a chair or wall for two minutes.",
+      "supportsNeeds": [
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Rest",
           "slug": "rest"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Floor starfish",
       "slug": "floor-starfish",
+      "summary": "Lay flat, arms and legs wide, and let the floor hold you for one minute.",
       "description": "Lay flat, arms and legs wide, and let the floor hold you for one minute.",
+      "supportsNeeds": [
+        "Safety",
+        "Rest",
+        "Support"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -12971,23 +13421,36 @@
           "title": "Support",
           "slug": "support"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Soft-gaze minute",
       "slug": "soft-gaze-minute",
+      "summary": "Choose one spot and rest your gaze there for 60 seconds.",
       "description": "Choose one spot and rest your gaze there for 60 seconds.",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "5-4-3-2-1 check",
       "slug": "5-4-3-2-1-check",
+      "summary": "Name 5 things you see, 4 feel, 3 hear, 2 smell, 1 taste.",
       "description": "Name 5 things you see, 4 feel, 3 hear, 2 smell, 1 taste.",
+      "supportsNeeds": [
+        "Safety",
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -12997,85 +13460,134 @@
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Color hunt",
       "slug": "color-hunt",
+      "summary": "Pick one color and find five items of that color around you.",
       "description": "Pick one color and find five items of that color around you.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Feel your feet",
       "slug": "feel-your-feet",
+      "summary": "Place both feet flat; press toes, heels, edges; notice contact.",
       "description": "Place both feet flat; press toes, heels, edges; notice contact.",
+      "supportsNeeds": [
+        "Safety"
+      ],
       "needs": [
         {
           "title": "Safety",
           "slug": "safety"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Barefoot on grass",
       "slug": "barefoot-on-grass",
+      "summary": "If available, stand barefoot on grass or carpet for 30 seconds.",
       "description": "If available, stand barefoot on grass or carpet for 30 seconds.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Hold something cool",
       "slug": "hold-something-cool",
+      "summary": "Hold a cool object or an ice cube and notice the sensation for 20 seconds.",
       "description": "Hold a cool object or an ice cube and notice the sensation for 20 seconds.",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Sky glance",
       "slug": "sky-glance",
+      "summary": "Look up at the sky and track one cloud or patch of blue for 30 seconds.",
       "description": "Look up at the sky and track one cloud or patch of blue for 30 seconds.",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name three sounds",
       "slug": "name-three-sounds",
+      "summary": "Listen and name three distinct sounds near or far.",
       "description": "Listen and name three distinct sounds near or far.",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Trace an object",
       "slug": "trace-an-object",
+      "summary": "With your finger, trace the outline of any object slowly.",
       "description": "With your finger, trace the outline of any object slowly.",
+      "supportsNeeds": [
+        "Beauty"
+      ],
       "needs": [
         {
           "title": "Beauty",
           "slug": "beauty"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "One-minute doodle",
       "slug": "one-minute-doodle",
+      "summary": "Draw lines, dots, or shapes continuously for 60 seconds.",
       "description": "Draw lines, dots, or shapes continuously for 60 seconds.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Write three sentences",
       "slug": "write-three-sentences",
+      "summary": "Write three unedited sentences about “right now.”",
       "description": "Write three unedited sentences about “right now.”",
+      "supportsNeeds": [
+        "Honesty",
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Honesty",
@@ -13085,29 +13597,46 @@
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Haiku in a minute",
       "slug": "haiku-in-a-minute",
+      "summary": "Write a 5-7-5 poem about what you notice.",
       "description": "Write a 5-7-5 poem about what you notice.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name three needs alive",
       "slug": "name-three-needs-alive",
+      "summary": "Write down three needs that feel alive for you in this moment.",
       "description": "Write down three needs that feel alive for you in this moment.",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Observation only",
       "slug": "observation-only",
+      "summary": "Write one sentence describing what happened with zero evaluations.",
       "description": "Write one sentence describing what happened with zero evaluations.",
+      "supportsNeeds": [
+        "Honesty",
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Honesty",
@@ -13117,12 +13646,19 @@
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Translate a “should”",
       "slug": "translate-a-should",
+      "summary": "Rewrite one “I should…” as “I choose to… because I value…”.",
       "description": "Rewrite one “I should…” as “I choose to… because I value…”.",
+      "supportsNeeds": [
+        "Autonomy",
+        "Integrity"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -13132,12 +13668,19 @@
           "title": "Integrity",
           "slug": "integrity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Micro-request to self",
       "slug": "micro-request-to-self",
+      "summary": "Write one tiny, do-now request you can meet in 2 minutes.",
       "description": "Write one tiny, do-now request you can meet in 2 minutes.",
+      "supportsNeeds": [
+        "Autonomy",
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -13147,12 +13690,19 @@
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Unsended appreciation",
       "slug": "unsended-appreciation",
+      "summary": "Write a 2-sentence appreciation to yourself; keep it.",
       "description": "Write a 2-sentence appreciation to yourself; keep it.",
+      "supportsNeeds": [
+        "Acceptance",
+        "Recognition"
+      ],
       "needs": [
         {
           "title": "Acceptance",
@@ -13162,12 +13712,19 @@
           "title": "Recognition",
           "slug": "recognition"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Needs → strategies map",
       "slug": "needs-strategies-map",
+      "summary": "List one need and brainstorm three different strategies for it.",
       "description": "List one need and brainstorm three different strategies for it.",
+      "supportsNeeds": [
+        "Choice",
+        "Autonomy"
+      ],
       "needs": [
         {
           "title": "Choice",
@@ -13177,23 +13734,36 @@
           "title": "Autonomy",
           "slug": "autonomy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Circle the priority",
       "slug": "circle-the-priority",
+      "summary": "List five needs and circle one to tend in the next ten minutes.",
       "description": "List five needs and circle one to tend in the next ten minutes.",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name a limit kindly",
       "slug": "name-a-limit-kindly",
+      "summary": "Say aloud: “I’m not ready to decide yet.”",
       "description": "Say aloud: “I’m not ready to decide yet.”",
+      "supportsNeeds": [
+        "Autonomy",
+        "Respect"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -13203,12 +13773,20 @@
           "title": "Respect",
           "slug": "respect"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Ask for a pause",
       "slug": "ask-for-a-pause",
+      "summary": "Say: “Could we take a 5-minute pause and return at :15?”",
       "description": "Say: “Could we take a 5-minute pause and return at :15?”",
+      "supportsNeeds": [
+        "Mutuality",
+        "Consideration",
+        "Space"
+      ],
       "needs": [
         {
           "title": "Mutuality",
@@ -13222,12 +13800,20 @@
           "title": "Space",
           "slug": "space"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Ask for channel shift",
       "slug": "ask-for-channel-shift",
+      "summary": "Say: “Could we move this to text so I can think?”",
       "description": "Say: “Could we move this to text so I can think?”",
+      "supportsNeeds": [
+        "Autonomy",
+        "Clarity",
+        "Consideration"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -13241,12 +13827,19 @@
           "title": "Consideration",
           "slug": "consideration"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Turn on Do Not Disturb",
       "slug": "turn-on-do-not-disturb",
+      "summary": "Set DND for 10 minutes; return when the timer ends.",
       "description": "Set DND for 10 minutes; return when the timer ends.",
+      "supportsNeeds": [
+        "Peace",
+        "Autonomy"
+      ],
       "needs": [
         {
           "title": "Peace",
@@ -13256,12 +13849,19 @@
           "title": "Autonomy",
           "slug": "autonomy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Phone face-down",
       "slug": "phone-face-down",
+      "summary": "Place phone face-down/out of reach for five minutes.",
       "description": "Place phone face-down/out of reach for five minutes.",
+      "supportsNeeds": [
+        "Autonomy",
+        "Space"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -13271,69 +13871,110 @@
           "title": "Space",
           "slug": "space"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "One thing off today",
       "slug": "one-thing-off-today",
+      "summary": "Choose one nonessential thing you will not do today.",
       "description": "Choose one nonessential thing you will not do today.",
+      "supportsNeeds": [
+        "Autonomy"
+      ],
       "needs": [
         {
           "title": "Autonomy",
           "slug": "autonomy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Two-minute eye rest",
       "slug": "two-minute-eye-rest",
+      "summary": "Close eyes or look at a far point for two minutes.",
       "description": "Close eyes or look at a far point for two minutes.",
+      "supportsNeeds": [
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Rest",
           "slug": "rest"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Jaw unclench",
       "slug": "jaw-unclench",
+      "summary": "Place tongue on the floor of your mouth; relax jaw for 10 breaths.",
       "description": "Place tongue on the floor of your mouth; relax jaw for 10 breaths.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Peripheral vision soften",
       "slug": "peripheral-vision-soften",
+      "summary": "Widen your visual field to the edges for 30 seconds.",
       "description": "Widen your visual field to the edges for 30 seconds.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Gentle sway",
       "slug": "gentle-sway",
+      "summary": "Stand or sit and sway side-to-side with your breath.",
       "description": "Stand or sit and sway side-to-side with your breath.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Slow-walk 60 seconds",
       "slug": "slow-walk-60-seconds",
+      "summary": "Walk deliberately slowly for one minute, feeling each step.",
       "description": "Walk deliberately slowly for one minute, feeling each step.",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Texture touch",
       "slug": "texture-touch",
+      "summary": "Touch wood, fabric, or stone; describe the texture to yourself.",
       "description": "Touch wood, fabric, or stone; describe the texture to yourself.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Wrap in a blanket",
       "slug": "wrap-in-a-blanket",
+      "summary": "Wrap shoulders and torso; notice warmth and weight.",
       "description": "Wrap shoulders and torso; notice warmth and weight.",
+      "supportsNeeds": [
+        "Safety",
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -13343,12 +13984,19 @@
           "title": "Rest",
           "slug": "rest"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Pillow nest",
       "slug": "pillow-nest",
+      "summary": "Create a quick cushion “nest” behind your back or under knees.",
       "description": "Create a quick cushion “nest” behind your back or under knees.",
+      "supportsNeeds": [
+        "Support",
+        "Rest"
+      ],
       "needs": [
         {
           "title": "Support",
@@ -13358,40 +14006,63 @@
           "title": "Rest",
           "slug": "rest"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Light adjust",
       "slug": "light-adjust",
+      "summary": "Increase or dim the light to suit your body right now.",
       "description": "Increase or dim the light to suit your body right now.",
+      "supportsNeeds": [
+        "Choice"
+      ],
       "needs": [
         {
           "title": "Choice",
           "slug": "choice"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Open the blinds",
       "slug": "open-the-blinds",
+      "summary": "Let natural light in and look outside for 30 seconds.",
       "description": "Let natural light in and look outside for 30 seconds.",
+      "supportsNeeds": [
+        "Beauty"
+      ],
       "needs": [
         {
           "title": "Beauty",
           "slug": "beauty"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Fresh socks",
       "slug": "fresh-socks",
+      "summary": "Change into clean or cozy socks for a reset.",
       "description": "Change into clean or cozy socks for a reset.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "One kind text",
       "slug": "one-kind-text",
+      "summary": "Send “Thinking of you—no need to reply.” to someone you trust.",
       "description": "Send “Thinking of you—no need to reply.” to someone you trust.",
+      "supportsNeeds": [
+        "Connection",
+        "Mutuality"
+      ],
       "needs": [
         {
           "title": "Connection",
@@ -13401,12 +14072,20 @@
           "title": "Mutuality",
           "slug": "mutuality"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Specific thank-you",
       "slug": "specific-thank-you",
+      "summary": "Send a short note naming one action someone did and how it supported you.",
       "description": "Send a short note naming one action someone did and how it supported you.",
+      "supportsNeeds": [
+        "Appreciation",
+        "Recognition",
+        "Connection"
+      ],
       "needs": [
         {
           "title": "Appreciation",
@@ -13420,12 +14099,19 @@
           "title": "Connection",
           "slug": "connection"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Kind comment online",
       "slug": "kind-comment-online",
+      "summary": "Leave a brief, sincere encouragement on a post.",
       "description": "Leave a brief, sincere encouragement on a post.",
+      "supportsNeeds": [
+        "Contribution",
+        "Community"
+      ],
       "needs": [
         {
           "title": "Contribution",
@@ -13435,12 +14121,19 @@
           "title": "Community",
           "slug": "community"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Mirror kindness",
       "slug": "mirror-kindness",
+      "summary": "Look in a mirror and say one thing you appreciate about your effort today.",
       "description": "Look in a mirror and say one thing you appreciate about your effort today.",
+      "supportsNeeds": [
+        "Recognition",
+        "Respect"
+      ],
       "needs": [
         {
           "title": "Recognition",
@@ -13450,51 +14143,81 @@
           "title": "Respect",
           "slug": "respect"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name → need link",
       "slug": "name-need-link",
+      "summary": "Write one sentence: “When I did/experienced __, the need was __.”",
       "description": "Write one sentence: “When I did/experienced __, the need was __.”",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Five gratitudes by need",
       "slug": "five-gratitudes-by-need",
+      "summary": "List five gratitudes and tag each with the need it tended.",
       "description": "List five gratitudes and tag each with the need it tended.",
+      "supportsNeeds": [
+        "Appreciation"
+      ],
       "needs": [
         {
           "title": "Appreciation",
           "slug": "appreciation"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Parking-lot note",
       "slug": "parking-lot-note",
+      "summary": "Make a note titled “Parking Lot” and park one worry there.",
       "description": "Make a note titled “Parking Lot” and park one worry there.",
+      "supportsNeeds": [
+        "Order"
+      ],
       "needs": [
         {
           "title": "Order",
           "slug": "order"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "One next tiny step",
       "slug": "one-next-tiny-step",
+      "summary": "Choose the smallest next step on something and do only that.",
       "description": "Choose the smallest next step on something and do only that.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Calendar one thing",
       "slug": "calendar-one-thing",
+      "summary": "Add just one gentle, specific item to your calendar.",
       "description": "Add just one gentle, specific item to your calendar.",
+      "supportsNeeds": [
+        "Predictability",
+        "Order",
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Predictability",
@@ -13508,23 +14231,37 @@
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Mark a date on a calendar",
       "slug": "mark-a-date-on-a-calendar",
+      "summary": "Circle a meaningful upcoming date (rest day, call, walk).",
       "description": "Circle a meaningful upcoming date (rest day, call, walk).",
+      "supportsNeeds": [
+        "Order"
+      ],
       "needs": [
         {
           "title": "Order",
           "slug": "order"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name support options",
       "slug": "name-support-options",
+      "summary": "List three people or places you could ask for support when ready.",
       "description": "List three people or places you could ask for support when ready.",
+      "supportsNeeds": [
+        "Safety",
+        "Support",
+        "Choice"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -13538,12 +14275,19 @@
           "title": "Choice",
           "slug": "choice"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Self-check scale",
       "slug": "self-check-scale",
+      "summary": "Draw a 0–10 line for energy; mark where you are now.",
       "description": "Draw a 0–10 line for energy; mark where you are now.",
+      "supportsNeeds": [
+        "Clarity",
+        "Honesty"
+      ],
       "needs": [
         {
           "title": "Clarity",
@@ -13553,57 +14297,90 @@
           "title": "Honesty",
           "slug": "honesty"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Body scan (30 sec)",
       "slug": "body-scan-30-sec",
+      "summary": "Scan from toes to head naming neutral sensations only.",
       "description": "Scan from toes to head naming neutral sensations only.",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Three shapes doodle",
       "slug": "three-shapes-doodle",
+      "summary": "Draw one circle, one triangle, one square repeatedly for a minute.",
       "description": "Draw one circle, one triangle, one square repeatedly for a minute.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Trace your hand",
       "slug": "trace-your-hand",
+      "summary": "Outline your hand and write a need in each finger.",
       "description": "Outline your hand and write a need in each finger.",
+      "supportsNeeds": [
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "One-foot balance",
       "slug": "one-foot-balance",
+      "summary": "Stand on one foot near support for 20–30 seconds.",
       "description": "Stand on one foot near support for 20–30 seconds.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Breath with steps",
       "slug": "breath-with-steps",
+      "summary": "Take ten steps; inhale for two steps, exhale for three.",
       "description": "Take ten steps; inhale for two steps, exhale for three.",
+      "supportsNeeds": [
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name what’s within control",
       "slug": "name-what-s-within-control",
+      "summary": "List three things within your influence today.",
       "description": "List three things within your influence today.",
+      "supportsNeeds": [
+        "Clarity",
+        "Autonomy"
+      ],
       "needs": [
         {
           "title": "Clarity",
@@ -13613,12 +14390,19 @@
           "title": "Autonomy",
           "slug": "autonomy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name what’s outside control",
       "slug": "name-what-s-outside-control",
+      "summary": "List three things outside your influence today.",
       "description": "List three things outside your influence today.",
+      "supportsNeeds": [
+        "Acceptance",
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Acceptance",
@@ -13628,34 +14412,54 @@
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Choose a gentler word",
       "slug": "choose-a-gentler-word",
+      "summary": "Replace one harsh word in your self-talk with a kinder one.",
       "description": "Replace one harsh word in your self-talk with a kinder one.",
+      "supportsNeeds": [
+        "Respect"
+      ],
       "needs": [
         {
           "title": "Respect",
           "slug": "respect"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Future-walk sketch",
       "slug": "future-walk-sketch",
+      "summary": "Pick a nearby block on a map and sketch a simple future walking loop.",
       "description": "Pick a nearby block on a map and sketch a simple future walking loop.",
+      "supportsNeeds": [
+        "Autonomy"
+      ],
       "needs": [
         {
           "title": "Autonomy",
           "slug": "autonomy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Micro boundary",
       "slug": "micro-boundary",
+      "summary": "Say “No, thank you” to one low-stakes ask today.",
       "description": "Say “No, thank you” to one low-stakes ask today.",
+      "supportsNeeds": [
+        "Autonomy",
+        "Respect",
+        "Integrity"
+      ],
       "needs": [
         {
           "title": "Autonomy",
@@ -13669,12 +14473,19 @@
           "title": "Integrity",
           "slug": "integrity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Value compass card",
       "slug": "value-compass-card",
+      "summary": "Write five values/needs on a card/note you can glance at.",
       "description": "Write five values/needs on a card/note you can glance at.",
+      "supportsNeeds": [
+        "Integrity",
+        "Clarity"
+      ],
       "needs": [
         {
           "title": "Integrity",
@@ -13684,41 +14495,67 @@
           "title": "Clarity",
           "slug": "clarity"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Two-sentence story",
       "slug": "two-sentence-story",
+      "summary": "Write a two-sentence story about today from your own point of view.",
       "description": "Write a two-sentence story about today from your own point of view.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Read one paragraph",
       "slug": "read-one-paragraph",
+      "summary": "Read one paragraph from any nonfiction page you have nearby.",
       "description": "Read one paragraph from any nonfiction page you have nearby.",
+      "supportsNeeds": [
+        "Growth"
+      ],
       "needs": [
         {
           "title": "Growth",
           "slug": "growth"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "One gentle stretch chain",
       "slug": "one-gentle-stretch-chain",
+      "summary": "Reach up, fold forward, roll up—three times, slowly.",
       "description": "Reach up, fold forward, roll up—three times, slowly.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Senses first aid kit",
       "slug": "senses-first-aid-kit",
+      "summary": "List one favorite sight, sound, taste, touch, and smell you can access easily.",
       "description": "List one favorite sight, sound, taste, touch, and smell you can access easily.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name a want & a don’t",
       "slug": "name-a-want-a-don-t",
+      "summary": "Complete: “I want __ and I don’t want __ because I value __.”",
       "description": "Complete: “I want __ and I don’t want __ because I value __.”",
+      "supportsNeeds": [
+        "Honesty",
+        "Clarity",
+        "Autonomy"
+      ],
       "needs": [
         {
           "title": "Honesty",
@@ -13732,12 +14569,19 @@
           "title": "Autonomy",
           "slug": "autonomy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Three breaths before reply",
       "slug": "three-breaths-before-reply",
+      "summary": "Take three breaths before sending your next message.",
       "description": "Take three breaths before sending your next message.",
+      "supportsNeeds": [
+        "Consideration",
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Consideration",
@@ -13747,40 +14591,64 @@
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Put it on paper",
       "slug": "put-it-on-paper",
+      "summary": "Write a worry on paper and place it in an envelope or book.",
       "description": "Write a worry on paper and place it in an envelope or book.",
+      "supportsNeeds": [
+        "Order"
+      ],
       "needs": [
         {
           "title": "Order",
           "slug": "order"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Choose a supportive spot",
       "slug": "choose-a-supportive-spot",
+      "summary": "Move to a seat with back support or softer light.",
       "description": "Move to a seat with back support or softer light.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Micro-celebration",
       "slug": "micro-celebration",
+      "summary": "Clap once or do a tiny fist-pump after finishing a task.",
       "description": "Clap once or do a tiny fist-pump after finishing a task.",
+      "supportsNeeds": [
+        "Recognition"
+      ],
       "needs": [
         {
           "title": "Recognition",
           "slug": "recognition"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Name one help to ask",
       "slug": "name-one-help-to-ask",
+      "summary": "Write a concrete, doable request you could ask someone this week.",
       "description": "Write a concrete, doable request you could ask someone this week.",
+      "supportsNeeds": [
+        "Support",
+        "Mutuality",
+        "Contribution"
+      ],
       "needs": [
         {
           "title": "Support",
@@ -13794,18 +14662,30 @@
           "title": "Contribution",
           "slug": "contribution"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Return to body cue",
       "slug": "return-to-body-cue",
+      "summary": "Set a simple cue (e.g., every doorframe = one deep breath) for today only.",
       "description": "Set a simple cue (e.g., every doorframe = one deep breath) for today only.",
-      "needs": []
+      "supportsNeeds": [],
+      "needs": [],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Inanimate Interview",
       "slug": "inanimate-interview",
+      "summary": "Pick a nearby object and ask it one question (\"what's your job here?\"). Answer in its voice in one sentence. Smile at whatever comes out.",
       "description": "Pick a nearby object and ask it one question (\"what's your job here?\"). Answer in its voice in one sentence. Smile at whatever comes out.",
+      "supportsNeeds": [
+        "Understanding",
+        "Self expression",
+        "Empathy"
+      ],
       "needs": [
         {
           "title": "Understanding",
@@ -13819,12 +14699,21 @@
           "title": "Empathy",
           "slug": "empathy"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Ambient Postcard",
       "slug": "ambient-postcard",
+      "summary": "On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your \"right now\"; optionally send it to one person.",
       "description": "On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your \"right now\"; optionally send it to one person.",
+      "supportsNeeds": [
+        "Belonging",
+        "Connection",
+        "Self expression",
+        "Appreciation"
+      ],
       "needs": [
         {
           "title": "Belonging",
@@ -13842,12 +14731,21 @@
           "title": "Appreciation",
           "slug": "appreciation"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Align x3",
       "slug": "align-x3",
+      "summary": "Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.",
       "description": "Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.",
+      "supportsNeeds": [
+        "Order",
+        "Peace",
+        "Calm",
+        "Control"
+      ],
       "needs": [
         {
           "title": "Order",
@@ -13865,12 +14763,21 @@
           "title": "Control",
           "slug": "control"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Shadow Line",
       "slug": "shadow-line",
+      "summary": "Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.",
       "description": "Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.",
+      "supportsNeeds": [
+        "Beauty",
+        "Order",
+        "Calm",
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Beauty",
@@ -13888,12 +14795,22 @@
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Exit Count",
       "slug": "exit-count",
+      "summary": "Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.",
       "description": "Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.",
+      "supportsNeeds": [
+        "Safety",
+        "Security",
+        "Calm",
+        "Control",
+        "Predictability"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -13915,12 +14832,21 @@
           "title": "Predictability",
           "slug": "predictability"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Grain Trace",
       "slug": "grain-trace",
+      "summary": "Run a fingertip along a visible line (wood grain, tile grout, fabric seam, etc.) until it ends, and let that completion register.",
       "description": "Run a fingertip along a visible line (wood grain, tile grout, fabric seam, etc.) until it ends, and let that completion register.",
+      "supportsNeeds": [
+        "Calm",
+        "Peace",
+        "Serenity",
+        "Beauty"
+      ],
       "needs": [
         {
           "title": "Calm",
@@ -13938,12 +14864,21 @@
           "title": "Beauty",
           "slug": "beauty"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Window Quarter",
       "slug": "window-quarter",
+      "summary": "Use the window frame to pick one small quadrant of the view and give it a one-line title you like; hold that title for a moment.",
       "description": "Use the window frame to pick one small quadrant of the view and give it a one-line title you like; hold that title for a moment.",
+      "supportsNeeds": [
+        "Beauty",
+        "Clarity",
+        "Calm",
+        "Appreciation"
+      ],
       "needs": [
         {
           "title": "Beauty",
@@ -13961,12 +14896,20 @@
           "title": "Appreciation",
           "slug": "appreciation"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Scent Caption",
       "slug": "scent-caption",
+      "summary": "Open a spice, soap, or leaf, take one brief sniff, and write a one-word caption for the scent before closing it.",
       "description": "Open a spice, soap, or leaf, take one brief sniff, and write a one-word caption for the scent before closing it.",
+      "supportsNeeds": [
+        "Beauty",
+        "Self expression",
+        "Appreciation"
+      ],
       "needs": [
         {
           "title": "Beauty",
@@ -13980,12 +14923,21 @@
           "title": "Appreciation",
           "slug": "appreciation"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Corner Count",
       "slug": "corner-count",
+      "summary": "Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.",
       "description": "Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.",
+      "supportsNeeds": [
+        "Order",
+        "Calm",
+        "Predictability",
+        "Peace"
+      ],
       "needs": [
         {
           "title": "Order",
@@ -14003,12 +14955,21 @@
           "title": "Peace",
           "slug": "peace"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Seat Press",
       "slug": "seat-press",
+      "summary": "Press the surface you're on (chair, floor, bed) firmly once with your palm or thigh and say \"held\" quietly; note the contact, then stop.",
       "description": "Press the surface you're on (chair, floor, bed) firmly once with your palm or thigh and say \"held\" quietly; note the contact, then stop.",
+      "supportsNeeds": [
+        "Safety",
+        "Space",
+        "Security",
+        "Calm"
+      ],
       "needs": [
         {
           "title": "Safety",
@@ -14026,12 +14987,20 @@
           "title": "Calm",
           "slug": "calm"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Nearest Job",
       "slug": "nearest-job",
+      "summary": "Pick the nearest object and state its job in two words (e.g., \"mug—holds\", \"pen—marks\"); enjoy the tidy accuracy and you're done.",
       "description": "Pick the nearest object and state its job in two words (e.g., \"mug—holds\", \"pen—marks\"); enjoy the tidy accuracy and you're done.",
+      "supportsNeeds": [
+        "Understanding",
+        "Clarity",
+        "Order"
+      ],
       "needs": [
         {
           "title": "Understanding",
@@ -14045,18 +15014,26 @@
           "title": "Order",
           "slug": "order"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     },
     {
       "title": "Dance",
       "slug": "dance",
+      "summary": "have a dance party!",
       "description": "have a dance party!",
+      "supportsNeeds": [
+        "Physical Fitness"
+      ],
       "needs": [
         {
           "title": "Physical Fitness",
           "slug": "physical-fitness"
         }
       ],
+      "contributorName": "Paige",
+      "contributorLocation": "USA",
       "contributor": {
         "name": "Paige",
         "location": "USA"
@@ -14065,13 +15042,19 @@
     {
       "title": "Yoga",
       "slug": "yoga",
+      "summary": "Do some yoga",
       "description": "Do some yoga",
+      "supportsNeeds": [
+        "Physical Fitness"
+      ],
       "needs": [
         {
           "title": "Physical Fitness",
           "slug": "physical-fitness"
         }
       ],
+      "contributorName": "Paige",
+      "contributorLocation": "USA",
       "contributor": {
         "name": "Paige",
         "location": "USA"
@@ -14080,13 +15063,19 @@
     {
       "title": "Hike",
       "slug": "hike",
+      "summary": "go hiking",
       "description": "go hiking",
+      "supportsNeeds": [
+        "Physical Fitness"
+      ],
       "needs": [
         {
           "title": "Physical Fitness",
           "slug": "physical-fitness"
         }
-      ]
+      ],
+      "contributorName": "",
+      "contributorLocation": ""
     }
   ]
 }

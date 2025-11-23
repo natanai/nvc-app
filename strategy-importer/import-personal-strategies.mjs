@@ -105,6 +105,7 @@ function readStrategiesCsv() {
   const csv = readFileSync(STRATEGIES_CSV_PATH, 'utf8').replace(/\ufeff/g, '');
   const rows = parseCsv(csv);
   const slugs = new Set();
+  const titles = new Set();
 
   rows.forEach((row) => {
     const title = (row['Strategy Title'] || '').trim();
@@ -113,9 +114,12 @@ function readStrategiesCsv() {
     if (slug) {
       slugs.add(slug.toLowerCase());
     }
+    if (title) {
+      titles.add(title.toLowerCase());
+    }
   });
 
-  return { rows, slugs };
+  return { rows, slugs, titles };
 }
 
 function extractStrategiesFromFile(path) {
@@ -177,16 +181,31 @@ function normalizeContributor(entry) {
   return { name, location };
 }
 
-function buildStrategyRows(files, existingSlugs, needLookup) {
+function buildStrategyRows(files, existingSlugs, existingTitles, needLookup) {
   const newRows = [];
-  const seen = new Set();
+  const seenSlugs = new Set();
+  const seenIds = new Set();
 
   files.forEach((filePath) => {
     const strategies = extractStrategiesFromFile(filePath);
     strategies.forEach((entry) => {
+      const strategyId = typeof entry?.id === 'string' || typeof entry?.id === 'number'
+        ? String(entry.id).trim()
+        : '';
       const title = (entry?.title || '').trim();
       if (!title) {
         console.warn(`Skipping strategy without a title in ${filePath}.`);
+        return;
+      }
+
+      const lowerTitle = title.toLowerCase();
+      if (existingTitles.has(lowerTitle)) {
+        console.warn(`Skipping strategy "${title}" – a matching title already exists in Strategies.csv.`);
+        return;
+      }
+
+      if (strategyId && seenIds.has(strategyId.toLowerCase())) {
+        console.warn(`Skipping duplicate strategy id "${strategyId}" within imported files.`);
         return;
       }
 
@@ -202,7 +221,7 @@ function buildStrategyRows(files, existingSlugs, needLookup) {
         return;
       }
 
-      if (seen.has(slugKey)) {
+      if (seenSlugs.has(slugKey)) {
         console.warn(`Skipping duplicate strategy "${title}" within imported files.`);
         return;
       }
@@ -217,6 +236,10 @@ function buildStrategyRows(files, existingSlugs, needLookup) {
       const description = (entry?.description || '').trim();
       const { name, location } = normalizeContributor(entry);
 
+      if (strategyId) {
+        seenIds.add(strategyId.toLowerCase());
+      }
+
       newRows.push({
         title,
         description,
@@ -225,7 +248,7 @@ function buildStrategyRows(files, existingSlugs, needLookup) {
         contributorLocation: location,
       });
 
-      seen.add(slugKey);
+      seenSlugs.add(slugKey);
     });
   });
 
@@ -235,7 +258,7 @@ function buildStrategyRows(files, existingSlugs, needLookup) {
 function appendStrategies(rows) {
   if (!rows.length) {
     console.log('No new strategies to append.');
-    return;
+    return false;
   }
 
   let buffer = '';
@@ -258,6 +281,7 @@ function appendStrategies(rows) {
 
   appendFileSync(STRATEGIES_CSV_PATH, buffer, 'utf8');
   console.log(`Appended ${rows.length} strategies to data/Strategies.csv.`);
+  return true;
 }
 
 function main() {
@@ -271,8 +295,8 @@ function main() {
   }
 
   const needLookup = loadNeedsLookup();
-  const { slugs: existingSlugs } = readStrategiesCsv();
-  const newRows = buildStrategyRows(files, existingSlugs, needLookup);
+  const { slugs: existingSlugs, titles: existingTitles } = readStrategiesCsv();
+  const newRows = buildStrategyRows(files, existingSlugs, existingTitles, needLookup);
   appendStrategies(newRows);
 }
 
