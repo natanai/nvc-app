@@ -17,6 +17,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
 
       - name: Set up Node.js
@@ -44,6 +45,10 @@ jobs:
           npm run build:data
           npm run build:pages
 
+      - name: Rebuild needs pages
+        if: steps.import.outputs.changes == 'true'
+        run: npm run build:pages -- --scope needs
+
       - name: Commit and push import artifacts
         if: steps.import.outputs.changes == 'true'
         env:
@@ -65,7 +70,7 @@ jobs:
       - name: Summary
         run: |
           if [ "${{ steps.import.outputs.changes }}" = "true" ]; then
-            echo "Imported strategies and rebuilt site content." >> "$GITHUB_STEP_SUMMARY"
+            echo "Imported strategies and rebuilt site content, including refreshed needs pages." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "No new strategies were imported from strategy-importer/." >> "$GITHUB_STEP_SUMMARY"
           fi
