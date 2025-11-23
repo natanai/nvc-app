@@ -1278,12 +1278,623 @@ button.site-nav__magnet {
             </div>
             
         <div class="strategy-form__field">
-          <label for="suggestion-need">Primary need</label>
-          <div class="strategy-card strategy-card--input">
-            <select id="suggestion-need" name="need" multiple required>
+          <div class="strategy-form__label-row">
+            <span id="suggestion-need-label" class="strategy-form__field-label">Primary need</span>
+            <p id="suggestion-need-helper" class="strategy-form__hint">Select one or more needs — click or press Space/Enter to toggle, no modifier keys needed.</p>
+          </div>
+          <div class="strategy-card strategy-card--input strategy-card--choices">
+            <div
+              class="strategy-form__choices"
+              data-need-picker
+              role="group"
+              aria-labelledby="suggestion-need-label"
+              aria-describedby="suggestion-need-helper"
+            >
               
-              <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty" selected>Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
-            </select>
+            <label class="strategy-form__choice" for="suggestion-need-love-caring">
+              <input
+                id="suggestion-need-love-caring"
+                type="checkbox"
+                name="need"
+                value="love-caring"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Love/Caring</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-nurturing">
+              <input
+                id="suggestion-need-nurturing"
+                type="checkbox"
+                name="need"
+                value="nurturing"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Nurturing</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-connection">
+              <input
+                id="suggestion-need-connection"
+                type="checkbox"
+                name="need"
+                value="connection"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Connection</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-belonging">
+              <input
+                id="suggestion-need-belonging"
+                type="checkbox"
+                name="need"
+                value="belonging"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Belonging</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-support">
+              <input
+                id="suggestion-need-support"
+                type="checkbox"
+                name="need"
+                value="support"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Support</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-consideration">
+              <input
+                id="suggestion-need-consideration"
+                type="checkbox"
+                name="need"
+                value="consideration"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Consideration</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-need-for-all-living-things-to-flourish">
+              <input
+                id="suggestion-need-need-for-all-living-things-to-flourish"
+                type="checkbox"
+                name="need"
+                value="need-for-all-living-things-to-flourish"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Need for all living things to flourish</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-inclusion">
+              <input
+                id="suggestion-need-inclusion"
+                type="checkbox"
+                name="need"
+                value="inclusion"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Inclusion</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-community">
+              <input
+                id="suggestion-need-community"
+                type="checkbox"
+                name="need"
+                value="community"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Community</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-safety">
+              <input
+                id="suggestion-need-safety"
+                type="checkbox"
+                name="need"
+                value="safety"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Safety</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-contribution">
+              <input
+                id="suggestion-need-contribution"
+                type="checkbox"
+                name="need"
+                value="contribution"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Contribution</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-peer-respect">
+              <input
+                id="suggestion-need-peer-respect"
+                type="checkbox"
+                name="need"
+                value="peer-respect"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Peer Respect</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-respect">
+              <input
+                id="suggestion-need-respect"
+                type="checkbox"
+                name="need"
+                value="respect"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Respect</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-autonomy">
+              <input
+                id="suggestion-need-autonomy"
+                type="checkbox"
+                name="need"
+                value="autonomy"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Autonomy</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-to-be-seen">
+              <input
+                id="suggestion-need-to-be-seen"
+                type="checkbox"
+                name="need"
+                value="to-be-seen"
+              />
+              <span class="strategy-form__choice-label" data-need-label>To be seen</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-acknowledgement">
+              <input
+                id="suggestion-need-acknowledgement"
+                type="checkbox"
+                name="need"
+                value="acknowledgement"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Acknowledgement</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-appreciation">
+              <input
+                id="suggestion-need-appreciation"
+                type="checkbox"
+                name="need"
+                value="appreciation"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Appreciation</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-trust">
+              <input
+                id="suggestion-need-trust"
+                type="checkbox"
+                name="need"
+                value="trust"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Trust</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-dependability">
+              <input
+                id="suggestion-need-dependability"
+                type="checkbox"
+                name="need"
+                value="dependability"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Dependability</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-honesty">
+              <input
+                id="suggestion-need-honesty"
+                type="checkbox"
+                name="need"
+                value="honesty" checked
+              />
+              <span class="strategy-form__choice-label" data-need-label>Honesty</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-honor">
+              <input
+                id="suggestion-need-honor"
+                type="checkbox"
+                name="need"
+                value="honor"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Honor</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-commitment">
+              <input
+                id="suggestion-need-commitment"
+                type="checkbox"
+                name="need"
+                value="commitment"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Commitment</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-clarity">
+              <input
+                id="suggestion-need-clarity"
+                type="checkbox"
+                name="need"
+                value="clarity"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Clarity</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-accountability">
+              <input
+                id="suggestion-need-accountability"
+                type="checkbox"
+                name="need"
+                value="accountability"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Accountability</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-causality">
+              <input
+                id="suggestion-need-causality"
+                type="checkbox"
+                name="need"
+                value="causality"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Causality</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-fairness">
+              <input
+                id="suggestion-need-fairness"
+                type="checkbox"
+                name="need"
+                value="fairness"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Fairness</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-justice">
+              <input
+                id="suggestion-need-justice"
+                type="checkbox"
+                name="need"
+                value="justice"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Justice</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-choice">
+              <input
+                id="suggestion-need-choice"
+                type="checkbox"
+                name="need"
+                value="choice"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Choice</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-freedom">
+              <input
+                id="suggestion-need-freedom"
+                type="checkbox"
+                name="need"
+                value="freedom"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Freedom</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-reliability">
+              <input
+                id="suggestion-need-reliability"
+                type="checkbox"
+                name="need"
+                value="reliability"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Reliability</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-act-freely">
+              <input
+                id="suggestion-need-act-freely"
+                type="checkbox"
+                name="need"
+                value="act-freely"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Act Freely</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-choose-freely">
+              <input
+                id="suggestion-need-choose-freely"
+                type="checkbox"
+                name="need"
+                value="choose-freely"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Choose Freely</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-understanding">
+              <input
+                id="suggestion-need-understanding"
+                type="checkbox"
+                name="need"
+                value="understanding"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Understanding</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-recognition">
+              <input
+                id="suggestion-need-recognition"
+                type="checkbox"
+                name="need"
+                value="recognition"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Recognition</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-non-judgmental-communication">
+              <input
+                id="suggestion-need-non-judgmental-communication"
+                type="checkbox"
+                name="need"
+                value="non-judgmental-communication"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Non-judgmental Communication</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-need-to-matter">
+              <input
+                id="suggestion-need-need-to-matter"
+                type="checkbox"
+                name="need"
+                value="need-to-matter"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Need to matter</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-friendship">
+              <input
+                id="suggestion-need-friendship"
+                type="checkbox"
+                name="need"
+                value="friendship"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Friendship</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-space">
+              <input
+                id="suggestion-need-space"
+                type="checkbox"
+                name="need"
+                value="space"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Space</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-peace">
+              <input
+                id="suggestion-need-peace"
+                type="checkbox"
+                name="need"
+                value="peace"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Peace</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-serenity">
+              <input
+                id="suggestion-need-serenity"
+                type="checkbox"
+                name="need"
+                value="serenity"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Serenity</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-do-things-at-my-own-pace-and-in-my-own-way">
+              <input
+                id="suggestion-need-do-things-at-my-own-pace-and-in-my-own-way"
+                type="checkbox"
+                name="need"
+                value="do-things-at-my-own-pace-and-in-my-own-way"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Do things at my own pace and in my own way</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-calm">
+              <input
+                id="suggestion-need-calm"
+                type="checkbox"
+                name="need"
+                value="calm"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Calm</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-participation">
+              <input
+                id="suggestion-need-participation"
+                type="checkbox"
+                name="need"
+                value="participation"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Participation</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-to-be-heard">
+              <input
+                id="suggestion-need-to-be-heard"
+                type="checkbox"
+                name="need"
+                value="to-be-heard"
+              />
+              <span class="strategy-form__choice-label" data-need-label>To be heard</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-equality">
+              <input
+                id="suggestion-need-equality"
+                type="checkbox"
+                name="need"
+                value="equality"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Equality</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-empowerment">
+              <input
+                id="suggestion-need-empowerment"
+                type="checkbox"
+                name="need"
+                value="empowerment"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Empowerment</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-consistency">
+              <input
+                id="suggestion-need-consistency"
+                type="checkbox"
+                name="need"
+                value="consistency"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Consistency</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-genuineness">
+              <input
+                id="suggestion-need-genuineness"
+                type="checkbox"
+                name="need"
+                value="genuineness"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Genuineness</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-mattering">
+              <input
+                id="suggestion-need-mattering"
+                type="checkbox"
+                name="need"
+                value="mattering"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Mattering</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-rest">
+              <input
+                id="suggestion-need-rest"
+                type="checkbox"
+                name="need"
+                value="rest"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Rest</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-mutuality">
+              <input
+                id="suggestion-need-mutuality"
+                type="checkbox"
+                name="need"
+                value="mutuality"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Mutuality</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-relaxation">
+              <input
+                id="suggestion-need-relaxation"
+                type="checkbox"
+                name="need"
+                value="relaxation"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Relaxation</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-closeness">
+              <input
+                id="suggestion-need-closeness"
+                type="checkbox"
+                name="need"
+                value="closeness"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Closeness</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-authenticity">
+              <input
+                id="suggestion-need-authenticity"
+                type="checkbox"
+                name="need"
+                value="authenticity"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Authenticity</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-self-expression">
+              <input
+                id="suggestion-need-self-expression"
+                type="checkbox"
+                name="need"
+                value="self-expression"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Self expression</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-integrity">
+              <input
+                id="suggestion-need-integrity"
+                type="checkbox"
+                name="need"
+                value="integrity"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Integrity</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-empathy">
+              <input
+                id="suggestion-need-empathy"
+                type="checkbox"
+                name="need"
+                value="empathy"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Empathy</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-privacy">
+              <input
+                id="suggestion-need-privacy"
+                type="checkbox"
+                name="need"
+                value="privacy"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Privacy</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-order">
+              <input
+                id="suggestion-need-order"
+                type="checkbox"
+                name="need"
+                value="order"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Order</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-beauty">
+              <input
+                id="suggestion-need-beauty"
+                type="checkbox"
+                name="need"
+                value="beauty"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Beauty</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-control">
+              <input
+                id="suggestion-need-control"
+                type="checkbox"
+                name="need"
+                value="control"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Control</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-predictability">
+              <input
+                id="suggestion-need-predictability"
+                type="checkbox"
+                name="need"
+                value="predictability"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Predictability</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-accomplishment">
+              <input
+                id="suggestion-need-accomplishment"
+                type="checkbox"
+                name="need"
+                value="accomplishment"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Accomplishment</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-physical-fitness">
+              <input
+                id="suggestion-need-physical-fitness"
+                type="checkbox"
+                name="need"
+                value="physical-fitness"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Physical Fitness</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-acceptance">
+              <input
+                id="suggestion-need-acceptance"
+                type="checkbox"
+                name="need"
+                value="acceptance"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Acceptance</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-growth">
+              <input
+                id="suggestion-need-growth"
+                type="checkbox"
+                name="need"
+                value="growth"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Growth</span>
+            </label>
+            <label class="strategy-form__choice" for="suggestion-need-security">
+              <input
+                id="suggestion-need-security"
+                type="checkbox"
+                name="need"
+                value="security"
+              />
+              <span class="strategy-form__choice-label" data-need-label>Security</span>
+            </label>
+            </div>
           </div>
         </div>
             
