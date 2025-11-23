@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -46,19 +48,19 @@ jobs:
         if: steps.import.outputs.changes == 'true'
         env:
           NOTE: ${{ inputs.note }}
-          BRANCH_NAME: strategy-import/${{ github.run_id }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B "$BRANCH_NAME"
-          git add -A
+          
           if [ -n "$NOTE" ]; then
             message="chore: import strategies - $NOTE"
           else
             message="chore: import strategies"
           fi
+
+          git add -A
           git commit -m "$message"
-          git push origin "$BRANCH_NAME"
+          git push
 
       - name: Summary
         run: |
