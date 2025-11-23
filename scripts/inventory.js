@@ -4452,10 +4452,14 @@ function startJournalEdit(id, { focusHistory = false } = {}) {
   state.journalEditingId = entry.id;
   state.journalEditingEntry = entry;
   fillJournalForm(entry);
+  setJournalEditState(entry.id);
+  if (!state.journalOverlayLayer || !state.journalOverlayContent) {
+    setupJournalOverlay();
+  }
+  openJournalOverlay();
   if (state.journalNotesInput) {
     state.journalNotesInput.focus();
   }
-  setJournalEditState(entry.id);
   const formattedDate = formatJournalDate(entry.dateISO);
   showJournalStatus(`Editing entry from ${formattedDate}. Save to update or clear to cancel.`);
   if (focusHistory) {
