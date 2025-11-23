@@ -6293,8 +6293,12 @@
       "rewrittenClaim": "People function much better when information is clear – unambiguous communication reduces the mental effort (“cognitive load”) required to understand, and it helps avoid misunderstandings that can be costly. The need for clarity may push us to simplify our messages, summarize key points, and double-check that everyone interprets things the same way. In education and work contexts, research shows that clarity in instructions or feedback lowers confusion and error rates. A dramatic illustration comes from healthcare: about 80% of serious medical errors have been traced to communication failures (unclear or incomplete information) rather than lack of skill. By ensuring reliable clarity – communicating in a straightforward, transparent manner – groups achieve better coordination, and individuals feel more confident in what they’re doing.",
       "supportingSources": [
         {
-          "url": "https://www.sciencedirect.com/science/article/abs/pii/S095947521100018X",
-          "description": "discussion on how clarity reduces cognitive load and errors"
+          "url": "https://doi.org/10.1207/S15326985EP3801_01",
+          "description": "Cognitive Load Theory review detailing how clear, well-integrated information (avoiding split-attention/redundancy) lowers extraneous load and improves performance."
+        },
+        {
+          "url": "https://doi.org/10.1111/j.2044-8279.1992.tb01017.x",
+          "description": "Experiments show that integrating text and diagrams reduces extraneous load and errors versus split-attention formats."
         },
         {
           "url": "https://qualitysafety.bmj.com/content/13/5/330",
@@ -8653,8 +8657,12 @@
       "rewrittenClaim": "Psychologists (starting with attachment theory) have found that having someone emotionally in-tune and physically or emotionally close is a powerful buffer for stress and a boon for healthy development. In other words, feeling closely connected – for example through shared quality time, attentive listening, and responsive care – protects people (especially children) by helping them regulate their emotions with support from another person (a process called co-regulation). This need for closeness may drive us to seek warm, reliable relationships. Secure attachment in childhood is linked to better coping with fear and stress, and even in adults, social support from a loved one can calm the body’s stress responses. By cultivating closeness and trust, individuals become more resilient: they recover faster from adversity and gain confidence knowing someone “has their back.",
       "supportingSources": [
         {
-          "url": "https://doi.org/10.1146/annurev.psych.58.110405.085646",
-          "description": "Canadian Psychological Association – secure attachment helps children cope with stress and fosters healthy development"
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4618716/",
+          "description": "Secure caregiver presence buffers children’s stress responses (HPA axis)"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4021853/",
+          "description": "Meta-analysis: early attachment security predicts better peer competence"
         },
         {
           "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2018.01539/full",
@@ -8895,10 +8903,6 @@
         {
           "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/",
           "description": "review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships"
-        },
-        {
-          "url": "https://journals.sagepub.com/doi/10.1177/00332941221097951 (study linking mindfulness,  cognitive empathy,  and relationship quality among adolescents)\"",
-          "description": ""
         }
       ]
     },
@@ -9115,12 +9119,40 @@
           "description": "research on locus of control: having control or influence correlates with reduced stress and better task outcomes"
         },
         {
-          "url": "https://www.cdc.gov/violenceprevention/about/social-ecologicalmodel.html",
+          "url": "https://systematicreviewsjournal.biomedcentral.com/articles/10.1186/2046-4053-2-30",
           "description": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts"
         },
         {
-          "url": "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(10)00185-3 (Humans have an intrinsic need for control/choice: integrative review showing control and choice are fundamental",
-          "description": ""
+          "url": "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(10)00185-3",
+          "description": "Humans have an intrinsic need for control/choice: integrative review arguing that a sense of control and the opportunity to choose are fundamental, with neural, motivational, and affective benefits"
+        },
+        {
+          "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-clinpsy-021815-093006",
+          "description": "Controllability reduces stress responses (learned helplessness: modern account): authoritative review describing how experiencing controllable stress engages prefrontal circuits that inhibit stress responses while lack of control yields learned helplessness"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/1998-00299-016",
+          "description": "Sense of control buffers socioeconomic gradients in health: large population study showing higher perceived control is associated with better health and well-being, moderating SES differences"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/1996-01799-010",
+          "description": "Control beliefs taxonomy and functions: classic review clarifying perceived control, mastery, and self-efficacy, how they develop, and why they matter"
+        },
+        {
+          "url": "https://www.jstor.org/stable/2392498?origin=crossref",
+          "description": "Low job control + high demands → strain and ill-health (Demand–Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research"
+        },
+        {
+          "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60994-5/fulltext",
+          "description": "Job strain (including low control) predicts heart disease (meta-analysis): individual participant data meta-analysis linking job strain to increased coronary heart disease risk, highlighting the role of low control"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/2000-13324-007",
+          "description": "Autonomy as a basic psychological need (self-determination theory review): comprehensive review establishing autonomy as a basic need that fosters wellness and performance"
+        },
+        {
+          "url": "https://psycnet.apa.org/record/1977-25733-001",
+          "description": "Self-efficacy (control over action) → motivation and change: foundational theory paper demonstrating that beliefs about one’s control over actions regulate motivation, affect, and behavior change"
         }
       ]
     },
@@ -9434,11 +9466,27 @@
       "rewrittenClaim": "Security means having a stable base – like steady resources (financial, food, shelter) and reliable relationships – such that you’re not constantly worried about losing the essentials. This stability enables people to plan for the future and invest time or resources into long-term goals. The need for security may drive behaviors such as saving money or supplies for a “rainy day,” building in redundancies or backup plans to guard against unforeseen loss, and developing dependable support networks (family, community, insurance) that can catch you if you fall. Research in psychology and economics suggests that when individuals feel secure about their basic needs and relationships, their minds are freed up to be more creative, take strategic risks, and focus on personal growth or complex problem-solving. By contrast, if someone is in an insecure situation (unsure if they’ll have food next week or if their job is stable), much of their mental energy gets diverted to anxiety and short-term survival thinking. Therefore, attaining a level of security essentially unlocks higher-order capacities – it provides peace of mind that allows attention to shift from merely surviving to thriving.",
       "supportingSources": [
         {
+          "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf",
+          "description": "Feeling safe enables learning and exploration (psychological safety)"
+        },
+        {
+          "url": "https://www.tandfonline.com/doi/full/10.1080/02699931.2010.540110",
+          "description": "Activating felt security increases creative problem solving (experiments)"
+        },
+        {
+          "url": "https://systematicreviewsjournal.biomedcentral.com/articles/10.1186/2046-4053-2-30",
+          "description": "Environmental changes reduce perceived threat (systematic review)"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/abs/10.4073/csr.2008.13",
+          "description": "Built-environment change reduces crime and increases perceived safety (systematic review)"
+        },
+        {
           "url": "https://www.jstor.org/stable/41428503",
           "description": "study on financial and relationship security: having secure baseline resources correlates with better long-term planning and higher creativity"
         },
         {
-          "url": "https://psycnet.apa.org/record/2018-13314-006",
+          "url": "https://www.apa.org/pubs/journals/releases/psp-101-2-354.pdf",
           "description": "research: when basic security needs are met, individuals are more likely to pursue self-actualization goals like creativity and personal growth – consistent with Maslow’s hierarchy"
         }
       ]
