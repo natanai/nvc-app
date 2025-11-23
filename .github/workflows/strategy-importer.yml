@@ -7,6 +7,9 @@ on:
         description: Optional note about the incoming batch
         required: false
 
+permissions:
+  contents: write
+
 jobs:
   import-strategies:
     runs-on: ubuntu-latest
@@ -38,6 +41,26 @@ jobs:
         run: |
           npm run build:data
           npm run build:pages
+
+      - name: Commit and push import artifacts
+        if: steps.import.outputs.changes == 'true'
+        env:
+          NOTE: ${{ inputs.note }}
+          BRANCH_NAME: strategy-import/${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH_NAME"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
+          git add -A
+          if [ -n "$NOTE" ]; then
+            message="chore: import strategies - $NOTE"
+          else
+            message="chore: import strategies"
+          fi
+          git commit -m "$message"
+          git push origin "$BRANCH_NAME"
 
       - name: Summary
         run: |
