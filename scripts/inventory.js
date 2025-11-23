@@ -6779,12 +6779,24 @@ function focusNeedSection(slug) {
     let startY = null;
     let isDragging = false;
     let swipeLocked = false;
+    let startedOnActiveCard = false;
 
     deck.addEventListener('pointerdown', function (event) {
       isDragging = true;
       swipeLocked = false;
+      startedOnActiveCard = false;
       startX = event.clientX;
       startY = event.clientY;
+
+      const activeCard = stack.querySelector('.strategy-card[data-active="true"]');
+      if (activeCard && activeCard.contains(event.target)) {
+        startedOnActiveCard = true;
+        swipeLocked = true;
+        deck.style.touchAction = 'pan-x';
+      } else {
+        deck.style.touchAction = '';
+      }
+
       if (deck.setPointerCapture) {
         try {
           deck.setPointerCapture(event.pointerId);
@@ -6801,6 +6813,11 @@ function focusNeedSection(slug) {
 
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
+
+      if (startedOnActiveCard) {
+        event.preventDefault();
+        return;
+      }
 
       if (!swipeLocked) {
         const horizontalDominant = Math.abs(dx) > Math.abs(dy) + 6;
@@ -6833,22 +6850,28 @@ function focusNeedSection(slug) {
 
       isDragging = false;
       swipeLocked = false;
+      startedOnActiveCard = false;
       startX = null;
       startY = null;
+      deck.style.touchAction = '';
     });
 
     deck.addEventListener('pointerleave', function () {
       isDragging = false;
       swipeLocked = false;
+      startedOnActiveCard = false;
       startX = null;
       startY = null;
+      deck.style.touchAction = '';
     });
 
     deck.addEventListener('pointercancel', function () {
       isDragging = false;
       swipeLocked = false;
+      startedOnActiveCard = false;
       startX = null;
       startY = null;
+      deck.style.touchAction = '';
     });
   }
 })();
