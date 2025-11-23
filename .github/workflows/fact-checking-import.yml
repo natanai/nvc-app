@@ -38,11 +38,9 @@ jobs:
       - name: Apply fact-checking spreadsheets
         run: npm run import:fact-checking
 
-      - name: Propagate citation updates
-        run: npm run replace:needs-sources
-
-      - name: Rebuild dataset and pages
+      - name: Propagate citation updates and rebuild site artifacts
         run: |
+          npm run replace:needs-sources
           npm run build:data
           npm run build:pages
 
@@ -68,7 +66,7 @@ jobs:
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Applied fact-checking spreadsheets, rebuilt data + pages, and pushed changes to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Applied fact-checking spreadsheets, refreshed needs citations, rebuilt data + pages, and pushed changes to ${{ env.TARGET_BRANCH }}."
           else
             SUMMARY="No updates detected after running the fact-checking import; nothing was pushed."
           fi
