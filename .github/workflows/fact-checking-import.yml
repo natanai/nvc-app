@@ -8,9 +8,8 @@ on:
         required: false
         default: "Apply fact-checking spreadsheets"
       base-branch:
-        description: "Branch to apply the fact-checking spreadsheets to"
+        description: "Branch to apply the fact-checking spreadsheets to (defaults to the triggering branch if omitted)"
         required: false
-        default: "main"
       push-directly:
         description: "Set to true to commit directly to the base branch instead of opening a PR"
         required: false
@@ -23,12 +22,14 @@ permissions:
 jobs:
   import-fact-checking:
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.ref_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.inputs.base-branch }}
+          ref: ${{ env.TARGET_BRANCH }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -52,7 +53,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: ${{ github.event.inputs.commit-message }}
-          branch: ${{ github.event.inputs.base-branch }}
+          branch: ${{ env.TARGET_BRANCH }}
 
       - name: Create pull request with applied data
         if: ${{ github.event.inputs.push-directly != 'true' }}
@@ -67,5 +68,5 @@ jobs:
 
             - Imported edited files from `fact-checking/`
             - Regenerated data and static pages
-          base: ${{ github.event.inputs.base-branch }}
+          base: ${{ env.TARGET_BRANCH }}
           delete-branch: true
