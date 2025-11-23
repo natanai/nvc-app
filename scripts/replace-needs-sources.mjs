@@ -121,26 +121,41 @@ function escapeAttr(str) {
   return escapeHtml(str).replace(/`/g, "&#96;");
 }
 
+function normalizeNeedSlug(filePath) {
+  if (!filePath) {
+    return null;
+  }
+
+  const trimmed = filePath.trim();
+  const withoutFragment = trimmed.split(/[?#]/)[0];
+  const resolved = path.isAbsolute(withoutFragment)
+    ? withoutFragment
+    : path.resolve(REPO_ROOT, withoutFragment.replace(/^\.\//, ""));
+  const rel = path.relative(REPO_ROOT, resolved);
+  const parts = path.normalize(rel).split(path.sep).filter(Boolean);
+
+  if (parts[0] !== "needs") {
+    return null;
+  }
+
+  const slug = parts[1];
+  const filename = parts[parts.length - 1];
+  if (!slug || filename !== "index.html") {
+    return null;
+  }
+
+  return slug;
+}
+
 function buildNeedSourcesMap(records) {
   const bySlug = new Map();
 
   records.forEach((record, index) => {
-    const filePath = record.file ? record.file.trim() : "";
     const url = record.url ? record.url.trim() : "";
     const label = record.label ? record.label.trim() : "";
+    const slug = normalizeNeedSlug(record.file);
 
-    if (!filePath || !url) {
-      return;
-    }
-
-    const rel = path.relative(REPO_ROOT, filePath);
-    const parts = rel.split(path.sep);
-    if (parts[0] !== "needs" || parts.length < 3 || parts[2] !== "index.html") {
-      return;
-    }
-
-    const slug = parts[1];
-    if (!slug) {
+    if (!slug || !url) {
       return;
     }
 
@@ -169,11 +184,12 @@ function buildNeedSourcesMap(records) {
   return bySlug;
 }
 
-function buildListItem({ label, url }) {
+function buildCitationItem({ label, url }, index) {
   const safeLabel = escapeHtml(label);
   const safeUrl = escapeAttr(url);
   const displayUrl = escapeHtml(url);
-  return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a><span class="need-evidence__source-url"> (${displayUrl})</span></li>`;
+
+  return `<li class="need-evidence__citation-item"><span class="need-evidence__citation-number">${index}</span><div class="need-evidence__citation-body"><span class="need-evidence__citation-description">${safeLabel}</span><a class="need-evidence__citation-url" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${displayUrl}</a></div></li>`;
 }
 
 async function updateNeedsPage(slug, entries) {
@@ -183,14 +199,14 @@ async function updateNeedsPage(slug, entries) {
     html = await fs.readFile(filePath, "utf8");
   } catch (error) {
     console.warn(`Skipping ${slug}: unable to read ${filePath}`);
-    return false;
+    return { updated: false, skipped: true };
   }
 
-  const listPattern = /(<ol class="need-evidence__list">)([\s\S]*?)(<\/ol>)/;
+  const listPattern = /(<ol[^>]*class="[^"]*need-evidence__(?:citation-)?list[^"]*"[^>]*>)([\s\S]*?)(<\/ol>)/;
   const match = listPattern.exec(html);
   if (!match) {
-    console.warn(`Skipping ${slug}: supporting sources list not found in ${filePath}`);
-    return false;
+    console.warn(`Skipping ${slug}: citations present but supporting sources list not found in ${filePath}`);
+    return { updated: false, skipped: true };
   }
 
   const [, start, listContent, end] = match;
@@ -201,14 +217,14 @@ async function updateNeedsPage(slug, entries) {
     );
   }
 
-  const updatedList = entries.map(buildListItem).join("");
+  const updatedList = entries.map((entry, idx) => buildCitationItem(entry, idx + 1)).join("");
   const updatedHtml = html.slice(0, match.index + start.length) + updatedList + end + html.slice(match.index + match[0].length);
 
   if (updatedHtml !== html) {
     await fs.writeFile(filePath, updatedHtml, "utf8");
-    return true;
+    return { updated: true, skipped: false };
   }
-  return false;
+  return { updated: false, skipped: false };
 }
 
 function formatSupportingSources(entries) {
@@ -294,10 +310,14 @@ async function main() {
   const slugMap = buildNeedSourcesMap(records);
 
   let htmlUpdated = 0;
+  let htmlSkipped = 0;
   for (const [slug, entries] of slugMap.entries()) {
-    const updated = await updateNeedsPage(slug, entries);
+    const { updated, skipped } = await updateNeedsPage(slug, entries);
     if (updated) {
       htmlUpdated += 1;
+    }
+    if (skipped) {
+      htmlSkipped += 1;
     }
   }
 
@@ -305,12 +325,17 @@ async function main() {
   await writeCitationsJson(records);
 
   console.log(`Updated ${htmlUpdated} needs page${htmlUpdated === 1 ? "" : "s"}.`);
+  console.log(`Skipped ${htmlSkipped} needs page${htmlSkipped === 1 ? "" : "s"} with citations but missing list block.`);
   if (spreadsheetUpdated) {
     console.log("Updated data/Needs.csv supporting sources.");
   } else {
     console.log("No changes applied to data/Needs.csv.");
   }
   console.log("Wrote _evidence/citations.json from citations.csv.");
+
+  if (htmlSkipped > 0) {
+    process.exitCode = process.exitCode || 1;
+  }
 }
 
 main().catch((error) => {

@@ -333,7 +333,7 @@
     "file": "/workspace/nvc-app/needs/clarity/index.html",
     "line": 752,
     "how": "Integrating information prevents split-attention errors (experiment)",
-    "label": "Experiments show that integrating text and diagrams reduces extraneous load and errors versus split-attention formats.",
+    "label": "Experiment: integrating information prevents split-attention errors",
     "url": "https://doi.org/10.1111/j.2044-8279.1992.tb01017.x",
     "domain": "",
     "label_domain_hint": "",
