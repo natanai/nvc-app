@@ -1190,18 +1190,53 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Road trip</h3>
-                    <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Road trip</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <span class="strategy-deck__counter" data-strategy-count></span>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

@@ -1190,63 +1190,108 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Call a friend</h3>
-                    <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="play-a-social-video-game" data-strategy-tags="connection|belonging|participation" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a social video game</h3>
-                    <p class="strategy-card__description">Some games involve other human interactions, corporatize games are sometimes called “PVE” (player vs environment) but other games that have compelling fictional characters could also be nice. Similar to reading a book you can build relationships with the characters and find connection in relating to their experience.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="read-a-character-driven-novel" data-strategy-tags="connection|belonging" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Read a character driven novel</h3>
-                    <p class="strategy-card__description">When we read a book the world and it’s inhabitants can feel especially personal. We can build very powerful connections this way and can go a long way in helping us feel less alone in the world. It’s okay for those relationships to mean so much to us, that’s why the author worked so hard on them &lt;3</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="one-kind-text" data-strategy-tags="connection|mutuality">
-                    <h3 class="strategy-card__title">One kind text</h3>
-                    <p class="strategy-card__description">Send “Thinking of you—no need to reply.” to someone you trust.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="specific-thank-you" data-strategy-tags="appreciation|recognition|connection">
-                    <h3 class="strategy-card__title">Specific thank-you</h3>
-                    <p class="strategy-card__description">Send a short note naming one action someone did and how it supported you.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="ambient-postcard" data-strategy-tags="belonging|connection|self-expression|appreciation">
-                    <h3 class="strategy-card__title">Ambient Postcard</h3>
-                    <p class="strategy-card__description">On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your &quot;right now&quot;; optionally send it to one person.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Call a friend</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="play-a-social-video-game" data-strategy-tags="connection|belonging|participation" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Play a social video game</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Some games involve other human interactions, corporatize games are sometimes called “PVE” (player vs environment) but other games that have compelling fictional characters could also be nice. Similar to reading a book you can build relationships with the characters and find connection in relating to their experience.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="read-a-character-driven-novel" data-strategy-tags="connection|belonging" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Read a character driven novel</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">When we read a book the world and it’s inhabitants can feel especially personal. We can build very powerful connections this way and can go a long way in helping us feel less alone in the world. It’s okay for those relationships to mean so much to us, that’s why the author worked so hard on them &lt;3</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="one-kind-text" data-strategy-tags="connection|mutuality">
+                      <h3 class="strategy-card__title">One kind text</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Send “Thinking of you—no need to reply.” to someone you trust.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="specific-thank-you" data-strategy-tags="appreciation|recognition|connection">
+                      <h3 class="strategy-card__title">Specific thank-you</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Send a short note naming one action someone did and how it supported you.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="ambient-postcard" data-strategy-tags="belonging|connection|self-expression|appreciation">
+                      <h3 class="strategy-card__title">Ambient Postcard</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">On your phone, record a 10-15-second clip of your current space (audio or short video) and save it with a single line about your &quot;right now&quot;; optionally send it to one person.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <span class="strategy-deck__counter" data-strategy-count></span>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

@@ -1190,63 +1190,108 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Road trip</h3>
-                    <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Schedule your day</h3>
-                    <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="sing" data-strategy-tags="to-be-heard|self-expression|autonomy|to-be-seen|empowerment|mattering|need-to-matter|control" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Sing</h3>
-                    <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="align-x3" data-strategy-tags="order|peace|calm|control">
-                    <h3 class="strategy-card__title">Align x3</h3>
-                    <p class="strategy-card__description">Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
-                    <h3 class="strategy-card__title">Exit Count</h3>
-                    <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Road trip</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Schedule your day</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="sing" data-strategy-tags="to-be-heard|self-expression|autonomy|to-be-seen|empowerment|mattering|need-to-matter|control" data-first-name="Nat" data-location="Missouri">
+                      <h3 class="strategy-card__title">Sing</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="align-x3" data-strategy-tags="order|peace|calm|control">
+                      <h3 class="strategy-card__title">Align x3</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
+                      <h3 class="strategy-card__title">Exit Count</h3>
+                      <div class="strategy-card__body">
+                        <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <span class="strategy-deck__counter" data-strategy-count></span>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
