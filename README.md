@@ -17,7 +17,8 @@ This repo powers a retro, offline-friendly Nonviolent Communication explorer foc
 
 ## Fact-checking the site
 
-- **Spreadsheet-first workflow:** run `npm run export:fact-checking` to populate the `fact-checking/` folder with every dataset as spreadsheets (core CSVs, citations, reverse-inference weights, body-region cues, and observation metadata). After editing those sheets, run `npm run import:fact-checking` to write the changes back into the `data/` and `_evidence/` sources.
+- **Spreadsheet-first workflow (GitHub Actions):** trigger the **“Fact-Checking Spreadsheets”** workflow from the Actions tab to download the current `fact-checking/` CSV bundle as an artifact. After editing those sheets, run the **“Apply Fact-Checking Spreadsheets”** workflow to import the folder, rebuild data + pages, and open a pull request with the generated changes—no local Node.js setup required.
+- **Local workflow (optional):** run `npm run export:fact-checking` to populate the `fact-checking/` folder with every dataset as spreadsheets (core CSVs, citations, reverse-inference weights, body-region cues, and observation metadata). After editing those sheets, run `npm run import:fact-checking` to write the changes back into the `data/` and `_evidence/` sources.
 - **Start with the Fact-Checking Playbook:** see `docs/fact-checking-playbook.md` for a single map of every data file, where each set of numbers or citations lives, and how to rebuild pages after edits.
 - **On-page checks:** open any need page and follow the "Supporting Sources" links to the cited material.
 - **Link hygiene:** run `npm run lint:links` to verify every URL under `Source Links` in `data/Needs.csv` responds correctly.

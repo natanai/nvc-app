@@ -1,0 +1,36 @@
+name: Fact-Checking Spreadsheets
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact-name:
+        description: "Optional custom name for the exported spreadsheets artifact"
+        required: false
+        default: "fact-checking-sheets"
+
+jobs:
+  export-fact-checking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Export fact-checking spreadsheets
+        run: npm run export:fact-checking
+
+      - name: Upload spreadsheets artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.artifact-name }}
+          path: fact-checking
+          if-no-files-found: error
+          retention-days: 14

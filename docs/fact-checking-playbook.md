@@ -4,7 +4,13 @@ This guide is for the alexithymia fact-checker. It shows exactly where every fac
 
 ## One-button spreadsheets
 
-Run the export command to generate a single `fact-checking/` folder that holds **every value and citation the site consumes** as spreadsheets. Edit those CSVs directly, then import to push the changes back into the canonical data files used at build time.
+You can now complete the entire fact-checking loop from GitHub Actions—no local runtime required:
+
+1. From the Actions tab, run **“Fact-Checking Spreadsheets”** to download the latest `fact-checking/` bundle as an artifact.
+2. Edit the spreadsheets.
+3. Run **“Apply Fact-Checking Spreadsheets”** to import the edited folder, rebuild data + pages, and open a pull request with the generated changes.
+
+Prefer local commands instead? Run the export command to generate a single `fact-checking/` folder that holds **every value and citation the site consumes** as spreadsheets. Edit those CSVs directly, then import to push the changes back into the canonical data files used at build time.
 
 ```bash
 npm run export:fact-checking   # writes fact-checking/*.csv for all datasets
