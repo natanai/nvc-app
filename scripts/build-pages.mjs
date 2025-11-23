@@ -1675,6 +1675,7 @@ ${strategiesNote}
               >
                 ←
               </button>
+              <span class="strategy-deck__counter" data-strategy-count></span>
               <button
                 type="button"
                 class="strategy-deck__nav strategy-deck__nav--next"

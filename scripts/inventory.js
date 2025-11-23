@@ -6645,6 +6645,7 @@ function focusNeedSection(slug) {
   const nextBtn = document.querySelector('[data-strategy-next]');
   const prevBtn = document.querySelector('[data-strategy-prev]');
   const shuffleBtn = document.querySelector('[data-strategy-shuffle]');
+  const counter = document.querySelector('[data-strategy-count]');
 
   if (!stack) {
     return;
@@ -6683,12 +6684,47 @@ function focusNeedSection(slug) {
     });
   }
 
+  if (counter) {
+    counter.setAttribute('aria-live', 'polite');
+  }
+
+  function updateCounter(currentIndex) {
+    if (!counter) return;
+    counter.textContent = `${currentIndex + 1} of ${cards.length}`;
+  }
+
+  function toggleBodyShadow(body) {
+    if (!body) return;
+    const hasOverflow = body.scrollHeight > body.clientHeight + 1;
+    const scrolledToBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 1;
+
+    body.classList.toggle('strategy-card__body--shadow', hasOverflow && !scrolledToBottom);
+  }
+
+  function refreshBodyShadows() {
+    cards.forEach((card) => {
+      const body = card.querySelector('.strategy-card__body');
+      toggleBodyShadow(body);
+    });
+  }
+
+  cards.forEach((card) => {
+    const body = card.querySelector('.strategy-card__body');
+    if (body) {
+      body.addEventListener('scroll', function () {
+        toggleBodyShadow(body);
+      });
+    }
+  });
+
   let currentIndex = 0;
 
   function go(offset) {
     if (!cards.length) return;
     currentIndex = (currentIndex + offset + cards.length) % cards.length;
     applyPositions(currentIndex);
+    updateCounter(currentIndex);
+    window.requestAnimationFrame(refreshBodyShadows);
   }
 
   function performShuffle() {
@@ -6704,9 +6740,17 @@ function focusNeedSection(slug) {
     cards = Array.from(stack.querySelectorAll('.strategy-card'));
     currentIndex = 0;
     applyPositions(currentIndex);
+    updateCounter(currentIndex);
+    window.requestAnimationFrame(refreshBodyShadows);
   }
 
   performShuffle();
+  updateCounter(currentIndex);
+  window.requestAnimationFrame(refreshBodyShadows);
+
+  window.addEventListener('resize', function () {
+    window.requestAnimationFrame(refreshBodyShadows);
+  });
 
   if (nextBtn) {
     nextBtn.addEventListener('click', function () {
