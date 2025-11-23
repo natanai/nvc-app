@@ -4,9 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       base-branch:
-        description: "Branch to refresh with regenerated fact-checking spreadsheets"
+        description: "Branch to refresh with regenerated fact-checking spreadsheets (defaults to the triggering branch if omitted)"
         required: false
-        default: "main"
       commit-message:
         description: "Commit message for refreshed spreadsheets"
         required: false
@@ -18,12 +17,14 @@ permissions:
 jobs:
   export-fact-checking:
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.ref_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.inputs.base-branch }}
+          ref: ${{ env.TARGET_BRANCH }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,5 +42,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: ${{ github.event.inputs.commit-message }}
-          branch: ${{ github.event.inputs.base-branch }}
+          branch: ${{ env.TARGET_BRANCH }}
           file_pattern: fact-checking/**
