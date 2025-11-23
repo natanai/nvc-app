@@ -6854,6 +6854,20 @@ function focusNeedSection(slug) {
     let startedOnActiveCard = false;
 
     deck.addEventListener('pointerdown', function (event) {
+      const target = event.target;
+      const targetIsElement = target instanceof Element;
+      const targetInsideStack = targetIsElement && (target === stack || stack.contains(target));
+
+      if (!targetInsideStack) {
+        isDragging = false;
+        swipeLocked = false;
+        startedOnActiveCard = false;
+        startX = null;
+        startY = null;
+        deck.style.touchAction = '';
+        return;
+      }
+
       isDragging = true;
       swipeLocked = false;
       startedOnActiveCard = false;
