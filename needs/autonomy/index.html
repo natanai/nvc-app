@@ -1188,181 +1188,270 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="go-on-walk" data-strategy-tags="clarity|peace|calm|freedom|beauty|autonomy|choice|space" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Go on walk</h3>
-                    <p class="strategy-card__description">I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Go on walk</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="make-a-request-in-conversation" data-strategy-tags="autonomy|freedom|choice|choose-freely|mutuality" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Make a request in conversation</h3>
-                    <p class="strategy-card__description">Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Make a request in conversation</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="make-art" data-strategy-tags="to-be-seen|to-be-heard|self-expression|autonomy|choice|accomplishment|acceptance|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Make art</h3>
-                    <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Make art</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="write" data-strategy-tags="self-expression|to-be-seen|to-be-heard|need-to-matter|autonomy|authenticity|integrity|acceptance|honesty|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Write</h3>
-                    <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Write</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Road trip</h3>
-                    <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Road trip</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="sing" data-strategy-tags="to-be-heard|self-expression|autonomy|to-be-seen|empowerment|mattering|need-to-matter|control" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Sing</h3>
-                    <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Sing</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="translate-a-should" data-strategy-tags="autonomy|integrity">
-                    <h3 class="strategy-card__title">Translate a “should”</h3>
-                    <p class="strategy-card__description">Rewrite one “I should…” as “I choose to… because I value…”.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Translate a “should”</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Rewrite one “I should…” as “I choose to… because I value…”.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="micro-request-to-self" data-strategy-tags="autonomy|clarity">
-                    <h3 class="strategy-card__title">Micro-request to self</h3>
-                    <p class="strategy-card__description">Write one tiny, do-now request you can meet in 2 minutes.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Micro-request to self</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Write one tiny, do-now request you can meet in 2 minutes.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="needs-strategies-map" data-strategy-tags="choice|autonomy">
-                    <h3 class="strategy-card__title">Needs → strategies map</h3>
-                    <p class="strategy-card__description">List one need and brainstorm three different strategies for it.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Needs → strategies map</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">List one need and brainstorm three different strategies for it.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="name-a-limit-kindly" data-strategy-tags="autonomy|respect">
-                    <h3 class="strategy-card__title">Name a limit kindly</h3>
-                    <p class="strategy-card__description">Say aloud: “I’m not ready to decide yet.”</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Name a limit kindly</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Say aloud: “I’m not ready to decide yet.”</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="ask-for-channel-shift" data-strategy-tags="autonomy|clarity|consideration">
-                    <h3 class="strategy-card__title">Ask for channel shift</h3>
-                    <p class="strategy-card__description">Say: “Could we move this to text so I can think?”</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Ask for channel shift</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Say: “Could we move this to text so I can think?”</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="turn-on-do-not-disturb" data-strategy-tags="peace|autonomy">
-                    <h3 class="strategy-card__title">Turn on Do Not Disturb</h3>
-                    <p class="strategy-card__description">Set DND for 10 minutes; return when the timer ends.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Turn on Do Not Disturb</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Set DND for 10 minutes; return when the timer ends.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="phone-face-down" data-strategy-tags="autonomy|space">
-                    <h3 class="strategy-card__title">Phone face-down</h3>
-                    <p class="strategy-card__description">Place phone face-down/out of reach for five minutes.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Phone face-down</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Place phone face-down/out of reach for five minutes.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="one-thing-off-today" data-strategy-tags="autonomy">
-                    <h3 class="strategy-card__title">One thing off today</h3>
-                    <p class="strategy-card__description">Choose one nonessential thing you will not do today.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">One thing off today</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Choose one nonessential thing you will not do today.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="name-what-s-within-control" data-strategy-tags="clarity|autonomy">
-                    <h3 class="strategy-card__title">Name what’s within control</h3>
-                    <p class="strategy-card__description">List three things within your influence today.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Name what’s within control</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">List three things within your influence today.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="future-walk-sketch" data-strategy-tags="autonomy">
-                    <h3 class="strategy-card__title">Future-walk sketch</h3>
-                    <p class="strategy-card__description">Pick a nearby block on a map and sketch a simple future walking loop.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Future-walk sketch</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Pick a nearby block on a map and sketch a simple future walking loop.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="micro-boundary" data-strategy-tags="autonomy|respect|integrity">
-                    <h3 class="strategy-card__title">Micro boundary</h3>
-                    <p class="strategy-card__description">Say “No, thank you” to one low-stakes ask today.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Micro boundary</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Say “No, thank you” to one low-stakes ask today.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="name-a-want-a-don-t" data-strategy-tags="honesty|clarity|autonomy">
-                    <h3 class="strategy-card__title">Name a want &amp; a don’t</h3>
-                    <p class="strategy-card__description">Complete: “I want __ and I don’t want __ because I value __.”</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Name a want &amp; a don’t</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Complete: “I want __ and I don’t want __ because I value __.”</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1427,5 +1516,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

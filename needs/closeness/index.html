@@ -1188,37 +1188,62 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Call a friend</h3>
-                    <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Call a friend</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="cuddle-your-favorite-stuffed-animal" data-strategy-tags="love-caring|closeness" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Cuddle your favorite stuffed animal</h3>
-                    <p class="strategy-card__description">Why do we rob ourselves of this freedom as adult? Reclaim the beauty of your inner child.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Cuddle your favorite stuffed animal</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Why do we rob ourselves of this freedom as adult? Reclaim the beauty of your inner child.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="call-a-parent" data-strategy-tags="nurturing|support|closeness|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Call a parent</h3>
-                    <p class="strategy-card__description">If you have a parent you trust, consider calling them. It&#39;s awkward at first but I like to ask &quot;will you still love me if x...&quot; and then I share the anxiety inducing thought I&#39;m struggling with. Even though you both know what their answer is, let them say it. Let yourself hear it. I promise they will love saying it, give them a chance to.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Call a parent</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">If you have a parent you trust, consider calling them. It&#39;s awkward at first but I like to ask &quot;will you still love me if x...&quot; and then I share the anxiety inducing thought I&#39;m struggling with. Even though you both know what their answer is, let them say it. Let yourself hear it. I promise they will love saying it, give them a chance to.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1283,5 +1308,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

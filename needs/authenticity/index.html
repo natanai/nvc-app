@@ -1188,28 +1188,49 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="write" data-strategy-tags="self-expression|to-be-seen|to-be-heard|need-to-matter|autonomy|authenticity|integrity|acceptance|honesty|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Write</h3>
-                    <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Write</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1274,5 +1295,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

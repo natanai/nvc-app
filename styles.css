@@ -3005,9 +3005,84 @@ main[data-need-slug] .page-title::before {
   }
 }
 
+.strategy-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.strategy-section__controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.strategy-carousel__shuffle,
+.strategy-carousel__nav-button {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.45rem 0.75rem;
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-md);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: 0 10px 0 var(--shadow);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.strategy-carousel__shuffle:hover,
+.strategy-carousel__shuffle:focus-visible,
+.strategy-carousel__nav-button:hover,
+.strategy-carousel__nav-button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 0 var(--shadow);
+}
+
+.strategy-carousel__nav-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.strategy-carousel__nav {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.strategy-carousel {
+  margin-top: 1rem;
+}
+
+.strategy-carousel__viewport {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0.25rem;
+  margin: 0 -0.25rem;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .strategy-list {
-  display: grid;
-  gap: 1rem;
+  --strategy-carousel-gap: 1rem;
+  --strategy-cards-per-view: 1;
+  display: flex;
+  gap: var(--strategy-carousel-gap);
+  min-height: 100%;
+}
+
+.strategy-carousel__track .strategy-card {
+  flex: 0 0 calc(
+    (100% - var(--strategy-carousel-gap) * (var(--strategy-cards-per-view) - 1)) /
+      var(--strategy-cards-per-view)
+  );
+  scroll-snap-align: start;
 }
 
 .strategy-card {
@@ -3019,6 +3094,34 @@ main[data-need-slug] .page-title::before {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.strategy-card:not(.strategy-card--form):not(.strategy-card--input) {
+  min-height: 18.5rem;
+  max-height: 18.5rem;
+}
+
+.strategy-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.strategy-card__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-right: 0.25rem;
+}
+
+.strategy-card__body:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
 }
 
 .strategy-card__title {

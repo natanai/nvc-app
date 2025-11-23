@@ -1188,100 +1188,153 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="clean-something" data-strategy-tags="order|beauty|accomplishment" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Clean something</h3>
-                    <p class="strategy-card__description">Clean your room, your kitchen, anything. Bring order to the chaos :)</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Clean something</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Clean your room, your kitchen, anything. Bring order to the chaos :)</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Schedule your day</h3>
-                    <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Schedule your day</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="parking-lot-note" data-strategy-tags="order">
-                    <h3 class="strategy-card__title">Parking-lot note</h3>
-                    <p class="strategy-card__description">Make a note titled “Parking Lot” and park one worry there.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Parking-lot note</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Make a note titled “Parking Lot” and park one worry there.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="calendar-one-thing" data-strategy-tags="predictability|order|clarity">
-                    <h3 class="strategy-card__title">Calendar one thing</h3>
-                    <p class="strategy-card__description">Add just one gentle, specific item to your calendar.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Calendar one thing</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Add just one gentle, specific item to your calendar.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="mark-a-date-on-a-calendar" data-strategy-tags="order">
-                    <h3 class="strategy-card__title">Mark a date on a calendar</h3>
-                    <p class="strategy-card__description">Circle a meaningful upcoming date (rest day, call, walk).</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Mark a date on a calendar</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Circle a meaningful upcoming date (rest day, call, walk).</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="put-it-on-paper" data-strategy-tags="order">
-                    <h3 class="strategy-card__title">Put it on paper</h3>
-                    <p class="strategy-card__description">Write a worry on paper and place it in an envelope or book.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Put it on paper</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Write a worry on paper and place it in an envelope or book.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="align-x3" data-strategy-tags="order|peace|calm|control">
-                    <h3 class="strategy-card__title">Align x3</h3>
-                    <p class="strategy-card__description">Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Align x3</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="shadow-line" data-strategy-tags="beauty|order|calm|peace">
-                    <h3 class="strategy-card__title">Shadow Line</h3>
-                    <p class="strategy-card__description">Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Shadow Line</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
-                    <h3 class="strategy-card__title">Corner Count</h3>
-                    <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Corner Count</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="nearest-job" data-strategy-tags="understanding|clarity|order">
-                    <h3 class="strategy-card__title">Nearest Job</h3>
-                    <p class="strategy-card__description">Pick the nearest object and state its job in two words (e.g., &quot;mug—holds&quot;, &quot;pen—marks&quot;); enjoy the tidy accuracy and you&#39;re done.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Nearest Job</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Pick the nearest object and state its job in two words (e.g., &quot;mug—holds&quot;, &quot;pen—marks&quot;); enjoy the tidy accuracy and you&#39;re done.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1346,5 +1399,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

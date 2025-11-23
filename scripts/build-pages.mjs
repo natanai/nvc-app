@@ -1601,49 +1601,66 @@ function renderNeed(item, strategyLookup) {
 
   const strategiesHtml = strategies.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
 ${strategiesNote}
-          <div class="strategy-list">
-            ${strategies
-              .map((strategy) => {
-                const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
-                const contributor = strategy.contributor || {};
-                const firstName = sanitizeContributorName(contributor.name);
-                const location = sanitizeLocation(contributor.location);
-                const contributorParts = [];
-                if (firstName) {
-                  contributorParts.push(firstName);
-                }
-                if (location) {
-                  contributorParts.push(location);
-                }
-                const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
-                const contributorHtml = contributorText
-                  ? `<p class="strategy-card__meta">${contributorText}</p>`
-                  : '';
-                const dataAttrs = [
-                  `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
-                  `data-strategy-tags="${escapeHtml(tags)}"`,
-                ];
-                if (firstName) {
-                  dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
-                }
-                if (location) {
-                  dataAttrs.push(`data-location="${escapeHtml(location)}"`);
-                }
-                const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
-                return `
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                ${strategies
+                  .map((strategy) => {
+                    const tags = strategy.needs?.map((need) => need.slug).join('|') || '';
+                    const contributor = strategy.contributor || {};
+                    const firstName = sanitizeContributorName(contributor.name);
+                    const location = sanitizeLocation(contributor.location);
+                    const contributorParts = [];
+                    if (firstName) {
+                      contributorParts.push(firstName);
+                    }
+                    if (location) {
+                      contributorParts.push(location);
+                    }
+                    const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
+                    const contributorHtml = contributorText
+                      ? `<p class="strategy-card__meta">${contributorText}</p>`
+                      : '';
+                    const dataAttrs = [
+                      `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
+                      `data-strategy-tags="${escapeHtml(tags)}"`,
+                    ];
+                    if (firstName) {
+                      dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
+                    }
+                    if (location) {
+                      dataAttrs.push(`data-location="${escapeHtml(location)}"`);
+                    }
+                    const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+                    return `
                   <article class="strategy-card"${dataAttrString}>
-                    <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
-                    <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
-                    ${contributorHtml}
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">${escapeHtml(strategy.description)}</p>
+                        ${contributorHtml}
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 `;
-              })
-              .join('')}
+                  })
+                  .join('')}
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>`
@@ -1706,7 +1723,7 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+    scripts: [{ src: 'scripts/strategy-carousel.js', defer: true }],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,
