@@ -6772,38 +6772,79 @@ function focusNeedSection(slug) {
 
   if (deck && deck.addEventListener) {
     let startX = null;
+    let startY = null;
     let isDragging = false;
+    let swipeLocked = false;
 
     deck.addEventListener('pointerdown', function (event) {
       isDragging = true;
+      swipeLocked = false;
       startX = event.clientX;
+      startY = event.clientY;
+      if (deck.setPointerCapture) {
+        try {
+          deck.setPointerCapture(event.pointerId);
+        } catch (err) {
+          /* noop */
+        }
+      }
+    });
+
+    deck.addEventListener('pointermove', function (event) {
+      if (!isDragging || startX == null || startY == null) {
+        return;
+      }
+
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+
+      if (!swipeLocked) {
+        const horizontalDominant = Math.abs(dx) > Math.abs(dy) + 6;
+        if (horizontalDominant && Math.abs(dx) > 12) {
+          swipeLocked = true;
+          event.preventDefault();
+        } else if (Math.abs(dy) > Math.abs(dx)) {
+          return;
+        }
+      } else {
+        event.preventDefault();
+      }
     });
 
     deck.addEventListener('pointerup', function (event) {
       if (!isDragging || startX == null) {
         return;
       }
-      const dx = event.clientX - startX;
-      const threshold = 30;
 
-      if (dx > threshold) {
-        go(-1);
-      } else if (dx < -threshold) {
-        go(1);
+      const dx = event.clientX - startX;
+      const threshold = 40;
+
+      if (swipeLocked && Math.abs(dx) > threshold) {
+        if (dx > 0) {
+          go(-1);
+        } else {
+          go(1);
+        }
       }
 
       isDragging = false;
+      swipeLocked = false;
       startX = null;
+      startY = null;
     });
 
     deck.addEventListener('pointerleave', function () {
       isDragging = false;
+      swipeLocked = false;
       startX = null;
+      startY = null;
     });
 
     deck.addEventListener('pointercancel', function () {
       isDragging = false;
+      swipeLocked = false;
       startX = null;
+      startY = null;
     });
   }
 })();
