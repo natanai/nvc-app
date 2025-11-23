@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="allneeds.app social card">
+  <rect width="1200" height="630" fill="#F5F6F8"/>
+  <!-- three flush arched doors -->
+  <g transform="translate(120,105)">
+    <path d="M0,360 V90 A90,90 0 0 1 180,90 V360 Z" fill="#5f65b5"/>
+    <path d="M180,360 V90 A90,90 0 0 1 360,90 V360 Z" fill="#e19bd9"/>
+    <path d="M360,360 V90 A90,90 0 0 1 540,90 V360 Z" fill="#8fe1b5"/>
+  </g>
+  <!-- text block on the right; tuned to match PNG composition -->
+  <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" fill="#111">
+    <text x="700" y="260" font-size="96" font-weight="700">
+      allneeds.app
+    </text>
+    <text x="700" y="340" font-size="48" font-weight="400">
+      Observations • Feelings • Needs
+    </text>
+  </g>
+</svg>
