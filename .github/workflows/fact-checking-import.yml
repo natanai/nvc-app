@@ -38,6 +38,9 @@ jobs:
       - name: Apply fact-checking spreadsheets
         run: npm run import:fact-checking
 
+      - name: Propagate citation updates
+        run: npm run replace:needs-sources
+
       - name: Rebuild dataset and pages
         run: |
           npm run build:data
