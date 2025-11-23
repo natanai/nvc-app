@@ -1607,10 +1607,6 @@ function renderNeed(item, strategyLookup) {
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
           <div class="strategy-deck-header">
-            <p class="strategy-deck-hint">
-              Swipe left or right (or use the arrows) to see more strategies.
-              Cards also scroll vertically if there’s more text.
-            </p>
             <button
               type="button"
               class="strategy-deck__shuffle"

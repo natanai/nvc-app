@@ -3044,20 +3044,13 @@ main[data-need-slug] .page-title::before {
   gap: 0.8rem;
 }
 
-/* Header row: hint + shuffle button */
+/* Header row: shuffle button */
 .strategy-deck-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 0.75rem;
-}
-
-.strategy-deck-hint {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  max-width: 30rem;
 }
 
 .strategy-deck__shuffle {
