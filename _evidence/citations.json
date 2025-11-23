@@ -311,16 +311,6 @@
   },
   {
     "file": "/workspace/nvc-app/needs/clarity/index.html",
-    "line": 750,
-    "how": "Clarity reduces cognitive load and errors (CLT review)",
-    "label": "Cognitive Load Theory review detailing how clear, well-integrated information (avoiding split-attention/redundancy) lowers extraneous load and improves performance.",
-    "url": "https://doi.org/10.1207/S15326985EP3801_01",
-    "domain": "",
-    "label_domain_hint": "",
-    "context": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/clarity/index.html",
     "line": 752,
     "how": "Integrating information prevents split-attention errors (experiment)",
     "label": "Experiments show that integrating text and diagrams reduces extraneous load and errors versus split-attention formats.",
