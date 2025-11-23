@@ -1188,56 +1188,90 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <p class="strategy-carousel__hint" role="note">Swipe or drag to browse cards, or use shuffle to reshuffle them.</p>
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="honor-reflection-meditation" data-strategy-tags="honor|recognition" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">(Honor) Reflection Meditation</h3>
-                    <p class="strategy-card__description">Reflect on moments this need has been met in the past. Was it an award you received? Verbal affirmation from a loved one? Consider calling a trusted friend and making a very vulnerable and specific request. &quot;I&#39;m wondering if you could tell me that even though I haven&#39;t accomplished some of my dreams, I am still beautiful person whose existence adds value to the world?&quot; 
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">(Honor) Reflection Meditation</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Reflect on moments this need has been met in the past. Was it an award you received? Verbal affirmation from a loved one? Consider calling a trusted friend and making a very vulnerable and specific request. &quot;I&#39;m wondering if you could tell me that even though I haven&#39;t accomplished some of my dreams, I am still beautiful person whose existence adds value to the world?&quot; 
 Consider also if you can validate that in yourself sometimes, perhaps regularly. Reflect on art your proud of, or the children your proud to have raised, the obstacles you&#39;re overcome in life, and see if you can honor yourself in some way by meditating on those things.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="unsended-appreciation" data-strategy-tags="acceptance|recognition">
-                    <h3 class="strategy-card__title">Unsended appreciation</h3>
-                    <p class="strategy-card__description">Write a 2-sentence appreciation to yourself; keep it.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Unsended appreciation</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Write a 2-sentence appreciation to yourself; keep it.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="specific-thank-you" data-strategy-tags="appreciation|recognition|connection">
-                    <h3 class="strategy-card__title">Specific thank-you</h3>
-                    <p class="strategy-card__description">Send a short note naming one action someone did and how it supported you.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Specific thank-you</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Send a short note naming one action someone did and how it supported you.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="mirror-kindness" data-strategy-tags="recognition|respect">
-                    <h3 class="strategy-card__title">Mirror kindness</h3>
-                    <p class="strategy-card__description">Look in a mirror and say one thing you appreciate about your effort today.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Mirror kindness</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Look in a mirror and say one thing you appreciate about your effort today.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="micro-celebration" data-strategy-tags="recognition">
-                    <h3 class="strategy-card__title">Micro-celebration</h3>
-                    <p class="strategy-card__description">Clap once or do a tiny fist-pump after finishing a task.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Micro-celebration</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Clap once or do a tiny fist-pump after finishing a task.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1303,5 +1337,6 @@ Consider also if you can validate that in yourself sometimes, perhaps regularly.
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

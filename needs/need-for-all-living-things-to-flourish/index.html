@@ -1188,29 +1188,51 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <p class="strategy-carousel__hint" role="note">Swipe or drag to browse cards, or use shuffle to reshuffle them.</p>
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="tend-to-a-plant" data-strategy-tags="need-for-all-living-things-to-flourish|nurturing" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Tend to a plant</h3>
-                    <p class="strategy-card__description">Water a plant. Research how to care for your specific plant. Don&#39;t have a plant? Do you want one? Consider making an event of getting one.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Tend to a plant</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Water a plant. Research how to care for your specific plant. Don&#39;t have a plant? Do you want one? Consider making an event of getting one.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="share-your-strategies" data-strategy-tags="need-for-all-living-things-to-flourish|contribution" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Share your strategies!</h3>
-                    <p class="strategy-card__description">No one likes unsolicited advise (unfortunately), but you can share your strategies here for others to find when they are looking for them ;)
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Share your strategies!</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">No one likes unsolicited advise (unfortunately), but you can share your strategies here for others to find when they are looking for them ;)
 It would make our lives so much more wonderful if you did!</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1276,5 +1298,6 @@ It would make our lives so much more wonderful if you did!</p>
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

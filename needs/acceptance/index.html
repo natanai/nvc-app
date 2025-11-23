@@ -1188,55 +1188,89 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <p class="strategy-carousel__hint" role="note">Swipe or drag to browse cards, or use shuffle to reshuffle them.</p>
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="play-an-instrument" data-strategy-tags="self-expression|to-be-heard|understanding|acceptance|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play an instrument</h3>
-                    <p class="strategy-card__description">Bang a piano or strum a guitar until you&#39;ve expressed all you can with it. Any instrument will do. Let the universe hear you.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Play an instrument</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Bang a piano or strum a guitar until you&#39;ve expressed all you can with it. Any instrument will do. Let the universe hear you.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="write" data-strategy-tags="self-expression|to-be-seen|to-be-heard|need-to-matter|autonomy|authenticity|integrity|acceptance|honesty|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Write</h3>
-                    <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Write</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="make-art" data-strategy-tags="to-be-seen|to-be-heard|self-expression|autonomy|choice|accomplishment|acceptance|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Make art</h3>
-                    <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Make art</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="unsended-appreciation" data-strategy-tags="acceptance|recognition">
-                    <h3 class="strategy-card__title">Unsended appreciation</h3>
-                    <p class="strategy-card__description">Write a 2-sentence appreciation to yourself; keep it.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Unsended appreciation</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Write a 2-sentence appreciation to yourself; keep it.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="name-what-s-outside-control" data-strategy-tags="acceptance|peace">
-                    <h3 class="strategy-card__title">Name what’s outside control</h3>
-                    <p class="strategy-card__description">List three things outside your influence today.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Name what’s outside control</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">List three things outside your influence today.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1302,5 +1336,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>

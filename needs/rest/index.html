@@ -1188,100 +1188,154 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-section__controls" aria-label="Strategy controls">
+              <button type="button" class="strategy-carousel__shuffle" data-strategy-shuffle>Shuffle cards</button>
+              <div class="strategy-carousel__nav" aria-label="Strategy navigation">
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-prev aria-label="Previous strategies">Prev</button>
+                <button type="button" class="strategy-carousel__nav-button" data-strategy-next aria-label="Next strategies">Next</button>
+              </div>
+            </div>
+          </div>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <p class="strategy-carousel__hint" role="note">Swipe or drag to browse cards, or use shuffle to reshuffle them.</p>
+          <div class="strategy-carousel" data-strategy-carousel>
+            <div class="strategy-carousel__viewport" data-strategy-carousel-viewport>
+              <div class="strategy-carousel__track strategy-list" data-strategy-carousel-track>
+                
                   <article class="strategy-card" data-strategy-slug="smell-something" data-strategy-tags="rest" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Smell something</h3>
-                    <p class="strategy-card__description">Take in a deep breath of a smell you like. At the grocery store approaching a panic attack a once stopped to smell an orange for a few seconds. It wasn&#39;t magic, but it helped.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Smell something</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Take in a deep breath of a smell you like. At the grocery store approaching a panic attack a once stopped to smell an orange for a few seconds. It wasn&#39;t magic, but it helped.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="stare-off" data-strategy-tags="safety|peace|rest" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Stare off</h3>
-                    <p class="strategy-card__description">Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I&#39;m just staring off. Reminding myself where I am in the world.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Stare off</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I&#39;m just staring off. Reminding myself where I am in the world.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="no-man-s-sky" data-strategy-tags="relaxation|rest|self-expression|mattering" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">No Man&#39;s Sky</h3>
-                    <p class="strategy-card__description">For me this game is calming. Just go harvest resources and float through space. I like to name things to as a way to feel like I&#39;m making a difference or matter because there is a tiny chance someone someday will land on the planet and see all the names.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">No Man&#39;s Sky</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">For me this game is calming. Just go harvest resources and float through space. I like to name things to as a way to feel like I&#39;m making a difference or matter because there is a tiny chance someone someday will land on the planet and see all the names.</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="4-7-8-breathing" data-strategy-tags="peace|rest">
-                    <h3 class="strategy-card__title">4-7-8 breathing</h3>
-                    <p class="strategy-card__description">Inhale 4, hold 7, exhale 8 (four cycles).</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">4-7-8 breathing</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Inhale 4, hold 7, exhale 8 (four cycles).</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="legs-up-the-wall" data-strategy-tags="rest">
-                    <h3 class="strategy-card__title">Legs up the wall</h3>
-                    <p class="strategy-card__description">Lay with calves on a chair or wall for two minutes.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Legs up the wall</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Lay with calves on a chair or wall for two minutes.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="floor-starfish" data-strategy-tags="safety|rest|support">
-                    <h3 class="strategy-card__title">Floor starfish</h3>
-                    <p class="strategy-card__description">Lay flat, arms and legs wide, and let the floor hold you for one minute.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Floor starfish</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Lay flat, arms and legs wide, and let the floor hold you for one minute.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="two-minute-eye-rest" data-strategy-tags="rest">
-                    <h3 class="strategy-card__title">Two-minute eye rest</h3>
-                    <p class="strategy-card__description">Close eyes or look at a far point for two minutes.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Two-minute eye rest</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Close eyes or look at a far point for two minutes.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="wrap-in-a-blanket" data-strategy-tags="safety|rest">
-                    <h3 class="strategy-card__title">Wrap in a blanket</h3>
-                    <p class="strategy-card__description">Wrap shoulders and torso; notice warmth and weight.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Wrap in a blanket</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Wrap shoulders and torso; notice warmth and weight.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="pillow-nest" data-strategy-tags="support|rest">
-                    <h3 class="strategy-card__title">Pillow nest</h3>
-                    <p class="strategy-card__description">Create a quick cushion “nest” behind your back or under knees.</p>
-                    
+                    <div class="strategy-card__content">
+                      <h3 class="strategy-card__title">Pillow nest</h3>
+                      <div class="strategy-card__body" tabindex="0">
+                        <p class="strategy-card__description">Create a quick cushion “nest” behind your back or under knees.</p>
+                        
+                      </div>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+              </div>
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
@@ -1347,5 +1401,6 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-carousel.js" defer></script>
   </body>
 </html>
