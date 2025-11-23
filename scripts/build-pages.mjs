@@ -1216,7 +1216,7 @@ function renderStrategyForm({
         <div class="strategy-form__field">
           <label for="${idPrefix}-need">Primary need</label>
           <div class="strategy-card strategy-card--input">
-            <select id="${idPrefix}-need" name="need"${multipleAttr} required>
+            <select id="${idPrefix}-need" name="need" data-strategy-need-select${multipleAttr} required>
               ${placeholderOption}
               ${needOptions}
             </select>
