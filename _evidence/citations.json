@@ -2,1526 +2,1416 @@
   {
     "file": "/workspace/nvc-app/needs/acceptance/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "evolutionary psychology study noting that social acceptance cues indicate safety and resource sharing",
     "url": "https://doi.org/10.1177/0146167203262085",
-    "how": "html_anchor",
-    "context": "evolutionary psychology study noting that social acceptance cues indicate safety and resource sharing",
     "domain": "doi.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "evolutionary psychology study noting that social acceptance cues indicate safety and resource sharing"
   },
   {
     "file": "/workspace/nvc-app/needs/acceptance/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "review detailing how social exclusion and loneliness harm psychological and physical health",
     "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
-    "how": "html_anchor",
-    "context": "review detailing how social exclusion and loneliness harm psychological and physical health",
     "domain": "journals.plos.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review detailing how social exclusion and loneliness harm psychological and physical health"
   },
   {
     "file": "/workspace/nvc-app/needs/accomplishment/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Self-determination theory research: competence/mastery as a basic psychological need",
     "url": "https://pubmed.ncbi.nlm.nih.gov/11392867/",
-    "how": "html_anchor",
-    "context": "Self-determination theory research: competence/mastery as a basic psychological need",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Self-determination theory research: competence/mastery as a basic psychological need"
   },
   {
     "file": "/workspace/nvc-app/needs/accomplishment/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "review on intrinsic reward of mastery and skill development",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5364176/",
-    "how": "html_anchor",
-    "context": "review on intrinsic reward of mastery and skill development",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review on intrinsic reward of mastery and skill development"
   },
   {
     "file": "/workspace/nvc-app/needs/accountability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "theory of social safety emphasizing reliable social bonds and trust",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7213777/",
-    "how": "html_anchor",
-    "context": "theory of social safety emphasizing reliable social bonds and trust",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "theory of social safety emphasizing reliable social bonds and trust"
   },
   {
     "file": "/workspace/nvc-app/needs/accountability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "discussion of accountability and trust in healthcare teams",
     "url": "https://bmchealthservres.biomedcentral.com/articles/10.1186/s12913-023-10035-3",
-    "how": "html_anchor",
-    "context": "discussion of accountability and trust in healthcare teams",
     "domain": "bmchealthservres.biomedcentral.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "discussion of accountability and trust in healthcare teams"
   },
   {
     "file": "/workspace/nvc-app/needs/accountability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Journal of Applied Psychology meta-analysis connecting accountability and team performance",
     "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008",
-    "how": "html_anchor",
-    "context": "Journal of Applied Psychology meta-analysis connecting accountability and team performance",
     "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Journal of Applied Psychology meta-analysis connecting accountability and team performance"
   },
   {
     "file": "/workspace/nvc-app/needs/acknowledgement/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "HBR article on the impact of recognition on morale and cooperation",
     "url": "https://pure.eur.nl/files/73371826/Repub_122313.pdf",
-    "how": "html_anchor",
-    "context": "HBR article on the impact of recognition on morale and cooperation",
     "domain": "pure.eur.nl",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "HBR article on the impact of recognition on morale and cooperation"
   },
   {
     "file": "/workspace/nvc-app/needs/acknowledgement/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research showing that acknowledgment and feedback increase teamwork and retention",
     "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/job.2624",
-    "how": "html_anchor",
-    "context": "research showing that acknowledgment and feedback increase teamwork and retention",
     "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research showing that acknowledgment and feedback increase teamwork and retention"
   },
   {
     "file": "/workspace/nvc-app/needs/act-freely/index.html",
     "line": 1180,
-    "label": "Harvard Business Review \u2013 Teresa Amabile \u2013 emphasizing that autonomy and freedom in how work is done fosters creativity and innovation",
-    "url": "https://hbr.org/1998/09/how-to-kill-creativity",
     "how": "html_anchor",
-    "context": "Harvard Business Review \u2013 Teresa Amabile \u2013 emphasizing that autonomy and freedom in how work is done fosters creativity and innovation",
+    "label": "Harvard Business Review – Teresa Amabile – emphasizing that autonomy and freedom in how work is done fosters creativity and innovation",
+    "url": "https://hbr.org/1998/09/how-to-kill-creativity",
     "domain": "hbr.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Harvard Business Review – Teresa Amabile – emphasizing that autonomy and freedom in how work is done fosters creativity and innovation"
   },
   {
     "file": "/workspace/nvc-app/needs/act-freely/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research linking flexible, autonomous work environments to stronger adaptability and performance",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6627190/",
-    "how": "html_anchor",
-    "context": "research linking flexible, autonomous work environments to stronger adaptability and performance",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research linking flexible, autonomous work environments to stronger adaptability and performance"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/appreciation/index.html",
+    "line": 1181,
+    "how": "html_anchor",
+    "label": "Cross-cultural: gratitude relates to prosocial behavior and relationship benefits",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7265817/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Cross-cultural: gratitude relates to prosocial behavior and relationship benefits"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/appreciation/index.html",
+    "line": 1181,
+    "how": "html_anchor",
+    "label": "Meta-analysis: gratitude → prosocial behavior",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/28406659/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Meta-analysis: gratitude → prosocial behavior"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/appreciation/index.html",
+    "line": 1181,
+    "how": "html_anchor",
+    "label": "Theory: gratitude strengthens relationships (Find–Remind–Bind)",
+    "url": "https://compass.onlinelibrary.wiley.com/doi/10.1111/j.1751-9004.2012.00439.x",
+    "domain": "compass.onlinelibrary.wiley.com",
+    "label_domain_hint": "",
+    "context": "Theory: gratitude strengthens relationships (Find–Remind–Bind)"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/appreciation/index.html",
+    "line": 1181,
+    "how": "html_anchor",
+    "label": "Experiment: gratitude increases costly helping",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/16623689/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "Experiment: gratitude increases costly helping"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/appreciation/index.html",
+    "line": 1181,
+    "how": "html_anchor",
+    "label": "cross-cultural research showing gratitude practices strengthen trust and social connection",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8600914/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "cross-cultural research showing gratitude practices strengthen trust and social connection"
   },
   {
     "file": "/workspace/nvc-app/needs/authenticity/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "meta-analysis linking authenticity with higher self-esteem and relationship satisfaction",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.01052/full",
-    "how": "html_anchor",
-    "context": "meta-analysis linking authenticity with higher self-esteem and relationship satisfaction",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "meta-analysis linking authenticity with higher self-esteem and relationship satisfaction"
   },
   {
     "file": "/workspace/nvc-app/needs/authenticity/index.html",
     "line": 1180,
-    "label": "research on how behaving in line with one\u2019s true self reduces stress and confusion in social interactions",
-    "url": "https://psycnet.apa.org/record/2006-06108-007",
     "how": "html_anchor",
-    "context": "research on how behaving in line with one\u2019s true self reduces stress and confusion in social interactions",
+    "label": "research on how behaving in line with one’s true self reduces stress and confusion in social interactions",
+    "url": "https://psycnet.apa.org/record/2006-06108-007",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on how behaving in line with one’s true self reduces stress and confusion in social interactions"
   },
   {
     "file": "/workspace/nvc-app/needs/autonomy/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Self-Determination Theory review, highlighting autonomy as a basic need for well-being",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3602424/",
-    "how": "html_anchor",
-    "context": "Self-Determination Theory review, highlighting autonomy as a basic need for well-being",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Self-Determination Theory review, highlighting autonomy as a basic need for well-being"
   },
   {
     "file": "/workspace/nvc-app/needs/autonomy/index.html",
     "line": 1180,
-    "label": "Deci & Ryan, 2000 \u2013 seminal paper on autonomy\u2019s role in motivation",
+    "how": "html_anchor",
+    "label": "Deci & Ryan, 2000 – seminal paper on autonomy’s role in motivation",
     "url": "https://pubmed.ncbi.nlm.nih.gov/11392867/",
-    "how": "html_anchor",
-    "context": "Deci & Ryan, 2000 \u2013 seminal paper on autonomy\u2019s role in motivation",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Deci & Ryan, 2000 – seminal paper on autonomy’s role in motivation"
   },
   {
     "file": "/workspace/nvc-app/needs/beauty/index.html",
     "line": 1180,
-    "label": "Canadian Psychological Association \u2013 nature exposure improves attention, mood, and stress recovery",
-    "url": "https://www.sciencedirect.com/science/article/pii/S0013935118303323",
     "how": "html_anchor",
-    "context": "Canadian Psychological Association \u2013 nature exposure improves attention, mood, and stress recovery",
+    "label": "Canadian Psychological Association – nature exposure improves attention, mood, and stress recovery",
+    "url": "https://www.sciencedirect.com/science/article/pii/S0013935118303323",
     "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Canadian Psychological Association – nature exposure improves attention, mood, and stress recovery"
   },
   {
     "file": "/workspace/nvc-app/needs/beauty/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study linking exposure to aesthetically pleasing natural environments with cognitive benefits and stress reduction",
     "url": "https://journals.sagepub.com/doi/10.1177/0956797612464121",
-    "how": "html_anchor",
-    "context": "study linking exposure to aesthetically pleasing natural environments with cognitive benefits and stress reduction",
     "domain": "journals.sagepub.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study linking exposure to aesthetically pleasing natural environments with cognitive benefits and stress reduction"
   },
   {
     "file": "/workspace/nvc-app/needs/belonging/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Review summarizing belonging as vital for health and longevity",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8095671/",
-    "how": "html_anchor",
-    "context": "Review summarizing belonging as vital for health and longevity",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Review summarizing belonging as vital for health and longevity"
   },
   {
     "file": "/workspace/nvc-app/needs/calm/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "review on stress recovery and its effects on cognitive function and health",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6438088/",
-    "how": "html_anchor",
-    "context": "review on stress recovery and its effects on cognitive function and health",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review on stress recovery and its effects on cognitive function and health"
   },
   {
     "file": "/workspace/nvc-app/needs/calm/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "APA press release: chronic stress impairs executive function; recovery improves regulation",
     "url": "https://www.apa.org/news/press/releases/2016/07/chronic-stress",
-    "how": "html_anchor",
-    "context": "APA press release: chronic stress impairs executive function; recovery improves regulation",
     "domain": "www.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "APA press release: chronic stress impairs executive function; recovery improves regulation"
   },
   {
     "file": "/workspace/nvc-app/needs/causality/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on how humans form causal models to reduce uncertainty and guide decisions",
     "url": "https://www.nature.com/articles/s41562-019-0766-4",
-    "how": "html_anchor",
-    "context": "research on how humans form causal models to reduce uncertainty and guide decisions",
     "domain": "www.nature.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on how humans form causal models to reduce uncertainty and guide decisions"
   },
   {
     "file": "/workspace/nvc-app/needs/causality/index.html",
     "line": 1180,
-    "label": "discussion on the brain\u2019s drive to predict and the stress of uncertainty",
+    "how": "html_anchor",
+    "label": "discussion on the brain’s drive to predict and the stress of uncertainty",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3694083/",
-    "how": "html_anchor",
-    "context": "discussion on the brain\u2019s drive to predict and the stress of uncertainty",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "discussion on the brain’s drive to predict and the stress of uncertainty"
   },
   {
     "file": "/workspace/nvc-app/needs/choice/index.html",
     "line": 1180,
-    "label": "research showing having choices that align with one\u2019s values increases satisfaction and perceived autonomy",
-    "url": "https://psycnet.apa.org/doi/10.1037/0022-3514.76.3.482",
     "how": "html_anchor",
-    "context": "research showing having choices that align with one\u2019s values increases satisfaction and perceived autonomy",
+    "label": "research showing having choices that align with one’s values increases satisfaction and perceived autonomy",
+    "url": "https://psycnet.apa.org/doi/10.1037/0022-3514.76.3.482",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research showing having choices that align with one’s values increases satisfaction and perceived autonomy"
   },
   {
     "file": "/workspace/nvc-app/needs/choice/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study on choice and perceived control contributing to stress reduction and flexibility",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3267932/",
-    "how": "html_anchor",
-    "context": "study on choice and perceived control contributing to stress reduction and flexibility",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on choice and perceived control contributing to stress reduction and flexibility"
   },
   {
     "file": "/workspace/nvc-app/needs/choose-freely/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Study linking meaningful choice opportunities with stronger motivation and well-being",
     "url": "https://pubmed.ncbi.nlm.nih.gov/1011073/",
-    "how": "html_anchor",
-    "context": "Study linking meaningful choice opportunities with stronger motivation and well-being",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Study linking meaningful choice opportunities with stronger motivation and well-being"
   },
   {
     "file": "/workspace/nvc-app/needs/choose-freely/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Deci & Ryan (2000) self-determination theory review on autonomy",
     "url": "https://pubmed.ncbi.nlm.nih.gov/11392867/",
-    "how": "html_anchor",
-    "context": "Deci & Ryan (2000) self-determination theory review on autonomy",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Deci & Ryan (2000) self-determination theory review on autonomy"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/clarity/index.html",
+    "line": 750,
+    "how": "Clarity reduces cognitive load and errors (CLT review)",
+    "label": "Cognitive Load Theory review detailing how clear, well-integrated information (avoiding split-attention/redundancy) lowers extraneous load and improves performance.",
+    "url": "https://doi.org/10.1207/S15326985EP3801_01",
+    "domain": "",
+    "label_domain_hint": "",
+    "context": ""
+  },
+  {
+    "file": "/workspace/nvc-app/needs/clarity/index.html",
+    "line": 752,
+    "how": "Integrating information prevents split-attention errors (experiment)",
+    "label": "Experiments show that integrating text and diagrams reduces extraneous load and errors versus split-attention formats.",
+    "url": "https://doi.org/10.1111/j.2044-8279.1992.tb01017.x",
+    "domain": "",
+    "label_domain_hint": "",
+    "context": ""
   },
   {
     "file": "/workspace/nvc-app/needs/clarity/index.html",
     "line": 1180,
-    "label": "discussion on how clarity reduces cognitive load and errors",
-    "url": "https://www.sciencedirect.com/science/article/abs/pii/S095947521100018X",
     "how": "html_anchor",
-    "context": "discussion on how clarity reduces cognitive load and errors",
-    "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/clarity/index.html",
-    "line": 1180,
     "label": "healthcare data: 80% of serious errors result from miscommunication, illustrating the cost of lack of clarity",
     "url": "https://qualitysafety.bmj.com/content/13/5/330",
-    "how": "html_anchor",
-    "context": "healthcare data: 80% of serious errors result from miscommunication, illustrating the cost of lack of clarity",
     "domain": "qualitysafety.bmj.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "healthcare data: 80% of serious errors result from miscommunication, illustrating the cost of lack of clarity"
   },
   {
     "file": "/workspace/nvc-app/needs/closeness/index.html",
-    "line": 1180,
-    "label": "Canadian Psychological Association \u2013 secure attachment helps children cope with stress and fosters healthy development",
-    "url": "https://doi.org/10.1146/annurev.psych.58.110405.085646",
+    "line": 750,
     "how": "html_anchor",
-    "context": "Canadian Psychological Association \u2013 secure attachment helps children cope with stress and fosters healthy development",
-    "domain": "doi.org",
-    "label_domain_hint": ""
+    "label": "Secure caregiver presence buffers children’s stress responses (HPA axis)",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4618716/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "closeness",
+    "context": "Developmental review of ‘social buffering’: caregiver availability attenuates physiological stress reactivity from infancy through adolescence, supporting coping and resilience."
+  },
+  {
+    "file": "/workspace/nvc-app/needs/closeness/index.html",
+    "line": 752,
+    "how": "html_anchor",
+    "label": "Meta-analysis: early attachment security predicts better peer competence",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4021853/",
+    "domain": "pmc.ncbi.nlm.nih.gov",
+    "label_domain_hint": "closeness",
+    "context": "Quantitative synthesis showing secure attachment in early life is linked to stronger social competence with peers during childhood—core to healthy development."
   },
   {
     "file": "/workspace/nvc-app/needs/closeness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study showing emotionally supportive partners dampen stress responses and aid recovery",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2018.01539/full",
-    "how": "html_anchor",
-    "context": "study showing emotionally supportive partners dampen stress responses and aid recovery",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study showing emotionally supportive partners dampen stress responses and aid recovery"
   },
   {
     "file": "/workspace/nvc-app/needs/commitment/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on commitment in relationships and teams contributing to long-term success and trust",
     "url": "https://psycnet.apa.org/record/1997-04604-006",
-    "how": "html_anchor",
-    "context": "research on commitment in relationships and teams contributing to long-term success and trust",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on commitment in relationships and teams contributing to long-term success and trust"
   },
   {
     "file": "/workspace/nvc-app/needs/commitment/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study linking commitment to goals with improved goal achievement and group momentum",
     "url": "https://www.sciencedirect.com/science/article/pii/S0010027725002276",
-    "how": "html_anchor",
-    "context": "study linking commitment to goals with improved goal achievement and group momentum",
     "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study linking commitment to goals with improved goal achievement and group momentum"
   },
   {
     "file": "/workspace/nvc-app/needs/community/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "anthropological perspective on humans as ultra-social, surviving via community cooperation",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6232274/",
-    "how": "html_anchor",
-    "context": "anthropological perspective on humans as ultra-social, surviving via community cooperation",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "anthropological perspective on humans as ultra-social, surviving via community cooperation"
   },
   {
     "file": "/workspace/nvc-app/needs/community/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "public health analysis showing mutual aid and strong community ties improve resilience and wellbeing",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8577769/",
-    "how": "html_anchor",
-    "context": "public health analysis showing mutual aid and strong community ties improve resilience and wellbeing",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "public health analysis showing mutual aid and strong community ties improve resilience and wellbeing"
   },
   {
     "file": "/workspace/nvc-app/needs/connection/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Holt-Lunstad et al. (2010) meta-analysis linking strong social connection to survival",
     "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
-    "how": "html_anchor",
-    "context": "Holt-Lunstad et al. (2010) meta-analysis linking strong social connection to survival",
     "domain": "journals.plos.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Holt-Lunstad et al. (2010) meta-analysis linking strong social connection to survival"
   },
   {
     "file": "/workspace/nvc-app/needs/consideration/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Journal of Applied Psychology study linking supervisor respect with employee outcomes",
     "url": "https://pubmed.ncbi.nlm.nih.gov/27856728/",
-    "how": "html_anchor",
-    "context": "Journal of Applied Psychology study linking supervisor respect with employee outcomes",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Journal of Applied Psychology study linking supervisor respect with employee outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/consideration/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Academy of Management Journal research on respect and constructive voice behavior",
     "url": "https://journals.sagepub.com/doi/10.1177/0149206310385943",
-    "how": "html_anchor",
-    "context": "Academy of Management Journal research on respect and constructive voice behavior",
     "domain": "journals.sagepub.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Academy of Management Journal research on respect and constructive voice behavior"
   },
   {
     "file": "/workspace/nvc-app/needs/consideration/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Literature review connecting interpersonal respect with well-being",
     "url": "https://www.scirp.org/reference/referencespapers?referenceid=3495223",
-    "how": "html_anchor",
-    "context": "Literature review connecting interpersonal respect with well-being",
     "domain": "www.scirp.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Literature review connecting interpersonal respect with well-being"
   },
   {
     "file": "/workspace/nvc-app/needs/consideration/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Peer-reviewed analysis of respectful care improving patient experiences",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6298854/",
-    "how": "html_anchor",
-    "context": "Peer-reviewed analysis of respectful care improving patient experiences",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Peer-reviewed analysis of respectful care improving patient experiences"
   },
   {
     "file": "/workspace/nvc-app/needs/consistency/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "evidence that structured routines reduce cognitive load and errors, enabling more creative work",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2018.00928/full",
-    "how": "html_anchor",
-    "context": "evidence that structured routines reduce cognitive load and errors, enabling more creative work",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "evidence that structured routines reduce cognitive load and errors, enabling more creative work"
   },
   {
     "file": "/workspace/nvc-app/needs/consistency/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on how environmental consistency and predictable structure benefit learning and innovation",
     "url": "https://psycnet.apa.org/record/2002-15408-004",
-    "how": "html_anchor",
-    "context": "research on how environmental consistency and predictable structure benefit learning and innovation",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on how environmental consistency and predictable structure benefit learning and innovation"
   },
   {
     "file": "/workspace/nvc-app/needs/contribution/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "APA press release on how prosocial behavior and contributing to others increases sense of purpose and even health",
     "url": "https://www.apa.org/news/press/releases/2020/09/doing-good-boosts-health",
-    "how": "html_anchor",
-    "context": "APA press release on how prosocial behavior and contributing to others increases sense of purpose and even health",
     "domain": "www.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "APA press release on how prosocial behavior and contributing to others increases sense of purpose and even health"
   },
   {
     "file": "/workspace/nvc-app/needs/contribution/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "longitudinal study showing that regular volunteering increases life satisfaction and sense of purpose",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5504667/",
-    "how": "html_anchor",
-    "context": "longitudinal study showing that regular volunteering increases life satisfaction and sense of purpose",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "longitudinal study showing that regular volunteering increases life satisfaction and sense of purpose"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on locus of control: having control or influence correlates with reduced stress and better task outcomes",
     "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/ajhb.24147",
-    "how": "html_anchor",
-    "context": "research on locus of control: having control or influence correlates with reduced stress and better task outcomes",
     "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on locus of control: having control or influence correlates with reduced stress and better task outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1180,
-    "label": "CDC commentary on how controlling one\u2019s environment reduces perceived threats and fosters safety \u2013 related to public health contexts",
-    "url": "https://www.cdc.gov/violenceprevention/about/social-ecologicalmodel.html",
     "how": "html_anchor",
-    "context": "CDC commentary on how controlling one\u2019s environment reduces perceived threats and fosters safety \u2013 related to public health contexts",
-    "domain": "www.cdc.gov",
-    "label_domain_hint": ""
+    "label": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts",
+    "url": "https://systematicreviewsjournal.biomedcentral.com/articles/10.1186/2046-4053-2-30",
+    "domain": "systematicreviewsjournal.biomedcentral.com",
+    "label_domain_hint": "",
+    "context": "CDC commentary on how controlling one’s environment reduces perceived threats and fosters safety – related to public health contexts"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1185,
+    "how": "html_anchor",
     "label": "Humans have an intrinsic need for control/choice: integrative review arguing that a sense of control and the opportunity to choose are fundamental, with neural, motivational, and affective benefits",
     "url": "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(10)00185-3",
-    "how": "html_anchor",
-    "context": "Humans have an intrinsic need for control/choice: integrative review arguing that a sense of control and the opportunity to choose are fundamental, with neural, motivational, and affective benefits",
     "domain": "www.cell.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Humans have an intrinsic need for control/choice: integrative review arguing that a sense of control and the opportunity to choose are fundamental, with neural, motivational, and affective benefits"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1186,
+    "how": "html_anchor",
     "label": "Controllability reduces stress responses (learned helplessness: modern account): authoritative review describing how experiencing controllable stress engages prefrontal circuits that inhibit stress responses while lack of control yields learned helplessness",
     "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-clinpsy-021815-093006",
-    "how": "html_anchor",
-    "context": "Controllability reduces stress responses (learned helplessness: modern account): authoritative review describing how experiencing controllable stress engages prefrontal circuits that inhibit stress responses while lack of control yields learned helplessness",
     "domain": "www.annualreviews.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Controllability reduces stress responses (learned helplessness: modern account): authoritative review describing how experiencing controllable stress engages prefrontal circuits that inhibit stress responses while lack of control yields learned helplessness"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1187,
+    "how": "html_anchor",
     "label": "Sense of control buffers socioeconomic gradients in health: large population study showing higher perceived control is associated with better health and well-being, moderating SES differences",
     "url": "https://psycnet.apa.org/record/1998-00299-016",
-    "how": "html_anchor",
-    "context": "Sense of control buffers socioeconomic gradients in health: large population study showing higher perceived control is associated with better health and well-being, moderating SES differences",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Sense of control buffers socioeconomic gradients in health: large population study showing higher perceived control is associated with better health and well-being, moderating SES differences"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1188,
+    "how": "html_anchor",
     "label": "Control beliefs taxonomy and functions: classic review clarifying perceived control, mastery, and self-efficacy, how they develop, and why they matter",
     "url": "https://psycnet.apa.org/record/1996-01799-010",
-    "how": "html_anchor",
-    "context": "Control beliefs taxonomy and functions: classic review clarifying perceived control, mastery, and self-efficacy, how they develop, and why they matter",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Control beliefs taxonomy and functions: classic review clarifying perceived control, mastery, and self-efficacy, how they develop, and why they matter"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1189,
-    "label": "Low job control + high demands \u2192 strain and ill-health (Demand\u2013Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research",
-    "url": "https://www.jstor.org/stable/2392498?origin=crossref",
     "how": "html_anchor",
-    "context": "Low job control + high demands \u2192 strain and ill-health (Demand\u2013Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research",
+    "label": "Low job control + high demands → strain and ill-health (Demand–Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research",
+    "url": "https://www.jstor.org/stable/2392498?origin=crossref",
     "domain": "www.jstor.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Low job control + high demands → strain and ill-health (Demand–Control model): seminal evidence that decision latitude protects against strain and is foundational for occupational health research"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1190,
+    "how": "html_anchor",
     "label": "Job strain (including low control) predicts heart disease (meta-analysis): individual participant data meta-analysis linking job strain to increased coronary heart disease risk, highlighting the role of low control",
     "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)60994-5/fulltext",
-    "how": "html_anchor",
-    "context": "Job strain (including low control) predicts heart disease (meta-analysis): individual participant data meta-analysis linking job strain to increased coronary heart disease risk, highlighting the role of low control",
     "domain": "www.thelancet.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Job strain (including low control) predicts heart disease (meta-analysis): individual participant data meta-analysis linking job strain to increased coronary heart disease risk, highlighting the role of low control"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1191,
+    "how": "html_anchor",
     "label": "Autonomy as a basic psychological need (self-determination theory review): comprehensive review establishing autonomy as a basic need that fosters wellness and performance",
     "url": "https://psycnet.apa.org/record/2000-13324-007",
-    "how": "html_anchor",
-    "context": "Autonomy as a basic psychological need (self-determination theory review): comprehensive review establishing autonomy as a basic need that fosters wellness and performance",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Autonomy as a basic psychological need (self-determination theory review): comprehensive review establishing autonomy as a basic need that fosters wellness and performance"
   },
   {
     "file": "/workspace/nvc-app/needs/control/index.html",
     "line": 1192,
-    "label": "Self-efficacy (control over action) \u2192 motivation and change: foundational theory paper demonstrating that beliefs about one\u2019s control over actions regulate motivation, affect, and behavior change",
-    "url": "https://psycnet.apa.org/record/1977-25733-001",
     "how": "html_anchor",
-    "context": "Self-efficacy (control over action) \u2192 motivation and change: foundational theory paper demonstrating that beliefs about one\u2019s control over actions regulate motivation, affect, and behavior change",
+    "label": "Self-efficacy (control over action) → motivation and change: foundational theory paper demonstrating that beliefs about one’s control over actions regulate motivation, affect, and behavior change",
+    "url": "https://psycnet.apa.org/record/1977-25733-001",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Self-efficacy (control over action) → motivation and change: foundational theory paper demonstrating that beliefs about one’s control over actions regulate motivation, affect, and behavior change"
   },
   {
     "file": "/workspace/nvc-app/needs/dependability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study on how reliability of team members lowers the need for oversight and improves collective performance",
     "url": "https://www.sciencedirect.com/science/article/pii/S0925753523001200",
-    "how": "html_anchor",
-    "context": "study on how reliability of team members lowers the need for oversight and improves collective performance",
     "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on how reliability of team members lowers the need for oversight and improves collective performance"
   },
   {
     "file": "/workspace/nvc-app/needs/dependability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research finding that people strongly prefer and trust those who are consistently honest/reliable",
     "url": "https://pubmed.ncbi.nlm.nih.gov/31916837/",
-    "how": "html_anchor",
-    "context": "research finding that people strongly prefer and trust those who are consistently honest/reliable",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research finding that people strongly prefer and trust those who are consistently honest/reliable"
   },
   {
     "file": "/workspace/nvc-app/needs/do-things-at-my-own-pace-and-in-my-own-way/index.html",
     "line": 1180,
-    "label": "review of work environment factors: having control over work pace is linked to lower burnout and higher quality output \u2013 see job control \u201cprotects against\u201d exhaustion",
-    "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
     "how": "html_anchor",
-    "context": "review of work environment factors: having control over work pace is linked to lower burnout and higher quality output \u2013 see job control \u201cprotects against\u201d exhaustion",
+    "label": "review of work environment factors: having control over work pace is linked to lower burnout and higher quality output – see job control “protects against” exhaustion",
+    "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
     "domain": "bmcpublichealth.biomedcentral.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review of work environment factors: having control over work pace is linked to lower burnout and higher quality output – see job control “protects against” exhaustion"
   },
   {
     "file": "/workspace/nvc-app/needs/do-things-at-my-own-pace-and-in-my-own-way/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "meta-analysis showing job control/autonomy, including pacing, buffers against burnout",
     "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12008",
-    "how": "html_anchor",
-    "context": "meta-analysis showing job control/autonomy, including pacing, buffers against burnout",
     "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "meta-analysis showing job control/autonomy, including pacing, buffers against burnout"
   },
   {
     "file": "/workspace/nvc-app/needs/do-things-at-my-own-pace-and-in-my-own-way/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Sussman & Sekuler (2022) study: time pressure degrades executive function",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9506568/",
-    "how": "html_anchor",
-    "context": "Sussman & Sekuler (2022) study: time pressure degrades executive function",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Sussman & Sekuler (2022) study: time pressure degrades executive function"
   },
   {
     "file": "/workspace/nvc-app/needs/do-things-at-my-own-pace-and-in-my-own-way/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Moore & Tenney (2012) analysis: constant time pressure lowers quality and productivity",
     "url": "https://www.researchgate.net/publication/286319678_Time_Pressure_Performance_and_Productivity",
-    "how": "html_anchor",
-    "context": "Moore & Tenney (2012) analysis: constant time pressure lowers quality and productivity",
     "domain": "www.researchgate.net",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Moore & Tenney (2012) analysis: constant time pressure lowers quality and productivity"
   },
   {
     "file": "/workspace/nvc-app/needs/empathy/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study showing empathy and communication skills improve team coordination and performance",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2023.1115402/full",
-    "how": "html_anchor",
-    "context": "study showing empathy and communication skills improve team coordination and performance",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study showing empathy and communication skills improve team coordination and performance"
   },
   {
     "file": "/workspace/nvc-app/needs/empathy/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4592359/",
-    "how": "html_anchor",
-    "context": "review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review on how empathy supports prosocial responses that reduce conflict and misunderstanding in relationships"
   },
   {
     "file": "/workspace/nvc-app/needs/empowerment/index.html",
     "line": 1180,
-    "label": "WHO report by N. Wallerstein, 2006 \u2013 evidence that empowerment initiatives lead to better health and social outcomes",
-    "url": "https://applications.emro.who.int/docs/Health-systems-governance-eng.pdf",
     "how": "html_anchor",
-    "context": "WHO report by N. Wallerstein, 2006 \u2013 evidence that empowerment initiatives lead to better health and social outcomes",
+    "label": "WHO report by N. Wallerstein, 2006 – evidence that empowerment initiatives lead to better health and social outcomes",
+    "url": "https://applications.emro.who.int/docs/Health-systems-governance-eng.pdf",
     "domain": "applications.emro.who.int",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "WHO report by N. Wallerstein, 2006 – evidence that empowerment initiatives lead to better health and social outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/empowerment/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study linking patient empowerment with improved health management and resilience",
     "url": "https://cdn.who.int/media/docs/default-source/universal-health-coverage/who-uhl-technical-brief-socialparticipation.pdf?download=true",
-    "how": "html_anchor",
-    "context": "study linking patient empowerment with improved health management and resilience",
     "domain": "cdn.who.int",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study linking patient empowerment with improved health management and resilience"
   },
   {
     "file": "/workspace/nvc-app/needs/equality/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on procedural justice showing equal voice increases cooperation and reduces conflict",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01306/full",
-    "how": "html_anchor",
-    "context": "research on procedural justice showing equal voice increases cooperation and reduces conflict",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on procedural justice showing equal voice increases cooperation and reduces conflict"
   },
   {
     "file": "/workspace/nvc-app/needs/equality/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Annual Review article on workplace self-reflection guiding psychological safety practices",
     "url": "https://www.annualreviews.org/content/journals/10.1146/annurev-orgpsych-031921-024406",
-    "how": "html_anchor",
-    "context": "Annual Review article on workplace self-reflection guiding psychological safety practices",
     "domain": "www.annualreviews.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Annual Review article on workplace self-reflection guiding psychological safety practices"
   },
   {
     "file": "/workspace/nvc-app/needs/fairness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "summary of research by Brosnan & de Waal: fairness instinct in primates evolved to support long-term cooperation",
     "url": "https://www.sciencedaily.com/releases/2014/09/140918141151.htm",
-    "how": "html_anchor",
-    "context": "summary of research by Brosnan & de Waal: fairness instinct in primates evolved to support long-term cooperation",
     "domain": "www.sciencedaily.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "summary of research by Brosnan & de Waal: fairness instinct in primates evolved to support long-term cooperation"
   },
   {
     "file": "/workspace/nvc-app/needs/fairness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation",
     "url": "https://www.pnas.org/doi/10.1073/pnas.1402280111",
-    "how": "html_anchor",
-    "context": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation",
     "domain": "www.pnas.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on humans enforcing fairness norms even at a cost, to stabilize cooperation"
   },
   {
     "file": "/workspace/nvc-app/needs/freedom/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "HBR article noting that giving people freedom in how they do their work increases intrinsic motivation and creativity",
     "url": "https://hbr.org/1998/09/how-to-kill-creativity",
-    "how": "html_anchor",
-    "context": "HBR article noting that giving people freedom in how they do their work increases intrinsic motivation and creativity",
     "domain": "hbr.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "HBR article noting that giving people freedom in how they do their work increases intrinsic motivation and creativity"
   },
   {
     "file": "/workspace/nvc-app/needs/freedom/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students",
     "url": "https://www.sciencedirect.com/science/article/abs/pii/S1871187125001026",
-    "how": "html_anchor",
-    "context": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students",
     "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study in educational settings: freedom to explore improves problem-solving skills and innovation among students"
   },
   {
     "file": "/workspace/nvc-app/needs/friendship/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "meta-analysis of 148 studies: strong social relationships increase survival by ~50%",
     "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316",
-    "how": "html_anchor",
-    "context": "meta-analysis of 148 studies: strong social relationships increase survival by ~50%",
     "domain": "journals.plos.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "meta-analysis of 148 studies: strong social relationships increase survival by ~50%"
   },
   {
     "file": "/workspace/nvc-app/needs/friendship/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "meta-analysis showing strong friendships and social ties reduce stress and increase longevity",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3150158/",
-    "how": "html_anchor",
-    "context": "meta-analysis showing strong friendships and social ties reduce stress and increase longevity",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "meta-analysis showing strong friendships and social ties reduce stress and increase longevity"
   },
   {
     "file": "/workspace/nvc-app/needs/genuineness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study indicating that straightforward, sincere communication builds interpersonal credibility and trust",
     "url": "https://doi.org/10.1037/cou0000283",
-    "how": "html_anchor",
-    "context": "study indicating that straightforward, sincere communication builds interpersonal credibility and trust",
     "domain": "doi.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study indicating that straightforward, sincere communication builds interpersonal credibility and trust"
   },
   {
     "file": "/workspace/nvc-app/needs/genuineness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "European Societies article on narrative construction of European identity",
     "url": "https://www.tandfonline.com/doi/full/10.1080/14616696.2015.1072227",
-    "how": "html_anchor",
-    "context": "European Societies article on narrative construction of European identity",
     "domain": "www.tandfonline.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "European Societies article on narrative construction of European identity"
   },
   {
     "file": "/workspace/nvc-app/needs/growth/index.html",
     "line": 1180,
-    "label": "research on \u201cgrowth mindset\u201d showing that embracing challenges and learning from feedback leads to greater skill development and adaptability",
-    "url": "https://psycnet.apa.org/record/2015-46007-001",
     "how": "html_anchor",
-    "context": "research on \u201cgrowth mindset\u201d showing that embracing challenges and learning from feedback leads to greater skill development and adaptability",
+    "label": "research on “growth mindset” showing that embracing challenges and learning from feedback leads to greater skill development and adaptability",
+    "url": "https://psycnet.apa.org/record/2015-46007-001",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on “growth mindset” showing that embracing challenges and learning from feedback leads to greater skill development and adaptability"
   },
   {
     "file": "/workspace/nvc-app/needs/growth/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Vision Research review on adaptation, perceptual learning, and neural plasticity",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5323482/",
-    "how": "html_anchor",
-    "context": "Vision Research review on adaptation, perceptual learning, and neural plasticity",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Vision Research review on adaptation, perceptual learning, and neural plasticity"
   },
   {
     "file": "/workspace/nvc-app/needs/honesty/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study: people strongly prefer to trust those who show consistent honesty; honest behavior biases others to view one as trustworthy",
     "url": "https://pubmed.ncbi.nlm.nih.gov/31916837/",
-    "how": "html_anchor",
-    "context": "study: people strongly prefer to trust those who show consistent honesty; honest behavior biases others to view one as trustworthy",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study: people strongly prefer to trust those who show consistent honesty; honest behavior biases others to view one as trustworthy"
   },
   {
     "file": "/workspace/nvc-app/needs/honesty/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "University of Rochester study: greater honesty in expressing needs or issues led to better relationship outcomes",
     "url": "https://doi.org/10.1037/pspi0000381",
-    "how": "html_anchor",
-    "context": "University of Rochester study: greater honesty in expressing needs or issues led to better relationship outcomes",
     "domain": "doi.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "University of Rochester study: greater honesty in expressing needs or issues led to better relationship outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Darwall (1977) on recognition vs. appraisal respect",
     "url": "https://www.journals.uchicago.edu/doi/10.1086/292054",
-    "how": "html_anchor",
-    "context": "Darwall (1977) on recognition vs. appraisal respect",
     "domain": "www.journals.uchicago.edu",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Darwall (1977) on recognition vs. appraisal respect"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Stanford Encyclopedia of Philosophy: Respect entry",
     "url": "https://plato.stanford.edu/entries/respect/",
-    "how": "html_anchor",
-    "context": "Stanford Encyclopedia of Philosophy: Respect entry",
     "domain": "plato.stanford.edu",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Stanford Encyclopedia of Philosophy: Respect entry"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Review of autonomy-supportive clinical communication and patient outcomes",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7923912/",
-    "how": "html_anchor",
-    "context": "Review of autonomy-supportive clinical communication and patient outcomes",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Review of autonomy-supportive clinical communication and patient outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Ng & Ntoumanis (2012) review on SDT and health behavior change",
     "url": "https://selfdeterminationtheory.org/SDT/documents/2012-NgNtoumanis_PPS.pdf",
-    "how": "html_anchor",
-    "context": "Ng & Ntoumanis (2012) review on SDT and health behavior change",
     "domain": "selfdeterminationtheory.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Ng & Ntoumanis (2012) review on SDT and health behavior change"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Ntoumanis et al. (2020) meta-analysis of autonomy support in health contexts",
     "url": "https://selfdeterminationtheory.org/wp-content/uploads/2020/05/2020_NtoumanisEtAl_MetaAnalysisHealth.pdf",
-    "how": "html_anchor",
-    "context": "Ntoumanis et al. (2020) meta-analysis of autonomy support in health contexts",
     "domain": "selfdeterminationtheory.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Ntoumanis et al. (2020) meta-analysis of autonomy support in health contexts"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "National Academies resource on respectful, autonomy-supportive care",
     "url": "https://www.ncbi.nlm.nih.gov/books/NBK589708/",
-    "how": "html_anchor",
-    "context": "National Academies resource on respectful, autonomy-supportive care",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "National Academies resource on respectful, autonomy-supportive care"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Systematic review linking autonomy-supportive practice to adherence and motivation",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9513407/",
-    "how": "html_anchor",
-    "context": "Systematic review linking autonomy-supportive practice to adherence and motivation",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Systematic review linking autonomy-supportive practice to adherence and motivation"
   },
   {
     "file": "/workspace/nvc-app/needs/honor/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Observational study of autonomy support improving patient adherence",
     "url": "https://pubmed.ncbi.nlm.nih.gov/25547522/",
-    "how": "html_anchor",
-    "context": "Observational study of autonomy support improving patient adherence",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Observational study of autonomy support improving patient adherence"
   },
   {
     "file": "/workspace/nvc-app/needs/inclusion/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "review noting loneliness and social exclusion can harm immune function and mental health; inclusive practices improve outcomes",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5729577/",
-    "how": "html_anchor",
-    "context": "review noting loneliness and social exclusion can harm immune function and mental health; inclusive practices improve outcomes",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review noting loneliness and social exclusion can harm immune function and mental health; inclusive practices improve outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/inclusion/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "2023 Scientific Reports study: diversity with inclusion significantly boosts team creativity and collective intelligence",
     "url": "https://www.nature.com/articles/s41598-023-39922-9",
-    "how": "html_anchor",
-    "context": "2023 Scientific Reports study: diversity with inclusion significantly boosts team creativity and collective intelligence",
     "domain": "www.nature.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "2023 Scientific Reports study: diversity with inclusion significantly boosts team creativity and collective intelligence"
   },
   {
     "file": "/workspace/nvc-app/needs/integrity/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "peer-reviewed analysis defining moral integrity as principled consistency linked to prosocial behavior",
     "url": "https://doi.org/10.1521/jscp.2008.27.10.1078",
-    "how": "html_anchor",
-    "context": "peer-reviewed analysis defining moral integrity as principled consistency linked to prosocial behavior",
     "domain": "doi.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "peer-reviewed analysis defining moral integrity as principled consistency linked to prosocial behavior"
   },
   {
     "file": "/workspace/nvc-app/needs/integrity/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "open-access study showing ethical leadership builds follower trust and cohesive, high-performing teams",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8882060/",
-    "how": "html_anchor",
-    "context": "open-access study showing ethical leadership builds follower trust and cohesive, high-performing teams",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "open-access study showing ethical leadership builds follower trust and cohesive, high-performing teams"
   },
   {
     "file": "/workspace/nvc-app/needs/justice/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "classic procedural justice review: fair processes build legitimacy and voluntary cooperation",
     "url": "https://www.annualreviews.org/doi/10.1146/annurev.psych.57.102904.190038",
-    "how": "html_anchor",
-    "context": "classic procedural justice review: fair processes build legitimacy and voluntary cooperation",
     "domain": "www.annualreviews.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "classic procedural justice review: fair processes build legitimacy and voluntary cooperation"
   },
   {
     "file": "/workspace/nvc-app/needs/justice/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study on restorative justice approaches and their effects on community trust and well-being",
     "url": "https://academic.oup.com/psychsocgerontology/article/71/1/229/2605306",
-    "how": "html_anchor",
-    "context": "study on restorative justice approaches and their effects on community trust and well-being",
     "domain": "academic.oup.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on restorative justice approaches and their effects on community trust and well-being"
   },
   {
     "file": "/workspace/nvc-app/needs/love-caring/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Annual Review of Psychology: Gunnar & Quevedo (2007) on sensitive caregiving calibrating stress physiology and emotion regulation",
     "url": "https://pubmed.ncbi.nlm.nih.gov/16903808/",
-    "how": "html_anchor",
-    "context": "Annual Review of Psychology: Gunnar & Quevedo (2007) on sensitive caregiving calibrating stress physiology and emotion regulation",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Annual Review of Psychology: Gunnar & Quevedo (2007) on sensitive caregiving calibrating stress physiology and emotion regulation"
   },
   {
     "file": "/workspace/nvc-app/needs/love-caring/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Gee (2020) review: supportive caregiving shapes corticolimbic development and emotion regulation",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7945765/",
-    "how": "html_anchor",
-    "context": "Gee (2020) review: supportive caregiving shapes corticolimbic development and emotion regulation",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Gee (2020) review: supportive caregiving shapes corticolimbic development and emotion regulation"
   },
   {
     "file": "/workspace/nvc-app/needs/love-caring/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Doom & Gunnar (2013) review: caregiving quality influences HPA axis and vagal regulation",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3869040/",
-    "how": "html_anchor",
-    "context": "Doom & Gunnar (2013) review: caregiving quality influences HPA axis and vagal regulation",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Doom & Gunnar (2013) review: caregiving quality influences HPA axis and vagal regulation"
   },
   {
     "file": "/workspace/nvc-app/needs/love-caring/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Stanford Center on Longevity Sightlines report: strong loving relationships support health, stress reduction, and life satisfaction",
     "url": "https://longevity.stanford.edu/wp-content/uploads/2018/06/Sightlines-SR-Social-Engagement-.pdf",
-    "how": "html_anchor",
-    "context": "Stanford Center on Longevity Sightlines report: strong loving relationships support health, stress reduction, and life satisfaction",
     "domain": "longevity.stanford.edu",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Stanford Center on Longevity Sightlines report: strong loving relationships support health, stress reduction, and life satisfaction"
   },
   {
     "file": "/workspace/nvc-app/needs/mattering/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Self & Identity (2004) validation of the mattering construct linking perceived significance to mental health and engagement",
     "url": "https://www.tandfonline.com/doi/pdf/10.1080/13576500444000119",
-    "how": "html_anchor",
-    "context": "Self & Identity (2004) validation of the mattering construct linking perceived significance to mental health and engagement",
     "domain": "www.tandfonline.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Self & Identity (2004) validation of the mattering construct linking perceived significance to mental health and engagement"
   },
   {
     "file": "/workspace/nvc-app/needs/mattering/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "2024 meta-analysis showing stronger sense of mattering predicts higher well-being and motivation",
     "url": "https://link.springer.com/article/10.1007/s10902-024-00720-3",
-    "how": "html_anchor",
-    "context": "2024 meta-analysis showing stronger sense of mattering predicts higher well-being and motivation",
     "domain": "link.springer.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "2024 meta-analysis showing stronger sense of mattering predicts higher well-being and motivation"
   },
   {
     "file": "/workspace/nvc-app/needs/mutuality/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on mutuality in long-term relationships: reciprocal support and balanced give-and-take linked to relationship satisfaction and lower burnout for caregivers",
     "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12051",
-    "how": "html_anchor",
-    "context": "research on mutuality in long-term relationships: reciprocal support and balanced give-and-take linked to relationship satisfaction and lower burnout for caregivers",
     "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on mutuality in long-term relationships: reciprocal support and balanced give-and-take linked to relationship satisfaction and lower burnout for caregivers"
   },
   {
     "file": "/workspace/nvc-app/needs/mutuality/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "social exchange theory: relationships with balanced exchange of support have greater stability and equity",
     "url": "https://journals.sagepub.com/doi/pdf/10.1177/0149206305279602",
-    "how": "html_anchor",
-    "context": "social exchange theory: relationships with balanced exchange of support have greater stability and equity",
     "domain": "journals.sagepub.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "social exchange theory: relationships with balanced exchange of support have greater stability and equity"
   },
   {
     "file": "/workspace/nvc-app/needs/need-for-all-living-things-to-flourish/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "WHO summary by Wallerstein: empowering communities to care for all members yields better collective outcomes",
     "url": "https://apps.who.int/iris/handle/10665/107481",
-    "how": "html_anchor",
-    "context": "WHO summary by Wallerstein: empowering communities to care for all members yields better collective outcomes",
     "domain": "apps.who.int",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "WHO summary by Wallerstein: empowering communities to care for all members yields better collective outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/need-for-all-living-things-to-flourish/index.html",
     "line": 1180,
-    "label": "Hui et al. (2020) Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers\u2019 well-being",
+    "how": "html_anchor",
+    "label": "Hui et al. (2020) Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers’ well-being",
     "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf",
-    "how": "html_anchor",
-    "context": "Hui et al. (2020) Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers\u2019 well-being",
     "domain": "www.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Hui et al. (2020) Psychological Bulletin meta-analysis: prosocial behavior reliably improves helpers’ well-being"
   },
   {
     "file": "/workspace/nvc-app/needs/need-to-matter/index.html",
     "line": 1180,
-    "label": "study on workplace \u201cmattering\u201d: employees who feel explicitly valued in their role show higher motivation and commitment",
-    "url": "https://psycnet.apa.org/fulltext/2013-06610-006.html",
     "how": "html_anchor",
-    "context": "study on workplace \u201cmattering\u201d: employees who feel explicitly valued in their role show higher motivation and commitment",
+    "label": "study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment",
+    "url": "https://psycnet.apa.org/fulltext/2013-06610-006.html",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on workplace “mattering”: employees who feel explicitly valued in their role show higher motivation and commitment"
   },
   {
     "file": "/workspace/nvc-app/needs/need-to-matter/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study showing that feeling one matters to others increases engagement and self-esteem",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.01016/full",
-    "how": "html_anchor",
-    "context": "study showing that feeling one matters to others increases engagement and self-esteem",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study showing that feeling one matters to others increases engagement and self-esteem"
   },
   {
     "file": "/workspace/nvc-app/needs/non-judgmental-communication/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Rogers & Feller (2018) Psychological Science: I-language phrasing reduces defensiveness compared to you-language",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5961625/",
-    "how": "html_anchor",
-    "context": "Rogers & Feller (2018) Psychological Science: I-language phrasing reduces defensiveness compared to you-language",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Rogers & Feller (2018) Psychological Science: I-language phrasing reduces defensiveness compared to you-language"
   },
   {
     "file": "/workspace/nvc-app/needs/non-judgmental-communication/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Weinstein (2022) Social and Personality Psychology Compass review: high-quality listening lowers defensiveness and motivates openness",
     "url": "https://compass.onlinelibrary.wiley.com/doi/full/10.1111/spc3.12651",
-    "how": "html_anchor",
-    "context": "Weinstein (2022) Social and Personality Psychology Compass review: high-quality listening lowers defensiveness and motivates openness",
     "domain": "compass.onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Weinstein (2022) Social and Personality Psychology Compass review: high-quality listening lowers defensiveness and motivates openness"
   },
   {
     "file": "/workspace/nvc-app/needs/nurturing/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "review describing how nurturing social support buffers stress responses and builds resilience over time",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2921311/",
-    "how": "html_anchor",
-    "context": "review describing how nurturing social support buffers stress responses and builds resilience over time",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "review describing how nurturing social support buffers stress responses and builds resilience over time"
   },
   {
     "file": "/workspace/nvc-app/needs/nurturing/index.html",
     "line": 1180,
-    "label": "community health worker-led community\u2013clinical linkage improved emotional well-being during chronic disease management",
-    "url": "https://www.cdc.gov/pcd/issues/2021/21_0080.htm",
     "how": "html_anchor",
-    "context": "community health worker-led community\u2013clinical linkage improved emotional well-being during chronic disease management",
+    "label": "community health worker-led community–clinical linkage improved emotional well-being during chronic disease management",
+    "url": "https://www.cdc.gov/pcd/issues/2021/21_0080.htm",
     "domain": "www.cdc.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "community health worker-led community–clinical linkage improved emotional well-being during chronic disease management"
   },
   {
     "file": "/workspace/nvc-app/needs/order/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Chandler &amp; Sweller, 1992: integrating structured information lowers extraneous cognitive load and errors",
     "url": "https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.2044-8279.1992.tb01017.x",
-    "how": "html_anchor",
-    "context": "Chandler &amp; Sweller, 1992: integrating structured information lowers extraneous cognitive load and errors",
     "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Chandler &amp; Sweller, 1992: integrating structured information lowers extraneous cognitive load and errors"
   },
   {
     "file": "/workspace/nvc-app/needs/order/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Vohs et al., 2013: tidy environments promote healthier, more self-controlled decisions relative to disorder",
     "url": "https://pubmed.ncbi.nlm.nih.gov/23907542/",
-    "how": "html_anchor",
-    "context": "Vohs et al., 2013: tidy environments promote healthier, more self-controlled decisions relative to disorder",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Vohs et al., 2013: tidy environments promote healthier, more self-controlled decisions relative to disorder"
   },
   {
     "file": "/workspace/nvc-app/needs/participation/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions",
     "url": "https://cdn.who.int/media/docs/default-source/hgf/9789240027794.pdf?download=true",
-    "how": "html_anchor",
-    "context": "study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions",
     "domain": "cdn.who.int",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on participative decision-making in organizations: higher employee participation leads to stronger commitment and better implementation of decisions"
   },
   {
     "file": "/workspace/nvc-app/needs/peace/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9535176/",
-    "how": "html_anchor",
-    "context": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Hyder et al. (2022) Pan American Journal of Public Health: synthesis linking peaceful conditions with better population health, mental health, and development outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/peace/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress",
     "url": "https://psycnet.apa.org/record/2019-50470-001",
-    "how": "html_anchor",
-    "context": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study: chronic conflict or exposure to violence diverts cognitive and economic resources; peace-time leads to improved cognitive function and societal progress"
   },
   {
     "file": "/workspace/nvc-app/needs/peace/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9957523/",
-    "how": "html_anchor",
-    "context": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Carpiniello & Pinna (2023) International Journal of Environmental Research and Public Health: review documenting the mental-health costs of armed conflicts"
   },
   {
     "file": "/workspace/nvc-app/needs/peace/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict",
     "url": "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(22)00088-3/fulltext",
-    "how": "html_anchor",
-    "context": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict",
     "domain": "www.thelancet.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Tay et al. (2022) The Lancet Public Health: analysis of the mental health needs of displaced people exposed to armed conflict"
   },
   {
     "file": "/workspace/nvc-app/needs/peer-respect/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study on workplace teams: mutual professional respect among peers correlates with higher morale and team performance",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5373634/",
-    "how": "html_anchor",
-    "context": "study on workplace teams: mutual professional respect among peers correlates with higher morale and team performance",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study on workplace teams: mutual professional respect among peers correlates with higher morale and team performance"
   },
   {
     "file": "/workspace/nvc-app/needs/peer-respect/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on status management in groups: when members feel respected as equals, cooperation increases and conflicts are fewer",
     "url": "https://psycnet.apa.org/record/2009-02221-005",
-    "how": "html_anchor",
-    "context": "research on status management in groups: when members feel respected as equals, cooperation increases and conflicts are fewer",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on status management in groups: when members feel respected as equals, cooperation increases and conflicts are fewer"
   },
   {
     "file": "/workspace/nvc-app/needs/physical-fitness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "large pooled analysis showing regular leisure-time physical activity lowers disease risk and supports overall health",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4451435/",
-    "how": "html_anchor",
-    "context": "large pooled analysis showing regular leisure-time physical activity lowers disease risk and supports overall health",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "large pooled analysis showing regular leisure-time physical activity lowers disease risk and supports overall health"
   },
   {
     "file": "/workspace/nvc-app/needs/physical-fitness/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study linking physical fitness with better brain health and functional independence in older adults",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1470658/",
-    "how": "html_anchor",
-    "context": "study linking physical fitness with better brain health and functional independence in older adults",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study linking physical fitness with better brain health and functional independence in older adults"
   },
   {
     "file": "/workspace/nvc-app/needs/predictability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study demonstrating that unpredictable contexts heighten stress while predictable routines lower vigilance",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01466/full",
-    "how": "html_anchor",
-    "context": "study demonstrating that unpredictable contexts heighten stress while predictable routines lower vigilance",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study demonstrating that unpredictable contexts heighten stress while predictable routines lower vigilance"
   },
   {
     "file": "/workspace/nvc-app/needs/predictability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "stress physiology review showing predictable schedules calm anxiety and support focus",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5774415/",
-    "how": "html_anchor",
-    "context": "stress physiology review showing predictable schedules calm anxiety and support focus",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "stress physiology review showing predictable schedules calm anxiety and support focus"
   },
   {
     "file": "/workspace/nvc-app/needs/privacy/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study showing solitude fosters self-reflection that supports identity development",
     "url": "https://journals.kmanpub.com/index.php/jarac/article/view/3914",
-    "how": "html_anchor",
-    "context": "study showing solitude fosters self-reflection that supports identity development",
     "domain": "journals.kmanpub.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study showing solitude fosters self-reflection that supports identity development"
   },
   {
     "file": "/workspace/nvc-app/needs/privacy/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research on digital age privacy: control over personal information and the ability to be alone correlate with better stress regulation and autonomy",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5579245/",
-    "how": "html_anchor",
-    "context": "research on digital age privacy: control over personal information and the ability to be alone correlate with better stress regulation and autonomy",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research on digital age privacy: control over personal information and the ability to be alone correlate with better stress regulation and autonomy"
   },
   {
     "file": "/workspace/nvc-app/needs/recognition/index.html",
     "line": 1180,
-    "label": "Gallup analysis: employees who receive regular recognition are more engaged and have lower turnover \u2013 highlights importance of specific praise",
+    "how": "html_anchor",
+    "label": "Gallup analysis: employees who receive regular recognition are more engaged and have lower turnover – highlights importance of specific praise",
     "url": "https://www.gallup.com/workplace/236441/employee-recognition-low-cost-high-impact.aspx",
-    "how": "html_anchor",
-    "context": "Gallup analysis: employees who receive regular recognition are more engaged and have lower turnover \u2013 highlights importance of specific praise",
     "domain": "www.gallup.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "Gallup analysis: employees who receive regular recognition are more engaged and have lower turnover – highlights importance of specific praise"
   },
   {
     "file": "/workspace/nvc-app/needs/recognition/index.html",
     "line": 1180,
-    "label": "study showing that when people\u2019s positive actions are recognized by others, it increases their intrinsic motivation and commitment",
-    "url": "https://psycnet.apa.org/record/2015-35180-001",
     "how": "html_anchor",
-    "context": "study showing that when people\u2019s positive actions are recognized by others, it increases their intrinsic motivation and commitment",
+    "label": "study showing that when people’s positive actions are recognized by others, it increases their intrinsic motivation and commitment",
+    "url": "https://psycnet.apa.org/record/2015-35180-001",
     "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study showing that when people’s positive actions are recognized by others, it increases their intrinsic motivation and commitment"
   },
   {
     "file": "/workspace/nvc-app/needs/relaxation/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study: brief relaxation techniques improved executive function and reduced stress, indicating cognitive benefits",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2019.02146/full",
-    "how": "html_anchor",
-    "context": "study: brief relaxation techniques improved executive function and reduced stress, indicating cognitive benefits",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study: brief relaxation techniques improved executive function and reduced stress, indicating cognitive benefits"
   },
   {
     "file": "/workspace/nvc-app/needs/relaxation/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "clinical review showing relaxation techniques restore cognitive flexibility and reduce stress",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4749015/",
-    "how": "html_anchor",
-    "context": "clinical review showing relaxation techniques restore cognitive flexibility and reduce stress",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "clinical review showing relaxation techniques restore cognitive flexibility and reduce stress"
   },
   {
     "file": "/workspace/nvc-app/needs/reliability/index.html",
     "line": 1180,
-    "label": "the same meta-review cited earlier notes moderate evidence that job reliability/stability improves outcomes and reduces burnout \u2013 indirectly supporting reliability\u2019s importance",
-    "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
     "how": "html_anchor",
-    "context": "the same meta-review cited earlier notes moderate evidence that job reliability/stability improves outcomes and reduces burnout \u2013 indirectly supporting reliability\u2019s importance",
+    "label": "the same meta-review cited earlier notes moderate evidence that job reliability/stability improves outcomes and reduces burnout – indirectly supporting reliability’s importance",
+    "url": "https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-017-4153-7",
     "domain": "bmcpublichealth.biomedcentral.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "the same meta-review cited earlier notes moderate evidence that job reliability/stability improves outcomes and reduces burnout – indirectly supporting reliability’s importance"
   },
   {
     "file": "/workspace/nvc-app/needs/reliability/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "meta-analysis: reliable job conditions and support correlate with lower emotional exhaustion and better organizational outcomes",
     "url": "https://pubmed.ncbi.nlm.nih.gov/25222612/",
-    "how": "html_anchor",
-    "context": "meta-analysis: reliable job conditions and support correlate with lower emotional exhaustion and better organizational outcomes",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "meta-analysis: reliable job conditions and support correlate with lower emotional exhaustion and better organizational outcomes"
   },
   {
     "file": "/workspace/nvc-app/needs/respect/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "field study of civility training indicating respectful treatment reduces conflict and improves collaboration",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2016.00526/full",
-    "how": "html_anchor",
-    "context": "field study of civility training indicating respectful treatment reduces conflict and improves collaboration",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "field study of civility training indicating respectful treatment reduces conflict and improves collaboration"
   },
   {
     "file": "/workspace/nvc-app/needs/respect/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "research: feeling respected in a group is associated with fewer interpersonal conflicts and greater commitment to group goals",
     "url": "https://journals.sagepub.com/doi/abs/10.1177/0146167202239043",
-    "how": "html_anchor",
-    "context": "research: feeling respected in a group is associated with fewer interpersonal conflicts and greater commitment to group goals",
     "domain": "journals.sagepub.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "research: feeling respected in a group is associated with fewer interpersonal conflicts and greater commitment to group goals"
   },
   {
     "file": "/workspace/nvc-app/needs/rest/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "NIH summary: sleep is vital for memory consolidation, metabolic regulation, immune function, etc.",
     "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6281147/",
-    "how": "html_anchor",
-    "context": "NIH summary: sleep is vital for memory consolidation, metabolic regulation, immune function, etc.",
     "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "NIH summary: sleep is vital for memory consolidation, metabolic regulation, immune function, etc."
   },
   {
     "file": "/workspace/nvc-app/needs/rest/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "CDC: adequate sleep improves mood, cognitive performance, and reduces health risks",
     "url": "https://www.cdc.gov/sleep/about-sleep/how-much-sleep.html",
-    "how": "html_anchor",
-    "context": "CDC: adequate sleep improves mood, cognitive performance, and reduces health risks",
     "domain": "www.cdc.gov",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "CDC: adequate sleep improves mood, cognitive performance, and reduces health risks"
   },
   {
     "file": "/workspace/nvc-app/needs/safety/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "organizational research demonstrating that psychological safety enables learning, exploration, and innovation",
     "url": "https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01143/full",
-    "how": "html_anchor",
-    "context": "organizational research demonstrating that psychological safety enables learning, exploration, and innovation",
     "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "organizational research demonstrating that psychological safety enables learning, exploration, and innovation"
   },
   {
     "file": "/workspace/nvc-app/needs/safety/index.html",
     "line": 1180,
+    "how": "html_anchor",
     "label": "study: perception of safety vs. threat alters cognitive processing and willingness to explore novel environments",
     "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7213777/",
-    "how": "html_anchor",
-    "context": "study: perception of safety vs. threat alters cognitive processing and willingness to explore novel environments",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/self-expression/index.html",
-    "line": 1180,
-    "label": "review showing expressive writing and art improve emotional processing and identity coherence",
-    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6367117/",
-    "how": "html_anchor",
-    "context": "review showing expressive writing and art improve emotional processing and identity coherence",
-    "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/self-expression/index.html",
-    "line": 1180,
-    "label": "research documenting how creative expression enhances insight and communication",
-    "url": "https://www.sciencedirect.com/science/article/pii/S2713374524000098",
-    "how": "html_anchor",
-    "context": "research documenting how creative expression enhances insight and communication",
-    "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/serenity/index.html",
-    "line": 1180,
-    "label": "neuroscience study: periods of calm, low stimulus (\u201cserene\u201d states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration",
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7024394/",
-    "how": "html_anchor",
-    "context": "neuroscience study: periods of calm, low stimulus (\u201cserene\u201d states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration",
-    "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/serenity/index.html",
-    "line": 1180,
-    "label": "psych research: being in a peaceful environment improved participants\u2019 complex decision-making and empathy compared to being in a hectic environment",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/19121124/",
-    "how": "html_anchor",
-    "context": "psych research: being in a peaceful environment improved participants\u2019 complex decision-making and empathy compared to being in a hectic environment",
-    "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/space/index.html",
-    "line": 1180,
-    "label": "study on open vs. crowded environments: having personal space correlates with perceived autonomy and lower stress",
-    "url": "https://www.sciencedirect.com/science/article/pii/S2090447923000059",
-    "how": "html_anchor",
-    "context": "study on open vs. crowded environments: having personal space correlates with perceived autonomy and lower stress",
-    "domain": "www.sciencedirect.com",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/space/index.html",
-    "line": 1180,
-    "label": "research on cognitive load: giving people \u201cmental space\u201d (time with no tasks) improved clarity of thinking and decision quality",
-    "url": "https://psycnet.apa.org/record/2018-54106-001",
-    "how": "html_anchor",
-    "context": "research on cognitive load: giving people \u201cmental space\u201d (time with no tasks) improved clarity of thinking and decision quality",
-    "domain": "psycnet.apa.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/support/index.html",
-    "line": 1180,
-    "label": "CDC 2024 report: loneliness and isolation elevate health risks",
-    "url": "https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm",
-    "how": "html_anchor",
-    "context": "CDC 2024 report: loneliness and isolation elevate health risks",
-    "domain": "www.cdc.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/support/index.html",
-    "line": 1180,
-    "label": "2024 Frontiers in Psychology review: social support buffers stress and illness",
-    "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1330720/full",
-    "how": "html_anchor",
-    "context": "2024 Frontiers in Psychology review: social support buffers stress and illness",
-    "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/to-be-heard/index.html",
-    "line": 1180,
-    "label": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later",
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504783/",
-    "how": "html_anchor",
-    "context": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later",
-    "domain": "pmc.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/to-be-heard/index.html",
-    "line": 1180,
-    "label": "HBR article summarizing research: truly hearing employees or partners increases trust, conflict resolution, and cooperation",
-    "url": "https://hbr.org/2016/07/what-great-listeners-actually-do",
-    "how": "html_anchor",
-    "context": "HBR article summarizing research: truly hearing employees or partners increases trust, conflict resolution, and cooperation",
-    "domain": "hbr.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/to-be-seen/index.html",
-    "line": 1180,
-    "label": "research showing that high-quality leader feedback increases teleworkers\u2019 sense of belongingness",
-    "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.806443/full",
-    "how": "html_anchor",
-    "context": "research showing that high-quality leader feedback increases teleworkers\u2019 sense of belongingness",
-    "domain": "www.frontiersin.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/to-be-seen/index.html",
-    "line": 1180,
-    "label": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/19785483/",
-    "how": "html_anchor",
-    "context": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress",
-    "domain": "pubmed.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/trust/index.html",
-    "line": 1180,
-    "label": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance",
-    "url": "https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806",
-    "how": "html_anchor",
-    "context": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance",
-    "domain": "pubsonline.informs.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/trust/index.html",
-    "line": 1180,
-    "label": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking",
-    "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf",
-    "how": "html_anchor",
-    "context": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking",
-    "domain": "www.apa.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/trust/index.html",
-    "line": 1180,
-    "label": "APA press release summarizing new evidence that mutual trust boosts subjective well-being",
-    "url": "https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being",
-    "how": "html_anchor",
-    "context": "APA press release summarizing new evidence that mutual trust boosts subjective well-being",
-    "domain": "www.apa.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/trust/index.html",
-    "line": 1180,
-    "label": "Psychological Bulletin meta-analysis of 991 effects showing bidirectional links between trust and subjective well-being",
-    "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf",
-    "how": "html_anchor",
-    "context": "Psychological Bulletin meta-analysis of 991 effects showing bidirectional links between trust and subjective well-being",
-    "domain": "www.apa.org",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/understanding/index.html",
-    "line": 1180,
-    "label": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other\u2019s roles, errors decrease and performance improves",
-    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/",
-    "how": "html_anchor",
-    "context": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other\u2019s roles, errors decrease and performance improves",
-    "domain": "www.ncbi.nlm.nih.gov",
-    "label_domain_hint": ""
-  },
-  {
-    "file": "/workspace/nvc-app/needs/understanding/index.html",
-    "line": 1180,
-    "label": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction",
-    "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614",
-    "how": "html_anchor",
-    "context": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction",
-    "domain": "onlinelibrary.wiley.com",
-    "label_domain_hint": ""
+    "label_domain_hint": "",
+    "context": "study: perception of safety vs. threat alters cognitive processing and willingness to explore novel environments"
   },
   {
     "file": "/workspace/nvc-app/needs/security/index.html",
-    "line": 1186,
+    "line": 1180,
     "how": "html_anchor",
     "label": "study on financial and relationship security: having secure baseline resources correlates with better long-term planning and higher creativity",
     "url": "https://www.jstor.org/stable/41428503",
@@ -1531,92 +1421,232 @@
   },
   {
     "file": "/workspace/nvc-app/needs/security/index.html",
-    "line": 1187,
+    "line": 1180,
     "how": "html_anchor",
-    "label": "Field study: teams with higher psychological safety (freedom from interpersonal threat) engage more in speaking up and learning behaviors\u2014conditions for growth.",
-    "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf",
-    "domain": "web.mit.edu",
-    "label_domain_hint": "",
-    "context": "Field study: teams with higher psychological safety (freedom from interpersonal threat) engage more in speaking up and learning behaviors\u2014conditions for growth."
-  },
-  {
-    "file": "/workspace/nvc-app/needs/security/index.html",
-    "line": 1188,
-    "how": "html_anchor",
-    "label": "Across two experiments, implicit/explicit attachment security primes produced more creative solutions\u2014consistent with security freeing cognitive/affective resources for growth.",
-    "url": "https://www.tandfonline.com/doi/full/10.1080/02699931.2010.540110",
-    "domain": "www.tandfonline.com",
-    "label_domain_hint": "",
-    "context": "Across two experiments, implicit/explicit attachment security primes produced more creative solutions\u2014consistent with security freeing cognitive/affective resources for growth."
-  },
-  {
-    "file": "/workspace/nvc-app/needs/security/index.html",
-    "line": 1189,
-    "how": "html_anchor",
-    "label": "Meta-analytic synthesis shows psychological safety positively relates to learning behaviors and performance, beyond related constructs\u2014supporting the idea that safety unlocks growth outcomes.",
-    "url": "https://digitalcommons.odu.edu/cgi/viewcontent.cgi?article=1018&context=management_fac_pubs",
-    "domain": "digitalcommons.odu.edu",
-    "label_domain_hint": "",
-    "context": "Meta-analytic synthesis shows psychological safety positively relates to learning behaviors and performance, beyond related constructs\u2014supporting the idea that safety unlocks growth outcomes."
-  },
-  {
-    "file": "/workspace/nvc-app/needs/security/index.html",
-    "line": 1190,
-    "how": "html_anchor",
-    "label": "Worldwide data show that fulfilling basic needs (including safety) relates to well-being while allowing pursuit of higher aims\u2014nuancing but broadly consonant with Maslow\u2019s growth idea.",
+    "label": "research: when basic security needs are met, individuals are more likely to pursue self-actualization goals like creativity and personal growth – consistent with Maslow’s hierarchy",
     "url": "https://www.apa.org/pubs/journals/releases/psp-101-2-354.pdf",
     "domain": "www.apa.org",
     "label_domain_hint": "",
-    "context": "Worldwide data show that fulfilling basic needs (including safety) relates to well-being while allowing pursuit of higher aims\u2014nuancing but broadly consonant with Maslow\u2019s growth idea."
+    "context": "research: when basic security needs are met, individuals are more likely to pursue self-actualization goals like creativity and personal growth – consistent with Maslow’s hierarchy"
   },
   {
-    "file": "/workspace/nvc-app/needs/appreciation/index.html",
-    "line": 1181,
+    "file": "/workspace/nvc-app/needs/self-expression/index.html",
+    "line": 1180,
     "how": "html_anchor",
+    "label": "review showing expressive writing and art improve emotional processing and identity coherence",
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6367117/",
+    "domain": "www.ncbi.nlm.nih.gov",
     "label_domain_hint": "",
-    "label": "Cross-cultural: gratitude relates to prosocial behavior and relationship benefits",
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7265817/",
+    "context": "review showing expressive writing and art improve emotional processing and identity coherence"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/self-expression/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "research documenting how creative expression enhances insight and communication",
+    "url": "https://www.sciencedirect.com/science/article/pii/S2713374524000098",
+    "domain": "www.sciencedirect.com",
+    "label_domain_hint": "",
+    "context": "research documenting how creative expression enhances insight and communication"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/serenity/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7024394/",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "context": "Cross-cultural: gratitude relates to prosocial behavior and relationship benefits"
+    "label_domain_hint": "",
+    "context": "neuroscience study: periods of calm, low stimulus (“serene” states) showed enhanced activity in brain regions associated with memory consolidation and perspective integration"
   },
   {
-    "file": "/workspace/nvc-app/needs/appreciation/index.html",
-    "line": 1181,
+    "file": "/workspace/nvc-app/needs/serenity/index.html",
+    "line": 1180,
     "how": "html_anchor",
-    "label_domain_hint": "",
-    "label": "Meta-analysis: gratitude \u2192 prosocial behavior",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/28406659/",
+    "label": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19121124/",
     "domain": "pubmed.ncbi.nlm.nih.gov",
-    "context": "Meta-analysis: gratitude \u2192 prosocial behavior"
+    "label_domain_hint": "",
+    "context": "psych research: being in a peaceful environment improved participants’ complex decision-making and empathy compared to being in a hectic environment"
   },
   {
-    "file": "/workspace/nvc-app/needs/appreciation/index.html",
-    "line": 1181,
+    "file": "/workspace/nvc-app/needs/space/index.html",
+    "line": 1180,
     "how": "html_anchor",
+    "label": "study on open vs. crowded environments: having personal space correlates with perceived autonomy and lower stress",
+    "url": "https://www.sciencedirect.com/science/article/pii/S2090447923000059",
+    "domain": "www.sciencedirect.com",
     "label_domain_hint": "",
-    "label": "Theory: gratitude strengthens relationships (Find\u2013Remind\u2013Bind)",
-    "url": "https://compass.onlinelibrary.wiley.com/doi/10.1111/j.1751-9004.2012.00439.x",
-    "domain": "compass.onlinelibrary.wiley.com",
-    "context": "Theory: gratitude strengthens relationships (Find\u2013Remind\u2013Bind)"
+    "context": "study on open vs. crowded environments: having personal space correlates with perceived autonomy and lower stress"
   },
   {
-    "file": "/workspace/nvc-app/needs/appreciation/index.html",
-    "line": 1181,
+    "file": "/workspace/nvc-app/needs/space/index.html",
+    "line": 1180,
     "how": "html_anchor",
+    "label": "research on cognitive load: giving people “mental space” (time with no tasks) improved clarity of thinking and decision quality",
+    "url": "https://psycnet.apa.org/record/2018-54106-001",
+    "domain": "psycnet.apa.org",
     "label_domain_hint": "",
-    "label": "Experiment: gratitude increases costly helping",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/16623689/",
-    "domain": "pubmed.ncbi.nlm.nih.gov",
-    "context": "Experiment: gratitude increases costly helping"
+    "context": "research on cognitive load: giving people “mental space” (time with no tasks) improved clarity of thinking and decision quality"
   },
   {
-    "file": "/workspace/nvc-app/needs/appreciation/index.html",
-    "line": 1181,
+    "file": "/workspace/nvc-app/needs/support/index.html",
+    "line": 1180,
     "how": "html_anchor",
+    "label": "CDC 2024 report: loneliness and isolation elevate health risks",
+    "url": "https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm",
+    "domain": "www.cdc.gov",
     "label_domain_hint": "",
-    "label": "cross-cultural research showing gratitude practices strengthen trust and social connection",
-    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8600914/",
+    "context": "CDC 2024 report: loneliness and isolation elevate health risks"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/support/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "2024 Frontiers in Psychology review: social support buffers stress and illness",
+    "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2024.1330720/full",
+    "domain": "www.frontiersin.org",
+    "label_domain_hint": "",
+    "context": "2024 Frontiers in Psychology review: social support buffers stress and illness"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/to-be-heard/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504783/",
     "domain": "pmc.ncbi.nlm.nih.gov",
-    "context": "cross-cultural research showing gratitude practices strengthen trust and social connection"
+    "label_domain_hint": "",
+    "context": "longitudinal study: perceiving a partner as responsive predicted healthier diurnal cortisol (lower stress) years later"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/to-be-heard/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "HBR article summarizing research: truly hearing employees or partners increases trust, conflict resolution, and cooperation",
+    "url": "https://hbr.org/2016/07/what-great-listeners-actually-do",
+    "domain": "hbr.org",
+    "label_domain_hint": "",
+    "context": "HBR article summarizing research: truly hearing employees or partners increases trust, conflict resolution, and cooperation"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/to-be-seen/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "research showing that high-quality leader feedback increases teleworkers’ sense of belongingness",
+    "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.806443/full",
+    "domain": "www.frontiersin.org",
+    "label_domain_hint": "",
+    "context": "research showing that high-quality leader feedback increases teleworkers’ sense of belongingness"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/to-be-seen/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19785483/",
+    "domain": "pubmed.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "study on concealable stigmas: anticipated stigma around hidden identities predicted greater psychological distress"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/trust/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance",
+    "url": "https://pubsonline.informs.org/doi/10.1287/orsc.14.1.57.12806",
+    "domain": "pubsonline.informs.org",
+    "label_domain_hint": "",
+    "context": "study: high trust in business or team relationships significantly lowers the costs of monitoring and coordination, improving performance"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/trust/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking",
+    "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000298.pdf",
+    "domain": "www.apa.org",
+    "label_domain_hint": "",
+    "context": "Frontiers in Psychology: trusting relationships buffer stress responses and support collaborative risk-taking"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/trust/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "APA press release summarizing new evidence that mutual trust boosts subjective well-being",
+    "url": "https://www.apa.org/news/press/releases/2025/06/trust-subjective-well-being",
+    "domain": "www.apa.org",
+    "label_domain_hint": "",
+    "context": "APA press release summarizing new evidence that mutual trust boosts subjective well-being"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/trust/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "Psychological Bulletin meta-analysis of 991 effects showing bidirectional links between trust and subjective well-being",
+    "url": "https://www.apa.org/pubs/journals/releases/bul-bul0000480.pdf",
+    "domain": "www.apa.org",
+    "label_domain_hint": "",
+    "context": "Psychological Bulletin meta-analysis of 991 effects showing bidirectional links between trust and subjective well-being"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/understanding/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves",
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5789218/",
+    "domain": "www.ncbi.nlm.nih.gov",
+    "label_domain_hint": "",
+    "context": "study on shared mental models in teams: when team members develop a common understanding of tasks and each other’s roles, errors decrease and performance improves"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/understanding/index.html",
+    "line": 1180,
+    "how": "html_anchor",
+    "label": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction",
+    "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.2614",
+    "domain": "onlinelibrary.wiley.com",
+    "label_domain_hint": "",
+    "context": "research: fostering mutual understanding through open dialogue reduced conflict and improved relationship satisfaction"
+  },
+  {
+    "file": "/workspace/nvc-app/needs/security/index.html",
+    "line": 758,
+    "how": "html_anchor",
+    "label": "Built-environment change reduces crime and increases perceived safety (systematic review)",
+    "url": "https://onlinelibrary.wiley.com/doi/abs/10.4073/csr.2008.13",
+    "domain": "onlinelibrary.wiley.com",
+    "label_domain_hint": "security",
+    "context": "Campbell systematic review: improved street lighting associated with significant crime reduction; mechanism consistent with informal social control and perceived safety."
+  },
+  {
+    "file": "/workspace/nvc-app/needs/security/index.html",
+    "line": 752,
+    "how": "html_anchor",
+    "label": "Environmental changes reduce perceived threat (systematic review)",
+    "url": "https://systematicreviewsjournal.biomedcentral.com/articles/10.1186/2046-4053-2-30",
+    "domain": "systematicreviewsjournal.biomedcentral.com",
+    "label_domain_hint": "security",
+    "context": "Built-environment interventions reduce fear of crime; environmental control fosters perceived safety."
+  },
+  {
+    "file": "/workspace/nvc-app/needs/security/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Feeling safe enables learning and exploration (psychological safety)",
+    "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Performance/Edmondson%20Psychological%20safety.pdf",
+    "domain": "web.mit.edu",
+    "label_domain_hint": "security",
+    "context": "Field study: teams with higher psychological safety (freedom from interpersonal threat) engage more in speaking up and learning behaviors."
+  },
+  {
+    "file": "/workspace/nvc-app/needs/security/index.html",
+    "line": 750,
+    "how": "html_anchor",
+    "label": "Activating felt security increases creative problem solving (experiments)",
+    "url": "https://www.tandfonline.com/doi/full/10.1080/02699931.2010.540110",
+    "domain": "www.tandfonline.com",
+    "label_domain_hint": "security",
+    "context": "Across experiments, attachment-security primes increased creative solutions—security frees resources for growth."
   }
 ]
