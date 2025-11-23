@@ -3065,6 +3065,19 @@ main[data-need-slug] .page-title::before {
   letter-spacing: normal;
 }
 
+.strategy-form__hint {
+  display: none;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+@media (hover: hover) {
+  .strategy-form__hint {
+    display: block;
+  }
+}
+
 .strategy-form input[type='text'],
 .strategy-form select,
 .strategy-form textarea {
