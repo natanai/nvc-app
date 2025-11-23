@@ -1604,6 +1604,7 @@ function renderNeed(item, strategyLookup) {
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
           <div class="strategy-deck-header">
+            <p class="strategy-deck__hint" aria-live="polite">Swipe through the cards and scroll inside each card to read everything.</p>
             <button type="button"
                     class="strategy-deck__shuffle"
                     data-strategy-shuffle>

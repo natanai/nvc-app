@@ -3047,8 +3047,17 @@ main[data-need-slug] .page-title::before {
 /* Header row for shuffle button */
 .strategy-deck-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.65rem;
   margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.strategy-deck__hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--ink-soft) 80%, #ffffff 20%);
 }
 
 .strategy-deck__shuffle {
@@ -3101,7 +3110,8 @@ main[data-need-slug] .page-title::before {
   scroll-snap-align: center;
   display: flex;
   flex-direction: column;
-  max-height: 18rem;
+  min-height: 20rem;
+  max-height: 22rem;
   padding: 1rem 1.1rem;
   overflow: hidden;
 }

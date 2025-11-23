@@ -1190,71 +1190,96 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-deck-header">
+            <p class="strategy-deck__hint" aria-live="polite">Swipe through the cards and scroll inside each card to read everything.</p>
+            <button type="button"
+                    class="strategy-deck__shuffle"
+                    data-strategy-shuffle>
+              Shuffle cards
+            </button>
+          </div>
+
+          <div class="strategy-deck" data-strategy-deck tabindex="0">
+            <div class="strategy-list" data-strategy-list>
+              
                   <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Listen to music</h3>
-                    <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Listen to music</h3>
+                      <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="write" data-strategy-tags="self-expression|to-be-seen|to-be-heard|need-to-matter|autonomy|authenticity|integrity|acceptance|honesty|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Write</h3>
-                    <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Write</h3>
+                      <p class="strategy-card__description">I like to get some kind of words on a page. Even if it&#39;s garbage I find the process can help.</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="view-previous-things-you-ve-written-or-made" data-strategy-tags="to-be-seen|to-be-heard|understanding|empathy|appreciation|honesty" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">View previous things you&#39;ve written or made</h3>
-                    <p class="strategy-card__description">To no one&#39;s surprise I often understand myself better than anyone else. Sometimes in a crisis I&#39;ll read something I wrote a month ago and think &quot;yes that&#39;s exactly it!&quot; - like past me is giving empathy to future me.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">View previous things you&#39;ve written or made</h3>
+                      <p class="strategy-card__description">To no one&#39;s surprise I often understand myself better than anyone else. Sometimes in a crisis I&#39;ll read something I wrote a month ago and think &quot;yes that&#39;s exactly it!&quot; - like past me is giving empathy to future me.</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="write-three-sentences" data-strategy-tags="honesty|clarity">
-                    <h3 class="strategy-card__title">Write three sentences</h3>
-                    <p class="strategy-card__description">Write three unedited sentences about “right now.”</p>
-                    
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Write three sentences</h3>
+                      <p class="strategy-card__description">Write three unedited sentences about “right now.”</p>
+                      
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="observation-only" data-strategy-tags="honesty|clarity">
-                    <h3 class="strategy-card__title">Observation only</h3>
-                    <p class="strategy-card__description">Write one sentence describing what happened with zero evaluations.</p>
-                    
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Observation only</h3>
+                      <p class="strategy-card__description">Write one sentence describing what happened with zero evaluations.</p>
+                      
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="self-check-scale" data-strategy-tags="clarity|honesty">
-                    <h3 class="strategy-card__title">Self-check scale</h3>
-                    <p class="strategy-card__description">Draw a 0–10 line for energy; mark where you are now.</p>
-                    
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Self-check scale</h3>
+                      <p class="strategy-card__description">Draw a 0–10 line for energy; mark where you are now.</p>
+                      
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="name-a-want-a-don-t" data-strategy-tags="honesty|clarity|autonomy">
-                    <h3 class="strategy-card__title">Name a want &amp; a don’t</h3>
-                    <p class="strategy-card__description">Complete: “I want __ and I don’t want __ because I value __.”</p>
-                    
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Name a want &amp; a don’t</h3>
+                      <p class="strategy-card__description">Complete: “I want __ and I don’t want __ because I value __.”</p>
+                      
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>

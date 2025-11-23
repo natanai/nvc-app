@@ -1190,35 +1190,52 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
+          <div class="strategy-deck-header">
+            <p class="strategy-deck__hint" aria-live="polite">Swipe through the cards and scroll inside each card to read everything.</p>
+            <button type="button"
+                    class="strategy-deck__shuffle"
+                    data-strategy-shuffle>
+              Shuffle cards
+            </button>
+          </div>
+
+          <div class="strategy-deck" data-strategy-deck tabindex="0">
+            <div class="strategy-list" data-strategy-list>
+              
                   <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Play a video game</h3>
-                    <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Play a video game</h3>
+                      <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="no-man-s-sky" data-strategy-tags="relaxation|rest|self-expression|mattering" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">No Man&#39;s Sky</h3>
-                    <p class="strategy-card__description">For me this game is calming. Just go harvest resources and float through space. I like to name things to as a way to feel like I&#39;m making a difference or matter because there is a tiny chance someone someday will land on the planet and see all the names.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">No Man&#39;s Sky</h3>
+                      <p class="strategy-card__description">For me this game is calming. Just go harvest resources and float through space. I like to name things to as a way to feel like I&#39;m making a difference or matter because there is a tiny chance someone someday will land on the planet and see all the names.</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
                   <article class="strategy-card" data-strategy-slug="sing" data-strategy-tags="to-be-heard|self-expression|autonomy|to-be-seen|empowerment|mattering|need-to-matter|control" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Sing</h3>
-                    <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
+                    <div class="strategy-card__body">
+                      <h3 class="strategy-card__title">Sing</h3>
+                      <p class="strategy-card__description">Find a private place to sing as loud as you’re comfortable. Sing with your favorite song in the car or if you play an instrument you could play a song you know. Search for a hymn online and sing that.</p>
+                      <p class="strategy-card__meta">Nat • Missouri</p>
+                    </div>
                     <div class="strategy-card__actions strategy-card__actions--stacked">
                       <button type="button" class="strategy-card__save">+ Save to inventory</button>
                     </div>
                   </article>
                 
+            </div>
           </div>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
