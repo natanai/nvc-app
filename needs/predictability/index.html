@@ -1190,45 +1190,89 @@ button.site-nav__magnet {
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-list">
-            
-                  <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
-                    <h3 class="strategy-card__title">Schedule your day</h3>
-                    <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
-                    <p class="strategy-card__meta">Nat • Missouri</p>
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="calendar-one-thing" data-strategy-tags="predictability|order|clarity">
-                    <h3 class="strategy-card__title">Calendar one thing</h3>
-                    <p class="strategy-card__description">Add just one gentle, specific item to your calendar.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
-                    <h3 class="strategy-card__title">Exit Count</h3>
-                    <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
-                  <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
-                    <h3 class="strategy-card__title">Corner Count</h3>
-                    <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
-                    
-                    <div class="strategy-card__actions strategy-card__actions--stacked">
-                      <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                    </div>
-                  </article>
-                
+          <div class="strategy-deck-header">
+            <p class="strategy-deck-hint">
+              Swipe left or right (or use the arrows) to see more strategies.
+              Cards also scroll vertically if there’s more text.
+            </p>
+            <button
+              type="button"
+              class="strategy-deck__shuffle"
+              data-strategy-shuffle
+            >
+              Shuffle cards
+            </button>
           </div>
+
+          <div class="strategy-deck" data-strategy-deck>
+            <div class="strategy-deck__stack" data-strategy-stack>
+              
+                    <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Schedule your day</h3>
+                        <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
+                        <p class="strategy-card__meta">Nat • Missouri</p>
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="calendar-one-thing" data-strategy-tags="predictability|order|clarity">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Calendar one thing</h3>
+                        <p class="strategy-card__description">Add just one gentle, specific item to your calendar.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Exit Count</h3>
+                        <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+                    <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
+                      <div class="strategy-card__body">
+                        <h3 class="strategy-card__title">Corner Count</h3>
+                        <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
+                        
+                      </div>
+                      <div class="strategy-card__actions strategy-card__actions--stacked">
+                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                      </div>
+                    </article>
+                  
+            </div>
+
+            <div class="strategy-deck__controls">
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--prev"
+                data-strategy-prev
+                aria-label="Previous strategy"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                class="strategy-deck__nav strategy-deck__nav--next"
+                data-strategy-next
+                aria-label="Next strategy"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
