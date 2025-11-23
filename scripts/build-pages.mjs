@@ -448,6 +448,7 @@ const DEFAULT_DESCRIPTION =
   'Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls.';
 
 const SITE_ORIGIN = 'https://allneeds.app';
+const SOCIAL_ASSET_VERSION = 'v=2';
 const FAVICON_SVG = 'icons/favicon-color.svg';
 const FAVICON_PNG_32 = 'icons/favicon-color-32x32.png';
 const FAVICON_PNG_16 = 'icons/favicon-color-16x16.png';
@@ -455,8 +456,10 @@ const TOUCH_ICON_SRC = 'icons/apple-touch-icon.png';
 const MASK_ICON_SRC = 'icons/safari-pinned-tab.svg';
 const TILE_IMAGE_SRC = 'icons/mstile-150x150.png';
 const BROWSER_CONFIG_SRC = 'browserconfig.xml';
-const SOCIAL_CARD_SRC = 'social/og-image-1200x630.png';
-const TWITTER_CARD_SRC = 'social/twitter-card-1200x630.png';
+const SOCIAL_CARD_PATH = 'social/og-image-1200x630.png';
+const TWITTER_CARD_PATH = 'social/twitter-card-1200x630.png';
+const SOCIAL_CARD_SRC = `${SOCIAL_CARD_PATH}?${SOCIAL_ASSET_VERSION}`;
+const TWITTER_CARD_SRC = `${TWITTER_CARD_PATH}?${SOCIAL_ASSET_VERSION}`;
 const SOCIAL_CARD_WIDTH = 1200;
 const SOCIAL_CARD_HEIGHT = 630;
 const TILE_COLOR = '#ffffff';
@@ -496,7 +499,10 @@ function guessMimeType(path = '') {
   if (!path) {
     return 'image/svg+xml';
   }
-  const normalized = path.toLowerCase();
+  const normalized = path
+    .toLowerCase()
+    .split('#', 1)[0]
+    .split('?', 1)[0];
   if (normalized.endsWith('.svg')) {
     return 'image/svg+xml';
   }
