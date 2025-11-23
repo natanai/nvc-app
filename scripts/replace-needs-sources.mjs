@@ -108,6 +108,70 @@ function stringifyCsv(rows) {
     .join("\n");
 }
 
+function objectsToRows(header, records) {
+  const rows = [header];
+  for (const record of records) {
+    rows.push(header.map((key) => record[key] ?? ""));
+  }
+  return rows;
+}
+
+function formatFindingLabel(label = "") {
+  const trimmed = label.replace(/^(finding:\s*)+/i, "").trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  const replacements = [
+    { pattern: /^study on (how\s+)?/i, replacement: "found that " },
+    { pattern: /^study showing\s+/i, replacement: "found " },
+    { pattern: /^study linking\s+/i, replacement: "found " },
+    { pattern: /^longitudinal study\s+(?:found\s+)?/i, replacement: "longitudinal study found " },
+    { pattern: /^research on\s+/i, replacement: "research found that " },
+    { pattern: /^research showing\s+/i, replacement: "research found " },
+    { pattern: /^cross-cultural research\s+/i, replacement: "cross-cultural research found " },
+    { pattern: /^review detailing\s+/i, replacement: "review found that " },
+    { pattern: /^review on\s+/i, replacement: "review found that " },
+    { pattern: /^review of\s+/i, replacement: "review found that " },
+    { pattern: /^meta-analysis showing\s+/i, replacement: "meta-analysis found " },
+    { pattern: /^summary of\s+/i, replacement: "summary found that " },
+    { pattern: /^discussion on\s+/i, replacement: "discussion noted that " },
+    { pattern: /^meta-analysis\s+/i, replacement: "meta-analysis found " },
+    { pattern: /^analysis\s+/i, replacement: "analysis found " },
+    { pattern: /^(?:apa\s+)?press release on\s+/i, replacement: "press release reported that " },
+    { pattern: /^hbr article on\s+/i, replacement: "article reported that " },
+    { pattern: /^article on\s+/i, replacement: "article reported that " },
+    { pattern: /^self-determination theory research:?\s*/i, replacement: "self-determination theory research found that " },
+    { pattern: /^Self-Determination Theory review:?\s*/i, replacement: "review concluded that " },
+  ];
+
+  let updated = trimmed.replace(/\u00a0/g, " ");
+  for (const { pattern, replacement } of replacements) {
+    if (pattern.test(updated)) {
+      updated = updated.replace(pattern, replacement);
+      break;
+    }
+  }
+
+    updated = updated
+      .replace(/\bfound showing\b/i, "found that")
+      .replace(/found(?:\s+found)+/gi, "found")
+      .replace(/(found that\s+){2,}/gi, "found that ")
+      .replace(/\breported that how\b/i, "reported that")
+    .replace(/\bfound that that\b/i, "found that")
+    .replace(/^longitudinal study:\s*/i, "longitudinal study found that ")
+    .replace(/^meta-analysis:\s*/i, "meta-analysis found that ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const normalized = updated[0].toUpperCase() + updated.slice(1);
+  if (/\b(found|shows?|showed|reported|demonstrates?|indicates)\b/i.test(normalized)) {
+    return normalized;
+  }
+
+  return `Finding: ${normalized}`;
+}
+
 function escapeHtml(str) {
   return String(str ?? "")
     .replace(/&/g, "&amp;")
@@ -176,6 +240,30 @@ function buildListItem({ label, url }) {
   return `<li class="need-evidence__item"><a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${safeLabel}</a><span class="need-evidence__source-url"> (${displayUrl})</span></li>`;
 }
 
+function buildNeedSourcesHtml(entries) {
+  const inlineCitations = entries.map((source, index) => {
+    const number = index + 1;
+    const safeUrl = escapeAttr(source.url);
+    const safeTitle = source.label ? ` title="${escapeHtml(source.label)}"` : "";
+    return `<span class="need-evidence__citation-ref">[<a class="need-evidence__link" href="${safeUrl}" target="_blank" rel="noreferrer noopener"${safeTitle}>${number}</a>]</span>`;
+  });
+
+  const citationDetails = entries.map((source, index) => {
+    const number = index + 1;
+    const safeDescription = escapeHtml(source.label || source.url || `Source ${number}`);
+    const safeUrl = escapeAttr(source.url);
+    return `<li class="need-evidence__citation-item">`
+      + `<span class="need-evidence__citation-number">${number}</span>`
+      + `<div class="need-evidence__citation-body">`
+      + `<span class="need-evidence__citation-description">${safeDescription}</span>`
+      + `<a class="need-evidence__citation-url" href="${safeUrl}" target="_blank" rel="noreferrer noopener">${escapeHtml(source.url)}</a>`
+      + `</div>`
+      + `</li>`;
+  });
+
+  return `<div class="need-evidence__sources"><h3 class="need-evidence__subheading">Supporting sources</h3><div class="need-evidence__citation-row" aria-label="Supporting sources">${inlineCitations.join('')}</div><details class="need-evidence__details need-evidence__citations"><summary class="need-evidence__details-toggle need-evidence__citations-toggle">Citations</summary><ol class="need-evidence__citation-list">${citationDetails.join('')}</ol></details></div>`;
+}
+
 async function updateNeedsPage(slug, entries) {
   const filePath = path.join(NEEDS_DIR, slug, "index.html");
   let html;
@@ -186,23 +274,14 @@ async function updateNeedsPage(slug, entries) {
     return false;
   }
 
-  const listPattern = /(<ol class="need-evidence__list">)([\s\S]*?)(<\/ol>)/;
-  const match = listPattern.exec(html);
-  if (!match) {
-    console.warn(`Skipping ${slug}: supporting sources list not found in ${filePath}`);
+  const sourcesPattern = /<div class="need-evidence__sources">[\s\S]*?(?=<div class="strategy-quick-actions">)/;
+  if (!sourcesPattern.test(html)) {
+    console.warn(`Skipping ${slug}: supporting sources block not found in ${filePath}`);
     return false;
   }
 
-  const [, start, listContent, end] = match;
-  const existingItems = listContent.match(/<li\b[\s\S]*?<\/li>/g) || [];
-  if (existingItems.length && existingItems.length !== entries.length) {
-    console.warn(
-      `Warning: ${slug} has ${existingItems.length} existing sources but ${entries.length} entries in citations.csv`
-    );
-  }
-
-  const updatedList = entries.map(buildListItem).join("");
-  const updatedHtml = html.slice(0, match.index + start.length) + updatedList + end + html.slice(match.index + match[0].length);
+  const updatedSources = buildNeedSourcesHtml(entries);
+  const updatedHtml = html.replace(sourcesPattern, updatedSources);
 
   if (updatedHtml !== html) {
     await fs.writeFile(filePath, updatedHtml, "utf8");
@@ -276,6 +355,12 @@ async function writeCitationsJson(records) {
   await fs.writeFile(CITATIONS_JSON_PATH, JSON.stringify(normalized, null, 2) + "\n", "utf8");
 }
 
+async function writeCitationsCsv(header, records) {
+  const rows = objectsToRows(header, records);
+  const csvText = stringifyCsv(rows);
+  await fs.writeFile(CITATIONS_CSV_PATH, csvText + (csvText.endsWith("\n") ? "" : "\n"), "utf8");
+}
+
 async function main() {
   let csvText;
   try {
@@ -286,12 +371,17 @@ async function main() {
     return;
   }
 
-  const { records } = rowsToObjects(parseCsv(csvText));
+  const { header, records } = rowsToObjects(parseCsv(csvText));
   if (!records.length) {
     console.warn("No citation records found in citations.csv");
   }
 
-  const slugMap = buildNeedSourcesMap(records);
+  const findingRecords = records.map((record) => ({
+    ...record,
+    label: formatFindingLabel(record.label),
+  }));
+
+  const slugMap = buildNeedSourcesMap(findingRecords);
 
   let htmlUpdated = 0;
   for (const [slug, entries] of slugMap.entries()) {
@@ -302,7 +392,8 @@ async function main() {
   }
 
   const spreadsheetUpdated = await updateNeedsSpreadsheet(slugMap);
-  await writeCitationsJson(records);
+  await writeCitationsCsv(header, findingRecords);
+  await writeCitationsJson(findingRecords);
 
   console.log(`Updated ${htmlUpdated} needs page${htmlUpdated === 1 ? "" : "s"}.`);
   if (spreadsheetUpdated) {
@@ -310,6 +401,7 @@ async function main() {
   } else {
     console.log("No changes applied to data/Needs.csv.");
   }
+  console.log("Wrote _evidence/citations.csv with updated finding-focused labels.");
   console.log("Wrote _evidence/citations.json from citations.csv.");
 }
 
