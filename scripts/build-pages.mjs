@@ -1875,6 +1875,7 @@ function renderInventoryPage() {
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
     needSelectMultiple: true,
+    includeContactFields: true,
     notice: inventoryFormNotice,
     includeLocalStorageReminder: true,
   });
