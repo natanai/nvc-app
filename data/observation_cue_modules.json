@@ -2934,7 +2934,7 @@
     "slotIds": [
       "time",
       "context",
-      "social"
+      "sensory"
     ],
     "detectors": [
       {
@@ -3435,7 +3435,7 @@
     "slotIds": [
       "time",
       "context",
-      "actions"
+      "sensory"
     ],
     "detectors": [
       {

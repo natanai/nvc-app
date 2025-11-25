@@ -4775,7 +4775,7 @@
       "slotIds": [
         "time",
         "context",
-        "social"
+        "sensory"
       ],
       "lexiconKeys": [],
       "feelings": [
@@ -5531,7 +5531,7 @@
       "slotIds": [
         "time",
         "context",
-        "actions"
+        "sensory"
       ],
       "lexiconKeys": [],
       "feelings": [
