@@ -1,4 +1,9 @@
-import { BODY_REGIONS, EMOTION_LIBRARY, FEELING_SLUG_ALIASES } from './alexithymia-support-data.js';
+import {
+  BODY_REGIONS,
+  EMOTION_LIBRARY,
+  FEELING_PAGE_SLUGS,
+  FEELING_SLUG_ALIASES,
+} from './alexithymia-support-data.js';
 
 const SLIDER_MIN = 0;
 const SLIDER_MAX = 100;
@@ -7,6 +12,7 @@ const MAX_MAGNETS = 18;
 const sliderStates = new Map();
 let reverseIndex = null;
 let canonicalSlugMap = null;
+const feelingSlugSet = new Set(FEELING_PAGE_SLUGS);
 
 const state = {
   values: new Map(),
@@ -191,7 +197,7 @@ function getFeelingLabel(feelingKey) {
 function getFeelingHref(feelingKey) {
   const map = getCanonicalSlugMap();
   const slug = map.get(feelingKey);
-  if (!slug) {
+  if (!slug || !feelingSlugSet.has(slug)) {
     return null;
   }
   return `${getBasePath()}feelings/${slug}/`;
