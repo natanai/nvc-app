@@ -36,9 +36,8 @@
         "emotions": {
           "anxiety": 1.2,
           "fear": 1.1,
-          "excitement": 1,
-          "anticipation": 1,
-          "anger": 1
+          "anger": 1,
+          "excited": 1
         }
       },
       {
@@ -49,9 +48,9 @@
         "emotions": {
           "calm": 1.2,
           "relief": 1.1,
-          "joy": 0.8,
           "gratitude": 0.9,
-          "love": 1.1
+          "joyful": 0.8,
+          "love-caring": 1.1
         }
       }
     ]
@@ -68,9 +67,7 @@
         "insight": "Rolling sensations can blend anxious worry with hopeful excitement about what is next.",
         "emotions": {
           "anxiety": 1.1,
-          "worry": 1,
-          "excitement": 0.9,
-          "anticipation": 1
+          "excited": 1
         }
       },
       {
@@ -104,10 +101,10 @@
         "note": "Grounded fullness, gentle ease",
         "insight": "Warmth in the belly can match calm confidence or gentle hope.",
         "emotions": {
-          "hope": 1,
-          "contentment": 1,
           "calm": 1,
-          "gratitude": 0.9
+          "gratitude": 0.9,
+          "hopeful": 1,
+          "contented": 1
         }
       }
     ]
@@ -149,8 +146,8 @@
         "emotions": {
           "fear": 1,
           "anxiety": 1,
-          "anticipation": 0.8,
-          "shame": 0.7
+          "shame": 0.7,
+          "excited": 0.8
         }
       },
       {
@@ -221,7 +218,7 @@
         "emotions": {
           "overwhelm": 1.3,
           "stress": 1.1,
-          "worry": 1
+          "anxiety": 1
         }
       },
       {
@@ -231,9 +228,8 @@
         "insight": "Buzzing in the head can come with anxious energy or excited anticipation.",
         "emotions": {
           "anxiety": 1.1,
-          "excitement": 0.9,
-          "anticipation": 0.9,
-          "overwhelm": 0.8
+          "overwhelm": 0.8,
+          "excited": 0.9
         }
       },
       {
@@ -317,10 +313,9 @@
         "insight": "Restless limbs can signal pent-up energy linked to anxiety, anticipation, or frustration.",
         "emotions": {
           "anxiety": 1.2,
-          "anticipation": 1.1,
-          "excitement": 1,
           "frustration": 0.9,
-          "anger": 0.8
+          "anger": 0.8,
+          "excited": 1.1
         }
       },
       {
@@ -329,10 +324,9 @@
         "note": "Buzzing skin, energetic tingles",
         "insight": "Tingles can mean excited anticipation or anxious vigilance.",
         "emotions": {
-          "anticipation": 1.2,
-          "excitement": 1.1,
           "fear": 0.9,
-          "joy": 0.8
+          "excited": 1.2,
+          "joyful": 0.8
         }
       }
     ]
@@ -349,9 +343,9 @@
         "insight": "Heat waves can pair with anger, excitement, or shame.",
         "emotions": {
           "anger": 1.2,
-          "excitement": 1,
           "shame": 1,
-          "pride": 0.6
+          "pride": 0.6,
+          "excited": 1
         }
       },
       {
@@ -373,10 +367,9 @@
         "insight": "Prickly sensations can show adrenaline—anxiety, anticipation, or overwhelm.",
         "emotions": {
           "anxiety": 1.1,
-          "anticipation": 1,
-          "excitement": 0.9,
           "stress": 0.8,
-          "fear": 1
+          "fear": 1,
+          "excited": 1
         }
       }
     ]
@@ -418,8 +411,8 @@
         "emotions": {
           "calm": 1.3,
           "relief": 1.1,
-          "contentment": 1.1,
-          "gratitude": 1
+          "gratitude": 1,
+          "contented": 1.1
         }
       }
     ]
