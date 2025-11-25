@@ -45,6 +45,7 @@ let guideNavigationBound = false;
 let highlightPopoverBound = false;
 let analysisTimer = 0;
 let analysisIdleHandle = null;
+let highlightMessageTimer = 0;
 
 const ANALYSIS_DEBOUNCE_MS = 140;
 
@@ -2491,58 +2492,21 @@ function renderHighlight() {
 }
 
 function syncObservationHighlightScroll() {
-  syncObservationHighlightLayout();
   const textarea = document.getElementById('observation-text');
   const highlight = document.getElementById('observation-highlight');
   const formula = document.getElementById('observation-formula');
   const scrollTop = textarea ? textarea.scrollTop : 0;
+  const scrollLeft = textarea ? textarea.scrollLeft : 0;
 
-  const applyTransform = element => {
-    if (!element) {
-      return;
-    }
-    if (scrollTop) {
-      element.style.transform = `translateY(${-scrollTop}px)`;
-    } else {
-      element.style.transform = '';
-    }
-  };
-
-  applyTransform(highlight);
-  applyTransform(formula);
-}
-
-function syncObservationHighlightLayout() {
-  const textarea = document.getElementById('observation-text');
-  if (!textarea || typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
-    return;
+  if (highlight) {
+    highlight.scrollTop = scrollTop;
+    highlight.scrollLeft = scrollLeft;
   }
 
-  const highlight = document.getElementById('observation-highlight');
-  const formula = document.getElementById('observation-formula');
-  const layers = [highlight, formula].filter(Boolean);
-  if (!layers.length) {
-    return;
+  if (formula) {
+    formula.scrollTop = scrollTop;
+    formula.scrollLeft = scrollLeft;
   }
-
-  const styles = window.getComputedStyle(textarea);
-  const paddingTop = styles.paddingTop || '';
-  const paddingBottom = styles.paddingBottom || '';
-  const paddingLeft = styles.paddingLeft || '';
-  const paddingRightPx = parseFloat(styles.paddingRight || '0');
-  const scrollbarWidth = Math.max(0, (textarea.offsetWidth || 0) - (textarea.clientWidth || 0));
-  const paddingRight = `${paddingRightPx + scrollbarWidth}px`;
-  const height = Math.max(textarea.scrollHeight || 0, textarea.clientHeight || 0);
-
-  layers.forEach(layer => {
-    layer.style.height = `${height}px`;
-    layer.style.paddingTop = paddingTop;
-    layer.style.paddingBottom = paddingBottom;
-    layer.style.paddingLeft = paddingLeft;
-    layer.style.paddingRight = paddingRight;
-    layer.style.lineHeight = styles.lineHeight || '';
-    layer.style.font = styles.font || '';
-  });
 }
 
 function inspectHighlightAtCursor(textarea) {
@@ -2598,10 +2562,13 @@ function renderHighlightDetails(range) {
     return;
   }
 
-  resetHighlightDetailsPosition(container);
+  if (highlightMessageTimer) {
+    window.clearTimeout(highlightMessageTimer);
+    highlightMessageTimer = 0;
+  }
 
   if (!range || !Array.isArray(range.items) || !range.items.length) {
-    container.innerHTML = '';
+    container.textContent = '';
     container.setAttribute('hidden', 'hidden');
     state.activeHighlightKey = '';
     return;
@@ -2609,142 +2576,28 @@ function renderHighlightDetails(range) {
 
   state.activeHighlightKey = buildHighlightKey(range);
 
-  container.innerHTML = '';
   const matchText = extractHighlightText(range);
-  if (matchText) {
-    const phrase = document.createElement('p');
-    phrase.className = 'observation-editor__highlight-details-phrase';
-    phrase.textContent = `“${matchText}”`;
-    container.appendChild(phrase);
-  }
+  const primaryMessage = range.items
+    .map(item => formatHighlightMessage(item))
+    .find(message => typeof message === 'string' && message.trim());
 
-  const seen = new Set();
-  range.items.forEach(item => {
-    const message = formatHighlightMessage(item);
-    if (!message) {
-      return;
-    }
-    const key = message.toLowerCase();
-    if (seen.has(key)) {
-      return;
-    }
-    seen.add(key);
-    const note = document.createElement('p');
-    note.className = 'observation-editor__highlight-details-message';
-    note.textContent = message;
-    container.appendChild(note);
-  });
-
-  if (!container.childNodes.length) {
+  const trimmedMessage = typeof primaryMessage === 'string' ? primaryMessage.trim() : '';
+  if (!trimmedMessage) {
     container.setAttribute('hidden', 'hidden');
     state.activeHighlightKey = '';
     return;
   }
 
-  container.style.visibility = 'hidden';
+  const message = matchText ? `“${matchText}” — ${trimmedMessage}` : trimmedMessage;
+  container.textContent = message;
   container.removeAttribute('hidden');
-  const positioned = positionHighlightDetails(container, range);
-  if (!positioned) {
-    container.innerHTML = '';
+
+  highlightMessageTimer = window.setTimeout(() => {
+    container.textContent = '';
     container.setAttribute('hidden', 'hidden');
     state.activeHighlightKey = '';
-    container.style.visibility = '';
-    return;
-  }
-
-  container.style.visibility = '';
-}
-
-function resetHighlightDetailsPosition(container) {
-  if (!container) {
-    return;
-  }
-  container.style.removeProperty('--highlight-top');
-  container.style.removeProperty('--highlight-left');
-  container.removeAttribute('data-placement');
-  container.removeAttribute('data-highlight-key');
-}
-
-function positionHighlightDetails(container, range) {
-  if (!container || !range) {
-    return false;
-  }
-  const key = buildHighlightKey(range);
-  if (!key) {
-    return false;
-  }
-  const host = document.getElementById('observation-highlight');
-  const wrapper = container.closest('.observation-editor__input-wrapper');
-  if (!host || !wrapper) {
-    return false;
-  }
-  const selectorKey = String(key).replace(/"/g, '\\"');
-  const marks = host.querySelectorAll(`[data-highlight-key="${selectorKey}"]`);
-  if (!marks.length) {
-    return false;
-  }
-
-  const wrapperRect = wrapper.getBoundingClientRect();
-  let minTop = Number.POSITIVE_INFINITY;
-  let maxBottom = Number.NEGATIVE_INFINITY;
-  let minLeft = Number.POSITIVE_INFINITY;
-  let maxRight = Number.NEGATIVE_INFINITY;
-
-  marks.forEach(mark => {
-    if (!mark || typeof mark.getBoundingClientRect !== 'function') {
-      return;
-    }
-    const rect = mark.getBoundingClientRect();
-    if (!rect) {
-      return;
-    }
-    if (rect.top < minTop) {
-      minTop = rect.top;
-    }
-    if (rect.bottom > maxBottom) {
-      maxBottom = rect.bottom;
-    }
-    if (rect.left < minLeft) {
-      minLeft = rect.left;
-    }
-    if (rect.right > maxRight) {
-      maxRight = rect.right;
-    }
-  });
-
-  if (!Number.isFinite(minTop) || !Number.isFinite(maxBottom) || !Number.isFinite(minLeft) || !Number.isFinite(maxRight)) {
-    return false;
-  }
-
-  const highlightTop = minTop - wrapperRect.top;
-  const highlightBottom = maxBottom - wrapperRect.top;
-  const highlightCenter = (minLeft + maxRight) / 2 - wrapperRect.left;
-  const wrapperWidth = wrapperRect.width;
-  const clampMargin = 16;
-  const clampedCenter = Math.min(wrapperWidth - clampMargin, Math.max(clampMargin, highlightCenter));
-
-  container.style.setProperty('--highlight-left', `${Math.max(0, clampedCenter)}px`);
-
-  const gap = 12;
-  const containerHeight = container.offsetHeight || 0;
-  const wrapperHeight = wrapperRect.height;
-  const aboveSpace = highlightTop;
-  const belowSpace = wrapperHeight - highlightBottom;
-
-  let placement = 'above';
-  let anchorTop = highlightTop;
-  if (aboveSpace < containerHeight + gap && belowSpace > aboveSpace) {
-    placement = 'below';
-    anchorTop = Math.min(wrapperHeight, highlightBottom);
-  } else {
-    placement = 'above';
-    anchorTop = Math.max(0, highlightTop);
-  }
-
-  container.style.setProperty('--highlight-top', `${Math.max(0, anchorTop)}px`);
-  container.setAttribute('data-placement', placement);
-  container.setAttribute('data-highlight-key', key);
-  return true;
+    highlightMessageTimer = 0;
+  }, 4200);
 }
 
 function extractHighlightText(range) {
