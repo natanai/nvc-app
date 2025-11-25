@@ -851,10 +851,28 @@ function createDetectionEntry(kind, slug) {
   if (!normalized) {
     return null;
   }
+  const base = DETECTION_BASE_PATHS[kind];
+  if (!base) {
+    return null;
+  }
+
+  if (kind === 'feeling' || kind === 'need') {
+    const catalogEntry = resolveCatalogEntry(kind, normalized);
+    if (!catalogEntry) {
+      return null;
+    }
+    const canonicalSlug = catalogEntry.slug || normalized;
+    const title = catalogEntry.title || formatTitle(canonicalSlug);
+    return {
+      kind,
+      slug: canonicalSlug,
+      title,
+      href: `${base}${encodeURIComponent(canonicalSlug)}/`,
+    };
+  }
 
   const title = resolveDetectionTitle(kind, normalized) || formatTitle(normalized);
-  const base = DETECTION_BASE_PATHS[kind];
-  if (!base || !title) {
+  if (!title) {
     return null;
   }
 
@@ -1111,6 +1129,9 @@ function populateChipList(container, emptyNode, items) {
       element.textContent = entry.title;
       if (entry.href) {
         element.href = entry.href;
+        element.target = '_blank';
+        element.rel = 'noreferrer';
+        element.setAttribute('aria-label', `${entry.title} (opens in a new tab)`);
       }
       if (entry.slug) {
         element.dataset.suggestionSlug = entry.slug;
@@ -1144,6 +1165,40 @@ function normalizeSuggestionItem(item) {
   const slug = typeof item.slug === 'string' ? item.slug : '';
   const kind = typeof item.kind === 'string' ? item.kind : '';
   return { title, href, slug, kind };
+}
+
+function resolveCatalogEntry(kind, slug) {
+  const trimmed = typeof slug === 'string' ? slug.trim() : '';
+  if (!trimmed) {
+    return null;
+  }
+
+  const catalog = kind === 'feeling'
+    ? state.catalog?.feelings
+    : kind === 'need'
+      ? state.catalog?.needs
+      : null;
+
+  if (!(catalog instanceof Map)) {
+    return null;
+  }
+
+  const direct = catalog.get(trimmed);
+  if (direct) {
+    return direct;
+  }
+
+  const target = trimmed.toLowerCase();
+  for (const entry of catalog.values()) {
+    if (Array.isArray(entry.aliases)) {
+      const hasAlias = entry.aliases.some(alias => typeof alias === 'string' && alias.trim().toLowerCase() === target);
+      if (hasAlias) {
+        return entry;
+      }
+    }
+  }
+
+  return null;
 }
 
 function buildIssueList(lint) {
@@ -1320,17 +1375,19 @@ function createSuggestionEntry(kind, slug) {
   if (!trimmed || !SUGGESTION_SLUG_PATTERN.test(trimmed)) {
     return null;
   }
-  const title = kind === 'feeling' ? resolveFeelingTitle(trimmed) : resolveNeedTitle(trimmed);
-  if (!title) {
+  const catalogEntry = resolveCatalogEntry(kind, trimmed);
+  if (!catalogEntry) {
     return null;
   }
   const base = SUGGESTION_BASE_PATHS[kind];
   if (!base) {
     return null;
   }
-  const encodedSlug = encodeURIComponent(trimmed);
+  const canonicalSlug = catalogEntry.slug || trimmed;
+  const title = catalogEntry.title || formatTitle(canonicalSlug);
+  const encodedSlug = encodeURIComponent(canonicalSlug);
   return {
-    slug: trimmed,
+    slug: canonicalSlug,
     title,
     href: `${base}${encodedSlug}/`,
     kind,
@@ -1338,13 +1395,13 @@ function createSuggestionEntry(kind, slug) {
 }
 
 function resolveFeelingTitle(slug) {
-  const entry = state.catalog?.feelings?.get?.(slug);
-  return entry?.title || formatTitle(slug);
+  const entry = resolveCatalogEntry('feeling', slug);
+  return entry?.title || '';
 }
 
 function resolveNeedTitle(slug) {
-  const entry = state.catalog?.needs?.get?.(slug);
-  return entry?.title || formatTitle(slug);
+  const entry = resolveCatalogEntry('need', slug);
+  return entry?.title || '';
 }
 
 function resolveFauxFeelingTitle(slug) {
