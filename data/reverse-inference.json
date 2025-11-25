@@ -2763,7 +2763,12 @@
       "desperation": "overwhelm",
       "jealous": "worry",
       "tired": "tired",
-      "calm": "calm"
+      "calm": "calm",
+      "gratitude": "gratitude",
+      "relief": "relief",
+      "bored": "bored",
+      "focused": "focused",
+      "determined": "determined"
     }
   }
 }

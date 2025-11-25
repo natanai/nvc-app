@@ -3587,6 +3587,217 @@
       ],
       "poemQuote": "",
       "poemUrl": ""
+    },
+    {
+      "title": "Gratitude",
+      "slug": "gratitude",
+      "description": "Warm appreciation when receiving help or recognising blessings; fosters a sense of connection and contentment. Practising gratitude is linked to better sleep, improved emotional and social well-being, favourable cardiovascular markers and may even reduce mortality risk[1][2].",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Appreciation",
+          "slug": "appreciation"
+        },
+        {
+          "title": "Connection",
+          "slug": "connection"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        },
+        {
+          "title": "Acknowledgement",
+          "slug": "acknowledgement"
+        }
+      ],
+      "needSatisfaction": "met",
+      "bodySignals": [
+        "Warmth in the chest or heart; gentle smile and softened eyes; shoulders relax and breathing deepens."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Relief",
+      "slug": "relief",
+      "description": "Release of tension when a feared outcome passes or support appears. Muscles loosen and breathing naturally lengthens as the body’s stress hormones subside; researchers note that cortisol drops during relief[3].",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Safety",
+          "slug": "safety"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Rest",
+          "slug": "rest"
+        },
+        {
+          "title": "Security",
+          "slug": "security"
+        }
+      ],
+      "needSatisfaction": "met",
+      "bodySignals": [
+        "Long exhale; loosening shoulders; heartbeat slowing; a sensation of lightness."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Bored",
+      "slug": "bored",
+      "description": "Restless dissatisfaction arising from lack of stimulation or meaning; it often signals unmet needs for novelty and engagement.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        },
+        {
+          "title": "Contribution",
+          "slug": "contribution"
+        },
+        {
+          "title": "Self expression",
+          "slug": "self-expression"
+        }
+      ],
+      "needSatisfaction": "unmet",
+      "bodySignals": [
+        "Heavy eyelids; fidgeting hands or tapping feet; frequent yawns; wandering gaze."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Curious",
+      "slug": "curious",
+      "description": "Energised interest and eagerness to learn or explore; encourages open-mindedness and discovery.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Freedom",
+          "slug": "freedom"
+        },
+        {
+          "title": "Choice",
+          "slug": "choice"
+        }
+      ],
+      "needSatisfaction": "met",
+      "bodySignals": [
+        "Leaning forward; widened eyes; alert posture; slight tilt of the head."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Focused",
+      "slug": "focused",
+      "description": "Concentrated attention and absorption in a task; distractions fade as the mind organises around a clear objective.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Accomplishment",
+          "slug": "accomplishment"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        }
+      ],
+      "needSatisfaction": "met",
+      "bodySignals": [
+        "Steady gaze; calm",
+        "rhythmic breathing; upright posture; minimal fidgeting."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Determined",
+      "slug": "determined",
+      "description": "Resolute commitment and perseverance toward a goal, often in the face of obstacles; can feel energising and empowering.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Autonomy",
+          "slug": "autonomy"
+        },
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        },
+        {
+          "title": "Growth",
+          "slug": "growth"
+        },
+        {
+          "title": "Accomplishment",
+          "slug": "accomplishment"
+        }
+      ],
+      "needSatisfaction": "met",
+      "bodySignals": [
+        "Jaw set or teeth clenched; shoulders squared; steady stance; fists or palms pressed firmly."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
+    },
+    {
+      "title": "Pensive",
+      "slug": "pensive",
+      "description": "Thoughtful, reflective mood turned inward; a person may be digesting experiences, memories or decisions.",
+      "fauxFeelings": [],
+      "needs": [
+        {
+          "title": "Understanding",
+          "slug": "understanding"
+        },
+        {
+          "title": "Clarity",
+          "slug": "clarity"
+        },
+        {
+          "title": "Privacy",
+          "slug": "privacy"
+        },
+        {
+          "title": "Space",
+          "slug": "space"
+        }
+      ],
+      "needSatisfaction": "unmet",
+      "bodySignals": [
+        "Furrowed brow; downward or far-away gaze; stillness with occasional sighs; hand supporting the chin."
+      ],
+      "poemQuote": "",
+      "poemUrl": ""
     }
   ],
   "needs": [
@@ -9494,6 +9705,69 @@
           "description": "research: when basic security needs are met, individuals are more likely to pursue self-actualization goals like creativity and personal growth – consistent with Maslow’s hierarchy"
         }
       ]
+    },
+    {
+      "title": "To grieve",
+      "slug": "to-grieve",
+      "category": "Sustenance/Health",
+      "description": "The natural process of mourning loss—whether of a loved one, a dream or a stage of life—allows us to integrate change and restore emotional balance. When we honour our grief, we make space for healing and reconnection.",
+      "strategies": [
+        {
+          "title": "Call a friend",
+          "slug": "call-a-friend"
+        },
+        {
+          "title": "Call a parent",
+          "slug": "call-a-parent"
+        },
+        {
+          "title": "Write",
+          "slug": "write"
+        },
+        {
+          "title": "View previous things you've written or made",
+          "slug": "view-previous-things-you-ve-written-or-made"
+        },
+        {
+          "title": "Go on walk",
+          "slug": "go-on-walk"
+        }
+      ],
+      "fauxFeelings": [],
+      "feelings": [
+        {
+          "title": "Sad",
+          "slug": "sad"
+        },
+        {
+          "title": "Hurt",
+          "slug": "hurt"
+        },
+        {
+          "title": "Lonely",
+          "slug": "lonely"
+        },
+        {
+          "title": "Anxious",
+          "slug": "anxious"
+        },
+        {
+          "title": "Relieved",
+          "slug": "relieved"
+        }
+      ],
+      "originalClaim": "Grieving is a healthy response to loss. Research notes that most people adapt to bereavement within six to twelve months and that reintegrating into social networks is a crucial goal of normal grief[4]. Adequate social support helps people process grief and prevents prolonged grief disorder[4]. Unresolved grief can affect the immune system and increase the risk of cardiovascular disease[5].",
+      "rewrittenClaim": "Grief is not a single emotion but a process that unfolds over time. In most cases people adapt within one year; part of this adaptation involves reintegrating into social networks and daily activities[4]. Adequate social support—trusted friends, rituals and professional guidance—is an important protective factor and helps prevent the development of prolonged grief disorder[4]. When grief is not expressed or supported, the body’s stress responses may become chronic, contributing to impaired immune function and increased risk of heart disease[5]. Providing safe spaces for mourning, acknowledging the loss and allowing emotions to be felt can foster resilience and help restore a sense of meaning after loss.",
+      "supportingSources": [
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK507832/",
+          "description": "StatPearls: Grief and Prolonged Grief Disorder"
+        },
+        {
+          "url": "https://www.apa.org/topics/grief",
+          "description": "APA overview of grief and coping"
+        }
+      ]
     }
   ],
   "fauxFeelings": [
@@ -11670,6 +11944,102 @@
         {
           "title": "Fairness",
           "slug": "fairness"
+        }
+      ]
+    },
+    {
+      "title": "Guilt",
+      "slug": "guilt",
+      "feelings": [
+        {
+          "title": "Sad",
+          "slug": "sad"
+        },
+        {
+          "title": "Fear",
+          "slug": "fear"
+        },
+        {
+          "title": "Lonely",
+          "slug": "lonely"
+        },
+        {
+          "title": "Hurt",
+          "slug": "hurt"
+        },
+        {
+          "title": "Embarrassed",
+          "slug": "embarrassed"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Integrity",
+          "slug": "integrity"
+        },
+        {
+          "title": "Accountability",
+          "slug": "accountability"
+        },
+        {
+          "title": "Acceptance",
+          "slug": "acceptance"
+        },
+        {
+          "title": "Support",
+          "slug": "support"
+        },
+        {
+          "title": "Trust",
+          "slug": "trust"
+        }
+      ]
+    },
+    {
+      "title": "Shame",
+      "slug": "shame",
+      "feelings": [
+        {
+          "title": "Embarrassed",
+          "slug": "embarrassed"
+        },
+        {
+          "title": "Hurt",
+          "slug": "hurt"
+        },
+        {
+          "title": "Fear",
+          "slug": "fear"
+        },
+        {
+          "title": "Lonely",
+          "slug": "lonely"
+        }
+      ],
+      "needs": [
+        {
+          "title": "Belonging",
+          "slug": "belonging"
+        },
+        {
+          "title": "Acceptance",
+          "slug": "acceptance"
+        },
+        {
+          "title": "Love/Caring",
+          "slug": "love-caring"
+        },
+        {
+          "title": "Respect",
+          "slug": "respect"
+        },
+        {
+          "title": "Empathy",
+          "slug": "empathy"
+        },
+        {
+          "title": "Equality",
+          "slug": "equality"
         }
       ]
     }
