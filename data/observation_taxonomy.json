@@ -291,7 +291,7 @@
           "label": "Task assigned without checking capacity",
           "example": "A task was assigned to me during standup without asking about my current load.",
           "feelings": [
-            "Pressured",
+            "Overwhelmed",
             "Tense",
             "Irritated",
             "Anxious"
@@ -440,7 +440,7 @@
           "example": "They canceled 30 minutes before our meeting.",
           "feelings": [
             "Disappointment",
-            "Pressured",
+            "Overwhelmed",
             "Frustrated",
             "Sad"
           ],
@@ -586,7 +586,7 @@
           "label": "Shared or showed private info",
           "example": "They screen-shared a direct message I sent.",
           "feelings": [
-            "Humiliated",
+            "Embarrassed",
             "Anxious",
             "Angry",
             "Hurt"
@@ -769,7 +769,7 @@
           "example": "They said 'This is a waste of time' while I spoke.",
           "feelings": [
             "Hurt",
-            "Humiliated",
+            "Embarrassed",
             "Anxious",
             "Angry"
           ],
@@ -805,7 +805,7 @@
             "Powerless",
             "Hurt",
             "Angry",
-            "Humiliated"
+            "Embarrassed"
           ],
           "needs": [
             "To be seen",
@@ -860,7 +860,7 @@
           "example": "I learned a requirement after submission closed.",
           "feelings": [
             "Confused",
-            "Pressured",
+            "Overwhelmed",
             "Anxious",
             "Frustrated"
           ],
@@ -876,10 +876,10 @@
           "label": "Late-night urgent pings / early deadline",
           "example": "Three pings after 10pm for a 7am turnaround.",
           "feelings": [
-            "Pressured",
             "Overwhelmed",
             "Tense",
-            "Anxious"
+            "Anxious",
+            "Frustrated"
           ],
           "needs": [
             "Support",
@@ -893,10 +893,10 @@
           "label": "New requirement added close to deadline",
           "example": "A new requirement was added two hours before the deadline.",
           "feelings": [
-            "Pressured",
             "Overwhelmed",
             "Anxious",
-            "Irritated"
+            "Irritated",
+            "Tense"
           ],
           "needs": [
             "Do things at my own pace and in my own way",
@@ -1148,9 +1148,9 @@
           "example": "They introduced me using a name I no longer use.",
           "feelings": [
             "Hurt",
-            "Humiliated",
+            "Embarrassed",
             "Angry",
-            "Embarrassed"
+            "Anxious"
           ],
           "needs": [
             "Respect",
@@ -1609,7 +1609,7 @@
           "feelings": [
             "Hurt",
             "Angry",
-            "Humiliated",
+            "Embarrassed",
             "Tense"
           ],
           "needs": [
@@ -1681,7 +1681,7 @@
           "label": "Booked over prior commitment without asking",
           "example": "A meeting invite overlapped a blocked time without checking.",
           "feelings": [
-            "Pressured",
+            "Overwhelmed",
             "Tense",
             "Resentful",
             "Frustrated"
@@ -1698,7 +1698,7 @@
           "label": "Critical feedback given in public",
           "example": "They gave critical feedback during a group call.",
           "feelings": [
-            "Humiliated",
+            "Embarrassed",
             "Anxious",
             "Hurt",
             "Angry"
