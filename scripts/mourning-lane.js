@@ -1,4 +1,5 @@
 import store from '../assets/js/journal/store.js';
+import { loadCatalogData } from '../assets/js/journal/module.js';
 
 const FEELING_SLUGS = [
   'sad',
@@ -160,7 +161,7 @@ const renderOptions = (options, container, type, searchTerm = '', elements) => {
     .forEach((item) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'pill magnet mourning-chip';
+      button.className = 'chip mourning-chip';
       button.textContent = normalizeLabel(item);
       button.dataset.mourningOption = type;
       button.dataset.mourningSlug = normalizeSlug(item);
@@ -186,21 +187,6 @@ const setObservation = (elements, value) => {
   updateAck(elements);
 };
 
-const loadCatalog = async () => {
-  const basePath = getBasePath();
-  const dataUrl = new URL(`${basePath}data/index.json`, window.location.href);
-  try {
-    const res = await fetch(dataUrl);
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-    return await res.json();
-  } catch (error) {
-    console.warn('Mourning lane: unable to load catalog', error);
-    return null;
-  }
-};
-
 const resolveFeelings = (catalog) => {
   if (!catalog?.feelings) {
     return [];
@@ -219,7 +205,7 @@ const init = async () => {
     return;
   }
 
-  const catalog = await loadCatalog();
+  const catalog = await loadCatalogData({ basePath: getBasePath() });
   if (!catalog) {
     setStatus(elements, 'Unable to load needs and feelings right now.');
     return;
