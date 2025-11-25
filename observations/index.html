@@ -786,6 +786,21 @@ button.site-nav__magnet {
     align-items: start;
   }
 
+  .observation-overview__content {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .observation-overview__why-callout {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.95rem 1.1rem;
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, var(--mint) 16%, #ffffff 90%);
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    box-shadow: 0 10px 20px color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
   @media (max-width: 720px) {
     .observation-overview {
       grid-template-columns: 1fr;
@@ -1482,46 +1497,66 @@ button.site-nav__magnet {
     }
   }
 
-  .observation-editor__slot-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  .observation-status-row {
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.6rem;
-    margin: 0 0 0.35rem;
-    padding: 0.4rem;
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
-    border: 1px dashed color-mix(in srgb, var(--outline) 22%, transparent);
+    margin: 0.75rem 0 0.2rem;
+    align-items: flex-start;
   }
 
-  .observation-editor__slot {
+  .observation-status-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.4rem 0.55rem;
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, #ffffff 92%, transparent);
+    gap: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--chip-bg) 76%, #ffffff 24%);
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-    min-height: 2.5rem;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 10%, transparent);
+    cursor: default;
+    user-select: none;
+    min-height: 2.35rem;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .observation-editor__slot-indicator {
-    width: 0.9rem;
-    height: 0.9rem;
-    border-radius: 999px;
-    border: 2px solid color-mix(in srgb, var(--outline) 42%, transparent);
-    background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 16%, transparent);
+  .observation-status-chip__label {
+    font-weight: 700;
+    color: color-mix(in srgb, var(--outline) 80%, transparent);
   }
 
-  .observation-editor__slot-label {
-    font-weight: 600;
-    color: color-mix(in srgb, var(--outline) 90%, transparent);
+  .observation-status-chip__state {
+    font-weight: 700;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
   }
 
-  .observation-editor__slot[data-state='complete'] .observation-editor__slot-indicator {
-    border-color: color-mix(in srgb, var(--mint) 60%, transparent);
-    background: color-mix(in srgb, var(--mint) 36%, #ffffff 64%);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 40%, transparent);
+  .observation-status-chip[data-state='missing'] {
+    background: color-mix(in srgb, var(--rose) 18%, #ffffff 88%);
+    border-color: color-mix(in srgb, var(--rose) 32%, transparent);
+  }
+
+  .observation-status-chip[data-state='missing'] .observation-status-chip__state {
+    color: color-mix(in srgb, var(--rose) 58%, var(--ink) 40%);
+  }
+
+  .observation-status-chip[data-state='optional'] {
+    background: color-mix(in srgb, var(--gold) 18%, #ffffff 88%);
+    border-color: color-mix(in srgb, var(--gold) 30%, transparent);
+  }
+
+  .observation-status-chip[data-state='optional'] .observation-status-chip__state {
+    color: color-mix(in srgb, var(--gold) 58%, var(--ink) 40%);
+  }
+
+  .observation-status-chip[data-state='complete'] {
+    background: color-mix(in srgb, var(--mint) 20%, #ffffff 86%);
+    border-color: color-mix(in srgb, var(--mint) 36%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 30%, transparent);
+  }
+
+  .observation-status-chip[data-state='complete'] .observation-status-chip__state {
+    color: color-mix(in srgb, var(--mint) 60%, var(--ink) 40%);
   }
 
   .observation-editor__status {
@@ -2601,10 +2636,27 @@ button.site-nav__magnet {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.15rem 0.35rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, #ffffff 94%, transparent);
-    border: none;
+    gap: 0.5rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, #ffffff 94%, var(--outline) 6%);
+    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+  }
+
+  .needs-toggle__label {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--outline) 72%, transparent);
+    opacity: 0.72;
+  }
+
+  .needs-toggle__label.is-active {
+    color: var(--ink);
+    opacity: 1;
+  }
+
+  .needs-toggle__switch {
+    flex: 0 0 auto;
   }
 
   .observation-panel__title {
@@ -2924,6 +2976,7 @@ button.site-nav__magnet {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </nav>
@@ -3275,8 +3328,9 @@ button.site-nav__magnet {
 </header>
 
 <section id="observation-overview" class="observation-overview" aria-labelledby="observation-overview-title">
-  <div class="observation-overview__content">
-    <h2 id="observation-overview-title" class="observation-overview__title">Why try this?</h2>
+    <div class="observation-overview__content">
+      <div class="observation-overview__why-callout">
+        <h2 id="observation-overview-title" class="observation-overview__title">Why try this?</h2>
 
     <p class="observation-overview__why">
       Using concrete, time-and-place descriptions of what you saw or heard can be cognitively easier to process than more abstract label terms
@@ -3324,6 +3378,7 @@ button.site-nav__magnet {
               <span class="observation-overview__slot" role="listitem">Measurement/quote (optional)</span>
             </div>
           </div>
+          </div>
           <div class="observation-overview__actions">
             <a class="observation-overview__learn-more" href="#observation-guide" data-open-observation-guide>
               Learn more
@@ -3343,53 +3398,6 @@ button.site-nav__magnet {
                     hidden
                     aria-live="polite"
                   ></div>
-                </div>
-                <div
-                  id="observation-slot-row"
-                  class="observation-editor__slot-row"
-                  role="list"
-                  aria-label="Observation slots"
-                >
-                  <div
-                    class="observation-editor__slot"
-                    data-slot-id="time"
-                    role="listitem"
-                    title="Anchor your sentence to a specific time, like ‘Yesterday at 3 p.m.’"
-                  >
-                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
-                    <span class="observation-editor__slot-label">When?</span>
-                    <span class="visually-hidden" data-slot-status>Missing</span>
-                  </div>
-                  <div
-                    class="observation-editor__slot"
-                    data-slot-id="context"
-                    role="listitem"
-                    title="Include where it happened, like ‘In the classroom’ or ‘On the playground.’"
-                  >
-                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
-                    <span class="observation-editor__slot-label">Where?</span>
-                    <span class="visually-hidden" data-slot-status>Missing</span>
-                  </div>
-                  <div
-                    class="observation-editor__slot"
-                    data-slot-id="sensory"
-                    role="listitem"
-                    title="Name what you saw or heard, like ‘I heard you say…’ or ‘I saw the door close.’"
-                  >
-                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
-                    <span class="observation-editor__slot-label">What did you see/hear?</span>
-                    <span class="visually-hidden" data-slot-status>Missing</span>
-                  </div>
-                  <div
-                    class="observation-editor__slot"
-                    data-slot-id="measure"
-                    role="listitem"
-                    title="Add a count or quote for clarity, like ‘twice’ or ‘You said, “Let’s leave.”’"
-                  >
-                    <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
-                    <span class="observation-editor__slot-label">Measurement or quote (optional)</span>
-                    <span class="visually-hidden" data-slot-status>Missing</span>
-                  </div>
                 </div>
                 <div class="observation-editor__input-wrapper">
                   <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
@@ -3411,6 +3419,53 @@ button.site-nav__magnet {
                     hidden
                     aria-live="polite"
                   ></div>
+                </div>
+                <div
+                  id="observation-slot-row"
+                  class="observation-status-row"
+                  role="list"
+                  aria-label="Observation slots"
+                >
+                  <div
+                    class="observation-status-chip"
+                    data-slot-id="time"
+                    role="listitem"
+                    title="Anchor your sentence to a specific time, like ‘Yesterday at 3 p.m.’"
+                    data-state="missing"
+                  >
+                    <span class="observation-status-chip__label">When?</span>
+                    <span class="observation-status-chip__state" data-slot-status>Missing</span>
+                  </div>
+                  <div
+                    class="observation-status-chip"
+                    data-slot-id="context"
+                    role="listitem"
+                    title="Include where it happened, like ‘In the classroom’ or ‘On the playground.’"
+                    data-state="missing"
+                  >
+                    <span class="observation-status-chip__label">Where?</span>
+                    <span class="observation-status-chip__state" data-slot-status>Missing</span>
+                  </div>
+                  <div
+                    class="observation-status-chip"
+                    data-slot-id="sensory"
+                    role="listitem"
+                    title="Name what you saw or heard, like ‘I heard you say…’ or ‘I saw the door close.’"
+                    data-state="missing"
+                  >
+                    <span class="observation-status-chip__label">What did you see/hear?</span>
+                    <span class="observation-status-chip__state" data-slot-status>Missing</span>
+                  </div>
+                  <div
+                    class="observation-status-chip"
+                    data-slot-id="measure"
+                    role="listitem"
+                    title="Add a count or quote for clarity, like ‘twice’ or ‘You said, “Let’s leave.”’"
+                    data-state="optional"
+                  >
+                    <span class="observation-status-chip__label">Measurement or quote (optional)</span>
+                    <span class="observation-status-chip__state" data-slot-status>Optional</span>
+                  </div>
                 </div>
                 <div class="observation-editor__example">
                   <button
@@ -3469,23 +3524,30 @@ button.site-nav__magnet {
                   <div class="observation-suggestions__panels">
                     <div class="observation-suggestions__needs">
                       <div
-                        class="observation-feelings-toggle"
+                        class="observation-feelings-toggle needs-toggle"
                         role="group"
                         aria-label="Toggle possible feelings"
                       >
+                        <span
+                          class="needs-toggle__label needs-toggle__label--unmet is-active"
+                          data-feelings-label="unmet"
+                        >
+                          Unmet
+                        </span>
                         <button
                           type="button"
-                          class="observation-switch observation-switch--compact"
+                          class="observation-switch observation-switch--compact needs-toggle__switch"
                           role="switch"
                           aria-checked="false"
+                          aria-pressed="false"
                           aria-label="Toggle between feelings for when needs aren’t met and when needs are met"
                           data-feelings-switch
                         >
                           <span class="observation-switch__base" aria-hidden="true">
                             <span class="observation-switch__thumb"></span>
                           </span>
-                          <span class="observation-switch__label" data-feelings-switch-label>Unmet</span>
                         </button>
+                        <span class="needs-toggle__label needs-toggle__label--met" data-feelings-label="met">Met</span>
                       </div>
                       <section class="observation-panel observation-panel--needs" aria-live="polite">
                         <header class="observation-panel__header">
@@ -3529,9 +3591,15 @@ button.site-nav__magnet {
                       Clear
                     </button>
                     <p class="observation-suggestions__links">
-                      <a href="../feelings/">Browse all feelings</a>
+                      <a href="../feelings/" target="_blank" rel="noopener noreferrer">
+                        Browse all feelings
+                        <span class="visually-hidden"> (opens in a new tab)</span>
+                      </a>
                       <span aria-hidden="true">•</span>
-                      <a href="../needs/">Browse all needs</a>
+                      <a href="../needs/" target="_blank" rel="noopener noreferrer">
+                        Browse all needs
+                        <span class="visually-hidden"> (opens in a new tab)</span>
+                      </a>
                     </p>
                   </div>
                 </section>

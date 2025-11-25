@@ -967,7 +967,7 @@ function renderSuggestions() {
   const actionButton = document.getElementById('observation-submit');
   const fallbackStart = document.getElementById('observation-fallback-start');
   const feelingsSwitch = document.querySelector('[data-feelings-switch]');
-  const feelingsSwitchLabel = document.querySelector('[data-feelings-switch-label]');
+  const feelingsLabels = document.querySelectorAll('[data-feelings-label]');
 
   if (!feelingsHost || !needsHost || !whyHost || !preview) {
     return;
@@ -976,13 +976,15 @@ function renderSuggestions() {
   if (feelingsSwitch) {
     const isMet = state.feelingsMode === 'met';
     feelingsSwitch.setAttribute('aria-checked', isMet ? 'true' : 'false');
+    feelingsSwitch.setAttribute('aria-pressed', isMet ? 'true' : 'false');
     feelingsSwitch.setAttribute('aria-label', isMet
       ? 'Show feelings for when needs are met'
       : 'Show feelings for when needs aren’t met');
     feelingsSwitch.classList.toggle('is-on', isMet);
-    if (feelingsSwitchLabel) {
-      feelingsSwitchLabel.textContent = isMet ? 'Met' : 'Unmet';
-    }
+    feelingsLabels.forEach(label => {
+      const mode = label?.dataset?.feelingsLabel;
+      label?.classList.toggle('is-active', mode === (isMet ? 'met' : 'unmet'));
+    });
   }
 
   if (feelingsEmpty) {
@@ -1111,6 +1113,12 @@ function populateChipList(container, emptyNode, items) {
       element.textContent = entry.title;
       if (entry.href) {
         element.href = entry.href;
+        element.target = '_blank';
+        element.rel = 'noopener noreferrer';
+        const tabNote = document.createElement('span');
+        tabNote.className = 'visually-hidden';
+        tabNote.textContent = ' (opens in a new tab)';
+        element.appendChild(tabNote);
       }
       if (entry.slug) {
         element.dataset.suggestionSlug = entry.slug;
