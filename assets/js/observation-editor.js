@@ -189,25 +189,43 @@ function bind() {
     });
   }
 
-  const feelingsSwitch = document.querySelector('[data-feelings-switch]');
-  if (feelingsSwitch) {
-    const toggleMode = () => {
-      setFeelingsMode(state.feelingsMode === 'met' ? 'unmet' : 'met');
+  const feelingsToggle = document.querySelector('.need-status-toggle');
+  if (feelingsToggle) {
+    const feelingsOptions = Array.from(feelingsToggle.querySelectorAll('.need-status-toggle__option'));
+    const feelingsStatusInput = feelingsToggle.querySelector('[data-feelings-status]');
+    const applyMode = value => {
+      const normalized = value === 'met' ? 'met' : 'unmet';
+      if (feelingsStatusInput) {
+        feelingsStatusInput.value = normalized;
+      }
+      setFeelingsMode(normalized);
     };
-    feelingsSwitch.addEventListener('click', event => {
-      event.preventDefault();
-      toggleMode();
+
+    feelingsToggle.addEventListener('click', event => {
+      const button = event.target.closest('.need-status-toggle__option');
+      if (!button) {
+        return;
+      }
+      const value = button.dataset.value === 'met' ? 'met' : 'unmet';
+      applyMode(value);
     });
-    feelingsSwitch.addEventListener('keydown', event => {
-      if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'Enter') {
-        event.preventDefault();
-        toggleMode();
-      } else if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        setFeelingsMode('unmet');
-      } else if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        setFeelingsMode('met');
+
+    feelingsToggle.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+        return;
+      }
+      if (!feelingsOptions.length) {
+        return;
+      }
+      event.preventDefault();
+      const currentIndex = feelingsOptions.findIndex(btn => btn.classList.contains('need-status-toggle__option--active'));
+      const direction = event.key === 'ArrowLeft' ? -1 : 1;
+      const startIndex = currentIndex === -1 ? 0 : currentIndex;
+      const nextIndex = (startIndex + direction + feelingsOptions.length) % feelingsOptions.length;
+      const nextButton = feelingsOptions[nextIndex];
+      if (nextButton) {
+        applyMode(nextButton.dataset.value === 'met' ? 'met' : 'unmet');
+        nextButton.focus();
       }
     });
   }
@@ -984,22 +1002,26 @@ function renderSuggestions() {
   const fallbackRunning = document.getElementById('observation-fallback-running');
   const actionButton = document.getElementById('observation-submit');
   const fallbackStart = document.getElementById('observation-fallback-start');
-  const feelingsSwitch = document.querySelector('[data-feelings-switch]');
-  const feelingsSwitchLabel = document.querySelector('[data-feelings-switch-label]');
+  const feelingsToggle = document.querySelector('.need-status-toggle');
+  const feelingsOptions = feelingsToggle
+    ? Array.from(feelingsToggle.querySelectorAll('.need-status-toggle__option'))
+    : [];
+  const feelingsStatusInput = feelingsToggle?.querySelector('[data-feelings-status]');
 
   if (!feelingsHost || !needsHost || !whyHost || !preview) {
     return;
   }
 
-  if (feelingsSwitch) {
-    const isMet = state.feelingsMode === 'met';
-    feelingsSwitch.setAttribute('aria-checked', isMet ? 'true' : 'false');
-    feelingsSwitch.setAttribute('aria-label', isMet
-      ? 'Show feelings for when needs are met'
-      : 'Show feelings for when needs aren’t met');
-    feelingsSwitch.classList.toggle('is-on', isMet);
-    if (feelingsSwitchLabel) {
-      feelingsSwitchLabel.textContent = isMet ? 'Met' : 'Unmet';
+  if (feelingsToggle && feelingsOptions.length) {
+    const mode = state.feelingsMode === 'met' ? 'met' : 'unmet';
+    feelingsOptions.forEach(option => {
+      const isActive = option.dataset.value === mode;
+      option.classList.toggle('need-status-toggle__option--active', isActive);
+      option.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      option.tabIndex = isActive ? 0 : -1;
+    });
+    if (feelingsStatusInput) {
+      feelingsStatusInput.value = mode;
     }
   }
 
