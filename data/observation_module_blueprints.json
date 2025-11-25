@@ -723,6 +723,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -833,6 +848,37 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "connection-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "terrified",
+            "hurt",
+            "bewildered",
+            "sad",
+            "frightened",
+            "lonely",
+            "upset",
+            "scared",
+            "embarrassed",
+            "anxious",
+            "angry",
+            "powerless",
+            "thwarted",
+            "frustrated",
+            "defiant",
+            "overwhelmed"
+          ],
+          "needs": [
+            "connection"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -986,6 +1032,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -1090,6 +1151,35 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "belonging-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "terrified",
+            "hurt",
+            "bewildered",
+            "sad",
+            "frightened",
+            "lonely",
+            "upset",
+            "scared",
+            "embarrassed",
+            "angry",
+            "afraid",
+            "anxious",
+            "defiant",
+            "frustrated"
+          ],
+          "needs": [
+            "belonging"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -1972,6 +2062,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -2070,6 +2175,33 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "inclusion-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "upset",
+            "scared",
+            "lonely",
+            "hurt",
+            "angry",
+            "embarrassed",
+            "frustrated",
+            "sad",
+            "afraid",
+            "anxious",
+            "defiant",
+            "jealous"
+          ],
+          "needs": [
+            "inclusion"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -2220,6 +2352,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -2315,6 +2462,32 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "community-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "upset",
+            "scared",
+            "lonely",
+            "hurt",
+            "sad",
+            "embarrassed",
+            "angry",
+            "afraid",
+            "anxious",
+            "frustrated",
+            "overwhelmed"
+          ],
+          "needs": [
+            "community"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -2468,6 +2641,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -2570,6 +2758,35 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "safety-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "scared",
+            "angry",
+            "anxiety",
+            "frightened",
+            "alarmed",
+            "agitated",
+            "defiant",
+            "helpless",
+            "sad",
+            "hurt",
+            "resentful",
+            "irritated",
+            "anxious",
+            "overwhelmed"
+          ],
+          "needs": [
+            "safety"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -4397,6 +4614,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -4502,6 +4734,36 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "trust-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "hurt",
+            "disappointment",
+            "enraged",
+            "resentful",
+            "sad",
+            "frustrated",
+            "frightened",
+            "scared",
+            "powerless",
+            "thwarted",
+            "embarrassed",
+            "agitated",
+            "anxiety",
+            "irritated"
+          ],
+          "needs": [
+            "trust"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -4647,6 +4909,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -4727,6 +5004,27 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "dependability-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "hurt",
+            "disappointment",
+            "enraged",
+            "sad",
+            "frightened"
+          ],
+          "needs": [
+            "dependability"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -5365,6 +5663,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -5437,6 +5750,25 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "commitment-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "hurt",
+            "disappointment",
+            "enraged"
+          ],
+          "needs": [
+            "commitment"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -5806,6 +6138,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -5904,6 +6251,33 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "accountability-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "scared",
+            "confused",
+            "antagonistic",
+            "hostile",
+            "bewildered",
+            "hurt",
+            "in-pain",
+            "anxious",
+            "frustrated",
+            "embarrassed",
+            "sad"
+          ],
+          "needs": [
+            "accountability"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -6050,6 +6424,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -6133,6 +6522,28 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "causality-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "scared",
+            "confused",
+            "antagonistic",
+            "hostile",
+            "bewildered",
+            "hurt"
+          ],
+          "needs": [
+            "causality"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -6282,6 +6693,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -6374,6 +6800,31 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "fairness-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "scared",
+            "confused",
+            "antagonistic",
+            "hostile",
+            "bewildered",
+            "hurt",
+            "resentful",
+            "disappointment",
+            "irritated"
+          ],
+          "needs": [
+            "fairness"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -6526,6 +6977,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -6627,6 +7093,34 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "justice-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "scared",
+            "confused",
+            "antagonistic",
+            "hostile",
+            "bewildered",
+            "hurt",
+            "resentful",
+            "impotent",
+            "helpless",
+            "disappointment",
+            "frightened",
+            "irritated"
+          ],
+          "needs": [
+            "justice"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -8835,6 +9329,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -8906,6 +9415,24 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "friendship-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "sad",
+            "lonely",
+            "hurt"
+          ],
+          "needs": [
+            "friendship"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -12004,6 +12531,21 @@
           "type": "regex",
           "pattern": "inviting)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -12084,6 +12626,27 @@
             "excluding)\\b[^\\n]{0,80}\\b(?:me",
             "them",
             "inviting)"
+          ]
+        },
+        {
+          "id": "mutuality-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "angry",
+            "frustrated",
+            "resentful",
+            "sad",
+            "frightened",
+            "helpless"
+          ],
+          "needs": [
+            "mutuality"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -13786,6 +14349,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -13915,6 +14493,44 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "order-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "scared",
+            "angry",
+            "anxiety",
+            "frightened",
+            "alarmed",
+            "agitated",
+            "defiant",
+            "helpless",
+            "sad",
+            "hurt",
+            "resentful",
+            "irritated",
+            "anxious",
+            "overwhelmed",
+            "disappointment",
+            "enraged",
+            "frustrated",
+            "powerless",
+            "thwarted",
+            "embarrassed",
+            "tense",
+            "distressed",
+            "lonely"
+          ],
+          "needs": [
+            "order"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -14344,6 +14960,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -14473,6 +15104,44 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "control-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "scared",
+            "angry",
+            "anxiety",
+            "frightened",
+            "alarmed",
+            "agitated",
+            "defiant",
+            "helpless",
+            "sad",
+            "hurt",
+            "resentful",
+            "irritated",
+            "anxious",
+            "overwhelmed",
+            "disappointment",
+            "enraged",
+            "frustrated",
+            "powerless",
+            "thwarted",
+            "embarrassed",
+            "tense",
+            "distressed",
+            "lonely"
+          ],
+          "needs": [
+            "control"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -14635,6 +15304,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -14764,6 +15448,44 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "predictability-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "scared",
+            "angry",
+            "anxiety",
+            "frightened",
+            "alarmed",
+            "agitated",
+            "defiant",
+            "helpless",
+            "sad",
+            "hurt",
+            "resentful",
+            "irritated",
+            "anxious",
+            "overwhelmed",
+            "disappointment",
+            "enraged",
+            "frustrated",
+            "powerless",
+            "thwarted",
+            "embarrassed",
+            "tense",
+            "distressed",
+            "lonely"
+          ],
+          "needs": [
+            "predictability"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]
@@ -15915,6 +16637,21 @@
           "type": "regex",
           "pattern": "inspection)",
           "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "flags": "iu"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+          "flags": "iu"
         }
       ],
       "cues": [
@@ -15993,6 +16730,27 @@
             "checklist",
             "protocol",
             "inspection)"
+          ]
+        },
+        {
+          "id": "security-plan-change-message",
+          "lexiconKeys": [],
+          "feelings": [
+            "frightened",
+            "tense",
+            "anxious",
+            "distressed",
+            "scared",
+            "lonely"
+          ],
+          "needs": [
+            "security"
+          ],
+          "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+          "patterns": [
+            "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+            "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+            "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
           ]
         }
       ]

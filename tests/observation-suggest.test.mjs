@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict';
 
 import { createCueMatchers } from '../lib/observationCueMatcher.js';
-import { compileObservationCueLibrary } from '../lib/observationCueData.js';
+import {
+  compileObservationCueLibrary,
+  parseObservationCueCSV,
+  parseObservationCueModules,
+} from '../lib/observationCueData.js';
 import { collectCatalogFeelings, suggestFromObservation } from '../lib/observationSuggest.js';
 import { computeFallbackSuggestion } from '../lib/observationFallback.js';
+import { readFileSync } from 'node:fs';
 
 const tests = [];
 
@@ -44,6 +49,25 @@ test('limits module hits and reports overflow', () => {
   assert.equal(result.hits.length, 2);
   assert.equal(result.totalHits, 3);
   assert.equal(result.overflow, 1);
+});
+
+test('observations page example suggests disappointment', () => {
+  const observation =
+    'Last Thursday, two days after my partner and I had agreed to have dinner together at home at 7 p.m., I arrived back at the apartment at 6:50 p.m. and started setting the table. At 7:15 p.m. my partner was not home yet, and at 7:20 p.m. I saw a message on my phone sent at 6:55 p.m. that said, "I decided to stay late at work and will eat here tonight."';
+
+  const cuesCsv = readFileSync(new URL('../data/observation_cues.csv', import.meta.url), 'utf8');
+  const modulesJson = readFileSync(new URL('../data/observation_cue_modules.json', import.meta.url), 'utf8');
+  const cues = parseObservationCueCSV(cuesCsv);
+  const modules = parseObservationCueModules(modulesJson);
+  const library = compileObservationCueLibrary({ cues, modules });
+
+  const result = suggestFromObservation(observation, library, 200, {
+    maxModules: 200,
+    maxNeeds: 200,
+    maxFeelings: 200,
+  });
+
+  assert.ok(result.feelings.includes('disappointment'));
 });
 
 test('limits suggestions to four needs and aligned feelings', () => {

@@ -107,6 +107,15 @@
           "them",
           "inviting)"
         ]
+      },
+      {
+        "suffix": "plan-change-message",
+        "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+        "patterns": [
+          "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
+        ]
       }
     ]
   },
@@ -312,6 +321,15 @@
           "checklist",
           "protocol",
           "inspection)"
+        ]
+      },
+      {
+        "suffix": "plan-change-message",
+        "example": "We agreed to have dinner at home at 7 p.m., but at 7:20 p.m. they still weren't home and had texted at 6:55 that they were staying late at work.",
+        "patterns": [
+          "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+          "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+          "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)"
         ]
       }
     ]

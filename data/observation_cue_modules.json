@@ -508,6 +508,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -518,7 +533,8 @@
     "cueIds": [
       "connection-meeting-without",
       "connection-door-closed-outside",
-      "connection-thread-without"
+      "connection-thread-without",
+      "connection-plan-change-message"
     ],
     "feelings": [
       "terrified",
@@ -666,6 +682,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -676,7 +707,8 @@
     "cueIds": [
       "belonging-meeting-without",
       "belonging-door-closed-outside",
-      "belonging-thread-without"
+      "belonging-thread-without",
+      "belonging-plan-change-message"
     ],
     "feelings": [
       "terrified",
@@ -1296,6 +1328,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -1306,7 +1353,8 @@
     "cueIds": [
       "inclusion-meeting-without",
       "inclusion-door-closed-outside",
-      "inclusion-thread-without"
+      "inclusion-thread-without",
+      "inclusion-plan-change-message"
     ],
     "feelings": [
       "upset",
@@ -1450,6 +1498,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -1460,7 +1523,8 @@
     "cueIds": [
       "community-meeting-without",
       "community-door-closed-outside",
-      "community-thread-without"
+      "community-thread-without",
+      "community-plan-change-message"
     ],
     "feelings": [
       "upset",
@@ -1603,6 +1667,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -1613,7 +1692,8 @@
     "cueIds": [
       "safety-door-unsecured",
       "safety-alarm-offline",
-      "safety-protocol-skipped"
+      "safety-protocol-skipped",
+      "safety-plan-change-message"
     ],
     "feelings": [
       "scared",
@@ -2798,6 +2878,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -2808,7 +2903,8 @@
     "cueIds": [
       "trust-door-unsecured",
       "trust-alarm-offline",
-      "trust-protocol-skipped"
+      "trust-protocol-skipped",
+      "trust-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -2955,6 +3051,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -2965,7 +3076,8 @@
     "cueIds": [
       "dependability-meeting-without",
       "dependability-door-closed-outside",
-      "dependability-thread-without"
+      "dependability-thread-without",
+      "dependability-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -3440,6 +3552,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -3450,7 +3577,8 @@
     "cueIds": [
       "commitment-door-unsecured",
       "commitment-alarm-offline",
-      "commitment-protocol-skipped"
+      "commitment-protocol-skipped",
+      "commitment-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -3723,6 +3851,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -3733,7 +3876,8 @@
     "cueIds": [
       "accountability-meeting-without",
       "accountability-door-closed-outside",
-      "accountability-thread-without"
+      "accountability-thread-without",
+      "accountability-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -3877,6 +4021,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -3887,7 +4046,8 @@
     "cueIds": [
       "causality-meeting-without",
       "causality-door-closed-outside",
-      "causality-thread-without"
+      "causality-thread-without",
+      "causality-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -4026,6 +4186,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -4036,7 +4211,8 @@
     "cueIds": [
       "fairness-meeting-without",
       "fairness-door-closed-outside",
-      "fairness-thread-without"
+      "fairness-thread-without",
+      "fairness-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -4178,6 +4354,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -4188,7 +4379,8 @@
     "cueIds": [
       "justice-meeting-without",
       "justice-door-closed-outside",
-      "justice-thread-without"
+      "justice-thread-without",
+      "justice-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -5680,6 +5872,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -5690,7 +5897,8 @@
     "cueIds": [
       "friendship-meeting-without",
       "friendship-door-closed-outside",
-      "friendship-thread-without"
+      "friendship-thread-without",
+      "friendship-plan-change-message"
     ],
     "feelings": [
       "sad",
@@ -7789,6 +7997,21 @@
         "type": "regex",
         "pattern": "inviting)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -7799,7 +8022,8 @@
     "cueIds": [
       "mutuality-meeting-without",
       "mutuality-door-closed-outside",
-      "mutuality-thread-without"
+      "mutuality-thread-without",
+      "mutuality-plan-change-message"
     ],
     "feelings": [
       "angry",
@@ -8997,6 +9221,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -9007,7 +9246,8 @@
     "cueIds": [
       "order-door-unsecured",
       "order-alarm-offline",
-      "order-protocol-skipped"
+      "order-protocol-skipped",
+      "order-plan-change-message"
     ],
     "feelings": [
       "scared",
@@ -9328,6 +9568,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -9338,7 +9593,8 @@
     "cueIds": [
       "control-door-unsecured",
       "control-alarm-offline",
-      "control-protocol-skipped"
+      "control-protocol-skipped",
+      "control-plan-change-message"
     ],
     "feelings": [
       "scared",
@@ -9493,6 +9749,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -9503,7 +9774,8 @@
     "cueIds": [
       "predictability-door-unsecured",
       "predictability-alarm-offline",
-      "predictability-protocol-skipped"
+      "predictability-protocol-skipped",
+      "predictability-plan-change-message"
     ],
     "feelings": [
       "scared",
@@ -10307,6 +10579,21 @@
         "type": "regex",
         "pattern": "inspection)",
         "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\bagreed\\s+to\\b[^\\n]{0,80}\\bat\\s+\\d",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:text(?:ed)?|messag(?:ed|e)|sent)\\b[^\\n]{0,80}\\bat\\s+\\d[^\\n]{0,80}\\b(?:stay(?:ing)?\\s+late\\s+at\\s+work)",
+        "flags": "iu"
+      },
+      {
+        "type": "regex",
+        "pattern": "\\b(?:not\\s+home|wasn'?t\\s+home|weren't\\s+home)\\b[^\\n]{0,40}\\b(?:yet|by\\s+\\d)",
+        "flags": "iu"
       }
     ],
     "examples": [
@@ -10317,7 +10604,8 @@
     "cueIds": [
       "security-door-unsecured",
       "security-alarm-offline",
-      "security-protocol-skipped"
+      "security-protocol-skipped",
+      "security-plan-change-message"
     ],
     "feelings": [
       "frightened",
