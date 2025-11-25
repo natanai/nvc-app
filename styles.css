@@ -6702,6 +6702,29 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   margin: 0 0 0.35rem;
 }
 
+.mourning-observation {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.mourning-observation__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.mourning-observation__guidance {
+  margin: 0;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+  text-align: right;
+}
+
+.mourning-observation__input-wrapper textarea {
+  min-height: 150px;
+}
+
 .mourning-filter {
   margin: 0.75rem 0;
 }
