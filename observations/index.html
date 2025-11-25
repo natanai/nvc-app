@@ -1739,6 +1739,9 @@ button.site-nav__magnet {
     overflow: hidden;
     box-shadow: 0 6px 18px color-mix(in srgb, var(--outline) 10%, transparent);
     transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    --observation-editor-padding-block: 1.15rem;
+    --observation-editor-padding-inline: 1.2rem;
+    --observation-scrollbar-width: 0px;
   }
 
   .observation-editor__input-wrapper:focus-within {
@@ -1751,7 +1754,7 @@ button.site-nav__magnet {
     z-index: 3;
     width: 100%;
     min-height: 10rem;
-    padding: 1.15rem 1.2rem;
+    padding: var(--observation-editor-padding-block) var(--observation-editor-padding-inline);
     box-sizing: border-box;
     border: none;
     border-radius: var(--radius-3xl);
@@ -1770,7 +1773,10 @@ button.site-nav__magnet {
   .observation-editor__highlight {
     position: absolute;
     inset: 0;
-    padding: 1.15rem 1.2rem;
+    padding: var(--observation-editor-padding-block) var(--observation-editor-padding-inline);
+    padding-right: calc(
+      var(--observation-editor-padding-inline) + var(--observation-scrollbar-width)
+    );
     box-sizing: border-box;
     font: inherit;
     line-height: 1.6;
@@ -1791,7 +1797,10 @@ button.site-nav__magnet {
   .observation-editor__formula {
     position: absolute;
     inset: 0;
-    padding: 1.15rem 1.2rem;
+    padding: var(--observation-editor-padding-block) var(--observation-editor-padding-inline);
+    padding-right: calc(
+      var(--observation-editor-padding-inline) + var(--observation-scrollbar-width)
+    );
     box-sizing: border-box;
     font: inherit;
     line-height: 1.6;
