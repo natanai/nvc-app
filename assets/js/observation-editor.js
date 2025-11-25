@@ -1111,6 +1111,9 @@ function populateChipList(container, emptyNode, items) {
       element.textContent = entry.title;
       if (entry.href) {
         element.href = entry.href;
+        element.target = '_blank';
+        element.rel = 'noreferrer';
+        element.setAttribute('aria-label', `${entry.title} (opens in a new tab)`);
       }
       if (entry.slug) {
         element.dataset.suggestionSlug = entry.slug;
