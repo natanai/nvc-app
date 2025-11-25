@@ -107,8 +107,8 @@ export const QUADRANT_SUGGESTIONS = {
   },
   'medium-unpleasant': {
     label: 'Steady energy · Unpleasant',
-    description: 'Uneasy steadiness can align with worry, guilt, or shame when something important feels off.',
-    emotions: ['worry', 'guilt', 'shame', 'stress'],
+    description: 'Uneasy steadiness can align with anxiousness, guilt, or shame when something important feels off.',
+    emotions: ['anxiety', 'guilt', 'shame', 'stress'],
     care: [
       'Name what feels out of alignment and what value or need wants attention.',
       'Try a grounding check: notice 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.',
@@ -148,7 +148,7 @@ export const QUADRANT_SUGGESTIONS = {
   'high-neutral': {
     label: 'High energy · Neutral',
     description: 'Buzzing but not distressed may indicate determination or anticipation before taking action.',
-    emotions: ['determined', 'focused', 'anticipation'],
+    emotions: ['determined', 'focused', 'excited'],
     care: [
       'Channel the energy into a clear next step or into movement like a brisk walk.',
       'Double-check your plan with a supportive person if you want validation before moving forward.',
@@ -158,7 +158,7 @@ export const QUADRANT_SUGGESTIONS = {
   'low-pleasant': {
     label: 'Low energy · Pleasant',
     description: 'Easeful and grounded sensations often pair with calm or relief after effort.',
-    emotions: ['calm', 'relief', 'contentment'],
+    emotions: ['calm', 'relief', 'contented'],
     care: [
       'Savor the ease—lengthen the exhale, stretch gently, or notice what feels safe.',
       'Thank your body for the steadiness.',
@@ -167,8 +167,8 @@ export const QUADRANT_SUGGESTIONS = {
   },
   'medium-pleasant': {
     label: 'Steady energy · Pleasant',
-    description: 'Balanced warmth can signal contentment, hope, or gratitude.',
-    emotions: ['contentment', 'hope', 'gratitude'],
+    description: 'Balanced warmth can signal feeling contented, hopeful, or grateful.',
+    emotions: ['contented', 'hopeful', 'gratitude'],
     care: [
       'Write down what is working right now so you can return to it later.',
       'Share appreciation with someone involved if that feels good.',
@@ -177,8 +177,8 @@ export const QUADRANT_SUGGESTIONS = {
   },
   'high-pleasant': {
     label: 'High energy · Pleasant',
-    description: 'Sparkly energy often aligns with joy, excitement, or pride.',
-    emotions: ['joy', 'excitement', 'pride'],
+    description: 'Sparkly energy often aligns with feeling joyful, excited, or proud.',
+    emotions: ['joyful', 'excited', 'pride'],
     care: [
       'Let yourself celebrate—move, dance, or tell someone the good news.',
       'Anchor the moment by noting what contributed to the joy.',
@@ -193,11 +193,19 @@ export const EMOTION_LIBRARY = {
     definition: 'An activated, future-focused alert that wants to keep you prepared for possible danger.',
     bodySignals: ['Tight or fluttery chest', 'Fast heartbeat', 'Butterflies in the stomach', 'Restless energy in hands or feet'],
     thoughts: ['“What if something goes wrong?”', 'Planning every possible outcome', 'Scanning for threats or mistakes'],
-    contexts: ['Facing uncertainty or change', 'Waiting for results', 'Holding lots of responsibility'],
-    needs: ['Safety', 'Clarity', 'Support', 'Trust'],
+    contexts: [
+      'Facing uncertainty or change',
+      'Waiting for results',
+      'Holding lots of responsibility',
+      'Unfinished tasks or ambiguous feedback',
+      'Caring deeply about an outcome',
+    ],
+    needs: ['Safety', 'Clarity', 'Support', 'Trust', 'Predictability'],
     regulation: [
       'Try 4-4-6 breathing: inhale 4, hold 4, exhale 6 to downshift activation.',
       'Orient to the present—name five things you can see or touch to remind your body it is here now.',
+      'Write down the worry, then note what is in your control versus what is not.',
+      'Schedule a specific time to revisit the concern so your brain can rest meanwhile.',
     ],
     communication: "I'm feeling anxious and could use some reassurance or clearer next steps.",
   },
@@ -240,28 +248,15 @@ export const EMOTION_LIBRARY = {
     ],
     communication: 'I feel overwhelmed and need to slow down or get help choosing the next priority.',
   },
-  excitement: {
-    name: 'Excitement',
+  excited: {
+    name: 'Excited',
     definition: 'High, sparkling energy that appears when something desired is about to happen.',
     bodySignals: ['Bouncing legs', 'Quick speech', 'Warmth in the face'],
     thoughts: ['“This is going to be great!”', '“I can’t wait.”'],
-    contexts: ['Anticipating a positive event', 'Working on an inspiring idea'],
-    needs: ['Appreciation', 'Self expression', 'Connection'],
-    regulation: ['Channel the spark—dance, share the news, or map out how to savor it.', 'Notice if you also need grounding to rest later.'],
+    contexts: ['Anticipating a positive event', 'Working on an inspiring idea', 'Waiting for news'],
+    needs: ['Appreciation', 'Self expression', 'Connection', 'Predictability'],
+    regulation: ['Channel the spark—dance, share the news, or map out how to savor it.', 'Alternate excitement with grounding breaths or movement so you can rest later.'],
     communication: 'I’m excited and want to celebrate or plan how to enjoy this moment.',
-  },
-  worry: {
-    name: 'Worry',
-    definition: 'A steady hum of concern that circles possibilities without resolution.',
-    bodySignals: ['Tension behind eyes', 'Fidgeting', 'Tight shoulders'],
-    thoughts: ['“Have I missed something?”', '“I should double-check.”'],
-    contexts: ['Unfinished tasks', 'Ambiguous feedback', 'Caring deeply about an outcome'],
-    needs: ['Clarity', 'Predictability', 'Support'],
-    regulation: [
-      'Write down the worry, then note what is in your control versus what is not.',
-      'Schedule a specific time to revisit the concern so your brain can rest meanwhile.',
-    ],
-    communication: 'I’m feeling worried and could use information or reassurance about what happens next.',
   },
   sadness: {
     name: 'Sadness',
@@ -440,16 +435,6 @@ export const EMOTION_LIBRARY = {
     regulation: ['Protect your focus window—silence notifications or set a timer.', 'Plan a closing ritual so you can release the task afterward.'],
     communication: 'I’m focused right now and need minimal interruptions until I finish.',
   },
-  anticipation: {
-    name: 'Anticipation',
-    definition: 'Energized readiness for something coming soon—pleasant or uncertain.',
-    bodySignals: ['Quickened breath', 'Forward-leaning posture', 'Tingling skin'],
-    thoughts: ['“It’s almost time.”', '“I wonder how it will go.”'],
-    contexts: ['Waiting for news', 'Preparing for an event'],
-    needs: ['Predictability', 'Support', 'Trust'],
-    regulation: ['Channel the build-up into preparation or a grounding routine.', 'Alternate between activity and calming breaths.'],
-    communication: 'I’m feeling anticipation and would like support as I get ready.',
-  },
   calm: {
     name: 'Calm',
     definition: 'Settled ease when your body senses safety and nothing demands urgent action.',
@@ -470,8 +455,8 @@ export const EMOTION_LIBRARY = {
     regulation: ['Let your body fully exhale and shake out leftover stress.', 'Mark the moment with a small reward or acknowledgement.'],
     communication: 'I’m relieved and want to honor the effort it took to get here.',
   },
-  contentment: {
-    name: 'Contentment',
+  contented: {
+    name: 'Contented',
     definition: 'Quiet satisfaction when needs feel sufficiently met.',
     bodySignals: ['Soft smile', 'Relaxed belly', 'Balanced posture'],
     thoughts: ['“This is enough for now.”', '“I can enjoy this.”'],
@@ -480,14 +465,14 @@ export const EMOTION_LIBRARY = {
     regulation: ['Pause to notice sensory details—savor taste, texture, or scenery.', 'Share gratitude or document what you appreciate.'],
     communication: 'I feel content and grateful for how things are landing right now.',
   },
-  hope: {
-    name: 'Hope',
+  hopeful: {
+    name: 'Hopeful',
     definition: 'A forward-looking belief that improvement or support is possible.',
     bodySignals: ['Light chest', 'Lifted gaze', 'Gentle energy'],
     thoughts: ['“Something good could happen.”', '“There are options.”'],
     contexts: ['Glimpsing new possibilities', 'Receiving encouragement'],
     needs: ['Growth', 'Support', 'Empowerment'],
-    regulation: ['Capture the ideas that spark hope so you can revisit them.', 'Pair hope with one practical next step.'],
+    regulation: ['Capture the ideas that spark hope so you can revisit it.', 'Pair hope with one practical next step.'],
     communication: 'I’m feeling hopeful and want to nurture this possibility together.',
   },
   gratitude: {
@@ -500,8 +485,8 @@ export const EMOTION_LIBRARY = {
     regulation: ['Express thanks aloud, in writing, or through a small gesture.', 'Record the moment so you can revisit it later.'],
     communication: 'I feel grateful and want to express appreciation for what you did.',
   },
-  joy: {
-    name: 'Joy',
+  joyful: {
+    name: 'Joyful',
     definition: 'Expansive delight when something deeply meaningful or playful lands well.',
     bodySignals: ['Light, bouncy energy', 'Laughing', 'Sparkling eyes'],
     thoughts: ['“This is wonderful!”', '“I love this.”'],
@@ -587,16 +572,19 @@ export const FEELING_SLUG_ALIASES = {
   "irritated": "frustration",
   "frustrated": "frustration",
   "thwarted": "frustration",
-  "contented": "contentment",
+  "contentment": "contented",
   "pressured": "stress",
   "tense": "stress",
   "distressed": "stress",
   "upset": "stress",
   "agitated": "stress",
   "relieved": "relief",
-  "joyful": "joy",
-  "excited": "excitement",
-  "hopeful": "hope",
+  "joyful": "joyful",
+  "joy": "joyful",
+  "excited": "excited",
+  "excitement": "excited",
+  "hopeful": "hopeful",
+  "hope": "hopeful",
   "overwhelmed": "overwhelm",
   "overwhelm": "overwhelm",
   "fear": "fear",
@@ -619,5 +607,9 @@ export const FEELING_SLUG_ALIASES = {
   "helpless": "numb",
   "impotent": "numb",
   "desperation": "overwhelm",
-  "jealous": "worry"
+  "worry": "anxiety",
+  "jealous": "anxiety",
+  "love": "love-caring",
+  "contented": "contented",
+  "anticipation": "excited"
 };

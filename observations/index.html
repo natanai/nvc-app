@@ -1483,45 +1483,44 @@ button.site-nav__magnet {
   }
 
   .observation-editor__slot-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: 0.6rem;
-    margin: 0 0 0.35rem;
-    padding: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.85rem;
+    margin: 0.4rem 0 0.15rem;
+    padding: 0.15rem 0;
     border-radius: var(--radius-xl);
-    background: color-mix(in srgb, var(--chip-bg) 60%, #ffffff 40%);
-    border: 1px dashed color-mix(in srgb, var(--outline) 22%, transparent);
   }
 
   .observation-editor__slot {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.4rem 0.55rem;
+    padding: 0.25rem 0.4rem;
     border-radius: var(--radius-lg);
-    background: color-mix(in srgb, #ffffff 92%, transparent);
-    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-    min-height: 2.5rem;
+    background: transparent;
+    border: none;
+    min-height: 2.15rem;
   }
 
   .observation-editor__slot-indicator {
-    width: 0.9rem;
-    height: 0.9rem;
+    width: 0.65rem;
+    height: 0.65rem;
     border-radius: 999px;
-    border: 2px solid color-mix(in srgb, var(--outline) 42%, transparent);
-    background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--outline) 36%, transparent);
+    background: color-mix(in srgb, var(--chip-bg) 58%, #ffffff 42%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--outline) 8%, transparent);
   }
 
   .observation-editor__slot-label {
-    font-weight: 600;
-    color: color-mix(in srgb, var(--outline) 90%, transparent);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: color-mix(in srgb, var(--outline) 70%, transparent);
   }
 
   .observation-editor__slot[data-state='complete'] .observation-editor__slot-indicator {
     border-color: color-mix(in srgb, var(--mint) 60%, transparent);
-    background: color-mix(in srgb, var(--mint) 36%, #ffffff 64%);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mint) 40%, transparent);
+    background: color-mix(in srgb, var(--mint) 48%, #ffffff 52%);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--mint) 18%, transparent);
   }
 
   .observation-editor__status {
@@ -2516,11 +2515,12 @@ button.site-nav__magnet {
     border: none;
     border-radius: 999px;
     background: color-mix(in srgb, #ffffff 78%, transparent);
-    width: var(--switch-width);
-    height: var(--switch-height);
-    padding: var(--switch-padding);
+    width: auto;
+    height: auto;
+    padding: 0.35rem 0.65rem;
     display: inline-flex;
     align-items: center;
+    gap: 0.5rem;
     position: relative;
     cursor: pointer;
     transition: background 0.2s ease, box-shadow 0.2s ease;
@@ -2544,17 +2544,23 @@ button.site-nav__magnet {
 
   .observation-switch__label {
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--outline) 55%, var(--ink) 45%);
+    color: color-mix(in srgb, var(--outline) 48%, var(--ink) 38%);
     line-height: 1;
+  }
+
+  .observation-switch__label--option {
+    color: color-mix(in srgb, var(--outline) 45%, transparent);
+    transition: color 0.18s ease;
   }
 
   .observation-switch__base {
     position: relative;
     flex: 1 1 auto;
-    height: 100%;
+    height: var(--switch-height);
+    min-width: var(--switch-width);
     border-radius: calc(var(--switch-height) / 2);
     background: color-mix(in srgb, var(--outline) 12%, transparent);
     overflow: hidden;
@@ -2590,6 +2596,11 @@ button.site-nav__magnet {
 
   .observation-switch.is-on .observation-switch__label {
     color: var(--ink);
+  }
+
+  .observation-switch:not(.is-on) .observation-switch__label--option[data-feelings-option='unmet'],
+  .observation-switch.is-on .observation-switch__label--option[data-feelings-option='met'] {
+    color: color-mix(in srgb, var(--ink) 78%, transparent);
   }
 
   .observation-switch:focus-visible {
@@ -3344,6 +3355,27 @@ button.site-nav__magnet {
                     aria-live="polite"
                   ></div>
                 </div>
+                <div class="observation-editor__input-wrapper">
+                  <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
+                  <div
+                    id="observation-formula"
+                    class="observation-editor__formula"
+                    aria-hidden="true"
+                    hidden
+                  ></div>
+                  <textarea
+                    id="observation-text"
+                    class="observation-editor__input"
+                    rows="7"
+                    aria-describedby="observation-guidelines-summary"
+                  ></textarea>
+                  <div
+                    id="observation-highlight-details"
+                    class="observation-editor__highlight-details"
+                    hidden
+                    aria-live="polite"
+                  ></div>
+                </div>
                 <div
                   id="observation-slot-row"
                   class="observation-editor__slot-row"
@@ -3390,27 +3422,6 @@ button.site-nav__magnet {
                     <span class="observation-editor__slot-label">Measurement or quote (optional)</span>
                     <span class="visually-hidden" data-slot-status>Missing</span>
                   </div>
-                </div>
-                <div class="observation-editor__input-wrapper">
-                  <div id="observation-highlight" class="observation-editor__highlight" aria-hidden="true"></div>
-                  <div
-                    id="observation-formula"
-                    class="observation-editor__formula"
-                    aria-hidden="true"
-                    hidden
-                  ></div>
-                  <textarea
-                    id="observation-text"
-                    class="observation-editor__input"
-                    rows="7"
-                    aria-describedby="observation-guidelines-summary"
-                  ></textarea>
-                  <div
-                    id="observation-highlight-details"
-                    class="observation-editor__highlight-details"
-                    hidden
-                    aria-live="polite"
-                  ></div>
                 </div>
                 <div class="observation-editor__example">
                   <button
@@ -3481,10 +3492,24 @@ button.site-nav__magnet {
                           aria-label="Toggle between feelings for when needs aren’t met and when needs are met"
                           data-feelings-switch
                         >
+                          <span
+                            class="observation-switch__label observation-switch__label--option"
+                            data-feelings-option="unmet"
+                            aria-hidden="true"
+                          >
+                            Unmet
+                          </span>
                           <span class="observation-switch__base" aria-hidden="true">
                             <span class="observation-switch__thumb"></span>
                           </span>
-                          <span class="observation-switch__label" data-feelings-switch-label>Unmet</span>
+                          <span
+                            class="observation-switch__label observation-switch__label--option"
+                            data-feelings-option="met"
+                            aria-hidden="true"
+                          >
+                            Met
+                          </span>
+                          <span class="visually-hidden" data-feelings-switch-label>Unmet</span>
                         </button>
                       </div>
                       <section class="observation-panel observation-panel--needs" aria-live="polite">
