@@ -272,6 +272,7 @@ function updateObservationText(value, options = {}) {
   state.text = next;
   state.scrolledToSuggestions = false;
   renderHighlightDetails(null);
+  syncObservationHighlightScroll();
 
   if (state.mode !== 'editing') {
     state.mode = 'editing';
@@ -2497,6 +2498,12 @@ function syncObservationHighlightScroll() {
   const formula = document.getElementById('observation-formula');
   const scrollTop = textarea ? textarea.scrollTop : 0;
   const scrollLeft = textarea ? textarea.scrollLeft : 0;
+  const wrapper = textarea ? textarea.parentElement : null;
+
+  if (wrapper && textarea) {
+    const scrollbarWidth = Math.max(0, textarea.offsetWidth - textarea.clientWidth);
+    wrapper.style.setProperty('--observation-scrollbar-width', `${scrollbarWidth}px`);
+  }
 
   if (highlight) {
     highlight.scrollTop = scrollTop;
