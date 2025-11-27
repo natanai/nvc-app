@@ -232,7 +232,7 @@ function checkReferenceList({
 }
 
 const EXTRA_DIRECTORY_ALLOWLIST = {
-  feelings: new Set(['body-cues']),
+  feelings: new Set(['body-cues', 'guilt-shame']),
   needs: new Set(),
   'faux-feelings': new Set(),
 };

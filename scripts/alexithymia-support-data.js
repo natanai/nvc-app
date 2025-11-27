@@ -530,6 +530,7 @@ export const FEELING_PAGE_SLUGS = [
   'fear',
   'frightened',
   'frustrated',
+  'guilt-shame',
   'helpless',
   'hopeful',
   'hostile',
@@ -600,6 +601,7 @@ export const FEELING_SLUG_ALIASES = {
   "humiliated": "shame",
   "embarrassed": "shame",
   "shame": "shame",
+  "guilt-shame": "guilt",
   "guilt": "guilt",
   "hurt": "sadness",
   "in-pain": "sadness",
@@ -609,7 +611,6 @@ export const FEELING_SLUG_ALIASES = {
   "desperation": "overwhelm",
   "worry": "anxiety",
   "jealous": "anxiety",
-  "love": "love-caring",
   "contented": "contented",
   "anticipation": "excited"
 };

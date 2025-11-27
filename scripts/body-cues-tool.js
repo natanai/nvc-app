@@ -43,6 +43,9 @@ function getCanonicalSlugMap() {
       }
     });
   });
+  ['guilt', 'shame'].forEach((key) => {
+    map.set(key, 'guilt-shame');
+  });
   canonicalSlugMap = map;
   return map;
 }
