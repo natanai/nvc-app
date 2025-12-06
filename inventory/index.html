@@ -820,6 +820,10 @@ button.site-nav__magnet {
         z-index: 9999;
       }
 
+      .bsky-login-modal[hidden] {
+        display: none;
+      }
+
       .bsky-login-modal__dialog {
         position: relative;
         max-width: 720px;
@@ -1455,7 +1459,7 @@ button.site-nav__magnet {
                       type="text"
                       required
                       autocomplete="username"
-                      placeholder="@nathanael.ink"
+                      placeholder="@your-handle.bsky.social"
                       data-bsky-handle-input
                     />
                   </label>
@@ -1698,6 +1702,8 @@ button.site-nav__magnet {
           return;
         }
 
+        modal.hidden = true;
+
         function showModal() {
           modal.hidden = false;
           if (errorBox) errorBox.textContent = '';
@@ -1742,6 +1748,18 @@ button.site-nav__magnet {
             }
           } finally {
             openButton.disabled = false;
+          }
+        });
+
+        modal.addEventListener('click', (ev) => {
+          if (ev.target === modal) {
+            hideModal();
+          }
+        });
+
+        window.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && !modal.hidden) {
+            hideModal();
           }
         });
 
