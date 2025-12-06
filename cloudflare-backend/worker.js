@@ -43,32 +43,249 @@ async function handleMe() {
   );
 }
 
-async function handleFeedStrategies() {
-  // Placeholder: will later return strategies from people the user follows.
-  return new Response(
-    JSON.stringify({
-      status: 'not_implemented',
-      endpoint: '/api/feed/strategies',
-    }),
-    {
-      status: 501,
-      headers: { 'Content-Type': 'application/json' },
-    },
-  );
+async function handlePostStrategy(request, env) {
+  let body;
+
+  try {
+    body = await request.json();
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ status: 'error', message: 'Invalid JSON body' }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  }
+
+  const { did, title, body: strategyBody = null, needIds = null } = body || {};
+
+  if (!did || !title || String(title).trim() === '') {
+    return new Response(
+      JSON.stringify({ status: 'error', message: 'did and title are required' }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  }
+
+  let needIdsSerialized = null;
+  if (Array.isArray(needIds)) {
+    try {
+      needIdsSerialized = JSON.stringify(needIds);
+    } catch (err) {
+      needIdsSerialized = null;
+    }
+  }
+
+  try {
+    await env.DB.prepare(
+      'INSERT INTO strategies (author_did, title, body, need_ids) VALUES (?, ?, ?, ?);',
+    )
+      .bind(did, title, strategyBody, needIdsSerialized)
+      .run();
+
+    return new Response(
+      JSON.stringify({ status: 'ok' }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  } catch (err) {
+    const message = String(err || '').toUpperCase();
+    if (message.includes('FOREIGN KEY')) {
+      return new Response(
+        JSON.stringify({ status: 'error', message: 'unknown author DID' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ status: 'error', message: String(err) }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
 }
 
-async function handleCreateStrategy() {
-  // Placeholder: will later create a strategy for the logged-in user.
-  return new Response(
-    JSON.stringify({
-      status: 'not_implemented',
-      endpoint: '/api/strategies',
-    }),
-    {
-      status: 501,
-      headers: { 'Content-Type': 'application/json' },
-    },
-  );
+async function handleGetStrategies(request, env) {
+  const url = new URL(request.url);
+  const did = url.searchParams.get('did');
+
+  if (!did) {
+    return new Response(
+      JSON.stringify({ status: 'error', message: 'did is required' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  try {
+    const stmt = env.DB.prepare(
+      `SELECT
+        s.id,
+        s.author_did,
+        s.title,
+        s.body,
+        s.need_ids,
+        s.created_at,
+        u.handle,
+        u.display_name,
+        u.avatar_url
+       FROM strategies s
+       LEFT JOIN users u ON u.did = s.author_did
+       WHERE s.author_did = ?
+       ORDER BY s.created_at DESC
+       LIMIT 100;`,
+    ).bind(did);
+
+    const { results } = await stmt.all();
+    const strategies = (results || []).map((row) => ({
+      id: row.id,
+      authorDid: row.author_did,
+      title: row.title,
+      body: row.body ?? null,
+      needIds: row.need_ids ? safeJsonParseArray(row.need_ids) : [],
+      createdAt: row.created_at,
+      author: {
+        did: row.author_did,
+        handle: row.handle || null,
+        displayName: row.display_name || null,
+        avatar: row.avatar_url || null,
+      },
+    }));
+
+    return new Response(
+      JSON.stringify({ status: 'ok', did, strategies }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ status: 'error', message: String(err) }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+}
+
+async function handleGetStrategyFeed(request, env) {
+  const url = new URL(request.url);
+  const viewerDid = url.searchParams.get('did');
+
+  if (!viewerDid) {
+    return new Response(
+      JSON.stringify({ status: 'error', message: 'did is required' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  try {
+    let viewerKnown = false;
+
+    try {
+      const userRow = await env.DB.prepare(
+        'SELECT did, handle FROM users WHERE did = ?;',
+      )
+        .bind(viewerDid)
+        .first();
+      viewerKnown = !!userRow;
+    } catch (err) {
+      // Best-effort; ignore lookup errors.
+      viewerKnown = false;
+    }
+
+    const apiUrl =
+      'https://public.api.bsky.app/xrpc/app.bsky.graph.getFollows' +
+      '?actor=' +
+      encodeURIComponent(viewerDid) +
+      '&limit=100';
+
+    const res = await fetch(apiUrl);
+    if (!res.ok) {
+      return new Response(
+        JSON.stringify({
+          status: 'error',
+          message: `Bluesky API returned ${res.status}`,
+        }),
+        { status: 502, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
+
+    const data = await res.json();
+    const followProfiles = Array.isArray(data.follows) ? data.follows : [];
+    const followDids = followProfiles
+      .map((p) => p.did)
+      .filter((d) => typeof d === 'string');
+
+    const didSet = new Set(followDids);
+    didSet.add(viewerDid);
+    const didList = Array.from(didSet);
+
+    if (didList.length === 0) {
+      return new Response(
+        JSON.stringify({
+          status: 'ok',
+          viewerDid,
+          strategies: [],
+          authors: [],
+          viewerKnown,
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
+
+    const placeholders = didList.map(() => '?').join(', ');
+    const sql = `
+      SELECT
+        s.id,
+        s.author_did,
+        s.title,
+        s.body,
+        s.need_ids,
+        s.created_at,
+        u.handle,
+        u.display_name,
+        u.avatar_url
+      FROM strategies s
+      LEFT JOIN users u ON u.did = s.author_did
+      WHERE s.author_did IN (${placeholders})
+      ORDER BY s.created_at DESC
+      LIMIT 100;
+    `;
+
+    const stmt = env.DB.prepare(sql).bind(...didList);
+    const { results } = await stmt.all();
+
+    const strategies = (results || []).map((row) => ({
+      id: row.id,
+      authorDid: row.author_did,
+      title: row.title,
+      body: row.body ?? null,
+      needIds: row.need_ids ? safeJsonParseArray(row.need_ids) : [],
+      createdAt: row.created_at,
+      author: {
+        did: row.author_did,
+        handle: row.handle || null,
+        displayName: row.display_name || null,
+        avatar: row.avatar_url || null,
+      },
+    }));
+
+    const authorsMap = new Map();
+    for (const s of strategies) {
+      if (!authorsMap.has(s.authorDid)) {
+        authorsMap.set(s.authorDid, s.author);
+      }
+    }
+
+    const authors = Array.from(authorsMap.values());
+
+    return new Response(
+      JSON.stringify({ status: 'ok', viewerDid, strategies, authors, viewerKnown }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ status: 'error', message: 'internal_error', detail: String(err) }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
 }
 
 async function handleResolveHandle(request, env) {
@@ -368,6 +585,15 @@ async function handlePostJournals(request, env) {
   }
 }
 
+function safeJsonParseArray(str) {
+  try {
+    const val = JSON.parse(str);
+    return Array.isArray(val) ? val : [];
+  } catch (err) {
+    return [];
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -385,12 +611,16 @@ export default {
 
     // Future feed endpoint (strategies from people the user follows)
     if (request.method === 'GET' && pathname === '/api/feed/strategies') {
-      return handleFeedStrategies();
+      return handleGetStrategyFeed(request, env);
     }
 
     // Future endpoint to create a new strategy
     if (request.method === 'POST' && pathname === '/api/strategies') {
-      return handleCreateStrategy();
+      return handlePostStrategy(request, env);
+    }
+
+    if (request.method === 'GET' && pathname === '/api/strategies') {
+      return handleGetStrategies(request, env);
     }
 
     // Resolve a Bluesky handle to a DID and upsert into users.
