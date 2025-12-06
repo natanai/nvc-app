@@ -1,7 +1,7 @@
 // inventory/bluesky-oauth.js
 
 // Bluesky OAuth in the browser, using the official client SDK.
-import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser@0.3.16";
+import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser@0.3.36";
 
 const CLIENT_METADATA_URL = "https://allneeds.app/oauth-client-metadata.json";
 
