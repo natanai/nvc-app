@@ -1,45 +1,47 @@
 // Cloudflare Worker entrypoint for the allneeds backend.
 // Assumes a D1 binding named `DB` is configured in the Cloudflare UI.
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': 'https://allneeds.app',
+  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      ...CORS_HEADERS,
+    },
+  });
+}
+
+function errorResponse(message, status = 400) {
+  return jsonResponse({ status: 'error', message }, status);
+}
+
 async function handleHealth(env) {
   try {
     const row = await env.DB.prepare('SELECT 1 AS ok').first();
 
-    return new Response(
-      JSON.stringify({
-        status: 'ok',
-        db: row, // expected to be { ok: 1 }
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({
+      status: 'ok',
+      db: row, // expected to be { ok: 1 }
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({
-        status: 'error',
-        message: String(err),
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
 async function handleMe() {
   // Placeholder: will later return the currently logged-in user.
-  return new Response(
-    JSON.stringify({
+  return jsonResponse(
+    {
       status: 'not_implemented',
       endpoint: '/api/me',
-    }),
-    {
-      status: 501,
-      headers: { 'Content-Type': 'application/json' },
     },
+    501,
   );
 }
 
@@ -49,25 +51,13 @@ async function handlePostStrategy(request, env) {
   try {
     body = await request.json();
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'Invalid JSON body' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('Invalid JSON body');
   }
 
   const { did, title, body: strategyBody = null, needIds = null } = body || {};
 
   if (!did || !title || String(title).trim() === '') {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did and title are required' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('did and title are required');
   }
 
   let needIdsSerialized = null;
@@ -86,23 +76,14 @@ async function handlePostStrategy(request, env) {
       .bind(did, title, strategyBody, needIdsSerialized)
       .run();
 
-    return new Response(
-      JSON.stringify({ status: 'ok' }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    return jsonResponse({ status: 'ok' });
   } catch (err) {
     const message = String(err || '').toUpperCase();
     if (message.includes('FOREIGN KEY')) {
-      return new Response(
-        JSON.stringify({ status: 'error', message: 'unknown author DID' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } },
-      );
+      return errorResponse('unknown author DID');
     }
 
-    return new Response(
-      JSON.stringify({ status: 'error', message: String(err) }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -111,10 +92,7 @@ async function handleGetStrategies(request, env) {
   const did = url.searchParams.get('did');
 
   if (!did) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did is required' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } },
-    );
+    return errorResponse('did is required');
   }
 
   try {
@@ -152,15 +130,9 @@ async function handleGetStrategies(request, env) {
       },
     }));
 
-    return new Response(
-      JSON.stringify({ status: 'ok', did, strategies }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    return jsonResponse({ status: 'ok', did, strategies });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: String(err) }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -169,10 +141,7 @@ async function handleGetStrategyFeed(request, env) {
   const viewerDid = url.searchParams.get('did');
 
   if (!viewerDid) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did is required' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } },
-    );
+    return errorResponse('did is required');
   }
 
   try {
@@ -198,13 +167,7 @@ async function handleGetStrategyFeed(request, env) {
 
     const res = await fetch(apiUrl);
     if (!res.ok) {
-      return new Response(
-        JSON.stringify({
-          status: 'error',
-          message: `Bluesky API returned ${res.status}`,
-        }),
-        { status: 502, headers: { 'Content-Type': 'application/json' } },
-      );
+      return errorResponse(`Bluesky API returned ${res.status}`, 502);
     }
 
     const data = await res.json();
@@ -218,16 +181,13 @@ async function handleGetStrategyFeed(request, env) {
     const didList = Array.from(didSet);
 
     if (didList.length === 0) {
-      return new Response(
-        JSON.stringify({
-          status: 'ok',
-          viewerDid,
-          strategies: [],
-          authors: [],
-          viewerKnown,
-        }),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
-      );
+      return jsonResponse({
+        status: 'ok',
+        viewerDid,
+        strategies: [],
+        authors: [],
+        viewerKnown,
+      });
     }
 
     const placeholders = didList.map(() => '?').join(', ');
@@ -276,15 +236,9 @@ async function handleGetStrategyFeed(request, env) {
 
     const authors = Array.from(authorsMap.values());
 
-    return new Response(
-      JSON.stringify({ status: 'ok', viewerDid, strategies, authors, viewerKnown }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    return jsonResponse({ status: 'ok', viewerDid, strategies, authors, viewerKnown });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'internal_error', detail: String(err) }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
-    );
+    return jsonResponse({ status: 'error', message: 'internal_error', detail: String(err) }, 500);
   }
 }
 
@@ -293,16 +247,7 @@ async function handleResolveHandle(request, env) {
   let handle = url.searchParams.get('handle');
 
   if (!handle) {
-    return new Response(
-      JSON.stringify({
-        status: 'error',
-        message: 'handle is required',
-      }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('handle is required');
   }
 
   handle = handle.trim();
@@ -320,16 +265,7 @@ async function handleResolveHandle(request, env) {
     const res = await fetch(apiUrl);
 
     if (!res.ok) {
-      return new Response(
-        JSON.stringify({
-          status: 'error',
-          message: `Bluesky API returned ${res.status}`,
-        }),
-        {
-          status: 502,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      return errorResponse(`Bluesky API returned ${res.status}`, 502);
     }
 
     const profile = await res.json();
@@ -340,16 +276,7 @@ async function handleResolveHandle(request, env) {
     const avatarUrl = profile.avatar || null;
 
     if (!did || !resolvedHandle) {
-      return new Response(
-        JSON.stringify({
-          status: 'error',
-          message: 'Profile response missing did or handle',
-        }),
-        {
-          status: 500,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
+      return errorResponse('Profile response missing did or handle', 500);
     }
 
     await env.DB.prepare(
@@ -364,31 +291,16 @@ async function handleResolveHandle(request, env) {
       .bind(did, resolvedHandle, displayName, avatarUrl)
       .run();
 
-    return new Response(
-      JSON.stringify({
-        status: 'ok',
-        did,
-        handle: resolvedHandle,
-        displayName,
-        avatar: avatarUrl,
-        raw: profile,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({
+      status: 'ok',
+      did,
+      handle: resolvedHandle,
+      displayName,
+      avatar: avatarUrl,
+      raw: profile,
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({
-        status: 'error',
-        message: String(err),
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -397,13 +309,7 @@ async function handleGetUserSettings(request, env) {
   const did = url.searchParams.get('did');
 
   if (!did) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did is required' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('did is required');
   }
 
   try {
@@ -413,25 +319,13 @@ async function handleGetUserSettings(request, env) {
       .bind(did)
       .all();
 
-    return new Response(
-      JSON.stringify({
-        status: 'ok',
-        did,
-        settings: result.results || [],
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({
+      status: 'ok',
+      did,
+      settings: result.results || [],
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: String(err) }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -441,25 +335,13 @@ async function handlePostUserSettings(request, env) {
   try {
     body = await request.json();
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'Invalid JSON body' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('Invalid JSON body');
   }
 
   const { did, key, value } = body || {};
 
   if (!did || !key || value === undefined) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did, key, and value are required' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('did, key, and value are required');
   }
 
   try {
@@ -469,26 +351,14 @@ async function handlePostUserSettings(request, env) {
       .bind(did, key, value)
       .run();
 
-    return new Response(
-      JSON.stringify({
-        status: 'ok',
-        did,
-        key,
-        value,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({
+      status: 'ok',
+      did,
+      key,
+      value,
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: String(err) }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -497,13 +367,7 @@ async function handleGetJournals(request, env) {
   const did = url.searchParams.get('did');
 
   if (!did) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did is required' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('did is required');
   }
 
   try {
@@ -513,25 +377,13 @@ async function handleGetJournals(request, env) {
       .bind(did)
       .all();
 
-    return new Response(
-      JSON.stringify({
-        status: 'ok',
-        did,
-        journals: result.results || [],
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({
+      status: 'ok',
+      did,
+      journals: result.results || [],
+    });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: String(err) }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -541,25 +393,13 @@ async function handlePostJournals(request, env) {
   try {
     body = await request.json();
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'Invalid JSON body' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('Invalid JSON body');
   }
 
   const { did, title = null, body: journalBody = null } = body || {};
 
   if (!did) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: 'did is required' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse('did is required');
   }
 
   try {
@@ -567,21 +407,9 @@ async function handlePostJournals(request, env) {
       .bind(did, title, journalBody)
       .run();
 
-    return new Response(
-      JSON.stringify({ status: 'ok' }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({ status: 'ok' });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ status: 'error', message: String(err) }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -598,6 +426,13 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const { pathname } = url;
+
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: CORS_HEADERS,
+      });
+    }
 
     // Health check
     if (request.method === 'GET' && pathname === '/api/health') {
@@ -645,17 +480,11 @@ export default {
     }
 
     // Default fallback for any other route
-    return new Response(
-      JSON.stringify({
-        status: 'ok',
-        message: 'allneeds-backend worker is running',
-        note: 'No specific endpoint matched this path.',
-        path: pathname,
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return jsonResponse({
+      status: 'ok',
+      message: 'allneeds-backend worker is running',
+      note: 'No specific endpoint matched this path.',
+      path: pathname,
+    });
   },
 };
