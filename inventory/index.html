@@ -1333,41 +1333,7 @@ button.site-nav__magnet {
               Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
             </p>
 
-            <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-              <h2>Bluesky sign-in (OAuth beta)</h2>
-              <div class="inventory-auth-note">
-                <p>Optionally sign in with your Bluesky account. This currently:</p>
-                <ul>
-                  <li>Proves that this browser successfully authenticated with Bluesky.</li>
-                  <li>Does <strong>not yet</strong> change where your journals or settings are stored.</li>
-                  <li>
-                    Does <strong>not</strong> send your Bluesky password to allneeds.app at any time.
-                    Authentication happens only at Bluesky’s servers per OAuth spec.
-                  </li>
-                </ul>
-              </div>
-
-              <div id="bluesky-auth-logged-out" hidden>
-                <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
-                <input id="bluesky-handle-input" type="text" autocomplete="username" />
-                <button id="bluesky-signin-button" type="button">
-                  Sign in with Bluesky
-                </button>
-              </div>
-
-              <div id="bluesky-auth-logged-in" hidden>
-                <p id="bluesky-auth-status-text"></p>
-                <button id="bluesky-signout-button" type="button">
-                  Sign out
-                </button>
-              </div>
-
-              <p class="inventory-auth-warning">
-                Privacy note: this is a beta OAuth login. Until we complete the next steps,
-                <strong>all sensitive data (journals, detailed observations, etc.) should still be kept in local exports only</strong>.
-                The backend currently treats user identifiers as hints, not as cryptographically verified identities.
-              </p>
-            </section>
+            
 
             <div class="strategy-quick-actions inventory-header__quick-actions">
               <a class="strategy-quick-actions__link" href="#inventory-form">
@@ -1387,61 +1353,101 @@ button.site-nav__magnet {
             </div>
 
             <details class="inventory-bluesky-panel">
-              <summary class="inventory-bluesky-panel__summary">
-                <div class="inventory-bluesky-panel__titles">
-                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
-                  <p class="inventory-bluesky-panel__subtitle">
-                    Link your account to save/load data and fetch shared strategies, or keep everything local.
-                  </p>
-                </div>
-                <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
-              </summary>
+  <summary class="inventory-bluesky-panel__summary">
+    <div class="inventory-bluesky-panel__titles">
+      <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
+      <p class="inventory-bluesky-panel__subtitle">
+        Link your account to save/load data and fetch shared strategies, or keep everything local.
+      </p>
+    </div>
+    <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
+  </summary>
 
-              <div class="inventory-bluesky-panel__content">
-                <p>
-                  Sign in with the Bluesky OAuth beta above to enable optional sync features, or continue using only the
-                  local export and import controls if you prefer keeping everything on this device.
-                </p>
+  <div class="inventory-bluesky-panel__content">
+    <p>
+      Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
+      local export and import controls if you prefer keeping everything on this device.
+    </p>
 
-                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-                  <h3 id="inventory-backend-sync-heading">Optional backend save/load</h3>
-                  <p>
-                    If you have linked a Bluesky account, you can save the same data you normally export as JSON to the
-                    allneeds backend, and load it again later on another device. This stores a single JSON snapshot keyed by your
-                    Bluesky DID. It does not run automatically; you decide when to send or fetch data.
-                  </p>
-                  <p>
-                    Compared to local-only mode, this means your snapshot may be visible to the allneeds server operator and
-                    could in principle be exposed in a server compromise or legal request. If you prefer to keep everything
-                    local, continue using only the JSON export/import buttons.
-                  </p>
+    <!-- OAuth sign-in / sign-out -->
+    <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
+      <h2>Bluesky sign-in (OAuth beta)</h2>
+      <div class="inventory-auth-note">
+        <p>Optionally sign in with your Bluesky account. This currently:</p>
+        <ul>
+          <li>Proves that this browser successfully authenticated with Bluesky.</li>
+          <li>Does <strong>not yet</strong> change where your journals or settings are stored.</li>
+          <li>
+            Does <strong>not</strong> send your Bluesky password to allneeds.app at any time.
+            Authentication happens only at Bluesky’s servers per OAuth spec.
+          </li>
+        </ul>
+      </div>
 
-                  <div class="inventory-backend-sync__buttons">
-                    <button type="button" data-backend-save-button>
-                      Save current data to allneeds backend
-                    </button>
-                    <button type="button" data-backend-load-button>
-                      Load data from allneeds backend
-                    </button>
-                  </div>
+      <div id="bluesky-auth-logged-out" hidden>
+        <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+        <input id="bluesky-handle-input" type="text" autocomplete="username" />
+        <button id="bluesky-signin-button" type="button">
+          Sign in with Bluesky
+        </button>
+      </div>
 
-                  <div class="inventory-backend-sync__status" data-backend-sync-status aria-live="polite"></div>
-                </section>
+      <div id="bluesky-auth-logged-in" hidden>
+        <p id="bluesky-auth-status-text"></p>
+        <button id="bluesky-signout-button" type="button">
+          Sign out
+        </button>
+      </div>
 
-                <section class="inventory-social-strategies" aria-labelledby="inventory-social-strategies-heading">
-                  <h3 id="inventory-social-strategies-heading">Strategies from Bluesky accounts you follow</h3>
-                  <p>
-                    When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
-                    This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
-                    in the allneeds database are shown here.
-                  </p>
-                  <button type="button" data-backend-fetch-feed-button>
-                    Fetch strategies from follows
-                  </button>
-                  <div class="inventory-social-strategies__list" data-backend-feed-container></div>
-                </section>
-              </div>
-            </details>
+      <p class="inventory-auth-warning">
+        Privacy note: this is a beta OAuth login. Until we complete the next steps,
+        <strong>all sensitive data (journals, detailed observations, etc.) should still be kept in local exports only</strong>.
+        The backend currently treats user identifiers as hints, not as cryptographically verified identities.
+      </p>
+    </section>
+
+    <!-- Optional backend save/load -->
+    <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
+      <h3 id="inventory-backend-sync-heading">Optional backend save/load</h3>
+      <p>
+        If you have linked a Bluesky account, you can save the same data you normally export as JSON to the
+        allneeds backend, and load it again later on another device. This stores a single JSON snapshot keyed by your
+        Bluesky DID. It does not run automatically; you decide when to send or fetch data.
+      </p>
+      <p>
+        Compared to local-only mode, this means your snapshot may be visible to the allneeds server operator and
+        could in principle be exposed in a server compromise or legal request. If you prefer to keep everything
+        local, continue using only the JSON export/import buttons.
+      </p>
+
+      <div class="inventory-backend-sync__buttons">
+        <button type="button" data-backend-save-button>
+          Save current data to allneeds backend
+        </button>
+        <button type="button" data-backend-load-button>
+          Load data from allneeds backend
+        </button>
+      </div>
+
+      <div class="inventory-backend-sync__status" data-backend-sync-status aria-live="polite"></div>
+    </section>
+
+    <!-- Strategies from follows -->
+    <section class="inventory-social-strategies" aria-labelledby="inventory-social-strategies-heading">
+      <h3 id="inventory-social-strategies-heading">Strategies from Bluesky accounts you follow</h3>
+      <p>
+        When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
+        This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
+        in the allneeds database are shown here.
+      </p>
+      <button type="button" data-backend-fetch-feed-button>
+        Fetch strategies from follows
+      </button>
+      <div class="inventory-social-strategies__list" data-backend-feed-container></div>
+    </section>
+  </div>
+</details>
+
 
           </div>
         </div>
