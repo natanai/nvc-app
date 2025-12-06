@@ -874,96 +874,9 @@ button.site-nav__magnet {
         font-weight: 700;
       }
 
-      .bsky-login-modal {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1.5rem;
-        background: color-mix(in srgb, var(--ink) 30%, transparent 70%);
-        backdrop-filter: blur(4px);
-        z-index: 9999;
-      }
-
-      .bsky-login-modal[hidden] {
-        display: none;
-      }
-
-      .bsky-login-modal__dialog {
-        position: relative;
-        max-width: 720px;
-        width: min(720px, 100%);
-        background: #ffffff;
-        border-radius: var(--radius-3xl);
-        border: 3px solid var(--outline);
-        padding: 1.75rem 1.5rem 1.5rem;
-        box-shadow: 0 20px 0 color-mix(in srgb, var(--outline) 18%, transparent),
-          0 18px 48px color-mix(in srgb, var(--outline) 26%, transparent);
-      }
-
-      .bsky-login-modal__close {
-        position: absolute;
-        top: 0.35rem;
-        right: 0.55rem;
-        border: none;
-        background: transparent;
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-
-      .bsky-login-modal h3 {
-        margin-top: 0.25rem;
-        margin-bottom: 0.65rem;
-        font-size: 1.3rem;
-      }
-
-      .bsky-login-modal__copy {
-        margin: 0 0 0.75rem;
-      }
-
-      .bsky-login-modal__field {
-        display: block;
-        margin: 0.5rem 0 1rem;
-        font-weight: 700;
-        letter-spacing: 0.01em;
-      }
-
-      .bsky-login-modal__field input[type='text'] {
-        display: block;
-        width: 100%;
-        margin-top: 0.45rem;
-        padding: 0.75rem 0.85rem;
-        border-radius: var(--radius-lg);
-        border: 2px solid color-mix(in srgb, var(--outline) 65%, transparent);
-        font-size: 1rem;
-        font-family: var(--font-body);
-      }
-
-      .bsky-login-modal__submit {
-        border: 3px solid var(--outline);
-        border-radius: var(--radius-pill);
-        background: color-mix(in srgb, var(--mint) 70%, #fff 30%);
-        color: var(--ink);
-        font-weight: 800;
-        padding: 0.8rem 1.1rem;
-        cursor: pointer;
-        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      .bsky-login-modal__error {
-        color: #a72c3f;
-        min-height: 1.2rem;
-        font-weight: 700;
-      }
-
       @media (max-width: 720px) {
         .inventory-auth-panel {
           padding: 1.2rem 1rem;
-        }
-
-        .bsky-login-modal__dialog {
-          padding: 1.4rem 1.1rem 1.25rem;
         }
       }
     </style>
@@ -1419,6 +1332,43 @@ button.site-nav__magnet {
             <p class="page-description">
               Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
             </p>
+
+            <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
+              <h2>Bluesky sign-in (OAuth beta)</h2>
+              <div class="inventory-auth-note">
+                <p>Optionally sign in with your Bluesky account. This currently:</p>
+                <ul>
+                  <li>Proves that this browser successfully authenticated with Bluesky.</li>
+                  <li>Does <strong>not yet</strong> change where your journals or settings are stored.</li>
+                  <li>
+                    Does <strong>not</strong> send your Bluesky password to allneeds.app at any time.
+                    Authentication happens only at Bluesky’s servers per OAuth spec.
+                  </li>
+                </ul>
+              </div>
+
+              <div id="bluesky-auth-logged-out" hidden>
+                <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+                <input id="bluesky-handle-input" type="text" autocomplete="username" />
+                <button id="bluesky-signin-button" type="button">
+                  Sign in with Bluesky
+                </button>
+              </div>
+
+              <div id="bluesky-auth-logged-in" hidden>
+                <p id="bluesky-auth-status-text"></p>
+                <button id="bluesky-signout-button" type="button">
+                  Sign out
+                </button>
+              </div>
+
+              <p class="inventory-auth-warning">
+                Privacy note: this is a beta OAuth login. Until we complete the next steps,
+                <strong>all sensitive data (journals, detailed observations, etc.) should still be kept in local exports only</strong>.
+                The backend currently treats user identifiers as hints, not as cryptographically verified identities.
+              </p>
+            </section>
+
             <div class="strategy-quick-actions inventory-header__quick-actions">
               <a class="strategy-quick-actions__link" href="#inventory-form">
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
@@ -1448,48 +1398,10 @@ button.site-nav__magnet {
               </summary>
 
               <div class="inventory-bluesky-panel__content">
-                <section class="inventory-auth-panel">
-                  <h2>Link a Bluesky account</h2>
-                  <p class="inventory-auth-panel__summary">
-                    You can optionally link this browser’s inventory to a Bluesky account.
-                    This does <strong>not</strong> use your password or app password. Instead,
-                    your Bluesky handle is resolved to a DID via the allneeds backend, and that
-                    DID becomes the key under which your settings, journals, and strategies
-                    are stored in a Cloudflare D1 database.
-                  </p>
-
-                  <p class="inventory-auth-panel__tradeoffs">
-                    If you prefer to keep everything local to this device, you can ignore this
-                    section and continue using the export / import buttons below. In local-only
-                    mode, your data lives in your browser’s storage and in any files you
-                    explicitly export; it is not sent to the allneeds backend.
-                  </p>
-
-                  <div class="inventory-auth-panel__controls">
-                    <button
-                      type="button"
-                      class="inventory-auth-panel__login-button"
-                      data-bsky-login-button
-                    >
-                      Link inventory to Bluesky account
-                    </button>
-
-                    <span
-                      class="inventory-auth-panel__user-badge"
-                      data-bsky-user-badge
-                      hidden
-                    ></span>
-
-                    <button
-                      type="button"
-                      class="inventory-auth-panel__logout-button"
-                      data-bsky-logout-button
-                      hidden
-                    >
-                      Unlink from Bluesky on this device
-                    </button>
-                  </div>
-                </section>
+                <p>
+                  Sign in with the Bluesky OAuth beta above to enable optional sync features, or continue using only the
+                  local export and import controls if you prefer keeping everything on this device.
+                </p>
 
                 <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
                   <h3 id="inventory-backend-sync-heading">Optional backend save/load</h3>
@@ -1531,65 +1443,6 @@ button.site-nav__magnet {
               </div>
             </details>
 
-            <div class="bsky-login-modal" data-bsky-login-modal hidden>
-              <div class="bsky-login-modal__dialog">
-                <button
-                  type="button"
-                  class="bsky-login-modal__close"
-                  data-bsky-modal-close
-                  aria-label="Close"
-                >
-                  ×
-                </button>
-
-                <h3>Link inventory to a Bluesky account</h3>
-
-                <p class="bsky-login-modal__copy">
-                  When you continue, allneeds will send the handle you enter below to its
-                  backend at <code>allneeds-backend.natanai.workers.dev</code>. The backend
-                  calls Bluesky’s public AppView API to resolve that handle to a DID
-                  (decentralized identifier) and stores a row in its <code>users</code> table
-                  keyed by that DID.
-                </p>
-
-                <p class="bsky-login-modal__copy">
-                  After linking, any features that choose to sync with the backend may
-                  store your settings, journals, and strategies in a Cloudflare D1 SQL
-                  database under that DID. No Bluesky passwords, app passwords, or private
-                  posts are used or stored. However, the DID, handle, display name, and any
-                  content you send to the backend become accessible to the allneeds server
-                  operator and, like any hosted service, could in principle be exposed in a
-                  compromise or legal request.
-                </p>
-
-                <p class="bsky-login-modal__copy">
-                  If you prefer not to create that server-side record or not to send any
-                  content off-device, you can cancel this dialog and keep using local
-                  export / import only. Signing out later will clear the link on this
-                  device, but it does <strong>not</strong> automatically delete any data
-                  that has already been written to the backend database.
-                </p>
-
-                <form data-bsky-login-form>
-                  <label class="bsky-login-modal__field">
-                    Bluesky handle
-                    <input
-                      type="text"
-                      required
-                      autocomplete="username"
-                      placeholder="@your-handle.bsky.social"
-                      data-bsky-handle-input
-                    />
-                  </label>
-
-                  <button type="submit" class="bsky-login-modal__submit">
-                    Resolve handle and link
-                  </button>
-
-                  <p class="bsky-login-modal__error" data-bsky-login-error></p>
-                </form>
-              </div>
-            </div>
           </div>
         </div>
       </header>
@@ -1778,123 +1631,116 @@ button.site-nav__magnet {
     <script src="../scripts/magnets.js" type="module"></script>
     <script type="module">
       import {
-        loadBlueskySession,
-        saveBlueskySession,
-        clearBlueskySession,
-        resolveHandleViaBackend,
-        setGlobalBlueskySession,
-      } from '/scripts/bluesky-login.js';
+        initBlueskyOAuth,
+        getCurrentBlueskySession,
+        signInWithBluesky,
+        signOutFromBluesky,
+      } from './bluesky-oauth.js';
 
-      function updateInventoryLoginUI(session) {
-        const loginButton = document.querySelector('[data-bsky-login-button]');
-        const logoutButton = document.querySelector('[data-bsky-logout-button]');
-        const userBadge = document.querySelector('[data-bsky-user-badge]');
+      // ⚠️ This only authenticates in the browser; the backend still trusts plain DIDs/handles.
+      // We will later wire this OAuth session into the Cloudflare Worker so private data is only
+      // readable by a DID that has actually completed OAuth.
+      function setGlobalBlueskySession(session) {
+        const normalizedDid = session?.did || session?.sub || null;
+        const normalizedHandle =
+          session?.preferred_username || session?.handle || session?.username || null;
 
-        if (!loginButton || !logoutButton || !userBadge) return;
+        if (normalizedDid) {
+          window.allneedsSession = {
+            did: normalizedDid,
+            handle: normalizedHandle,
+          };
+        } else {
+          window.allneedsSession = null;
+        }
+
+        const evt = new CustomEvent('allneeds:bsky-login-changed', {
+          detail: window.allneedsSession,
+        });
+        window.dispatchEvent(evt);
+      }
+
+      function describeSession(session) {
+        const did = session?.did || session?.sub || '';
+        const handle = session?.preferred_username || session?.handle || session?.username || '';
+
+        if (handle && did) {
+          return `Signed in as @${handle} (${did})`;
+        }
+        if (handle) {
+          return `Signed in as @${handle}`;
+        }
+        if (did) {
+          return `Signed in (${did})`;
+        }
+        return 'Signed in with Bluesky';
+      }
+
+      function updateBlueskyAuthUi(session) {
+        const loggedOut = document.querySelector('#bluesky-auth-logged-out');
+        const loggedIn = document.querySelector('#bluesky-auth-logged-in');
+        const statusText = document.querySelector('#bluesky-auth-status-text');
 
         if (session) {
-          loginButton.hidden = true;
-          logoutButton.hidden = false;
-          userBadge.hidden = false;
-
-          const label = session.displayName || session.handle || session.did;
-          userBadge.textContent = `Linked to ${label}`;
+          if (loggedOut) loggedOut.hidden = true;
+          if (loggedIn) loggedIn.hidden = false;
+          if (statusText) {
+            statusText.textContent = describeSession(session);
+          }
         } else {
-          loginButton.hidden = false;
-          logoutButton.hidden = true;
-          userBadge.hidden = true;
-          userBadge.textContent = '';
+          if (loggedOut) loggedOut.hidden = false;
+          if (loggedIn) loggedIn.hidden = true;
+          if (statusText) {
+            statusText.textContent = '';
+          }
         }
       }
 
-      function initInventoryBlueskyLogin() {
-        const modal = document.querySelector('[data-bsky-login-modal]');
-        const openButton = document.querySelector('[data-bsky-login-button]');
-        const closeButton = document.querySelector('[data-bsky-modal-close]');
-        const form = document.querySelector('[data-bsky-login-form]');
-        const handleInput = document.querySelector('[data-bsky-handle-input]');
-        const errorBox = document.querySelector('[data-bsky-login-error]');
-        const logoutButton = document.querySelector('[data-bsky-logout-button]');
+      async function onBlueskySignInClick() {
+        const input = document.querySelector('#bluesky-handle-input');
+        const handle = input?.value?.trim();
+        if (!handle) return;
 
-        if (!openButton || !modal || !form || !handleInput || !logoutButton) {
-          return;
+        try {
+          await signInWithBluesky(handle);
+        } catch (err) {
+          console.error('Error during Bluesky OAuth sign-in', err);
         }
-
-        modal.hidden = true;
-
-        function showModal() {
-          modal.hidden = false;
-          if (errorBox) errorBox.textContent = '';
-          handleInput.focus();
-        }
-
-        function hideModal() {
-          modal.hidden = true;
-          form.reset();
-          if (errorBox) errorBox.textContent = '';
-        }
-
-        openButton.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          showModal();
-        });
-
-        if (closeButton) {
-          closeButton.addEventListener('click', (ev) => {
-            ev.preventDefault();
-            hideModal();
-          });
-        }
-
-        form.addEventListener('submit', async (ev) => {
-          ev.preventDefault();
-          if (errorBox) errorBox.textContent = '';
-
-          const handle = handleInput.value;
-          openButton.disabled = true;
-
-          try {
-            const session = await resolveHandleViaBackend(handle);
-            saveBlueskySession(session);
-            setGlobalBlueskySession(session);
-            updateInventoryLoginUI(session);
-            hideModal();
-          } catch (err) {
-            console.error(err);
-            if (errorBox) {
-              errorBox.textContent = err.message || 'Could not link this handle. Please try again.';
-            }
-          } finally {
-            openButton.disabled = false;
-          }
-        });
-
-        modal.addEventListener('click', (ev) => {
-          if (ev.target === modal) {
-            hideModal();
-          }
-        });
-
-        window.addEventListener('keydown', (ev) => {
-          if (ev.key === 'Escape' && !modal.hidden) {
-            hideModal();
-          }
-        });
-
-        logoutButton.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          clearBlueskySession();
-          setGlobalBlueskySession(null);
-          updateInventoryLoginUI(null);
-        });
-
-        // On load, restore any existing session for this browser.
-        const existing = loadBlueskySession();
-        setGlobalBlueskySession(existing);
-        updateInventoryLoginUI(existing);
       }
 
-      document.addEventListener('DOMContentLoaded', initInventoryBlueskyLogin);
+      async function onBlueskySignOutClick() {
+        try {
+          await signOutFromBluesky();
+        } catch (err) {
+          console.error('Error during Bluesky OAuth sign-out', err);
+        }
+        setGlobalBlueskySession(null);
+        updateBlueskyAuthUi(null);
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        document
+          .querySelector('#bluesky-signin-button')
+          ?.addEventListener('click', onBlueskySignInClick);
+
+        document
+          .querySelector('#bluesky-signout-button')
+          ?.addEventListener('click', onBlueskySignOutClick);
+
+        let session = null;
+        try {
+          session = await initBlueskyOAuth();
+        } catch (err) {
+          console.error('Error initializing Bluesky OAuth', err);
+        }
+
+        if (!session) {
+          session = getCurrentBlueskySession();
+        }
+
+        setGlobalBlueskySession(session || null);
+        updateBlueskyAuthUi(session);
+      });
     </script>
   </body>
 </html>
