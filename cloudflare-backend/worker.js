@@ -71,6 +71,110 @@ async function handleCreateStrategy() {
   );
 }
 
+async function handleResolveHandle(request, env) {
+  const url = new URL(request.url);
+  let handle = url.searchParams.get('handle');
+
+  if (!handle) {
+    return new Response(
+      JSON.stringify({
+        status: 'error',
+        message: 'handle is required',
+      }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  }
+
+  handle = handle.trim();
+  if (handle.startsWith('@')) {
+    handle = handle.slice(1);
+  }
+  handle = handle.toLowerCase();
+
+  try {
+    const apiUrl =
+      'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile' +
+      '?actor=' +
+      encodeURIComponent(handle);
+
+    const res = await fetch(apiUrl);
+
+    if (!res.ok) {
+      return new Response(
+        JSON.stringify({
+          status: 'error',
+          message: `Bluesky API returned ${res.status}`,
+        }),
+        {
+          status: 502,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
+    const profile = await res.json();
+
+    const did = profile.did;
+    const resolvedHandle = profile.handle;
+    const displayName = profile.displayName || null;
+    const avatarUrl = profile.avatar || null;
+
+    if (!did || !resolvedHandle) {
+      return new Response(
+        JSON.stringify({
+          status: 'error',
+          message: 'Profile response missing did or handle',
+        }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
+
+    await env.DB.prepare(
+      `INSERT INTO users (did, handle, display_name, avatar_url, created_at, last_login_at)
+         VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+         ON CONFLICT(did) DO UPDATE SET
+           handle = excluded.handle,
+           display_name = excluded.display_name,
+           avatar_url = excluded.avatar_url,
+           last_login_at = CURRENT_TIMESTAMP`,
+    )
+      .bind(did, resolvedHandle, displayName, avatarUrl)
+      .run();
+
+    return new Response(
+      JSON.stringify({
+        status: 'ok',
+        did,
+        handle: resolvedHandle,
+        displayName,
+        avatar: avatarUrl,
+        raw: profile,
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({
+        status: 'error',
+        message: String(err),
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+  }
+}
+
 async function handleGetUserSettings(request, env) {
   const url = new URL(request.url);
   const did = url.searchParams.get('did');
@@ -287,6 +391,11 @@ export default {
     // Future endpoint to create a new strategy
     if (request.method === 'POST' && pathname === '/api/strategies') {
       return handleCreateStrategy();
+    }
+
+    // Resolve a Bluesky handle to a DID and upsert into users.
+    if (request.method === 'GET' && pathname === '/api/resolve-handle') {
+      return handleResolveHandle(request, env);
     }
 
     if (request.method === 'GET' && pathname === '/api/user-settings') {
