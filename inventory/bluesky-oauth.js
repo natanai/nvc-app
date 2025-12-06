@@ -4,7 +4,7 @@ import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser
 let oauthClient = null;
 let oauthSession = null;
 
-const CLIENT_METADATA_URL = "https://allneeds.app/oauth/client-metadata.json";
+const CLIENT_METADATA_URL = "https://allneeds.app/oauth-client-metadata.json";
 
 // ⚠️ This only authenticates in the browser; the backend still trusts plain DIDs/handles.
 // Journals and settings are not yet bound to OAuth tokens or server-side sessions.
