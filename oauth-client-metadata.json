@@ -1,0 +1,12 @@
+{
+  "client_id": "https://allneeds.app/oauth-client-metadata.json",
+  "application_type": "web",
+  "client_name": "allneeds.app",
+  "client_uri": "https://allneeds.app",
+  "dpop_bound_access_tokens": true,
+  "grant_types": ["authorization_code", "refresh_token"],
+  "redirect_uris": ["https://allneeds-backend.natanai.workers.dev/auth/bluesky/callback"],
+  "response_types": ["code"],
+  "scope": "atproto",
+  "token_endpoint_auth_method": "none"
+}
