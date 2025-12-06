@@ -7,6 +7,8 @@ const PERSONAL_STRATEGIES_EMAIL_ADDRESS = 'ahiccup@gmail.com';
 const PERSONAL_STRATEGIES_EMAIL_SUBJECT = 'Strategies for allneeds.app!';
 const PERSONAL_STRATEGIES_EMAIL_BODY =
   'Hi Nat,\n\nI just exported my personal strategies from allneeds.app and attached the file for you.\n\nWith care,';
+const BACKEND_BASE_URL = 'https://allneeds-backend.natanai.workers.dev';
+const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
 
 function redirectLegacyJournalHash() {
   if (typeof window === 'undefined') {
@@ -1517,7 +1519,14 @@ document.addEventListener('DOMContentLoaded', () => {
   renderJournalViews();
   loadJournalReferenceData();
   setupScrollTopButton();
+  updateBackendSyncButtons();
 });
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('allneeds:bsky-login-changed', () => {
+    updateBackendSyncButtons();
+  });
+}
 
 if (
   typeof window !== 'undefined' &&
@@ -1968,6 +1977,31 @@ function setupInventoryPage() {
       }
       handleImportInventory(file);
       importInput.value = '';
+    });
+  }
+
+  const backendSaveButton = document.querySelector('[data-backend-save-button]');
+  const backendLoadButton = document.querySelector('[data-backend-load-button]');
+  const backendFetchFeedButton = document.querySelector('[data-backend-fetch-feed-button]');
+
+  if (backendSaveButton) {
+    backendSaveButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      saveSnapshotToBackend();
+    });
+  }
+
+  if (backendLoadButton) {
+    backendLoadButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      loadSnapshotFromBackend();
+    });
+  }
+
+  if (backendFetchFeedButton) {
+    backendFetchFeedButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      fetchSocialStrategiesFeed();
     });
   }
 
@@ -6066,6 +6100,218 @@ function openPersonalStrategiesEmailDraft() {
     }
   } catch (error) {
     window.location.href = mailtoLink;
+  }
+}
+
+function getCurrentDid() {
+  const session = typeof window !== 'undefined' ? window.allneedsSession : null;
+  if (session && typeof session === 'object' && session.did) {
+    return session.did;
+  }
+  return null;
+}
+
+function buildExportSnapshot() {
+  return buildLocalDataBackup();
+}
+
+async function applyImportSnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object') {
+    broadcastDataMessage('Import failed. No snapshot found to apply.', 'error');
+    return;
+  }
+  await importLocalStorageSnapshot(snapshot);
+}
+
+function getBackendSyncStatusEl() {
+  return document.querySelector('[data-backend-sync-status]');
+}
+
+function setBackendStatusMessage(message) {
+  const statusEl = getBackendSyncStatusEl();
+  if (!statusEl) {
+    return;
+  }
+  statusEl.textContent = message || '';
+}
+
+async function saveSnapshotToBackend() {
+  const did = getCurrentDid();
+
+  if (!did) {
+    setBackendStatusMessage('Link a Bluesky account before saving to the backend.');
+    return;
+  }
+
+  let snapshot;
+  try {
+    snapshot = buildExportSnapshot();
+  } catch (error) {
+    console.error('Failed to build snapshot', error);
+    setBackendStatusMessage('Could not build export snapshot.');
+    return;
+  }
+
+  let value;
+  try {
+    value = JSON.stringify(snapshot);
+  } catch (error) {
+    console.error('Failed to stringify snapshot', error);
+    setBackendStatusMessage('Could not serialize export snapshot.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ did, key: BACKEND_SNAPSHOT_KEY, value }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data || data.status !== 'ok') {
+      throw new Error(data && data.message ? data.message : 'Unknown error');
+    }
+    setBackendStatusMessage('Snapshot saved to backend.');
+  } catch (error) {
+    console.error('Failed to save snapshot to backend', error);
+    setBackendStatusMessage('Error saving snapshot to backend.');
+  }
+}
+
+async function loadSnapshotFromBackend() {
+  const did = getCurrentDid();
+
+  if (!did) {
+    setBackendStatusMessage('Link a Bluesky account before loading from backend.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings?did=${encodeURIComponent(did)}`);
+    const data = await res.json();
+
+    if (!res.ok || !data || data.status !== 'ok') {
+      throw new Error(data && data.message ? data.message : 'Unknown error');
+    }
+
+    const setting = Array.isArray(data.settings)
+      ? data.settings.find((entry) => entry && entry.key === BACKEND_SNAPSHOT_KEY)
+      : null;
+
+    if (!setting || typeof setting.value !== 'string') {
+      setBackendStatusMessage('No backend snapshot found for this DID.');
+      return;
+    }
+
+    let snapshot;
+    try {
+      snapshot = JSON.parse(setting.value);
+    } catch (error) {
+      console.error('Failed to parse backend snapshot JSON', error);
+      setBackendStatusMessage('Backend snapshot is not valid JSON.');
+      return;
+    }
+
+    await applyImportSnapshot(snapshot);
+    setBackendStatusMessage('Backend snapshot loaded into this browser.');
+  } catch (error) {
+    console.error('Failed to load snapshot from backend', error);
+    setBackendStatusMessage('Error loading snapshot from backend.');
+  }
+}
+
+async function fetchSocialStrategiesFeed() {
+  const did = getCurrentDid();
+  const container = document.querySelector('[data-backend-feed-container]');
+
+  if (!container) {
+    return;
+  }
+
+  container.textContent = '';
+
+  if (!did) {
+    container.textContent = 'Link a Bluesky account before fetching strategies from follows.';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BACKEND_BASE_URL}/api/feed/strategies?did=${encodeURIComponent(did)}`);
+    const data = await res.json();
+
+    if (!res.ok || !data || data.status !== 'ok') {
+      throw new Error(data && data.message ? data.message : 'Unknown error');
+    }
+
+    const strategies = Array.isArray(data.strategies) ? data.strategies : [];
+    if (!strategies.length) {
+      container.textContent = 'No shared strategies found yet for accounts you follow.';
+      return;
+    }
+
+    const list = document.createElement('div');
+    list.className = 'inventory-social-strategies__items';
+
+    strategies.forEach((strategy) => {
+      const card = document.createElement('article');
+      card.className = 'inventory-social-strategies__item';
+
+      const author = strategy && strategy.author ? strategy.author : {};
+      const label = author.displayName || author.handle || author.did || 'Unknown author';
+
+      const heading = document.createElement('h4');
+      heading.textContent = strategy?.title || '(no title)';
+      card.appendChild(heading);
+
+      const meta = document.createElement('p');
+      meta.className = 'inventory-social-strategies__meta';
+      meta.textContent = `Shared by ${label}`;
+      card.appendChild(meta);
+
+      const body = document.createElement('p');
+      body.className = 'inventory-social-strategies__body';
+      const bodyText = (strategy?.body || '').toString();
+      body.textContent = bodyText.length > 200 ? `${bodyText.slice(0, 200)}…` : bodyText;
+      card.appendChild(body);
+
+      if (Array.isArray(strategy?.needIds) && strategy.needIds.length) {
+        const needsEl = document.createElement('p');
+        needsEl.className = 'inventory-social-strategies__needs';
+        needsEl.textContent = `Needs: ${strategy.needIds.join(', ')}`;
+        card.appendChild(needsEl);
+      }
+
+      list.appendChild(card);
+    });
+
+    container.appendChild(list);
+  } catch (error) {
+    console.error('Failed to fetch social strategies feed', error);
+    container.textContent = 'Error fetching strategies from follows.';
+  }
+}
+
+function updateBackendSyncButtons() {
+  const did = getCurrentDid();
+  const saveBtn = document.querySelector('[data-backend-save-button]');
+  const loadBtn = document.querySelector('[data-backend-load-button]');
+  const fetchBtn = document.querySelector('[data-backend-fetch-feed-button]');
+
+  const disabled = !did;
+  [saveBtn, loadBtn, fetchBtn].forEach((btn) => {
+    if (!btn) return;
+    btn.disabled = disabled;
+    if (disabled) {
+      btn.setAttribute('aria-disabled', 'true');
+    } else {
+      btn.removeAttribute('aria-disabled');
+    }
+  });
+
+  if (disabled) {
+    setBackendStatusMessage('Link a Bluesky account to enable backend save/load.');
+  } else {
+    setBackendStatusMessage('');
   }
 }
 

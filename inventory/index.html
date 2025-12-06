@@ -1517,6 +1517,44 @@ button.site-nav__magnet {
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
         </section>
 
+        <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
+          <h3 id="inventory-backend-sync-heading">Optional backend save/load</h3>
+          <p>
+            If you have linked a Bluesky account, you can save the same data you normally export as JSON to the
+            allneeds backend, and load it again later on another device. This stores a single JSON snapshot keyed by your
+            Bluesky DID. It does not run automatically; you decide when to send or fetch data.
+          </p>
+          <p>
+            Compared to local-only mode, this means your snapshot may be visible to the allneeds server operator and
+            could in principle be exposed in a server compromise or legal request. If you prefer to keep everything
+            local, continue using only the JSON export/import buttons.
+          </p>
+
+          <div class="inventory-backend-sync__buttons">
+            <button type="button" data-backend-save-button>
+              Save current data to allneeds backend
+            </button>
+            <button type="button" data-backend-load-button>
+              Load data from allneeds backend
+            </button>
+          </div>
+
+          <div class="inventory-backend-sync__status" data-backend-sync-status aria-live="polite"></div>
+        </section>
+
+        <section class="inventory-social-strategies" aria-labelledby="inventory-social-strategies-heading">
+          <h3 id="inventory-social-strategies-heading">Strategies from Bluesky accounts you follow</h3>
+          <p>
+            When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
+            This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
+            in the allneeds database are shown here.
+          </p>
+          <button type="button" data-backend-fetch-feed-button>
+            Fetch strategies from follows
+          </button>
+          <div class="inventory-social-strategies__list" data-backend-feed-container></div>
+        </section>
+
         <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
           <div class="inventory-overview__header">
             <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
