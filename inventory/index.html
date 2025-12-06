@@ -736,24 +736,90 @@ button.site-nav__magnet {
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
     <style>
-      .inventory-auth-panel {
+      .inventory-bluesky-panel {
         margin-top: 1.75rem;
-        padding: 1.35rem 1.5rem;
         border: 3px solid var(--outline);
         border-radius: var(--radius-xl);
         background: color-mix(in srgb, var(--lavender) 65%, #fff 35%);
         box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+        overflow: hidden;
+      }
+
+      .inventory-bluesky-panel__summary {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.9rem;
+        padding: 1rem 1.1rem;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .inventory-bluesky-panel__summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .inventory-bluesky-panel__titles {
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .inventory-bluesky-panel__title {
+        margin: 0;
+        font-size: 1.15rem;
+        letter-spacing: 0.01em;
+      }
+
+      .inventory-bluesky-panel__subtitle {
+        margin: 0;
+        color: color-mix(in srgb, var(--ink) 85%, #000 15%);
+      }
+
+      .inventory-bluesky-panel__chevron {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.6rem;
+        height: 1.6rem;
+        border: 2px solid color-mix(in srgb, var(--outline) 60%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, var(--btn-bg) 18%, #fff 82%);
+        font-weight: 700;
+        transform: rotate(90deg);
+        transition: transform 0.2s ease;
+      }
+
+      .inventory-bluesky-panel[open] .inventory-bluesky-panel__chevron {
+        transform: rotate(270deg);
+      }
+
+      .inventory-bluesky-panel__content {
+        display: grid;
+        gap: 1.1rem;
+        padding: 0 1.25rem 1.35rem;
+        border-top: 2px dashed color-mix(in srgb, var(--outline) 38%, transparent);
+        background: color-mix(in srgb, #ffffff 86%, var(--lavender) 14%);
+      }
+
+      .inventory-auth-panel {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        box-shadow: none;
+        display: grid;
+        gap: 0.75rem;
       }
 
       .inventory-auth-panel h2 {
-        margin: 0 0 0.65rem;
-        font-size: 1.15rem;
+        margin: 0;
+        font-size: 1.05rem;
         letter-spacing: 0.01em;
       }
 
       .inventory-auth-panel__summary,
       .inventory-auth-panel__tradeoffs {
-        margin: 0 0 0.75rem;
+        margin: 0;
         color: color-mix(in srgb, var(--ink) 85%, #000 15%);
       }
 
@@ -762,7 +828,7 @@ button.site-nav__magnet {
         flex-wrap: wrap;
         align-items: center;
         gap: 0.75rem;
-        margin-top: 0.35rem;
+        margin-top: 0.15rem;
       }
 
       .inventory-auth-panel__login-button,
@@ -1370,48 +1436,100 @@ button.site-nav__magnet {
               </a>
             </div>
 
-            <section class="inventory-auth-panel">
-              <h2>Optional Bluesky account link</h2>
-              <p class="inventory-auth-panel__summary">
-                You can optionally link this browser’s inventory to a Bluesky account.
-                This does <strong>not</strong> use your password or app password. Instead,
-                your Bluesky handle is resolved to a DID via the allneeds backend, and that
-                DID becomes the key under which your settings, journals, and strategies
-                are stored in a Cloudflare D1 database.
-              </p>
+            <details class="inventory-bluesky-panel">
+              <summary class="inventory-bluesky-panel__summary">
+                <div class="inventory-bluesky-panel__titles">
+                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
+                  <p class="inventory-bluesky-panel__subtitle">
+                    Link your account to save/load data and fetch shared strategies, or keep everything local.
+                  </p>
+                </div>
+                <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
+              </summary>
 
-              <p class="inventory-auth-panel__tradeoffs">
-                If you prefer to keep everything local to this device, you can ignore this
-                section and continue using the export / import buttons below. In local-only
-                mode, your data lives in your browser’s storage and in any files you
-                explicitly export; it is not sent to the allneeds backend.
-              </p>
+              <div class="inventory-bluesky-panel__content">
+                <section class="inventory-auth-panel">
+                  <h2>Link a Bluesky account</h2>
+                  <p class="inventory-auth-panel__summary">
+                    You can optionally link this browser’s inventory to a Bluesky account.
+                    This does <strong>not</strong> use your password or app password. Instead,
+                    your Bluesky handle is resolved to a DID via the allneeds backend, and that
+                    DID becomes the key under which your settings, journals, and strategies
+                    are stored in a Cloudflare D1 database.
+                  </p>
 
-              <div class="inventory-auth-panel__controls">
-                <button
-                  type="button"
-                  class="inventory-auth-panel__login-button"
-                  data-bsky-login-button
-                >
-                  Link inventory to Bluesky account
-                </button>
+                  <p class="inventory-auth-panel__tradeoffs">
+                    If you prefer to keep everything local to this device, you can ignore this
+                    section and continue using the export / import buttons below. In local-only
+                    mode, your data lives in your browser’s storage and in any files you
+                    explicitly export; it is not sent to the allneeds backend.
+                  </p>
 
-                <span
-                  class="inventory-auth-panel__user-badge"
-                  data-bsky-user-badge
-                  hidden
-                ></span>
+                  <div class="inventory-auth-panel__controls">
+                    <button
+                      type="button"
+                      class="inventory-auth-panel__login-button"
+                      data-bsky-login-button
+                    >
+                      Link inventory to Bluesky account
+                    </button>
 
-                <button
-                  type="button"
-                  class="inventory-auth-panel__logout-button"
-                  data-bsky-logout-button
-                  hidden
-                >
-                  Unlink from Bluesky on this device
-                </button>
+                    <span
+                      class="inventory-auth-panel__user-badge"
+                      data-bsky-user-badge
+                      hidden
+                    ></span>
+
+                    <button
+                      type="button"
+                      class="inventory-auth-panel__logout-button"
+                      data-bsky-logout-button
+                      hidden
+                    >
+                      Unlink from Bluesky on this device
+                    </button>
+                  </div>
+                </section>
+
+                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
+                  <h3 id="inventory-backend-sync-heading">Optional backend save/load</h3>
+                  <p>
+                    If you have linked a Bluesky account, you can save the same data you normally export as JSON to the
+                    allneeds backend, and load it again later on another device. This stores a single JSON snapshot keyed by your
+                    Bluesky DID. It does not run automatically; you decide when to send or fetch data.
+                  </p>
+                  <p>
+                    Compared to local-only mode, this means your snapshot may be visible to the allneeds server operator and
+                    could in principle be exposed in a server compromise or legal request. If you prefer to keep everything
+                    local, continue using only the JSON export/import buttons.
+                  </p>
+
+                  <div class="inventory-backend-sync__buttons">
+                    <button type="button" data-backend-save-button>
+                      Save current data to allneeds backend
+                    </button>
+                    <button type="button" data-backend-load-button>
+                      Load data from allneeds backend
+                    </button>
+                  </div>
+
+                  <div class="inventory-backend-sync__status" data-backend-sync-status aria-live="polite"></div>
+                </section>
+
+                <section class="inventory-social-strategies" aria-labelledby="inventory-social-strategies-heading">
+                  <h3 id="inventory-social-strategies-heading">Strategies from Bluesky accounts you follow</h3>
+                  <p>
+                    When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
+                    This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
+                    in the allneeds database are shown here.
+                  </p>
+                  <button type="button" data-backend-fetch-feed-button>
+                    Fetch strategies from follows
+                  </button>
+                  <div class="inventory-social-strategies__list" data-backend-feed-container></div>
+                </section>
               </div>
-            </section>
+            </details>
 
             <div class="bsky-login-modal" data-bsky-login-modal hidden>
               <div class="bsky-login-modal__dialog">
@@ -1515,44 +1633,6 @@ button.site-nav__magnet {
             <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-        </section>
-
-        <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-          <h3 id="inventory-backend-sync-heading">Optional backend save/load</h3>
-          <p>
-            If you have linked a Bluesky account, you can save the same data you normally export as JSON to the
-            allneeds backend, and load it again later on another device. This stores a single JSON snapshot keyed by your
-            Bluesky DID. It does not run automatically; you decide when to send or fetch data.
-          </p>
-          <p>
-            Compared to local-only mode, this means your snapshot may be visible to the allneeds server operator and
-            could in principle be exposed in a server compromise or legal request. If you prefer to keep everything
-            local, continue using only the JSON export/import buttons.
-          </p>
-
-          <div class="inventory-backend-sync__buttons">
-            <button type="button" data-backend-save-button>
-              Save current data to allneeds backend
-            </button>
-            <button type="button" data-backend-load-button>
-              Load data from allneeds backend
-            </button>
-          </div>
-
-          <div class="inventory-backend-sync__status" data-backend-sync-status aria-live="polite"></div>
-        </section>
-
-        <section class="inventory-social-strategies" aria-labelledby="inventory-social-strategies-heading">
-          <h3 id="inventory-social-strategies-heading">Strategies from Bluesky accounts you follow</h3>
-          <p>
-            When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
-            This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
-            in the allneeds database are shown here.
-          </p>
-          <button type="button" data-backend-fetch-feed-button>
-            Fetch strategies from follows
-          </button>
-          <div class="inventory-social-strategies__list" data-backend-feed-container></div>
         </section>
 
         <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
