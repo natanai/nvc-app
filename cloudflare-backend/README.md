@@ -6,7 +6,7 @@ for **allneeds.app**.
 The Worker is already deployed in the Cloudflare dashboard as:
 
 - Worker name: `allneeds-backend`
-- Public URL: `https://allneeds-backend.natanai.workers.dev`
+- Public URL: `https://backend.allneeds.app`
 
 The Worker has a D1 database binding configured in the Cloudflare UI:
 

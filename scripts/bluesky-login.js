@@ -3,7 +3,7 @@
 // store the result in localStorage, expose it globally, and let the
 // Inventory page hook into it.
 
-const BSKY_API_BASE = 'https://allneeds-backend.natanai.workers.dev';
+const BSKY_API_BASE = 'https://backend.allneeds.app/api';
 const SESSION_STORAGE_KEY = 'allneeds.bskySession';
 
 export function loadBlueskySession() {

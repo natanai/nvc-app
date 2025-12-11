@@ -7,7 +7,7 @@ const PERSONAL_STRATEGIES_EMAIL_ADDRESS = 'ahiccup@gmail.com';
 const PERSONAL_STRATEGIES_EMAIL_SUBJECT = 'Strategies for allneeds.app!';
 const PERSONAL_STRATEGIES_EMAIL_BODY =
   'Hi Nat,\n\nI just exported my personal strategies from allneeds.app and attached the file for you.\n\nWith care,';
-const BACKEND_BASE_URL = 'https://allneeds-backend.natanai.workers.dev';
+const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
 const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
 
 function redirectLegacyJournalHash() {
