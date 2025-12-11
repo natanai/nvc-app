@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>feed • allneeds.app</title>
+    <meta
+      name="description"
+      content="Browse strategies shared publicly or with followers across allneeds.app."
+    />
+    <link rel="icon" type="image/svg+xml" href="../../icons/favicon-color.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-color-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-color-16x16.png" />
+    <link rel="manifest" href="../../site.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="application-name" content="allneeds.app" />
+    <link rel="apple-touch-icon" href="../../icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="allneeds.app" />
+    <link rel="mask-icon" href="../../icons/safari-pinned-tab.svg" color="#000000" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="../../icons/mstile-150x150.png" />
+    <meta name="msapplication-config" content="../../browserconfig.xml" />
+    <link rel="canonical" href="https://allneeds.app/inventory/feed/" />
+    <meta property="fb:app_id" content="966242223397117" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="allneeds.app" />
+    <meta property="og:url" content="https://allneeds.app/inventory/feed/" />
+    <meta property="og:title" content="feed • allneeds.app" />
+    <meta
+      property="og:description"
+      content="Browse strategies shared publicly or with followers across allneeds.app."
+    />
+    <meta property="og:image" content="https://allneeds.app/social/og-image-1200x630.png?v=2" />
+    <meta property="og:image:secure_url" content="https://allneeds.app/social/og-image-1200x630.png?v=2" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="feed • allneeds.app" />
+    <meta
+      name="twitter:description"
+      content="Browse strategies shared publicly or with followers across allneeds.app."
+    />
+    <meta name="twitter:url" content="https://allneeds.app/inventory/feed/" />
+    <meta name="twitter:image" content="https://allneeds.app/social/twitter-card-1200x630.png?v=2" />
+    <meta name="twitter:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
+    <link rel="preload" href="../../styles.css" as="style" />
+    <link rel="stylesheet" href="../../styles.css" fetchpriority="high" />
+            <script src="../../assets/js/ui/contrast.js"></script>
+    <script>
+      (function() {
+        const STORAGE_KEY = 'nvcApp.theme';
+        const VAR_MAP = {
+          plum: '--plum',
+          lavender: '--lavender',
+          ink: '--ink',
+          inkSoft: '--ink-soft',
+          rose: '--rose',
+          mint: '--mint',
+          gold: '--gold',
+          sky: '--sky',
+          outline: '--outline',
+        };
+        const HEX_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+        const root = document.documentElement;
+        if (!root) {
+          return;
+        }
+
+        function readStorageValue(key) {
+          if (!key) {
+            return '';
+          }
+
+          const candidates = [];
+          const errors = [];
+
+          try {
+            if (window.localStorage) {
+              const raw = localStorage.getItem(key);
+              const value = typeof raw === 'string' ? raw.trim() : '';
+              if (value) {
+                candidates.push({ value, index: candidates.length });
+              }
+            }
+          } catch (error) {
+            errors.push(error);
+          }
+
+          try {
+            if (window.sessionStorage) {
+              const raw = sessionStorage.getItem(key);
+              const value = typeof raw === 'string' ? raw.trim() : '';
+              if (value) {
+                candidates.push({ value, index: candidates.length });
+              }
+            }
+          } catch (error) {
+            errors.push(error);
+          }
+
+          if (!candidates.length) {
+            if (errors.length && typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to access theme storage', errors[errors.length - 1]);
+            }
+            return '';
+          }
+
+          if (candidates.length === 1) {
+            return candidates[0].value;
+          }
+
+          let best = candidates[0];
+          let bestTimestamp = readUpdatedAt(best.value);
+          let bestIndex = typeof best.index === 'number' ? best.index : 0;
+
+          for (let i = 1; i < candidates.length; i += 1) {
+            const candidate = candidates[i];
+            const timestamp = readUpdatedAt(candidate.value);
+            const index = typeof candidate.index === 'number' ? candidate.index : i;
+            if (timestamp > bestTimestamp || (timestamp === bestTimestamp && index < bestIndex)) {
+              best = candidate;
+              bestTimestamp = timestamp;
+              bestIndex = index;
+            }
+          }
+
+          return best.value;
+        }
+
+        function readUpdatedAt(value) {
+          if (typeof value !== 'string') {
+            return 0;
+          }
+          const trimmed = value.trim();
+          if (!trimmed || trimmed[0] !== '{') {
+            return 0;
+          }
+          try {
+            const parsed = JSON.parse(trimmed);
+            const candidate = parsed && typeof parsed === 'object' ? parsed.updatedAt : null;
+            return typeof candidate === 'number' && Number.isFinite(candidate) ? candidate : 0;
+          } catch (error) {
+            return 0;
+          }
+        }
+
+        function normalizeHex(value) {
+          if (typeof value !== 'string') {
+            return '';
+          }
+          const trimmed = value.trim();
+          if (!trimmed) {
+            return '';
+          }
+          const prefixed = trimmed.startsWith('#') ? trimmed : '#' + trimmed;
+          return HEX_PATTERN.test(prefixed) ? prefixed.toUpperCase() : '';
+        }
+
+        function readStoredThemePayload() {
+          const raw = readStorageValue(STORAGE_KEY);
+          if (!raw) {
+            return null;
+          }
+          try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' ? parsed : null;
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to parse saved theme', error);
+            }
+            return null;
+          }
+        }
+
+        function readPaletteVar(varName) {
+          const direct = normalizeHex(root.style.getPropertyValue(varName));
+          if (direct) {
+            return direct;
+          }
+          try {
+            const computed = getComputedStyle(root).getPropertyValue(varName);
+            return normalizeHex(computed);
+          } catch (error) {
+            if (typeof console !== 'undefined' && console.warn) {
+              console.warn('Unable to read palette color', varName, error);
+            }
+          }
+          return '';
+        }
+
+        let applied = false;
+
+        try {
+          const parsed = readStoredThemePayload();
+          if (parsed && typeof parsed === 'object' && parsed.values && typeof parsed.values === 'object') {
+            for (const [key, varName] of Object.entries(VAR_MAP)) {
+              const value = normalizeHex(parsed.values[key]);
+              if (!value) {
+                continue;
+              }
+              root.style.setProperty(varName, value);
+              applied = true;
+            }
+
+            const roundnessRaw =
+              typeof parsed.roundness === 'number' ? parsed.roundness : Number(parsed.roundness);
+            if (!Number.isNaN(roundnessRaw)) {
+              const clampedRoundness = Math.min(200, Math.max(0, Math.round(roundnessRaw)));
+              root.style.setProperty('--radius-sm', `${clampedRoundness / 10}px`);
+              root.style.setProperty('--radius-md', `${clampedRoundness / 4}px`);
+              root.style.setProperty('--radius-lg', `${clampedRoundness / 2}px`);
+              root.style.setProperty('--radius-full', `${clampedRoundness}px`);
+              applied = true;
+            }
+          }
+        } catch (error) {
+          if (typeof console !== 'undefined' && console.warn) {
+            console.warn('Unable to apply stored theme', error);
+          }
+        }
+
+        if (!applied) {
+          root.style.setProperty('--plum', '#74569B');
+          root.style.setProperty('--lavender', '#EDE4FF');
+          root.style.setProperty('--ink', '#1F1230');
+          root.style.setProperty('--ink-soft', '#392351');
+          root.style.setProperty('--rose', '#FFB3CB');
+          root.style.setProperty('--mint', '#96FBC7');
+          root.style.setProperty('--gold', '#F7FFAE');
+          root.style.setProperty('--sky', '#D3F1FF');
+          root.style.setProperty('--outline', '#12081F');
+          root.style.setProperty('--radius-sm', '10px');
+          root.style.setProperty('--radius-md', '25px');
+          root.style.setProperty('--radius-lg', '50px');
+          root.style.setProperty('--radius-full', '100px');
+        }
+      })();
+    </script>
+    <style>
+      .feed-page {
+        display: grid;
+        gap: 1rem;
+        padding: 1.25rem 0.5rem 2rem;
+      }
+
+      .feed-hero {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .feed-actions {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .inventory-social-strategies {
+        border: 2px solid color-mix(in srgb, var(--outline) 30%, transparent);
+        border-radius: var(--radius-lg);
+        padding: 1rem 1rem 1.25rem;
+        background: rgba(255, 255, 255, 0.92);
+        display: grid;
+        gap: 0.7rem;
+      }
+
+      .inventory-social-strategies__heading {
+        margin: 0;
+      }
+
+      .inventory-social-strategies__summary {
+        margin: 0;
+      }
+
+      .inventory-social-strategies__controls {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .inventory-social-strategies__status {
+        margin: 0;
+        color: var(--ink-soft);
+      }
+
+      .inventory-social-strategies__list {
+        margin-top: 0.25rem;
+      }
+
+      .inventory-backend-sync__buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .inventory-social-strategies__items {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .inventory-social-strategies__item {
+        padding: 0.75rem 0.85rem;
+        border-radius: var(--radius-md);
+        border: 2px solid color-mix(in srgb, var(--outline) 35%, transparent);
+        background: rgba(255, 255, 255, 0.9);
+        display: grid;
+        gap: 0.3rem;
+      }
+
+      .inventory-social-strategies__meta {
+        margin: 0;
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+      }
+
+      .inventory-social-strategies__body {
+        margin: 0;
+      }
+
+      .inventory-social-strategies__needs {
+        margin: 0;
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+      }
+
+      .feed-auth-panel {
+        border: 2px dashed color-mix(in srgb, var(--outline) 25%, transparent);
+        border-radius: var(--radius-md);
+        padding: 0.85rem 0.95rem 1rem;
+        display: grid;
+        gap: 0.6rem;
+        background: rgba(255, 255, 255, 0.65);
+      }
+
+      .feed-auth-panel__row {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .feed-auth-panel__status {
+        margin: 0;
+        color: var(--ink-soft);
+      }
+
+      .inventory-social-strategies__meta[data-status-type='error'] {
+        color: #a6003d;
+      }
+
+      .inventory-social-strategies__meta[data-status-type='warning'] {
+        color: #8a6400;
+      }
+
+      @media (max-width: 720px) {
+        .feed-actions {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body data-base-path="../../">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="page-wrapper">
+      <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
+        <div class="magnet-board-wrapper site-nav__board-wrapper">
+          <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
+
+  <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+    <use href="../../icons/nav-sprite.svg#icon-home" />
+  </svg>
+              <span class="site-nav__magnet-label visually-hidden">Home</span>
+            </a>
+            <button
+              class="pill magnet site-nav__magnet site-nav__magnet--customizer"
+              data-magnet-id="nav-customizer"
+              type="button"
+              data-palette-toggle
+              aria-haspopup="dialog"
+              aria-expanded="false"
+            >
+              <span class="site-nav__magnet-glyph" aria-hidden="true">+</span>
+              <span class="site-nav__magnet-label visually-hidden">Customizer</span>
+            </button>
+            <button
+              class="pill magnet site-nav__magnet site-nav__magnet--journal"
+              data-magnet-id="nav-journal"
+              type="button"
+              data-support-journal-open
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="global-support-journal-layer"
+            >
+              <span class="site-nav__magnet-label">Journal</span>
+            </button>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../" aria-current="page">
+              <span class="site-nav__magnet-label">Inventory</span>
+              <span class="site-nav__count" data-inventory-count hidden></span>
+            </a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-observations" href="../../observations/"><span class="site-nav__magnet-label">Observations</span></a>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--faux-feelings" data-magnet-id="nav-faux-feelings" href="../../faux-feelings/" data-nav-hidden="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Faux feelings</span></a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-feelings" href="../../feelings/"><span class="site-nav__magnet-label">Feelings</span></a>
+            <a class="pill magnet site-nav__magnet" data-magnet-id="nav-needs" href="../../needs/"><span class="site-nav__magnet-label">Needs</span></a>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--body-cues" data-magnet-id="nav-body-cues" href="../../feelings/body-cues/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Body cues</span></a>
+            <a class="pill magnet site-nav__magnet site-nav__magnet--journal-dashboard" data-magnet-id="nav-journal-dashboard" href="../journal/" data-nav-hidden="true" data-nav-supplemental="true" aria-hidden="true" tabindex="-1"><span class="site-nav__magnet-label">Journal dashboard</span></a>
+          </div>
+        </div>
+      </nav>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="../../">Home</a></li><li><a href="../">Inventory</a></li><li aria-current="page">Feed</li>
+        </ol>
+      </nav>
+      <main id="main" class="page" role="main">
+        <div class="feed-page">
+          <header class="feed-hero">
+            <p class="eyebrow">Strategy feed</p>
+            <h1 class="page-title">See what others are sharing</h1>
+            <p>
+              View strategies from people you follow on Bluesky and from anyone who has made their strategies
+              public. Use the visibility picker when saving a personal strategy to decide who can see it here.
+            </p>
+            <div class="feed-actions">
+              <a class="inventory-button inventory-button--compact" href="../">Back to inventory</a>
+              <a class="inventory-button inventory-button--ghost inventory-button--compact" href="../#inventory-form">Add a personal strategy</a>
+            </div>
+          </header>
+
+          <section class="feed-auth-panel" aria-labelledby="feed-auth-heading">
+            <div class="feed-auth-panel__row">
+              <h2 id="feed-auth-heading" class="section-title">Link your Bluesky account</h2>
+              <p class="feed-auth-panel__status" data-session-status>Not linked to Bluesky yet.</p>
+            </div>
+            <div class="feed-auth-panel__row">
+              <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+              <input id="bluesky-handle-input" type="text" autocomplete="username" />
+            </div>
+            <div class="feed-auth-panel__row">
+              <div class="inventory-backend-sync__buttons">
+                <button
+                  type="button"
+                  id="bluesky-signin-button"
+                  class="inventory-button inventory-button--compact"
+                >
+                  <span class="inventory-button__text">Sign in with Bluesky</span>
+                </button>
+                <button
+                  type="button"
+                  id="bluesky-signout-button"
+                  class="inventory-button inventory-button--ghost inventory-button--compact"
+                >
+                  <span class="inventory-button__text">Sign out</span>
+                </button>
+              </div>
+            </div>
+            <p class="feed-auth-panel__status">We only use your DID to fetch shared strategies; your password never touches allneeds.app.</p>
+          </section>
+
+          <section class="inventory-social-strategies" aria-labelledby="following-feed-heading">
+            <div class="inventory-social-strategies__controls">
+              <div>
+                <h2 id="following-feed-heading" class="inventory-social-strategies__heading">From people you follow</h2>
+                <p class="inventory-social-strategies__summary">
+                  Strategies shared publicly or with followers by Bluesky accounts you follow.
+                </p>
+              </div>
+              <button
+                type="button"
+                class="inventory-button inventory-button--compact"
+                data-feed-refresh="following"
+              >
+                <span class="inventory-button__text">Refresh</span>
+              </button>
+            </div>
+            <p class="inventory-social-strategies__meta" data-feed-status="following"></p>
+            <div class="inventory-social-strategies__list" data-feed-list="following"></div>
+          </section>
+
+          <section class="inventory-social-strategies" aria-labelledby="public-feed-heading">
+            <div class="inventory-social-strategies__controls">
+              <div>
+                <h2 id="public-feed-heading" class="inventory-social-strategies__heading">Shared with everyone</h2>
+                <p class="inventory-social-strategies__summary">
+                  Strategies that anyone has chosen to make visible to the whole community.
+                </p>
+              </div>
+              <button
+                type="button"
+                class="inventory-button inventory-button--ghost inventory-button--compact"
+                data-feed-refresh="public"
+              >
+                <span class="inventory-button__text">Refresh</span>
+              </button>
+            </div>
+            <p class="inventory-social-strategies__meta" data-feed-status="public"></p>
+            <div class="inventory-social-strategies__list" data-feed-list="public"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/feed.js" defer></script>
+    <script type="module">
+      import {
+        initBlueskyOAuth,
+        getCurrentBlueskySession,
+        signInWithBluesky,
+        signOutFromBluesky,
+      } from '../bluesky-oauth.js';
+
+      // ⚠️ This only authenticates in the browser; the backend still trusts plain DIDs/handles.
+      // We will later wire this OAuth session into the Cloudflare Worker so private data is only
+      // readable by a DID that has actually completed OAuth.
+      function setGlobalBlueskySession(session) {
+        const normalizedDid = session?.did || session?.sub || null;
+        const normalizedHandle =
+          session?.preferred_username || session?.handle || session?.username || null;
+
+        if (normalizedDid) {
+          window.allneedsSession = {
+            did: normalizedDid,
+            handle: normalizedHandle,
+          };
+        } else {
+          window.allneedsSession = null;
+        }
+
+        const evt = new CustomEvent('allneeds:bsky-login-changed', {
+          detail: window.allneedsSession,
+        });
+        window.dispatchEvent(evt);
+      }
+
+      function describeSession(session) {
+        const did = session?.did || session?.sub || '';
+        const handle = session?.preferred_username || session?.handle || session?.username || '';
+
+        if (handle && did) {
+          return `Signed in as @${handle} (${did})`;
+        }
+        if (handle) {
+          return `Signed in as @${handle}`;
+        }
+        if (did) {
+          return `Signed in (${did})`;
+        }
+        return 'Signed in with Bluesky';
+      }
+
+      function updateBlueskyAuthUi(session) {
+        const statusText = document.querySelector('[data-session-status]');
+
+        if (session) {
+          if (statusText) {
+            statusText.textContent = describeSession(session);
+          }
+        } else if (statusText) {
+          statusText.textContent = 'Not linked to Bluesky yet.';
+        }
+      }
+
+      async function onBlueskySignInClick() {
+        const input = document.querySelector('#bluesky-handle-input');
+        const handle = input?.value?.trim();
+        if (!handle) return;
+
+        try {
+          await signInWithBluesky(handle);
+        } catch (err) {
+          console.error('Error during Bluesky OAuth sign-in', err);
+        }
+      }
+
+      async function onBlueskySignOutClick() {
+        try {
+          await signOutFromBluesky();
+        } catch (err) {
+          console.error('Error during Bluesky OAuth sign-out', err);
+        }
+        setGlobalBlueskySession(null);
+        updateBlueskyAuthUi(null);
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        document
+          .querySelector('#bluesky-signin-button')
+          ?.addEventListener('click', onBlueskySignInClick);
+
+        document
+          .querySelector('#bluesky-signout-button')
+          ?.addEventListener('click', onBlueskySignOutClick);
+
+        let session = null;
+        try {
+          session = await initBlueskyOAuth();
+        } catch (err) {
+          console.error('Error initializing Bluesky OAuth', err);
+        }
+
+        if (!session) {
+          session = getCurrentBlueskySession();
+        }
+
+        setGlobalBlueskySession(session || null);
+        updateBlueskyAuthUi(session);
+      });
+    </script>
+  </body>
+</html>

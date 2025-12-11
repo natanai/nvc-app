@@ -1556,7 +1556,7 @@ button.site-nav__magnet {
       <p class="inventory-social-strategies__summary">
         When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
         This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
-        in the allneeds database are shown here.
+        in the allneeds database are shown here. Visit the feed to browse everything shared publicly or with followers.
       </p>
       <button
         type="button"
@@ -1565,6 +1565,12 @@ button.site-nav__magnet {
       >
         <span class="inventory-button__text">Fetch strategies from follows</span>
       </button>
+      <a
+        class="inventory-button inventory-button--ghost inventory-button--compact"
+        href="./feed/"
+      >
+        <span class="inventory-button__text">Open feed</span>
+      </a>
       <div class="inventory-social-strategies__list" data-backend-feed-container></div>
     </section>
   </div>
@@ -1745,7 +1751,7 @@ button.site-nav__magnet {
           </form>
         </div>
         
-      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
+      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Choose who can see them with the visibility options, and use the export tools above whenever you would like a backup.</p>
         
       </div>
         </section>

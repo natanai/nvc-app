@@ -602,6 +602,142 @@ function sanitizeLocation(value) {
   return value.trim();
 }
 
+const VISIBILITY_OPTIONS = new Set(['private', 'followers', 'public']);
+
+function normalizeStrategyVisibility(value, isPersonal = false) {
+  const normalized = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  if (VISIBILITY_OPTIONS.has(normalized)) {
+    return normalized;
+  }
+  return isPersonal ? 'private' : '';
+}
+
+function describeStrategyVisibility(value) {
+  switch (value) {
+    case 'public':
+      return 'Visible to everyone';
+    case 'followers':
+      return 'Visible to followers';
+    case 'private':
+      return 'Private to you';
+    default:
+      return '';
+  }
+}
+
+function createVisibilityChoice({ id, value, label, description, defaultChecked }) {
+  const wrapper = document.createElement('label');
+  wrapper.className = 'strategy-form__choice';
+  wrapper.setAttribute('for', id);
+
+  const input = document.createElement('input');
+  input.type = 'radio';
+  input.name = 'visibility';
+  input.id = id;
+  input.value = value;
+  input.required = true;
+  if (defaultChecked) {
+    input.checked = true;
+  }
+
+  const body = document.createElement('span');
+
+  const labelEl = document.createElement('span');
+  labelEl.className = 'strategy-form__choice-label';
+  labelEl.textContent = label;
+  body.append(labelEl);
+
+  if (description) {
+    const desc = document.createElement('span');
+    desc.className = 'strategy-form__choice-description';
+    desc.textContent = description;
+    body.append(desc);
+  }
+
+  wrapper.append(input, body);
+  return wrapper;
+}
+
+function injectVisibilityFieldset(form) {
+  if (!(form instanceof HTMLFormElement)) {
+    return;
+  }
+  if (form.querySelector('[data-visibility-field]')) {
+    return;
+  }
+
+  const existingChoice = form.querySelector('input[name="visibility"]');
+  const selectedValue = existingChoice?.value || 'private';
+  const idPrefix = form.getAttribute('id') || 'strategy';
+
+  const fieldset = document.createElement('fieldset');
+  fieldset.className = 'strategy-form__field strategy-form__field--visibility';
+  fieldset.dataset.visibilityField = 'true';
+
+  const legend = document.createElement('legend');
+  legend.textContent = 'Who can see this strategy?';
+  fieldset.append(legend);
+
+  const hint = document.createElement('p');
+  hint.className = 'strategy-form__hint';
+  hint.textContent = 'Your choice is saved with this strategy when you export or sync later.';
+  fieldset.append(hint);
+
+  const choices = document.createElement('div');
+  choices.className = 'strategy-form__choices';
+
+  const options = [
+    {
+      value: 'private',
+      label: 'Only me',
+      description: 'Keep this strategy private in this browser and exports.',
+    },
+    {
+      value: 'followers',
+      label: 'Followers',
+      description: 'Share with people who follow you when you publish strategies.',
+    },
+    {
+      value: 'public',
+      label: 'Everyone',
+      description: 'Share publicly so anyone can discover it.',
+    },
+  ];
+
+  options.forEach((option, index) => {
+    const id = `${idPrefix}-visibility-${option.value || index}`;
+    const isChecked = option.value === selectedValue || (!selectedValue && option.value === 'private');
+    choices.append(
+      createVisibilityChoice({
+        id,
+        value: option.value,
+        label: option.label,
+        description: option.description,
+        defaultChecked: isChecked,
+      })
+    );
+  });
+
+  fieldset.append(choices);
+
+  const actions = form.querySelector('.strategy-form__actions') || form.querySelector('.strategy-card__actions');
+  if (actions && actions.parentNode) {
+    actions.parentNode.insertBefore(fieldset, actions);
+  } else {
+    form.append(fieldset);
+  }
+}
+
+function ensureVisibilityControls() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const forms = document.querySelectorAll('form[data-strategy-form]');
+  forms.forEach((form) => {
+    injectVisibilityFieldset(form);
+  });
+}
+
 function normalizeStrategySlug(value) {
   if (typeof value !== 'string') {
     return '';
@@ -630,6 +766,10 @@ function normalizeInventoryEntry(entry) {
   }
   normalized.firstName = contributorName;
   normalized.location = contributorLocation;
+  const visibility = normalizeStrategyVisibility(entry.visibility, Boolean(entry.personal));
+  if (visibility) {
+    normalized.visibility = visibility;
+  }
   normalized.need = typeof entry.need === 'string' ? entry.need.trim() : normalized.need || '';
   const normalizedSlug = normalizeNeedSlugValue(entry.needSlug || entry.sourceNeedPage);
   normalized.needSlug = normalizedSlug;
@@ -1512,6 +1652,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Unable to set up the customizer', error);
   });
   updateInventoryCount();
+  ensureVisibilityControls();
   setupNeedPage();
   setupInventoryPage();
   attachDelegatedJournalOverlayTriggerListener();
@@ -1773,6 +1914,8 @@ function setupNeedPage() {
       const primaryNeedSlug = selectedNeedSlugs[0] || normalizeNeedSlugValue(needSlug);
       const primaryNeedTitle = selectedNeedTitles[0] || needTitle;
 
+      const visibility = normalizeStrategyVisibility(formData.get('visibility'), true);
+
       const tags = buildStrategyTags(selectedNeedSlugs.join('|'), primaryNeedSlug);
       const needSlugs = resolveNeedSlugsFromTags(tags, primaryNeedSlug);
       if (!needSlugs.length) {
@@ -1793,6 +1936,7 @@ function setupNeedPage() {
         needSlugs,
         tags: normalizedTags,
         personal: true,
+        visibility,
         sourceNeedPage: '',
         strategySlug: '',
         createdAt: new Date().toISOString(),
@@ -1898,6 +2042,7 @@ function setupInventoryPage() {
       const primaryNeedSlug = needSlugs[0];
       const needTitle = state.needsBySlug.get(primaryNeedSlug)?.title || primaryNeedSlug;
       const resolvedNeedSlugs = resolveNeedSlugsFromTags(tags, primaryNeedSlug);
+      const visibility = normalizeStrategyVisibility(formData.get('visibility'), true);
 
       const entry = {
         id: generateId(),
@@ -1908,6 +2053,7 @@ function setupInventoryPage() {
         needSlugs: resolvedNeedSlugs,
         tags: Array.from(new Set([...tags, ...resolvedNeedSlugs])),
         personal: true,
+        visibility,
         sourceNeedPage: '',
         strategySlug: '',
         createdAt: new Date().toISOString(),
@@ -5640,6 +5786,13 @@ function renderInventoryItem(entry, options = {}) {
     header.append(badge);
   }
 
+  if (entry.personal && entry.visibility) {
+    const audienceBadge = document.createElement('span');
+    audienceBadge.className = 'inventory-item__tag inventory-item__tag--visibility';
+    audienceBadge.textContent = describeStrategyVisibility(entry.visibility);
+    header.append(audienceBadge);
+  }
+
   if (entry.sourceNeedPage) {
     const badge = document.createElement('span');
     badge.className = 'inventory-item__tag inventory-item__tag--source';
@@ -5752,6 +5905,16 @@ function backfillInventoryNeedSlugs() {
     }
 
     const normalized = { ...entry };
+    const normalizedVisibility = normalizeStrategyVisibility(normalized.visibility, Boolean(normalized.personal));
+    if (normalized.personal) {
+      if (normalized.visibility !== normalizedVisibility) {
+        normalized.visibility = normalizedVisibility;
+        updated = true;
+      }
+    } else if (normalized.visibility) {
+      delete normalized.visibility;
+      updated = true;
+    }
     const cleanedTags = normalizeTagsList(normalized.tags);
     if (!Array.isArray(normalized.tags) || normalized.tags.length !== cleanedTags.length) {
       updated = true;
@@ -6267,6 +6430,14 @@ async function fetchSocialStrategiesFeed() {
       meta.className = 'inventory-social-strategies__meta';
       meta.textContent = `Shared by ${label}`;
       card.appendChild(meta);
+
+      const visibilityLabel = describeStrategyVisibility(strategy?.visibility);
+      if (visibilityLabel) {
+        const visibility = document.createElement('p');
+        visibility.className = 'inventory-social-strategies__meta';
+        visibility.textContent = visibilityLabel;
+        card.appendChild(visibility);
+      }
 
       const body = document.createElement('p');
       body.className = 'inventory-social-strategies__body';

@@ -3354,6 +3354,36 @@ main[data-need-slug] .page-title::before {
   gap: 0.65rem;
 }
 
+.strategy-form__choices {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.strategy-form__choice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.strategy-form__choice input[type='radio'] {
+  margin-top: 0.15rem;
+}
+
+.strategy-form__choice-label {
+  display: block;
+  font-weight: 600;
+}
+
+.strategy-form__choice-description {
+  margin: 0.15rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
 .strategy-form__actions {
   display: flex;
   justify-content: flex-end;
