@@ -6165,7 +6165,8 @@ async function saveSnapshotToBackend() {
     const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ did, key: BACKEND_SNAPSHOT_KEY, value }),
+      credentials: 'include',
+      body: JSON.stringify({ key: BACKEND_SNAPSHOT_KEY, value }),
     });
     const data = await res.json();
     if (!res.ok || !data || data.status !== 'ok') {
@@ -6187,7 +6188,9 @@ async function loadSnapshotFromBackend() {
   }
 
   try {
-    const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings?did=${encodeURIComponent(did)}`);
+    const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings`, {
+      credentials: 'include',
+    });
     const data = await res.json();
 
     if (!res.ok || !data || data.status !== 'ok') {
@@ -6236,7 +6239,9 @@ async function fetchSocialStrategiesFeed() {
   }
 
   try {
-    const res = await fetch(`${BACKEND_BASE_URL}/api/feed/strategies?did=${encodeURIComponent(did)}`);
+    const res = await fetch(`${BACKEND_BASE_URL}/api/feed/strategies`, {
+      credentials: 'include',
+    });
     const data = await res.json();
 
     if (!res.ok || !data || data.status !== 'ok') {

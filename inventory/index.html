@@ -1496,9 +1496,9 @@ button.site-nav__magnet {
       </div>
 
       <p class="inventory-auth-warning">
-        Privacy note: this is a beta OAuth login. Until we complete the next steps,
-        <strong>all sensitive data (journals, detailed observations, etc.) should still be kept in local exports only</strong>.
-        The backend currently treats user identifiers as hints, not as cryptographically verified identities.
+        Data stored on the allneeds backend is tied to your Bluesky identity and protected by your login.
+        It is your choice whether to use the backend or keep data local-only; data stored on the backend
+        could be exposed in the event of a server compromise or legal request.
       </p>
     </section>
 
@@ -1762,11 +1762,11 @@ button.site-nav__magnet {
         getCurrentBlueskySession,
         signInWithBluesky,
         signOutFromBluesky,
+        ensureBackendSession,
       } from './bluesky-oauth.js';
 
-      // ⚠️ This only authenticates in the browser; the backend still trusts plain DIDs/handles.
-      // We will later wire this OAuth session into the Cloudflare Worker so private data is only
-      // readable by a DID that has actually completed OAuth.
+      // OAuth sign-in is mirrored to the backend via /auth/session so private data endpoints use
+      // your signed-in DID rather than trusting client-provided identifiers.
       function setGlobalBlueskySession(session) {
         const normalizedDid = session?.did || session?.sub || null;
         const normalizedHandle =
@@ -1863,6 +1863,14 @@ button.site-nav__magnet {
 
         if (!session) {
           session = getCurrentBlueskySession();
+        }
+
+        if (session) {
+          try {
+            await ensureBackendSession(session);
+          } catch (err) {
+            console.error('Could not start backend session', err);
+          }
         }
 
         setGlobalBlueskySession(session || null);
