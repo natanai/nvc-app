@@ -4,7 +4,7 @@
 import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser@0.3.36";
 
 const CLIENT_METADATA_URL = "https://allneeds.app/oauth-client-metadata.json";
-const BACKEND_BASE_URL = "https://allneeds-backend.natanai.workers.dev";
+const BACKEND_BASE_URL = "https://backend.allneeds.app/api";
 
 let oauthClient = null;
 /**
