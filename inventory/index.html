@@ -1435,9 +1435,12 @@ button.site-nav__magnet {
                 <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
                 <span>Review saved strategies</span>
               </a>
-              <a class="strategy-quick-actions__link strategy-quick-actions__item" href="../feed/">
-                <span class="strategy-quick-actions__label">Browse shared strategies</span>
-                <span class="strategy-quick-actions__hint">See strategies shared by others</span>
+              <a class="inventory-shared-button" href="../feed/">
+                <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
+                <span class="inventory-shared-button__text">
+                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
+                  <span class="inventory-shared-button__label">View shared strategies</span>
+                </span>
               </a>
             </div>
 
@@ -1756,12 +1759,10 @@ button.site-nav__magnet {
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
             </div>
-            
-            <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
           </form>
         </div>
-        
-      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
+
+      <p class="strategy-form__notice">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups. Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
         
       </div>
         </section>
