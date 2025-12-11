@@ -1456,19 +1456,12 @@ button.site-nav__magnet {
 
     <!-- OAuth sign-in / sign-out -->
     <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-      <h2 class="inventory-auth-panel__heading">Bluesky sign-in (OAuth beta)</h2>
+      <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
 
-      <div class="inventory-auth-note">
-        <p>Optionally sign in with your Bluesky account. This currently:</p>
-        <ul>
-          <li>Proves that this browser successfully authenticated with Bluesky.</li>
-          <li>Does <strong>not yet</strong> change where your journals or settings are stored.</li>
-          <li>
-            Does <strong>not</strong> send your Bluesky password to allneeds.app at any time.
-            Authentication happens only at Bluesky’s servers per OAuth spec.
-          </li>
-        </ul>
-      </div>
+      <p class="inventory-auth-note">
+        Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
+        Signing in by itself does <strong>not</strong> move or sync any of your data.
+      </p>
 
       <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
         <div class="inventory-auth-panel__field">
@@ -1496,9 +1489,8 @@ button.site-nav__magnet {
       </div>
 
       <p class="inventory-auth-warning">
-        Data stored on the allneeds backend is tied to your Bluesky identity and protected by your login.
-        It is your choice whether to use the backend or keep data local-only; data stored on the backend
-        could be exposed in the event of a server compromise or legal request.
+        We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
+        You can ignore this sign-in and keep everything local if you prefer.
       </p>
     </section>
 
@@ -1508,14 +1500,14 @@ button.site-nav__magnet {
         Optional backend save/load
       </h3>
       <p>
-        If you have linked a Bluesky account, you can save the same data you normally export as JSON to the
-        allneeds backend, and load it again later on another device. This stores a single JSON snapshot keyed by your
-        Bluesky DID. It does not run automatically; you decide when to send or fetch data.
+        When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
+        (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
+        you decide when to send or fetch data.
       </p>
       <p>
-        Compared to local-only mode, this means your snapshot may be visible to the allneeds server operator and
-        could in principle be exposed in a server compromise or legal request. If you prefer to keep everything
-        local, continue using only the JSON export/import buttons.
+        This makes it easier to continue your work on another device, but it also means that snapshot is stored
+        on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
+        feel right for you, keep using the local export/import buttons instead.
       </p>
 
       <div class="inventory-backend-sync__buttons">
@@ -1554,9 +1546,9 @@ button.site-nav__magnet {
         Strategies from Bluesky accounts you follow
       </h3>
       <p class="inventory-social-strategies__summary">
-        When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow have shared.
-        This uses your DID to query the allneeds backend and Bluesky AppView. Only publicly shared strategies stored
-        in the allneeds database are shown here.
+        When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
+        have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
+        are shown here.
       </p>
       <button
         type="button"
