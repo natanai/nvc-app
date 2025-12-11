@@ -4,6 +4,7 @@
 import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser@0.3.36";
 
 const CLIENT_METADATA_URL = "https://allneeds.app/oauth-client-metadata.json";
+const BACKEND_BASE_URL = "https://allneeds-backend.natanai.workers.dev";
 
 let oauthClient = null;
 /**
@@ -11,6 +12,7 @@ let oauthClient = null;
  * { did, handle, raw }
  */
 let oauthSession = null;
+let backendSessionDid = null;
 
 /**
  * Initialize the Bluesky OAuth client and try to restore
@@ -34,6 +36,11 @@ export async function initBlueskyOAuth() {
     if (result && result.session) {
       oauthSession = normalizeSession(result.session);
       console.log("Bluesky OAuth: restored session", oauthSession);
+      try {
+        await ensureBackendSession(oauthSession);
+      } catch (err) {
+        console.warn("Bluesky OAuth: could not start backend session", err);
+      }
     } else {
       oauthSession = null;
       console.log("Bluesky OAuth: no existing session");
@@ -62,6 +69,38 @@ function normalizeSession(session) {
     null;
 
   return { did, handle, raw: session };
+}
+
+async function createBackendSession(did) {
+  const res = await fetch(`${BACKEND_BASE_URL}/auth/session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ did }),
+  });
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data || data.status !== "ok") {
+    throw new Error("Could not start backend session");
+  }
+
+  backendSessionDid = did;
+}
+
+export async function ensureBackendSession(session) {
+  const did = session?.did || session?.sub || null;
+  if (!did) return;
+  if (backendSessionDid === did) return;
+
+  await createBackendSession(did);
+}
+
+export async function logoutBackendSession() {
+  backendSessionDid = null;
+  await fetch(`${BACKEND_BASE_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  }).catch(() => {});
 }
 
 /**
@@ -124,17 +163,18 @@ export async function signInWithBluesky(handleInput) {
  * call a `signOut()` method on the session object.
  */
 export async function signOutFromBluesky() {
-  if (!oauthClient) return;
-
-  try {
-    const result = await oauthClient.init();
-    if (result && result.session && typeof result.session.signOut === "function") {
-      await result.session.signOut();
+  if (oauthClient) {
+    try {
+      const result = await oauthClient.init();
+      if (result && result.session && typeof result.session.signOut === "function") {
+        await result.session.signOut();
+      }
+    } catch (err) {
+      console.warn("Bluesky OAuth: error during sign-out", err);
     }
-  } catch (err) {
-    console.warn("Bluesky OAuth: error during sign-out", err);
   }
 
   oauthSession = null;
+  await logoutBackendSession();
   console.log("Bluesky OAuth: signed out (local state cleared)");
 }

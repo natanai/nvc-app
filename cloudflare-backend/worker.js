@@ -5,6 +5,7 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Origin': 'https://allneeds.app',
   'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Credentials': 'true',
 };
 
 function jsonResponse(data, status = 200) {
@@ -19,6 +20,36 @@ function jsonResponse(data, status = 200) {
 
 function errorResponse(message, status = 400) {
   return jsonResponse({ status: 'error', message }, status);
+}
+
+function parseCookies(request) {
+  const header = request.headers.get('Cookie');
+  if (!header) return {};
+  return Object.fromEntries(
+    header.split(';').map((part) => {
+      const [k, ...v] = part.trim().split('=');
+      return [decodeURIComponent(k), decodeURIComponent(v.join('='))];
+    }),
+  );
+}
+
+async function getSession(env, request) {
+  const cookies = parseCookies(request);
+  const sid = cookies['allneeds_session'];
+  if (!sid) return null;
+
+  const row = await env.DB.prepare(
+    'SELECT did, expires_at FROM sessions WHERE id = ?',
+  )
+    .bind(sid)
+    .first();
+
+  if (!row) return null;
+
+  // If you later start using expires_at, you can enforce it here:
+  // if (row.expires_at && new Date(row.expires_at) < new Date()) { ... }
+
+  return { id: sid, did: row.did };
 }
 
 async function handleHealth(env) {
@@ -46,6 +77,11 @@ async function handleMe() {
 }
 
 async function handlePostStrategy(request, env) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
+  }
+
   let body;
 
   try {
@@ -54,10 +90,10 @@ async function handlePostStrategy(request, env) {
     return errorResponse('Invalid JSON body');
   }
 
-  const { did, title, body: strategyBody = null, needIds = null } = body || {};
+  const { title, body: strategyBody = null, needIds = null } = body || {};
 
-  if (!did || !title || String(title).trim() === '') {
-    return errorResponse('did and title are required');
+  if (!title || String(title).trim() === '') {
+    return errorResponse('title is required');
   }
 
   let needIdsSerialized = null;
@@ -73,7 +109,7 @@ async function handlePostStrategy(request, env) {
     await env.DB.prepare(
       'INSERT INTO strategies (author_did, title, body, need_ids) VALUES (?, ?, ?, ?);',
     )
-      .bind(did, title, strategyBody, needIdsSerialized)
+      .bind(session.did, title, strategyBody, needIdsSerialized)
       .run();
 
     return jsonResponse({ status: 'ok' });
@@ -88,11 +124,9 @@ async function handlePostStrategy(request, env) {
 }
 
 async function handleGetStrategies(request, env) {
-  const url = new URL(request.url);
-  const did = url.searchParams.get('did');
-
-  if (!did) {
-    return errorResponse('did is required');
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
   }
 
   try {
@@ -112,7 +146,7 @@ async function handleGetStrategies(request, env) {
        WHERE s.author_did = ?
        ORDER BY s.created_at DESC
        LIMIT 100;`,
-    ).bind(did);
+    ).bind(session.did);
 
     const { results } = await stmt.all();
     const strategies = (results || []).map((row) => ({
@@ -130,19 +164,18 @@ async function handleGetStrategies(request, env) {
       },
     }));
 
-    return jsonResponse({ status: 'ok', did, strategies });
+    return jsonResponse({ status: 'ok', did: session.did, strategies });
   } catch (err) {
     return errorResponse(String(err), 500);
   }
 }
 
 async function handleGetStrategyFeed(request, env) {
-  const url = new URL(request.url);
-  const viewerDid = url.searchParams.get('did');
-
-  if (!viewerDid) {
-    return errorResponse('did is required');
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
   }
+  const viewerDid = session.did;
 
   try {
     let viewerKnown = false;
@@ -305,23 +338,21 @@ async function handleResolveHandle(request, env) {
 }
 
 async function handleGetUserSettings(request, env) {
-  const url = new URL(request.url);
-  const did = url.searchParams.get('did');
-
-  if (!did) {
-    return errorResponse('did is required');
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
   }
 
   try {
     const result = await env.DB.prepare(
       'SELECT key, value, updated_at FROM user_settings WHERE did = ? ORDER BY key;',
     )
-      .bind(did)
+      .bind(session.did)
       .all();
 
     return jsonResponse({
       status: 'ok',
-      did,
+      did: session.did,
       settings: result.results || [],
     });
   } catch (err) {
@@ -330,6 +361,11 @@ async function handleGetUserSettings(request, env) {
 }
 
 async function handlePostUserSettings(request, env) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
+  }
+
   let body;
 
   try {
@@ -338,22 +374,22 @@ async function handlePostUserSettings(request, env) {
     return errorResponse('Invalid JSON body');
   }
 
-  const { did, key, value } = body || {};
+  const { key, value } = body || {};
 
-  if (!did || !key || value === undefined) {
-    return errorResponse('did, key, and value are required');
+  if (!key || value === undefined) {
+    return errorResponse('key and value are required');
   }
 
   try {
     await env.DB.prepare(
       'INSERT INTO user_settings (did, key, value, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP) ON CONFLICT(did, key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP;',
     )
-      .bind(did, key, value)
+      .bind(session.did, key, value)
       .run();
 
     return jsonResponse({
       status: 'ok',
-      did,
+      did: session.did,
       key,
       value,
     });
@@ -363,23 +399,21 @@ async function handlePostUserSettings(request, env) {
 }
 
 async function handleGetJournals(request, env) {
-  const url = new URL(request.url);
-  const did = url.searchParams.get('did');
-
-  if (!did) {
-    return errorResponse('did is required');
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
   }
 
   try {
     const result = await env.DB.prepare(
       'SELECT id, did, created_at, updated_at, title, body FROM journals WHERE did = ? ORDER BY created_at DESC;',
     )
-      .bind(did)
+      .bind(session.did)
       .all();
 
     return jsonResponse({
       status: 'ok',
-      did,
+      did: session.did,
       journals: result.results || [],
     });
   } catch (err) {
@@ -388,6 +422,11 @@ async function handleGetJournals(request, env) {
 }
 
 async function handlePostJournals(request, env) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
+  }
+
   let body;
 
   try {
@@ -396,15 +435,11 @@ async function handlePostJournals(request, env) {
     return errorResponse('Invalid JSON body');
   }
 
-  const { did, title = null, body: journalBody = null } = body || {};
-
-  if (!did) {
-    return errorResponse('did is required');
-  }
+  const { title = null, body: journalBody = null } = body || {};
 
   try {
     await env.DB.prepare('INSERT INTO journals (did, title, body) VALUES (?, ?, ?);')
-      .bind(did, title, journalBody)
+      .bind(session.did, title, journalBody)
       .run();
 
     return jsonResponse({ status: 'ok' });
@@ -426,8 +461,9 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const { pathname } = url;
+    const method = request.method;
 
-    if (request.method === 'OPTIONS') {
+    if (method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
         headers: CORS_HEADERS,
@@ -435,47 +471,101 @@ export default {
     }
 
     // Health check
-    if (request.method === 'GET' && pathname === '/api/health') {
+    if (method === 'GET' && pathname === '/api/health') {
       return handleHealth(env);
     }
 
     // Future auth/user endpoint
-    if (request.method === 'GET' && pathname === '/api/me') {
+    if (method === 'GET' && pathname === '/api/me') {
       return handleMe();
     }
 
+    if (method === 'POST' && pathname === '/auth/session') {
+      const body = await request.json().catch(() => null);
+      if (!body || typeof body.did !== 'string') {
+        return jsonResponse({ status: 'error', message: 'invalid body' }, 400);
+      }
+
+      const did = body.did.trim();
+      if (!did || !did.startsWith('did:')) {
+        return jsonResponse({ status: 'error', message: 'invalid did' }, 400);
+      }
+
+      await env.DB.prepare(
+        'INSERT OR IGNORE INTO users (did, created_at) VALUES (?, CURRENT_TIMESTAMP)',
+      )
+        .bind(did)
+        .run();
+
+      const sid = crypto.randomUUID();
+
+      await env.DB.prepare(
+        'INSERT INTO sessions (id, did, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
+      )
+        .bind(sid, did)
+        .run();
+
+      return new Response(JSON.stringify({ status: 'ok' }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...CORS_HEADERS,
+          'Set-Cookie':
+            `allneeds_session=${encodeURIComponent(sid)}; HttpOnly; Secure; SameSite=Lax; Path=/`,
+        },
+      });
+    }
+
+    if (method === 'POST' && pathname === '/auth/logout') {
+      const session = await getSession(env, request);
+      if (session) {
+        await env.DB.prepare('DELETE FROM sessions WHERE id = ?')
+          .bind(session.id)
+          .run();
+      }
+
+      return new Response(null, {
+        status: 204,
+        headers: {
+          ...CORS_HEADERS,
+          'Set-Cookie':
+            'allneeds_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
+        },
+      });
+    }
+
     // Future feed endpoint (strategies from people the user follows)
-    if (request.method === 'GET' && pathname === '/api/feed/strategies') {
+    if (method === 'GET' && pathname === '/api/feed/strategies') {
       return handleGetStrategyFeed(request, env);
     }
 
     // Future endpoint to create a new strategy
-    if (request.method === 'POST' && pathname === '/api/strategies') {
+    if (method === 'POST' && pathname === '/api/strategies') {
       return handlePostStrategy(request, env);
     }
 
-    if (request.method === 'GET' && pathname === '/api/strategies') {
+    if (method === 'GET' && pathname === '/api/strategies') {
       return handleGetStrategies(request, env);
     }
 
     // Resolve a Bluesky handle to a DID and upsert into users.
-    if (request.method === 'GET' && pathname === '/api/resolve-handle') {
+    if (method === 'GET' && pathname === '/api/resolve-handle') {
       return handleResolveHandle(request, env);
     }
 
-    if (request.method === 'GET' && pathname === '/api/user-settings') {
+    if (method === 'GET' && pathname === '/api/user-settings') {
       return handleGetUserSettings(request, env);
     }
 
-    if (request.method === 'POST' && pathname === '/api/user-settings') {
+    if (method === 'POST' && pathname === '/api/user-settings') {
       return handlePostUserSettings(request, env);
     }
 
-    if (request.method === 'GET' && pathname === '/api/journals') {
+    if (method === 'GET' && pathname === '/api/journals') {
       return handleGetJournals(request, env);
     }
 
-    if (request.method === 'POST' && pathname === '/api/journals') {
+    if (method === 'POST' && pathname === '/api/journals') {
       return handlePostJournals(request, env);
     }
 
