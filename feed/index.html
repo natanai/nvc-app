@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>inventory • allneeds.app</title>
-    <meta name="description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
+    <title>strategy feed • allneeds.app</title>
+    <meta
+      name="description"
+      content="Browse strategies shared by the allneeds community, with filters for follows vs public and options to sort by recency or popularity."
+    />
     <link rel="icon" type="image/svg+xml" href="../icons/favicon-color.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-color-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../icons/favicon-color-16x16.png" />
@@ -18,13 +21,16 @@
     <meta name="msapplication-TileColor" content="#ffffff" />
     <meta name="msapplication-TileImage" content="../icons/mstile-150x150.png" />
     <meta name="msapplication-config" content="../browserconfig.xml" />
-    <link rel="canonical" href="https://allneeds.app/inventory/" />
+    <link rel="canonical" href="https://allneeds.app/feed/" />
     <meta property="fb:app_id" content="966242223397117" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="allneeds.app" />
-    <meta property="og:url" content="https://allneeds.app/inventory/" />
-    <meta property="og:title" content="inventory • allneeds.app" />
-    <meta property="og:description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
+    <meta property="og:url" content="https://allneeds.app/feed/" />
+    <meta property="og:title" content="strategy feed • allneeds.app" />
+    <meta
+      property="og:description"
+      content="Browse strategies shared by the allneeds community, with filters for follows vs public and options to sort by recency or popularity."
+    />
     <meta property="og:image" content="https://allneeds.app/social/og-image-1200x630.png?v=2" />
     <meta property="og:image:secure_url" content="https://allneeds.app/social/og-image-1200x630.png?v=2" />
     <meta property="og:image:type" content="image/png" />
@@ -32,9 +38,12 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="inventory • allneeds.app" />
-    <meta name="twitter:description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
-    <meta name="twitter:url" content="https://allneeds.app/inventory/" />
+    <meta name="twitter:title" content="strategy feed • allneeds.app" />
+    <meta
+      name="twitter:description"
+      content="Browse strategies shared by the allneeds community, with filters for follows vs public and options to sort by recency or popularity."
+    />
+    <meta name="twitter:url" content="https://allneeds.app/feed/" />
     <meta name="twitter:image" content="https://allneeds.app/social/twitter-card-1200x630.png?v=2" />
     <meta name="twitter:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
             <script src="../assets/js/ui/contrast.js"></script>
@@ -1394,505 +1403,60 @@ button.site-nav__magnet {
       </script>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../">Home</a></li><li aria-current="page">Inventory</li>
+          <li><a href="../">Home</a></li>
+          <li><a href="../inventory/">Inventory</a></li>
+          <li aria-current="page">Strategy feed</li>
         </ol>
       </nav>
+
       <main id="main" class="page" role="main">
-        
-      <header class="page-header inventory-header">
-        <div class="inventory-header__layout">
-          <div class="inventory-header__content">
-            <div class="inventory-header__title-row">
-              <h1 class="page-title">Strategy inventory</h1>
-              <a class="inventory-journal-button" href="./journal/">
-                <img
-                  src="../icons/journal-32bit.svg"
-                  class="inventory-journal-button__icon"
-                  alt=""
-                  aria-hidden="true"
-                />
-                <span class="inventory-journal-button__label">Journal</span>
-              </a>
-            </div>
-            <p class="page-description">
-              Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
-            </p>
-
-            
-
-            <div class="strategy-quick-actions inventory-header__quick-actions">
-              <a class="strategy-quick-actions__link" href="#inventory-form">
-                <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
-                <span>Add personal strategy</span>
-              </a>
-              <a
-                class="strategy-quick-actions__link strategy-quick-actions__link--secondary"
-                href="#strategies-list"
-                data-jump-to-strategies
-                aria-controls="strategies-list"
-                aria-expanded="false"
-              >
-                <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
-                <span>Review saved strategies</span>
-              </a>
-              <a class="strategy-quick-actions__link strategy-quick-actions__item" href="../feed/">
-                <span class="strategy-quick-actions__label">Browse shared strategies</span>
-                <span class="strategy-quick-actions__hint">See strategies shared by others</span>
-              </a>
-            </div>
-
-           <details class="inventory-bluesky-panel">
-  <summary class="inventory-bluesky-panel__summary">
-    <div class="inventory-bluesky-panel__titles">
-      <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
-      <p class="inventory-bluesky-panel__subtitle">
-        Link your account to save/load data and fetch shared strategies, or keep everything local.
-      </p>
-    </div>
-    <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
-  </summary>
-
-  <div class="inventory-bluesky-panel__content">
-    <p class="inventory-bluesky-panel__intro">
-      Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
-      local export and import controls if you prefer keeping everything on this device.
-    </p>
-
-    <!-- OAuth sign-in / sign-out -->
-    <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-      <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
-
-      <p class="inventory-auth-note">
-        Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
-        Signing in by itself does <strong>not</strong> move or sync any of your data.
-      </p>
-
-      <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
-        <div class="inventory-auth-panel__field">
-          <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
-          <input id="bluesky-handle-input" type="text" autocomplete="username" />
-        </div>
-        <button
-          id="bluesky-signin-button"
-          type="button"
-          class="inventory-button inventory-button--compact"
-        >
-          <span class="inventory-button__text">Sign in with Bluesky</span>
-        </button>
-      </div>
-
-      <div id="bluesky-auth-logged-in" class="inventory-auth-panel__state" hidden>
-        <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
-        <button
-          id="bluesky-signout-button"
-          type="button"
-          class="inventory-button inventory-button--ghost inventory-button--compact"
-        >
-          <span class="inventory-button__text">Sign out</span>
-        </button>
-      </div>
-
-      <p class="inventory-auth-warning">
-        We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
-        You can ignore this sign-in and keep everything local if you prefer.
-      </p>
-    </section>
-
-    <!-- Optional backend save/load -->
-    <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-      <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
-        Optional backend save/load
-      </h3>
-      <p>
-        When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
-        (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
-        you decide when to send or fetch data.
-      </p>
-      <p>
-        This makes it easier to continue your work on another device, but it also means that snapshot is stored
-        on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
-        feel right for you, keep using the local export/import buttons instead.
-      </p>
-
-      <div class="inventory-backend-sync__buttons">
-        <button
-          type="button"
-          data-backend-save-button
-          class="inventory-button inventory-button--compact"
-        >
-          <span class="inventory-button__text">Save current data to allneeds backend</span>
-        </button>
-        <button
-          type="button"
-          data-backend-load-button
-          class="inventory-button inventory-button--ghost inventory-button--compact"
-        >
-          <span class="inventory-button__text">Load data from allneeds backend</span>
-        </button>
-      </div>
-
-      <div
-        class="inventory-backend-sync__status"
-        data-backend-sync-status
-        aria-live="polite"
-      ></div>
-    </section>
-
-    <!-- Strategies from follows -->
-    <section
-      class="inventory-social-strategies"
-      aria-labelledby="inventory-social-strategies-heading"
-    >
-      <h3
-        id="inventory-social-strategies-heading"
-        class="inventory-social-strategies__heading"
-      >
-        Strategies from Bluesky accounts you follow
-      </h3>
-      <p class="inventory-social-strategies__summary">
-        When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
-        have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
-        are shown here.
-      </p>
-      <button
-        type="button"
-        data-backend-fetch-feed-button
-        class="inventory-button inventory-button--compact"
-      >
-        <span class="inventory-button__text">Fetch strategies from follows</span>
-      </button>
-      <div class="inventory-social-strategies__list" data-backend-feed-container></div>
-    </section>
-  </div>
-</details>
-
-          </div>
-        </div>
-      </header>
-
-      <section class="inventory-main" aria-labelledby="inventory-overview-heading">
-        <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
-          <div class="inventory-actions__header">
-            <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
-            <p class="inventory-actions__hint">
-              Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
-            </p>
-          </div>
-          <div class="inventory-actions__buttons">
-            <button
-              type="button"
-              id="inventory-export"
-              class="inventory-button inventory-button--compact"
-              aria-label="Export localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export localStorage</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-email-personal"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Export personal strategies and email them to Nat"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
-              <span class="inventory-button__text">email me your strategies pretty please 🙏 - Nat</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-import-trigger"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Import localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import localStorage</span>
-            </button>
-            <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
-          </div>
-          <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-        </section>
-
-        <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
-          <div class="inventory-overview__header">
-            <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
-            <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
-          </div>
-          <div class="inventory-overview__tools">
-            <div class="inventory-summary__filters" role="group" aria-label="Filter needs coverage list">
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="all"
-                aria-pressed="true"
-                title="Show all needs"
-              >
-                <span aria-hidden="true">◎</span>
-                <span class="visually-hidden">Show all needs</span>
-              </button>
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="missing"
-                aria-pressed="false"
-                title="Show needs with no coverage"
-              >
-                <span aria-hidden="true">!</span>
-                <span class="visually-hidden">Show needs with no coverage</span>
-              </button>
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="ready"
-                aria-pressed="false"
-                title="Show needs with coverage"
-              >
-                <span aria-hidden="true">✓</span>
-                <span class="visually-hidden">Show needs with coverage</span>
-              </button>
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="none"
-                aria-pressed="false"
-                title="Hide all needs"
-              >
-                <span aria-hidden="true">⊘</span>
-                <span class="visually-hidden">Hide all needs</span>
-              </button>
-            </div>
-          </div>
-          <div id="inventory-summary" class="inventory-summary"></div>
-          <div class="inventory-list__toggle">
-            <button
-              type="button"
-              class="inventory-button"
-              data-inventory-toggle
-              aria-expanded="false"
-              aria-controls="strategies-list"
-            >
-              Show your saved strategies
-            </button>
-          </div>
-          <div
-            class="inventory-list-panel inventory-list-panel--hidden"
-            id="strategies-list"
-            data-strategies-container
-            hidden
-            aria-labelledby="inventory-list-heading"
-          >
-            <div class="inventory-list__header">
-              <h3 id="inventory-list-heading" class="section-title" tabindex="-1">Saved strategies by need</h3>
-              <p class="inventory-list__hint">
-                Expand a need to review strategies you have saved and make updates.
+        <header class="page-header inventory-header">
+          <div class="inventory-header__layout">
+            <div class="inventory-header__content">
+              <div class="inventory-header__title-row">
+                <h1 class="page-title">Strategy feed</h1>
+              </div>
+              <p class="page-description">
+                Browse strategies that other allneeds users have chosen to share. You can filter between
+                people you follow and all public strategies, and sort by most recent or most added.
               </p>
             </div>
-            <div id="inventory-list" class="inventory-list"></div>
           </div>
+        </header>
+
+        <section class="feed-controls">
+          <h2 class="section-heading">Filters</h2>
+          <div class="feed-controls__row">
+            <label class="feed-controls__group">
+              <span class="feed-controls__label">Show</span>
+              <select id="feed-scope-select">
+                <option value="follows">From people you follow</option>
+                <option value="public">All public strategies</option>
+              </select>
+            </label>
+            <label class="feed-controls__group">
+              <span class="feed-controls__label">Sort by</span>
+              <select id="feed-sort-select">
+                <option value="recent">Most recent</option>
+                <option value="popular">Most added</option>
+              </select>
+            </label>
+          </div>
+          <p class="feed-status" data-feed-status></p>
+          <p class="feed-auth-hint" data-feed-auth-hint>
+            <!-- JS will fill in a message here depending on whether the viewer is signed in. -->
+          </p>
         </section>
 
-        <section class="inventory-form" aria-labelledby="inventory-form-heading">
-          <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
-          
-      <div class="strategy-form__container" data-strategy-form-container>
-        <div class="strategy-card strategy-card--form">
-          <form id="inventory-form" class="strategy-form" data-strategy-form>
-            <div class="strategy-form__field">
-              <label for="inventory-title">Strategy name</label>
-              <div class="strategy-card strategy-card--input">
-                <input id="inventory-title" name="title" type="text" required />
-              </div>
-            </div>
-            <div class="strategy-form__field">
-              <label for="inventory-description">How do you put it into practice?</label>
-              <div class="strategy-card strategy-card--input">
-                <textarea id="inventory-description" name="description" rows="4" required></textarea>
-              </div>
-            </div>
-            
-        <div class="strategy-form__field">
-          <label for="inventory-need">Primary need</label>
-          <p id="inventory-need-hint" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="inventory-need" name="need" multiple aria-describedby="inventory-need-hint" required>
-              <option value="" disabled>Select a need</option>
-              <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
-            </select>
-          </div>
-        </div>
-            
-        <div class="strategy-form__row">
-          <div class="strategy-form__field">
-            <label for="inventory-name">First name (optional)</label>
-            <div class="strategy-card strategy-card--input">
-              <input id="inventory-name" name="name" type="text" />
-            </div>
-          </div>
-          <div class="strategy-form__field">
-            <label for="inventory-location">Location (optional)</label>
-            <div class="strategy-card strategy-card--input">
-              <input id="inventory-location" name="location" type="text" />
-            </div>
-          </div>
-        </div>
-        <div class="inventory-add-strategy__visibility">
-          <h3 class="inventory-section-heading">Visibility</h3>
-          <p class="inventory-help-text">
-            Choose who can see this strategy in the shared feed.
-          </p>
-          <div class="inventory-visibility-options">
-            <label class="pill-toggle">
-              <input type="radio" name="strategy-visibility" value="private" checked />
-              <span>Private (only you)</span>
-            </label>
-            <label class="pill-toggle">
-              <input type="radio" name="strategy-visibility" value="followers" />
-              <span>Followers only</span>
-            </label>
-            <label class="pill-toggle">
-              <input type="radio" name="strategy-visibility" value="public" />
-              <span>Public</span>
-            </label>
-          </div>
-        </div>
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
-            </div>
-            
-            <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          </form>
-        </div>
-        
-      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
-        
-      </div>
+        <section class="feed-list" aria-label="Shared strategies">
+          <div class="strategy-list" data-feed-list></div>
         </section>
-      </section>
-    
       </main>
+
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
     <script src="../scripts/inventory-store.js" defer></script>
-    <script src="../scripts/inventory.js" defer></script>
+    <script type="module" src="../scripts/strategy-feed.js"></script>
     <script src="../scripts/magnets.js" type="module"></script>
-    <script type="module">
-      import {
-        initBlueskyOAuth,
-        getCurrentBlueskySession,
-        signInWithBluesky,
-        signOutFromBluesky,
-        ensureBackendSession,
-      } from './bluesky-oauth.js';
-
-      // OAuth sign-in is mirrored to the backend via /auth/session so private data endpoints use
-      // your signed-in DID rather than trusting client-provided identifiers.
-      function setGlobalBlueskySession(session) {
-        const normalizedDid = session?.did || session?.sub || null;
-        const normalizedHandle =
-          session?.preferred_username || session?.handle || session?.username || null;
-
-        if (normalizedDid) {
-          window.allneedsSession = {
-            did: normalizedDid,
-            handle: normalizedHandle,
-          };
-        } else {
-          window.allneedsSession = null;
-        }
-
-        const evt = new CustomEvent('allneeds:bsky-login-changed', {
-          detail: window.allneedsSession,
-        });
-        window.dispatchEvent(evt);
-      }
-
-      function describeSession(session) {
-        const did = session?.did || session?.sub || '';
-        const handle = session?.preferred_username || session?.handle || session?.username || '';
-
-        if (handle && did) {
-          return `Signed in as @${handle} (${did})`;
-        }
-        if (handle) {
-          return `Signed in as @${handle}`;
-        }
-        if (did) {
-          return `Signed in (${did})`;
-        }
-        return 'Signed in with Bluesky';
-      }
-
-      function updateBlueskyAuthUi(session) {
-        const loggedOut = document.querySelector('#bluesky-auth-logged-out');
-        const loggedIn = document.querySelector('#bluesky-auth-logged-in');
-        const statusText = document.querySelector('#bluesky-auth-status-text');
-
-        if (session) {
-          if (loggedOut) loggedOut.hidden = true;
-          if (loggedIn) loggedIn.hidden = false;
-          if (statusText) {
-            statusText.textContent = describeSession(session);
-          }
-        } else {
-          if (loggedOut) loggedOut.hidden = false;
-          if (loggedIn) loggedIn.hidden = true;
-          if (statusText) {
-            statusText.textContent = '';
-          }
-        }
-      }
-
-      async function onBlueskySignInClick() {
-        const input = document.querySelector('#bluesky-handle-input');
-        const handle = input?.value?.trim();
-        if (!handle) return;
-
-        try {
-          await signInWithBluesky(handle);
-        } catch (err) {
-          console.error('Error during Bluesky OAuth sign-in', err);
-        }
-      }
-
-      async function onBlueskySignOutClick() {
-        try {
-          await signOutFromBluesky();
-        } catch (err) {
-          console.error('Error during Bluesky OAuth sign-out', err);
-        }
-        setGlobalBlueskySession(null);
-        updateBlueskyAuthUi(null);
-      }
-
-      document.addEventListener('DOMContentLoaded', async () => {
-        document
-          .querySelector('#bluesky-signin-button')
-          ?.addEventListener('click', onBlueskySignInClick);
-
-        document
-          .querySelector('#bluesky-signout-button')
-          ?.addEventListener('click', onBlueskySignOutClick);
-
-        let session = null;
-        try {
-          session = await initBlueskyOAuth();
-        } catch (err) {
-          console.error('Error initializing Bluesky OAuth', err);
-        }
-
-        if (!session) {
-          session = getCurrentBlueskySession();
-        }
-
-        if (session) {
-          try {
-            await ensureBackendSession(session);
-          } catch (err) {
-            console.error('Could not start backend session', err);
-          }
-        }
-
-        setGlobalBlueskySession(session || null);
-        updateBlueskyAuthUi(session);
-      });
-    </script>
   </body>
 </html>

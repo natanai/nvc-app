@@ -22,6 +22,14 @@ function errorResponse(message, status = 400) {
   return jsonResponse({ status: 'error', message }, status);
 }
 
+function normalizeVisibility(input) {
+  const value = typeof input === 'string' ? input.trim().toLowerCase() : '';
+  if (value === 'public' || value === 'followers' || value === 'private') {
+    return value;
+  }
+  return 'private';
+}
+
 function parseCookies(request) {
   const header = request.headers.get('Cookie');
   if (!header) return {};
@@ -90,11 +98,18 @@ async function handlePostStrategy(request, env) {
     return errorResponse('Invalid JSON body');
   }
 
-  const { title, body: strategyBody = null, needIds = null } = body || {};
+  const {
+    title,
+    body: strategyBody = null,
+    needIds = null,
+    visibility: requestVisibility = 'private',
+  } = body || {};
 
   if (!title || String(title).trim() === '') {
     return errorResponse('title is required');
   }
+
+  const visibility = normalizeVisibility(requestVisibility);
 
   let needIdsSerialized = null;
   if (Array.isArray(needIds)) {
@@ -106,13 +121,54 @@ async function handlePostStrategy(request, env) {
   }
 
   try {
-    await env.DB.prepare(
-      'INSERT INTO strategies (author_did, title, body, need_ids) VALUES (?, ?, ?, ?);',
+    const result = await env.DB.prepare(
+      'INSERT INTO strategies (author_did, title, body, need_ids, visibility) VALUES (?, ?, ?, ?, ?);',
     )
-      .bind(session.did, title, strategyBody, needIdsSerialized)
+      .bind(session.did, title, strategyBody, needIdsSerialized, visibility)
       .run();
 
-    return jsonResponse({ status: 'ok' });
+    const newId = result.meta?.last_row_id;
+    if (newId) {
+      const row = await env.DB.prepare(
+        `SELECT
+           s.id,
+           s.author_did,
+           s.title,
+           s.body,
+           s.need_ids,
+           s.created_at,
+           s.visibility,
+           s.add_count,
+           u.handle,
+           u.display_name,
+           u.avatar_url
+         FROM strategies s
+         LEFT JOIN users u ON u.did = s.author_did
+         WHERE s.id = ?
+         LIMIT 1;`,
+      )
+        .bind(newId)
+        .first();
+
+      if (row) {
+        return jsonResponse({ status: 'ok', strategy: mapStrategyRow(row) });
+      }
+    }
+
+    return jsonResponse({
+      status: 'ok',
+      strategy: {
+        id: newId || null,
+        authorDid: session.did,
+        title,
+        body: strategyBody,
+        needIds: needIdsSerialized ? safeJsonParseArray(needIdsSerialized) : [],
+        createdAt: new Date().toISOString(),
+        visibility,
+        addCount: 0,
+        author: null,
+      },
+    });
   } catch (err) {
     const message = String(err || '').toUpperCase();
     if (message.includes('FOREIGN KEY')) {
@@ -138,6 +194,8 @@ async function handleGetStrategies(request, env) {
         s.body,
         s.need_ids,
         s.created_at,
+        s.visibility,
+        s.add_count,
         u.handle,
         u.display_name,
         u.avatar_url
@@ -149,20 +207,7 @@ async function handleGetStrategies(request, env) {
     ).bind(session.did);
 
     const { results } = await stmt.all();
-    const strategies = (results || []).map((row) => ({
-      id: row.id,
-      authorDid: row.author_did,
-      title: row.title,
-      body: row.body ?? null,
-      needIds: row.need_ids ? safeJsonParseArray(row.need_ids) : [],
-      createdAt: row.created_at,
-      author: {
-        did: row.author_did,
-        handle: row.handle || null,
-        displayName: row.display_name || null,
-        avatar: row.avatar_url || null,
-      },
-    }));
+    const strategies = (results || []).map((row) => mapStrategyRow(row));
 
     return jsonResponse({ status: 'ok', did: session.did, strategies });
   } catch (err) {
@@ -170,60 +215,96 @@ async function handleGetStrategies(request, env) {
   }
 }
 
+async function fetchFollowDidList(env, did) {
+  const apiUrl =
+    'https://public.api.bsky.app/xrpc/app.bsky.graph.getFollows' +
+    '?actor=' +
+    encodeURIComponent(did) +
+    '&limit=100';
+
+  const res = await fetch(apiUrl);
+  if (!res.ok) {
+    throw new Error(`Bluesky API returned ${res.status}`);
+  }
+
+  const data = await res.json();
+  const followProfiles = Array.isArray(data.follows) ? data.follows : [];
+  return followProfiles.map((p) => p.did).filter((d) => typeof d === 'string');
+}
+
+function mapStrategyRow(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    authorDid: row.author_did,
+    title: row.title,
+    body: row.body ?? null,
+    needIds: row.need_ids ? safeJsonParseArray(row.need_ids) : [],
+    createdAt: row.created_at,
+    visibility: normalizeVisibility(row.visibility),
+    addCount: typeof row.add_count === 'number' ? row.add_count : Number(row.add_count) || 0,
+    author: row.author_did
+      ? {
+          did: row.author_did,
+          handle: row.handle || null,
+          displayName: row.display_name || null,
+          avatarUrl: row.avatar_url || null,
+          avatar: row.avatar_url || null,
+        }
+      : null,
+  };
+}
+
 async function handleGetStrategyFeed(request, env) {
   const session = await getSession(env, request);
-  if (!session) {
-    return errorResponse('not signed in', 401);
-  }
-  const viewerDid = session.did;
+  const viewerDid = session?.did || null;
+
+  const url = new URL(request.url);
+  const scopeParam = (url.searchParams.get('scope') || '').toLowerCase();
+  const sortParam = (url.searchParams.get('sort') || '').toLowerCase();
+  const limitParam = parseInt(url.searchParams.get('limit') || '50', 10);
+
+  const scope = scopeParam === 'follows' ? 'follows' : 'public';
+  const sort = sortParam === 'popular' ? 'popular' : 'recent';
+  const limit = Number.isFinite(limitParam) ? Math.min(Math.max(limitParam, 1), 100) : 50;
 
   try {
-    let viewerKnown = false;
-
-    try {
-      const userRow = await env.DB.prepare(
-        'SELECT did, handle FROM users WHERE did = ?;',
-      )
-        .bind(viewerDid)
-        .first();
-      viewerKnown = !!userRow;
-    } catch (err) {
-      // Best-effort; ignore lookup errors.
-      viewerKnown = false;
+    let followDids = [];
+    if (scope === 'follows' && viewerDid) {
+      try {
+        followDids = await fetchFollowDidList(env, viewerDid);
+      } catch (err) {
+        return errorResponse(String(err), 502);
+      }
     }
 
-    const apiUrl =
-      'https://public.api.bsky.app/xrpc/app.bsky.graph.getFollows' +
-      '?actor=' +
-      encodeURIComponent(viewerDid) +
-      '&limit=100';
+    const whereClauses = [];
+    const params = [];
 
-    const res = await fetch(apiUrl);
-    if (!res.ok) {
-      return errorResponse(`Bluesky API returned ${res.status}`, 502);
+    if (!viewerDid || scope === 'public') {
+      whereClauses.push("s.visibility = 'public'");
+    } else {
+      const includeClauses = [];
+      const validFollows = Array.isArray(followDids)
+        ? followDids.filter((did) => typeof did === 'string' && did.startsWith('did:'))
+        : [];
+      if (validFollows.length) {
+        const placeholders = validFollows.map(() => '?').join(', ');
+        includeClauses.push(`(s.author_did IN (${placeholders}) AND s.visibility IN ('followers', 'public'))`);
+        params.push(...validFollows);
+      }
+      includeClauses.push('s.author_did = ?');
+      params.push(viewerDid);
+      includeClauses.push("s.visibility = 'public'");
+      whereClauses.push(`(${includeClauses.join(' OR ')})`);
     }
 
-    const data = await res.json();
-    const followProfiles = Array.isArray(data.follows) ? data.follows : [];
-    const followDids = followProfiles
-      .map((p) => p.did)
-      .filter((d) => typeof d === 'string');
+    const whereSql = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
+    const orderSql =
+      sort === 'popular'
+        ? 'ORDER BY s.add_count DESC, s.created_at DESC'
+        : 'ORDER BY s.created_at DESC';
 
-    const didSet = new Set(followDids);
-    didSet.add(viewerDid);
-    const didList = Array.from(didSet);
-
-    if (didList.length === 0) {
-      return jsonResponse({
-        status: 'ok',
-        viewerDid,
-        strategies: [],
-        authors: [],
-        viewerKnown,
-      });
-    }
-
-    const placeholders = didList.map(() => '?').join(', ');
     const sql = `
       SELECT
         s.id,
@@ -232,46 +313,78 @@ async function handleGetStrategyFeed(request, env) {
         s.body,
         s.need_ids,
         s.created_at,
+        s.visibility,
+        s.add_count,
         u.handle,
         u.display_name,
         u.avatar_url
       FROM strategies s
-      LEFT JOIN users u ON u.did = s.author_did
-      WHERE s.author_did IN (${placeholders})
-      ORDER BY s.created_at DESC
-      LIMIT 100;
+      JOIN users u ON u.did = s.author_did
+      ${whereSql}
+      ${orderSql}
+      LIMIT ?;
     `;
 
-    const stmt = env.DB.prepare(sql).bind(...didList);
+    const stmt = env.DB.prepare(sql).bind(...params, limit);
     const { results } = await stmt.all();
+    const strategies = (results || []).map((row) => mapStrategyRow(row)).filter(Boolean);
 
-    const strategies = (results || []).map((row) => ({
-      id: row.id,
-      authorDid: row.author_did,
-      title: row.title,
-      body: row.body ?? null,
-      needIds: row.need_ids ? safeJsonParseArray(row.need_ids) : [],
-      createdAt: row.created_at,
-      author: {
-        did: row.author_did,
-        handle: row.handle || null,
-        displayName: row.display_name || null,
-        avatar: row.avatar_url || null,
-      },
-    }));
-
-    const authorsMap = new Map();
-    for (const s of strategies) {
-      if (!authorsMap.has(s.authorDid)) {
-        authorsMap.set(s.authorDid, s.author);
-      }
-    }
-
-    const authors = Array.from(authorsMap.values());
-
-    return jsonResponse({ status: 'ok', viewerDid, strategies, authors, viewerKnown });
+    return jsonResponse({ status: 'ok', scope, sort, viewerDid: viewerDid || null, strategies });
   } catch (err) {
     return jsonResponse({ status: 'error', message: 'internal_error', detail: String(err) }, 500);
+  }
+}
+
+async function handleIncrementAddCount(request, env, id) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
+  }
+
+  const strategyId = parseInt(id, 10);
+  if (!Number.isFinite(strategyId)) {
+    return errorResponse('invalid strategy id', 400);
+  }
+
+  try {
+    const updateResult = await env.DB.prepare(
+      'UPDATE strategies SET add_count = add_count + 1 WHERE id = ?;',
+    )
+      .bind(strategyId)
+      .run();
+
+    if (!updateResult || updateResult.meta.changes === 0) {
+      return errorResponse('strategy not found', 404);
+    }
+
+    const row = await env.DB.prepare(
+      `SELECT
+         s.id,
+         s.author_did,
+         s.title,
+         s.body,
+         s.need_ids,
+         s.created_at,
+         s.visibility,
+         s.add_count,
+         u.handle,
+         u.display_name,
+         u.avatar_url
+       FROM strategies s
+       JOIN users u ON u.did = s.author_did
+       WHERE s.id = ?
+       LIMIT 1;`,
+    )
+      .bind(strategyId)
+      .first();
+
+    if (!row) {
+      return errorResponse('strategy not found', 404);
+    }
+
+    return jsonResponse({ status: 'ok', strategy: mapStrategyRow(row) });
+  } catch (err) {
+    return errorResponse(String(err), 500);
   }
 }
 
@@ -534,18 +647,26 @@ export default {
       });
     }
 
-    // Future feed endpoint (strategies from people the user follows)
-    if (method === 'GET' && pathname === '/api/feed/strategies') {
+    // Strategy feed
+    if (
+      method === 'GET' &&
+      (pathname === '/api/strategies/feed' || pathname === '/api/feed/strategies')
+    ) {
       return handleGetStrategyFeed(request, env);
     }
 
-    // Future endpoint to create a new strategy
+    // Endpoint to create a new strategy
     if (method === 'POST' && pathname === '/api/strategies') {
       return handlePostStrategy(request, env);
     }
 
     if (method === 'GET' && pathname === '/api/strategies') {
       return handleGetStrategies(request, env);
+    }
+
+    const addToInventoryMatch = pathname.match(/^\/api\/strategies\/(\d+)\/add-to-inventory$/);
+    if (method === 'POST' && addToInventoryMatch) {
+      return handleIncrementAddCount(request, env, addToInventoryMatch[1]);
     }
 
     // Resolve a Bluesky handle to a DID and upsert into users.

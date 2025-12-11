@@ -3566,6 +3566,45 @@ main[data-need-slug] .page-title::before {
   outline-offset: 3px;
 }
 
+.inventory-add-strategy__visibility {
+  margin-top: 0.85rem;
+}
+
+.inventory-add-strategy__visibility .inventory-help-text {
+  margin: 0.25rem 0 0.4rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.inventory-visibility-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid color-mix(in srgb, var(--outline) 35%, transparent);
+  background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.pill-toggle input {
+  margin: 0;
+}
+
+.pill-toggle input:focus-visible + span,
+.pill-toggle:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 3px;
+}
+
 .inventory-button {
   font-family: var(--font-display);
   font-size: 0.8rem;
@@ -6642,4 +6681,105 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   margin: 0 0 0.5rem;
   font-size: 1rem;
   font-weight: 600;
+}
+
+.strategy-quick-actions__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-decoration: none;
+}
+
+.strategy-quick-actions__label {
+  font-weight: 700;
+  color: inherit;
+}
+
+.strategy-quick-actions__hint {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.feed-controls {
+  margin: 1.25rem 0 0.5rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid color-mix(in srgb, var(--outline) 30%, transparent);
+  background: color-mix(in srgb, #ffffff 80%, var(--lavender) 20%);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.feed-controls__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.feed-controls__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 240px;
+}
+
+.feed-controls__label {
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.feed-controls select {
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-md);
+  border: 2px solid color-mix(in srgb, var(--outline) 30%, transparent);
+  background: #fff;
+  font-size: 1rem;
+}
+
+.feed-status {
+  margin: 0.25rem 0 0;
+  min-height: 1.2em;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.feed-auth-hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.feed-list {
+  margin-top: 1.25rem;
+}
+
+.strategy-card__action {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--outline);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.strategy-card__action:hover,
+.strategy-card__action:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 var(--shadow);
+}
+
+@media (max-width: 720px) {
+  .feed-controls__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feed-controls__group {
+    width: 100%;
+  }
 }
