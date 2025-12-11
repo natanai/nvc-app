@@ -9,6 +9,22 @@ const PERSONAL_STRATEGIES_EMAIL_BODY =
   'Hi Nat,\n\nI just exported my personal strategies from allneeds.app and attached the file for you.\n\nWith care,';
 const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
 const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
+const VISIBILITY_VALUES = ['private', 'followers', 'public'];
+
+function normalizeVisibilityValue(value) {
+  try {
+    if (window?.NVCInventoryStore?.normalizeVisibility) {
+      return window.NVCInventoryStore.normalizeVisibility(value);
+    }
+  } catch (error) {
+    // ignore
+  }
+  const normalized = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  if (VISIBILITY_VALUES.includes(normalized)) {
+    return normalized;
+  }
+  return 'private';
+}
 
 function redirectLegacyJournalHash() {
   if (typeof window === 'undefined') {
@@ -654,6 +670,7 @@ function normalizeInventoryEntry(entry) {
     normalized.needSlug = normalizedNeedSlugs[0];
   }
   normalized.tags = nextTags;
+  normalized.visibility = normalizeVisibilityValue(entry.visibility);
   return normalized;
 }
 
@@ -1541,6 +1558,9 @@ if (
 
 function loadInventory() {
   try {
+    if (window?.NVCInventoryStore?.loadInventorySnapshot) {
+      return window.NVCInventoryStore.loadInventorySnapshot();
+    }
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) {
       return [];
@@ -1560,6 +1580,10 @@ function loadInventory() {
 
 function saveInventory(items) {
   try {
+    if (window?.NVCInventoryStore?.saveInventorySnapshot) {
+      window.NVCInventoryStore.saveInventorySnapshot(items);
+      return;
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
     console.warn('Unable to save inventory to storage', error);
@@ -1688,6 +1712,7 @@ function setupNeedPage() {
         sourceNeedPage: strategySlug ? needSlug : '',
         strategySlug,
         createdAt: new Date().toISOString(),
+        visibility: normalizeVisibilityValue(card.dataset.visibility || 'private'),
       };
       if (firstName || location) {
         entry.contributor = {};
@@ -1796,6 +1821,7 @@ function setupNeedPage() {
         sourceNeedPage: '',
         strategySlug: '',
         createdAt: new Date().toISOString(),
+        visibility: normalizeVisibilityValue('private'),
       };
       if (firstName || location) {
         entry.contributor = {};
@@ -1888,6 +1914,8 @@ function setupInventoryPage() {
       const needSlugs = normalizeNeedSlugList(formData.getAll('need'));
       const firstName = sanitizeContributorName(formData.get('name'));
       const location = sanitizeLocation(formData.get('location'));
+      const visibilityInput = form.querySelector('input[name="strategy-visibility"]:checked');
+      const visibility = visibilityInput ? visibilityInput.value : 'private';
 
       if (!title || !description || !needSlugs.length) {
         showInventoryMessage('Please fill in the title, description, and at least one need before adding.', 'error');
@@ -1911,6 +1939,7 @@ function setupInventoryPage() {
         sourceNeedPage: '',
         strategySlug: '',
         createdAt: new Date().toISOString(),
+        visibility: normalizeVisibilityValue(visibility),
       };
       if (firstName || location) {
         entry.contributor = {};
@@ -6239,7 +6268,7 @@ async function fetchSocialStrategiesFeed() {
   }
 
   try {
-    const res = await fetch(`${BACKEND_BASE_URL}/api/feed/strategies`, {
+    const res = await fetch(`/api/strategies/feed?scope=follows`, {
       credentials: 'include',
     });
     const data = await res.json();
