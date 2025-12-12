@@ -1641,8 +1641,57 @@ function renderNeed(item, allStrategies) {
 
   const strategiesNote = `          ${localStorageReminderHtml}`;
 
-  const strategiesHtml = strategiesForNeed.length
-    ? `<section class="strategy-section" aria-labelledby="strategy-heading">
+  const strategyCardsHtml = strategiesForNeed
+    .map((strategy) => {
+      const tags = Array.isArray(strategy.needs)
+        ? strategy.needs
+            .map((need) => need.slug)
+            .filter(Boolean)
+            .join('|')
+        : '';
+      const contributor = strategy.contributor || {};
+      const firstName = sanitizeContributorName(contributor.name);
+      const location = sanitizeLocation(contributor.location);
+      const contributorParts = [];
+      if (firstName) {
+        contributorParts.push(firstName);
+      }
+      if (location) {
+        contributorParts.push(location);
+      }
+      const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
+      const contributorHtml = contributorText
+        ? `<p class="strategy-card__meta">${contributorText}</p>`
+        : '';
+      const dataAttrs = [
+        `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
+        `data-strategy-tags="${escapeHtml(tags)}"`,
+      ];
+      if (firstName) {
+        dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
+      }
+      if (location) {
+        dataAttrs.push(`data-location="${escapeHtml(location)}"`);
+      }
+      const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+      const description = strategy.summary || strategy.description || '';
+
+      return `
+        <article class="strategy-card"${dataAttrString}>
+          <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">${escapeHtml(description)}</p>
+            ${contributorHtml}
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+
+  const strategiesHtml = `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
           <div class="strategy-deck-header">
@@ -1653,59 +1702,29 @@ ${strategiesNote}
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
-              ${strategiesForNeed
-                .map((strategy) => {
-                  const tags = Array.isArray(strategy.needs)
-                    ? strategy.needs
-                        .map((need) => need.slug)
-                        .filter(Boolean)
-                        .join('|')
-                    : '';
-                  const contributor = strategy.contributor || {};
-                  const firstName = sanitizeContributorName(contributor.name);
-                  const location = sanitizeLocation(contributor.location);
-                  const contributorParts = [];
-                  if (firstName) {
-                    contributorParts.push(firstName);
-                  }
-                  if (location) {
-                    contributorParts.push(location);
-                  }
-                  const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
-                  const contributorHtml = contributorText
-                    ? `<p class="strategy-card__meta">${contributorText}</p>`
-                    : '';
-                  const dataAttrs = [
-                    `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
-                    `data-strategy-tags="${escapeHtml(tags)}"`,
-                  ];
-                  if (firstName) {
-                    dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
-                  }
-                  if (location) {
-                    dataAttrs.push(`data-location="${escapeHtml(location)}"`);
-                  }
-                  const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
-                  const description = strategy.summary || strategy.description || '';
-
-                  return `
-                    <article class="strategy-card"${dataAttrString}>
-                      <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">${escapeHtml(description)}</p>
-                        ${contributorHtml}
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  `;
-                })
-                .join('')}
+              ${strategyCardsHtml}
             </div>
 
             <div class="strategy-deck__controls">
@@ -1729,12 +1748,10 @@ ${strategiesNote}
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty${
+            strategiesForNeed.length ? ' hidden' : ''
+          }>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
-        </section>`
-    : `<section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
-${strategiesNote}
-          <p class="empty-state">Strategies for this need are coming soon.</p>
         </section>`;
 
   const descriptionHtml = item.description

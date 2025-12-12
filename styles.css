@@ -3162,6 +3162,52 @@ main[data-need-slug] .page-title::before {
   gap: 0.5rem 0.75rem;
 }
 
+.strategy-deck__shared-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-start;
+  margin-left: auto;
+  min-width: min(420px, 100%);
+}
+
+.strategy-deck__shared-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.strategy-deck__shared-label {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+.strategy-deck__shared-inputs select[data-shared-strategy-scope] {
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--outline);
+  padding: 0.45rem 0.8rem;
+  background: color-mix(in srgb, var(--chip-bg) 75%, #ffffff 25%);
+  font-weight: 600;
+}
+
+.strategy-deck__shared-status,
+.strategy-deck__shared-auth-hint {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.strategy-deck__shared-status[data-status="error"] {
+  color: var(--rose);
+}
+
+.strategy-empty-state {
+  margin: 0 auto;
+  text-align: center;
+}
+
 .strategy-deck__shuffle,
 .strategy-deck__toggle {
   font-family: var(--font-display);

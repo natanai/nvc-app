@@ -1199,55 +1199,73 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="go-on-walk" data-strategy-tags="clarity|peace|calm|freedom|beauty|autonomy|choice|space" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Go on walk</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="ask-for-a-pause" data-strategy-tags="mutuality|consideration|space">
-                      <h3 class="strategy-card__title">Ask for a pause</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Say: “Could we take a 5-minute pause and return at :15?”</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="phone-face-down" data-strategy-tags="autonomy|space">
-                      <h3 class="strategy-card__title">Phone face-down</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Place phone face-down/out of reach for five minutes.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="seat-press" data-strategy-tags="safety|space|security|calm">
-                      <h3 class="strategy-card__title">Seat Press</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Press the surface you&#39;re on (chair, floor, bed) firmly once with your palm or thigh and say &quot;held&quot; quietly; note the contact, then stop.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="go-on-walk" data-strategy-tags="clarity|peace|calm|freedom|beauty|autonomy|choice|space" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Go on walk</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="ask-for-a-pause" data-strategy-tags="mutuality|consideration|space">
+          <h3 class="strategy-card__title">Ask for a pause</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Say: “Could we take a 5-minute pause and return at :15?”</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="phone-face-down" data-strategy-tags="autonomy|space">
+          <h3 class="strategy-card__title">Phone face-down</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Place phone face-down/out of reach for five minutes.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="seat-press" data-strategy-tags="safety|space|security|calm">
+          <h3 class="strategy-card__title">Seat Press</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Press the surface you&#39;re on (chair, floor, bed) firmly once with your palm or thigh and say &quot;held&quot; quietly; note the contact, then stop.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1271,6 +1289,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

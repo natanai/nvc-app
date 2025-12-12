@@ -1199,44 +1199,62 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="snuggle-a-pet" data-strategy-tags="love-caring|safety|nurturing" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Snuggle a pet</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Don&#39;t have one? Go get one and make a day of it!</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="call-a-parent" data-strategy-tags="nurturing|support|closeness|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Call a parent</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">If you have a parent you trust, consider calling them. It&#39;s awkward at first but I like to ask &quot;will you still love me if x...&quot; and then I share the anxiety inducing thought I&#39;m struggling with. Even though you both know what their answer is, let them say it. Let yourself hear it. I promise they will love saying it, give them a chance to.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="tend-to-a-plant" data-strategy-tags="need-for-all-living-things-to-flourish|nurturing" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Tend to a plant</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Water a plant. Research how to care for your specific plant. Don&#39;t have a plant? Do you want one? Consider making an event of getting one.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="snuggle-a-pet" data-strategy-tags="love-caring|safety|nurturing" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Snuggle a pet</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Don&#39;t have one? Go get one and make a day of it!</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="call-a-parent" data-strategy-tags="nurturing|support|closeness|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Call a parent</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">If you have a parent you trust, consider calling them. It&#39;s awkward at first but I like to ask &quot;will you still love me if x...&quot; and then I share the anxiety inducing thought I&#39;m struggling with. Even though you both know what their answer is, let them say it. Let yourself hear it. I promise they will love saying it, give them a chance to.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="tend-to-a-plant" data-strategy-tags="need-for-all-living-things-to-flourish|nurturing" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Tend to a plant</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Water a plant. Research how to care for your specific plant. Don&#39;t have a plant? Do you want one? Consider making an event of getting one.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1260,6 +1278,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

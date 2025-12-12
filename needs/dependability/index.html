@@ -1199,33 +1199,51 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Schedule your day</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="mindfulness-trust" data-strategy-tags="trust|dependability" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Mindfulness (Trust)</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Reflect on moments you’ve reliably done what you intended to. From things like getting out of bed (eventually) to doing chores or keeping a promise to a friend. Every moment you make it through, each next breath you take, you prove to your friends and family that you can be trusted to keep living. If someone is not able to extend trust to you it doesn’t have to mean you are untrustworthy. It just means they have a need too which is not being met for some reason. I find when I engage my thoughts this way it’s easier to have compassion on myself and others.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Schedule your day</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="mindfulness-trust" data-strategy-tags="trust|dependability" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Mindfulness (Trust)</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Reflect on moments you’ve reliably done what you intended to. From things like getting out of bed (eventually) to doing chores or keeping a promise to a friend. Every moment you make it through, each next breath you take, you prove to your friends and family that you can be trusted to keep living. If someone is not able to extend trust to you it doesn’t have to mean you are untrustworthy. It just means they have a need too which is not being met for some reason. I find when I engage my thoughts this way it’s easier to have compassion on myself and others.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1249,6 +1267,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

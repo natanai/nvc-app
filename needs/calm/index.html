@@ -1199,110 +1199,128 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="go-on-walk" data-strategy-tags="clarity|peace|calm|freedom|beauty|autonomy|choice|space" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Go on walk</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Listen to music</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="align-x3" data-strategy-tags="order|peace|calm|control">
-                      <h3 class="strategy-card__title">Align x3</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="shadow-line" data-strategy-tags="beauty|order|calm|peace">
-                      <h3 class="strategy-card__title">Shadow Line</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
-                      <h3 class="strategy-card__title">Exit Count</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="grain-trace" data-strategy-tags="calm|peace|serenity|beauty">
-                      <h3 class="strategy-card__title">Grain Trace</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Run a fingertip along a visible line (wood grain, tile grout, fabric seam, etc.) until it ends, and let that completion register.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="window-quarter" data-strategy-tags="beauty|clarity|calm|appreciation">
-                      <h3 class="strategy-card__title">Window Quarter</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Use the window frame to pick one small quadrant of the view and give it a one-line title you like; hold that title for a moment.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
-                      <h3 class="strategy-card__title">Corner Count</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="seat-press" data-strategy-tags="safety|space|security|calm">
-                      <h3 class="strategy-card__title">Seat Press</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Press the surface you&#39;re on (chair, floor, bed) firmly once with your palm or thigh and say &quot;held&quot; quietly; note the contact, then stop.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="go-on-walk" data-strategy-tags="clarity|peace|calm|freedom|beauty|autonomy|choice|space" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Go on walk</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">I know you probably hear it a lot.. but going on a walk really can make a fascinating difference.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Listen to music</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">A lot of variety available to you here. Could benefit from calming music or raging music. You do you ;)</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="align-x3" data-strategy-tags="order|peace|calm|control">
+          <h3 class="strategy-card__title">Align x3</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Choose any three nearby items and apply one simple rule: align one edge, sort big-to-small, or make a clean line. Arrange them once, then stop to register the order you created.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="shadow-line" data-strategy-tags="beauty|order|calm|peace">
+          <h3 class="strategy-card__title">Shadow Line</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Rotate a nearby object until its shadow makes a clean line or pleasing shape, then pause to take in the look you created.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
+          <h3 class="strategy-card__title">Exit Count</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="grain-trace" data-strategy-tags="calm|peace|serenity|beauty">
+          <h3 class="strategy-card__title">Grain Trace</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Run a fingertip along a visible line (wood grain, tile grout, fabric seam, etc.) until it ends, and let that completion register.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="window-quarter" data-strategy-tags="beauty|clarity|calm|appreciation">
+          <h3 class="strategy-card__title">Window Quarter</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Use the window frame to pick one small quadrant of the view and give it a one-line title you like; hold that title for a moment.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
+          <h3 class="strategy-card__title">Corner Count</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="seat-press" data-strategy-tags="safety|space|security|calm">
+          <h3 class="strategy-card__title">Seat Press</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Press the surface you&#39;re on (chair, floor, bed) firmly once with your palm or thigh and say &quot;held&quot; quietly; note the contact, then stop.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1326,6 +1344,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">

@@ -1199,66 +1199,84 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Call a friend</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="make-a-request-in-conversation" data-strategy-tags="autonomy|freedom|choice|choose-freely|mutuality" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Make a request in conversation</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="ask-for-a-pause" data-strategy-tags="mutuality|consideration|space">
-                      <h3 class="strategy-card__title">Ask for a pause</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Say: “Could we take a 5-minute pause and return at :15?”</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="one-kind-text" data-strategy-tags="connection|mutuality">
-                      <h3 class="strategy-card__title">One kind text</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Send “Thinking of you—no need to reply.” to someone you trust.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="name-one-help-to-ask" data-strategy-tags="support|mutuality|contribution">
-                      <h3 class="strategy-card__title">Name one help to ask</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Write a concrete, doable request you could ask someone this week.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="call-a-friend" data-strategy-tags="love-caring|connection|consideration|belonging|support|friendship|peer-respect|respect|closeness|mutuality|participation|non-judgmental-communication" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Call a friend</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="make-a-request-in-conversation" data-strategy-tags="autonomy|freedom|choice|choose-freely|mutuality" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Make a request in conversation</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Often in conversation if I’m hearing something as a demand I say something like “I’m needing some autonomy I think because I’d like to be free to disagree but I’m afraid that might sound to you like criticism.” It’s not perfect but it’s something to honor what’s alive in me.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="ask-for-a-pause" data-strategy-tags="mutuality|consideration|space">
+          <h3 class="strategy-card__title">Ask for a pause</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Say: “Could we take a 5-minute pause and return at :15?”</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="one-kind-text" data-strategy-tags="connection|mutuality">
+          <h3 class="strategy-card__title">One kind text</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Send “Thinking of you—no need to reply.” to someone you trust.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="name-one-help-to-ask" data-strategy-tags="support|mutuality|contribution">
+          <h3 class="strategy-card__title">Name one help to ask</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Write a concrete, doable request you could ask someone this week.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1282,6 +1300,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
