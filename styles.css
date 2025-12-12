@@ -2988,7 +2988,10 @@ main[data-need-slug] .page-title::before {
 
 .strategy-quick-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0 0 1.5rem;
 }
 
@@ -3007,6 +3010,8 @@ main[data-need-slug] .page-title::before {
   color: var(--ink);
   box-shadow: 0 10px 0 var(--shadow);
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .strategy-quick-actions__link--secondary {
@@ -3151,6 +3156,22 @@ main[data-need-slug] .page-title::before {
 .strategy-section {
   display: grid;
   gap: 0.8rem;
+}
+
+.strategy-layout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 980px) {
+  .strategy-layout {
+    grid-template-columns: minmax(0, 540px) minmax(0, 1fr);
+  }
+
+  .strategy-layout .strategy-deck {
+    margin-bottom: 0;
+  }
 }
 
 /* Header row: shuffle button */
@@ -6729,6 +6750,30 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   color: var(--ink-soft);
 }
 
+.need-feed__quick-actions {
+  gap: 0.5rem 0.75rem;
+}
+
+.need-feed__scope {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.need-feed__label {
+  font-size: 0.9rem;
+}
+
+.need-feed__scope select {
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-md);
+  border: 2px solid color-mix(in srgb, var(--outline) 30%, transparent);
+  background: #fff;
+  font-size: 0.95rem;
+}
+
 .feed-controls {
   margin: 1.25rem 0 0.5rem;
   padding: 1rem;
@@ -6777,6 +6822,29 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   margin: 0;
   color: var(--ink-soft);
   font-size: 0.95rem;
+}
+
+.need-feed {
+  padding: 1rem;
+  border-radius: var(--radius-xl);
+  border: 2px solid color-mix(in srgb, var(--outline) 30%, transparent);
+  background: color-mix(in srgb, #ffffff 80%, var(--lavender) 20%);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.need-feed__status {
+  margin: 0;
+}
+
+.need-feed__list {
+  display: grid;
+  gap: 1rem;
+}
+
+.need-feed__auth-hint {
+  margin: 0;
+  color: var(--ink-soft);
 }
 
 .feed-list {
