@@ -1199,34 +1199,52 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="write-a-letter" data-strategy-tags="equality|fairness|justice" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Write a letter</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">To a friend or a senator. Advocate for yourself or others.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="compassionate-meditation" data-strategy-tags="fairness" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Compassionate meditation</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Reflect on decision you made that you regret and listen for the need you were trying to meet. Leave room to grieve how tragic it is that in that moment no better strategies came to mind. 
+        <article class="strategy-card" data-strategy-slug="write-a-letter" data-strategy-tags="equality|fairness|justice" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Write a letter</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">To a friend or a senator. Advocate for yourself or others.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="compassionate-meditation" data-strategy-tags="fairness" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Compassionate meditation</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Reflect on decision you made that you regret and listen for the need you were trying to meet. Leave room to grieve how tragic it is that in that moment no better strategies came to mind. 
 Do the same exercise reflecting on past pains you’ve endured from others. Consider what need was not met for you when they did or did not do a specific thing. Honor the need that wasn’t met. Consider what need they have had and grieve how tragic it is that no better strategies came to mind for them in that moment - strategies that could have included your needs.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1250,6 +1268,7 @@ Do the same exercise reflecting on past pains you’ve endured from others. Cons
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1294,6 +1313,17 @@ Do the same exercise reflecting on past pains you’ve endured from others. Cons
             <div class="strategy-card strategy-card--input">
               <input id="suggestion-location" name="location" type="text" />
             </div>
+          </div>
+        </div>
+            
+        <div class="strategy-form__field strategy-form__field--visibility">
+          <label for="suggestion-visibility">Visibility</label>
+          <div class="strategy-card strategy-card--input">
+            <select id="suggestion-visibility" name="visibility">
+              <option value="private" selected>Private (only you)</option>
+              <option value="followers">Followers only</option>
+              <option value="public">Public</option>
+            </select>
           </div>
         </div>
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">

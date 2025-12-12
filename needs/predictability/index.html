@@ -1199,55 +1199,73 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Schedule your day</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="calendar-one-thing" data-strategy-tags="predictability|order|clarity">
-                      <h3 class="strategy-card__title">Calendar one thing</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Add just one gentle, specific item to your calendar.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
-                      <h3 class="strategy-card__title">Exit Count</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
-                      <h3 class="strategy-card__title">Corner Count</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="schedule-your-day" data-strategy-tags="predictability|control|consistency|order|trust|dependability|commitment|accountability|reliability" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Schedule your day</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="calendar-one-thing" data-strategy-tags="predictability|order|clarity">
+          <h3 class="strategy-card__title">Calendar one thing</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Add just one gentle, specific item to your calendar.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
+          <h3 class="strategy-card__title">Exit Count</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="corner-count" data-strategy-tags="order|calm|predictability|peace">
+          <h3 class="strategy-card__title">Corner Count</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Pick any rectangle in view (screen, book, ceiling tile) and count its corners clockwise until you return to the start; let the tidy loop register.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1271,6 +1289,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1315,6 +1334,17 @@ button.site-nav__magnet {
             <div class="strategy-card strategy-card--input">
               <input id="suggestion-location" name="location" type="text" />
             </div>
+          </div>
+        </div>
+            
+        <div class="strategy-form__field strategy-form__field--visibility">
+          <label for="suggestion-visibility">Visibility</label>
+          <div class="strategy-card strategy-card--input">
+            <select id="suggestion-visibility" name="visibility">
+              <option value="private" selected>Private (only you)</option>
+              <option value="followers">Followers only</option>
+              <option value="public">Public</option>
+            </select>
           </div>
         </div>
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">

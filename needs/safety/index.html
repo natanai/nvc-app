@@ -1199,187 +1199,205 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="snuggle-a-pet" data-strategy-tags="love-caring|safety|nurturing" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Snuggle a pet</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Don&#39;t have one? Go get one and make a day of it!</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="self-holding" data-strategy-tags="love-caring|safety" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Self holding</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Place your hands on the opposite sides of your face and breathe deeply</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Crunch the numbers</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="stare-off" data-strategy-tags="safety|peace|rest" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Stare off</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I&#39;m just staring off. Reminding myself where I am in the world.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Road trip</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="watch-a-comfort-show" data-strategy-tags="security|safety" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Watch a comfort show</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Try to make space to watch a tv show or movie that feels something like home for you.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="back-to-wall-lean" data-strategy-tags="safety">
-                      <h3 class="strategy-card__title">Back to wall lean</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Press your spine to a wall and breathe into your back for 5 breaths.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="butterfly-taps" data-strategy-tags="safety|peace">
-                      <h3 class="strategy-card__title">Butterfly taps</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Cross arms over chest and tap alternately left/right for 60 seconds.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="hand-on-heart-breaths" data-strategy-tags="safety|peace">
-                      <h3 class="strategy-card__title">Hand on heart breaths</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Place a palm on your chest; inhale for 4, exhale for 6, five times.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="floor-starfish" data-strategy-tags="safety|rest|support">
-                      <h3 class="strategy-card__title">Floor starfish</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Lay flat, arms and legs wide, and let the floor hold you for one minute.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="5-4-3-2-1-check" data-strategy-tags="safety|clarity">
-                      <h3 class="strategy-card__title">5-4-3-2-1 check</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Name 5 things you see, 4 feel, 3 hear, 2 smell, 1 taste.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="feel-your-feet" data-strategy-tags="safety">
-                      <h3 class="strategy-card__title">Feel your feet</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Place both feet flat; press toes, heels, edges; notice contact.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="wrap-in-a-blanket" data-strategy-tags="safety|rest">
-                      <h3 class="strategy-card__title">Wrap in a blanket</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Wrap shoulders and torso; notice warmth and weight.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="name-support-options" data-strategy-tags="safety|support|choice">
-                      <h3 class="strategy-card__title">Name support options</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">List three people or places you could ask for support when ready.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
-                      <h3 class="strategy-card__title">Exit Count</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="seat-press" data-strategy-tags="safety|space|security|calm">
-                      <h3 class="strategy-card__title">Seat Press</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Press the surface you&#39;re on (chair, floor, bed) firmly once with your palm or thigh and say &quot;held&quot; quietly; note the contact, then stop.</p>
-                        
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="snuggle-a-pet" data-strategy-tags="love-caring|safety|nurturing" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Snuggle a pet</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Don&#39;t have one? Go get one and make a day of it!</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="self-holding" data-strategy-tags="love-caring|safety" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Self holding</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Place your hands on the opposite sides of your face and breathe deeply</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Crunch the numbers</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="stare-off" data-strategy-tags="safety|peace|rest" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Stare off</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Sit or lay down and just notice everything your body is feeling. I like to start with my toes and work my way up to my forehead while I&#39;m just staring off. Reminding myself where I am in the world.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="road-trip" data-strategy-tags="freedom|act-freely|choose-freely|autonomy|control|choice|safety|do-things-at-my-own-pace-and-in-my-own-way|privacy" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Road trip</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="watch-a-comfort-show" data-strategy-tags="security|safety" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Watch a comfort show</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Try to make space to watch a tv show or movie that feels something like home for you.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="back-to-wall-lean" data-strategy-tags="safety">
+          <h3 class="strategy-card__title">Back to wall lean</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Press your spine to a wall and breathe into your back for 5 breaths.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="butterfly-taps" data-strategy-tags="safety|peace">
+          <h3 class="strategy-card__title">Butterfly taps</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Cross arms over chest and tap alternately left/right for 60 seconds.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="hand-on-heart-breaths" data-strategy-tags="safety|peace">
+          <h3 class="strategy-card__title">Hand on heart breaths</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Place a palm on your chest; inhale for 4, exhale for 6, five times.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="floor-starfish" data-strategy-tags="safety|rest|support">
+          <h3 class="strategy-card__title">Floor starfish</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Lay flat, arms and legs wide, and let the floor hold you for one minute.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="5-4-3-2-1-check" data-strategy-tags="safety|clarity">
+          <h3 class="strategy-card__title">5-4-3-2-1 check</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Name 5 things you see, 4 feel, 3 hear, 2 smell, 1 taste.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="feel-your-feet" data-strategy-tags="safety">
+          <h3 class="strategy-card__title">Feel your feet</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Place both feet flat; press toes, heels, edges; notice contact.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="wrap-in-a-blanket" data-strategy-tags="safety|rest">
+          <h3 class="strategy-card__title">Wrap in a blanket</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Wrap shoulders and torso; notice warmth and weight.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="name-support-options" data-strategy-tags="safety|support|choice">
+          <h3 class="strategy-card__title">Name support options</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">List three people or places you could ask for support when ready.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="exit-count" data-strategy-tags="safety|security|calm|control|predictability">
+          <h3 class="strategy-card__title">Exit Count</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Pick your preferred exit or safe spot and count the exact number of steps from where you are to there; keep that number in mind.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="seat-press" data-strategy-tags="safety|space|security|calm">
+          <h3 class="strategy-card__title">Seat Press</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Press the surface you&#39;re on (chair, floor, bed) firmly once with your palm or thigh and say &quot;held&quot; quietly; note the contact, then stop.</p>
+            
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1403,6 +1421,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1447,6 +1466,17 @@ button.site-nav__magnet {
             <div class="strategy-card strategy-card--input">
               <input id="suggestion-location" name="location" type="text" />
             </div>
+          </div>
+        </div>
+            
+        <div class="strategy-form__field strategy-form__field--visibility">
+          <label for="suggestion-visibility">Visibility</label>
+          <div class="strategy-card strategy-card--input">
+            <select id="suggestion-visibility" name="visibility">
+              <option value="private" selected>Private (only you)</option>
+              <option value="followers">Followers only</option>
+              <option value="public">Public</option>
+            </select>
           </div>
         </div>
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">

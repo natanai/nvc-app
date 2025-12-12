@@ -10,6 +10,8 @@ const PERSONAL_STRATEGIES_EMAIL_BODY =
 const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
 const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
 const VISIBILITY_VALUES = ['private', 'followers', 'public'];
+const SHARED_FEED_CACHE_TTL_MS = 5 * 60 * 1000;
+const sharedStrategyFeedCache = new Map();
 
 function normalizeVisibilityValue(value) {
   try {
@@ -1652,6 +1654,248 @@ function registerStrategySaveButton(slug, button) {
   updateStrategySaveButton(button, isStrategySaved(normalizedSlug));
 }
 
+function wireNeedStrategyCard(card, { needSlug, needName, needTitle, feedback }) {
+  if (!card) {
+    return;
+  }
+
+  const saveButton = card.querySelector('.strategy-card__save');
+  if (!saveButton || saveButton.dataset.listenerAttached === 'true') {
+    return;
+  }
+
+  const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
+  if (strategySlug) {
+    registerStrategySaveButton(strategySlug, saveButton);
+  }
+
+  saveButton.dataset.listenerAttached = 'true';
+  saveButton.addEventListener('click', () => {
+    const title = card.querySelector('.strategy-card__title')?.textContent?.trim() || 'Untitled strategy';
+    const description = card.querySelector('.strategy-card__description')?.textContent?.trim() || '';
+    if (strategySlug && isStrategySaved(strategySlug)) {
+      const nextInventory = state.inventory.filter(
+        (item) => normalizeStrategySlug(item.strategySlug) !== strategySlug
+      );
+      persistInventory(nextInventory, {
+        feedbackElement: feedback,
+        feedbackMessage: `Removed “${title}” from your inventory for ${needName}.`,
+        feedbackMessageType: 'warning',
+      });
+      return;
+    }
+
+    const tags = buildStrategyTags(card.dataset.strategyTags, needSlug);
+    const needSlugs = resolveNeedSlugsFromTags(tags, needSlug);
+    const firstName = sanitizeContributorName(card.dataset.firstName || '');
+    const location = sanitizeLocation(card.dataset.location || '');
+    const normalizedTags = Array.from(
+      new Set([...tags, ...needSlugs].map((tag) => tag?.toString().trim()).filter(Boolean))
+    );
+    const primaryNeedSlug = needSlugs[0] || needSlug;
+
+    const entry = {
+      id: generateId(),
+      title,
+      description,
+      need: needTitle,
+      needSlug: primaryNeedSlug,
+      needSlugs,
+      tags: normalizedTags,
+      personal: false,
+      sourceNeedPage: strategySlug ? needSlug : '',
+      strategySlug,
+      createdAt: new Date().toISOString(),
+      visibility: normalizeVisibilityValue(card.dataset.visibility || 'private'),
+    };
+    if (firstName || location) {
+      entry.contributor = {};
+      if (firstName) {
+        entry.contributor.name = firstName;
+        entry.firstName = firstName;
+      }
+      if (location) {
+        entry.contributor.location = location;
+        entry.location = location;
+      }
+    }
+
+    const duplicate = state.inventory.find(
+      (item) =>
+        item.title.trim().toLowerCase() === entry.title.trim().toLowerCase() &&
+        haveSharedNeedSlugs(resolveEntryNeedSlugs(item), needSlugs)
+    );
+
+    if (duplicate) {
+      const confirmDuplicate = window.confirm(
+        'You already saved a strategy with this title for this need. Save another copy?'
+      );
+      if (!confirmDuplicate) {
+        showFeedback(feedback, 'Skipped saving duplicate strategy.', 'warning');
+        return;
+      }
+    }
+
+    const nextInventory = [...state.inventory, entry];
+    persistInventory(nextInventory, {
+      feedbackElement: feedback,
+      feedbackMessage: `Saved “${title}” to your inventory for ${needName}.`,
+    });
+  });
+}
+
+function updateNeedEmptyState(stack, emptyState) {
+  if (!emptyState) {
+    return;
+  }
+  const cardCount = stack?.querySelectorAll('.strategy-card').length || 0;
+  emptyState.hidden = cardCount > 0;
+}
+
+function normalizeSharedScope(value) {
+  const normalized = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  return normalized === 'follows' ? 'follows' : 'public';
+}
+
+function describeSharedStrategyAuthor(strategy) {
+  const author = strategy?.author || {};
+  const label = author.displayName || author.handle || author.did || '';
+  if (!label) {
+    return '';
+  }
+  return author.handle && author.displayName ? `${label} (@${author.handle})` : label;
+}
+
+function buildSharedStrategyCard(strategy, needSlug) {
+  const card = document.createElement('article');
+  card.className = 'strategy-card';
+
+  const tags = Array.isArray(strategy?.needIds)
+    ? strategy.needIds.map((id) => normalizeNeedSlugValue(id)).filter(Boolean)
+    : [];
+  if (needSlug && !tags.includes(needSlug)) {
+    tags.push(needSlug);
+  }
+
+  const strategySlug =
+    normalizeStrategySlug(strategy?.id || strategy?.slug || '') ||
+    (strategy?.title ? `shared-${normalizeStrategySlug(strategy.title)}` : '');
+
+  if (strategySlug) {
+    card.dataset.strategySlug = strategySlug;
+  }
+  if (tags.length) {
+    card.dataset.strategyTags = tags.join('|');
+  }
+  card.dataset.visibility = normalizeVisibilityValue(strategy?.visibility || 'public');
+
+  const title = document.createElement('h3');
+  title.className = 'strategy-card__title';
+  title.textContent = strategy?.title?.toString().trim() || 'Untitled strategy';
+  card.appendChild(title);
+
+  const body = document.createElement('div');
+  body.className = 'strategy-card__body';
+  const description = document.createElement('p');
+  description.className = 'strategy-card__description';
+  description.textContent = (strategy?.body || '').toString();
+  body.appendChild(description);
+
+  const authorLabel = describeSharedStrategyAuthor(strategy);
+  const visibility = normalizeVisibilityValue(strategy?.visibility || 'public');
+  const metaParts = [];
+  if (authorLabel) {
+    metaParts.push(`Shared by ${authorLabel}`);
+    card.dataset.firstName = authorLabel;
+  }
+  const visibilityLabel = visibility === 'followers' ? 'Followers only' : 'Public';
+  metaParts.push(visibilityLabel);
+
+  if (metaParts.length) {
+    const meta = document.createElement('p');
+    meta.className = 'strategy-card__meta';
+    meta.textContent = metaParts.join(' • ');
+    body.appendChild(meta);
+  }
+
+  card.appendChild(body);
+
+  const actions = document.createElement('div');
+  actions.className = 'strategy-card__actions strategy-card__actions--stacked';
+  const saveButton = document.createElement('button');
+  saveButton.type = 'button';
+  saveButton.className = 'strategy-card__save';
+  saveButton.textContent = '+ Save to inventory';
+  actions.appendChild(saveButton);
+  card.appendChild(actions);
+
+  return card;
+}
+
+function filterSharedStrategiesByNeed(strategies, needSlug) {
+  if (!Array.isArray(strategies) || !strategies.length) {
+    return [];
+  }
+  const normalizedNeed = normalizeNeedSlugValue(needSlug);
+  if (!normalizedNeed) {
+    return [];
+  }
+  return strategies.filter((strategy) => {
+    const needIds = Array.isArray(strategy?.needIds)
+      ? strategy.needIds.map((id) => normalizeNeedSlugValue(id)).filter(Boolean)
+      : [];
+    return needIds.includes(normalizedNeed);
+  });
+}
+
+async function loadSharedStrategyFeed(scope) {
+  const normalizedScope = normalizeSharedScope(scope);
+  const cacheKey = `scope:${normalizedScope}`;
+  const now = Date.now();
+  const cached = sharedStrategyFeedCache.get(cacheKey);
+  if (cached?.data && now - cached.timestamp < SHARED_FEED_CACHE_TTL_MS) {
+    return { strategies: cached.data, fromCache: true };
+  }
+  if (cached?.promise) {
+    return cached.promise;
+  }
+
+  const params = new URLSearchParams({
+    scope: normalizedScope,
+    sort: 'recent',
+  });
+
+  const request = (async () => {
+    try {
+      const res = await fetch(`/api/strategies/feed?${params.toString()}`, {
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok || data?.status !== 'ok') {
+        const message = data?.message || 'Unable to load shared strategies';
+        throw new Error(message);
+      }
+      const strategies = Array.isArray(data.strategies) ? data.strategies : [];
+      sharedStrategyFeedCache.set(cacheKey, {
+        data: strategies,
+        timestamp: Date.now(),
+      });
+      return { strategies, fromCache: false };
+    } catch (error) {
+      sharedStrategyFeedCache.delete(cacheKey);
+      throw error;
+    } finally {
+      const current = sharedStrategyFeedCache.get(cacheKey);
+      if (current?.promise === request && !current.data) {
+        sharedStrategyFeedCache.delete(cacheKey);
+      }
+    }
+  })();
+
+  sharedStrategyFeedCache.set(cacheKey, { promise: request });
+  return request;
+}
+
 
 function setupNeedPage() {
   const main = document.querySelector('main[data-need-slug]');
@@ -1664,91 +1908,154 @@ function setupNeedPage() {
   const needTitle = main.dataset.needTitle || needName;
   const feedback = main.querySelector('[data-inventory-feedback]');
 
-  const cards = main.querySelectorAll('.strategy-card');
+  const stack = main.querySelector('[data-strategy-stack]');
+  const emptyState = main.querySelector('[data-strategy-empty]');
+  const deckApi =
+    window.NVCNeedDeck ||
+    {
+      refresh: () => {},
+      reshuffle: () => {},
+      getCardCount: () => 0,
+    };
+
+  const cards = stack ? stack.querySelectorAll('.strategy-card') : main.querySelectorAll('.strategy-card');
   cards.forEach((card) => {
-    const saveButton = card.querySelector('.strategy-card__save');
-    if (!saveButton) {
-      return;
-    }
+    wireNeedStrategyCard(card, { needSlug, needName, needTitle, feedback });
+  });
+  updateNeedEmptyState(stack, emptyState);
 
-    const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
-    if (strategySlug) {
-      registerStrategySaveButton(strategySlug, saveButton);
-    }
+  const sharedControls = main.querySelector('[data-shared-strategy-controls]');
+  if (sharedControls && stack) {
+    const scopeSelect = sharedControls.querySelector('[data-shared-strategy-scope]');
+    const loadButton = sharedControls.querySelector('[data-shared-strategy-load]');
+    const statusEl = sharedControls.querySelector('[data-shared-strategy-status]');
+    const authHintEl = sharedControls.querySelector('[data-shared-strategy-auth-hint]');
 
-    saveButton.addEventListener('click', () => {
-      const title = card.querySelector('.strategy-card__title')?.textContent?.trim() || 'Untitled strategy';
-      const description = card.querySelector('.strategy-card__description')?.textContent?.trim() || '';
-      if (strategySlug && isStrategySaved(strategySlug)) {
-        const nextInventory = state.inventory.filter(
-          (item) => normalizeStrategySlug(item.strategySlug) !== strategySlug
-        );
-        persistInventory(nextInventory, {
-          feedbackElement: feedback,
-          feedbackMessage: `Removed “${title}” from your inventory for ${needName}.`,
-          feedbackMessageType: 'warning',
-        });
+    const setStatus = (message, type = '') => {
+      if (!statusEl) {
+        return;
+      }
+      statusEl.textContent = message || '';
+      if (type) {
+        statusEl.dataset.status = type;
+      } else {
+        delete statusEl.dataset.status;
+      }
+    };
+
+    const toggleLoading = (isLoading) => {
+      if (loadButton) {
+        loadButton.disabled = isLoading;
+        loadButton.textContent = isLoading ? 'Loading…' : 'Load shared strategies';
+      }
+      if (scopeSelect) {
+        scopeSelect.disabled = isLoading;
+      }
+    };
+
+    const setAuthHint = () => {
+      if (!authHintEl) {
+        return;
+      }
+      const did = getCurrentDid();
+      if (did) {
+        authHintEl.textContent =
+          'Signed in with Bluesky. You can add public strategies or ones shared by people you follow.';
+      } else {
+        authHintEl.textContent =
+          'To load follower-only strategies, sign in with Bluesky on the Inventory page. Public strategies are always available.';
+      }
+    };
+
+    const loadSharedStrategies = async () => {
+      if (!stack) {
         return;
       }
 
-      const tags = buildStrategyTags(card.dataset.strategyTags, needSlug);
-      const needSlugs = resolveNeedSlugsFromTags(tags, needSlug);
-      const firstName = sanitizeContributorName(card.dataset.firstName || '');
-      const location = sanitizeLocation(card.dataset.location || '');
-      const normalizedTags = Array.from(
-        new Set([...tags, ...needSlugs].map((tag) => tag?.toString().trim()).filter(Boolean))
-      );
-      const primaryNeedSlug = needSlugs[0] || needSlug;
+      let scope = scopeSelect?.value || 'public';
+      let normalizedScope = normalizeSharedScope(scope);
 
-      const entry = {
-        id: generateId(),
-        title,
-        description,
-        need: needTitle,
-        needSlug: primaryNeedSlug,
-        needSlugs,
-        tags: normalizedTags,
-        personal: false,
-        sourceNeedPage: strategySlug ? needSlug : '',
-        strategySlug,
-        createdAt: new Date().toISOString(),
-        visibility: normalizeVisibilityValue(card.dataset.visibility || 'private'),
-      };
-      if (firstName || location) {
-        entry.contributor = {};
-        if (firstName) {
-          entry.contributor.name = firstName;
-          entry.firstName = firstName;
+      if (normalizedScope === 'follows' && !getCurrentDid()) {
+        normalizedScope = 'public';
+        scope = 'public';
+        setStatus(
+          'Sign in on the Inventory page to load strategies from people you follow. Showing public strategies instead.',
+          'error'
+        );
+        if (scopeSelect) {
+          scopeSelect.value = 'public';
         }
-        if (location) {
-          entry.contributor.location = location;
-          entry.location = location;
-        }
+      } else {
+        setStatus('Loading shared strategies...');
       }
 
-      const duplicate = state.inventory.find(
-        (item) =>
-          item.title.trim().toLowerCase() === entry.title.trim().toLowerCase() &&
-          haveSharedNeedSlugs(resolveEntryNeedSlugs(item), needSlugs)
-      );
+      toggleLoading(true);
 
-      if (duplicate) {
-        const confirmDuplicate = window.confirm(
-          'You already saved a strategy with this title for this need. Save another copy?'
-        );
-        if (!confirmDuplicate) {
-          showFeedback(feedback, 'Skipped saving duplicate strategy.', 'warning');
+      try {
+        const { strategies, fromCache } = await loadSharedStrategyFeed(normalizedScope);
+        const filtered = filterSharedStrategiesByNeed(strategies, needSlug);
+        if (!filtered.length) {
+          setStatus('No shared strategies for this need yet. Try again later.');
           return;
         }
-      }
 
-      const nextInventory = [...state.inventory, entry];
-      persistInventory(nextInventory, {
-        feedbackElement: feedback,
-        feedbackMessage: `Saved “${title}” to your inventory for ${needName}.`,
-      });
-    });
-  });
+        const existingSlugs = new Set(
+          Array.from(stack.querySelectorAll('.strategy-card')).map((card) => {
+            const slug = normalizeStrategySlug(card.dataset.strategySlug || '');
+            if (slug) {
+              return slug;
+            }
+            return normalizeStrategySlug(
+              card.querySelector('.strategy-card__title')?.textContent?.toString() || ''
+            );
+          })
+        );
+
+        const newCards = [];
+        filtered.forEach((strategy) => {
+          const rawSlug = normalizeStrategySlug(strategy?.id || strategy?.slug || '') ||
+            normalizeStrategySlug(strategy?.title || '');
+          if (rawSlug && existingSlugs.has(rawSlug)) {
+            return;
+          }
+          const card = buildSharedStrategyCard(strategy, needSlug);
+          stack.appendChild(card);
+          wireNeedStrategyCard(card, { needSlug, needName, needTitle, feedback });
+          if (rawSlug) {
+            existingSlugs.add(rawSlug);
+          }
+          newCards.push(card);
+        });
+
+        if (!newCards.length) {
+          setStatus('Those shared strategies are already in your deck.');
+          deckApi.refresh();
+          return;
+        }
+
+        deckApi.refresh({ reshuffle: true });
+        updateNeedEmptyState(stack, emptyState);
+        const cacheNote = fromCache ? ' (cached)' : '';
+        const noun = newCards.length === 1 ? 'strategy' : 'strategies';
+        setStatus(`Added ${newCards.length} shared ${noun} for ${needName}.${cacheNote}`);
+      } catch (error) {
+        console.error('Unable to load shared strategies for need deck', error);
+        setStatus('Unable to load shared strategies right now. Please try again later.', 'error');
+      } finally {
+        toggleLoading(false);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('allneeds:bsky-login-changed', setAuthHint);
+    }
+
+    setAuthHint();
+
+    if (loadButton) {
+      loadButton.addEventListener('click', loadSharedStrategies);
+    }
+  }
 
   const suggestionForm = main.querySelector('#suggestion-form');
   if (suggestionForm) {
@@ -1914,8 +2221,7 @@ function setupInventoryPage() {
       const needSlugs = normalizeNeedSlugList(formData.getAll('need'));
       const firstName = sanitizeContributorName(formData.get('name'));
       const location = sanitizeLocation(formData.get('location'));
-      const visibilityInput = form.querySelector('input[name="strategy-visibility"]:checked');
-      const visibility = visibilityInput ? visibilityInput.value : 'private';
+      const visibility = (formData.get('visibility') || 'private').toString();
 
       if (!title || !description || !needSlugs.length) {
         showInventoryMessage('Please fill in the title, description, and at least one need before adding.', 'error');
@@ -6933,14 +7239,21 @@ function focusNeedSection(slug) {
   const counter = document.querySelector('[data-strategy-count]');
   let toggleBtn = document.querySelector('[data-strategy-toggle]');
 
+  const defaultDeckApi = {
+    refresh: () => {},
+    reshuffle: () => {},
+    getCardCount: () => 0,
+  };
+
   if (!stack) {
+    window.NVCNeedDeck = defaultDeckApi;
     return;
   }
 
-  let cards = Array.from(stack.querySelectorAll('.strategy-card'));
-  if (!cards.length) {
-    return;
-  }
+  let cards = [];
+  let currentIndex = 0;
+  let viewAll = false;
+  const bodyListeners = new WeakSet();
 
   if (!toggleBtn && deckHeader) {
     toggleBtn = document.createElement('button');
@@ -6961,15 +7274,59 @@ function focusNeedSection(slug) {
     return arr;
   }
 
-  let viewAll = false;
-
   function updateToggleButton() {
     if (!toggleBtn) return;
     toggleBtn.textContent = viewAll ? 'View one at a time' : 'View all';
     toggleBtn.setAttribute('aria-pressed', viewAll ? 'true' : 'false');
   }
 
-  function applyPositions(currentIndex) {
+  function toggleBodyShadow(body) {
+    if (!body) return;
+
+    const hasOverflow = body.scrollHeight > body.clientHeight + 1;
+    const dismissed = body.dataset.scrollHintDismissed === 'true';
+
+    body.classList.toggle('strategy-card__body--shadow', hasOverflow && !dismissed);
+  }
+
+  function refreshBodyShadows() {
+    cards.forEach((card) => {
+      const body = card.querySelector('.strategy-card__body');
+      toggleBodyShadow(body);
+    });
+  }
+
+  function attachBodyListener(card) {
+    const body = card?.querySelector?.('.strategy-card__body');
+    if (!body || bodyListeners.has(body)) {
+      return;
+    }
+    body.addEventListener('scroll', function () {
+      if (body.scrollTop > 0) {
+        body.dataset.scrollHintDismissed = 'true';
+      }
+      toggleBodyShadow(body);
+    });
+    bodyListeners.add(body);
+  }
+
+  function refreshCardsFromStack() {
+    cards = Array.from(stack.querySelectorAll('.strategy-card'));
+    cards.forEach(attachBodyListener);
+    if (!cards.length) {
+      currentIndex = 0;
+      return;
+    }
+    if (currentIndex >= cards.length) {
+      currentIndex = cards.length - 1;
+    }
+  }
+
+  function applyPositions(index) {
+    if (!cards.length) {
+      return;
+    }
+
     if (viewAll) {
       cards.forEach((card) => {
         card.removeAttribute('data-active');
@@ -6978,18 +7335,18 @@ function focusNeedSection(slug) {
       return;
     }
 
-    const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
-    const nextIndex = (currentIndex + 1) % cards.length;
+    const prevIndex = (index - 1 + cards.length) % cards.length;
+    const nextIndex = (index + 1) % cards.length;
 
-    cards.forEach((card, index) => {
+    cards.forEach((card, cardIndex) => {
       card.removeAttribute('data-active');
       card.removeAttribute('data-position');
 
-      if (index === currentIndex) {
+      if (cardIndex === index) {
         card.setAttribute('data-active', 'true');
-      } else if (index === prevIndex) {
+      } else if (cardIndex === prevIndex) {
         card.setAttribute('data-position', 'prev');
-      } else if (index === nextIndex) {
+      } else if (cardIndex === nextIndex) {
         card.setAttribute('data-position', 'next');
       }
     });
@@ -6999,12 +7356,16 @@ function focusNeedSection(slug) {
     counter.setAttribute('aria-live', 'polite');
   }
 
-  function updateCounter(currentIndex) {
+  function updateCounter(index) {
     if (!counter) return;
+    if (!cards.length) {
+      counter.textContent = '0 cards';
+      return;
+    }
     if (viewAll) {
       counter.textContent = `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`;
     } else {
-      counter.textContent = `${currentIndex + 1} of ${cards.length}`;
+      counter.textContent = `${index + 1} of ${cards.length}`;
     }
   }
 
@@ -7038,36 +7399,6 @@ function focusNeedSection(slug) {
     }
   }
 
-  function toggleBodyShadow(body) {
-    if (!body) return;
-
-    const hasOverflow = body.scrollHeight > body.clientHeight + 1;
-    const dismissed = body.dataset.scrollHintDismissed === 'true';
-
-    body.classList.toggle('strategy-card__body--shadow', hasOverflow && !dismissed);
-  }
-
-  function refreshBodyShadows() {
-    cards.forEach((card) => {
-      const body = card.querySelector('.strategy-card__body');
-      toggleBodyShadow(body);
-    });
-  }
-
-  cards.forEach((card) => {
-    const body = card.querySelector('.strategy-card__body');
-    if (body) {
-      body.addEventListener('scroll', function () {
-        if (body.scrollTop > 0) {
-          body.dataset.scrollHintDismissed = 'true';
-        }
-        toggleBodyShadow(body);
-      });
-    }
-  });
-
-  let currentIndex = 0;
-
   function go(offset) {
     if (!cards.length || viewAll) return;
     currentIndex = (currentIndex + offset + cards.length) % cards.length;
@@ -7081,22 +7412,46 @@ function focusNeedSection(slug) {
       return node.classList && node.classList.contains('strategy-card');
     });
 
+    if (!children.length) {
+      cards = [];
+      currentIndex = 0;
+      updateCounter(currentIndex);
+      updateToggleButton();
+      window.requestAnimationFrame(refreshBodyShadows);
+      return;
+    }
+
     const shuffled = shuffleArray(children);
     shuffled.forEach(function (card) {
       stack.appendChild(card);
     });
 
-    cards = Array.from(stack.querySelectorAll('.strategy-card'));
+    refreshCardsFromStack();
     currentIndex = 0;
     applyPositions(currentIndex);
     updateCounter(currentIndex);
+    updateToggleButton();
     window.requestAnimationFrame(refreshBodyShadows);
   }
 
-  performShuffle();
-  updateCounter(currentIndex);
-  updateToggleButton();
-  window.requestAnimationFrame(refreshBodyShadows);
+  function refreshDeck(options = {}) {
+    refreshCardsFromStack();
+    if (!cards.length) {
+      updateCounter(currentIndex);
+      updateToggleButton();
+      return;
+    }
+    if (options.reshuffle) {
+      performShuffle();
+      return;
+    }
+    applyPositions(currentIndex);
+    updateCounter(currentIndex);
+    updateToggleButton();
+    window.requestAnimationFrame(refreshBodyShadows);
+  }
+
+  refreshDeck({ reshuffle: true });
 
   window.addEventListener('resize', function () {
     window.requestAnimationFrame(refreshBodyShadows);
@@ -7240,4 +7595,10 @@ function focusNeedSection(slug) {
       deck.style.touchAction = '';
     });
   }
+
+  window.NVCNeedDeck = {
+    refresh: refreshDeck,
+    reshuffle: performShuffle,
+    getCardCount: () => cards.length,
+  };
 })();

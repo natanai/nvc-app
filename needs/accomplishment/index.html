@@ -1199,66 +1199,84 @@ button.site-nav__magnet {
             >
               Shuffle cards
             </button>
+            <div class="strategy-deck__shared-controls" data-shared-strategy-controls>
+              <label class="strategy-deck__shared-label" for="shared-strategy-scope">Add shared strategies</label>
+              <div class="strategy-deck__shared-inputs">
+                <select id="shared-strategy-scope" data-shared-strategy-scope>
+                  <option value="public" selected>All public strategies</option>
+                  <option value="follows">From people you follow</option>
+                </select>
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle strategy-deck__load"
+                  data-shared-strategy-load
+                >
+                  Load shared strategies
+                </button>
+              </div>
+              <p class="strategy-deck__shared-status" data-shared-strategy-status></p>
+              <p class="strategy-deck__shared-auth-hint" data-shared-strategy-auth-hint></p>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
             <div class="strategy-deck__stack" data-strategy-stack>
               
-                    <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Crunch the numbers</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="make-art" data-strategy-tags="to-be-seen|to-be-heard|self-expression|autonomy|choice|accomplishment|acceptance|growth" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Make art</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="clean-something" data-strategy-tags="order|beauty|accomplishment" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Clean something</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">Clean your room, your kitchen, anything. Bring order to the chaos :)</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Play a video game</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
-                    <article class="strategy-card" data-strategy-slug="make-a-list-and-check-things-off" data-strategy-tags="accomplishment" data-first-name="Nat" data-location="Missouri">
-                      <h3 class="strategy-card__title">Make a list and check things off</h3>
-                      <div class="strategy-card__body">
-                        <p class="strategy-card__description">If you make the tasks small enough so as to avoid becoming overwhelmed the experience of checking something off a list can be very powerful. Things like “10 minutes playing piano scales” or “10 minutes cleaning the kitchen” are a great start. Set a timer and allow yourself to feel repeat when the ten minutes are up. Don’t force yourself to go past these simple goal. Enjoy having make a goal and achieved it.</p>
-                        <p class="strategy-card__meta">Nat • Missouri</p>
-                      </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
-                      </div>
-                    </article>
-                  
+        <article class="strategy-card" data-strategy-slug="crunch-the-numbers" data-strategy-tags="safety|clarity|accomplishment|commitment|security" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Crunch the numbers</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">This isn&#39;t for everyone I know, but I like to review my budget. I made a google sheet of my expenses vs my income. Having a clear plan really does calm my nerves.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="make-art" data-strategy-tags="to-be-seen|to-be-heard|self-expression|autonomy|choice|accomplishment|acceptance|growth" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Make art</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Whatever kind. A scribble, a drawing, a painting, a piece of music.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="clean-something" data-strategy-tags="order|beauty|accomplishment" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Clean something</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">Clean your room, your kitchen, anything. Bring order to the chaos :)</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="play-a-video-game" data-strategy-tags="acknowledgement|freedom|belonging|inclusion|community|contribution|control|choice|clarity|causality|act-freely|need-to-matter|friendship|relaxation|authenticity|autonomy|rest|mattering|beauty|to-be-seen|to-be-heard|do-things-at-my-own-pace-and-in-my-own-way|accomplishment|growth" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Play a video game</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">There is such a wide diversity of video games out there. Calming exploratory games, puzzle games, combat, story, single or multiplayer, etc. Once I get in touch with the need that is alive in me it’s fun to look for a game or game genre that might tend specifically to that.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
+        <article class="strategy-card" data-strategy-slug="make-a-list-and-check-things-off" data-strategy-tags="accomplishment" data-first-name="Nat" data-location="Missouri">
+          <h3 class="strategy-card__title">Make a list and check things off</h3>
+          <div class="strategy-card__body">
+            <p class="strategy-card__description">If you make the tasks small enough so as to avoid becoming overwhelmed the experience of checking something off a list can be very powerful. Things like “10 minutes playing piano scales” or “10 minutes cleaning the kitchen” are a great start. Set a timer and allow yourself to feel repeat when the ten minutes are up. Don’t force yourself to go past these simple goal. Enjoy having make a goal and achieved it.</p>
+            <p class="strategy-card__meta">Nat • Missouri</p>
+          </div>
+          <div class="strategy-card__actions strategy-card__actions--stacked">
+            <button type="button" class="strategy-card__save">+ Save to inventory</button>
+          </div>
+        </article>
+      
             </div>
 
             <div class="strategy-deck__controls">
@@ -1282,6 +1300,7 @@ button.site-nav__magnet {
             </div>
           </div>
 
+          <p class="empty-state strategy-empty-state" data-strategy-empty hidden>Strategies for this need are coming soon. Add your own or import shared strategies above.</p>
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
         </section>
       <section class="suggestion" aria-labelledby="suggestion-heading">
@@ -1326,6 +1345,17 @@ button.site-nav__magnet {
             <div class="strategy-card strategy-card--input">
               <input id="suggestion-location" name="location" type="text" />
             </div>
+          </div>
+        </div>
+            
+        <div class="strategy-form__field strategy-form__field--visibility">
+          <label for="suggestion-visibility">Visibility</label>
+          <div class="strategy-card strategy-card--input">
+            <select id="suggestion-visibility" name="visibility">
+              <option value="private" selected>Private (only you)</option>
+              <option value="followers">Followers only</option>
+              <option value="public">Public</option>
+            </select>
           </div>
         </div>
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
