@@ -2,6 +2,7 @@ import {
   initBlueskyOAuth,
   getCurrentBlueskySession,
   ensureBackendSession,
+  BACKEND_BASE_URL,
 } from './bluesky-oauth.js';
 
 const state = {
@@ -173,7 +174,7 @@ function addStrategyLocally(strategy) {
 
 async function notifyBackendAdd(strategy) {
   if (!strategy?.id) return null;
-  const res = await fetch(`/api/strategies/${strategy.id}/add-to-inventory`, {
+  const res = await fetch(`${BACKEND_BASE_URL}/strategies/${strategy.id}/add-to-inventory`, {
     method: 'POST',
     credentials: 'include',
   });
@@ -217,7 +218,7 @@ async function fetchAndRenderFeed() {
   setStatus('Loading strategies...');
 
   try {
-    const res = await fetch(`/api/strategies/feed?${params.toString()}`, {
+    const res = await fetch(`${BACKEND_BASE_URL}/strategies/feed?${params.toString()}`, {
       credentials: 'include',
     });
     const data = await res.json();

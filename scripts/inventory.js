@@ -6268,7 +6268,7 @@ async function fetchSocialStrategiesFeed() {
   }
 
   try {
-    const res = await fetch(`/api/strategies/feed?scope=follows`, {
+    const res = await fetch(`${BACKEND_BASE_URL}/strategies/feed?scope=follows`, {
       credentials: 'include',
     });
     const data = await res.json();
