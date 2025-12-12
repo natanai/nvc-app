@@ -1821,7 +1821,9 @@ function setupNeedPage() {
         sourceNeedPage: '',
         strategySlug: '',
         createdAt: new Date().toISOString(),
-        visibility: normalizeVisibilityValue('private'),
+        visibility: normalizeVisibilityValue(
+          (formData.get('strategy-visibility') || 'private').toString().trim() || 'private'
+        ),
       };
       if (firstName || location) {
         entry.contributor = {};
@@ -1914,8 +1916,9 @@ function setupInventoryPage() {
       const needSlugs = normalizeNeedSlugList(formData.getAll('need'));
       const firstName = sanitizeContributorName(formData.get('name'));
       const location = sanitizeLocation(formData.get('location'));
-      const visibilityInput = form.querySelector('input[name="strategy-visibility"]:checked');
-      const visibility = visibilityInput ? visibilityInput.value : 'private';
+      const visibilityField = form.querySelector('[name="strategy-visibility"]');
+      const visibilityValue = visibilityField ? visibilityField.value : formData.get('strategy-visibility');
+      const visibility = visibilityValue ? visibilityValue.toString().trim() : 'private';
 
       if (!title || !description || !needSlugs.length) {
         showInventoryMessage('Please fill in the title, description, and at least one need before adding.', 'error');

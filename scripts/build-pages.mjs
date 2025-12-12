@@ -1188,6 +1188,12 @@ function writePage(relativePath, html) {
   writeFileSync(outputPath, html.trimStart());
 }
 
+const DEFAULT_VISIBILITY_OPTIONS = [
+  { value: 'private', label: 'Private (only you)', selected: true },
+  { value: 'followers', label: 'Followers only' },
+  { value: 'public', label: 'Public' },
+];
+
 function renderStrategyForm({
   formId,
   idPrefix,
@@ -1203,6 +1209,10 @@ function renderStrategyForm({
   includeMessage = false,
   notice = '',
   includeLocalStorageReminder = false,
+  includeVisibilitySelect = false,
+  visibilityLabel = 'Visibility',
+  visibilityHint = 'Choose who can see this strategy in the shared feed.',
+  visibilityOptions = DEFAULT_VISIBILITY_OPTIONS,
 }) {
   const needOptions = data.needs
     .map(
@@ -1230,6 +1240,37 @@ function renderStrategyForm({
             <select id="${idPrefix}-need" name="need"${multipleAttr}${needDescribedByAttr} required>
               ${placeholderOption}
               ${needOptions}
+            </select>
+          </div>
+        </div>`
+    : '';
+
+  const normalizedVisibilityOptions = Array.isArray(visibilityOptions) && visibilityOptions.length
+    ? visibilityOptions
+    : DEFAULT_VISIBILITY_OPTIONS;
+
+  const visibilityHintId = `${idPrefix}-visibility-hint`;
+  const visibilityDescribedByAttr = visibilityHint ? ` aria-describedby="${visibilityHintId}"` : '';
+
+  const visibilityField = includeVisibilitySelect
+    ? `
+        <div class="strategy-form__field">
+          <label for="${idPrefix}-visibility">${escapeHtml(visibilityLabel)}</label>
+          ${
+            visibilityHint
+              ? `<p id="${visibilityHintId}" class="strategy-form__hint">${escapeHtml(visibilityHint)}</p>`
+              : ''
+          }
+          <div class="strategy-card strategy-card--input">
+            <select id="${idPrefix}-visibility" name="strategy-visibility"${visibilityDescribedByAttr}>
+              ${normalizedVisibilityOptions
+                .map((option) => {
+                  const value = option?.value || '';
+                  const label = option?.label || option?.value || '';
+                  const selected = option?.selected ? ' selected' : '';
+                  return `<option value="${escapeHtml(value)}"${selected}>${escapeHtml(label)}</option>`;
+                })
+                .join('')}
             </select>
           </div>
         </div>`
@@ -1286,6 +1327,7 @@ function renderStrategyForm({
             </div>
             ${needField}
             ${contactFields}
+            ${visibilityField}
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
             </div>
@@ -1295,6 +1337,18 @@ function renderStrategyForm({
         ${noticeMarkup}
         ${message}
       </div>`;
+}
+
+function renderPersonalStrategyForm(options = {}) {
+  return renderStrategyForm({
+    titleLabel: 'Strategy name',
+    descriptionLabel: 'How do you put it into practice?',
+    includePlaceholderOption: true,
+    needSelectMultiple: true,
+    includeContactFields: true,
+    includeVisibilitySelect: true,
+    ...options,
+  });
 }
 
 function renderHome() {
@@ -1726,15 +1780,13 @@ ${strategiesNote}
   const suggestionNotice =
     '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="../../inventory/">inventory screen</a> to export them if you would like a backup.</p>';
 
-  const suggestionForm = renderStrategyForm({
+  const suggestionForm = renderPersonalStrategyForm({
     formId: 'suggestion-form',
     idPrefix: 'suggestion',
     submitLabel: '+ Save to inventory',
-    titleLabel: 'Strategy name',
     descriptionLabel: 'Strategy details',
     defaultNeedSlug: item.slug,
-    needSelectMultiple: true,
-    includeContactFields: true,
+    includePlaceholderOption: false,
     includeMessage: true,
     notice: suggestionNotice,
   });
@@ -1867,15 +1919,10 @@ function renderInventoryPage() {
   const inventoryFormNotice =
     '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>';
 
-  const personalStrategyForm = renderStrategyForm({
+  const personalStrategyForm = renderPersonalStrategyForm({
     formId: 'inventory-form',
     idPrefix: 'inventory',
     submitLabel: 'Add to inventory',
-    titleLabel: 'Strategy name',
-    descriptionLabel: 'How do you put it into practice?',
-    includePlaceholderOption: true,
-    needSelectMultiple: true,
-    includeContactFields: true,
     notice: inventoryFormNotice,
     includeLocalStorageReminder: true,
   });
