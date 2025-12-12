@@ -263,10 +263,12 @@ async function handleGetStrategyFeed(request, env) {
   const scopeParam = (url.searchParams.get('scope') || '').toLowerCase();
   const sortParam = (url.searchParams.get('sort') || '').toLowerCase();
   const limitParam = parseInt(url.searchParams.get('limit') || '50', 10);
+  const needParam = (url.searchParams.get('need') || '').toLowerCase();
 
   const scope = scopeParam === 'follows' ? 'follows' : 'public';
   const sort = sortParam === 'popular' ? 'popular' : 'recent';
   const limit = Number.isFinite(limitParam) ? Math.min(Math.max(limitParam, 1), 100) : 50;
+  const normalizedNeed = needParam.replace(/[^a-z0-9-]/g, '');
 
   try {
     let followDids = [];
@@ -297,6 +299,11 @@ async function handleGetStrategyFeed(request, env) {
       params.push(viewerDid);
       includeClauses.push("s.visibility = 'public'");
       whereClauses.push(`(${includeClauses.join(' OR ')})`);
+    }
+
+    if (normalizedNeed) {
+      whereClauses.push(`s.need_ids LIKE ?`);
+      params.push(`%"${normalizedNeed}"%`);
     }
 
     const whereSql = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
