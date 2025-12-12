@@ -489,6 +489,8 @@ const state = {
   viewportHeightListenersAttached: false,
   journalStoreListenersAttached: false,
   journalModuleReadyPromise: null,
+  needStrategyCache: new Map(),
+  needStrategyRequests: new Map(),
 };
 
 const SUMMARY_FILTERS = new Set(['all', 'missing', 'ready', 'none']);
@@ -1652,6 +1654,396 @@ function registerStrategySaveButton(slug, button) {
   updateStrategySaveButton(button, isStrategySaved(normalizedSlug));
 }
 
+const NEED_STRATEGY_SCOPE_LABELS = {
+  follows: 'From people you follow',
+  public: 'All public strategies',
+};
+
+function normalizeNeedStrategyScope(value) {
+  const normalized = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  return normalized === 'follows' ? 'follows' : 'public';
+}
+
+function getNeedStrategyCacheKey(needSlug, scope) {
+  const normalizedNeed = normalizeNeedSlugValue(needSlug || '');
+  const normalizedScope = normalizeNeedStrategyScope(scope);
+  return `${normalizedNeed || 'unknown'}::${normalizedScope}`;
+}
+
+function getNeedStrategyCache(needSlug, scope) {
+  const key = getNeedStrategyCacheKey(needSlug, scope);
+  return state.needStrategyCache.get(key) || null;
+}
+
+function setNeedStrategyCache(needSlug, scope, payload) {
+  const key = getNeedStrategyCacheKey(needSlug, scope);
+  state.needStrategyCache.set(key, payload);
+}
+
+function renderNeedStrategyStatus(statusEl, message, tone = 'info') {
+  if (!statusEl) {
+    return;
+  }
+  statusEl.textContent = message || '';
+  statusEl.dataset.tone = tone;
+}
+
+function buildInventoryEntryFromSharedStrategy(strategy, needSlug, needTitle) {
+  const normalizedNeedSlug = normalizeNeedSlugValue(needSlug);
+  const rawNeedSlugs = Array.isArray(strategy?.needIds) ? strategy.needIds : [];
+  const resolvedNeedSlugs = normalizeNeedSlugList([rawNeedSlugs, normalizedNeedSlug]).filter(Boolean);
+  const primaryNeedSlug = resolvedNeedSlugs[0] || normalizedNeedSlug;
+  const tags = buildStrategyTags(resolvedNeedSlugs.join('|'), primaryNeedSlug);
+
+  const contributorName =
+    strategy?.author?.displayName || strategy?.author?.handle || strategy?.author?.did || '';
+
+  const entry = {
+    id: generateId(),
+    title: (strategy?.title || '').toString().trim() || 'Untitled strategy',
+    description: (strategy?.body || '').toString(),
+    need: needTitle || 'Need',
+    needSlug: primaryNeedSlug || normalizedNeedSlug,
+    needSlugs: resolvedNeedSlugs.length ? resolvedNeedSlugs : normalizedNeedSlugList([normalizedNeedSlug]),
+    tags,
+    personal: false,
+    sourceNeedPage: normalizedNeedSlug,
+    strategySlug: strategy?.id ? `shared-${strategy.id}` : '',
+    createdAt: new Date().toISOString(),
+    visibility: normalizeVisibilityValue(strategy?.visibility || 'public'),
+  };
+
+  if (contributorName) {
+    entry.contributor = { name: contributorName };
+    entry.firstName = contributorName;
+  }
+
+  return entry;
+}
+
+async function incrementSharedStrategyAddCount(strategyId) {
+  const numericId = Number(strategyId);
+  if (!Number.isFinite(numericId)) {
+    return;
+  }
+  try {
+    await fetch(`/api/strategies/${numericId}/add-to-inventory`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+  } catch (error) {
+    console.warn('Unable to increment shared strategy add count', error);
+  }
+}
+
+function renderNeedStrategyCards(container, strategies, options) {
+  if (!container) {
+    return;
+  }
+
+  const needTitle = options?.needTitle || 'this need';
+  const needSlug = options?.needSlug || '';
+  const scope = normalizeNeedStrategyScope(options?.scope);
+  const feedbackEl = options?.feedbackEl || null;
+  const lastChecked = options?.lastChecked || null;
+
+  container.textContent = '';
+
+  if (!Array.isArray(strategies) || !strategies.length) {
+    container.textContent =
+      'No shared strategies found for this source yet. Try another source or check back later.';
+    return;
+  }
+
+  const list = document.createElement('div');
+  list.className = 'need-shared-strategies__list';
+
+  const scopeLabel = NEED_STRATEGY_SCOPE_LABELS[scope] || NEED_STRATEGY_SCOPE_LABELS.public;
+
+  strategies.forEach((strategy) => {
+    const card = document.createElement('article');
+    card.className = 'need-shared-strategy';
+
+    const heading = document.createElement('h3');
+    heading.className = 'need-shared-strategy__title';
+    heading.textContent = strategy?.title || 'Untitled strategy';
+    card.appendChild(heading);
+
+    const meta = document.createElement('p');
+    meta.className = 'need-shared-strategy__meta';
+    const authorLabel =
+      strategy?.author?.displayName || strategy?.author?.handle || strategy?.author?.did || 'Unknown author';
+    meta.textContent = `${authorLabel} • ${scopeLabel}`;
+    card.appendChild(meta);
+
+    if (strategy?.body) {
+      const body = document.createElement('p');
+      body.className = 'need-shared-strategy__body';
+      body.textContent = strategy.body;
+      card.appendChild(body);
+    }
+
+    if (Array.isArray(strategy?.needIds) && strategy.needIds.length) {
+      const needs = document.createElement('p');
+      needs.className = 'need-shared-strategy__needs';
+      needs.textContent = `Tagged needs: ${strategy.needIds.join(', ')}`;
+      card.appendChild(needs);
+    }
+
+    const footer = document.createElement('div');
+    footer.className = 'need-shared-strategy__actions';
+
+    const addButton = document.createElement('button');
+    addButton.type = 'button';
+    addButton.className = 'need-shared-strategy__button';
+    addButton.textContent = 'Add to my inventory';
+    addButton.addEventListener('click', () => {
+      const entry = buildInventoryEntryFromSharedStrategy(strategy, needSlug, needTitle);
+      const resolvedNeedSlugs = resolveEntryNeedSlugs(entry);
+      const duplicate = state.inventory.find(
+        (item) =>
+          item.title.trim().toLowerCase() === entry.title.trim().toLowerCase() &&
+          haveSharedNeedSlugs(resolveEntryNeedSlugs(item), resolvedNeedSlugs)
+      );
+
+      if (duplicate) {
+        const confirmDuplicate = window.confirm(
+          'You already saved a strategy with this title for one of these needs. Save another copy?'
+        );
+        if (!confirmDuplicate) {
+          return;
+        }
+      }
+
+      const nextInventory = [...state.inventory, entry];
+      persistInventory(nextInventory, {
+        feedbackElement: feedbackEl,
+        feedbackMessage: `Saved “${entry.title}” to your inventory for ${needTitle}.`,
+        feedbackMessageType: 'success',
+      });
+
+      if (strategy?.id) {
+        incrementSharedStrategyAddCount(strategy.id);
+      }
+    });
+
+    footer.appendChild(addButton);
+
+    if (strategy?.author?.handle || strategy?.author?.did) {
+      const profileLink = document.createElement('a');
+      profileLink.className = 'need-shared-strategy__link';
+      profileLink.target = '_blank';
+      profileLink.rel = 'noreferrer noopener';
+      const profileId = strategy.author.handle || strategy.author.did;
+      profileLink.href = `https://bsky.app/profile/${encodeURIComponent(profileId)}`;
+      profileLink.textContent = 'View author on Bluesky';
+      footer.appendChild(profileLink);
+    }
+
+    card.appendChild(footer);
+    list.appendChild(card);
+  });
+
+  if (lastChecked) {
+    const timestamp = document.createElement('p');
+    timestamp.className = 'need-shared-strategy__timestamp';
+    timestamp.textContent = `Last checked: ${new Date(lastChecked).toLocaleString()}`;
+    container.appendChild(timestamp);
+  }
+
+  container.appendChild(list);
+}
+
+async function fetchNeedStrategies({ needSlug, scope }) {
+  const controller = new AbortController();
+  const cacheKey = getNeedStrategyCacheKey(needSlug, scope);
+  state.needStrategyRequests.set(cacheKey, controller);
+
+  try {
+    const url = new URL('/api/strategies/feed', window.location.origin);
+    url.searchParams.set('scope', normalizeNeedStrategyScope(scope));
+    if (needSlug) {
+      url.searchParams.set('need', needSlug);
+    }
+
+    const res = await fetch(url.toString(), {
+      credentials: 'include',
+      signal: controller.signal,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data || data.status !== 'ok') {
+      throw new Error(data && data.message ? data.message : 'Unable to fetch strategies');
+    }
+
+    const strategies = Array.isArray(data.strategies) ? data.strategies : [];
+
+    return { strategies, fetchedAt: Date.now(), scope: normalizeNeedStrategyScope(scope) };
+  } finally {
+    state.needStrategyRequests.delete(cacheKey);
+  }
+}
+
+function renderNeedStrategyCacheOrPrompt(container, statusEl, options) {
+  const scope = normalizeNeedStrategyScope(options?.scope);
+  const cache = getNeedStrategyCache(options?.needSlug, scope);
+  if (cache) {
+    renderNeedStrategyStatus(
+      statusEl,
+      `Showing cached results from ${new Date(cache.fetchedAt).toLocaleString()}. Click check to refresh.`,
+      'info'
+    );
+    renderNeedStrategyCards(container, cache.strategies, {
+      scope,
+      needSlug: options?.needSlug,
+      needTitle: options?.needTitle,
+      lastChecked: cache.fetchedAt,
+      feedbackEl: options?.feedbackEl,
+    });
+    return true;
+  }
+  renderNeedStrategyStatus(
+    statusEl,
+    'No shared strategies fetched yet for this source. Click “Check for shared strategies” to load them.',
+    'info'
+  );
+  container.textContent = '';
+  return false;
+}
+
+function attachNeedStrategySection(main, needSlug, needTitle, feedbackEl) {
+  if (!main) {
+    return;
+  }
+
+  const strategySection = main.querySelector('.strategy-section');
+
+  const section = document.createElement('section');
+  section.className = 'need-shared-strategies';
+  section.setAttribute('aria-labelledby', 'need-shared-strategies-heading');
+
+  const header = document.createElement('div');
+  header.className = 'need-shared-strategies__header';
+
+  const heading = document.createElement('h2');
+  heading.id = 'need-shared-strategies-heading';
+  heading.className = 'section-title';
+  heading.textContent = 'Shared strategies';
+  header.appendChild(heading);
+
+  const helper = document.createElement('p');
+  helper.className = 'need-shared-strategies__helper';
+  helper.textContent =
+    'Checks for Bluesky strategies tagged with this need. Viewing is read-only; add to your inventory with the buttons below.';
+  header.appendChild(helper);
+
+  section.appendChild(header);
+
+  const controls = document.createElement('div');
+  controls.className = 'need-shared-strategies__controls';
+
+  const scopeLabel = document.createElement('label');
+  scopeLabel.className = 'need-shared-strategies__label';
+  scopeLabel.setAttribute('for', 'need-strategy-source');
+  scopeLabel.textContent = 'Source';
+
+  const scopeSelect = document.createElement('select');
+  scopeSelect.id = 'need-strategy-source';
+  scopeSelect.className = 'need-shared-strategies__select';
+
+  const followsOption = document.createElement('option');
+  followsOption.value = 'follows';
+  followsOption.textContent = NEED_STRATEGY_SCOPE_LABELS.follows;
+  scopeSelect.appendChild(followsOption);
+
+  const publicOption = document.createElement('option');
+  publicOption.value = 'public';
+  publicOption.textContent = NEED_STRATEGY_SCOPE_LABELS.public;
+  scopeSelect.appendChild(publicOption);
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'need-shared-strategies__button';
+  button.textContent = 'Check for shared strategies';
+
+  controls.appendChild(scopeLabel);
+  controls.appendChild(scopeSelect);
+  controls.appendChild(button);
+  section.appendChild(controls);
+
+  const status = document.createElement('p');
+  status.className = 'need-shared-strategies__status';
+  section.appendChild(status);
+
+  const results = document.createElement('div');
+  results.className = 'need-shared-strategies__results';
+  section.appendChild(results);
+
+  const updateFromCache = () =>
+    renderNeedStrategyCacheOrPrompt(results, status, {
+      needSlug,
+      needTitle,
+      scope: scopeSelect.value,
+      feedbackEl,
+    });
+
+  scopeSelect.addEventListener('change', () => {
+    updateFromCache();
+  });
+
+  button.addEventListener('click', async () => {
+    const scope = normalizeNeedStrategyScope(scopeSelect.value);
+    button.disabled = true;
+    scopeSelect.disabled = true;
+    renderNeedStrategyStatus(
+      status,
+      scope === 'follows'
+        ? 'Checking Bluesky strategies from people you follow for this need...'
+        : 'Checking public Bluesky strategies for this need...',
+      'info'
+    );
+
+    try {
+      const result = await fetchNeedStrategies({ needSlug, scope });
+      setNeedStrategyCache(needSlug, scope, result);
+      renderNeedStrategyStatus(
+        status,
+        `Found ${result.strategies.length || 0} strategies. Last checked ${new Date(
+          result.fetchedAt
+        ).toLocaleString()}.`,
+        'success'
+      );
+      renderNeedStrategyCards(results, result.strategies, {
+        scope,
+        needSlug,
+        needTitle,
+        lastChecked: result.fetchedAt,
+        feedbackEl,
+      });
+    } catch (error) {
+      console.warn('Unable to fetch shared strategies', error);
+      renderNeedStrategyStatus(
+        status,
+        'Unable to fetch shared strategies right now. Link your Bluesky account and try again.',
+        'error'
+      );
+      results.textContent = '';
+    } finally {
+      button.disabled = false;
+      scopeSelect.disabled = false;
+    }
+  });
+
+  updateFromCache();
+
+  if (strategySection && strategySection.parentNode === main) {
+    strategySection.parentNode.insertBefore(section, strategySection);
+  } else {
+    main.prepend(section);
+  }
+}
+
 
 function setupNeedPage() {
   const main = document.querySelector('main[data-need-slug]');
@@ -1663,6 +2055,8 @@ function setupNeedPage() {
   const needName = main.dataset.needName || main.dataset.needTitle || 'Need';
   const needTitle = main.dataset.needTitle || needName;
   const feedback = main.querySelector('[data-inventory-feedback]');
+
+  attachNeedStrategySection(main, needSlug, needTitle, feedback);
 
   const cards = main.querySelectorAll('.strategy-card');
   cards.forEach((card) => {

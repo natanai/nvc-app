@@ -3146,6 +3146,153 @@ main[data-need-slug] .page-title::before {
   font-size: 0.95rem;
 }
 
+.need-shared-strategies {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem 1.25rem;
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--mint) 70%, #ffffff 30%);
+  box-shadow: 0 12px 0 var(--shadow);
+}
+
+.need-shared-strategies__header {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.need-shared-strategies__helper {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.need-shared-strategies__controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.need-shared-strategies__label {
+  font-weight: 600;
+}
+
+.need-shared-strategies__select {
+  min-width: 12rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--outline);
+  background: #fff;
+  font-weight: 600;
+}
+
+.need-shared-strategies__button {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--btn-bg) 70%, #ffffff 30%);
+  color: var(--btn-fg);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.need-shared-strategies__button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.need-shared-strategies__status {
+  margin: 0;
+  font-weight: 600;
+}
+
+.need-shared-strategies__status[data-tone='error'] {
+  color: #a40000;
+}
+
+.need-shared-strategies__status[data-tone='success'] {
+  color: #0b6b3a;
+}
+
+.need-shared-strategies__results {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.need-shared-strategies__list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.need-shared-strategy {
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-lg);
+  background: #fff;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 8px 0 var(--shadow);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.need-shared-strategy__title {
+  margin: 0;
+}
+
+.need-shared-strategy__meta,
+.need-shared-strategy__body,
+.need-shared-strategy__needs,
+.need-shared-strategy__timestamp {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.need-shared-strategy__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.need-shared-strategy__button {
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: var(--lavender);
+  padding: 0.45rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 0 var(--shadow);
+}
+
+.need-shared-strategy__link {
+  font-weight: 700;
+}
+
+.need-shared-strategy__timestamp {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 720px) {
+  .need-shared-strategies {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .need-shared-strategies__controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .need-shared-strategies__button,
+  .need-shared-strategy__button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 /* Strategy deck: stacked playing-card layout */
 
 .strategy-section {
