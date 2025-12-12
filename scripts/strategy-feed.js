@@ -58,9 +58,11 @@ function setAuthHint(session) {
   }
 }
 
-function renderFeed(strategies) {
+function renderFeed(strategies, { sort } = {}) {
   if (!state.feedList) return;
   state.feedList.textContent = '';
+
+  const currentSort = sort || state.sortSelect?.value || 'recent';
 
   if (!Array.isArray(strategies) || !strategies.length) {
     setStatus('No strategies found for this filter yet.');
@@ -110,13 +112,12 @@ function renderFeed(strategies) {
     visibilityBadge.textContent = `Visibility: ${formatVisibility(strategy?.visibility)}`;
     footer.appendChild(visibilityBadge);
 
-    const addCountBadge = document.createElement('span');
-    addCountBadge.className = 'strategy-card__badge';
-    const startingCount = Number.isFinite(strategy?.addCount)
-      ? Number(strategy.addCount)
-      : Number(strategy?.addCount || 0);
-    addCountBadge.textContent = `Added to inventories: ${startingCount}`;
-    footer.appendChild(addCountBadge);
+    if (currentSort === 'popular') {
+      const addCountBadge = document.createElement('span');
+      addCountBadge.className = 'strategy-card__badge';
+      addCountBadge.textContent = 'Trending';
+      footer.appendChild(addCountBadge);
+    }
 
     const addButton = document.createElement('button');
     addButton.type = 'button';
@@ -124,7 +125,7 @@ function renderFeed(strategies) {
     addButton.dataset.addToInventory = 'true';
     addButton.textContent = 'Add to inventory';
     addButton.addEventListener('click', () => {
-      handleAddToInventory(strategy, addCountBadge);
+      handleAddToInventory(strategy);
     });
     footer.appendChild(addButton);
 
@@ -186,7 +187,7 @@ async function notifyBackendAdd(strategy) {
   return data?.strategy || null;
 }
 
-async function handleAddToInventory(strategy, addCountBadge) {
+async function handleAddToInventory(strategy) {
   addStrategyLocally(strategy);
   setStatus('Added to your local inventory.');
 
@@ -204,10 +205,6 @@ async function handleAddToInventory(strategy, addCountBadge) {
     : Number(strategy?.addCount || 0);
   const nextCount = Number.isFinite(updated?.addCount) ? Number(updated.addCount) : baseCount + 1;
   strategy.addCount = nextCount;
-  if (addCountBadge) {
-    const displayCount = Number.isFinite(nextCount) ? nextCount : 0;
-    addCountBadge.textContent = `Added to inventories: ${displayCount}`;
-  }
 }
 
 async function fetchAndRenderFeed() {
@@ -225,7 +222,7 @@ async function fetchAndRenderFeed() {
       throw new Error(data?.message || 'Unable to load feed');
     }
     state.strategies = Array.isArray(data.strategies) ? data.strategies : [];
-    renderFeed(state.strategies);
+    renderFeed(state.strategies, { sort });
     if (!state.strategies.length) {
       setStatus('No strategies found for this filter yet.');
     }
