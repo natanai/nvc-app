@@ -11,6 +11,7 @@ const state = {
   authHintEl: null,
   scopeSelect: null,
   sortSelect: null,
+  loadButton: null,
 };
 
 function normalizeVisibility(value) {
@@ -235,12 +236,21 @@ async function fetchAndRenderFeed() {
   }
 }
 
+function handleFilterChange() {
+  setStatus('Filters changed. Click "Load strategies" to refresh, or confirm to reload now.');
+
+  if (window.confirm('Apply these filters and reload the strategy feed now?')) {
+    fetchAndRenderFeed();
+  }
+}
+
 async function init() {
   state.feedList = document.querySelector('[data-feed-list]');
   state.statusEl = document.querySelector('[data-feed-status]');
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
   state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
+  state.loadButton = document.getElementById('feed-load-button');
 
   let session = null;
   try {
@@ -261,14 +271,17 @@ async function init() {
   }
 
   setAuthHint(session || null);
-
-  await fetchAndRenderFeed();
+  setStatus('Choose your filters, then select "Load strategies" to see the feed.');
 
   if (state.scopeSelect) {
-    state.scopeSelect.addEventListener('change', fetchAndRenderFeed);
+    state.scopeSelect.addEventListener('change', handleFilterChange);
   }
   if (state.sortSelect) {
-    state.sortSelect.addEventListener('change', fetchAndRenderFeed);
+    state.sortSelect.addEventListener('change', handleFilterChange);
+  }
+
+  if (state.loadButton) {
+    state.loadButton.addEventListener('click', fetchAndRenderFeed);
   }
 }
 
