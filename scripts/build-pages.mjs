@@ -1605,6 +1605,17 @@ function renderFeeling(item) {
   writePage(`feelings/${item.slug}/index.html`, html);
 }
 
+function renderNeedFeed(item) {
+  if (!item?.slug) {
+    return '';
+  }
+  return `
+    <section class="need-feed" aria-label="Shared strategies" data-need-feed data-need-slug="${escapeHtml(item.slug)}">
+      <p class="feed-status need-feed__status" data-need-feed-status></p>
+      <div class="strategy-list need-feed__list" data-need-feed-list></div>
+    </section>`;
+}
+
 function renderNeed(item, allStrategies) {
   const strategiesForNeed = Array.isArray(allStrategies)
     ? allStrategies.filter((strategy) =>
@@ -1619,58 +1630,62 @@ function renderNeed(item, allStrategies) {
 
   const strategiesNote = `          ${localStorageReminderHtml}`;
 
+  const needFeedHtml = renderNeedFeed(item);
+
   const strategiesHtml = strategiesForNeed.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
-          <div class="strategy-deck-header">
-            <button
-              type="button"
-              class="strategy-deck__shuffle"
-              data-strategy-shuffle
-            >
-              Shuffle cards
-            </button>
-          </div>
+          <div class="strategy-layout">
+            <div>
+              <div class="strategy-deck-header">
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle"
+                  data-strategy-shuffle
+                >
+                  Shuffle cards
+                </button>
+              </div>
 
-          <div class="strategy-deck" data-strategy-deck>
-            <div class="strategy-deck__stack" data-strategy-stack>
-              ${strategiesForNeed
-                .map((strategy) => {
-                  const tags = Array.isArray(strategy.needs)
-                    ? strategy.needs
-                        .map((need) => need.slug)
-                        .filter(Boolean)
-                        .join('|')
-                    : '';
-                  const contributor = strategy.contributor || {};
-                  const firstName = sanitizeContributorName(contributor.name);
-                  const location = sanitizeLocation(contributor.location);
-                  const contributorParts = [];
-                  if (firstName) {
-                    contributorParts.push(firstName);
-                  }
-                  if (location) {
-                    contributorParts.push(location);
-                  }
-                  const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
-                  const contributorHtml = contributorText
-                    ? `<p class="strategy-card__meta">${contributorText}</p>`
-                    : '';
-                  const dataAttrs = [
-                    `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
-                    `data-strategy-tags="${escapeHtml(tags)}"`,
-                  ];
-                  if (firstName) {
-                    dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
-                  }
-                  if (location) {
-                    dataAttrs.push(`data-location="${escapeHtml(location)}"`);
-                  }
-                  const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
-                  const description = strategy.summary || strategy.description || '';
+              <div class="strategy-deck" data-strategy-deck>
+                <div class="strategy-deck__stack" data-strategy-stack>
+                  ${strategiesForNeed
+                    .map((strategy) => {
+                      const tags = Array.isArray(strategy.needs)
+                        ? strategy.needs
+                            .map((need) => need.slug)
+                            .filter(Boolean)
+                            .join('|')
+                        : '';
+                      const contributor = strategy.contributor || {};
+                      const firstName = sanitizeContributorName(contributor.name);
+                      const location = sanitizeLocation(contributor.location);
+                      const contributorParts = [];
+                      if (firstName) {
+                        contributorParts.push(firstName);
+                      }
+                      if (location) {
+                        contributorParts.push(location);
+                      }
+                      const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
+                      const contributorHtml = contributorText
+                        ? `<p class="strategy-card__meta">${contributorText}</p>`
+                        : '';
+                      const dataAttrs = [
+                        `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
+                        `data-strategy-tags="${escapeHtml(tags)}"`,
+                      ];
+                      if (firstName) {
+                        dataAttrs.push(`data-first-name="${escapeHtml(firstName)}"`);
+                      }
+                      if (location) {
+                        dataAttrs.push(`data-location="${escapeHtml(location)}"`);
+                      }
+                      const dataAttrString = dataAttrs.length ? ` ${dataAttrs.join(' ')}` : '';
+                      const description = strategy.summary || strategy.description || '';
 
-                  return `
+                      return `
                     <article class="strategy-card"${dataAttrString}>
                       <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                       <div class="strategy-card__body">
@@ -1682,29 +1697,32 @@ ${strategiesNote}
                       </div>
                     </article>
                   `;
-                })
-                .join('')}
-            </div>
+                    })
+                    .join('')}
+                </div>
 
-            <div class="strategy-deck__controls">
-              <button
-                type="button"
-                class="strategy-deck__nav strategy-deck__nav--prev"
-                data-strategy-prev
-                aria-label="Previous strategy"
-              >
-                ←
-              </button>
-              <span class="strategy-deck__counter" data-strategy-count></span>
-              <button
-                type="button"
-                class="strategy-deck__nav strategy-deck__nav--next"
-                data-strategy-next
-                aria-label="Next strategy"
-              >
-                →
-              </button>
+                <div class="strategy-deck__controls">
+                  <button
+                    type="button"
+                    class="strategy-deck__nav strategy-deck__nav--prev"
+                    data-strategy-prev
+                    aria-label="Previous strategy"
+                  >
+                    ←
+                  </button>
+                  <span class="strategy-deck__counter" data-strategy-count></span>
+                  <button
+                    type="button"
+                    class="strategy-deck__nav strategy-deck__nav--next"
+                    data-strategy-next
+                    aria-label="Next strategy"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
             </div>
+            ${needFeedHtml}
           </div>
 
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
@@ -1712,7 +1730,10 @@ ${strategiesNote}
     : `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
 ${strategiesNote}
-          <p class="empty-state">Strategies for this need are coming soon.</p>
+          <div class="strategy-layout">
+            <p class="empty-state">Strategies for this need are coming soon.</p>
+            ${needFeedHtml}
+          </div>
         </section>`;
 
   const descriptionHtml = item.description
@@ -1722,12 +1743,24 @@ ${strategiesNote}
   const evidenceHtml = renderNeedEvidence(item);
 
   const quickAddHtml = `
-      <div class="strategy-quick-actions">
+      <div class="strategy-quick-actions need-feed__quick-actions">
         <a class="strategy-quick-actions__link" href="#suggestion-form">
           <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
           <span>Add personal strategy</span>
         </a>
-      </div>`;
+        <button type="button" class="strategy-quick-actions__link strategy-quick-actions__link--secondary" data-need-feed-button>
+          <span class="strategy-quick-actions__icon" aria-hidden="true">↺</span>
+          <span>Check for shared strategies</span>
+        </button>
+        <label class="need-feed__scope">
+          <span class="need-feed__label">Show</span>
+          <select data-need-feed-scope>
+            <option value="follows">From people you follow</option>
+            <option value="public">All public strategies</option>
+          </select>
+        </label>
+      </div>
+      <p class="feed-auth-hint need-feed__auth-hint" data-need-feed-auth-hint></p>`;
 
   const suggestionNotice =
     '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="../../inventory/">inventory screen</a> to export them if you would like a backup.</p>';
@@ -1768,7 +1801,10 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+    scripts: [
+      { src: 'inventory/bluesky-oauth.js', module: true },
+      { src: 'scripts/need-strategy-feed.js', module: true },
+    ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,

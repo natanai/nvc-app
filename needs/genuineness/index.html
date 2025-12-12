@@ -1182,28 +1182,42 @@ button.site-nav__magnet {
       </section>
     
       
-      <div class="strategy-quick-actions">
+      <div class="strategy-quick-actions need-feed__quick-actions">
         <a class="strategy-quick-actions__link" href="#suggestion-form">
           <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
           <span>Add personal strategy</span>
         </a>
+        <button type="button" class="strategy-quick-actions__link strategy-quick-actions__link--secondary" data-need-feed-button>
+          <span class="strategy-quick-actions__icon" aria-hidden="true">↺</span>
+          <span>Check for shared strategies</span>
+        </button>
+        <label class="need-feed__scope">
+          <span class="need-feed__label">Show</span>
+          <select data-need-feed-scope>
+            <option value="follows">From people you follow</option>
+            <option value="public">All public strategies</option>
+          </select>
+        </label>
       </div>
+      <p class="feed-auth-hint need-feed__auth-hint" data-need-feed-auth-hint></p>
       <section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
           <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-deck-header">
-            <button
-              type="button"
-              class="strategy-deck__shuffle"
-              data-strategy-shuffle
-            >
-              Shuffle cards
-            </button>
-          </div>
+          <div class="strategy-layout">
+            <div>
+              <div class="strategy-deck-header">
+                <button
+                  type="button"
+                  class="strategy-deck__shuffle"
+                  data-strategy-shuffle
+                >
+                  Shuffle cards
+                </button>
+              </div>
 
-          <div class="strategy-deck" data-strategy-deck>
-            <div class="strategy-deck__stack" data-strategy-stack>
-              
+              <div class="strategy-deck" data-strategy-deck>
+                <div class="strategy-deck__stack" data-strategy-stack>
+                  
                     <article class="strategy-card" data-strategy-slug="listen-to-music" data-strategy-tags="peace|self-expression|to-be-seen|belonging|understanding|serenity|calm|empowerment|genuineness|honesty" data-first-name="Nat" data-location="Missouri">
                       <h3 class="strategy-card__title">Listen to music</h3>
                       <div class="strategy-card__body">
@@ -1215,27 +1229,34 @@ button.site-nav__magnet {
                       </div>
                     </article>
                   
-            </div>
+                </div>
 
-            <div class="strategy-deck__controls">
-              <button
-                type="button"
-                class="strategy-deck__nav strategy-deck__nav--prev"
-                data-strategy-prev
-                aria-label="Previous strategy"
-              >
-                ←
-              </button>
-              <span class="strategy-deck__counter" data-strategy-count></span>
-              <button
-                type="button"
-                class="strategy-deck__nav strategy-deck__nav--next"
-                data-strategy-next
-                aria-label="Next strategy"
-              >
-                →
-              </button>
+                <div class="strategy-deck__controls">
+                  <button
+                    type="button"
+                    class="strategy-deck__nav strategy-deck__nav--prev"
+                    data-strategy-prev
+                    aria-label="Previous strategy"
+                  >
+                    ←
+                  </button>
+                  <span class="strategy-deck__counter" data-strategy-count></span>
+                  <button
+                    type="button"
+                    class="strategy-deck__nav strategy-deck__nav--next"
+                    data-strategy-next
+                    aria-label="Next strategy"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
             </div>
+            
+    <section class="need-feed" aria-label="Shared strategies" data-need-feed data-need-slug="genuineness">
+      <p class="feed-status need-feed__status" data-need-feed-status></p>
+      <div class="strategy-list need-feed__list" data-need-feed-list></div>
+    </section>
           </div>
 
           <p class="inventory-feedback" data-inventory-feedback hidden></p>
@@ -1302,5 +1323,7 @@ button.site-nav__magnet {
     <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../inventory/bluesky-oauth.js" type="module"></script>
+    <script src="../../scripts/need-strategy-feed.js" type="module"></script>
   </body>
 </html>
