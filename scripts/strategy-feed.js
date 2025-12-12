@@ -2,7 +2,7 @@ import {
   initBlueskyOAuth,
   getCurrentBlueskySession,
   ensureBackendSession,
-} from '../inventory/bluesky-oauth.js';
+} from './bluesky-oauth.js';
 
 const state = {
   strategies: [],

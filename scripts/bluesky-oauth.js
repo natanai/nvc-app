@@ -1,4 +1,4 @@
-// inventory/bluesky-oauth.js
+// scripts/bluesky-oauth.js
 
 // Bluesky OAuth in the browser, using the official client SDK.
 import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser@0.3.36";

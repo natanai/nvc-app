@@ -1914,7 +1914,139 @@ function renderInventoryPage() {
                 <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
                 <span>Review saved strategies</span>
               </a>
+              <a class="inventory-shared-button" href="../feed/">
+                <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
+                <span class="inventory-shared-button__text">
+                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
+                  <span class="inventory-shared-button__label">View shared strategies</span>
+                </span>
+              </a>
             </div>
+
+            <details class="inventory-bluesky-panel">
+              <summary class="inventory-bluesky-panel__summary">
+                <div class="inventory-bluesky-panel__titles">
+                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
+                  <p class="inventory-bluesky-panel__subtitle">
+                    Link your account to save/load data and fetch shared strategies, or keep everything local.
+                  </p>
+                </div>
+                <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
+              </summary>
+
+              <div class="inventory-bluesky-panel__content">
+                <p class="inventory-bluesky-panel__intro">
+                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
+                  local export and import controls if you prefer keeping everything on this device.
+                </p>
+
+                <!-- OAuth sign-in / sign-out -->
+                <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
+                  <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
+
+                  <p class="inventory-auth-note">
+                    Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
+                    Signing in by itself does <strong>not</strong> move or sync any of your data.
+                  </p>
+
+                  <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
+                    <div class="inventory-auth-panel__field">
+                      <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+                      <input id="bluesky-handle-input" type="text" autocomplete="username" />
+                    </div>
+                    <button
+                      id="bluesky-signin-button"
+                      type="button"
+                      class="inventory-button inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Sign in with Bluesky</span>
+                    </button>
+                  </div>
+
+                  <div id="bluesky-auth-logged-in" class="inventory-auth-panel__state" hidden>
+                    <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
+                    <button
+                      id="bluesky-signout-button"
+                      type="button"
+                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Sign out</span>
+                    </button>
+                  </div>
+
+                  <p class="inventory-auth-warning">
+                    We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
+                    You can ignore this sign-in and keep everything local if you prefer.
+                  </p>
+                </section>
+
+                <!-- Optional backend save/load -->
+                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
+                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
+                    Optional backend save/load
+                  </h3>
+                  <p>
+                    When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
+                    (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
+                    you decide when to send or fetch data.
+                  </p>
+                  <p>
+                    This makes it easier to continue your work on another device, but it also means that snapshot is stored
+                    on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
+                    feel right for you, keep using the local export/import buttons instead.
+                  </p>
+
+                  <div class="inventory-backend-sync__buttons">
+                    <button
+                      type="button"
+                      data-backend-save-button
+                      class="inventory-button inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Save current data to allneeds backend</span>
+                    </button>
+                    <button
+                      type="button"
+                      data-backend-load-button
+                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Load data from allneeds backend</span>
+                    </button>
+                  </div>
+
+                  <div
+                    class="inventory-backend-sync__status"
+                    data-backend-sync-status
+                    aria-live="polite"
+                  ></div>
+                </section>
+
+                <!-- Strategies from follows -->
+                <section
+                  class="inventory-social-strategies"
+                  aria-labelledby="inventory-social-strategies-heading"
+                >
+                  <h3
+                    id="inventory-social-strategies-heading"
+                    class="inventory-social-strategies__heading"
+                  >
+                    Strategies from Bluesky accounts you follow
+                  </h3>
+                  <p class="inventory-social-strategies__summary">
+                    When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
+                    have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
+                    are shown here.
+                  </p>
+                  <button
+                    type="button"
+                    data-backend-fetch-feed-button
+                    class="inventory-button inventory-button--compact"
+                  >
+                    <span class="inventory-button__text">Fetch strategies from follows</span>
+                  </button>
+                  <div class="inventory-social-strategies__list" data-backend-feed-container></div>
+                </section>
+              </div>
+            </details>
           </div>
         </div>
       </header>
@@ -2052,6 +2184,7 @@ function renderInventoryPage() {
       { label: 'Home', href: '../' },
       { label: 'Inventory' },
     ],
+    scripts: [{ src: 'scripts/inventory-bluesky.js', module: true }],
     main,
     activeNav: 'inventory',
     canonicalPath: 'inventory/',
