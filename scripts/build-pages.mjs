@@ -1188,6 +1188,21 @@ function writePage(relativePath, html) {
   writeFileSync(outputPath, html.trimStart());
 }
 
+function renderVisibilityField(idPrefix) {
+  const selectId = `${idPrefix}-visibility`;
+  return `
+        <div class="strategy-form__field strategy-form__field--visibility">
+          <label for="${selectId}">Visibility</label>
+          <div class="strategy-card strategy-card--input">
+            <select id="${selectId}" name="visibility">
+              <option value="private" selected>Private (only you)</option>
+              <option value="followers">Followers only</option>
+              <option value="public">Public</option>
+            </select>
+          </div>
+        </div>`;
+}
+
 function renderStrategyForm({
   formId,
   idPrefix,
@@ -1203,6 +1218,7 @@ function renderStrategyForm({
   includeMessage = false,
   notice = '',
   includeLocalStorageReminder = false,
+  includeVisibilitySelect = false,
   extraFields = '',
 }) {
   const needOptions = data.needs
@@ -1254,9 +1270,15 @@ function renderStrategyForm({
         </div>`
     : '';
 
-  const additionalFields = extraFields
+  const visibilityField = includeVisibilitySelect ? renderVisibilityField(idPrefix) : '';
+
+  const additionalFieldsContent = [visibilityField, extraFields]
+    .filter(Boolean)
+    .join('\n            ');
+
+  const additionalFields = additionalFieldsContent
     ? `
-            ${extraFields}`
+            ${additionalFieldsContent}`
     : '';
 
   const message = includeMessage
@@ -1743,6 +1765,7 @@ ${strategiesNote}
     includeContactFields: true,
     includeMessage: true,
     notice: suggestionNotice,
+    includeVisibilitySelect: true,
   });
 
   const main = `
@@ -1873,19 +1896,6 @@ function renderInventoryPage() {
   const inventoryFormNotice =
     '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>';
 
-  const visibilityField = `
-        <div class="strategy-form__field strategy-form__field--visibility">
-          <label for="inventory-visibility">Visibility</label>
-          <p id="inventory-visibility-hint" class="strategy-form__hint">Choose who can see this strategy in the shared feed.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="inventory-visibility" name="visibility" aria-describedby="inventory-visibility-hint">
-              <option value="private" selected>Private (only you)</option>
-              <option value="followers">Followers only</option>
-              <option value="public">Public</option>
-            </select>
-          </div>
-        </div>`;
-
   const personalStrategyForm = renderStrategyForm({
     formId: 'inventory-form',
     idPrefix: 'inventory',
@@ -1897,7 +1907,7 @@ function renderInventoryPage() {
     includeContactFields: true,
     notice: inventoryFormNotice,
     includeLocalStorageReminder: true,
-    extraFields: visibilityField,
+    includeVisibilitySelect: true,
   });
 
   const main = `
