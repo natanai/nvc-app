@@ -1914,8 +1914,7 @@ function setupInventoryPage() {
       const needSlugs = normalizeNeedSlugList(formData.getAll('need'));
       const firstName = sanitizeContributorName(formData.get('name'));
       const location = sanitizeLocation(formData.get('location'));
-      const visibilityInput = form.querySelector('input[name="strategy-visibility"]:checked');
-      const visibility = visibilityInput ? visibilityInput.value : 'private';
+      const visibility = (formData.get('visibility') || 'private').toString();
 
       if (!title || !description || !needSlugs.length) {
         showInventoryMessage('Please fill in the title, description, and at least one need before adding.', 'error');

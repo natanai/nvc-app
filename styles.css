@@ -3632,44 +3632,7 @@ main[data-need-slug] .page-title::before {
   outline-offset: 3px;
 }
 
-.inventory-add-strategy__visibility {
-  margin-top: 0.85rem;
-}
 
-.inventory-add-strategy__visibility .inventory-help-text {
-  margin: 0.25rem 0 0.4rem;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
-.inventory-visibility-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.pill-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-pill);
-  border: 2px solid color-mix(in srgb, var(--outline) 35%, transparent);
-  background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
-  font-weight: 600;
-  cursor: pointer;
-  min-width: 0;
-}
-
-.pill-toggle input {
-  margin: 0;
-}
-
-.pill-toggle input:focus-visible + span,
-.pill-toggle:focus-visible {
-  outline: 3px dashed var(--outline);
-  outline-offset: 3px;
-}
 
 .inventory-button {
   font-family: var(--font-display);

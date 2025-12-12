@@ -1203,6 +1203,7 @@ function renderStrategyForm({
   includeMessage = false,
   notice = '',
   includeLocalStorageReminder = false,
+  extraFields = '',
 }) {
   const needOptions = data.needs
     .map(
@@ -1253,6 +1254,11 @@ function renderStrategyForm({
         </div>`
     : '';
 
+  const additionalFields = extraFields
+    ? `
+            ${extraFields}`
+    : '';
+
   const message = includeMessage
     ? `
       <p class="strategy-form__message" data-form-message hidden aria-live="polite"></p>`
@@ -1285,7 +1291,7 @@ function renderStrategyForm({
               </div>
             </div>
             ${needField}
-            ${contactFields}
+            ${contactFields}${additionalFields}
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
             </div>
@@ -1867,6 +1873,19 @@ function renderInventoryPage() {
   const inventoryFormNotice =
     '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>';
 
+  const visibilityField = `
+        <div class="strategy-form__field strategy-form__field--visibility">
+          <label for="inventory-visibility">Visibility</label>
+          <p id="inventory-visibility-hint" class="strategy-form__hint">Choose who can see this strategy in the shared feed.</p>
+          <div class="strategy-card strategy-card--input">
+            <select id="inventory-visibility" name="visibility" aria-describedby="inventory-visibility-hint">
+              <option value="private" selected>Private (only you)</option>
+              <option value="followers">Followers only</option>
+              <option value="public">Public</option>
+            </select>
+          </div>
+        </div>`;
+
   const personalStrategyForm = renderStrategyForm({
     formId: 'inventory-form',
     idPrefix: 'inventory',
@@ -1878,6 +1897,7 @@ function renderInventoryPage() {
     includeContactFields: true,
     notice: inventoryFormNotice,
     includeLocalStorageReminder: true,
+    extraFields: visibilityField,
   });
 
   const main = `
