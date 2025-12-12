@@ -1417,9 +1417,6 @@ button.site-nav__magnet {
             <p class="page-description">
               Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
             </p>
-
-            
-
             <div class="strategy-quick-actions inventory-header__quick-actions">
               <a class="strategy-quick-actions__link" href="#inventory-form">
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
@@ -1444,131 +1441,130 @@ button.site-nav__magnet {
               </a>
             </div>
 
-           <details class="inventory-bluesky-panel">
-  <summary class="inventory-bluesky-panel__summary">
-    <div class="inventory-bluesky-panel__titles">
-      <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
-      <p class="inventory-bluesky-panel__subtitle">
-        Link your account to save/load data and fetch shared strategies, or keep everything local.
-      </p>
-    </div>
-    <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
-  </summary>
+            <details class="inventory-bluesky-panel">
+              <summary class="inventory-bluesky-panel__summary">
+                <div class="inventory-bluesky-panel__titles">
+                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
+                  <p class="inventory-bluesky-panel__subtitle">
+                    Link your account to save/load data and fetch shared strategies, or keep everything local.
+                  </p>
+                </div>
+                <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
+              </summary>
 
-  <div class="inventory-bluesky-panel__content">
-    <p class="inventory-bluesky-panel__intro">
-      Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
-      local export and import controls if you prefer keeping everything on this device.
-    </p>
+              <div class="inventory-bluesky-panel__content">
+                <p class="inventory-bluesky-panel__intro">
+                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
+                  local export and import controls if you prefer keeping everything on this device.
+                </p>
 
-    <!-- OAuth sign-in / sign-out -->
-    <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-      <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
+                <!-- OAuth sign-in / sign-out -->
+                <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
+                  <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
 
-      <p class="inventory-auth-note">
-        Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
-        Signing in by itself does <strong>not</strong> move or sync any of your data.
-      </p>
+                  <p class="inventory-auth-note">
+                    Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
+                    Signing in by itself does <strong>not</strong> move or sync any of your data.
+                  </p>
 
-      <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
-        <div class="inventory-auth-panel__field">
-          <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
-          <input id="bluesky-handle-input" type="text" autocomplete="username" />
-        </div>
-        <button
-          id="bluesky-signin-button"
-          type="button"
-          class="inventory-button inventory-button--compact"
-        >
-          <span class="inventory-button__text">Sign in with Bluesky</span>
-        </button>
-      </div>
+                  <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
+                    <div class="inventory-auth-panel__field">
+                      <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+                      <input id="bluesky-handle-input" type="text" autocomplete="username" />
+                    </div>
+                    <button
+                      id="bluesky-signin-button"
+                      type="button"
+                      class="inventory-button inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Sign in with Bluesky</span>
+                    </button>
+                  </div>
 
-      <div id="bluesky-auth-logged-in" class="inventory-auth-panel__state" hidden>
-        <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
-        <button
-          id="bluesky-signout-button"
-          type="button"
-          class="inventory-button inventory-button--ghost inventory-button--compact"
-        >
-          <span class="inventory-button__text">Sign out</span>
-        </button>
-      </div>
+                  <div id="bluesky-auth-logged-in" class="inventory-auth-panel__state" hidden>
+                    <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
+                    <button
+                      id="bluesky-signout-button"
+                      type="button"
+                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Sign out</span>
+                    </button>
+                  </div>
 
-      <p class="inventory-auth-warning">
-        We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
-        You can ignore this sign-in and keep everything local if you prefer.
-      </p>
-    </section>
+                  <p class="inventory-auth-warning">
+                    We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
+                    You can ignore this sign-in and keep everything local if you prefer.
+                  </p>
+                </section>
 
-    <!-- Optional backend save/load -->
-    <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-      <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
-        Optional backend save/load
-      </h3>
-      <p>
-        When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
-        (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
-        you decide when to send or fetch data.
-      </p>
-      <p>
-        This makes it easier to continue your work on another device, but it also means that snapshot is stored
-        on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
-        feel right for you, keep using the local export/import buttons instead.
-      </p>
+                <!-- Optional backend save/load -->
+                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
+                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
+                    Optional backend save/load
+                  </h3>
+                  <p>
+                    When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
+                    (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
+                    you decide when to send or fetch data.
+                  </p>
+                  <p>
+                    This makes it easier to continue your work on another device, but it also means that snapshot is stored
+                    on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
+                    feel right for you, keep using the local export/import buttons instead.
+                  </p>
 
-      <div class="inventory-backend-sync__buttons">
-        <button
-          type="button"
-          data-backend-save-button
-          class="inventory-button inventory-button--compact"
-        >
-          <span class="inventory-button__text">Save current data to allneeds backend</span>
-        </button>
-        <button
-          type="button"
-          data-backend-load-button
-          class="inventory-button inventory-button--ghost inventory-button--compact"
-        >
-          <span class="inventory-button__text">Load data from allneeds backend</span>
-        </button>
-      </div>
+                  <div class="inventory-backend-sync__buttons">
+                    <button
+                      type="button"
+                      data-backend-save-button
+                      class="inventory-button inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Save current data to allneeds backend</span>
+                    </button>
+                    <button
+                      type="button"
+                      data-backend-load-button
+                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Load data from allneeds backend</span>
+                    </button>
+                  </div>
 
-      <div
-        class="inventory-backend-sync__status"
-        data-backend-sync-status
-        aria-live="polite"
-      ></div>
-    </section>
+                  <div
+                    class="inventory-backend-sync__status"
+                    data-backend-sync-status
+                    aria-live="polite"
+                  ></div>
+                </section>
 
-    <!-- Strategies from follows -->
-    <section
-      class="inventory-social-strategies"
-      aria-labelledby="inventory-social-strategies-heading"
-    >
-      <h3
-        id="inventory-social-strategies-heading"
-        class="inventory-social-strategies__heading"
-      >
-        Strategies from Bluesky accounts you follow
-      </h3>
-      <p class="inventory-social-strategies__summary">
-        When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
-        have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
-        are shown here.
-      </p>
-      <button
-        type="button"
-        data-backend-fetch-feed-button
-        class="inventory-button inventory-button--compact"
-      >
-        <span class="inventory-button__text">Fetch strategies from follows</span>
-      </button>
-      <div class="inventory-social-strategies__list" data-backend-feed-container></div>
-    </section>
-  </div>
-</details>
-
+                <!-- Strategies from follows -->
+                <section
+                  class="inventory-social-strategies"
+                  aria-labelledby="inventory-social-strategies-heading"
+                >
+                  <h3
+                    id="inventory-social-strategies-heading"
+                    class="inventory-social-strategies__heading"
+                  >
+                    Strategies from Bluesky accounts you follow
+                  </h3>
+                  <p class="inventory-social-strategies__summary">
+                    When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
+                    have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
+                    are shown here.
+                  </p>
+                  <button
+                    type="button"
+                    data-backend-fetch-feed-button
+                    class="inventory-button inventory-button--compact"
+                  >
+                    <span class="inventory-button__text">Fetch strategies from follows</span>
+                  </button>
+                  <div class="inventory-social-strategies__list" data-backend-feed-container></div>
+                </section>
+              </div>
+            </details>
           </div>
         </div>
       </header>
@@ -1736,33 +1732,15 @@ button.site-nav__magnet {
             </div>
           </div>
         </div>
-        <div class="inventory-add-strategy__visibility">
-          <h3 class="inventory-section-heading">Visibility</h3>
-          <p class="inventory-help-text">
-            Choose who can see this strategy in the shared feed.
-          </p>
-          <div class="inventory-visibility-options">
-            <label class="pill-toggle">
-              <input type="radio" name="strategy-visibility" value="private" checked />
-              <span>Private (only you)</span>
-            </label>
-            <label class="pill-toggle">
-              <input type="radio" name="strategy-visibility" value="followers" />
-              <span>Followers only</span>
-            </label>
-            <label class="pill-toggle">
-              <input type="radio" name="strategy-visibility" value="public" />
-              <span>Public</span>
-            </label>
-          </div>
-        </div>
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
             </div>
+            
+            <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
           </form>
         </div>
-
-      <p class="strategy-form__notice">Reminder: Your inventory stays in this browser unless you choose to sync. Clearing local storage deletes it, so export a file or (when signed into Bluesky) save a snapshot as a backup.</p>
+        
+      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
         
       </div>
         </section>
@@ -1771,129 +1749,8 @@ button.site-nav__magnet {
       </main>
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
-    <script src="../scripts/inventory-store.js" defer></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/magnets.js" type="module"></script>
-    <script type="module">
-      import {
-        initBlueskyOAuth,
-        getCurrentBlueskySession,
-        signInWithBluesky,
-        signOutFromBluesky,
-        ensureBackendSession,
-      } from './bluesky-oauth.js';
-
-      // OAuth sign-in is mirrored to the backend via /auth/session so private data endpoints use
-      // your signed-in DID rather than trusting client-provided identifiers.
-      function setGlobalBlueskySession(session) {
-        const normalizedDid = session?.did || session?.sub || null;
-        const normalizedHandle =
-          session?.preferred_username || session?.handle || session?.username || null;
-
-        if (normalizedDid) {
-          window.allneedsSession = {
-            did: normalizedDid,
-            handle: normalizedHandle,
-          };
-        } else {
-          window.allneedsSession = null;
-        }
-
-        const evt = new CustomEvent('allneeds:bsky-login-changed', {
-          detail: window.allneedsSession,
-        });
-        window.dispatchEvent(evt);
-      }
-
-      function describeSession(session) {
-        const did = session?.did || session?.sub || '';
-        const handle = session?.preferred_username || session?.handle || session?.username || '';
-
-        if (handle && did) {
-          return `Signed in as @${handle} (${did})`;
-        }
-        if (handle) {
-          return `Signed in as @${handle}`;
-        }
-        if (did) {
-          return `Signed in (${did})`;
-        }
-        return 'Signed in with Bluesky';
-      }
-
-      function updateBlueskyAuthUi(session) {
-        const loggedOut = document.querySelector('#bluesky-auth-logged-out');
-        const loggedIn = document.querySelector('#bluesky-auth-logged-in');
-        const statusText = document.querySelector('#bluesky-auth-status-text');
-
-        if (session) {
-          if (loggedOut) loggedOut.hidden = true;
-          if (loggedIn) loggedIn.hidden = false;
-          if (statusText) {
-            statusText.textContent = describeSession(session);
-          }
-        } else {
-          if (loggedOut) loggedOut.hidden = false;
-          if (loggedIn) loggedIn.hidden = true;
-          if (statusText) {
-            statusText.textContent = '';
-          }
-        }
-      }
-
-      async function onBlueskySignInClick() {
-        const input = document.querySelector('#bluesky-handle-input');
-        const handle = input?.value?.trim();
-        if (!handle) return;
-
-        try {
-          await signInWithBluesky(handle);
-        } catch (err) {
-          console.error('Error during Bluesky OAuth sign-in', err);
-        }
-      }
-
-      async function onBlueskySignOutClick() {
-        try {
-          await signOutFromBluesky();
-        } catch (err) {
-          console.error('Error during Bluesky OAuth sign-out', err);
-        }
-        setGlobalBlueskySession(null);
-        updateBlueskyAuthUi(null);
-      }
-
-      document.addEventListener('DOMContentLoaded', async () => {
-        document
-          .querySelector('#bluesky-signin-button')
-          ?.addEventListener('click', onBlueskySignInClick);
-
-        document
-          .querySelector('#bluesky-signout-button')
-          ?.addEventListener('click', onBlueskySignOutClick);
-
-        let session = null;
-        try {
-          session = await initBlueskyOAuth();
-        } catch (err) {
-          console.error('Error initializing Bluesky OAuth', err);
-        }
-
-        if (!session) {
-          session = getCurrentBlueskySession();
-        }
-
-        if (session) {
-          try {
-            await ensureBackendSession(session);
-          } catch (err) {
-            console.error('Could not start backend session', err);
-          }
-        }
-
-        setGlobalBlueskySession(session || null);
-        updateBlueskyAuthUi(session);
-      });
-    </script>
+    <script src="../scripts/inventory-bluesky.js" type="module"></script>
   </body>
 </html>
