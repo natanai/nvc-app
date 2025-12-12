@@ -1609,8 +1609,19 @@ button.site-nav__magnet {
               <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
               <span class="inventory-button__text">Import localStorage</span>
             </button>
+            <button
+              type="button"
+              class="inventory-button inventory-button--ghost inventory-button--compact"
+              data-backend-fetch-feed-button
+              aria-label="Fetch shared strategies from people you follow"
+            >
+              <span class="inventory-button__glyph" aria-hidden="true">⇣</span>
+              <span class="inventory-button__text">Fetch shared strategies</span>
+            </button>
             <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
           </div>
+          <p class="inventory-message" data-backend-sync-status aria-live="polite"></p>
+          <div class="inventory-social-strategies" data-backend-feed-container aria-live="polite"></div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
         </section>
 
