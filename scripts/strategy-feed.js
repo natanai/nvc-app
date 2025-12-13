@@ -5,6 +5,9 @@ import {
   BACKEND_BASE_URL,
 } from './bluesky-oauth.js';
 
+// Updating this string forces cache-busting when referenced from feed/index.html.
+const FEED_ASSET_VERSION = '2024-07-05';
+
 const state = {
   strategies: [],
   feedList: null,
@@ -177,6 +180,7 @@ async function notifyBackendAdd(strategy) {
   const res = await fetch(`${BACKEND_BASE_URL}/strategies/${strategy.id}/add-to-inventory`, {
     method: 'POST',
     credentials: 'include',
+    cache: 'no-store',
   });
   if (!res.ok) {
     const data = await res.json().catch(() => null);
@@ -220,6 +224,7 @@ async function fetchAndRenderFeed() {
   try {
     const res = await fetch(`${BACKEND_BASE_URL}/strategies/feed?${params.toString()}`, {
       credentials: 'include',
+      cache: 'no-cache',
     });
     const data = await res.json();
     if (!res.ok || !data || data.status !== 'ok') {
@@ -245,6 +250,10 @@ async function init() {
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
   state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
+
+  if (document?.documentElement) {
+    document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
+  }
 
   let session = null;
   try {
