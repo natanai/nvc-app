@@ -1493,6 +1493,18 @@ button.site-nav__magnet {
             </div>
           </div>
         </div>
+            
+        <div class="strategy-form__field">
+          <label for="suggestion-visibility">Visibility</label>
+          <p class="strategy-form__hint">Choose who can see this strategy when you export or share it.</p>
+          <div class="strategy-card strategy-card--input">
+            <select id="suggestion-visibility" name="strategy-visibility">
+              <option value="private">Private (only on this browser)</option>
+              <option value="followers">Followers (Bluesky followers when synced)</option>
+              <option value="public">Public</option>
+            </select>
+          </div>
+        </div>
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">+ Save to inventory</button>
             </div>
