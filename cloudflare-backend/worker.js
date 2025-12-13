@@ -24,7 +24,7 @@ function errorResponse(message, status = 400) {
 
 function normalizeVisibility(input) {
   const value = typeof input === 'string' ? input.trim().toLowerCase() : '';
-  if (value === 'public' || value === 'followers' || value === 'private') {
+  if (value === 'followers' || value === 'private') {
     return value;
   }
   return 'private';
@@ -260,46 +260,42 @@ async function handleGetStrategyFeed(request, env) {
   const viewerDid = session?.did || null;
 
   const url = new URL(request.url);
-  const scopeParam = (url.searchParams.get('scope') || '').toLowerCase();
   const sortParam = (url.searchParams.get('sort') || '').toLowerCase();
   const limitParam = parseInt(url.searchParams.get('limit') || '50', 10);
 
-  const scope = scopeParam === 'follows' ? 'follows' : 'public';
+  const scope = 'follows';
   const sort = sortParam === 'popular' ? 'popular' : 'recent';
   const limit = Number.isFinite(limitParam) ? Math.min(Math.max(limitParam, 1), 100) : 50;
 
   try {
-    let followDids = [];
-    if (scope === 'follows' && viewerDid) {
-      try {
-        followDids = await fetchFollowDidList(env, viewerDid);
-      } catch (err) {
-        return errorResponse(String(err), 502);
-      }
+    if (!viewerDid) {
+      return errorResponse('not signed in', 401);
     }
 
-    const whereClauses = [];
+    let followDids = [];
+    try {
+      followDids = await fetchFollowDidList(env, viewerDid);
+    } catch (err) {
+      return errorResponse(String(err), 502);
+    }
+
+    const includeClauses = [];
     const params = [];
 
-    if (!viewerDid || scope === 'public') {
-      whereClauses.push("s.visibility = 'public'");
-    } else {
-      const includeClauses = [];
-      const validFollows = Array.isArray(followDids)
-        ? followDids.filter((did) => typeof did === 'string' && did.startsWith('did:'))
-        : [];
-      if (validFollows.length) {
-        const placeholders = validFollows.map(() => '?').join(', ');
-        includeClauses.push(`(s.author_did IN (${placeholders}) AND s.visibility IN ('followers', 'public'))`);
-        params.push(...validFollows);
-      }
-      includeClauses.push('s.author_did = ?');
-      params.push(viewerDid);
-      includeClauses.push("s.visibility = 'public'");
-      whereClauses.push(`(${includeClauses.join(' OR ')})`);
+    const validFollows = Array.isArray(followDids)
+      ? followDids.filter((did) => typeof did === 'string' && did.startsWith('did:'))
+      : [];
+
+    if (validFollows.length) {
+      const placeholders = validFollows.map(() => '?').join(', ');
+      includeClauses.push(`(s.author_did IN (${placeholders}) AND s.visibility = 'followers')`);
+      params.push(...validFollows);
     }
 
-    const whereSql = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
+    includeClauses.push('s.author_did = ?');
+    params.push(viewerDid);
+
+    const whereSql = includeClauses.length ? `WHERE (${includeClauses.join(' OR ')})` : '';
     const orderSql =
       sort === 'popular'
         ? 'ORDER BY s.add_count DESC, s.created_at DESC'
