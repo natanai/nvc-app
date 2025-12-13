@@ -10,7 +10,6 @@ const state = {
   feedList: null,
   statusEl: null,
   authHintEl: null,
-  scopeSelect: null,
   sortSelect: null,
 };
 
@@ -19,13 +18,12 @@ function normalizeVisibility(value) {
     return window.NVCInventoryStore.normalizeVisibility(value);
   }
   const normalized = typeof value === 'string' ? value.trim().toLowerCase() : '';
-  return ['public', 'followers', 'private'].includes(normalized) ? normalized : 'private';
+  return ['followers', 'private'].includes(normalized) ? normalized : 'private';
 }
 
 function formatVisibility(value) {
   const normalized = normalizeVisibility(value);
-  if (normalized === 'public') return 'Public';
-  if (normalized === 'followers') return 'Followers only';
+  if (normalized === 'followers') return 'Shared with followers';
   return 'Private';
 }
 
@@ -55,7 +53,7 @@ function setAuthHint(session) {
       'Signed in via Bluesky. You can see strategies shared by accounts you follow and add them to your inventory.';
   } else {
     state.authHintEl.textContent =
-      'You’re currently signed out. You can still browse public strategies, but to see strategies from people you follow and to track “add” counts, sign in with Bluesky on the Inventory page.';
+      'You’re currently signed out. Sign in with Bluesky on the Inventory page to see strategies shared by accounts you follow.';
   }
 }
 
@@ -212,9 +210,8 @@ async function handleAddToInventory(strategy, addCountBadge) {
 }
 
 async function fetchAndRenderFeed() {
-  const scope = state.scopeSelect?.value || 'public';
   const sort = state.sortSelect?.value || 'recent';
-  const params = new URLSearchParams({ scope, sort });
+  const params = new URLSearchParams({ scope: 'follows', sort });
   setStatus('Loading strategies...');
 
   try {
@@ -222,6 +219,9 @@ async function fetchAndRenderFeed() {
       credentials: 'include',
     });
     const data = await res.json();
+    if (res.status === 401) {
+      throw new Error('sign_in_required');
+    }
     if (!res.ok || !data || data.status !== 'ok') {
       throw new Error(data?.message || 'Unable to load feed');
     }
@@ -232,7 +232,11 @@ async function fetchAndRenderFeed() {
     }
   } catch (error) {
     console.error('Error loading strategy feed', error);
-    setStatus('Unable to load the strategy feed right now. Please try again later.');
+    if (error?.message === 'sign_in_required') {
+      setStatus('Sign in with Bluesky on the Inventory page to load shared strategies from people you follow.');
+    } else {
+      setStatus('Unable to load the strategy feed right now. Please try again later.');
+    }
     if (state.feedList) {
       state.feedList.textContent = '';
     }
@@ -243,7 +247,6 @@ async function init() {
   state.feedList = document.querySelector('[data-feed-list]');
   state.statusEl = document.querySelector('[data-feed-status]');
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
-  state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
 
   let session = null;
@@ -268,9 +271,6 @@ async function init() {
 
   await fetchAndRenderFeed();
 
-  if (state.scopeSelect) {
-    state.scopeSelect.addEventListener('change', fetchAndRenderFeed);
-  }
   if (state.sortSelect) {
     state.sortSelect.addEventListener('change', fetchAndRenderFeed);
   }

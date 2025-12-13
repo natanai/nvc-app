@@ -9,7 +9,7 @@ const PERSONAL_STRATEGIES_EMAIL_BODY =
   'Hi Nat,\n\nI just exported my personal strategies from allneeds.app and attached the file for you.\n\nWith care,';
 const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
 const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
-const VISIBILITY_VALUES = ['private', 'followers', 'public'];
+const VISIBILITY_VALUES = ['private', 'followers'];
 
 function normalizeVisibilityValue(value) {
   try {
