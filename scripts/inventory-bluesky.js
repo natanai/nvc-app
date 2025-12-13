@@ -4,7 +4,7 @@ import {
   signInWithBluesky,
   signOutFromBluesky,
   ensureBackendSession,
-} from './bluesky-oauth.js';
+} from './bluesky-oauth.js?v=2024-07-11';
 
 function setGlobalBlueskySession(session) {
   const normalizedDid = session?.did || session?.sub || null;
