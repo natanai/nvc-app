@@ -3,10 +3,10 @@ import {
   getCurrentBlueskySession,
   ensureBackendSession,
   BACKEND_BASE_URL,
-} from './bluesky-oauth.js';
+} from './bluesky-oauth.js?v=2024-07-11';
 
 // Updating this string forces cache-busting when referenced from feed/index.html.
-const FEED_ASSET_VERSION = '2024-07-05';
+const FEED_ASSET_VERSION = '2024-07-11';
 
 const state = {
   strategies: [],
