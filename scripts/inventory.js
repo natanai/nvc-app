@@ -6191,7 +6191,7 @@ async function saveSnapshotToBackend() {
   }
 
   try {
-    const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings`, {
+    const res = await fetch(`${BACKEND_BASE_URL}/user-settings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -6217,7 +6217,7 @@ async function loadSnapshotFromBackend() {
   }
 
   try {
-    const res = await fetch(`${BACKEND_BASE_URL}/api/user-settings`, {
+    const res = await fetch(`${BACKEND_BASE_URL}/user-settings`, {
       credentials: 'include',
     });
     const data = await res.json();
