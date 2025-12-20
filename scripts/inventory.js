@@ -6149,6 +6149,29 @@ function buildExportSnapshot() {
   return buildLocalDataBackup();
 }
 
+function buildBackendStrategySyncPayload(snapshot) {
+  const inventory = Array.isArray(snapshot?.inventory) ? snapshot.inventory : [];
+  const sharedEntries = inventory
+    .map((entry) => {
+      const visibility = normalizeVisibilityValue(entry?.visibility);
+      if (visibility !== 'public' && visibility !== 'followers') {
+        return null;
+      }
+      const title = entry?.title ? String(entry.title).trim() : '';
+      if (!title) {
+        return null;
+      }
+      return {
+        title,
+        body: entry?.description ? String(entry.description) : '',
+        needIds: resolveEntryNeedSlugs(entry),
+        visibility,
+      };
+    })
+    .filter(Boolean);
+  return sharedEntries;
+}
+
 async function applyImportSnapshot(snapshot) {
   if (!snapshot || typeof snapshot !== 'object') {
     broadcastDataMessage('Import failed. No snapshot found to apply.', 'error');
@@ -6246,7 +6269,25 @@ async function saveSnapshotToBackend() {
     if (!res.ok || !data || data.status !== 'ok') {
       throw new Error(data && data.message ? data.message : 'Unknown error');
     }
-    setBackendStatusMessage('Snapshot saved to backend.');
+    let syncMessage = '';
+    try {
+      const strategies = buildBackendStrategySyncPayload(snapshot);
+      const syncRes = await fetch(`${BACKEND_BASE_URL}/strategies/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ strategies }),
+      });
+      const syncData = await syncRes.json().catch(() => null);
+      if (!syncRes.ok || !syncData || syncData.status !== 'ok') {
+        throw new Error(syncData && syncData.message ? syncData.message : 'Unknown error');
+      }
+      syncMessage = ' Shared strategies synced.';
+    } catch (error) {
+      console.error('Failed to sync shared strategies', error);
+      syncMessage = ' Shared strategies could not be synced.';
+    }
+    setBackendStatusMessage(`Snapshot saved to backend.${syncMessage}`);
   } catch (error) {
     console.error('Failed to save snapshot to backend', error);
     setBackendStatusMessage('Error saving snapshot to backend.');

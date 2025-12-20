@@ -570,6 +570,138 @@ function safeJsonParseArray(str) {
   }
 }
 
+function normalizeNeedIds(needIds) {
+  if (!Array.isArray(needIds)) {
+    return [];
+  }
+  return needIds
+    .map((id) => (id == null ? '' : String(id).trim()))
+    .filter(Boolean)
+    .sort();
+}
+
+function buildStrategySignature({ title, body, needIds, visibility }) {
+  const normalizedTitle = typeof title === 'string' ? title.trim() : '';
+  const normalizedBody = body == null ? '' : String(body);
+  const normalizedVisibility = normalizeVisibility(visibility);
+  const normalizedNeedIds = normalizeNeedIds(needIds);
+  return JSON.stringify([normalizedTitle, normalizedBody, normalizedNeedIds, normalizedVisibility]);
+}
+
+async function handleSyncStrategies(request, env) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return errorResponse('Invalid JSON body');
+  }
+
+  const incoming = Array.isArray(body?.strategies) ? body.strategies : null;
+  if (!incoming) {
+    return errorResponse('strategies array is required');
+  }
+
+  const desiredMap = new Map();
+  incoming.forEach((entry) => {
+    const visibility = normalizeVisibility(entry?.visibility);
+    if (visibility !== 'public' && visibility !== 'followers') {
+      return;
+    }
+    const title = entry?.title ? String(entry.title).trim() : '';
+    if (!title) {
+      return;
+    }
+    const payload = {
+      title,
+      body: entry?.body ? String(entry.body) : '',
+      needIds: normalizeNeedIds(entry?.needIds),
+      visibility,
+    };
+    const signature = buildStrategySignature(payload);
+    if (!desiredMap.has(signature)) {
+      desiredMap.set(signature, []);
+    }
+    desiredMap.get(signature).push(payload);
+  });
+
+  const existingResults = await env.DB.prepare(
+    `SELECT id, title, body, need_ids, visibility, created_at
+       FROM strategies
+      WHERE author_did = ?
+        AND visibility IN ('public', 'followers')
+      ORDER BY created_at DESC, id DESC;`,
+  )
+    .bind(session.did)
+    .all();
+
+  const existingMap = new Map();
+  (existingResults.results || []).forEach((row) => {
+    const signature = buildStrategySignature({
+      title: row.title,
+      body: row.body ?? '',
+      needIds: safeJsonParseArray(row.need_ids),
+      visibility: row.visibility,
+    });
+    if (!existingMap.has(signature)) {
+      existingMap.set(signature, []);
+    }
+    existingMap.get(signature).push(row.id);
+  });
+
+  const idsToDelete = [];
+  existingMap.forEach((ids, signature) => {
+    const desiredCount = desiredMap.has(signature) ? desiredMap.get(signature).length : 0;
+    if (ids.length > desiredCount) {
+      idsToDelete.push(...ids.slice(desiredCount));
+    }
+  });
+
+  if (idsToDelete.length) {
+    const placeholders = idsToDelete.map(() => '?').join(', ');
+    await env.DB.prepare(`DELETE FROM strategies WHERE id IN (${placeholders});`)
+      .bind(...idsToDelete)
+      .run();
+  }
+
+  let insertedCount = 0;
+  for (const [signature, payloads] of desiredMap.entries()) {
+    const existingCount = existingMap.has(signature) ? existingMap.get(signature).length : 0;
+    const missingCount = payloads.length - existingCount;
+    if (missingCount <= 0) {
+      continue;
+    }
+    for (let i = 0; i < missingCount; i += 1) {
+      const payload = payloads[i];
+      const needIdsSerialized =
+        payload.needIds && payload.needIds.length ? JSON.stringify(payload.needIds) : null;
+      await env.DB.prepare(
+        'INSERT INTO strategies (author_did, title, body, need_ids, visibility) VALUES (?, ?, ?, ?, ?);',
+      )
+        .bind(
+          session.did,
+          payload.title,
+          payload.body || null,
+          needIdsSerialized,
+          payload.visibility,
+        )
+        .run();
+      insertedCount += 1;
+    }
+  }
+
+  return jsonResponse({
+    status: 'ok',
+    did: session.did,
+    deleted: idsToDelete.length,
+    inserted: insertedCount,
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -662,6 +794,10 @@ export default {
 
     if (method === 'GET' && pathname === '/api/strategies') {
       return handleGetStrategies(request, env);
+    }
+
+    if (method === 'POST' && pathname === '/api/strategies/sync') {
+      return handleSyncStrategies(request, env);
     }
 
     const addToInventoryMatch = pathname.match(/^\/api\/strategies\/(\d+)\/add-to-inventory$/);
