@@ -3707,6 +3707,18 @@ main[data-need-slug] .page-title::before {
   color: var(--btn-fg);
 }
 
+.inventory-button--flat {
+  box-shadow: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.inventory-button--flat:hover,
+.inventory-button--flat:focus-visible {
+  transform: none;
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--outline) 75%, transparent);
+}
+
 .inventory-button:hover,
 .inventory-button:focus-visible {
   transform: translateY(-3px);
@@ -3909,6 +3921,10 @@ main[data-need-slug] .page-title::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 2px solid color-mix(in srgb, var(--outline) 40%, transparent);
+  background: color-mix(in srgb, #ffffff 85%, var(--mint) 15%);
 }
 
 .inventory-actions__summary::-webkit-details-marker {
@@ -3926,14 +3942,10 @@ main[data-need-slug] .page-title::before {
 }
 
 .inventory-actions__buttons {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.5rem;
   align-items: stretch;
-}
-
-.inventory-actions__buttons .inventory-button {
-  flex: 1 1 12rem;
 }
 
 .inventory-button--compact {

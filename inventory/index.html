@@ -791,7 +791,9 @@ button.site-nav__magnet {
         border: 2px solid var(--outline);
         background: rgba(255, 255, 255, 0.9);
         font-size: 0.9rem;
+        line-height: 1;
         transform: rotate(90deg);
+        transform-origin: 50% 50%;
         transition: transform 0.18s ease, background 0.18s ease;
       }
 
@@ -1468,9 +1470,9 @@ button.site-nav__magnet {
               </a>
             </div>
             <div class="strategy-quick-actions inventory-header__quick-actions">
-              <a class="strategy-quick-actions__link" href="#inventory-form" aria-label="Add a strategy">
+              <a class="strategy-quick-actions__link" href="#inventory-form">
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
-                <span class="visually-hidden">Add a strategy</span>
+                <span>Add strategy</span>
               </a>
               <a
                 class="strategy-quick-actions__link strategy-quick-actions__link--secondary"
@@ -1478,14 +1480,13 @@ button.site-nav__magnet {
                 data-jump-to-strategies
                 aria-controls="strategies-list"
                 aria-expanded="false"
-                aria-label="Jump to saved strategies"
               >
                 <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
-                <span class="visually-hidden">Saved strategies</span>
+                <span>Saved strategies</span>
               </a>
-              <a class="inventory-shared-button" href="../feed/" aria-label="Shared feed">
+              <a class="inventory-shared-button" href="../feed/">
                 <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
-                <span class="inventory-shared-button__text visually-hidden">Shared feed</span>
+                <span class="inventory-shared-button__text">Shared feed</span>
               </a>
             </div>
 
@@ -1512,7 +1513,7 @@ button.site-nav__magnet {
                     <button
                       id="bluesky-signin-button"
                       type="button"
-                      class="inventory-button inventory-button--compact"
+                      class="inventory-button inventory-button--compact inventory-button--flat"
                     >
                       <span class="inventory-button__text">Sign in</span>
                     </button>
@@ -1523,7 +1524,7 @@ button.site-nav__magnet {
                     <button
                       id="bluesky-signout-button"
                       type="button"
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                      class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
                     >
                       <span class="inventory-button__text">Sign out</span>
                     </button>
@@ -1547,14 +1548,14 @@ button.site-nav__magnet {
                       <button
                         type="button"
                         data-backend-save-button
-                        class="inventory-button inventory-button--compact"
+                        class="inventory-button inventory-button--compact inventory-button--flat"
                       >
                         <span class="inventory-button__text">Save snapshot</span>
                       </button>
                       <button
                         type="button"
                         data-backend-load-button
-                        class="inventory-button inventory-button--ghost inventory-button--compact"
+                        class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
                       >
                         <span class="inventory-button__text">Load snapshot</span>
                       </button>
@@ -1576,7 +1577,7 @@ button.site-nav__magnet {
                     <button
                       type="button"
                       data-backend-fetch-feed-button
-                      class="inventory-button inventory-button--compact"
+                      class="inventory-button inventory-button--compact inventory-button--flat"
                     >
                       <span class="inventory-button__text">Fetch strategies</span>
                     </button>
@@ -1598,29 +1599,29 @@ button.site-nav__magnet {
             <button
               type="button"
               id="inventory-export"
-              class="inventory-button inventory-button--compact"
+              class="inventory-button inventory-button--compact inventory-button--flat"
               aria-label="Export localStorage JSON"
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export</span>
+              <span class="inventory-button__text">Export JSON</span>
             </button>
             <button
               type="button"
               id="inventory-email-personal"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
+              class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
               aria-label="Export personal strategies and email them to Nat"
             >
               <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
-              <span class="inventory-button__text">Email Nat</span>
+              <span class="inventory-button__text">Email Nat your strategies</span>
             </button>
             <button
               type="button"
               id="inventory-import-trigger"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
+              class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
               aria-label="Import localStorage JSON"
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import</span>
+              <span class="inventory-button__text">Import JSON</span>
             </button>
             <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
           </div>
