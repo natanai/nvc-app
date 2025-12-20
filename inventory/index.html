@@ -1417,6 +1417,15 @@ button.site-nav__magnet {
             <p class="page-description">
               Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
             </p>
+            <div class="inventory-header__sync">
+              <button
+                type="button"
+                id="inventory-open-sync"
+                class="inventory-button inventory-button--ghost inventory-button--compact"
+              >
+                <span class="inventory-button__text">Sign in / load</span>
+              </button>
+            </div>
             <div class="strategy-quick-actions inventory-header__quick-actions">
               <a class="strategy-quick-actions__link" href="#inventory-form">
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
@@ -1441,7 +1450,7 @@ button.site-nav__magnet {
               </a>
             </div>
 
-            <details class="inventory-bluesky-panel">
+            <details class="inventory-bluesky-panel" id="inventory-bluesky-details">
               <summary class="inventory-bluesky-panel__summary">
                 <div class="inventory-bluesky-panel__titles">
                   <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>

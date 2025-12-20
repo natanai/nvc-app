@@ -62,6 +62,21 @@ function updateBlueskyAuthUi(session) {
   }
 }
 
+function openSyncPanel() {
+  const details = document.getElementById('inventory-bluesky-details');
+  if (!details) {
+    return;
+  }
+  details.open = true;
+  if (typeof details.scrollIntoView === 'function') {
+    details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const handleInput = document.getElementById('bluesky-handle-input');
+  if (handleInput && typeof handleInput.focus === 'function') {
+    handleInput.focus({ preventScroll: true });
+  }
+}
+
 async function onBlueskySignInClick() {
   const input = document.querySelector('#bluesky-handle-input');
   const handle = input?.value?.trim();
@@ -85,6 +100,8 @@ async function onBlueskySignOutClick() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('inventory-open-sync')?.addEventListener('click', openSyncPanel);
+
   document
     .querySelector('#bluesky-signin-button')
     ?.addEventListener('click', onBlueskySignInClick);
