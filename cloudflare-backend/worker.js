@@ -22,6 +22,26 @@ function errorResponse(message, status = 400) {
   return jsonResponse({ status: 'error', message }, status);
 }
 
+function logServerError(err) {
+  const errorId = crypto.randomUUID();
+  console.error('Worker error', { errorId, err });
+  return errorId;
+}
+
+function serverErrorResponse(err, status = 500) {
+  const errorId = logServerError(err);
+  const detail = err instanceof Error ? err.message : String(err);
+  return jsonResponse(
+    {
+      status: 'error',
+      message: 'internal_error',
+      detail,
+      errorId,
+    },
+    status,
+  );
+}
+
 function normalizeVisibility(input) {
   const value = typeof input === 'string' ? input.trim().toLowerCase() : '';
   if (value === 'public' || value === 'followers' || value === 'private') {
@@ -737,168 +757,176 @@ async function handleSyncStrategies(request, env) {
 
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-    const { pathname } = url;
-    const method = request.method;
+    try {
+      const url = new URL(request.url);
+      const { pathname } = url;
+      const method = request.method;
 
-    if (method === 'OPTIONS') {
-      return new Response(null, {
-        status: 204,
-        headers: CORS_HEADERS,
-      });
-    }
-
-    // Health check
-    if (method === 'GET' && pathname === '/api/health') {
-      return handleHealth(env);
-    }
-
-    // Future auth/user endpoint
-    if (method === 'GET' && pathname === '/api/me') {
-      return handleMe();
-    }
-
-    if (method === 'POST' && pathname === '/auth/session') {
-      const body = await request.json().catch(() => null);
-      if (!body || typeof body.did !== 'string') {
-        return jsonResponse({ status: 'error', message: 'invalid body' }, 400);
+      if (method === 'OPTIONS') {
+        return new Response(null, {
+          status: 204,
+          headers: CORS_HEADERS,
+        });
       }
 
-      const did = body.did.trim();
-      if (!did || !did.startsWith('did:')) {
-        return jsonResponse({ status: 'error', message: 'invalid did' }, 400);
+      // Health check
+      if (method === 'GET' && pathname === '/api/health') {
+        return handleHealth(env);
       }
 
-      const accessToken =
-        typeof body.accessToken === 'string' && body.accessToken.trim() !== ''
-          ? body.accessToken.trim()
-          : null;
+      // Future auth/user endpoint
+      if (method === 'GET' && pathname === '/api/me') {
+        return handleMe();
+      }
 
-      await env.DB.prepare(
-        'INSERT OR IGNORE INTO users (did, created_at) VALUES (?, CURRENT_TIMESTAMP)',
-      )
-        .bind(did)
-        .run();
+      if (method === 'POST' && pathname === '/auth/session') {
+        try {
+          const body = await request.json().catch(() => null);
+          if (!body || typeof body.did !== 'string') {
+            return jsonResponse({ status: 'error', message: 'invalid body' }, 400);
+          }
 
-      const sid = crypto.randomUUID();
+          const did = body.did.trim();
+          if (!did || !did.startsWith('did:')) {
+            return jsonResponse({ status: 'error', message: 'invalid did' }, 400);
+          }
 
-      await env.DB.prepare(
-        'INSERT INTO sessions (id, did, access_token, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)',
-      )
-        .bind(sid, did, accessToken)
-        .run();
+          const accessToken =
+            typeof body.accessToken === 'string' && body.accessToken.trim() !== ''
+              ? body.accessToken.trim()
+              : null;
 
-      return new Response(JSON.stringify({ status: 'ok' }), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          ...CORS_HEADERS,
-          'Set-Cookie':
-            `allneeds_session=${encodeURIComponent(sid)}; HttpOnly; Secure; SameSite=Lax; Path=/`,
-        },
-      });
-    }
+          await env.DB.prepare(
+            'INSERT OR IGNORE INTO users (did, created_at) VALUES (?, CURRENT_TIMESTAMP)',
+          )
+            .bind(did)
+            .run();
 
-    if (method === 'POST' && pathname === '/auth/logout') {
-      const session = await getSession(env, request);
-      if (session) {
-        await env.DB.prepare('DELETE FROM sessions WHERE id = ?')
-          .bind(session.id)
+          const sid = crypto.randomUUID();
+
+          await env.DB.prepare(
+            'INSERT INTO sessions (id, did, access_token, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)',
+          )
+            .bind(sid, did, accessToken)
+            .run();
+
+          return new Response(JSON.stringify({ status: 'ok' }), {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              ...CORS_HEADERS,
+              'Set-Cookie':
+                `allneeds_session=${encodeURIComponent(sid)}; HttpOnly; Secure; SameSite=Lax; Path=/`,
+            },
+          });
+        } catch (err) {
+          return serverErrorResponse(err);
+        }
+      }
+
+      if (method === 'POST' && pathname === '/auth/logout') {
+        const session = await getSession(env, request);
+        if (session) {
+          await env.DB.prepare('DELETE FROM sessions WHERE id = ?')
+            .bind(session.id)
+            .run();
+        }
+
+        return new Response(null, {
+          status: 204,
+          headers: {
+            ...CORS_HEADERS,
+            'Set-Cookie':
+              'allneeds_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
+          },
+        });
+      }
+
+      if (method === 'POST' && pathname === '/auth/session/token') {
+        const session = await getSession(env, request);
+        if (!session) {
+          return errorResponse('not signed in', 401);
+        }
+
+        const body = await request.json().catch(() => null);
+        const accessToken =
+          typeof body?.accessToken === 'string' && body.accessToken.trim() !== ''
+            ? body.accessToken.trim()
+            : null;
+
+        if (!accessToken) {
+          return errorResponse('access token is required', 400);
+        }
+
+        await env.DB.prepare(
+          'UPDATE sessions SET access_token = ?, access_token_expires_at = NULL WHERE id = ?',
+        )
+          .bind(accessToken, session.id)
           .run();
+
+        return jsonResponse({ status: 'ok' });
       }
 
-      return new Response(null, {
-        status: 204,
-        headers: {
-          ...CORS_HEADERS,
-          'Set-Cookie':
-            'allneeds_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
-        },
+      // Strategy feed
+      if (
+        method === 'GET' &&
+        (pathname === '/api/strategies/feed' || pathname === '/api/feed/strategies')
+      ) {
+        return handleGetStrategyFeed(request, env);
+      }
+
+      // Endpoint to create a new strategy
+      if (method === 'POST' && pathname === '/api/strategies') {
+        return handlePostStrategy(request, env);
+      }
+
+      if (method === 'GET' && pathname === '/api/strategies') {
+        return handleGetStrategies(request, env);
+      }
+
+      if (method === 'GET' && pathname === '/api/bluesky/follows-status') {
+        return handleBlueskyFollowsStatus(request, env);
+      }
+
+      if (method === 'POST' && pathname === '/api/strategies/sync') {
+        return handleSyncStrategies(request, env);
+      }
+
+      const addToInventoryMatch = pathname.match(/^\/api\/strategies\/(\d+)\/add-to-inventory$/);
+      if (method === 'POST' && addToInventoryMatch) {
+        return handleIncrementAddCount(request, env, addToInventoryMatch[1]);
+      }
+
+      // Resolve a Bluesky handle to a DID and upsert into users.
+      if (method === 'GET' && pathname === '/api/resolve-handle') {
+        return handleResolveHandle(request, env);
+      }
+
+      if (method === 'GET' && pathname === '/api/user-settings') {
+        return handleGetUserSettings(request, env);
+      }
+
+      if (method === 'POST' && pathname === '/api/user-settings') {
+        return handlePostUserSettings(request, env);
+      }
+
+      if (method === 'GET' && pathname === '/api/journals') {
+        return handleGetJournals(request, env);
+      }
+
+      if (method === 'POST' && pathname === '/api/journals') {
+        return handlePostJournals(request, env);
+      }
+
+      // Default fallback for any other route
+      return jsonResponse({
+        status: 'ok',
+        message: 'allneeds-backend worker is running',
+        note: 'No specific endpoint matched this path.',
+        path: pathname,
       });
+    } catch (err) {
+      return serverErrorResponse(err);
     }
-
-    if (method === 'POST' && pathname === '/auth/session/token') {
-      const session = await getSession(env, request);
-      if (!session) {
-        return errorResponse('not signed in', 401);
-      }
-
-      const body = await request.json().catch(() => null);
-      const accessToken =
-        typeof body?.accessToken === 'string' && body.accessToken.trim() !== ''
-          ? body.accessToken.trim()
-          : null;
-
-      if (!accessToken) {
-        return errorResponse('access token is required', 400);
-      }
-
-      await env.DB.prepare(
-        'UPDATE sessions SET access_token = ?, access_token_expires_at = NULL WHERE id = ?',
-      )
-        .bind(accessToken, session.id)
-        .run();
-
-      return jsonResponse({ status: 'ok' });
-    }
-
-    // Strategy feed
-    if (
-      method === 'GET' &&
-      (pathname === '/api/strategies/feed' || pathname === '/api/feed/strategies')
-    ) {
-      return handleGetStrategyFeed(request, env);
-    }
-
-    // Endpoint to create a new strategy
-    if (method === 'POST' && pathname === '/api/strategies') {
-      return handlePostStrategy(request, env);
-    }
-
-    if (method === 'GET' && pathname === '/api/strategies') {
-      return handleGetStrategies(request, env);
-    }
-
-    if (method === 'GET' && pathname === '/api/bluesky/follows-status') {
-      return handleBlueskyFollowsStatus(request, env);
-    }
-
-    if (method === 'POST' && pathname === '/api/strategies/sync') {
-      return handleSyncStrategies(request, env);
-    }
-
-    const addToInventoryMatch = pathname.match(/^\/api\/strategies\/(\d+)\/add-to-inventory$/);
-    if (method === 'POST' && addToInventoryMatch) {
-      return handleIncrementAddCount(request, env, addToInventoryMatch[1]);
-    }
-
-    // Resolve a Bluesky handle to a DID and upsert into users.
-    if (method === 'GET' && pathname === '/api/resolve-handle') {
-      return handleResolveHandle(request, env);
-    }
-
-    if (method === 'GET' && pathname === '/api/user-settings') {
-      return handleGetUserSettings(request, env);
-    }
-
-    if (method === 'POST' && pathname === '/api/user-settings') {
-      return handlePostUserSettings(request, env);
-    }
-
-    if (method === 'GET' && pathname === '/api/journals') {
-      return handleGetJournals(request, env);
-    }
-
-    if (method === 'POST' && pathname === '/api/journals') {
-      return handlePostJournals(request, env);
-    }
-
-    // Default fallback for any other route
-    return jsonResponse({
-      status: 'ok',
-      message: 'allneeds-backend worker is running',
-      note: 'No specific endpoint matched this path.',
-      path: pathname,
-    });
   },
 };
