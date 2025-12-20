@@ -52,6 +52,7 @@ function updateBlueskyAuthUi(session) {
     if (handleField) handleField.hidden = true;
     if (statusText) {
       statusText.textContent = describeSession(session);
+      statusText.classList.remove('inventory-auth-panel__status-text--error');
     }
     if (authButton) {
       authButton.classList.add('inventory-button--ghost');
@@ -62,6 +63,7 @@ function updateBlueskyAuthUi(session) {
     if (handleField) handleField.hidden = false;
     if (statusText) {
       statusText.textContent = '';
+      statusText.classList.remove('inventory-auth-panel__status-text--error');
     }
     if (authButton) {
       authButton.classList.remove('inventory-button--ghost');
@@ -71,15 +73,25 @@ function updateBlueskyAuthUi(session) {
   }
 }
 
+function setStatusText(message, { isError = false } = {}) {
+  const statusText = document.querySelector('#bluesky-auth-status-text');
+  if (!statusText) return;
+  statusText.textContent = message || '';
+  statusText.classList.toggle('inventory-auth-panel__status-text--error', Boolean(isError));
+}
+
 async function onBlueskySignInClick() {
   const input = document.querySelector('#bluesky-handle-input');
   const handle = input?.value?.trim();
   if (!handle) return;
 
   try {
+    setStatusText('Opening Bluesky sign-in…');
     await signInWithBluesky(handle);
   } catch (err) {
     console.error('Error during Bluesky OAuth sign-in', err);
+    const message = err?.message || 'Unable to start Bluesky sign-in. Please check your handle.';
+    setStatusText(message, { isError: true });
   }
 }
 
@@ -102,6 +114,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else {
         onBlueskySignInClick();
       }
+    });
+  }
+  const handleInput = document.querySelector('#bluesky-handle-input');
+  if (handleInput) {
+    handleInput.addEventListener('input', () => {
+      setStatusText('');
     });
   }
 

@@ -187,10 +187,28 @@ function normalizeHandle(input) {
     );
   }
 
+  if (noAt.includes(":")) {
+    throw new Error(
+      "Bluesky handles cannot include ':' or suffixes like :1. Please use your full handle (e.g. yourname.bsky.social)."
+    );
+  }
+
   // Bluesky handles: letters, digits, dashes, and periods only.
   if (!/^[A-Za-z0-9.-]+$/.test(noAt)) {
     throw new Error(
       "Bluesky handle can only contain letters, numbers, dashes, and periods (no @)."
+    );
+  }
+
+  if (!noAt.includes(".")) {
+    throw new Error(
+      "Bluesky handles must include a domain (for example: yourname.bsky.social)."
+    );
+  }
+
+  if (noAt.includes("bksy.social")) {
+    throw new Error(
+      "Did you mean bsky.social? That handle does not resolve on Bluesky."
     );
   }
 

@@ -898,6 +898,23 @@ button.site-nav__magnet {
         outline-offset: 1px;
       }
 
+      .inventory-auth-panel__helper {
+        margin: 0.2rem 0 0;
+        font-size: 0.72rem;
+        color: var(--ink-soft);
+      }
+
+      .inventory-auth-panel__status-text {
+        margin: 0.15rem 0 0;
+        min-height: 1.1em;
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+      }
+
+      .inventory-auth-panel__status-text--error {
+        color: #7b1f36;
+      }
+
       /* Backend save/load + feed sections */
 
       .inventory-backend-sync__buttons {
@@ -1457,6 +1474,9 @@ button.site-nav__magnet {
                   <div class="inventory-auth-panel__field" data-bluesky-handle-field>
                     <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
                     <input id="bluesky-handle-input" type="text" autocomplete="username" />
+                    <p class="inventory-auth-panel__helper">
+                      Use your full handle, like <strong>yourname.bsky.social</strong> or a custom domain. No @, no :1.
+                    </p>
                   </div>
                   <button
                     id="bluesky-auth-button"
@@ -1465,7 +1485,7 @@ button.site-nav__magnet {
                   >
                     <span class="inventory-button__text">Sign in</span>
                   </button>
-                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
+                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text" aria-live="polite"></p>
 
                   <p class="inventory-auth-warning">
                     We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
