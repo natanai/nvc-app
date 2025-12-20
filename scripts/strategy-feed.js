@@ -264,6 +264,7 @@ async function fetchAndRenderFeed() {
   const sort = state.sortSelect?.value || 'recent';
   const params = new URLSearchParams({ scope, sort });
   setStatus('Loading strategies...');
+  let authFollowError = false;
 
   try {
     const res = await fetch(`${BACKEND_BASE_URL}/strategies/feed?${params.toString()}`, {
@@ -272,6 +273,9 @@ async function fetchAndRenderFeed() {
     });
     const data = await res.json();
     if (!res.ok || !data || data.status !== 'ok') {
+      if (data?.message === 'auth_follow_fetch_failed') {
+        authFollowError = true;
+      }
       throw new Error(data?.message || 'Unable to load feed');
     }
     state.strategies = Array.isArray(data.strategies) ? data.strategies : [];
@@ -281,7 +285,13 @@ async function fetchAndRenderFeed() {
     }
   } catch (error) {
     console.error('Error loading strategy feed', error);
-    setStatus('Unable to load the strategy feed right now. Please try again later.');
+    if (authFollowError) {
+      setStatus(
+        'We couldn’t load your follows feed because your Bluesky session needs attention. Please sign in again from the Inventory page.',
+      );
+    } else {
+      setStatus('Unable to load the strategy feed right now. Please try again later.');
+    }
     if (state.feedList) {
       state.feedList.textContent = '';
     }

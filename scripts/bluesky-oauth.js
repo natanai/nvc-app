@@ -14,6 +14,7 @@ let oauthClient = null;
  */
 let oauthSession = null;
 let backendSessionDid = null;
+let backendSessionAccessToken = null;
 
 /**
  * Initialize the Bluesky OAuth client and try to restore
@@ -72,12 +73,12 @@ function normalizeSession(session) {
   return { did, handle, raw: session };
 }
 
-async function createBackendSession(did) {
+async function createBackendSession(did, accessToken) {
   const res = await fetch(`${BACKEND_AUTH_BASE_URL}/auth/session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ did }),
+    body: JSON.stringify({ did, accessToken }),
   });
 
   const data = await res.json().catch(() => null);
@@ -86,22 +87,86 @@ async function createBackendSession(did) {
   }
 
   backendSessionDid = did;
+  backendSessionAccessToken = accessToken || null;
 }
 
 export async function ensureBackendSession(session) {
   const did = session?.did || session?.sub || null;
   if (!did) return;
-  if (backendSessionDid === did) return;
+  const accessToken = await resolveOAuthAccessToken(session);
 
-  await createBackendSession(did);
+  if (backendSessionDid === did) {
+    if (accessToken && accessToken !== backendSessionAccessToken) {
+      try {
+        await updateBackendSessionToken(accessToken);
+      } catch (error) {
+        await createBackendSession(did, accessToken);
+      }
+    }
+    return;
+  }
+
+  await createBackendSession(did, accessToken);
 }
 
 export async function logoutBackendSession() {
   backendSessionDid = null;
+  backendSessionAccessToken = null;
   await fetch(`${BACKEND_AUTH_BASE_URL}/auth/logout`, {
     method: "POST",
     credentials: "include",
   }).catch(() => {});
+}
+
+async function updateBackendSessionToken(accessToken) {
+  if (!accessToken) return;
+  const res = await fetch(`${BACKEND_AUTH_BASE_URL}/auth/session/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ accessToken }),
+  });
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data || data.status !== "ok") {
+    throw new Error("Could not update backend session token");
+  }
+
+  backendSessionAccessToken = accessToken;
+}
+
+async function resolveOAuthAccessToken(session) {
+  const raw = session?.raw || session;
+  if (!raw) return null;
+
+  if (typeof raw.getAccessToken === "function") {
+    try {
+      const token = await raw.getAccessToken();
+      if (typeof token === "string") return token;
+      if (typeof token?.accessToken === "string") return token.accessToken;
+      if (typeof token?.access_token === "string") return token.access_token;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  const candidates = [
+    raw?.token,
+    raw?.tokens,
+    raw?.credentials,
+    raw?.auth,
+    raw,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate || typeof candidate !== "object") continue;
+    if (typeof candidate.accessToken === "string") return candidate.accessToken;
+    if (typeof candidate.access_token === "string") return candidate.access_token;
+    if (candidate.accessToken?.value) return candidate.accessToken.value;
+    if (candidate.access_token?.value) return candidate.access_token.value;
+  }
+
+  return null;
 }
 
 /**

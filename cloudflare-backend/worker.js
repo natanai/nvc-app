@@ -47,7 +47,7 @@ async function getSession(env, request) {
   if (!sid) return null;
 
   const row = await env.DB.prepare(
-    'SELECT did, expires_at FROM sessions WHERE id = ?',
+    'SELECT did, expires_at, access_token, access_token_expires_at FROM sessions WHERE id = ?',
   )
     .bind(sid)
     .first();
@@ -57,7 +57,12 @@ async function getSession(env, request) {
   // If you later start using expires_at, you can enforce it here:
   // if (row.expires_at && new Date(row.expires_at) < new Date()) { ... }
 
-  return { id: sid, did: row.did };
+  return {
+    id: sid,
+    did: row.did,
+    accessToken: row.access_token || null,
+    accessTokenExpiresAt: row.access_token_expires_at || null,
+  };
 }
 
 async function handleHealth(env) {
@@ -215,16 +220,26 @@ async function handleGetStrategies(request, env) {
   }
 }
 
-async function fetchFollowDidList(env, did) {
+async function fetchFollowDidList(env, did, accessToken = null) {
+  const useAuth = typeof accessToken === 'string' && accessToken.trim() !== '';
   const apiUrl =
-    'https://public.api.bsky.app/xrpc/app.bsky.graph.getFollows' +
+    (useAuth
+      ? 'https://bsky.social/xrpc/app.bsky.graph.getFollows'
+      : 'https://public.api.bsky.app/xrpc/app.bsky.graph.getFollows') +
     '?actor=' +
     encodeURIComponent(did) +
     '&limit=100';
 
-  const res = await fetch(apiUrl);
+  const res = await fetch(apiUrl, {
+    headers: useAuth ? { Authorization: `Bearer ${accessToken}` } : undefined,
+  });
   if (!res.ok) {
-    throw new Error(`Bluesky API returned ${res.status}`);
+    const error = new Error(`Bluesky API returned ${res.status}`);
+    if (useAuth) {
+      error.code = 'auth_follow_fetch_failed';
+      error.status = res.status;
+    }
+    throw error;
   }
 
   const data = await res.json();
@@ -272,8 +287,11 @@ async function handleGetStrategyFeed(request, env) {
     let followDids = [];
     if (scope === 'follows' && viewerDid) {
       try {
-        followDids = await fetchFollowDidList(env, viewerDid);
+        followDids = await fetchFollowDidList(env, viewerDid, session?.accessToken || null);
       } catch (err) {
+        if (err && err.code === 'auth_follow_fetch_failed') {
+          return errorResponse('auth_follow_fetch_failed', 401);
+        }
         return errorResponse(String(err), 502);
       }
     }
@@ -736,6 +754,11 @@ export default {
         return jsonResponse({ status: 'error', message: 'invalid did' }, 400);
       }
 
+      const accessToken =
+        typeof body.accessToken === 'string' && body.accessToken.trim() !== ''
+          ? body.accessToken.trim()
+          : null;
+
       await env.DB.prepare(
         'INSERT OR IGNORE INTO users (did, created_at) VALUES (?, CURRENT_TIMESTAMP)',
       )
@@ -745,9 +768,9 @@ export default {
       const sid = crypto.randomUUID();
 
       await env.DB.prepare(
-        'INSERT INTO sessions (id, did, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
+        'INSERT INTO sessions (id, did, access_token, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)',
       )
-        .bind(sid, did)
+        .bind(sid, did, accessToken)
         .run();
 
       return new Response(JSON.stringify({ status: 'ok' }), {
@@ -777,6 +800,31 @@ export default {
             'allneeds_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0',
         },
       });
+    }
+
+    if (method === 'POST' && pathname === '/auth/session/token') {
+      const session = await getSession(env, request);
+      if (!session) {
+        return errorResponse('not signed in', 401);
+      }
+
+      const body = await request.json().catch(() => null);
+      const accessToken =
+        typeof body?.accessToken === 'string' && body.accessToken.trim() !== ''
+          ? body.accessToken.trim()
+          : null;
+
+      if (!accessToken) {
+        return errorResponse('access token is required', 400);
+      }
+
+      await env.DB.prepare(
+        'UPDATE sessions SET access_token = ?, access_token_expires_at = NULL WHERE id = ?',
+      )
+        .bind(accessToken, session.id)
+        .run();
+
+      return jsonResponse({ status: 'ok' });
     }
 
     // Strategy feed
