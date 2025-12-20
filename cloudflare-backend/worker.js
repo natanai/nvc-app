@@ -247,6 +247,21 @@ async function fetchFollowDidList(env, did, accessToken = null) {
   return followProfiles.map((p) => p.did).filter((d) => typeof d === 'string');
 }
 
+async function handleBlueskyFollowsStatus(request, env) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return jsonResponse({ status: 'error', followerCount: null, error: 'not signed in' }, 401);
+  }
+
+  try {
+    const followDids = await fetchFollowDidList(env, session.did);
+    const followerCount = Array.isArray(followDids) ? followDids.length : 0;
+    return jsonResponse({ status: 'ok', followerCount, error: null });
+  } catch (err) {
+    return jsonResponse({ status: 'error', followerCount: null, error: String(err) }, 502);
+  }
+}
+
 function mapStrategyRow(row) {
   if (!row) return null;
   return {
@@ -842,6 +857,10 @@ export default {
 
     if (method === 'GET' && pathname === '/api/strategies') {
       return handleGetStrategies(request, env);
+    }
+
+    if (method === 'GET' && pathname === '/api/bluesky/follows-status') {
+      return handleBlueskyFollowsStatus(request, env);
     }
 
     if (method === 'POST' && pathname === '/api/strategies/sync') {
