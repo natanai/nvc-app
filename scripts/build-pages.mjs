@@ -1203,6 +1203,7 @@ function renderStrategyForm({
   defaultNeedSlug = '',
   includeContactFields = false,
   includeMessage = false,
+  includeVisibilitySelect = false,
   notice = '',
   includeLocalStorageReminder = false,
 }) {
@@ -1265,6 +1266,21 @@ function renderStrategyForm({
 
   const descriptionRequiredAttr = descriptionRequired ? ' required' : '';
 
+  const visibilityField = includeVisibilitySelect
+    ? `
+        <div class="strategy-form__field">
+          <label for="${idPrefix}-visibility">Visibility</label>
+          <p class="strategy-form__hint">Choose who can see this strategy when you export or share it.</p>
+          <div class="strategy-card strategy-card--input">
+            <select id="${idPrefix}-visibility" name="strategy-visibility">
+              <option value="private">Private (only on this browser)</option>
+              <option value="followers">Followers (Bluesky followers when synced)</option>
+              <option value="public">Public</option>
+            </select>
+          </div>
+        </div>`
+    : '';
+
   const localStorageNote = includeLocalStorageReminder
     ? `
             ${localStorageReminderHtml}`
@@ -1288,6 +1304,7 @@ function renderStrategyForm({
             </div>
             ${needField}
             ${contactFields}
+            ${visibilityField}
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
             </div>
@@ -1738,6 +1755,7 @@ ${strategiesNote}
     needSelectMultiple: true,
     includeContactFields: true,
     includeMessage: true,
+    includeVisibilitySelect: true,
     notice: suggestionNotice,
   });
 
@@ -1878,6 +1896,7 @@ function renderInventoryPage() {
     includePlaceholderOption: true,
     needSelectMultiple: true,
     includeContactFields: true,
+    includeVisibilitySelect: true,
     notice: inventoryFormNotice,
     includeLocalStorageReminder: true,
   });
