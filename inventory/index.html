@@ -911,6 +911,21 @@ button.site-nav__magnet {
         margin-top: 0.25rem;
       }
 
+      .inventory-backend-sync__status--highlight {
+        animation: backend-sync-highlight 1.2s ease-out;
+      }
+
+      @keyframes backend-sync-highlight {
+        0% {
+          background: color-mix(in srgb, var(--gold) 70%, transparent);
+          box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 70%, transparent);
+        }
+        100% {
+          background: transparent;
+          box-shadow: 0 0 0 6px transparent;
+        }
+      }
+
       /* Small screens */
 
       @media (max-width: 720px) {
