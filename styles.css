@@ -5410,6 +5410,7 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   box-shadow: 0 7px 0 var(--shadow);
 }
 
+.inventory-item__edit,
 .inventory-item__delete {
   font-family: var(--font-display);
   font-size: 0.6rem;
@@ -5418,41 +5419,25 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   padding: 0.25rem 0.6rem;
   border: 2px solid var(--outline);
   border-radius: var(--radius-md);
-  background: #ffd4d4;
   box-shadow: 0 4px 0 var(--shadow);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.inventory-item__edit {
+  background: color-mix(in srgb, var(--sky) 75%, #ffffff 25%);
+}
+
+.inventory-item__delete {
+  background: #ffd4d4;
+}
+
+.inventory-item__edit:hover,
+.inventory-item__edit:focus-visible,
 .inventory-item__delete:hover,
 .inventory-item__delete:focus-visible {
   transform: translateY(-1px);
   box-shadow: 0 7px 0 var(--shadow);
-}
-
-.inventory-jump {
-  display: none;
-}
-
-.inventory-jump__link {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.35rem 0.65rem;
-  border: 2px solid var(--outline);
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, #ffffff 82%, var(--mint) 18%);
-  color: var(--ink);
-  box-shadow: 0 6px 0 var(--shadow);
-  text-decoration: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.inventory-jump__link:hover,
-.inventory-jump__link:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 9px 0 var(--shadow);
 }
 
 .empty-state {
@@ -5509,6 +5494,7 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
     align-items: stretch;
   }
 
+  .inventory-item__edit,
   .inventory-item__link,
   .inventory-item__delete {
     width: 100%;
@@ -5519,25 +5505,6 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 @media (max-width: 720px) {
   .inventory-summary {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  }
-
-  .page {
-    padding-bottom: 4.5rem;
-  }
-
-  .inventory-jump {
-    position: fixed;
-    left: 50%;
-    bottom: 0.75rem;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 0.4rem;
-    padding: 0.35rem 0.5rem;
-    border-radius: var(--radius-pill);
-    border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 35%, transparent);
-    z-index: 20;
   }
 }
 
