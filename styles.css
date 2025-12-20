@@ -5191,6 +5191,8 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 .inventory-list__hint {
   margin: 0;
   color: var(--ink-soft);
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 
 .inventory-list__toggle {
@@ -5211,6 +5213,51 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 .inventory-list {
   display: grid;
   gap: 0.6rem;
+}
+
+.inventory-form .strategy-card--form {
+  padding: 0.65rem 0.8rem;
+  gap: 0.5rem;
+}
+
+.inventory-form .strategy-form {
+  gap: 0.5rem;
+}
+
+.inventory-form .strategy-form__field {
+  gap: 0.3rem;
+}
+
+.inventory-form .strategy-form__hint {
+  font-size: 0.85rem;
+  margin-top: -0.1rem;
+}
+
+.inventory-form .strategy-card--input textarea {
+  min-height: 5.5rem;
+  padding: 0.5rem 0.7rem;
+}
+
+.inventory-form .strategy-card--form .strategy-card--input input[type='text'],
+.inventory-form .strategy-card--form .strategy-card--input select,
+.inventory-form .strategy-card--form .strategy-card--input textarea {
+  padding: 0.5rem 0.7rem;
+}
+
+.inventory-form .strategy-form__row {
+  gap: 0.5rem;
+}
+
+.inventory-form .strategy-card__save {
+  border-width: 2px;
+  padding: 0.35rem 0.7rem;
+  box-shadow: 0 6px 0 var(--shadow);
+}
+
+.inventory-form .strategy-card__save:hover,
+.inventory-form .strategy-card__save:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 0 var(--shadow);
 }
 
 .inventory-need {
