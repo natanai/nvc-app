@@ -5,6 +5,7 @@ import { BrowserOAuthClient } from "https://esm.sh/@atproto/oauth-client-browser
 
 const CLIENT_METADATA_URL = "https://allneeds.app/oauth-client-metadata.json";
 export const BACKEND_BASE_URL = "https://backend.allneeds.app/api";
+const BACKEND_AUTH_BASE_URL = BACKEND_BASE_URL.replace(/\/api\/?$/, "");
 
 let oauthClient = null;
 /**
@@ -72,7 +73,7 @@ function normalizeSession(session) {
 }
 
 async function createBackendSession(did) {
-  const res = await fetch(`${BACKEND_BASE_URL}/auth/session`, {
+  const res = await fetch(`${BACKEND_AUTH_BASE_URL}/auth/session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -97,7 +98,7 @@ export async function ensureBackendSession(session) {
 
 export async function logoutBackendSession() {
   backendSessionDid = null;
-  await fetch(`${BACKEND_BASE_URL}/auth/logout`, {
+  await fetch(`${BACKEND_AUTH_BASE_URL}/auth/logout`, {
     method: "POST",
     credentials: "include",
   }).catch(() => {});

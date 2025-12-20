@@ -1747,6 +1747,7 @@ function setupNeedPage() {
         feedbackElement: feedback,
         feedbackMessage: `Saved “${title}” to your inventory for ${needName}.`,
       });
+      publishStrategyToBackend(entry);
     });
   });
 
@@ -1855,6 +1856,7 @@ function setupNeedPage() {
 
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory);
+      publishStrategyToBackend(entry);
 
       suggestionForm.reset();
       showFormMessage(
@@ -1977,6 +1979,7 @@ function setupInventoryPage() {
           `Added “${title}” to your inventory. Strategies you add stay on this browser, so export a localStorage JSON backup whenever you want an archive.`,
         openList: true,
       });
+      publishStrategyToBackend(entry);
       form.reset();
       const needSelect = form.querySelector('#inventory-need');
       if (needSelect) {
@@ -6164,6 +6167,46 @@ function setBackendStatusMessage(message) {
     return;
   }
   statusEl.textContent = message || '';
+}
+
+async function publishStrategyToBackend(entry) {
+  const did = getCurrentDid();
+  if (!did) {
+    return;
+  }
+
+  const visibility = normalizeVisibilityValue(entry?.visibility);
+  if (visibility !== 'public' && visibility !== 'followers') {
+    return;
+  }
+
+  const title = entry?.title ? String(entry.title).trim() : '';
+  if (!title) {
+    return;
+  }
+
+  const needIds = resolveEntryNeedSlugs(entry);
+  const payload = {
+    title,
+    body: entry?.description ? String(entry.description) : '',
+    needIds,
+    visibility,
+  };
+
+  try {
+    const res = await fetch(`${BACKEND_BASE_URL}/strategies`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data || data.status !== 'ok') {
+      throw new Error(data && data.message ? data.message : 'Unable to publish strategy');
+    }
+  } catch (error) {
+    console.warn('Unable to publish strategy to backend', error);
+  }
 }
 
 async function saveSnapshotToBackend() {
