@@ -46,7 +46,6 @@ function updateBlueskyAuthUi(session) {
   const loggedOut = document.querySelector('#bluesky-auth-logged-out');
   const loggedIn = document.querySelector('#bluesky-auth-logged-in');
   const statusText = document.querySelector('#bluesky-auth-status-text');
-  const dataChip = document.querySelector('#invDataChip');
 
   if (session) {
     if (loggedOut) loggedOut.hidden = true;
@@ -54,18 +53,27 @@ function updateBlueskyAuthUi(session) {
     if (statusText) {
       statusText.textContent = describeSession(session);
     }
-    if (dataChip) {
-      dataChip.textContent = 'Synced';
-    }
   } else {
     if (loggedOut) loggedOut.hidden = false;
     if (loggedIn) loggedIn.hidden = true;
     if (statusText) {
       statusText.textContent = '';
     }
-    if (dataChip) {
-      dataChip.textContent = 'Local';
-    }
+  }
+}
+
+function openSyncPanel() {
+  const details = document.getElementById('inventory-bluesky-details');
+  if (!details) {
+    return;
+  }
+  details.open = true;
+  if (typeof details.scrollIntoView === 'function') {
+    details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const handleInput = document.getElementById('bluesky-handle-input');
+  if (handleInput && typeof handleInput.focus === 'function') {
+    handleInput.focus({ preventScroll: true });
   }
 }
 
@@ -92,6 +100,8 @@ async function onBlueskySignOutClick() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('inventory-open-sync')?.addEventListener('click', openSyncPanel);
+
   document
     .querySelector('#bluesky-signin-button')
     ?.addEventListener('click', onBlueskySignInClick);
