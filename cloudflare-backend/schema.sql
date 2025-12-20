@@ -43,5 +43,8 @@ CREATE TABLE IF NOT EXISTS sessions (
   did TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   expires_at TEXT,
+  access_token TEXT,
+  refresh_token TEXT,
+  token_expires_at TEXT,
   FOREIGN KEY (did) REFERENCES users(did)
 );

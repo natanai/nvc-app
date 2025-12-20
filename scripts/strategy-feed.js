@@ -16,6 +16,8 @@ const state = {
   scopeSelect: null,
   sortSelect: null,
   fetchButton: null,
+  debugButton: null,
+  debugStatusEl: null,
   session: null,
 };
 
@@ -57,10 +59,10 @@ function setAuthHint(session) {
   if (!state.authHintEl) return;
   if (session && session.did) {
     state.authHintEl.textContent =
-      'Signed in via Bluesky. You can see strategies shared by accounts you follow and add them to your inventory.';
+      'Signed in via Bluesky. You can see strategies shared by accounts you follow and add them to your inventory. If your Bluesky account hides your follows from logged-out viewers, the feed may need authenticated access.';
   } else {
     state.authHintEl.textContent =
-      'You’re currently signed out. You can still browse public strategies, but to see strategies from people you follow, sign in with Bluesky on the Inventory page.';
+      'You’re currently signed out. You can still browse public strategies, but to see strategies from people you follow, sign in with Bluesky on the Inventory page. If your Bluesky account hides your follows from logged-out viewers, the follows feed won’t load.';
   }
 }
 
@@ -81,6 +83,11 @@ function setScopeAvailability(session) {
 
 function setFilterHint(message) {
   setStatus(message || 'Choose filters, then click “Pull strategies” to load the feed.');
+}
+
+function setDebugStatus(message) {
+  if (!state.debugStatusEl) return;
+  state.debugStatusEl.textContent = message || '';
 }
 
 function normalizeStrategyNeeds(strategy) {
@@ -281,10 +288,43 @@ async function fetchAndRenderFeed() {
     }
   } catch (error) {
     console.error('Error loading strategy feed', error);
-    setStatus('Unable to load the strategy feed right now. Please try again later.');
+    if (error?.message === 'follow_visibility_blocked') {
+      setStatus(
+        'Your Bluesky account may hide follows from logged-out viewers. Enable logged-out visibility in Bluesky or use the debug gear to check authenticated access.',
+      );
+    } else {
+      setStatus('Unable to load the strategy feed right now. Please try again later.');
+    }
     if (state.feedList) {
       state.feedList.textContent = '';
     }
+  }
+}
+
+async function runFollowDiagnostic() {
+  setDebugStatus('Checking Bluesky follow access...');
+  try {
+    const res = await fetch(`${BACKEND_BASE_URL}/bluesky/follows/diagnostic`, {
+      credentials: 'include',
+      cache: 'no-store',
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data || data.status !== 'ok') {
+      if (data?.message === 'follow_visibility_blocked' || data?.visibilityBlocked) {
+        setDebugStatus(
+          'Bluesky follow visibility is blocked for logged-out viewers. Enable logged-out visibility in Bluesky settings or re-authenticate.',
+        );
+        return;
+      }
+      throw new Error(data?.message || 'Unable to check follow access.');
+    }
+    const sourceLabel = data.source === 'authenticated' ? 'authenticated' : 'public';
+    setDebugStatus(
+      `Follow check succeeded via ${sourceLabel} access. Found ${data.followCount} follow(s).`,
+    );
+  } catch (error) {
+    console.error('Error running follow diagnostic', error);
+    setDebugStatus('Unable to check follow access right now. Please try again later.');
   }
 }
 
@@ -295,6 +335,8 @@ async function init() {
   state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
   state.fetchButton = document.querySelector('[data-feed-fetch]');
+  state.debugButton = document.querySelector('[data-feed-debug]');
+  state.debugStatusEl = document.querySelector('[data-feed-debug-status]');
 
   if (document?.documentElement) {
     document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
@@ -341,6 +383,9 @@ async function init() {
   }
   if (state.fetchButton) {
     state.fetchButton.addEventListener('click', fetchAndRenderFeed);
+  }
+  if (state.debugButton) {
+    state.debugButton.addEventListener('click', runFollowDiagnostic);
   }
 }
 

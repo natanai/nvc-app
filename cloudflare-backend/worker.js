@@ -47,7 +47,7 @@ async function getSession(env, request) {
   if (!sid) return null;
 
   const row = await env.DB.prepare(
-    'SELECT did, expires_at FROM sessions WHERE id = ?',
+    'SELECT did, expires_at, access_token, refresh_token, token_expires_at FROM sessions WHERE id = ?',
   )
     .bind(sid)
     .first();
@@ -57,7 +57,13 @@ async function getSession(env, request) {
   // If you later start using expires_at, you can enforce it here:
   // if (row.expires_at && new Date(row.expires_at) < new Date()) { ... }
 
-  return { id: sid, did: row.did };
+  return {
+    id: sid,
+    did: row.did,
+    accessToken: row.access_token || null,
+    refreshToken: row.refresh_token || null,
+    tokenExpiresAt: row.token_expires_at || null,
+  };
 }
 
 async function handleHealth(env) {
@@ -215,21 +221,61 @@ async function handleGetStrategies(request, env) {
   }
 }
 
-async function fetchFollowDidList(env, did) {
-  const apiUrl =
+async function fetchFollowDidList(env, did, accessToken) {
+  const publicUrl =
     'https://public.api.bsky.app/xrpc/app.bsky.graph.getFollows' +
     '?actor=' +
     encodeURIComponent(did) +
     '&limit=100';
 
-  const res = await fetch(apiUrl);
-  if (!res.ok) {
-    throw new Error(`Bluesky API returned ${res.status}`);
+  const authenticatedUrl =
+    'https://bsky.social/xrpc/app.bsky.graph.getFollows' +
+    '?actor=' +
+    encodeURIComponent(did) +
+    '&limit=100';
+
+  const endpoints = [];
+  if (accessToken) {
+    endpoints.push({
+      url: authenticatedUrl,
+      headers: { Authorization: `Bearer ${accessToken}` },
+      source: 'authenticated',
+      checksVisibility: false,
+    });
+  }
+  endpoints.push({
+    url: publicUrl,
+    headers: {},
+    source: 'public',
+    checksVisibility: true,
+  });
+
+  let visibilityBlocked = false;
+  let lastError = null;
+
+  for (const endpoint of endpoints) {
+    const res = await fetch(endpoint.url, { headers: endpoint.headers });
+    if (res.ok) {
+      const data = await res.json();
+      const followProfiles = Array.isArray(data.follows) ? data.follows : [];
+      const dids = followProfiles.map((p) => p.did).filter((d) => typeof d === 'string');
+      return { dids, source: endpoint.source, visibilityBlocked };
+    }
+
+    if (endpoint.checksVisibility && (res.status === 401 || res.status === 403)) {
+      visibilityBlocked = true;
+    }
+
+    lastError = new Error(`Bluesky API returned ${res.status}`);
+    lastError.status = res.status;
   }
 
-  const data = await res.json();
-  const followProfiles = Array.isArray(data.follows) ? data.follows : [];
-  return followProfiles.map((p) => p.did).filter((d) => typeof d === 'string');
+  if (lastError) {
+    lastError.visibilityBlocked = visibilityBlocked;
+    throw lastError;
+  }
+
+  return { dids: [], source: 'unknown', visibilityBlocked };
 }
 
 function mapStrategyRow(row) {
@@ -270,10 +316,16 @@ async function handleGetStrategyFeed(request, env) {
 
   try {
     let followDids = [];
+    let visibilityBlocked = false;
     if (scope === 'follows' && viewerDid) {
       try {
-        followDids = await fetchFollowDidList(env, viewerDid);
+        const followResult = await fetchFollowDidList(env, viewerDid, session?.accessToken);
+        followDids = followResult.dids || [];
+        visibilityBlocked = !!followResult.visibilityBlocked;
       } catch (err) {
+        if (err && err.visibilityBlocked) {
+          return errorResponse('follow_visibility_blocked', 403);
+        }
         return errorResponse(String(err), 502);
       }
     }
@@ -329,9 +381,43 @@ async function handleGetStrategyFeed(request, env) {
     const { results } = await stmt.all();
     const strategies = (results || []).map((row) => mapStrategyRow(row)).filter(Boolean);
 
-    return jsonResponse({ status: 'ok', scope, sort, viewerDid: viewerDid || null, strategies });
+    return jsonResponse({
+      status: 'ok',
+      scope,
+      sort,
+      viewerDid: viewerDid || null,
+      visibilityBlocked,
+      strategies,
+    });
   } catch (err) {
     return jsonResponse({ status: 'error', message: 'internal_error', detail: String(err) }, 500);
+  }
+}
+
+async function handleFollowDiagnostic(request, env) {
+  const session = await getSession(env, request);
+  if (!session) {
+    return errorResponse('not signed in', 401);
+  }
+
+  try {
+    const followResult = await fetchFollowDidList(env, session.did, session.accessToken);
+    return jsonResponse({
+      status: 'ok',
+      did: session.did,
+      source: followResult.source,
+      followCount: Array.isArray(followResult.dids) ? followResult.dids.length : 0,
+      visibilityBlocked: !!followResult.visibilityBlocked,
+    });
+  } catch (err) {
+    return jsonResponse(
+      {
+        status: 'error',
+        message: err?.visibilityBlocked ? 'follow_visibility_blocked' : String(err),
+        visibilityBlocked: !!err?.visibilityBlocked,
+      },
+      err?.visibilityBlocked ? 403 : 502,
+    );
   }
 }
 
@@ -732,6 +818,10 @@ export default {
       }
 
       const did = body.did.trim();
+      const accessToken = typeof body.accessToken === 'string' ? body.accessToken.trim() : null;
+      const refreshToken = typeof body.refreshToken === 'string' ? body.refreshToken.trim() : null;
+      const tokenExpiresAt =
+        typeof body.tokenExpiresAt === 'string' ? body.tokenExpiresAt.trim() : null;
       if (!did || !did.startsWith('did:')) {
         return jsonResponse({ status: 'error', message: 'invalid did' }, 400);
       }
@@ -745,9 +835,9 @@ export default {
       const sid = crypto.randomUUID();
 
       await env.DB.prepare(
-        'INSERT INTO sessions (id, did, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
+        'INSERT INTO sessions (id, did, created_at, access_token, refresh_token, token_expires_at) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?)',
       )
-        .bind(sid, did)
+        .bind(sid, did, accessToken, refreshToken, tokenExpiresAt)
         .run();
 
       return new Response(JSON.stringify({ status: 'ok' }), {
@@ -785,6 +875,10 @@ export default {
       (pathname === '/api/strategies/feed' || pathname === '/api/feed/strategies')
     ) {
       return handleGetStrategyFeed(request, env);
+    }
+
+    if (method === 'GET' && pathname === '/api/bluesky/follows/diagnostic') {
+      return handleFollowDiagnostic(request, env);
     }
 
     // Endpoint to create a new strategy

@@ -14,6 +14,7 @@ let oauthClient = null;
  */
 let oauthSession = null;
 let backendSessionDid = null;
+let backendSessionToken = null;
 
 /**
  * Initialize the Bluesky OAuth client and try to restore
@@ -68,16 +69,61 @@ function normalizeSession(session) {
     session.handle ||
     session.preferred_username ||
     null;
+  const tokenData = extractTokenData(session);
 
-  return { did, handle, raw: session };
+  return { did, handle, tokenData, raw: session };
+}
+
+function extractTokenData(session) {
+  if (!session || typeof session !== "object") {
+    return null;
+  }
+
+  const accessToken =
+    session.accessToken ||
+    session.access_token ||
+    session.accessJwt ||
+    session.access_jwt ||
+    session.token?.accessToken ||
+    session.token?.access_token ||
+    session.tokenSet?.access_token ||
+    null;
+
+  const refreshToken =
+    session.refreshToken ||
+    session.refresh_token ||
+    session.token?.refreshToken ||
+    session.token?.refresh_token ||
+    session.tokenSet?.refresh_token ||
+    null;
+
+  const expiresAt =
+    session.expiresAt ||
+    session.expires_at ||
+    session.token?.expiresAt ||
+    session.token?.expires_at ||
+    session.tokenSet?.expires_at ||
+    null;
+
+  if (!accessToken && !refreshToken && !expiresAt) {
+    return null;
+  }
+
+  return { accessToken, refreshToken, expiresAt };
 }
 
 async function createBackendSession(did) {
+  const tokenData = oauthSession?.tokenData || null;
   const res = await fetch(`${BACKEND_AUTH_BASE_URL}/auth/session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ did }),
+    body: JSON.stringify({
+      did,
+      accessToken: tokenData?.accessToken || null,
+      refreshToken: tokenData?.refreshToken || null,
+      tokenExpiresAt: tokenData?.expiresAt || null,
+    }),
   });
 
   const data = await res.json().catch(() => null);
@@ -86,18 +132,23 @@ async function createBackendSession(did) {
   }
 
   backendSessionDid = did;
+  backendSessionToken = tokenData?.accessToken || null;
 }
 
 export async function ensureBackendSession(session) {
   const did = session?.did || session?.sub || null;
   if (!did) return;
-  if (backendSessionDid === did) return;
+  const tokenData = session?.tokenData || null;
+  if (backendSessionDid === did && backendSessionToken === (tokenData?.accessToken || null)) {
+    return;
+  }
 
   await createBackendSession(did);
 }
 
 export async function logoutBackendSession() {
   backendSessionDid = null;
+  backendSessionToken = null;
   await fetch(`${BACKEND_AUTH_BASE_URL}/auth/logout`, {
     method: "POST",
     credentials: "include",
