@@ -1423,6 +1423,10 @@ button.site-nav__magnet {
                 Browse strategies that other allneeds users have chosen to share. Choose your filters, then use
                 the “Pull strategies” button to load the latest list from the database.
               </p>
+              <p class="page-description">
+                The “From people you follow” feed uses Bluesky’s public API, so it only works when logged-out visibility
+                is enabled and you’re signed in.
+              </p>
             </div>
           </div>
         </header>
@@ -1451,6 +1455,9 @@ button.site-nav__magnet {
           <p class="feed-status" data-feed-status></p>
           <p class="feed-action-hint">
             Select a filter and click “Pull strategies” to retrieve the latest feed.
+          </p>
+          <p class="feed-action-hint">
+            Follow-based results require Bluesky public visibility plus an active sign-in session.
           </p>
           <p class="feed-auth-hint" data-feed-auth-hint>
             <!-- JS will fill in a message here depending on whether the viewer is signed in. -->
