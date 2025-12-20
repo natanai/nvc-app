@@ -5497,111 +5497,17 @@ function renderInventoryList() {
 
   state.inventoryListEl.innerHTML = '';
 
-  const grouped = new Map();
-  const extras = [];
-
-  state.inventory.forEach((entry) => {
-    const slugs = resolveEntryNeedSlugs(entry);
-    let added = false;
-    slugs.forEach((slug) => {
-      if (!slug || !state.needsBySlug.has(slug)) {
-        return;
-      }
-      if (!grouped.has(slug)) {
-        grouped.set(slug, []);
-      }
-      grouped.get(slug).push(entry);
-      added = true;
-    });
-    if (added) {
-      return;
-    }
-    extras.push(entry);
-  });
-
-  let openedNeed = false;
-
-  const needsWithEntries = state.needs.filter((need) => grouped.has(need.slug));
-
-  needsWithEntries.forEach((need) => {
-    const entries = grouped.get(need.slug) || [];
-    if (!entries.length) {
-      return;
-    }
-
-    const details = document.createElement('details');
-    details.className = 'inventory-need';
-    details.id = `inventory-${need.slug}`;
-    if (!openedNeed) {
-      details.open = true;
-      openedNeed = true;
-    }
-
-    const summary = document.createElement('summary');
-    summary.className = 'inventory-need__summary';
-
-    const name = document.createElement('span');
-    name.className = 'inventory-need__name';
-    name.textContent = need.title;
-    summary.append(name);
-
-    const badge = document.createElement('span');
-    badge.className = 'inventory-need__badge';
-    badge.textContent = `${entries.length} ${entries.length === 1 ? 'strategy' : 'strategies'}`;
-    summary.append(badge);
-
-    details.append(summary);
-
-    const body = document.createElement('div');
-    body.className = 'inventory-need__body';
-
-    entries.forEach((entry) => {
-      body.append(renderInventoryItem(entry, { needSlug: need.slug }));
-    });
-
-    details.append(body);
-    state.inventoryListEl.append(details);
-  });
-
-  if (extras.length) {
-    const details = document.createElement('details');
-    details.className = 'inventory-need inventory-need--extra';
-    details.id = 'inventory-uncategorized';
-    if (!openedNeed) {
-      details.open = true;
-      openedNeed = true;
-    }
-
-    const summary = document.createElement('summary');
-    summary.className = 'inventory-need__summary';
-
-    const name = document.createElement('span');
-    name.className = 'inventory-need__name';
-    name.textContent = 'Other strategies';
-    summary.append(name);
-
-    const badge = document.createElement('span');
-    badge.className = 'inventory-need__badge';
-    badge.textContent = `${extras.length} ${extras.length === 1 ? 'strategy' : 'strategies'}`;
-    summary.append(badge);
-
-    details.append(summary);
-
-    const body = document.createElement('div');
-    body.className = 'inventory-need__body';
-    extras.forEach((entry) => {
-      body.append(renderInventoryItem(entry));
-    });
-    details.append(body);
-    state.inventoryListEl.append(details);
-  }
-
-  if (!needsWithEntries.length && !extras.length) {
+  if (!state.inventory.length) {
     const emptyNotice = document.createElement('p');
     emptyNotice.className = 'inventory-empty';
     emptyNotice.textContent = 'No saved strategies yet – use the Need Page button above to add one.';
     state.inventoryListEl.append(emptyNotice);
+    return;
   }
+
+  state.inventory.forEach((entry) => {
+    state.inventoryListEl.append(renderInventoryItem(entry));
+  });
 }
 
 function setShowStrategies(visible) {
@@ -5707,20 +5613,32 @@ function renderInventoryItem(entry, options = {}) {
     card.append(meta);
   }
 
-  if (entry.tags?.length) {
+  const needs = resolveEntryNeedSlugs(entry);
+  const needTitles = [];
+  const seenNeeds = new Set();
+  needs.forEach((slug) => {
+    const normalized = normalizeNeedSlugValue(slug);
+    if (!normalized || seenNeeds.has(normalized)) {
+      return;
+    }
+    seenNeeds.add(normalized);
+    const needTitle = state.needsBySlug.get(normalized)?.title || normalized;
+    needTitles.push(needTitle);
+  });
+  if (!needTitles.length && entry.need) {
+    const fallbackNeed = entry.need.toString().trim();
+    if (fallbackNeed) {
+      needTitles.push(fallbackNeed);
+    }
+  }
+
+  if (needTitles.length) {
     const tagList = document.createElement('ul');
     tagList.className = 'inventory-item__tags';
-    const seenTags = new Set();
-    entry.tags.forEach((tag) => {
+    needTitles.forEach((needTitle) => {
       const item = document.createElement('li');
       item.className = 'inventory-item__tag-pill';
-      const normalizedTag = typeof tag === 'string' ? tag.trim() : String(tag).trim();
-      if (!normalizedTag || seenTags.has(normalizedTag)) {
-        return;
-      }
-      seenTags.add(normalizedTag);
-      const needTitle = state.needsBySlug.get(normalizeNeedSlugValue(normalizedTag))?.title;
-      item.textContent = needTitle || normalizedTag;
+      item.textContent = needTitle;
       tagList.append(item);
     });
     card.append(tagList);
