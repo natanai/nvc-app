@@ -73,12 +73,12 @@ function normalizeSession(session) {
   return { did, handle, raw: session };
 }
 
-async function createBackendSession(did, accessToken) {
+async function createBackendSession(did, accessToken, handle) {
   const res = await fetch(`${BACKEND_AUTH_BASE_URL}/auth/session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ did, accessToken }),
+    body: JSON.stringify({ did, accessToken, handle }),
   });
 
   const data = await res.json().catch(() => null);
@@ -94,19 +94,20 @@ export async function ensureBackendSession(session) {
   const did = session?.did || session?.sub || null;
   if (!did) return;
   const accessToken = await resolveOAuthAccessToken(session);
+  const handle = session?.handle || null;
 
   if (backendSessionDid === did) {
     if (accessToken && accessToken !== backendSessionAccessToken) {
       try {
         await updateBackendSessionToken(accessToken);
       } catch (error) {
-        await createBackendSession(did, accessToken);
+        await createBackendSession(did, accessToken, handle);
       }
     }
     return;
   }
 
-  await createBackendSession(did, accessToken);
+  await createBackendSession(did, accessToken, handle);
 }
 
 export async function logoutBackendSession() {

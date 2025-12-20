@@ -791,15 +791,19 @@ export default {
             return jsonResponse({ status: 'error', message: 'invalid did' }, 400);
           }
 
+          const handleInput =
+            typeof body.handle === 'string' ? body.handle.trim() : '';
+          const handle = handleInput || did;
+
           const accessToken =
             typeof body.accessToken === 'string' && body.accessToken.trim() !== ''
               ? body.accessToken.trim()
               : null;
 
           await env.DB.prepare(
-            'INSERT OR IGNORE INTO users (did, created_at) VALUES (?, CURRENT_TIMESTAMP)',
+            'INSERT OR IGNORE INTO users (did, handle, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)',
           )
-            .bind(did)
+            .bind(did, handle)
             .run();
 
           const sid = crypto.randomUUID();
