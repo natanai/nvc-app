@@ -6,16 +6,19 @@ import {
 } from './bluesky-oauth.js?v=2024-07-11';
 
 // Updating this string forces cache-busting when referenced from feed/index.html.
-const FEED_ASSET_VERSION = '2024-10-06';
+const FEED_ASSET_VERSION = '2024-10-10';
 
 const state = {
   strategies: [],
   feedList: null,
   statusEl: null,
+  followStatusEl: null,
   authHintEl: null,
   scopeSelect: null,
   sortSelect: null,
   fetchButton: null,
+  followCheckButton: null,
+  followCheckInFlight: false,
   session: null,
 };
 
@@ -51,6 +54,11 @@ function formatTimestamp(isoString) {
 function setStatus(message) {
   if (!state.statusEl) return;
   state.statusEl.textContent = message || '';
+}
+
+function setFollowStatus(message) {
+  if (!state.followStatusEl) return;
+  state.followStatusEl.textContent = message || '';
 }
 
 function setAuthHint(session) {
@@ -288,13 +296,67 @@ async function fetchAndRenderFeed() {
   }
 }
 
+async function fetchFollowsStatus() {
+  if (state.followCheckInFlight) return;
+  if (!state.session?.did) {
+    setFollowStatus('Sign in with Bluesky to check follow visibility.');
+    return;
+  }
+
+  state.followCheckInFlight = true;
+  if (state.followCheckButton) {
+    state.followCheckButton.disabled = true;
+  }
+
+  setFollowStatus('Checking follow visibility...');
+
+  try {
+    try {
+      await ensureBackendSession(state.session);
+    } catch (error) {
+      console.warn('Unable to refresh backend session before follow check', error);
+    }
+
+    const res = await fetch(`${BACKEND_BASE_URL}/bluesky/follows-status`, {
+      credentials: 'include',
+      cache: 'no-store',
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data) {
+      const errorMessage = data?.error || data?.message || `Backend responded with ${res.status}`;
+      setFollowStatus(`Follow visibility check failed: ${errorMessage}.`);
+      return;
+    }
+    if (data.status !== 'ok') {
+      const errorMessage = data.error || 'Unknown error';
+      setFollowStatus(`Follow visibility check failed: ${errorMessage}.`);
+      return;
+    }
+
+    const count = Number.isFinite(data.followerCount)
+      ? data.followerCount
+      : Number(data?.followerCount || 0);
+    setFollowStatus(`Bluesky follows visible: ${count}.`);
+  } catch (error) {
+    console.error('Error checking follow visibility', error);
+    setFollowStatus('Follow visibility check failed. Please try again.');
+  } finally {
+    state.followCheckInFlight = false;
+    if (state.followCheckButton) {
+      state.followCheckButton.disabled = false;
+    }
+  }
+}
+
 async function init() {
   state.feedList = document.querySelector('[data-feed-list]');
   state.statusEl = document.querySelector('[data-feed-status]');
+  state.followStatusEl = document.querySelector('[data-feed-follows-status]');
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
   state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
   state.fetchButton = document.querySelector('[data-feed-fetch]');
+  state.followCheckButton = document.querySelector('[data-feed-follows-check]');
 
   if (document?.documentElement) {
     document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
@@ -341,6 +403,9 @@ async function init() {
   }
   if (state.fetchButton) {
     state.fetchButton.addEventListener('click', fetchAndRenderFeed);
+  }
+  if (state.followCheckButton) {
+    state.followCheckButton.addEventListener('click', fetchFollowsStatus);
   }
 }
 

@@ -1444,11 +1444,21 @@ button.site-nav__magnet {
                 <option value="popular">Most added</option>
               </select>
             </label>
+            <button
+              class="feed-controls__icon-button"
+              type="button"
+              data-feed-follows-check
+              aria-label="Check Bluesky follow visibility"
+              title="Check Bluesky follow visibility"
+            >
+              <span aria-hidden="true">⚙️</span>
+            </button>
             <button class="feed-controls__button" type="button" data-feed-fetch>
               Pull strategies
             </button>
           </div>
           <p class="feed-status" data-feed-status></p>
+          <p class="feed-follows-status" data-feed-follows-status></p>
           <p class="feed-action-hint">
             Select a filter and click “Pull strategies” to retrieve the latest feed.
           </p>
@@ -1465,7 +1475,7 @@ button.site-nav__magnet {
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
     <script src="../scripts/inventory-store.js" defer></script>
-    <script type="module" src="../scripts/strategy-feed.js?v=2024-10-06"></script>
+    <script type="module" src="../scripts/strategy-feed.js?v=2024-10-10"></script>
     <script src="../scripts/magnets.js" type="module"></script>
   </body>
 </html>
