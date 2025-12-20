@@ -10,6 +10,7 @@ const PERSONAL_STRATEGIES_EMAIL_BODY =
 const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
 const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
 const VISIBILITY_VALUES = ['private', 'followers', 'public'];
+const STRATEGY_TITLE_COLLATOR = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true });
 
 function normalizeVisibilityValue(value) {
   try {
@@ -24,6 +25,62 @@ function normalizeVisibilityValue(value) {
     return normalized;
   }
   return 'private';
+}
+
+function normalizeTitleValue(value) {
+  if (value == null) {
+    return '';
+  }
+  return value.toString().trim();
+}
+
+function sortEntriesByTitle(entries) {
+  const list = Array.isArray(entries) ? entries.slice() : [];
+  return list
+    .map((entry, index) => ({
+      entry,
+      index,
+      title: normalizeTitleValue(entry?.title),
+    }))
+    .sort((a, b) => {
+      const diff = STRATEGY_TITLE_COLLATOR.compare(a.title, b.title);
+      return diff || a.index - b.index;
+    })
+    .map((item) => item.entry);
+}
+
+function getStrategyCardTitle(card) {
+  if (!card) {
+    return '';
+  }
+  const titleEl = card.querySelector('.strategy-card__title');
+  if (!titleEl) {
+    return '';
+  }
+  const textNode = Array.from(titleEl.childNodes).find(
+    (node) => node.nodeType === Node.TEXT_NODE && node.nodeValue && node.nodeValue.trim()
+  );
+  return textNode ? textNode.nodeValue.trim() : titleEl.textContent?.trim() || '';
+}
+
+function sortStrategyCardsAlphabetically(stack, cards) {
+  if (!stack || !Array.isArray(cards) || !cards.length) {
+    return cards;
+  }
+  const sorted = cards
+    .map((card, index) => ({
+      card,
+      index,
+      title: normalizeTitleValue(getStrategyCardTitle(card)),
+    }))
+    .sort((a, b) => {
+      const diff = STRATEGY_TITLE_COLLATOR.compare(a.title, b.title);
+      return diff || a.index - b.index;
+    });
+  sorted.forEach(({ card }) => {
+    stack.appendChild(card);
+  });
+  return sorted.map(({ card }) => card);
 }
 
 function redirectLegacyJournalHash() {
@@ -1652,6 +1709,43 @@ function registerStrategySaveButton(slug, button) {
   updateStrategySaveButton(button, isStrategySaved(normalizedSlug));
 }
 
+function applyContributorNameToStrategyCard(card) {
+  if (!card) {
+    return;
+  }
+  const titleEl = card.querySelector('.strategy-card__title');
+  if (!titleEl) {
+    return;
+  }
+  if (!titleEl.querySelector('.strategy-card__title-name')) {
+    const firstName = sanitizeContributorName(card.dataset.firstName || '');
+    if (firstName) {
+      const nameEl = document.createElement('span');
+      nameEl.className = 'strategy-card__title-name';
+      nameEl.textContent = `— ${firstName}`;
+      titleEl.append(' ', nameEl);
+    }
+  }
+
+  const location = sanitizeLocation(card.dataset.location || '');
+  const metaEl = card.querySelector('.strategy-card__meta');
+  if (metaEl) {
+    if (location) {
+      metaEl.textContent = location;
+    } else {
+      metaEl.remove();
+    }
+  } else if (location) {
+    const body = card.querySelector('.strategy-card__body');
+    if (body) {
+      const meta = document.createElement('p');
+      meta.className = 'strategy-card__meta';
+      meta.textContent = location;
+      body.append(meta);
+    }
+  }
+}
+
 
 function setupNeedPage() {
   const main = document.querySelector('main[data-need-slug]');
@@ -1666,6 +1760,7 @@ function setupNeedPage() {
 
   const cards = main.querySelectorAll('.strategy-card');
   cards.forEach((card) => {
+    applyContributorNameToStrategyCard(card);
     const saveButton = card.querySelector('.strategy-card__save');
     if (!saveButton) {
       return;
@@ -5519,7 +5614,7 @@ function renderInventoryList() {
   const needsWithEntries = state.needs.filter((need) => grouped.has(need.slug));
 
   needsWithEntries.forEach((need) => {
-    const entries = grouped.get(need.slug) || [];
+    const entries = sortEntriesByTitle(grouped.get(need.slug) || []);
     if (!entries.length) {
       return;
     }
@@ -5584,7 +5679,8 @@ function renderInventoryList() {
 
     const body = document.createElement('div');
     body.className = 'inventory-need__body';
-    extras.forEach((entry) => {
+    const sortedExtras = sortEntriesByTitle(extras);
+    sortedExtras.forEach((entry) => {
       body.append(renderInventoryItem(entry));
     });
     details.append(body);
@@ -5654,12 +5750,22 @@ function renderInventoryItem(entry, options = {}) {
   card.className = 'inventory-item';
   card.dataset.id = entry.id;
 
+  const contributorSource = entry.contributor && typeof entry.contributor === 'object' ? entry.contributor : {};
+  const firstName = sanitizeContributorName(contributorSource.name || entry.firstName || '');
+  const location = sanitizeLocation(contributorSource.location || entry.location || '');
+
   const header = document.createElement('div');
   header.className = 'inventory-item__header';
 
   const title = document.createElement('h3');
   title.className = 'inventory-item__title';
   title.textContent = entry.title;
+  if (firstName) {
+    const nameEl = document.createElement('span');
+    nameEl.className = 'inventory-item__title-name';
+    nameEl.textContent = `— ${firstName}`;
+    title.append(' ', nameEl);
+  }
   header.append(title);
 
   if (entry.personal) {
@@ -5682,16 +5788,10 @@ function renderInventoryItem(entry, options = {}) {
     const description = document.createElement('p');
     description.className = 'inventory-item__description';
     description.textContent = entry.description;
-    card.append(description);
+  card.append(description);
   }
 
   const metaParts = [];
-  const contributorSource = entry.contributor && typeof entry.contributor === 'object' ? entry.contributor : {};
-  const firstName = sanitizeContributorName(contributorSource.name || entry.firstName || '');
-  const location = sanitizeLocation(contributorSource.location || entry.location || '');
-  if (firstName) {
-    metaParts.push(firstName);
-  }
   if (location) {
     metaParts.push(location);
   }
@@ -6942,6 +7042,8 @@ function focusNeedSection(slug) {
     return;
   }
 
+  cards = sortStrategyCardsAlphabetically(stack, cards);
+
   if (!toggleBtn && deckHeader) {
     toggleBtn = document.createElement('button');
     toggleBtn.type = 'button';
@@ -7093,7 +7195,7 @@ function focusNeedSection(slug) {
     window.requestAnimationFrame(refreshBodyShadows);
   }
 
-  performShuffle();
+  applyPositions(currentIndex);
   updateCounter(currentIndex);
   updateToggleButton();
   window.requestAnimationFrame(refreshBodyShadows);
