@@ -1898,7 +1898,7 @@ function renderInventoryPage() {
     includeContactFields: true,
     includeVisibilitySelect: true,
     notice: inventoryFormNotice,
-    includeLocalStorageReminder: true,
+    includeLocalStorageReminder: false,
   });
 
   const blueskyPanelStyles = `    <style>
@@ -1993,8 +1993,7 @@ function renderInventoryPage() {
       /* Card-like sections inside the panel */
 
       .inventory-auth-panel,
-      .inventory-backend-sync,
-      .inventory-social-strategies {
+      .inventory-backend-sync {
         border-radius: var(--radius-lg);
         border: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
         background: rgba(255, 255, 255, 0.85);
@@ -2004,8 +2003,7 @@ function renderInventoryPage() {
       }
 
       .inventory-auth-panel h2,
-      .inventory-backend-sync__heading,
-      .inventory-social-strategies__heading {
+      .inventory-backend-sync__heading {
         margin: 0;
         font-family: var(--font-display);
         font-size: 0.9rem;
@@ -2031,17 +2029,6 @@ function renderInventoryPage() {
         background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
         font-size: 0.8rem;
         color: color-mix(in srgb, var(--ink) 80%, #000 20%);
-      }
-
-      /* Login / logout states */
-
-      #bluesky-auth-logged-out,
-      #bluesky-auth-logged-in {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-        align-items: center;
-        margin-top: 0.35rem;
       }
 
       .inventory-auth-panel__field {
@@ -2087,27 +2074,6 @@ function renderInventoryPage() {
         margin-top: 0.25rem;
       }
 
-      .inventory-social-strategies__summary {
-        margin: 0.25rem 0 0;
-      }
-
-      .inventory-social-strategies__list {
-        margin-top: 0.5rem;
-        display: grid;
-        gap: 0.5rem;
-      }
-
-      .inventory-social-strategies__list > * {
-        padding: 0.6rem 0.7rem;
-        border-radius: var(--radius-md);
-        border: 2px solid color-mix(in srgb, var(--outline) 50%, transparent);
-        background: rgba(255, 255, 255, 0.9);
-        font-size: 0.85rem;
-        line-height: 1.4;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-      }
-
       /* Small screens */
 
       @media (max-width: 720px) {
@@ -2124,8 +2090,7 @@ function renderInventoryPage() {
         }
 
         .inventory-auth-panel,
-        .inventory-backend-sync,
-        .inventory-social-strategies {
+        .inventory-backend-sync {
           padding: 0.85rem 0.8rem 0.9rem;
         }
       }
@@ -2180,7 +2145,7 @@ function renderInventoryPage() {
                 <div class="inventory-bluesky-panel__titles">
                   <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
                   <p class="inventory-bluesky-panel__subtitle">
-                    Link your account to save/load data and fetch shared strategies, or keep everything local.
+                    Link your account to save/load data, or keep everything local.
                   </p>
                 </div>
                 <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
@@ -2188,8 +2153,8 @@ function renderInventoryPage() {
 
               <div class="inventory-bluesky-panel__content">
                 <p class="inventory-bluesky-panel__intro">
-                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
-                  local export and import controls if you prefer keeping everything on this device.
+                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the local
+                  export and import controls if you prefer keeping everything on this device.
                 </p>
 
                 <!-- OAuth sign-in / sign-out -->
@@ -2201,30 +2166,18 @@ function renderInventoryPage() {
                     Signing in by itself does <strong>not</strong> move or sync any of your data.
                   </p>
 
-                  <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
-                    <div class="inventory-auth-panel__field">
-                      <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
-                      <input id="bluesky-handle-input" type="text" autocomplete="username" />
-                    </div>
-                    <button
-                      id="bluesky-signin-button"
-                      type="button"
-                      class="inventory-button inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Sign in with Bluesky</span>
-                    </button>
+                  <div class="inventory-auth-panel__field" data-bluesky-handle-field>
+                    <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+                    <input id="bluesky-handle-input" type="text" autocomplete="username" />
                   </div>
-
-                  <div id="bluesky-auth-logged-in" class="inventory-auth-panel__state" hidden>
-                    <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
-                    <button
-                      id="bluesky-signout-button"
-                      type="button"
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Sign out</span>
-                    </button>
-                  </div>
+                  <button
+                    id="bluesky-auth-button"
+                    type="button"
+                    class="inventory-button inventory-button--compact"
+                  >
+                    <span class="inventory-button__text">Sign in</span>
+                  </button>
+                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
 
                   <p class="inventory-auth-warning">
                     We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
@@ -2272,31 +2225,6 @@ function renderInventoryPage() {
                   ></div>
                 </section>
 
-                <!-- Strategies from follows -->
-                <section
-                  class="inventory-social-strategies"
-                  aria-labelledby="inventory-social-strategies-heading"
-                >
-                  <h3
-                    id="inventory-social-strategies-heading"
-                    class="inventory-social-strategies__heading"
-                  >
-                    Strategies from Bluesky accounts you follow
-                  </h3>
-                  <p class="inventory-social-strategies__summary">
-                    When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
-                    have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
-                    are shown here.
-                  </p>
-                  <button
-                    type="button"
-                    data-backend-fetch-feed-button
-                    class="inventory-button inventory-button--compact"
-                  >
-                    <span class="inventory-button__text">Fetch strategies from follows</span>
-                  </button>
-                  <div class="inventory-social-strategies__list" data-backend-feed-container></div>
-                </section>
               </div>
             </details>
           </div>

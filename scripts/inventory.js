@@ -2016,7 +2016,6 @@ function setupInventoryPage() {
 
   const backendSaveButton = document.querySelector('[data-backend-save-button]');
   const backendLoadButton = document.querySelector('[data-backend-load-button]');
-  const backendFetchFeedButton = document.querySelector('[data-backend-fetch-feed-button]');
 
   if (backendSaveButton) {
     backendSaveButton.addEventListener('click', (event) => {
@@ -2032,12 +2031,6 @@ function setupInventoryPage() {
     });
   }
 
-  if (backendFetchFeedButton) {
-    backendFetchFeedButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      fetchSocialStrategiesFeed();
-    });
-  }
 
   if (state.inventoryListEl) {
     state.inventoryListEl.addEventListener('click', (event) => {
@@ -5633,6 +5626,13 @@ function renderInventoryItem(entry, options = {}) {
   }
 
   if (needTitles.length) {
+    const needsDetails = document.createElement('details');
+    needsDetails.className = 'inventory-item__needs';
+    const summary = document.createElement('summary');
+    summary.className = 'inventory-item__needs-summary';
+    summary.textContent = `Needs (${needTitles.length})`;
+    needsDetails.append(summary);
+
     const tagList = document.createElement('ul');
     tagList.className = 'inventory-item__tags';
     needTitles.forEach((needTitle) => {
@@ -5641,37 +5641,12 @@ function renderInventoryItem(entry, options = {}) {
       item.textContent = needTitle;
       tagList.append(item);
     });
-    card.append(tagList);
+    needsDetails.append(tagList);
+    card.append(needsDetails);
   }
 
   const actions = document.createElement('div');
   actions.className = 'inventory-item__actions';
-
-  const requestedSlug = normalizeNeedSlugValue(options.needSlug || '');
-  const resolvedSlugs = resolveEntryNeedSlugs(entry);
-  let linkSlug = '';
-  if (requestedSlug && isValidNeedSlug(requestedSlug)) {
-    linkSlug = requestedSlug;
-  } else if (resolvedSlugs.length) {
-    linkSlug = resolvedSlugs[0];
-  } else if (entry.needSlug) {
-    const normalized = normalizeNeedSlugValue(entry.needSlug);
-    if (normalized) {
-      linkSlug = normalized;
-    }
-  }
-
-  if (linkSlug && isValidNeedSlug(linkSlug)) {
-    const visitLink = document.createElement('a');
-    visitLink.className = 'inventory-item__link';
-    visitLink.href = `${state.basePath}needs/${linkSlug}/`;
-    visitLink.textContent = 'Need page';
-    const linkNeed = state.needsBySlug.get(linkSlug);
-    if (linkNeed?.title) {
-      visitLink.setAttribute('aria-label', `Need page for ${linkNeed.title}`);
-    }
-    actions.append(visitLink);
-  }
 
   const deleteButton = document.createElement('button');
   deleteButton.type = 'button';
@@ -6256,87 +6231,13 @@ async function loadSnapshotFromBackend() {
   }
 }
 
-async function fetchSocialStrategiesFeed() {
-  const did = getCurrentDid();
-  const container = document.querySelector('[data-backend-feed-container]');
-
-  if (!container) {
-    return;
-  }
-
-  container.textContent = '';
-
-  if (!did) {
-    container.textContent = 'Link a Bluesky account before fetching strategies from follows.';
-    return;
-  }
-
-  try {
-    const res = await fetch(`${BACKEND_BASE_URL}/strategies/feed?scope=follows`, {
-      credentials: 'include',
-    });
-    const data = await res.json();
-
-    if (!res.ok || !data || data.status !== 'ok') {
-      throw new Error(data && data.message ? data.message : 'Unknown error');
-    }
-
-    const strategies = Array.isArray(data.strategies) ? data.strategies : [];
-    if (!strategies.length) {
-      container.textContent = 'No shared strategies found yet for accounts you follow.';
-      return;
-    }
-
-    const list = document.createElement('div');
-    list.className = 'inventory-social-strategies__items';
-
-    strategies.forEach((strategy) => {
-      const card = document.createElement('article');
-      card.className = 'inventory-social-strategies__item';
-
-      const author = strategy && strategy.author ? strategy.author : {};
-      const label = author.displayName || author.handle || author.did || 'Unknown author';
-
-      const heading = document.createElement('h4');
-      heading.textContent = strategy?.title || '(no title)';
-      card.appendChild(heading);
-
-      const meta = document.createElement('p');
-      meta.className = 'inventory-social-strategies__meta';
-      meta.textContent = `Shared by ${label}`;
-      card.appendChild(meta);
-
-      const body = document.createElement('p');
-      body.className = 'inventory-social-strategies__body';
-      const bodyText = (strategy?.body || '').toString();
-      body.textContent = bodyText.length > 200 ? `${bodyText.slice(0, 200)}…` : bodyText;
-      card.appendChild(body);
-
-      if (Array.isArray(strategy?.needIds) && strategy.needIds.length) {
-        const needsEl = document.createElement('p');
-        needsEl.className = 'inventory-social-strategies__needs';
-        needsEl.textContent = `Needs: ${strategy.needIds.join(', ')}`;
-        card.appendChild(needsEl);
-      }
-
-      list.appendChild(card);
-    });
-
-    container.appendChild(list);
-  } catch (error) {
-    console.error('Failed to fetch social strategies feed', error);
-    container.textContent = 'Error fetching strategies from follows.';
-  }
-}
-
 function updateBackendSyncButtons() {
   const did = getCurrentDid();
   const saveBtn = document.querySelector('[data-backend-save-button]');
   const loadBtn = document.querySelector('[data-backend-load-button]');
-  const fetchBtn = document.querySelector('[data-backend-fetch-feed-button]');
 
   const disabled = !did;
-  [saveBtn, loadBtn, fetchBtn].forEach((btn) => {
+  [saveBtn, loadBtn].forEach((btn) => {
     if (!btn) return;
     btn.disabled = disabled;
     if (disabled) {

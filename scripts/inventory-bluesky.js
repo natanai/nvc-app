@@ -43,21 +43,30 @@ function describeSession(session) {
 }
 
 function updateBlueskyAuthUi(session) {
-  const loggedOut = document.querySelector('#bluesky-auth-logged-out');
-  const loggedIn = document.querySelector('#bluesky-auth-logged-in');
+  const handleField = document.querySelector('[data-bluesky-handle-field]');
   const statusText = document.querySelector('#bluesky-auth-status-text');
+  const authButton = document.querySelector('#bluesky-auth-button');
+  const authButtonText = authButton?.querySelector('.inventory-button__text');
 
   if (session) {
-    if (loggedOut) loggedOut.hidden = true;
-    if (loggedIn) loggedIn.hidden = false;
+    if (handleField) handleField.hidden = true;
     if (statusText) {
       statusText.textContent = describeSession(session);
     }
+    if (authButton) {
+      authButton.classList.add('inventory-button--ghost');
+      if (authButtonText) authButtonText.textContent = 'Sign out';
+      authButton.setAttribute('aria-label', 'Sign out of Bluesky');
+    }
   } else {
-    if (loggedOut) loggedOut.hidden = false;
-    if (loggedIn) loggedIn.hidden = true;
+    if (handleField) handleField.hidden = false;
     if (statusText) {
       statusText.textContent = '';
+    }
+    if (authButton) {
+      authButton.classList.remove('inventory-button--ghost');
+      if (authButtonText) authButtonText.textContent = 'Sign in';
+      authButton.setAttribute('aria-label', 'Sign in with Bluesky');
     }
   }
 }
@@ -85,13 +94,16 @@ async function onBlueskySignOutClick() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  document
-    .querySelector('#bluesky-signin-button')
-    ?.addEventListener('click', onBlueskySignInClick);
-
-  document
-    .querySelector('#bluesky-signout-button')
-    ?.addEventListener('click', onBlueskySignOutClick);
+  const authButton = document.querySelector('#bluesky-auth-button');
+  if (authButton) {
+    authButton.addEventListener('click', () => {
+      if (window.allneedsSession) {
+        onBlueskySignOutClick();
+      } else {
+        onBlueskySignInClick();
+      }
+    });
+  }
 
   let session = null;
   try {
