@@ -942,6 +942,165 @@ button.site-nav__magnet {
         overflow-wrap: anywhere;
       }
 
+      .inv-status-strip {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .inv-status-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .inv-status-left,
+      .inv-status-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .inv-status-actions--secondary {
+        justify-content: flex-start;
+      }
+
+      .inv-chip {
+        padding: 0.3rem 0.65rem;
+        border-radius: 999px;
+        border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
+        background: rgba(255, 255, 255, 0.85);
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .inv-empty-callout {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.9rem 1rem;
+        border-radius: var(--radius-lg);
+        border: 2px dashed color-mix(in srgb, var(--outline) 55%, transparent);
+        background: color-mix(in srgb, var(--gold) 30%, #ffffff 70%);
+      }
+
+      .inv-empty-callout__content h3 {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .inv-empty-callout__content p {
+        margin: 0.3rem 0 0;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+      }
+
+      .inv-empty-callout__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .inv-details {
+        margin-top: 0.5rem;
+        border: 2px solid color-mix(in srgb, var(--outline) 50%, transparent);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 0.5rem 0.75rem;
+      }
+
+      .inv-details summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        cursor: pointer;
+        list-style: none;
+        font-family: var(--font-display);
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .inv-details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .inv-details summary::after {
+        content: '➤';
+        font-size: 0.85rem;
+        transform: rotate(90deg);
+        transition: transform 0.18s ease;
+      }
+
+      .inv-details[open] summary::after {
+        transform: rotate(270deg);
+      }
+
+      .inv-details .inventory-actions__buttons {
+        margin-top: 0.75rem;
+      }
+
+      .inv-dialog::backdrop {
+        background: rgba(0, 0, 0, 0.25);
+      }
+
+      .inv-dialog {
+        border: none;
+        border-radius: 18px;
+        padding: 0;
+        max-width: 720px;
+        width: calc(100% - 24px);
+        background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+        box-shadow: 0 18px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      }
+
+      .inv-dialog-inner {
+        display: grid;
+        gap: 1rem;
+        padding: 1.5rem;
+        max-height: min(85vh, 820px);
+        overflow: auto;
+      }
+
+      .inv-dialog-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .inv-dialog-header h2 {
+        margin: 0;
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 1.1rem;
+      }
+
+      .inv-dialog-close {
+        border: 2px solid var(--outline);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 999px;
+        padding: 0.35rem 0.9rem;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .inv-dialog-close:hover,
+      .inv-dialog-close:focus-visible {
+        background: color-mix(in srgb, var(--sky) 35%, #ffffff 65%);
+        outline: none;
+      }
+
       /* Small screens */
 
       @media (max-width: 720px) {
@@ -961,6 +1120,24 @@ button.site-nav__magnet {
         .inventory-backend-sync,
         .inventory-social-strategies {
           padding: 0.85rem 0.8rem 0.9rem;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .inv-dialog {
+          width: 100%;
+          max-width: none;
+          border-radius: 18px 18px 0 0;
+          margin: 0;
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+
+        .inv-dialog-inner {
+          max-height: calc(100vh - 1.5rem);
+          padding: 1.25rem;
         }
       }
 
@@ -1404,47 +1581,71 @@ button.site-nav__magnet {
           <div class="inventory-header__content">
             <div class="inventory-header__title-row">
               <h1 class="page-title">Strategy inventory</h1>
-              <a class="inventory-journal-button" href="./journal/">
-                <img
-                  src="../icons/journal-32bit.svg"
-                  class="inventory-journal-button__icon"
-                  alt=""
-                  aria-hidden="true"
-                />
-                <span class="inventory-journal-button__label">Journal</span>
-              </a>
             </div>
             <p class="page-description">
               Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
             </p>
-            <div class="strategy-quick-actions inventory-header__quick-actions">
-              <a class="strategy-quick-actions__link" href="#inventory-form">
-                <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
-                <span>Add personal strategy</span>
-              </a>
-              <a
-                class="strategy-quick-actions__link strategy-quick-actions__link--secondary"
-                href="#strategies-list"
-                data-jump-to-strategies
-                aria-controls="strategies-list"
-                aria-expanded="false"
-              >
-                <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
-                <span>Review saved strategies</span>
-              </a>
-              <a class="inventory-shared-button" href="../feed/">
-                <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
-                <span class="inventory-shared-button__text">
-                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
-                  <span class="inventory-shared-button__label">View shared strategies</span>
-                </span>
-              </a>
+            <div class="inv-status-strip">
+              <div class="inv-status-row">
+                <div class="inv-status-left">
+                  <span class="inv-chip" id="invDataChip">Local</span>
+                  <span class="inv-chip" id="invCountChip">0 strategies loaded</span>
+                </div>
+                <div class="inv-status-actions">
+                  <a class="inventory-journal-button" href="./journal/">
+                    <img
+                      src="../icons/journal-32bit.svg"
+                      class="inventory-journal-button__icon"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <span class="inventory-journal-button__label">Journal</span>
+                  </a>
+                  <a
+                    class="inventory-button inventory-button--ghost inventory-button--compact inv-journal-page"
+                    href="/inventory/journal/"
+                  >
+                    <span class="inventory-button__text">Journal page</span>
+                  </a>
+                </div>
+              </div>
+              <div class="inv-status-actions inv-status-actions--secondary">
+                <button
+                  type="button"
+                  id="invOpenSyncTop"
+                  class="inventory-button inventory-button--compact"
+                >
+                  <span class="inventory-button__text">Sign in / load</span>
+                </button>
+              </div>
+              <div id="invEmptyCallout" class="inv-empty-callout" hidden>
+                <div class="inv-empty-callout__content">
+                  <h3>No strategies loaded yet</h3>
+                  <p>If you’re on a new browser, sign in to load your saved strategies, or import a backup.</p>
+                </div>
+                <div class="inv-empty-callout__actions">
+                  <button
+                    type="button"
+                    class="inventory-button inventory-button--compact"
+                    data-open-sync
+                  >
+                    <span class="inventory-button__text">Sign in / sync</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="inventory-button inventory-button--ghost inventory-button--compact"
+                    data-import-backup
+                  >
+                    <span class="inventory-button__text">Import backup</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <details class="inventory-bluesky-panel">
+            <details class="inventory-bluesky-panel" id="bluesky-sync-details">
               <summary class="inventory-bluesky-panel__summary">
                 <div class="inventory-bluesky-panel__titles">
-                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
+                  <h2 class="inventory-bluesky-panel__title">Sign in &amp; load (Bluesky sync)</h2>
                   <p class="inventory-bluesky-panel__subtitle">
                     Link your account to save/load data and fetch shared strategies, or keep everything local.
                   </p>
@@ -1565,6 +1766,30 @@ button.site-nav__magnet {
                 </section>
               </div>
             </details>
+            <div class="strategy-quick-actions inventory-header__quick-actions">
+              <a class="strategy-quick-actions__link" href="#add-strategy" data-open-add-strategy>
+                <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
+                <span>Add personal strategy</span>
+              </a>
+              <a
+                class="strategy-quick-actions__link strategy-quick-actions__link--secondary"
+                href="#strategies-list"
+                data-jump-to-strategies
+                aria-controls="strategies-list"
+                aria-expanded="false"
+              >
+                <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
+                <span>Review saved strategies</span>
+              </a>
+              <a class="inventory-shared-button" href="../feed/">
+                <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
+                <span class="inventory-shared-button__text">
+                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
+                  <span class="inventory-shared-button__label">View shared strategies</span>
+                </span>
+              </a>
+            </div>
+
           </div>
         </div>
       </header>
@@ -1577,36 +1802,39 @@ button.site-nav__magnet {
               Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
             </p>
           </div>
-          <div class="inventory-actions__buttons">
-            <button
-              type="button"
-              id="inventory-export"
-              class="inventory-button inventory-button--compact"
-              aria-label="Export localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export localStorage</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-email-personal"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Export personal strategies and email them to Nat"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
-              <span class="inventory-button__text">email me your strategies pretty please 🙏 - Nat</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-import-trigger"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Import localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import localStorage</span>
-            </button>
-            <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
-          </div>
+          <details class="inv-details" id="backup-details">
+            <summary>Backup &amp; share</summary>
+            <div class="inventory-actions__buttons">
+              <button
+                type="button"
+                id="inventory-export"
+                class="inventory-button inventory-button--compact"
+                aria-label="Export localStorage JSON"
+              >
+                <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
+                <span class="inventory-button__text">Export localStorage</span>
+              </button>
+              <button
+                type="button"
+                id="inventory-email-personal"
+                class="inventory-button inventory-button--ghost inventory-button--compact"
+                aria-label="Export personal strategies and email them to Nat"
+              >
+                <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
+                <span class="inventory-button__text">email me your strategies pretty please 🙏 - Nat</span>
+              </button>
+              <button
+                type="button"
+                id="inventory-import-trigger"
+                class="inventory-button inventory-button--ghost inventory-button--compact"
+                aria-label="Import localStorage JSON"
+              >
+                <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
+                <span class="inventory-button__text">Import localStorage</span>
+              </button>
+              <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
+            </div>
+          </details>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
         </section>
 
@@ -1689,74 +1917,78 @@ button.site-nav__magnet {
           </div>
         </section>
 
-        <section class="inventory-form" aria-labelledby="inventory-form-heading">
-          <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
-          
-      <div class="strategy-form__container" data-strategy-form-container>
-        <div class="strategy-card strategy-card--form">
-          <form id="inventory-form" class="strategy-form" data-strategy-form>
-            <div class="strategy-form__field">
-              <label for="inventory-title">Strategy name</label>
-              <div class="strategy-card strategy-card--input">
-                <input id="inventory-title" name="title" type="text" required />
+        <dialog id="addStrategyDialog" class="inv-dialog" aria-labelledby="inventory-form-heading">
+          <div class="inv-dialog-inner">
+            <div class="inv-dialog-header">
+              <h2 id="inventory-form-heading">Add a personal strategy</h2>
+              <button type="button" class="inv-dialog-close" data-close>Close</button>
+            </div>
+            <div class="strategy-form__container" data-strategy-form-container>
+              <div class="strategy-card strategy-card--form">
+                <form id="inventory-form" class="strategy-form" data-strategy-form>
+                  <div class="strategy-form__field">
+                    <label for="inventory-title">Strategy name</label>
+                    <div class="strategy-card strategy-card--input">
+                      <input id="inventory-title" name="title" type="text" required />
+                    </div>
+                  </div>
+                  <div class="strategy-form__field">
+                    <label for="inventory-description">How do you put it into practice?</label>
+                    <div class="strategy-card strategy-card--input">
+                      <textarea id="inventory-description" name="description" rows="4" required></textarea>
+                    </div>
+                  </div>
+
+                  <div class="strategy-form__field">
+                    <label for="inventory-need">Primary need</label>
+                    <p id="inventory-need-hint" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
+                    <div class="strategy-card strategy-card--input">
+                      <select id="inventory-need" name="need" multiple aria-describedby="inventory-need-hint" required>
+                        <option value="" disabled>Select a need</option>
+                        <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="strategy-form__row">
+                    <div class="strategy-form__field">
+                      <label for="inventory-name">First name (optional)</label>
+                      <div class="strategy-card strategy-card--input">
+                        <input id="inventory-name" name="name" type="text" />
+                      </div>
+                    </div>
+                    <div class="strategy-form__field">
+                      <label for="inventory-location">Location (optional)</label>
+                      <div class="strategy-card strategy-card--input">
+                        <input id="inventory-location" name="location" type="text" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="strategy-form__field">
+                    <label for="inventory-visibility">Visibility</label>
+                    <p class="strategy-form__hint">Choose who can see this strategy when you export or share it.</p>
+                    <div class="strategy-card strategy-card--input">
+                      <select id="inventory-visibility" name="strategy-visibility">
+                        <option value="private">Private (only on this browser)</option>
+                        <option value="followers">Followers (Bluesky followers when synced)</option>
+                        <option value="public">Public</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
+                    <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
+                  </div>
+
+                  <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
+                </form>
               </div>
-            </div>
-            <div class="strategy-form__field">
-              <label for="inventory-description">How do you put it into practice?</label>
-              <div class="strategy-card strategy-card--input">
-                <textarea id="inventory-description" name="description" rows="4" required></textarea>
-              </div>
-            </div>
-            
-        <div class="strategy-form__field">
-          <label for="inventory-need">Primary need</label>
-          <p id="inventory-need-hint" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="inventory-need" name="need" multiple aria-describedby="inventory-need-hint" required>
-              <option value="" disabled>Select a need</option>
-              <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
-            </select>
-          </div>
-        </div>
-            
-        <div class="strategy-form__row">
-          <div class="strategy-form__field">
-            <label for="inventory-name">First name (optional)</label>
-            <div class="strategy-card strategy-card--input">
-              <input id="inventory-name" name="name" type="text" />
+
+              <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
+
             </div>
           </div>
-          <div class="strategy-form__field">
-            <label for="inventory-location">Location (optional)</label>
-            <div class="strategy-card strategy-card--input">
-              <input id="inventory-location" name="location" type="text" />
-            </div>
-          </div>
-        </div>
-            
-        <div class="strategy-form__field">
-          <label for="inventory-visibility">Visibility</label>
-          <p class="strategy-form__hint">Choose who can see this strategy when you export or share it.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="inventory-visibility" name="strategy-visibility">
-              <option value="private">Private (only on this browser)</option>
-              <option value="followers">Followers (Bluesky followers when synced)</option>
-              <option value="public">Public</option>
-            </select>
-          </div>
-        </div>
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
-            </div>
-            
-            <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          </form>
-        </div>
-        
-      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
-        
-      </div>
-        </section>
+        </dialog>
       </section>
     
       </main>

@@ -486,6 +486,7 @@ const state = {
   journalSummaryCollapsed: false,
   journalSavedTimer: null,
   journalSaveLabel: '',
+  hasImportedBackup: false,
   viewportHeightListenersAttached: false,
   journalStoreListenersAttached: false,
   journalModuleReadyPromise: null,
@@ -1542,6 +1543,7 @@ document.addEventListener('DOMContentLoaded', () => {
 if (typeof window !== 'undefined') {
   window.addEventListener('allneeds:bsky-login-changed', () => {
     updateBackendSyncButtons();
+    updateInventoryCount();
   });
 }
 
@@ -1883,6 +1885,47 @@ function setupInventoryPage() {
   state.jumpToStrategiesButton = document.querySelector('[data-jump-to-strategies]');
   state.inventoryListHeading = document.getElementById('inventory-list-heading');
   state.summaryFilterButtons = Array.from(document.querySelectorAll('[data-summary-filter]'));
+
+  const openSyncButtons = [
+    document.getElementById('invOpenSyncTop'),
+    ...Array.from(document.querySelectorAll('[data-open-sync]')),
+  ].filter(Boolean);
+  openSyncButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      openBlueskySyncPanel();
+    });
+  });
+
+  const importBackupButtons = Array.from(document.querySelectorAll('[data-import-backup]'));
+  importBackupButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      document.getElementById('inventory-import-trigger')?.click();
+    });
+  });
+
+  const openAddButtons = Array.from(document.querySelectorAll('[data-open-add-strategy]'));
+  openAddButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      if (event) {
+        event.preventDefault();
+      }
+      openAddStrategyDialog();
+    });
+  });
+
+  const addStrategyDialog = document.getElementById('addStrategyDialog');
+  if (addStrategyDialog) {
+    addStrategyDialog.addEventListener('click', (event) => {
+      if (event.target === addStrategyDialog) {
+        closeAddStrategyDialog(addStrategyDialog);
+      }
+    });
+    addStrategyDialog.querySelectorAll('[data-close]').forEach((closeButton) => {
+      closeButton.addEventListener('click', () => {
+        closeAddStrategyDialog(addStrategyDialog);
+      });
+    });
+  }
 
   if (state.inventoryToggleButton) {
     state.inventoryToggleButton.addEventListener('click', () => {
@@ -5408,6 +5451,50 @@ function renderInventorySummary() {
   });
 }
 
+function openBlueskySyncPanel() {
+  const details = document.getElementById('bluesky-sync-details');
+  if (!details) {
+    return;
+  }
+  details.open = true;
+  if (typeof details.scrollIntoView === 'function') {
+    details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const input = document.getElementById('bluesky-handle-input');
+  if (input && typeof input.focus === 'function') {
+    input.focus({ preventScroll: true });
+  }
+}
+
+function openAddStrategyDialog() {
+  const dialog = document.getElementById('addStrategyDialog');
+  if (!dialog) {
+    return;
+  }
+  if (typeof dialog.showModal === 'function') {
+    if (!dialog.open) {
+      dialog.showModal();
+    }
+  } else {
+    dialog.setAttribute('open', '');
+  }
+  const titleInput = document.getElementById('inventory-title');
+  if (titleInput && typeof titleInput.focus === 'function') {
+    titleInput.focus({ preventScroll: true });
+  }
+}
+
+function closeAddStrategyDialog(dialog) {
+  if (!dialog) {
+    return;
+  }
+  if (typeof dialog.close === 'function') {
+    dialog.close();
+  } else {
+    dialog.removeAttribute('open');
+  }
+}
+
 function handleJumpToStrategies(event) {
   if (event) {
     event.preventDefault();
@@ -5804,18 +5891,34 @@ function persistInventory(items, options = {}) {
   }
 }
 
+function markInventoryImport() {
+  state.hasImportedBackup = true;
+  updateInventoryCount();
+}
+
 function updateInventoryCount() {
   const counter = document.querySelector('[data-inventory-count]');
-  if (!counter) {
-    return;
-  }
   const total = state.inventory.length;
-  if (!total) {
-    counter.textContent = '';
-    counter.hidden = true;
-  } else {
-    counter.textContent = String(total);
-    counter.hidden = false;
+  if (counter) {
+    if (!total) {
+      counter.textContent = '';
+      counter.hidden = true;
+    } else {
+      counter.textContent = String(total);
+      counter.hidden = false;
+    }
+  }
+
+  const countChip = document.getElementById('invCountChip');
+  if (countChip) {
+    countChip.textContent = `${total} ${total === 1 ? 'strategy' : 'strategies'} loaded`;
+  }
+
+  const emptyCallout = document.getElementById('invEmptyCallout');
+  if (emptyCallout) {
+    const isLoggedIn = Boolean(getCurrentDid());
+    const shouldShow = total === 0 && !isLoggedIn && !state.hasImportedBackup;
+    emptyCallout.hidden = !shouldShow;
   }
 }
 
@@ -6392,12 +6495,16 @@ async function importLocalData(file) {
     return;
   }
   if (detection.type === 'snapshot') {
-    await importLocalStorageSnapshot(detection.payload);
+    const imported = await importLocalStorageSnapshot(detection.payload);
+    if (imported) {
+      markInventoryImport();
+    }
     return;
   }
   if (detection.type === 'legacyInventoryCsv') {
     const imported = importInventoryCsvFromText(text);
     if (imported) {
+      markInventoryImport();
       showJournalMessage(
         'Legacy inventory CSV imported. Export a new localStorage backup to include journal and customizer data.',
         'warning'
@@ -6408,6 +6515,7 @@ async function importLocalData(file) {
   if (detection.type === 'legacyJournal') {
     const imported = await importLegacyJournalEntries(detection.entries);
     if (imported) {
+      markInventoryImport();
       showInventoryMessage(
         'Legacy journal JSON imported. Export a new localStorage backup to include inventory and customizer data.',
         'warning'
@@ -6526,7 +6634,7 @@ async function importLocalStorageSnapshot(payload) {
   const normalized = normalizeBackupPayload(payload);
   if (!normalized.localStorage || !Object.keys(normalized.localStorage).length) {
     broadcastDataMessage('Import failed. Backup did not contain localStorage data.', 'error');
-    return;
+    return false;
   }
 
   const confirmed = window.confirm(
@@ -6534,7 +6642,7 @@ async function importLocalStorageSnapshot(payload) {
   );
   if (!confirmed) {
     broadcastDataMessage('Import canceled. No changes were made.', 'warning');
-    return;
+    return false;
   }
 
   const previousSnapshot = captureLocalStorageSnapshot();
@@ -6542,7 +6650,7 @@ async function importLocalStorageSnapshot(payload) {
   if (!replaceResult.success) {
     console.warn('Unable to apply localStorage backup', replaceResult.error);
     broadcastDataMessage('Import failed. Unable to write to localStorage.', 'error');
-    return;
+    return false;
   }
 
   const counts = await refreshStateFromLocalStorageSnapshot(normalized.localStorage);
@@ -6551,6 +6659,7 @@ async function importLocalStorageSnapshot(payload) {
   const message = `Restored localStorage backup (${inventoryCount} strategies, ${journalCount} journal entries, customizer settings).`;
   broadcastDataMessage(message, 'success');
   showJournalStatus(`Restored ${journalCount} ${journalCount === 1 ? 'entry' : 'entries'} from backup.`);
+  return true;
 }
 
 async function refreshStateFromLocalStorageSnapshot(snapshot) {
