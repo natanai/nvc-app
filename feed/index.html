@@ -1417,8 +1417,8 @@ button.site-nav__magnet {
                 <h1 class="page-title">Strategy feed</h1>
               </div>
               <p class="page-description">
-                Browse strategies that other allneeds users have chosen to share. You can filter between
-                people you follow and all public strategies, and sort by most recent or most added.
+                Browse strategies that other allneeds users have chosen to share. Choose your filters, then use
+                the “Pull strategies” button to load the latest list from the database.
               </p>
             </div>
           </div>
@@ -1441,8 +1441,14 @@ button.site-nav__magnet {
                 <option value="popular">Most added</option>
               </select>
             </label>
+            <button class="feed-controls__button" type="button" data-feed-fetch>
+              Pull strategies
+            </button>
           </div>
           <p class="feed-status" data-feed-status></p>
+          <p class="feed-action-hint">
+            Select a filter and click “Pull strategies” to retrieve the latest feed.
+          </p>
           <p class="feed-auth-hint" data-feed-auth-hint>
             <!-- JS will fill in a message here depending on whether the viewer is signed in. -->
           </p>
@@ -1456,7 +1462,7 @@ button.site-nav__magnet {
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
     <script src="../scripts/inventory-store.js" defer></script>
-    <script type="module" src="../scripts/strategy-feed.js?v=2024-07-11"></script>
+    <script type="module" src="../scripts/strategy-feed.js?v=2024-10-06"></script>
     <script src="../scripts/magnets.js" type="module"></script>
   </body>
 </html>

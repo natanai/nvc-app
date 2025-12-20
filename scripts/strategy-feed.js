@@ -6,7 +6,7 @@ import {
 } from './bluesky-oauth.js?v=2024-07-11';
 
 // Updating this string forces cache-busting when referenced from feed/index.html.
-const FEED_ASSET_VERSION = '2024-07-11';
+const FEED_ASSET_VERSION = '2024-10-06';
 
 const state = {
   strategies: [],
@@ -15,6 +15,8 @@ const state = {
   authHintEl: null,
   scopeSelect: null,
   sortSelect: null,
+  fetchButton: null,
+  session: null,
 };
 
 function normalizeVisibility(value) {
@@ -58,8 +60,44 @@ function setAuthHint(session) {
       'Signed in via Bluesky. You can see strategies shared by accounts you follow and add them to your inventory.';
   } else {
     state.authHintEl.textContent =
-      'You’re currently signed out. You can still browse public strategies, but to see strategies from people you follow and to track “add” counts, sign in with Bluesky on the Inventory page.';
+      'You’re currently signed out. You can still browse public strategies, but to see strategies from people you follow, sign in with Bluesky on the Inventory page.';
   }
+}
+
+function setScopeAvailability(session) {
+  if (!state.scopeSelect) return;
+  const followsOption = state.scopeSelect.querySelector('option[value="follows"]');
+  if (!session || !session.did) {
+    if (state.scopeSelect.value === 'follows') {
+      state.scopeSelect.value = 'public';
+    }
+    if (followsOption) {
+      followsOption.disabled = true;
+    }
+  } else if (followsOption) {
+    followsOption.disabled = false;
+  }
+}
+
+function setFilterHint(message) {
+  setStatus(message || 'Choose filters, then click “Pull strategies” to load the feed.');
+}
+
+function normalizeStrategyNeeds(strategy) {
+  const needs =
+    (Array.isArray(strategy?.needIds) && strategy.needIds) ||
+    (Array.isArray(strategy?.supportsNeeds) && strategy.supportsNeeds) ||
+    (Array.isArray(strategy?.needs) && strategy.needs) ||
+    [];
+  const normalized = needs
+    .map((item) => {
+      if (!item) return '';
+      if (typeof item === 'string') return item.trim();
+      if (typeof item === 'object') return item.title || item.slug || '';
+      return '';
+    })
+    .filter(Boolean);
+  return Array.from(new Set(normalized));
 }
 
 function renderFeed(strategies) {
@@ -86,16 +124,16 @@ function renderFeed(strategies) {
     title.textContent = strategy?.title || 'Untitled strategy';
     header.appendChild(title);
 
-  const meta = document.createElement('p');
-  meta.className = 'strategy-card__meta';
-  const author = strategy?.author || {};
-  const authorLabel = author.displayName || author.handle || author.did || 'Unknown author';
-  const handleLabel = author.handle ? `@${author.handle}` : '';
-  const timestamp = formatTimestamp(strategy?.createdAt);
-  meta.textContent = timestamp
-    ? `by ${authorLabel}${handleLabel ? ' (' + handleLabel + ')' : ''} · ${timestamp}`
-    : `by ${authorLabel}${handleLabel ? ' (' + handleLabel + ')' : ''}`;
-  header.appendChild(meta);
+    const meta = document.createElement('p');
+    meta.className = 'strategy-card__meta';
+    const author = strategy?.author || {};
+    const authorLabel = author.displayName || author.handle || author.did || 'Unknown author';
+    const handleLabel = author.handle ? `@${author.handle}` : '';
+    const timestamp = formatTimestamp(strategy?.createdAt);
+    meta.textContent = timestamp
+      ? `by ${authorLabel}${handleLabel ? ' (' + handleLabel + ')' : ''} · ${timestamp}`
+      : `by ${authorLabel}${handleLabel ? ' (' + handleLabel + ')' : ''}`;
+    header.appendChild(meta);
 
     card.appendChild(header);
 
@@ -111,16 +149,26 @@ function renderFeed(strategies) {
 
     const visibilityBadge = document.createElement('span');
     visibilityBadge.className = 'strategy-card__badge';
-    visibilityBadge.textContent = `Visibility: ${formatVisibility(strategy?.visibility)}`;
+    visibilityBadge.textContent = formatVisibility(strategy?.visibility);
     footer.appendChild(visibilityBadge);
 
-    const addCountBadge = document.createElement('span');
-    addCountBadge.className = 'strategy-card__badge';
-    const startingCount = Number.isFinite(strategy?.addCount)
-      ? Number(strategy.addCount)
-      : Number(strategy?.addCount || 0);
-    addCountBadge.textContent = `Added to inventories: ${startingCount}`;
-    footer.appendChild(addCountBadge);
+    const needs = normalizeStrategyNeeds(strategy);
+    if (needs.length) {
+      const needsDetails = document.createElement('details');
+      needsDetails.className = 'strategy-card__needs';
+      const needsSummary = document.createElement('summary');
+      needsSummary.textContent = 'Needs supported';
+      needsDetails.appendChild(needsSummary);
+      const needsList = document.createElement('ul');
+      needsList.className = 'strategy-card__needs-list';
+      needs.forEach((need) => {
+        const item = document.createElement('li');
+        item.textContent = need;
+        needsList.appendChild(item);
+      });
+      needsDetails.appendChild(needsList);
+      footer.appendChild(needsDetails);
+    }
 
     const addButton = document.createElement('button');
     addButton.type = 'button';
@@ -128,7 +176,7 @@ function renderFeed(strategies) {
     addButton.dataset.addToInventory = 'true';
     addButton.textContent = 'Add to inventory';
     addButton.addEventListener('click', () => {
-      handleAddToInventory(strategy, addCountBadge);
+      handleAddToInventory(strategy);
     });
     footer.appendChild(addButton);
 
@@ -191,7 +239,7 @@ async function notifyBackendAdd(strategy) {
   return data?.strategy || null;
 }
 
-async function handleAddToInventory(strategy, addCountBadge) {
+async function handleAddToInventory(strategy) {
   addStrategyLocally(strategy);
   setStatus('Added to your local inventory.');
 
@@ -209,10 +257,6 @@ async function handleAddToInventory(strategy, addCountBadge) {
     : Number(strategy?.addCount || 0);
   const nextCount = Number.isFinite(updated?.addCount) ? Number(updated.addCount) : baseCount + 1;
   strategy.addCount = nextCount;
-  if (addCountBadge) {
-    const displayCount = Number.isFinite(nextCount) ? nextCount : 0;
-    addCountBadge.textContent = `Added to inventories: ${displayCount}`;
-  }
 }
 
 async function fetchAndRenderFeed() {
@@ -250,6 +294,7 @@ async function init() {
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
   state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
+  state.fetchButton = document.querySelector('[data-feed-fetch]');
 
   if (document?.documentElement) {
     document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
@@ -273,15 +318,29 @@ async function init() {
     }
   }
 
-  setAuthHint(session || null);
+  state.session = session || null;
+  setAuthHint(state.session);
+  setScopeAvailability(state.session);
+  setFilterHint();
 
-  await fetchAndRenderFeed();
+  const updateHint = () => {
+    setFilterHint();
+  };
 
   if (state.scopeSelect) {
-    state.scopeSelect.addEventListener('change', fetchAndRenderFeed);
+    state.scopeSelect.addEventListener('change', () => {
+      if (!state.session?.did && state.scopeSelect.value === 'follows') {
+        state.scopeSelect.value = 'public';
+      }
+      setScopeAvailability(state.session);
+      updateHint();
+    });
   }
   if (state.sortSelect) {
-    state.sortSelect.addEventListener('change', fetchAndRenderFeed);
+    state.sortSelect.addEventListener('change', updateHint);
+  }
+  if (state.fetchButton) {
+    state.fetchButton.addEventListener('click', fetchAndRenderFeed);
   }
 }
 
