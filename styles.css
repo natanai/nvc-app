@@ -6803,10 +6803,35 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   font-size: 1rem;
 }
 
+.feed-controls__button {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--outline);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.feed-controls__button:hover,
+.feed-controls__button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 var(--shadow);
+}
+
 .feed-status {
   margin: 0.25rem 0 0;
   min-height: 1.2em;
   font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.feed-action-hint {
+  margin: 0;
+  font-size: 0.95rem;
   color: var(--ink-soft);
 }
 
@@ -6839,6 +6864,46 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   box-shadow: 0 10px 0 var(--shadow);
 }
 
+.strategy-card__footer {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.strategy-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--chip-bg) 70%, #ffffff 30%);
+  color: var(--ink);
+  width: fit-content;
+}
+
+.strategy-card__needs {
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--outline) 25%, transparent);
+  padding: 0.45rem 0.65rem;
+  background: #fff;
+}
+
+.strategy-card__needs summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.strategy-card__needs-list {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+  display: grid;
+  gap: 0.2rem;
+}
+
 @media (max-width: 720px) {
   .feed-controls__row {
     flex-direction: column;
@@ -6846,6 +6911,10 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   }
 
   .feed-controls__group {
+    width: 100%;
+  }
+
+  .feed-controls__button {
     width: 100%;
   }
 }
