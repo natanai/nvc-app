@@ -6186,6 +6186,19 @@ function setBackendStatusMessage(message) {
     return;
   }
   statusEl.textContent = message || '';
+  if (message) {
+    statusEl.classList.remove('inventory-backend-sync__status--highlight');
+    void statusEl.offsetWidth;
+    statusEl.classList.add('inventory-backend-sync__status--highlight');
+  }
+}
+
+function formatBackendStatusTimestamp(date = new Date()) {
+  try {
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  } catch (error) {
+    return date.toLocaleTimeString();
+  }
 }
 
 async function publishStrategyToBackend(entry) {
@@ -6283,7 +6296,8 @@ async function saveSnapshotToBackend() {
       console.error('Failed to sync shared strategies', error);
       syncMessage = ' Shared strategies could not be synced.';
     }
-    setBackendStatusMessage(`Snapshot saved to backend.${syncMessage}`);
+    const timestamp = formatBackendStatusTimestamp();
+    setBackendStatusMessage(`Snapshot saved to backend at ${timestamp}.${syncMessage}`);
   } catch (error) {
     console.error('Failed to save snapshot to backend', error);
     setBackendStatusMessage('Error saving snapshot to backend.');
