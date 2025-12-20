@@ -1643,15 +1643,15 @@ ${strategiesNote}
                   const firstName = sanitizeContributorName(contributor.name);
                   const location = sanitizeLocation(contributor.location);
                   const contributorParts = [];
+                  if (firstName) {
+                    contributorParts.push(firstName);
+                  }
                   if (location) {
                     contributorParts.push(location);
                   }
                   const contributorText = contributorParts.map((part) => escapeHtml(part)).join(' • ');
                   const contributorHtml = contributorText
                     ? `<p class="strategy-card__meta">${contributorText}</p>`
-                    : '';
-                  const titleName = firstName
-                    ? `<span class="strategy-card__title-name">— ${escapeHtml(firstName)}</span>`
                     : '';
                   const dataAttrs = [
                     `data-strategy-slug="${escapeHtml(strategy.slug)}"`,
@@ -1668,7 +1668,7 @@ ${strategiesNote}
 
                   return `
                     <article class="strategy-card"${dataAttrString}>
-                      <h3 class="strategy-card__title">${escapeHtml(strategy.title)}${titleName ? ` ${titleName}` : ''}</h3>
+                      <h3 class="strategy-card__title">${escapeHtml(strategy.title)}</h3>
                       <div class="strategy-card__body">
                         <p class="strategy-card__description">${escapeHtml(description)}</p>
                         ${contributorHtml}

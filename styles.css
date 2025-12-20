@@ -3135,12 +3135,6 @@ main[data-need-slug] .page-title::before {
   font-size: 1.1rem;
 }
 
-.strategy-card__title-name {
-  font-size: 0.85em;
-  font-weight: 500;
-  color: var(--ink-soft);
-}
-
 .strategy-card__description {
   margin: 0;
   color: var(--ink-soft);
@@ -5312,12 +5306,6 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   margin: 0;
   font-size: 1.05rem;
   word-break: break-word;
-}
-
-.inventory-item__title-name {
-  font-size: 0.85em;
-  font-weight: 500;
-  color: var(--ink-soft);
 }
 
 .inventory-item__description {
