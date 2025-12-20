@@ -1910,6 +1910,7 @@ function renderInventoryPage() {
         border-radius: var(--radius-xl);
         background: color-mix(in srgb, var(--lavender) 65%, #ffffff 35%);
         box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+        overflow: hidden;
       }
 
       .inventory-bluesky-panel__summary {
@@ -1973,6 +1974,8 @@ function renderInventoryPage() {
         display: grid;
         gap: 1rem;
         max-width: 100%;
+        border-bottom-left-radius: var(--radius-xl);
+        border-bottom-right-radius: var(--radius-xl);
       }
 
       .inventory-bluesky-panel__content p,
