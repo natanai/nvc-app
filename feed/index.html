@@ -1447,14 +1447,28 @@ button.site-nav__magnet {
             <button class="feed-controls__button" type="button" data-feed-fetch>
               Pull strategies
             </button>
+            <button
+              class="feed-controls__debug"
+              type="button"
+              data-feed-debug
+              aria-label="Check Bluesky follow access"
+              title="Check Bluesky follow access"
+            >
+              <span aria-hidden="true">⚙︎</span>
+            </button>
           </div>
           <p class="feed-status" data-feed-status></p>
           <p class="feed-action-hint">
             Select a filter and click “Pull strategies” to retrieve the latest feed.
           </p>
+          <p class="feed-visibility-hint">
+            If your Bluesky account hides follows from logged-out viewers, the “people you follow” filter may appear
+            empty. Use the gear icon to check access or enable logged-out visibility in Bluesky settings.
+          </p>
           <p class="feed-auth-hint" data-feed-auth-hint>
             <!-- JS will fill in a message here depending on whether the viewer is signed in. -->
           </p>
+          <p class="feed-debug-status" data-feed-debug-status></p>
         </section>
 
         <section class="feed-list" aria-label="Shared strategies">

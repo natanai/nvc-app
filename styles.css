@@ -6876,6 +6876,28 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   box-shadow: 0 10px 0 var(--shadow);
 }
 
+.feed-controls__debug {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 2px solid var(--outline);
+  background: #fff;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--shadow) 60%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.feed-controls__debug:hover,
+.feed-controls__debug:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--shadow) 60%, transparent);
+}
+
 .feed-status {
   margin: 0.25rem 0 0;
   min-height: 1.2em;
@@ -6889,10 +6911,18 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   color: var(--ink-soft);
 }
 
+.feed-visibility-hint,
 .feed-auth-hint {
   margin: 0;
   color: var(--ink-soft);
   font-size: 0.95rem;
+}
+
+.feed-debug-status {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  min-height: 1.1em;
 }
 
 .feed-list {
