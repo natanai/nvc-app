@@ -5546,7 +5546,7 @@ function updateInventoryToggleLabel() {
   }
   const isOpen = state.showStrategies;
   const total = state.inventory.length;
-  const baseLabel = isOpen ? 'Hide your saved strategies' : 'Show your saved strategies';
+  const baseLabel = isOpen ? 'Hide saved strategies' : 'Show saved strategies';
   const suffix = !isOpen && total ? ` (${total})` : '';
   state.inventoryToggleButton.textContent = `${baseLabel}${suffix}`;
   state.inventoryToggleButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');

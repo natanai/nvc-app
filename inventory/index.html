@@ -791,7 +791,9 @@ button.site-nav__magnet {
         border: 2px solid var(--outline);
         background: rgba(255, 255, 255, 0.9);
         font-size: 0.9rem;
+        line-height: 1;
         transform: rotate(90deg);
+        transform-origin: 50% 50%;
         transition: transform 0.18s ease, background 0.18s ease;
       }
 
@@ -826,9 +828,7 @@ button.site-nav__magnet {
 
       /* Card-like sections inside the panel */
 
-      .inventory-auth-panel,
-      .inventory-backend-sync,
-      .inventory-social-strategies {
+      .inventory-auth-panel {
         border-radius: var(--radius-lg);
         border: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
         background: rgba(255, 255, 255, 0.85);
@@ -837,9 +837,7 @@ button.site-nav__magnet {
         gap: 0.55rem;
       }
 
-      .inventory-auth-panel h2,
-      .inventory-backend-sync__heading,
-      .inventory-social-strategies__heading {
+      .inventory-auth-panel h2 {
         margin: 0;
         font-family: var(--font-display);
         font-size: 0.9rem;
@@ -859,12 +857,71 @@ button.site-nav__magnet {
 
       .inventory-auth-warning {
         margin: 0.35rem 0 0;
-        padding: 0.5rem 0.6rem;
+        padding: 0;
         border-radius: var(--radius-md);
         border: 2px dashed color-mix(in srgb, var(--outline) 60%, transparent);
         background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
         font-size: 0.8rem;
         color: color-mix(in srgb, var(--ink) 80%, #000 20%);
+      }
+
+      .inventory-auth-warning summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 0.5rem 0.6rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .inventory-auth-warning summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .inventory-auth-warning p {
+        margin: 0;
+        padding: 0 0.6rem 0.5rem;
+      }
+
+      .inventory-bluesky-panel__section {
+        border-radius: var(--radius-lg);
+        border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
+        background: rgba(255, 255, 255, 0.82);
+        padding: 0.6rem 0.7rem;
+      }
+
+      .inventory-bluesky-panel__section summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        color: var(--ink);
+      }
+
+      .inventory-bluesky-panel__section summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .inventory-bluesky-panel__section summary::after {
+        content: '▸';
+        font-size: 0.9rem;
+        transition: transform 0.18s ease;
+      }
+
+      .inventory-bluesky-panel__section[open] summary::after {
+        transform: rotate(90deg);
+      }
+
+      .inventory-bluesky-panel__section-content {
+        padding-top: 0.5rem;
+        display: grid;
+        gap: 0.5rem;
       }
 
       /* Login / logout states */
@@ -957,9 +1014,7 @@ button.site-nav__magnet {
           font-size: 0.85rem;
         }
 
-        .inventory-auth-panel,
-        .inventory-backend-sync,
-        .inventory-social-strategies {
+        .inventory-auth-panel {
           padding: 0.85rem 0.8rem 0.9rem;
         }
       }
@@ -1397,7 +1452,7 @@ button.site-nav__magnet {
           <li><a href="../">Home</a></li><li aria-current="page">Inventory</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page inventory-page" role="main">
         
       <header class="page-header inventory-header">
         <div class="inventory-header__layout">
@@ -1411,16 +1466,13 @@ button.site-nav__magnet {
                   alt=""
                   aria-hidden="true"
                 />
-                <span class="inventory-journal-button__label">Journal</span>
+                <span class="inventory-journal-button__label visually-hidden">Journal</span>
               </a>
             </div>
-            <p class="page-description">
-              Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
-            </p>
             <div class="strategy-quick-actions inventory-header__quick-actions">
               <a class="strategy-quick-actions__link" href="#inventory-form">
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
-                <span>Add personal strategy</span>
+                <span>Add strategy</span>
               </a>
               <a
                 class="strategy-quick-actions__link strategy-quick-actions__link--secondary"
@@ -1430,54 +1482,40 @@ button.site-nav__magnet {
                 aria-expanded="false"
               >
                 <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
-                <span>Review saved strategies</span>
+                <span>Saved strategies</span>
               </a>
               <a class="inventory-shared-button" href="../feed/">
                 <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
-                <span class="inventory-shared-button__text">
-                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
-                  <span class="inventory-shared-button__label">View shared strategies</span>
-                </span>
+                <span class="inventory-shared-button__text">Shared feed</span>
               </a>
             </div>
 
             <details class="inventory-bluesky-panel">
               <summary class="inventory-bluesky-panel__summary">
                 <div class="inventory-bluesky-panel__titles">
-                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
-                  <p class="inventory-bluesky-panel__subtitle">
-                    Link your account to save/load data and fetch shared strategies, or keep everything local.
-                  </p>
+                  <h2 class="inventory-bluesky-panel__title">Bluesky</h2>
+                  <p class="inventory-bluesky-panel__subtitle">Sync + shared feed (optional)</p>
                 </div>
                 <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
               </summary>
 
               <div class="inventory-bluesky-panel__content">
-                <p class="inventory-bluesky-panel__intro">
-                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the
-                  local export and import controls if you prefer keeping everything on this device.
-                </p>
-
                 <!-- OAuth sign-in / sign-out -->
                 <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-                  <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
-
-                  <p class="inventory-auth-note">
-                    Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
-                    Signing in by itself does <strong>not</strong> move or sync any of your data.
-                  </p>
+                  <h2 class="inventory-auth-panel__heading">Account</h2>
+                  <p class="inventory-auth-note">Sign in to enable sync + shared feed.</p>
 
                   <div id="bluesky-auth-logged-out" class="inventory-auth-panel__state" hidden>
                     <div class="inventory-auth-panel__field">
-                      <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
+                      <label for="bluesky-handle-input">Handle</label>
                       <input id="bluesky-handle-input" type="text" autocomplete="username" />
                     </div>
                     <button
                       id="bluesky-signin-button"
                       type="button"
-                      class="inventory-button inventory-button--compact"
+                      class="inventory-button inventory-button--compact inventory-button--flat"
                     >
-                      <span class="inventory-button__text">Sign in with Bluesky</span>
+                      <span class="inventory-button__text">Sign in</span>
                     </button>
                   </div>
 
@@ -1486,83 +1524,66 @@ button.site-nav__magnet {
                     <button
                       id="bluesky-signout-button"
                       type="button"
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                      class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
                     >
                       <span class="inventory-button__text">Sign out</span>
                     </button>
                   </div>
 
-                  <p class="inventory-auth-warning">
-                    We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
-                    You can ignore this sign-in and keep everything local if you prefer.
-                  </p>
+                  <details class="inventory-auth-warning">
+                    <summary>Privacy</summary>
+                    <p>
+                      We never see your Bluesky password. Authentication happens on Bluesky’s servers. Keep everything
+                      local if you prefer.
+                    </p>
+                  </details>
                 </section>
 
                 <!-- Optional backend save/load -->
-                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
-                    Optional backend save/load
-                  </h3>
-                  <p>
-                    When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
-                    (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
-                    you decide when to send or fetch data.
-                  </p>
-                  <p>
-                    This makes it easier to continue your work on another device, but it also means that snapshot is stored
-                    on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
-                    feel right for you, keep using the local export/import buttons instead.
-                  </p>
+                <details class="inventory-bluesky-panel__section">
+                  <summary>Sync snapshot</summary>
+                  <div class="inventory-bluesky-panel__section-content">
+                    <p>Save or load a single snapshot tied to your DID.</p>
+                    <div class="inventory-backend-sync__buttons">
+                      <button
+                        type="button"
+                        data-backend-save-button
+                        class="inventory-button inventory-button--compact inventory-button--flat"
+                      >
+                        <span class="inventory-button__text">Save snapshot</span>
+                      </button>
+                      <button
+                        type="button"
+                        data-backend-load-button
+                        class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
+                      >
+                        <span class="inventory-button__text">Load snapshot</span>
+                      </button>
+                    </div>
 
-                  <div class="inventory-backend-sync__buttons">
-                    <button
-                      type="button"
-                      data-backend-save-button
-                      class="inventory-button inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Save current data to allneeds backend</span>
-                    </button>
-                    <button
-                      type="button"
-                      data-backend-load-button
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Load data from allneeds backend</span>
-                    </button>
+                    <div
+                      class="inventory-backend-sync__status"
+                      data-backend-sync-status
+                      aria-live="polite"
+                    ></div>
                   </div>
-
-                  <div
-                    class="inventory-backend-sync__status"
-                    data-backend-sync-status
-                    aria-live="polite"
-                  ></div>
-                </section>
+                </details>
 
                 <!-- Strategies from follows -->
-                <section
-                  class="inventory-social-strategies"
-                  aria-labelledby="inventory-social-strategies-heading"
-                >
-                  <h3
-                    id="inventory-social-strategies-heading"
-                    class="inventory-social-strategies__heading"
-                  >
-                    Strategies from Bluesky accounts you follow
-                  </h3>
-                  <p class="inventory-social-strategies__summary">
-                    When linked to a Bluesky account, you can fetch strategies that other allneeds users you follow
-                    have chosen to share publicly. Only strategies stored in the allneeds database and marked as shared
-                    are shown here.
-                  </p>
-                  <button
-                    type="button"
-                    data-backend-fetch-feed-button
-                    class="inventory-button inventory-button--compact"
-                  >
-                    <span class="inventory-button__text">Fetch strategies from follows</span>
-                  </button>
-                  <div class="inventory-social-strategies__list" data-backend-feed-container></div>
-                </section>
+                <details class="inventory-bluesky-panel__section">
+                  <summary>Shared feed</summary>
+                  <div class="inventory-bluesky-panel__section-content">
+                    <p>Pull shared strategies from follows.</p>
+                    <button
+                      type="button"
+                      data-backend-fetch-feed-button
+                      class="inventory-button inventory-button--compact inventory-button--flat"
+                    >
+                      <span class="inventory-button__text">Fetch strategies</span>
+                    </button>
+                    <div class="inventory-social-strategies__list" data-backend-feed-container></div>
+                  </div>
+                </details>
               </div>
             </details>
           </div>
@@ -1570,50 +1591,46 @@ button.site-nav__magnet {
       </header>
 
       <section class="inventory-main" aria-labelledby="inventory-overview-heading">
-        <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
-          <div class="inventory-actions__header">
-            <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
-            <p class="inventory-actions__hint">
-              Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
-            </p>
-          </div>
+        <details class="inventory-actions">
+          <summary class="inventory-actions__summary">
+            <span class="inventory-actions__title">Backup & transfer</span>
+          </summary>
           <div class="inventory-actions__buttons">
             <button
               type="button"
               id="inventory-export"
-              class="inventory-button inventory-button--compact"
+              class="inventory-button inventory-button--compact inventory-button--flat"
               aria-label="Export localStorage JSON"
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export localStorage</span>
+              <span class="inventory-button__text">Export JSON</span>
             </button>
             <button
               type="button"
               id="inventory-email-personal"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
+              class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
               aria-label="Export personal strategies and email them to Nat"
             >
               <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
-              <span class="inventory-button__text">email me your strategies pretty please 🙏 - Nat</span>
+              <span class="inventory-button__text">Email Nat your strategies</span>
             </button>
             <button
               type="button"
               id="inventory-import-trigger"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
+              class="inventory-button inventory-button--ghost inventory-button--compact inventory-button--flat"
               aria-label="Import localStorage JSON"
             >
               <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import localStorage</span>
+              <span class="inventory-button__text">Import JSON</span>
             </button>
             <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-        </section>
+        </details>
 
         <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
           <div class="inventory-overview__header">
-            <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
-            <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
+            <h2 id="inventory-overview-heading" class="section-title">Coverage board</h2>
           </div>
           <div class="inventory-overview__tools">
             <div class="inventory-summary__filters" role="group" aria-label="Filter needs coverage list">
@@ -1668,7 +1685,7 @@ button.site-nav__magnet {
               aria-expanded="false"
               aria-controls="strategies-list"
             >
-              Show your saved strategies
+              Show saved strategies
             </button>
           </div>
           <div
@@ -1680,17 +1697,13 @@ button.site-nav__magnet {
           >
             <div class="inventory-list__header">
               <h3 id="inventory-list-heading" class="section-title" tabindex="-1">Saved strategies</h3>
-              <p class="inventory-list__hint">
-                Review your saved strategies and the needs they tend to. Add, remove, or tweak your inventory list
-                anytime.
-              </p>
             </div>
             <div id="inventory-list" class="inventory-list"></div>
           </div>
         </section>
 
         <section class="inventory-form" aria-labelledby="inventory-form-heading">
-          <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
+          <h2 id="inventory-form-heading" class="section-title">Add strategy</h2>
           
       <div class="strategy-form__container" data-strategy-form-container>
         <div class="strategy-card strategy-card--form">
@@ -1710,7 +1723,7 @@ button.site-nav__magnet {
             
         <div class="strategy-form__field">
           <label for="inventory-need">Primary need</label>
-          <p id="inventory-need-hint" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
+          <p id="inventory-need-hint" class="strategy-form__hint">Hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
           <div class="strategy-card strategy-card--input">
             <select id="inventory-need" name="need" multiple aria-describedby="inventory-need-hint" required>
               <option value="" disabled>Select a need</option>
@@ -1736,7 +1749,7 @@ button.site-nav__magnet {
             
         <div class="strategy-form__field">
           <label for="inventory-visibility">Visibility</label>
-          <p class="strategy-form__hint">Choose who can see this strategy when you export or share it.</p>
+          <p class="strategy-form__hint">Visibility when exported/shared.</p>
           <div class="strategy-card strategy-card--input">
             <select id="inventory-visibility" name="strategy-visibility">
               <option value="private">Private (only on this browser)</option>
@@ -1749,12 +1762,13 @@ button.site-nav__magnet {
               <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
             </div>
             
-            <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
+            <details class="local-storage-note">
+              <summary>Storage note</summary>
+              <p>This static site saves data in your browser; clearing local storage removes it.</p>
+            </details>
           </form>
         </div>
-        
-      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
-        
+
       </div>
         </section>
       </section>
