@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS journals (
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
   did TEXT NOT NULL,
+  access_token TEXT,
+  access_token_expires_at TEXT,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   expires_at TEXT,
   FOREIGN KEY (did) REFERENCES users(did)
