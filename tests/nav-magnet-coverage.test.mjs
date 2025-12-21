@@ -32,7 +32,7 @@ const requiredMagnets = [
   },
   {
     id: 'nav-journal-dashboard',
-    label: 'Journal dashboard magnet',
+    label: 'Journal History magnet',
     requiredClasses: ['site-nav__magnet--journal-dashboard'],
     requiredAttributes: [
       { name: 'data-nav-hidden', value: 'true' },

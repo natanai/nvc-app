@@ -1000,7 +1000,7 @@ function renderNav(basePath, activeNav, options = {}) {
     {
       key: 'journal-dashboard',
       href: 'inventory/journal/',
-      label: 'Journal dashboard',
+      label: 'Journal History',
       magnetId: 'nav-journal-dashboard',
       className: 'site-nav__magnet--journal-dashboard',
       attributes: {
@@ -1391,7 +1391,7 @@ function renderCategory(type, items) {
     type === 'feelings'
       ? `<div class="support-actions support-actions--muted">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your journal dashboard</a>
+          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your Journal History</a>
         </div>`
       : '';
 

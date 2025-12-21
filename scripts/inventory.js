@@ -391,7 +391,7 @@ const NAV_ITEM_DEFINITIONS = [
   {
     id: 'journalDashboard',
     magnetId: 'nav-journal-dashboard',
-    label: 'Journal dashboard magnet',
+    label: 'Journal History magnet',
     defaultEnabled: false,
     isSupplemental: true,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal-dashboard"]') || null,
@@ -404,7 +404,7 @@ const NAV_ITEM_DEFINITIONS = [
       link.dataset.navDynamic = 'true';
       const label = document.createElement('span');
       label.className = 'site-nav__magnet-label';
-      label.textContent = 'Journal dashboard';
+      label.textContent = 'Journal History';
       link.appendChild(label);
       return link;
     },
@@ -2039,6 +2039,10 @@ function setupInventoryPage() {
   if (backendSaveButton) {
     backendSaveButton.addEventListener('click', (event) => {
       event.preventDefault();
+      if (backendSaveButton.getAttribute('aria-disabled') === 'true') {
+        setBackendStatusMessage('Sign in with Bluesky on the Inventory page to save.');
+        return;
+      }
       saveSnapshotToBackend();
     });
   }
@@ -2046,6 +2050,10 @@ function setupInventoryPage() {
   if (backendLoadButton) {
     backendLoadButton.addEventListener('click', (event) => {
       event.preventDefault();
+      if (backendLoadButton.getAttribute('aria-disabled') === 'true') {
+        setBackendStatusMessage('Sign in with Bluesky on the Inventory page to load journal history.');
+        return;
+      }
       loadSnapshotFromBackend();
     });
   }
@@ -6312,6 +6320,8 @@ async function loadSnapshotFromBackend() {
     return;
   }
 
+  setBackendStatusMessage('Loading journal history from backend...');
+
   try {
     const res = await fetch(`${BACKEND_BASE_URL}/user-settings`, {
       credentials: 'include',
@@ -6356,11 +6366,14 @@ function updateBackendSyncButtons() {
   const disabled = !did;
   [saveBtn, loadBtn].forEach((btn) => {
     if (!btn) return;
-    btn.disabled = disabled;
     if (disabled) {
       btn.setAttribute('aria-disabled', 'true');
+      btn.dataset.backendDisabled = 'true';
+      btn.classList.add('inventory-button--disabled');
     } else {
       btn.removeAttribute('aria-disabled');
+      delete btn.dataset.backendDisabled;
+      btn.classList.remove('inventory-button--disabled');
     }
   });
 
