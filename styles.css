@@ -4954,6 +4954,10 @@ main[data-need-slug] .page-title::before {
   color: color-mix(in srgb, var(--ink) 70%, var(--ink-soft) 30%);
 }
 
+.journal-empty[hidden] {
+  display: none !important;
+}
+
 .journal-empty__title {
   font-weight: 600;
   color: color-mix(in srgb, var(--ink) 82%, var(--ink-soft) 18%);
