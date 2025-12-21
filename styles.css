@@ -4299,29 +4299,30 @@ main[data-need-slug] .page-title::before {
 .journal-actions-panel__summary {
   display: grid;
   gap: 0.25rem;
-  padding: 0.75rem 0.9rem;
+  padding: 0.75rem 2.2rem 0.75rem 0.9rem;
   border-radius: var(--radius-2xl);
   border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
   background: #ffffff;
   cursor: pointer;
   position: relative;
+  align-items: start;
 }
 
 .journal-actions-panel__summary::after {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 0.9rem;
   right: 0.9rem;
   width: 0.6rem;
   height: 0.6rem;
   border-right: 1.5px solid currentColor;
   border-bottom: 1.5px solid currentColor;
-  transform: translateY(-50%) rotate(45deg);
+  transform: rotate(45deg);
   transition: transform 200ms ease;
 }
 
 .journal-actions-panel[open] .journal-actions-panel__summary::after {
-  transform: translateY(-50%) rotate(225deg);
+  transform: rotate(225deg);
 }
 
 .journal-actions-panel__summary::-webkit-details-marker {
