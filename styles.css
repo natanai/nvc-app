@@ -4329,6 +4329,22 @@ main[data-need-slug] .page-title::before {
   justify-content: flex-start;
 }
 
+.journal-backend-sync {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.journal-backend-sync__actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.journal-backend-sync__status {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
 .journal-message {
   margin: 0;
   padding: 0.6rem 0.75rem;

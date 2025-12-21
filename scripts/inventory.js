@@ -391,7 +391,7 @@ const NAV_ITEM_DEFINITIONS = [
   {
     id: 'journalDashboard',
     magnetId: 'nav-journal-dashboard',
-    label: 'Journal dashboard magnet',
+    label: 'Journal History magnet',
     defaultEnabled: false,
     isSupplemental: true,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal-dashboard"]') || null,
@@ -404,7 +404,7 @@ const NAV_ITEM_DEFINITIONS = [
       link.dataset.navDynamic = 'true';
       const label = document.createElement('span');
       label.className = 'site-nav__magnet-label';
-      label.textContent = 'Journal dashboard';
+      label.textContent = 'Journal History';
       link.appendChild(label);
       return link;
     },
