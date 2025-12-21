@@ -425,6 +425,9 @@ const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
 ]);
 
+let lastBackendAutoLoadDid = null;
+let backendAutoLoadInFlight = null;
+
 const state = {
   inventory: [],
   needs: [],
@@ -593,6 +596,7 @@ function updateJournalEntriesFromStore() {
   state.journalEntries = store ? store.list() : [];
   updateJournalTagSource();
   renderJournalOverlayHistory();
+  renderJournalHistory();
 }
 
 function updateJournalTagSource() {
@@ -1543,8 +1547,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('allneeds:bsky-login-changed', () => {
+  window.addEventListener('allneeds:bsky-login-changed', (event) => {
     updateBackendSyncButtons();
+    const session = event?.detail;
+    const did = session?.did || session?.sub || null;
+    if (!did) {
+      lastBackendAutoLoadDid = null;
+      return;
+    }
+    if (did === lastBackendAutoLoadDid || backendAutoLoadInFlight) {
+      return;
+    }
+    lastBackendAutoLoadDid = did;
+    backendAutoLoadInFlight = loadSnapshotFromBackend()
+      .catch((error) => {
+        console.error('Failed to auto-load backend snapshot after Bluesky login', error);
+      })
+      .finally(() => {
+        backendAutoLoadInFlight = null;
+      });
   });
 }
 
