@@ -1194,34 +1194,36 @@ button.site-nav__magnet {
       </header>
       <section class="journal-page" data-inventory-section="journal">
         <div class="journal-overview-grid">
-          <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
-            <div class="journal-actions__header">
-              <h2 id="journal-actions-heading" class="section-title">Save your progress</h2>
-              <p class="journal-actions__hint">
-                Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
-              </p>
-            </div>
-            <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export localStorage</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import localStorage</button>
-              <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
-            </div>
-            <div class="journal-backend-sync" aria-live="polite">
-              <p class="journal-actions__hint">
-                Signed in with Bluesky on the Inventory page? Pull your stored journal history from the allneeds backend.
-              </p>
-              <div class="journal-backend-sync__actions">
-                <button
-                  type="button"
-                  class="inventory-button inventory-button--ghost"
-                  data-backend-load-button
-                >
-                  Load journal history from Bluesky
-                </button>
+          <section class="journal-panel" aria-labelledby="journal-actions-heading">
+            <details class="journal-actions-panel">
+              <summary class="journal-actions-panel__summary">
+                <span class="journal-actions-panel__title" id="journal-actions-heading">Save &amp; sync journal data</span>
+                <span class="journal-actions-panel__subtitle">Pull from Bluesky, or export/import locally.</span>
+              </summary>
+              <div class="journal-actions journal-actions-panel__body">
+                <div class="journal-backend-sync" aria-live="polite">
+                  <p class="journal-actions__hint">
+                    Prefer Bluesky sync? Load your latest history after signing in on the Inventory page.
+                  </p>
+                  <div class="journal-backend-sync__actions">
+                    <button
+                      type="button"
+                      class="inventory-button inventory-button--ghost"
+                      data-backend-load-button
+                    >
+                      Load journal history from Bluesky
+                    </button>
+                  </div>
+                  <p class="journal-backend-sync__status" data-backend-sync-status></p>
+                </div>
+                <div class="journal-actions__buttons">
+                  <button type="button" id="journal-export" class="inventory-button">Export localStorage</button>
+                  <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import localStorage</button>
+                  <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
+                </div>
+                <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
               </div>
-              <p class="journal-backend-sync__status" data-backend-sync-status></p>
-            </div>
-            <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
+            </details>
           </section>
 
           <section class="journal-summary-section journal-panel" aria-labelledby="journal-summary-heading">

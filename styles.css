@@ -4290,6 +4290,58 @@ main[data-need-slug] .page-title::before {
   display: none;
 }
 
+.journal-actions-panel {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.journal-actions-panel__summary {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-2xl);
+  border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+  background: #ffffff;
+  cursor: pointer;
+  position: relative;
+}
+
+.journal-actions-panel__summary::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0.9rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.journal-actions-panel[open] .journal-actions-panel__summary::after {
+  transform: translateY(-50%) rotate(225deg);
+}
+
+.journal-actions-panel__summary::-webkit-details-marker {
+  display: none;
+}
+
+.journal-actions-panel__title {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ink) 82%, var(--ink-soft) 18%);
+}
+
+.journal-actions-panel__subtitle {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.journal-actions-panel__body {
+  margin-top: 0.75rem;
+}
+
 .journal-inline-container {
   display: block;
   width: 100%;

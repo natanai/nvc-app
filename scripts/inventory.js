@@ -6312,6 +6312,8 @@ async function loadSnapshotFromBackend() {
     return;
   }
 
+  setBackendStatusMessage('Loading journal history from backend...');
+
   try {
     const res = await fetch(`${BACKEND_BASE_URL}/user-settings`, {
       credentials: 'include',
