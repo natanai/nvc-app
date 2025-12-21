@@ -1164,15 +1164,15 @@ button.site-nav__magnet {
       </script>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../../">Home</a></li><li><a href="../">Inventory</a></li><li aria-current="page"><span class="breadcrumbs__label"><img src="../../icons/journal-32bit.svg" class="journal-label-icon" alt="" aria-hidden="true" /> Journal</span></li>
+          <li><a href="../../">Home</a></li><li><a href="../">Inventory</a></li><li aria-current="page"><span class="breadcrumbs__label">Journal History</span></li>
         </ol>
       </nav>
       <main id="main" class="page" role="main" data-page-id="inventory-journal">
         
-      <header class="page-header journal-page-header">
-        <div class="journal-page-title-row">
-          <h1 class="page-title visually-hidden">Journal</h1>
-          <div class="journal-page-title-row__actions">
+      <h1 class="page-title visually-hidden">Journal</h1>
+      <section class="journal-page" data-inventory-section="journal">
+        <div class="journal-overview-grid">
+          <div class="journal-fullscreen-slot">
             <button
               type="button"
               class="journal-fullscreen-button journal-fullscreen-button--spotlight"
@@ -1186,15 +1186,7 @@ button.site-nav__magnet {
               </span>
             </button>
           </div>
-        </div>
-        <p class="page-description journal-page-description">
-          Log feelings, needs, and notes from any check-in. Entries are stored locally so you can review patterns privately or
-          export them when you're ready.
-        </p>
-      </header>
-      <section class="journal-page" data-inventory-section="journal">
-        <div class="journal-overview-grid">
-          <section class="journal-panel" aria-labelledby="journal-actions-heading">
+          <section class="journal-panel journal-storage-panel" aria-labelledby="journal-actions-heading">
             <details class="journal-actions-panel">
               <summary class="journal-actions-panel__summary">
                 <span class="journal-actions-panel__title" id="journal-actions-heading">Journal storage</span>
