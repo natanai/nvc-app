@@ -4221,12 +4221,14 @@ main[data-need-slug] .page-title::before {
 @media (min-width: 960px) {
   .journal-overview-grid {
     grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
-    grid-template-areas: "summary storage";
+    grid-template-areas:
+      "fullscreen storage"
+      "summary summary";
   }
 }
 
 @media (min-width: 960px) {
-  .journal-overview-grid > .journal-panel {
+  .journal-overview-grid .journal-storage-panel {
     grid-area: storage;
     align-self: start;
   }
@@ -4234,6 +4236,17 @@ main[data-need-slug] .page-title::before {
   .journal-overview-grid .journal-summary-section {
     grid-area: summary;
   }
+
+  .journal-overview-grid .journal-fullscreen-slot {
+    grid-area: fullscreen;
+    align-self: center;
+  }
+}
+
+.journal-fullscreen-slot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .journal-panel {
@@ -5213,6 +5226,16 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   }
 
   .journal-page-title-row__actions .journal-fullscreen-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .journal-fullscreen-slot {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .journal-fullscreen-slot .journal-fullscreen-button {
     width: 100%;
     justify-content: center;
   }
