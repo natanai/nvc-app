@@ -1577,7 +1577,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. Track what works or needs tweaking so future-you can adjust with care.</p>
       ${evidenceNote}
       <div class="regulation-actions">
-        <a class="support-button support-button--link" href="${journalLink}">Open journal dashboard</a>
+        <a class="support-button support-button--link" href="${journalLink}">Open Journal History</a>
       </div>
     `;
   }
@@ -1882,7 +1882,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     const link = document.createElement('a');
     link.className = 'support-button support-button--link support-button--ghost';
     link.href = `${basePath}inventory/journal/`;
-    link.textContent = 'Open full journal dashboard';
+    link.textContent = 'Open full Journal History';
     journalHistory.appendChild(link);
   }
 
