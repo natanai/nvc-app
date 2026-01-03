@@ -739,11 +739,11 @@ button.site-nav__magnet {
            /* Optional Bluesky sync panel */
 
       .inventory-bluesky-panel {
-        margin-top: 1.1rem;
-        border: 2px solid var(--outline);
+        margin-top: 1.75rem;
+        border: 3px solid var(--outline);
         border-radius: var(--radius-xl);
         background: color-mix(in srgb, var(--lavender) 65%, #ffffff 35%);
-        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+        box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 18%, transparent);
         overflow: hidden;
       }
 
@@ -751,8 +751,8 @@ button.site-nav__magnet {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 0.6rem;
-        padding: 0.7rem 0.85rem;
+        gap: 0.9rem;
+        padding: 1rem 1.1rem;
         cursor: pointer;
         list-style: none;
       }
@@ -763,22 +763,22 @@ button.site-nav__magnet {
 
       .inventory-bluesky-panel__titles {
         display: grid;
-        gap: 0.1rem;
+        gap: 0.15rem;
       }
 
       .inventory-bluesky-panel__title {
         margin: 0;
         font-family: var(--font-display);
-        font-size: 0.95rem;
-        letter-spacing: 0.05em;
+        font-size: 1.05rem;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
       }
 
       .inventory-bluesky-panel__subtitle {
         margin: 0;
-        font-size: 0.82rem;
+        font-size: 0.9rem;
         color: var(--ink-soft);
-        max-width: 30rem;
+        max-width: 32rem;
       }
 
       .inventory-bluesky-panel__chevron {
@@ -786,12 +786,12 @@ button.site-nav__magnet {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         border-radius: 999px;
         border: 2px solid var(--outline);
         background: rgba(255, 255, 255, 0.9);
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         transform: rotate(90deg);
         transition: transform 0.18s ease, background 0.18s ease;
       }
@@ -802,11 +802,11 @@ button.site-nav__magnet {
       }
 
       .inventory-bluesky-panel__content {
-        padding: 0.8rem 0.85rem 0.9rem;
-        border-top: 2px solid var(--outline);
+        padding: 1rem 1.1rem 1.1rem;
+        border-top: 3px solid var(--outline);
         background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
         display: grid;
-        gap: 0.75rem;
+        gap: 1rem;
         max-width: 100%;
         border-bottom-left-radius: var(--radius-xl);
         border-bottom-right-radius: var(--radius-xl);
@@ -814,9 +814,9 @@ button.site-nav__magnet {
 
       .inventory-bluesky-panel__content p,
       .inventory-bluesky-panel__content li {
-        margin: 0.2rem 0;
-        font-size: 0.82rem;
-        line-height: 1.4;
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+        line-height: 1.5;
         color: var(--ink-soft);
         max-width: 100%;
         word-break: break-word;
@@ -824,7 +824,7 @@ button.site-nav__magnet {
       }
 
       .inventory-bluesky-panel__content ul {
-        padding-left: 1rem;
+        padding-left: 1.15rem;
       }
 
       /* Card-like sections inside the panel */
@@ -834,41 +834,39 @@ button.site-nav__magnet {
         border-radius: var(--radius-lg);
         border: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
         background: rgba(255, 255, 255, 0.85);
-        padding: 0.65rem 0.7rem 0.75rem;
+        padding: 0.9rem 0.9rem 0.95rem;
         display: grid;
-        gap: 0.4rem;
+        gap: 0.55rem;
       }
 
       .inventory-auth-panel h2,
       .inventory-backend-sync__heading {
         margin: 0;
         font-family: var(--font-display);
-        font-size: 0.8rem;
-        letter-spacing: 0.07em;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
       .inventory-auth-note {
-        font-size: 0.78rem;
+        font-size: 0.85rem;
         color: var(--ink-soft);
       }
 
       .inventory-auth-note ul {
-        margin: 0.25rem 0 0;
-        padding-left: 1rem;
+        margin: 0.4rem 0 0;
+        padding-left: 1.15rem;
       }
 
       .inventory-auth-warning {
-        margin: 0.25rem 0 0;
-        padding: 0.4rem 0.5rem;
+        margin: 0.35rem 0 0;
+        padding: 0.5rem 0.6rem;
         border-radius: var(--radius-md);
         border: 2px dashed color-mix(in srgb, var(--outline) 60%, transparent);
         background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
-        font-size: 0.74rem;
+        font-size: 0.8rem;
         color: color-mix(in srgb, var(--ink) 80%, #000 20%);
       }
-
-      /* Login / logout states */
 
       .inventory-auth-panel__field {
         flex: 1 1 12rem;
@@ -877,20 +875,18 @@ button.site-nav__magnet {
 
       .inventory-auth-panel__field label {
         display: block;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         font-weight: 600;
-        margin-bottom: 0.15rem;
+        margin-bottom: 0.2rem;
       }
 
       .inventory-auth-panel__field input[type='text'] {
         width: 100%;
-        padding: 0.35rem 0.6rem;
+        padding: 0.45rem 0.75rem;
         border-radius: var(--radius-pill);
         border: 2px solid color-mix(in srgb, var(--outline) 50%, transparent);
         background: rgba(255, 255, 255, 0.95);
-        font-size: 1rem;
-        line-height: 1.4;
-        font-family: revert;
+        font: inherit;
         color: inherit;
       }
 
@@ -899,64 +895,20 @@ button.site-nav__magnet {
         outline-offset: 1px;
       }
 
-      .inventory-auth-panel__helper {
-        margin: 0.2rem 0 0;
-        font-size: 0.72rem;
-        color: var(--ink-soft);
-      }
-
-      .inventory-auth-panel__status-text {
-        margin: 0.15rem 0 0;
-        min-height: 1.1em;
-        font-size: 0.78rem;
-        color: var(--ink-soft);
-      }
-
-      .inventory-auth-panel__status-text--error {
-        color: #7b1f36;
-      }
-
       /* Backend save/load + feed sections */
 
       .inventory-backend-sync__buttons {
         display: flex;
-        flex-wrap: nowrap;
-        gap: 0.3rem;
-        margin-top: 0.2rem;
-      }
-
-      .inventory-backend-sync__buttons .inventory-button {
-        flex: 1 1 0;
-        min-width: 0;
-        padding: 0.3rem 0.45rem;
-        font-size: 0.7rem;
-        line-height: 1.1;
-      }
-
-      .inventory-backend-sync__buttons .inventory-button__text {
-        white-space: nowrap;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.35rem;
       }
 
       .inventory-backend-sync__status {
-        font-size: 0.74rem;
+        font-size: 0.8rem;
         color: var(--ink-soft);
         min-height: 1.1em;
         margin-top: 0.25rem;
-      }
-
-      .inventory-backend-sync__status--highlight {
-        animation: backend-sync-highlight 1.2s ease-out;
-      }
-
-      @keyframes backend-sync-highlight {
-        0% {
-          background: color-mix(in srgb, var(--gold) 70%, transparent);
-          box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 70%, transparent);
-        }
-        100% {
-          background: transparent;
-          box-shadow: 0 0 0 6px transparent;
-        }
       }
 
       /* Small screens */
@@ -967,16 +919,16 @@ button.site-nav__magnet {
         }
 
         .inventory-bluesky-panel__title {
-          font-size: 0.9rem;
+          font-size: 0.98rem;
         }
 
         .inventory-bluesky-panel__subtitle {
-          font-size: 0.78rem;
+          font-size: 0.85rem;
         }
 
         .inventory-auth-panel,
         .inventory-backend-sync {
-          padding: 0.6rem 0.65rem 0.7rem;
+          padding: 0.85rem 0.8rem 0.9rem;
         }
       }
 
@@ -1427,7 +1379,7 @@ button.site-nav__magnet {
                   alt=""
                   aria-hidden="true"
                 />
-                <span class="inventory-journal-button__label">Journal History</span>
+                <span class="inventory-journal-button__label">Journal</span>
               </a>
             </div>
             <p class="page-description">
@@ -1470,57 +1422,22 @@ button.site-nav__magnet {
 
               <div class="inventory-bluesky-panel__content">
                 <p class="inventory-bluesky-panel__intro">
-                  Sign in to enable optional sync, or keep everything local with export/import.
+                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the local
+                  export and import controls if you prefer keeping everything on this device.
                 </p>
-
-                <!-- Optional backend save/load -->
-                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
-                    Optional backend save/load
-                  </h3>
-                  <p>
-                    Save or load a single JSON snapshot (same data as the file export). Nothing happens automatically, and
-                    when you save a public/followers strategy you’ll be asked if you want to share it right away.
-                  </p>
-
-                  <div class="inventory-backend-sync__buttons">
-                    <button
-                      type="button"
-                      data-backend-save-button
-                      class="inventory-button inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Save to backend</span>
-                    </button>
-                    <button
-                      type="button"
-                      data-backend-load-button
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Load from backend</span>
-                    </button>
-                  </div>
-
-                  <div
-                    class="inventory-backend-sync__status"
-                    data-backend-sync-status
-                    aria-live="polite"
-                  ></div>
-                </section>
 
                 <!-- OAuth sign-in / sign-out -->
                 <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
                   <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
 
                   <p class="inventory-auth-note">
-                    Sign in with your Bluesky handle to unlock optional sync. Signing in alone doesn’t move any data.
+                    Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
+                    Signing in by itself does <strong>not</strong> move or sync any of your data.
                   </p>
 
                   <div class="inventory-auth-panel__field" data-bluesky-handle-field>
                     <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
                     <input id="bluesky-handle-input" type="text" autocomplete="username" />
-                    <p class="inventory-auth-panel__helper">
-                      Use your full handle, like <strong>yourname.bsky.social</strong> or a custom domain. No @, no :1.
-                    </p>
                   </div>
                   <button
                     id="bluesky-auth-button"
@@ -1529,11 +1446,53 @@ button.site-nav__magnet {
                   >
                     <span class="inventory-button__text">Sign in</span>
                   </button>
-                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text" aria-live="polite"></p>
+                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
 
                   <p class="inventory-auth-warning">
-                    Auth happens on Bluesky’s servers. Skip this if you want to stay fully local.
+                    We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
+                    You can ignore this sign-in and keep everything local if you prefer.
                   </p>
+                </section>
+
+                <!-- Optional backend save/load -->
+                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
+                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
+                    Optional backend save/load
+                  </h3>
+                  <p>
+                    When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
+                    (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
+                    you decide when to send or fetch data. When you save a public/followers strategy, you’ll be asked if
+                    you want to share it right away.
+                  </p>
+                  <p>
+                    This makes it easier to continue your work on another device, but it also means that snapshot is stored
+                    on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
+                    feel right for you, keep using the local export/import buttons instead.
+                  </p>
+
+                  <div class="inventory-backend-sync__buttons">
+                    <button
+                      type="button"
+                      data-backend-save-button
+                      class="inventory-button inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Save current data to allneeds backend</span>
+                    </button>
+                    <button
+                      type="button"
+                      data-backend-load-button
+                      class="inventory-button inventory-button--ghost inventory-button--compact"
+                    >
+                      <span class="inventory-button__text">Load data from allneeds backend</span>
+                    </button>
+                  </div>
+
+                  <div
+                    class="inventory-backend-sync__status"
+                    data-backend-sync-status
+                    aria-live="polite"
+                  ></div>
                 </section>
 
               </div>
@@ -1652,10 +1611,9 @@ button.site-nav__magnet {
             aria-labelledby="inventory-list-heading"
           >
             <div class="inventory-list__header">
-              <h3 id="inventory-list-heading" class="section-title" tabindex="-1">Saved strategies</h3>
+              <h3 id="inventory-list-heading" class="section-title" tabindex="-1">Saved strategies by need</h3>
               <p class="inventory-list__hint">
-                Review your saved strategies and the needs they tend to. Add, remove, or tweak your inventory list
-                anytime.
+                Expand a need to review strategies you have saved and make updates.
               </p>
             </div>
             <div id="inventory-list" class="inventory-list"></div>
@@ -1721,15 +1679,17 @@ button.site-nav__magnet {
             <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
               <button type="submit" class="strategy-form__submit strategy-card__save">Add to inventory</button>
             </div>
+            
           </form>
         </div>
         
-      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>
+      <p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="../inventory/">inventory screen</a> to export them if you would like a backup. Use the export tools above whenever you would like a backup.</p>
         
+      <p class="strategy-form__message" data-form-message hidden aria-live="polite"></p>
       </div>
+        </section>
       </section>
-    </section>
-
+    
       </main>
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
