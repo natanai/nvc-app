@@ -1316,6 +1316,34 @@ function renderStrategyForm({
       </div>`;
 }
 
+function buildPersonalStrategyNotice(basePath, suffix = '') {
+  const safeSuffix = suffix ? ` ${suffix}` : '';
+  return `<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="${basePath}inventory/">inventory screen</a> to export them if you would like a backup.${safeSuffix}</p>`;
+}
+
+function buildPersonalStrategyFormOptions({
+  formId,
+  idPrefix,
+  notice,
+  defaultNeedSlug = '',
+}) {
+  return {
+    formId,
+    idPrefix,
+    submitLabel: 'Add to inventory',
+    titleLabel: 'Strategy name',
+    descriptionLabel: 'How do you put it into practice?',
+    includePlaceholderOption: true,
+    needSelectMultiple: true,
+    defaultNeedSlug,
+    includeContactFields: true,
+    includeVisibilitySelect: true,
+    includeMessage: true,
+    notice,
+    includeLocalStorageReminder: false,
+  };
+}
+
 function renderHome() {
   const basePath = basePathFromDepth(0);
   const iconMap = {
@@ -1742,22 +1770,16 @@ ${strategiesNote}
         </a>
       </div>`;
 
-  const suggestionNotice =
-    '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="../../inventory/">inventory screen</a> to export them if you would like a backup.</p>';
-
-  const suggestionForm = renderStrategyForm({
-    formId: 'suggestion-form',
-    idPrefix: 'suggestion',
-    submitLabel: '+ Save to inventory',
-    titleLabel: 'Strategy name',
-    descriptionLabel: 'Strategy details',
-    defaultNeedSlug: item.slug,
-    needSelectMultiple: true,
-    includeContactFields: true,
-    includeMessage: true,
-    includeVisibilitySelect: true,
-    notice: suggestionNotice,
-  });
+  const basePath = basePathFromDepth(2);
+  const suggestionNotice = buildPersonalStrategyNotice(basePath);
+  const suggestionForm = renderStrategyForm(
+    buildPersonalStrategyFormOptions({
+      formId: 'suggestion-form',
+      idPrefix: 'suggestion',
+      defaultNeedSlug: item.slug,
+      notice: suggestionNotice,
+    })
+  );
 
   const main = `
       <header class="page-header">
@@ -1884,22 +1906,18 @@ function renderNeedEvidence(item) {
 }
 
 function renderInventoryPage() {
-  const inventoryFormNotice =
-    '<p class="strategy-form__notice">Personal strategies you add stay on this browser. Use the export tools above whenever you would like a backup.</p>';
-
-  const personalStrategyForm = renderStrategyForm({
-    formId: 'inventory-form',
-    idPrefix: 'inventory',
-    submitLabel: 'Add to inventory',
-    titleLabel: 'Strategy name',
-    descriptionLabel: 'How do you put it into practice?',
-    includePlaceholderOption: true,
-    needSelectMultiple: true,
-    includeContactFields: true,
-    includeVisibilitySelect: true,
-    notice: inventoryFormNotice,
-    includeLocalStorageReminder: false,
-  });
+  const basePath = basePathFromDepth(1);
+  const inventoryFormNotice = buildPersonalStrategyNotice(
+    basePath,
+    'Use the export tools above whenever you would like a backup.'
+  );
+  const personalStrategyForm = renderStrategyForm(
+    buildPersonalStrategyFormOptions({
+      formId: 'inventory-form',
+      idPrefix: 'inventory',
+      notice: inventoryFormNotice,
+    })
+  );
 
   const blueskyPanelStyles = `    <style>
            /* Optional Bluesky sync panel */
@@ -2196,7 +2214,8 @@ function renderInventoryPage() {
                   <p>
                     When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
                     (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
-                    you decide when to send or fetch data.
+                    you decide when to send or fetch data. When you save a public/followers strategy, you’ll be asked if
+                    you want to share it right away.
                   </p>
                   <p>
                     This makes it easier to continue your work on another device, but it also means that snapshot is stored
