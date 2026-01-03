@@ -1544,11 +1544,13 @@ document.addEventListener('DOMContentLoaded', () => {
   loadJournalReferenceData();
   setupScrollTopButton();
   updateBackendSyncButtons();
+  updateVisibilityControls();
 });
 
 if (typeof window !== 'undefined') {
   window.addEventListener('allneeds:bsky-login-changed', (event) => {
     updateBackendSyncButtons();
+    updateVisibilityControls();
     const session = event?.detail;
     const did = session?.did || session?.sub || null;
     if (!did) {
@@ -1771,7 +1773,7 @@ function setupNeedPage() {
         feedbackElement: feedback,
         feedbackMessage: `Saved “${title}” to your inventory for ${needName}.`,
       });
-      publishStrategyToBackend(entry);
+      maybePublishStrategy(entry);
     });
   });
 
@@ -1880,7 +1882,7 @@ function setupNeedPage() {
 
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory);
-      publishStrategyToBackend(entry);
+      maybePublishStrategy(entry);
 
       suggestionForm.reset();
       showFormMessage(
@@ -2018,7 +2020,7 @@ function setupInventoryPage() {
           : `Added “${title}” to your inventory. Strategies you add stay on this browser, so export a localStorage JSON backup whenever you want an archive.`,
         openList: true,
       });
-      publishStrategyToBackend(entry);
+      maybePublishStrategy(entry);
       form.reset();
       setInventoryFormMode({ entry: null });
       const needSelect = form.querySelector('#inventory-need');
@@ -6170,8 +6172,64 @@ function getCurrentDid() {
   return null;
 }
 
+function updateVisibilityControls() {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  const signedIn = Boolean(getCurrentDid());
+  const selects = Array.from(document.querySelectorAll('select[name="strategy-visibility"]'));
+  if (!selects.length) {
+    return;
+  }
+  const baseHint = 'Choose who can see this strategy when you export or share it.';
+  const signedOutHint =
+    'Sign in with Bluesky to enable Followers/Public. While signed out, strategies stay only on this browser.';
+  const signedInHint =
+    'You can keep Followers/Public strategies local, or choose to share them when you save.';
+
+  selects.forEach((select) => {
+    const field = select.closest('.strategy-form__field');
+    const hint = field?.querySelector('.strategy-form__hint');
+    const publicOption = select.querySelector('option[value="public"]');
+    const followersOption = select.querySelector('option[value="followers"]');
+
+    if (publicOption) {
+      publicOption.disabled = !signedIn;
+    }
+    if (followersOption) {
+      followersOption.disabled = !signedIn;
+    }
+    if (!signedIn && (select.value === 'public' || select.value === 'followers')) {
+      select.value = 'private';
+    }
+
+    if (hint) {
+      hint.textContent = `${baseHint} ${signedIn ? signedInHint : signedOutHint}`;
+    }
+  });
+}
+
 function buildExportSnapshot() {
   return buildLocalDataBackup();
+}
+
+function maybePublishStrategy(entry) {
+  const did = getCurrentDid();
+  if (!did) {
+    return;
+  }
+
+  const visibility = normalizeVisibilityValue(entry?.visibility);
+  if (visibility !== 'public' && visibility !== 'followers') {
+    return;
+  }
+
+  const shouldShare = window.confirm(
+    'Do you want to share this strategy to the backend right now? You can also keep it local and share later from the Inventory page.'
+  );
+  if (shouldShare) {
+    publishStrategyToBackend(entry);
+  }
 }
 
 function buildBackendStrategySyncPayload(snapshot) {

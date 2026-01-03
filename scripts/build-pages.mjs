@@ -2196,7 +2196,8 @@ function renderInventoryPage() {
                   <p>
                     When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
                     (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
-                    you decide when to send or fetch data.
+                    you decide when to send or fetch data. When you save a public/followers strategy, you’ll be asked if
+                    you want to share it right away.
                   </p>
                   <p>
                     This makes it easier to continue your work on another device, but it also means that snapshot is stored
