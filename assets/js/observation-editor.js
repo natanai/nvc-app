@@ -28,12 +28,13 @@ const state = {
   cueHighlightRanges: [],
   positiveHighlightRanges: [],
   activeHighlightKey: '',
-  detectionMatchLimit: 1,
+  detectionMatchLimit: 4,
   detectionNearLimit: 4,
   detectorStats: null,
   validityStatus: 'idle',
   validityMessage: 'No matches yet.',
   fallback: createFallbackState(),
+  matchQueue: createMatchQueueState(),
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
   formulaMissing: [],
@@ -69,7 +70,7 @@ const DETECTION_LABELS = {
 };
 
 const DETECTION_MIN_WORDS = 2;
-const DETECTION_MATCH_LIMIT = 1;
+const DETECTION_MATCH_LIMIT = 4;
 const DETECTION_NEAR_LIMIT = 4;
 
 const OBSERVATION_GUIDELINE_INTRO = 'Use these prompts to keep your statement observational.';
@@ -141,6 +142,7 @@ function bind() {
         setValidityStatus('pending', 'Observation updated.');
       }
       state.fallback = createFallbackState();
+      state.matchQueue = createMatchQueueState();
       scheduleAnalysis('typing');
       renderSuggestions();
     });
@@ -939,6 +941,12 @@ function finalizeObservation() {
   state.lastSubmitted = trimmed;
   const direct = buildSuggestions(trimmed);
   state.directSuggestions = direct;
+  const matchQueue = buildMatchQueue(trimmed, state.detectionMatchLimit);
+  applyMatchQueue(matchQueue, {
+    message: matchQueue.length > 1
+      ? `Cycling through the top ${matchQueue.length} matches from our detector.`
+      : 'Showing the strongest match from our detector.',
+  });
   const hasDirect = hasSuggestions(direct);
   state.fallback = createFallbackState();
   state.fallback.shouldPrompt = !hasDirect;
@@ -1036,10 +1044,13 @@ function renderSuggestions() {
   preview.textContent = state.lastSubmitted ? `“${state.lastSubmitted}”` : '';
   const direct = state.directSuggestions || createEmptySuggestionSet();
   const hasDirect = hasSuggestions(direct);
+  const matchActive = state.matchQueue.active && state.matchQueue.queue.length;
   const fallbackActive = state.fallback.active && state.fallback.queue.length;
   const current = fallbackActive
     ? state.fallback.queue[state.fallback.index] || createEmptySuggestionSet()
-    : direct;
+    : matchActive
+      ? state.matchQueue.queue[state.matchQueue.index] || createEmptySuggestionSet()
+      : direct;
 
   const feelings = resolveSuggestionFeelings(current);
   populateChipList(feelingsHost, feelingsEmpty, feelings);
@@ -1066,6 +1077,21 @@ function renderSuggestions() {
     }
     const slotNote = slotNotes.length ? ` ${slotNotes.join(' ')}` : '';
     whyHost.textContent = `${message}${slotNote}`.trim();
+  } else if (matchActive) {
+    const position = state.matchQueue.queue.length > 1
+      ? `Match ${state.matchQueue.index + 1} of ${state.matchQueue.queue.length}.`
+      : '';
+    const message = state.matchQueue.message || 'Showing matches from our detector.';
+    const slotNotes = [];
+    if (slotSupportSummary) {
+      slotNotes.push(`Coverage includes your ${slotSupportSummary}.`);
+    }
+    if (slotGapSummary) {
+      slotNotes.push(`Still watching for the ${slotGapSummary}.`);
+    }
+    const slotNote = slotNotes.length ? ` ${slotNotes.join(' ')}` : '';
+    const positionNote = position ? ` ${position}` : '';
+    whyHost.textContent = `${message}${slotNote}${positionNote}`.trim();
   } else {
     const cueLabels = (direct.cues || []).map(formatCueLabel).filter(Boolean);
     const overflowCount = fallbackActive ? 0 : Math.max(Number(direct.overflow) || 0, 0);
@@ -1126,7 +1152,8 @@ function renderSuggestions() {
 
   if (actionButton) {
     const hasNextFallback = fallbackActive && state.fallback.queue.length > 1;
-    if (hasNextFallback) {
+    const hasNextMatchQueue = matchActive && state.matchQueue.queue.length > 1;
+    if (hasNextFallback || hasNextMatchQueue) {
       actionButton.textContent = 'Next match';
       actionButton.dataset.action = 'next';
       actionButton.disabled = false;
@@ -1340,6 +1367,47 @@ function buildSuggestions(text) {
         ? suggestion.hits.length
         : 0,
   };
+}
+
+function buildMatchQueue(text, limit = state.detectionMatchLimit || DETECTION_MATCH_LIMIT) {
+  const max = Math.max(Number(limit) || 0, 0);
+  if (!text || max <= 0) {
+    return [];
+  }
+  const suggestion = suggestFromObservation(
+    text,
+    state.cueLibrary || state.cues || [],
+    8,
+    { maxModules: max },
+  );
+  const hits = Array.isArray(suggestion.hits) ? suggestion.hits.slice(0, max) : [];
+
+  return hits.map(hit => {
+    const module = hit?.module || {};
+    const needs = buildSuggestionEntries(module.needs, 'need');
+    const feelings = buildSuggestionEntries(module.feelings, 'feeling');
+    const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
+    const supportSummary = formatObservationFormulaSlotSummary(hit.slotMatches || [], { includeArticle: false });
+    const missingSummary = formatObservationFormulaSlotSummary(hit.slotGaps || [], { includeArticle: false });
+    const moduleLabel = module.label || formatCueLabel(module.id);
+    const modules = Array.isArray(suggestion.modules)
+      ? suggestion.modules.filter(entry => entry?.id === module.id)
+      : [];
+    const slotSummary = supportSummary || missingSummary
+      ? { supportSummary, missingSummary }
+      : null;
+
+    return {
+      feelings,
+      metFeelings,
+      needs,
+      cues: moduleLabel ? [moduleLabel] : [],
+      modules,
+      slotSummary,
+      overflow: Math.max((Number(suggestion.totalHits) || hits.length) - hits.length, 0),
+      total: needs.length + feelings.length,
+    };
+  });
 }
 
 function deriveCatalogFeelings(needs, mode, limit) {
@@ -1695,6 +1763,15 @@ function createFallbackState() {
   };
 }
 
+function createMatchQueueState() {
+  return {
+    queue: [],
+    index: 0,
+    active: false,
+    message: '',
+  };
+}
+
 function applyFallbackQueue(queue, options = {}) {
   const results = Array.isArray(queue) ? queue : [];
   state.fallback.queue = results;
@@ -1713,6 +1790,17 @@ function applyFallbackQueue(queue, options = {}) {
   }
 }
 
+function applyMatchQueue(queue, options = {}) {
+  const results = Array.isArray(queue) ? queue : [];
+  state.matchQueue.queue = results;
+  state.matchQueue.index = 0;
+  state.matchQueue.active = results.length > 0;
+  state.matchQueue.message = options.message ||
+    (results.length > 1
+      ? 'Cycling through exact matches from our detector.'
+      : 'Showing the strongest exact match from our detector.');
+}
+
 function hasSuggestions(set) {
   if (!set) {
     return false;
@@ -1727,9 +1815,15 @@ function handlePrimaryAction() {
   if (submitButton?.dataset?.action === 'done') {
     return;
   }
-  if (state.mode === 'results' && state.fallback.active && state.fallback.queue.length > 1) {
-    advanceFallback();
-    return;
+  if (state.mode === 'results') {
+    if (state.matchQueue.active && state.matchQueue.queue.length > 1) {
+      advanceMatchQueue();
+      return;
+    }
+    if (state.fallback.active && state.fallback.queue.length > 1) {
+      advanceFallback();
+      return;
+    }
   }
   handleSubmit();
 }
@@ -1807,6 +1901,7 @@ function handleClear() {
   state.lastSubmitted = '';
   state.directSuggestions = createEmptySuggestionSet();
   state.fallback = createFallbackState();
+  state.matchQueue = createMatchQueueState();
   state.scrolledToSuggestions = false;
   state.cueHighlightRanges = [];
   state.anchorRewrite = { when: '', where: '' };
@@ -1877,7 +1972,7 @@ function startFallbackSearch() {
   state.fallback.shouldPrompt = false;
   renderSuggestions();
   window.setTimeout(() => {
-    const queue = computeFallbackQueue(state.lastSubmitted);
+    const queue = computeFallbackQueue(state.lastSubmitted, state.detectionNearLimit);
     applyFallbackQueue(queue);
     if (state.detectionSource === state.lastSubmitted) {
       state.detectionFallbackQueue = queue;
@@ -1899,30 +1994,43 @@ function advanceFallback() {
   renderSuggestions();
 }
 
-function computeFallbackQueue(text) {
+function advanceMatchQueue() {
+  if (!state.matchQueue.active || state.matchQueue.queue.length <= 1) {
+    return;
+  }
+  state.matchQueue.index = (state.matchQueue.index + 1) % state.matchQueue.queue.length;
+  renderSuggestions();
+}
+
+function computeFallbackQueue(text, limit = state.detectionNearLimit || DETECTION_NEAR_LIMIT) {
   if (!text || !state.cues.length) {
     return [];
   }
-  const fallback = computeFallbackSuggestion(text, state.cues, { needLimit: 4, feelingLimit: 4 });
+  const max = Math.max(Number(limit) || 0, 0);
+  if (max <= 0) {
+    return [];
+  }
+  const fallback = computeFallbackSuggestion(text, state.cues, { needLimit: max, feelingLimit: 4 });
   if (!fallback) {
     return [];
   }
-  const needs = buildSuggestionEntries(fallback.needSlugs, 'need');
-  if (!needs.length) {
-    return [];
-  }
-  const feelings = buildSuggestionEntries(fallback.feelingSlugs, 'feeling');
-  const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
-  return [{
-    feelings,
-    metFeelings,
-    needs,
-    cues: [],
-    modules: [],
-    slotSummary: null,
-    overflow: 0,
-    total: needs.length + feelings.length,
-  }];
+  const fallbackFeelings = buildSuggestionEntries(fallback.feelingSlugs, 'feeling');
+
+  return fallback.needSlugs.slice(0, max).map(slug => {
+    const needs = buildSuggestionEntries([slug], 'need');
+    const feelings = fallbackFeelings.length ? fallbackFeelings : buildSuggestionEntries([], 'feeling');
+    const metFeelings = deriveCatalogFeelings(needs, 'met', 4);
+    return {
+      feelings,
+      metFeelings,
+      needs,
+      cues: [],
+      modules: [],
+      slotSummary: null,
+      overflow: 0,
+      total: needs.length + feelings.length,
+    };
+  });
 }
 
 function countFlaggedTokens(lint) {
@@ -2063,7 +2171,7 @@ function updateDetectionStatus(rawInput, trimmedInput) {
     state.detectionFallbackQueue = [];
   } else {
     state.cueHighlightRanges = [];
-    const fallbackQueue = computeFallbackQueue(trimmed);
+    const fallbackQueue = computeFallbackQueue(trimmed, state.detectionNearLimit);
     state.detectionFallbackQueue = fallbackQueue;
     state.detectionFallbacks = fallbackQueue.length;
     state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
