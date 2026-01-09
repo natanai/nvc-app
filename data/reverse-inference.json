@@ -2581,9 +2581,9 @@
       "jealous": "anxiety",
       "tired": "tired",
       "calm": "calm",
-      "love": "love-caring",
       "contented": "contented",
-      "anticipation": "excited"
+      "anticipation": "excited",
+      "guilt-shame": "guilt"
     }
   }
 }
