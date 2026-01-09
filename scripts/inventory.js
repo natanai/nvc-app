@@ -951,6 +951,7 @@ function applyNavSettings() {
   let hasSupplementalItems = false;
   let navItemsBecameVisible = false;
   const fragment = document.createDocumentFragment();
+  const pendingRegistration = [];
 
   order.forEach((id) => {
     const element = ensureNavItemElement(id);
@@ -967,10 +968,18 @@ function applyNavSettings() {
     if (definition.isSupplemental && isEnabled) {
       hasSupplementalItems = true;
     }
+    if (element.dataset.navDynamic === 'true' && element.dataset.navRegistered !== 'true') {
+      pendingRegistration.push(element);
+    }
     fragment.appendChild(element);
   });
 
   navState.board.appendChild(fragment);
+
+  if (pendingRegistration.length && navState.board && typeof navState.board.dispatchEvent === 'function') {
+    const detail = { elements: pendingRegistration.slice() };
+    navState.board.dispatchEvent(new CustomEvent('navmagnetregister', { detail }));
+  }
 
   if (navState.nav) {
     if (hasSupplementalItems) {
