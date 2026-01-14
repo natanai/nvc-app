@@ -885,6 +885,15 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     region.summary.dataset.hasSelection = 'true';
   }
 
+  function setRegionToggleState(regionId, { completed = false } = {}) {
+    const region = regionElements.get(regionId);
+    if (!region?.toggle) {
+      return;
+    }
+    region.toggle.textContent = completed ? region.toggleCompletedLabel : region.toggleDefaultLabel;
+    region.toggle.dataset.regionCompleted = completed ? 'true' : 'false';
+  }
+
   function setSensationState(optionId, active, { focusSlider = false, skipDraft = false } = {}) {
     const elements = sensationOptionElements.get(optionId);
     if (!elements) return;
@@ -967,6 +976,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       if (!regionId) {
         return;
       }
+      setRegionToggleState(regionId, { completed: true });
       collapseRegion(regionId, { returnFocus: true });
       return;
     }
@@ -1108,6 +1118,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     scheduleLaneDraftSave();
     regionElements.forEach((_, regionId) => {
       collapseRegion(regionId);
+      setRegionToggleState(regionId, { completed: false });
     });
   }
 
@@ -1283,6 +1294,8 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         toggle,
         details,
         defaultSummary,
+        toggleDefaultLabel: 'Check in',
+        toggleCompletedLabel: 'Completed',
       });
     });
   }
