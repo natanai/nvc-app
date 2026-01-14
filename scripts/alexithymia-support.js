@@ -876,6 +876,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         region.defaultSummary || region.summary.dataset.defaultSummary || 'We can check in here whenever you\'re ready.';
       region.summary.textContent = fallback;
       region.summary.dataset.hasSelection = 'false';
+      if (region.toggle) {
+        region.toggle.textContent = region.toggle.dataset.defaultLabel || 'Check in';
+      }
       return;
     }
     const display = selections.slice(0, 3).join(', ');
@@ -883,6 +886,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       selections.length > 3 ? '…' : ''
     }.`;
     region.summary.dataset.hasSelection = 'true';
+    if (region.toggle) {
+      region.toggle.textContent = region.toggle.dataset.completedLabel || 'Review check-in';
+    }
   }
 
   function setSensationState(optionId, active, { focusSlider = false, skipDraft = false } = {}) {
@@ -1156,7 +1162,11 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       toggle.dataset.regionToggle = region.id;
       toggle.setAttribute('aria-expanded', 'false');
       toggle.setAttribute('aria-controls', detailsId);
-      toggle.textContent = 'Check in';
+      const defaultToggleLabel = 'Check in';
+      const completedToggleLabel = 'Review check-in';
+      toggle.textContent = defaultToggleLabel;
+      toggle.dataset.defaultLabel = defaultToggleLabel;
+      toggle.dataset.completedLabel = completedToggleLabel;
       header.appendChild(toggle);
 
       section.appendChild(header);
