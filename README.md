@@ -9,7 +9,7 @@
 ## How information is organised
 
 - The authoritative data lives in `data/*.csv` files. Editors update those sheets to add or change content.
-- `npm run build:data` converts the CSVs into `data/index.json`, and `npm run build:pages` turns that dataset into static HTML under `index.html`, `feelings/`, `faux feelings/`, `needs/`, and `inventory/`.
+- `npm run build:data` converts the CSVs into `data/index.json`, and `npm run build:pages` turns that dataset into static HTML under `index.html`, `feelings/`, `faux-feelings/`, `needs/`, and `inventory/`.
 - Generated pages store citation metadata from `_evidence/` so each claim on a need page can be traced back to its source.
 
 ## Fact-checking the site
@@ -35,13 +35,19 @@ python -m http.server  # or any static server
 
 ## Development workflow
 
-- **Lint generated scripts:** `npm run lint`
+- **Evidence lint:** `npm run lint:evidence`
+- **Entry point lint:** `npm run lint:entrypoints`
 - **Link hygiene:** `npm run lint:links`
 - **Evidence maintenance:**
   - `npm run extract:citations`
   - edit `_evidence/citations.csv`
   - `npm run replace:needs-sources`
-- **Playwright smoke tests:** `npm test`
+- **Regression/coverage tests:**
+  - `npm run test:data-integrity`
+  - `npm run test:home-regressions`
+  - `npm run test:nav-magnets`
+  - `npm run test:flicker-jitter`
+  - `npm run test:obsolete`
 
 Re-run `npm run build:pages` before tests if you updated data or templates. Prefer open-access citations so readers can check the evidence without paywalls.
 
@@ -89,7 +95,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 ├── index.html                 # generated home page
 ├── feelings/                  # generated feeling hub + individual pages
 ├── needs/                     # generated need hub + individual pages
-├── faux feelings/             # generated situation hub + individual pages
+├── faux-feelings/             # generated situation hub + individual pages
 ├── styles.css                 # shared retro aesthetic
 ├── data/
 │   ├── Feelings.csv
