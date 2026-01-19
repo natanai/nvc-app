@@ -1,7 +1,4 @@
 # allneeds.app
-
-This repo powers a retro, offline-friendly Nonviolent Communication explorer focused on **building a personal inventory of strategies** that support your needs. Everything runs in the browser with no server dependencies: magnets shuffle around each category hub, notes and preferences stay in `localStorage`, and installable PWA metadata keeps the experience available offline.
-
 ## What the site does
 
 - **Build a strategies inventory:** capture strategies that support each need, organize them by contributor details, and export/import the inventory from the navigation magnet. This mirrors the site metadata that promises an on-device strategy library.
