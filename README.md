@@ -127,3 +127,7 @@ Run `npm run build:data` after editing any of these spreadsheets to regenerate t
 - **Category hubs:** each hub displays a grid of clickable entries that navigate to item pages with rich descriptions and related magnets.
 - **Cross-linking:** situation and feeling pages list their related magnets in labelled panels, while need pages highlight strategies and include the share-a-strategy form.
 - **Responsive retro styling:** keeps the playful palette and pixel fonts while threading feelings, needs, faux feelings, and strategies through the same hierarchy.
+
+## Interaction safeguards
+
+- **Strategy deck controls:** keep pointer-driven swipe handlers from intercepting clicks on interactive elements like the "Save to inventory" buttons inside strategy cards, especially on desktop, so inventory actions remain reliable when updating the deck behavior in `scripts/inventory.js`.
