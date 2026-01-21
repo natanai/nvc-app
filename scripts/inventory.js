@@ -7251,8 +7251,11 @@ function focusNeedSection(slug) {
       const target = event.target;
       const targetIsElement = target instanceof Element;
       const targetInsideStack = targetIsElement && (target === stack || stack.contains(target));
+      const interactiveTarget = targetIsElement
+        ? target.closest('button, a, input, textarea, select, label')
+        : null;
 
-      if (!targetInsideStack) {
+      if (!targetInsideStack || (interactiveTarget && deck.contains(interactiveTarget))) {
         isDragging = false;
         swipeLocked = false;
         startedOnActiveCard = false;
