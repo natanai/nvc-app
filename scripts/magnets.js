@@ -1837,6 +1837,62 @@ const initializeBoard = async (root, index) => {
   attachSearch(state);
 };
 
+const MOURNING_FEELINGS = new Set(['guilt', 'shame']);
+
+const resolveBasePath = () => document.body?.dataset?.basePath || '';
+
+const shouldRedirectFeeling = (element) => {
+  if (!element) {
+    return false;
+  }
+  const dataset = element.dataset || {};
+  const candidates = [
+    dataset.emotion,
+    dataset.emotionKey,
+    dataset.feeling,
+    dataset.feelingSlug,
+    dataset.magnetId,
+  ]
+    .filter(Boolean)
+    .map((value) => value.toString().trim().toLowerCase());
+
+  const textLabel = (element.textContent || '').trim().toLowerCase();
+  if (textLabel) {
+    candidates.push(textLabel);
+  }
+
+  const href = typeof element.getAttribute === 'function' ? element.getAttribute('href') : '';
+  if (href) {
+    const match = href.match(/feelings\/([a-z0-9-]+)\//i);
+    if (match?.[1]) {
+      candidates.push(match[1].toLowerCase());
+    }
+  }
+
+  return candidates.some((value) => MOURNING_FEELINGS.has(value));
+};
+
+const interceptFeelingMagnets = () => {
+  const destination = new URL(`${resolveBasePath()}mourning/`, window.location.href);
+  document.addEventListener(
+    'click',
+    (event) => {
+      const target = event.target?.closest(
+        '[data-emotion], [data-feeling], [data-feeling-slug], [data-emotion-key], [data-magnet-id], a, button',
+      );
+      if (!target || !shouldRedirectFeeling(target)) {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      window.location.assign(destination.toString());
+    },
+    true,
+  );
+};
+
+interceptFeelingMagnets();
+
 const setup = async () => {
   const roots = Array.from(document.querySelectorAll('[data-magnet-root]'));
   if (!roots.length) {

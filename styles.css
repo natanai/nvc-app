@@ -6643,3 +6643,145 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   font-size: 1rem;
   font-weight: 600;
 }
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-field__label {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+
+.form-field__input,
+.form-field input,
+.form-field textarea {
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--outline);
+  border-radius: 12px;
+  background: var(--sand);
+  color: var(--ink);
+}
+
+.form-field__input:focus-visible,
+.form-field input:focus-visible,
+.form-field textarea:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--mint) 60%, transparent);
+  outline-offset: 2px;
+}
+
+.mourning-hero {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mourning-wizard {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.mourning-step {
+  border: 1px solid color-mix(in srgb, var(--outline) 60%, transparent);
+  border-radius: 12px;
+  padding: 1.25rem;
+  background: color-mix(in srgb, var(--sand) 80%, white 20%);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--outline) 15%, transparent);
+}
+
+.mourning-step h2 {
+  margin: 0 0 0.35rem;
+}
+
+.mourning-observation {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.mourning-observation__label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.mourning-observation__guidance {
+  margin: 0;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+  text-align: right;
+}
+
+.mourning-observation__input-wrapper textarea {
+  min-height: 150px;
+}
+
+.mourning-filter {
+  margin: 0.75rem 0;
+}
+
+.mourning-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.mourning-options--feelings {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+.mourning-chip {
+  justify-content: center;
+  border: 1px dashed color-mix(in srgb, var(--outline) 55%, transparent);
+  background: color-mix(in srgb, var(--sand) 90%, white 10%);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.mourning-chip:hover,
+.mourning-chip:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 10px color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.mourning-chip.is-selected {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--mint) 60%, transparent);
+  background: color-mix(in srgb, var(--mint) 12%, var(--sand) 88%);
+}
+
+.mourning-selection {
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.mourning-step--ack {
+  border-color: color-mix(in srgb, var(--mint) 60%, transparent);
+  background: color-mix(in srgb, var(--mint) 8%, var(--sand) 92%);
+}
+
+.mourning-ack {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1rem;
+  border-left: 4px solid color-mix(in srgb, var(--mint) 60%, transparent);
+  font-style: italic;
+}
+
+.mourning-footnote {
+  margin: 0 0 0.5rem;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+
+.mourning-status {
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+}

@@ -20,6 +20,7 @@ const KNOWN_SCOPES = new Set([
   'inventory',
   'observation-guide',
   'support-lane',
+  'mourning-lane',
 ]);
 
 const DEFAULT_SCOPES = [
@@ -30,6 +31,7 @@ const DEFAULT_SCOPES = [
   'inventory',
   'observation-guide',
   'support-lane',
+  'mourning-lane',
 ];
 
 const DIRECTORIES_BY_SCOPE = new Map([
@@ -37,6 +39,7 @@ const DIRECTORIES_BY_SCOPE = new Map([
   ['feelings', ['feelings']],
   ['needs', ['needs']],
   ['inventory', ['inventory']],
+  ['mourning-lane', ['mourning']],
 ]);
 
 function parseScopeArgs(argv) {
@@ -1372,6 +1375,7 @@ function renderCategory(type, items) {
     type === 'feelings'
       ? `<div class="support-actions support-actions--muted">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
+          <a class="support-button support-button--ghost" href="../mourning/">Process guilt or shame</a>
           <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your journal dashboard</a>
         </div>`
       : '';
@@ -2245,6 +2249,90 @@ function slugify(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
+function renderMourningLane() {
+  const main = `
+      <header class="page-header mourning-hero">
+        <p class="support-note support-note--mini">Non-judgmental lane for guilt and shame</p>
+        <h1 class="page-title">Mourning a Choice: Processing Guilt &amp; Shame</h1>
+        <p class="page-description">
+          Guilt and Shame are signals that a deep value (Need) was not met. Use this lane to acknowledge the gap without self-judgment.
+        </p>
+      </header>
+
+      <section class="mourning-wizard">
+        <div class="mourning-step">
+          <h2>1. The Action (Observation)</h2>
+          <p>What specific action did you take or refrain from taking? (Stick to the facts, no evaluation.)</p>
+          <label class="form-field">
+            <span class="form-field__label">Observation</span>
+            <textarea
+              class="form-field__input"
+              data-mourning-observation
+              rows="3"
+              placeholder="e.g., I did not return the call yesterday."
+            ></textarea>
+          </label>
+        </div>
+
+        <div class="mourning-step">
+          <h2>2. The Cost (The Unmet Need)</h2>
+          <p>This action signals a conflict. Which precious Need of yours was not met in this situation?</p>
+          <div class="mourning-filter">
+            <label class="form-field form-field--inline">
+              <span class="form-field__label">Filter needs</span>
+              <input type="search" data-mourning-need-search placeholder="Search needs">
+            </label>
+          </div>
+          <div class="mourning-options" data-mourning-need-options></div>
+          <p class="mourning-selection" data-mourning-need-summary hidden>
+            Acknowledged Unmet Need: <strong data-mourning-need-label></strong>
+          </p>
+        </div>
+
+        <div class="mourning-step">
+          <h2>3. The Mourning (The Authentic Feeling)</h2>
+          <p>
+            Now, focus on the unmet need for <strong data-mourning-need-placeholder>[Value]</strong>.
+            What “clean” feeling (sadness, regret, disappointment) arises?
+          </p>
+          <div class="mourning-filter">
+            <label class="form-field form-field--inline">
+              <span class="form-field__label">Filter feelings</span>
+              <input type="search" data-mourning-feeling-search placeholder="Search feelings">
+            </label>
+          </div>
+          <div class="mourning-options mourning-options--feelings" data-mourning-feeling-options></div>
+          <p class="mourning-selection" data-mourning-feeling-summary hidden>
+            Mourning Feeling: <strong data-mourning-feeling-label></strong>
+          </p>
+        </div>
+
+        <div class="mourning-step mourning-step--ack" data-mourning-ack hidden>
+          <h2>4. Acknowledgment</h2>
+          <blockquote class="mourning-ack" data-mourning-acknowledgement></blockquote>
+          <p class="mourning-footnote">Entries save to your on-device journal so you can revisit them later.</p>
+          <button class="support-button" type="button" data-mourning-save disabled>Acknowledge &amp; Save</button>
+          <p class="mourning-status" aria-live="polite" data-mourning-status></p>
+        </div>
+      </section>
+    `;
+
+  const html = htmlPage({
+    title: 'Mourning a Choice',
+    depth: 1,
+    breadcrumbs: [
+      { label: 'Home', href: '../' },
+      { label: 'Mourning a Choice' },
+    ],
+    main,
+    scripts: [{ src: 'scripts/mourning-lane.js', module: true }],
+    activeNav: 'feelings',
+    canonicalPath: '/mourning/',
+  });
+
+  writePage('mourning/index.html', html);
+}
+
 function updateSupportLaneNav() {
   const supportPath = join(rootDir, 'alexithymia-support', 'index.html');
   let contents;
@@ -2293,6 +2381,7 @@ function build(scopeSet) {
   const buildInventory = shouldBuild('inventory');
   const buildObservationGuide = shouldBuild('observation-guide');
   const buildSupportLane = shouldBuild('support-lane');
+  const buildMourningLane = shouldBuild('mourning-lane');
 
   if (buildHome) {
     renderHome();
@@ -2340,6 +2429,10 @@ function build(scopeSet) {
 
   if (buildSupportLane) {
     updateSupportLaneNav();
+  }
+
+  if (buildMourningLane) {
+    renderMourningLane();
   }
 }
 

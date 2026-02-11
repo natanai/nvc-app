@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>feelings • allneeds.app</title>
+    <title>mourning a choice • allneeds.app</title>
     <meta name="description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
     <link rel="icon" type="image/svg+xml" href="../icons/favicon-color.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-color-32x32.png" />
@@ -18,12 +18,12 @@
     <meta name="msapplication-TileColor" content="#ffffff" />
     <meta name="msapplication-TileImage" content="../icons/mstile-150x150.png" />
     <meta name="msapplication-config" content="../browserconfig.xml" />
-    <link rel="canonical" href="https://allneeds.app/feelings/" />
+    <link rel="canonical" href="https://allneeds.app/mourning/" />
     <meta property="fb:app_id" content="966242223397117" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="allneeds.app" />
-    <meta property="og:url" content="https://allneeds.app/feelings/" />
-    <meta property="og:title" content="feelings • allneeds.app" />
+    <meta property="og:url" content="https://allneeds.app/mourning/" />
+    <meta property="og:title" content="mourning a choice • allneeds.app" />
     <meta property="og:description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
     <meta property="og:image" content="https://allneeds.app/social/og-image-1200x630.png?v=2" />
     <meta property="og:image:secure_url" content="https://allneeds.app/social/og-image-1200x630.png?v=2" />
@@ -32,9 +32,9 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="feelings • allneeds.app" />
+    <meta name="twitter:title" content="mourning a choice • allneeds.app" />
     <meta name="twitter:description" content="Build an inventory of strategies to tend to all your basic human needs. Everything stays on your device in localStorage with import and export controls." />
-    <meta name="twitter:url" content="https://allneeds.app/feelings/" />
+    <meta name="twitter:url" content="https://allneeds.app/mourning/" />
     <meta name="twitter:image" content="https://allneeds.app/social/twitter-card-1200x630.png?v=2" />
     <meta name="twitter:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
             <script src="../assets/js/ui/contrast.js"></script>
@@ -1164,58 +1164,79 @@ button.site-nav__magnet {
       </script>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="../">Home</a></li><li aria-current="page">Feelings</li>
+          <li><a href="../">Home</a></li><li aria-current="page">Mourning a Choice</li>
         </ol>
       </nav>
       <main id="main" class="page" role="main">
         
-      <header class="page-header">
-        <h1 class="page-title">Feelings</h1>
-        <p class="page-description">Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.</p>
-        <div class="support-actions support-actions--muted">
-          <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="../mourning/">Process guilt or shame</a>
-          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your journal dashboard</a>
-        </div>
+      <header class="page-header mourning-hero">
+        <p class="support-note support-note--mini">Non-judgmental lane for guilt and shame</p>
+        <h1 class="page-title">Mourning a Choice: Processing Guilt &amp; Shame</h1>
+        <p class="page-description">
+          Guilt and Shame are signals that a deep value (Need) was not met. Use this lane to acknowledge the gap without self-judgment.
+        </p>
       </header>
-      <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root>
-        <div class="magnet-section__header">
-          <h2 id="feelings-list" class="section-title">Feelings directory</h2>
-        </div>
-        <div class="magnet-search" data-magnet-search>
-          <div class="magnet-search__toolbar">
-            <div class="magnet-search__controls">
-              <a class="magnet-search__alt" href="body-cues/">Search by body cues</a>
-              <label class="magnet-search__field">
-                <span class="magnet-search__label visually-hidden">Search feelings</span>
-                <input
-                  type="search"
-                  name="feelings-search"
-                  class="magnet-search__input"
-                  placeholder="Search feelings"
-                  autocomplete="off"
-                  data-magnet-search-input
-                >
-              </label>
+
+      <section class="mourning-wizard">
+        <div class="mourning-step">
+          <h2>1. The Action (Observation)</h2>
+          <p>What specific action did you take or refrain from taking? (Stick to the facts, no evaluation.)</p>
+          <div class="mourning-observation">
+            <div class="mourning-observation__label-row">
+              <p class="form-field__label">Observation</p>
+              <p class="mourning-observation__guidance" data-mourning-observation-guidance hidden></p>
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
-          </div>
-          <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
-            <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
-            <div class="magnet-search__list" data-magnet-search-list></div>
+            <div class="mourning-observation__input-wrapper observation-editor__input-wrapper observation-editor__input-wrapper--compact">
+              <div class="observation-editor__highlight" data-mourning-observation-highlight aria-hidden="true"></div>
+              <textarea
+                class="observation-editor__input"
+                data-mourning-observation
+                rows="4"
+                placeholder="e.g., I did not return the call yesterday."
+              ></textarea>
+            </div>
           </div>
         </div>
-        <div class="magnet-board-wrapper">
-          <div class="pill-grid magnet-board" data-magnet-board>
-            <a class="pill magnet" data-magnet-id="feelings-hurt" href="hurt/"><span class="magnet__label">Hurt</span></a><a class="pill magnet" data-magnet-id="feelings-terrified" href="terrified/"><span class="magnet__label">Terrified</span></a><a class="pill magnet" data-magnet-id="feelings-bewildered" href="bewildered/"><span class="magnet__label">Bewildered</span></a><a class="pill magnet" data-magnet-id="feelings-sad" href="sad/"><span class="magnet__label">Sad</span></a><a class="pill magnet" data-magnet-id="feelings-frightened" href="frightened/"><span class="magnet__label">Frightened</span></a><a class="pill magnet" data-magnet-id="feelings-lonely" href="lonely/"><span class="magnet__label">Lonely</span></a><a class="pill magnet" data-magnet-id="feelings-angry" href="angry/"><span class="magnet__label">Angry</span></a><a class="pill magnet" data-magnet-id="feelings-frustrated" href="frustrated/"><span class="magnet__label">Frustrated</span></a><a class="pill magnet" data-magnet-id="feelings-scared" href="scared/"><span class="magnet__label">Scared</span></a><a class="pill magnet" data-magnet-id="feelings-upset" href="upset/"><span class="magnet__label">Upset</span></a><a class="pill magnet" data-magnet-id="feelings-tense" href="tense/"><span class="magnet__label">Tense</span></a><a class="pill magnet" data-magnet-id="feelings-distressed" href="distressed/"><span class="magnet__label">Distressed</span></a><a class="pill magnet" data-magnet-id="feelings-disappointment" href="disappointment/"><span class="magnet__label">Disappointment</span></a><a class="pill magnet" data-magnet-id="feelings-enraged" href="enraged/"><span class="magnet__label">Enraged</span></a><a class="pill magnet" data-magnet-id="feelings-confused" href="confused/"><span class="magnet__label">Confused</span></a><a class="pill magnet" data-magnet-id="feelings-antagonistic" href="antagonistic/"><span class="magnet__label">Antagonistic</span></a><a class="pill magnet" data-magnet-id="feelings-hostile" href="hostile/"><span class="magnet__label">Hostile</span></a><a class="pill magnet" data-magnet-id="feelings-thwarted" href="thwarted/"><span class="magnet__label">Thwarted</span></a><a class="pill magnet" data-magnet-id="feelings-anxious" href="anxious/"><span class="magnet__label">Anxious</span></a><a class="pill magnet" data-magnet-id="feelings-resentful" href="resentful/"><span class="magnet__label">Resentful</span></a><a class="pill magnet" data-magnet-id="feelings-in-pain" href="in-pain/"><span class="magnet__label">In pain</span></a><a class="pill magnet" data-magnet-id="feelings-embarrassed" href="embarrassed/"><span class="magnet__label">Embarrassed</span></a><a class="pill magnet" data-magnet-id="feelings-overwhelmed" href="overwhelmed/"><span class="magnet__label">Overwhelmed</span></a><a class="pill magnet" data-magnet-id="feelings-irritated" href="irritated/"><span class="magnet__label">Irritated</span></a><a class="pill magnet" data-magnet-id="feelings-anxiety" href="anxiety/"><span class="magnet__label">Anxiety</span></a><a class="pill magnet" data-magnet-id="feelings-afraid" href="afraid/"><span class="magnet__label">Afraid</span></a><a class="pill magnet" data-magnet-id="feelings-powerless" href="powerless/"><span class="magnet__label">Powerless</span></a><a class="pill magnet" data-magnet-id="feelings-impotent" href="impotent/"><span class="magnet__label">Impotent</span></a><a class="pill magnet" data-magnet-id="feelings-helpless" href="helpless/"><span class="magnet__label">Helpless</span></a><a class="pill magnet" data-magnet-id="feelings-tired" href="tired/"><span class="magnet__label">Tired</span></a><a class="pill magnet" data-magnet-id="feelings-defiant" href="defiant/"><span class="magnet__label">Defiant</span></a><a class="pill magnet" data-magnet-id="feelings-fear" href="fear/"><span class="magnet__label">Fear</span></a><a class="pill magnet" data-magnet-id="feelings-desperation" href="desperation/"><span class="magnet__label">Desperation</span></a><a class="pill magnet" data-magnet-id="feelings-alarmed" href="alarmed/"><span class="magnet__label">Alarmed</span></a><a class="pill magnet" data-magnet-id="feelings-agitated" href="agitated/"><span class="magnet__label">Agitated</span></a><a class="pill magnet" data-magnet-id="feelings-jealous" href="jealous/"><span class="magnet__label">Jealous</span></a><a class="pill magnet" data-magnet-id="feelings-calm" href="calm/"><span class="magnet__label">Calm</span></a><a class="pill magnet" data-magnet-id="feelings-inspired" href="inspired/"><span class="magnet__label">Inspired</span></a><a class="pill magnet" data-magnet-id="feelings-proud" href="proud/"><span class="magnet__label">Proud</span></a><a class="pill magnet" data-magnet-id="feelings-hopeful" href="hopeful/"><span class="magnet__label">Hopeful</span></a><a class="pill magnet" data-magnet-id="feelings-contented" href="contented/"><span class="magnet__label">Contented</span></a><a class="pill magnet" data-magnet-id="feelings-peaceful" href="peaceful/"><span class="magnet__label">Peaceful</span></a><a class="pill magnet" data-magnet-id="feelings-relieved" href="relieved/"><span class="magnet__label">Relieved</span></a><a class="pill magnet" data-magnet-id="feelings-relaxed" href="relaxed/"><span class="magnet__label">Relaxed</span></a><a class="pill magnet" data-magnet-id="feelings-joyful" href="joyful/"><span class="magnet__label">Joyful</span></a><a class="pill magnet" data-magnet-id="feelings-playful" href="playful/"><span class="magnet__label">Playful</span></a><a class="pill magnet" data-magnet-id="feelings-excited" href="excited/"><span class="magnet__label">Excited</span></a><a class="pill magnet" data-magnet-id="feelings-energized" href="energized/"><span class="magnet__label">Energized</span></a>
+
+        <div class="mourning-step">
+          <h2>2. The Cost (The Unmet Need)</h2>
+          <p>This action signals a conflict. Which precious Need of yours was not met in this situation?</p>
+          <div class="mourning-filter">
+            <label class="form-field form-field--inline">
+              <span class="form-field__label">Search needs</span>
+              <input type="search" data-mourning-need-search placeholder="Search needs">
+            </label>
           </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
-          </label>
+          <div class="mourning-options" data-mourning-need-options></div>
+          <p class="mourning-selection" data-mourning-need-summary hidden>
+            Acknowledged Unmet Need: <strong data-mourning-need-label></strong>
+          </p>
+        </div>
+
+        <div class="mourning-step">
+          <h2>3. The Mourning (The Authentic Feeling)</h2>
+          <p>
+            Now, focus on the unmet need for <strong data-mourning-need-placeholder>[Value]</strong>.
+            What “clean” feeling (sadness, regret, disappointment) arises?
+          </p>
+          <div class="mourning-filter">
+            <label class="form-field form-field--inline">
+              <span class="form-field__label">Search feelings</span>
+              <input type="search" data-mourning-feeling-search placeholder="Search feelings">
+            </label>
+          </div>
+          <div class="mourning-options mourning-options--feelings" data-mourning-feeling-options></div>
+          <p class="mourning-selection" data-mourning-feeling-summary hidden>
+            Mourning Feeling: <strong data-mourning-feeling-label></strong>
+          </p>
+        </div>
+
+        <div class="mourning-step mourning-step--ack" data-mourning-ack hidden>
+          <h2>4. Acknowledgment</h2>
+          <blockquote class="mourning-ack" data-mourning-acknowledgement></blockquote>
+          <p class="mourning-footnote">Entries save to your on-device journal so you can revisit them later.</p>
+          <button class="support-button" type="button" data-mourning-save disabled>Acknowledge &amp; Save</button>
+          <p class="mourning-status" aria-live="polite" data-mourning-status></p>
         </div>
       </section>
     
@@ -1224,5 +1245,6 @@ button.site-nav__magnet {
     <script src="../assets/js/journal/store.js" type="module"></script>
     <script src="../scripts/inventory.js" defer></script>
     <script src="../scripts/magnets.js" type="module"></script>
+    <script src="../scripts/mourning-lane.js" type="module"></script>
   </body>
 </html>
