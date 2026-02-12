@@ -1805,7 +1805,7 @@ ${strategiesNote}
     ],
     main,
         scripts: [
-      { src: 'scripts/inventory-bluesky.js', module: true },
+      { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
     ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
@@ -2388,7 +2388,7 @@ function renderInventoryPage() {
       { label: 'Home', href: '../' },
       { label: 'Inventory' },
     ],
-    scripts: [{ src: 'scripts/inventory-bluesky.js', module: true }],
+    scripts: [{ src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true }],
     headExtras: blueskyPanelStyles,
     main,
     activeNav: 'inventory',
