@@ -1330,7 +1330,7 @@ function buildPersonalStrategyFormOptions({
   return {
     formId,
     idPrefix,
-    submitLabel: 'Add to inventory',
+    submitLabel: '💾 Save to device',
     titleLabel: 'Strategy name',
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
@@ -1719,7 +1719,7 @@ ${strategiesNote}
                         ${contributorHtml}
                       </div>
                       <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                        <button type="button" class="strategy-card__save">Save to device</button>
                       </div>
                     </article>
                   `;

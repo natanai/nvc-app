@@ -182,7 +182,7 @@ function renderFeed(strategies) {
     addButton.type = 'button';
     addButton.className = 'strategy-card__action';
     addButton.dataset.addToInventory = 'true';
-    addButton.textContent = 'Add to inventory';
+    addButton.textContent = '💾 Save to device';
     addButton.addEventListener('click', () => {
       handleAddToInventory(strategy);
     });

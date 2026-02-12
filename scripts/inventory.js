@@ -10,6 +10,8 @@ const PERSONAL_STRATEGIES_EMAIL_BODY =
 const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
 const BACKEND_SNAPSHOT_KEY = 'allneeds_export_v1';
 const VISIBILITY_VALUES = ['private', 'followers', 'public'];
+const SAVE_TARGET_DEVICE = 'device';
+const SAVE_TARGET_PROFILE = 'profile';
 
 function normalizeVisibilityValue(value) {
   try {
@@ -435,6 +437,7 @@ const state = {
   needsBySlug: new Map(),
   savedStrategySlugs: new Set(),
   strategyButtons: new Map(),
+  profileSaveButtons: new Set(),
   basePath: '',
   inventoryListEl: null,
   inventorySummaryEl: null,
@@ -1545,12 +1548,14 @@ document.addEventListener('DOMContentLoaded', () => {
   setupScrollTopButton();
   updateBackendSyncButtons();
   updateVisibilityControls();
+  updateProfileSaveButtonStates();
 });
 
 if (typeof window !== 'undefined') {
   window.addEventListener('allneeds:bsky-login-changed', (event) => {
     updateBackendSyncButtons();
     updateVisibilityControls();
+    updateProfileSaveButtonStates();
     const session = event?.detail;
     const did = session?.did || session?.sub || null;
     if (!did) {
@@ -1638,15 +1643,39 @@ function isStrategySaved(slug) {
   return state.savedStrategySlugs.has(normalizedSlug);
 }
 
+function isSignedIn() {
+  return Boolean(getCurrentDid());
+}
+
+function updateProfileSaveButtonStates() {
+  const signedIn = isSignedIn();
+  state.profileSaveButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+    button.disabled = !signedIn;
+    button.setAttribute('aria-disabled', signedIn ? 'false' : 'true');
+    button.title = signedIn ? '' : 'Sign in to save to profile';
+  });
+}
+
+function registerProfileSaveButton(button) {
+  if (!button) {
+    return;
+  }
+  state.profileSaveButtons.add(button);
+  updateProfileSaveButtonStates();
+}
+
 function updateStrategySaveButton(button, isSaved) {
   if (!button) {
     return;
   }
   if (!button.dataset.defaultLabel) {
-    button.dataset.defaultLabel = button.textContent?.trim() || '+ Save to inventory';
+    button.dataset.defaultLabel = button.textContent?.trim() || '💾 Save to device';
   }
   if (!button.dataset.savedLabel) {
-    button.dataset.savedLabel = '✓ In your inventory';
+    button.dataset.savedLabel = '✓ Saved on this device';
   }
   const defaultLabel = button.dataset.defaultLabel;
   const savedLabel = button.dataset.savedLabel;
@@ -1692,30 +1721,38 @@ function setupNeedPage() {
 
   const cards = main.querySelectorAll('.strategy-card');
   cards.forEach((card) => {
-    const saveButton = card.querySelector('.strategy-card__save');
-    if (!saveButton) {
+    const saveToDeviceButton = card.querySelector('.strategy-card__save');
+    if (!saveToDeviceButton) {
       return;
     }
 
+    saveToDeviceButton.textContent = '💾 Save to device';
+    saveToDeviceButton.classList.add('strategy-card__save--device');
+
+    let saveToProfileButton = card.querySelector('[data-save-to-profile-button="true"]');
+    if (!saveToProfileButton) {
+      saveToProfileButton = document.createElement('button');
+      saveToProfileButton.type = 'button';
+      saveToProfileButton.className = saveToDeviceButton.className;
+      saveToProfileButton.dataset.saveToProfileButton = 'true';
+      saveToProfileButton.textContent = '☁️ Save to profile';
+      saveToDeviceButton.insertAdjacentElement('afterend', saveToProfileButton);
+    }
+    saveToProfileButton.classList.add('strategy-card__save--profile');
+    registerProfileSaveButton(saveToProfileButton);
+
     const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
     if (strategySlug) {
-      registerStrategySaveButton(strategySlug, saveButton);
+      registerStrategySaveButton(strategySlug, saveToDeviceButton);
     }
 
-    saveButton.addEventListener('click', () => {
-      const title = card.querySelector('.strategy-card__title')?.textContent?.trim() || 'Untitled strategy';
-      const description = card.querySelector('.strategy-card__description')?.textContent?.trim() || '';
-      if (strategySlug && isStrategySaved(strategySlug)) {
-        const nextInventory = state.inventory.filter(
-          (item) => normalizeStrategySlug(item.strategySlug) !== strategySlug
-        );
-        persistInventory(nextInventory, {
-          feedbackElement: feedback,
-          feedbackMessage: `Removed “${title}” from your inventory for ${needName}.`,
-          feedbackMessageType: 'warning',
-        });
+    const saveFromCard = async (saveTarget = SAVE_TARGET_DEVICE) => {
+      if (saveTarget === SAVE_TARGET_PROFILE && !isSignedIn()) {
+        showFeedback(feedback, 'Sign in to save to profile.', 'warning');
         return;
       }
+      const title = card.querySelector('.strategy-card__title')?.textContent?.trim() || 'Untitled strategy';
+      const description = card.querySelector('.strategy-card__description')?.textContent?.trim() || '';
 
       const tags = buildStrategyTags(card.dataset.strategyTags, needSlug);
       const needSlugs = resolveNeedSlugsFromTags(tags, needSlug);
@@ -1771,9 +1808,22 @@ function setupNeedPage() {
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory, {
         feedbackElement: feedback,
-        feedbackMessage: `Saved “${title}” to your inventory for ${needName}.`,
+        feedbackMessage:
+          saveTarget === SAVE_TARGET_PROFILE
+            ? `Saved “${title}” to your profile and device for ${needName}.`
+            : `Saved “${title}” to your device for ${needName}.`,
       });
-      maybePublishStrategy(entry);
+      if (saveTarget === SAVE_TARGET_PROFILE) {
+        await saveSnapshotToBackend();
+      }
+    };
+
+    saveToDeviceButton.addEventListener('click', () => {
+      saveFromCard(SAVE_TARGET_DEVICE);
+    });
+
+    saveToProfileButton.addEventListener('click', () => {
+      saveFromCard(SAVE_TARGET_PROFILE);
     });
   });
 
@@ -1783,7 +1833,38 @@ function setupNeedPage() {
       .closest('[data-strategy-form-container]')
       ?.querySelector('[data-form-message]');
 
-    suggestionForm.addEventListener('submit', (event) => {
+    const saveTargetField = document.createElement('input');
+    saveTargetField.type = 'hidden';
+    saveTargetField.name = 'save-target';
+    saveTargetField.value = SAVE_TARGET_DEVICE;
+    suggestionForm.appendChild(saveTargetField);
+
+    const formSaveToDevice = suggestionForm.querySelector('.strategy-form__submit');
+    if (formSaveToDevice) {
+      formSaveToDevice.textContent = '💾 Save to device';
+      formSaveToDevice.classList.add('strategy-card__save--device');
+      formSaveToDevice.addEventListener('click', () => {
+        saveTargetField.value = SAVE_TARGET_DEVICE;
+      });
+
+      const formSaveToProfile = document.createElement('button');
+      formSaveToProfile.type = 'submit';
+      formSaveToProfile.className = formSaveToDevice.className;
+      formSaveToProfile.textContent = '☁️ Save to profile';
+      formSaveToProfile.addEventListener('click', () => {
+        saveTargetField.value = SAVE_TARGET_PROFILE;
+      });
+      formSaveToProfile.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
+      formSaveToDevice.insertAdjacentElement('afterend', formSaveToProfile);
+      registerProfileSaveButton(formSaveToProfile);
+
+      const saveTargetHint = document.createElement('p');
+      saveTargetHint.className = 'strategy-save-target-hint';
+      saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
+      formSaveToProfile.insertAdjacentElement('afterend', saveTargetHint);
+    }
+
+    suggestionForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
       const formData = new FormData(suggestionForm);
@@ -1797,6 +1878,12 @@ function setupNeedPage() {
       const location = sanitizeLocation(formData.get('location'));
       const visibility = (formData.get('strategy-visibility') || '').toString();
       const normalizedVisibility = normalizeVisibilityValue(visibility);
+      const saveTarget = (formData.get('save-target') || SAVE_TARGET_DEVICE).toString();
+
+      if (saveTarget === SAVE_TARGET_PROFILE && !isSignedIn()) {
+        showFormMessage(message, 'Sign in to save to profile.', 'warning');
+        return;
+      }
 
       if (!title || !description) {
         showFormMessage(message, 'Please share a strategy name and description before saving.', 'error');
@@ -1882,18 +1969,22 @@ function setupNeedPage() {
 
       const nextInventory = [...state.inventory, entry];
       persistInventory(nextInventory);
-      maybePublishStrategy(entry);
+      if (saveTarget === SAVE_TARGET_PROFILE) {
+        await saveSnapshotToBackend();
+      }
 
       suggestionForm.reset();
+      saveTargetField.value = SAVE_TARGET_DEVICE;
       showFormMessage(
         message,
-        `Saved “${title}” to your inventory. Personal strategies stay on this browser. Visit the inventory page anytime to export a backup.`,
+        saveTarget === SAVE_TARGET_PROFILE
+          ? `Saved “${title}” to your profile and device. A backend sync was triggered automatically.`
+          : `Saved “${title}” to your device. Visit the inventory page anytime to export a backup.`,
         'success'
       );
     });
   }
 }
-
 function setupInventoryPage() {
   const listEl = document.getElementById('inventory-list');
   if (!listEl) {
@@ -1938,8 +2029,33 @@ function setupInventoryPage() {
   if (form) {
     state.inventoryForm = form;
     state.inventorySubmitButton = form.querySelector('.strategy-form__submit');
+    const saveTargetField = document.createElement('input');
+    saveTargetField.type = 'hidden';
+    saveTargetField.name = 'save-target';
+    saveTargetField.value = SAVE_TARGET_DEVICE;
+    form.appendChild(saveTargetField);
+
+    if (state.inventorySubmitButton) {
+      state.inventorySubmitButton.textContent = '💾 Save to device';
+      state.inventorySubmitButton.classList.add('strategy-card__save--device');
+      state.inventorySubmitButton.addEventListener('click', () => {
+        saveTargetField.value = SAVE_TARGET_DEVICE;
+      });
+
+      const saveToProfileButton = document.createElement('button');
+      saveToProfileButton.type = 'submit';
+      saveToProfileButton.className = state.inventorySubmitButton.className;
+      saveToProfileButton.textContent = '☁️ Save to profile';
+      saveToProfileButton.addEventListener('click', () => {
+        saveTargetField.value = SAVE_TARGET_PROFILE;
+      });
+      saveToProfileButton.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
+      state.inventorySubmitButton.insertAdjacentElement('afterend', saveToProfileButton);
+      registerProfileSaveButton(saveToProfileButton);
+    }
+
     setInventoryFormMode({ entry: null });
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const formData = new FormData(form);
       const title = (formData.get('title') || '').toString().trim();
@@ -1949,6 +2065,12 @@ function setupInventoryPage() {
       const location = sanitizeLocation(formData.get('location'));
       const visibility = (formData.get('strategy-visibility') || '').toString();
       const normalizedVisibility = normalizeVisibilityValue(visibility);
+      const saveTarget = (formData.get('save-target') || SAVE_TARGET_DEVICE).toString();
+
+      if (saveTarget === SAVE_TARGET_PROFILE && !isSignedIn()) {
+        showInventoryMessage('Sign in to save to profile.', 'warning');
+        return;
+      }
 
       if (!title || !description || !needSlugs.length) {
         showInventoryMessage('Please fill in the title, description, and at least one need before adding.', 'error');
@@ -2016,12 +2138,19 @@ function setupInventoryPage() {
 
       persistInventory(nextInventory, {
         inventoryMessage: existingEntry
-          ? `Updated “${title}” in your inventory.`
-          : `Added “${title}” to your inventory. Strategies you add stay on this browser, so export a localStorage JSON backup whenever you want an archive.`,
+          ? (saveTarget === SAVE_TARGET_PROFILE
+              ? `Updated “${title}” in your profile and device.`
+              : `Updated “${title}” on your device.`)
+          : (saveTarget === SAVE_TARGET_PROFILE
+              ? `Added “${title}” to your profile and device.`
+              : `Added “${title}” to your device. Strategies you add stay on this browser, so export a localStorage JSON backup whenever you want an archive.`),
         openList: true,
       });
-      maybePublishStrategy(entry);
+      if (saveTarget === SAVE_TARGET_PROFILE) {
+        await saveSnapshotToBackend();
+      }
       form.reset();
+      saveTargetField.value = SAVE_TARGET_DEVICE;
       setInventoryFormMode({ entry: null });
       const needSelect = form.querySelector('#inventory-need');
       if (needSelect) {
@@ -5741,14 +5870,14 @@ function setInventoryFormMode({ entry }) {
 
   if (!entry) {
     state.inventoryEditingId = null;
-    state.inventorySubmitButton.textContent = 'Add to inventory';
+    state.inventorySubmitButton.textContent = '💾 Save to device';
     state.inventoryForm.removeAttribute('data-editing');
     return;
   }
 
   state.inventoryEditingId = entry.id;
   state.inventoryForm.setAttribute('data-editing', 'true');
-  state.inventorySubmitButton.textContent = 'Save changes';
+  state.inventorySubmitButton.textContent = '💾 Save changes to device';
 
   const titleInput = state.inventoryForm.querySelector('#inventory-title');
   const descriptionInput = state.inventoryForm.querySelector('#inventory-description');
@@ -6211,25 +6340,6 @@ function updateVisibilityControls() {
 
 function buildExportSnapshot() {
   return buildLocalDataBackup();
-}
-
-function maybePublishStrategy(entry) {
-  const did = getCurrentDid();
-  if (!did) {
-    return;
-  }
-
-  const visibility = normalizeVisibilityValue(entry?.visibility);
-  if (visibility !== 'public' && visibility !== 'followers') {
-    return;
-  }
-
-  const shouldShare = window.confirm(
-    'Do you want to share this strategy to the backend right now? You can also keep it local and share later from the Inventory page.'
-  );
-  if (shouldShare) {
-    publishStrategyToBackend(entry);
-  }
 }
 
 function buildBackendStrategySyncPayload(snapshot) {
