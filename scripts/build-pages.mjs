@@ -1330,7 +1330,7 @@ function buildPersonalStrategyFormOptions({
   return {
     formId,
     idPrefix,
-    submitLabel: 'Add to inventory',
+    submitLabel: '💾 Save to device',
     titleLabel: 'Strategy name',
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
@@ -1719,7 +1719,7 @@ ${strategiesNote}
                         ${contributorHtml}
                       </div>
                       <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">+ Save to inventory</button>
+                        <button type="button" class="strategy-card__save">Save to device</button>
                       </div>
                     </article>
                   `;
@@ -1771,7 +1771,7 @@ ${strategiesNote}
       </div>`;
 
   const basePath = basePathFromDepth(2);
-  const suggestionNotice = buildPersonalStrategyNotice(basePath);
+  const suggestionNotice = '';
   const suggestionForm = renderStrategyForm(
     buildPersonalStrategyFormOptions({
       formId: 'suggestion-form',
@@ -1804,7 +1804,9 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+        scripts: [
+      { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
+    ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,
@@ -2166,7 +2168,7 @@ function renderInventoryPage() {
                 <div class="inventory-bluesky-panel__titles">
                   <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
                   <p class="inventory-bluesky-panel__subtitle">
-                    Link your account to save/load data, or keep everything local.
+                    Sign in to unlock profile saves and backend load, or keep everything local.
                   </p>
                 </div>
                 <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
@@ -2174,8 +2176,7 @@ function renderInventoryPage() {
 
               <div class="inventory-bluesky-panel__content">
                 <p class="inventory-bluesky-panel__intro">
-                  Use the Bluesky sign-in panel below to enable optional sync features, or continue using only the local
-                  export and import controls if you prefer keeping everything on this device.
+                  Use Bluesky sign-in if you want profile save/load. You can still keep everything local using export/import only.
                 </p>
 
                 <!-- OAuth sign-in / sign-out -->
@@ -2184,7 +2185,7 @@ function renderInventoryPage() {
 
                   <p class="inventory-auth-note">
                     Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
-                    Signing in by itself does <strong>not</strong> move or sync any of your data.
+                    After a fresh sign-in, the app loads your backend snapshot once. Then you can save either to device only or to profile (which also syncs backend).
                   </p>
 
                   <div class="inventory-auth-panel__field" data-bluesky-handle-field>
@@ -2213,9 +2214,8 @@ function renderInventoryPage() {
                   </h3>
                   <p>
                     When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
-                    (the same data you can export as a file), keyed to your Bluesky DID. Nothing is saved automatically;
-                    you decide when to send or fetch data. When you save a public/followers strategy, you’ll be asked if
-                    you want to share it right away.
+                    (the same data you can export as a file). Profile saves also trigger backend save automatically, while
+                    device saves remain local-only. Use “Load data from allneeds backend” any time you want to pull the latest snapshot manually.
                   </p>
                   <p>
                     This makes it easier to continue your work on another device, but it also means that snapshot is stored
@@ -2386,7 +2386,7 @@ function renderInventoryPage() {
       { label: 'Home', href: '../' },
       { label: 'Inventory' },
     ],
-    scripts: [{ src: 'scripts/inventory-bluesky.js', module: true }],
+    scripts: [{ src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true }],
     headExtras: blueskyPanelStyles,
     main,
     activeNav: 'inventory',

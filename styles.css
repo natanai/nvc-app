@@ -3563,6 +3563,41 @@ main[data-need-slug] .page-title::before {
   box-shadow: 0 8px 0 var(--shadow);
 }
 
+
+.strategy-card__save--profile,
+.strategy-form__submit--secondary.strategy-card__save {
+  background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+  color: var(--ink-soft);
+  border-style: dashed;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--shadow) 70%, #ffffff 30%);
+}
+
+.strategy-card__save--profile:hover,
+.strategy-card__save--profile:focus-visible {
+  box-shadow: 0 11px 0 color-mix(in srgb, var(--shadow) 70%, #ffffff 30%);
+}
+
+.strategy-card__save--profile:disabled,
+.strategy-card__save--profile[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.9;
+  color: color-mix(in srgb, var(--ink-soft) 88%, #ffffff 12%);
+  border-color: color-mix(in srgb, var(--outline) 75%, #ffffff 25%);
+  transform: none;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 60%, #ffffff 40%);
+}
+
+.strategy-save-target-hint {
+  margin: 0.15rem 0 0;
+  max-width: 30ch;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--ink-soft) 82%, #ffffff 18%);
+  text-align: right;
+}
+
 @media (max-width: 600px) {
   .strategy-card--form .strategy-card__actions {
     justify-content: stretch;
@@ -3571,6 +3606,20 @@ main[data-need-slug] .page-title::before {
   .strategy-card--form .strategy-card__save {
     width: 100%;
     text-align: center;
+  }
+
+  .strategy-card__actions--stacked {
+    align-items: stretch;
+  }
+
+  .strategy-card__actions--stacked .strategy-card__save {
+    width: 100%;
+    text-align: center;
+  }
+
+  .strategy-save-target-hint {
+    max-width: none;
+    text-align: left;
   }
 
   .strategy-form__row {
