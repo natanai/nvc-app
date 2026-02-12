@@ -3580,7 +3580,9 @@ main[data-need-slug] .page-title::before {
 .strategy-card__save--profile:disabled,
 .strategy-card__save--profile[aria-disabled='true'] {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: 0.9;
+  color: color-mix(in srgb, var(--ink-soft) 88%, #ffffff 12%);
+  border-color: color-mix(in srgb, var(--outline) 75%, #ffffff 25%);
   transform: none;
   box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 60%, #ffffff 40%);
 }
@@ -3602,6 +3604,15 @@ main[data-need-slug] .page-title::before {
   }
 
   .strategy-card--form .strategy-card__save {
+    width: 100%;
+    text-align: center;
+  }
+
+  .strategy-card__actions--stacked {
+    align-items: stretch;
+  }
+
+  .strategy-card__actions--stacked .strategy-card__save {
     width: 100%;
     text-align: center;
   }

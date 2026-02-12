@@ -1804,7 +1804,9 @@ ${strategiesNote}
       { label: item.title }
     ],
     main,
-    scripts: [],
+        scripts: [
+      { src: 'scripts/inventory-bluesky.js', module: true },
+    ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
     activeNav: 'needs',
     canonicalPath: `needs/${item.slug}/`,
