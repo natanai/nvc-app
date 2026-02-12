@@ -1771,7 +1771,7 @@ ${strategiesNote}
       </div>`;
 
   const basePath = basePathFromDepth(2);
-  const suggestionNotice = buildPersonalStrategyNotice(basePath);
+  const suggestionNotice = '';
   const suggestionForm = renderStrategyForm(
     buildPersonalStrategyFormOptions({
       formId: 'suggestion-form',

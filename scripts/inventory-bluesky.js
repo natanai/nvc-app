@@ -57,17 +57,10 @@ function setGlobalBlueskySession(session, { reason = '' } = {}) {
 }
 
 function describeSession(session) {
-  const did = session?.did || session?.sub || '';
   const handle = session?.preferred_username || session?.handle || session?.username || '';
 
-  if (handle && did) {
-    return `Signed in as @${handle} (${did})`;
-  }
   if (handle) {
     return `Signed in as @${handle}`;
-  }
-  if (did) {
-    return `Signed in (${did})`;
   }
   return 'Signed in with Bluesky';
 }
