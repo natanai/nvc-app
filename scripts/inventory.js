@@ -427,9 +427,6 @@ const SECTION_ALIASES = new Map([
   ['/alexithymia-support/', '/feelings/'],
 ]);
 
-let lastBackendAutoLoadDid = null;
-let backendAutoLoadInFlight = null;
-
 const state = {
   inventory: [],
   needs: [],
@@ -1552,27 +1549,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('allneeds:bsky-login-changed', (event) => {
+  window.addEventListener('allneeds:bsky-login-changed', () => {
     updateBackendSyncButtons();
     updateVisibilityControls();
     updateProfileSaveButtonStates();
-    const session = event?.detail;
-    const did = session?.did || session?.sub || null;
-    if (!did) {
-      lastBackendAutoLoadDid = null;
-      return;
-    }
-    if (did === lastBackendAutoLoadDid || backendAutoLoadInFlight) {
-      return;
-    }
-    lastBackendAutoLoadDid = did;
-    backendAutoLoadInFlight = loadSnapshotFromBackend()
-      .catch((error) => {
-        console.error('Failed to auto-load backend snapshot after Bluesky login', error);
-      })
-      .finally(() => {
-        backendAutoLoadInFlight = null;
-      });
   });
 }
 
