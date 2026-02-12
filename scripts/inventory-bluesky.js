@@ -6,7 +6,34 @@ import {
   ensureBackendSession,
 } from './bluesky-oauth.js?v=2024-07-11';
 
-function setGlobalBlueskySession(session) {
+const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
+
+function consumeLoginIntent() {
+  try {
+    if (!window.sessionStorage) {
+      return false;
+    }
+    const hasIntent = window.sessionStorage.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
+    if (hasIntent) {
+      window.sessionStorage.removeItem(LOGIN_INTENT_STORAGE_KEY);
+    }
+    return hasIntent;
+  } catch (error) {
+    return false;
+  }
+}
+
+function setLoginIntent() {
+  try {
+    if (window.sessionStorage) {
+      window.sessionStorage.setItem(LOGIN_INTENT_STORAGE_KEY, '1');
+    }
+  } catch (error) {
+    // ignore storage errors
+  }
+}
+
+function setGlobalBlueskySession(session, { reason = '' } = {}) {
   const normalizedDid = session?.did || session?.sub || null;
   const normalizedHandle =
     session?.preferred_username || session?.handle || session?.username || null;
@@ -21,7 +48,10 @@ function setGlobalBlueskySession(session) {
   }
 
   const evt = new CustomEvent('allneeds:bsky-login-changed', {
-    detail: window.allneedsSession,
+    detail: {
+      ...(window.allneedsSession || {}),
+      reason,
+    },
   });
   window.dispatchEvent(evt);
 }
@@ -87,6 +117,7 @@ async function onBlueskySignInClick() {
 
   try {
     setStatusText('Opening Bluesky sign-in…');
+    setLoginIntent();
     await signInWithBluesky(handle);
   } catch (err) {
     console.error('Error during Bluesky OAuth sign-in', err);
@@ -124,6 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   let session = null;
+  const loginIntent = consumeLoginIntent();
   try {
     session = await initBlueskyOAuth();
   } catch (err) {
@@ -142,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  setGlobalBlueskySession(session || null);
+  const reason = session ? (loginIntent ? 'signin' : 'restore') : 'signout';
+  setGlobalBlueskySession(session || null, { reason });
   updateBlueskyAuthUi(session);
 });

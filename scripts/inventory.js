@@ -1549,10 +1549,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('allneeds:bsky-login-changed', () => {
+  window.addEventListener('allneeds:bsky-login-changed', (event) => {
     updateBackendSyncButtons();
     updateVisibilityControls();
     updateProfileSaveButtonStates();
+
+    const session = event?.detail;
+    const did = session?.did || session?.sub || null;
+    const reason = session?.reason || '';
+    if (!did || reason !== 'signin') {
+      return;
+    }
+
+    loadSnapshotFromBackend().catch((error) => {
+      console.error('Failed to auto-load backend snapshot after sign-in', error);
+    });
   });
 }
 
