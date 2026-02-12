@@ -1847,21 +1847,29 @@ function setupNeedPage() {
         saveTargetField.value = SAVE_TARGET_DEVICE;
       });
 
-      const formSaveToProfile = document.createElement('button');
-      formSaveToProfile.type = 'submit';
-      formSaveToProfile.className = formSaveToDevice.className;
-      formSaveToProfile.textContent = '☁️ Save to profile';
-      formSaveToProfile.addEventListener('click', () => {
-        saveTargetField.value = SAVE_TARGET_PROFILE;
-      });
+      let formSaveToProfile = suggestionForm.querySelector('[data-save-to-profile-button="true"]');
+      if (!formSaveToProfile) {
+        formSaveToProfile = document.createElement('button');
+        formSaveToProfile.type = 'submit';
+        formSaveToProfile.className = formSaveToDevice.className;
+        formSaveToProfile.dataset.saveToProfileButton = 'true';
+        formSaveToProfile.textContent = '☁️ Save to profile';
+        formSaveToProfile.addEventListener('click', () => {
+          saveTargetField.value = SAVE_TARGET_PROFILE;
+        });
+        formSaveToDevice.insertAdjacentElement('afterend', formSaveToProfile);
+      }
       formSaveToProfile.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
-      formSaveToDevice.insertAdjacentElement('afterend', formSaveToProfile);
       registerProfileSaveButton(formSaveToProfile);
 
-      const saveTargetHint = document.createElement('p');
-      saveTargetHint.className = 'strategy-save-target-hint';
-      saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
-      formSaveToProfile.insertAdjacentElement('afterend', saveTargetHint);
+      let saveTargetHint = suggestionForm.querySelector('[data-save-target-hint="true"]');
+      if (!saveTargetHint) {
+        saveTargetHint = document.createElement('p');
+        saveTargetHint.className = 'strategy-save-target-hint';
+        saveTargetHint.dataset.saveTargetHint = 'true';
+        saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
+        formSaveToProfile.insertAdjacentElement('afterend', saveTargetHint);
+      }
     }
 
     suggestionForm.addEventListener('submit', async (event) => {
@@ -2042,16 +2050,29 @@ function setupInventoryPage() {
         saveTargetField.value = SAVE_TARGET_DEVICE;
       });
 
-      const saveToProfileButton = document.createElement('button');
-      saveToProfileButton.type = 'submit';
-      saveToProfileButton.className = state.inventorySubmitButton.className;
-      saveToProfileButton.textContent = '☁️ Save to profile';
-      saveToProfileButton.addEventListener('click', () => {
-        saveTargetField.value = SAVE_TARGET_PROFILE;
-      });
+      let saveToProfileButton = form.querySelector('[data-save-to-profile-button="true"]');
+      if (!saveToProfileButton) {
+        saveToProfileButton = document.createElement('button');
+        saveToProfileButton.type = 'submit';
+        saveToProfileButton.className = state.inventorySubmitButton.className;
+        saveToProfileButton.dataset.saveToProfileButton = 'true';
+        saveToProfileButton.textContent = '☁️ Save to profile';
+        saveToProfileButton.addEventListener('click', () => {
+          saveTargetField.value = SAVE_TARGET_PROFILE;
+        });
+        state.inventorySubmitButton.insertAdjacentElement('afterend', saveToProfileButton);
+      }
       saveToProfileButton.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
-      state.inventorySubmitButton.insertAdjacentElement('afterend', saveToProfileButton);
       registerProfileSaveButton(saveToProfileButton);
+
+      let saveTargetHint = form.querySelector('[data-save-target-hint="true"]');
+      if (!saveTargetHint) {
+        saveTargetHint = document.createElement('p');
+        saveTargetHint.className = 'strategy-save-target-hint';
+        saveTargetHint.dataset.saveTargetHint = 'true';
+        saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
+        saveToProfileButton.insertAdjacentElement('afterend', saveTargetHint);
+      }
     }
 
     setInventoryFormMode({ entry: null });
