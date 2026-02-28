@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>emotions wheel • allneeds.app</title>
+    <meta
+      name="description"
+      content="Explore an interactive emotions wheel built from existing feelings and faux-feelings pages."
+    />
+    <link rel="canonical" href="https://allneeds.app/feelings/emotions-wheel/" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <style>
+      .wheel-page {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 1.25rem;
+      }
+
+      .wheel-header {
+        display: grid;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+      }
+
+      .wheel-shell {
+        border: 1px solid color-mix(in srgb, var(--outline, #12081f) 28%, transparent);
+        border-radius: 20px;
+        padding: 1rem;
+        background: color-mix(in srgb, white 84%, var(--lavender, #efdff7));
+      }
+
+      .emotion-wheel {
+        width: min(100%, 900px);
+        margin: 0 auto;
+        aspect-ratio: 1;
+      }
+
+      .emotion-wheel svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .wheel-slice-path {
+        stroke: #ffffff;
+        stroke-width: 1.5;
+        transition: filter 140ms ease;
+      }
+
+      .wheel-slice-link:hover .wheel-slice-path,
+      .wheel-slice-link:focus .wheel-slice-path,
+      .wheel-slice-link:focus-visible .wheel-slice-path {
+        filter: brightness(1.06) saturate(1.15);
+      }
+
+      .wheel-label {
+        fill: var(--ink, #12081f);
+        font-size: 10px;
+        font-weight: 600;
+        text-anchor: middle;
+        dominant-baseline: middle;
+        pointer-events: none;
+      }
+
+      .wheel-center {
+        fill: color-mix(in srgb, white 80%, var(--rose, #ffb3cb));
+        stroke: color-mix(in srgb, var(--outline, #12081f) 30%, transparent);
+        stroke-width: 1.25;
+      }
+
+      .wheel-center-text {
+        fill: var(--ink, #12081f);
+        font-size: 16px;
+        font-weight: 700;
+        text-anchor: middle;
+      }
+
+      .wheel-help {
+        margin-top: 0.85rem;
+        color: var(--ink-soft, #4a3f59);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page wheel-page" role="main">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="../../">Home</a></li>
+          <li><a href="../">Feelings</a></li>
+          <li aria-current="page">Emotions wheel</li>
+        </ol>
+      </nav>
+
+      <header class="wheel-header">
+        <h1 class="page-title">Interactive emotions wheel</h1>
+        <p class="page-description">
+          Each wheel segment is clickable and opens an existing feelings or faux feelings page.
+        </p>
+      </header>
+
+      <section class="wheel-shell" aria-label="Emotion and feeling wheel">
+        <div class="emotion-wheel" id="emotion-wheel"></div>
+        <p class="wheel-help">Tip: the outer ring includes a few synonyms that route to existing supported pages.</p>
+      </section>
+    </main>
+
+    <script>
+      const baseGroups = [
+        {
+          label: 'Joyful',
+          href: '../joyful/',
+          color: '#b5df8c',
+          ring2: [
+            { label: 'Excited', href: '../excited/' },
+            { label: 'Inspired', href: '../inspired/' },
+            { label: 'Calm', href: '../calm/' },
+            { label: 'Hopeful', href: '../hopeful/' },
+          ],
+          ring3: [
+            { label: 'Thrilled', href: '../excited/' },
+            { label: 'Eager', href: '../excited/' },
+            { label: 'Creative', href: '../inspired/' },
+            { label: 'Moved', href: '../inspired/' },
+            { label: 'Relaxed', href: '../relaxed/' },
+            { label: 'Peaceful', href: '../peaceful/' },
+            { label: 'Optimistic', href: '../hopeful/' },
+            { label: 'Confident', href: '../proud/' },
+          ],
+        },
+        {
+          label: 'Sad',
+          href: '../sad/',
+          color: '#b7c1f0',
+          ring2: [
+            { label: 'Hurt', href: '../hurt/' },
+            { label: 'Lonely', href: '../lonely/' },
+            { label: 'Powerless', href: '../powerless/' },
+            { label: 'Disappointment', href: '../disappointment/' },
+          ],
+          ring3: [
+            { label: 'Wounded', href: '../hurt/' },
+            { label: 'In pain', href: '../in-pain/' },
+            { label: 'Isolated', href: '../../faux-feelings/isolated/' },
+            { label: 'Unseen', href: '../../faux-feelings/unseen/' },
+            { label: 'Helpless', href: '../helpless/' },
+            { label: 'Hopeless', href: '../desperation/' },
+            { label: 'Blue', href: '../sad/' },
+            { label: 'Regretful', href: '../disappointment/' },
+          ],
+        },
+        {
+          label: 'Angry',
+          href: '../angry/',
+          color: '#f4a4be',
+          ring2: [
+            { label: 'Frustrated', href: '../frustrated/' },
+            { label: 'Upset', href: '../upset/' },
+            { label: 'Irritated', href: '../irritated/' },
+            { label: 'Enraged', href: '../enraged/' },
+          ],
+          ring3: [
+            { label: 'Annoyed', href: '../frustrated/' },
+            { label: 'Thwarted', href: '../thwarted/' },
+            { label: 'Distressed', href: '../distressed/' },
+            { label: 'Resentful', href: '../resentful/' },
+            { label: 'Agitated', href: '../agitated/' },
+            { label: 'Hostile', href: '../hostile/' },
+            { label: 'Mad', href: '../angry/' },
+            { label: 'Antagonistic', href: '../antagonistic/' },
+          ],
+        },
+        {
+          label: 'Scared',
+          href: '../scared/',
+          color: '#f6c48f',
+          ring2: [
+            { label: 'Fear', href: '../fear/' },
+            { label: 'Anxious', href: '../anxious/' },
+            { label: 'Frightened', href: '../frightened/' },
+            { label: 'Terrified', href: '../terrified/' },
+          ],
+          ring3: [
+            { label: 'Alarmed', href: '../alarmed/' },
+            { label: 'Worried', href: '../fear/' },
+            { label: 'Tense', href: '../tense/' },
+            { label: 'Overwhelmed', href: '../overwhelmed/' },
+            { label: 'Uneasy', href: '../anxiety/' },
+            { label: 'Unsafe', href: '../../faux-feelings/threatened/' },
+            { label: 'Shaky', href: '../frightened/' },
+            { label: 'Panic', href: '../terrified/' },
+          ],
+        },
+        {
+          label: 'Confused',
+          href: '../confused/',
+          color: '#92dad3',
+          ring2: [
+            { label: 'Bewildered', href: '../bewildered/' },
+            { label: 'Embarrassed', href: '../embarrassed/' },
+            { label: 'Shocked', href: '../../faux-feelings/threatened/' },
+            { label: 'Misunderstood', href: '../../faux-feelings/misunderstood/' },
+          ],
+          ring3: [
+            { label: 'Perplexed', href: '../bewildered/' },
+            { label: 'Unsure', href: '../confused/' },
+            { label: 'Ashamed', href: '../embarrassed/' },
+            { label: 'Self-conscious', href: '../embarrassed/' },
+            { label: 'Startled', href: '../../faux-feelings/threatened/' },
+            { label: 'Unsteady', href: '../overwhelmed/' },
+            { label: 'Overlooked', href: '../../faux-feelings/unheard/' },
+            { label: 'Dismissed', href: '../../faux-feelings/discounted-diminished/' },
+          ],
+        },
+      ];
+
+      const svgSize = 860;
+      const center = svgSize / 2;
+      const radii = {
+        innerStart: 56,
+        ring1End: 175,
+        ring2End: 285,
+        ring3End: 395,
+      };
+
+      const wheel = document.getElementById('emotion-wheel');
+
+      function toPoint(radius, angle) {
+        return {
+          x: center + radius * Math.cos(angle),
+          y: center + radius * Math.sin(angle),
+        };
+      }
+
+      function ringSlicePath(innerRadius, outerRadius, startAngle, endAngle) {
+        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+        const p1 = toPoint(outerRadius, startAngle);
+        const p2 = toPoint(outerRadius, endAngle);
+        const p3 = toPoint(innerRadius, endAngle);
+        const p4 = toPoint(innerRadius, startAngle);
+
+        return [
+          `M ${p1.x} ${p1.y}`,
+          `A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${p2.x} ${p2.y}`,
+          `L ${p3.x} ${p3.y}`,
+          `A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${p4.x} ${p4.y}`,
+          'Z',
+        ].join(' ');
+      }
+
+      function textTransform(radius, startAngle, endAngle) {
+        const mid = (startAngle + endAngle) / 2;
+        const p = toPoint(radius, mid);
+        const degrees = (mid * 180) / Math.PI;
+        const spin = degrees > 90 && degrees < 270 ? degrees + 180 : degrees;
+        return `translate(${p.x} ${p.y}) rotate(${spin})`;
+      }
+
+      function drawSlice(svg, item) {
+        const link = document.createElementNS('http://www.w3.org/2000/svg', 'a');
+        link.setAttribute('href', item.href);
+        link.setAttribute('class', 'wheel-slice-link');
+        link.setAttribute('aria-label', item.label);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', item.path);
+        path.setAttribute('fill', item.color);
+        path.setAttribute('class', 'wheel-slice-path');
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('class', 'wheel-label');
+        text.setAttribute('transform', textTransform(item.textRadius, item.start, item.end));
+        text.textContent = item.label;
+
+        link.appendChild(path);
+        link.appendChild(text);
+        svg.appendChild(link);
+      }
+
+      function buildWheel() {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', `0 0 ${svgSize} ${svgSize}`);
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', 'Interactive emotion and feeling wheel');
+
+        const baseSlice = (Math.PI * 2) / baseGroups.length;
+
+        baseGroups.forEach((group, index) => {
+          const groupStart = -Math.PI / 2 + index * baseSlice;
+          const groupEnd = groupStart + baseSlice;
+
+          drawSlice(svg, {
+            label: group.label,
+            href: group.href,
+            color: group.color,
+            start: groupStart,
+            end: groupEnd,
+            textRadius: (radii.innerStart + radii.ring1End) / 2,
+            path: ringSlicePath(radii.innerStart, radii.ring1End, groupStart, groupEnd),
+          });
+
+          const subSlice = (groupEnd - groupStart) / group.ring2.length;
+          group.ring2.forEach((entry, subIndex) => {
+            const subStart = groupStart + subSlice * subIndex;
+            const subEnd = subStart + subSlice;
+            drawSlice(svg, {
+              label: entry.label,
+              href: entry.href,
+              color: group.color,
+              start: subStart,
+              end: subEnd,
+              textRadius: (radii.ring1End + radii.ring2End) / 2,
+              path: ringSlicePath(radii.ring1End, radii.ring2End, subStart, subEnd),
+            });
+          });
+
+          const outerSlice = (groupEnd - groupStart) / group.ring3.length;
+          group.ring3.forEach((entry, outerIndex) => {
+            const outerStart = groupStart + outerSlice * outerIndex;
+            const outerEnd = outerStart + outerSlice;
+            drawSlice(svg, {
+              label: entry.label,
+              href: entry.href,
+              color: group.color,
+              start: outerStart,
+              end: outerEnd,
+              textRadius: (radii.ring2End + radii.ring3End) / 2,
+              path: ringSlicePath(radii.ring2End, radii.ring3End, outerStart, outerEnd),
+            });
+          });
+        });
+
+        const centerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        centerCircle.setAttribute('cx', String(center));
+        centerCircle.setAttribute('cy', String(center));
+        centerCircle.setAttribute('r', String(radii.innerStart - 1));
+        centerCircle.setAttribute('class', 'wheel-center');
+        svg.appendChild(centerCircle);
+
+        const centerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        centerText.setAttribute('class', 'wheel-center-text');
+        centerText.setAttribute('x', String(center));
+        centerText.setAttribute('y', String(center + 5));
+        centerText.textContent = 'Feelings';
+        svg.appendChild(centerText);
+
+        wheel.replaceChildren(svg);
+      }
+
+      buildWheel();
+    </script>
+  </body>
+</html>
