@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>emotions wheel • allneeds.app</title>
+    <meta
+      name="description"
+      content="Explore an interactive emotions wheel that links directly to existing feelings and faux feelings pages."
+    />
+    <link rel="canonical" href="https://allneeds.app/feelings/emotions-wheel/" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <style>
+      .wheel-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1.25rem;
+      }
+      .wheel-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .wheel-layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 430px) minmax(0, 1fr);
+        gap: 1.25rem;
+        align-items: start;
+      }
+      .emotion-wheel {
+        width: min(100%, 430px);
+        aspect-ratio: 1;
+        margin: 0 auto;
+      }
+      .emotion-wheel svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .wheel-segment {
+        cursor: pointer;
+        transition: filter 160ms ease, transform 160ms ease;
+      }
+      .wheel-segment[aria-pressed='true'] {
+        filter: saturate(1.25) brightness(1.05);
+      }
+      .wheel-center {
+        font-size: 0.95rem;
+        text-anchor: middle;
+        fill: var(--ink, #12081f);
+        pointer-events: none;
+      }
+      .wheel-groups {
+        display: grid;
+        gap: 1rem;
+      }
+      .wheel-group {
+        border: 1px solid color-mix(in srgb, var(--outline, #12081f) 30%, transparent);
+        border-radius: 16px;
+        padding: 0.85rem;
+        background: color-mix(in srgb, white 75%, var(--lavender, #efdff7));
+      }
+      .wheel-group h2 {
+        margin: 0 0 0.6rem;
+        font-size: 1rem;
+      }
+      .wheel-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+      }
+      .wheel-links a {
+        text-decoration: none;
+      }
+      .wheel-links .pill {
+        margin: 0;
+      }
+      .wheel-synonyms {
+        margin-top: 1rem;
+      }
+      .wheel-synonyms h2 {
+        margin-bottom: 0.55rem;
+      }
+      @media (max-width: 900px) {
+        .wheel-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page wheel-page" role="main">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="../../">Home</a></li>
+          <li><a href="../">Feelings</a></li>
+          <li aria-current="page">Emotions wheel</li>
+        </ol>
+      </nav>
+
+      <header class="wheel-header">
+        <div>
+          <h1 class="page-title">Interactive emotions wheel</h1>
+          <p class="page-description">
+            Tap a wheel segment to focus on that cluster, then pick a word to open an existing feelings or faux feelings page.
+          </p>
+        </div>
+        <a class="support-button" href="../">Back to feelings directory</a>
+      </header>
+
+      <section class="wheel-layout" aria-label="Emotions wheel explorer">
+        <div class="emotion-wheel" id="emotion-wheel"></div>
+        <div class="wheel-groups" id="wheel-groups"></div>
+      </section>
+
+      <section class="wheel-synonyms" aria-labelledby="synonym-links">
+        <h2 id="synonym-links" class="section-title">Helpful synonyms (linked to existing pages)</h2>
+        <div class="wheel-links">
+          <a class="pill" href="../angry/">Mad → Angry</a>
+          <a class="pill" href="../sad/">Blue → Sad</a>
+          <a class="pill" href="../fear/">Worried → Fear</a>
+          <a class="pill" href="../joyful/">Glad → Joyful</a>
+          <a class="pill" href="../frustrated/">Annoyed → Frustrated</a>
+          <a class="pill" href="../../faux-feelings/unheard/">Overlooked → Unheard</a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const groups = [
+        {
+          id: 'joy',
+          label: 'Joy & ease',
+          color: '#ffcf78',
+          words: [
+            ['Joyful', '../joyful/'],
+            ['Hopeful', '../hopeful/'],
+            ['Inspired', '../inspired/'],
+            ['Peaceful', '../peaceful/'],
+            ['Calm', '../calm/'],
+            ['Relieved', '../relieved/'],
+          ],
+        },
+        {
+          id: 'fear',
+          label: 'Fear & alarm',
+          color: '#9fd2ff',
+          words: [
+            ['Fear', '../fear/'],
+            ['Anxious', '../anxious/'],
+            ['Scared', '../scared/'],
+            ['Frightened', '../frightened/'],
+            ['Terrified', '../terrified/'],
+            ['Alarmed', '../alarmed/'],
+          ],
+        },
+        {
+          id: 'anger',
+          label: 'Anger & tension',
+          color: '#ff9a9a',
+          words: [
+            ['Angry', '../angry/'],
+            ['Frustrated', '../frustrated/'],
+            ['Upset', '../upset/'],
+            ['Irritated', '../irritated/'],
+            ['Enraged', '../enraged/'],
+            ['Hostile', '../hostile/'],
+          ],
+        },
+        {
+          id: 'sadness',
+          label: 'Sadness & hurt',
+          color: '#b8b7ff',
+          words: [
+            ['Sad', '../sad/'],
+            ['Hurt', '../hurt/'],
+            ['Lonely', '../lonely/'],
+            ['Disappointment', '../disappointment/'],
+            ['In pain', '../in-pain/'],
+            ['Powerless', '../powerless/'],
+          ],
+        },
+        {
+          id: 'faux',
+          label: 'Faux feelings / evaluations',
+          color: '#a6e0bf',
+          words: [
+            ['Rejected', '../../faux-feelings/rejected/'],
+            ['Ignored', '../../faux-feelings/ignored/'],
+            ['Misunderstood', '../../faux-feelings/misunderstood/'],
+            ['Unappreciated', '../../faux-feelings/unappreciated/'],
+            ['Unsupported', '../../faux-feelings/unsupported/'],
+            ['Betrayed', '../../faux-feelings/betrayed/'],
+          ],
+        },
+      ];
+
+      const groupsContainer = document.getElementById('wheel-groups');
+      const wheelContainer = document.getElementById('emotion-wheel');
+      let activeId = null;
+
+      function renderGroups() {
+        groupsContainer.innerHTML = groups
+          .map((group) => {
+            const hidden = activeId && activeId !== group.id ? ' hidden' : '';
+            const links = group.words
+              .map(([name, href]) => `<a class="pill" href="${href}">${name}</a>`)
+              .join('');
+            return `<section class="wheel-group" data-group-id="${group.id}"${hidden}><h2>${group.label}</h2><div class="wheel-links">${links}</div></section>`;
+          })
+          .join('');
+      }
+
+      function arcPath(cx, cy, innerR, outerR, startA, endA) {
+        const sOuterX = cx + outerR * Math.cos(startA);
+        const sOuterY = cy + outerR * Math.sin(startA);
+        const eOuterX = cx + outerR * Math.cos(endA);
+        const eOuterY = cy + outerR * Math.sin(endA);
+        const sInnerX = cx + innerR * Math.cos(endA);
+        const sInnerY = cy + innerR * Math.sin(endA);
+        const eInnerX = cx + innerR * Math.cos(startA);
+        const eInnerY = cy + innerR * Math.sin(startA);
+        const largeArc = endA - startA > Math.PI ? 1 : 0;
+
+        return [
+          `M ${sOuterX} ${sOuterY}`,
+          `A ${outerR} ${outerR} 0 ${largeArc} 1 ${eOuterX} ${eOuterY}`,
+          `L ${sInnerX} ${sInnerY}`,
+          `A ${innerR} ${innerR} 0 ${largeArc} 0 ${eInnerX} ${eInnerY}`,
+          'Z',
+        ].join(' ');
+      }
+
+      function renderWheel() {
+        const size = 420;
+        const center = size / 2;
+        const outer = 185;
+        const inner = 82;
+        const slice = (Math.PI * 2) / groups.length;
+
+        const segments = groups
+          .map((group, index) => {
+            const start = -Math.PI / 2 + index * slice;
+            const end = start + slice;
+            const selected = activeId === group.id;
+            return `<path class="wheel-segment" data-group-id="${group.id}" d="${arcPath(center, center, inner, outer, start, end)}" fill="${group.color}" stroke="white" stroke-width="2" role="button" tabindex="0" aria-pressed="${selected}"><title>${group.label}</title></path>`;
+          })
+          .join('');
+
+        wheelContainer.innerHTML = `<svg viewBox="0 0 ${size} ${size}" aria-label="Emotion category wheel">${segments}<circle cx="${center}" cy="${center}" r="${inner - 1}" fill="white" stroke="#ddd" /><text class="wheel-center" x="${center}" y="${center - 8}">Choose a</text><text class="wheel-center" x="${center}" y="${center + 16}">category</text></svg>`;
+
+        wheelContainer.querySelectorAll('.wheel-segment').forEach((segment) => {
+          function activate() {
+            const id = segment.dataset.groupId;
+            activeId = activeId === id ? null : id;
+            renderGroups();
+            renderWheel();
+          }
+          segment.addEventListener('click', activate);
+          segment.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              activate();
+            }
+          });
+        });
+      }
+
+      renderGroups();
+      renderWheel();
+    </script>
+  </body>
+</html>
