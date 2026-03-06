@@ -1906,6 +1906,37 @@ body.has-support-journal-open {
   padding-block-end: 0.5rem;
 }
 
+.emotion-wheel-link {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  background: color-mix(in srgb, var(--lavender) 22%, #ffffff);
+  border: 2px solid color-mix(in srgb, var(--outline) 40%, transparent);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emotion-wheel-link:hover,
+.emotion-wheel-link:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 34%, transparent);
+}
+
+.emotion-wheel-link:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.emotion-wheel-link__icon {
+  display: block;
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
 .magnet-search {
   margin-top: 0.5rem;
   display: flex;
