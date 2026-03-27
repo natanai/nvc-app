@@ -1167,14 +1167,13 @@ button.site-nav__magnet {
           <li><a href="../">Home</a></li><li aria-current="page">Feelings</li>
         </ol>
       </nav>
-      <main id="main" class="page" role="main">
+      <main id="main" class="page page--feelings" role="main">
         
-      <header class="page-header">
+      <header class="page-header page-header--feelings">
         <h1 class="page-title">Feelings</h1>
-        <p class="page-description">Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.</p>
-        <div class="support-actions support-actions--muted">
-          <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your Journal History</a>
+        <div class="support-actions support-actions--muted support-actions--feelings">
+          <a class="support-button" href="../alexithymia-support/">Support lane</a>
+          <a class="support-button support-button--ghost" href="../inventory/journal/">Journal history</a>
         </div>
       </header>
       <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root>
@@ -1194,12 +1193,17 @@ button.site-nav__magnet {
             </svg>
             <span class="visually-hidden">Open interactive emotions wheel</span>
           </a>
-          <h2 id="feelings-list" class="section-title">Feelings directory</h2>
+          <h2 id="feelings-list" class="section-title">Emotion wheel</h2>
         </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
-              <a class="magnet-search__alt" href="body-cues/">Search by body cues</a>
+              <a class="magnet-search__alt" href="body-cues/" aria-label="Search by body cues">
+                <svg class="magnet-search__alt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M10.5 3.5a7 7 0 0 1 5.53 11.3l4.08 4.08a1 1 0 0 1-1.42 1.42l-4.08-4.08A7 7 0 1 1 10.5 3.5Zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z" fill="currentColor"></path>
+                </svg>
+                <span>Body cues</span>
+              </a>
               <label class="magnet-search__field">
                 <span class="magnet-search__label visually-hidden">Search feelings</span>
                 <input
@@ -1212,7 +1216,14 @@ button.site-nav__magnet {
                 >
               </label>
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
+            <button type="button" class="shuffle-button shuffle-button--icon magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets" title="Shuffle magnets">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M3 7h3c2 0 3.2 1 4.2 2.4l3.6 5.2C14.8 16 16 17 18 17h3"></path>
+                <path d="M3 17h3c2 0 3.2-1 4.2-2.4l3.6-5.2C14.8 8 16 7 18 7h3"></path>
+                <path d="M18 4l3 3-3 3"></path>
+                <path d="M18 14l3 3-3 3"></path>
+              </svg>
+            </button>
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
