@@ -1411,13 +1411,11 @@ function renderCategory(type, items) {
   const lowerTitle = escapeHtml(title.toLowerCase());
   const description = type === 'faux-feelings'
     ? 'Faux feelings (sometimes called evaluations) are often the first stories that surface. Follow them to the feelings and needs underneath.'
-    : type === 'feelings'
-    ? 'Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.'
     : '';
 
   const supportLinks =
     type === 'feelings'
-      ? `<div class="support-actions support-actions--muted">
+      ? `<div class="support-actions support-actions--muted feelings-header__actions">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
           <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your Journal History</a>
         </div>`
@@ -1433,7 +1431,11 @@ function renderCategory(type, items) {
 
   const searchAltLink =
     type === 'feelings'
-      ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
+      ? `<a class="magnet-search__alt magnet-search__alt--discreet" href="body-cues/" title="Open body cues explorer page">
+                <span class="magnet-search__alt-icon" aria-hidden="true">◎</span>
+                <span>Body cues page</span>
+                <span class="magnet-search__alt-exit" aria-hidden="true">↗</span>
+              </a>`
       : null;
 
   const searchInputMarkup = `<label class="magnet-search__field">
@@ -1448,27 +1450,59 @@ function renderCategory(type, items) {
                 >
               </label>`;
 
-  const searchControlsMarkup = [searchAltLink, searchInputMarkup]
+  const shuffleControlMarkup =
+    type === 'feelings'
+      ? `<button type="button" class="shuffle-button magnet-search__shuffle magnet-search__shuffle--icon-only" data-magnet-shuffle aria-label="Shuffle feeling magnets" title="Shuffle magnets">
+                <span class="magnet-search__shuffle-icon" aria-hidden="true">⤮</span>
+              </button>`
+      : '';
+
+  const searchControlsMarkup = [searchAltLink, searchInputMarkup, shuffleControlMarkup]
     .filter(Boolean)
     .join('\n              ');
 
+  const headerTitleMarkup =
+    type === 'feelings'
+      ? `<div class="feelings-header__top">
+        <h1 class="page-title">Feelings</h1>
+        ${supportLinks}
+      </div>`
+      : `<h1 class="page-title">${escapedTitle}</h1>`;
+
+  const sectionHeaderMarkup =
+    type === 'feelings'
+      ? `<a class="emotion-wheel-link emotion-wheel-link--with-label" href="emotions-wheel/" aria-label="Open interactive emotion wheel" title="Open interactive emotion wheel">
+            <svg class="emotion-wheel-link__icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+              <circle cx="50" cy="50" r="46" fill="#ffffff"></circle>
+              <path d="M50 50 L50 4 A46 46 0 0 1 89.84 27 Z" fill="#b5df8c"></path>
+              <path d="M50 50 L89.84 27 A46 46 0 0 1 89.84 73 Z" fill="#f4a4be"></path>
+              <path d="M50 50 L89.84 73 A46 46 0 0 1 50 96 Z" fill="#f6c48f"></path>
+              <path d="M50 50 L50 96 A46 46 0 0 1 10.16 73 Z" fill="#b7c1f0"></path>
+              <path d="M50 50 L10.16 73 A46 46 0 0 1 10.16 27 Z" fill="#92dad3"></path>
+              <path d="M50 50 L10.16 27 A46 46 0 0 1 50 4 Z" fill="#ffd8a6"></path>
+              <circle cx="50" cy="50" r="16" fill="#ffffff"></circle>
+              <circle cx="50" cy="50" r="46" fill="none" stroke="var(--outline)" stroke-width="4"></circle>
+              <circle cx="50" cy="50" r="16" fill="none" stroke="var(--outline)" stroke-width="3"></circle>
+            </svg>
+            <h2 id="${type}-list" class="section-title">Emotion wheel</h2>
+          </a>`
+      : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
+
   const main = `
-      <header class="page-header">
-        <h1 class="page-title">${escapedTitle}</h1>
-        ${description ? `<p class="page-description">${escapeHtml(description)}</p>` : ''}${
-          supportLinks ? `\n        ${supportLinks}` : ''
-        }
+      <header class="page-header${type === 'feelings' ? ' feelings-header' : ''}">
+        ${headerTitleMarkup}
+        ${description ? `<p class="page-description">${escapeHtml(description)}</p>` : ''}
       </header>
       <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
-          <h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>
+          ${sectionHeaderMarkup}
         </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
               ${searchControlsMarkup}
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
+            ${type === 'feelings' ? '' : '<button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>'}
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>

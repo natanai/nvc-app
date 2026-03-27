@@ -1169,17 +1169,19 @@ button.site-nav__magnet {
       </nav>
       <main id="main" class="page" role="main">
         
-      <header class="page-header">
+      <header class="page-header feelings-header">
+        <div class="feelings-header__top">
         <h1 class="page-title">Feelings</h1>
-        <p class="page-description">Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.</p>
-        <div class="support-actions support-actions--muted">
+        <div class="support-actions support-actions--muted feelings-header__actions">
           <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
           <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your Journal History</a>
         </div>
+      </div>
+        
       </header>
       <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
-          <a class="emotion-wheel-link" href="emotions-wheel/" aria-label="Open interactive emotions wheel" title="Open interactive emotions wheel">
+          <a class="emotion-wheel-link emotion-wheel-link--with-label" href="emotions-wheel/" aria-label="Open interactive emotion wheel" title="Open interactive emotion wheel">
             <svg class="emotion-wheel-link__icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
               <circle cx="50" cy="50" r="46" fill="#ffffff"></circle>
               <path d="M50 50 L50 4 A46 46 0 0 1 89.84 27 Z" fill="#b5df8c"></path>
@@ -1192,14 +1194,17 @@ button.site-nav__magnet {
               <circle cx="50" cy="50" r="46" fill="none" stroke="var(--outline)" stroke-width="4"></circle>
               <circle cx="50" cy="50" r="16" fill="none" stroke="var(--outline)" stroke-width="3"></circle>
             </svg>
-            <span class="visually-hidden">Open interactive emotions wheel</span>
+            <h2 id="feelings-list" class="section-title">Emotion wheel</h2>
           </a>
-          <h2 id="feelings-list" class="section-title">Feelings directory</h2>
         </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
-              <a class="magnet-search__alt" href="body-cues/">Search by body cues</a>
+              <a class="magnet-search__alt magnet-search__alt--discreet" href="body-cues/" title="Open body cues explorer page">
+                <span class="magnet-search__alt-icon" aria-hidden="true">◎</span>
+                <span>Body cues page</span>
+                <span class="magnet-search__alt-exit" aria-hidden="true">↗</span>
+              </a>
               <label class="magnet-search__field">
                 <span class="magnet-search__label visually-hidden">Search feelings</span>
                 <input
@@ -1211,8 +1216,11 @@ button.site-nav__magnet {
                   data-magnet-search-input
                 >
               </label>
+              <button type="button" class="shuffle-button magnet-search__shuffle magnet-search__shuffle--icon-only" data-magnet-shuffle aria-label="Shuffle feeling magnets" title="Shuffle magnets">
+                <span class="magnet-search__shuffle-icon" aria-hidden="true">⤮</span>
+              </button>
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
+            
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
