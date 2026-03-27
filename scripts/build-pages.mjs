@@ -1433,7 +1433,7 @@ function renderCategory(type, items) {
     type === 'feelings'
       ? `<a class="magnet-search__alt magnet-search__alt--discreet" href="body-cues/" title="Open body cues explorer page">
                 <span class="magnet-search__alt-icon" aria-hidden="true">◎</span>
-                <span>Body cues page</span>
+                <span>Body cues</span>
                 <span class="magnet-search__alt-exit" aria-hidden="true">↗</span>
               </a>`
       : null;
@@ -1453,7 +1453,9 @@ function renderCategory(type, items) {
   const shuffleControlMarkup =
     type === 'feelings'
       ? `<button type="button" class="shuffle-button magnet-search__shuffle magnet-search__shuffle--icon-only" data-magnet-shuffle aria-label="Shuffle feeling magnets" title="Shuffle magnets">
-                <span class="magnet-search__shuffle-icon" aria-hidden="true">⤮</span>
+                <svg class="magnet-search__shuffle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M16 3h5v5h-2V6.41l-4.55 4.54-1.41-1.41L17.59 5H16V3zm3 14h2v4h-5v-2h1.59L5 6.41V8H3V3h5v2H6.41L19 17.59V17zm-7.96-2.63 1.41 1.41L8 20H3v-5h2v1.59l6.04-6.22z"/>
+                </svg>
               </button>`
       : '';
 
@@ -1471,7 +1473,8 @@ function renderCategory(type, items) {
 
   const sectionHeaderMarkup =
     type === 'feelings'
-      ? `<a class="emotion-wheel-link emotion-wheel-link--with-label" href="emotions-wheel/" aria-label="Open interactive emotion wheel" title="Open interactive emotion wheel">
+      ? `<h2 id="${type}-list" class="section-title section-title--emotion-wheel">
+          <a class="emotion-wheel-link emotion-wheel-link--with-label" href="emotions-wheel/" aria-label="Open interactive emotion wheel" title="Open interactive emotion wheel">
             <svg class="emotion-wheel-link__icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
               <circle cx="50" cy="50" r="46" fill="#ffffff"></circle>
               <path d="M50 50 L50 4 A46 46 0 0 1 89.84 27 Z" fill="#b5df8c"></path>
@@ -1484,8 +1487,9 @@ function renderCategory(type, items) {
               <circle cx="50" cy="50" r="46" fill="none" stroke="var(--outline)" stroke-width="4"></circle>
               <circle cx="50" cy="50" r="16" fill="none" stroke="var(--outline)" stroke-width="3"></circle>
             </svg>
-            <h2 id="${type}-list" class="section-title">Emotion wheel</h2>
-          </a>`
+            <span>Emotion wheel</span>
+          </a>
+        </h2>`
       : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
 
   const main = `

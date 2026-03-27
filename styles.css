@@ -290,18 +290,24 @@ a:focus-visible {
 }
 
 .feelings-header__top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   gap: 0.9rem;
 }
 
 .feelings-header__actions {
+  display: grid;
   margin-top: 0;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-items: end;
   gap: 0.4rem;
   flex: 0 0 auto;
+}
+
+.feelings-header__actions .support-button {
+  width: auto;
+  max-width: fit-content;
+  white-space: nowrap;
 }
 
 .page-title-with-icon {
@@ -1940,17 +1946,28 @@ body.has-support-journal-open {
 }
 
 .emotion-wheel-link--with-label {
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   height: auto;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-pill);
   justify-content: flex-start;
   gap: 0.75rem;
-  padding: 0.35rem 0.55rem 0.35rem 0.35rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.3rem;
   text-decoration: none;
 }
 
-.emotion-wheel-link--with-label .section-title {
+.section-title--emotion-wheel {
   margin: 0;
+}
+
+.emotion-wheel-link--with-label span {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .emotion-wheel-link:hover,
@@ -1991,7 +2008,7 @@ body.has-support-journal-open {
   gap: 0.65rem;
   width: 100%;
   flex: 1 1 16rem;
-  align-items: stretch;
+  align-items: center;
 }
 
 .magnet-search__controls > .magnet-search__field {
@@ -2007,21 +2024,25 @@ body.has-support-journal-open {
 
 .magnet-search__shuffle--icon-only {
   margin-left: 0;
-  width: 2.7rem;
-  min-width: 2.7rem;
-  min-height: 2.7rem;
+  width: 2.55rem;
+  min-width: 2.55rem;
+  min-height: 2.55rem;
   padding: 0;
   border-radius: var(--radius-circle);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  font-size: 1rem;
   line-height: 1;
+  box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
 }
 
 .magnet-search__shuffle-icon {
   display: inline-block;
-  transform: translateY(-1px);
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: currentColor;
+  transform: none;
 }
 
 .magnet-search__label {
@@ -2072,14 +2093,16 @@ body.has-support-journal-open {
 .magnet-search__alt--discreet {
   flex: 0 1 auto;
   min-width: auto;
-  padding: 0.45rem 0.65rem;
+  padding: 0.15rem 0.2rem;
   border-width: 1px;
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, #ffffff 90%, var(--mint) 10%);
+  border-color: transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
   box-shadow: none;
   font-size: 0.82rem;
   font-weight: 500;
   gap: 0.35rem;
+  justify-content: flex-start;
 }
 
 .magnet-search__alt-icon,
@@ -2102,10 +2125,10 @@ body.has-support-journal-open {
 
 .magnet-search__alt--discreet:hover,
 .magnet-search__alt--discreet:focus-visible {
-  transform: translateY(-1px);
+  transform: none;
   box-shadow: none;
-  border-color: color-mix(in srgb, var(--outline) 50%, transparent);
-  background: color-mix(in srgb, #ffffff 84%, var(--mint) 16%);
+  border-color: color-mix(in srgb, var(--outline) 20%, transparent);
+  background: color-mix(in srgb, #ffffff 88%, var(--mint) 12%);
 }
 
 .magnet-search__results {
@@ -2179,13 +2202,14 @@ body.has-support-journal-open {
   }
 
   .feelings-header__actions .support-button {
-    font-size: 0.72rem;
-    padding: 0.4rem 0.6rem;
+    font-size: 0.68rem;
+    padding: 0.32rem 0.52rem;
+    letter-spacing: 0.01em;
   }
 
   .emotion-wheel-link--with-label {
-    gap: 0.55rem;
-    padding: 0.3rem 0.45rem 0.3rem 0.3rem;
+    gap: 0.45rem;
+    padding: 0.22rem 0.45rem 0.22rem 0.22rem;
   }
 
   .emotion-wheel-link--with-label .emotion-wheel-link__icon {
@@ -2198,16 +2222,19 @@ body.has-support-journal-open {
   }
 
   .magnet-search__controls > .magnet-search__field {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     order: 2;
   }
 
   .magnet-search__alt--discreet {
     order: 1;
+    flex-basis: 100%;
   }
 
   .magnet-search__shuffle--icon-only {
     order: 3;
+    margin-left: 0;
   }
 }
 
