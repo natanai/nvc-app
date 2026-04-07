@@ -898,6 +898,39 @@ body.has-support-journal-open {
   color: var(--ink-soft);
 }
 
+.page-header--feelings {
+  gap: 0;
+}
+
+.feelings-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.support-actions--stacked {
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .feelings-header-top {
+    align-items: center;
+  }
+
+  .support-actions--stacked {
+    gap: 0.45rem;
+  }
+
+  .support-actions--stacked .support-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.74rem;
+  }
+}
+
 .breathing-card {
   display: grid;
   gap: 1rem;
@@ -1946,29 +1979,35 @@ body.has-support-journal-open {
 
 .magnet-search__toolbar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
   align-items: stretch;
   width: 100%;
 }
 
 .magnet-search__controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
+  flex-direction: column;
+  gap: 0.5rem;
   width: 100%;
-  flex: 1 1 16rem;
+  flex: 1 1 auto;
   align-items: stretch;
 }
 
-.magnet-search__controls > .magnet-search__field {
+.magnet-search__search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.magnet-search__search-row > .magnet-search__field {
   flex: 1 1 16rem;
-  min-width: min(19rem, 100%);
+  min-width: 0;
 }
 
 .magnet-search__shuffle {
   margin-left: auto;
-  align-self: flex-start;
+  align-self: center;
   flex: 0 0 auto;
 }
 
@@ -1978,6 +2017,7 @@ body.has-support-journal-open {
 
 .magnet-search__field {
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .magnet-search__input {
@@ -2001,28 +2041,43 @@ body.has-support-journal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 14rem;
-  min-width: min(14rem, 100%);
-  padding: 0.65rem 1.1rem;
-  border-radius: var(--radius-lg);
-  border: 3px solid var(--outline);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, #ffffff 45%), color-mix(in srgb, var(--sky) 35%, var(--mint) 65%));
-  background-size: 180% 180%;
-  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  gap: 0.35rem;
+  flex: 0 0 auto;
+  min-width: auto;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--outline);
+  background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+  box-shadow: none;
   font: inherit;
+  font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
   color: var(--outline);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-position 0.35s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  align-self: flex-start;
+}
+
+.magnet-search__alt-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.magnet-search__alt-text {
+  white-space: nowrap;
 }
 
 .magnet-search__alt:hover,
 .magnet-search__alt:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 28%, transparent);
-  filter: brightness(1.03);
-  background-position: 72% 28%;
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--outline) 78%, transparent);
+  background: #ffffff;
 }
 
 .magnet-search__alt:focus-visible {
@@ -2076,17 +2131,21 @@ body.has-support-journal-open {
   }
 
   .magnet-search__controls {
-    flex-wrap: nowrap;
+    gap: 0.55rem;
   }
 
   .magnet-search__alt {
-    flex: 0 0 auto;
-    min-width: 12.5rem;
-    padding-inline: 1.3rem;
+    padding-inline: 0.8rem;
   }
 
   .magnet-search__shuffle {
-    align-self: stretch;
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .magnet-search__alt-text {
+    font-size: 0.75rem;
   }
 }
 
@@ -2216,24 +2275,36 @@ body.has-support-journal-open {
 }
 
 .shuffle-button {
-  align-self: flex-start;
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.6rem 1rem;
-  background: var(--mint);
-  border: 3px solid var(--outline);
-  border-radius: var(--radius-md-plus);
-  box-shadow: 0 12px 0 var(--shadow);
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  background: #ffffff;
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  color: var(--outline);
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.magnet-search__shuffle-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .shuffle-button:hover,
 .shuffle-button:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 0 var(--shadow);
+  transform: translateY(-1px);
+  background: color-mix(in srgb, #ffffff 72%, var(--lavender) 28%);
 }
 
 .shuffle-button:focus-visible {
