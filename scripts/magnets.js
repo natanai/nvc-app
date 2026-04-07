@@ -65,8 +65,6 @@ const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 16;
 const CLICK_SUPPRESS_WINDOW = 150;
-const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
-const SHUFFLE_LABEL_BUSY = 'Shuffling…';
 const TOGGLE_GUARD_MS = 120;
 
 const isNavBoardState = (state) => state?.storageKey === NAV_STORAGE_KEY;
@@ -1812,9 +1810,6 @@ const initializeBoard = async (root, index) => {
       }
       if (state.physics && state.physics.shuffle) {
         state.isShuffling = true;
-        const originalLabel = shuffleButton.dataset.originalLabel || shuffleButton.textContent || SHUFFLE_LABEL_DEFAULT;
-        shuffleButton.dataset.originalLabel = originalLabel;
-        shuffleButton.textContent = SHUFFLE_LABEL_BUSY;
         shuffleButton.setAttribute('aria-busy', 'true');
         shuffleButton.disabled = true;
         shuffleButton.setAttribute('aria-disabled', 'true');
@@ -1823,7 +1818,6 @@ const initializeBoard = async (root, index) => {
           .finally(() => {
             state.isShuffling = false;
             shuffleButton.disabled = false;
-            shuffleButton.textContent = shuffleButton.dataset.originalLabel || SHUFFLE_LABEL_DEFAULT;
             shuffleButton.removeAttribute('aria-busy');
             shuffleButton.removeAttribute('aria-disabled');
           });
@@ -1854,4 +1848,3 @@ if (document.readyState === 'loading') {
 } else {
   setup();
 }
-
