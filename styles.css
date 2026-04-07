@@ -279,6 +279,10 @@ a:focus-visible {
   gap: clamp(1.25rem, 3vw, 2rem);
 }
 
+.page--feelings {
+  gap: 0.35rem;
+}
+
 .page-header {
   display: flex;
   flex-direction: column;
@@ -358,7 +362,8 @@ a:focus-visible {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
   color: color-mix(in srgb, var(--ink) 80%, #fff 20%);
 }
 
@@ -367,7 +372,8 @@ a:focus-visible {
   font-size: clamp(0.75rem, 0.8vw + 0.65rem, 0.95rem);
   letter-spacing: 0.015em;
   font-family: var(--font-sans);
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
   color: color-mix(in srgb, var(--ink) 70%, #fff 30%);
 }
 
@@ -884,6 +890,31 @@ body.has-support-journal-open {
   background: color-mix(in srgb, #ffffff 95%, var(--sky) 5%);
   color: color-mix(in srgb, var(--outline) 75%, var(--ink-soft) 25%);
   box-shadow: none;
+}
+
+.page-header--feelings {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+}
+
+.support-actions--feelings {
+  margin-top: 0;
+  margin-left: auto;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 0 1 15rem;
+  min-width: 0;
+}
+
+.support-actions--feelings .support-button {
+  width: 100%;
+  padding-inline: 0.75rem;
+  font-size: 0.76rem;
+  white-space: normal;
+  line-height: 1.2;
 }
 
 .support-actions--muted .support-button:hover,
@@ -1688,6 +1719,28 @@ body.has-support-journal-open {
     letter-spacing: 0.04em;
     width: 100%;
   }
+
+  .page-header--feelings {
+    flex-wrap: wrap;
+  }
+
+  .support-actions--feelings {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .magnet-search__controls {
+    flex-wrap: wrap;
+  }
+
+  .magnet-search__alt {
+    order: 2;
+  }
+
+  .magnet-search__controls > .magnet-search__field {
+    order: 1;
+    flex-basis: 100%;
+  }
 }
 
 .door-grid {
@@ -1706,7 +1759,7 @@ body.has-support-journal-open {
   border: 3px solid var(--outline);
   border-radius: var(--radius-2xl);
   background: color-mix(in srgb, var(--outline) 8%, transparent);
-  box-shadow: 0 16px 0 var(--shadow);
+  box-shadow: 0 16px 0 color-mix(in srgb, #111111 34%, transparent);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   text-align: center;
 }
@@ -1903,7 +1956,7 @@ body.has-support-journal-open {
   justify-content: flex-start;
   gap: 0.75rem;
   flex-wrap: wrap;
-  padding-block-end: 0.5rem;
+  padding-block-end: 0;
 }
 
 .emotion-wheel-link {
@@ -1938,7 +1991,7 @@ body.has-support-journal-open {
 }
 
 .magnet-search {
-  margin-top: 0.5rem;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -1948,27 +2001,27 @@ body.has-support-journal-open {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  align-items: stretch;
+  align-items: center;
   width: 100%;
 }
 
 .magnet-search__controls {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.65rem;
   width: 100%;
   flex: 1 1 16rem;
-  align-items: stretch;
+  align-items: center;
 }
 
 .magnet-search__controls > .magnet-search__field {
   flex: 1 1 16rem;
-  min-width: min(19rem, 100%);
+  min-width: 0;
 }
 
 .magnet-search__shuffle {
-  margin-left: auto;
-  align-self: flex-start;
+  margin-left: 0;
+  align-self: center;
   flex: 0 0 auto;
 }
 
@@ -1982,6 +2035,7 @@ body.has-support-journal-open {
 
 .magnet-search__input {
   font: inherit;
+  width: 100%;
   padding: 0.65rem 0.9rem;
   border: 3px solid var(--outline);
   border-radius: var(--radius-lg);
@@ -2001,33 +2055,38 @@ body.has-support-journal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 14rem;
-  min-width: min(14rem, 100%);
-  padding: 0.65rem 1.1rem;
-  border-radius: var(--radius-lg);
-  border: 3px solid var(--outline);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, #ffffff 45%), color-mix(in srgb, var(--sky) 35%, var(--mint) 65%));
-  background-size: 180% 180%;
-  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  gap: 0.3rem;
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--outline) 36%, transparent);
+  background: transparent;
+  box-shadow: none;
   font: inherit;
+  font-size: 0.86rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
-  color: var(--outline);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-position 0.35s ease;
+  color: var(--ink-soft);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .magnet-search__alt:hover,
 .magnet-search__alt:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 28%, transparent);
-  filter: brightness(1.03);
-  background-position: 72% 28%;
+  background: color-mix(in srgb, #ffffff 90%, var(--sky) 10%);
+  color: var(--outline);
+  border-color: color-mix(in srgb, var(--outline) 50%, transparent);
 }
 
 .magnet-search__alt:focus-visible {
-  outline: 3px dashed var(--outline);
-  outline-offset: 4px;
+  outline: 2px dashed var(--outline);
+  outline-offset: 2px;
+}
+
+.magnet-search__alt-icon {
+  width: 0.9rem;
+  height: 0.9rem;
 }
 
 .magnet-search__results {
@@ -2075,18 +2134,12 @@ body.has-support-journal-open {
     align-items: center;
   }
 
-  .magnet-search__controls {
-    flex-wrap: nowrap;
-  }
-
   .magnet-search__alt {
-    flex: 0 0 auto;
-    min-width: 12.5rem;
-    padding-inline: 1.3rem;
+    min-width: auto;
   }
 
   .magnet-search__shuffle {
-    align-self: stretch;
+    align-self: center;
   }
 }
 
@@ -2160,7 +2213,8 @@ body.has-support-journal-open {
   margin: -1px;
   overflow: hidden;
   clip: rect(0 0 0 0);
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.2;
   border: 0;
 }
 
@@ -2222,10 +2276,11 @@ body.has-support-journal-open {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0.6rem 1rem;
-  background: var(--mint);
-  border: 3px solid var(--outline);
+  background: #ffffff;
+  color: #111111;
+  border: 3px solid #111111;
   border-radius: var(--radius-md-plus);
-  box-shadow: 0 12px 0 var(--shadow);
+  box-shadow: 0 12px 0 color-mix(in srgb, #111111 28%, transparent);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -2233,12 +2288,33 @@ body.has-support-journal-open {
 .shuffle-button:hover,
 .shuffle-button:focus-visible {
   transform: translateY(-4px);
-  box-shadow: 0 16px 0 var(--shadow);
+  box-shadow: 0 16px 0 color-mix(in srgb, #111111 34%, transparent);
 }
 
 .shuffle-button:focus-visible {
-  outline: 3px dashed var(--outline);
+  outline: 3px dashed #111111;
   outline-offset: 4px;
+}
+
+.shuffle-button--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  padding: 0;
+  border-radius: var(--radius-lg);
+}
+
+.shuffle-button--icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: block;
+  fill: none;
+  stroke: #111111;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .magnet {
@@ -3160,7 +3236,7 @@ main[data-need-slug] .page-title::before {
   border: 3px solid var(--outline);
   border-radius: var(--radius-xl);
   padding: 1rem 1.25rem;
-  box-shadow: 0 16px 0 var(--shadow);
+  box-shadow: 0 16px 0 color-mix(in srgb, #111111 34%, transparent);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
