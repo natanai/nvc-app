@@ -1901,9 +1901,10 @@ body.has-support-journal-open {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 0.6rem;
+  flex-wrap: nowrap;
   padding-block-end: 0.5rem;
+  max-width: 100%;
 }
 
 .emotion-wheel-link {
@@ -1953,22 +1954,28 @@ body.has-support-journal-open {
 }
 
 .magnet-search__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
+  display: grid;
+  gap: 0.45rem;
   width: 100%;
-  flex: 1 1 16rem;
-  align-items: stretch;
+  flex: 1 1 auto;
+  align-items: start;
 }
 
-.magnet-search__controls > .magnet-search__field {
+.magnet-search__search-row {
+  display: flex;
+  gap: 0.45rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.magnet-search__search-row > .magnet-search__field {
   flex: 1 1 16rem;
   min-width: min(19rem, 100%);
 }
 
 .magnet-search__shuffle {
-  margin-left: auto;
-  align-self: flex-start;
+  margin-left: 0;
+  align-self: stretch;
   flex: 0 0 auto;
 }
 
@@ -2001,28 +2008,28 @@ body.has-support-journal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 14rem;
-  min-width: min(14rem, 100%);
-  padding: 0.65rem 1.1rem;
+  gap: 0.35rem;
+  justify-self: start;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.38rem 0.58rem;
   border-radius: var(--radius-lg);
-  border: 3px solid var(--outline);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 55%, #ffffff 45%), color-mix(in srgb, var(--sky) 35%, var(--mint) 65%));
-  background-size: 180% 180%;
-  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-  font: inherit;
-  font-weight: 600;
+  border: 2px solid var(--outline);
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.77rem;
+  font-weight: 500;
   letter-spacing: 0.01em;
   text-decoration: none;
   color: var(--outline);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background-position 0.35s ease;
+  white-space: nowrap;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .magnet-search__alt:hover,
 .magnet-search__alt:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 0 color-mix(in srgb, var(--outline) 28%, transparent);
-  filter: brightness(1.03);
-  background-position: 72% 28%;
+  transform: translateY(-1px);
+  background: color-mix(in srgb, #ffffff 88%, var(--ink-soft) 12%);
 }
 
 .magnet-search__alt:focus-visible {
@@ -2075,18 +2082,13 @@ body.has-support-journal-open {
     align-items: center;
   }
 
-  .magnet-search__controls {
-    flex-wrap: nowrap;
-  }
-
   .magnet-search__alt {
-    flex: 0 0 auto;
-    min-width: 12.5rem;
-    padding-inline: 1.3rem;
+    min-width: 0;
+    padding-inline: 0.65rem;
   }
 
   .magnet-search__shuffle {
-    align-self: stretch;
+    align-self: auto;
   }
 }
 
@@ -2216,24 +2218,68 @@ body.has-support-journal-open {
 }
 
 .shuffle-button {
-  align-self: flex-start;
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.6rem 1rem;
-  background: var(--mint);
-  border: 3px solid var(--outline);
-  border-radius: var(--radius-md-plus);
-  box-shadow: 0 12px 0 var(--shadow);
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.7rem;
+  min-width: 2.7rem;
+  padding: 0.55rem;
+  background: #ffffff;
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 22%, transparent);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .shuffle-button:hover,
 .shuffle-button:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 0 var(--shadow);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 28%, transparent);
+}
+
+.feelings-page-header__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.feelings-page-header__actions {
+  margin-top: 0;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: end;
+}
+
+.feelings-page-header__actions .support-button {
+  width: auto;
+}
+
+@media (max-width: 640px) {
+  .feelings-page-header__topline {
+    flex-wrap: nowrap;
+  }
+
+  .feelings-page-header__actions .support-button {
+    font-size: 0.76rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .magnet-search__search-row > .magnet-search__field {
+    flex: 1 1 10rem;
+    min-width: 0;
+  }
+
+  .magnet-search__alt {
+    font-size: 0.72rem;
+    padding: 0.32rem 0.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1rem, 4.2vw, 1.2rem);
+  }
 }
 
 .shuffle-button:focus-visible {

@@ -1170,11 +1170,12 @@ button.site-nav__magnet {
       <main id="main" class="page" role="main">
         
       <header class="page-header">
-        <h1 class="page-title">Feelings</h1>
-        <p class="page-description">Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.</p>
-        <div class="support-actions support-actions--muted">
-          <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your Journal History</a>
+        <div class="feelings-page-header__topline">
+          <h1 class="page-title">Feelings</h1>
+          <div class="support-actions support-actions--muted feelings-page-header__actions">
+            <a class="support-button" href="../alexithymia-support/">Support lane</a>
+            <a class="support-button support-button--ghost" href="../inventory/journal/">Journal</a>
+          </div>
         </div>
       </header>
       <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root>
@@ -1194,25 +1195,29 @@ button.site-nav__magnet {
             </svg>
             <span class="visually-hidden">Open interactive emotions wheel</span>
           </a>
-          <h2 id="feelings-list" class="section-title">Feelings directory</h2>
+          <h2 id="feelings-list" class="section-title">Emotion wheel</h2>
         </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
-              <a class="magnet-search__alt" href="body-cues/">Search by body cues</a>
-              <label class="magnet-search__field">
-                <span class="magnet-search__label visually-hidden">Search feelings</span>
-                <input
-                  type="search"
-                  name="feelings-search"
-                  class="magnet-search__input"
-                  placeholder="Search feelings"
-                  autocomplete="off"
-                  data-magnet-search-input
-                >
-              </label>
+              <a class="magnet-search__alt" href="body-cues/" aria-label="Open body cues page"><span aria-hidden="true">↗</span><span>Body cues</span></a>
+              <div class="magnet-search__search-row">
+                <label class="magnet-search__field">
+                  <span class="magnet-search__label visually-hidden">Search feelings</span>
+                  <input
+                    type="search"
+                    name="feelings-search"
+                    class="magnet-search__input"
+                    placeholder="Search feelings"
+                    autocomplete="off"
+                    data-magnet-search-input
+                  >
+                </label>
+                <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets">
+                  <span aria-hidden="true">⤮</span>
+                </button>
+              </div>
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
