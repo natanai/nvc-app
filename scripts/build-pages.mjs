@@ -1459,6 +1459,7 @@ function renderCategory(type, items) {
               </button>
             </div>`;
 
+  const suppressDirectoryHeading = type === 'needs' || type === 'faux-feelings';
   const headerTitleMarkup =
     type === 'feelings'
       ? `<a class="emotion-wheel-link" href="emotions-wheel/" aria-label="Open interactive emotions wheel" title="Open interactive emotions wheel">
@@ -1477,7 +1478,10 @@ function renderCategory(type, items) {
             <span class="visually-hidden">Open interactive emotions wheel</span>
           </a>
           <h2 id="${type}-list" class="section-title">Emotion wheel</h2>`
-      : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
+      : suppressDirectoryHeading
+        ? ''
+        : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
+  const listSectionA11yAttr = suppressDirectoryHeading ? `aria-label="${escapedTitle} magnets"` : `aria-labelledby="${type}-list"`;
 
   const main = `
       <header class="page-header">
@@ -1492,7 +1496,7 @@ function renderCategory(type, items) {
         }`
         }
       </header>
-      <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
+      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
           ${headerTitleMarkup}
           ${searchAltLinkInline}
@@ -2593,7 +2597,15 @@ function renderPillGroup(label, items, type) {
   return `<section class="pill-section magnet-section" aria-labelledby="${slugify(label)}-heading" data-magnet-root>
       <div class="magnet-section__header">
         <h2 id="${slugify(label)}-heading" class="section-title">${escapeHtml(label)}</h2>
-        <button type="button" class="shuffle-button" data-magnet-shuffle>Shuffle magnets</button>
+        <button type="button" class="shuffle-button" data-magnet-shuffle aria-label="Shuffle magnets">
+          <svg class="shuffle-button__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M16 3h5v5"></path>
+            <path d="M4 20L21 3"></path>
+            <path d="M21 16v5h-5"></path>
+            <path d="M15 15l6 6"></path>
+            <path d="M4 4l5 5"></path>
+          </svg>
+        </button>
       </div>
       <div class="magnet-board-wrapper">
         <div class="pill-grid magnet-board" data-magnet-board>
