@@ -1167,6 +1167,21 @@ const handlePositionsUpdate = (state, list) => {
   persistLayout(state);
 };
 
+const handlePositionCommit = (state, item) => {
+  if (!item || !item.id) {
+    return;
+  }
+  const magnet = state.magnetMap.get(item.id);
+  if (!magnet) {
+    return;
+  }
+  magnet.x = item.x;
+  magnet.y = item.y;
+  updateBoardHeight(state);
+  updateLayout(state);
+  persistLayout(state, true);
+};
+
 const stopPhysicsLoop = (state) => {
   if (state.physics) {
     state.physics.stop();
@@ -1210,6 +1225,7 @@ const setPlayState = (state, active) => {
       magnets: magnetElements,
       config: physicsConfig,
       onPositions: (list) => handlePositionsUpdate(state, list),
+      onPositionCommit: (item) => handlePositionCommit(state, item),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       onDragRelease: () => state.setClickSuppress(),
       onTiltPermissionDenied: (reason) => handleTiltPermissionDenied(state, reason),

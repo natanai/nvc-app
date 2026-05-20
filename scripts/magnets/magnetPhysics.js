@@ -242,6 +242,17 @@ const notifyPositions = (state) => {
   state.onPositions(payload);
 };
 
+const commitPosition = (state, magnet) => {
+  if (!state.onPositionCommit || !magnet) {
+    return;
+  }
+  state.onPositionCommit({
+    id: magnet.id,
+    x: magnet.x,
+    y: magnet.y,
+  });
+};
+
 const measureMagnet = (boardRect, element) => {
   const rect = element.getBoundingClientRect();
   const id = element.dataset.magnetId || element.id || element.textContent || '';
@@ -369,6 +380,16 @@ const addPointerListeners = (state) => {
       return;
     }
     const magnetState = state.dragging;
+    const boardRect = state.board.getBoundingClientRect();
+    const { width, height } = getBoardSize(state);
+    const maxX = Math.max(width - magnetState.w, 0);
+    const maxY = Math.max(height - magnetState.h, 0);
+    magnetState.x = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
+    magnetState.y = clamp(event.clientY - boardRect.top - magnetState.offsetY, 0, maxY);
+    magnetState.vx = 0;
+    magnetState.vy = 0;
+    applyTransform(magnetState);
+    commitPosition(state, magnetState);
     if (typeof magnetState.element.releasePointerCapture === 'function') {
       try {
         magnetState.element.releasePointerCapture(event.pointerId);
@@ -820,6 +841,7 @@ export function startPhysics(options) {
     onPositions: options.onPositions,
     getBoardSize: options.getBoardSize,
     onDragRelease: options.onDragRelease,
+    onPositionCommit: options.onPositionCommit,
     isShuffling: false,
     shufflePromise: null,
     lastShuffleTime: 0,
