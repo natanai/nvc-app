@@ -1459,6 +1459,7 @@ function renderCategory(type, items) {
               </button>
             </div>`;
 
+  const suppressDirectoryHeading = type === 'needs' || type === 'faux-feelings';
   const headerTitleMarkup =
     type === 'feelings'
       ? `<a class="emotion-wheel-link" href="emotions-wheel/" aria-label="Open interactive emotions wheel" title="Open interactive emotions wheel">
@@ -1477,7 +1478,10 @@ function renderCategory(type, items) {
             <span class="visually-hidden">Open interactive emotions wheel</span>
           </a>
           <h2 id="${type}-list" class="section-title">Emotion wheel</h2>`
-      : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
+      : suppressDirectoryHeading
+        ? ''
+        : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
+  const listSectionA11yAttr = suppressDirectoryHeading ? `aria-label="${escapedTitle} magnets"` : `aria-labelledby="${type}-list"`;
 
   const main = `
       <header class="page-header">
@@ -1492,7 +1496,7 @@ function renderCategory(type, items) {
         }`
         }
       </header>
-      <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
+      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
           ${headerTitleMarkup}
           ${searchAltLinkInline}
