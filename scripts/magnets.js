@@ -65,6 +65,8 @@ const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 16;
 const CLICK_SUPPRESS_WINDOW = 150;
+const SHUFFLE_LABEL_DEFAULT = 'Shuffle';
+const SHUFFLE_LABEL_BUSY = 'Shuffling…';
 const TOGGLE_GUARD_MS = 120;
 
 const isNavBoardState = (state) => state?.storageKey === NAV_STORAGE_KEY;
@@ -1180,6 +1182,8 @@ const setPlayState = (state, active) => {
     state.isShuffling = false;
     if (state.shuffleButton) {
       state.shuffleButton.disabled = false;
+      state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || SHUFFLE_LABEL_DEFAULT;
+      state.shuffleButton.removeAttribute('aria-busy');
       state.shuffleButton.removeAttribute('aria-disabled');
     }
   }
@@ -1193,6 +1197,8 @@ const setPlayState = (state, active) => {
     state.playActive = true;
     if (state.shuffleButton) {
       state.shuffleButton.disabled = false;
+      state.shuffleButton.textContent = state.shuffleButton.dataset.originalLabel || state.shuffleButton.textContent;
+      state.shuffleButton.removeAttribute('aria-busy');
       state.shuffleButton.removeAttribute('aria-disabled');
     }
     state.board.dataset.active = '1';
@@ -1806,6 +1812,10 @@ const initializeBoard = async (root, index) => {
       }
       if (state.physics && state.physics.shuffle) {
         state.isShuffling = true;
+        const originalLabel = shuffleButton.dataset.originalLabel || shuffleButton.textContent || SHUFFLE_LABEL_DEFAULT;
+        shuffleButton.dataset.originalLabel = originalLabel;
+        shuffleButton.textContent = SHUFFLE_LABEL_BUSY;
+        shuffleButton.setAttribute('aria-busy', 'true');
         shuffleButton.disabled = true;
         shuffleButton.setAttribute('aria-disabled', 'true');
         Promise.resolve(state.physics.shuffle())
@@ -1813,6 +1823,8 @@ const initializeBoard = async (root, index) => {
           .finally(() => {
             state.isShuffling = false;
             shuffleButton.disabled = false;
+            shuffleButton.textContent = shuffleButton.dataset.originalLabel || SHUFFLE_LABEL_DEFAULT;
+            shuffleButton.removeAttribute('aria-busy');
             shuffleButton.removeAttribute('aria-disabled');
           });
       } else {
@@ -1842,3 +1854,4 @@ if (document.readyState === 'loading') {
 } else {
   setup();
 }
+
