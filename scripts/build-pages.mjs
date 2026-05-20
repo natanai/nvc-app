@@ -1411,15 +1411,13 @@ function renderCategory(type, items) {
   const lowerTitle = escapeHtml(title.toLowerCase());
   const description = type === 'faux-feelings'
     ? 'Faux feelings (sometimes called evaluations) are often the first stories that surface. Follow them to the feelings and needs underneath.'
-    : type === 'feelings'
-    ? 'Need a softer on-ramp? Try the guided lane and journaling tools that support emotional awareness.'
     : '';
 
   const supportLinks =
     type === 'feelings'
-      ? `<div class="support-actions support-actions--muted">
-          <a class="support-button" href="../alexithymia-support/">Open Alexithymia Support lane</a>
-          <a class="support-button support-button--ghost" href="../inventory/journal/">Visit your Journal History</a>
+      ? `<div class="support-actions support-actions--muted feelings-page-header__actions">
+          <a class="support-button" href="../alexithymia-support/">Support</a>
+          <a class="support-button support-button--ghost" href="../inventory/journal/">Journal</a>
         </div>`
       : '';
 
@@ -1431,10 +1429,10 @@ function renderCategory(type, items) {
   .join('');
 
 
-  const searchAltLink =
+  const searchAltLinkInline =
     type === 'feelings'
-      ? `<a class="magnet-search__alt" href="body-cues/">Search by body cues</a>`
-      : null;
+      ? `<a class="magnet-search__alt magnet-search__alt--inline" href="body-cues/" aria-label="Open body cues page"><span aria-hidden="true">↗</span><span>Body cues</span></a>`
+      : '';
 
   const searchInputMarkup = `<label class="magnet-search__field">
                 <span class="magnet-search__label visually-hidden">Search ${lowerTitle}</span>
@@ -1448,27 +1446,54 @@ function renderCategory(type, items) {
                 >
               </label>`;
 
-  const searchControlsMarkup = [searchAltLink, searchInputMarkup]
-    .filter(Boolean)
-    .join('\n              ');
+  const searchControlsMarkup = `<div class="magnet-search__search-row">
+              ${searchInputMarkup}
+              <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets"><span aria-hidden="true">⤮</span></button>
+            </div>`;
+
+  const headerTitleMarkup =
+    type === 'feelings'
+      ? `<a class="emotion-wheel-link" href="emotions-wheel/" aria-label="Open interactive emotions wheel" title="Open interactive emotions wheel">
+            <svg class="emotion-wheel-link__icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+              <circle cx="50" cy="50" r="46" fill="#ffffff"></circle>
+              <path d="M50 50 L50 4 A46 46 0 0 1 89.84 27 Z" fill="#b5df8c"></path>
+              <path d="M50 50 L89.84 27 A46 46 0 0 1 89.84 73 Z" fill="#f4a4be"></path>
+              <path d="M50 50 L89.84 73 A46 46 0 0 1 50 96 Z" fill="#f6c48f"></path>
+              <path d="M50 50 L50 96 A46 46 0 0 1 10.16 73 Z" fill="#b7c1f0"></path>
+              <path d="M50 50 L10.16 73 A46 46 0 0 1 10.16 27 Z" fill="#92dad3"></path>
+              <path d="M50 50 L10.16 27 A46 46 0 0 1 50 4 Z" fill="#ffd8a6"></path>
+              <circle cx="50" cy="50" r="16" fill="#ffffff"></circle>
+              <circle cx="50" cy="50" r="46" fill="none" stroke="var(--outline)" stroke-width="4"></circle>
+              <circle cx="50" cy="50" r="16" fill="none" stroke="var(--outline)" stroke-width="3"></circle>
+            </svg>
+            <span class="visually-hidden">Open interactive emotions wheel</span>
+          </a>
+          <h2 id="${type}-list" class="section-title">Emotion wheel</h2>`
+      : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
 
   const main = `
       <header class="page-header">
+        ${type === 'feelings'
+          ? `<div class="feelings-page-header__topline">
         <h1 class="page-title">${escapedTitle}</h1>
+        ${supportLinks}
+      </div>`
+          : `<h1 class="page-title">${escapedTitle}</h1>
         ${description ? `<p class="page-description">${escapeHtml(description)}</p>` : ''}${
           supportLinks ? `\n        ${supportLinks}` : ''
+        }`
         }
       </header>
       <section aria-labelledby="${type}-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
-          <h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>
+          ${headerTitleMarkup}
+          ${searchAltLinkInline}
         </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
               ${searchControlsMarkup}
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>

@@ -1169,13 +1169,19 @@ button.site-nav__magnet {
       </nav>
       <main id="main" class="page" role="main">
         
+      <header class="page-header">
+        <h1 class="page-title">Needs</h1>
+        
+      </header>
       <section aria-labelledby="needs-list" class="pill-section magnet-section" data-magnet-root>
         <div class="magnet-section__header">
-          <h2 id="needs-list" class="section-title">Needs</h2>
+          <h2 id="needs-list" class="section-title">Needs directory</h2>
+          
         </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
+              <div class="magnet-search__search-row">
               <label class="magnet-search__field">
                 <span class="magnet-search__label visually-hidden">Search needs</span>
                 <input
@@ -1187,8 +1193,9 @@ button.site-nav__magnet {
                   data-magnet-search-input
                 >
               </label>
+              <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets"><span aria-hidden="true">⤮</span></button>
             </div>
-            <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle>Shuffle magnets</button>
+            </div>
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>
             <p class="magnet-search__count" data-magnet-search-count hidden>No matches yet.</p>
