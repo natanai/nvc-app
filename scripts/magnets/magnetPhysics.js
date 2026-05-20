@@ -17,6 +17,8 @@ const DEFAULT_CONFIG = {
 
 const DRAG_DISTANCE_THRESHOLD = 6;
 const DRAG_TIME_THRESHOLD = 150;
+const RELEASE_VELOCITY_WINDOW_MS = 120;
+const RELEASE_VELOCITY_CLAMP = 1800;
 const LAYOUT_GAP_X = 12;
 const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 24;
@@ -266,6 +268,11 @@ const measureMagnet = (boardRect, element) => {
     offsetY: 0,
     driftX: drift.x,
     driftY: drift.y,
+    lastPointerX: null,
+    lastPointerY: null,
+    lastPointerT: 0,
+    releaseVx: 0,
+    releaseVy: 0,
   };
 };
 
@@ -301,6 +308,11 @@ const addPointerListeners = (state) => {
     magnetState.offsetY = event.clientY - (boardRect.top + magnetState.y);
     magnetState.vx = 0;
     magnetState.vy = 0;
+    magnetState.lastPointerX = event.clientX;
+    magnetState.lastPointerY = event.clientY;
+    magnetState.lastPointerT = getNow();
+    magnetState.releaseVx = 0;
+    magnetState.releaseVy = 0;
     target.classList.add('dragging');
     state.board.dataset.dragging = '1';
     if (typeof target.setPointerCapture === 'function') {
@@ -325,10 +337,26 @@ const addPointerListeners = (state) => {
       const maxY = Math.max(height - magnetState.h, 0);
       const nextX = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
       const nextY = clamp(event.clientY - boardRect.top - magnetState.offsetY, 0, maxY);
+      const now = getNow();
+      const elapsedMs = now - (magnetState.lastPointerT || 0);
+      if (
+        magnetState.lastPointerX != null &&
+        magnetState.lastPointerY != null &&
+        elapsedMs > 0 &&
+        elapsedMs <= RELEASE_VELOCITY_WINDOW_MS
+      ) {
+        const vx = ((event.clientX - magnetState.lastPointerX) / elapsedMs) * 1000;
+        const vy = ((event.clientY - magnetState.lastPointerY) / elapsedMs) * 1000;
+        magnetState.releaseVx = clamp(vx, -RELEASE_VELOCITY_CLAMP, RELEASE_VELOCITY_CLAMP);
+        magnetState.releaseVy = clamp(vy, -RELEASE_VELOCITY_CLAMP, RELEASE_VELOCITY_CLAMP);
+      }
       magnetState.x = nextX;
       magnetState.y = nextY;
       magnetState.vx = 0;
       magnetState.vy = 0;
+      magnetState.lastPointerX = event.clientX;
+      magnetState.lastPointerY = event.clientY;
+      magnetState.lastPointerT = now;
       applyTransform(magnetState);
       notifyPositions(state);
       if (
@@ -369,6 +397,15 @@ const addPointerListeners = (state) => {
       return;
     }
     const magnetState = state.dragging;
+    const boardRect = state.board.getBoundingClientRect();
+    const { width, height } = getBoardSize(state);
+    const maxX = Math.max(width - magnetState.w, 0);
+    const maxY = Math.max(height - magnetState.h, 0);
+    magnetState.x = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
+    magnetState.y = clamp(event.clientY - boardRect.top - magnetState.offsetY, 0, maxY);
+    magnetState.vx = magnetState.releaseVx || 0;
+    magnetState.vy = magnetState.releaseVy || 0;
+    applyTransform(magnetState);
     if (typeof magnetState.element.releasePointerCapture === 'function') {
       try {
         magnetState.element.releasePointerCapture(event.pointerId);
@@ -379,6 +416,11 @@ const addPointerListeners = (state) => {
     magnetState.element.classList.remove('dragging');
     magnetState.dragging = false;
     magnetState.pointerId = null;
+    magnetState.lastPointerX = null;
+    magnetState.lastPointerY = null;
+    magnetState.lastPointerT = 0;
+    magnetState.releaseVx = 0;
+    magnetState.releaseVy = 0;
     state.dragging = null;
     delete state.board.dataset.dragging;
     notifyPositions(state);
