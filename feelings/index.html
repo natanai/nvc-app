@@ -1200,24 +1200,23 @@ button.site-nav__magnet {
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
-              <a class="magnet-search__alt" href="body-cues/" aria-label="Open body cues page">
-                <span aria-hidden="true">↗</span>
-                <span>Body cues page</span>
-              </a>
-              <label class="magnet-search__field">
-                <span class="magnet-search__label visually-hidden">Search feelings</span>
-                <input
-                  type="search"
-                  name="feelings-search"
-                  class="magnet-search__input"
-                  placeholder="Search feelings"
-                  autocomplete="off"
-                  data-magnet-search-input
-                >
-              </label>
-              <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets">
-                <span aria-hidden="true">⤮</span>
-              </button>
+              <a class="magnet-search__alt" href="body-cues/" aria-label="Open body cues page"><span aria-hidden="true">↗</span><span>Body cues</span></a>
+              <div class="magnet-search__search-row">
+                <label class="magnet-search__field">
+                  <span class="magnet-search__label visually-hidden">Search feelings</span>
+                  <input
+                    type="search"
+                    name="feelings-search"
+                    class="magnet-search__input"
+                    placeholder="Search feelings"
+                    autocomplete="off"
+                    data-magnet-search-input
+                  >
+                </label>
+                <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets">
+                  <span aria-hidden="true">⤮</span>
+                </button>
+              </div>
             </div>
           </div>
           <div class="magnet-search__results" data-magnet-search-results aria-live="polite" hidden>

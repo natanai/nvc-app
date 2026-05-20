@@ -1954,15 +1954,21 @@ body.has-support-journal-open {
 }
 
 .magnet-search__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  display: grid;
+  gap: 0.45rem;
   width: 100%;
-  flex: 1 1 16rem;
-  align-items: stretch;
+  flex: 1 1 auto;
+  align-items: start;
 }
 
-.magnet-search__controls > .magnet-search__field {
+.magnet-search__search-row {
+  display: flex;
+  gap: 0.45rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.magnet-search__search-row > .magnet-search__field {
   flex: 1 1 16rem;
   min-width: min(19rem, 100%);
 }
@@ -2003,15 +2009,15 @@ body.has-support-journal-open {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  flex: 0 1 auto;
+  justify-self: start;
   min-width: 0;
   max-width: 100%;
-  padding: 0.55rem 0.7rem;
+  padding: 0.38rem 0.58rem;
   border-radius: var(--radius-lg);
   border: 2px solid var(--outline);
   background: transparent;
   box-shadow: none;
-  font-size: 0.84rem;
+  font-size: 0.77rem;
   font-weight: 500;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -2076,14 +2082,9 @@ body.has-support-journal-open {
     align-items: center;
   }
 
-  .magnet-search__controls {
-    flex-wrap: nowrap;
-  }
-
   .magnet-search__alt {
-    flex: 0 1 auto;
     min-width: 0;
-    padding-inline: 0.8rem;
+    padding-inline: 0.65rem;
   }
 
   .magnet-search__shuffle {
@@ -2266,9 +2267,14 @@ body.has-support-journal-open {
     padding: 0.45rem 0.65rem;
   }
 
-  .magnet-search__controls > .magnet-search__field {
+  .magnet-search__search-row > .magnet-search__field {
     flex: 1 1 10rem;
     min-width: 0;
+  }
+
+  .magnet-search__alt {
+    font-size: 0.72rem;
+    padding: 0.32rem 0.5rem;
   }
 
   .section-title {
