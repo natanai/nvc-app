@@ -405,10 +405,10 @@ const addPointerListeners = (state: InternalState) => {
       const maxY = Math.max(height - magnetState.h, 0);
       const nextX = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
       const nextY = clamp(event.clientY - boardRect.top - magnetState.offsetY, 0, maxY);
+      magnetState.vx = nextX - magnetState.x;
+      magnetState.vy = nextY - magnetState.y;
       magnetState.x = nextX;
       magnetState.y = nextY;
-      magnetState.vx = 0;
-      magnetState.vy = 0;
       applyTransform(magnetState);
       notifyPositions(state);
       if (event.pointerType !== 'mouse') {
@@ -1024,4 +1024,3 @@ export function savePositions(
     // Swallow write errors (quota, private mode, etc.).
   }
 }
-
