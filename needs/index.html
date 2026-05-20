@@ -1173,7 +1173,11 @@ button.site-nav__magnet {
         <h1 class="page-title">Needs</h1>
         
       </header>
-      <section aria-label="Needs magnets" class="pill-section magnet-section" data-magnet-root>
+      <section aria-labelledby="needs-list" class="pill-section magnet-section" data-magnet-root>
+        <div class="magnet-section__header">
+          <h2 id="needs-list" class="section-title">Needs directory</h2>
+          
+        </div>
         <div class="magnet-search" data-magnet-search>
           <div class="magnet-search__toolbar">
             <div class="magnet-search__controls">
@@ -1189,7 +1193,15 @@ button.site-nav__magnet {
                   data-magnet-search-input
                 >
               </label>
-              <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets"><span aria-hidden="true">⤮</span></button>
+              <button type="button" class="shuffle-button magnet-search__shuffle" data-magnet-shuffle aria-label="Shuffle magnets">
+                <svg class="shuffle-button__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M16 3h5v5"></path>
+                  <path d="M4 20L21 3"></path>
+                  <path d="M21 16v5h-5"></path>
+                  <path d="M15 15l6 6"></path>
+                  <path d="M4 4l5 5"></path>
+                </svg>
+              </button>
             </div>
             </div>
           </div>
