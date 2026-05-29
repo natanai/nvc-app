@@ -7308,3 +7308,309 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
     width: 100%;
   }
 }
+
+.print-resource-page {
+  gap: 1rem;
+}
+
+.print-resource__header {
+  gap: 0.65rem;
+}
+
+.print-resource__eyebrow {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink-soft) 78%, #ffffff 22%);
+}
+
+.print-resource__actions {
+  margin-top: 0.25rem;
+}
+
+.print-resource__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.print-resource__summary span {
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #ffffff 78%, var(--mint) 22%);
+  padding: 0.28rem 0.7rem;
+}
+
+.print-resource__section {
+  display: grid;
+  gap: 0.65rem;
+  padding-block-start: 0.75rem;
+  border-top: 3px solid color-mix(in srgb, var(--outline) 72%, transparent);
+}
+
+.print-resource__section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.print-resource__section-heading h2,
+.print-resource__section-heading p,
+.print-resource__item h3,
+.print-resource__related,
+.print-resource__footer p {
+  margin: 0;
+}
+
+.print-resource__section-heading h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.print-resource__section-heading p {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.print-resource__columns {
+  column-count: 2;
+  column-gap: 0.8rem;
+}
+
+.print-resource__item {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0 0 0.45rem;
+  padding: 0.45rem 0.5rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #ffffff 80%, var(--lavender) 20%);
+  line-height: 1.28;
+}
+
+.print-resource__item h3 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.12;
+}
+
+.print-resource__related {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.print-resource__related + .print-resource__related {
+  margin-top: 0.16rem;
+}
+
+.print-resource__related-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.print-resource__footer {
+  border-top: 2px solid color-mix(in srgb, var(--outline) 35%, transparent);
+  padding-top: 0.75rem;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+@media (min-width: 900px) {
+  .print-resource__columns {
+    column-count: 3;
+  }
+}
+
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 0.25in;
+  }
+
+  html:has(.print-resource-page),
+  body:has(.print-resource-page) {
+    width: auto;
+    min-height: 0;
+    background: #ffffff !important;
+  }
+
+  body:has(.print-resource-page) {
+    display: block;
+    padding: 0;
+    color: #000000;
+  }
+
+  body:has(.print-resource-page) .skip-link,
+  body:has(.print-resource-page) .site-nav,
+  body:has(.print-resource-page) .breadcrumbs,
+  .print-resource__actions {
+    display: none !important;
+  }
+
+  body:has(.print-resource-page) .page-wrapper,
+  .print-resource-page {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  .print-resource-page {
+    font-size: 9px;
+    line-height: 1.16;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  .print-resource__header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.04in 0.12in;
+    align-items: end;
+    margin-bottom: 0.06in;
+    border-bottom: 1px solid #000000;
+    padding-bottom: 0.03in;
+  }
+
+  .print-resource__header .page-description {
+    grid-column: 1 / -1;
+    max-width: none;
+    font-size: 6.8pt;
+    line-height: 1.1;
+  }
+
+  .print-resource__eyebrow {
+    font-size: 5.7pt;
+    line-height: 1;
+    margin: 0 0 0.01in;
+    color: #000000;
+  }
+
+  .print-resource-page .page-title {
+    font-size: 12pt;
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+
+  .print-resource__summary {
+    justify-content: flex-end;
+    gap: 0.04in;
+    font-size: 6.2pt;
+    line-height: 1;
+  }
+
+  .print-resource__summary span {
+    border: 1px solid #000000;
+    border-radius: 0;
+    background: transparent;
+    padding: 0.02in 0.035in;
+  }
+
+  .print-resource__section {
+    display: block;
+    border-top: 1px solid #000000;
+    padding-top: 0.035in;
+    margin-top: 0.045in;
+    page-break-inside: auto;
+  }
+
+  .print-resource__section-heading {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.08in;
+    align-items: baseline;
+    margin-bottom: 0.035in;
+  }
+
+  .print-resource__section-heading h2 {
+    font-size: 8pt;
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+
+  .print-resource__section-heading p {
+    font-size: 5.9pt;
+    line-height: 1.05;
+    color: #000000;
+  }
+
+  .print-resource__columns {
+    column-count: 4;
+    column-gap: 0.08in;
+  }
+
+  .print-resource__item {
+    margin: 0 0 0.025in;
+    padding: 0.025in 0.03in;
+    border: 0.5px solid #8f8f8f;
+    border-radius: 0;
+    background: transparent;
+    line-height: 1.08;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-resource__item h3 {
+    display: inline;
+    font-size: 6.8pt;
+    line-height: 1.02;
+  }
+
+  .print-resource__item h3::after {
+    content: ' — ';
+    font-weight: 400;
+  }
+
+  .print-resource__related {
+    display: inline;
+    font-size: 5.65pt;
+    line-height: 1.06;
+    color: #000000;
+  }
+
+  .print-resource__related + .print-resource__related::before {
+    content: ' • ';
+  }
+
+  .print-resource__related + .print-resource__related {
+    margin-top: 0;
+  }
+
+  .print-resource__related-label {
+    color: #000000;
+  }
+
+  .print-resource__separator {
+    white-space: normal;
+  }
+
+  .print-resource__footer {
+    margin-top: 0.04in;
+    padding-top: 0.025in;
+    border-top: 1px solid #000000;
+    font-size: 5.7pt;
+    line-height: 1.05;
+    color: #000000;
+  }
+
+  .print-resource-page a {
+    color: #000000;
+    text-decoration: none;
+  }
+}
