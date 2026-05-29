@@ -20,6 +20,7 @@ const KNOWN_SCOPES = new Set([
   'inventory',
   'observation-guide',
   'support-lane',
+  'print-resource',
 ]);
 
 const DEFAULT_SCOPES = [
@@ -30,6 +31,7 @@ const DEFAULT_SCOPES = [
   'inventory',
   'observation-guide',
   'support-lane',
+  'print-resource',
 ];
 
 const DIRECTORIES_BY_SCOPE = new Map([
@@ -37,6 +39,7 @@ const DIRECTORIES_BY_SCOPE = new Map([
   ['feelings', ['feelings']],
   ['needs', ['needs']],
   ['inventory', ['inventory']],
+  ['print-resource', ['print-resource']],
 ]);
 
 function parseScopeArgs(argv) {
@@ -1413,13 +1416,17 @@ function renderCategory(type, items) {
     ? 'Faux feelings (sometimes called evaluations) are often the first stories that surface. Follow them to the feelings and needs underneath.'
     : '';
 
+  const printResourceLink = `<a class="support-button support-button--ghost" href="../print-resource/">Print handout</a>`;
   const supportLinks =
     type === 'feelings'
       ? `<div class="support-actions support-actions--muted feelings-page-header__actions">
           <a class="support-button" href="../alexithymia-support/">Support</a>
           <a class="support-button support-button--ghost" href="../inventory/journal/">Journal</a>
+          ${printResourceLink}
         </div>`
-      : '';
+      : `<div class="support-actions support-actions--muted">
+          ${printResourceLink}
+        </div>`;
 
   const magnets = items
   .map((item) => {
@@ -1541,6 +1548,125 @@ function renderCategory(type, items) {
   });
 
   writePage(`${type}/index.html`, html);
+}
+
+
+function renderCompactRelatedList(items, type) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return '<span class="print-resource__empty">—</span>';
+  }
+
+  return items
+    .map((item) => {
+      const href = `../${type}/${item.slug}/`;
+      return `<a href="${href}">${escapeHtml(item.title)}</a>`;
+    })
+    .join('<span class="print-resource__separator">, </span>');
+}
+
+function renderPrintableRows(items, type, relationRenderers) {
+  return items
+    .map((item) => {
+      const relations = relationRenderers
+        .map(({ label, type: relatedType, items: getItems }) => {
+          const relatedItems = getItems(item);
+          return `<div class="print-resource__related"><span class="print-resource__related-label">${escapeHtml(label)}:</span> ${renderCompactRelatedList(relatedItems, relatedType)}</div>`;
+        })
+        .join('');
+      return `<tr class="print-resource__item print-resource__item--${type}">
+            <td class="print-resource__item-cell"><span class="print-resource__item-title"><a href="../${type}/${item.slug}/">${escapeHtml(item.title)}</a></span>${relations}</td>
+          </tr>`;
+    })
+    .join('\n');
+}
+
+function renderPrintableSection({ id, title, description, items, type, relationRenderers }) {
+  return `<section class="print-resource__section print-resource__section--${type}" aria-labelledby="${id}">
+        <div class="print-resource__section-heading">
+          <h2 id="${id}">${escapeHtml(title)}</h2>
+          <p>${escapeHtml(description)}</p>
+        </div>
+        <table class="print-resource__table">
+          <tbody>
+            ${renderPrintableRows(items, type, relationRenderers)}
+          </tbody>
+        </table>
+      </section>`;
+}
+
+function renderPrintableResourcePage() {
+  const sections = [
+    renderPrintableSection({
+      id: 'print-feelings',
+      title: `Feelings (${data.feelings.length})`,
+      description: 'Site feeling words with related needs.',
+      items: data.feelings,
+      type: 'feelings',
+      relationRenderers: [
+        { label: 'Needs', type: 'needs', items: (item) => item.needs },
+      ],
+    }),
+    renderPrintableSection({
+      id: 'print-needs',
+      title: `Needs (${data.needs.length})`,
+      description: 'Site need words with related feelings.',
+      items: data.needs,
+      type: 'needs',
+      relationRenderers: [
+        { label: 'Feelings', type: 'feelings', items: (item) => item.feelings },
+      ],
+    }),
+    renderPrintableSection({
+      id: 'print-faux-feelings',
+      title: `Faux feelings (${data.fauxFeelings.length})`,
+      description: 'Evaluation words with possible feelings and needs underneath.',
+      items: data.fauxFeelings,
+      type: 'faux-feelings',
+      relationRenderers: [
+        { label: 'Feelings', type: 'feelings', items: (item) => item.feelings },
+        { label: 'Needs', type: 'needs', items: (item) => item.needs },
+      ],
+    }),
+  ].join('\n');
+
+  const main = `
+      <header class="page-header print-resource__header">
+        <div>
+          <p class="print-resource__eyebrow">Therapeutic handout</p>
+          <h1 class="page-title">Printable NVC word resource</h1>
+        </div>
+        <p class="page-description">A compact printable reference for every feeling, need, and faux feeling currently listed on allneeds.app, including the relationship links used by the site.</p>
+        <div class="support-actions print-resource__actions">
+          <button class="support-button" type="button" onclick="window.print()">Print handout</button>
+          <a class="support-button support-button--ghost" href="../feelings/">Browse feelings</a>
+          <a class="support-button support-button--ghost" href="../needs/">Browse needs</a>
+        </div>
+      </header>
+      <div class="print-resource__summary" aria-label="Print resource summary">
+        <span>${data.feelings.length} feelings</span>
+        <span>${data.needs.length} needs</span>
+        <span>${data.fauxFeelings.length} faux feelings</span>
+      </div>
+      ${sections}
+      <footer class="print-resource__footer">
+        <p>Printed from allneeds.app. Use these words as invitations to check what is alive, not as diagnoses or demands.</p>
+      </footer>`;
+
+  const html = htmlPage({
+    title: 'Printable NVC word resource',
+    depth: 1,
+    breadcrumbs: [
+      { label: 'Home', href: '../' },
+      { label: 'Print handout' },
+    ],
+    main,
+    mainClass: 'page print-resource-page',
+    activeNav: 'print-resource',
+    canonicalPath: 'print-resource/',
+    description: 'Print a compact allneeds.app reference of NVC feelings, needs, and faux feelings with their related site words.',
+  });
+
+  writePage('print-resource/index.html', html);
 }
 
 function renderBodyCuesPage() {
@@ -2674,6 +2800,7 @@ function build(scopeSet) {
   const buildInventory = shouldBuild('inventory');
   const buildObservationGuide = shouldBuild('observation-guide');
   const buildSupportLane = shouldBuild('support-lane');
+  const buildPrintResource = shouldBuild('print-resource');
 
   if (buildHome) {
     renderHome();
@@ -2695,6 +2822,10 @@ function build(scopeSet) {
   if (buildInventory) {
     renderInventoryPage();
     renderInventoryJournalPage(data.needs);
+  }
+
+  if (buildPrintResource) {
+    renderPrintableResourcePage();
   }
 
   if (buildFauxFeelings) {
