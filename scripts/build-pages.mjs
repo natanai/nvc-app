@@ -1581,12 +1581,9 @@ function renderPrintableRows(items, type, relationRenderers) {
     .join('\n');
 }
 
-function renderPrintableSection({ id, title, description, items, type, relationRenderers }) {
+function renderPrintableSection({ id, title, items, type, relationRenderers }) {
   return `<section class="print-resource__section print-resource__section--${type}" aria-labelledby="${id}">
-        <div class="print-resource__section-heading">
-          <h2 id="${id}">${escapeHtml(title)}</h2>
-          <p>${escapeHtml(description)}</p>
-        </div>
+        <h2 id="${id}" class="print-resource__section-heading">${escapeHtml(title)}</h2>
         <div class="print-resource__columns">
           ${renderPrintableRows(items, type, relationRenderers)}
         </div>
@@ -1598,7 +1595,6 @@ function renderPrintableResourcePage() {
     renderPrintableSection({
       id: 'print-feelings',
       title: `Feelings (${data.feelings.length})`,
-      description: 'Site feeling words with related needs.',
       items: data.feelings,
       type: 'feelings',
       relationRenderers: [
@@ -1608,7 +1604,6 @@ function renderPrintableResourcePage() {
     renderPrintableSection({
       id: 'print-needs',
       title: `Needs (${data.needs.length})`,
-      description: 'Site need words with related feelings.',
       items: data.needs,
       type: 'needs',
       relationRenderers: [
@@ -1618,7 +1613,6 @@ function renderPrintableResourcePage() {
     renderPrintableSection({
       id: 'print-faux-feelings',
       title: `Faux feelings (${data.fauxFeelings.length})`,
-      description: 'Evaluation words with possible feelings and needs underneath.',
       items: data.fauxFeelings,
       type: 'faux-feelings',
       relationRenderers: [
@@ -1629,27 +1623,12 @@ function renderPrintableResourcePage() {
   ].join('\n');
 
   const main = `
-      <header class="page-header print-resource__header">
-        <div>
-          <p class="print-resource__eyebrow">Therapeutic handout</p>
-          <h1 class="page-title">Printable NVC word resource</h1>
-        </div>
-        <p class="page-description">A compact printable reference for every feeling, need, and faux feeling currently listed on allneeds.app, including the relationship links used by the site.</p>
-        <div class="support-actions print-resource__actions">
-          <button class="support-button" type="button" onclick="window.print()">Print handout</button>
-          <a class="support-button support-button--ghost" href="../feelings/">Browse feelings</a>
-          <a class="support-button support-button--ghost" href="../needs/">Browse needs</a>
-        </div>
-      </header>
-      <div class="print-resource__summary" aria-label="Print resource summary">
-        <span>${data.feelings.length} feelings</span>
-        <span>${data.needs.length} needs</span>
-        <span>${data.fauxFeelings.length} faux feelings</span>
+      <div class="support-actions print-resource__actions" aria-label="Print resource actions">
+        <button class="support-button" type="button" onclick="window.print()">Print handout</button>
+        <a class="support-button support-button--ghost" href="../feelings/">Browse feelings</a>
+        <a class="support-button support-button--ghost" href="../needs/">Browse needs</a>
       </div>
-      ${sections}
-      <footer class="print-resource__footer">
-        <p>Printed from allneeds.app. Use these words as invitations to check what is alive, not as diagnoses or demands.</p>
-      </footer>`;
+      ${sections}`;
 
   const html = htmlPage({
     title: 'Printable NVC word resource',

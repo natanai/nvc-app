@@ -1169,28 +1169,13 @@ button.site-nav__magnet {
       </nav>
       <main id="main" class="page print-resource-page" role="main">
         
-      <header class="page-header print-resource__header">
-        <div>
-          <p class="print-resource__eyebrow">Therapeutic handout</p>
-          <h1 class="page-title">Printable NVC word resource</h1>
-        </div>
-        <p class="page-description">A compact printable reference for every feeling, need, and faux feeling currently listed on allneeds.app, including the relationship links used by the site.</p>
-        <div class="support-actions print-resource__actions">
-          <button class="support-button" type="button" onclick="window.print()">Print handout</button>
-          <a class="support-button support-button--ghost" href="../feelings/">Browse feelings</a>
-          <a class="support-button support-button--ghost" href="../needs/">Browse needs</a>
-        </div>
-      </header>
-      <div class="print-resource__summary" aria-label="Print resource summary">
-        <span>48 feelings</span>
-        <span>67 needs</span>
-        <span>56 faux feelings</span>
+      <div class="support-actions print-resource__actions" aria-label="Print resource actions">
+        <button class="support-button" type="button" onclick="window.print()">Print handout</button>
+        <a class="support-button support-button--ghost" href="../feelings/">Browse feelings</a>
+        <a class="support-button support-button--ghost" href="../needs/">Browse needs</a>
       </div>
       <section class="print-resource__section print-resource__section--feelings" aria-labelledby="print-feelings">
-        <div class="print-resource__section-heading">
-          <h2 id="print-feelings">Feelings (48)</h2>
-          <p>Site feeling words with related needs.</p>
-        </div>
+        <h2 id="print-feelings" class="print-resource__section-heading">Feelings (48)</h2>
         <div class="print-resource__columns">
           <article class="print-resource__item print-resource__item--feelings">
             <h3><a href="../feelings/hurt/">Hurt</a></h3>
@@ -1387,10 +1372,7 @@ button.site-nav__magnet {
         </div>
       </section>
 <section class="print-resource__section print-resource__section--needs" aria-labelledby="print-needs">
-        <div class="print-resource__section-heading">
-          <h2 id="print-needs">Needs (67)</h2>
-          <p>Site need words with related feelings.</p>
-        </div>
+        <h2 id="print-needs" class="print-resource__section-heading">Needs (67)</h2>
         <div class="print-resource__columns">
           <article class="print-resource__item print-resource__item--needs">
             <h3><a href="../needs/love-caring/">Love/Caring</a></h3>
@@ -1663,10 +1645,7 @@ button.site-nav__magnet {
         </div>
       </section>
 <section class="print-resource__section print-resource__section--faux-feelings" aria-labelledby="print-faux-feelings">
-        <div class="print-resource__section-heading">
-          <h2 id="print-faux-feelings">Faux feelings (56)</h2>
-          <p>Evaluation words with possible feelings and needs underneath.</p>
-        </div>
+        <h2 id="print-faux-feelings" class="print-resource__section-heading">Faux feelings (56)</h2>
         <div class="print-resource__columns">
           <article class="print-resource__item print-resource__item--faux-feelings">
             <h3><a href="../faux-feelings/abandoned/">Abandoned</a></h3>
@@ -1894,9 +1873,6 @@ button.site-nav__magnet {
           </article>
         </div>
       </section>
-      <footer class="print-resource__footer">
-        <p>Printed from allneeds.app. Use these words as invitations to check what is alive, not as diagnoses or demands.</p>
-      </footer>
       </main>
     </div>
     <script src="../assets/js/journal/store.js" type="module"></script>
