@@ -1416,17 +1416,13 @@ function renderCategory(type, items) {
     ? 'Faux feelings (sometimes called evaluations) are often the first stories that surface. Follow them to the feelings and needs underneath.'
     : '';
 
-  const printResourceLink = `<a class="support-button support-button--ghost" href="../print-resource/">Print handout</a>`;
   const supportLinks =
     type === 'feelings'
       ? `<div class="support-actions support-actions--muted feelings-page-header__actions">
           <a class="support-button" href="../alexithymia-support/">Support</a>
           <a class="support-button support-button--ghost" href="../inventory/journal/">Journal</a>
-          ${printResourceLink}
         </div>`
-      : `<div class="support-actions support-actions--muted">
-          ${printResourceLink}
-        </div>`;
+      : '';
 
   const magnets = items
   .map((item) => {
