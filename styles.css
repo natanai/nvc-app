@@ -2472,15 +2472,45 @@ main[data-need-slug] .page-title::before {
 }
 
 .body-cues-tool {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  padding: clamp(1.25rem, 2vw, 2rem);
+  display: grid;
+  gap: clamp(1.25rem, 2.4vw, 1.9rem);
+}
+
+.body-cues-tool__summary-panel,
+.body-cues-tool__slider-panel {
   border-radius: var(--radius-3xl);
   border: 3px solid var(--outline);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: inset 0 12px 0 color-mix(in srgb, var(--outline) 14%, transparent),
     0 18px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
+.body-cues-tool__summary-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1.15rem, 2vw, 1.75rem);
+}
+
+.body-cues-tool__slider-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: color-mix(in srgb, #ffffff 90%, var(--sky) 10%);
+}
+
+.body-cues-tool__slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.body-cues-tool__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .body-cues-tool__reset {
@@ -2522,7 +2552,7 @@ main[data-need-slug] .page-title::before {
 
 .body-cues-tool__scroll-hint {
   margin: 0;
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.55rem;
   color: var(--ink-soft);
@@ -2531,6 +2561,7 @@ main[data-need-slug] .page-title::before {
 
 .body-cues-tool__scroll-icon {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   width: 1.9rem;
@@ -2627,9 +2658,19 @@ main[data-need-slug] .page-title::before {
   flex-direction: column;
   gap: 1.15rem;
   position: relative;
-  scrollbar-gutter: stable both-edges;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--outline) 35%, transparent) rgba(255, 255, 255, 0.7);
+}
+
+.body-cues-tool__controls-shell {
+  position: relative;
+  min-width: 0;
+}
+
+.body-cues-tool__scroll-fade,
+.body-cues-tool__scroll-more {
+  display: none;
 }
 
 .body-cues-tool__controls::-webkit-scrollbar {
@@ -2694,11 +2735,14 @@ main[data-need-slug] .page-title::before {
 }
 
 .body-cues-tool__option-title {
+  min-width: 0;
   margin: 0;
+  overflow-wrap: anywhere;
   font-size: 1rem;
 }
 
 .body-cues-tool__option-value {
+  flex: 0 0 auto;
   font-size: 0.9rem;
   color: var(--ink-soft);
   font-weight: 600;
@@ -2725,6 +2769,7 @@ main[data-need-slug] .page-title::before {
   background: linear-gradient(90deg, var(--mint) 0%, var(--rose) 100%);
   border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
   box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.6);
+  touch-action: pan-y;
 }
 
 .body-cues-tool__slider::-webkit-slider-thumb {
@@ -2775,38 +2820,165 @@ main[data-need-slug] .page-title::before {
   font-weight: 600;
 }
 
-@media (max-width: 720px) {
+@media (min-width: 900px) {
   .body-cues-tool {
-    gap: 1.6rem;
-    padding: clamp(1rem, 5vw, 1.5rem);
-    border-width: 2px;
+    grid-template-columns: minmax(17rem, 0.78fr) minmax(0, 1.22fr);
+    align-items: start;
   }
 
-  .body-cues-tool__magnets {
-    padding: 0;
+  .body-cues-tool__slider-panel {
+    min-width: 0;
+  }
+
+  .body-cues-tool__controls {
+    max-height: min(68vh, 44rem);
+    max-height: min(68dvh, 44rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-inline-end: 0.35rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .body-cues-page {
+    gap: 1.25rem;
+    padding-inline: clamp(0.35rem, 2.5vw, 0.75rem);
+    border-width: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .body-cues-tool {
+    gap: 1.1rem;
+  }
+
+  .body-cues-tool__summary-panel {
+    gap: 0.85rem;
+    padding: clamp(0.9rem, 4vw, 1.15rem);
+    border-width: 2px;
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .body-cues-tool__slider-panel {
+    gap: 0.8rem;
+    padding-block: 0.85rem 0.95rem;
+    padding-inline: clamp(0.45rem, 2vw, 0.65rem);
+    border: 0;
+    border-radius: var(--radius-2xl);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .body-cues-tool__slider-header {
+    padding-inline: clamp(0.15rem, 1.5vw, 0.35rem);
   }
 
   .body-cues-tool__scroll-hint {
-    display: inline-flex;
+    font-size: 0.88rem;
   }
 
   .body-cues-tool__controls {
     gap: 0.85rem;
-    max-height: min(60vh, 28rem);
-    max-height: min(60dvh, 28rem);
+    max-height: min(64vh, 32rem);
+    max-height: min(64dvh, 32rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: clamp(0.4rem, 3.5vw, 0.75rem);
-    margin-inline: clamp(0.25rem, 4vw, 0.65rem);
-    border-radius: var(--radius-xl);
-    border: 1px solid color-mix(in srgb, var(--outline) 32%, transparent);
-    background: color-mix(in srgb, #ffffff 92%, var(--sky) 8%);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 12%, transparent);
+    padding-block: 0.15rem 0.5rem;
+    padding-inline: clamp(0.15rem, 1vw, 0.3rem);
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    scrollbar-gutter: stable;
+  }
+
+  .body-cues-tool__scroll-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: block;
+    height: 2.75rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 160ms ease;
+  }
+
+  .body-cues-tool__scroll-fade--top {
+    top: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, #ffffff 52%, var(--lavender) 48%),
+      color-mix(in srgb, var(--sky) 28%, transparent),
+      transparent
+    );
+  }
+
+  .body-cues-tool__scroll-fade--bottom {
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, #ffffff 54%, var(--lavender) 46%),
+      color-mix(in srgb, var(--sky) 30%, transparent),
+      transparent
+    );
+  }
+
+  .body-cues-tool__scroll-more {
+    position: absolute;
+    left: 50%;
+    bottom: 0.45rem;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.28rem 0.72rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--plum) 13%, transparent);
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    pointer-events: none;
+    text-transform: uppercase;
+    transform: translate(-50%, 0.15rem);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .body-cues-tool__controls-shell[data-scrollable='true'][data-scroll-position='top']
+    .body-cues-tool__scroll-fade--bottom,
+  .body-cues-tool__controls-shell[data-scrollable='true'][data-scroll-position='middle']
+    .body-cues-tool__scroll-fade--bottom {
+    opacity: 0.82;
+  }
+
+  .body-cues-tool__controls-shell[data-scrollable='true'][data-scroll-position='middle']
+    .body-cues-tool__scroll-fade--top,
+  .body-cues-tool__controls-shell[data-scrollable='true'][data-scroll-position='bottom']
+    .body-cues-tool__scroll-fade--top {
+    opacity: 0.68;
+  }
+
+  .body-cues-tool__controls-shell[data-scrollable='true'][data-scroll-position='top']
+    .body-cues-tool__scroll-more,
+  .body-cues-tool__controls-shell[data-scrollable='true'][data-scroll-position='middle']
+    .body-cues-tool__scroll-more {
+    opacity: 0.9;
+    transform: translate(-50%, 0);
   }
 
   .body-cues-tool__option {
-    padding-block: clamp(0.5rem, 3vw, 0.7rem);
-    padding-inline: clamp(0.45rem, 3.2vw, 0.7rem);
+    padding-block: clamp(0.55rem, 2.8vw, 0.7rem);
+    padding-inline: clamp(0.65rem, 3vw, 0.85rem);
+    border-color: color-mix(in srgb, var(--outline) 16%, transparent);
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 8%, transparent);
   }
 }
 

@@ -1171,28 +1171,46 @@ button.site-nav__magnet {
         
       <section class="body-cues-tool" data-body-cues-root>
         <h1 class="visually-hidden">Body Cues explorer</h1>
-        <section class="body-cues-tool__magnets" aria-labelledby="body-cues-magnets-heading">
-          <div class="magnet-search__results body-cues-tool__magnet-panel">
-            <div class="body-cues-tool__magnet-header">
-              <h2 id="body-cues-magnets-heading">Matching magnets</h2>
-              <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
+
+        <section class="body-cues-tool__summary-panel" aria-labelledby="body-cues-magnets-heading">
+          <section class="body-cues-tool__magnets">
+            <div class="magnet-search__results body-cues-tool__magnet-panel">
+              <div class="body-cues-tool__magnet-header">
+                <h2 id="body-cues-magnets-heading">Matching magnets</h2>
+                <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
+              </div>
+              <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite">
+                <p class="body-cues-tool__empty" data-body-cues-empty>
+                  Slide any cues that feel relevant—the magnets here update instantly with feelings that often travel with that mix.
+                </p>
+              </div>
             </div>
-            <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite">
-              <p class="body-cues-tool__empty" data-body-cues-empty>
-                Slide any cues that feel relevant—the magnets here update instantly with feelings that often travel with that mix.
-              </p>
-            </div>
+            <p class="body-cues-tool__error" data-body-cues-error hidden>
+              We couldn't load the body cues data. Check your connection and try again.
+            </p>
+          </section>
+
+          <div class="body-cues-tool__actions">
+            <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
           </div>
-          <p class="body-cues-tool__error" data-body-cues-error hidden>
-            We couldn't load the body cues data. Check your connection and try again.
-          </p>
         </section>
-        <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
-        <p class="body-cues-tool__scroll-hint">
-          <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
-          <span>Scroll through the body cues list below to explore more sliders.</span>
-        </p>
-        <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+
+        <section class="body-cues-tool__slider-panel" aria-labelledby="body-cues-sliders-heading">
+          <div class="body-cues-tool__slider-header">
+            <h2 id="body-cues-sliders-heading" class="visually-hidden">Body cue sliders</h2>
+            <p class="body-cues-tool__scroll-hint">
+              <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
+              <span>Scroll through the body cues list below to explore more sliders.</span>
+            </p>
+          </div>
+
+          <div class="body-cues-tool__controls-shell" data-body-cues-controls-shell data-scrollable="false" data-scroll-position="none">
+            <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+            <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--top" aria-hidden="true"></span>
+            <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--bottom" aria-hidden="true"></span>
+            <span class="body-cues-tool__scroll-more" aria-hidden="true">More cues below ↓</span>
+          </div>
+        </section>
       </section>
     
       </main>
