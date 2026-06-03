@@ -1580,7 +1580,12 @@ function renderBodyCuesPage() {
             </p>
           </div>
 
-          <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+          <div class="body-cues-tool__controls-shell" data-body-cues-controls-shell data-scrollable="false" data-scroll-position="none">
+            <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+            <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--top" aria-hidden="true"></span>
+            <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--bottom" aria-hidden="true"></span>
+            <span class="body-cues-tool__scroll-more" aria-hidden="true">More cues below ↓</span>
+          </div>
         </section>
       </section>
     `;

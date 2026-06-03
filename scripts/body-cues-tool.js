@@ -352,6 +352,59 @@ function resetAllSliders() {
   updateMatches();
 }
 
+function setupControlsScrollAffordance(root) {
+  const controls = root.querySelector('[data-body-cues-controls]');
+  const shell = root.querySelector('[data-body-cues-controls-shell]') || controls;
+  if (!controls || !shell) {
+    return;
+  }
+
+  const threshold = 4;
+  let frame = null;
+
+  const updateScrollState = () => {
+    frame = null;
+    const isScrollable = controls.scrollHeight > controls.clientHeight + threshold;
+    shell.dataset.scrollable = isScrollable ? 'true' : 'false';
+
+    if (!isScrollable) {
+      shell.dataset.scrollPosition = 'none';
+      return;
+    }
+
+    const atTop = controls.scrollTop <= threshold;
+    const atBottom =
+      controls.scrollTop + controls.clientHeight >= controls.scrollHeight - threshold;
+
+    if (atTop) {
+      shell.dataset.scrollPosition = 'top';
+    } else if (atBottom) {
+      shell.dataset.scrollPosition = 'bottom';
+    } else {
+      shell.dataset.scrollPosition = 'middle';
+    }
+  };
+
+  const scheduleUpdate = () => {
+    if (frame !== null) {
+      return;
+    }
+    frame = window.requestAnimationFrame(updateScrollState);
+  };
+
+  controls.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate, { passive: true });
+
+  if ('ResizeObserver' in window) {
+    const observer = new ResizeObserver(scheduleUpdate);
+    observer.observe(controls);
+    observer.observe(shell);
+    shell._bodyCuesScrollAffordanceObserver = observer;
+  }
+
+  scheduleUpdate();
+}
+
 function initTool(root) {
   state.controlsRoot = root.querySelector('[data-body-cues-controls]');
   state.magnetContainer = root.querySelector('[data-body-cues-magnets]');
@@ -368,6 +421,7 @@ function initTool(root) {
   }
 
   buildControls(state.controlsRoot);
+  setupControlsScrollAffordance(root);
 }
 
 ready(async () => {
