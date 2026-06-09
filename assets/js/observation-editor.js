@@ -32,7 +32,7 @@ const state = {
   detectionNearLimit: 4,
   detectorStats: null,
   validityStatus: 'idle',
-  validityMessage: 'No matches yet.',
+  validityMessage: 'Ready for matches.',
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
@@ -243,8 +243,6 @@ function bind() {
   toggleObservationExample(false);
 
   bindGuideOpener();
-  updateNextNavigationLinks();
-
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -961,8 +959,8 @@ function finalizeObservation() {
       });
     }
   }
-  renderPanels();
   renderSuggestions();
+  renderPanels();
   renderJournalConversion();
 }
 
@@ -981,7 +979,13 @@ function renderPanels() {
     if (!state.scrolledToSuggestions) {
       state.scrolledToSuggestions = true;
       const scrollTarget = () => {
-        suggestionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const fallbackPrompt = document.getElementById('observation-fallback-prompt');
+        const panels = suggestionSection.querySelector('.observation-suggestions__panels');
+        const needsPanel = suggestionSection.querySelector('.observation-panel--needs');
+        const target = fallbackPrompt && !fallbackPrompt.hasAttribute('hidden')
+          ? fallbackPrompt
+          : panels || needsPanel || suggestionSection;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       };
       if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
         window.requestAnimationFrame(scrollTarget);
@@ -1136,7 +1140,7 @@ function renderSuggestions() {
       actionButton.dataset.action = 'done';
       actionButton.disabled = true;
     } else {
-      actionButton.textContent = 'Load possible matches';
+      actionButton.textContent = 'Load matches';
       actionButton.dataset.action = 'submit';
       actionButton.disabled = !canSubmitMatches();
     }
@@ -1946,7 +1950,7 @@ function setValidityStatus(status, message) {
   if (typeof message === 'string') {
     state.validityMessage = message;
   } else if (state.validityStatus === 'idle') {
-    state.validityMessage = 'No matches yet.';
+    state.validityMessage = 'Ready for matches.';
   } else if (state.validityStatus === 'pending') {
     state.validityMessage = 'Keep editing.';
   }
@@ -2002,7 +2006,7 @@ function defaultValidityMessage(status) {
     case 'pending':
       return 'Keep editing.';
     default:
-      return 'No matches yet.';
+      return 'Ready for matches.';
   }
 }
 
@@ -3110,28 +3114,6 @@ function openObservationGuide() {
   }
 }
 
-function updateNextNavigationLinks() {
-  const setState = (linkId, magnetId) => {
-    const link = document.getElementById(linkId);
-    if (!link) {
-      return;
-    }
-    const magnet = document.querySelector(`[data-magnet-id="${magnetId}"]`);
-    const hidden = !magnet
-      || magnet.getAttribute('aria-hidden') === 'true'
-      || magnet.dataset.navHidden === 'true';
-    if (hidden) {
-      link.setAttribute('aria-disabled', 'true');
-      link.setAttribute('tabindex', '-1');
-    } else {
-      link.removeAttribute('aria-disabled');
-      link.removeAttribute('tabindex');
-    }
-  };
-  setState('observation-next-feelings', 'nav-feelings');
-  setState('observation-next-needs', 'nav-needs');
-}
-
 function bindGuideNavigation() {
   if (typeof document === 'undefined') {
     return;
@@ -3165,7 +3147,7 @@ function initializeObservationInfoDialog() {
 
   const topics = {
     basics: 'Observation basics',
-    slots: 'Observation checklist',
+    slots: 'Quick check',
     matching: 'How matching works',
   };
   let returnFocus = null;
