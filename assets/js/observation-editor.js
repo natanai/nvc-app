@@ -3167,7 +3167,6 @@ function initializeObservationInfoDialog() {
     basics: 'Observation basics',
     slots: 'Quick check',
     matching: 'How matching works',
-    why: 'Why this helps',
   };
   let returnFocus = null;
 
