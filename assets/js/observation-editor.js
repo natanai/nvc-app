@@ -32,7 +32,7 @@ const state = {
   detectionNearLimit: 4,
   detectorStats: null,
   validityStatus: 'idle',
-  validityMessage: 'No matches yet.',
+  validityMessage: 'Ready when you are.',
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
@@ -1136,7 +1136,7 @@ function renderSuggestions() {
       actionButton.dataset.action = 'done';
       actionButton.disabled = true;
     } else {
-      actionButton.textContent = 'Load possible matches';
+      actionButton.textContent = 'Load matches';
       actionButton.dataset.action = 'submit';
       actionButton.disabled = !canSubmitMatches();
     }
@@ -1946,7 +1946,7 @@ function setValidityStatus(status, message) {
   if (typeof message === 'string') {
     state.validityMessage = message;
   } else if (state.validityStatus === 'idle') {
-    state.validityMessage = 'No matches yet.';
+    state.validityMessage = 'Ready when you are.';
   } else if (state.validityStatus === 'pending') {
     state.validityMessage = 'Keep editing.';
   }
@@ -2002,7 +2002,7 @@ function defaultValidityMessage(status) {
     case 'pending':
       return 'Keep editing.';
     default:
-      return 'No matches yet.';
+      return 'Ready when you are.';
   }
 }
 
@@ -2162,7 +2162,7 @@ function renderDetectionSummary() {
   summary.setAttribute('data-state', flagged ? 'flagged' : status);
 
   if (note) {
-    let message = 'No matches yet.';
+    let message = 'Ready when you are.';
     switch (status) {
       case 'loading':
         message = 'Scanning…';
@@ -3165,7 +3165,7 @@ function initializeObservationInfoDialog() {
 
   const topics = {
     basics: 'Observation basics',
-    slots: 'Observation checklist',
+    slots: 'Quick check',
     matching: 'How matching works',
     why: 'Why this helps',
   };
