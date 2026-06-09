@@ -32,7 +32,7 @@ const state = {
   detectionNearLimit: 4,
   detectorStats: null,
   validityStatus: 'idle',
-  validityMessage: 'No matches yet.',
+  validityMessage: 'Ready for matches.',
   fallback: createFallbackState(),
   scrolledToSuggestions: false,
   formula: createEmptyObservationFormulaState(),
@@ -43,6 +43,7 @@ const state = {
 
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
+
 let analysisTimer = 0;
 let analysisIdleHandle = null;
 let highlightMessageTimer = 0;
@@ -84,6 +85,8 @@ const OBSERVATION_EXAMPLE_TEXT =
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
+  logObservationViewportDiagnostics('load');
+  initializeObservationInfoDialog();
   renderPanels();
   renderValidityStatus();
   renderDetectionStatus();
@@ -159,7 +162,10 @@ function bind() {
     textarea.addEventListener('blur', () => {
       renderHighlightDetails(null);
     });
+    bindObservationTextareaDiagnostics(textarea);
   }
+
+  bindObservationJournalViewportCleanup();
 
   const submit = document.getElementById('observation-submit');
   if (submit) {
@@ -242,8 +248,6 @@ function bind() {
   toggleObservationExample(false);
 
   bindGuideOpener();
-  updateNextNavigationLinks();
-
   bindGuideNavigation();
 
   if (!highlightPopoverBound && typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
@@ -260,6 +264,131 @@ function bind() {
   }
 
   syncObservationHighlightScroll();
+}
+
+
+function bindObservationTextareaDiagnostics(textarea) {
+  if (!textarea || textarea.dataset.viewportDiagnosticsBound === 'true') {
+    return;
+  }
+  textarea.dataset.viewportDiagnosticsBound = 'true';
+
+  textarea.addEventListener('focus', () => {
+    logObservationViewportDiagnostics('focus');
+  });
+}
+
+function bindObservationJournalViewportCleanup() {
+  if (typeof document === 'undefined' || document.documentElement.dataset.observationJournalViewportCleanup === 'true') {
+    return;
+  }
+  document.documentElement.dataset.observationJournalViewportCleanup = 'true';
+  document.addEventListener('click', event => {
+    const trigger = event.target instanceof Element
+      ? event.target.closest('[data-support-journal-open]')
+      : null;
+    if (!trigger) {
+      return;
+    }
+    resetObservationPageFocusState({ blur: true });
+  }, true);
+}
+
+function resetObservationHorizontalScroll() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+  const y = window.scrollY || window.pageYOffset || 0;
+  if ((window.scrollX || window.pageXOffset || 0) !== 0) {
+    window.scrollTo(0, y);
+  }
+  if (document.documentElement) {
+    document.documentElement.scrollLeft = 0;
+  }
+  if (document.body) {
+    document.body.scrollLeft = 0;
+  }
+}
+
+function resetObservationPageFocusState(options = {}) {
+  const textarea = document.getElementById('observation-text');
+  if (options.blur && textarea && typeof textarea.blur === 'function') {
+    textarea.blur();
+  }
+  resetObservationHorizontalScroll();
+}
+
+function shouldLogObservationViewportDiagnostics() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  try {
+    const params = new URLSearchParams(window.location.search || '');
+    if (params.get('observationViewportDebug') === '1') {
+      return true;
+    }
+    return window.localStorage?.getItem('observationViewportDebug') === '1';
+  } catch (error) {
+    return false;
+  }
+}
+
+function findObservationViewportOverflowElements() {
+  if (typeof document === 'undefined') {
+    return [];
+  }
+  const root = document.documentElement;
+  const clientWidth = root?.clientWidth || window.innerWidth || 0;
+  if (!document.body || !clientWidth) {
+    return [];
+  }
+  return Array.from(document.body.querySelectorAll('*'))
+    .map(element => {
+      const rect = element.getBoundingClientRect();
+      const overflowRight = rect.right - clientWidth;
+      const overflowLeft = Math.abs(Math.min(rect.left, 0));
+      const overflow = Math.max(overflowRight, overflowLeft);
+      return { element, rect, overflow };
+    })
+    .filter(item => item.overflow > 1)
+    .sort((a, b) => b.overflow - a.overflow)
+    .slice(0, 12)
+    .map(item => ({
+      tag: item.element.tagName.toLowerCase(),
+      id: item.element.id || '',
+      className: typeof item.element.className === 'string' ? item.element.className : '',
+      left: Math.round(item.rect.left * 10) / 10,
+      right: Math.round(item.rect.right * 10) / 10,
+      width: Math.round(item.rect.width * 10) / 10,
+      overflow: Math.round(item.overflow * 10) / 10,
+    }));
+}
+
+function logObservationViewportDiagnostics(label) {
+  if (!shouldLogObservationViewportDiagnostics()) {
+    return;
+  }
+  [0, 50, 300, 700].forEach(delay => {
+    window.setTimeout(() => {
+      const vv = window.visualViewport || null;
+      const root = document.documentElement;
+      const body = document.body;
+      console.info('[observation viewport]', label, `${delay}ms`, {
+        scale: vv?.scale,
+        visualViewportWidth: vv?.width,
+        visualViewportHeight: vv?.height,
+        offsetLeft: vv?.offsetLeft,
+        pageLeft: vv?.pageLeft,
+        innerWidth: window.innerWidth,
+        clientWidth: root?.clientWidth,
+        documentScrollWidth: root?.scrollWidth,
+        bodyScrollWidth: body?.scrollWidth,
+        scrollX: window.scrollX,
+        scrollY: window.scrollY,
+        overflowingElements: findObservationViewportOverflowElements(),
+      });
+    }, delay);
+  });
 }
 
 function updateObservationText(value, options = {}) {
@@ -960,8 +1089,8 @@ function finalizeObservation() {
       });
     }
   }
-  renderPanels();
   renderSuggestions();
+  renderPanels();
   renderJournalConversion();
 }
 
@@ -980,7 +1109,13 @@ function renderPanels() {
     if (!state.scrolledToSuggestions) {
       state.scrolledToSuggestions = true;
       const scrollTarget = () => {
-        suggestionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const fallbackPrompt = document.getElementById('observation-fallback-prompt');
+        const panels = suggestionSection.querySelector('.observation-suggestions__panels');
+        const needsPanel = suggestionSection.querySelector('.observation-panel--needs');
+        const target = fallbackPrompt && !fallbackPrompt.hasAttribute('hidden')
+          ? fallbackPrompt
+          : panels || needsPanel || suggestionSection;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       };
       if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
         window.requestAnimationFrame(scrollTarget);
@@ -1135,7 +1270,7 @@ function renderSuggestions() {
       actionButton.dataset.action = 'done';
       actionButton.disabled = true;
     } else {
-      actionButton.textContent = 'Load possible matches';
+      actionButton.textContent = 'Load matches';
       actionButton.dataset.action = 'submit';
       actionButton.disabled = !canSubmitMatches();
     }
@@ -1781,6 +1916,7 @@ function convertObservationToJournal() {
   convertButton.textContent = 'Opening journal…';
 
   const journalButton = document.querySelector('[data-support-journal-open]');
+  resetObservationPageFocusState({ blur: true });
   const applyNotesToJournal = () => {
     const notesField = document.querySelector('[data-journal-notes]');
     if (notesField instanceof HTMLTextAreaElement) {
@@ -1945,7 +2081,7 @@ function setValidityStatus(status, message) {
   if (typeof message === 'string') {
     state.validityMessage = message;
   } else if (state.validityStatus === 'idle') {
-    state.validityMessage = 'No matches yet.';
+    state.validityMessage = 'Ready for matches.';
   } else if (state.validityStatus === 'pending') {
     state.validityMessage = 'Keep editing.';
   }
@@ -2001,7 +2137,7 @@ function defaultValidityMessage(status) {
     case 'pending':
       return 'Keep editing.';
     default:
-      return 'No matches yet.';
+      return 'Ready for matches.';
   }
 }
 
@@ -2151,95 +2287,45 @@ function renderDetectionSummary() {
   }
 
   if (exactValue) {
-    exactValue.textContent = `${exactCount}/${matchLimit}`;
+    exactValue.textContent = `${exactCount} exact`;
   }
 
   if (nearValue) {
-    const denominator = nearLimit > 0 ? nearLimit : Math.max(nearLimit, nearCount, 0);
-    nearValue.textContent = `${nearCount}/${denominator}`;
+    nearValue.textContent = `${nearCount} nearby`;
   }
 
   summary.setAttribute('data-state', flagged ? 'flagged' : status);
 
   if (note) {
-    const limitMessage = nearLimit
-      ? `Load possible matches to review up to ${nearLimit} nearby needs with aligned feelings.`
-      : '';
-    let message = '';
+    let message = 'No matches yet.';
     switch (status) {
       case 'loading':
-        message = 'Warming up the detector…';
+        message = 'Scanning…';
         break;
       case 'idle':
-        message = limitMessage
-          ? `We’ll scan for cues as you type. ${limitMessage}`
-          : 'We’ll scan for cues as you type.';
+        message = 'Ready when you are.';
         break;
       case 'short':
-        message = limitMessage
-          ? `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
-          : `Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
+        message = `Add ${DETECTION_MIN_WORDS}+ words to match.`;
         break;
       case 'match':
-        message = limitMessage
-          ? `Exact matches are ready when you are. ${limitMessage}`
-          : 'Exact matches are ready when you are. Load possible matches to explore nearby needs.';
+        message = 'Matches ready.';
         break;
       case 'near':
-        message = limitMessage || 'Nearest matches are queued when you need them.';
+        message = 'Nearby matches ready.';
         break;
       case 'none':
-        message = limitMessage
-          ? `We didn’t spot an exact match yet. ${limitMessage}`
-          : 'We didn’t spot an exact match yet. Load possible matches to explore nearby needs.';
+        message = 'Try loading possible matches.';
         break;
       default:
-        message = limitMessage || 'We’re preparing the detector…';
+        message = 'Scanning…';
         break;
     }
 
     if (flagged) {
-      switch (status) {
-        case 'idle':
-          message = limitMessage
-            ? `Flagged language detected. We’ll scan for cues as you type. ${limitMessage}`
-            : 'Flagged language detected. We’ll scan for cues as you type.';
-          break;
-        case 'short':
-          message = limitMessage
-            ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
-            : `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
-          break;
-        case 'match':
-          message = limitMessage
-            ? `Flagged language detected. Exact matches are ready when you are. ${limitMessage}`
-            : 'Flagged language detected. Exact matches are ready when you are.';
-          break;
-        case 'near':
-          message = limitMessage
-            ? `Flagged language detected. Nearest matches are queued when you need them. ${limitMessage}`
-            : 'Flagged language detected. Nearest matches are queued when you need them.';
-          break;
-        case 'none':
-          message = limitMessage
-            ? `Flagged language detected. We didn’t spot an exact match yet. ${limitMessage}`
-            : 'Flagged language detected. We didn’t spot an exact match yet.';
-          break;
-        default:
-          message = limitMessage
-            ? `Flagged language detected. ${limitMessage}`
-            : 'Flagged language detected.';
-          break;
-      }
-    }
-
-    if (status === 'match' && Number(state.detectionMatches) > matchLimit) {
-      message = `${message} We surface the strongest exact match first.`;
-    } else if (
-      matchLimit === 1 &&
-      (status === 'match' || status === 'near' || status === 'none')
-    ) {
-      message = `${message} We surface the strongest exact match first.`;
+      message = status === 'short'
+        ? `Flagged language noted. Add ${DETECTION_MIN_WORDS}+ words.`
+        : `Flagged language noted. ${message}`;
     }
 
     note.textContent = message.trim();
@@ -3159,28 +3245,6 @@ function openObservationGuide() {
   }
 }
 
-function updateNextNavigationLinks() {
-  const setState = (linkId, magnetId) => {
-    const link = document.getElementById(linkId);
-    if (!link) {
-      return;
-    }
-    const magnet = document.querySelector(`[data-magnet-id="${magnetId}"]`);
-    const hidden = !magnet
-      || magnet.getAttribute('aria-hidden') === 'true'
-      || magnet.dataset.navHidden === 'true';
-    if (hidden) {
-      link.setAttribute('aria-disabled', 'true');
-      link.setAttribute('tabindex', '-1');
-    } else {
-      link.removeAttribute('aria-disabled');
-      link.removeAttribute('tabindex');
-    }
-  };
-  setState('observation-next-feelings', 'nav-feelings');
-  setState('observation-next-needs', 'nav-needs');
-}
-
 function bindGuideNavigation() {
   if (typeof document === 'undefined') {
     return;
@@ -3198,6 +3262,93 @@ function bindGuideNavigation() {
     openGuideSectionFromHash();
     window.addEventListener('hashchange', openGuideSectionFromHash);
   }
+}
+
+
+function initializeObservationInfoDialog() {
+  const dialog = document.getElementById('observation-info-dialog');
+  const title = document.getElementById('observation-info-title');
+  const body = document.getElementById('observation-info-body');
+  const closeButton = dialog?.querySelector('[data-observation-info-close]');
+  const triggers = document.querySelectorAll('[data-observation-info]');
+
+  if (!dialog || !title || !body || !triggers.length) {
+    return;
+  }
+
+  const topics = {
+    basics: 'Observation basics',
+    slots: 'Quick check',
+    matching: 'How matching works',
+  };
+  let returnFocus = null;
+
+  const closeDialog = () => {
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close();
+    } else {
+      dialog.removeAttribute('open');
+      dialog.setAttribute('hidden', 'hidden');
+      if (returnFocus && typeof returnFocus.focus === 'function') {
+        returnFocus.focus({ preventScroll: true });
+      }
+    }
+  };
+
+  const openTopic = (topic, trigger) => {
+    const template = document.getElementById(`observation-info-template-${topic}`);
+    if (!template) {
+      return;
+    }
+
+    returnFocus = trigger || null;
+    title.textContent = topics[topic] || 'Observation help';
+    body.innerHTML = '';
+    body.append(template.content.cloneNode(true));
+
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    } else {
+      dialog.removeAttribute('hidden');
+      dialog.setAttribute('open', 'open');
+    }
+
+    const focusTarget = closeButton || title || body;
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      window.requestAnimationFrame(() => focusTarget.focus({ preventScroll: true }));
+    }
+  };
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', event => {
+      event.preventDefault();
+      openTopic(trigger.getAttribute('data-observation-info'), trigger);
+    });
+  });
+
+  if (closeButton) {
+    closeButton.addEventListener('click', closeDialog);
+  }
+
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog) {
+      closeDialog();
+    }
+  });
+
+  dialog.addEventListener('cancel', event => {
+    event.preventDefault();
+    closeDialog();
+  });
+
+  dialog.addEventListener('close', () => {
+    if (returnFocus && typeof returnFocus.focus === 'function') {
+      returnFocus.focus({ preventScroll: true });
+    }
+    returnFocus = null;
+  });
 }
 
 function initializeGuideTabs() {
