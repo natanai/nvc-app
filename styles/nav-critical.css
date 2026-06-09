@@ -38,11 +38,17 @@
 }
 
 html {
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
   background: linear-gradient(135deg, color-mix(in srgb, var(--plum) 65%, #000 5%) 0%,
       color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
       color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
   background-attachment: fixed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html {
+    scrollbar-gutter: stable;
+  }
 }
 
 * {
