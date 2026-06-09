@@ -734,27 +734,12 @@ button.site-nav__magnet {
 }
   .observations-page {
     width: min(100%, 960px);
-    max-width: 100%;
     margin: 0 auto clamp(2rem, 5vw, 3.5rem);
     display: grid;
     gap: clamp(1.6rem, 4vw, 2.75rem);
     padding: clamp(1.35rem, 4vw, 2.75rem);
     border-width: clamp(3px, 1vw, 4px);
   }
-
-  @supports selector(:has(*)) {
-    html:has(.observations-page),
-    body:has(.observations-page) {
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-  }
-
-  body:has(.observations-page) .page-wrapper {
-    max-width: 100%;
-    overflow-x: clip;
-  }
-
   .observations-page,
   .observation-editor,
   .observation-editor__card,
@@ -1094,11 +1079,13 @@ button.site-nav__magnet {
 
   .observation-guide__nav {
     display: flex;
+    max-width: 100%;
+    min-width: 0;
     align-items: flex-end;
     gap: 0.5rem;
     overflow-x: auto;
     padding: 0.35rem 0.35rem 0;
-    margin: 0 -0.35rem;
+    margin: 0;
     scrollbar-width: thin;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -1488,7 +1475,7 @@ button.site-nav__magnet {
     .observation-guide__nav {
       gap: 0.35rem;
       padding: 0.35rem 0.2rem 0;
-      margin: 0 -0.2rem;
+      margin: 0;
     }
 
     .observation-guide__tab {
@@ -1617,6 +1604,7 @@ button.site-nav__magnet {
 
   .observation-editor__slot-row {
     display: flex;
+    max-width: 100%;
     flex-wrap: wrap;
     gap: 0.6rem 0.85rem;
     margin: 0.4rem 0 0.15rem;
@@ -1657,6 +1645,7 @@ button.site-nav__magnet {
       flex-wrap: nowrap;
       gap: 0.45rem;
       overflow-x: auto;
+      max-width: 100%;
       padding-block: 0.2rem 0.45rem;
       scrollbar-width: thin;
     }
@@ -1940,7 +1929,7 @@ button.site-nav__magnet {
     }
 
     .observation-editor__input {
-      min-height: clamp(13rem, 42dvh, 22rem);
+      min-height: clamp(13rem, 18rem, 20rem);
     }
   }
 
@@ -2591,6 +2580,8 @@ button.site-nav__magnet {
 
   .observation-suggestions__action-row {
     display: grid;
+    max-width: 100%;
+    min-width: 0;
     grid-template-columns: minmax(0, 1fr) minmax(6rem, auto);
     gap: 0.65rem;
     align-items: stretch;
@@ -2718,12 +2709,14 @@ button.site-nav__magnet {
 
   .observation-feelings-toggle {
     display: inline-flex;
+    max-width: 100%;
     align-items: center;
     justify-content: center;
   }
 
   .need-status-toggle {
     display: inline-flex;
+    max-width: 100%;
     align-items: stretch;
     border-radius: 999px;
     border: 2px solid var(--btn-bg);
@@ -2733,6 +2726,7 @@ button.site-nav__magnet {
 
   .need-status-toggle__option {
     flex: 1 1 0;
+    min-width: 0;
     padding: 0.6rem 1.6rem;
     border: none;
     background: transparent;
@@ -2783,6 +2777,8 @@ button.site-nav__magnet {
 
   .observation-chip-list {
     display: flex;
+    max-width: 100%;
+    min-width: 0;
     flex-wrap: wrap;
     gap: 0.6rem;
     align-items: flex-start;
@@ -2790,6 +2786,8 @@ button.site-nav__magnet {
 
   .observation-chip {
     display: inline-flex;
+    max-width: 100%;
+    overflow-wrap: anywhere;
     align-items: center;
     justify-content: center;
     gap: 0.25rem;

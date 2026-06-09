@@ -44,11 +44,6 @@ const state = {
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
 
-const observationViewportFocusState = {
-  originalViewportContent: null,
-  restoreTimer: 0,
-  settleTimer: 0,
-};
 let analysisTimer = 0;
 let analysisIdleHandle = null;
 let highlightMessageTimer = 0;
@@ -90,6 +85,7 @@ const OBSERVATION_EXAMPLE_TEXT =
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
+  logObservationViewportDiagnostics('load');
   initializeObservationInfoDialog();
   renderPanels();
   renderValidityStatus();
@@ -166,7 +162,7 @@ function bind() {
     textarea.addEventListener('blur', () => {
       renderHighlightDetails(null);
     });
-    bindObservationTextareaViewportGuard(textarea);
+    bindObservationTextareaDiagnostics(textarea);
   }
 
   bindObservationJournalViewportCleanup();
@@ -271,26 +267,14 @@ function bind() {
 }
 
 
-function bindObservationTextareaViewportGuard(textarea) {
-  if (!textarea || textarea.dataset.viewportGuardBound === 'true') {
+function bindObservationTextareaDiagnostics(textarea) {
+  if (!textarea || textarea.dataset.viewportDiagnosticsBound === 'true') {
     return;
   }
-  textarea.dataset.viewportGuardBound = 'true';
+  textarea.dataset.viewportDiagnosticsBound = 'true';
 
   textarea.addEventListener('focus', () => {
-    applyObservationViewportFocusGuard();
-    resetObservationHorizontalScroll();
     logObservationViewportDiagnostics('focus');
-    clearTimeout(observationViewportFocusState.settleTimer);
-    observationViewportFocusState.settleTimer = window.setTimeout(() => {
-      resetObservationHorizontalScroll();
-    }, 360);
-  });
-
-  textarea.addEventListener('blur', () => {
-    clearTimeout(observationViewportFocusState.settleTimer);
-    restoreObservationViewportAfterFocus();
-    window.setTimeout(resetObservationHorizontalScroll, 80);
   });
 }
 
@@ -306,58 +290,8 @@ function bindObservationJournalViewportCleanup() {
     if (!trigger) {
       return;
     }
-    resetObservationViewportState({ blur: true, restoreViewport: true });
+    resetObservationPageFocusState({ blur: true });
   }, true);
-}
-
-function isIOSWebKit() {
-  if (typeof navigator === 'undefined') {
-    return false;
-  }
-  const platform = navigator.platform || '';
-  const ua = navigator.userAgent || '';
-  const touchMac = platform === 'MacIntel' && Number(navigator.maxTouchPoints) > 1;
-  return /iP(?:hone|ad|od)/.test(platform) || touchMac || /iP(?:hone|ad|od)/.test(ua);
-}
-
-function getViewportMeta() {
-  return document.querySelector('meta[name="viewport"]');
-}
-
-function applyObservationViewportFocusGuard() {
-  if (!isIOSWebKit() || typeof document === 'undefined') {
-    return;
-  }
-  const viewport = getViewportMeta();
-  if (!viewport) {
-    return;
-  }
-  if (observationViewportFocusState.originalViewportContent == null) {
-    observationViewportFocusState.originalViewportContent = viewport.getAttribute('content') || '';
-  }
-  clearTimeout(observationViewportFocusState.restoreTimer);
-  const current = viewport.getAttribute('content') || '';
-  if (/maximum-scale\s*=/.test(current)) {
-    viewport.setAttribute('content', current.replace(/maximum-scale\s*=\s*[^,]+/, 'maximum-scale=1'));
-    return;
-  }
-  const separator = current.trim() ? ', ' : '';
-  viewport.setAttribute('content', `${current}${separator}maximum-scale=1`);
-}
-
-function restoreObservationViewportAfterFocus() {
-  if (!isIOSWebKit() || typeof document === 'undefined') {
-    return;
-  }
-  clearTimeout(observationViewportFocusState.restoreTimer);
-  observationViewportFocusState.restoreTimer = window.setTimeout(() => {
-    const viewport = getViewportMeta();
-    if (viewport && observationViewportFocusState.originalViewportContent != null) {
-      viewport.setAttribute('content', observationViewportFocusState.originalViewportContent);
-    }
-    observationViewportFocusState.originalViewportContent = null;
-    resetObservationHorizontalScroll();
-  }, 220);
 }
 
 function resetObservationHorizontalScroll() {
@@ -376,19 +310,10 @@ function resetObservationHorizontalScroll() {
   }
 }
 
-function resetObservationViewportState(options = {}) {
+function resetObservationPageFocusState(options = {}) {
   const textarea = document.getElementById('observation-text');
   if (options.blur && textarea && typeof textarea.blur === 'function') {
     textarea.blur();
-  }
-  clearTimeout(observationViewportFocusState.settleTimer);
-  if (options.restoreViewport) {
-    clearTimeout(observationViewportFocusState.restoreTimer);
-    const viewport = getViewportMeta();
-    if (viewport && observationViewportFocusState.originalViewportContent != null) {
-      viewport.setAttribute('content', observationViewportFocusState.originalViewportContent);
-    }
-    observationViewportFocusState.originalViewportContent = null;
   }
   resetObservationHorizontalScroll();
 }
@@ -408,11 +333,42 @@ function shouldLogObservationViewportDiagnostics() {
   }
 }
 
+function findObservationViewportOverflowElements() {
+  if (typeof document === 'undefined') {
+    return [];
+  }
+  const root = document.documentElement;
+  const clientWidth = root?.clientWidth || window.innerWidth || 0;
+  if (!document.body || !clientWidth) {
+    return [];
+  }
+  return Array.from(document.body.querySelectorAll('*'))
+    .map(element => {
+      const rect = element.getBoundingClientRect();
+      const overflowRight = rect.right - clientWidth;
+      const overflowLeft = Math.abs(Math.min(rect.left, 0));
+      const overflow = Math.max(overflowRight, overflowLeft);
+      return { element, rect, overflow };
+    })
+    .filter(item => item.overflow > 1)
+    .sort((a, b) => b.overflow - a.overflow)
+    .slice(0, 12)
+    .map(item => ({
+      tag: item.element.tagName.toLowerCase(),
+      id: item.element.id || '',
+      className: typeof item.element.className === 'string' ? item.element.className : '',
+      left: Math.round(item.rect.left * 10) / 10,
+      right: Math.round(item.rect.right * 10) / 10,
+      width: Math.round(item.rect.width * 10) / 10,
+      overflow: Math.round(item.overflow * 10) / 10,
+    }));
+}
+
 function logObservationViewportDiagnostics(label) {
   if (!shouldLogObservationViewportDiagnostics()) {
     return;
   }
-  [50, 300, 700].forEach(delay => {
+  [0, 50, 300, 700].forEach(delay => {
     window.setTimeout(() => {
       const vv = window.visualViewport || null;
       const root = document.documentElement;
@@ -429,6 +385,7 @@ function logObservationViewportDiagnostics(label) {
         bodyScrollWidth: body?.scrollWidth,
         scrollX: window.scrollX,
         scrollY: window.scrollY,
+        overflowingElements: findObservationViewportOverflowElements(),
       });
     }, delay);
   });
@@ -1959,7 +1916,7 @@ function convertObservationToJournal() {
   convertButton.textContent = 'Opening journal…';
 
   const journalButton = document.querySelector('[data-support-journal-open]');
-  resetObservationViewportState({ blur: true, restoreViewport: true });
+  resetObservationPageFocusState({ blur: true });
   const applyNotesToJournal = () => {
     const notesField = document.querySelector('[data-journal-notes]');
     if (notesField instanceof HTMLTextAreaElement) {
