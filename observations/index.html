@@ -739,6 +739,8 @@ button.site-nav__magnet {
     gap: clamp(1.6rem, 4vw, 2.75rem);
     padding: clamp(1.35rem, 4vw, 2.75rem);
     border-width: clamp(3px, 1vw, 4px);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   @media (max-width: 720px) {
@@ -1890,10 +1892,13 @@ button.site-nav__magnet {
     border-radius: var(--radius-3xl);
     background: transparent;
     font: inherit;
+    font-size: max(16px, 1rem);
     line-height: 1.6;
     resize: vertical;
     color: var(--ink);
     caret-color: color-mix(in srgb, var(--outline) 85%, transparent);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   .observation-editor__input:focus {
@@ -1916,7 +1921,16 @@ button.site-nav__magnet {
 
     .observation-editor__input {
       min-height: clamp(13rem, 42dvh, 22rem);
-      font-size: 1rem;
+      font-size: max(16px, 1rem);
+    }
+
+    .observation-keyboard-active .observations-page {
+      padding-block-end: calc(clamp(2.5rem, 14dvh, 7rem) + env(safe-area-inset-bottom, 0px));
+      scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .observation-keyboard-active .observation-editor__input {
+      min-height: clamp(10rem, 34dvh, 16rem);
     }
   }
 

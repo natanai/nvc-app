@@ -129,6 +129,7 @@ function setFeelingsMode(mode) {
 function bind() {
   const textarea = document.getElementById('observation-text');
   if (textarea) {
+    bindObservationTextareaFocusStabilizer(textarea);
     textarea.addEventListener('input', event => {
       state.text = event.target.value || '';
       state.scrolledToSuggestions = false;
@@ -259,6 +260,81 @@ function bind() {
   }
 
   syncObservationHighlightScroll();
+}
+
+function bindObservationTextareaFocusStabilizer(textarea) {
+  if (!textarea || textarea.dataset.focusStabilizerBound === 'true') {
+    return;
+  }
+  textarea.dataset.focusStabilizerBound = 'true';
+
+  const root = document.documentElement;
+  const viewport = typeof window !== 'undefined' ? window.visualViewport : null;
+  let focused = false;
+  let timers = [];
+  let animationFrame = 0;
+
+  const clearScheduled = () => {
+    timers.forEach(timer => window.clearTimeout(timer));
+    timers = [];
+    if (animationFrame) {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+    }
+  };
+
+  const scrollComposerIntoView = (behavior = 'auto') => {
+    if (!focused) {
+      return;
+    }
+    const target = textarea.closest('.observation-editor__input-wrapper')
+      || textarea.closest('.observation-editor__field')
+      || textarea;
+    if (target && typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({ behavior, block: 'center', inline: 'nearest' });
+    }
+  };
+
+  const scheduleScroll = (delay = 0, behavior = 'auto') => {
+    if (!focused) {
+      return;
+    }
+    const run = () => {
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = 0;
+        scrollComposerIntoView(behavior);
+      });
+    };
+    if (delay > 0) {
+      timers.push(window.setTimeout(run, delay));
+    } else {
+      run();
+    }
+  };
+
+  const handleViewportResize = () => {
+    clearScheduled();
+    scheduleScroll(80, 'auto');
+  };
+
+  textarea.addEventListener('focus', () => {
+    focused = true;
+    root?.classList?.add('observation-keyboard-active');
+    scheduleScroll(80, 'auto');
+    scheduleScroll(320, 'auto');
+    if (viewport && typeof viewport.addEventListener === 'function') {
+      viewport.addEventListener('resize', handleViewportResize, { passive: true });
+    }
+  });
+
+  textarea.addEventListener('blur', () => {
+    focused = false;
+    clearScheduled();
+    root?.classList?.remove('observation-keyboard-active');
+    if (viewport && typeof viewport.removeEventListener === 'function') {
+      viewport.removeEventListener('resize', handleViewportResize);
+    }
+  });
 }
 
 function updateObservationText(value, options = {}) {
