@@ -810,14 +810,6 @@ button.site-nav__magnet {
     box-shadow: none;
   }
 
-  .observation-info-button--text {
-    width: auto;
-    padding: 0.45rem 0.75rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.86rem;
-    letter-spacing: 0.02em;
-  }
-
   .observations-title {
     font-size: clamp(1.8rem, 3vw, 2.2rem);
     letter-spacing: 0.035em;
@@ -830,59 +822,34 @@ button.site-nav__magnet {
   }
 
   .observation-overview {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1.25rem;
-    padding: clamp(1.2rem, 3vw, 1.8rem);
-    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-    border-radius: var(--radius-3xl);
-    background: color-mix(in srgb, var(--mint) 12%, #ffffff 92%);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--outline) 10%, transparent);
-    align-items: start;
-  }
-
-  @media (max-width: 720px) {
-    .observation-overview {
-      grid-template-columns: 1fr;
-      gap: 0.9rem;
-      padding: clamp(0.9rem, 4vw, 1.15rem);
-      border-radius: var(--radius-2xl);
-      box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 7%, transparent);
-    }
-  }
-
-  @media (max-width: 460px) {
-    .observation-overview__slots {
-      gap: 0.4rem;
-    }
-
-    .observation-overview__slot {
-      padding: 0.3rem 0.55rem;
-      font-size: 0.88rem;
-    }
-  }
-
-  .observation-overview__title {
-    margin: 0;
-    font-size: clamp(1.2rem, 3vw, 1.4rem);
-    letter-spacing: 0.035em;
-  }
-
-  .observation-overview__summary {
-    margin: 0;
-    color: color-mix(in srgb, var(--outline) 72%, transparent);
+    margin-block: 0;
   }
 
   .observation-overview__details {
-    display: grid;
-    gap: 0.7rem;
-    margin-block-start: 0.35rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, var(--mint) 5%, #ffffff 97%);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 7%, transparent);
+    overflow: clip;
   }
 
   .observation-overview__summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    padding: clamp(0.8rem, 2.5vw, 1rem) clamp(0.95rem, 3vw, 1.15rem);
     cursor: pointer;
-    font-weight: 800;
-    color: color-mix(in srgb, var(--outline) 72%, transparent);
+    list-style: none;
+  }
+
+  .observation-overview__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .observation-overview__summary::marker {
+    content: '';
   }
 
   .observation-overview__summary:focus-visible {
@@ -890,53 +857,97 @@ button.site-nav__magnet {
     outline-offset: 3px;
   }
 
+  .observation-overview__summary-text {
+    display: grid;
+    gap: 0.12rem;
+    min-width: 0;
+  }
+
+  .observation-overview__title {
+    font-size: clamp(1.02rem, 2.5vw, 1.16rem);
+    font-weight: 800;
+    letter-spacing: 0.025em;
+    line-height: 1.2;
+  }
+
+  .observation-overview__subtitle {
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
+    font-size: 0.82rem;
+    font-weight: 650;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .observation-overview__summary-icon {
+    width: 1.7rem;
+    height: 1.7rem;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--outline) 13%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 86%, var(--mint) 14%);
+    color: color-mix(in srgb, var(--outline) 72%, transparent);
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1;
+    transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  }
+
+  .observation-overview__details[open] .observation-overview__summary-icon {
+    transform: rotate(45deg);
+    background: color-mix(in srgb, var(--mint) 15%, #ffffff 85%);
+    border-color: color-mix(in srgb, var(--mint) 28%, transparent);
+  }
+
+  .observation-overview__body {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0 clamp(0.95rem, 3vw, 1.15rem) clamp(0.95rem, 3vw, 1.15rem);
+    border-top: 1px solid color-mix(in srgb, var(--outline) 10%, transparent);
+  }
+
   .observation-overview__why {
-    margin: 0.4rem 0 0;
+    margin: 0.85rem 0 0;
     color: color-mix(in srgb, var(--outline) 76%, transparent);
+    font-size: clamp(0.95rem, 2.5vw, 1rem);
+    line-height: 1.62;
   }
 
   .observation-overview__slots {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.4rem;
+    margin: 0;
   }
 
   .observation-overview__slot {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem 0.65rem;
+    gap: 0.3rem;
+    padding: 0.28rem 0.55rem;
     border-radius: var(--radius-xl);
-    background: color-mix(in srgb, #ffffff 90%, var(--mint) 18%);
-    border: 1px dashed color-mix(in srgb, var(--outline) 28%, transparent);
-    font-size: 0.95rem;
+    background: color-mix(in srgb, #ffffff 92%, var(--mint) 10%);
+    border: 1px dashed color-mix(in srgb, var(--outline) 20%, transparent);
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
+    font-size: 0.82rem;
+    font-weight: 650;
   }
 
-  .observation-overview__actions {
-    display: grid;
-    gap: 0.5rem;
-    justify-items: end;
-  }
+  @media (max-width: 460px) {
+    .observation-overview__summary {
+      gap: 0.7rem;
+      padding-inline: 0.85rem;
+    }
 
-  .observation-overview__learn-more {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.55rem 0.9rem;
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, var(--ink) 6%, #ffffff 94%);
-    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-    color: inherit;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 8%, transparent);
-  }
+    .observation-overview__body {
+      padding-inline: 0.85rem;
+    }
 
-  .observation-overview__learn-more:hover,
-  .observation-overview__learn-more:focus-visible {
-    background: color-mix(in srgb, var(--mint) 12%, #ffffff 88%);
-    border-color: color-mix(in srgb, var(--mint) 30%, transparent);
+    .observation-overview__slots {
+      gap: 0.35rem;
+    }
   }
 
   .observation-guide__summary {
@@ -3915,72 +3926,63 @@ button.site-nav__magnet {
         </section>
 
         <section id="observation-overview" class="observation-overview" aria-labelledby="observation-overview-title">
-          <div class="observation-overview__content">
-            <h2 id="observation-overview-title" class="observation-overview__title">Why try this?</h2>
+          <details class="observation-overview__details">
+            <summary class="observation-overview__summary">
+              <span class="observation-overview__summary-text">
+                <span id="observation-overview-title" class="observation-overview__title">Why try this?</span>
+                <span class="observation-overview__subtitle">Optional context</span>
+              </span>
+              <span class="observation-overview__summary-icon" aria-hidden="true">+</span>
+            </summary>
 
-            <details class="observation-overview__details">
-              <summary class="observation-overview__summary">Read the short why</summary>
+            <div class="observation-overview__body">
               <p class="observation-overview__why">
-              Using concrete, time-and-place descriptions of what you saw or heard can be cognitively easier to process than more abstract label terms
-              <a
-                class="observation-overview__citation"
-                href="https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                [2].
-              </a>
-              Putting what you notice into words is also linked with lower emotional activation and distress
-              <a
-                class="observation-overview__citation"
-                href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                [4].
-              </a>
-              One study found that subjects practicing the use of concrete language led to reductions in depressive symptoms and rumination
-              <a
-                class="observation-overview__citation"
-                href="https://doi.org/10.1037/a0013642"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                [19].
-              </a>
-              Because inner speech develops from internalized conversations with others, the language habits you practice here are likely to influence both how you speak to others <strong>and</strong> how you speak to yourself
-              <a
-                class="observation-overview__citation"
-                href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4538954/"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                [20].
-              </a>
-            </p>
+                Using concrete, time-and-place descriptions of what you saw or heard can be cognitively easier to process than more abstract label terms
+                <a
+                  class="observation-overview__citation"
+                  href="https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [2].
+                </a>
+                Putting what you notice into words is also linked with lower emotional activation and distress
+                <a
+                  class="observation-overview__citation"
+                  href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [4].
+                </a>
+                One study found that subjects practicing the use of concrete language led to reductions in depressive symptoms and rumination
+                <a
+                  class="observation-overview__citation"
+                  href="https://doi.org/10.1037/a0013642"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [19].
+                </a>
+                Because inner speech develops from internalized conversations with others, the language habits you practice here are likely to influence both how you speak to others <strong>and</strong> how you speak to yourself
+                <a
+                  class="observation-overview__citation"
+                  href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4538954/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [20].
+                </a>
+              </p>
 
-            <div class="observation-overview__slots" role="list" aria-label="Observation ingredients">
-              <span class="observation-overview__slot" role="listitem">Time</span>
-              <span class="observation-overview__slot" role="listitem">Place</span>
-              <span class="observation-overview__slot" role="listitem">What you saw/heard</span>
-              <span class="observation-overview__slot" role="listitem">Measurement/quote (optional)</span>
+              <div class="observation-overview__slots" role="list" aria-label="Observation ingredients">
+                <span class="observation-overview__slot" role="listitem">Time</span>
+                <span class="observation-overview__slot" role="listitem">Place</span>
+                <span class="observation-overview__slot" role="listitem">What you saw/heard</span>
+                <span class="observation-overview__slot" role="listitem">Measurement/quote (optional)</span>
+              </div>
             </div>
-
-            </details>
-          </div>
-          <div class="observation-overview__actions">
-            <button
-              class="observation-info-button observation-info-button--text"
-              type="button"
-              data-observation-info="why"
-              aria-haspopup="dialog"
-            >
-              Why this helps
-            </button>
-            <a class="observation-overview__learn-more" href="#observation-guide" data-open-observation-guide>
-              Full guide
-            </a>
-          </div>
+          </details>
         </section>
 
 
@@ -4026,11 +4028,6 @@ button.site-nav__magnet {
           <p>Exact matches come from recognized cue patterns. Nearby matches are fallback options when the wording is close but not exact.</p>
           <p>Load possible matches to open exact matches and nearby needs with aligned feelings.</p>
         </template>
-        <template id="observation-info-template-why">
-          <p>Concrete observations are often easier to discuss than labels or judgments because they point to a shared moment.</p>
-          <p>The research links and practical guide remain below when you want more background.</p>
-        </template>
-
         <details id="observation-guide" class="observation-guide">
           <!-- observation-guide:start -->
           <summary class="observation-guide__toggle">
