@@ -458,6 +458,9 @@ a:focus-visible {
 .support-journal__layer {
   position: fixed;
   inset: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
   display: none;
   background: color-mix(in srgb, var(--ink) 46%, transparent);
   backdrop-filter: blur(8px);
@@ -478,6 +481,7 @@ a:focus-visible {
   height: 100dvh;
   max-height: 100dvh;
   width: min(100vw, 100%);
+  max-width: 100vw;
   overflow: hidden;
   background: linear-gradient(
       135deg,

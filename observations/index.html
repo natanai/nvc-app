@@ -734,6 +734,7 @@ button.site-nav__magnet {
 }
   .observations-page {
     width: min(100%, 960px);
+    max-width: 100%;
     margin: 0 auto clamp(2rem, 5vw, 3.5rem);
     display: grid;
     gap: clamp(1.6rem, 4vw, 2.75rem);
@@ -741,26 +742,93 @@ button.site-nav__magnet {
     border-width: clamp(3px, 1vw, 4px);
   }
 
-  @media (max-width: 640px) {
+  @supports selector(:has(*)) {
+    html:has(.observations-page),
+    body:has(.observations-page) {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  }
+
+  body:has(.observations-page) .page-wrapper {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .observations-page,
+  .observation-editor,
+  .observation-editor__card,
+  .observation-editor__grid,
+  .observation-editor__field {
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 720px) {
     .observations-page {
-      padding: clamp(1rem, 6vw, 1.85rem);
-      gap: clamp(1.4rem, 5vw, 2.25rem);
+      gap: clamp(1.05rem, 4vw, 1.65rem);
+      padding-inline: clamp(0.35rem, 2.5vw, 0.75rem);
+      border-width: 0;
+      background: transparent;
+      box-shadow: none;
     }
   }
 
   @media (max-width: 460px) {
     .observations-page {
-      padding: clamp(0.85rem, 6.5vw, 1.5rem);
-      border-width: 2px;
       border-radius: var(--radius-3xl);
-      box-shadow: 0 20px 0 var(--shadow);
     }
   }
 
   .observations-header {
     display: grid;
-    gap: 1rem;
+    gap: 0.65rem;
     text-align: left;
+  }
+
+  .observations-header__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .observation-info-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-circle);
+    border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    background: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
+    color: color-mix(in srgb, var(--outline) 80%, transparent);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 8%, transparent);
+    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .observation-info-button:hover,
+  .observation-info-button:focus-visible {
+    border-color: color-mix(in srgb, var(--outline) 38%, transparent);
+    background: color-mix(in srgb, #ffffff 78%, var(--mint) 22%);
+    transform: translateY(-1px);
+  }
+
+  .observation-info-button:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 3px;
+  }
+
+  .observation-info-button--subtle {
+    background: color-mix(in srgb, #ffffff 92%, transparent);
+    box-shadow: none;
   }
 
   .observations-title {
@@ -775,81 +843,119 @@ button.site-nav__magnet {
   }
 
   .observation-overview {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1.25rem;
-    padding: clamp(1.2rem, 3vw, 1.8rem);
-    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-    border-radius: var(--radius-3xl);
-    background: color-mix(in srgb, var(--mint) 12%, #ffffff 92%);
-    box-shadow: 0 12px 28px color-mix(in srgb, var(--outline) 10%, transparent);
-    align-items: start;
+    display: block;
   }
 
-  @media (max-width: 720px) {
-    .observation-overview {
-      grid-template-columns: 1fr;
-    }
+  .observation-overview__details {
+    border: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+    border-radius: var(--radius-3xl);
+    background: color-mix(in srgb, #ffffff 94%, var(--mint) 6%);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--outline) 7%, transparent);
+    overflow: hidden;
+  }
+
+  .observation-overview__summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 44px;
+    padding: clamp(0.85rem, 2.5vw, 1.1rem) clamp(1rem, 3vw, 1.35rem);
+    color: inherit;
+  }
+
+  .observation-overview__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .observation-overview__summary::marker {
+    content: '';
+  }
+
+  .observation-overview__summary:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: -6px;
+  }
+
+  .observation-overview__summary-text {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
   }
 
   .observation-overview__title {
     margin: 0;
-    font-size: clamp(1.2rem, 3vw, 1.4rem);
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.7vw, 1.25rem);
     letter-spacing: 0.035em;
   }
 
-  .observation-overview__summary {
-    margin: 0;
-    color: color-mix(in srgb, var(--outline) 72%, transparent);
+  .observation-overview__subtitle {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--outline) 54%, transparent);
+  }
+
+  .observation-overview__summary-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-circle);
+    background: color-mix(in srgb, #ffffff 88%, var(--mint) 12%);
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    font-weight: 800;
+    line-height: 1;
+    transition: transform 0.18s ease, background 0.18s ease;
+  }
+
+  .observation-overview__details[open] .observation-overview__summary-icon {
+    transform: rotate(45deg);
+    background: color-mix(in srgb, #ffffff 76%, var(--mint) 24%);
+  }
+
+  .observation-overview__body {
+    display: grid;
+    gap: 0.85rem;
+    padding: 0 clamp(1rem, 3vw, 1.35rem) clamp(0.95rem, 2.8vw, 1.2rem);
   }
 
   .observation-overview__why {
-    margin: 0.4rem 0 0;
-    color: color-mix(in srgb, var(--outline) 76%, transparent);
+    margin: 0;
+    color: color-mix(in srgb, var(--outline) 74%, transparent);
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
   .observation-overview__slots {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.4rem;
+    margin: 0;
   }
 
   .observation-overview__slot {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem 0.65rem;
+    gap: 0.3rem;
+    padding: 0.28rem 0.55rem;
     border-radius: var(--radius-xl);
-    background: color-mix(in srgb, #ffffff 90%, var(--mint) 18%);
-    border: 1px dashed color-mix(in srgb, var(--outline) 28%, transparent);
-    font-size: 0.95rem;
+    background: color-mix(in srgb, #ffffff 92%, var(--mint) 8%);
+    border: 1px dashed color-mix(in srgb, var(--outline) 20%, transparent);
+    color: color-mix(in srgb, var(--outline) 68%, transparent);
+    font-size: 0.85rem;
+    font-weight: 700;
   }
 
-  .observation-overview__actions {
-    display: grid;
-    gap: 0.5rem;
-    justify-items: end;
-  }
-
-  .observation-overview__learn-more {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.55rem 0.9rem;
-    border-radius: var(--radius-xl);
-    background: color-mix(in srgb, var(--ink) 6%, #ffffff 94%);
-    border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-    color: inherit;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 8%, transparent);
-  }
-
-  .observation-overview__learn-more:hover,
-  .observation-overview__learn-more:focus-visible {
-    background: color-mix(in srgb, var(--mint) 12%, #ffffff 88%);
-    border-color: color-mix(in srgb, var(--mint) 30%, transparent);
+  @media (max-width: 720px) {
+    .observation-overview__details {
+      border-radius: var(--radius-2xl);
+      box-shadow: 0 8px 18px color-mix(in srgb, var(--outline) 6%, transparent);
+    }
   }
 
   .observation-guide__summary {
@@ -1475,11 +1581,38 @@ button.site-nav__magnet {
     gap: clamp(1.3rem, 3vw, 2rem);
   }
 
-  @media (max-width: 640px) {
+  .observation-editor,
+  .observation-editor__card,
+  .observation-editor__grid,
+  .observation-editor__field,
+  .observation-editor__input-wrapper {
+    min-width: 0;
+  }
+
+  @media (max-width: 720px) {
     .observation-editor__card {
-      padding: clamp(1rem, 5.5vw, 1.75rem);
-      gap: clamp(1.1rem, 4.5vw, 1.75rem);
+      padding: 0;
+      gap: clamp(1rem, 4vw, 1.35rem);
+      border: 0;
+      background: transparent;
+      box-shadow: none;
     }
+  }
+
+  .observation-editor__slot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-block-start: 0.15rem;
+  }
+
+  .observation-editor__slot-heading {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
   }
 
   .observation-editor__slot-row {
@@ -1489,6 +1622,7 @@ button.site-nav__magnet {
     margin: 0.4rem 0 0.15rem;
     padding: 0.15rem 0;
     border-radius: var(--radius-xl);
+    min-width: 0;
   }
 
   .observation-editor__slot {
@@ -1516,6 +1650,27 @@ button.site-nav__magnet {
     font-weight: 700;
     letter-spacing: 0.01em;
     color: color-mix(in srgb, var(--outline) 70%, transparent);
+  }
+
+  @media (max-width: 460px) {
+    .observation-editor__slot-row {
+      flex-wrap: nowrap;
+      gap: 0.45rem;
+      overflow-x: auto;
+      padding-block: 0.2rem 0.45rem;
+      scrollbar-width: thin;
+    }
+
+    .observation-editor__slot {
+      flex: 0 0 auto;
+      min-height: 2rem;
+      padding: 0.25rem 0.35rem;
+    }
+
+    .observation-editor__slot-label {
+      font-size: 0.86rem;
+      white-space: nowrap;
+    }
   }
 
   .observation-editor__slot[data-state='complete'] .observation-editor__slot-indicator {
@@ -1577,9 +1732,10 @@ button.site-nav__magnet {
     gap: clamp(0.5rem, 2.4vw, 1rem);
   }
 
-  @media (max-width: 380px) {
+  @media (max-width: 720px) {
     .observation-editor__label-row {
       grid-template-columns: minmax(0, 1fr);
+      gap: 0.6rem;
     }
   }
 
@@ -1596,15 +1752,10 @@ button.site-nav__magnet {
     box-shadow: 0 6px 14px color-mix(in srgb, var(--rose) 18%, transparent);
   }
 
-  @media (max-width: 420px) {
-    .observation-editor__inline-detection {
-      width: min(100%, 13.75rem);
-    }
-  }
-
-  @media (max-width: 380px) {
+  @media (max-width: 720px) {
     .observation-editor__inline-detection {
       justify-self: stretch;
+      width: 100%;
     }
   }
 
@@ -1733,6 +1884,7 @@ button.site-nav__magnet {
 
   .observation-editor__input-wrapper {
     position: relative;
+    width: 100%;
     border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
     border-radius: var(--radius-3xl);
     background: #ffffff;
@@ -1741,6 +1893,8 @@ button.site-nav__magnet {
     transition: border-color 0.18s ease, box-shadow 0.18s ease;
     --observation-editor-padding-block: 1.15rem;
     --observation-editor-padding-inline: 1.2rem;
+    --observation-editor-font-size: 18px;
+    --observation-editor-line-height: 1.6;
     --observation-scrollbar-width: 0px;
   }
 
@@ -1760,7 +1914,8 @@ button.site-nav__magnet {
     border-radius: var(--radius-3xl);
     background: transparent;
     font: inherit;
-    line-height: 1.6;
+    font-size: var(--observation-editor-font-size);
+    line-height: var(--observation-editor-line-height);
     resize: vertical;
     color: var(--ink);
     caret-color: color-mix(in srgb, var(--outline) 85%, transparent);
@@ -1768,6 +1923,25 @@ button.site-nav__magnet {
 
   .observation-editor__input:focus {
     outline: none;
+  }
+
+  @media (max-width: 720px) {
+    .observation-editor__input-wrapper {
+      border-color: color-mix(in srgb, var(--outline) 22%, transparent);
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--outline) 12%, transparent);
+      --observation-editor-padding-block: clamp(0.95rem, 3.5vw, 1.1rem);
+      --observation-editor-padding-inline: clamp(0.9rem, 3.5vw, 1.05rem);
+    }
+
+    .observation-editor__input-wrapper:focus-within {
+      border-color: color-mix(in srgb, var(--outline) 42%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 28%, transparent),
+        0 12px 28px color-mix(in srgb, var(--outline) 14%, transparent);
+    }
+
+    .observation-editor__input {
+      min-height: clamp(13rem, 42dvh, 22rem);
+    }
   }
 
   .observation-editor__highlight {
@@ -1779,7 +1953,8 @@ button.site-nav__magnet {
     );
     box-sizing: border-box;
     font: inherit;
-    line-height: 1.6;
+    font-size: var(--observation-editor-font-size);
+    line-height: var(--observation-editor-line-height);
     white-space: pre-wrap;
     word-break: break-word;
     color: transparent;
@@ -1803,7 +1978,8 @@ button.site-nav__magnet {
     );
     box-sizing: border-box;
     font: inherit;
-    line-height: 1.6;
+    font-size: var(--observation-editor-font-size);
+    line-height: var(--observation-editor-line-height);
     white-space: pre-wrap;
     overflow: hidden;
     pointer-events: none;
@@ -1990,6 +2166,15 @@ button.site-nav__magnet {
 
     .observation-editor__recipe[data-collapsed='true'] .observation-editor__recipe-body {
       display: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .observation-editor__recipe {
+      padding: 0.85rem 1rem;
+      border-color: color-mix(in srgb, var(--outline) 18%, transparent);
+      background: color-mix(in srgb, #ffffff 82%, transparent);
+      box-shadow: none;
     }
   }
 
@@ -2229,33 +2414,29 @@ button.site-nav__magnet {
 
   .observation-editor__match-summary {
     display: grid;
-    gap: 0.4rem;
+    gap: 0.55rem;
+    width: 100%;
     margin: 0;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 92%, var(--sky) 8%);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--outline) 7%, transparent);
     font-size: 0.9rem;
     color: color-mix(in srgb, var(--ink) 72%, transparent);
-    max-width: 40ch;
   }
 
-  .observation-editor__next-prompts {
+  .observation-editor__match-summary-main {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 0.75rem;
     align-items: center;
-    padding: 0.35rem 0;
-    border-top: 1px dashed color-mix(in srgb, var(--outline) 18%, transparent);
-    margin-top: 0.35rem;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
-  .observation-editor__next-label {
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    color: color-mix(in srgb, var(--outline) 78%, transparent);
-  }
-
-  .observation-editor__next-actions {
+  .observation-editor__match-summary-chips {
     display: flex;
-    gap: 0.55rem;
     flex-wrap: wrap;
+    gap: 0.45rem;
   }
 
   .observation-editor__next-link {
@@ -2283,10 +2464,14 @@ button.site-nav__magnet {
   }
 
   .observation-editor__match-summary-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, #ffffff 88%, var(--mint) 12%);
+    border: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
   }
 
   .observation-editor__match-summary-label {
@@ -2306,7 +2491,12 @@ button.site-nav__magnet {
     color: color-mix(in srgb, var(--ink) 68%, transparent);
   }
 
+  .observation-editor__match-summary-note {
+    font-weight: 700;
+  }
+
   .observation-editor__match-summary-coverage {
+    display: none;
     color: color-mix(in srgb, var(--ink) 64%, transparent);
   }
 
@@ -2394,11 +2584,16 @@ button.site-nav__magnet {
   }
 
   .observation-suggestions__header {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    display: grid;
+    gap: 0.75rem;
     align-items: flex-start;
-    justify-content: space-between;
+  }
+
+  .observation-suggestions__action-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(6rem, auto);
+    gap: 0.65rem;
+    align-items: stretch;
   }
 
   .observation-suggestions__heading {
@@ -2419,9 +2614,30 @@ button.site-nav__magnet {
     color: var(--ink-soft);
   }
 
+  .observation-suggestions__why-details {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+    background: color-mix(in srgb, #ffffff 94%, var(--sky) 6%);
+  }
+
+  .observation-suggestions__why-toggle {
+    cursor: pointer;
+    color: color-mix(in srgb, var(--outline) 62%, transparent);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .observation-suggestions__why-toggle:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 3px;
+  }
+
   .observation-suggestions__why {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: color-mix(in srgb, var(--outline) 64%, transparent);
   }
 
@@ -2441,6 +2657,28 @@ button.site-nav__magnet {
     padding-block-start: clamp(1.25rem, 3vw, 1.75rem);
     padding-block-end: clamp(1rem, 2.5vw, 1.4rem);
     gap: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .observation-suggestions[data-mode='editing'] {
+    gap: 0.75rem;
+    padding-block: 0.35rem 0;
+    border-top: 0;
+  }
+
+  .observation-suggestions[data-mode='editing'] .observation-suggestions__heading,
+  .observation-suggestions[data-mode='editing'] .observation-suggestions__why-details,
+  .observation-suggestions[data-mode='editing'] .observation-suggestions__panels,
+  .observation-suggestions[data-mode='editing'] .observation-suggestions__actions {
+    display: none;
+  }
+
+  .observation-suggestions[data-mode='results'] {
+    border-top-style: solid;
+  }
+
+  .observation-suggestions__panels,
+  .observation-suggestions__fallback {
+    scroll-margin-top: clamp(1rem, 8vh, 4rem);
   }
 
   @media (min-width: 640px) {
@@ -2613,10 +2851,12 @@ button.site-nav__magnet {
   }
 
   .observation-suggestions__action {
-    align-self: flex-start;
+    align-self: stretch;
+    justify-content: center;
     min-width: 0;
+    min-height: 3rem;
     padding-inline: 0.95rem;
-    margin-block-start: 0.15rem;
+    margin-block-start: 0;
     position: relative;
     z-index: 0;
     overflow: visible;
@@ -2624,10 +2864,14 @@ button.site-nav__magnet {
 
   .observation-suggestions__action:disabled {
     cursor: not-allowed;
-    border-color: color-mix(in srgb, var(--outline) 22%, transparent);
-    background: color-mix(in srgb, #ffffff 92%, var(--ink-soft) 8%);
-    color: color-mix(in srgb, var(--ink-soft) 55%, transparent);
-    box-shadow: none;
+    border-color: color-mix(in srgb, var(--outline) 28%, transparent);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--gold) 38%, #ffffff 62%),
+      color-mix(in srgb, var(--rose) 20%, #ffffff 80%)
+    );
+    color: color-mix(in srgb, var(--ink-soft) 62%, transparent);
+    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 16%, transparent);
     transform: none;
   }
 
@@ -2696,12 +2940,15 @@ button.site-nav__magnet {
 
   .observation-suggestions__clear {
     min-width: 6rem;
+    min-height: 3rem;
+    justify-content: center;
+    padding-inline: 0.85rem;
   }
 
   .observation-suggestions__links {
     margin: 0;
-    font-size: 0.95rem;
-    color: color-mix(in srgb, var(--outline) 60%, transparent);
+    font-size: 0.88rem;
+    color: color-mix(in srgb, var(--outline) 52%, transparent);
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -2716,6 +2963,122 @@ button.site-nav__magnet {
 
   .observation-suggestions__links span {
     color: color-mix(in srgb, var(--outline) 38%, transparent);
+  }
+
+  .observation-info-dialog {
+    width: min(92vw, 36rem);
+    max-width: none;
+    max-height: min(82vh, 42rem);
+    max-height: min(82dvh, 42rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-3xl);
+    background: transparent;
+    color: inherit;
+    box-shadow: 0 28px 80px color-mix(in srgb, var(--outline) 34%, transparent);
+    overflow: hidden;
+  }
+
+  .observation-info-dialog::backdrop {
+    background: color-mix(in srgb, var(--outline) 48%, transparent);
+    backdrop-filter: blur(3px);
+  }
+
+  .observation-info-dialog__sheet {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    max-height: inherit;
+    background: color-mix(in srgb, #ffffff 96%, var(--sky) 4%);
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  .observation-info-dialog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--outline) 10%, transparent);
+  }
+
+  .observation-info-dialog__title {
+    margin: 0;
+    font-size: clamp(1.15rem, 3vw, 1.35rem);
+  }
+
+  .observation-info-dialog__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-circle);
+    border: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);
+    background: #ffffff;
+    color: var(--ink);
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .observation-info-dialog__close:focus-visible {
+    outline: 3px dashed var(--outline);
+    outline-offset: 3px;
+  }
+
+  .observation-info-dialog__body {
+    display: grid;
+    gap: 0.75rem;
+    max-height: 100%;
+    padding: 1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(to bottom, color-mix(in srgb, var(--sky) 30%, transparent), transparent 2.25rem, transparent calc(100% - 2.25rem), color-mix(in srgb, var(--sky) 30%, transparent)) border-box;
+  }
+
+  .observation-info-dialog__body > * {
+    margin-block: 0;
+  }
+
+  .observation-info-dialog__body ul {
+    display: grid;
+    gap: 0.45rem;
+    padding-inline-start: 1.2rem;
+  }
+
+  @media (max-width: 720px) {
+    .observation-info-dialog {
+      inset: auto 0 0 0;
+      width: 100%;
+      max-height: calc(100dvh - 1rem);
+      margin: 0;
+      border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+    }
+
+    .observation-info-dialog__sheet {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      border-bottom: 0;
+      border-radius: inherit;
+    }
+
+    .observation-info-dialog__body {
+      padding: 1rem clamp(1rem, 4vw, 1.35rem) calc(1rem + env(safe-area-inset-bottom, 0));
+    }
+
+    .observation-suggestions__action-row {
+      grid-template-columns: minmax(0, 1fr) minmax(5.25rem, auto);
+      gap: 0.55rem;
+    }
+
+    .observation-suggestions__action,
+    .observation-suggestions__clear {
+      min-height: 3.1rem;
+    }
   }
 
   @media (max-width: 640px) {
@@ -2738,7 +3101,6 @@ button.site-nav__magnet {
     }
 
     .observation-suggestions__actions {
-      flex-direction: column;
       align-items: flex-start;
     }
   }
@@ -3179,75 +3541,26 @@ button.site-nav__magnet {
       </nav>
             <main id="main" class="page observations-page" role="main">
        <header class="observations-header">
-  <h1 class="observations-title">Observations</h1>
-  <p class="observations-description">
-    Write a brief, time-and-place description of what you saw or heard, without judgments or labels. Connect to feelings and needs after.
-  </p>
+  <div class="observations-header__title-row">
+    <h1 class="observations-title">Observations</h1>
+    <button
+      class="observation-info-button"
+      type="button"
+      data-observation-info="basics"
+      aria-haspopup="dialog"
+      aria-label="Observation basics"
+    >
+      i
+    </button>
+  </div>
 </header>
-
-<section id="observation-overview" class="observation-overview" aria-labelledby="observation-overview-title">
-  <div class="observation-overview__content">
-    <h2 id="observation-overview-title" class="observation-overview__title">Why try this?</h2>
-
-    <p class="observation-overview__why">
-      Using concrete, time-and-place descriptions of what you saw or heard can be cognitively easier to process than more abstract label terms
-      <a
-        class="observation-overview__citation"
-        href="https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        [2].
-      </a>
-      Putting what you notice into words is also linked with lower emotional activation and distress
-      <a
-        class="observation-overview__citation"
-        href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        [4].
-      </a>
-     One study found that subjects practicing the use of concrete language led to reductions in depressive symptoms and rumination 
-      <a
-        class="observation-overview__citation"
-        href="https://doi.org/10.1037/a0013642"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        [19].
-      </a>
-      Because inner speech develops from internalized conversations with others, the language habits you practice here are likely to influence both how you speak to others <strong>and</strong> how you speak to yourself 
-      <a
-        class="observation-overview__citation"
-        href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4538954/"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        [20].
-      </a>
-    </p>
-    
-            <div class="observation-overview__slots" role="list" aria-label="Observation ingredients">
-              <span class="observation-overview__slot" role="listitem">Time</span>
-              <span class="observation-overview__slot" role="listitem">Place</span>
-              <span class="observation-overview__slot" role="listitem">What you saw/heard</span>
-              <span class="observation-overview__slot" role="listitem">Measurement/quote (optional)</span>
-            </div>
-          </div>
-          <div class="observation-overview__actions">
-            <a class="observation-overview__learn-more" href="#observation-guide" data-open-observation-guide>
-              Learn more
-            </a>
-          </div>
-        </section>
 
         <section id="observation-editor" class="observation-editor" aria-label="Observation editor">
           <div class="observation-editor__card">
             <div class="observation-editor__grid">
               <div class="observation-editor__field">
                 <div class="observation-editor__label-row">
-                  <label class="observation-editor__label" for="observation-text">Observation statement</label>
+                  <label class="observation-editor__label" for="observation-text">What did you notice?</label>
                   <div
                     id="observation-guidelines-inline"
                     class="observation-editor__inline-detection"
@@ -3276,6 +3589,18 @@ button.site-nav__magnet {
                     aria-describedby="observation-guidelines-summary"
                   ></textarea>
                 </div>
+                <div class="observation-editor__slot-header">
+                  <span class="observation-editor__slot-heading">Quick check</span>
+                  <button
+                    class="observation-info-button observation-info-button--subtle"
+                    type="button"
+                    data-observation-info="slots"
+                    aria-haspopup="dialog"
+                    aria-label="How the observation checklist works"
+                  >
+                    i
+                  </button>
+                </div>
                 <div
                   id="observation-slot-row"
                   class="observation-editor__slot-row"
@@ -3286,7 +3611,6 @@ button.site-nav__magnet {
                     class="observation-editor__slot"
                     data-slot-id="time"
                     role="listitem"
-                    title="Anchor your sentence to a specific time, like ‘Yesterday at 3 p.m.’"
                   >
                     <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
                     <span class="observation-editor__slot-label">When?</span>
@@ -3296,7 +3620,6 @@ button.site-nav__magnet {
                     class="observation-editor__slot"
                     data-slot-id="context"
                     role="listitem"
-                    title="Include where it happened, like ‘In the classroom’ or ‘On the playground.’"
                   >
                     <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
                     <span class="observation-editor__slot-label">Where?</span>
@@ -3306,7 +3629,6 @@ button.site-nav__magnet {
                     class="observation-editor__slot"
                     data-slot-id="sensory"
                     role="listitem"
-                    title="Name what you saw or heard, like ‘I heard you say…’ or ‘I saw the door close.’"
                   >
                     <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
                     <span class="observation-editor__slot-label">What did you see/hear?</span>
@@ -3316,7 +3638,6 @@ button.site-nav__magnet {
                     class="observation-editor__slot"
                     data-slot-id="measure"
                     role="listitem"
-                    title="Add a count or quote for clarity, like ‘twice’ or ‘You said, “Let’s leave.”’"
                   >
                     <span class="observation-editor__slot-indicator" aria-hidden="true"></span>
                     <span class="observation-editor__slot-label">Measurement or quote (optional)</span>
@@ -3359,6 +3680,54 @@ button.site-nav__magnet {
                     <span id="observation-detection-text" class="observation-editor__status-text">Warming up the language detector…</span>
                   </div>
                 </div>
+                <div
+                  id="observation-detection-summary"
+                  class="observation-editor__match-summary"
+                  aria-live="polite"
+                >
+                  <div class="observation-editor__match-summary-main">
+                    <p id="observation-detection-note" class="observation-editor__match-summary-note">
+                      No matches yet.
+                    </p>
+                    <button
+                      class="observation-info-button observation-info-button--subtle"
+                      type="button"
+                      data-observation-info="matching"
+                      aria-haspopup="dialog"
+                      aria-label="How matching works"
+                    >
+                      i
+                    </button>
+                  </div>
+                  <div class="observation-editor__match-summary-chips" aria-label="Match counts">
+                    <span class="observation-editor__match-summary-row">
+                      <span
+                        id="observation-detection-exact"
+                        class="observation-editor__match-summary-value"
+                      >
+                        0 exact
+                      </span>
+                    </span>
+                    <span class="observation-editor__match-summary-row">
+                      <span
+                        id="observation-detection-near"
+                        class="observation-editor__match-summary-value"
+                      >
+                        0 nearby
+                      </span>
+                    </span>
+                  </div>
+                  <p
+                    id="observation-detection-coverage"
+                    class="observation-editor__match-summary-coverage"
+                    hidden
+                  ></p>
+                  <p
+                    id="observation-detection-feelings"
+                    class="observation-editor__match-summary-coverage"
+                    hidden
+                  ></p>
+                </div>
                 <ul id="observation-issues" class="observation-editor__issues" hidden aria-live="polite"></ul>
                 <section id="observation-suggestions" class="observation-suggestions" aria-live="polite">
                   <header class="observation-suggestions__header">
@@ -3366,17 +3735,22 @@ button.site-nav__magnet {
                       <h2 class="observation-suggestions__title">Possible feelings &amp; needs to explore</h2>
                       <p id="observation-preview" class="observation-suggestions__preview"></p>
                     </div>
-                    <button
-                      id="observation-submit"
-                      class="support-button observation-suggestions__action"
-                      type="button"
-                      data-action="submit"
-                      disabled
-                    >
-                      Load possible matches
-                    </button>
+                    <div class="observation-suggestions__action-row">
+                      <button
+                        id="observation-submit"
+                        class="support-button observation-suggestions__action"
+                        type="button"
+                        data-action="submit"
+                        aria-label="Load possible feelings and needs matches"
+                        disabled
+                      >
+                        Load matches
+                      </button>
+                      <button id="observation-clear" class="support-button support-button--ghost observation-suggestions__clear" type="button">
+                        Clear
+                      </button>
+                    </div>
                   </header>
-                  <p id="suggested-why" class="observation-suggestions__why"></p>
                   <div class="observation-suggestions__panels">
                     <div class="observation-suggestions__needs">
                       <div
@@ -3438,6 +3812,10 @@ button.site-nav__magnet {
                       </section>
                     </div>
                   </div>
+                  <details class="observation-suggestions__why-details">
+                    <summary class="observation-suggestions__why-toggle">Why these matches?</summary>
+                    <p id="suggested-why" class="observation-suggestions__why"></p>
+                  </details>
                   <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
                     <p class="observation-suggestions__fallback-text">
                       We didn’t find a direct match yet. Want to review the closest option?
@@ -3450,9 +3828,6 @@ button.site-nav__magnet {
                     <p class="observation-suggestions__fallback-text">Looking for the closest match…</p>
                   </div>
                   <div class="observation-suggestions__actions">
-                    <button id="observation-clear" class="support-button observation-suggestions__clear" type="button">
-                      Clear
-                    </button>
                     <p class="observation-suggestions__links">
                       <a href="../feelings/">Browse all feelings</a>
                       <span aria-hidden="true">•</span>
@@ -3487,45 +3862,6 @@ button.site-nav__magnet {
               </aside>
             </div>
             <footer class="observation-editor__footer">
-              <div class="observation-editor__actions">
-                <div
-                  id="observation-detection-summary"
-                  class="observation-editor__match-summary"
-                  aria-live="polite"
-                >
-                  <div class="observation-editor__match-summary-row">
-                    <span class="observation-editor__match-summary-label">Exact matches ready</span>
-                    <span
-                      id="observation-detection-exact"
-                      class="observation-editor__match-summary-value"
-                    >
-                      0/1
-                    </span>
-                  </div>
-                  <div class="observation-editor__match-summary-row">
-                    <span class="observation-editor__match-summary-label">Nearest needs queued</span>
-                    <span
-                      id="observation-detection-near"
-                      class="observation-editor__match-summary-value"
-                    >
-                      0/4
-                    </span>
-                  </div>
-                  <p id="observation-detection-note" class="observation-editor__match-summary-note">
-                    We’ll scan for cues as you type. Load possible matches to open exact matches and nearby needs with aligned feelings.
-                  </p>
-                  <p
-                    id="observation-detection-coverage"
-                    class="observation-editor__match-summary-coverage"
-                    hidden
-                  ></p>
-                  <p
-                    id="observation-detection-feelings"
-                    class="observation-editor__match-summary-coverage"
-                    hidden
-                  ></p>
-                </div>
-              </div>
               <div class="observation-editor__status">
                 <div
                   id="observation-validity-container"
@@ -3534,7 +3870,7 @@ button.site-nav__magnet {
                   aria-live="polite"
                 >
                   <span id="observation-validity-label" class="observation-editor__status-text">
-                    No matches yet.
+                    Ready for matches.
                   </span>
                 </div>
                 <button
@@ -3547,31 +3883,117 @@ button.site-nav__magnet {
                   Convert into journal entry
                 </button>
               </div>
-              <div class="observation-editor__next-prompts">
-                <span class="observation-editor__next-label">Keep going:</span>
-                <div class="observation-editor__next-actions">
-                  <a
-                    id="observation-next-feelings"
-                    class="observation-editor__next-link"
-                    href="../feelings/"
-                  >
-                    Feelings magnets
-                  </a>
-                  <a id="observation-next-needs" class="observation-editor__next-link" href="../needs/">
-                    Needs magnets
-                  </a>
-                </div>
-              </div>
             </footer>
           </div>
         </section>
+
+        <section id="observation-overview" class="observation-overview" aria-labelledby="observation-overview-title">
+          <details class="observation-overview__details">
+            <summary class="observation-overview__summary">
+              <span class="observation-overview__summary-text">
+                <span id="observation-overview-title" class="observation-overview__title">Why try this?</span>
+                <span class="observation-overview__subtitle">Optional context</span>
+              </span>
+              <span class="observation-overview__summary-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="observation-overview__body">
+              <p class="observation-overview__why">
+                Using concrete, time-and-place descriptions of what you saw or heard can be cognitively easier to process than more abstract label terms
+                <a
+                  class="observation-overview__citation"
+                  href="https://behavioralandbrainfunctions.biomedcentral.com/articles/10.1186/1744-9081-10-34"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [2].
+                </a>
+                Putting what you notice into words is also linked with lower emotional activation and distress
+                <a
+                  class="observation-overview__citation"
+                  href="https://sanlab.psych.ucla.edu/wp-content/uploads/sites/31/2015/05/Lieberman_AL-2007.pdf"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [4].
+                </a>
+                One study found that subjects practicing the use of concrete language led to reductions in depressive symptoms and rumination
+                <a
+                  class="observation-overview__citation"
+                  href="https://doi.org/10.1037/a0013642"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [19].
+                </a>
+                Because inner speech develops from internalized conversations with others, the language habits you practice here are likely to influence both how you speak to others <strong>and</strong> how you speak to yourself
+                <a
+                  class="observation-overview__citation"
+                  href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4538954/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  [20].
+                </a>
+              </p>
+              <div class="observation-overview__slots" role="list" aria-label="Observation ingredients">
+                <span class="observation-overview__slot" role="listitem">Time</span>
+                <span class="observation-overview__slot" role="listitem">Place</span>
+                <span class="observation-overview__slot" role="listitem">What you saw/heard</span>
+                <span class="observation-overview__slot" role="listitem">Measurement/quote (optional)</span>
+              </div>
+            </div>
+          </details>
+        </section>
+
+
+        <dialog
+          id="observation-info-dialog"
+          class="observation-info-dialog"
+          aria-labelledby="observation-info-title"
+          aria-describedby="observation-info-body"
+          aria-modal="true"
+        >
+          <div class="observation-info-dialog__sheet">
+            <header class="observation-info-dialog__header">
+              <h2 id="observation-info-title" class="observation-info-dialog__title" tabindex="-1">Observation help</h2>
+              <button
+                class="observation-info-dialog__close"
+                type="button"
+                data-observation-info-close
+                aria-label="Close observation help"
+              >
+                ×
+              </button>
+            </header>
+            <div id="observation-info-body" class="observation-info-dialog__body" tabindex="-1"></div>
+          </div>
+        </dialog>
+
+        <template id="observation-info-template-basics">
+          <p>Start with what a camera or microphone could capture: the time, place, and words or actions you saw/heard.</p>
+          <p>Save feelings, needs, motives, and interpretations for the next step.</p>
+        </template>
+        <template id="observation-info-template-slots">
+          <p>The checklist is a quick quality pass for your sentence.</p>
+          <ul>
+            <li><strong>When?</strong> Add a time or event anchor.</li>
+            <li><strong>Where?</strong> Name the setting.</li>
+            <li><strong>What did you see/hear?</strong> Use observable words or actions.</li>
+            <li><strong>Measurement or quote</strong> is optional, but counts and exact words can make a memory easier to revisit.</li>
+          </ul>
+        </template>
+        <template id="observation-info-template-matching">
+          <p>Matching scans your observation for concrete cues and then opens feelings and needs that may be worth exploring.</p>
+          <p>Exact matches come from recognized cue patterns. Nearby matches are fallback options when the wording is close but not exact.</p>
+          <p>Load possible matches to open exact matches and nearby needs with aligned feelings.</p>
+        </template>
 
         <details id="observation-guide" class="observation-guide">
           <!-- observation-guide:start -->
           <summary class="observation-guide__toggle">
             <span class="observation-guide__toggle-text">
-              <span class="observation-guide__eyebrow">Research-grounded (open-access links)</span>
-              <span class="observation-guide__toggle-title">Observation Guide: Low-Inference Description</span>
+              <span class="observation-guide__eyebrow">Optional</span>
+              <span class="observation-guide__toggle-title">Full guide &amp; research</span>
             </span>
             <span class="observation-guide__toggle-icon" aria-hidden="true">+</span>
           </summary>
