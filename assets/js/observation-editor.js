@@ -84,6 +84,7 @@ const OBSERVATION_EXAMPLE_TEXT =
 
 document.addEventListener('DOMContentLoaded', () => {
   bind();
+  initializeObservationInfoDialog();
   renderPanels();
   renderValidityStatus();
   renderDetectionStatus();
@@ -2151,95 +2152,45 @@ function renderDetectionSummary() {
   }
 
   if (exactValue) {
-    exactValue.textContent = `${exactCount}/${matchLimit}`;
+    exactValue.textContent = `${exactCount} exact`;
   }
 
   if (nearValue) {
-    const denominator = nearLimit > 0 ? nearLimit : Math.max(nearLimit, nearCount, 0);
-    nearValue.textContent = `${nearCount}/${denominator}`;
+    nearValue.textContent = `${nearCount} nearby`;
   }
 
   summary.setAttribute('data-state', flagged ? 'flagged' : status);
 
   if (note) {
-    const limitMessage = nearLimit
-      ? `Load possible matches to review up to ${nearLimit} nearby needs with aligned feelings.`
-      : '';
-    let message = '';
+    let message = 'No matches yet.';
     switch (status) {
       case 'loading':
-        message = 'Warming up the detector…';
+        message = 'Scanning…';
         break;
       case 'idle':
-        message = limitMessage
-          ? `We’ll scan for cues as you type. ${limitMessage}`
-          : 'We’ll scan for cues as you type.';
+        message = 'Ready when you are.';
         break;
       case 'short':
-        message = limitMessage
-          ? `Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
-          : `Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
+        message = `Add ${DETECTION_MIN_WORDS}+ words to match.`;
         break;
       case 'match':
-        message = limitMessage
-          ? `Exact matches are ready when you are. ${limitMessage}`
-          : 'Exact matches are ready when you are. Load possible matches to explore nearby needs.';
+        message = 'Matches ready.';
         break;
       case 'near':
-        message = limitMessage || 'Nearest matches are queued when you need them.';
+        message = 'Nearby matches ready.';
         break;
       case 'none':
-        message = limitMessage
-          ? `We didn’t spot an exact match yet. ${limitMessage}`
-          : 'We didn’t spot an exact match yet. Load possible matches to explore nearby needs.';
+        message = 'Try loading possible matches.';
         break;
       default:
-        message = limitMessage || 'We’re preparing the detector…';
+        message = 'Scanning…';
         break;
     }
 
     if (flagged) {
-      switch (status) {
-        case 'idle':
-          message = limitMessage
-            ? `Flagged language detected. We’ll scan for cues as you type. ${limitMessage}`
-            : 'Flagged language detected. We’ll scan for cues as you type.';
-          break;
-        case 'short':
-          message = limitMessage
-            ? `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching. ${limitMessage}`
-            : `Flagged language detected. Add at least ${DETECTION_MIN_WORDS} words so we can start matching.`;
-          break;
-        case 'match':
-          message = limitMessage
-            ? `Flagged language detected. Exact matches are ready when you are. ${limitMessage}`
-            : 'Flagged language detected. Exact matches are ready when you are.';
-          break;
-        case 'near':
-          message = limitMessage
-            ? `Flagged language detected. Nearest matches are queued when you need them. ${limitMessage}`
-            : 'Flagged language detected. Nearest matches are queued when you need them.';
-          break;
-        case 'none':
-          message = limitMessage
-            ? `Flagged language detected. We didn’t spot an exact match yet. ${limitMessage}`
-            : 'Flagged language detected. We didn’t spot an exact match yet.';
-          break;
-        default:
-          message = limitMessage
-            ? `Flagged language detected. ${limitMessage}`
-            : 'Flagged language detected.';
-          break;
-      }
-    }
-
-    if (status === 'match' && Number(state.detectionMatches) > matchLimit) {
-      message = `${message} We surface the strongest exact match first.`;
-    } else if (
-      matchLimit === 1 &&
-      (status === 'match' || status === 'near' || status === 'none')
-    ) {
-      message = `${message} We surface the strongest exact match first.`;
+      message = status === 'short'
+        ? `Flagged language noted. Add ${DETECTION_MIN_WORDS}+ words.`
+        : `Flagged language noted. ${message}`;
     }
 
     note.textContent = message.trim();
@@ -3198,6 +3149,93 @@ function bindGuideNavigation() {
     openGuideSectionFromHash();
     window.addEventListener('hashchange', openGuideSectionFromHash);
   }
+}
+
+
+function initializeObservationInfoDialog() {
+  const dialog = document.getElementById('observation-info-dialog');
+  const title = document.getElementById('observation-info-title');
+  const body = document.getElementById('observation-info-body');
+  const closeButton = dialog?.querySelector('[data-observation-info-close]');
+  const triggers = document.querySelectorAll('[data-observation-info]');
+
+  if (!dialog || !title || !body || !triggers.length) {
+    return;
+  }
+
+  const topics = {
+    basics: 'Observation basics',
+    slots: 'Observation checklist',
+    matching: 'How matching works',
+  };
+  let returnFocus = null;
+
+  const closeDialog = () => {
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close();
+    } else {
+      dialog.removeAttribute('open');
+      dialog.setAttribute('hidden', 'hidden');
+      if (returnFocus && typeof returnFocus.focus === 'function') {
+        returnFocus.focus({ preventScroll: true });
+      }
+    }
+  };
+
+  const openTopic = (topic, trigger) => {
+    const template = document.getElementById(`observation-info-template-${topic}`);
+    if (!template) {
+      return;
+    }
+
+    returnFocus = trigger || null;
+    title.textContent = topics[topic] || 'Observation help';
+    body.innerHTML = '';
+    body.append(template.content.cloneNode(true));
+
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    } else {
+      dialog.removeAttribute('hidden');
+      dialog.setAttribute('open', 'open');
+    }
+
+    const focusTarget = closeButton || title || body;
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      window.requestAnimationFrame(() => focusTarget.focus({ preventScroll: true }));
+    }
+  };
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', event => {
+      event.preventDefault();
+      openTopic(trigger.getAttribute('data-observation-info'), trigger);
+    });
+  });
+
+  if (closeButton) {
+    closeButton.addEventListener('click', closeDialog);
+  }
+
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog) {
+      closeDialog();
+    }
+  });
+
+  dialog.addEventListener('cancel', event => {
+    event.preventDefault();
+    closeDialog();
+  });
+
+  dialog.addEventListener('close', () => {
+    if (returnFocus && typeof returnFocus.focus === 'function') {
+      returnFocus.focus({ preventScroll: true });
+    }
+    returnFocus = null;
+  });
 }
 
 function initializeGuideTabs() {
