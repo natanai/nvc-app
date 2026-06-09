@@ -43,6 +43,8 @@ const state = {
 
 let guideNavigationBound = false;
 let highlightPopoverBound = false;
+let observationInfoBound = false;
+let observationInfoLastTrigger = null;
 let analysisTimer = 0;
 let analysisIdleHandle = null;
 let highlightMessageTimer = 0;
@@ -242,6 +244,7 @@ function bind() {
   toggleObservationExample(false);
 
   bindGuideOpener();
+  bindObservationInfo();
   updateNextNavigationLinks();
 
   bindGuideNavigation();
@@ -260,6 +263,108 @@ function bind() {
   }
 
   syncObservationHighlightScroll();
+}
+
+function bindObservationInfo() {
+  if (typeof document === 'undefined' || observationInfoBound) {
+    return;
+  }
+
+  const dialog = document.getElementById('observation-info-dialog');
+  const title = document.getElementById('observation-info-title');
+  const body = document.getElementById('observation-info-body');
+  if (!dialog || !title || !body) {
+    return;
+  }
+
+  observationInfoBound = true;
+
+  const buttons = Array.from(document.querySelectorAll('[data-observation-info-topic]'));
+  const closeButton = dialog.querySelector('[data-observation-info-close]');
+
+  const resetExpanded = () => {
+    buttons.forEach(button => {
+      button.setAttribute('aria-expanded', 'false');
+    });
+  };
+
+  const closeDialog = () => {
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close();
+    } else {
+      dialog.removeAttribute('open');
+      dialog.dispatchEvent(new Event('close'));
+    }
+  };
+
+  const openDialog = trigger => {
+    if (!trigger) {
+      return;
+    }
+
+    const topic = trigger.getAttribute('data-observation-info-topic');
+    const template = topic
+      ? Array.from(document.querySelectorAll('template[data-observation-info-template]')).find(candidate => (
+        candidate.getAttribute('data-observation-info-template') === topic
+      ))
+      : null;
+    if (!template) {
+      return;
+    }
+
+    observationInfoLastTrigger = trigger;
+    title.textContent = template.getAttribute('data-observation-info-title') || 'Observation help';
+    body.replaceChildren(template.content.cloneNode(true));
+    resetExpanded();
+    trigger.setAttribute('aria-expanded', 'true');
+
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    } else {
+      dialog.setAttribute('open', 'open');
+    }
+
+    const focusTarget = closeButton || body;
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      requestAnimationFrame(() => focusTarget.focus());
+    }
+  };
+
+  buttons.forEach(button => {
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      openDialog(button);
+    });
+  });
+
+  if (closeButton) {
+    closeButton.addEventListener('click', () => closeDialog());
+  }
+
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog) {
+      closeDialog();
+    }
+  });
+
+  dialog.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && dialog.open) {
+      event.preventDefault();
+      closeDialog();
+    }
+  });
+
+  dialog.addEventListener('close', () => {
+    resetExpanded();
+    body.replaceChildren();
+    const trigger = observationInfoLastTrigger;
+    observationInfoLastTrigger = null;
+    if (trigger && typeof trigger.focus === 'function' && document.contains(trigger)) {
+      requestAnimationFrame(() => trigger.focus());
+    }
+  });
 }
 
 function updateObservationText(value, options = {}) {
