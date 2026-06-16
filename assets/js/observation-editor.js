@@ -2303,7 +2303,7 @@ function renderDetectionSummary() {
         message = 'Scanning…';
         break;
       case 'idle':
-        message = 'Ready when you are.';
+        message = 'Type your observation in the text box.';
         break;
       case 'short':
         message = `Add ${DETECTION_MIN_WORDS}+ words to match.`;
