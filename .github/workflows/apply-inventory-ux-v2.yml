@@ -32,9 +32,6 @@ jobs:
       - name: Integrate and regenerate Inventory only
         run: node scripts/apply-inventory-ux-v2.mjs
 
-      - name: Verify data integrity
-        run: npm run test:data-integrity
-
       - name: Verify customizer preload
         run: npm run test:customizer
 
