@@ -1,0 +1,472 @@
+/* Body Cues explorer — page-specific UX refinements.
+   Loaded by scripts/body-cues-tool.js so generated pages can remain unchanged. */
+
+.body-cues-page .body-cues-tool {
+  gap: clamp(1rem, 3vw, 1.5rem);
+}
+
+.body-cues-page .body-cues-tool__summary-panel,
+.body-cues-page .body-cues-tool__slider-panel {
+  min-width: 0;
+  border: 3px solid var(--outline);
+  border-radius: var(--radius-2xl);
+  background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+}
+
+.body-cues-page .body-cues-tool__summary-panel {
+  gap: 0.8rem;
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+.body-cues-page .body-cues-tool__slider-panel {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+.body-cues-page .body-cues-tool__magnet-panel {
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.body-cues-page .body-cues-tool__magnet-header,
+.body-cues-page .body-cues-tool__slider-header {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.body-cues-page .body-cues-tool__magnet-header h2,
+.body-cues-page .body-cues-tool__slider-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1rem + 1vw, 1.35rem);
+  line-height: 1.15;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.body-cues-page .body-cues-tool__magnet-subtitle,
+.body-cues-page .body-cues-tool__instructions,
+.body-cues-page .body-cues-tool__active-count {
+  margin: 0;
+}
+
+.body-cues-page .body-cues-tool__magnet-subtitle,
+.body-cues-page .body-cues-tool__instructions {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.body-cues-page .body-cues-tool__magnet-subtitle {
+  min-height: 1.35em;
+}
+
+.body-cues-page .body-cues-tool__active-count {
+  width: max-content;
+  max-width: 100%;
+  padding: 0.3rem 0.65rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 48%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--mint) 45%, #fff 55%);
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+/* Reserve enough vertical room for the collapsed result set. The page therefore
+   does not jump when a slider first creates or reorders matches. */
+.body-cues-page .body-cues-tool__magnet-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.5rem;
+  min-height: 15.5rem;
+  padding: 0.15rem 0;
+}
+
+.body-cues-page .body-cues-tool__magnet-container[data-empty='true'] {
+  align-content: center;
+}
+
+.body-cues-page .body-cues-tool__empty {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.body-cues-page .body-cues-tool__magnet {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.65rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.58rem 0.7rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 68%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, #ffffff 78%, var(--sky) 22%);
+  color: var(--ink);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+  text-align: left;
+  text-decoration: none;
+  transform: none;
+  transition: background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.body-cues-page .body-cues-tool__magnet:hover,
+.body-cues-page .body-cues-tool__magnet:focus-visible {
+  transform: none;
+  background: color-mix(in srgb, #ffffff 62%, var(--sky) 38%);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 20%, transparent);
+}
+
+.body-cues-page .body-cues-tool__magnet:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 2px;
+}
+
+.body-cues-page .body-cues-tool__magnet.is-top-match {
+  border-color: var(--outline);
+  background: color-mix(in srgb, #ffffff 58%, var(--mint) 42%);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+}
+
+.body-cues-page .body-cues-tool__magnet-text {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.body-cues-page .body-cues-tool__magnet-percent {
+  min-width: 2.9rem;
+  padding: 0.16rem 0.4rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--lavender) 68%, #fff 32%);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.body-cues-page .body-cues-tool__result-toggle {
+  justify-self: start;
+  min-height: 40px;
+  padding: 0.42rem 0.72rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 58%, transparent);
+  border-radius: var(--radius-pill);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.body-cues-page .body-cues-tool__result-toggle:hover,
+.body-cues-page .body-cues-tool__result-toggle:focus-visible {
+  background: color-mix(in srgb, #fff 72%, var(--gold) 28%);
+  transform: none;
+  box-shadow: none;
+}
+
+.body-cues-page .body-cues-tool__actions {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+}
+
+.body-cues-page .body-cues-tool__reset {
+  width: auto;
+  min-height: 42px;
+  padding: 0.48rem 0.78rem;
+  border-width: 2px;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+}
+
+.body-cues-page .body-cues-tool__controls-shell {
+  min-width: 0;
+}
+
+.body-cues-page .body-cues-tool__controls {
+  gap: 1rem;
+  padding: 0;
+  scrollbar-gutter: auto;
+}
+
+.body-cues-page .body-cues-tool__region {
+  overflow: hidden;
+  border: 2px solid color-mix(in srgb, var(--outline) 62%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, #ffffff 86%, var(--lavender) 14%);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+}
+
+.body-cues-page .body-cues-tool__region-header {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem 0.9rem 0.8rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--outline) 25%, transparent);
+  background: color-mix(in srgb, var(--lavender) 58%, #fff 42%);
+}
+
+.body-cues-page .body-cues-tool__region-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.body-cues-page .body-cues-tool__region-prompt {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.body-cues-page .body-cues-tool__options {
+  display: grid;
+  gap: 0;
+}
+
+.body-cues-page .body-cues-tool__option {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0.9rem;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+  border-radius: 0;
+  background: color-mix(in srgb, #fff 94%, var(--sky) 6%);
+  box-shadow: none;
+  transition: background 120ms ease;
+}
+
+.body-cues-page .body-cues-tool__option:last-child {
+  border-bottom: 0;
+}
+
+.body-cues-page .body-cues-tool__option[data-active] {
+  background: color-mix(in srgb, #fff 82%, var(--mint) 18%);
+}
+
+.body-cues-page .body-cues-tool__option-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.65rem;
+}
+
+.body-cues-page .body-cues-tool__option-title {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.body-cues-page .body-cues-tool__option-value {
+  align-self: start;
+  min-width: 3.5rem;
+  padding: 0.18rem 0.45rem;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 42%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #fff 74%, var(--lavender) 26%);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.body-cues-page .body-cues-tool__option[data-active] .body-cues-tool__option-value {
+  border-color: color-mix(in srgb, var(--outline) 60%, transparent);
+  background: color-mix(in srgb, var(--mint) 52%, #fff 48%);
+}
+
+.body-cues-page .body-cues-tool__option-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+.body-cues-page .body-cues-tool__slider-wrapper {
+  display: grid;
+  gap: 0.32rem;
+  padding-top: 0.15rem;
+}
+
+.body-cues-page .body-cues-tool__slider {
+  --cue-progress: 0%;
+  width: 100%;
+  min-height: 34px;
+  margin: 0;
+  background: transparent;
+  accent-color: var(--plum);
+  touch-action: pan-y;
+}
+
+.body-cues-page .body-cues-tool__slider::-webkit-slider-runnable-track {
+  height: 0.72rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 52%, transparent);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--mint) 68%, #fff 32%) 0 var(--cue-progress),
+    color-mix(in srgb, #fff 78%, var(--lavender) 22%) var(--cue-progress) 100%
+  );
+}
+
+.body-cues-page .body-cues-tool__slider::-webkit-slider-thumb {
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-top: -0.52rem;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--outline);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--outline) 28%, transparent);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.body-cues-page .body-cues-tool__slider::-moz-range-track {
+  height: 0.72rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 52%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #fff 78%, var(--lavender) 22%);
+}
+
+.body-cues-page .body-cues-tool__slider::-moz-range-progress {
+  height: 0.72rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--mint) 68%, #fff 32%);
+}
+
+.body-cues-page .body-cues-tool__slider::-moz-range-thumb {
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--outline);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--outline) 28%, transparent);
+}
+
+.body-cues-page .body-cues-tool__slider:focus-visible {
+  outline: 3px dashed var(--outline);
+  outline-offset: 4px;
+}
+
+.body-cues-page .body-cues-tool__slider-scale {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.2rem;
+  color: color-mix(in srgb, var(--ink-soft) 82%, #fff 18%);
+  font-size: 0.64rem;
+  line-height: 1.2;
+}
+
+.body-cues-page .body-cues-tool__slider-scale span:nth-child(1) {
+  text-align: left;
+}
+
+.body-cues-page .body-cues-tool__slider-scale span:nth-child(2),
+.body-cues-page .body-cues-tool__slider-scale span:nth-child(3) {
+  text-align: center;
+}
+
+.body-cues-page .body-cues-tool__slider-scale span:nth-child(4) {
+  text-align: right;
+}
+
+/* On phones and tablets, the document itself scrolls. Removing the nested
+   scroll container makes it obvious what moves and prevents scroll trapping. */
+@media (max-width: 899px) {
+  .body-cues-page .body-cues-tool__controls {
+    max-height: none !important;
+    overflow: visible !important;
+    overscroll-behavior: auto !important;
+    padding-inline-end: 0 !important;
+  }
+
+  .body-cues-page .body-cues-tool__scroll-fade,
+  .body-cues-page .body-cues-tool__scroll-more {
+    display: none !important;
+  }
+
+  .body-cues-page .body-cues-tool__summary-panel,
+  .body-cues-page .body-cues-tool__slider-panel {
+    border-width: 2px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 14%, transparent);
+  }
+}
+
+/* Desktop keeps the useful two-pane explorer, but clearly marks the right pane
+   as the scrollable cue list and keeps the result summary in view. */
+@media (min-width: 900px) {
+  .body-cues-page .body-cues-tool {
+    grid-template-columns: minmax(17rem, 0.82fr) minmax(0, 1.18fr);
+    align-items: start;
+  }
+
+  .body-cues-page .body-cues-tool__summary-panel {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .body-cues-page .body-cues-tool__slider-panel {
+    min-height: 0;
+  }
+
+  .body-cues-page .body-cues-tool__controls {
+    max-height: min(72vh, 48rem);
+    max-height: min(72dvh, 48rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.1rem 0.45rem 0.5rem 0.1rem;
+    scrollbar-gutter: stable;
+  }
+
+  .body-cues-page .body-cues-tool__slider-header {
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+  }
+}
+
+@media (max-width: 420px) {
+  .body-cues-page .body-cues-tool__magnet-container {
+    min-height: 15rem;
+  }
+
+  .body-cues-page .body-cues-tool__option {
+    padding: 0.82rem;
+  }
+
+  .body-cues-page .body-cues-tool__slider-scale {
+    font-size: 0.58rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body-cues-page .body-cues-tool__magnet,
+  .body-cues-page .body-cues-tool__option {
+    transition: none;
+  }
+}
