@@ -13,11 +13,11 @@ function assert(condition, message) {
 }
 
 assert(
-  contrast.includes('/\\/inventory\\/(?:index\\.html)?$/i'),
+  contrast.includes("if (!/\\/inventory\\/(?:index\\.html)?$/i.test(pathname))"),
   'Pre-paint bootstrap must target the Inventory page.'
 );
 assert(
-  contrast.includes("document.write("),
+  contrast.includes('document.write('),
   'Inventory stylesheet must be inserted synchronously during head parsing.'
 );
 assert(
