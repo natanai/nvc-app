@@ -12,6 +12,10 @@ on:
         required: false
         default: backend
 
+concurrency:
+  group: site-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   site-quality:
     runs-on: ubuntu-latest
@@ -30,10 +34,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site
-        run: npm run build
-        env:
-          LINK_CHECK_REPORT_ONLY: "1"
+      - name: Verify evidence metadata
+        run: npm run lint:evidence
+
+      - name: Verify generated data can build
+        run: npm run build:data
 
       - name: Verify data integrity
         run: npm run test:data-integrity
