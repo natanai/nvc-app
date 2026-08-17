@@ -41,6 +41,9 @@ jobs:
       - name: Verify customizer preload
         run: npm run test:customizer
 
+      - name: Verify Inventory pre-paint styling
+        run: node tests/inventory-prepaint-style.test.mjs
+
       - name: Run flicker and jitter checker
         run: npm run test:flicker-jitter
 
