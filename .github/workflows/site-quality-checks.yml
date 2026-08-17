@@ -2,15 +2,15 @@ name: Site Quality Checks
 
 on:
   push:
-    branches: [main, work]
+    branches: [backend, ux-audit, main, work]
   pull_request:
-    branches: [main, work]
+    branches: [backend, main, work]
   workflow_dispatch:
     inputs:
       target_branch:
-        description: 'Branch to run checks against (defaults to main)'
+        description: 'Branch to run checks against (defaults to backend)'
         required: false
-        default: main
+        default: backend
 
 jobs:
   site-quality:
