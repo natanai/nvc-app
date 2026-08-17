@@ -1,0 +1,49 @@
+name: Apply Inventory UX First Pass
+
+on:
+  push:
+    branches: [ux-audit]
+    paths:
+      - 'scripts/apply-inventory-ux-first-pass.mjs'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-inventory-ux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply Inventory UX source changes
+        run: node scripts/apply-inventory-ux-first-pass.mjs
+
+      - name: Rebuild Inventory pages only
+        run: npm run build:pages -- --scope inventory
+
+      - name: Verify data integrity
+        run: npm run test:data-integrity
+
+      - name: Commit generated Inventory preview
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/build-pages.mjs styles/inventory.css inventory/
+          if git diff --cached --quiet; then
+            echo "No Inventory UX changes to commit."
+            exit 0
+          fi
+          git commit -m "Inventory UX first pass"
+          git push origin HEAD:ux-audit
