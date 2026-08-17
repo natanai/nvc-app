@@ -6,19 +6,6 @@ import {
   ensureBackendSession,
 } from './bluesky-oauth.js?v=2024-07-11';
 
-function loadInventoryPageStyles() {
-  if (typeof document === 'undefined' || document.querySelector('link[data-inventory-page-styles]')) {
-    return;
-  }
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = new URL('../styles/inventory.css', import.meta.url).href;
-  link.dataset.inventoryPageStyles = 'true';
-  document.head.appendChild(link);
-}
-
-loadInventoryPageStyles();
-
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
 
 function consumeLoginIntent() {
