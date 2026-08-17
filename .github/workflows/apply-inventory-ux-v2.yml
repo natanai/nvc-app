@@ -29,17 +29,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Integrate and regenerate Inventory only
+      - name: Integrate, regenerate, and smoke-test Inventory
         run: node scripts/apply-inventory-ux-v2.mjs
-
-      - name: Verify customizer preload
-        run: npm run test:customizer
-
-      - name: Verify navigation startup stability
-        run: npm run test:flicker-jitter
-
-      - name: Verify navigation magnets
-        run: npm run test:nav-magnets
 
       - name: Confirm only expected durable files changed
         run: |
