@@ -43,7 +43,7 @@ jobs:
           fi
 
       - name: Remove one-shot integration machinery
-        run: git rm .github/workflows/apply-journal-ux-v1.yml scripts/apply-journal-ux-v1.mjs scripts/apply-journal-ux-v1.trigger
+        run: git rm .github/workflows/apply-journal-ux-v1.yml scripts/apply-journal-ux-v1.mjs
 
       - name: Commit durable Journal UX changes
         run: |
