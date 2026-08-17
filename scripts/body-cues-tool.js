@@ -8,6 +8,9 @@ import {
 const SLIDER_MIN = 0;
 const SLIDER_MAX = 100;
 const MAX_MAGNETS = 18;
+const COLLAPSED_MAGNETS = 5;
+const MATCH_UPDATE_DELAY = 140;
+const ENHANCEMENT_STYLESHEET_ID = 'body-cues-enhancements';
 
 const sliderStates = new Map();
 let reverseIndex = null;
@@ -20,10 +23,27 @@ const state = {
   magnetContainer: null,
   emptyState: null,
   headingLiveRegion: null,
+  resultToggle: null,
+  activeCueCount: null,
+  lastResults: [],
+  resultsExpanded: false,
+  matchUpdateTimer: null,
+  magnetNodes: new Map(),
 };
 
 function getBasePath() {
   return document.body?.dataset?.basePath || '';
+}
+
+function loadEnhancementStyles() {
+  if (document.getElementById(ENHANCEMENT_STYLESHEET_ID)) {
+    return;
+  }
+  const link = document.createElement('link');
+  link.id = ENHANCEMENT_STYLESHEET_ID;
+  link.rel = 'stylesheet';
+  link.href = `${getBasePath()}styles/body-cues.css`;
+  document.head.appendChild(link);
 }
 
 function getCanonicalSlugMap() {
@@ -99,15 +119,45 @@ function createEl(tagName, className, text) {
   return element;
 }
 
+function updateActiveCueCount() {
+  if (!state.activeCueCount) {
+    return;
+  }
+  const count = state.values.size;
+  state.activeCueCount.textContent = `${count} ${count === 1 ? 'cue' : 'cues'} selected`;
+}
+
 function updateSliderLabel(optionId, value) {
   const sliderState = sliderStates.get(optionId);
   if (!sliderState) {
     return;
   }
-  sliderState.label.textContent = describeSliderValue(value);
+  const description = describeSliderValue(value);
+  sliderState.label.textContent = description;
+  sliderState.slider.setAttribute('aria-valuetext', description);
+  sliderState.slider.style.setProperty('--cue-progress', `${value}%`);
+  sliderState.container.toggleAttribute('data-active', value > 0);
 }
 
-function onSliderInput(optionId, rawValue) {
+function flushMatchUpdate() {
+  if (state.matchUpdateTimer !== null) {
+    window.clearTimeout(state.matchUpdateTimer);
+    state.matchUpdateTimer = null;
+  }
+  updateMatches();
+}
+
+function scheduleMatchUpdate() {
+  if (state.matchUpdateTimer !== null) {
+    window.clearTimeout(state.matchUpdateTimer);
+  }
+  state.matchUpdateTimer = window.setTimeout(() => {
+    state.matchUpdateTimer = null;
+    updateMatches();
+  }, MATCH_UPDATE_DELAY);
+}
+
+function onSliderInput(optionId, rawValue, { commit = false } = {}) {
   const numeric = Math.max(SLIDER_MIN, Math.min(SLIDER_MAX, Number(rawValue)));
   if (Number.isNaN(numeric)) {
     return;
@@ -118,7 +168,12 @@ function onSliderInput(optionId, rawValue) {
     state.values.set(optionId, numeric / SLIDER_MAX);
   }
   updateSliderLabel(optionId, numeric);
-  updateMatches();
+  updateActiveCueCount();
+  if (commit) {
+    flushMatchUpdate();
+  } else {
+    scheduleMatchUpdate();
+  }
 }
 
 function createSlider(option) {
@@ -143,20 +198,26 @@ function createSlider(option) {
   slider.max = String(SLIDER_MAX);
   slider.step = '5';
   slider.value = String(SLIDER_MIN);
+  slider.style.setProperty('--cue-progress', '0%');
   slider.setAttribute('aria-label', `${option.title} intensity`);
+  slider.setAttribute('aria-valuetext', 'Off');
   slider.addEventListener('input', (event) => {
     onSliderInput(option.id, event?.target?.value || '0');
+  });
+  slider.addEventListener('change', (event) => {
+    onSliderInput(option.id, event?.target?.value || '0', { commit: true });
   });
   inputWrapper.appendChild(slider);
 
   const scale = createEl('div', 'body-cues-tool__slider-scale');
-  scale.appendChild(createEl('span', null, 'Off'));
-  scale.appendChild(createEl('span', null, 'Strong'));
+  ['Off', 'Hint', 'Noticeable', 'Strong'].forEach((label) => {
+    scale.appendChild(createEl('span', null, label));
+  });
   inputWrapper.appendChild(scale);
 
   container.appendChild(inputWrapper);
 
-  sliderStates.set(option.id, { slider, label: valueLabel });
+  sliderStates.set(option.id, { slider, label: valueLabel, container });
 
   return container;
 }
@@ -208,63 +269,100 @@ function formatPercent(value) {
   return `${rounded}%`;
 }
 
+function createMagnetNode(result) {
+  const href = getFeelingHref(result.key);
+  const magnet = createEl(href ? 'a' : 'span', 'body-cues-tool__magnet');
+  magnet.dataset.feelingKey = result.key;
+
+  if (href) {
+    magnet.href = href;
+    magnet.title = `Open the ${result.label} page`;
+  } else {
+    magnet.classList.add('body-cues-tool__magnet--inactive');
+    magnet.setAttribute('aria-disabled', 'true');
+  }
+
+  const label = createEl('span', 'body-cues-tool__magnet-text');
+  const percent = createEl('span', 'body-cues-tool__magnet-percent');
+  magnet.appendChild(label);
+  magnet.appendChild(percent);
+  magnet._bodyCueLabel = label;
+  magnet._bodyCuePercent = percent;
+  return magnet;
+}
+
+function updateResultToggle(totalResults) {
+  if (!state.resultToggle) {
+    return;
+  }
+  const cappedTotal = Math.min(totalResults, MAX_MAGNETS);
+  const hiddenCount = Math.max(0, cappedTotal - COLLAPSED_MAGNETS);
+  state.resultToggle.hidden = hiddenCount === 0;
+  state.resultToggle.textContent = state.resultsExpanded
+    ? 'Show fewer matches'
+    : `Show ${hiddenCount} more ${hiddenCount === 1 ? 'match' : 'matches'}`;
+  state.resultToggle.setAttribute('aria-expanded', String(state.resultsExpanded));
+}
+
 function updateMagnets(results) {
   if (!state.magnetContainer) {
     return;
   }
+
+  state.lastResults = results;
   const instructions = state.emptyState;
-  Array.from(state.magnetContainer.children).forEach((child) => {
-    if (!instructions || child !== instructions) {
-      state.magnetContainer.removeChild(child);
-    }
-  });
 
   if (!results.length) {
-    state.magnetContainer.setAttribute('data-empty', 'true');
+    state.resultsExpanded = false;
+    state.magnetContainer.dataset.empty = 'true';
+    state.magnetContainer.dataset.expanded = 'false';
     if (instructions) {
       instructions.hidden = false;
     }
+    state.magnetNodes.forEach((node) => {
+      node.hidden = true;
+    });
+    updateResultToggle(0);
     return;
   }
 
-  state.magnetContainer.removeAttribute('data-empty');
+  state.magnetContainer.dataset.empty = 'false';
+  state.magnetContainer.dataset.expanded = String(state.resultsExpanded);
   if (instructions) {
     instructions.hidden = true;
   }
 
-  const fragment = document.createDocumentFragment();
+  const limit = state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS;
+  const visibleResults = results.slice(0, limit);
+  const visibleKeys = new Set(visibleResults.map((result) => result.key));
 
-  results.slice(0, MAX_MAGNETS).forEach((result) => {
-    const magnet = createEl('span', 'pill body-cues-tool__magnet');
-    const label = createEl(
-      'span',
-      'body-cues-tool__magnet-text',
-      `${result.label} · ${formatPercent(result.percent)}`,
-    );
-    magnet.appendChild(label);
-    const href = getFeelingHref(result.key);
-    if (href) {
-      magnet.setAttribute('data-href', href);
-      magnet.tabIndex = 0;
-      magnet.setAttribute('role', 'link');
-      magnet.title = `Open the ${result.label} page`;
-      magnet.addEventListener('click', () => {
-        window.location.assign(href);
-      });
-      magnet.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          window.location.assign(href);
-        }
-      });
-    } else {
-      magnet.classList.add('body-cues-tool__magnet--inactive');
-      magnet.setAttribute('aria-disabled', 'true');
-    }
-    fragment.appendChild(magnet);
+  state.magnetNodes.forEach((node, key) => {
+    node.hidden = !visibleKeys.has(key);
+    node.classList.remove('is-top-match');
   });
 
-  state.magnetContainer.appendChild(fragment);
+  visibleResults.forEach((result, index) => {
+    let magnet = state.magnetNodes.get(result.key);
+    if (!magnet) {
+      magnet = createMagnetNode(result);
+      state.magnetNodes.set(result.key, magnet);
+    }
+
+    magnet.hidden = false;
+    magnet.classList.toggle('is-top-match', index === 0);
+    magnet._bodyCueLabel.textContent = result.label;
+    magnet._bodyCuePercent.textContent = formatPercent(result.percent);
+    magnet.setAttribute(
+      'aria-label',
+      `${result.label}, ${formatPercent(result.percent)} of the current match weight${
+        getFeelingHref(result.key) ? '. Open feeling page.' : ''
+      }`,
+    );
+
+    state.magnetContainer.appendChild(magnet);
+  });
+
+  updateResultToggle(results.length);
 }
 
 function computeMatches() {
@@ -335,10 +433,13 @@ function updateMatches() {
   updateMagnets(matches);
   if (state.headingLiveRegion) {
     if (!matches.length) {
-      state.headingLiveRegion.textContent = '';
+      state.headingLiveRegion.textContent = 'Adjust a cue below to see possible feelings.';
     } else {
-      const top = matches[0];
-      state.headingLiveRegion.textContent = `Top match: ${top.label} at ${formatPercent(top.percent)}`;
+      const shown = Math.min(
+        state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS,
+        matches.length,
+      );
+      state.headingLiveRegion.textContent = `${shown} strongest ${shown === 1 ? 'match' : 'matches'} shown`;
     }
   }
 }
@@ -349,7 +450,71 @@ function resetAllSliders() {
     updateSliderLabel(optionId, SLIDER_MIN);
   });
   state.values.clear();
-  updateMatches();
+  state.resultsExpanded = false;
+  updateActiveCueCount();
+  flushMatchUpdate();
+}
+
+function setupResultToggle(root) {
+  const magnetPanel = root.querySelector('.body-cues-tool__magnet-panel');
+  if (!magnetPanel || !state.magnetContainer) {
+    return;
+  }
+
+  const toggle = createEl('button', 'body-cues-tool__result-toggle', 'Show more matches');
+  toggle.type = 'button';
+  toggle.hidden = true;
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.addEventListener('click', () => {
+    state.resultsExpanded = !state.resultsExpanded;
+    updateMagnets(state.lastResults);
+    if (state.headingLiveRegion && state.lastResults.length) {
+      const shown = Math.min(
+        state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS,
+        state.lastResults.length,
+      );
+      state.headingLiveRegion.textContent = `${shown} strongest ${shown === 1 ? 'match' : 'matches'} shown`;
+    }
+  });
+  magnetPanel.appendChild(toggle);
+  state.resultToggle = toggle;
+}
+
+function enhanceStructure(root) {
+  const matchHeading = root.querySelector('#body-cues-magnets-heading');
+  if (matchHeading) {
+    matchHeading.textContent = 'Possible feelings';
+  }
+
+  if (state.emptyState) {
+    state.emptyState.textContent =
+      'Start with one cue below. As you adjust its intensity, the strongest feeling matches will appear here.';
+  }
+
+  const sliderHeading = root.querySelector('#body-cues-sliders-heading');
+  if (sliderHeading) {
+    sliderHeading.classList.remove('visually-hidden');
+    sliderHeading.textContent = 'Body cues';
+  }
+
+  const sliderHeader = root.querySelector('.body-cues-tool__slider-header');
+  const oldHint = root.querySelector('.body-cues-tool__scroll-hint');
+  if (oldHint) {
+    oldHint.className = 'body-cues-tool__instructions';
+    oldHint.replaceChildren(
+      document.createTextNode('Move a slider only when a cue fits. Leave everything else off.'),
+    );
+  }
+
+  if (sliderHeader) {
+    state.activeCueCount = createEl('p', 'body-cues-tool__active-count', '0 cues selected');
+    sliderHeader.appendChild(state.activeCueCount);
+  }
+
+  const resetButton = root.querySelector('[data-body-cues-reset]');
+  if (resetButton) {
+    resetButton.textContent = 'Reset all cues';
+  }
 }
 
 function setupControlsScrollAffordance(root) {
@@ -406,6 +571,8 @@ function setupControlsScrollAffordance(root) {
 }
 
 function initTool(root) {
+  loadEnhancementStyles();
+
   state.controlsRoot = root.querySelector('[data-body-cues-controls]');
   state.magnetContainer = root.querySelector('[data-body-cues-magnets]');
   state.emptyState = root.querySelector('[data-body-cues-empty]');
@@ -416,11 +583,15 @@ function initTool(root) {
     return;
   }
 
+  enhanceStructure(root);
+  setupResultToggle(root);
+
   if (resetButton) {
     resetButton.addEventListener('click', resetAllSliders);
   }
 
   buildControls(state.controlsRoot);
+  updateActiveCueCount();
   setupControlsScrollAffordance(root);
 }
 
