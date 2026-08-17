@@ -14,9 +14,7 @@ let segment = source.slice(functionStart, functionEnd);
 const marker = 'Journal UX first pass v1 — inline pre-paint overrides';
 
 if (!segment.includes(marker)) {
-  const styles = String.raw`
-  const journalPageStyles = \`    <style>
-      /* Journal UX first pass v1 — inline pre-paint overrides */
+  const css = String.raw`      /* Journal UX first pass v1 — inline pre-paint overrides */
       main[data-page-id='inventory-journal'] {
         gap: clamp(1rem, 2.4vw, 1.5rem);
       }
@@ -226,17 +224,16 @@ if (!segment.includes(marker)) {
         main[data-page-id='inventory-journal'] .journal-actions__buttons {
           grid-template-columns: minmax(0, 1fr);
         }
-      }
-    </style>\`;
-`;
+      }`;
 
+  const styles = "  const journalPageStyles = `    <style>\n" + css + "\n    </style>`;\n";
   const anchor = '  const needsJson = JSON.stringify(needsDataset);\n  const main = `';
   if (!segment.includes(anchor)) {
     throw new Error('Journal styles insertion anchor not found.');
   }
   segment = segment.replace(
     anchor,
-    `  const needsJson = JSON.stringify(needsDataset);\n${styles}\n  const main = \``
+    '  const needsJson = JSON.stringify(needsDataset);\n' + styles + '\n  const main = `'
   );
 
   const replacements = [
