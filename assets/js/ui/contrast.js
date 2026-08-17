@@ -1,6 +1,46 @@
 (function (global) {
   const namespace = global.NVCContrast || {};
 
+  function loadPageStylesBeforePaint() {
+    if (typeof document === 'undefined' || typeof window === 'undefined') {
+      return;
+    }
+
+    const pathname = window.location?.pathname || '';
+    if (!/\/inventory\/(?:index\.html)?$/i.test(pathname)) {
+      return;
+    }
+
+    if (document.querySelector('link[data-inventory-page-styles]')) {
+      return;
+    }
+
+    const href = '../styles/inventory.css';
+
+    // This script is intentionally loaded synchronously in <head> as part of
+    // the site's pre-paint bootstrap. Writing the stylesheet link while the
+    // parser is still in <head> makes the Inventory overrides render-blocking
+    // so the legacy layout never paints first.
+    if (document.readyState === 'loading' && typeof document.write === 'function') {
+      document.write(
+        '<link rel="stylesheet" href="' + href + '" data-inventory-page-styles="true">'
+      );
+      return;
+    }
+
+    // Defensive fallback for unusual execution contexts where the parser has
+    // already advanced. The blocking token asks supporting browsers not to
+    // paint until this stylesheet is available.
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.setAttribute('blocking', 'render');
+    link.dataset.inventoryPageStyles = 'true';
+    document.head.appendChild(link);
+  }
+
+  loadPageStylesBeforePaint();
+
   function clamp(value, min, max) {
     if (Number.isNaN(value)) {
       return min;
