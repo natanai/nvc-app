@@ -37,15 +37,22 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           path = Path('scripts/apply-magnet-obstacle-v4.mjs')
-          text = path.read_text()
-          text = text.replace("  state.board.style.height = \\\`${height}px\\\`;", "  state.board.style.height = height + 'px';")
-          path.write_text(text)
+          lines = path.read_text().splitlines()
+          matched = False
+          for i, line in enumerate(lines):
+              if 'state.board.style.height =' in line and '${height}px' in line:
+                  lines[i] = "  state.board.style.height = height + 'px';"
+                  matched = True
+          if not matched:
+              raise SystemExit('Could not find temporary nested-template height line to repair')
+          path.write_text('\n'.join(lines) + '\n')
           PY
 
       - name: Integrate inset fixed toggle obstacle
         run: node scripts/apply-magnet-obstacle-v4.mjs
 
       - name: Restore standalone emotions wheel
+        if: always()
         run: |
           mkdir -p feelings/emotions-wheel
           cp /tmp/emotions-wheel-index.html feelings/emotions-wheel/index.html
