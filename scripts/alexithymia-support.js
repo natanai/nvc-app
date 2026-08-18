@@ -872,13 +872,13 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       selections.push(`${option.title} (${intensity}/10)`);
     });
     if (!selections.length) {
-      const fallback =
-        region.defaultSummary || region.summary.dataset.defaultSummary || 'We can check in here whenever you\'re ready.';
-      region.summary.textContent = fallback;
+      region.summary.textContent = '';
+      region.summary.hidden = true;
       region.summary.dataset.hasSelection = 'false';
       return;
     }
     const display = selections.slice(0, 3).join(', ');
+    region.summary.hidden = false;
     region.summary.textContent = selections.length === 1 ? `Noticing: ${display}.` : `Noticing: ${display}${
       selections.length > 3 ? '…' : ''
     }.`;
@@ -890,8 +890,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     if (!region?.toggle) {
       return;
     }
-    region.toggle.textContent = completed ? region.toggleCompletedLabel : region.toggleDefaultLabel;
     region.toggle.dataset.regionCompleted = completed ? 'true' : 'false';
+    const label = completed ? `Review ${region.label} check-in` : `Check in: ${region.label}`;
+    region.toggle.setAttribute('aria-label', label);
+    region.toggle.title = label;
   }
 
   function setSensationState(optionId, active, { focusSlider = false, skipDraft = false } = {}) {
@@ -1154,9 +1156,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       const summary = document.createElement('p');
       summary.className = 'sensation-region__summary';
       summary.dataset.hasSelection = 'false';
-      const defaultSummary = 'We can check in here whenever you\'re ready.';
-      summary.dataset.defaultSummary = defaultSummary;
-      summary.textContent = defaultSummary;
+      summary.dataset.defaultSummary = '';
+      summary.textContent = '';
+      summary.hidden = true;
       meta.appendChild(summary);
 
       header.appendChild(meta);
@@ -1165,9 +1167,11 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       toggle.type = 'button';
       toggle.className = 'support-button support-button--ghost sensation-region__toggle';
       toggle.dataset.regionToggle = region.id;
+      toggle.dataset.regionCompleted = 'false';
       toggle.setAttribute('aria-expanded', 'false');
       toggle.setAttribute('aria-controls', detailsId);
-      toggle.textContent = 'Check in';
+      toggle.setAttribute('aria-label', `Check in: ${region.label}`);
+      toggle.title = `Check in: ${region.label}`;
       header.appendChild(toggle);
 
       section.appendChild(header);
@@ -1279,9 +1283,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
       const closeButton = document.createElement('button');
       closeButton.type = 'button';
-      closeButton.className = 'support-button support-button--ghost sensation-region__close';
+      closeButton.className = 'support-button support-button--ghost support-button--icon-label sensation-region__close';
       closeButton.dataset.regionClose = region.id;
-      closeButton.textContent = 'Done with this area';
+      closeButton.dataset.supportIcon = 'check';
+      closeButton.textContent = 'Done';
       details.appendChild(closeButton);
 
       section.appendChild(details);
@@ -1293,9 +1298,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         label: region.label,
         toggle,
         details,
-        defaultSummary,
-        toggleDefaultLabel: 'Check in',
-        toggleCompletedLabel: 'Completed',
       });
     });
   }
@@ -1310,6 +1312,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
     if (region.toggle) {
       region.toggle.setAttribute('aria-expanded', 'false');
+      const completed = region.toggle.dataset.regionCompleted === 'true';
+      const label = completed ? `Review ${region.label} check-in` : `Check in: ${region.label}`;
+      region.toggle.setAttribute('aria-label', label);
+      region.toggle.title = label;
       if (returnFocus) {
         try {
           region.toggle.focus({ preventScroll: true });
@@ -1337,6 +1343,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     region.element?.classList.add('sensation-region--open');
     if (region.toggle) {
       region.toggle.setAttribute('aria-expanded', 'true');
+      const label = `Close ${region.label} check-in`;
+      region.toggle.setAttribute('aria-label', label);
+      region.toggle.title = label;
     }
     if (focus && region.details) {
       const selected = region.details.querySelector('[data-sensation][aria-pressed="true"]');
