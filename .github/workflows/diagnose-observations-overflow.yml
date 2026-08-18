@@ -1,0 +1,145 @@
+name: Diagnose Observations Overflow Once
+
+on:
+  pull_request:
+    branches: [ux-audit]
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/diagnose-observations-overflow.trigger'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+
+      - name: Inject runner-only viewport diagnostics
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('observations/index.html')
+          text = path.read_text()
+          script = r'''
+          <script>
+          (() => {
+            const snapshot = (label) => {
+              const root = document.documentElement;
+              const clientWidth = root.clientWidth || window.innerWidth || 0;
+              const offenders = Array.from(document.body.querySelectorAll('*'))
+                .map((element) => {
+                  const rect = element.getBoundingClientRect();
+                  const style = getComputedStyle(element);
+                  const overflowRight = rect.right - clientWidth;
+                  const overflowLeft = Math.max(-rect.left, 0);
+                  return {
+                    tag: element.tagName.toLowerCase(),
+                    id: element.id || '',
+                    cls: typeof element.className === 'string' ? element.className : '',
+                    left: Math.round(rect.left * 10) / 10,
+                    right: Math.round(rect.right * 10) / 10,
+                    width: Math.round(rect.width * 10) / 10,
+                    overflow: Math.round(Math.max(overflowRight, overflowLeft) * 10) / 10,
+                    display: style.display,
+                    position: style.position,
+                    cssWidth: style.width,
+                    minWidth: style.minWidth,
+                    maxWidth: style.maxWidth,
+                    overflowX: style.overflowX,
+                    whiteSpace: style.whiteSpace,
+                  };
+                })
+                .filter((item) => item.display !== 'none' && item.overflow > 0.5)
+                .sort((a, b) => b.overflow - a.overflow)
+                .slice(0, 30);
+              return {
+                label,
+                innerWidth: window.innerWidth,
+                clientWidth,
+                rootScrollWidth: root.scrollWidth,
+                bodyScrollWidth: document.body.scrollWidth,
+                scrollX: window.scrollX,
+                offenders,
+              };
+            };
+
+            window.addEventListener('load', () => {
+              setTimeout(() => {
+                const initial = snapshot('initial');
+                const textarea = document.getElementById('observation-text');
+                if (textarea) textarea.focus({ preventScroll: true });
+                setTimeout(() => {
+                  const focused = snapshot('focused');
+                  if (textarea) textarea.blur();
+                  const pre = document.createElement('pre');
+                  pre.id = 'overflow-diagnostic';
+                  pre.textContent = JSON.stringify({ initial, focused }, null, 2);
+                  document.body.appendChild(pre);
+                }, 300);
+              }, 800);
+            });
+          })();
+          </script>
+          '''
+          if '</body>' not in text:
+              raise SystemExit('observations page missing </body>')
+          path.write_text(text.replace('</body>', script + '\n</body>', 1))
+          PY
+
+      - name: Locate Chrome
+        id: chrome
+        run: |
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [[ -z "$CHROME" ]]; then
+            echo "No Chrome/Chromium binary found"
+            exit 1
+          fi
+          echo "path=$CHROME" >> "$GITHUB_OUTPUT"
+          "$CHROME" --version
+
+      - name: Serve repository locally
+        run: |
+          python3 -m http.server 8123 >/tmp/observations-server.log 2>&1 &
+          echo $! >/tmp/observations-server.pid
+          sleep 1
+
+      - name: Measure 390px viewport
+        env:
+          CHROME: ${{ steps.chrome.outputs.path }}
+        run: |
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=3500 --dump-dom http://127.0.0.1:8123/observations/ > /tmp/observations-390.html
+          python3 - <<'PY'
+          import html, re
+          text = open('/tmp/observations-390.html').read()
+          match = re.search(r'<pre id="overflow-diagnostic">(.*?)</pre>', text, re.S)
+          if not match:
+              raise SystemExit('390px diagnostic block not found')
+          print('=== 390px ===')
+          print(html.unescape(match.group(1)))
+          PY
+
+      - name: Measure 414px viewport
+        env:
+          CHROME: ${{ steps.chrome.outputs.path }}
+        run: |
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --window-size=414,896 --virtual-time-budget=3500 --dump-dom http://127.0.0.1:8123/observations/ > /tmp/observations-414.html
+          python3 - <<'PY'
+          import html, re
+          text = open('/tmp/observations-414.html').read()
+          match = re.search(r'<pre id="overflow-diagnostic">(.*?)</pre>', text, re.S)
+          if not match:
+              raise SystemExit('414px diagnostic block not found')
+          print('=== 414px ===')
+          print(html.unescape(match.group(1)))
+          PY
+
+      - name: Confirm diagnostic did not modify repository source
+        run: |
+          git checkout -- observations/index.html
+          git status --short
+          test -z "$(git status --porcelain)"
