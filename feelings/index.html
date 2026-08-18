@@ -742,58 +742,83 @@ button.site-nav__magnet {
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
     <style>
-      /* Magnet hub UX v1 — stable resting layout */
-      [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
-        padding-top: 2.9rem;
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub {
-        top: 0.35rem;
-        right: 0.35rem;
-        z-index: 4;
-        gap: 0.42rem;
-        justify-content: flex-end;
-        min-height: 38px;
-        padding: 0.28rem 0.48rem 0.28rem 0.62rem;
-        border: 2px solid color-mix(in srgb, var(--outline) 72%, transparent);
-        border-radius: var(--radius-pill);
-        background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
-        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle__label {
-        font-family: var(--font-display);
-        font-size: 0.7rem;
-        font-weight: 700;
-        line-height: 1;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        color: var(--ink-soft);
-        user-select: none;
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub:has(.magnet-play-toggle__input:checked) {
-        background: color-mix(in srgb, #ffffff 72%, var(--mint) 28%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-board {
+      /* Magnet hub UX v3 — compact mobile resting layout */
+      [data-magnet-key$='-hub-v3'] .magnet-board {
         overflow: hidden;
       }
 
+      [data-magnet-key$='-hub-v3'] .magnet-play-toggle--hub {
+        top: -1.15rem;
+        right: 0.35rem;
+        z-index: 4;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
       @media (max-width: 640px) {
-        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
-          padding-top: 2.7rem;
+        body {
+          padding-left: 0.65rem;
+          padding-right: 0.65rem;
         }
 
-        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper .magnet-play-toggle--hub {
-          top: 0.25rem;
-          right: 0.2rem;
+        .page-wrapper {
+          gap: 1rem;
         }
 
-        [data-magnet-key$='-hub-v2'] .magnet-board {
-          padding-left: 0.85rem;
-          padding-right: 0.85rem;
+        .page {
+          padding: 1.05rem 0.85rem 1.2rem;
+          gap: 0.85rem;
+        }
+
+        .breadcrumbs {
+          padding: 0.42rem 0.7rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] {
+          gap: 0.6rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search {
+          margin-top: 0;
+          gap: 0.45rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search__search-row {
+          gap: 0.35rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search__input {
+          padding: 0.55rem 0.7rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .shuffle-button {
+          width: 44px;
+          min-width: 44px;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper {
+          padding-top: 0.2rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper .magnet-play-toggle--hub {
+          top: -1.25rem;
+          right: 0.15rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board {
+          padding: 0.55rem 0.35rem 0.45rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .pill.magnet {
+          min-height: 44px;
+          padding: 0.36rem 0.58rem;
+          font-size: 0.9rem;
         }
       }
     </style>
@@ -1240,7 +1265,7 @@ button.site-nav__magnet {
         </div>
       </div>
       </header>
-      <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root data-magnet-key="feelings-hub-v2">
+      <section aria-labelledby="feelings-list" class="pill-section magnet-section" data-magnet-root data-magnet-key="feelings-hub-v3">
         <div class="magnet-section__header">
           <a class="emotion-wheel-link" href="emotions-wheel/" aria-label="Open interactive emotions wheel" title="Open interactive emotions wheel">
             <svg class="emotion-wheel-link__icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
@@ -1296,9 +1321,8 @@ button.site-nav__magnet {
           <div class="pill-grid magnet-board" data-magnet-board>
             <a class="pill magnet" data-magnet-id="feelings-hurt" href="hurt/"><span class="magnet__label">Hurt</span></a><a class="pill magnet" data-magnet-id="feelings-terrified" href="terrified/"><span class="magnet__label">Terrified</span></a><a class="pill magnet" data-magnet-id="feelings-bewildered" href="bewildered/"><span class="magnet__label">Bewildered</span></a><a class="pill magnet" data-magnet-id="feelings-sad" href="sad/"><span class="magnet__label">Sad</span></a><a class="pill magnet" data-magnet-id="feelings-frightened" href="frightened/"><span class="magnet__label">Frightened</span></a><a class="pill magnet" data-magnet-id="feelings-lonely" href="lonely/"><span class="magnet__label">Lonely</span></a><a class="pill magnet" data-magnet-id="feelings-angry" href="angry/"><span class="magnet__label">Angry</span></a><a class="pill magnet" data-magnet-id="feelings-frustrated" href="frustrated/"><span class="magnet__label">Frustrated</span></a><a class="pill magnet" data-magnet-id="feelings-scared" href="scared/"><span class="magnet__label">Scared</span></a><a class="pill magnet" data-magnet-id="feelings-upset" href="upset/"><span class="magnet__label">Upset</span></a><a class="pill magnet" data-magnet-id="feelings-tense" href="tense/"><span class="magnet__label">Tense</span></a><a class="pill magnet" data-magnet-id="feelings-distressed" href="distressed/"><span class="magnet__label">Distressed</span></a><a class="pill magnet" data-magnet-id="feelings-disappointment" href="disappointment/"><span class="magnet__label">Disappointment</span></a><a class="pill magnet" data-magnet-id="feelings-enraged" href="enraged/"><span class="magnet__label">Enraged</span></a><a class="pill magnet" data-magnet-id="feelings-confused" href="confused/"><span class="magnet__label">Confused</span></a><a class="pill magnet" data-magnet-id="feelings-antagonistic" href="antagonistic/"><span class="magnet__label">Antagonistic</span></a><a class="pill magnet" data-magnet-id="feelings-hostile" href="hostile/"><span class="magnet__label">Hostile</span></a><a class="pill magnet" data-magnet-id="feelings-thwarted" href="thwarted/"><span class="magnet__label">Thwarted</span></a><a class="pill magnet" data-magnet-id="feelings-anxious" href="anxious/"><span class="magnet__label">Anxious</span></a><a class="pill magnet" data-magnet-id="feelings-resentful" href="resentful/"><span class="magnet__label">Resentful</span></a><a class="pill magnet" data-magnet-id="feelings-in-pain" href="in-pain/"><span class="magnet__label">In pain</span></a><a class="pill magnet" data-magnet-id="feelings-embarrassed" href="embarrassed/"><span class="magnet__label">Embarrassed</span></a><a class="pill magnet" data-magnet-id="feelings-overwhelmed" href="overwhelmed/"><span class="magnet__label">Overwhelmed</span></a><a class="pill magnet" data-magnet-id="feelings-irritated" href="irritated/"><span class="magnet__label">Irritated</span></a><a class="pill magnet" data-magnet-id="feelings-anxiety" href="anxiety/"><span class="magnet__label">Anxiety</span></a><a class="pill magnet" data-magnet-id="feelings-afraid" href="afraid/"><span class="magnet__label">Afraid</span></a><a class="pill magnet" data-magnet-id="feelings-powerless" href="powerless/"><span class="magnet__label">Powerless</span></a><a class="pill magnet" data-magnet-id="feelings-impotent" href="impotent/"><span class="magnet__label">Impotent</span></a><a class="pill magnet" data-magnet-id="feelings-helpless" href="helpless/"><span class="magnet__label">Helpless</span></a><a class="pill magnet" data-magnet-id="feelings-tired" href="tired/"><span class="magnet__label">Tired</span></a><a class="pill magnet" data-magnet-id="feelings-defiant" href="defiant/"><span class="magnet__label">Defiant</span></a><a class="pill magnet" data-magnet-id="feelings-fear" href="fear/"><span class="magnet__label">Fear</span></a><a class="pill magnet" data-magnet-id="feelings-desperation" href="desperation/"><span class="magnet__label">Desperation</span></a><a class="pill magnet" data-magnet-id="feelings-alarmed" href="alarmed/"><span class="magnet__label">Alarmed</span></a><a class="pill magnet" data-magnet-id="feelings-agitated" href="agitated/"><span class="magnet__label">Agitated</span></a><a class="pill magnet" data-magnet-id="feelings-jealous" href="jealous/"><span class="magnet__label">Jealous</span></a><a class="pill magnet" data-magnet-id="feelings-calm" href="calm/"><span class="magnet__label">Calm</span></a><a class="pill magnet" data-magnet-id="feelings-inspired" href="inspired/"><span class="magnet__label">Inspired</span></a><a class="pill magnet" data-magnet-id="feelings-proud" href="proud/"><span class="magnet__label">Proud</span></a><a class="pill magnet" data-magnet-id="feelings-hopeful" href="hopeful/"><span class="magnet__label">Hopeful</span></a><a class="pill magnet" data-magnet-id="feelings-contented" href="contented/"><span class="magnet__label">Contented</span></a><a class="pill magnet" data-magnet-id="feelings-peaceful" href="peaceful/"><span class="magnet__label">Peaceful</span></a><a class="pill magnet" data-magnet-id="feelings-relieved" href="relieved/"><span class="magnet__label">Relieved</span></a><a class="pill magnet" data-magnet-id="feelings-relaxed" href="relaxed/"><span class="magnet__label">Relaxed</span></a><a class="pill magnet" data-magnet-id="feelings-joyful" href="joyful/"><span class="magnet__label">Joyful</span></a><a class="pill magnet" data-magnet-id="feelings-playful" href="playful/"><span class="magnet__label">Playful</span></a><a class="pill magnet" data-magnet-id="feelings-excited" href="excited/"><span class="magnet__label">Excited</span></a><a class="pill magnet" data-magnet-id="feelings-energized" href="energized/"><span class="magnet__label">Energized</span></a>
           </div>
-          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off">
-            <span class="magnet-play-toggle__label" aria-hidden="true">Motion</span>
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
+          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off" title="Toggle magnet motion">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Toggle magnet motion">
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>

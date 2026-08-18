@@ -1484,58 +1484,83 @@ function renderCategory(type, items) {
   const listSectionA11yAttr = suppressDirectoryHeading ? `aria-label="${escapedTitle} magnets"` : `aria-labelledby="${type}-list"`;
 
   const magnetHubStyles = `    <style>
-      /* Magnet hub UX v1 — stable resting layout */
-      [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
-        padding-top: 2.9rem;
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub {
-        top: 0.35rem;
-        right: 0.35rem;
-        z-index: 4;
-        gap: 0.42rem;
-        justify-content: flex-end;
-        min-height: 38px;
-        padding: 0.28rem 0.48rem 0.28rem 0.62rem;
-        border: 2px solid color-mix(in srgb, var(--outline) 72%, transparent);
-        border-radius: var(--radius-pill);
-        background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
-        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle__label {
-        font-family: var(--font-display);
-        font-size: 0.7rem;
-        font-weight: 700;
-        line-height: 1;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        color: var(--ink-soft);
-        user-select: none;
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub:has(.magnet-play-toggle__input:checked) {
-        background: color-mix(in srgb, #ffffff 72%, var(--mint) 28%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-board {
+      /* Magnet hub UX v3 — compact mobile resting layout */
+      [data-magnet-key$='-hub-v3'] .magnet-board {
         overflow: hidden;
       }
 
+      [data-magnet-key$='-hub-v3'] .magnet-play-toggle--hub {
+        top: -1.15rem;
+        right: 0.35rem;
+        z-index: 4;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
       @media (max-width: 640px) {
-        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
-          padding-top: 2.7rem;
+        body {
+          padding-left: 0.65rem;
+          padding-right: 0.65rem;
         }
 
-        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper .magnet-play-toggle--hub {
-          top: 0.25rem;
-          right: 0.2rem;
+        .page-wrapper {
+          gap: 1rem;
         }
 
-        [data-magnet-key$='-hub-v2'] .magnet-board {
-          padding-left: 0.85rem;
-          padding-right: 0.85rem;
+        .page {
+          padding: 1.05rem 0.85rem 1.2rem;
+          gap: 0.85rem;
+        }
+
+        .breadcrumbs {
+          padding: 0.42rem 0.7rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] {
+          gap: 0.6rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search {
+          margin-top: 0;
+          gap: 0.45rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search__search-row {
+          gap: 0.35rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search__input {
+          padding: 0.55rem 0.7rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .shuffle-button {
+          width: 44px;
+          min-width: 44px;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper {
+          padding-top: 0.2rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper .magnet-play-toggle--hub {
+          top: -1.25rem;
+          right: 0.15rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board {
+          padding: 0.55rem 0.35rem 0.45rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .pill.magnet {
+          min-height: 44px;
+          padding: 0.36rem 0.58rem;
+          font-size: 0.9rem;
         }
       }
     </style>`;
@@ -1554,7 +1579,7 @@ function renderCategory(type, items) {
         }`
         }
       </header>
-      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root data-magnet-key="${type}-hub-v2">
+      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root data-magnet-key="${type}-hub-v3">
         <div class="magnet-section__header">
           ${headerTitleMarkup}
           ${searchAltLinkInline}
@@ -1574,9 +1599,8 @@ function renderCategory(type, items) {
           <div class="pill-grid magnet-board" data-magnet-board>
             ${magnets}
           </div>
-          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off">
-            <span class="magnet-play-toggle__label" aria-hidden="true">Motion</span>
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
+          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off" title="Toggle magnet motion">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Toggle magnet motion">
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>

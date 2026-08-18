@@ -742,58 +742,83 @@ button.site-nav__magnet {
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
     <style>
-      /* Magnet hub UX v1 — stable resting layout */
-      [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
-        padding-top: 2.9rem;
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub {
-        top: 0.35rem;
-        right: 0.35rem;
-        z-index: 4;
-        gap: 0.42rem;
-        justify-content: flex-end;
-        min-height: 38px;
-        padding: 0.28rem 0.48rem 0.28rem 0.62rem;
-        border: 2px solid color-mix(in srgb, var(--outline) 72%, transparent);
-        border-radius: var(--radius-pill);
-        background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
-        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle__label {
-        font-family: var(--font-display);
-        font-size: 0.7rem;
-        font-weight: 700;
-        line-height: 1;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        color: var(--ink-soft);
-        user-select: none;
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub:has(.magnet-play-toggle__input:checked) {
-        background: color-mix(in srgb, #ffffff 72%, var(--mint) 28%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 22%, transparent);
-      }
-
-      [data-magnet-key$='-hub-v2'] .magnet-board {
+      /* Magnet hub UX v3 — compact mobile resting layout */
+      [data-magnet-key$='-hub-v3'] .magnet-board {
         overflow: hidden;
       }
 
+      [data-magnet-key$='-hub-v3'] .magnet-play-toggle--hub {
+        top: -1.15rem;
+        right: 0.35rem;
+        z-index: 4;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
       @media (max-width: 640px) {
-        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
-          padding-top: 2.7rem;
+        body {
+          padding-left: 0.65rem;
+          padding-right: 0.65rem;
         }
 
-        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper .magnet-play-toggle--hub {
-          top: 0.25rem;
-          right: 0.2rem;
+        .page-wrapper {
+          gap: 1rem;
         }
 
-        [data-magnet-key$='-hub-v2'] .magnet-board {
-          padding-left: 0.85rem;
-          padding-right: 0.85rem;
+        .page {
+          padding: 1.05rem 0.85rem 1.2rem;
+          gap: 0.85rem;
+        }
+
+        .breadcrumbs {
+          padding: 0.42rem 0.7rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] {
+          gap: 0.6rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search {
+          margin-top: 0;
+          gap: 0.45rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search__search-row {
+          gap: 0.35rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-search__input {
+          padding: 0.55rem 0.7rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .shuffle-button {
+          width: 44px;
+          min-width: 44px;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper {
+          padding-top: 0.2rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper .magnet-play-toggle--hub {
+          top: -1.25rem;
+          right: 0.15rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .magnet-board {
+          padding: 0.55rem 0.35rem 0.45rem;
+        }
+
+        [data-magnet-key$='-hub-v3'] .pill.magnet {
+          min-height: 44px;
+          padding: 0.36rem 0.58rem;
+          font-size: 0.9rem;
         }
       }
     </style>
@@ -1235,7 +1260,7 @@ button.site-nav__magnet {
         <h1 class="page-title">Needs</h1>
         
       </header>
-      <section aria-label="Needs magnets" class="pill-section magnet-section" data-magnet-root data-magnet-key="needs-hub-v2">
+      <section aria-label="Needs magnets" class="pill-section magnet-section" data-magnet-root data-magnet-key="needs-hub-v3">
         <div class="magnet-section__header">
           
           
@@ -1276,9 +1301,8 @@ button.site-nav__magnet {
           <div class="pill-grid magnet-board" data-magnet-board>
             <a class="pill magnet" data-magnet-id="needs-love-caring" href="love-caring/"><span class="magnet__label">Love/Caring</span></a><a class="pill magnet" data-magnet-id="needs-nurturing" href="nurturing/"><span class="magnet__label">Nurturing</span></a><a class="pill magnet" data-magnet-id="needs-connection" href="connection/"><span class="magnet__label">Connection</span></a><a class="pill magnet" data-magnet-id="needs-belonging" href="belonging/"><span class="magnet__label">Belonging</span></a><a class="pill magnet" data-magnet-id="needs-support" href="support/"><span class="magnet__label">Support</span></a><a class="pill magnet" data-magnet-id="needs-consideration" href="consideration/"><span class="magnet__label">Consideration</span></a><a class="pill magnet" data-magnet-id="needs-need-for-all-living-things-to-flourish" href="need-for-all-living-things-to-flourish/"><span class="magnet__label">Need for all living things to flourish</span></a><a class="pill magnet" data-magnet-id="needs-inclusion" href="inclusion/"><span class="magnet__label">Inclusion</span></a><a class="pill magnet" data-magnet-id="needs-community" href="community/"><span class="magnet__label">Community</span></a><a class="pill magnet" data-magnet-id="needs-safety" href="safety/"><span class="magnet__label">Safety</span></a><a class="pill magnet" data-magnet-id="needs-contribution" href="contribution/"><span class="magnet__label">Contribution</span></a><a class="pill magnet" data-magnet-id="needs-peer-respect" href="peer-respect/"><span class="magnet__label">Peer Respect</span></a><a class="pill magnet" data-magnet-id="needs-respect" href="respect/"><span class="magnet__label">Respect</span></a><a class="pill magnet" data-magnet-id="needs-autonomy" href="autonomy/"><span class="magnet__label">Autonomy</span></a><a class="pill magnet" data-magnet-id="needs-to-be-seen" href="to-be-seen/"><span class="magnet__label">To be seen</span></a><a class="pill magnet" data-magnet-id="needs-acknowledgement" href="acknowledgement/"><span class="magnet__label">Acknowledgement</span></a><a class="pill magnet" data-magnet-id="needs-appreciation" href="appreciation/"><span class="magnet__label">Appreciation</span></a><a class="pill magnet" data-magnet-id="needs-trust" href="trust/"><span class="magnet__label">Trust</span></a><a class="pill magnet" data-magnet-id="needs-dependability" href="dependability/"><span class="magnet__label">Dependability</span></a><a class="pill magnet" data-magnet-id="needs-honesty" href="honesty/"><span class="magnet__label">Honesty</span></a><a class="pill magnet" data-magnet-id="needs-honor" href="honor/"><span class="magnet__label">Honor</span></a><a class="pill magnet" data-magnet-id="needs-commitment" href="commitment/"><span class="magnet__label">Commitment</span></a><a class="pill magnet" data-magnet-id="needs-clarity" href="clarity/"><span class="magnet__label">Clarity</span></a><a class="pill magnet" data-magnet-id="needs-accountability" href="accountability/"><span class="magnet__label">Accountability</span></a><a class="pill magnet" data-magnet-id="needs-causality" href="causality/"><span class="magnet__label">Causality</span></a><a class="pill magnet" data-magnet-id="needs-fairness" href="fairness/"><span class="magnet__label">Fairness</span></a><a class="pill magnet" data-magnet-id="needs-justice" href="justice/"><span class="magnet__label">Justice</span></a><a class="pill magnet" data-magnet-id="needs-choice" href="choice/"><span class="magnet__label">Choice</span></a><a class="pill magnet" data-magnet-id="needs-freedom" href="freedom/"><span class="magnet__label">Freedom</span></a><a class="pill magnet" data-magnet-id="needs-reliability" href="reliability/"><span class="magnet__label">Reliability</span></a><a class="pill magnet" data-magnet-id="needs-act-freely" href="act-freely/"><span class="magnet__label">Act Freely</span></a><a class="pill magnet" data-magnet-id="needs-choose-freely" href="choose-freely/"><span class="magnet__label">Choose Freely</span></a><a class="pill magnet" data-magnet-id="needs-understanding" href="understanding/"><span class="magnet__label">Understanding</span></a><a class="pill magnet" data-magnet-id="needs-recognition" href="recognition/"><span class="magnet__label">Recognition</span></a><a class="pill magnet" data-magnet-id="needs-non-judgmental-communication" href="non-judgmental-communication/"><span class="magnet__label">Non-judgmental Communication</span></a><a class="pill magnet" data-magnet-id="needs-need-to-matter" href="need-to-matter/"><span class="magnet__label">Need to matter</span></a><a class="pill magnet" data-magnet-id="needs-friendship" href="friendship/"><span class="magnet__label">Friendship</span></a><a class="pill magnet" data-magnet-id="needs-space" href="space/"><span class="magnet__label">Space</span></a><a class="pill magnet" data-magnet-id="needs-peace" href="peace/"><span class="magnet__label">Peace</span></a><a class="pill magnet" data-magnet-id="needs-serenity" href="serenity/"><span class="magnet__label">Serenity</span></a><a class="pill magnet" data-magnet-id="needs-do-things-at-my-own-pace-and-in-my-own-way" href="do-things-at-my-own-pace-and-in-my-own-way/"><span class="magnet__label">Do things at my own pace and in my own way</span></a><a class="pill magnet" data-magnet-id="needs-calm" href="calm/"><span class="magnet__label">Calm</span></a><a class="pill magnet" data-magnet-id="needs-participation" href="participation/"><span class="magnet__label">Participation</span></a><a class="pill magnet" data-magnet-id="needs-to-be-heard" href="to-be-heard/"><span class="magnet__label">To be heard</span></a><a class="pill magnet" data-magnet-id="needs-equality" href="equality/"><span class="magnet__label">Equality</span></a><a class="pill magnet" data-magnet-id="needs-empowerment" href="empowerment/"><span class="magnet__label">Empowerment</span></a><a class="pill magnet" data-magnet-id="needs-consistency" href="consistency/"><span class="magnet__label">Consistency</span></a><a class="pill magnet" data-magnet-id="needs-genuineness" href="genuineness/"><span class="magnet__label">Genuineness</span></a><a class="pill magnet" data-magnet-id="needs-mattering" href="mattering/"><span class="magnet__label">Mattering</span></a><a class="pill magnet" data-magnet-id="needs-rest" href="rest/"><span class="magnet__label">Rest</span></a><a class="pill magnet" data-magnet-id="needs-mutuality" href="mutuality/"><span class="magnet__label">Mutuality</span></a><a class="pill magnet" data-magnet-id="needs-relaxation" href="relaxation/"><span class="magnet__label">Relaxation</span></a><a class="pill magnet" data-magnet-id="needs-closeness" href="closeness/"><span class="magnet__label">Closeness</span></a><a class="pill magnet" data-magnet-id="needs-authenticity" href="authenticity/"><span class="magnet__label">Authenticity</span></a><a class="pill magnet" data-magnet-id="needs-self-expression" href="self-expression/"><span class="magnet__label">Self expression</span></a><a class="pill magnet" data-magnet-id="needs-integrity" href="integrity/"><span class="magnet__label">Integrity</span></a><a class="pill magnet" data-magnet-id="needs-empathy" href="empathy/"><span class="magnet__label">Empathy</span></a><a class="pill magnet" data-magnet-id="needs-privacy" href="privacy/"><span class="magnet__label">Privacy</span></a><a class="pill magnet" data-magnet-id="needs-order" href="order/"><span class="magnet__label">Order</span></a><a class="pill magnet" data-magnet-id="needs-beauty" href="beauty/"><span class="magnet__label">Beauty</span></a><a class="pill magnet" data-magnet-id="needs-control" href="control/"><span class="magnet__label">Control</span></a><a class="pill magnet" data-magnet-id="needs-predictability" href="predictability/"><span class="magnet__label">Predictability</span></a><a class="pill magnet" data-magnet-id="needs-accomplishment" href="accomplishment/"><span class="magnet__label">Accomplishment</span></a><a class="pill magnet" data-magnet-id="needs-physical-fitness" href="physical-fitness/"><span class="magnet__label">Physical Fitness</span></a><a class="pill magnet" data-magnet-id="needs-acceptance" href="acceptance/"><span class="magnet__label">Acceptance</span></a><a class="pill magnet" data-magnet-id="needs-growth" href="growth/"><span class="magnet__label">Growth</span></a><a class="pill magnet" data-magnet-id="needs-security" href="security/"><span class="magnet__label">Security</span></a>
           </div>
-          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off">
-            <span class="magnet-play-toggle__label" aria-hidden="true">Motion</span>
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
+          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off" title="Toggle magnet motion">
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Toggle magnet motion">
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>
