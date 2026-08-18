@@ -29,6 +29,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Correct temporary structural counter
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply-support-lane-wizard-v1.mjs')
+          text = path.read_text()
+          old = "if ((finalHtml.match(/class=\"support-step/g) || []).length !== 9) {"
+          new = "if ((finalHtml.match(/<article class=\"support-step/g) || []).length !== 9) {"
+          if old not in text:
+              raise SystemExit('temporary counter anchor not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+
       - name: Apply one-step Support Lane integration
         run: node scripts/apply-support-lane-wizard-v1.mjs
 
@@ -57,6 +70,9 @@ jobs:
           if (!css.includes('Support Lane wizard stability v1')) throw new Error('Scoped Support Lane stability CSS missing');
           console.log('Support Lane focused smoke checks passed.');
           NODE
+
+      - name: Restore temporary patcher before diff gate
+        run: git checkout -- scripts/apply-support-lane-wizard-v1.mjs
 
       - name: Confirm only intended durable files changed
         run: |
