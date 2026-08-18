@@ -2827,7 +2827,7 @@ function renderInventoryJournalPage(needsList = []) {
 
       main[data-page-id='inventory-journal'] .journal-actions__buttons {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
         gap: 0.55rem;
       }
 
@@ -2945,8 +2945,8 @@ function renderInventoryJournalPage(needsList = []) {
               </p>
             </div>
             <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export localStorage</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import localStorage</button>
+              <button type="button" id="journal-export" class="inventory-button">Export backup</button>
+              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import backup</button>
               <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
             </div>
             <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
