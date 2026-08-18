@@ -317,10 +317,15 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     return window.NVCJournalStore || window.NVCJournal?.store || null;
   }
 
-  function revealStep(key) {
-    const step = steps[key];
-    if (!step || !step.classList.contains('is-hidden')) return;
-    step.classList.remove('is-hidden');
+  function showOnlyStep(key) {
+    const active = steps[key];
+    if (!active) return;
+    Object.entries(steps).forEach(([stepKey, node]) => {
+      if (!node) return;
+      const isActive = stepKey === key;
+      node.classList.toggle('is-hidden', !isActive);
+      node.classList.toggle('step-current', isActive);
+    });
   }
 
   function focusStep(key) {
@@ -361,8 +366,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
     if (nextButton) {
       const hideNext = index >= STEP_SEQUENCE.length - 1;
+      const waitingForCompass = state.activeStep === 'compass' && !state.compassTouched;
+      const waitingForEmotion = state.activeStep === 'library' && !state.selectedEmotion;
       nextButton.hidden = hideNext;
-      setControlButtonState(nextButton, hideNext);
+      setControlButtonState(nextButton, hideNext || waitingForCompass || waitingForEmotion);
     }
     if (skipButton) {
       const disableSkip = index >= STEP_SEQUENCE.length - 1;
@@ -373,12 +380,8 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   function goToStep(key, options = {}) {
     const step = steps[key];
     if (!step) return;
-    revealStep(key);
     state.activeStep = key;
-    document.querySelectorAll('.support-step.step-current').forEach((node) => {
-      node.classList.remove('step-current');
-    });
-    step.classList.add('step-current');
+    showOnlyStep(key);
     updateStepControls();
     if (typeof window !== 'undefined') {
       window.dispatchEvent(
@@ -511,8 +514,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   function resetBreathingVisual() {
     breathingVisual?.classList.remove('is-active');
     if (breathingDisplay) {
-      const label = BREATH_PATTERN_LABELS[state.preferredBreathPattern] || 'guided breath';
-      breathingDisplay.textContent = `Press start to try a ${label.toLowerCase()} (~30 seconds).`;
+      breathingDisplay.textContent = 'Press start for a 30-second guided breath.';
     }
     if (breathingTimer) {
       clearInterval(breathingTimer);
@@ -525,8 +527,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       goToStep('body');
       return;
     }
-    revealStep('body');
-    updateStepControls();
     if (breathingTimer) {
       clearInterval(breathingTimer);
       breathingTimer = null;
@@ -539,7 +539,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     let elapsed = 0;
     let phaseIndex = 0;
     let remaining = sequence[phaseIndex].seconds;
-    breathingDisplay.textContent = `${label}: ${sequence[phaseIndex].label} • ${remaining}s`;
+    breathingDisplay.textContent = `${sequence[phaseIndex].label} • ${remaining}s`;
 
     breathingTimer = setInterval(() => {
       elapsed += 1;
@@ -548,12 +548,12 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         phaseIndex = (phaseIndex + 1) % sequence.length;
         remaining = sequence[phaseIndex].seconds;
       }
-      breathingDisplay.textContent = `${label}: ${sequence[phaseIndex].label} • ${remaining}s`;
+      breathingDisplay.textContent = `${sequence[phaseIndex].label} • ${remaining}s`;
       if (elapsed >= 30) {
         clearInterval(breathingTimer);
         breathingTimer = null;
         breathingVisual.classList.remove('is-active');
-        breathingDisplay.textContent = `${label} complete. Ready for the body check-in when it feels right.`;
+        breathingDisplay.textContent = 'Breathing complete. Ready for the body check-in.';
         goToStep('body');
       }
     }, 1000);
@@ -1396,6 +1396,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
     if (detail.userTriggered) {
       state.compassTouched = true;
+      updateStepControls();
     }
     const quadrantKey = computeQuadrant(detail.energyKey, detail.valenceKey);
     state.compassQuadrant = quadrantKey;
@@ -1448,7 +1449,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       entries: baseEntries,
     };
     updateCandidateSnapshot();
-    revealStep('library');
     updateStepControls();
   }
 
@@ -1557,10 +1557,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     `;
     emotionLibrary.innerHTML = html;
 
-    revealStep('journal');
-    revealStep('regulation');
-    revealStep('communication');
-    revealStep('closing');
     renderRegulationCard(emotion);
     renderCommunicationCard(emotion);
     refreshSuggestions();
@@ -2386,8 +2382,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   }
 
   function init() {
-    const initialStepElement = steps[state.activeStep];
-    initialStepElement?.classList.add('step-current');
+    showOnlyStep(state.activeStep);
 
     if (startButton) {
       startButton.addEventListener('click', handleStart);

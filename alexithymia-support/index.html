@@ -524,7 +524,7 @@ button.site-nav__magnet {
     <link rel="stylesheet" href="../styles.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="../styles.css" /></noscript>
   </head>
-  <body data-base-path="../">
+  <body class="alexithymia-support-page" data-base-path="../">
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="page-wrapper">
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
@@ -990,8 +990,13 @@ button.site-nav__magnet {
               <div class="breathing-visual" data-breathing-visual aria-hidden="true"></div>
               <div class="breathing-card__actions">
                 <button class="support-button" type="button" data-action="breathing-start">Start breathing</button>
-                <button class="support-button support-button--ghost" type="button" data-action="breathing-skip">
-                  Skip to body check-in
+                <button
+                  class="support-button support-button--ghost"
+                  type="button"
+                  data-action="breathing-skip"
+                  aria-label="Skip breathing and continue to the body check-in"
+                >
+                  Skip breathing
                 </button>
               </div>
             </div>
@@ -1019,7 +1024,6 @@ button.site-nav__magnet {
                 </button>
               </div>
             </form>
-            <p class="support-scroll-hint" aria-hidden="true">Keep scrolling for the next step ↓</p>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="compass">
@@ -1051,7 +1055,13 @@ button.site-nav__magnet {
                 </div>
               </div>
             </div>
-            <p class="support-scroll-hint" aria-hidden="true">More guidance is just below ↓</p>
+            <div class="support-step__nav" data-step-cta>
+              <button class="support-button support-button--ghost" type="button" data-step-back>Back</button>
+              <div class="support-step__nav-primary">
+                <button class="support-button support-button--ghost" type="button" data-step-skip>I'm not sure</button>
+                <button class="support-button" type="button" data-step-next>Continue</button>
+              </div>
+            </div>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="library">
@@ -1069,7 +1079,10 @@ button.site-nav__magnet {
             <div class="emotion-library" data-emotion-library>
               <p class="support-note">Select an emotion above to load its details.</p>
             </div>
-            <p class="support-scroll-hint" aria-hidden="true">Scroll down to capture reflections ↓</p>
+            <div class="support-step__nav" data-step-cta>
+              <button class="support-button support-button--ghost" type="button" data-step-back>Back</button>
+              <button class="support-button" type="button" data-step-next>Continue</button>
+            </div>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="journal">
@@ -1088,6 +1101,10 @@ button.site-nav__magnet {
             >
               Open full screen journal
             </button>
+            <div class="support-step__nav" data-step-cta>
+              <button class="support-button support-button--ghost" type="button" data-step-back>Back</button>
+              <button class="support-button" type="button" data-step-next>Continue</button>
+            </div>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="regulation">
@@ -1095,7 +1112,10 @@ button.site-nav__magnet {
             <div class="regulation-card" data-regulation-card>
               <p class="support-note">Suggestions will appear after you choose an emotion.</p>
             </div>
-            <p class="support-scroll-hint" aria-hidden="true">Communication support follows below ↓</p>
+            <div class="support-step__nav" data-step-cta>
+              <button class="support-button support-button--ghost" type="button" data-step-back>Back</button>
+              <button class="support-button" type="button" data-step-next>Continue</button>
+            </div>
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="communication">
@@ -1107,7 +1127,10 @@ button.site-nav__magnet {
             <div class="communication-card" data-communication-card>
               <p class="support-note">We will suggest a sentence once you pick an emotion.</p>
             </div>
-            <p class="support-scroll-hint" aria-hidden="true">One more encouragement is below ↓</p>
+            <div class="support-step__nav" data-step-cta>
+              <button class="support-button support-button--ghost" type="button" data-step-back>Back</button>
+              <button class="support-button" type="button" data-step-next>Finish</button>
+            </div>
           </article>
 
           <article class="support-step is-hidden" data-step="closing">
@@ -1116,6 +1139,9 @@ button.site-nav__magnet {
               You did courageous work by checking in. Emotional vocabulary grows with repetition. Return whenever you want a guide,
               and celebrate every moment of connection you create with yourself.
             </p>
+            <div class="support-step__nav support-step__nav--back-only" data-step-cta>
+              <button class="support-button support-button--ghost" type="button" data-step-back>Back</button>
+            </div>
           </article>
         </section>
       </main>
