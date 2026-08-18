@@ -1,0 +1,125 @@
+name: Apply Support Lane Icon Controls V1 Once
+
+on:
+  pull_request:
+    branches: [ux-audit]
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/apply-support-lane-icons-v1.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-support-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Correct temporary patcher details
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/apply-support-lane-icons-v1.mjs')
+          s = p.read_text()
+          s = s.replace(
+              '              data-support-icon="journal"\\n              class="support-button support-button--icon-label"\\n            >',
+              '              data-support-icon="journal"\\n            >'
+          )
+          s = s.replace(
+              ".alexithymia-support-page .sensation-actions:not(.sensation-actions--secondary) {\\n  grid-template-columns: minmax(0, 1fr) auto;",
+              ".alexithymia-support-page .sensation-actions:not(.sensation-actions--secondary) {\\n  display: grid;\\n  grid-template-columns: minmax(0, 1fr) auto;"
+          )
+          p.write_text(s)
+          PY
+
+      - name: Apply symbolic Support Lane controls
+        run: node scripts/apply-support-lane-icons-v1.mjs
+
+      - name: Keep Support-only control CSS in the initial page head
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          marker = '/* Support Lane symbolic controls v1 */'
+          css_path = Path('styles.css')
+          html_path = Path('alexithymia-support/index.html')
+          css = css_path.read_text()
+          idx = css.find(marker)
+          if idx < 0:
+              raise SystemExit('symbolic-control CSS marker missing after patch')
+          block = css[idx:].strip()
+          css_path.write_text(css[:idx].rstrip() + '\n')
+          html = html_path.read_text()
+          anchor = '    <link rel="preload" href="../styles.css" as="style" />'
+          if anchor not in html:
+              raise SystemExit('Support Lane head preload anchor missing')
+          if marker in html:
+              raise SystemExit('symbolic-control CSS already present in page head')
+          html = html.replace(anchor, f'    <style>\n{block}\n    </style>\n{anchor}', 1)
+          html_path.write_text(html)
+          PY
+
+      - name: Run focused checks
+        run: |
+          node --check scripts/alexithymia-support.js
+          npm run lint:evidence
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+          git diff --quiet -- styles.css || { echo 'styles.css should be unchanged after moving Support-only CSS into the page head'; exit 1; }
+          node - <<'NODE'
+          const fs = require('fs');
+          const html = fs.readFileSync('alexithymia-support/index.html', 'utf8');
+          const js = fs.readFileSync('scripts/alexithymia-support.js', 'utf8');
+          const headEnd = html.indexOf('</head>');
+          const marker = html.indexOf('Support Lane symbolic controls v1');
+          if (marker < 0 || headEnd < 0 || marker > headEnd) throw new Error('Symbolic control CSS is not in the initial head');
+          for (const icon of ['play','skip','next','back','check','reset','spark','compass','journal']) {
+            if (!html.includes(`data-support-icon="${icon}"`)) throw new Error(`Missing ${icon} control icon`);
+          }
+          if (!html.includes('aria-label="Start breathing"')) throw new Error('Start breathing accessible name missing');
+          if (!html.includes('aria-label="Clear choices"')) throw new Error('Clear choices accessible name missing');
+          if (!html.includes('aria-label="Continue"')) throw new Error('Continue accessible name missing');
+          if (html.includes('See possible emotions') || html.includes("I'm not sure — skip to the compass")) throw new Error('Long body action copy remains');
+          if (js.includes("toggle.textContent = 'Check in'")) throw new Error('Repeated Check in button text remains');
+          if (js.includes("We can check in here whenever you're ready.")) throw new Error('Repeated empty region filler remains');
+          if (!js.includes("region.summary.hidden = true") || !js.includes("region.summary.hidden = false")) throw new Error('Dynamic region summaries are not preserved');
+          if (!js.includes("toggle.setAttribute('aria-label', `Check in: ${region.label}`)")) throw new Error('Dynamic region icon controls lack accessible names');
+          console.log('Support Lane symbolic-control smoke checks passed.');
+          NODE
+
+      - name: Restore temporary patcher before diff gate
+        run: git checkout -- scripts/apply-support-lane-icons-v1.mjs
+
+      - name: Confirm only intended durable files changed
+        run: |
+          git status --short
+          unexpected="$(git status --porcelain | awk '{print $2}' | grep -Ev '^(alexithymia-support/index\.html|scripts/alexithymia-support\.js)$' || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "Unexpected site changes detected:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Remove one-shot integration machinery
+        run: git rm .github/workflows/apply-support-lane-icons-v1.yml scripts/apply-support-lane-icons-v1.mjs
+
+      - name: Commit durable Support Lane icon controls
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add alexithymia-support/index.html scripts/alexithymia-support.js
+          git commit -m "Polish Support Lane controls with symbols"
+          git push origin HEAD:ux-audit
