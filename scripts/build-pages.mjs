@@ -1483,6 +1483,64 @@ function renderCategory(type, items) {
         : `<h2 id="${type}-list" class="section-title">${escapedTitle} directory</h2>`;
   const listSectionA11yAttr = suppressDirectoryHeading ? `aria-label="${escapedTitle} magnets"` : `aria-labelledby="${type}-list"`;
 
+  const magnetHubStyles = `    <style>
+      /* Magnet hub UX v1 — stable resting layout */
+      [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
+        padding-top: 2.9rem;
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub {
+        top: 0.35rem;
+        right: 0.35rem;
+        z-index: 4;
+        gap: 0.42rem;
+        justify-content: flex-end;
+        min-height: 38px;
+        padding: 0.28rem 0.48rem 0.28rem 0.62rem;
+        border: 2px solid color-mix(in srgb, var(--outline) 72%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-play-toggle__label {
+        font-family: var(--font-display);
+        font-size: 0.7rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        user-select: none;
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub:has(.magnet-play-toggle__input:checked) {
+        background: color-mix(in srgb, #ffffff 72%, var(--mint) 28%);
+        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-board {
+        overflow: hidden;
+      }
+
+      @media (max-width: 640px) {
+        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
+          padding-top: 2.7rem;
+        }
+
+        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper .magnet-play-toggle--hub {
+          top: 0.25rem;
+          right: 0.2rem;
+        }
+
+        [data-magnet-key$='-hub-v2'] .magnet-board {
+          padding-left: 0.85rem;
+          padding-right: 0.85rem;
+        }
+      }
+    </style>`;
+
+
   const main = `
       <header class="page-header">
         ${type === 'feelings'
@@ -1496,7 +1554,7 @@ function renderCategory(type, items) {
         }`
         }
       </header>
-      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root>
+      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root data-magnet-key="${type}-hub-v2">
         <div class="magnet-section__header">
           ${headerTitleMarkup}
           ${searchAltLinkInline}
@@ -1516,12 +1574,13 @@ function renderCategory(type, items) {
           <div class="pill-grid magnet-board" data-magnet-board>
             ${magnets}
           </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
+          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off">
+            <span class="magnet-play-toggle__label" aria-hidden="true">Motion</span>
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
           </label>
         </div>
       </section>
@@ -1535,6 +1594,7 @@ function renderCategory(type, items) {
       { label: title }
     ],
     main,
+    headExtras: magnetHubStyles,
     scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
     activeNav: type,
     canonicalPath: `${type}/`,

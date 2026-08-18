@@ -741,6 +741,62 @@ button.site-nav__magnet {
 }</style>
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" fetchpriority="high" />
+    <style>
+      /* Magnet hub UX v1 — stable resting layout */
+      [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
+        padding-top: 2.9rem;
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub {
+        top: 0.35rem;
+        right: 0.35rem;
+        z-index: 4;
+        gap: 0.42rem;
+        justify-content: flex-end;
+        min-height: 38px;
+        padding: 0.28rem 0.48rem 0.28rem 0.62rem;
+        border: 2px solid color-mix(in srgb, var(--outline) 72%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-play-toggle__label {
+        font-family: var(--font-display);
+        font-size: 0.7rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        user-select: none;
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-play-toggle--hub:has(.magnet-play-toggle__input:checked) {
+        background: color-mix(in srgb, #ffffff 72%, var(--mint) 28%);
+        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 22%, transparent);
+      }
+
+      [data-magnet-key$='-hub-v2'] .magnet-board {
+        overflow: hidden;
+      }
+
+      @media (max-width: 640px) {
+        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
+          padding-top: 2.7rem;
+        }
+
+        [data-magnet-key$='-hub-v2'] .magnet-board-wrapper .magnet-play-toggle--hub {
+          top: 0.25rem;
+          right: 0.2rem;
+        }
+
+        [data-magnet-key$='-hub-v2'] .magnet-board {
+          padding-left: 0.85rem;
+          padding-right: 0.85rem;
+        }
+      }
+    </style>
   </head>
   <body data-base-path="../">
     <a href="#main" class="skip-link">Skip to content</a>
@@ -1179,7 +1235,7 @@ button.site-nav__magnet {
         <h1 class="page-title">Faux Feelings</h1>
         <p class="page-description">Faux feelings (sometimes called evaluations) are often the first stories that surface. Follow them to the feelings and needs underneath.</p>
       </header>
-      <section aria-label="Faux Feelings magnets" class="pill-section magnet-section" data-magnet-root>
+      <section aria-label="Faux Feelings magnets" class="pill-section magnet-section" data-magnet-root data-magnet-key="faux-feelings-hub-v2">
         <div class="magnet-section__header">
           
           
@@ -1220,12 +1276,13 @@ button.site-nav__magnet {
           <div class="pill-grid magnet-board" data-magnet-board>
             <a class="pill magnet" data-magnet-id="faux-feelings-abandoned" href="abandoned/"><span class="magnet__label">Abandoned</span></a><a class="pill magnet" data-magnet-id="faux-feelings-abused" href="abused/"><span class="magnet__label">Abused</span></a><a class="pill magnet" data-magnet-id="faux-feelings-attacked" href="attacked/"><span class="magnet__label">Attacked</span></a><a class="pill magnet" data-magnet-id="faux-feelings-not-accepted" href="not-accepted/"><span class="magnet__label">(Not) Accepted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-belittled" href="belittled/"><span class="magnet__label">Belittled</span></a><a class="pill magnet" data-magnet-id="faux-feelings-betrayed" href="betrayed/"><span class="magnet__label">Betrayed</span></a><a class="pill magnet" data-magnet-id="faux-feelings-blamed" href="blamed/"><span class="magnet__label">Blamed</span></a><a class="pill magnet" data-magnet-id="faux-feelings-bullied" href="bullied/"><span class="magnet__label">Bullied</span></a><a class="pill magnet" data-magnet-id="faux-feelings-caged-boxed-in" href="caged-boxed-in/"><span class="magnet__label">Caged/Boxed-in</span></a><a class="pill magnet" data-magnet-id="faux-feelings-cheated" href="cheated/"><span class="magnet__label">Cheated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-coerced" href="coerced/"><span class="magnet__label">Coerced</span></a><a class="pill magnet" data-magnet-id="faux-feelings-cornered" href="cornered/"><span class="magnet__label">Cornered</span></a><a class="pill magnet" data-magnet-id="faux-feelings-criticized" href="criticized/"><span class="magnet__label">Criticized</span></a><a class="pill magnet" data-magnet-id="faux-feelings-discounted-diminished" href="discounted-diminished/"><span class="magnet__label">Discounted/Diminished</span></a><a class="pill magnet" data-magnet-id="faux-feelings-disliked" href="disliked/"><span class="magnet__label">Disliked</span></a><a class="pill magnet" data-magnet-id="faux-feelings-distrusted" href="distrusted/"><span class="magnet__label">Distrusted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-dumped-on" href="dumped-on/"><span class="magnet__label">Dumped on</span></a><a class="pill magnet" data-magnet-id="faux-feelings-harassed" href="harassed/"><span class="magnet__label">Harassed</span></a><a class="pill magnet" data-magnet-id="faux-feelings-hassled" href="hassled/"><span class="magnet__label">Hassled</span></a><a class="pill magnet" data-magnet-id="faux-feelings-humiliated" href="humiliated/"><span class="magnet__label">Humiliated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-ignored" href="ignored/"><span class="magnet__label">Ignored</span></a><a class="pill magnet" data-magnet-id="faux-feelings-insulted" href="insulted/"><span class="magnet__label">Insulted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-interrupted" href="interrupted/"><span class="magnet__label">Interrupted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-intimidated" href="intimidated/"><span class="magnet__label">Intimidated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-invalidated" href="invalidated/"><span class="magnet__label">Invalidated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-invisible" href="invisible/"><span class="magnet__label">Invisible</span></a><a class="pill magnet" data-magnet-id="faux-feelings-isolated" href="isolated/"><span class="magnet__label">Isolated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-left-out" href="left-out/"><span class="magnet__label">Left out</span></a><a class="pill magnet" data-magnet-id="faux-feelings-let-down" href="let-down/"><span class="magnet__label">Let down</span></a><a class="pill magnet" data-magnet-id="faux-feelings-manipulated" href="manipulated/"><span class="magnet__label">Manipulated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-mistrusted" href="mistrusted/"><span class="magnet__label">Mistrusted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-misunderstood" href="misunderstood/"><span class="magnet__label">Misunderstood</span></a><a class="pill magnet" data-magnet-id="faux-feelings-neglected" href="neglected/"><span class="magnet__label">Neglected</span></a><a class="pill magnet" data-magnet-id="faux-feelings-overpowered" href="overpowered/"><span class="magnet__label">Overpowered</span></a><a class="pill magnet" data-magnet-id="faux-feelings-overworked" href="overworked/"><span class="magnet__label">Overworked</span></a><a class="pill magnet" data-magnet-id="faux-feelings-patronized" href="patronized/"><span class="magnet__label">Patronized</span></a><a class="pill magnet" data-magnet-id="faux-feelings-pressured" href="pressured/"><span class="magnet__label">Pressured</span></a><a class="pill magnet" data-magnet-id="faux-feelings-provoked" href="provoked/"><span class="magnet__label">Provoked</span></a><a class="pill magnet" data-magnet-id="faux-feelings-put-down" href="put-down/"><span class="magnet__label">Put down</span></a><a class="pill magnet" data-magnet-id="faux-feelings-rejected" href="rejected/"><span class="magnet__label">Rejected</span></a><a class="pill magnet" data-magnet-id="faux-feelings-ripped-off-screwed" href="ripped-off-screwed/"><span class="magnet__label">Ripped off / Screwed</span></a><a class="pill magnet" data-magnet-id="faux-feelings-smothered-suffocated" href="smothered-suffocated/"><span class="magnet__label">Smothered/Suffocated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-taken-for-granted" href="taken-for-granted/"><span class="magnet__label">Taken for granted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-threatened" href="threatened/"><span class="magnet__label">Threatened</span></a><a class="pill magnet" data-magnet-id="faux-feelings-trampled" href="trampled/"><span class="magnet__label">Trampled</span></a><a class="pill magnet" data-magnet-id="faux-feelings-tricked" href="tricked/"><span class="magnet__label">Tricked</span></a><a class="pill magnet" data-magnet-id="faux-feelings-unappreciated" href="unappreciated/"><span class="magnet__label">Unappreciated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-unheard" href="unheard/"><span class="magnet__label">Unheard</span></a><a class="pill magnet" data-magnet-id="faux-feelings-unloved" href="unloved/"><span class="magnet__label">Unloved</span></a><a class="pill magnet" data-magnet-id="faux-feelings-unseen" href="unseen/"><span class="magnet__label">Unseen</span></a><a class="pill magnet" data-magnet-id="faux-feelings-unsupported" href="unsupported/"><span class="magnet__label">Unsupported</span></a><a class="pill magnet" data-magnet-id="faux-feelings-unwanted" href="unwanted/"><span class="magnet__label">Unwanted</span></a><a class="pill magnet" data-magnet-id="faux-feelings-used" href="used/"><span class="magnet__label">Used</span></a><a class="pill magnet" data-magnet-id="faux-feelings-victimized" href="victimized/"><span class="magnet__label">Victimized</span></a><a class="pill magnet" data-magnet-id="faux-feelings-violated" href="violated/"><span class="magnet__label">Violated</span></a><a class="pill magnet" data-magnet-id="faux-feelings-wronged" href="wronged/"><span class="magnet__label">Wronged</span></a>
           </div>
-          <label class="magnet-play-toggle" data-magnet-toggle data-state="on">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Disable magnet physics" checked>
+          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off">
+            <span class="magnet-play-toggle__label" aria-hidden="true">Motion</span>
+            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Enable magnet physics">
             <span class="magnet-play-toggle__track" aria-hidden="true">
               <span class="magnet-play-toggle__thumb"></span>
             </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is on</span>
+            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
           </label>
         </div>
       </section>
