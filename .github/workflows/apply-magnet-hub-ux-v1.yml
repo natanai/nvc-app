@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: Remove one-shot integration machinery
-        run: git rm .github/workflows/apply-magnet-hub-ux-v1.yml scripts/apply-magnet-hub-ux-v1.mjs
+        run: git rm .github/workflows/apply-magnet-hub-ux-v1.yml scripts/apply-magnet-hub-ux-v1.mjs scripts/apply-magnet-hub-ux-v1.trigger
 
       - name: Commit durable magnet hub UX changes
         run: |
