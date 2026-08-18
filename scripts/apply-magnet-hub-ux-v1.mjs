@@ -16,10 +16,7 @@ if (!source.includes(marker)) {
 
   let segment = source.slice(start, end + endAnchor.length);
 
-  const styles = String.raw`
-
-  const magnetHubStyles = \`    <style>
-      /* Magnet hub UX v1 — stable resting layout */
+  const css = String.raw`      /* Magnet hub UX v1 — stable resting layout */
       [data-magnet-key$='-hub-v2'] .magnet-board-wrapper {
         padding-top: 2.9rem;
       }
@@ -72,10 +69,9 @@ if (!source.includes(marker)) {
           padding-left: 0.85rem;
           padding-right: 0.85rem;
         }
-      }
-    </style>\`;
-`;
+      }`;
 
+  const styles = "\n\n  const magnetHubStyles = `    <style>\n" + css + "\n    </style>`;\n";
   segment = segment.replace(startAnchor, startAnchor + styles);
 
   const rootAnchor = '<section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root>';
