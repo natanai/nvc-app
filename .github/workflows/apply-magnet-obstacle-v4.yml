@@ -1,0 +1,70 @@
+name: Apply Magnet Obstacle V4 Once
+
+on:
+  pull_request:
+    branches: [ux-audit]
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/apply-magnet-obstacle-v4.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-magnet-obstacle-v4:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit base
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+          fetch-depth: 0
+
+      - name: Preserve standalone emotions wheel
+        run: cp feelings/emotions-wheel/index.html /tmp/emotions-wheel-index.html
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Integrate inset fixed toggle obstacle
+        run: node scripts/apply-magnet-obstacle-v4.mjs
+
+      - name: Restore standalone emotions wheel
+        run: |
+          mkdir -p feelings/emotions-wheel
+          cp /tmp/emotions-wheel-index.html feelings/emotions-wheel/index.html
+
+      - name: Run focused syntax and magnet checks
+        run: |
+          node --check scripts/build-pages.mjs
+          node --check scripts/magnets.js
+          node --check scripts/magnets/magnetPhysics.js
+          npm run test:nav-magnets
+          npm run test:flicker-jitter
+
+      - name: Confirm only expected durable files changed
+        run: |
+          git status --short
+          unexpected="$(git status --porcelain | awk '{print $2}' | grep -Ev '^(scripts/build-pages\.mjs|scripts/magnets\.js|scripts/magnets/magnetPhysics\.js|needs/index\.html|feelings/index\.html|faux-feelings/index\.html)$' || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "Unexpected generated changes detected:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Remove one-shot integration machinery
+        run: git rm .github/workflows/apply-magnet-obstacle-v4.yml scripts/apply-magnet-obstacle-v4.mjs
+
+      - name: Commit durable inset-toggle changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/build-pages.mjs scripts/magnets.js scripts/magnets/magnetPhysics.js needs/index.html feelings/index.html faux-feelings/index.html
+          git commit -m "Inset magnet motion control into boards"
+          git push origin HEAD:ux-audit
