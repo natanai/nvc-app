@@ -290,32 +290,15 @@ function bindObservationJournalViewportCleanup() {
     if (!trigger) {
       return;
     }
-    resetObservationPageFocusState({ blur: true });
+    blurObservationEditor();
   }, true);
 }
 
-function resetObservationHorizontalScroll() {
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
-    return;
-  }
-  const y = window.scrollY || window.pageYOffset || 0;
-  if ((window.scrollX || window.pageXOffset || 0) !== 0) {
-    window.scrollTo(0, y);
-  }
-  if (document.documentElement) {
-    document.documentElement.scrollLeft = 0;
-  }
-  if (document.body) {
-    document.body.scrollLeft = 0;
-  }
-}
-
-function resetObservationPageFocusState(options = {}) {
+function blurObservationEditor() {
   const textarea = document.getElementById('observation-text');
-  if (options.blur && textarea && typeof textarea.blur === 'function') {
+  if (textarea && typeof textarea.blur === 'function') {
     textarea.blur();
   }
-  resetObservationHorizontalScroll();
 }
 
 function shouldLogObservationViewportDiagnostics() {
@@ -1916,7 +1899,7 @@ function convertObservationToJournal() {
   convertButton.textContent = 'Opening journal…';
 
   const journalButton = document.querySelector('[data-support-journal-open]');
-  resetObservationPageFocusState({ blur: true });
+  blurObservationEditor();
   const applyNotesToJournal = () => {
     const notesField = document.querySelector('[data-journal-notes]');
     if (notesField instanceof HTMLTextAreaElement) {
