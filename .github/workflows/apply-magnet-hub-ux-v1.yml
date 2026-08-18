@@ -32,6 +32,9 @@ jobs:
       - name: Integrate and verify magnet hubs
         run: node scripts/apply-magnet-hub-ux-v1.mjs
 
+      - name: Restore standalone feelings page outside generator
+        run: git restore --source=HEAD -- feelings/emotions-wheel/index.html
+
       - name: Run focused magnet checks
         run: |
           node --check scripts/magnets.js
