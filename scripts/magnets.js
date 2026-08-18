@@ -66,6 +66,8 @@ const LAYOUT_GAP_Y = 14;
 const BOARD_PADDING = 16;
 const CLICK_SUPPRESS_WINDOW = 150;
 const TOGGLE_GUARD_MS = 120;
+const FIXED_OBSTACLE_CLEARANCE = 8;
+const FIXED_OBSTACLE_PHYSICS_CLEARANCE = 4;
 
 const isNavBoardState = (state) => state?.storageKey === NAV_STORAGE_KEY;
 
@@ -706,6 +708,103 @@ const getMagnetBounds = (magnet) => {
   return { left, top, right, bottom };
 };
 
+const rectsOverlap = (a, b) => Boolean(
+  a && b
+  && a.left < b.right
+  && a.right > b.left
+  && a.top < b.bottom
+  && a.bottom > b.top
+);
+
+const getFixedObstacleRects = (state, clearance = FIXED_OBSTACLE_CLEARANCE) => {
+  if (!state?.board) return [];
+  const boardRect = state.board.getBoundingClientRect();
+  return Array.from(state.board.querySelectorAll('[data-magnet-obstacle]'))
+    .filter((element) => !element.hidden && element.getAttribute('aria-hidden') !== 'true')
+    .map((element) => {
+      const rect = element.getBoundingClientRect();
+      const pad = Math.max(Number(clearance) || 0, 0);
+      return {
+        left: rect.left - boardRect.left - pad,
+        top: rect.top - boardRect.top - pad,
+        right: rect.right - boardRect.left + pad,
+        bottom: rect.bottom - boardRect.top + pad,
+      };
+    });
+};
+
+const magnetOverlapsFixedObstacle = (state, magnet, clearance = FIXED_OBSTACLE_CLEARANCE) => {
+  if (!magnet || magnet.navHidden) return false;
+  const bounds = getMagnetBounds(magnet);
+  return getFixedObstacleRects(state, clearance).some((obstacle) => rectsOverlap(bounds, obstacle));
+};
+
+const layoutHasFixedObstacleOverlap = (state) =>
+  Boolean(state?.magnets?.some((magnet) => magnetOverlapsFixedObstacle(state, magnet)));
+
+const candidateOverlapsFixedObstacle = (state, magnet, x, y, obstacles) => {
+  const marginLeft = magnet.marginLeft || 0;
+  const marginRight = magnet.marginRight || 0;
+  const marginTop = magnet.marginTop || 0;
+  const marginBottom = magnet.marginBottom || 0;
+  const bounds = {
+    left: x - marginLeft,
+    top: y - marginTop,
+    right: x + magnet.width + marginRight,
+    bottom: y + magnet.height + marginBottom,
+  };
+  return obstacles.find((obstacle) => rectsOverlap(bounds, obstacle)) || null;
+};
+
+const resolveFixedObstacleOverlaps = (state) => {
+  if (!state?.magnets?.length) return false;
+  const obstacles = getFixedObstacleRects(state);
+  if (!obstacles.length) return false;
+  const boardWidth = Math.max(state.boardWidth || 0, 1);
+  let changed = false;
+
+  state.magnets.forEach((magnet) => {
+    if (!magnet || magnet.navHidden) return;
+    obstacles.forEach((obstacle) => {
+      const bounds = getMagnetBounds(magnet);
+      if (!rectsOverlap(bounds, obstacle)) return;
+
+      const gap = FIXED_OBSTACLE_CLEARANCE;
+      const shifts = [
+        { axis: 'x', value: obstacle.left - bounds.right - gap },
+        { axis: 'x', value: obstacle.right - bounds.left + gap },
+        { axis: 'y', value: obstacle.top - bounds.bottom - gap },
+        { axis: 'y', value: obstacle.bottom - bounds.top + gap },
+      ].filter((shift) => {
+        if (shift.axis === 'x') {
+          const left = bounds.left + shift.value;
+          const right = bounds.right + shift.value;
+          return left >= 0 && right <= boardWidth;
+        }
+        return bounds.top + shift.value >= 0;
+      });
+
+      shifts.sort((a, b) => Math.abs(a.value) - Math.abs(b.value));
+      const chosen = shifts[0];
+      if (!chosen) return;
+      if (chosen.axis === 'x') magnet.x += chosen.value;
+      else magnet.y += chosen.value;
+      changed = true;
+    });
+  });
+
+  if (!changed) return false;
+  state.magnets.forEach((magnet) => setMagnetTransform(magnet));
+  updateBoardHeight(state);
+
+  if (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state)) {
+    applyRowPackedLayout(state, state.magnets, { persist: false });
+  } else {
+    updateLayout(state);
+  }
+  return true;
+};
+
 const isMagnetOffBoard = (state, magnet) => {
   if (!magnet || magnet.navHidden) {
     return false;
@@ -948,31 +1047,67 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
   const width = Math.max(state.boardWidth || 0, 1);
   const startX = LAYOUT_GAP_X;
   const startY = LAYOUT_GAP_Y;
+  const obstacles = getFixedObstacleRects(state);
   let cursorX = startX;
   let cursorY = startY;
   let rowHeight = 0;
   let maxBottom = startY;
 
   const seeds = isNavBoardState(state) ? order.filter((magnet) => !magnet?.navHidden) : order;
-  const placements = seeds.map((magnet) => {
+  const placements = [];
+
+  seeds.forEach((magnet) => {
     const marginLeft = magnet.marginLeft || 0;
     const marginRight = magnet.marginRight || 0;
     const marginTop = magnet.marginTop || 0;
     const marginBottom = magnet.marginBottom || 0;
     const footprintWidth = magnet.width + marginLeft + marginRight;
     const footprintHeight = magnet.height + marginTop + marginBottom;
-    if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
+    let attempts = 0;
+
+    while (attempts < Math.max(obstacles.length + 3, 4)) {
+      if (cursorX > startX && cursorX + footprintWidth + LAYOUT_GAP_X > width) {
+        cursorX = startX;
+        cursorY += rowHeight + LAYOUT_GAP_Y;
+        rowHeight = 0;
+      }
+
+      const maxX = Math.max(width - magnet.width, 0);
+      const x = clamp(cursorX + marginLeft, 0, maxX);
+      const y = cursorY + marginTop;
+      const obstacle = candidateOverlapsFixedObstacle(state, magnet, x, y, obstacles);
+
+      if (!obstacle) {
+        placements.push({ magnet, x, y });
+        cursorX += footprintWidth + LAYOUT_GAP_X;
+        rowHeight = Math.max(rowHeight, footprintHeight);
+        maxBottom = Math.max(maxBottom, y + magnet.height + marginBottom);
+        return;
+      }
+
+      const afterObstacleX = obstacle.right + LAYOUT_GAP_X;
+      if (afterObstacleX + footprintWidth + LAYOUT_GAP_X <= width && afterObstacleX > cursorX) {
+        cursorX = afterObstacleX;
+        attempts += 1;
+        continue;
+      }
+
       cursorX = startX;
-      cursorY += rowHeight + LAYOUT_GAP_Y;
+      cursorY = Math.max(
+        cursorY + Math.max(rowHeight, footprintHeight) + LAYOUT_GAP_Y,
+        obstacle.bottom + LAYOUT_GAP_Y,
+      );
       rowHeight = 0;
+      attempts += 1;
     }
+
     const maxX = Math.max(width - magnet.width, 0);
     const x = clamp(cursorX + marginLeft, 0, maxX);
     const y = cursorY + marginTop;
+    placements.push({ magnet, x, y });
     cursorX += footprintWidth + LAYOUT_GAP_X;
     rowHeight = Math.max(rowHeight, footprintHeight);
     maxBottom = Math.max(maxBottom, y + magnet.height + marginBottom);
-    return { magnet, x, y };
   });
 
   placements.forEach(({ magnet, x, y }) => {
@@ -983,11 +1118,9 @@ const applyRowPackedLayout = (state, order, { persist = false } = {}) => {
 
   const height = Math.max(state.minHeight, maxBottom + BOARD_PADDING);
   state.boardHeight = height;
-  state.board.style.height = `${height}px`;
+  state.board.style.height = height + 'px';
   updateLayout(state);
-  if (persist) {
-    persistLayout(state, true);
-  }
+  if (persist) persistLayout(state, true);
   state.lastSeedWidth = state.boardWidth;
   state.lastLayoutType = 'seed';
 };
@@ -1211,6 +1344,7 @@ const setPlayState = (state, active) => {
       config: physicsConfig,
       onPositions: (list) => handlePositionsUpdate(state, list),
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
+      getObstacles: () => getFixedObstacleRects(state, FIXED_OBSTACLE_PHYSICS_CLEARANCE),
       onDragRelease: () => state.setClickSuppress(),
       onTiltPermissionDenied: (reason) => handleTiltPermissionDenied(state, reason),
     });
@@ -1268,6 +1402,8 @@ const setPlayState = (state, active) => {
       }
       if (isNavBoardState(state)) {
         resolveNavLayoutToNearestValid(state);
+      } else {
+        resolveFixedObstacleOverlaps(state);
       }
       updateLayout(state);
       persistLayout(state, true);
@@ -1683,7 +1819,7 @@ const initializeBoard = async (root, index) => {
     updateBoardHeight(state);
     updateLayout(state);
     state.lastLayoutType = 'restored';
-    if (!isNavBoardState(state) && layoutHasOverlap(state)) {
+    if (!isNavBoardState(state) && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state))) {
       shouldSeed = true;
     }
   }
@@ -1746,6 +1882,7 @@ const initializeBoard = async (root, index) => {
         } else {
           updateBoardHeight(state);
         }
+        if (!isNavBoardState(state)) resolveFixedObstacleOverlaps(state);
         updateLayout(state);
         persistLayout(state, true);
         state.lastLayoutType = 'manual';

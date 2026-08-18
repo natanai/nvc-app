@@ -526,6 +526,51 @@ const applySeparationForces = (state, dt) => {
   }
 };
 
+const getObstacleRects = (state) => {
+  if (typeof state.getObstacles !== 'function') return [];
+  try {
+    const obstacles = state.getObstacles();
+    return Array.isArray(obstacles)
+      ? obstacles.filter((obstacle) => obstacle
+        && Number.isFinite(obstacle.left)
+        && Number.isFinite(obstacle.right)
+        && Number.isFinite(obstacle.top)
+        && Number.isFinite(obstacle.bottom))
+      : [];
+  } catch {
+    return [];
+  }
+};
+
+const applyObstacleForces = (state, dt) => {
+  const obstacles = getObstacleRects(state);
+  if (!obstacles.length) return;
+  const { sepStrength } = state.config;
+
+  state.magnets.forEach((magnet) => {
+    if (magnet.navHidden || magnet.dragging) return;
+    obstacles.forEach((obstacle) => {
+      const overlapX = Math.min(magnet.x + magnet.w, obstacle.right) - Math.max(magnet.x, obstacle.left);
+      const overlapY = Math.min(magnet.y + magnet.h, obstacle.bottom) - Math.max(magnet.y, obstacle.top);
+      if (overlapX <= 0 || overlapY <= 0) return;
+
+      const centerX = magnet.x + magnet.w / 2;
+      const centerY = magnet.y + magnet.h / 2;
+      const obstacleCenterX = (obstacle.left + obstacle.right) / 2;
+      const obstacleCenterY = (obstacle.top + obstacle.bottom) / 2;
+      const impulseScale = sepStrength * dt * 1.35;
+
+      if (overlapX < overlapY) {
+        const direction = centerX < obstacleCenterX ? -1 : 1;
+        magnet.vx += direction * overlapX * impulseScale;
+      } else {
+        const direction = centerY < obstacleCenterY ? -1 : 1;
+        magnet.vy += direction * overlapY * impulseScale;
+      }
+    });
+  });
+};
+
 const applyPointerField = (state, dt) => {
   if (!state.pointerField.active) {
     return;
@@ -635,6 +680,7 @@ const frameStep = (state, timestamp) => {
   const dt = step / Math.max(iterations, 1);
   for (let i = 0; i < iterations; i += 1) {
     applySeparationForces(state, dt);
+    applyObstacleForces(state, dt);
     applyPointerField(state, dt);
     updateTilt(state, dt);
     integrateMotion(state, dt);
@@ -819,6 +865,7 @@ export function startPhysics(options) {
     dragging: null,
     onPositions: options.onPositions,
     getBoardSize: options.getBoardSize,
+    getObstacles: options.getObstacles,
     onDragRelease: options.onDragRelease,
     isShuffling: false,
     shufflePromise: null,

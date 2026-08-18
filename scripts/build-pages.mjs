@@ -1484,23 +1484,39 @@ function renderCategory(type, items) {
   const listSectionA11yAttr = suppressDirectoryHeading ? `aria-label="${escapedTitle} magnets"` : `aria-labelledby="${type}-list"`;
 
   const magnetHubStyles = `    <style>
-      /* Magnet hub UX v3 — compact mobile resting layout */
-      [data-magnet-key$='-hub-v3'] .magnet-board {
+      /* Magnet hub UX v4 — inset fixed toggle obstacle */
+      [data-magnet-key$='-hub-v4'] .magnet-board {
         overflow: hidden;
       }
 
-      [data-magnet-key$='-hub-v3'] .magnet-play-toggle--hub {
-        top: -1.15rem;
-        right: 0.35rem;
-        z-index: 4;
+      [data-magnet-key$='-hub-v4'] .magnet-play-toggle--hub {
+        top: 0.45rem;
+        right: 0.45rem;
+        z-index: 6;
         width: 44px;
         height: 44px;
         min-width: 44px;
         min-height: 44px;
         padding: 0;
         border: 0;
+        border-radius: 0;
         background: transparent;
         box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        transform: none;
+      }
+
+      [data-magnet-key$='-hub-v4'] .magnet-play-toggle--hub:hover,
+      [data-magnet-key$='-hub-v4'] .magnet-play-toggle--hub:focus-within {
+        transform: none;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      [data-magnet-key$='-hub-v4'] .magnet-play-toggle--hub:focus-within {
+        outline: 2px dashed color-mix(in srgb, var(--outline) 48%, transparent);
+        outline-offset: -3px;
       }
 
       @media (max-width: 640px) {
@@ -1522,42 +1538,42 @@ function renderCategory(type, items) {
           padding: 0.42rem 0.7rem;
         }
 
-        [data-magnet-key$='-hub-v3'] {
+        [data-magnet-key$='-hub-v4'] {
           gap: 0.6rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .magnet-search {
+        [data-magnet-key$='-hub-v4'] .magnet-search {
           margin-top: 0;
           gap: 0.45rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .magnet-search__search-row {
+        [data-magnet-key$='-hub-v4'] .magnet-search__search-row {
           gap: 0.35rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .magnet-search__input {
+        [data-magnet-key$='-hub-v4'] .magnet-search__input {
           padding: 0.55rem 0.7rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .shuffle-button {
+        [data-magnet-key$='-hub-v4'] .shuffle-button {
           width: 44px;
           min-width: 44px;
         }
 
-        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper {
+        [data-magnet-key$='-hub-v4'] .magnet-board-wrapper {
           padding-top: 0.2rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .magnet-board-wrapper .magnet-play-toggle--hub {
-          top: -1.25rem;
-          right: 0.15rem;
+        [data-magnet-key$='-hub-v4'] .magnet-play-toggle--hub {
+          top: 0.35rem;
+          right: 0.35rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .magnet-board {
+        [data-magnet-key$='-hub-v4'] .magnet-board {
           padding: 0.55rem 0.35rem 0.45rem;
         }
 
-        [data-magnet-key$='-hub-v3'] .pill.magnet {
+        [data-magnet-key$='-hub-v4'] .pill.magnet {
           min-height: 44px;
           padding: 0.36rem 0.58rem;
           font-size: 0.9rem;
@@ -1579,7 +1595,7 @@ function renderCategory(type, items) {
         }`
         }
       </header>
-      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root data-magnet-key="${type}-hub-v3">
+      <section ${listSectionA11yAttr} class="pill-section magnet-section" data-magnet-root data-magnet-key="${type}-hub-v4">
         <div class="magnet-section__header">
           ${headerTitleMarkup}
           ${searchAltLinkInline}
@@ -1598,14 +1614,14 @@ function renderCategory(type, items) {
         <div class="magnet-board-wrapper">
           <div class="pill-grid magnet-board" data-magnet-board>
             ${magnets}
+            <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-magnet-obstacle data-state="off" title="Toggle magnet motion">
+              <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Toggle magnet motion">
+              <span class="magnet-play-toggle__track" aria-hidden="true">
+                <span class="magnet-play-toggle__thumb"></span>
+              </span>
+              <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
+            </label>
           </div>
-          <label class="magnet-play-toggle magnet-play-toggle--hub" data-magnet-toggle data-state="off" title="Toggle magnet motion">
-            <input type="checkbox" class="magnet-play-toggle__input" role="switch" aria-label="Toggle magnet motion">
-            <span class="magnet-play-toggle__track" aria-hidden="true">
-              <span class="magnet-play-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden magnet-play-toggle__sr-state">Physics is off</span>
-          </label>
         </div>
       </section>
     `;
