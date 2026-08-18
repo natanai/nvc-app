@@ -65,6 +65,9 @@ jobs:
           npm run test:nav-magnets
           npm run test:flicker-jitter
 
+      - name: Restore temporary patcher before diff gate
+        run: git checkout -- scripts/apply-magnet-obstacle-v4.mjs
+
       - name: Confirm only expected durable files changed
         run: |
           git status --short
