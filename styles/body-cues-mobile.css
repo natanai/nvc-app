@@ -2,6 +2,11 @@
    Presentation only. The scoring, slider state, result DOM reuse, and update timing
    remain owned by scripts/body-cues-tool.js. */
 
+/* The pin control is created by the Body Cues runtime but is a mobile-only affordance. */
+.body-cues-page .body-cues-tool__pin-toggle {
+  display: none;
+}
+
 @media (max-width: 640px) {
   /* Treat Body Cues as a dedicated mobile surface rather than a card inside a card. */
   .body-cues-page.body-cues-page {
@@ -19,8 +24,9 @@
   }
 
   /* The results surface stays compact enough to remain useful while sticky.
-     It becomes sticky only once there are actual matches. */
+     It is pinned by default but the user can return it to its natural position. */
   .body-cues-page .body-cues-tool__summary-panel {
+    position: relative;
     margin-inline: 0.65rem;
     padding: 0.65rem 0.7rem;
     gap: 0.5rem;
@@ -30,7 +36,7 @@
     box-shadow: none;
   }
 
-  .body-cues-page .body-cues-tool__summary-panel:has(
+  .body-cues-page .body-cues-tool__summary-panel[data-pinned='true']:has(
       .body-cues-tool__magnet-container[data-empty='false']
     ) {
     position: sticky;
@@ -41,6 +47,7 @@
 
   .body-cues-page .body-cues-tool__magnet-panel {
     gap: 0.42rem;
+    min-width: 0;
   }
 
   .body-cues-page .body-cues-tool__magnet-header {
@@ -48,6 +55,7 @@
     column-gap: 0.5rem;
     row-gap: 0.08rem;
     align-items: center;
+    padding-right: 6.7rem;
   }
 
   .body-cues-page .body-cues-tool__magnet-header h2 {
@@ -84,9 +92,11 @@
     line-height: 1.35;
   }
 
-  /* Reuse the exact same result nodes as a horizontal live shelf on phones. */
+  /* Reuse the exact same result nodes as a single horizontal live shelf on phones.
+     The shared legacy CSS sets flex-wrap: wrap, so nowrap must be explicit here. */
   .body-cues-page .body-cues-tool__magnet-container:not([data-empty='true']) {
     display: flex;
+    flex-wrap: nowrap;
     align-items: stretch;
     gap: 0.38rem;
     min-height: 2.65rem;
@@ -102,11 +112,17 @@
     display: none;
   }
 
+  /* Safari must honor the runtime's collapsed-result state even though the card
+     itself has an author-level display declaration. */
+  .body-cues-page .body-cues-tool__magnet[hidden] {
+    display: none !important;
+  }
+
   .body-cues-page .body-cues-tool__magnet {
     flex: 0 0 auto;
     width: auto;
-    min-width: min(10.5rem, 54vw);
-    max-width: 68vw;
+    min-width: min(9.6rem, 48vw);
+    max-width: 62vw;
     min-height: 2.45rem;
     padding: 0.4rem 0.5rem;
     gap: 0.4rem;
@@ -123,7 +139,7 @@
   }
 
   .body-cues-page .body-cues-tool__magnet-text {
-    max-width: 42vw;
+    max-width: 38vw;
     font-size: 0.78rem;
   }
 
@@ -145,20 +161,54 @@
     top: 0.48rem;
     right: 0.55rem;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.28rem;
   }
 
-  .body-cues-page .body-cues-tool__summary-panel {
-    position: relative;
+  .body-cues-page .body-cues-tool__pin-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0;
+    border: 1.5px solid color-mix(in srgb, var(--outline) 52%, transparent);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+    color: var(--ink);
+    box-shadow: none;
+    cursor: pointer;
   }
 
-  .body-cues-page .body-cues-tool__summary-panel:has(
-      .body-cues-tool__magnet-container[data-empty='false']
-    ) {
-    position: sticky;
+  .body-cues-page .body-cues-tool__pin-toggle[aria-pressed='true'] {
+    background: color-mix(in srgb, var(--mint) 58%, #ffffff 42%);
+    border-color: color-mix(in srgb, var(--outline) 68%, transparent);
   }
 
-  .body-cues-page .body-cues-tool__magnet-header {
-    padding-right: 4.8rem;
+  .body-cues-page .body-cues-tool__pin-toggle:hover,
+  .body-cues-page .body-cues-tool__pin-toggle:focus-visible {
+    transform: none;
+    box-shadow: none;
+    background: color-mix(in srgb, var(--mint) 42%, #ffffff 58%);
+  }
+
+  .body-cues-page .body-cues-tool__pin-toggle:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
+    outline-offset: 2px;
+  }
+
+  .body-cues-page .body-cues-tool__pin-toggle svg {
+    width: 1rem;
+    height: 1rem;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
   }
 
   .body-cues-page .body-cues-tool__reset {
@@ -285,7 +335,7 @@
   }
 
   .body-cues-page .body-cues-tool__magnet {
-    min-width: 58vw;
-    max-width: 74vw;
+    min-width: 54vw;
+    max-width: 70vw;
   }
 }
