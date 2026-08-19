@@ -76,10 +76,7 @@ jobs:
           echo "$PROBE_DIR" > "$RUNNER_TEMP/feelings_probe_dir"
           git worktree add --detach "$PROBE_DIR" HEAD
           cp scripts/build-pages.mjs "$PROBE_DIR/scripts/build-pages.mjs"
-          (
-            cd "$PROBE_DIR"
-            node scripts/build-pages.mjs --scope feelings
-          )
+          (cd "$PROBE_DIR" && node scripts/build-pages.mjs --scope feelings)
           echo 'Scoped generator probe completed in disposable worktree.'
 
       - name: Audit generator probe and patch existing pages precisely
@@ -91,8 +88,7 @@ jobs:
 
           old = '<span class="feeling-inference-toggle__label">How this feeling might be inferred</span>'
           new = '<span class="feeling-inference-toggle__label">How this feeling may show up</span>'
-          probe_dir = Path(os.environ['RUNNER_TEMP']) / 'feelings_probe_dir'
-          probe = Path(probe_dir.read_text().strip())
+          probe = Path((Path(os.environ['RUNNER_TEMP']) / 'feelings_probe_dir').read_text().strip())
 
           tracked = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
           targets = []
@@ -104,13 +100,11 @@ jobs:
                   if before.count(old) != 1:
                       raise SystemExit(f'{path}: expected one old inference label, found {before.count(old)}')
                   targets.append(path)
-
           if not targets:
               raise SystemExit('No existing feeling pages contain the old static inference label.')
 
           probe_deleted = subprocess.check_output(
-              ['git', '-C', str(probe), 'diff', '--name-only', '--diff-filter=D', '--', 'feelings'],
-              text=True,
+              ['git', '-C', str(probe), 'diff', '--name-only', '--diff-filter=D', '--', 'feelings'], text=True
           ).splitlines()
           probe_drift = []
           missing_targets = []
@@ -126,22 +120,15 @@ jobs:
                   raise SystemExit(f'{path}: patched generator did not emit the new static label')
               if generated != expected:
                   probe_drift.append(path)
-
           if missing_targets:
               raise SystemExit('Scoped generator failed to regenerate expected feeling pages:\n' + '\n'.join(missing_targets[:20]))
 
           print(f'Generator probe would delete {len(probe_deleted)} tracked feeling-path file(s).')
           for path in probe_deleted[:30]:
               print(f'  DELETE (quarantined): {path}')
-          if len(probe_deleted) > 30:
-              print(f'  ...and {len(probe_deleted) - 30} more')
-
           print(f'Generator probe has unrelated output drift on {len(probe_drift)} of {len(targets)} target pages.')
-          if probe_drift:
-              for path in probe_drift[:20]:
-                  print(f'  DRIFT (not committed): {path}')
-              if len(probe_drift) > 20:
-                  print(f'  ...and {len(probe_drift) - 20} more')
+          for path in probe_drift[:20]:
+              print(f'  DRIFT (not committed): {path}')
 
           for path in targets:
               page = Path(path)
@@ -174,7 +161,6 @@ jobs:
           new = '<span class="feeling-inference-toggle__label">How this feeling may show up</span>'
           targets = [p for p in Path(os.environ['RUNNER_TEMP'], 'feelings_target_paths').read_text().splitlines() if p]
           allowed = set(targets) | {'scripts/build-pages.mjs', 'scripts/feeling-reverse-inference.js'}
-
           status = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
           dirty = []
           for line in status:
@@ -187,12 +173,10 @@ jobs:
               raise SystemExit('Unexpected paths changed; refusing to continue:\n' + '\n'.join(unexpected))
 
           generator_before = subprocess.check_output(['git', 'show', 'HEAD:scripts/build-pages.mjs'], text=True)
-          generator_after = Path('scripts/build-pages.mjs').read_text()
-          if generator_before.count(old) != 1 or generator_after != generator_before.replace(old, new, 1):
+          if Path('scripts/build-pages.mjs').read_text() != generator_before.replace(old, new, 1):
               raise SystemExit('build-pages.mjs changed beyond the single approved static-label replacement')
 
           runtime_before = subprocess.check_output(['git', 'show', 'HEAD:scripts/feeling-reverse-inference.js'], text=True)
-          runtime_after = Path('scripts/feeling-reverse-inference.js').read_text()
           runtime_pattern = re.compile(
               r"\n  const toggleLabel = toggle\.querySelector\('\.feeling-inference-toggle__label'\);\n"
               r"  if \(toggleLabel\) \{\n"
@@ -200,20 +184,16 @@ jobs:
               r"  \}\n"
           )
           expected_runtime, count = runtime_pattern.subn('\n', runtime_before, count=1)
-          if count != 1 or runtime_after != expected_runtime:
+          if count != 1 or Path('scripts/feeling-reverse-inference.js').read_text() != expected_runtime:
               raise SystemExit('feeling-reverse-inference.js changed beyond removal of the runtime text swap')
 
           for path in targets:
               before = subprocess.check_output(['git', 'show', f'HEAD:{path}'], text=True)
-              after = Path(path).read_text()
-              expected = before.replace(old, new, 1)
-              if after != expected:
+              if Path(path).read_text() != before.replace(old, new, 1):
                   raise SystemExit(f'{path}: changed beyond the single approved static-label replacement')
 
-          inventory_dirty = subprocess.check_output(['git', 'status', '--porcelain=v1', '--', 'inventory/'], text=True)
-          if inventory_dirty.strip():
-              raise SystemExit('Inventory changed unexpectedly:\n' + inventory_dirty)
-
+          if subprocess.check_output(['git', 'status', '--porcelain=v1', '--', 'inventory/'], text=True).strip():
+              raise SystemExit('Inventory changed unexpectedly.')
           print(f'Final diff allowlist passed for {len(targets)} feeling pages + 2 source files. Inventory is untouched.')
           PY
 
@@ -236,24 +216,35 @@ jobs:
             exit 1
           fi
 
-          for report in data/reports/data-integrity-report.md data/reports/missing-vocabulary.csv; do
-            if [ -f "$BASELINE_DIR/$report" ] && [ -f "$report" ]; then
-              if ! cmp -s "$BASELINE_DIR/$report" "$report"; then
-                echo "Data-integrity report changed relative to baseline: $report" >&2
-                diff -u "$BASELINE_DIR/$report" "$report" || true
-                exit 1
-              fi
-            elif [ -f "$BASELINE_DIR/$report" ] || [ -f "$report" ]; then
-              echo "Data-integrity report presence changed relative to baseline: $report" >&2
+          BASE_REPORT="$BASELINE_DIR/data/reports/data-integrity-report.md"
+          PATCHED_REPORT="data/reports/data-integrity-report.md"
+          if [ -f "$BASE_REPORT" ] && [ -f "$PATCHED_REPORT" ]; then
+            sed '/^Generated: /d' "$BASE_REPORT" > "$RUNNER_TEMP/baseline-integrity-normalized.md"
+            sed '/^Generated: /d' "$PATCHED_REPORT" > "$RUNNER_TEMP/patched-integrity-normalized.md"
+            if ! cmp -s "$RUNNER_TEMP/baseline-integrity-normalized.md" "$RUNNER_TEMP/patched-integrity-normalized.md"; then
+              echo 'Data-integrity report changed relative to baseline beyond its timestamp.' >&2
+              diff -u "$RUNNER_TEMP/baseline-integrity-normalized.md" "$RUNNER_TEMP/patched-integrity-normalized.md" || true
               exit 1
             fi
-          done
-
-          echo "Data-integrity result matches baseline exactly (exit $PATCHED_CODE)."
-          if [ "$PATCHED_CODE" -ne 0 ]; then
-            echo 'Baseline already has known integrity failures; this patch introduces no new integrity report differences.'
+          elif [ -f "$BASE_REPORT" ] || [ -f "$PATCHED_REPORT" ]; then
+            echo 'Data-integrity report presence changed relative to baseline.' >&2
+            exit 1
           fi
 
+          BASE_MISSING="$BASELINE_DIR/data/reports/missing-vocabulary.csv"
+          PATCHED_MISSING="data/reports/missing-vocabulary.csv"
+          if [ -f "$BASE_MISSING" ] && [ -f "$PATCHED_MISSING" ]; then
+            if ! cmp -s "$BASE_MISSING" "$PATCHED_MISSING"; then
+              echo 'Missing-vocabulary report changed relative to baseline.' >&2
+              diff -u "$BASE_MISSING" "$PATCHED_MISSING" || true
+              exit 1
+            fi
+          elif [ -f "$BASE_MISSING" ] || [ -f "$PATCHED_MISSING" ]; then
+            echo 'Missing-vocabulary report presence changed relative to baseline.' >&2
+            exit 1
+          fi
+
+          echo "Data-integrity result matches baseline (exit $PATCHED_CODE); no new integrity findings were introduced."
           git worktree remove --force "$BASELINE_DIR"
 
           for report in data/reports/data-integrity-report.md data/reports/missing-vocabulary.csv; do
@@ -277,7 +268,6 @@ jobs:
           from pathlib import Path
           import os
           import subprocess
-
           targets = [p for p in Path(os.environ['RUNNER_TEMP'], 'feelings_target_paths').read_text().splitlines() if p]
           allowed = set(targets) | {'scripts/build-pages.mjs', 'scripts/feeling-reverse-inference.js'}
           status = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
