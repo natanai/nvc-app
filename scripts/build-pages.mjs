@@ -2625,7 +2625,13 @@ function renderInventoryPage() {
       .inventory-summary__filter-button {
         min-height: 38px;
         min-width: 0;
-        padding: 0.38rem 0.7rem;
+        width: auto;
+        height: auto;
+        max-width: none;
+        padding: 0.42rem 0.74rem;
+        white-space: nowrap;
+        line-height: 1.1;
+        flex: 0 0 auto;
         border: 1.5px solid color-mix(in srgb, var(--outline) 38%, transparent);
         border-radius: var(--radius-pill);
         background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
