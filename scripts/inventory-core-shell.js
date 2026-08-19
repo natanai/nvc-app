@@ -82,8 +82,12 @@ function menuMarkup() {
               </span>
               <span aria-hidden="true">›</span>
             </button>
-            <a class="inventory-app-menu__row" href="#inventory-sync-settings"><span class="inventory-app-menu__row-title">Sync &amp; account</span><span aria-hidden="true">›</span></a>
-            <a class="inventory-app-menu__row" href="#inventory-backup-settings"><span class="inventory-app-menu__row-title">Backup &amp; restore</span><span aria-hidden="true">›</span></a>
+            <button class="inventory-app-menu__button" type="button" data-core-command="sync">
+              <span class="inventory-app-menu__row-title">Sync &amp; account</span><span aria-hidden="true">›</span>
+            </button>
+            <button class="inventory-app-menu__button" type="button" data-core-command="backup">
+              <span class="inventory-app-menu__row-title">Backup &amp; restore</span><span aria-hidden="true">›</span>
+            </button>
           </div>
         </details>
       </div>
@@ -125,6 +129,20 @@ function proxyLegacyControl(selector) {
   return false;
 }
 
+function openSettingsPanel(selector) {
+  const panel = document.querySelector(selector);
+  if (!(panel instanceof HTMLElement)) {
+    return false;
+  }
+  if (panel instanceof HTMLDetailsElement) {
+    panel.open = true;
+  }
+  window.requestAnimationFrame(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  return true;
+}
+
 function prepareInventoryUtilities() {
   const main = document.querySelector('.inventory-main');
   const syncPanel = document.querySelector('.inventory-bluesky-panel');
@@ -137,11 +155,6 @@ function prepareInventoryUtilities() {
   const backup = document.querySelector('.inventory-actions--collapsible');
   if (backup) {
     backup.id = 'inventory-backup-settings';
-  }
-
-  const title = document.querySelector('.inventory-header .page-title');
-  if (title) {
-    title.textContent = 'My inventory';
   }
 
   document.querySelector('.inventory-journal-button')?.remove();
@@ -214,6 +227,14 @@ function initInventoryCoreShell() {
         if (addButton instanceof HTMLElement) {
           addButton.click();
         }
+        return;
+      }
+      if (command === 'sync') {
+        openSettingsPanel('#inventory-sync-settings');
+        return;
+      }
+      if (command === 'backup') {
+        openSettingsPanel('#inventory-backup-settings');
       }
     });
   });
