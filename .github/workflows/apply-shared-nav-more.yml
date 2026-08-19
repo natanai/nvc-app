@@ -1,0 +1,80 @@
+name: Apply Shared More Magnet
+
+# One-shot integration workflow for the shared persistent More magnet.
+on:
+  push:
+    branches: [inventory-core-overhaul]
+    paths:
+      - '.github/workflows/apply-shared-nav-more.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout overhaul branch
+        uses: actions/checkout@v4
+        with:
+          ref: inventory-core-overhaul
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate and apply integration
+        run: |
+          node --check scripts/apply-shared-nav-more.mjs
+          node scripts/apply-shared-nav-more.mjs
+          node --check assets/js/ui/contrast.js
+          node --check scripts/magnets.js
+          node --check scripts/inventory-core-shell.js
+
+      - name: Verify shared nav source
+        run: |
+          grep -q "'nav-menu'" scripts/magnets.js
+          grep -q 'loadSharedMoreNavigationBeforeMagnets' assets/js/ui/contrast.js
+          grep -q 'data-shared-nav-more-bootstrap' assets/js/ui/contrast.js
+          grep -q "NAV_LAYOUT_KEY = 'magnetPositions:site-nav'" scripts/inventory-core-shell.js
+          grep -q "'nav-menu'," scripts/inventory-core-shell.js
+          if grep -q "@import url('./inventory-core-shell.css')" styles/inventory-mobile.css; then
+            echo 'Inventory still imports the globally loaded More stylesheet.' >&2
+            exit 1
+          fi
+
+      - name: Run focused regression checks
+        run: |
+          npm run test:nav-magnets
+          npm run test:flicker-jitter
+
+      - name: Remove one-shot integration machinery
+        run: |
+          rm -f scripts/apply-shared-nav-more.mjs
+          rm -f .github/workflows/apply-shared-nav-more.yml
+
+      - name: Gate durable diff
+        run: |
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            case "$file" in
+              assets/js/ui/contrast.js|scripts/magnets.js|styles/inventory-mobile.css|scripts/apply-shared-nav-more.mjs|.github/workflows/apply-shared-nav-more.yml) ;;
+              *) echo "Unexpected durable change: $file" >&2; exit 1 ;;
+            esac
+          done <<< "$changed"
+
+      - name: Commit shared navigation integration
+        run: |
+          git config user.name 'natanai'
+          git config user.email '109430106+natanai@users.noreply.github.com'
+          git add -A
+          git commit -m 'Make More a shared persistent nav magnet'
+          git push origin inventory-core-overhaul
