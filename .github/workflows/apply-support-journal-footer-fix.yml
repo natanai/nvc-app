@@ -1,0 +1,74 @@
+name: Apply Support Journal Root Fix Once
+
+on:
+  pull_request:
+    branches: [ux-audit]
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/apply-support-journal-footer-fix.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-support-journal-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply Journal viewport and Support footer fixes
+        run: node scripts/apply-support-journal-footer-fix.mjs
+
+      - name: Run focused checks
+        run: |
+          node --check scripts/alexithymia-support.js
+          npm run lint:evidence
+          npm run test:nav-magnets
+          npm run test:flicker-jitter
+          node - <<'NODE'
+          const fs = require('fs');
+          const css = fs.readFileSync('styles.css','utf8');
+          const js = fs.readFileSync('scripts/alexithymia-support.js','utf8');
+          const html = fs.readFileSync('alexithymia-support/index.html','utf8');
+          if (/support-journal__dialog\s*\{[^}]*100svh/s.test(css)) throw new Error('100svh still controls Journal dialog height');
+          if (!css.includes('height: 100dvh;')) throw new Error('100dvh Journal sizing missing');
+          if (js.includes('setupSupportJournalOverlay') || js.includes('openSupportJournalOverlay')) throw new Error('obsolete Support overlay controller remains');
+          if ((html.match(/data-journal-overlay(?:\s|>)/g) || []).length !== 1) throw new Error('Support page must contain one global Journal overlay');
+          if ((html.match(/data-support-journal-open/g) || []).length < 2) throw new Error('nav and lane Journal triggers must share global hook');
+          if (!html.includes('support-step__nav--compass')) throw new Error('compass footer layout missing');
+          console.log('Support Journal and compass footer structural checks passed.');
+          NODE
+
+      - name: Confirm only intended durable files changed
+        run: |
+          git status --short
+          unexpected="$(git status --porcelain | awk '{print $2}' | grep -Ev '^(styles\.css|scripts/alexithymia-support\.js|alexithymia-support/index\.html)$' || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "Unexpected changes detected:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Remove one-shot integration machinery
+        run: git rm .github/workflows/apply-support-journal-footer-fix.yml scripts/apply-support-journal-footer-fix.mjs
+
+      - name: Commit durable root fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add styles.css scripts/alexithymia-support.js alexithymia-support/index.html
+          git commit -m "Unify Support Journal and fix mobile footer"
+          git push origin HEAD:ux-audit
