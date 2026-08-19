@@ -33,33 +33,31 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           path = Path('scripts/build-pages.mjs')
           text = path.read_text()
-          old = """      .inventory-summary__filter-button {
-                min-height: 38px;
-                min-width: 0;
-                padding: 0.38rem 0.7rem;
-          """
-          new = """      .inventory-summary__filter-button {
-                min-height: 38px;
-                min-width: 0;
-                width: auto;
-                height: auto;
-                max-width: none;
-                padding: 0.42rem 0.74rem;
-                white-space: nowrap;
-                line-height: 1.1;
-                flex: 0 0 auto;
-          """
-          count = text.count(old)
+          pattern = re.compile(
+              r"(\.inventory-summary__filter-button \{\s*\n\s*min-height: 38px;\s*\n\s*min-width: 0;\s*\n)\s*padding: 0\.38rem 0\.7rem;"
+          )
+          replacement = (
+              r"\1"
+              "        width: auto;\n"
+              "        height: auto;\n"
+              "        max-width: none;\n"
+              "        padding: 0.42rem 0.74rem;\n"
+              "        white-space: nowrap;\n"
+              "        line-height: 1.1;\n"
+              "        flex: 0 0 auto;"
+          )
+          text, count = pattern.subn(replacement, text, count=1)
           if count != 1:
-              raise SystemExit(f'Expected exactly one prototype filter rule, found {count}')
-          path.write_text(text.replace(old, new, 1))
+              raise SystemExit(f'Expected exactly one prototype filter rule, patched {count}')
+          path.write_text(text)
           PY
 
-      - name: Regenerate pages
-        run: node scripts/build-pages.mjs
+      - name: Regenerate Inventory only
+        run: node scripts/build-pages.mjs --scope inventory
 
       - name: Verify intended result
         run: |
