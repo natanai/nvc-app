@@ -3,14 +3,15 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const primaryPath = 'scripts/apply-static-nav-menu-repair.mjs';
 let primary = readFileSync(primaryPath, 'utf8');
 
-const oldHomeBlock = `  if (!text.includes('data-magnet-id=\\\\\"nav-menu\\\\\"')) {
-    const homeLineNeedle = '            <a class=\\\\\"pill magnet site-nav__magnet site-nav__magnet--home\\\\\" data-magnet-id=\\\\\"nav-home\\\\\"';
-    assertIncludes(text, homeLineNeedle, 'nav Home markup');
-    text = text.replace(homeLineNeedle, menuMarkup + homeLineNeedle);
+if (!primary.includes("lines.findIndex((line) =>") || !primary.includes("line.includes('nav-home')")) {
+  const blockStart = primary.indexOf("  if (!text.includes('data-magnet-id=\\\\\"nav-menu\\\\\"')) {");
+  const blockEndNeedle = "\n  // Journal is no longer part of the default core board";
+  const blockEnd = primary.indexOf(blockEndNeedle, blockStart);
+  if (blockStart < 0 || blockEnd < 0) {
+    throw new Error('Unable to locate the old Home insertion block in primary repair patcher.');
   }
-`;
 
-const newHomeBlock = `  if (!text.includes('data-magnet-id="nav-menu"') && !text.includes('data-magnet-id=\\\\\"nav-menu\\\\\"')) {
+  const replacement = `  if (!text.includes('data-magnet-id="nav-menu"') && !text.includes('nav-menu')) {
     const lines = text.split('\\n');
     const homeIndex = lines.findIndex((line) =>
       line.includes('site-nav__magnet--home')
@@ -21,21 +22,14 @@ const newHomeBlock = `  if (!text.includes('data-magnet-id="nav-menu"') && !text
     text = lines.join('\\n');
   }
 `;
-
-if (!primary.includes(oldHomeBlock)) {
-  throw new Error('Unable to locate the over-escaped Home matcher in primary repair patcher.');
+  primary = primary.slice(0, blockStart) + replacement + primary.slice(blockEnd);
+  writeFileSync(primaryPath, primary);
 }
-primary = primary.replace(oldHomeBlock, newHomeBlock);
-writeFileSync(primaryPath, primary);
 
 const finishPath = 'scripts/finish-static-nav-menu-repair.mjs';
-let finish = readFileSync(finishPath, 'utf8');
-const oldJournalLine = `  const index = lines.findIndex((line) => line.includes('data-magnet-id=\\\\\\\"nav-journal\\\\\\\"'));`;
-const newJournalLine = `  const index = lines.findIndex((line) => line.includes('data-magnet-id') && line.includes('nav-journal'));`;
-if (!finish.includes(oldJournalLine)) {
-  throw new Error('Unable to locate the over-escaped Journal matcher in finish repair patcher.');
+const finish = readFileSync(finishPath, 'utf8');
+if (!finish.includes("line.includes('data-magnet-id') && line.includes('nav-journal')")) {
+  throw new Error('Finish repair patcher is not using the semantic Journal matcher.');
 }
-finish = finish.replace(oldJournalLine, newJournalLine);
-writeFileSync(finishPath, finish);
 
-console.log('One-shot nav repair matchers corrected.');
+console.log('One-shot nav repair matchers are semantic.');
