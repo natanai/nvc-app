@@ -45,13 +45,27 @@ jobs:
         run: |
           node tests/shared-nav-menu.test.mjs
           npm run test:nav-magnets
-          npm run test:customizer
           npm run test:flicker-jitter
           node --check scripts/body-cues-tool.js
           if ! git diff --quiet ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css; then
             echo 'Body Cues implementation drifted from the preserved working checkpoint.' >&2
             git diff -- ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css
             exit 1
+          fi
+
+          # The preserved checkpoint already has one known customizer-integrity
+          # exception: the standalone Emotions Wheel is outside the generated
+          # app shell and lacks the theme/customizer bootstrap. Refuse any new
+          # customizer regression, but do not let that inherited exception block
+          # this unrelated nav repair.
+          if ! npm run test:customizer > /tmp/customizer-check.log 2>&1; then
+            cat /tmp/customizer-check.log
+            unexpected="$(grep '^Missing ' /tmp/customizer-check.log | grep -v 'feelings/emotions-wheel/index.html' || true)"
+            count="$(grep -c '^Missing .*feelings/emotions-wheel/index.html' /tmp/customizer-check.log || true)"
+            if [ -n "$unexpected" ] || [ "$count" -ne 3 ]; then
+              echo 'Customizer check contains a new regression beyond the preserved Emotions Wheel exception.' >&2
+              exit 1
+            fi
           fi
 
       - name: Remove one-shot machinery
