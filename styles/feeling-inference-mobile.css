@@ -2,6 +2,12 @@
    The disclosure remains the primary tactile container; its expanded content is
    intentionally flatter so information can use the available phone width. */
 
+/* Regulation exercises belong in the dedicated support tools, not in the
+   "How this feeling may show up" recognition view. */
+.feeling-inference__section--skills {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .feeling-inference-panel {
     margin-top: 0.4rem;
@@ -160,37 +166,6 @@
   .feeling-inference__cue-weight,
   .feeling-inference__cue-weight-scale {
     display: none !important;
-  }
-
-  .feeling-inference__skills {
-    display: grid;
-    gap: 0;
-  }
-
-  .feeling-inference__skill {
-    padding: 0.25rem 0;
-    border: 0;
-    border-top: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .feeling-inference__skill:first-child {
-    border-top: 0;
-  }
-
-  .feeling-inference__skill-btn {
-    width: 100%;
-    min-height: 44px;
-    padding: 0.25rem 0;
-    font-size: 0.82rem;
-  }
-
-  .feeling-inference__skill-detail {
-    margin: 0 0 0.45rem;
-    font-size: 0.76rem;
-    line-height: 1.4;
   }
 
   .feeling-inference__actions {
