@@ -1,0 +1,446 @@
+/* Inventory core overhaul — first application-shell prototype.
+   This stylesheet is intentionally scoped to the Inventory page and is linked
+   from the generated Inventory head before first paint. The existing Inventory
+   data/storage behavior remains owned by scripts/inventory.js. */
+
+.inventory-app-shell {
+  position: relative;
+  z-index: 120;
+  width: 100%;
+}
+
+.inventory-app-shell__bar {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 58px;
+  padding: 0.32rem 0.38rem;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 28%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+  box-shadow: 0 7px 18px color-mix(in srgb, var(--outline) 13%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+}
+
+.inventory-app-shell__menu-button,
+.inventory-app-shell__journal-button {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.inventory-app-shell__menu-button:hover,
+.inventory-app-shell__menu-button:focus-visible,
+.inventory-app-shell__journal-button:hover,
+.inventory-app-shell__journal-button:focus-visible {
+  transform: none;
+  background: color-mix(in srgb, var(--sky) 30%, transparent);
+  box-shadow: none;
+}
+
+.inventory-app-shell__menu-icon {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.inventory-app-shell__journal-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.inventory-app-shell__brand {
+  min-width: 0;
+  justify-self: center;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.inventory-app-shell__brand:hover,
+.inventory-app-shell__brand:focus-visible {
+  background: color-mix(in srgb, var(--lavender) 48%, transparent);
+}
+
+.inventory-app-menu[popover] {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: min(390px, calc(100vw - 1rem));
+  max-width: calc(100vw - 1rem);
+  max-height: calc(100dvh - 1rem);
+  margin: 0.5rem;
+  padding: 0;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 34%, transparent);
+  border-radius: clamp(22px, 5vw, 30px);
+  background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+  color: var(--ink);
+  box-shadow: 0 22px 60px color-mix(in srgb, var(--outline) 28%, transparent);
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inventory-app-menu[popover]::backdrop {
+  background: color-mix(in srgb, var(--outline) 20%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.inventory-app-menu__inner {
+  display: grid;
+  gap: 0;
+  padding: max(0.9rem, env(safe-area-inset-top)) 0.85rem max(1rem, env(safe-area-inset-bottom));
+}
+
+.inventory-app-menu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0.45rem 0.8rem;
+}
+
+.inventory-app-menu__eyebrow,
+.inventory-app-menu__title {
+  margin: 0;
+}
+
+.inventory-app-menu__eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+}
+
+.inventory-app-menu__title {
+  margin-top: 0.08rem;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.inventory-app-menu__close {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
+  box-shadow: none;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.inventory-app-menu__close:hover,
+.inventory-app-menu__close:focus-visible {
+  transform: none;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--sky) 34%, #ffffff 66%);
+}
+
+.inventory-app-menu__home,
+.inventory-app-menu__primary,
+.inventory-app-menu__row,
+.inventory-app-menu__button {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.62rem 0.7rem;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+  text-align: left;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.inventory-app-menu__home:hover,
+.inventory-app-menu__home:focus-visible,
+.inventory-app-menu__primary:hover,
+.inventory-app-menu__primary:focus-visible,
+.inventory-app-menu__row:hover,
+.inventory-app-menu__row:focus-visible,
+.inventory-app-menu__button:hover,
+.inventory-app-menu__button:focus-visible {
+  transform: none;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--sky) 25%, transparent);
+}
+
+.inventory-app-menu__home {
+  margin-bottom: 0.3rem;
+  border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+  background: color-mix(in srgb, #ffffff 72%, var(--lavender) 28%);
+}
+
+.inventory-app-menu__home-copy,
+.inventory-app-menu__row-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.04rem;
+}
+
+.inventory-app-menu__home-title,
+.inventory-app-menu__row-title {
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.inventory-app-menu__home-note,
+.inventory-app-menu__row-note {
+  font-size: 0.72rem;
+  line-height: 1.25;
+  color: var(--ink-soft);
+}
+
+.inventory-app-menu__section {
+  padding: 0.72rem 0.2rem 0.58rem;
+  border-top: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+}
+
+.inventory-app-menu__section-title {
+  margin: 0 0 0.22rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink-soft) 68%, transparent);
+}
+
+.inventory-app-menu__section--inventory {
+  padding-top: 0.58rem;
+}
+
+.inventory-app-menu__primary {
+  border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+  background: color-mix(in srgb, var(--mint) 30%, #ffffff 70%);
+  font-weight: 800;
+}
+
+.inventory-app-menu__primary[aria-current='page'] {
+  background: color-mix(in srgb, var(--mint) 48%, #ffffff 52%);
+}
+
+.inventory-app-menu__count {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0.1rem 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #ffffff 80%, var(--sky) 20%);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.inventory-app-menu__settings {
+  border-top: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+  padding: 0.52rem 0.2rem 0;
+}
+
+.inventory-app-menu__settings > summary {
+  min-height: 48px;
+  padding: 0.58rem 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  list-style: none;
+  cursor: pointer;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+.inventory-app-menu__settings > summary::-webkit-details-marker {
+  display: none;
+}
+
+.inventory-app-menu__settings > summary:hover,
+.inventory-app-menu__settings > summary:focus-visible {
+  background: color-mix(in srgb, var(--sky) 22%, transparent);
+}
+
+.inventory-app-menu__settings-chevron {
+  transition: transform 0.16s ease;
+}
+
+.inventory-app-menu__settings[open] .inventory-app-menu__settings-chevron {
+  transform: rotate(90deg);
+}
+
+.inventory-app-menu__settings-body {
+  padding-left: 0.55rem;
+  border-left: 2px solid color-mix(in srgb, var(--outline) 12%, transparent);
+}
+
+/* On the prototype Inventory route the app bar already provides location and
+   navigation context, so the legacy breadcrumb is redundant. */
+.inventory-app-shell + .breadcrumbs {
+  display: none;
+}
+
+/* The app shell owns Journal/Shared/Sync discovery in this experiment. The
+   Inventory header can focus on the workspace itself. */
+.inventory-page .inventory-header__title-row {
+  display: block;
+}
+
+.inventory-page .inventory-header .page-title {
+  text-transform: none;
+  letter-spacing: -0.02em;
+}
+
+.inventory-page .inventory-header__quick-actions {
+  display: flex;
+  width: auto;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
+  width: auto;
+}
+
+.inventory-page .inventory-settings-panel {
+  order: 4;
+}
+
+.inventory-page .inventory-settings-panel:target,
+.inventory-page #inventory-backup-settings:target {
+  scroll-margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-top: 0.7rem;
+  }
+
+  .page-wrapper {
+    gap: 0.75rem;
+  }
+
+  .inventory-app-shell {
+    width: calc(100% + 1rem);
+    margin-inline: -0.5rem;
+  }
+
+  .inventory-app-shell__bar {
+    min-height: 56px;
+    padding: 0.26rem 0.3rem;
+    border-color: color-mix(in srgb, var(--outline) 18%, transparent);
+    background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--outline) 11%, transparent);
+  }
+
+  .inventory-app-menu[popover] {
+    width: calc(100vw - 0.7rem);
+    max-width: calc(100vw - 0.7rem);
+    max-height: calc(100dvh - 0.7rem);
+    margin: 0.35rem;
+    border-radius: 26px;
+  }
+
+  body .inventory-page.inventory-page {
+    padding-top: 0.35rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-header {
+    margin-inline: 0.85rem;
+    gap: 0.35rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__content {
+    gap: 0.35rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-header .page-title {
+    font-size: clamp(1.42rem, 7.2vw, 1.85rem);
+    line-height: 1.05;
+  }
+
+  body .inventory-page.inventory-page .inventory-header .page-description,
+  body .inventory-page.inventory-page .inventory-journal-button,
+  body .inventory-page.inventory-page .inventory-shared-button {
+    display: none !important;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__quick-actions {
+    margin: 0.05rem 0 0;
+    display: flex;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
+    width: auto;
+    min-height: 42px;
+    padding: 0.42rem 0.72rem;
+    border-width: 1.5px;
+    border-radius: var(--radius-pill);
+    box-shadow: none;
+    font-size: 0.76rem;
+    letter-spacing: 0.055em;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child:hover,
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child:focus-visible {
+    transform: none;
+    box-shadow: none;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__quick-actions .strategy-quick-actions__icon {
+    width: 1.35rem;
+    height: 1.35rem;
+    min-width: 1.35rem;
+    min-height: 1.35rem;
+    border-width: 1.5px;
+    box-shadow: none;
+  }
+
+  body .inventory-page.inventory-page .inventory-view-switch {
+    margin-top: 0.05rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-settings-panel,
+  body .inventory-page.inventory-page .inventory-actions--collapsible,
+  body .inventory-page.inventory-page .inventory-form--collapsible {
+    margin-inline: 0.85rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-settings-panel {
+    border: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+  }
+}
