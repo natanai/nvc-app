@@ -47,9 +47,9 @@ jobs:
           npm run test:nav-magnets
           npm run test:flicker-jitter
           node --check scripts/body-cues-tool.js
-          if ! git diff --quiet ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css; then
+          if ! git diff --quiet origin/ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css; then
             echo 'Body Cues implementation drifted from the preserved working checkpoint.' >&2
-            git diff -- ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css
+            git diff origin/ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css
             exit 1
           fi
 
