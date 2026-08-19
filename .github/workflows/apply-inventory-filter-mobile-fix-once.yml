@@ -1,0 +1,84 @@
+name: Apply Inventory Filter Mobile Fix Once
+
+on:
+  pull_request:
+    branches: [ux-audit]
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/inventory-filter-mobile-fix.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-inventory-filter-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit base
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Patch Inventory filter sizing in generator
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/build-pages.mjs')
+          text = path.read_text()
+          old = """      .inventory-summary__filter-button {
+                min-height: 38px;
+                min-width: 0;
+                padding: 0.38rem 0.7rem;
+          """
+          new = """      .inventory-summary__filter-button {
+                min-height: 38px;
+                min-width: 0;
+                width: auto;
+                height: auto;
+                max-width: none;
+                padding: 0.42rem 0.74rem;
+                white-space: nowrap;
+                line-height: 1.1;
+                flex: 0 0 auto;
+          """
+          count = text.count(old)
+          if count != 1:
+              raise SystemExit(f'Expected exactly one prototype filter rule, found {count}')
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Regenerate pages
+        run: node scripts/build-pages.mjs
+
+      - name: Verify intended result
+        run: |
+          grep -n "white-space: nowrap" inventory/index.html
+          grep -n "width: auto" inventory/index.html
+          unexpected="$(git status --porcelain | awk '{print $2}' | grep -Ev '^(scripts/build-pages\.mjs|inventory/index\.html|\.github/workflows/apply-inventory-filter-mobile-fix-once\.yml)$' || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "Unexpected changes detected:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Remove one-shot workflow
+        run: git rm .github/workflows/apply-inventory-filter-mobile-fix-once.yml
+
+      - name: Commit Inventory mobile filter repair
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/build-pages.mjs inventory/index.html
+          git commit -m "Repair Inventory mobile filter sizing"
+          git push origin HEAD:ux-audit
