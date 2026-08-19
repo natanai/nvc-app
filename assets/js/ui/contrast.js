@@ -1,17 +1,22 @@
 (function (global) {
   const namespace = global.NVCContrast || {};
 
+  function isInventoryWorkspacePath() {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    const pathname = window.location && typeof window.location.pathname === 'string'
+      ? window.location.pathname
+      : '';
+    return pathname.endsWith('/inventory/') || pathname.endsWith('/inventory/index.html');
+  }
+
   function loadInventoryMobileStylesBeforePaint() {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
 
-    const pathname = window.location && typeof window.location.pathname === 'string'
-      ? window.location.pathname
-      : '';
-    const isInventoryPath =
-      pathname.endsWith('/inventory/') || pathname.endsWith('/inventory/index.html');
-    if (!isInventoryPath) {
+    if (!isInventoryWorkspacePath()) {
       return;
     }
 
@@ -36,6 +41,36 @@
   }
 
   loadInventoryMobileStylesBeforePaint();
+
+  function loadInventoryCoreShellBeforeMagnets() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    if (!isInventoryWorkspacePath()) {
+      return;
+    }
+
+    if (document.querySelector('script[data-inventory-core-shell-bootstrap]')) {
+      return;
+    }
+
+    const src = '../scripts/inventory-core-shell.js';
+    if (document.readyState === 'loading' && typeof document.write === 'function') {
+      document.write(
+        '<script defer src="' + src + '" data-inventory-core-shell-bootstrap="true"><\/script>'
+      );
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    script.dataset.inventoryCoreShellBootstrap = 'true';
+    document.head.appendChild(script);
+  }
+
+  loadInventoryCoreShellBeforeMagnets();
 
   function loadBodyCuesStylesBeforePaint() {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
