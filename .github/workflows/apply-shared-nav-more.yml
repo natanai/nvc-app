@@ -1,6 +1,6 @@
-name: Apply Shared More Magnet
+name: Verify Shared More Magnet
 
-# One-shot integration workflow for the shared persistent More magnet.
+# One-shot verification/cleanup workflow for the shared persistent More magnet.
 on:
   pull_request:
     branches: [ux-audit-v1-complete]
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  integrate:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout overhaul branch
@@ -28,16 +28,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate and apply integration
+      - name: Validate durable source
         run: |
-          node --check scripts/apply-shared-nav-more.mjs
-          node scripts/apply-shared-nav-more.mjs
           node --check assets/js/ui/contrast.js
           node --check scripts/magnets.js
           node --check scripts/inventory-core-shell.js
-
-      - name: Verify shared nav source
-        run: |
           grep -q "'nav-menu'" scripts/magnets.js
           grep -q 'loadSharedMoreNavigationBeforeMagnets' assets/js/ui/contrast.js
           grep -q 'data-shared-nav-more-bootstrap' assets/js/ui/contrast.js
@@ -53,27 +48,27 @@ jobs:
           npm run test:nav-magnets
           npm run test:flicker-jitter
 
-      - name: Remove one-shot integration machinery
+      - name: Remove one-shot verification machinery
         run: |
           rm -f scripts/apply-shared-nav-more.mjs
           rm -f .github/workflows/apply-shared-nav-more.yml
 
-      - name: Gate durable diff
+      - name: Gate cleanup diff
         run: |
           changed="$(git diff --name-only)"
           printf '%s\n' "$changed"
           while IFS= read -r file; do
             [ -z "$file" ] && continue
             case "$file" in
-              assets/js/ui/contrast.js|scripts/magnets.js|styles/inventory-mobile.css|scripts/apply-shared-nav-more.mjs|.github/workflows/apply-shared-nav-more.yml) ;;
-              *) echo "Unexpected durable change: $file" >&2; exit 1 ;;
+              scripts/apply-shared-nav-more.mjs|.github/workflows/apply-shared-nav-more.yml) ;;
+              *) echo "Unexpected cleanup change: $file" >&2; exit 1 ;;
             esac
           done <<< "$changed"
 
-      - name: Commit shared navigation integration
+      - name: Commit cleanup
         run: |
           git config user.name 'natanai'
           git config user.email '109430106+natanai@users.noreply.github.com'
           git add -A
-          git commit -m 'Make More a shared persistent nav magnet'
+          git commit -m 'Clean shared nav verification machinery'
           git push origin inventory-core-overhaul
