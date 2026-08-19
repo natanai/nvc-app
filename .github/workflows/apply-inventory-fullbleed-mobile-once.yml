@@ -33,6 +33,7 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           path = Path('scripts/build-pages.mjs')
           text = path.read_text()
@@ -52,16 +53,6 @@ jobs:
               raise SystemExit(f'Expected one Inventory htmlPage call anchor, found {text.count(call_old)}')
           text = text.replace(call_old, call_new, 1)
 
-          mobile_old = """      @media (max-width: 640px) {
-                .inventory-overview { padding: 0.7rem; border-radius: var(--radius-xl); }
-                .inventory-view-panel__header { align-items: start; }
-                .inventory-needs-status,
-                .inventory-strategy-count { font-size: 0.72rem; }
-                .inventory-summary__focus { min-height: 58px; padding: 0.62rem 0.65rem; gap: 0.58rem; }
-                .inventory-summary__detail { padding: 0.62rem; }
-                .inventory-header__quick-actions { grid-template-columns: minmax(0, 1fr); }
-              }
-          """
           mobile_new = """      @media (max-width: 640px) {
                 /* Inventory is the app surface on phones, not a card inside the page. */
                 .inventory-page {
@@ -136,9 +127,23 @@ jobs:
                 }
               }
           """
-          if text.count(mobile_old) != 1:
-              raise SystemExit(f'Expected one Inventory prototype mobile block, found {text.count(mobile_old)}')
-          text = text.replace(mobile_old, mobile_new, 1)
+
+          pattern = re.compile(
+              r"      @media \(max-width: 640px\) \{\s*"
+              r"\.inventory-overview \{ padding: 0\.7rem; border-radius: var\(--radius-xl\); \}\s*"
+              r"\.inventory-view-panel__header \{ align-items: start; \}\s*"
+              r"\.inventory-needs-status,\s*"
+              r"\.inventory-strategy-count \{ font-size: 0\.72rem; \}\s*"
+              r"\.inventory-summary__focus \{ min-height: 58px; padding: 0\.62rem 0\.65rem; gap: 0\.58rem; \}\s*"
+              r"\.inventory-summary__detail \{ padding: 0\.62rem; \}\s*"
+              r"\.inventory-header__quick-actions \{ grid-template-columns: minmax\(0, 1fr\); \}\s*"
+              r"\}",
+              re.S,
+          )
+          text, count = pattern.subn(mobile_new.rstrip(), text, count=1)
+          if count != 1:
+              raise SystemExit(f'Expected one Inventory prototype mobile block, found {count}')
+
           path.write_text(text)
           PY
 
