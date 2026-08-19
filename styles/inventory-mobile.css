@@ -1,3 +1,5 @@
+@import url('./inventory-core-shell.css');
+
 /* Inventory mobile app-surface redesign.
    Loaded synchronously from the existing prepaint script only on /inventory/.
    Keep this file presentation-only: no inventory, auth, sync, or storage behavior lives here. */
