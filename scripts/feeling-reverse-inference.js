@@ -127,7 +127,7 @@ function createIntensityDisplay(band, arousal) {
   const energyLabel = describeArousal(arousal);
   const rangeLabel = formatIntensityBand(normalized || band);
   const label = createEl('div', 'feeling-inference__cue-intensity-label');
-  const labelTitle = createEl('span', 'feeling-inference__cue-intensity-title', 'Typical intensity range');
+  const labelTitle = createEl('span', 'feeling-inference__cue-intensity-title', 'Typical intensity');
   label.appendChild(labelTitle);
   if (energyLabel) {
     label.appendChild(createEl('span', 'feeling-inference__cue-intensity-energy', energyLabel));
@@ -174,7 +174,7 @@ function createEl(tag, className, text) {
 
 function buildZoneSection(entry, primaryZone) {
   const section = createEl('section', 'feeling-inference__section feeling-inference__section--zones');
-  const heading = createEl('h3', 'feeling-inference__subheading', 'Affective zone (hypotheses)');
+  const heading = createEl('h3', 'feeling-inference__subheading', 'Typical pattern');
   section.appendChild(heading);
   const list = createEl('div', 'feeling-inference__zones');
   entry.zones.forEach((zoneKey) => {
@@ -202,11 +202,11 @@ function groupBodyCuesByRegion(bodyCues) {
 
 function buildBodyCueSection(entry) {
   const section = createEl('section', 'feeling-inference__section feeling-inference__section--body');
-  const heading = createEl('h3', 'feeling-inference__subheading', 'Body cues that can point here');
+  const heading = createEl('h3', 'feeling-inference__subheading', 'Possible body cues');
   const disclaimer = createEl(
     'p',
     'feeling-inference__disclaimer',
-    'Cues are invitations, not rules; people differ. The green bar shows the feeling intensity (0–10) where folks tend to notice it. The purple bar shows how much this cue mattered compared with other cues in the same body area.'
+    'Possible patterns—not rules or diagnoses. Your experience may differ.'
   );
   section.appendChild(heading);
   section.appendChild(disclaimer);
@@ -232,28 +232,28 @@ function buildBodyCueSection(entry) {
       const weightLabel = createEl('div', 'feeling-inference__cue-weight-label');
       weightLabel.id = weightLabelId;
       weightLabel.appendChild(
-        createEl('span', 'feeling-inference__cue-weight-heading', 'How strongly this cue points to this feeling')
+        createEl('span', 'feeling-inference__cue-weight-heading', 'Relative importance')
       );
       weightLabel.appendChild(
         createEl(
           'span',
           'feeling-inference__cue-weight-detail',
-          `${weightPercent}% of the body-cue signal for this area`
+          `${weightPercent}% among cues in this body area`
         )
       );
       const weight = createEl('div', 'feeling-inference__cue-weight');
       weight.setAttribute('role', 'img');
       weight.setAttribute(
         'aria-label',
-        `Relative contribution approximately ${weightPercent}% of the body-cue signal for this feeling in this area.`
+        `Relative importance ${weightPercent}% compared with other cues in this body area.`
       );
       weight.setAttribute('aria-labelledby', weightLabelId);
       const weightFill = createEl('div', 'feeling-inference__cue-weight-fill');
       weightFill.style.width = `${weightPercent}%`;
       weight.appendChild(weightFill);
       const weightScale = createEl('div', 'feeling-inference__cue-weight-scale');
-      weightScale.appendChild(createEl('span', null, '0% (weak match)'));
-      weightScale.appendChild(createEl('span', null, '100% (primary cue)'));
+      weightScale.appendChild(createEl('span', null, '0%'));
+      weightScale.appendChild(createEl('span', null, '100%'));
       item.appendChild(weightLabel);
       item.appendChild(weight);
       item.appendChild(weightScale);
@@ -463,13 +463,6 @@ function renderPanel(container, feelingKey, entry) {
   container.classList.add('feeling-inference--ready');
   container.setAttribute('tabindex', '-1');
 
-  const heading = createEl(
-    'h2',
-    'feeling-inference__title',
-    'How this feeling might be inferred (hypotheses)'
-  );
-  container.appendChild(heading);
-
   const anchor = EMOTION_CIRCUMPLEX[feelingKey];
   const primaryZone = anchor ? `${anchor.arousal}-${anchor.valence}` : entry.zones?.[0];
   if (entry.zones?.length) {
@@ -478,13 +471,6 @@ function renderPanel(container, feelingKey, entry) {
   container.appendChild(buildBodyCueSection(entry));
 
   container.appendChild(buildSkillsSection(entry));
-
-  const footer = createEl(
-    'footer',
-    'feeling-inference__footer',
-    'These suggestions are hypotheses from affect science (valence × arousal) and self-reported body maps; they are not diagnostic.'
-  );
-  container.appendChild(footer);
 
   const controls = createEl('div', 'feeling-inference__actions');
   controls.appendChild(buildEvidenceButton(container, feelingKey, entry));
@@ -509,6 +495,11 @@ ready(() => {
   const container = panelShell?.querySelector('[data-reverse-inference]');
   if (!toggle || !panelShell || !container) {
     return;
+  }
+
+  const toggleLabel = toggle.querySelector('.feeling-inference-toggle__label');
+  if (toggleLabel) {
+    toggleLabel.textContent = 'How this feeling may show up';
   }
 
   const removeWrapper = () => {
