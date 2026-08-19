@@ -29,8 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prepare and syntax-check Inventory integrator
+        run: |
+          node scripts/prepare-inventory-model-patcher.mjs
+          node --check /tmp/apply-inventory-model-v1.mjs
+
       - name: Integrate Inventory model prototype
-        run: node scripts/apply-inventory-model-v1.mjs
+        run: node /tmp/apply-inventory-model-v1.mjs
 
       - name: Run focused checks
         run: |
@@ -49,7 +54,7 @@ jobs:
           fi
 
       - name: Remove one-shot integration machinery
-        run: git rm .github/workflows/apply-inventory-model-v1.yml scripts/apply-inventory-model-v1.mjs scripts/apply-inventory-model-v1.trigger
+        run: git rm .github/workflows/apply-inventory-model-v1.yml scripts/apply-inventory-model-v1.mjs scripts/apply-inventory-model-v1.trigger scripts/prepare-inventory-model-patcher.mjs
 
       - name: Commit durable Inventory prototype
         run: |
