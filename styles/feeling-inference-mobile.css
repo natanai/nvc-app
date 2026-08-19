@@ -1,0 +1,211 @@
+/* Feeling detail inference — mobile composition.
+   The disclosure remains the primary tactile container; its expanded content is
+   intentionally flatter so information can use the available phone width. */
+
+@media (max-width: 640px) {
+  .feeling-inference-panel {
+    margin-top: 0.4rem;
+  }
+
+  .feeling-inference-panel > .feeling-inference,
+  .feeling-inference {
+    margin: 0;
+    padding: 0.35rem 0.15rem 0.15rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .feeling-inference__section {
+    margin: 0;
+    padding: 0.8rem 0.2rem;
+    border-top: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .feeling-inference__section:first-child {
+    border-top: 0;
+    padding-top: 0.5rem;
+  }
+
+  .feeling-inference__subheading {
+    margin: 0 0 0.45rem;
+    font-size: 0.88rem;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+  }
+
+  .feeling-inference__zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .feeling-inference__zone-chip {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 0;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, #ffffff 72%, var(--lavender) 28%);
+    box-shadow: none;
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    line-height: 1.25;
+    font-weight: 500;
+    text-align: left;
+  }
+
+  .feeling-inference__zone-chip.is-primary {
+    border-color: color-mix(in srgb, var(--outline) 30%, transparent);
+    background: color-mix(in srgb, var(--mint) 48%, #ffffff 52%);
+    font-weight: 650;
+  }
+
+  .feeling-inference__disclaimer {
+    margin: -0.1rem 0 0.5rem;
+    max-width: none;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+  }
+
+  .feeling-inference__body-groups {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .feeling-inference__body-region {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .feeling-inference__body-region + .feeling-inference__body-region {
+    margin-top: 0.65rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .feeling-inference__region-title {
+    margin: 0 0 0.2rem;
+    font-size: 0.78rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    color: color-mix(in srgb, var(--ink) 82%, transparent);
+  }
+
+  .feeling-inference__cue {
+    padding: 0.6rem 0;
+    border-top: 1px solid color-mix(in srgb, var(--outline) 11%, transparent);
+  }
+
+  .feeling-inference__cue:first-of-type {
+    border-top: 0;
+    padding-top: 0.35rem;
+  }
+
+  .feeling-inference__cue-title {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    font-weight: 650;
+  }
+
+  .feeling-inference__cue-note {
+    margin: 0.18rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.38;
+    color: color-mix(in srgb, var(--ink-soft) 78%, transparent);
+  }
+
+  .feeling-inference__cue-intensity {
+    margin: 0.4rem 0 0;
+    gap: 0.28rem;
+  }
+
+  .feeling-inference__cue-intensity-label {
+    display: inline-flex;
+    width: fit-content;
+    gap: 0;
+    align-items: center;
+    padding: 0.16rem 0.42rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--mint) 18%, #ffffff 82%);
+    font-size: 0.67rem;
+    line-height: 1.25;
+    font-style: normal;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--ink) 72%, transparent);
+  }
+
+  .feeling-inference__cue-intensity-meter {
+    height: 0.28rem;
+    background: color-mix(in srgb, var(--outline) 13%, transparent);
+  }
+
+  .feeling-inference__cue-intensity-fill {
+    background: color-mix(in srgb, var(--mint) 65%, var(--plum) 10%);
+  }
+
+  .feeling-inference__cue-intensity-scale,
+  .feeling-inference__cue-weight-label,
+  .feeling-inference__cue-weight,
+  .feeling-inference__cue-weight-scale {
+    display: none !important;
+  }
+
+  .feeling-inference__skills {
+    display: grid;
+    gap: 0;
+  }
+
+  .feeling-inference__skill {
+    padding: 0.25rem 0;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .feeling-inference__skill:first-child {
+    border-top: 0;
+  }
+
+  .feeling-inference__skill-btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.25rem 0;
+    font-size: 0.82rem;
+  }
+
+  .feeling-inference__skill-detail {
+    margin: 0 0 0.45rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
+  }
+
+  .feeling-inference__actions {
+    margin-top: 0.15rem;
+    padding: 0.65rem 0.2rem 0.2rem;
+    border-top: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  .feeling-inference__evidence-btn {
+    min-height: 40px;
+    padding: 0.35rem 0.65rem;
+    border-width: 1px;
+    border-radius: var(--radius-pill);
+    box-shadow: none;
+    background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
+    font-size: 0.72rem;
+  }
+}
