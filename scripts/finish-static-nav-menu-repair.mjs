@@ -50,14 +50,15 @@ const migrationBlock = `          // v2 repairs the short-lived first More proto
   const path = 'scripts/build-pages.mjs';
   let text = read(path);
   const lines = text.split('\n');
-  const index = lines.findIndex((line) => line.includes('data-magnet-id=\\"nav-journal\\"'));
+  const index = lines.findIndex((line) =>
+    line.includes('data-magnet-id') && line.includes('nav-journal'));
   if (index < 0) throw new Error('Unable to locate generated Journal magnet');
   const nearby = lines.slice(index, index + 6).join('\n');
   if (!nearby.includes('data-nav-hidden')) {
     lines.splice(index + 1, 0,
-      '              data-nav-hidden=\\"true\\"',
-      '              aria-hidden=\\"true\\"',
-      '              tabindex=\\"-1\\"',
+      '              data-nav-hidden="true"',
+      '              aria-hidden="true"',
+      '              tabindex="-1"',
     );
     text = lines.join('\n');
   }
