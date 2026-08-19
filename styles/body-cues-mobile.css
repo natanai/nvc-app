@@ -1,6 +1,6 @@
 /* Body Cues mobile app-surface refinements.
-   Presentation only. The scoring, slider state, result DOM reuse, and update timing
-   remain owned by scripts/body-cues-tool.js. */
+   Scoring, slider state, result ordering, and update timing remain owned by
+   scripts/body-cues-tool.js; this file only composes those states for phones. */
 
 /* The pin control is created by the Body Cues runtime but is a mobile-only affordance. */
 .body-cues-page .body-cues-tool__pin-toggle {
@@ -23,8 +23,7 @@
     gap: 0.75rem;
   }
 
-  /* The results surface stays compact enough to remain useful while sticky.
-     It is pinned by default but the user can return it to its natural position. */
+  /* The results surface is pinned by default but can return to its natural place. */
   .body-cues-page .body-cues-tool__summary-panel {
     position: relative;
     margin-inline: 0.65rem;
@@ -92,9 +91,10 @@
     line-height: 1.35;
   }
 
-  /* Reuse the exact same result nodes as a single horizontal live shelf on phones.
-     The shared legacy CSS sets flex-wrap: wrap, so nowrap must be explicit here. */
-  .body-cues-page .body-cues-tool__magnet-container:not([data-empty='true']) {
+  /* Pinned = one horizontal live shelf. All matches remain available by swiping. */
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='true']
+    .body-cues-tool__magnet-container:not([data-empty='true']) {
     display: flex;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -108,12 +108,23 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .body-cues-page .body-cues-tool__magnet-container:not([data-empty='true'])::-webkit-scrollbar {
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='true']
+    .body-cues-tool__magnet-container:not([data-empty='true'])::-webkit-scrollbar {
     display: none;
   }
 
-  /* Safari must honor the runtime's collapsed-result state even though the card
-     itself has an author-level display declaration. */
+  /* Unpinned = full result view in the panel's normal document position. */
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='false']
+    .body-cues-tool__magnet-container:not([data-empty='true']) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
   .body-cues-page .body-cues-tool__magnet[hidden] {
     display: none !important;
   }
@@ -132,6 +143,16 @@
     scroll-snap-align: start;
   }
 
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='false']
+    .body-cues-tool__magnet {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    justify-content: space-between;
+    scroll-snap-align: none;
+  }
+
   .body-cues-page .body-cues-tool__magnet:hover,
   .body-cues-page .body-cues-tool__magnet:focus-visible,
   .body-cues-page .body-cues-tool__magnet.is-top-match {
@@ -143,17 +164,21 @@
     font-size: 0.78rem;
   }
 
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='false']
+    .body-cues-tool__magnet-text {
+    max-width: none;
+  }
+
   .body-cues-page .body-cues-tool__magnet-percent {
     min-width: 2.25rem;
     padding: 0.12rem 0.3rem;
     font-size: 0.64rem;
   }
 
+  /* Mobile no longer collapses the result set; horizontal overflow is the compact state. */
   .body-cues-page .body-cues-tool__result-toggle {
-    min-height: 34px;
-    padding: 0.28rem 0.58rem;
-    border-width: 1.5px;
-    font-size: 0.7rem;
+    display: none !important;
   }
 
   .body-cues-page .body-cues-tool__actions {
@@ -167,6 +192,7 @@
   }
 
   .body-cues-page .body-cues-tool__pin-toggle {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -177,7 +203,7 @@
     padding: 0;
     border: 1.5px solid color-mix(in srgb, var(--outline) 52%, transparent);
     border-radius: var(--radius-pill);
-    background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+    background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
     color: var(--ink);
     box-shadow: none;
     cursor: pointer;
@@ -188,11 +214,15 @@
     border-color: color-mix(in srgb, var(--outline) 68%, transparent);
   }
 
+  .body-cues-page .body-cues-tool__pin-toggle[aria-pressed='false'] {
+    background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+    border-color: color-mix(in srgb, var(--outline) 42%, transparent);
+  }
+
   .body-cues-page .body-cues-tool__pin-toggle:hover,
   .body-cues-page .body-cues-tool__pin-toggle:focus-visible {
     transform: none;
     box-shadow: none;
-    background: color-mix(in srgb, var(--mint) 42%, #ffffff 58%);
   }
 
   .body-cues-page .body-cues-tool__pin-toggle:focus-visible {
@@ -209,6 +239,18 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     pointer-events: none;
+  }
+
+  .body-cues-page .body-cues-tool__pin-slash {
+    opacity: 0;
+    stroke-width: 2.2;
+    transition: opacity 120ms ease;
+  }
+
+  .body-cues-page
+    .body-cues-tool__pin-toggle[aria-pressed='false']
+    .body-cues-tool__pin-slash {
+    opacity: 1;
   }
 
   .body-cues-page .body-cues-tool__reset {
@@ -334,8 +376,16 @@
     margin-inline: 0.5rem;
   }
 
-  .body-cues-page .body-cues-tool__magnet {
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='true']
+    .body-cues-tool__magnet {
     min-width: 54vw;
     max-width: 70vw;
+  }
+
+  .body-cues-page
+    .body-cues-tool__summary-panel[data-pinned='false']
+    .body-cues-tool__magnet-container:not([data-empty='true']) {
+    grid-template-columns: 1fr;
   }
 }
