@@ -1,6 +1,42 @@
 (function (global) {
   const namespace = global.NVCContrast || {};
 
+  function loadInventoryMobileStylesBeforePaint() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const pathname = window.location && typeof window.location.pathname === 'string'
+      ? window.location.pathname
+      : '';
+    const isInventoryPath =
+      pathname.endsWith('/inventory/') || pathname.endsWith('/inventory/index.html');
+    if (!isInventoryPath) {
+      return;
+    }
+
+    if (document.querySelector('link[data-inventory-mobile-styles]')) {
+      return;
+    }
+
+    const href = '../styles/inventory-mobile.css';
+    if (document.readyState === 'loading' && typeof document.write === 'function') {
+      document.write(
+        '<link rel="stylesheet" href="' + href + '" data-inventory-mobile-styles="true">'
+      );
+      return;
+    }
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset.inventoryMobileStyles = 'true';
+    link.setAttribute('blocking', 'render');
+    document.head.appendChild(link);
+  }
+
+  loadInventoryMobileStylesBeforePaint();
+
   function clamp(value, min, max) {
     if (Number.isNaN(value)) {
       return min;
