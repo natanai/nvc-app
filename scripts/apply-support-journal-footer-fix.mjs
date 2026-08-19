@@ -7,9 +7,9 @@ function replaceOnce(source, from, to, label) {
   return next;
 }
 
-// 1) Shared Journal viewport: prefer dynamic viewport height. The later svh
-// overrides made the dialog shorter than the visible viewport after iOS Safari
-// collapsed its browser chrome.
+// 1) Shared Journal viewport: prefer the dynamic viewport. The later svh
+// overrides made the dialog shorter than the currently visible viewport after
+// iOS Safari collapsed its browser chrome.
 const stylesPath = 'styles.css';
 let styles = readFileSync(stylesPath, 'utf8');
 const svhBlocks = [
@@ -103,8 +103,8 @@ for (const deadName of [
 }
 writeFileSync(scriptPath, script);
 
-// 3) Support page: flatten the compass footer so mobile can put Back + Continue
-// on the main row and Not sure below, instead of squeezing three buttons together.
+// 3) Support page: flatten the compass footer so Back + Continue are the
+// primary navigation row and Not sure is a quieter fallback below on phones.
 const pagePath = 'alexithymia-support/index.html';
 let page = readFileSync(pagePath, 'utf8');
 page = replaceOnce(
@@ -123,67 +123,72 @@ page = replaceOnce(
             </div>`,
   'compass footer markup'
 );
-page = replaceOnce(
-  page,
-`.alexithymia-support-page .support-step__nav-primary {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-`,
-`.alexithymia-support-page .support-step__nav--compass {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas: 'back unsure next';
-}
 
-.alexithymia-support-page .support-step__nav--compass [data-step-back] { grid-area: back; }
-.alexithymia-support-page .support-step__nav--compass [data-step-skip] { grid-area: unsure; justify-self: center; }
-.alexithymia-support-page .support-step__nav--compass [data-step-next] { grid-area: next; }
-`,
-  'desktop compass footer styles'
-);
-page = replaceOnce(
-  page,
-`  .alexithymia-support-page .support-step__nav-primary {
-    gap: 0.4rem;
-  }
-
-  .alexithymia-support-page .support-step__nav .support-button {
-    padding-inline: 0.65rem;
-  }`,
-`  .alexithymia-support-page .support-step__nav--compass {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas:
-      'back next'
-      'unsure unsure';
-    gap: 0.55rem;
-  }
-
-  .alexithymia-support-page .support-step__nav--compass [data-step-back],
-  .alexithymia-support-page .support-step__nav--compass [data-step-next] {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .alexithymia-support-page .support-step__nav--compass .support-button--not-sure {
-    justify-self: center;
-    min-width: auto;
-    padding: 0.42rem 0.9rem;
-    border-width: 2px;
-    box-shadow: none;
-  }
-
-  .alexithymia-support-page .support-step__nav .support-button {
-    padding-inline: 0.65rem;
-  }`,
-  'mobile compass footer styles'
+// The old helper class only existed to group Not sure + Continue. It is now
+// unused, so remove its page-scoped rules rather than layering new overrides on
+// top of dead layout code.
+page = page.replace(
+  /\n[ \t]*\.alexithymia-support-page \.support-step__nav-primary \{[^}]*\}\n/g,
+  '\n'
 );
 if (page.includes('support-step__nav-primary')) {
-  throw new Error('Old nested compass footer remains.');
+  throw new Error('Old nested compass footer helper remains.');
 }
+
+const compassFooterStyles = `
+    <style>
+      /* Support Lane compass footer v3 */
+      .alexithymia-support-page .support-step__nav--compass {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-areas: 'back unsure next';
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .alexithymia-support-page .support-step__nav--compass [data-step-back] {
+        grid-area: back;
+      }
+
+      .alexithymia-support-page .support-step__nav--compass [data-step-skip] {
+        grid-area: unsure;
+        justify-self: center;
+      }
+
+      .alexithymia-support-page .support-step__nav--compass [data-step-next] {
+        grid-area: next;
+      }
+
+      @media (max-width: 640px) {
+        .alexithymia-support-page .support-step__nav--compass {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          grid-template-areas:
+            'back next'
+            'unsure unsure';
+          gap: 0.55rem;
+        }
+
+        .alexithymia-support-page .support-step__nav--compass [data-step-back],
+        .alexithymia-support-page .support-step__nav--compass [data-step-next] {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .alexithymia-support-page .support-step__nav--compass .support-button--not-sure {
+          justify-self: center;
+          min-width: auto;
+          padding: 0.42rem 0.9rem;
+          border-width: 2px;
+          box-shadow: none;
+        }
+      }
+    </style>
+`;
+if (page.includes('Support Lane compass footer v3')) {
+  throw new Error('Compass footer v3 styles already present unexpectedly.');
+}
+page = replaceOnce(page, '  </head>', `${compassFooterStyles}  </head>`, 'page head closing tag');
+
 const openHookCount = (page.match(/data-support-journal-open/g) || []).length;
 if (openHookCount < 2) {
   throw new Error('Expected both nav and Support Lane Journal triggers to use the shared hook.');
