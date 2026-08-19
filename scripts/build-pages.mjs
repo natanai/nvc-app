@@ -2891,14 +2891,78 @@ function renderInventoryPage() {
       .inventory-actions--collapsible .inventory-actions__header .section-title { display: none; }
 
       @media (max-width: 640px) {
-        .inventory-overview { padding: 0.7rem; border-radius: var(--radius-xl); }
-        .inventory-view-panel__header { align-items: start; }
-        .inventory-needs-status,
-        .inventory-strategy-count { font-size: 0.72rem; }
-        .inventory-summary__focus { min-height: 58px; padding: 0.62rem 0.65rem; gap: 0.58rem; }
-        .inventory-summary__detail { padding: 0.62rem; }
-        .inventory-header__quick-actions { grid-template-columns: minmax(0, 1fr); }
+      /* Inventory is the app surface on phones, not a card inside the page. */
+      .inventory-page {
+        width: calc(100% + 2rem);
+        margin-inline: -1rem;
+        padding: 1rem 0 2rem;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        gap: 1rem;
       }
+
+      .inventory-page .inventory-header,
+      .inventory-page .inventory-form--collapsible,
+      .inventory-page .inventory-actions--collapsible {
+        margin-inline: 1rem;
+      }
+
+      .inventory-page .inventory-main {
+        gap: 1rem;
+      }
+
+      .inventory-page .inventory-overview {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        gap: 0.75rem;
+      }
+
+      .inventory-page .inventory-view-switch,
+      .inventory-page .inventory-view-panel__header,
+      .inventory-page .inventory-overview__tools,
+      .inventory-page .inventory-strategy-search {
+        margin-inline: 1rem;
+      }
+
+      .inventory-page .inventory-view-panel__header {
+        align-items: start;
+      }
+
+      .inventory-page .inventory-summary {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        border-top: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+        border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+      }
+
+      .inventory-page .inventory-summary__focus {
+        min-height: 60px;
+        padding: 0.72rem 1rem;
+        gap: 0.65rem;
+      }
+
+      .inventory-page .inventory-summary__detail {
+        padding: 0.72rem 1rem;
+      }
+
+      .inventory-page .inventory-list-panel {
+        margin-inline: 1rem;
+      }
+
+      .inventory-page .inventory-needs-status,
+      .inventory-page .inventory-strategy-count {
+        font-size: 0.72rem;
+      }
+
+      .inventory-page .inventory-header__quick-actions {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
     </style>`;
 
   const main = `
@@ -3176,6 +3240,7 @@ function renderInventoryPage() {
     scripts: [{ src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true }],
     headExtras: blueskyPanelStyles,
     main,
+    mainClass: 'page inventory-page',
     activeNav: 'inventory',
     canonicalPath: 'inventory/',
   });
