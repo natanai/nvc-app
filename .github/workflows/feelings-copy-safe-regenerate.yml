@@ -1,8 +1,8 @@
 name: Guarded feelings-only regeneration
 
 on:
-  push:
-    branches: [ux-audit-feelings-copy-safe-run-2]
+  pull_request:
+    branches: [ux-audit]
     paths:
       - '.github/workflows/feelings-copy-safe-regenerate.yml'
 
@@ -11,13 +11,14 @@ permissions:
 
 jobs:
   regenerate-feelings:
+    if: github.event.pull_request.head.ref == 'ux-audit-feelings-copy-safe-run-2'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout exact triggering commit
+      - name: Checkout exact PR head
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -148,12 +149,14 @@ jobs:
           git add scripts/build-pages.mjs scripts/feeling-reverse-inference.js feelings
           git commit -m 'Regenerate feeling inference copy without runtime swap'
 
-      - name: Push only if the isolated branch has not moved
+      - name: Push only if isolated PR branch has not moved
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           git fetch origin ux-audit-feelings-copy-safe-run-2
           REMOTE_SHA="$(git rev-parse origin/ux-audit-feelings-copy-safe-run-2)"
-          if [ "$REMOTE_SHA" != "${GITHUB_SHA}" ]; then
-            echo "Isolated branch moved from ${GITHUB_SHA} to ${REMOTE_SHA}; refusing to overwrite it." >&2
+          if [ "$REMOTE_SHA" != "$EXPECTED_HEAD" ]; then
+            echo "Isolated branch moved from $EXPECTED_HEAD to $REMOTE_SHA; refusing to overwrite it." >&2
             exit 1
           fi
           git push origin HEAD:ux-audit-feelings-copy-safe-run-2
