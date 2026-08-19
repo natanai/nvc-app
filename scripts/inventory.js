@@ -5740,6 +5740,13 @@ function renderInventorySummary() {
     textWrap.className = 'inventory-summary__text';
     const label = document.createElement('span');
     label.className = 'inventory-summary__label';
+    const longestNeedWord = need.title
+      .trim()
+      .split(/\s+/)
+      .reduce((longest, word) => Math.max(longest, word.length), 0);
+    if (longestNeedWord >= 13) {
+      label.classList.add('inventory-summary__label--compact');
+    }
     label.textContent = need.title;
     const countText = document.createElement('span');
     countText.className = 'inventory-summary__count';

@@ -2940,10 +2940,118 @@ function renderInventoryPage() {
         border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
       }
 
+      .inventory-page .inventory-summary {
+
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+
+      }
+
+
+
       .inventory-page .inventory-summary__focus {
+
+
+        min-width: 0;
+
+
         min-height: 60px;
-        padding: 0.72rem 1rem;
-        gap: 0.65rem;
+
+
+        padding: 0.68rem 0.7rem;
+
+
+        gap: 0.45rem;
+
+
+      }
+
+
+
+      .inventory-page .inventory-summary__status {
+
+
+        width: 0.72rem;
+
+
+        height: 0.72rem;
+
+
+        flex: 0 0 auto;
+
+
+      }
+
+
+
+      .inventory-page .inventory-summary__text {
+
+
+        min-width: 0;
+
+
+      }
+
+
+
+      .inventory-page .inventory-summary__label {
+
+
+        font-size: 0.9rem;
+
+
+        line-height: 1.16;
+
+
+        letter-spacing: -0.01em;
+
+
+        text-wrap: balance;
+
+
+      }
+
+
+
+      .inventory-page .inventory-summary__label--compact {
+
+
+        font-size: 0.82rem;
+
+
+        letter-spacing: -0.025em;
+
+
+        white-space: nowrap;
+
+
+      }
+
+
+
+      .inventory-page .inventory-summary__count {
+
+
+        font-size: 0.72rem;
+
+
+        line-height: 1.2;
+
+
+      }
+
+
+
+      .inventory-page .inventory-summary__chevron {
+
+
+        font-size: 1.08rem;
+
+
+        flex: 0 0 auto;
+
+
       }
 
       .inventory-page .inventory-summary__detail {
