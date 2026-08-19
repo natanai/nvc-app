@@ -1,2 +1,2 @@
-Run the isolated feelings-only regeneration with strict diff guards.
-Retry after hardening runtime-swap removal.
+Run the isolated feelings-only copy update with strict diff guards.
+Probe generator destructively only in a disposable worktree; patch live files precisely.
