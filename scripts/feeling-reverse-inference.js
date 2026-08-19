@@ -33,6 +33,7 @@ const AROUSAL_LABELS = {
   low: 'Low energy',
 };
 
+const POLISH_STYLESHEET_ID = 'feeling-inference-mobile-styles';
 let reverseIndexPromise = null;
 
 function slugify(text) {
@@ -44,6 +45,23 @@ function slugify(text) {
 
 function getBasePath() {
   return document.body?.dataset?.basePath || '';
+}
+
+function loadPolishStyles() {
+  const existing = document.getElementById(POLISH_STYLESHEET_ID);
+  if (existing) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    const link = document.createElement('link');
+    link.id = POLISH_STYLESHEET_ID;
+    link.rel = 'stylesheet';
+    link.href = `${getBasePath()}styles/feeling-inference-mobile.css`;
+    link.addEventListener('load', resolve, { once: true });
+    link.addEventListener('error', resolve, { once: true });
+    document.head.appendChild(link);
+  });
 }
 
 function fetchReverseIndex() {
@@ -126,15 +144,21 @@ function createIntensityDisplay(band, arousal) {
   const container = createEl('div', 'feeling-inference__cue-intensity');
   const energyLabel = describeArousal(arousal);
   const rangeLabel = formatIntensityBand(normalized || band);
-  const label = createEl('div', 'feeling-inference__cue-intensity-label');
-  const labelTitle = createEl('span', 'feeling-inference__cue-intensity-title', 'Typical intensity');
-  label.appendChild(labelTitle);
+  const parts = [];
+
   if (energyLabel) {
-    label.appendChild(createEl('span', 'feeling-inference__cue-intensity-energy', energyLabel));
+    parts.push(energyLabel);
   }
-  const rangeText = rangeLabel === '—' ? 'Not enough data yet' : rangeLabel;
-  label.appendChild(createEl('span', 'feeling-inference__cue-intensity-value', rangeText));
-  container.appendChild(label);
+  if (rangeLabel !== '—') {
+    parts.push(`${rangeLabel} / 10`);
+  }
+  if (!parts.length) {
+    parts.push('Intensity varies');
+  }
+
+  container.appendChild(
+    createEl('div', 'feeling-inference__cue-intensity-label', parts.join(' · '))
+  );
 
   if (!normalized) {
     return container;
@@ -143,7 +167,7 @@ function createIntensityDisplay(band, arousal) {
   const [min, max] = normalized;
   const meter = createEl('div', 'feeling-inference__cue-intensity-meter');
   meter.setAttribute('role', 'img');
-  meter.setAttribute('aria-label', `Intensity range ${min} to ${max} on a 0 to 10 scale.`);
+  meter.setAttribute('aria-label', `Typical intensity ${min} to ${max} on a 0 to 10 scale.`);
   const fill = createEl('div', 'feeling-inference__cue-intensity-fill');
   const startPercent = Math.max(0, Math.min(100, (min / 10) * 100));
   const endPercent = Math.max(startPercent, Math.min(100, (max / 10) * 100));
@@ -152,11 +176,6 @@ function createIntensityDisplay(band, arousal) {
   fill.style.width = `${widthPercent}%`;
   meter.appendChild(fill);
   container.appendChild(meter);
-
-  const scale = createEl('div', 'feeling-inference__cue-intensity-scale');
-  scale.appendChild(createEl('span', null, '0'));
-  scale.appendChild(createEl('span', null, '10'));
-  container.appendChild(scale);
 
   return container;
 }
@@ -178,7 +197,7 @@ function buildZoneSection(entry, primaryZone) {
   section.appendChild(heading);
   const list = createEl('div', 'feeling-inference__zones');
   entry.zones.forEach((zoneKey) => {
-    const chip = createEl('span', 'feeling-inference__zone-chip chip', formatZoneLabel(zoneKey));
+    const chip = createEl('span', 'feeling-inference__zone-chip', formatZoneLabel(zoneKey));
     if (zoneKey === primaryZone) {
       chip.classList.add('is-primary');
       chip.setAttribute('aria-label', `${chip.textContent} (primary)`);
@@ -202,11 +221,11 @@ function groupBodyCuesByRegion(bodyCues) {
 
 function buildBodyCueSection(entry) {
   const section = createEl('section', 'feeling-inference__section feeling-inference__section--body');
-  const heading = createEl('h3', 'feeling-inference__subheading', 'Possible body cues');
+  const heading = createEl('h3', 'feeling-inference__subheading', 'Body cues');
   const disclaimer = createEl(
     'p',
     'feeling-inference__disclaimer',
-    'Possible patterns—not rules or diagnoses. Your experience may differ.'
+    'Possible cues, not a checklist or diagnosis.'
   );
   section.appendChild(heading);
   section.appendChild(disclaimer);
@@ -221,42 +240,12 @@ function buildBodyCueSection(entry) {
     group.cues.forEach((cue) => {
       const item = createEl('div', 'feeling-inference__cue');
       item.dataset.optionId = cue.optionId;
+      item.dataset.relativeWeight = String(cue.relativeWeight ?? '');
       item.appendChild(createEl('h5', 'feeling-inference__cue-title', cue.title));
       if (cue.note) {
         item.appendChild(createEl('p', 'feeling-inference__cue-note', cue.note));
       }
-      const intensity = createIntensityDisplay(cue.intensityBand, cue.arousal);
-      item.appendChild(intensity);
-      const weightLabelId = `feeling-cue-${cue.optionId}-weight-label`;
-      const weightPercent = Math.round(cue.relativeWeight * 100);
-      const weightLabel = createEl('div', 'feeling-inference__cue-weight-label');
-      weightLabel.id = weightLabelId;
-      weightLabel.appendChild(
-        createEl('span', 'feeling-inference__cue-weight-heading', 'Relative importance')
-      );
-      weightLabel.appendChild(
-        createEl(
-          'span',
-          'feeling-inference__cue-weight-detail',
-          `${weightPercent}% among cues in this body area`
-        )
-      );
-      const weight = createEl('div', 'feeling-inference__cue-weight');
-      weight.setAttribute('role', 'img');
-      weight.setAttribute(
-        'aria-label',
-        `Relative importance ${weightPercent}% compared with other cues in this body area.`
-      );
-      weight.setAttribute('aria-labelledby', weightLabelId);
-      const weightFill = createEl('div', 'feeling-inference__cue-weight-fill');
-      weightFill.style.width = `${weightPercent}%`;
-      weight.appendChild(weightFill);
-      const weightScale = createEl('div', 'feeling-inference__cue-weight-scale');
-      weightScale.appendChild(createEl('span', null, '0%'));
-      weightScale.appendChild(createEl('span', null, '100%'));
-      item.appendChild(weightLabel);
-      item.appendChild(weight);
-      item.appendChild(weightScale);
+      item.appendChild(createIntensityDisplay(cue.intensityBand, cue.arousal));
       region.appendChild(item);
     });
     regionContainer.appendChild(region);
@@ -469,7 +458,6 @@ function renderPanel(container, feelingKey, entry) {
     container.appendChild(buildZoneSection(entry, primaryZone));
   }
   container.appendChild(buildBodyCueSection(entry));
-
   container.appendChild(buildSkillsSection(entry));
 
   const controls = createEl('div', 'feeling-inference__actions');
@@ -496,7 +484,6 @@ ready(() => {
   if (!toggle || !panelShell || !container) {
     return;
   }
-
 
   const removeWrapper = () => {
     if (wrapper.parentNode) {
@@ -538,7 +525,7 @@ ready(() => {
   const main = document.querySelector('main[data-feeling-slug]');
   const slug = main?.dataset?.feelingSlug;
 
-  fetchReverseIndex().then((data) => {
+  Promise.all([loadPolishStyles(), fetchReverseIndex()]).then(([, data]) => {
     if (!data) {
       removeWrapper();
       return;
