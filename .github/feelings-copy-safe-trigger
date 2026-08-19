@@ -1,1 +1,2 @@
 Run the isolated feelings-only regeneration with strict diff guards.
+Retry after hardening runtime-swap removal.
