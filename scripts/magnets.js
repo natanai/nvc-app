@@ -4,12 +4,13 @@ import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhys
 const NAV_STORAGE_KEY = 'site-nav';
 const NAV_MOBILE_ORDER_QUERY = '(max-width: 640px)';
 const NAV_MOBILE_ORDER_IDS = [
+  'nav-menu',
   'nav-home',
-  'nav-customizer',
-  'nav-journal',
   'nav-observations',
   'nav-feelings',
   'nav-needs',
+  'nav-customizer',
+  'nav-journal',
   'nav-inventory',
 ];
 const ALLOWED_OVERLAP = 6;
