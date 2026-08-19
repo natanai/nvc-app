@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/apply-inventory-mobile-style-loader-once.yml'
 
+# One-shot workflow: this file removes itself after wiring the stylesheet loader.
 permissions:
   contents: write
 
