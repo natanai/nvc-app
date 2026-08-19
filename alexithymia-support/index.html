@@ -521,8 +521,19 @@ button.site-nav__magnet {
   }
 }</style>
     <style>
-/* Support Lane symbolic controls v1 */
-.alexithymia-support-page .support-button[data-support-icon],
+/* Support Lane control hierarchy v2 */
+.alexithymia-support-page .support-button__symbol {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Symbol', sans-serif;
+  font-size: 1.05em;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.alexithymia-support-page .support-button--continue,
+.alexithymia-support-page .support-button--nav,
+.alexithymia-support-page .support-button--breathing-action,
 .alexithymia-support-page .support-button--icon-label {
   display: inline-flex;
   align-items: center;
@@ -530,76 +541,70 @@ button.site-nav__magnet {
   gap: 0.5rem;
 }
 
-.alexithymia-support-page .support-button[data-support-icon]::before,
-.alexithymia-support-page .support-button--icon-label[data-support-icon]::before,
-.alexithymia-support-page .sensation-region__toggle::before {
+.alexithymia-support-page .support-button[data-support-icon='journal']::before,
+.alexithymia-support-page .support-button[data-support-icon='check']::before {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  min-width: 1.15em;
+  min-width: 1.1em;
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Symbol', sans-serif;
-  font-size: 1.05em;
+  font-size: 1.02em;
   font-weight: 800;
   line-height: 1;
 }
 
-.alexithymia-support-page [data-support-icon='play']::before { content: '▶'; }
-.alexithymia-support-page [data-support-icon='skip']::before { content: '»'; }
-.alexithymia-support-page [data-support-icon='back']::before { content: '←'; }
-.alexithymia-support-page [data-support-icon='next']::before { content: '→'; }
-.alexithymia-support-page [data-support-icon='check']::before { content: '✓'; }
-.alexithymia-support-page [data-support-icon='reset']::before { content: '↺'; }
-.alexithymia-support-page [data-support-icon='spark']::before { content: '✦'; }
-.alexithymia-support-page [data-support-icon='compass']::before { content: '⌖'; }
 .alexithymia-support-page [data-support-icon='journal']::before { content: '▤'; }
-
-.alexithymia-support-page .support-button--icon-only {
-  width: 3.2rem;
-  min-width: 3.2rem;
-  height: 3.2rem;
-  min-height: 3.2rem;
-  padding: 0;
-  aspect-ratio: 1;
-}
-
-.alexithymia-support-page .support-button--round,
-.alexithymia-support-page .support-step__nav-icon {
-  border-radius: var(--radius-circle);
-}
+.alexithymia-support-page [data-support-icon='check']::before { content: '✓'; }
 
 .alexithymia-support-page .breathing-card__actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
 }
 
 .alexithymia-support-page .breathing-card__actions .support-button {
-  width: 3.6rem;
-  min-width: 3.6rem;
-  height: 3.6rem;
-  min-height: 3.6rem;
-  padding: 0;
+  width: 100%;
+  min-height: 48px;
+  padding-inline: 0.75rem;
+}
+
+.alexithymia-support-page .sensation-region-list {
+  gap: clamp(0.65rem, 2vw, 0.9rem);
+}
+
+.alexithymia-support-page .sensation-region {
+  gap: 0.45rem;
+  padding: clamp(0.75rem, 2vw, 0.95rem);
 }
 
 .alexithymia-support-page .sensation-region__header {
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.65rem;
+}
+
+.alexithymia-support-page .sensation-region__meta {
+  min-width: 0;
 }
 
 .alexithymia-support-page .sensation-region__toggle {
-  width: 3rem;
-  min-width: 3rem;
-  height: 3rem;
-  min-height: 3rem;
+  width: 46px;
+  min-width: 46px;
+  height: 46px;
+  min-height: 46px;
+  margin: 0;
   padding: 0;
   border-radius: var(--radius-circle);
-  flex: 0 0 auto;
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 24%, transparent);
 }
 
 .alexithymia-support-page .sensation-region__toggle::before {
   content: '+';
-  font-size: 1.45rem;
+  display: block;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .alexithymia-support-page .sensation-region__toggle[aria-expanded='true']::before {
@@ -608,50 +613,83 @@ button.site-nav__magnet {
 
 .alexithymia-support-page .sensation-region__toggle[data-region-completed='true'][aria-expanded='false']::before {
   content: '✓';
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 }
 
-.alexithymia-support-page .sensation-actions {
-  align-items: center;
-}
-
-.alexithymia-support-page .sensation-actions:not(.sensation-actions--secondary) {
+.alexithymia-support-page .sensation-actions--progress {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-top: 0.9rem;
 }
 
-.alexithymia-support-page .sensation-actions .support-button--icon-only {
-  width: 3.25rem;
-  min-width: 3.25rem;
+.alexithymia-support-page .sensation-actions--progress .support-button--continue {
+  width: 100%;
 }
 
-.alexithymia-support-page .sensation-actions--secondary .support-button {
+.alexithymia-support-page .support-button--reset {
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  border-radius: var(--radius-circle);
+  font-size: 1.1rem;
+}
+
+.alexithymia-support-page .support-step__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.alexithymia-support-page .support-step__nav-primary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.alexithymia-support-page .support-step__nav .support-button {
   width: auto;
-  justify-self: start;
+  min-height: 46px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.alexithymia-support-page .support-step__nav .support-button--continue {
+  min-width: 7.5rem;
+}
+
+.alexithymia-support-page .support-step__nav .support-button:disabled {
+  opacity: 0.46;
 }
 
 @media (max-width: 640px) {
+  .alexithymia-support-page .sensation-region__title {
+    font-size: 1rem;
+  }
+
   .alexithymia-support-page .support-step__nav {
-    align-items: center;
+    gap: 0.45rem;
   }
 
   .alexithymia-support-page .support-step__nav-primary {
-    display: flex;
-    flex: 0 1 auto;
-    align-items: center;
+    gap: 0.4rem;
   }
 
-  .alexithymia-support-page .support-step__nav-primary .support-button {
-    width: auto;
+  .alexithymia-support-page .support-step__nav .support-button {
+    padding-inline: 0.65rem;
+    letter-spacing: 0.025em;
   }
 
-  .alexithymia-support-page .sensation-region {
-    padding-block: 0.8rem;
-  }
-
-  .alexithymia-support-page .sensation-region__header {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.65rem;
+  .alexithymia-support-page .support-step__nav .support-button--continue {
+    min-width: 6.8rem;
   }
 }
     </style>
@@ -1111,7 +1149,7 @@ button.site-nav__magnet {
               There are no wrong answers here. Treat every sensation you notice as valuable information. Move at the pace that
               feels kind to you.
             </p>
-            <button class="support-button support-button--icon-label" type="button" data-action="start" data-support-icon="next">Begin</button>
+            <button class="support-button support-button--continue" type="button" data-action="start">Begin <span class="support-button__symbol" aria-hidden="true">→</span></button>
           </article>
 
           <article class="support-step is-hidden" data-step="breathing" aria-live="polite">
@@ -1124,15 +1162,17 @@ button.site-nav__magnet {
               <p class="breathing-card__prompt" data-breathing-display>Press start to try a 30-second guided breath.</p>
               <div class="breathing-visual" data-breathing-visual aria-hidden="true"></div>
               <div class="breathing-card__actions">
-                <button class="support-button support-button--icon-only support-button--round" type="button" data-action="breathing-start" data-support-icon="play" aria-label="Start breathing" title="Start breathing"></button>
+                <button class="support-button support-button--breathing-action" type="button" data-action="breathing-start" aria-label="Start breathing">
+                  <span class="support-button__symbol" aria-hidden="true">▶</span><span>Start</span>
+                </button>
                 <button
-                  class="support-button support-button--ghost support-button--icon-only support-button--round"
+                  class="support-button support-button--ghost support-button--breathing-action"
                   type="button"
                   data-action="breathing-skip"
-                  data-support-icon="skip"
                   aria-label="Skip breathing and continue to the body check-in"
-                  title="Skip breathing"
-                ></button>
+                >
+                  <span>Skip</span><span class="support-button__symbol" aria-hidden="true">→</span>
+                </button>
               </div>
             </div>
           </article>
@@ -1149,18 +1189,13 @@ button.site-nav__magnet {
                 <legend class="sensation-form__legend">Explore sensations by region</legend>
                 <div class="sensation-region-list" data-sensation-region-list aria-live="polite"></div>
               </fieldset>
-              <div class="sensation-actions">
-                <button class="support-button support-button--icon-label" type="button" data-action="sensation-submit" data-support-icon="spark">Emotions</button>
-                <button class="support-button support-button--ghost support-button--icon-only" type="button" data-action="sensation-clear" data-support-icon="reset" aria-label="Clear choices" title="Clear choices"></button>
-              </div>
-              <div class="sensation-actions sensation-actions--secondary">
-                <button
-                  class="support-button support-button--ghost support-button--icon-label"
-                  type="button"
-                  data-action="sensation-next"
-                  data-support-icon="compass"
-                  aria-label="Skip the body check-in and use the emotion compass"
-                >Compass</button>
+              <div class="sensation-actions sensation-actions--progress">
+                <button class="support-button support-button--continue" type="button" data-action="sensation-submit">
+                  <span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span>
+                </button>
+                <button class="support-button support-button--ghost support-button--reset" type="button" data-action="sensation-clear" aria-label="Clear body choices" title="Clear body choices">
+                  <span aria-hidden="true">↺</span>
+                </button>
               </div>
             </form>
           </article>
@@ -1195,10 +1230,10 @@ button.site-nav__magnet {
               </div>
             </div>
             <div class="support-step__nav" data-step-cta>
-              <button class="support-button support-button--ghost support-button--icon-only support-step__nav-icon" type="button" data-step-back data-support-icon="back" aria-label="Back" title="Back"></button>
+              <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
               <div class="support-step__nav-primary">
-                <button class="support-button support-button--ghost support-button--icon-label" type="button" data-step-skip data-support-icon="skip">Not sure</button>
-                <button class="support-button support-button--icon-only support-step__nav-icon" type="button" data-step-next data-support-icon="next" aria-label="Continue" title="Continue"></button>
+                <button class="support-button support-button--ghost support-button--nav" type="button" data-step-skip>Not sure</button>
+                <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span></button>
               </div>
             </div>
           </article>
@@ -1219,8 +1254,8 @@ button.site-nav__magnet {
               <p class="support-note">Select an emotion above to load its details.</p>
             </div>
             <div class="support-step__nav" data-step-cta>
-              <button class="support-button support-button--ghost support-button--icon-only support-step__nav-icon" type="button" data-step-back data-support-icon="back" aria-label="Back" title="Back"></button>
-              <button class="support-button support-button--icon-only support-step__nav-icon" type="button" data-step-next data-support-icon="next" aria-label="Continue" title="Continue"></button>
+              <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
+              <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span></button>
             </div>
           </article>
 
@@ -1231,7 +1266,7 @@ button.site-nav__magnet {
               with them.
             </p>
             <button
-              class="support-button"
+              class="support-button support-button--icon-label"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"
@@ -1242,8 +1277,8 @@ button.site-nav__magnet {
               Journal
             </button>
             <div class="support-step__nav" data-step-cta>
-              <button class="support-button support-button--ghost support-button--icon-only support-step__nav-icon" type="button" data-step-back data-support-icon="back" aria-label="Back" title="Back"></button>
-              <button class="support-button support-button--icon-only support-step__nav-icon" type="button" data-step-next data-support-icon="next" aria-label="Continue" title="Continue"></button>
+              <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
+              <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span></button>
             </div>
           </article>
 
@@ -1253,8 +1288,8 @@ button.site-nav__magnet {
               <p class="support-note">Suggestions will appear after you choose an emotion.</p>
             </div>
             <div class="support-step__nav" data-step-cta>
-              <button class="support-button support-button--ghost support-button--icon-only support-step__nav-icon" type="button" data-step-back data-support-icon="back" aria-label="Back" title="Back"></button>
-              <button class="support-button support-button--icon-only support-step__nav-icon" type="button" data-step-next data-support-icon="next" aria-label="Continue" title="Continue"></button>
+              <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
+              <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span></button>
             </div>
           </article>
 
@@ -1268,8 +1303,8 @@ button.site-nav__magnet {
               <p class="support-note">We will suggest a sentence once you pick an emotion.</p>
             </div>
             <div class="support-step__nav" data-step-cta>
-              <button class="support-button support-button--ghost support-button--icon-only support-step__nav-icon" type="button" data-step-back data-support-icon="back" aria-label="Back" title="Back"></button>
-              <button class="support-button support-button--icon-only support-step__nav-icon" type="button" data-step-next data-support-icon="check" aria-label="Finish" title="Finish"></button>
+              <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
+              <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Finish</span><span class="support-button__symbol" aria-hidden="true">✓</span></button>
             </div>
           </article>
 
@@ -1280,7 +1315,7 @@ button.site-nav__magnet {
               and celebrate every moment of connection you create with yourself.
             </p>
             <div class="support-step__nav support-step__nav--back-only" data-step-cta>
-              <button class="support-button support-button--ghost support-button--icon-only support-step__nav-icon" type="button" data-step-back data-support-icon="back" aria-label="Back" title="Back"></button>
+              <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
             </div>
           </article>
         </section>

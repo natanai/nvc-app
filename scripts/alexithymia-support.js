@@ -404,11 +404,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         goToStep('body');
         break;
       case 'body':
-        if (skip) {
-          goToStep('compass');
-        } else {
-          handleSensationSubmit();
-        }
+        handleSensationSubmit();
         break;
       case 'compass':
         if (skip || state.compassTouched) {
@@ -1122,11 +1118,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       collapseRegion(regionId);
       setRegionToggleState(regionId, { completed: false });
     });
-  }
-
-  function handleSensationSkip() {
-    finishGuidedScan();
-    goToStep('compass');
   }
 
   function renderBodyRegions(container) {
@@ -2409,10 +2400,8 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
     const sensationSubmit = document.querySelector('[data-action="sensation-submit"]');
     const sensationClear = document.querySelector('[data-action="sensation-clear"]');
-    const sensationNext = document.querySelector('[data-action="sensation-next"]');
     sensationSubmit?.addEventListener('click', handleSensationSubmit);
     sensationClear?.addEventListener('click', handleSensationClear);
-    sensationNext?.addEventListener('click', handleSensationSkip);
 
     compassRoot?.addEventListener('nvc-compass-change', handleCompassSelection);
 
