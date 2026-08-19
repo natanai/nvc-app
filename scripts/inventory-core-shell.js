@@ -190,7 +190,10 @@ function initInventoryCoreShell() {
   }
 
   menuButton?.addEventListener('click', () => {
-    const isOpen = typeof menu?.matches === 'function' && menu.matches(':popover-open');
+    const supportsPopover = typeof menu?.showPopover === 'function';
+    const isOpen = supportsPopover && typeof menu?.matches === 'function'
+      ? menu.matches(':popover-open')
+      : false;
     const fallbackOpen = menu?.getAttribute('data-open') === 'true';
     if (isOpen || fallbackOpen) {
       closeMenu(menu, menuButton);
@@ -200,10 +203,12 @@ function initInventoryCoreShell() {
   });
 
   closeButton?.addEventListener('click', () => closeMenu(menu, menuButton));
-  menu?.addEventListener('toggle', () => {
-    const open = menu.matches(':popover-open');
-    menuButton?.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
+  if (menu && typeof menu.showPopover === 'function') {
+    menu.addEventListener('toggle', () => {
+      const open = menu.matches(':popover-open');
+      menuButton?.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
 
   journalButton?.addEventListener('click', () => {
     proxyLegacyControl('.site-nav [data-support-journal-open]');
