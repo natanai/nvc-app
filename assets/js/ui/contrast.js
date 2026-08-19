@@ -37,6 +37,61 @@
 
   loadInventoryMobileStylesBeforePaint();
 
+  function loadBodyCuesStylesBeforePaint() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const pathname = window.location && typeof window.location.pathname === 'string'
+      ? window.location.pathname
+      : '';
+    const isBodyCuesPath =
+      pathname.endsWith('/feelings/body-cues/') ||
+      pathname.endsWith('/feelings/body-cues/index.html');
+    if (!isBodyCuesPath) {
+      return;
+    }
+
+    const links = [
+      {
+        href: '../../styles/body-cues.css',
+        id: 'body-cues-enhancements',
+        marker: 'data-body-cues-base-styles',
+      },
+      {
+        href: '../../styles/body-cues-mobile.css',
+        id: '',
+        marker: 'data-body-cues-mobile-styles',
+      },
+    ];
+
+    links.forEach((entry) => {
+      if (document.querySelector('link[' + entry.marker + ']')) {
+        return;
+      }
+
+      const idAttribute = entry.id ? ' id="' + entry.id + '"' : '';
+      if (document.readyState === 'loading' && typeof document.write === 'function') {
+        document.write(
+          '<link rel="stylesheet" href="' + entry.href + '"' + idAttribute + ' ' + entry.marker + '="true">'
+        );
+        return;
+      }
+
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = entry.href;
+      if (entry.id) {
+        link.id = entry.id;
+      }
+      link.setAttribute(entry.marker, 'true');
+      link.setAttribute('blocking', 'render');
+      document.head.appendChild(link);
+    });
+  }
+
+  loadBodyCuesStylesBeforePaint();
+
   function clamp(value, min, max) {
     if (Number.isNaN(value)) {
       return min;
