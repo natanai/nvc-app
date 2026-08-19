@@ -1,0 +1,88 @@
+name: Apply Inventory Core Shell
+
+on:
+  push:
+    branches: [inventory-core-overhaul]
+    paths:
+      - '.github/workflows/apply-inventory-core-shell.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout overhaul branch
+        uses: actions/checkout@v4
+        with:
+          ref: inventory-core-overhaul
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate integration script
+        run: node --check scripts/apply-inventory-core-shell.mjs
+
+      - name: Apply Inventory shell at generator source
+        run: node scripts/apply-inventory-core-shell.mjs
+
+      - name: Validate generator and shell renderer
+        run: |
+          node --check scripts/build-pages.mjs
+          node --check scripts/render-inventory-app-shell.mjs
+          node --check scripts/inventory.js
+
+      - name: Regenerate Inventory scope
+        run: node scripts/build-pages.mjs --scope=inventory
+
+      - name: Verify Inventory shell output
+        run: |
+          grep -q 'class="inventory-app-shell"' inventory/index.html
+          grep -q 'id="inventory-app-menu"' inventory/index.html
+          grep -q 'id="inventory-sync-settings"' inventory/index.html
+          grep -q 'id="inventory-backup-settings"' inventory/index.html
+          grep -q 'inventory-core-shell.css' inventory/index.html
+          grep -q 'data-magnet-root' index.html
+          if grep -q 'class="inventory-journal-button"' inventory/index.html; then
+            echo 'Legacy Inventory Journal header button still present.' >&2
+            exit 1
+          fi
+          if grep -q 'class="inventory-shared-button"' inventory/index.html; then
+            echo 'Legacy Inventory Shared header button still present.' >&2
+            exit 1
+          fi
+
+      - name: Verify data integrity
+        run: npm run test:data-integrity
+
+      - name: Gate durable diff
+        run: |
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            case "$file" in
+              scripts/build-pages.mjs|inventory/index.html|inventory/journal/index.html) ;;
+              *) echo "Unexpected generated change: $file" >&2; exit 1 ;;
+            esac
+          done <<< "$changed"
+
+      - name: Commit generated Inventory shell
+        run: |
+          git config user.name 'natanai'
+          git config user.email '109430106+natanai@users.noreply.github.com'
+          git add scripts/build-pages.mjs inventory/index.html inventory/journal/index.html
+          if git diff --cached --quiet; then
+            echo 'No generator changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Introduce Inventory core app shell'
+          git push origin inventory-core-overhaul
