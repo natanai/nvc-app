@@ -24,9 +24,11 @@ const state = {
   emptyState: null,
   headingLiveRegion: null,
   resultToggle: null,
+  pinToggle: null,
   activeCueCount: null,
   lastResults: [],
   resultsExpanded: false,
+  resultsPinned: true,
   matchUpdateTimer: null,
   magnetNodes: new Map(),
 };
@@ -480,6 +482,40 @@ function setupResultToggle(root) {
   state.resultToggle = toggle;
 }
 
+function setupPinToggle(root) {
+  const summaryPanel = root.querySelector('.body-cues-tool__summary-panel');
+  const actions = root.querySelector('.body-cues-tool__actions');
+  if (!summaryPanel || !actions) {
+    return;
+  }
+
+  summaryPanel.dataset.pinned = 'true';
+
+  const toggle = createEl('button', 'body-cues-tool__pin-toggle');
+  toggle.type = 'button';
+  toggle.setAttribute('aria-pressed', 'true');
+  toggle.setAttribute('aria-label', 'Unpin possible feelings');
+  toggle.title = 'Unpin possible feelings';
+  toggle.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M8 3h8l-1 6 3 3v2H6v-2l3-3-1-6Z"></path>
+      <path d="M12 14v7"></path>
+    </svg>
+  `;
+
+  toggle.addEventListener('click', () => {
+    state.resultsPinned = !state.resultsPinned;
+    summaryPanel.dataset.pinned = String(state.resultsPinned);
+    toggle.setAttribute('aria-pressed', String(state.resultsPinned));
+    const label = state.resultsPinned ? 'Unpin possible feelings' : 'Pin possible feelings';
+    toggle.setAttribute('aria-label', label);
+    toggle.title = label;
+  });
+
+  actions.prepend(toggle);
+  state.pinToggle = toggle;
+}
+
 function enhanceStructure(root) {
   const matchHeading = root.querySelector('#body-cues-magnets-heading');
   if (matchHeading) {
@@ -513,7 +549,8 @@ function enhanceStructure(root) {
 
   const resetButton = root.querySelector('[data-body-cues-reset]');
   if (resetButton) {
-    resetButton.textContent = 'Reset all cues';
+    resetButton.textContent = 'Reset';
+    resetButton.setAttribute('aria-label', 'Reset all cues');
   }
 }
 
@@ -584,6 +621,7 @@ function initTool(root) {
   }
 
   enhanceStructure(root);
+  setupPinToggle(root);
   setupResultToggle(root);
 
   if (resetButton) {
