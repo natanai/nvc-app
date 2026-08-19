@@ -29,6 +29,8 @@ jobs:
 
       - name: Apply source repair
         run: |
+          node --check scripts/fix-nav-repair-matchers.mjs
+          node scripts/fix-nav-repair-matchers.mjs
           node --check scripts/apply-static-nav-menu-repair.mjs
           node --check scripts/finish-static-nav-menu-repair.mjs
           node scripts/apply-static-nav-menu-repair.mjs
@@ -38,9 +40,6 @@ jobs:
           node --check scripts/inventory.js
           node --check scripts/inventory-core-shell.js
           node --check assets/js/ui/contrast.js
-
-      - name: Regenerate generator-owned pages
-        run: npm run build:pages
 
       - name: Verify shared nav and regressions
         run: |
@@ -57,6 +56,7 @@ jobs:
 
       - name: Remove one-shot machinery
         run: |
+          rm -f scripts/fix-nav-repair-matchers.mjs
           rm -f scripts/apply-static-nav-menu-repair.mjs
           rm -f scripts/finish-static-nav-menu-repair.mjs
           rm -f .github/workflows/repair-shared-nav-menu.yml
@@ -68,7 +68,7 @@ jobs:
           while IFS= read -r file; do
             [ -z "$file" ] && continue
             case "$file" in
-              *.html|scripts/build-pages.mjs|scripts/magnets.js|scripts/inventory.js|scripts/inventory-core-shell.js|assets/js/ui/contrast.js|styles/nav-critical.css|styles.css|tests/shared-nav-menu.test.mjs|scripts/apply-static-nav-menu-repair.mjs|scripts/finish-static-nav-menu-repair.mjs|.github/workflows/repair-shared-nav-menu.yml) ;;
+              *.html|scripts/build-pages.mjs|scripts/magnets.js|scripts/inventory.js|scripts/inventory-core-shell.js|assets/js/ui/contrast.js|styles/nav-critical.css|styles.css|tests/shared-nav-menu.test.mjs|scripts/fix-nav-repair-matchers.mjs|scripts/apply-static-nav-menu-repair.mjs|scripts/finish-static-nav-menu-repair.mjs|.github/workflows/repair-shared-nav-menu.yml) ;;
               *) echo "Unexpected durable change: $file" >&2; exit 1 ;;
             esac
           done <<< "$changed"
