@@ -1,0 +1,82 @@
+name: Repair Shared Nav Menu
+
+on:
+  pull_request:
+    branches: [ux-audit-v1-complete]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout overhaul branch
+        uses: actions/checkout@v4
+        with:
+          ref: inventory-core-overhaul
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply source repair
+        run: |
+          node --check scripts/apply-static-nav-menu-repair.mjs
+          node --check scripts/finish-static-nav-menu-repair.mjs
+          node scripts/apply-static-nav-menu-repair.mjs
+          node scripts/finish-static-nav-menu-repair.mjs
+          node --check scripts/build-pages.mjs
+          node --check scripts/magnets.js
+          node --check scripts/inventory.js
+          node --check scripts/inventory-core-shell.js
+          node --check assets/js/ui/contrast.js
+
+      - name: Regenerate generator-owned pages
+        run: npm run build:pages
+
+      - name: Verify shared nav and regressions
+        run: |
+          node tests/shared-nav-menu.test.mjs
+          npm run test:nav-magnets
+          npm run test:customizer
+          npm run test:flicker-jitter
+          node --check scripts/body-cues-tool.js
+          if ! git diff --quiet ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css; then
+            echo 'Body Cues implementation drifted from the preserved working checkpoint.' >&2
+            git diff -- ux-audit-v1-complete -- scripts/body-cues-tool.js styles/body-cues.css styles/body-cues-mobile.css
+            exit 1
+          fi
+
+      - name: Remove one-shot machinery
+        run: |
+          rm -f scripts/apply-static-nav-menu-repair.mjs
+          rm -f scripts/finish-static-nav-menu-repair.mjs
+          rm -f .github/workflows/repair-shared-nav-menu.yml
+
+      - name: Gate durable source diff
+        run: |
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            case "$file" in
+              *.html|scripts/build-pages.mjs|scripts/magnets.js|scripts/inventory.js|scripts/inventory-core-shell.js|assets/js/ui/contrast.js|styles/nav-critical.css|styles.css|tests/shared-nav-menu.test.mjs|scripts/apply-static-nav-menu-repair.mjs|scripts/finish-static-nav-menu-repair.mjs|.github/workflows/repair-shared-nav-menu.yml) ;;
+              *) echo "Unexpected durable change: $file" >&2; exit 1 ;;
+            esac
+          done <<< "$changed"
+
+      - name: Commit repair
+        run: |
+          git config user.name 'natanai'
+          git config user.email '109430106+natanai@users.noreply.github.com'
+          git add -A
+          git commit -m 'Integrate Menu into persistent nav board'
+          git push origin inventory-core-overhaul
