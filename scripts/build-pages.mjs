@@ -183,13 +183,24 @@ const navPrefillScript = () => String.raw`
               board.classList.remove('no-transitions');
             };
           }
+          var hasMissingVisiblePlacement = false;
           for (var i = 0; i < magnets.length; i += 1) {
             var el = magnets[i];
             if (!el || !el.dataset) {
               continue;
             }
             var id = el.dataset.magnetId;
-            if (!id || !(id in parsed.magnets)) {
+            if (!id) {
+              continue;
+            }
+            if (!(id in parsed.magnets)) {
+              var navHidden =
+                el.hidden ||
+                (el.dataset && el.dataset.navHidden === 'true') ||
+                el.getAttribute('aria-hidden') === 'true';
+              if (!navHidden) {
+                hasMissingVisiblePlacement = true;
+              }
               continue;
             }
             var entry = parsed.magnets[id];
@@ -206,6 +217,13 @@ const navPrefillScript = () => String.raw`
             var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
             var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
             el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
+          }
+
+          if (hasMissingVisiblePlacement) {
+            if (restoreTransitions) {
+              restoreTransitions();
+            }
+            return;
           }
 
           if (board && (board.dataset || typeof board.setAttribute === 'function')) {
@@ -294,10 +312,37 @@ const navVisibilityBootstrapScript = () => String.raw`
             return;
           }
 
+          // v2 repairs the short-lived first More prototype, which forced the
+          // Inventory magnet off. Restore Inventory before first paint while
+          // keeping Journal secondary by default.
+          var navMoreV2Key = 'allneeds.navMore.v2';
+          var needsNavMoreV2 = true;
+          try {
+            needsNavMoreV2 = !window.localStorage || window.localStorage.getItem(navMoreV2Key) !== '1';
+          } catch (error) {
+            needsNavMoreV2 = true;
+          }
+          if (needsNavMoreV2) {
+            parsed.enabled = parsed.enabled && typeof parsed.enabled === 'object'
+              ? parsed.enabled
+              : {};
+            parsed.enabled.inventory = true;
+            parsed.enabled.journal = false;
+            parsed.updatedAt = Date.now();
+            try {
+              if (window.localStorage) {
+                window.localStorage.setItem(storageKey, JSON.stringify(parsed));
+                window.localStorage.setItem(navMoreV2Key, '1');
+              }
+            } catch (error) {
+              // Continue with the in-memory repaired settings.
+            }
+          }
+
           var defaults = {
             home: true,
             customizer: true,
-            journal: true,
+            journal: false,
             inventory: true,
             observations: true,
             fauxFeelings: false,
@@ -762,6 +807,7 @@ const localStorageReminderHtml =
 function normalizeScripts(scripts) {
   const baseScripts = [
     { src: 'assets/js/journal/store.js', module: true },
+    { src: 'scripts/inventory-core-shell.js', defer: true },
     { src: 'scripts/inventory.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
   ];
@@ -1050,6 +1096,20 @@ function renderNav(basePath, activeNav, options = {}) {
   return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="${NAV_MAGNET_STORAGE_KEY}">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
+            <button
+              class="pill magnet site-nav__magnet site-nav__magnet--menu"
+              type="button"
+              data-magnet-id="nav-menu"
+              aria-label="Open More menu"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="nav-more-menu"
+            >
+              <svg class="site-nav__menu-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M4 7h16M4 12h16M4 17h16"></path>
+              </svg>
+              <span class="site-nav__magnet-label visually-hidden">More</span>
+            </button>
             <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="${homeHref}"${activeAttr('home')}>
 ${HOME_ICON_INLINE(basePath)}
               <span class="site-nav__magnet-label visually-hidden">Home</span>
@@ -1068,6 +1128,9 @@ ${HOME_ICON_INLINE(basePath)}
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
+              data-nav-hidden="true"
+              aria-hidden="true"
+              tabindex="-1"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"

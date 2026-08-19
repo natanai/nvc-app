@@ -372,15 +372,8 @@ function initSharedMoreMagnet() {
   const board = nav?.querySelector('[data-magnet-board]');
   if (!nav || !board) return false;
 
-  let menuMagnet = board.querySelector(`[data-magnet-id="${MENU_MAGNET_ID}"]`);
-  if (!(menuMagnet instanceof HTMLElement)) {
-    menuMagnet = createMenuMagnet();
-    const home = board.querySelector('[data-magnet-id="nav-home"]');
-    board.insertBefore(menuMagnet, home || board.firstChild);
-  }
-
-  migrateSharedNav(nav);
-  enforceCanonicalDomOrder(board);
+  const menuMagnet = board.querySelector(`[data-magnet-id="${MENU_MAGNET_ID}"]`);
+  if (!(menuMagnet instanceof HTMLElement)) return false;
 
   const rootUrl = getSiteRootUrl(nav);
   prepareInventoryUtilities(rootUrl);

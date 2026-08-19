@@ -42,57 +42,6 @@
 
   loadInventoryMobileStylesBeforePaint();
 
-  function loadSharedMoreNavigationBeforeMagnets() {
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
-      return;
-    }
-
-    if (
-      document.querySelector('script[data-shared-nav-more-bootstrap]') ||
-      document.querySelector('link[data-shared-nav-more-styles]')
-    ) {
-      return;
-    }
-
-    const current = document.currentScript;
-    if (!current || !current.src) {
-      return;
-    }
-
-    let root;
-    try {
-      root = new URL('../../../', current.src);
-    } catch (error) {
-      return;
-    }
-
-    const styleHref = new URL('styles/inventory-core-shell.css', root).href;
-    const scriptSrc = new URL('scripts/inventory-core-shell.js', root).href;
-
-    if (document.readyState === 'loading' && typeof document.write === 'function') {
-      document.write(
-        '<link rel="stylesheet" href="' + styleHref + '" data-shared-nav-more-styles="true">' +
-        '<script defer src="' + scriptSrc + '" data-shared-nav-more-bootstrap="true"><\\/script>'
-      );
-      return;
-    }
-
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = styleHref;
-    link.dataset.sharedNavMoreStyles = 'true';
-    link.setAttribute('blocking', 'render');
-    document.head.appendChild(link);
-
-    const script = document.createElement('script');
-    script.src = scriptSrc;
-    script.defer = true;
-    script.dataset.sharedNavMoreBootstrap = 'true';
-    document.head.appendChild(script);
-  }
-
-  loadSharedMoreNavigationBeforeMagnets();
-
   function loadBodyCuesStylesBeforePaint() {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;

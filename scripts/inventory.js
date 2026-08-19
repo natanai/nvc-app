@@ -318,7 +318,7 @@ const NAV_ITEM_DEFINITIONS = [
     id: 'journal',
     magnetId: 'nav-journal',
     label: 'Journal magnet',
-    defaultEnabled: true,
+    defaultEnabled: false,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal"]') || null,
   },
   {

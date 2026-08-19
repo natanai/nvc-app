@@ -9,9 +9,9 @@ const NAV_MOBILE_ORDER_IDS = [
   'nav-observations',
   'nav-feelings',
   'nav-needs',
+  'nav-inventory',
   'nav-customizer',
   'nav-journal',
-  'nav-inventory',
 ];
 const ALLOWED_OVERLAP = 6;
 const DEFAULT_CONFIG = {
@@ -1745,6 +1745,14 @@ const initializeBoard = async (root, index) => {
     }
   }
   const stored = storedResult?.magnets || null;
+  const storedIds = Array.isArray(stored)
+    ? new Set(stored.map((item) => item?.id).filter(Boolean))
+    : null;
+  const hasMissingVisibleNavMagnet = Boolean(
+    isNavBoardState(state)
+    && storedIds
+    && state.magnets.some((magnet) => !magnet.navHidden && !storedIds.has(magnet.id)),
+  );
   const storedBoardHeightRaw = storedResult?.boardHeight;
   if (!isNavBoardState(state) && typeof storedBoardHeightRaw === 'number' && storedBoardHeightRaw > 0) {
     const storedBoardHeight = Math.max(storedBoardHeightRaw, state.minHeight || 0);
@@ -1754,7 +1762,7 @@ const initializeBoard = async (root, index) => {
   }
 
   let shouldSeed = true;
-  if (stored && stored.length) {
+  if (stored && stored.length && !hasMissingVisibleNavMagnet) {
     shouldSeed = false;
     const storedById = new Map(stored.map((item) => [item.id, item]));
     const newMagnets = [];
