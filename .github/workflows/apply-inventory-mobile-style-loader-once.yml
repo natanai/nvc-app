@@ -86,9 +86,10 @@ jobs:
           npm run test:nav-magnets
           npm run test:flicker-jitter
 
-      - name: Remove one-shot workflow and commit
+      - name: Remove one-shot files and commit
         run: |
           git rm .github/workflows/apply-inventory-mobile-style-loader-once.yml
+          git rm scripts/inventory-mobile-redesign.trigger
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/js/ui/contrast.js
