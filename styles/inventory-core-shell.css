@@ -1,12 +1,78 @@
 /* Inventory core overhaul — first application-shell prototype.
-   This stylesheet is intentionally scoped to the Inventory page and is linked
-   from the generated Inventory head before first paint. The existing Inventory
-   data/storage behavior remains owned by scripts/inventory.js. */
+   Loaded through the existing Inventory pre-paint stylesheet. Keep this layer
+   scoped to the Inventory workspace; storage and feature behavior still belong
+   to the existing Inventory/Journal/Customizer implementations. */
+
+/* Before the client shell is mounted, collapse the legacy magnet board into a
+   lightweight app-bar placeholder. This prevents an old-nav -> new-nav flash. */
+.page-wrapper:has(.inventory-page) > .site-nav {
+  position: relative;
+  min-height: 58px;
+  padding: 0;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 22%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, #ffffff 86%, var(--lavender) 14%);
+  box-shadow: 0 7px 18px color-mix(in srgb, var(--outline) 12%, transparent);
+  overflow: visible;
+}
+
+.page-wrapper:has(.inventory-page) > .site-nav > .site-nav__board-wrapper {
+  display: none !important;
+}
+
+.page-wrapper:has(.inventory-page) > .site-nav::before {
+  content: 'allneeds.app';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.page-wrapper:has(.inventory-page) > .site-nav::after {
+  content: '☰';
+  position: absolute;
+  left: 0.82rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* Inventory's app bar owns location context in this experiment. */
+.page-wrapper:has(.inventory-page) > .breadcrumbs {
+  display: none;
+}
 
 .inventory-app-shell {
   position: relative;
   z-index: 120;
   width: 100%;
+}
+
+/* Once the real shell is mounted, leave only the legacy Journal overlay inside
+   the old nav. The board stays available in the DOM as the tested behavior owner. */
+.inventory-app-shell + .site-nav {
+  min-height: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.inventory-app-shell + .site-nav::before,
+.inventory-app-shell + .site-nav::after {
+  content: none;
 }
 
 .inventory-app-shell__bar {
@@ -101,6 +167,10 @@
   overflow: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+}
+
+.inventory-app-menu[popover][data-open='true'] {
+  display: block;
 }
 
 .inventory-app-menu[popover]::backdrop {
@@ -306,12 +376,6 @@
   border-left: 2px solid color-mix(in srgb, var(--outline) 12%, transparent);
 }
 
-/* On the prototype Inventory route the app bar already provides location and
-   navigation context, so the legacy breadcrumb is redundant. */
-.inventory-app-shell + .breadcrumbs {
-  display: none;
-}
-
 /* The app shell owns Journal/Shared/Sync discovery in this experiment. The
    Inventory header can focus on the workspace itself. */
 .inventory-page .inventory-header__title-row {
@@ -350,6 +414,11 @@
 
   .page-wrapper {
     gap: 0.75rem;
+  }
+
+  .page-wrapper:has(.inventory-page) > .site-nav {
+    min-height: 56px;
+    box-shadow: 0 5px 14px color-mix(in srgb, var(--outline) 11%, transparent);
   }
 
   .inventory-app-shell {
