@@ -1,3 +1,5 @@
+import './inventory-core-shell.js';
+
 import {
   initBlueskyOAuth,
   getCurrentBlueskySession,
