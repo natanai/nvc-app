@@ -271,6 +271,28 @@ function formatPercent(value) {
   return `${rounded}%`;
 }
 
+function isMobileResultsLayout() {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches;
+}
+
+function getVisibleResultLimit() {
+  if (isMobileResultsLayout()) {
+    return MAX_MAGNETS;
+  }
+  return state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS;
+}
+
+function resetMobileResultsScroll() {
+  if (!isMobileResultsLayout() || !state.resultsPinned || !state.magnetContainer) {
+    return;
+  }
+  window.requestAnimationFrame(() => {
+    if (state.magnetContainer) {
+      state.magnetContainer.scrollLeft = 0;
+    }
+  });
+}
+
 function createMagnetNode(result) {
   const href = getFeelingHref(result.key);
   const magnet = createEl(href ? 'a' : 'span', 'body-cues-tool__magnet');
@@ -297,6 +319,13 @@ function updateResultToggle(totalResults) {
   if (!state.resultToggle) {
     return;
   }
+
+  if (isMobileResultsLayout()) {
+    state.resultToggle.hidden = true;
+    state.resultToggle.setAttribute('aria-expanded', 'true');
+    return;
+  }
+
   const cappedTotal = Math.min(totalResults, MAX_MAGNETS);
   const hiddenCount = Math.max(0, cappedTotal - COLLAPSED_MAGNETS);
   state.resultToggle.hidden = hiddenCount === 0;
@@ -325,16 +354,19 @@ function updateMagnets(results) {
       node.hidden = true;
     });
     updateResultToggle(0);
+    resetMobileResultsScroll();
     return;
   }
 
   state.magnetContainer.dataset.empty = 'false';
-  state.magnetContainer.dataset.expanded = String(state.resultsExpanded);
+  state.magnetContainer.dataset.expanded = String(
+    isMobileResultsLayout() ? true : state.resultsExpanded,
+  );
   if (instructions) {
     instructions.hidden = true;
   }
 
-  const limit = state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS;
+  const limit = getVisibleResultLimit();
   const visibleResults = results.slice(0, limit);
   const visibleKeys = new Set(visibleResults.map((result) => result.key));
 
@@ -365,6 +397,7 @@ function updateMagnets(results) {
   });
 
   updateResultToggle(results.length);
+  resetMobileResultsScroll();
 }
 
 function computeMatches() {
@@ -437,10 +470,7 @@ function updateMatches() {
     if (!matches.length) {
       state.headingLiveRegion.textContent = 'Adjust a cue below to see possible feelings.';
     } else {
-      const shown = Math.min(
-        state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS,
-        matches.length,
-      );
+      const shown = Math.min(getVisibleResultLimit(), matches.length);
       state.headingLiveRegion.textContent = `${shown} strongest ${shown === 1 ? 'match' : 'matches'} shown`;
     }
   }
@@ -468,13 +498,13 @@ function setupResultToggle(root) {
   toggle.hidden = true;
   toggle.setAttribute('aria-expanded', 'false');
   toggle.addEventListener('click', () => {
+    if (isMobileResultsLayout()) {
+      return;
+    }
     state.resultsExpanded = !state.resultsExpanded;
     updateMagnets(state.lastResults);
     if (state.headingLiveRegion && state.lastResults.length) {
-      const shown = Math.min(
-        state.resultsExpanded ? MAX_MAGNETS : COLLAPSED_MAGNETS,
-        state.lastResults.length,
-      );
+      const shown = Math.min(getVisibleResultLimit(), state.lastResults.length);
       state.headingLiveRegion.textContent = `${shown} strongest ${shown === 1 ? 'match' : 'matches'} shown`;
     }
   });
@@ -500,6 +530,7 @@ function setupPinToggle(root) {
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="M8 3h8l-1 6 3 3v2H6v-2l3-3-1-6Z"></path>
       <path d="M12 14v7"></path>
+      <path class="body-cues-tool__pin-slash" d="M4 4l16 16"></path>
     </svg>
   `;
 
@@ -510,6 +541,9 @@ function setupPinToggle(root) {
     const label = state.resultsPinned ? 'Unpin possible feelings' : 'Pin possible feelings';
     toggle.setAttribute('aria-label', label);
     toggle.title = label;
+    if (state.resultsPinned) {
+      resetMobileResultsScroll();
+    }
   });
 
   actions.prepend(toggle);
