@@ -645,14 +645,6 @@ button.site-nav__magnet {
   gap: 0.55rem;
 }
 
-.alexithymia-support-page .support-step__nav-primary {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-left: auto;
-}
 
 .alexithymia-support-page .support-step__nav .support-button {
   width: auto;
@@ -679,9 +671,6 @@ button.site-nav__magnet {
     gap: 0.45rem;
   }
 
-  .alexithymia-support-page .support-step__nav-primary {
-    gap: 0.4rem;
-  }
 
   .alexithymia-support-page .support-step__nav .support-button {
     padding-inline: 0.65rem;
@@ -696,6 +685,54 @@ button.site-nav__magnet {
     <link rel="preload" href="../styles.css" as="style" />
     <link rel="stylesheet" href="../styles.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="../styles.css" /></noscript>
+
+    <style>
+      /* Support Lane compass footer v3 */
+      .alexithymia-support-page .support-step__nav--compass {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-areas: 'back unsure next';
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .alexithymia-support-page .support-step__nav--compass [data-step-back] {
+        grid-area: back;
+      }
+
+      .alexithymia-support-page .support-step__nav--compass [data-step-skip] {
+        grid-area: unsure;
+        justify-self: center;
+      }
+
+      .alexithymia-support-page .support-step__nav--compass [data-step-next] {
+        grid-area: next;
+      }
+
+      @media (max-width: 640px) {
+        .alexithymia-support-page .support-step__nav--compass {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          grid-template-areas:
+            'back next'
+            'unsure unsure';
+          gap: 0.55rem;
+        }
+
+        .alexithymia-support-page .support-step__nav--compass [data-step-back],
+        .alexithymia-support-page .support-step__nav--compass [data-step-next] {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .alexithymia-support-page .support-step__nav--compass .support-button--not-sure {
+          justify-self: center;
+          min-width: auto;
+          padding: 0.42rem 0.9rem;
+          border-width: 2px;
+          box-shadow: none;
+        }
+      }
+    </style>
   </head>
   <body class="alexithymia-support-page" data-base-path="../">
     <a href="#main" class="skip-link">Skip to content</a>
@@ -1229,12 +1266,10 @@ button.site-nav__magnet {
                 </div>
               </div>
             </div>
-            <div class="support-step__nav" data-step-cta>
+            <div class="support-step__nav support-step__nav--compass" data-step-cta>
               <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>
-              <div class="support-step__nav-primary">
-                <button class="support-button support-button--ghost support-button--nav" type="button" data-step-skip>Not sure</button>
-                <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span></button>
-              </div>
+              <button class="support-button support-button--ghost support-button--nav support-button--not-sure" type="button" data-step-skip>Not sure</button>
+              <button class="support-button support-button--continue support-button--nav" type="button" data-step-next><span>Continue</span><span class="support-button__symbol" aria-hidden="true">→</span></button>
             </div>
           </article>
 

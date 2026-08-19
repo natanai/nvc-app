@@ -511,18 +511,6 @@ a:focus-visible {
   }
 }
 
-@supports (height: 100svh) {
-  .support-journal__open {
-    top: calc(100svh - clamp(5rem, 16vw, 6rem));
-  }
-
-  .support-journal__dialog {
-    min-height: 100svh;
-    height: 100svh;
-    max-height: 100svh;
-  }
-}
-
 .support-journal__header {
   position: sticky;
   top: 0;
@@ -820,15 +808,6 @@ body.has-support-journal-open {
     }
   }
 
-  @supports (height: 100svh) {
-    .support-journal__dialog {
-      min-height: 100svh;
-      height: 100svh;
-      max-height: 100svh;
-      width: min(92svh, 560px);
-      max-width: min(92svh, 560px);
-    }
-  }
 }
 
 @keyframes supportScrollHint {

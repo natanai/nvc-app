@@ -128,14 +128,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   let supportJournalNotes = null;
   let supportJournalSubmit = null;
   let supportJournalOpenLink = null;
-  let supportJournalContainer = null;
-  let supportJournalLayer = null;
-  let supportJournalDialog = null;
-  let supportJournalOpenButton = null;
-  let supportJournalCloseButton = null;
-  let supportJournalTitle = null;
-  let supportJournalHeading = null;
-  let supportJournalOverlayOpen = false;
   let evidencePopover = null;
   let evidencePopoverContent = null;
   let evidencePopoverClose = null;
@@ -184,134 +176,10 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   supportJournalNotes = state.journalController?.notesInput || journalStep?.querySelector('[data-journal-notes]');
   supportJournalSubmit = state.journalController?.saveButton || journalStep?.querySelector('[data-journal-submit]');
   supportJournalOpenLink = journalStep?.querySelector('[data-journal-open-link]');
-  supportJournalContainer = journalStep?.querySelector('[data-support-journal]') || null;
-  supportJournalLayer = supportJournalContainer?.querySelector('[data-support-journal-layer]') || null;
-  supportJournalDialog = supportJournalContainer?.querySelector('[data-support-journal-dialog]') || null;
-  supportJournalOpenButton = supportJournalContainer?.querySelector('[data-support-journal-open]') || null;
-  supportJournalCloseButton = supportJournalContainer?.querySelector('[data-support-journal-close]') || null;
-  supportJournalTitle = journalStep?.querySelector('#support-journal-title') || null;
-  supportJournalHeading = supportJournalContainer?.querySelector('[data-support-journal-heading]') || null;
-  if (supportJournalHeading && supportJournalTitle?.textContent) {
-    supportJournalHeading.textContent = supportJournalTitle.textContent.trim();
-  }
-
-  setupSupportJournalOverlay();
 
   state.saveButtonDefaultLabel = supportJournalSubmit?.textContent || 'Save reflection';
 
   let breathingTimer = null;
-
-  function enableSupportJournalDialogAttributes() {
-    if (!supportJournalDialog) {
-      return;
-    }
-    supportJournalDialog.setAttribute('role', 'dialog');
-    supportJournalDialog.setAttribute('aria-modal', 'true');
-    if (supportJournalTitle?.id) {
-      supportJournalDialog.setAttribute('aria-labelledby', supportJournalTitle.id);
-    }
-  }
-
-  function disableSupportJournalDialogAttributes() {
-    if (!supportJournalDialog) {
-      return;
-    }
-    supportJournalDialog.removeAttribute('role');
-    supportJournalDialog.removeAttribute('aria-modal');
-    supportJournalDialog.removeAttribute('aria-labelledby');
-  }
-
-  function setSupportJournalBodyScroll(enabled) {
-    if (!document.body || !document.body.classList) {
-      return;
-    }
-    if (enabled) {
-      document.body.classList.remove('has-support-journal-open');
-    } else {
-      document.body.classList.add('has-support-journal-open');
-    }
-  }
-
-  function openSupportJournalOverlay() {
-    if (!supportJournalLayer || supportJournalOverlayOpen) {
-      return;
-    }
-    supportJournalOverlayOpen = true;
-    supportJournalLayer.dataset.state = 'open';
-    supportJournalLayer.setAttribute('aria-hidden', 'false');
-    if (supportJournalOpenButton) {
-      supportJournalOpenButton.setAttribute('aria-expanded', 'true');
-    }
-    enableSupportJournalDialogAttributes();
-    setSupportJournalBodyScroll(false);
-    if (supportJournalDialog) {
-      const focusDialog = () => {
-        try {
-          supportJournalDialog.focus({ preventScroll: true });
-        } catch (error) {
-          supportJournalDialog.focus();
-        }
-      };
-      if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
-        window.requestAnimationFrame(focusDialog);
-      } else {
-        focusDialog();
-      }
-    }
-    document.addEventListener('keydown', handleSupportJournalEscape);
-  }
-
-  function closeSupportJournalOverlay(options = {}) {
-    const { returnFocus = true } = options;
-    if (!supportJournalLayer || !supportJournalOverlayOpen) {
-      return;
-    }
-    supportJournalOverlayOpen = false;
-    supportJournalLayer.dataset.state = 'closed';
-    supportJournalLayer.setAttribute('aria-hidden', 'true');
-    if (supportJournalOpenButton) {
-      supportJournalOpenButton.setAttribute('aria-expanded', 'false');
-      if (returnFocus) {
-        supportJournalOpenButton.focus();
-      }
-    }
-    disableSupportJournalDialogAttributes();
-    setSupportJournalBodyScroll(true);
-    document.removeEventListener('keydown', handleSupportJournalEscape);
-  }
-
-  function handleSupportJournalLayerClick(event) {
-    if (!supportJournalLayer) {
-      return;
-    }
-    if (event.target === supportJournalLayer) {
-      closeSupportJournalOverlay();
-    }
-  }
-
-  function handleSupportJournalEscape(event) {
-    if (event.defaultPrevented) {
-      return;
-    }
-    if (event.key === 'Escape' || event.key === 'Esc') {
-      closeSupportJournalOverlay();
-    }
-  }
-
-  function setupSupportJournalOverlay() {
-    if (!supportJournalLayer) {
-      return;
-    }
-    supportJournalLayer.dataset.state = 'closed';
-    supportJournalLayer.setAttribute('aria-hidden', 'true');
-    disableSupportJournalDialogAttributes();
-    if (supportJournalOpenButton) {
-      supportJournalOpenButton.setAttribute('aria-expanded', 'false');
-    }
-    supportJournalOpenButton?.addEventListener('click', openSupportJournalOverlay);
-    supportJournalCloseButton?.addEventListener('click', () => closeSupportJournalOverlay());
-    supportJournalLayer.addEventListener('click', handleSupportJournalLayerClick);
-  }
 
   function getJournalStore() {
     return window.NVCJournalStore || window.NVCJournal?.store || null;
