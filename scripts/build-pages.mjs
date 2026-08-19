@@ -2515,6 +2515,384 @@ function renderInventoryPage() {
         }
       }
 
+
+
+      /* Inventory model prototype v1 */
+      .inventory-main {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.9rem, 2vw, 1.25rem);
+      }
+
+      .inventory-overview { order: 1; }
+      .inventory-form { order: 2; }
+      .inventory-actions { order: 3; }
+
+      .inventory-header__quick-actions {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .inventory-view-switch {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px;
+        padding: 4px;
+        border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, var(--lavender) 62%, #ffffff 38%);
+        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      }
+
+      .inventory-view-switch__button {
+        min-height: 46px;
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: transparent;
+        color: var(--ink);
+        font: 700 0.9rem/1 var(--font-body);
+        letter-spacing: 0.02em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        cursor: pointer;
+      }
+
+      .inventory-view-switch__button.is-active,
+      .inventory-view-switch__button[aria-selected='true'] {
+        background: #ffffff;
+        box-shadow: 0 2px 8px color-mix(in srgb, var(--outline) 13%, transparent);
+      }
+
+      .inventory-view-switch__count {
+        min-width: 1.45rem;
+        padding: 0.18rem 0.42rem;
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, var(--sky) 58%, #ffffff 42%);
+        font-size: 0.72rem;
+      }
+
+      .inventory-overview {
+        display: grid;
+        gap: 0.85rem;
+        padding: clamp(0.8rem, 2vw, 1.1rem);
+        border: 2px solid color-mix(in srgb, var(--outline) 50%, transparent);
+        border-radius: var(--radius-2xl);
+        background: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
+        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
+      }
+
+      .inventory-view-panel {
+        display: grid;
+        gap: 0.75rem;
+        min-width: 0;
+      }
+
+      .inventory-view-panel[hidden] { display: none !important; }
+
+      .inventory-view-panel__header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .inventory-view-panel__header .section-title,
+      .inventory-view-panel__header p { margin: 0; }
+
+      .inventory-overview__hint,
+      .inventory-list__hint {
+        margin-top: 0.18rem !important;
+        font-size: 0.84rem;
+        line-height: 1.35;
+        color: var(--ink-soft);
+      }
+
+      .inventory-needs-status,
+      .inventory-strategy-count {
+        flex: 0 0 auto;
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+        text-align: right;
+      }
+
+      .inventory-summary__filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .inventory-summary__filter-button {
+        min-height: 38px;
+        min-width: 0;
+        padding: 0.38rem 0.7rem;
+        border: 1.5px solid color-mix(in srgb, var(--outline) 38%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
+        box-shadow: none;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .inventory-summary__filter-button[aria-pressed='true'],
+      .inventory-summary__filter-button--active {
+        border-color: var(--outline);
+        background: color-mix(in srgb, var(--sky) 54%, #ffffff 46%);
+      }
+
+      .inventory-summary {
+        display: grid;
+        gap: 0;
+        overflow: hidden;
+        border: 2px solid color-mix(in srgb, var(--outline) 46%, transparent);
+        border-radius: var(--radius-xl);
+        background: #ffffff;
+      }
+
+      .inventory-summary__item {
+        display: grid;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--outline) 17%, transparent);
+        border-radius: 0;
+        background: #ffffff;
+        box-shadow: none;
+        overflow: hidden;
+      }
+
+      .inventory-summary__item:last-child { border-bottom: 0; }
+      .inventory-summary__item--ready { background: color-mix(in srgb, var(--mint) 13%, #ffffff 87%); }
+      .inventory-summary__item--missing { background: color-mix(in srgb, var(--rose) 8%, #ffffff 92%); }
+
+      .inventory-summary__focus {
+        width: 100%;
+        min-height: 62px;
+        padding: 0.7rem 0.8rem;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.7rem;
+        text-align: left;
+        color: var(--ink);
+      }
+
+      .inventory-summary__focus:hover,
+      .inventory-summary__focus:focus-visible {
+        transform: none;
+        background: color-mix(in srgb, var(--sky) 16%, #ffffff 84%);
+      }
+
+      .inventory-summary__status {
+        width: 0.82rem;
+        height: 0.82rem;
+        border: 2px solid var(--outline);
+        border-radius: 50%;
+        background: #ffffff;
+      }
+
+      .inventory-summary__item--ready .inventory-summary__status {
+        background: var(--mint);
+      }
+
+      .inventory-summary__text {
+        min-width: 0;
+        display: grid;
+        gap: 0.08rem;
+      }
+
+      .inventory-summary__label {
+        font-size: 0.94rem;
+        font-weight: 750;
+        line-height: 1.2;
+      }
+
+      .inventory-summary__count {
+        font-size: 0.78rem;
+        line-height: 1.2;
+        color: var(--ink-soft);
+      }
+
+      .inventory-summary__chevron {
+        font-size: 1.35rem;
+        line-height: 1;
+        color: var(--ink-soft);
+        transition: transform 0.16s ease;
+      }
+
+      .inventory-summary__focus[aria-expanded='true'] .inventory-summary__chevron {
+        transform: rotate(90deg);
+      }
+
+      .inventory-summary__detail {
+        padding: 0.75rem;
+        border-top: 1px solid color-mix(in srgb, var(--outline) 17%, transparent);
+        background: color-mix(in srgb, var(--lavender) 18%, #ffffff 82%);
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .inventory-summary__detail[hidden] { display: none !important; }
+
+      .inventory-summary__detail-header,
+      .inventory-summary__detail-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .inventory-summary__detail-title {
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .inventory-summary__about-link,
+      .inventory-summary__add-button {
+        min-height: 40px;
+        border-radius: var(--radius-pill);
+        font-size: 0.78rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.38rem 0.72rem;
+      }
+
+      .inventory-summary__about-link {
+        color: var(--ink);
+        text-decoration: none;
+        border: 1.5px solid color-mix(in srgb, var(--outline) 34%, transparent);
+        background: #ffffff;
+      }
+
+      .inventory-summary__add-button {
+        border: 2px solid var(--outline);
+        background: color-mix(in srgb, var(--rose) 74%, #ffffff 26%);
+        color: var(--ink);
+      }
+
+      .inventory-summary__strategy-list {
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .inventory-item--compact {
+        padding: 0.65rem 0.7rem;
+        border-width: 1.5px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 3px 0 color-mix(in srgb, var(--outline) 11%, transparent);
+        background: #ffffff;
+      }
+
+      .inventory-item--compact .inventory-item__title { font-size: 0.95rem; }
+      .inventory-item--compact .inventory-item__description { font-size: 0.82rem; line-height: 1.35; }
+      .inventory-item--compact .inventory-item__actions { margin-top: 0.35rem; }
+
+      .inventory-strategy-search {
+        min-height: 48px;
+        padding: 0 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        border: 2px solid color-mix(in srgb, var(--outline) 42%, transparent);
+        border-radius: var(--radius-lg);
+        background: #ffffff;
+      }
+
+      .inventory-strategy-search__icon {
+        flex: 0 0 auto;
+        font-size: 1.1rem;
+        color: var(--ink-soft);
+      }
+
+      .inventory-strategy-search input {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+      }
+
+      .inventory-list-panel {
+        display: block;
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+        background: transparent;
+      }
+
+      .inventory-list {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .inventory-list .inventory-item {
+        margin: 0;
+      }
+
+      .inventory-form--collapsible,
+      .inventory-actions--collapsible {
+        border: 2px solid color-mix(in srgb, var(--outline) 40%, transparent);
+        border-radius: var(--radius-xl);
+        background: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
+        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 10%, transparent);
+        overflow: hidden;
+      }
+
+      .inventory-disclosure-summary {
+        min-height: 50px;
+        padding: 0.68rem 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        cursor: pointer;
+        list-style: none;
+        font-weight: 800;
+      }
+
+      .inventory-disclosure-summary::-webkit-details-marker { display: none; }
+
+      .inventory-disclosure-summary__glyph {
+        width: 1.7rem;
+        height: 1.7rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--sky) 45%, #ffffff 55%);
+        transition: transform 0.16s ease;
+      }
+
+      details[open] > .inventory-disclosure-summary .inventory-disclosure-summary__glyph {
+        transform: rotate(45deg);
+      }
+
+      .inventory-disclosure-body {
+        padding: 0 0.8rem 0.85rem;
+      }
+
+      .inventory-actions--collapsible .inventory-actions__header .section-title { display: none; }
+
+      @media (max-width: 640px) {
+        .inventory-overview { padding: 0.7rem; border-radius: var(--radius-xl); }
+        .inventory-view-panel__header { align-items: start; }
+        .inventory-needs-status,
+        .inventory-strategy-count { font-size: 0.72rem; }
+        .inventory-summary__focus { min-height: 58px; padding: 0.62rem 0.65rem; gap: 0.58rem; }
+        .inventory-summary__detail { padding: 0.62rem; }
+        .inventory-header__quick-actions { grid-template-columns: minmax(0, 1fr); }
+      }
     </style>`;
 
   const main = `
@@ -2534,22 +2912,12 @@ function renderInventoryPage() {
               </a>
             </div>
             <p class="page-description">
-              Collect strategies you love, then visit the journal to follow how your feelings and needs shift over time.
+              Build a personal library of strategies that help you care for your needs. Browse by need or review everything you have saved.
             </p>
             <div class="strategy-quick-actions inventory-header__quick-actions">
-              <a class="strategy-quick-actions__link" href="#inventory-form">
+              <a class="strategy-quick-actions__link" href="#inventory-form" data-inventory-form-open>
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
-                <span>Add personal strategy</span>
-              </a>
-              <a
-                class="strategy-quick-actions__link strategy-quick-actions__link--secondary"
-                href="#strategies-list"
-                data-jump-to-strategies
-                aria-controls="strategies-list"
-                aria-expanded="false"
-              >
-                <span class="strategy-quick-actions__icon" aria-hidden="true">⇣</span>
-                <span>Review saved strategies</span>
+                <span>Add strategy</span>
               </a>
               <a class="inventory-shared-button" href="../feed/">
                 <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
@@ -2651,9 +3019,14 @@ function renderInventoryPage() {
       </header>
 
       <section class="inventory-main" aria-labelledby="inventory-overview-heading">
-        <section class="inventory-actions" aria-labelledby="inventory-actions-heading">
+        <details class="inventory-actions inventory-actions--collapsible">
+          <summary class="inventory-disclosure-summary">
+            <span>Backup &amp; restore</span>
+            <span class="inventory-disclosure-summary__glyph" aria-hidden="true">+</span>
+          </summary>
+          <div class="inventory-disclosure-body">
           <div class="inventory-actions__header">
-            <h2 id="inventory-actions-heading" class="section-title">Save your progress</h2>
+            <h2 id="inventory-actions-heading" class="visually-hidden">Backup and restore</h2>
             <p class="inventory-actions__hint">
               Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
             </p>
@@ -2689,90 +3062,101 @@ function renderInventoryPage() {
             <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
           </div>
           <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-        </section>
+          </div>
+        </details>
 
-        <section class="inventory-overview" aria-labelledby="inventory-overview-heading">
-          <div class="inventory-overview__header">
-            <h2 id="inventory-overview-heading" class="section-title">Need coverage & saved strategies</h2>
-            <p class="inventory-overview__hint">Use the board to spot needs that are still waiting for care and review what you've saved.</p>
+        <section class="inventory-overview" aria-label="Strategy inventory views">
+        <div class="inventory-view-switch" role="tablist" aria-label="Inventory view">
+          <button
+            type="button"
+            id="inventory-view-needs"
+            class="inventory-view-switch__button is-active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="inventory-needs-panel"
+            data-inventory-view="needs"
+          >
+            Needs
+          </button>
+          <button
+            type="button"
+            id="inventory-view-strategies"
+            class="inventory-view-switch__button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="inventory-strategies-panel"
+            data-inventory-view="strategies"
+          >
+            Strategies
+            <span class="inventory-view-switch__count" data-inventory-strategy-badge hidden></span>
+          </button>
+        </div>
+
+        <section
+          id="inventory-needs-panel"
+          class="inventory-view-panel inventory-view-panel--needs"
+          role="tabpanel"
+          aria-labelledby="inventory-view-needs"
+          data-inventory-view-panel="needs"
+        >
+          <div class="inventory-overview__header inventory-view-panel__header">
+            <div>
+              <h2 class="section-title">Needs</h2>
+              <p class="inventory-overview__hint">Tap a need to see the strategies you have saved for it.</p>
+            </div>
+            <p class="inventory-needs-status" data-inventory-needs-status aria-live="polite"></p>
           </div>
           <div class="inventory-overview__tools">
-            <div class="inventory-summary__filters" role="group" aria-label="Filter needs coverage list">
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="all"
-                aria-pressed="true"
-                title="Show all needs"
-              >
-                <span aria-hidden="true">◎</span>
-                <span class="visually-hidden">Show all needs</span>
-              </button>
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="missing"
-                aria-pressed="false"
-                title="Show needs with no coverage"
-              >
-                <span aria-hidden="true">!</span>
-                <span class="visually-hidden">Show needs with no coverage</span>
-              </button>
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="ready"
-                aria-pressed="false"
-                title="Show needs with coverage"
-              >
-                <span aria-hidden="true">✓</span>
-                <span class="visually-hidden">Show needs with coverage</span>
-              </button>
-              <button
-                type="button"
-                class="inventory-summary__filter-button"
-                data-summary-filter="none"
-                aria-pressed="false"
-                title="Hide all needs"
-              >
-                <span aria-hidden="true">⊘</span>
-                <span class="visually-hidden">Hide all needs</span>
-              </button>
+            <div class="inventory-summary__filters" role="group" aria-label="Filter needs">
+              <button type="button" class="inventory-summary__filter-button" data-summary-filter="all" aria-pressed="true">All</button>
+              <button type="button" class="inventory-summary__filter-button" data-summary-filter="missing" aria-pressed="false">Needs care</button>
+              <button type="button" class="inventory-summary__filter-button" data-summary-filter="ready" aria-pressed="false">Supported</button>
             </div>
           </div>
           <div id="inventory-summary" class="inventory-summary"></div>
-          <div class="inventory-list__toggle">
-            <button
-              type="button"
-              class="inventory-button"
-              data-inventory-toggle
-              aria-expanded="false"
-              aria-controls="strategies-list"
-            >
-              Show your saved strategies
-            </button>
+        </section>
+
+        <section
+          id="inventory-strategies-panel"
+          class="inventory-view-panel inventory-view-panel--strategies"
+          role="tabpanel"
+          aria-labelledby="inventory-view-strategies"
+          data-inventory-view-panel="strategies"
+          hidden
+        >
+          <div class="inventory-list__header inventory-view-panel__header">
+            <div>
+              <h2 id="inventory-list-heading" class="section-title" tabindex="-1">My strategies</h2>
+              <p class="inventory-list__hint">Everything you have saved, regardless of which needs it supports.</p>
+            </div>
+            <p class="inventory-strategy-count" data-inventory-strategy-count aria-live="polite"></p>
           </div>
+          <label class="inventory-strategy-search">
+            <span class="visually-hidden">Search saved strategies</span>
+            <span class="inventory-strategy-search__icon" aria-hidden="true">⌕</span>
+            <input type="search" placeholder="Search your strategies" autocomplete="off" data-inventory-strategy-search />
+          </label>
           <div
-            class="inventory-list-panel inventory-list-panel--hidden"
+            class="inventory-list-panel"
             id="strategies-list"
             data-strategies-container
-            hidden
             aria-labelledby="inventory-list-heading"
           >
-            <div class="inventory-list__header">
-              <h3 id="inventory-list-heading" class="section-title" tabindex="-1">Saved strategies by need</h3>
-              <p class="inventory-list__hint">
-                Expand a need to review strategies you have saved and make updates.
-              </p>
-            </div>
             <div id="inventory-list" class="inventory-list"></div>
           </div>
         </section>
+      </section>
 
-        <section class="inventory-form" aria-labelledby="inventory-form-heading">
-          <h2 id="inventory-form-heading" class="section-title">Add a personal strategy</h2>
+        <details class="inventory-form inventory-form--collapsible" data-inventory-form-shell>
+          <summary class="inventory-disclosure-summary">
+            <span>Add a personal strategy</span>
+            <span class="inventory-disclosure-summary__glyph" aria-hidden="true">+</span>
+          </summary>
+          <div class="inventory-disclosure-body">
+          <h2 id="inventory-form-heading" class="visually-hidden">Add a personal strategy</h2>
           ${personalStrategyForm}
-        </section>
+          </div>
+        </details>
       </section>
     `;
 
