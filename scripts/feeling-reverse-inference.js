@@ -497,10 +497,6 @@ ready(() => {
     return;
   }
 
-  const toggleLabel = toggle.querySelector('.feeling-inference-toggle__label');
-  if (toggleLabel) {
-    toggleLabel.textContent = 'How this feeling may show up';
-  }
 
   const removeWrapper = () => {
     if (wrapper.parentNode) {

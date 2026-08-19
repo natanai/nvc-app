@@ -1743,7 +1743,7 @@ function renderFeeling(item) {
         <button type="button" class="feeling-inference-toggle" data-reverse-inference-toggle aria-expanded="false" aria-controls="${inferencePanelId}" disabled>
           <span class="feeling-inference-toggle__copy">
             <span class="feeling-inference-toggle__badge">Alexithymia support</span>
-            <span class="feeling-inference-toggle__label">How this feeling might be inferred</span>
+            <span class="feeling-inference-toggle__label">How this feeling may show up</span>
           </span>
         </button>
         <div id="${inferencePanelId}" class="feeling-inference-panel" data-reverse-inference-panel hidden>
