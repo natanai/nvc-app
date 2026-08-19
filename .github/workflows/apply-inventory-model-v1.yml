@@ -1,8 +1,9 @@
 name: Apply Inventory Model V1 Once
 
 on:
-  push:
+  pull_request:
     branches: [ux-audit]
+    types: [opened, synchronize]
     paths:
       - 'scripts/apply-inventory-model-v1.trigger'
 
@@ -13,7 +14,7 @@ jobs:
   apply-inventory-model:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout ux-audit
+      - name: Checkout ux-audit base
         uses: actions/checkout@v4
         with:
           ref: ux-audit
