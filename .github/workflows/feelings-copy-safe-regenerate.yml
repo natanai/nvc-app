@@ -1,0 +1,162 @@
+name: Guarded feelings-only regeneration
+
+on:
+  pull_request:
+    branches: [ux-audit]
+    paths:
+      - '.github/workflows/feelings-copy-safe-regenerate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-feelings:
+    if: github.event.pull_request.head.ref == 'ux-audit-feelings-copy-safe-run-2'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply source copy changes without runtime text swapping
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          generator = Path('scripts/build-pages.mjs')
+          generator_text = generator.read_text()
+          old_static = '<span class="feeling-inference-toggle__label">How this feeling might be inferred</span>'
+          new_static = '<span class="feeling-inference-toggle__label">How this feeling may show up</span>'
+          if generator_text.count(old_static) != 1:
+              raise SystemExit(f'Expected exactly one old static inference label in {generator}; found {generator_text.count(old_static)}')
+          generator.write_text(generator_text.replace(old_static, new_static, 1))
+
+          runtime = Path('scripts/feeling-reverse-inference.js')
+          runtime_text = runtime.read_text()
+          old_runtime = """  const toggleLabel = toggle.querySelector('.feeling-inference-toggle__label');
+          if (toggleLabel) {
+            toggleLabel.textContent = 'How this feeling may show up';
+          }
+
+          """
+          if runtime_text.count(old_runtime) != 1:
+              raise SystemExit(f'Expected exactly one runtime label-rewrite block in {runtime}; found {runtime_text.count(old_runtime)}')
+          runtime_text = runtime_text.replace(old_runtime, '', 1)
+
+          required_copy = [
+              "'Typical intensity'",
+              "'Typical pattern'",
+              "'Possible body cues'",
+              "'Relative importance'",
+              "'Possible patterns—not rules or diagnoses. Your experience may differ.'",
+          ]
+          missing = [item for item in required_copy if item not in runtime_text]
+          if missing:
+              raise SystemExit(f'Expected tightened inference copy is missing from {runtime}: {missing}')
+          runtime.write_text(runtime_text)
+          PY
+
+      - name: Regenerate only feeling pages
+        run: node scripts/build-pages.mjs --scope feelings
+
+      - name: Fail closed on any unexpected generated diff
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          allowed_sources = {
+              'scripts/build-pages.mjs',
+              'scripts/feeling-reverse-inference.js',
+          }
+          status = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
+          dirty_paths = []
+          for line in status:
+              path = line[3:]
+              if ' -> ' in path:
+                  path = path.split(' -> ', 1)[1]
+              dirty_paths.append(path)
+
+          unexpected = [
+              path for path in dirty_paths
+              if path not in allowed_sources and not path.startswith('feelings/')
+          ]
+          if unexpected:
+              raise SystemExit('Unexpected paths changed; refusing to continue:\n' + '\n'.join(unexpected))
+
+          old = '<span class="feeling-inference-toggle__label">How this feeling might be inferred</span>'
+          new = '<span class="feeling-inference-toggle__label">How this feeling may show up</span>'
+          changed_feelings = subprocess.check_output(
+              ['git', 'diff', '--name-only', '--', 'feelings'], text=True
+          ).splitlines()
+          if not changed_feelings:
+              raise SystemExit('Feelings-only regeneration produced no feeling-page changes.')
+
+          for path in changed_feelings:
+              if not path.startswith('feelings/') or not path.endswith('/index.html'):
+                  raise SystemExit(f'Unexpected feelings output path: {path}')
+              before = subprocess.check_output(['git', 'show', f'HEAD:{path}'], text=True)
+              after = Path(path).read_text()
+              if before.count(old) != 1:
+                  raise SystemExit(f'{path}: expected exactly one old static label before regeneration; found {before.count(old)}')
+              expected = before.replace(old, new, 1)
+              if after != expected:
+                  raise SystemExit(f'{path}: regeneration changed content beyond the single approved label replacement')
+
+          stale = []
+          for page in Path('feelings').glob('*/index.html'):
+              text = page.read_text()
+              if old in text:
+                  stale.append(str(page))
+          if stale:
+              raise SystemExit('Old inference label remains in generated pages:\n' + '\n'.join(stale[:20]))
+
+          print(f'Validated {len(changed_feelings)} feeling pages; every generated diff is exactly the approved label replacement.')
+          PY
+
+      - name: Verify no Inventory changes
+        run: |
+          if git status --porcelain=v1 -- inventory/ | grep -q .; then
+            echo 'Inventory changed unexpectedly; refusing to continue.' >&2
+            git status --porcelain=v1 -- inventory/
+            exit 1
+          fi
+
+      - name: Run non-destructive integrity checks
+        run: |
+          npm run test:data-integrity
+          npm run test:customizer
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+          npm run lint:entrypoints
+
+      - name: Remove one-shot workflow and commit guarded result
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/feelings-copy-safe-regenerate.yml
+          git add scripts/build-pages.mjs scripts/feeling-reverse-inference.js feelings
+          git commit -m 'Regenerate feeling inference copy without runtime swap'
+
+      - name: Push only if isolated PR branch has not moved
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch origin ux-audit-feelings-copy-safe-run-2
+          REMOTE_SHA="$(git rev-parse origin/ux-audit-feelings-copy-safe-run-2)"
+          if [ "$REMOTE_SHA" != "$EXPECTED_HEAD" ]; then
+            echo "Isolated branch moved from $EXPECTED_HEAD to $REMOTE_SHA; refusing to overwrite it." >&2
+            exit 1
+          fi
+          git push origin HEAD:ux-audit-feelings-copy-safe-run-2
