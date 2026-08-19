@@ -1,3 +1,0 @@
-Run the isolated feelings-only copy update with strict diff guards.
-Probe generator destructively only in a disposable worktree; patch live files precisely.
-Compare known data-integrity failures against the unmodified baseline, ignoring only report timestamps.
