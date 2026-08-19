@@ -2,10 +2,9 @@ name: Apply Shared More Magnet
 
 # One-shot integration workflow for the shared persistent More magnet.
 on:
-  push:
-    branches: [inventory-core-overhaul]
-    paths:
-      - '.github/workflows/apply-shared-nav-more.yml'
+  pull_request:
+    branches: [ux-audit-v1-complete]
+  workflow_dispatch:
 
 permissions:
   contents: write
