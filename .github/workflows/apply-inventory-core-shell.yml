@@ -1,5 +1,6 @@
 name: Apply Inventory Core Shell
 
+# Registered first, then touched once so GitHub executes the already-known workflow.
 on:
   push:
     branches: [inventory-core-overhaul]
