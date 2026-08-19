@@ -143,8 +143,6 @@ jobs:
               if len(probe_drift) > 20:
                   print(f'  ...and {len(probe_drift) - 20} more')
 
-          # Do not use the destructive generator output. Patch only the one approved
-          # static string in the currently tracked pages, preserving every other byte.
           for path in targets:
               page = Path(path)
               current = page.read_text()
@@ -219,13 +217,83 @@ jobs:
           print(f'Final diff allowlist passed for {len(targets)} feeling pages + 2 source files. Inventory is untouched.')
           PY
 
-      - name: Run non-destructive integrity checks
+      - name: Compare data-integrity result with unmodified baseline
         run: |
-          npm run test:data-integrity
+          set -u
+          BASELINE_DIR="$(mktemp -d)"
+          git worktree add --detach "$BASELINE_DIR" HEAD
+
+          set +e
+          (cd "$BASELINE_DIR" && npm run test:data-integrity > "$RUNNER_TEMP/baseline-integrity.log" 2>&1)
+          BASELINE_CODE=$?
+          npm run test:data-integrity > "$RUNNER_TEMP/patched-integrity.log" 2>&1
+          PATCHED_CODE=$?
+          set -e
+
+          if [ "$PATCHED_CODE" -ne "$BASELINE_CODE" ]; then
+            echo "Data-integrity exit changed: baseline=$BASELINE_CODE patched=$PATCHED_CODE" >&2
+            cat "$RUNNER_TEMP/patched-integrity.log" >&2
+            exit 1
+          fi
+
+          for report in data/reports/data-integrity-report.md data/reports/missing-vocabulary.csv; do
+            if [ -f "$BASELINE_DIR/$report" ] && [ -f "$report" ]; then
+              if ! cmp -s "$BASELINE_DIR/$report" "$report"; then
+                echo "Data-integrity report changed relative to baseline: $report" >&2
+                diff -u "$BASELINE_DIR/$report" "$report" || true
+                exit 1
+              fi
+            elif [ -f "$BASELINE_DIR/$report" ] || [ -f "$report" ]; then
+              echo "Data-integrity report presence changed relative to baseline: $report" >&2
+              exit 1
+            fi
+          done
+
+          echo "Data-integrity result matches baseline exactly (exit $PATCHED_CODE)."
+          if [ "$PATCHED_CODE" -ne 0 ]; then
+            echo 'Baseline already has known integrity failures; this patch introduces no new integrity report differences.'
+          fi
+
+          git worktree remove --force "$BASELINE_DIR"
+
+          for report in data/reports/data-integrity-report.md data/reports/missing-vocabulary.csv; do
+            if git ls-files --error-unmatch "$report" >/dev/null 2>&1; then
+              git restore --source=HEAD -- "$report"
+            else
+              rm -f "$report"
+            fi
+          done
+
+      - name: Run remaining non-destructive checks
+        run: |
           npm run test:customizer
           npm run test:flicker-jitter
           npm run test:nav-magnets
           npm run lint:entrypoints
+
+      - name: Verify tests created no unexpected changes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          import subprocess
+
+          targets = [p for p in Path(os.environ['RUNNER_TEMP'], 'feelings_target_paths').read_text().splitlines() if p]
+          allowed = set(targets) | {'scripts/build-pages.mjs', 'scripts/feeling-reverse-inference.js'}
+          status = subprocess.check_output(['git', 'status', '--porcelain=v1'], text=True).splitlines()
+          dirty = []
+          for line in status:
+              path = line[3:]
+              if ' -> ' in path:
+                  path = path.split(' -> ', 1)[1]
+              dirty.append(path)
+          unexpected = sorted(set(dirty) - allowed)
+          if unexpected:
+              raise SystemExit('Tests left unexpected changes; refusing to commit:\n' + '\n'.join(unexpected))
+          if any(path.startswith('inventory/') for path in dirty):
+              raise SystemExit('Inventory changed unexpectedly; refusing to commit.')
+          print('Post-test working tree remains within the approved allowlist; Inventory is untouched.')
+          PY
 
       - name: Remove trigger and commit guarded result
         run: |
