@@ -1,0 +1,98 @@
+name: Apply Inventory Mobile Style Loader Once
+
+on:
+  push:
+    branches: [ux-audit]
+    paths:
+      - '.github/workflows/apply-inventory-mobile-style-loader-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-loader:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ux-audit
+        uses: actions/checkout@v4
+        with:
+          ref: ux-audit
+          fetch-depth: 0
+
+      - name: Add Inventory-only prepaint stylesheet loader
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'assets/js/ui/contrast.js';
+          let source = fs.readFileSync(path, 'utf8');
+
+          if (source.includes('data-inventory-mobile-styles')) {
+            console.log('Inventory mobile stylesheet loader already present.');
+            process.exit(0);
+          }
+
+          const anchor = "(function (global) {\n  const namespace = global.NVCContrast || {};\n";
+          if (!source.includes(anchor)) {
+            throw new Error('Could not find contrast.js bootstrap anchor');
+          }
+
+          const loader = `
+
+  function loadInventoryMobileStylesBeforePaint() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const pathname = window.location && typeof window.location.pathname === 'string'
+      ? window.location.pathname
+      : '';
+    if (!/\\/inventory\\/(?:index\\.html)?$/i.test(pathname)) {
+      return;
+    }
+
+    if (document.querySelector('link[data-inventory-mobile-styles]')) {
+      return;
+    }
+
+    const href = '../styles/inventory-mobile.css';
+    if (document.readyState === 'loading' && typeof document.write === 'function') {
+      document.write(
+        '<link rel="stylesheet" href="' + href + '" data-inventory-mobile-styles="true">'
+      );
+      return;
+    }
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset.inventoryMobileStyles = 'true';
+    link.setAttribute('blocking', 'render');
+    document.head.appendChild(link);
+  }
+
+  loadInventoryMobileStylesBeforePaint();`;
+
+          source = source.replace(anchor, anchor + loader);
+          fs.writeFileSync(path, source);
+          NODE
+
+      - name: Verify loader and focused regressions
+        run: |
+          node --check assets/js/ui/contrast.js
+          test -f styles/inventory-mobile.css
+          grep -n 'data-inventory-mobile-styles' assets/js/ui/contrast.js
+          grep -n 'inventory-summary__label--compact' styles/inventory-mobile.css
+          if [ -f tests/inventory-prepaint-style.test.mjs ]; then
+            node tests/inventory-prepaint-style.test.mjs
+          fi
+          npm run test:nav-magnets
+          npm run test:flicker-jitter
+
+      - name: Remove one-shot workflow and commit
+        run: |
+          git rm .github/workflows/apply-inventory-mobile-style-loader-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/js/ui/contrast.js
+          git commit -m "Load Inventory mobile redesign before paint"
+          git push origin HEAD:ux-audit
