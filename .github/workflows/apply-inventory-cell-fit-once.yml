@@ -33,111 +33,95 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           js_path = Path('scripts/inventory.js')
           js = js_path.read_text()
-          old = """    const label = document.createElement('span');
-              label.className = 'inventory-summary__label';
-              label.textContent = need.title;
-          """
-          new = """    const label = document.createElement('span');
-              label.className = 'inventory-summary__label';
-              const longestNeedWord = need.title
-                .trim()
-                .split(/\\s+/)
-                .reduce((longest, word) => Math.max(longest, word.length), 0);
-              if (longestNeedWord >= 13) {
-                label.classList.add('inventory-summary__label--compact');
-              }
-              label.textContent = need.title;
-          """
-          if js.count(old) != 1:
-              raise SystemExit(f'Expected one Inventory label creation anchor, found {js.count(old)}')
-          js = js.replace(old, new, 1)
+          js_pattern = re.compile(
+              r"(?P<indent>\s*)const label = document\.createElement\('span'\);\n"
+              r"(?P=indent)label\.className = 'inventory-summary__label';\n"
+              r"(?P=indent)label\.textContent = need\.title;"
+          )
+          js_match = js_pattern.search(js)
+          if not js_match:
+              raise SystemExit('Inventory label creation anchor not found')
+          indent = js_match.group('indent')
+          js_replacement = (
+              f"{indent}const label = document.createElement('span');\n"
+              f"{indent}label.className = 'inventory-summary__label';\n"
+              f"{indent}const longestNeedWord = need.title\n"
+              f"{indent}  .trim()\n"
+              f"{indent}  .split(/\\s+/)\n"
+              f"{indent}  .reduce((longest, word) => Math.max(longest, word.length), 0);\n"
+              f"{indent}if (longestNeedWord >= 13) {{\n"
+              f"{indent}  label.classList.add('inventory-summary__label--compact');\n"
+              f"{indent}}}\n"
+              f"{indent}label.textContent = need.title;"
+          )
+          js, count = js_pattern.subn(js_replacement, js, count=1)
+          if count != 1:
+              raise SystemExit(f'Expected one Inventory label patch, got {count}')
           js_path.write_text(js)
 
           build_path = Path('scripts/build-pages.mjs')
           build = build_path.read_text()
-          anchor = """      .inventory-page .inventory-summary__focus {
-                min-height: 60px;
-                padding: 0.72rem 1rem;
-                gap: 0.65rem;
-              }
-          """
-          replacement = """      .inventory-page .inventory-summary {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-              }
+          css_pattern = re.compile(
+              r"(?P<indent>\s*)\.inventory-page \.inventory-summary__focus \{\s*"
+              r"min-height:\s*60px;\s*"
+              r"padding:\s*0\.72rem 1rem;\s*"
+              r"gap:\s*0\.65rem;\s*"
+              r"\}"
+          )
+          css_match = css_pattern.search(build)
+          if not css_match:
+              raise SystemExit('Mobile Inventory focus block not found')
+          i = css_match.group('indent')
+          css_replacement = f"""{i}.inventory-page .inventory-summary {{
+          {i}  grid-template-columns: repeat(2, minmax(0, 1fr));
+          {i}}}
 
-              .inventory-page .inventory-summary__focus {
-                min-width: 0;
-                min-height: 60px;
-                padding: 0.68rem 0.7rem;
-                gap: 0.45rem;
-              }
+          {i}.inventory-page .inventory-summary__focus {{
+          {i}  min-width: 0;
+          {i}  min-height: 60px;
+          {i}  padding: 0.68rem 0.7rem;
+          {i}  gap: 0.45rem;
+          {i}}}
 
-              .inventory-page .inventory-summary__status {
-                width: 0.72rem;
-                height: 0.72rem;
-                flex: 0 0 auto;
-              }
+          {i}.inventory-page .inventory-summary__status {{
+          {i}  width: 0.72rem;
+          {i}  height: 0.72rem;
+          {i}  flex: 0 0 auto;
+          {i}}}
 
-              .inventory-page .inventory-summary__text {
-                min-width: 0;
-              }
+          {i}.inventory-page .inventory-summary__text {{
+          {i}  min-width: 0;
+          {i}}}
 
-              .inventory-page .inventory-summary__label {
-                font-size: 0.9rem;
-                line-height: 1.16;
-                letter-spacing: -0.01em;
-                text-wrap: balance;
-              }
+          {i}.inventory-page .inventory-summary__label {{
+          {i}  font-size: 0.9rem;
+          {i}  line-height: 1.16;
+          {i}  letter-spacing: -0.01em;
+          {i}  text-wrap: balance;
+          {i}}}
 
-              .inventory-page .inventory-summary__label--compact {
-                font-size: 0.82rem;
-                letter-spacing: -0.025em;
-                white-space: nowrap;
-              }
+          {i}.inventory-page .inventory-summary__label--compact {{
+          {i}  font-size: 0.82rem;
+          {i}  letter-spacing: -0.025em;
+          {i}  white-space: nowrap;
+          {i}}}
 
-              .inventory-page .inventory-summary__count {
-                font-size: 0.72rem;
-                line-height: 1.2;
-              }
+          {i}.inventory-page .inventory-summary__count {{
+          {i}  font-size: 0.72rem;
+          {i}  line-height: 1.2;
+          {i}}}
 
-              .inventory-page .inventory-summary__chevron {
-                font-size: 1.08rem;
-                flex: 0 0 auto;
-              }
-          """
-          if build.count(anchor) != 1:
-              raise SystemExit(f'Expected one mobile Inventory focus anchor, found {build.count(anchor)}')
-          build = build.replace(anchor, replacement, 1)
-
-          narrow_anchor = """      .inventory-page .inventory-header__quick-actions {
-                grid-template-columns: minmax(0, 1fr);
-              }
-            }
-          """
-          narrow_replacement = """      .inventory-page .inventory-header__quick-actions {
-                grid-template-columns: minmax(0, 1fr);
-              }
-            }
-
-            @media (max-width: 350px) {
-              .inventory-page .inventory-summary {
-                grid-template-columns: minmax(0, 1fr);
-              }
-
-              .inventory-page .inventory-summary__label,
-              .inventory-page .inventory-summary__label--compact {
-                font-size: 0.9rem;
-                letter-spacing: -0.01em;
-                white-space: normal;
-              }
-            }
-          """
-          if build.count(narrow_anchor) != 1:
-              raise SystemExit(f'Expected one Inventory mobile block ending anchor, found {build.count(narrow_anchor)}')
-          build = build.replace(narrow_anchor, narrow_replacement, 1)
+          {i}.inventory-page .inventory-summary__chevron {{
+          {i}  font-size: 1.08rem;
+          {i}  flex: 0 0 auto;
+          {i}}}"""
+          build, count = css_pattern.subn(css_replacement, build, count=1)
+          if count != 1:
+              raise SystemExit(f'Expected one Inventory CSS patch, got {count}')
           build_path.write_text(build)
           PY
 
@@ -149,7 +133,6 @@ jobs:
           node --check scripts/inventory.js
           grep -n 'inventory-summary__label--compact' scripts/inventory.js
           grep -n 'grid-template-columns: repeat(2, minmax(0, 1fr))' inventory/index.html
-          grep -n '@media (max-width: 350px)' inventory/index.html
           npm run test:nav-magnets
           npm run test:flicker-jitter
           unexpected="$(git status --porcelain | awk '{print $2}' | grep -Ev '^(scripts/build-pages\.mjs|scripts/inventory\.js|inventory/index\.html|\.github/workflows/apply-inventory-cell-fit-once\.yml)$' || true)"
