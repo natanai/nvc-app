@@ -33,6 +33,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
 
           generator = Path('scripts/build-pages.mjs')
           generator_text = generator.read_text()
@@ -44,15 +45,16 @@ jobs:
 
           runtime = Path('scripts/feeling-reverse-inference.js')
           runtime_text = runtime.read_text()
-          old_runtime = """  const toggleLabel = toggle.querySelector('.feeling-inference-toggle__label');
-          if (toggleLabel) {
-            toggleLabel.textContent = 'How this feeling may show up';
-          }
-
-          """
-          if runtime_text.count(old_runtime) != 1:
-              raise SystemExit(f'Expected exactly one runtime label-rewrite block in {runtime}; found {runtime_text.count(old_runtime)}')
-          runtime_text = runtime_text.replace(old_runtime, '', 1)
+          runtime_pattern = re.compile(
+              r"\n  const toggleLabel = toggle\.querySelector\('\.feeling-inference-toggle__label'\);\n"
+              r"  if \(toggleLabel\) \{\n"
+              r"    toggleLabel\.textContent = 'How this feeling may show up';\n"
+              r"  \}\n"
+          )
+          matches = runtime_pattern.findall(runtime_text)
+          if len(matches) != 1:
+              raise SystemExit(f'Expected exactly one runtime label-rewrite block in {runtime}; found {len(matches)}')
+          runtime_text = runtime_pattern.sub('\n', runtime_text, count=1)
 
           required_copy = [
               "'Typical intensity'",
