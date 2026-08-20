@@ -22,6 +22,19 @@ function toSiteUrl(rootUrl, path = '') {
   return new URL(path, rootUrl).href;
 }
 
+function getMagnetHref(nav, rootUrl, magnetId, fallbackPath) {
+  const magnet = nav?.querySelector(`[data-magnet-id="${magnetId}"]`);
+  const href = magnet?.getAttribute('href');
+  if (href) {
+    try {
+      return new URL(href, window.location.href).href;
+    } catch (error) {
+      // Fall through to the resilient canonical fallback.
+    }
+  }
+  return toSiteUrl(rootUrl, fallbackPath);
+}
+
 function isInventoryWorkspace(rootUrl) {
   try {
     const inventoryUrl = new URL('inventory/', rootUrl);
@@ -69,17 +82,19 @@ function pathMatches(url) {
   }
 }
 
-function menuMarkup(rootUrl) {
+function menuMarkup(nav, rootUrl) {
+  // Existing magnets are the source of truth for destinations that already
+  // exist in site navigation. Fallbacks are only for defensive resilience.
   const urls = {
-    home: rootUrl.href,
-    observations: toSiteUrl(rootUrl, 'observations/'),
-    feelings: toSiteUrl(rootUrl, 'feelings/'),
-    needs: toSiteUrl(rootUrl, 'needs/'),
-    bodyCues: toSiteUrl(rootUrl, 'feelings/body-cues/'),
-    fauxFeelings: toSiteUrl(rootUrl, 'faux-feelings/'),
+    home: getMagnetHref(nav, rootUrl, 'nav-home', ''),
+    observations: getMagnetHref(nav, rootUrl, 'nav-observations', 'observations/'),
+    feelings: getMagnetHref(nav, rootUrl, 'nav-feelings', 'feelings/'),
+    needs: getMagnetHref(nav, rootUrl, 'nav-needs', 'needs/'),
+    bodyCues: getMagnetHref(nav, rootUrl, 'nav-body-cues', 'feelings/body-cues/'),
+    fauxFeelings: getMagnetHref(nav, rootUrl, 'nav-faux-feelings', 'faux-feelings/'),
+    inventory: getMagnetHref(nav, rootUrl, 'nav-inventory', 'inventory/'),
+    journalHistory: getMagnetHref(nav, rootUrl, 'nav-journal-dashboard', 'inventory/journal/'),
     guided: toSiteUrl(rootUrl, 'alexithymia-support/'),
-    inventory: toSiteUrl(rootUrl, 'inventory/'),
-    journalHistory: toSiteUrl(rootUrl, 'inventory/journal/'),
     shared: toSiteUrl(rootUrl, 'feed/'),
   };
 
@@ -396,6 +411,7 @@ function installReliableMenuActivation(menuMagnet, menu) {
   menuMagnet.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
+    pointerActivatedAt = performance.now();
     toggleMenu(menu, menuMagnet);
   });
 }
@@ -408,6 +424,10 @@ function initSharedMoreMagnet() {
   const menuMagnet = board.querySelector(`[data-magnet-id="${MENU_MAGNET_ID}"]`);
   if (!(menuMagnet instanceof HTMLElement)) return false;
 
+  menuMagnet.setAttribute('aria-label', 'Open menu');
+  const hiddenLabel = menuMagnet.querySelector('.site-nav__magnet-label');
+  if (hiddenLabel) hiddenLabel.textContent = 'Menu';
+
   const rootUrl = getSiteRootUrl(nav);
   const personalShareButton = prepareInventoryExperience(rootUrl);
 
@@ -419,7 +439,7 @@ function initSharedMoreMagnet() {
     menu.setAttribute('popover', 'auto');
     menu.setAttribute('role', 'dialog');
     menu.setAttribute('aria-label', 'allneeds.app menu');
-    menu.innerHTML = menuMarkup(rootUrl);
+    menu.innerHTML = menuMarkup(nav, rootUrl);
     nav.appendChild(menu);
   }
 
