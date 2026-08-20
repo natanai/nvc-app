@@ -30,21 +30,8 @@ function collectHtml(target, output = []) {
   return output;
 }
 
-function normalizeSharedScriptOrder(html) {
-  // The published static pages intentionally load inventory.js before the
-  // shared menu shell. build-pages currently emits the same two deferred
-  // scripts in the opposite order, which makes a clean build look dirty even
-  // though the browser-visible behavior has not changed. Keep the final static
-  // artifact deterministic and preserve the already-published execution order.
-  return html.replace(
-    /([ \t]*)<script src="([^"]*scripts\/inventory-core-shell\.js)" defer><\/script>(\r?\n)\1<script src="([^"]*scripts\/inventory\.js)" defer><\/script>/g,
-    (_match, indent, shellSrc, newline, inventorySrc) =>
-      `${indent}<script src="${inventorySrc}" defer></script>${newline}${indent}<script defer src="${shellSrc}"></script>`,
-  );
-}
-
 function finalizeSharedHtml(html) {
-  let output = normalizeSharedScriptOrder(html);
+  let output = html;
 
   output = output
     .replaceAll('💾 Save to device', 'Save to device')
