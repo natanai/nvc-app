@@ -88,7 +88,9 @@ test('Menu information architecture separates destinations, actions, personal co
   const personalIndex = controller.indexOf('id="nav-more-personal-heading"');
   assert.ok(discoverIndex >= 0 && settingsIndex > discoverIndex && personalIndex > settingsIndex,
     'personal sharing should live after app navigation/settings rather than inside Discover');
-  assert.ok(controller.includes('data-menu-personal-section hidden'), 'personal section should stay absent unless the Inventory share action is available');
+  assert.ok(controller.includes('data-menu-personal-section aria-labelledby'), 'personal section should be part of the global Menu on every page');
+  assert.ok(!controller.includes('data-menu-personal-section hidden'), 'personal section must not depend on Inventory page DOM to become visible');
+  assert.ok(controller.includes('data-menu-action="share-with-nat"'), 'personal section should provide its own global share action');
   assert.ok(controller.includes('>From Nat<'), 'personal sharing should retain its intentionally personal framing');
 
   assert.ok(!controller.includes('goToInventoryCommand'), 'Menu must not navigate to Inventory and then issue a remote command');
@@ -150,6 +152,23 @@ test('Account & data actions are bound by the global Menu controller, not Invent
   assert.ok(inventoryScript >= 0 && menuScript > inventoryScript,
     'classic inventory implementation must load before the Menu controller that binds its global actions');
   assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should be a non-Inventory page');
+});
+
+test('From Nat sharing is global and reuses the canonical Inventory sharing implementation', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const inventory = await fs.readFile(path.join(root, 'scripts/inventory.js'), 'utf8');
+  const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
+
+  assert.ok(controller.includes('function setupPersonalShareControls(menu)'), 'Menu should own a global personal-sharing initializer');
+  assert.ok(controller.includes('setupPersonalShareControls(menu);'), 'personal sharing must initialize on every page with the Menu');
+  assert.ok(controller.includes("window.buildPersonalStrategiesExportPayload"), 'Menu should inspect the canonical personal-strategy export payload');
+  assert.ok(controller.includes("invokeInventoryControl('handleEmailPersonalStrategies')"), 'Menu should reuse the canonical personal-strategy exporter');
+  assert.ok(controller.includes("invokeInventoryControl('openPersonalStrategiesEmailDraft')"), 'Menu should reuse the canonical email-draft action');
+  assert.ok(!controller.includes('function adoptPersonalShareAction'), 'Menu must not borrow an Inventory-page button as its global share UI');
+  assert.ok(!controller.includes('const personalShareButton = prepareInventoryExperience'), 'Menu visibility must not depend on Inventory page preparation');
+  assert.ok(inventory.includes('function handleEmailPersonalStrategies()'), 'Inventory controller should remain the canonical personal-strategy export implementation');
+  assert.ok(inventory.includes('function openPersonalStrategiesEmailDraft()'), 'Inventory controller should remain the canonical Nat email-draft implementation');
+  assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should prove personal sharing works without Inventory page DOM');
 });
 
 test('Inventory keeps system management out of its primary workspace', async () => {
