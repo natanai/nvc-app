@@ -30,6 +30,15 @@ function collectHtml(target, output = []) {
   return output;
 }
 
+function ensureStylesheet(html, href, attributes = '') {
+  if (html.includes(`href="${href}"`)) {
+    return html;
+  }
+  const suffix = attributes ? ` ${attributes}` : '';
+  const link = `    <link rel="stylesheet" href="${href}"${suffix} />\n`;
+  return html.replace('  </head>', `${link}  </head>`);
+}
+
 function finalizeSharedHtml(html) {
   let output = html;
 
@@ -71,15 +80,51 @@ function finalizeFeedHtml(html) {
   return output;
 }
 
+function finalizeFeelingDetailHtml(html) {
+  let output = ensureStylesheet(
+    html,
+    '../../styles/feeling-inference-mobile.css',
+  );
+  output = output.replace(
+    'class="feeling-inference-wrapper" data-reverse-inference-container hidden',
+    'class="feeling-inference-wrapper" data-reverse-inference-container',
+  );
+  return output;
+}
+
+function finalizeInventoryHtml(html) {
+  return ensureStylesheet(
+    html,
+    '../styles/inventory-mobile.css',
+    'media="(max-width: 640px)"',
+  );
+}
+
 const htmlFiles = htmlTargets.flatMap((target) => collectHtml(join(rootDir, target)));
 let changedFiles = 0;
 
 for (const file of htmlFiles) {
   const before = readFileSync(file, 'utf8');
+  const relativePath = relative(rootDir, file).replaceAll('\\', '/');
   let after = finalizeSharedHtml(before);
-  if (relative(rootDir, file).replaceAll('\\', '/') === 'feed/index.html') {
+
+  if (relativePath === 'feed/index.html') {
     after = finalizeFeedHtml(after);
   }
+
+  if (
+    relativePath.startsWith('feelings/')
+    && relativePath.endsWith('/index.html')
+    && relativePath !== 'feelings/body-cues/index.html'
+    && relativePath !== 'feelings/emotions-wheel/index.html'
+  ) {
+    after = finalizeFeelingDetailHtml(after);
+  }
+
+  if (relativePath === 'inventory/index.html') {
+    after = finalizeInventoryHtml(after);
+  }
+
   if (after !== before) {
     writeFileSync(file, after);
     changedFiles += 1;
