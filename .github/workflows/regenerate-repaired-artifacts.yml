@@ -1,0 +1,93 @@
+name: Regenerate repaired artifacts (temporary)
+
+on:
+  push:
+    branches: [repair-generated-source-of-truth]
+    paths:
+      - '.github/workflows/regenerate-repaired-artifacts.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repair branch
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build repaired site
+        run: npm run build
+        env:
+          LINK_CHECK_REPORT_ONLY: '1'
+
+      - name: Verify independent quality checks before committing artifacts
+        run: |
+          npm run test:data-integrity
+          npm run test:customizer
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+
+      - name: Stage only known generated artifacts
+        shell: bash
+        run: |
+          git add -A -- \
+            index.html \
+            alexithymia-support/index.html \
+            data/index.json \
+            data/body-regions.json \
+            data/reverse-inference.json \
+            faux-feelings \
+            feelings \
+            needs \
+            inventory/index.html \
+            inventory/journal/index.html
+
+          bad=0
+          while IFS= read -r file; do
+            case "$file" in
+              index.html|alexithymia-support/index.html|data/index.json|data/body-regions.json|data/reverse-inference.json|faux-feelings/index.html|faux-feelings/*/index.html|feelings/index.html|feelings/*/index.html|needs/index.html|needs/*/index.html|inventory/index.html|inventory/journal/index.html)
+                ;;
+              *)
+                echo "::error title=Unexpected staged path::Refusing to commit generated output outside the explicit allowlist: $file"
+                bad=1
+                ;;
+            esac
+          done < <(git diff --cached --name-only)
+
+          if [ "$bad" -ne 0 ]; then
+            exit 1
+          fi
+
+          echo 'Generated paths staged:'
+          git diff --cached --name-only
+          echo
+          echo 'Generated diff summary:'
+          git diff --cached --stat
+
+      - name: Commit generated artifacts and remove temporary workflow
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git rm .github/workflows/regenerate-repaired-artifacts.yml
+          git add .github/workflows/regenerate-repaired-artifacts.yml
+
+          if git diff --cached --quiet; then
+            echo 'No generated artifact changes remain to commit.'
+            exit 1
+          fi
+
+          git commit -m 'Regenerate static artifacts from repaired sources'
+          git push
