@@ -22,16 +22,16 @@ jobs:
     steps:
       - name: Checkout selected branch
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.target_branch }}
 
       - name: Checkout event revision
         if: github.event_name != 'workflow_dispatch'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -45,16 +45,69 @@ jobs:
           LINK_CHECK_REPORT_ONLY: "1"
 
       - name: Verify generated artifacts are committed
-        run: git diff --exit-code
+        id: generated-artifacts
+        continue-on-error: true
+        run: |
+          if git diff --quiet; then
+            echo "Generated artifacts are up to date."
+            exit 0
+          fi
+
+          echo "::error title=Generated artifacts are out of date::npm run build changed committed files. This is a repository reproducibility issue and does not by itself mean the live site is broken."
+          echo "Changed files after build:"
+          git diff --name-only
+          echo
+          echo "Diff summary:"
+          git diff --stat
+          echo
+          echo "Representative diff (first 300 lines):"
+          git diff --unified=3 | sed -n '1,300p'
+          exit 1
 
       - name: Verify data integrity
+        id: data-integrity
+        continue-on-error: true
         run: npm run test:data-integrity
 
       - name: Verify customizer preload
+        id: customizer-preload
+        continue-on-error: true
         run: npm run test:customizer
 
       - name: Run flicker and jitter checker
+        id: flicker-jitter
+        continue-on-error: true
         run: npm run test:flicker-jitter
 
       - name: Verify navigation magnets
+        id: navigation-magnets
+        continue-on-error: true
         run: npm run test:nav-magnets
+
+      - name: Summarize site quality
+        if: always()
+        run: |
+          echo "Generated artifacts: ${{ steps.generated-artifacts.outcome }}"
+          echo "Data integrity: ${{ steps.data-integrity.outcome }}"
+          echo "Customizer preload: ${{ steps.customizer-preload.outcome }}"
+          echo "Flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
+          echo "Navigation magnets: ${{ steps.navigation-magnets.outcome }}"
+
+          failed=0
+          for result in \
+            "${{ steps.generated-artifacts.outcome }}" \
+            "${{ steps.data-integrity.outcome }}" \
+            "${{ steps.customizer-preload.outcome }}" \
+            "${{ steps.flicker-jitter.outcome }}" \
+            "${{ steps.navigation-magnets.outcome }}"; do
+            if [ "$result" != "success" ]; then
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -ne 0 ]; then
+            echo "::error title=Site quality checks failed::See the individual checks above for the specific failure(s)."
+            exit 1
+          fi
+
+          echo "All site quality checks passed."
