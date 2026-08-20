@@ -12,9 +12,12 @@ async function workflow(name) {
   return fs.readFile(path.join(workflowsDir, name), 'utf8');
 }
 
+async function workflowNames() {
+  return (await fs.readdir(workflowsDir)).filter((name) => /\.ya?ml$/.test(name));
+}
+
 test('write workflows use one branch-scoped lock and bounded staging', async () => {
-  const names = (await fs.readdir(workflowsDir)).filter((name) => /\.ya?ml$/.test(name));
-  for (const name of names) {
+  for (const name of await workflowNames()) {
     const source = await workflow(name);
     if (!/contents:\s*write/.test(source)) continue;
 
@@ -25,6 +28,14 @@ test('write workflows use one branch-scoped lock and bounded staging', async () 
     assert.ok(!source.includes('git add .'), `${name} must not stage the entire repository`);
     assert.ok(!source.includes('git push --force'), `${name} must never force-push`);
     assert.ok(!source.includes('finalize-static-assets.mjs'), `${name} must not depend on a post-generator finalizer`);
+  }
+});
+
+test('official GitHub actions do not regress to deprecated Node 20 runtimes', async () => {
+  for (const name of await workflowNames()) {
+    const source = await workflow(name);
+    assert.ok(!source.includes('actions/checkout@v4'), `${name} must not use checkout v4`);
+    assert.ok(!source.includes('actions/setup-node@v4'), `${name} must not use setup-node v4`);
   }
 });
 
