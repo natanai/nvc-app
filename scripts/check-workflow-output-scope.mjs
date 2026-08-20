@@ -1,6 +1,17 @@
 import { spawnSync } from 'node:child_process';
 
 const mode = process.argv[2];
+const VALID_MODES = new Set([
+  'site-rebuild',
+  'fact-checking',
+  'strategy-import',
+  'push-poems',
+  'observation-guide',
+]);
+
+if (!VALID_MODES.has(mode)) {
+  throw new Error(`Unknown workflow output mode: ${mode || '(missing)'}`);
+}
 
 const GENERATED_DATA_FILES = new Set([
   'data/index.json',
@@ -67,11 +78,7 @@ function isAllowed(file) {
     return file === 'observations/index.html';
   }
 
-  if (mode === 'fact-checking') {
-    return FACT_CHECKING_SOURCE_FILES.has(file) || GENERATED_DATA_FILES.has(file) || isGeneratedHtml(file);
-  }
-
-  throw new Error(`Unknown workflow output mode: ${mode || '(missing)'}`);
+  return FACT_CHECKING_SOURCE_FILES.has(file) || GENERATED_DATA_FILES.has(file) || isGeneratedHtml(file);
 }
 
 function capture(command, args) {
