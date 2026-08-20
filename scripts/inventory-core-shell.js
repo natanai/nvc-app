@@ -155,11 +155,13 @@ function menuMarkup(nav, rootUrl) {
             </button>
           </section>
 
-          <section class="inventory-more-menu__section inventory-more-menu__section--personal" data-menu-personal-section hidden aria-labelledby="nav-more-personal-heading">
+          <section class="inventory-more-menu__section inventory-more-menu__section--personal" data-menu-personal-section aria-labelledby="nav-more-personal-heading">
             <h3 id="nav-more-personal-heading" class="inventory-more-menu__section-title">From Nat</h3>
             <div class="inventory-more-menu__personal-card">
               <p class="inventory-more-menu__personal-copy">If something you saved feels worth sharing, I’d genuinely love to see it.</p>
-              <div data-menu-personal-share-slot></div>
+              <button type="button" class="inventory-more-menu__personal-share" data-menu-action="share-with-nat">Share your strategies with Nat…</button>
+              <p class="inventory-more-menu__personal-copy" data-menu-personal-status aria-live="polite" hidden></p>
+              <button type="button" class="inventory-more-menu__account-action inventory-more-menu__account-action--secondary" data-menu-action="email-nat" hidden>Start email to Nat</button>
             </div>
           </section>
         </nav>
@@ -307,7 +309,7 @@ function toggleMenu(menu, menuMagnet) {
 }
 
 function prepareInventoryExperience(rootUrl) {
-  if (!isInventoryWorkspace(rootUrl)) return null;
+  if (!isInventoryWorkspace(rootUrl)) return;
 
   const emailButton = document.querySelector('#inventory-email-personal');
   if (emailButton instanceof HTMLElement) {
@@ -326,24 +328,6 @@ function prepareInventoryExperience(rootUrl) {
   document.querySelector('.inventory-header .inventory-shared-button')?.remove();
   document.querySelector('.inventory-bluesky-panel')?.remove();
   document.querySelector('.inventory-main > .inventory-actions')?.remove();
-
-  return emailButton instanceof HTMLElement ? emailButton : null;
-}
-
-function adoptPersonalShareAction(menu, emailButton) {
-  if (!(emailButton instanceof HTMLElement) || !menu) return;
-  const section = menu.querySelector('[data-menu-personal-section]');
-  const slot = menu.querySelector('[data-menu-personal-share-slot]');
-  if (!(section instanceof HTMLElement) || !(slot instanceof HTMLElement)) return;
-
-  emailButton.classList.add('inventory-more-menu__personal-share');
-  emailButton.classList.remove('inventory-more-menu__row', 'inventory-more-menu__button', 'inventory-button--ghost', 'inventory-button--compact');
-  emailButton.removeAttribute('style');
-  emailButton.setAttribute('aria-label', 'Share your personal strategies with Nat');
-  const text = emailButton.querySelector('.inventory-button__text');
-  if (text) text.textContent = 'Share your strategies with Nat…';
-  section.hidden = false;
-  slot.appendChild(emailButton);
 }
 
 function triggerCustomizer() {
@@ -473,6 +457,67 @@ function setupAccountDataControls(menu) {
   }
 }
 
+function setupPersonalShareControls(menu) {
+  if (!(menu instanceof HTMLElement)) return;
+
+  const shareButton = menu.querySelector('[data-menu-action="share-with-nat"]');
+  const emailButton = menu.querySelector('[data-menu-action="email-nat"]');
+  const status = menu.querySelector('[data-menu-personal-status]');
+
+  const setStatus = (message) => {
+    if (!(status instanceof HTMLElement)) return;
+    status.textContent = message || '';
+    status.hidden = !message;
+  };
+
+  if (shareButton instanceof HTMLElement && shareButton.dataset.personalShareBound !== 'true') {
+    shareButton.dataset.personalShareBound = 'true';
+    shareButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      const buildPayload = typeof window !== 'undefined' ? window.buildPersonalStrategiesExportPayload : null;
+      if (typeof buildPayload !== 'function') {
+        setStatus('Sharing is unavailable right now.');
+        return;
+      }
+
+      let strategies = [];
+      try {
+        const payload = buildPayload();
+        strategies = Array.isArray(payload?.personalStrategies) ? payload.personalStrategies : [];
+      } catch (error) {
+        console.warn('Unable to prepare personal strategies for sharing', error);
+        setStatus('Couldn’t prepare your strategies right now.');
+        return;
+      }
+
+      if (!strategies.length) {
+        setStatus('Add a personal strategy first, then come back here to share it.');
+        if (emailButton instanceof HTMLElement) emailButton.hidden = true;
+        return;
+      }
+
+      if (!invokeInventoryControl('handleEmailPersonalStrategies')) {
+        setStatus('Couldn’t prepare your strategies right now.');
+        return;
+      }
+
+      setStatus('Your strategies file downloaded. Attach it to the email to Nat.');
+      if (emailButton instanceof HTMLElement) emailButton.hidden = false;
+    });
+  }
+
+  if (emailButton instanceof HTMLElement && emailButton.dataset.personalShareBound !== 'true') {
+    emailButton.dataset.personalShareBound = 'true';
+    emailButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      invokeInventoryControl('openPersonalStrategiesEmailDraft');
+    });
+  }
+}
+
 function installReliableMenuActivation(menuMagnet, menu) {
   let pointerStart = null;
   let pointerActivatedAt = 0;
@@ -524,7 +569,7 @@ function initSharedMoreMagnet() {
   if (hiddenLabel) hiddenLabel.textContent = 'Menu';
 
   const rootUrl = getSiteRootUrl(nav);
-  const personalShareButton = prepareInventoryExperience(rootUrl);
+  prepareInventoryExperience(rootUrl);
 
   let menu = document.getElementById(MENU_ID);
   if (!(menu instanceof HTMLElement)) {
@@ -540,11 +585,11 @@ function initSharedMoreMagnet() {
 
   if (typeof menu.showPopover !== 'function') menu.hidden = true;
 
-  adoptPersonalShareAction(menu, personalShareButton);
   syncInventoryCount(menu, nav);
   syncAccountStatus(menu);
   ensureBlueskyModule(rootUrl);
   setupAccountDataControls(menu);
+  setupPersonalShareControls(menu);
   installReliableMenuActivation(menuMagnet, menu);
 
   menu.querySelectorAll('.inventory-more-menu__close').forEach((button) => {
