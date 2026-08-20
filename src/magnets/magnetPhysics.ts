@@ -405,10 +405,10 @@ const addPointerListeners = (state: InternalState) => {
       const maxY = Math.max(height - magnetState.h, 0);
       const nextX = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
       const nextY = clamp(event.clientY - boardRect.top - magnetState.offsetY, 0, maxY);
+      magnetState.vx = nextX - magnetState.x;
+      magnetState.vy = nextY - magnetState.y;
       magnetState.x = nextX;
       magnetState.y = nextY;
-      magnetState.vx = 0;
-      magnetState.vy = 0;
       applyTransform(magnetState);
       notifyPositions(state);
       if (event.pointerType !== 'mouse') {
@@ -448,34 +448,8 @@ const addPointerListeners = (state: InternalState) => {
     notifyPositions(state);
   };
 
-  const handlePointerCancel = (event: PointerEvent) => {
-    if (state.isShuffling) {
-      return;
-    }
-    if (!state.dragging || state.dragging.pointerId !== event.pointerId) {
-      return;
-    }
-    const magnetState = state.dragging;
-    if (typeof magnetState.element.releasePointerCapture === 'function') {
-      try {
-        magnetState.element.releasePointerCapture(event.pointerId);
-      } catch {
-        // Ignore.
-      }
-    }
-    magnetState.element.classList.remove('dragging');
-    magnetState.dragging = false;
-    magnetState.pointerId = null;
-    state.dragging = null;
-    delete state.board.dataset.dragging;
-    notifyPositions(state);
-  };
-
   state.magnets.forEach((magnet) => {
     magnet.element.addEventListener('pointerdown', handlePointerDown);
-    magnet.element.addEventListener('pointermove', handlePointerMove);
-    magnet.element.addEventListener('pointerup', handlePointerUp);
-    magnet.element.addEventListener('pointercancel', handlePointerCancel);
   });
 
   const handlePointerLeave = () => {
@@ -493,17 +467,18 @@ const addPointerListeners = (state: InternalState) => {
   };
 
   state.board.addEventListener('pointermove', handlePointerMove);
+  state.board.addEventListener('pointerup', handlePointerUp);
+  state.board.addEventListener('pointercancel', handlePointerUp);
   state.board.addEventListener('pointerleave', handlePointerLeave);
   state.board.addEventListener('pointercancel', handlePointerCancelField);
 
   return () => {
     state.magnets.forEach((magnet) => {
       magnet.element.removeEventListener('pointerdown', handlePointerDown);
-      magnet.element.removeEventListener('pointermove', handlePointerMove);
-      magnet.element.removeEventListener('pointerup', handlePointerUp);
-      magnet.element.removeEventListener('pointercancel', handlePointerCancel);
     });
     state.board.removeEventListener('pointermove', handlePointerMove);
+    state.board.removeEventListener('pointerup', handlePointerUp);
+    state.board.removeEventListener('pointercancel', handlePointerUp);
     state.board.removeEventListener('pointerleave', handlePointerLeave);
     state.board.removeEventListener('pointercancel', handlePointerCancelField);
   };
@@ -1049,4 +1024,3 @@ export function savePositions(
     // Swallow write errors (quota, private mode, etc.).
   }
 }
-

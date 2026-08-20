@@ -1162,8 +1162,6 @@ const handlePositionsUpdate = (state, list) => {
     magnet.x = item.x;
     magnet.y = item.y;
   });
-  updateBoardHeight(state);
-  updateLayout(state);
   persistLayout(state);
 };
 
