@@ -86,3 +86,20 @@ test('shared strategies behavior is feed-first without repairing static chrome i
   assert.ok(finalizer.includes('data-feed-follows-check'));
   assert.ok(finalizer.includes('data-feed-fetch'));
 });
+
+test('desktop Inventory keeps the Needs header left-aligned and uses one segmented filter control', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/shared-density.css'), 'utf8');
+  const inventoryHtml = await fs.readFile(path.join(root, 'inventory/index.html'), 'utf8');
+
+  assert.ok(css.includes('@media (min-width: 641px)'));
+  assert.ok(css.includes('body .inventory-page .inventory-view-panel__header'));
+  assert.ok(css.includes('flex-direction: row;'));
+  assert.ok(css.includes('body .inventory-page .inventory-summary__filters'));
+  assert.ok(css.includes('grid-template-columns: repeat(3, minmax(0, 1fr));'));
+  assert.ok(css.includes("body .inventory-page .inventory-summary__filter-button[aria-pressed='true']"));
+
+  assert.ok(inventoryHtml.includes('class="inventory-summary__filters" role="group" aria-label="Filter needs"'));
+  assert.ok(inventoryHtml.includes('data-summary-filter="all"'));
+  assert.ok(inventoryHtml.includes('data-summary-filter="missing"'));
+  assert.ok(inventoryHtml.includes('data-summary-filter="ready"'));
+});
