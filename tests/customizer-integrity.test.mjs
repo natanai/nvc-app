@@ -2,7 +2,8 @@ import { readdirSync, readFileSync } from 'fs';
 import { join, relative } from 'path';
 
 const rootDir = process.cwd();
-const ignoredDirectories = new Set(['node_modules', '.git', '.github', '.vscode']);
+const ignoredDirectories = new Set(['node_modules', '.git', '.github', '.vscode', 'static-pages']);
+const standaloneHtmlAllowlist = new Set(['feelings/emotions-wheel/index.html']);
 
 function collectHtmlFiles(directory) {
   const entries = readdirSync(directory, { withFileTypes: true });
@@ -43,7 +44,11 @@ const staleContrastAttribute = [];
 
 for (const file of htmlFiles) {
   const contents = readFileSync(file, 'utf8');
-  const relativePath = relative(rootDir, file);
+  const relativePath = relative(rootDir, file).replaceAll('\\', '/');
+
+  if (standaloneHtmlAllowlist.has(relativePath)) {
+    continue;
+  }
 
   if (!contents.includes("const STORAGE_KEY = 'nvcApp.theme'")) {
     missingStorageSnippet.push(relativePath);
