@@ -46,7 +46,7 @@ test('build pipeline writes final user-facing static markup before deployment', 
 test('checked-in static artifacts already contain the final UI', async () => {
   const feedHtml = await fs.readFile(path.join(root, 'feed/index.html'), 'utf8');
   const needHtml = await fs.readFile(path.join(root, 'needs/acceptance/index.html'), 'utf8');
-  const inventoryHtml = await fs.readFile(path.join(root, 'inventory/index.html'), 'utf8');
+  const journalHtml = await fs.readFile(path.join(root, 'inventory/journal/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/shared-density.css'), 'utf8');
 
   assert.ok(feedHtml.includes('<h1 class="page-title">Shared strategies</h1>'));
@@ -55,8 +55,8 @@ test('checked-in static artifacts already contain the final UI', async () => {
   assert.ok(!feedHtml.includes('Browse strategies that other allneeds users have chosen to share.'));
   assert.ok(needHtml.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
   assert.ok(!needHtml.includes('💾 Save to device'));
-  assert.ok(inventoryHtml.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
-  assert.ok(inventoryHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(journalHtml.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
+  assert.ok(journalHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
   assert.ok(!css.includes('.feed-controls__icon-button'));
   assert.ok(!css.includes('.feed-controls__button'));
 });
