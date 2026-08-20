@@ -223,7 +223,7 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [], bodyRegi
     const skills = skillsForArousal(arousal).slice(0, 2);
     const evidenceKeys = new Set();
     evidenceKeys.add(`zone-${anchor.valence}-${anchor.arousal}`);
-    evidenceKeys.add(`emotion-${feelingKey}`);
+    evidenceKeys.add(`emotion-${circumplexKey}`);
     skills.forEach((skill) => {
       evidenceKeys.add(`skill-${skill}`);
     });
