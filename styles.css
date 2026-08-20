@@ -7490,3 +7490,199 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
     width: 100%;
   }
 }
+
+.print-resource-page {
+  gap: 0.75rem;
+}
+
+.print-resource__actions {
+  margin: 0 0 0.5rem;
+}
+
+.print-resource__section {
+  display: grid;
+  gap: 0.65rem;
+  padding-block-start: 0.75rem;
+  border-top: 3px solid color-mix(in srgb, var(--outline) 72%, transparent);
+}
+
+.print-resource__section:first-of-type {
+  padding-block-start: 0;
+  border-top: 0;
+}
+
+.print-resource__section-heading,
+.print-resource__item h3,
+.print-resource__related {
+  margin: 0;
+}
+
+.print-resource__section-heading {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.print-resource__columns {
+  column-count: 2;
+  column-gap: 0.8rem;
+}
+
+.print-resource__item {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0 0 0.45rem;
+  padding: 0.45rem 0.5rem;
+  border: 2px solid color-mix(in srgb, var(--outline) 70%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #ffffff 80%, var(--lavender) 20%);
+  line-height: 1.28;
+}
+
+.print-resource__item h3 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.12;
+}
+
+.print-resource__related {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.print-resource__related + .print-resource__related {
+  margin-top: 0.16rem;
+}
+
+.print-resource__related-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  .print-resource__columns {
+    column-count: 3;
+  }
+}
+
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 0.25in;
+  }
+
+  html:has(.print-resource-page),
+  body:has(.print-resource-page) {
+    width: auto;
+    min-height: 0;
+    background: #ffffff !important;
+  }
+
+  body:has(.print-resource-page) {
+    display: block;
+    padding: 0;
+    color: #000000;
+  }
+
+  body:has(.print-resource-page) .skip-link,
+  body:has(.print-resource-page) .site-nav,
+  body:has(.print-resource-page) .breadcrumbs,
+  .print-resource__actions {
+    display: none !important;
+  }
+
+  body:has(.print-resource-page) .page-wrapper,
+  .print-resource-page {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  .print-resource-page {
+    font-size: 9px;
+    line-height: 1.16;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  .print-resource__section {
+    display: block;
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+    page-break-inside: auto;
+  }
+
+  .print-resource__section + .print-resource__section {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .print-resource__section-heading {
+    margin: 0 0 0.035in;
+    font-size: 8pt;
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+
+  .print-resource__columns {
+    column-count: 4;
+    column-gap: 0.08in;
+  }
+
+  .print-resource__item {
+    margin: 0 0 0.025in;
+    padding: 0.025in 0.03in;
+    border: 0.5px solid #8f8f8f;
+    border-radius: 0;
+    background: transparent;
+    line-height: 1.08;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-resource__item h3 {
+    display: inline;
+    font-size: 6.8pt;
+    line-height: 1.02;
+  }
+
+  .print-resource__item h3::after {
+    content: ' — ';
+    font-weight: 400;
+  }
+
+  .print-resource__related {
+    display: inline;
+    font-size: 5.65pt;
+    line-height: 1.06;
+    color: #000000;
+  }
+
+  .print-resource__related + .print-resource__related::before {
+    content: ' • ';
+  }
+
+  .print-resource__related + .print-resource__related {
+    margin-top: 0;
+  }
+
+  .print-resource__related-label {
+    color: #000000;
+  }
+
+  .print-resource__separator {
+    white-space: normal;
+  }
+
+  .print-resource-page a {
+    color: #000000;
+    text-decoration: none;
+  }
+}
