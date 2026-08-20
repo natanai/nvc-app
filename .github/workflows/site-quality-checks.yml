@@ -60,6 +60,9 @@ jobs:
       - name: Verify generator source-of-truth
         run: npm run test:generator-stability
 
+      - name: Verify browser entrypoint graph
+        run: node tests/entrypoint-integrity.test.mjs
+
       - name: Verify workflow safety contracts
         run: npm run test:workflow-safety
 
