@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: observation-guide-builder-${{ inputs.target_branch }}
+  group: nvc-app-write-${{ inputs.target_branch }}
   cancel-in-progress: false
 
 jobs:
@@ -40,6 +40,12 @@ jobs:
       - name: Rebuild observation guide page
         run: node scripts/build-pages.mjs --scope=observation-guide
 
+      - name: Verify observation rebuild stability and scope
+        run: |
+          npm run verify:observation-idempotent
+          npm run guard:workflow-output -- observation-guide
+          npm run test:generator-stability
+
       - name: Commit updated observation guide
         id: commit
         run: |
@@ -62,7 +68,7 @@ jobs:
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Rebuilt the observation guide and pushed updated markup to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Rebuilt, validated, and pushed the observation guide to ${{ env.TARGET_BRANCH }}."
           else
             SUMMARY="No changes were needed; the observation guide is already up to date."
           fi
