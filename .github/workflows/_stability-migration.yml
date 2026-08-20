@@ -1,6 +1,9 @@
 name: One-time stability migration
 
 on:
+  pull_request:
+    branches:
+      - inventory-core-overhaul
   push:
     branches:
       - stability-generated-source-of-truth
@@ -10,6 +13,7 @@ permissions:
 
 jobs:
   migrate:
+    if: github.head_ref == 'stability-generated-source-of-truth' || github.ref_name == 'stability-generated-source-of-truth'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout migration branch
