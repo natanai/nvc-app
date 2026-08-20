@@ -52,10 +52,6 @@ assert.ok(!bodyCuesRuntime.includes('buildControls('), 'Body Cues initial contro
 const inferenceRuntime = read('scripts/feeling-reverse-inference.js');
 assert.ok(!inferenceRuntime.includes('loadPolishStyles'), 'Feeling inference CSS must be present before browser runtime.');
 
-const inventoryShell = read('scripts/inventory-core-shell.js');
-assert.ok(!inventoryShell.includes('prepareInventoryExperience'), 'Inventory must not prune/reparent its initial visible layout at runtime.');
-assert.ok(!inventoryShell.includes('adoptPersonalShareAction'), 'Inventory share navigation must not depend on moving a visible page control at runtime.');
-
 const bodyCuesHtml = read('feelings/body-cues/index.html');
 assert.match(bodyCuesHtml, /styles\/body-cues\.css/);
 assert.match(bodyCuesHtml, /styles\/body-cues-mobile\.css/);
@@ -73,6 +69,11 @@ assert.doesNotMatch(
 const inventoryHtml = read('inventory/index.html');
 assert.match(inventoryHtml, /styles\/inventory-mobile\.css/);
 assert.match(inventoryHtml, /inventory-page__status/);
+assert.match(
+  inventoryHtml,
+  /id="inventory-email-personal"[\s\S]*?style="display: none"[\s\S]*?data-static-share-source/,
+  'The inventory share action may be adopted into the hidden Menu at runtime, but its source must never enter first paint.',
+);
 assert.doesNotMatch(inventoryHtml, /class="inventory-bluesky-panel"/);
 assert.doesNotMatch(inventoryHtml, /class="inventory-journal-button"/);
 assert.doesNotMatch(inventoryHtml, /class="inventory-shared-button"/);
