@@ -1,5 +1,4 @@
 import {
-  BODY_REGIONS,
   EMOTION_LIBRARY,
   FEELING_PAGE_SLUGS,
   FEELING_SLUG_ALIASES,
@@ -10,7 +9,6 @@ const SLIDER_MAX = 100;
 const MAX_MAGNETS = 18;
 const COLLAPSED_MAGNETS = 5;
 const MATCH_UPDATE_DELAY = 140;
-const ENHANCEMENT_STYLESHEET_ID = 'body-cues-enhancements';
 
 const sliderStates = new Map();
 let reverseIndex = null;
@@ -35,17 +33,6 @@ const state = {
 
 function getBasePath() {
   return document.body?.dataset?.basePath || '';
-}
-
-function loadEnhancementStyles() {
-  if (document.getElementById(ENHANCEMENT_STYLESHEET_ID)) {
-    return;
-  }
-  const link = document.createElement('link');
-  link.id = ENHANCEMENT_STYLESHEET_ID;
-  link.rel = 'stylesheet';
-  link.href = `${getBasePath()}styles/body-cues.css`;
-  document.head.appendChild(link);
 }
 
 function getCanonicalSlugMap() {
@@ -178,75 +165,25 @@ function onSliderInput(optionId, rawValue, { commit = false } = {}) {
   }
 }
 
-function createSlider(option) {
-  const container = createEl('div', 'body-cues-tool__option');
-  container.dataset.optionId = option.id;
-
-  const header = createEl('div', 'body-cues-tool__option-header');
-  const title = createEl('h4', 'body-cues-tool__option-title', option.title);
-  const valueLabel = createEl('span', 'body-cues-tool__option-value', 'Off');
-  header.appendChild(title);
-  header.appendChild(valueLabel);
-  container.appendChild(header);
-
-  if (option.note) {
-    container.appendChild(createEl('p', 'body-cues-tool__option-note', option.note));
-  }
-
-  const inputWrapper = createEl('div', 'body-cues-tool__slider-wrapper');
-  const slider = createEl('input', 'body-cues-tool__slider');
-  slider.type = 'range';
-  slider.min = String(SLIDER_MIN);
-  slider.max = String(SLIDER_MAX);
-  slider.step = '5';
-  slider.value = String(SLIDER_MIN);
-  slider.style.setProperty('--cue-progress', '0%');
-  slider.setAttribute('aria-label', `${option.title} intensity`);
-  slider.setAttribute('aria-valuetext', 'Off');
-  slider.addEventListener('input', (event) => {
-    onSliderInput(option.id, event?.target?.value || '0');
-  });
-  slider.addEventListener('change', (event) => {
-    onSliderInput(option.id, event?.target?.value || '0', { commit: true });
-  });
-  inputWrapper.appendChild(slider);
-
-  const scale = createEl('div', 'body-cues-tool__slider-scale');
-  ['Off', 'Hint', 'Noticeable', 'Strong'].forEach((label) => {
-    scale.appendChild(createEl('span', null, label));
-  });
-  inputWrapper.appendChild(scale);
-
-  container.appendChild(inputWrapper);
-
-  sliderStates.set(option.id, { slider, label: valueLabel, container });
-
-  return container;
-}
-
-function buildControls(root) {
-  const fragment = document.createDocumentFragment();
-
-  BODY_REGIONS.forEach((region) => {
-    const section = createEl('section', 'body-cues-tool__region');
-    section.dataset.regionId = region.id;
-
-    const heading = createEl('header', 'body-cues-tool__region-header');
-    heading.appendChild(createEl('h3', 'body-cues-tool__region-title', region.label));
-    if (region.prompt) {
-      heading.appendChild(createEl('p', 'body-cues-tool__region-prompt', region.prompt));
+function hydrateControls(root) {
+  const containers = Array.from(root.querySelectorAll('.body-cues-tool__option[data-option-id]'));
+  containers.forEach((container) => {
+    const optionId = container.dataset.optionId;
+    const slider = container.querySelector('.body-cues-tool__slider');
+    const valueLabel = container.querySelector('.body-cues-tool__option-value');
+    if (!optionId || !(slider instanceof HTMLInputElement) || !valueLabel) {
+      return;
     }
-    section.appendChild(heading);
 
-    const optionsList = createEl('div', 'body-cues-tool__options');
-    region.options.forEach((option) => {
-      optionsList.appendChild(createSlider(option));
+    slider.addEventListener('input', (event) => {
+      onSliderInput(optionId, event?.target?.value || '0');
     });
-    section.appendChild(optionsList);
-    fragment.appendChild(section);
-  });
+    slider.addEventListener('change', (event) => {
+      onSliderInput(optionId, event?.target?.value || '0', { commit: true });
+    });
 
-  root.appendChild(fragment);
+    sliderStates.set(optionId, { slider, label: valueLabel, container });
+  });
 }
 
 function getFeelingLabel(feelingKey) {
@@ -488,15 +425,11 @@ function resetAllSliders() {
 }
 
 function setupResultToggle(root) {
-  const magnetPanel = root.querySelector('.body-cues-tool__magnet-panel');
-  if (!magnetPanel || !state.magnetContainer) {
+  const toggle = root.querySelector('[data-body-cues-result-toggle]');
+  if (!toggle || !state.magnetContainer) {
     return;
   }
 
-  const toggle = createEl('button', 'body-cues-tool__result-toggle', 'Show more matches');
-  toggle.type = 'button';
-  toggle.hidden = true;
-  toggle.setAttribute('aria-expanded', 'false');
   toggle.addEventListener('click', () => {
     if (isMobileResultsLayout()) {
       return;
@@ -508,84 +441,35 @@ function setupResultToggle(root) {
       state.headingLiveRegion.textContent = `${shown} strongest ${shown === 1 ? 'match' : 'matches'} shown`;
     }
   });
-  magnetPanel.appendChild(toggle);
   state.resultToggle = toggle;
 }
 
 function setupPinToggle(root) {
   const summaryPanel = root.querySelector('.body-cues-tool__summary-panel');
-  const actions = root.querySelector('.body-cues-tool__actions');
-  if (!summaryPanel || !actions) {
+  const toggle = root.querySelector('[data-body-cues-pin-toggle]');
+  if (!summaryPanel || !toggle) {
     return;
   }
 
-  summaryPanel.dataset.pinned = 'true';
-
-  const toggle = createEl('button', 'body-cues-tool__pin-toggle');
-  toggle.type = 'button';
-  toggle.setAttribute('aria-pressed', 'true');
-  toggle.setAttribute('aria-label', 'Unpin possible feelings');
-  toggle.title = 'Unpin possible feelings';
-  toggle.innerHTML = `
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M8 3h8l-1 6 3 3v2H6v-2l3-3-1-6Z"></path>
-      <path d="M12 14v7"></path>
-      <path class="body-cues-tool__pin-slash" d="M4 4l16 16"></path>
-    </svg>
-  `;
-
-  toggle.addEventListener('click', () => {
-    state.resultsPinned = !state.resultsPinned;
+  state.resultsPinned = summaryPanel.dataset.pinned !== 'false';
+  const syncToggle = () => {
     summaryPanel.dataset.pinned = String(state.resultsPinned);
     toggle.setAttribute('aria-pressed', String(state.resultsPinned));
     const label = state.resultsPinned ? 'Unpin possible feelings' : 'Pin possible feelings';
     toggle.setAttribute('aria-label', label);
     toggle.title = label;
+  };
+
+  syncToggle();
+  toggle.addEventListener('click', () => {
+    state.resultsPinned = !state.resultsPinned;
+    syncToggle();
     if (state.resultsPinned) {
       resetMobileResultsScroll();
     }
   });
 
-  actions.prepend(toggle);
   state.pinToggle = toggle;
-}
-
-function enhanceStructure(root) {
-  const matchHeading = root.querySelector('#body-cues-magnets-heading');
-  if (matchHeading) {
-    matchHeading.textContent = 'Possible feelings';
-  }
-
-  if (state.emptyState) {
-    state.emptyState.textContent =
-      'Start with one cue below. As you adjust its intensity, the strongest feeling matches will appear here.';
-  }
-
-  const sliderHeading = root.querySelector('#body-cues-sliders-heading');
-  if (sliderHeading) {
-    sliderHeading.classList.remove('visually-hidden');
-    sliderHeading.textContent = 'Body cues';
-  }
-
-  const sliderHeader = root.querySelector('.body-cues-tool__slider-header');
-  const oldHint = root.querySelector('.body-cues-tool__scroll-hint');
-  if (oldHint) {
-    oldHint.className = 'body-cues-tool__instructions';
-    oldHint.replaceChildren(
-      document.createTextNode('Move a slider only when a cue fits. Leave everything else off.'),
-    );
-  }
-
-  if (sliderHeader) {
-    state.activeCueCount = createEl('p', 'body-cues-tool__active-count', '0 cues selected');
-    sliderHeader.appendChild(state.activeCueCount);
-  }
-
-  const resetButton = root.querySelector('[data-body-cues-reset]');
-  if (resetButton) {
-    resetButton.textContent = 'Reset';
-    resetButton.setAttribute('aria-label', 'Reset all cues');
-  }
 }
 
 function setupControlsScrollAffordance(root) {
@@ -642,19 +526,17 @@ function setupControlsScrollAffordance(root) {
 }
 
 function initTool(root) {
-  loadEnhancementStyles();
-
   state.controlsRoot = root.querySelector('[data-body-cues-controls]');
   state.magnetContainer = root.querySelector('[data-body-cues-magnets]');
   state.emptyState = root.querySelector('[data-body-cues-empty]');
   state.headingLiveRegion = root.querySelector('[data-body-cues-live]');
   const resetButton = root.querySelector('[data-body-cues-reset]');
+  state.activeCueCount = root.querySelector('[data-body-cues-active-count]');
 
   if (!state.controlsRoot || !state.magnetContainer) {
     return;
   }
 
-  enhanceStructure(root);
   setupPinToggle(root);
   setupResultToggle(root);
 
@@ -662,7 +544,7 @@ function initTool(root) {
     resetButton.addEventListener('click', resetAllSliders);
   }
 
-  buildControls(state.controlsRoot);
+  hydrateControls(state.controlsRoot);
   updateActiveCueCount();
   setupControlsScrollAffordance(root);
 }
