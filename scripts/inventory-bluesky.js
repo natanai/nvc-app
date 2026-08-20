@@ -5,6 +5,7 @@ import {
   signOutFromBluesky,
   ensureBackendSession,
 } from './bluesky-oauth.js?v=2024-07-11';
+import './profile-restore-rehydration.js';
 
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
 let initialized = false;
