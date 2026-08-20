@@ -9,6 +9,8 @@ const dataPath = join(rootDir, 'data', 'index.json');
 const indexData = JSON.parse(readFileSync(dataPath, 'utf8'));
 const { strategies } = indexData;
 const data = indexData;
+const bodyRegionsPath = join(rootDir, 'data', 'body-regions.json');
+const bodyRegions = JSON.parse(readFileSync(bodyRegionsPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
 
@@ -1706,23 +1708,79 @@ function renderCategory(type, items) {
   writePage(`${type}/index.html`, html);
 }
 
+function renderBodyCueControls() {
+  return bodyRegions
+    .map((region) => {
+      const options = Array.isArray(region.options) ? region.options : [];
+      const optionMarkup = options
+        .map((option) => {
+          const title = escapeHtml(option.title || '');
+          const optionId = escapeHtml(option.id || '');
+          const note = option.note
+            ? `
+              <p class="body-cues-tool__option-note">${escapeHtml(option.note)}</p>`
+            : '';
+          return `
+            <div class="body-cues-tool__option" data-option-id="${optionId}">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">${title}</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>${note}
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="${title} intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>`;
+        })
+        .join('');
+
+      return `
+        <section class="body-cues-tool__region" data-region-id="${escapeHtml(region.id || '')}">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">${escapeHtml(region.label || '')}</h3>
+            ${region.prompt ? `<p class="body-cues-tool__region-prompt">${escapeHtml(region.prompt)}</p>` : ''}
+          </header>
+          <div class="body-cues-tool__options">${optionMarkup}
+          </div>
+        </section>`;
+    })
+    .join('');
+}
+
 function renderBodyCuesPage() {
+  const bodyCuesStyles = `    <link rel="preload" href="../../styles/body-cues.css" as="style" />
+    <link rel="stylesheet" href="../../styles/body-cues.css" />
+    <link rel="stylesheet" href="../../styles/body-cues-mobile.css" media="(max-width: 640px)" />`;
+
   const main = `
       <section class="body-cues-tool" data-body-cues-root>
         <h1 class="visually-hidden">Body Cues explorer</h1>
 
-        <section class="body-cues-tool__summary-panel" aria-labelledby="body-cues-magnets-heading">
+        <section class="body-cues-tool__summary-panel" data-pinned="true" aria-labelledby="body-cues-magnets-heading">
           <section class="body-cues-tool__magnets">
             <div class="magnet-search__results body-cues-tool__magnet-panel">
               <div class="body-cues-tool__magnet-header">
-                <h2 id="body-cues-magnets-heading">Matching magnets</h2>
-                <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
+                <h2 id="body-cues-magnets-heading">Possible feelings</h2>
+                <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live>Adjust a cue below to see possible feelings.</p>
               </div>
-              <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite">
+              <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" data-expanded="false" aria-live="polite">
                 <p class="body-cues-tool__empty" data-body-cues-empty>
-                  Slide any cues that feel relevant—the magnets here update instantly with feelings that often travel with that mix.
+                  Start with one cue below. As you adjust its intensity, the strongest feeling matches will appear here.
                 </p>
               </div>
+              <button type="button" class="body-cues-tool__result-toggle" data-body-cues-result-toggle aria-expanded="false" hidden>Show more matches</button>
             </div>
             <p class="body-cues-tool__error" data-body-cues-error hidden>
               We couldn't load the body cues data. Check your connection and try again.
@@ -1730,21 +1788,27 @@ function renderBodyCuesPage() {
           </section>
 
           <div class="body-cues-tool__actions">
-            <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
+            <button type="button" class="body-cues-tool__pin-toggle" data-body-cues-pin-toggle aria-pressed="true" aria-label="Unpin possible feelings" title="Unpin possible feelings">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M8 3h8l-1 6 3 3v2H6v-2l3-3-1-6Z"></path>
+                <path d="M12 14v7"></path>
+                <path class="body-cues-tool__pin-slash" d="M4 4l16 16"></path>
+              </svg>
+            </button>
+            <button type="button" class="body-cues-tool__reset" data-body-cues-reset aria-label="Reset all cues">Reset</button>
           </div>
         </section>
 
         <section class="body-cues-tool__slider-panel" aria-labelledby="body-cues-sliders-heading">
           <div class="body-cues-tool__slider-header">
-            <h2 id="body-cues-sliders-heading" class="visually-hidden">Body cue sliders</h2>
-            <p class="body-cues-tool__scroll-hint">
-              <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
-              <span>Scroll through the body cues list below to explore more sliders.</span>
-            </p>
+            <h2 id="body-cues-sliders-heading">Body cues</h2>
+            <p class="body-cues-tool__instructions">Move a slider only when a cue fits. Leave everything else off.</p>
+            <p class="body-cues-tool__active-count" data-body-cues-active-count>0 cues selected</p>
           </div>
 
           <div class="body-cues-tool__controls-shell" data-body-cues-controls-shell data-scrollable="false" data-scroll-position="none">
-            <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+            <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders">${renderBodyCueControls()}
+            </section>
             <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--top" aria-hidden="true"></span>
             <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--bottom" aria-hidden="true"></span>
             <span class="body-cues-tool__scroll-more" aria-hidden="true">More cues below ↓</span>
@@ -1764,6 +1828,7 @@ function renderBodyCuesPage() {
       { label: 'Body Cues' },
     ],
     main,
+    headExtras: bodyCuesStyles,
     scripts: [{ src: 'scripts/body-cues-tool.js', type: 'module' }],
     activeNav: 'feelings',
     mainClass: 'page body-cues-page',

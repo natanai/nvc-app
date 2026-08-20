@@ -489,6 +489,13 @@ button,
   padding-top: 0.75rem;
 }
 
+.magnet-board:not([data-ready='1']) .magnet {
+  position: absolute;
+  touch-action: none;
+  transition: none;
+  visibility: hidden;
+}
+
 .site-nav__board {
   min-height: clamp(10.875rem, 24vw, 11.25rem);
   padding: 1.25rem 1.25rem 0.5rem;
@@ -638,6 +645,31 @@ button.site-nav__magnet {
   flex-shrink: 0;
 }
 
+.site-nav__magnet--menu {
+  padding: 0.45rem;
+  gap: 0;
+  justify-content: center;
+  min-width: 0;
+  background: color-mix(in srgb, var(--gold) 72%, #ffffff 28%);
+}
+
+.site-nav__menu-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.site-nav__magnet--menu[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--gold) 88%, #ffffff 12%);
+  box-shadow: inset 0 -8px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
 .site-nav__magnet--home,
 .site-nav__magnet--customizer {
   padding: 0.45rem;
@@ -741,6 +773,9 @@ button.site-nav__magnet {
 }</style>
     <link rel="preload" href="../../styles.css" as="style" />
     <link rel="stylesheet" href="../../styles.css" fetchpriority="high" />
+    <link rel="preload" href="../../styles/body-cues.css" as="style" />
+    <link rel="stylesheet" href="../../styles/body-cues.css" />
+    <link rel="stylesheet" href="../../styles/body-cues-mobile.css" media="(max-width: 640px)" />
   </head>
   <body data-base-path="../../">
     <a href="#main" class="skip-link">Skip to content</a>
@@ -748,7 +783,7 @@ button.site-nav__magnet {
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-                        <button
+            <button
               class="pill magnet site-nav__magnet site-nav__magnet--menu"
               type="button"
               data-magnet-id="nav-menu"
@@ -762,7 +797,7 @@ button.site-nav__magnet {
               </svg>
               <span class="site-nav__magnet-label visually-hidden">More</span>
             </button>
-<a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
+            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
 
   <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
     <use href="../../icons/nav-sprite.svg#icon-home" />
@@ -783,12 +818,15 @@ button.site-nav__magnet {
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
+              data-nav-hidden="true"
+              aria-hidden="true"
+              tabindex="-1"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
-             data-nav-hidden="true" aria-hidden="true" tabindex="-1">
+            >
               <span class="site-nav__magnet-label">Journal</span>
             </button>
             <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../../inventory/">
@@ -1237,18 +1275,19 @@ button.site-nav__magnet {
       <section class="body-cues-tool" data-body-cues-root>
         <h1 class="visually-hidden">Body Cues explorer</h1>
 
-        <section class="body-cues-tool__summary-panel" aria-labelledby="body-cues-magnets-heading">
+        <section class="body-cues-tool__summary-panel" data-pinned="true" aria-labelledby="body-cues-magnets-heading">
           <section class="body-cues-tool__magnets">
             <div class="magnet-search__results body-cues-tool__magnet-panel">
               <div class="body-cues-tool__magnet-header">
-                <h2 id="body-cues-magnets-heading">Matching magnets</h2>
-                <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live></p>
+                <h2 id="body-cues-magnets-heading">Possible feelings</h2>
+                <p class="body-cues-tool__magnet-subtitle" aria-live="polite" data-body-cues-live>Adjust a cue below to see possible feelings.</p>
               </div>
-              <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" aria-live="polite">
+              <div class="body-cues-tool__magnet-container" data-body-cues-magnets data-empty="true" data-expanded="false" aria-live="polite">
                 <p class="body-cues-tool__empty" data-body-cues-empty>
-                  Slide any cues that feel relevant—the magnets here update instantly with feelings that often travel with that mix.
+                  Start with one cue below. As you adjust its intensity, the strongest feeling matches will appear here.
                 </p>
               </div>
+              <button type="button" class="body-cues-tool__result-toggle" data-body-cues-result-toggle aria-expanded="false" hidden>Show more matches</button>
             </div>
             <p class="body-cues-tool__error" data-body-cues-error hidden>
               We couldn't load the body cues data. Check your connection and try again.
@@ -1256,21 +1295,789 @@ button.site-nav__magnet {
           </section>
 
           <div class="body-cues-tool__actions">
-            <button type="button" class="body-cues-tool__reset" data-body-cues-reset>Reset sliders</button>
+            <button type="button" class="body-cues-tool__pin-toggle" data-body-cues-pin-toggle aria-pressed="true" aria-label="Unpin possible feelings" title="Unpin possible feelings">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M8 3h8l-1 6 3 3v2H6v-2l3-3-1-6Z"></path>
+                <path d="M12 14v7"></path>
+                <path class="body-cues-tool__pin-slash" d="M4 4l16 16"></path>
+              </svg>
+            </button>
+            <button type="button" class="body-cues-tool__reset" data-body-cues-reset aria-label="Reset all cues">Reset</button>
           </div>
         </section>
 
         <section class="body-cues-tool__slider-panel" aria-labelledby="body-cues-sliders-heading">
           <div class="body-cues-tool__slider-header">
-            <h2 id="body-cues-sliders-heading" class="visually-hidden">Body cue sliders</h2>
-            <p class="body-cues-tool__scroll-hint">
-              <span aria-hidden="true" class="body-cues-tool__scroll-icon">⇣</span>
-              <span>Scroll through the body cues list below to explore more sliders.</span>
-            </p>
+            <h2 id="body-cues-sliders-heading">Body cues</h2>
+            <p class="body-cues-tool__instructions">Move a slider only when a cue fits. Leave everything else off.</p>
+            <p class="body-cues-tool__active-count" data-body-cues-active-count>0 cues selected</p>
           </div>
 
           <div class="body-cues-tool__controls-shell" data-body-cues-controls-shell data-scrollable="false" data-scroll-position="none">
-            <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders"></section>
+            <section class="body-cues-tool__controls" data-body-cues-controls aria-label="Body cue sliders">
+        <section class="body-cues-tool__region" data-region-id="chest">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Chest or heart space</h3>
+            <p class="body-cues-tool__region-prompt">Rest your attention on your chest or heart space. Notice breath depth, expansion, or pulsing.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="chest-tight">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Tight or constricted</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Band squeezing, armor, or breath held high</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Tight or constricted intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="chest-pressure">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Weighted or pressured</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Heavy stone, shoulders collapsing inward</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Weighted or pressured intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="chest-pounding">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Pounding or racing heartbeat</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Heart racing, flutter, sudden surges of beats</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Pounding or racing heartbeat intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="chest-open">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Open, warm, or expansive</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Soft chest, easy breathing, gentle warmth</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Open, warm, or expansive intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="gut">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Stomach or gut</h3>
+            <p class="body-cues-tool__region-prompt">Soften awareness into your belly. Notice flips, hollowness, or steadiness.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="gut-rolling">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Rolling or fluttering</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Butterflies, swirls, churning movement</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Rolling or fluttering intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="gut-nausea">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Nausea or queasy</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Churned up, unsettled, urge to vomit</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Nausea or queasy intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="gut-emptiness">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Hollow or empty</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Sinking, dropping, missing center</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Hollow or empty intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="gut-warm">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Settled or warm</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Grounded fullness, gentle ease</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Settled or warm intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="throat">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Throat and voice</h3>
+            <p class="body-cues-tool__region-prompt">Bring attention to your throat and voice box. Notice tightness, urge to speak, or dryness.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="throat-tight">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Tight or gripped</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Squeezing band, hard to swallow</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Tight or gripped intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="throat-lump">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Lump or swelling</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Tears hovering, voice shaking, lump rising</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Lump or swelling intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="throat-dry">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Dry or closed off</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Scratchy, hard to speak, voice fades</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Dry or closed off intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="throat-gag">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Gag or urge to retch</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Gag reflex, throat closing, increased saliva</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Gag or urge to retch intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="jaw">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Jaw, mouth, or fists</h3>
+            <p class="body-cues-tool__region-prompt">Notice your jaw, tongue, and hands. Are they loose, braced, or buzzing?</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="jaw-clench">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Clenched or grinding</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Teeth locked, fists tight, rigid tongue</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Clenched or grinding intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="jaw-heat">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Heat or flush</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Warm cheeks, heat pooling in jaw</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Heat or flush intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="jaw-tremble">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Tremble or quiver</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Jaw shaking, lips or hands quivering</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Tremble or quiver intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="head">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Head and mind space</h3>
+            <p class="body-cues-tool__region-prompt">Check your forehead, temples, and behind the eyes. Notice pressure, buzzing, or fog.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="head-pressure">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Pressure or band</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Helmet feeling, squeezing temples</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Pressure or band intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="head-buzzing">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Buzzing or static</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Quick thoughts, humming energy</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Buzzing or static intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="head-fog">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Foggy or heavy</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Hard to focus, thick clouded feeling</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Foggy or heavy intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="shoulders">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Shoulders and upper back</h3>
+            <p class="body-cues-tool__region-prompt">Sense the slope of your shoulders and upper back. Notice if they lift, droop, or carry weight.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="shoulders-weighted">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Weighted or burdened</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Heavy load, sagging posture, tight knots</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Weighted or burdened intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="shoulders-braced">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Lifted or braced</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Raised, ready to act, armor-like</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Lifted or braced intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="shoulders-droop">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Drooping or collapsed</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Slumped, no lift, giving way</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Drooping or collapsed intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="limbs">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Arms, hands, or legs</h3>
+            <p class="body-cues-tool__region-prompt">Let awareness move through arms and legs. Notice heaviness, restlessness, or tingles.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="limbs-heavy">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Heavy or lead-like</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Hard to move, sluggish, weighted</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Heavy or lead-like intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="limbs-restless">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Restless or fidgety</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Urge to pace, bounce, or shake</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Restless or fidgety intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="limbs-tingly">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Tingly or sparkly</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Buzzing skin, energetic tingles</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Tingly or sparkly intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="temperature">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Temperature shifts</h3>
+            <p class="body-cues-tool__region-prompt">Notice any sudden changes in temperature or skin sensation.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="temp-flush">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Flush of heat</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Cheeks glowing, warmth rushing outward</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Flush of heat intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="temp-chill">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Chill or cold rush</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Goosebumps, cold core, shivers</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Chill or cold rush intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="temp-prickly">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Prickly or sweaty skin</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Prickles, sudden sweat, tingling heat</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Prickly or sweaty skin intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="body-cues-tool__region" data-region-id="overall">
+          <header class="body-cues-tool__region-header">
+            <h3 class="body-cues-tool__region-title">Whole-body sense</h3>
+            <p class="body-cues-tool__region-prompt">Step back and notice the overall tone of your body right now.</p>
+          </header>
+          <div class="body-cues-tool__options">
+            <div class="body-cues-tool__option" data-option-id="overall-numb">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Muted or numb</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Blank, disconnected, hard to feel</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Muted or numb intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="overall-floating">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Floating or unreal</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Drifting, spaced out, not quite here</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Floating or unreal intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+            <div class="body-cues-tool__option" data-option-id="overall-calm">
+              <div class="body-cues-tool__option-header">
+                <h4 class="body-cues-tool__option-title">Grounded or calm</h4>
+                <span class="body-cues-tool__option-value">Off</span>
+              </div>
+              <p class="body-cues-tool__option-note">Steady, anchored, peacefully present</p>
+              <div class="body-cues-tool__slider-wrapper">
+                <input
+                  class="body-cues-tool__slider"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  value="0"
+                  style="--cue-progress: 0%;"
+                  aria-label="Grounded or calm intensity"
+                  aria-valuetext="Off"
+                >
+                <div class="body-cues-tool__slider-scale" aria-hidden="true">
+                  <span>Off</span><span>Hint</span><span>Noticeable</span><span>Strong</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+            </section>
             <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--top" aria-hidden="true"></span>
             <span class="body-cues-tool__scroll-fade body-cues-tool__scroll-fade--bottom" aria-hidden="true"></span>
             <span class="body-cues-tool__scroll-more" aria-hidden="true">More cues below ↓</span>
@@ -1281,8 +2088,8 @@ button.site-nav__magnet {
       </main>
     </div>
     <script src="../../assets/js/journal/store.js" type="module"></script>
+    <script src="../../scripts/inventory-core-shell.js" defer></script>
     <script src="../../scripts/inventory.js" defer></script>
-    <script defer src="../../scripts/inventory-core-shell.js"></script>
     <script src="../../scripts/magnets.js" type="module"></script>
     <script src="../../scripts/body-cues-tool.js" type="module"></script>
   </body>
