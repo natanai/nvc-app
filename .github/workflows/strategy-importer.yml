@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: strategy-importer-${{ inputs.target_branch }}
+  group: nvc-app-write-${{ inputs.target_branch }}
   cancel-in-progress: false
 
 jobs:
@@ -56,6 +56,14 @@ jobs:
           npm run build:data
           npm run build:pages
 
+      - name: Verify generated output stability and scope
+        if: steps.import.outputs.changes == 'true'
+        run: |
+          npm run verify:build-idempotent
+          npm run guard:workflow-output -- strategy-import
+          npm run test:generator-stability
+          npm run test:data-integrity
+
       - name: Commit and push import artifacts
         if: steps.import.outputs.changes == 'true'
         env:
@@ -70,14 +78,15 @@ jobs:
             message="chore: import strategies"
           fi
 
-          git add -A
+          git add data/Strategies.csv data/index.json data/body-regions.json data/reverse-inference.json \
+            index.html alexithymia-support faux-feelings feelings needs inventory observations
           git commit -m "$message"
           git push origin HEAD:${TARGET_BRANCH}
 
       - name: Summary
         run: |
           if [ "${{ steps.import.outputs.changes }}" = "true" ]; then
-            echo "Imported strategies and rebuilt site content on branch: ${{ env.TARGET_BRANCH }}." >> "$GITHUB_STEP_SUMMARY"
+            echo "Imported strategies, validated generated output, and rebuilt site content on branch: ${{ env.TARGET_BRANCH }}." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "No new strategies were imported from strategy-importer/." >> "$GITHUB_STEP_SUMMARY"
           fi
