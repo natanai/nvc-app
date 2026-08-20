@@ -3,7 +3,11 @@ name: Fact-Checking Spreadsheets
 on:
   workflow_dispatch:
     inputs:
-      commit-message:
+      target_branch:
+        description: "Branch to refresh (published branch by default)"
+        required: true
+        default: "inventory-core-overhaul"
+      commit_message:
         description: "Commit message for refreshed spreadsheets"
         required: false
         default: "chore: refresh fact-checking spreadsheets"
@@ -11,13 +15,17 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: fact-checking-export-${{ inputs.target_branch }}
+  cancel-in-progress: false
+
 jobs:
   export-fact-checking:
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ github.event.repository.default_branch }}
+      TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
-      - name: Checkout repository
+      - name: Checkout target branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -26,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -38,6 +46,6 @@ jobs:
       - name: Commit refreshed spreadsheets
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: ${{ github.event.inputs.commit-message }}
+          commit_message: ${{ inputs.commit_message }}
           branch: ${{ env.TARGET_BRANCH }}
           file_pattern: fact-checking/**
