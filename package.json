@@ -16,6 +16,7 @@
     "test:flicker-jitter": "node tests/navigation-highlight.test.mjs",
     "test:home-regressions": "node tests/home-page-regressions.test.mjs",
     "test:nav-magnets": "node tests/nav-magnet-coverage.test.mjs",
+    "test:internal-links": "node tests/internal-link-integrity.test.mjs",
     "calculate:observation-feelings": "node scripts/calculateObservationFeelingCoverage.mjs",
     "extract:citations": "node scripts/extract-citations.mjs",
     "replace:needs-sources": "node scripts/replace-needs-sources.mjs",
