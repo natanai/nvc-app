@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: fact-checking-export-${{ inputs.target_branch }}
+  group: nvc-app-write-${{ inputs.target_branch }}
   cancel-in-progress: false
 
 jobs:
