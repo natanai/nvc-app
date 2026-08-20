@@ -1,6 +1,45 @@
 (function (global) {
   const namespace = global.NVCContrast || {};
 
+  // Older generated pages contain a one-time navigation migration that can
+  // overwrite an explicit Journal-magnet choice on the first page load after
+  // customization. Protect the user's saved choice before that legacy
+  // bootstrap runs. This is storage compatibility only; it does not alter DOM
+  // or presentation at runtime.
+  function protectExplicitJournalPreference() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      const storage = window.localStorage;
+      if (!storage || storage.getItem('allneeds.navMore.v2') === '1') {
+        return;
+      }
+
+      const raw = storage.getItem('nvcApp.navSettings');
+      if (!raw) {
+        return;
+      }
+
+      const parsed = JSON.parse(raw);
+      if (
+        parsed
+        && typeof parsed === 'object'
+        && parsed.enabled
+        && typeof parsed.enabled === 'object'
+        && parsed.enabled.journal === true
+      ) {
+        storage.setItem('allneeds.navMore.v2', '1');
+      }
+    } catch (error) {
+      // Storage may be unavailable or contain malformed legacy data. In that
+      // case, leave the existing bootstrap behavior untouched.
+    }
+  }
+
+  protectExplicitJournalPreference();
+
   function isInventoryWorkspacePath() {
     if (typeof window === 'undefined') {
       return false;
