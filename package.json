@@ -1,11 +1,11 @@
 {
   "name": "nvc-app",
   "version": "1.0.0",
-  "description": "Retro Nonviolent Communication explorer with magnet play, journaling, and a localStorage-powered strategy inventory for allneeds.app",
+  "description": "Static-first allneeds.app for exploring feelings, human needs, body cues, observations, journaling, and personal strategies.",
   "type": "module",
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
-    "build:pages": "node scripts/build-pages.mjs && node scripts/finalize-static-assets.mjs",
+    "build:pages": "node scripts/build-pages.mjs && node scripts/build-emotions-wheel.mjs && node scripts/finalize-static-assets.mjs",
     "lint:links": "node scripts/check-links.mjs",
     "lint:evidence": "node scripts/lint-evidence.mjs",
     "lint:entrypoints": "node scripts/lint-entrypoints.mjs",
@@ -14,6 +14,7 @@
     "test:data-integrity": "node tests/data-integrity.test.mjs",
     "test:obsolete": "node tests/obsolete-references.test.mjs",
     "test:flicker-jitter": "node tests/navigation-highlight.test.mjs",
+    "test:static-first": "node tests/static-first-architecture.test.mjs",
     "test:home-regressions": "node tests/home-page-regressions.test.mjs",
     "test:nav-magnets": "node tests/nav-magnet-coverage.test.mjs",
     "calculate:observation-feelings": "node scripts/calculateObservationFeelingCoverage.mjs",
