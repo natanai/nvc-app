@@ -29,11 +29,24 @@ function normalizePath(filePath) {
   return posix.normalize(relative(rootDir, filePath).replace(/\\/g, '/'));
 }
 
+function stripBrowserUrlSuffix(value) {
+  if (typeof value !== 'string') return '';
+  const queryIndex = value.indexOf('?');
+  const hashIndex = value.indexOf('#');
+  const cutPoints = [queryIndex, hashIndex].filter((index) => index >= 0);
+  const end = cutPoints.length ? Math.min(...cutPoints) : value.length;
+  return value.slice(0, end);
+}
+
 function resolveScriptFromHtml(htmlFile, src) {
   if (!src || /^(?:[a-z]+:)?\/\//i.test(src) || src.startsWith('data:')) {
     return null;
   }
-  const resolved = resolve(dirname(htmlFile), src);
+
+  const pathname = stripBrowserUrlSuffix(src);
+  if (!pathname) return null;
+
+  const resolved = resolve(dirname(htmlFile), pathname);
   if (!resolved.startsWith(rootDir) || !existsSync(resolved)) {
     return null;
   }
@@ -45,8 +58,11 @@ function resolveImport(fromFile, specifier) {
     return null;
   }
 
+  const pathname = stripBrowserUrlSuffix(specifier);
+  if (!pathname) return null;
+
   const baseDir = dirname(fromFile);
-  const attempt = specifier.startsWith('/') ? resolve(rootDir, `.${specifier}`) : resolve(baseDir, specifier);
+  const attempt = pathname.startsWith('/') ? resolve(rootDir, `.${pathname}`) : resolve(baseDir, pathname);
   const candidates = [];
   const ext = extname(attempt);
   if (ext) {
