@@ -136,7 +136,6 @@ function menuMarkup(nav, rootUrl) {
           <section class="inventory-more-menu__section" aria-labelledby="nav-more-discover-heading">
             <h3 id="nav-more-discover-heading" class="inventory-more-menu__section-title">Discover</h3>
             ${directRow({ href: urls.shared, label: 'Shared strategies', note: 'Ideas other people have chosen to share', current: pathMatches(urls.shared) })}
-            <div data-menu-personal-share-slot hidden></div>
           </section>
 
           <section class="inventory-more-menu__section" aria-labelledby="nav-more-settings-heading">
@@ -155,6 +154,14 @@ function menuMarkup(nav, rootUrl) {
               </span>
             </button>
           </section>
+
+          <section class="inventory-more-menu__section inventory-more-menu__section--personal" data-menu-personal-section hidden aria-labelledby="nav-more-personal-heading">
+            <h3 id="nav-more-personal-heading" class="inventory-more-menu__section-title">From Nat</h3>
+            <div class="inventory-more-menu__personal-card">
+              <p class="inventory-more-menu__personal-copy">If something you saved feels worth sharing, I’d genuinely love to see it.</p>
+              <div data-menu-personal-share-slot></div>
+            </div>
+          </section>
         </nav>
       </section>
 
@@ -169,55 +176,62 @@ function menuMarkup(nav, rootUrl) {
         <div class="inventory-more-menu__account-heading">
           <p class="inventory-more-menu__eyebrow">Settings</p>
           <h2 class="inventory-more-menu__title">Account &amp; data</h2>
-          <p class="inventory-more-menu__intro">allneeds works without an account. Sign in or make a backup only if those options are useful to you.</p>
+          <p class="inventory-more-menu__intro">Your data stays on this device unless you choose to sync or back it up.</p>
         </div>
 
         <section class="inventory-more-menu__system-section" aria-labelledby="menu-account-heading">
-          <h3 id="menu-account-heading" class="inventory-more-menu__section-title">Bluesky</h3>
+          <h3 id="menu-account-heading" class="inventory-more-menu__section-title">Account</h3>
           <div class="inventory-auth-panel inventory-more-menu__system-card" aria-label="Bluesky sign-in">
-            <p class="inventory-more-menu__system-copy">Optional sign-in can keep a profile snapshot available across devices.</p>
+            <div class="inventory-more-menu__system-heading">
+              <h4 class="inventory-more-menu__system-title">Bluesky</h4>
+              <p class="inventory-more-menu__system-copy">Optional sign-in for a profile snapshot you can use across browsers and devices.</p>
+            </div>
             <div class="inventory-auth-panel__field" data-bluesky-handle-field>
               <label for="bluesky-handle-input">Bluesky handle</label>
               <input id="bluesky-handle-input" type="text" autocomplete="username" placeholder="yourname.bsky.social" />
             </div>
-            <button id="bluesky-auth-button" type="button" class="inventory-button inventory-button--compact inventory-more-menu__system-action">
+            <button id="bluesky-auth-button" type="button" class="inventory-button inventory-button--compact inventory-more-menu__account-action inventory-more-menu__account-action--primary">
               <span class="inventory-button__text">Sign in</span>
             </button>
             <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text" aria-live="polite"></p>
-            <p class="inventory-more-menu__privacy-note">Your Bluesky password is handled by Bluesky, not allneeds.app.</p>
+            <p class="inventory-more-menu__privacy-note">Your password stays with Bluesky.</p>
           </div>
 
           <div class="inventory-backend-sync inventory-more-menu__system-card" aria-labelledby="menu-sync-heading">
-            <h4 id="menu-sync-heading" class="inventory-more-menu__system-title">Profile snapshot</h4>
-            <p class="inventory-more-menu__system-copy">When signed in, you can save or load one allneeds snapshot from the backend.</p>
-            <div class="inventory-backend-sync__buttons inventory-more-menu__system-actions">
-              <button type="button" data-backend-save-button class="inventory-button inventory-button--compact inventory-more-menu__system-action">
-                <span class="inventory-button__text">Save to profile</span>
+            <div class="inventory-more-menu__system-heading">
+              <h4 id="menu-sync-heading" class="inventory-more-menu__system-title">Profile snapshot</h4>
+              <p class="inventory-more-menu__system-copy">Save this browser’s allneeds data to your profile, or load your saved profile here.</p>
+            </div>
+            <div class="inventory-backend-sync__buttons inventory-more-menu__action-pair">
+              <button type="button" data-backend-save-button class="inventory-more-menu__account-action inventory-more-menu__account-action--primary">
+                <span class="inventory-button__text">Save this browser</span>
               </button>
-              <button type="button" data-backend-load-button class="inventory-button inventory-button--ghost inventory-button--compact inventory-more-menu__system-action">
-                <span class="inventory-button__text">Load from profile</span>
+              <button type="button" data-backend-load-button class="inventory-more-menu__account-action inventory-more-menu__account-action--secondary">
+                <span class="inventory-button__text">Load saved profile</span>
               </button>
             </div>
             <div class="inventory-backend-sync__status" data-backend-sync-status aria-live="polite"></div>
+            <p class="inventory-more-menu__caution">Loading replaces this browser’s current allneeds data.</p>
           </div>
         </section>
 
         <section class="inventory-more-menu__system-section" aria-labelledby="menu-backup-heading">
           <h3 id="menu-backup-heading" class="inventory-more-menu__section-title">This device</h3>
           <div class="inventory-more-menu__system-card">
-            <h4 class="inventory-more-menu__system-title">Backup &amp; restore</h4>
-            <p class="inventory-more-menu__system-copy">Download a copy of your local allneeds data, or restore a backup you made earlier.</p>
-            <div class="inventory-more-menu__system-actions">
-              <button type="button" id="inventory-export" class="inventory-button inventory-button--compact inventory-more-menu__system-action" aria-label="Back up allneeds data">
-                <span class="inventory-button__text">Back Up Allneeds Data…</span>
+            <div class="inventory-more-menu__system-heading">
+              <h4 class="inventory-more-menu__system-title">Backup &amp; restore</h4>
+              <p class="inventory-more-menu__system-copy">Download a backup file, or restore one to this browser.</p>
+            </div>
+            <div class="inventory-more-menu__action-pair">
+              <button type="button" id="inventory-export" class="inventory-more-menu__account-action inventory-more-menu__account-action--primary" aria-label="Download an allneeds backup">
+                <span class="inventory-button__text">Download backup</span>
               </button>
-              <button type="button" id="inventory-import-trigger" class="inventory-button inventory-button--ghost inventory-button--compact inventory-more-menu__system-action" aria-label="Restore allneeds data from backup">
-                <span class="inventory-button__text">Restore From Backup…</span>
+              <button type="button" id="inventory-import-trigger" class="inventory-more-menu__account-action inventory-more-menu__account-action--secondary" aria-label="Restore allneeds data from backup">
+                <span class="inventory-button__text">Restore backup</span>
               </button>
               <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
             </div>
-            <p class="inventory-more-menu__system-status" aria-live="polite">Backups are downloaded to your device; restoring replaces the local allneeds data on this browser.</p>
-            <p class="inventory-more-menu__privacy-note">Your inventory, journal, and customizer settings stay on this device unless you explicitly save a profile snapshot.</p>
+            <p class="inventory-more-menu__caution">Restoring replaces this browser’s current allneeds data.</p>
           </div>
         </section>
       </section>
@@ -318,16 +332,17 @@ function prepareInventoryExperience(rootUrl) {
 
 function adoptPersonalShareAction(menu, emailButton) {
   if (!(emailButton instanceof HTMLElement) || !menu) return;
+  const section = menu.querySelector('[data-menu-personal-section]');
   const slot = menu.querySelector('[data-menu-personal-share-slot]');
-  if (!(slot instanceof HTMLElement)) return;
+  if (!(section instanceof HTMLElement) || !(slot instanceof HTMLElement)) return;
 
-  emailButton.classList.add('inventory-more-menu__row', 'inventory-more-menu__button', 'inventory-more-menu__personal-share');
-  emailButton.classList.remove('inventory-button--ghost', 'inventory-button--compact');
+  emailButton.classList.add('inventory-more-menu__personal-share');
+  emailButton.classList.remove('inventory-more-menu__row', 'inventory-more-menu__button', 'inventory-button--ghost', 'inventory-button--compact');
   emailButton.removeAttribute('style');
   emailButton.setAttribute('aria-label', 'Share your personal strategies with Nat');
   const text = emailButton.querySelector('.inventory-button__text');
   if (text) text.textContent = 'Share your strategies with Nat…';
-  slot.hidden = false;
+  section.hidden = false;
   slot.appendChild(emailButton);
 }
 

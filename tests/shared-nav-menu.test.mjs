@@ -71,7 +71,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
   assert.ok(styles.includes('100svh - clamp(7rem, 22vw, 10rem)'), 'mobile Customizer must respect Safari safe viewport height');
 });
 
-test('Menu information architecture separates destinations, actions, and drill-in settings', async () => {
+test('Menu information architecture separates destinations, actions, personal connection, and drill-in settings', async () => {
   const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
 
   assert.ok(controller.includes('>Explore<'), 'Menu should expose an Explore group');
@@ -82,6 +82,14 @@ test('Menu information architecture separates destinations, actions, and drill-i
   assert.ok(controller.includes('inventory-more-menu__disclosure'), 'drill-in control should carry the disclosure affordance');
   assert.ok(controller.includes('Customize…'), 'Customizer should read as an action that opens another interface');
   assert.ok(!controller.includes('Explore what is present now, or return to the practices you build over time.'), 'Menu root should not explain itself with unnecessary helper copy');
+
+  const discoverIndex = controller.indexOf('id="nav-more-discover-heading"');
+  const settingsIndex = controller.indexOf('id="nav-more-settings-heading"');
+  const personalIndex = controller.indexOf('id="nav-more-personal-heading"');
+  assert.ok(discoverIndex >= 0 && settingsIndex > discoverIndex && personalIndex > settingsIndex,
+    'personal sharing should live after app navigation/settings rather than inside Discover');
+  assert.ok(controller.includes('data-menu-personal-section hidden'), 'personal section should stay absent unless the Inventory share action is available');
+  assert.ok(controller.includes('>From Nat<'), 'personal sharing should retain its intentionally personal framing');
 
   assert.ok(!controller.includes('goToInventoryCommand'), 'Menu must not navigate to Inventory and then issue a remote command');
   assert.ok(!controller.includes('openInventoryPanel'), 'Menu must not manipulate an Inventory panel after navigation');
@@ -108,6 +116,21 @@ test('Account & data reuses existing allneeds capabilities instead of duplicatin
 
   assert.ok(bluesky.includes("document.readyState === 'loading'"), 'Bluesky module should initialize both before and after DOMContentLoaded');
   assert.ok(bluesky.includes('let initialized = false'), 'Bluesky module should guard duplicate initialization');
+});
+
+test('Account & data uses compact menu-native labels and explicit data direction', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
+
+  assert.ok(controller.includes('Save this browser'), 'profile save should state which side of the sync is being saved');
+  assert.ok(controller.includes('Load saved profile'), 'profile load should state what is being loaded');
+  assert.ok(controller.includes('Download backup'), 'backup should use a concise file-oriented label');
+  assert.ok(controller.includes('Restore backup'), 'restore should use a concise paired label');
+  assert.ok(controller.includes('Loading replaces this browser’s current allneeds data.'), 'profile load should state its replacement behavior');
+  assert.ok(controller.includes('Restoring replaces this browser’s current allneeds data.'), 'backup restore should state its replacement behavior');
+  assert.ok(!controller.includes('Back Up Allneeds Data…'), 'legacy full-page backup label should not remain in the Menu');
+  assert.ok(css.includes('.inventory-more-menu__action-pair'), 'paired data actions should have a menu-native layout');
+  assert.ok(css.includes('.inventory-more-menu__account-action'), 'Account & data should use menu-native action styling');
 });
 
 test('Account & data actions are bound by the global Menu controller, not Inventory page presence', async () => {
