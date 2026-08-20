@@ -4,16 +4,13 @@ on:
   pull_request:
     branches:
       - inventory-core-overhaul
-  push:
-    branches:
-      - stability-generated-source-of-truth
 
 permissions:
   contents: write
 
 jobs:
   migrate:
-    if: github.head_ref == 'stability-generated-source-of-truth' || github.ref_name == 'stability-generated-source-of-truth'
+    if: github.head_ref == 'stability-generated-source-of-truth'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout migration branch
@@ -27,10 +24,21 @@ jobs:
         with:
           node-version: 22
 
-      - name: Apply migration
-        run: node scripts/_apply-stability-migration.mjs
+      - name: Apply migration without changing workflows
+        id: migrate
+        run: |
+          if [ ! -f scripts/finalize-static-assets.mjs ]; then
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+            echo "Source migration already applied."
+            exit 0
+          fi
+
+          node scripts/_apply-stability-migration.mjs
+          git restore --source=HEAD -- .github/workflows
+          echo "needed=true" >> "$GITHUB_OUTPUT"
 
       - name: Commit migrated source
+        if: steps.migrate.outputs.needed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -38,4 +46,4 @@ jobs:
           git commit -m "Make generator the static UI source of truth"
           git push origin HEAD:stability-generated-source-of-truth
 
-# Intentionally branch-local and self-removing after one successful run.
+# Branch-local validation harness; remove before merge.
