@@ -377,6 +377,87 @@ function ensureBlueskyModule(rootUrl) {
   document.body.appendChild(script);
 }
 
+function invokeInventoryControl(name, ...args) {
+  const fn = typeof window !== 'undefined' ? window[name] : null;
+  if (typeof fn !== 'function') {
+    console.warn(`Account & data action unavailable: ${name}`);
+    return false;
+  }
+  fn(...args);
+  return true;
+}
+
+function setAccountDataStatus(menu, message) {
+  if (!message) return;
+  if (invokeInventoryControl('setBackendStatusMessage', message)) return;
+  const status = menu?.querySelector('[data-backend-sync-status]');
+  if (status instanceof HTMLElement) status.textContent = message;
+}
+
+function setupAccountDataControls(menu) {
+  if (!(menu instanceof HTMLElement)) return;
+
+  const exportButton = menu.querySelector('#inventory-export');
+  if (exportButton instanceof HTMLElement && exportButton.dataset.accountDataBound !== 'true') {
+    exportButton.dataset.accountDataBound = 'true';
+    exportButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      invokeInventoryControl('handleExportInventory');
+    });
+  }
+
+  const importTrigger = menu.querySelector('#inventory-import-trigger');
+  const importInput = menu.querySelector('#inventory-import');
+  if (
+    importTrigger instanceof HTMLElement &&
+    importInput instanceof HTMLInputElement &&
+    importTrigger.dataset.accountDataBound !== 'true'
+  ) {
+    importTrigger.dataset.accountDataBound = 'true';
+    importTrigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      importInput.click();
+    });
+    importInput.addEventListener('change', (event) => {
+      event.stopImmediatePropagation();
+      const file = event.target?.files?.[0];
+      if (!file) return;
+      invokeInventoryControl('handleImportInventory', file);
+      importInput.value = '';
+    });
+  }
+
+  const backendSaveButton = menu.querySelector('[data-backend-save-button]');
+  if (backendSaveButton instanceof HTMLElement && backendSaveButton.dataset.accountDataBound !== 'true') {
+    backendSaveButton.dataset.accountDataBound = 'true';
+    backendSaveButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (backendSaveButton.getAttribute('aria-disabled') === 'true') {
+        setAccountDataStatus(menu, 'Sign in with Bluesky in Account & data to save to your profile.');
+        return;
+      }
+      invokeInventoryControl('saveSnapshotToBackend');
+    });
+  }
+
+  const backendLoadButton = menu.querySelector('[data-backend-load-button]');
+  if (backendLoadButton instanceof HTMLElement && backendLoadButton.dataset.accountDataBound !== 'true') {
+    backendLoadButton.dataset.accountDataBound = 'true';
+    backendLoadButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (backendLoadButton.getAttribute('aria-disabled') === 'true') {
+        setAccountDataStatus(menu, 'Sign in with Bluesky in Account & data to load your profile.');
+        return;
+      }
+      invokeInventoryControl('loadSnapshotFromBackend');
+    });
+  }
+}
+
 function installReliableMenuActivation(menuMagnet, menu) {
   let pointerStart = null;
   let pointerActivatedAt = 0;
@@ -448,6 +529,7 @@ function initSharedMoreMagnet() {
   syncInventoryCount(menu, nav);
   syncAccountStatus(menu);
   ensureBlueskyModule(rootUrl);
+  setupAccountDataControls(menu);
   installReliableMenuActivation(menuMagnet, menu);
 
   menu.querySelectorAll('.inventory-more-menu__close').forEach((button) => {
