@@ -25,7 +25,7 @@ function collectHtml(target, output = []) {
   }
 
   for (const entry of readdirSync(target)) {
-    collectHtml(join(target, entry), output);
+    collectHtml(join(target, entry), extensions, output);
   }
   return output;
 }
@@ -105,11 +105,22 @@ function finalizeInventoryHtml(html) {
     .replace(/\s*<details class="inventory-bluesky-panel">[\s\S]*?<\/details>/, '')
     .replace(/\s*<details class="inventory-actions inventory-actions--collapsible">[\s\S]*?<\/details>/, '');
 
-  if (!output.includes('class="inventory-message inventory-page__status"')) {
-    output = output.replace(
-      '<section class="inventory-main" aria-labelledby="inventory-overview-heading">',
-      '<section class="inventory-main" aria-labelledby="inventory-overview-heading">\n        <p class="inventory-message inventory-page__status" data-inventory-message hidden aria-live="polite"></p>',
-    );
+  const inventoryMain = '<section class="inventory-main" aria-labelledby="inventory-overview-heading">';
+  const firstPaintSupport = `
+        <button
+          type="button"
+          id="inventory-email-personal"
+          class="inventory-button inventory-button--ghost inventory-button--compact"
+          style="display: none"
+          aria-label="Share your personal strategies with Nat"
+          data-static-share-source
+        >
+          <span class="inventory-button__text">Share your strategies with Nat…</span>
+        </button>
+        <p class="inventory-message inventory-page__status" data-inventory-message hidden aria-live="polite"></p>`;
+
+  if (!output.includes('data-static-share-source')) {
+    output = output.replace(inventoryMain, `${inventoryMain}${firstPaintSupport}`);
   }
 
   return output;
