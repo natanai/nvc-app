@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -39,6 +39,12 @@ const DIRECTORIES_BY_SCOPE = new Map([
   ['feelings', ['feelings']],
   ['needs', ['needs']],
   ['inventory', ['inventory']],
+]);
+
+// These live inside otherwise generated directories but are maintained as
+// standalone static features. A rebuild must never delete them.
+const PRESERVED_STATIC_ENTRIES_BY_DIRECTORY = new Map([
+  ['feelings', new Set(['emotions-wheel'])],
 ]);
 
 function parseScopeArgs(argv) {
@@ -795,8 +801,29 @@ const themePreloadScript = (basePath) => {
       })();
     </script>`;
 };
+function resetGeneratedDirectory(dir) {
+  const directoryPath = join(rootDir, dir);
+  const preservedEntries = PRESERVED_STATIC_ENTRIES_BY_DIRECTORY.get(dir);
+
+  if (!preservedEntries || preservedEntries.size === 0) {
+    rmSync(directoryPath, { recursive: true, force: true });
+    return;
+  }
+
+  if (!existsSync(directoryPath)) {
+    return;
+  }
+
+  for (const entry of readdirSync(directoryPath)) {
+    if (preservedEntries.has(entry)) {
+      continue;
+    }
+    rmSync(join(directoryPath, entry), { recursive: true, force: true });
+  }
+}
+
 for (const dir of directoriesToReset) {
-  rmSync(join(rootDir, dir), { recursive: true, force: true });
+  resetGeneratedDirectory(dir);
 }
 
 function basePathFromDepth(depth) {
@@ -1381,9 +1408,8 @@ function renderStrategyForm({
       </div>`;
 }
 
-function buildPersonalStrategyNotice(basePath, suffix = '') {
-  const safeSuffix = suffix ? ` ${suffix}` : '';
-  return `<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="${basePath}inventory/">inventory screen</a> to export them if you would like a backup.${safeSuffix}</p>`;
+function buildPersonalStrategyNotice() {
+  return '<p class="strategy-form__notice">Backup, restore, and account sync are in Menu → Account &amp; data.</p>';
 }
 
 function buildPersonalStrategyFormOptions({
@@ -1395,7 +1421,7 @@ function buildPersonalStrategyFormOptions({
   return {
     formId,
     idPrefix,
-    submitLabel: '💾 Save to device',
+    submitLabel: 'Save to device',
     titleLabel: 'Strategy name',
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
@@ -3803,8 +3829,8 @@ function renderInventoryJournalPage(needsList = []) {
             <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>
               <section class="journal-form-section" aria-labelledby="journal-form-heading">
                 <div class="journal-form-section__header">
-                  <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
-                  <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+                  <h2 id="journal-form-heading" class="section-title">New entry</h2>
+                  <p class="journal-form-section__hint">Tag what’s present now. Feeling optional—notes are enough.</p>
                 </div>
                 <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
                   <noscript>

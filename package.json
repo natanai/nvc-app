@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
-    "build:pages": "node scripts/build-pages.mjs && node scripts/finalize-static-assets.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
     "lint:links": "node scripts/check-links.mjs",
     "lint:evidence": "node scripts/lint-evidence.mjs",
     "lint:entrypoints": "node scripts/lint-entrypoints.mjs",
@@ -23,6 +23,12 @@
     "validate:observation-cues": "node scripts/validateObservationCues.mjs",
     "build:observation-cues": "node scripts/generateNeedObservationBlueprint.mjs && node scripts/buildObservationCueLibrary.mjs",
     "export:fact-checking": "node scripts/export-fact-checking.mjs",
-    "import:fact-checking": "node scripts/import-fact-checking.mjs"
+    "import:fact-checking": "node scripts/import-fact-checking.mjs",
+    "test:generator-stability": "node tests/generator-source-of-truth.test.mjs",
+    "test:workflow-safety": "node tests/workflow-safety.test.mjs",
+    "verify:build-idempotent": "node scripts/verify-build-idempotency.mjs full",
+    "verify:feelings-idempotent": "node scripts/verify-build-idempotency.mjs feelings",
+    "verify:observation-idempotent": "node scripts/verify-build-idempotency.mjs observation-guide",
+    "guard:workflow-output": "node scripts/check-workflow-output-scope.mjs"
   }
 }
