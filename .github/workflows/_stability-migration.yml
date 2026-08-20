@@ -1,0 +1,35 @@
+name: One-time stability migration
+
+on:
+  push:
+    branches:
+      - stability-generated-source-of-truth
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: stability-generated-source-of-truth
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Apply migration
+        run: node scripts/_apply-stability-migration.mjs
+
+      - name: Commit migrated source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Make generator the static UI source of truth"
+          git push origin HEAD:stability-generated-source-of-truth
