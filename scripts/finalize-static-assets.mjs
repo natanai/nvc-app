@@ -93,11 +93,26 @@ function finalizeFeelingDetailHtml(html) {
 }
 
 function finalizeInventoryHtml(html) {
-  return ensureStylesheet(
+  let output = ensureStylesheet(
     html,
     '../styles/inventory-mobile.css',
     'media="(max-width: 640px)"',
   );
+
+  output = output
+    .replace(/\s*<a class="inventory-journal-button"[\s\S]*?<\/a>/, '')
+    .replace(/\s*<a class="inventory-shared-button"[\s\S]*?<\/a>/, '')
+    .replace(/\s*<details class="inventory-bluesky-panel">[\s\S]*?<\/details>/, '')
+    .replace(/\s*<details class="inventory-actions inventory-actions--collapsible">[\s\S]*?<\/details>/, '');
+
+  if (!output.includes('class="inventory-message inventory-page__status"')) {
+    output = output.replace(
+      '<section class="inventory-main" aria-labelledby="inventory-overview-heading">',
+      '<section class="inventory-main" aria-labelledby="inventory-overview-heading">\n        <p class="inventory-message inventory-page__status" data-inventory-message hidden aria-live="polite"></p>',
+    );
+  }
+
+  return output;
 }
 
 const htmlFiles = htmlTargets.flatMap((target) => collectHtml(join(rootDir, target)));
