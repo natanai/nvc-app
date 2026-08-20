@@ -105,7 +105,6 @@ function menuMarkup(nav, rootUrl) {
           <div>
             <p class="inventory-more-menu__eyebrow">allneeds.app</p>
             <h2 class="inventory-more-menu__title">Menu</h2>
-            <p class="inventory-more-menu__intro">Explore what is present now, or return to the practices you build over time.</p>
           </div>
           <button class="inventory-more-menu__close" type="button" aria-label="Close menu">×</button>
         </header>

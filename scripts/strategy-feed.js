@@ -1,3 +1,5 @@
+import './inventory.js?v=2026-08-19-feed-ui';
+
 import {
   initBlueskyOAuth,
   getCurrentBlueskySession,
@@ -5,8 +7,8 @@ import {
   BACKEND_BASE_URL,
 } from './bluesky-oauth.js?v=2024-07-11';
 
-// Updating this string forces cache-busting when referenced from feed/index.html.
-const FEED_ASSET_VERSION = '2024-10-10';
+// Updating this string makes it easier to verify that the current feed bundle is running.
+const FEED_ASSET_VERSION = '2026-08-19';
 
 const state = {
   strategies: [],
@@ -65,10 +67,10 @@ function setAuthHint(session) {
   if (!state.authHintEl) return;
   if (session && session.did) {
     state.authHintEl.textContent =
-      'Signed in via Bluesky. You can see strategies shared by accounts you follow and add them to your inventory.';
+      'Signed in with Bluesky. You can see strategies shared by accounts you follow and save them to your inventory.';
   } else {
     state.authHintEl.textContent =
-      'You’re currently signed out. You can still browse public strategies, but to see strategies from people you follow, sign in with Bluesky on the Inventory page.';
+      'You can browse public strategies without signing in. To see strategies from people you follow, open Menu → Account & data and sign in with Bluesky.';
   }
 }
 
@@ -88,7 +90,7 @@ function setScopeAvailability(session) {
 }
 
 function setFilterHint(message) {
-  setStatus(message || 'Choose filters, then click “Pull strategies” to load the feed.');
+  setStatus(message || 'Choose filters, then pull strategies.');
 }
 
 function normalizeStrategyNeeds(strategy) {
@@ -295,7 +297,7 @@ async function fetchAndRenderFeed() {
     console.error('Error loading strategy feed', error);
     if (authFollowError) {
       setStatus(
-        'We couldn’t load your follows feed because your Bluesky session needs attention. Please sign in again from the Inventory page.',
+        'We couldn’t load your follows feed because your Bluesky session needs attention. Open Menu → Account & data and sign in again.',
       );
     } else {
       setStatus('Unable to load the strategy feed right now. Please try again later.');

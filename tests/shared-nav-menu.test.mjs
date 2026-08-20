@@ -81,6 +81,7 @@ test('Menu information architecture separates destinations, actions, and drill-i
   assert.ok(controller.includes('data-menu-drill="${MENU_ACCOUNT_VIEW}"'), 'Account & data should be a drill-in control');
   assert.ok(controller.includes('inventory-more-menu__disclosure'), 'drill-in control should carry the disclosure affordance');
   assert.ok(controller.includes('Customize…'), 'Customizer should read as an action that opens another interface');
+  assert.ok(!controller.includes('Explore what is present now, or return to the practices you build over time.'), 'Menu root should not explain itself with unnecessary helper copy');
 
   assert.ok(!controller.includes('goToInventoryCommand'), 'Menu must not navigate to Inventory and then issue a remote command');
   assert.ok(!controller.includes('openInventoryPanel'), 'Menu must not manipulate an Inventory panel after navigation');
@@ -126,4 +127,14 @@ test('Menu activation remains reliable when magnet physics suppresses synthetic 
   assert.ok(controller.includes("menuMagnet.addEventListener('pointerup'"), 'Menu should respond to a deliberate pointer release');
   assert.ok(controller.includes('TAP_MOVE_THRESHOLD'), 'Menu should distinguish a tap from a drag');
   assert.ok(controller.includes("menuMagnet.addEventListener('keydown'"), 'Menu should retain keyboard activation independent of click suppression');
+});
+
+test('strategy feed participates in the shared UI architecture and mobile app surface', async () => {
+  const feed = await fs.readFile(path.join(root, 'scripts/strategy-feed.js'), 'utf8');
+  const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
+
+  assert.ok(feed.startsWith("import './inventory.js"), 'Feed should initialize the existing shared Customizer, Journal, and data controller instead of duplicating handlers');
+  assert.ok(feed.includes('Menu → Account & data'), 'Feed sign-in guidance should point to the current Account & data location');
+  assert.ok(!feed.includes('sign in with Bluesky on the Inventory page'), 'Feed should not send account management back to Inventory');
+  assert.ok(css.includes('body:has(#main [data-feed-list]) #main.page'), 'Feed should use the same full-bleed mobile app-surface direction as Inventory');
 });

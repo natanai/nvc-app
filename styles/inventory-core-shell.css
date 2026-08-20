@@ -475,4 +475,33 @@
     border-width: 1.5px;
     box-shadow: none;
   }
+
+  /* Match the recent Inventory mobile direction: on phones the feed is the app
+     surface, not a card nested inside another padded page. Keep nav/breadcrumbs
+     inset, but let the actual feed use the viewport width. */
+  body:has(#main [data-feed-list]) #main.page {
+    width: calc(100% + 2rem);
+    margin-inline: -1rem;
+    padding: 1rem 0 2rem;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    gap: 0.9rem;
+  }
+
+  body:has(#main [data-feed-list]) #main > .inventory-header,
+  body:has(#main [data-feed-list]) #main > .feed-controls {
+    margin-inline: 0.85rem;
+  }
+
+  body:has(#main [data-feed-list]) #main > .feed-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-list {
+    width: 100%;
+    padding-inline: 0.85rem;
+    gap: 0.65rem;
+  }
 }
