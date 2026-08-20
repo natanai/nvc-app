@@ -1737,7 +1737,7 @@ function setupNeedPage() {
       saveToProfileButton.type = 'button';
       saveToProfileButton.className = saveToDeviceButton.className;
       saveToProfileButton.dataset.saveToProfileButton = 'true';
-      saveToProfileButton.textContent = '☁️ Save to profile';
+      saveToProfileButton.textContent = 'Save to profile';
       saveToDeviceButton.insertAdjacentElement('afterend', saveToProfileButton);
     }
     saveToProfileButton.classList.add('strategy-card__save--profile');
@@ -1855,7 +1855,7 @@ function setupNeedPage() {
         formSaveToProfile.type = 'submit';
         formSaveToProfile.className = formSaveToDevice.className;
         formSaveToProfile.dataset.saveToProfileButton = 'true';
-        formSaveToProfile.textContent = '☁️ Save to profile';
+        formSaveToProfile.textContent = 'Save to profile';
         formSaveToProfile.addEventListener('click', () => {
           saveTargetField.value = SAVE_TARGET_PROFILE;
         });
@@ -2086,7 +2086,7 @@ function setupInventoryPage() {
         saveToProfileButton.type = 'submit';
         saveToProfileButton.className = state.inventorySubmitButton.className;
         saveToProfileButton.dataset.saveToProfileButton = 'true';
-        saveToProfileButton.textContent = '☁️ Save to profile';
+        saveToProfileButton.textContent = 'Save to profile';
         saveToProfileButton.addEventListener('click', () => {
           saveTargetField.value = SAVE_TARGET_PROFILE;
         });

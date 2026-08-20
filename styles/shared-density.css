@@ -2,21 +2,9 @@
    Keep global rules narrowly scoped to established shared UI surfaces so
    generated content and page-specific visual systems remain untouched. */
 
-/* Strategy creation: the actions already explain local vs profile storage.
-   Keep the final note compact and current. */
+/* Strategy creation: keep the final account/data note compact. */
 body .strategy-form__notice {
   max-width: 46ch;
-}
-
-/* Shared strategies should read like a feed, not a settings screen. Hide the
-   legacy explanatory/button UI before the feed module takes over. */
-body:has(#main [data-feed-list]) #main .inventory-header .page-description,
-body:has(#main [data-feed-list]) #main .feed-controls > .section-heading,
-body:has(#main [data-feed-list]) #main .feed-controls__icon-button,
-body:has(#main [data-feed-list]) #main .feed-controls__button,
-body:has(#main [data-feed-list]) #main .feed-action-hint,
-body:has(#main [data-feed-list]) #main .feed-follows-status {
-  display: none !important;
 }
 
 body:has(#main [data-feed-list]) #main .feed-status:empty,

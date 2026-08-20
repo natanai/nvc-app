@@ -1473,7 +1473,7 @@ button.site-nav__magnet {
         <ol>
           <li><a href="../">Home</a></li>
           <li><a href="../inventory/">Inventory</a></li>
-          <li aria-current="page">Strategy feed</li>
+          <li aria-current="page">Shared strategies</li>
         </ol>
       </nav>
 
@@ -1482,22 +1482,13 @@ button.site-nav__magnet {
           <div class="inventory-header__layout">
             <div class="inventory-header__content">
               <div class="inventory-header__title-row">
-                <h1 class="page-title">Strategy feed</h1>
+                <h1 class="page-title">Shared strategies</h1>
               </div>
-              <p class="page-description">
-                Browse strategies that other allneeds users have chosen to share. Choose your filters, then use
-                the “Pull strategies” button to load the latest list from the database.
-              </p>
-              <p class="page-description">
-                The “From people you follow” feed uses Bluesky’s public API, so it only works when logged-out visibility
-                is enabled and you’re signed in.
-              </p>
             </div>
           </div>
         </header>
 
         <section class="feed-controls">
-          <h2 class="section-heading">Filters</h2>
           <div class="feed-controls__row">
             <label class="feed-controls__group">
               <span class="feed-controls__label">Show</span>
@@ -1513,27 +1504,8 @@ button.site-nav__magnet {
                 <option value="popular">Most added</option>
               </select>
             </label>
-            <button
-              class="feed-controls__icon-button"
-              type="button"
-              data-feed-follows-check
-              aria-label="Check Bluesky follow visibility"
-              title="Check Bluesky follow visibility"
-            >
-              <span aria-hidden="true">⚙️</span>
-            </button>
-            <button class="feed-controls__button" type="button" data-feed-fetch>
-              Pull strategies
-            </button>
           </div>
           <p class="feed-status" data-feed-status></p>
-          <p class="feed-follows-status" data-feed-follows-status></p>
-          <p class="feed-action-hint">
-            Select a filter and click “Pull strategies” to retrieve the latest feed.
-          </p>
-          <p class="feed-action-hint">
-            Follow-based results require Bluesky public visibility plus an active sign-in session.
-          </p>
           <p class="feed-auth-hint" data-feed-auth-hint>
             <!-- JS will fill in a message here depending on whether the viewer is signed in. -->
           </p>
