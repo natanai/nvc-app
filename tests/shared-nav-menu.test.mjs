@@ -38,7 +38,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
     }
     if (inventoryIndex < 0) violations.push(`${relative}: missing Inventory magnet`);
     if (!html.includes('scripts/inventory-core-shell.js')) {
-      violations.push(`${relative}: missing normal More controller script`);
+      violations.push(`${relative}: missing normal Menu controller script`);
     }
     if (!html.includes('hasMissingVisiblePlacement')) {
       violations.push(`${relative}: nav prefill can reveal a board with an unplaced visible magnet`);
@@ -48,7 +48,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
   assert.deepEqual(violations, []);
 
   const contrast = await fs.readFile(path.join(root, 'assets/js/ui/contrast.js'), 'utf8');
-  assert.ok(!contrast.includes('loadSharedMoreNavigationBeforeMagnets'), 'More must not be parser-injected from contrast.js');
+  assert.ok(!contrast.includes('loadSharedMoreNavigationBeforeMagnets'), 'Menu must not be parser-injected from contrast.js');
   assert.ok(contrast.includes('loadBodyCuesStylesBeforePaint();'), 'Body Cues prepaint loader must remain intact');
 
   const magnets = await fs.readFile(path.join(root, 'scripts/magnets.js'), 'utf8');
@@ -69,4 +69,61 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
 
   const styles = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
   assert.ok(styles.includes('100svh - clamp(7rem, 22vw, 10rem)'), 'mobile Customizer must respect Safari safe viewport height');
+});
+
+test('Menu information architecture separates destinations, actions, and drill-in settings', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+
+  assert.ok(controller.includes('>Explore<'), 'Menu should expose an Explore group');
+  assert.ok(controller.includes('>Your practice<'), 'Menu should expose a Your practice group');
+  assert.ok(controller.includes('>Discover<'), 'Menu should expose a Discover group');
+  assert.ok(controller.includes('Account &amp; data'), 'Menu should expose Account & data');
+  assert.ok(controller.includes('data-menu-drill="${MENU_ACCOUNT_VIEW}"'), 'Account & data should be a drill-in control');
+  assert.ok(controller.includes('inventory-more-menu__disclosure'), 'drill-in control should carry the disclosure affordance');
+  assert.ok(controller.includes('Customize…'), 'Customizer should read as an action that opens another interface');
+
+  assert.ok(!controller.includes('goToInventoryCommand'), 'Menu must not navigate to Inventory and then issue a remote command');
+  assert.ok(!controller.includes('openInventoryPanel'), 'Menu must not manipulate an Inventory panel after navigation');
+  assert.ok(!controller.includes('scrollIntoView'), 'global Menu must not rely on brittle cross-page scroll targets');
+  assert.ok(!controller.includes('NAV_LAYOUT_KEY'), 'Menu controller must not own or reset saved magnet positions');
+  assert.ok(!controller.includes('migrateSharedNav'), 'obsolete navigation migration logic should not remain in the controller');
+});
+
+test('Account & data reuses existing allneeds capabilities instead of duplicating them', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const inventory = await fs.readFile(path.join(root, 'scripts/inventory.js'), 'utf8');
+  const bluesky = await fs.readFile(path.join(root, 'scripts/inventory-bluesky.js'), 'utf8');
+
+  assert.ok(controller.includes('id="inventory-export"'), 'Menu should expose the existing backup trigger ID');
+  assert.ok(controller.includes('id="inventory-import-trigger"'), 'Menu should expose the existing restore trigger ID');
+  assert.ok(controller.includes('id="inventory-import"'), 'Menu should expose the existing restore file input ID');
+  assert.ok(controller.includes('data-backend-save-button'), 'Menu should expose the existing backend save contract');
+  assert.ok(controller.includes('data-backend-load-button'), 'Menu should expose the existing backend load contract');
+  assert.ok(controller.includes('id="bluesky-auth-button"'), 'Menu should expose the existing Bluesky auth contract');
+
+  assert.ok(inventory.includes("document.getElementById('inventory-export')"), 'existing inventory controller should remain the backup implementation');
+  assert.ok(inventory.includes("document.getElementById('inventory-import-trigger')"), 'existing inventory controller should remain the restore implementation');
+  assert.ok(inventory.includes("document.querySelectorAll('[data-support-journal-open]')"), 'existing journal trigger architecture should remain reusable');
+
+  assert.ok(bluesky.includes("document.readyState === 'loading'"), 'Bluesky module should initialize both before and after DOMContentLoaded');
+  assert.ok(bluesky.includes('let initialized = false'), 'Bluesky module should guard duplicate initialization');
+});
+
+test('Inventory keeps system management out of its primary workspace', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
+
+  assert.ok(controller.includes("document.querySelector('.inventory-bluesky-panel')?.remove()"), 'old Bluesky panel should leave the Inventory workspace');
+  assert.ok(controller.includes("document.querySelector('.inventory-main > .inventory-actions')?.remove()"), 'old backup/import section should leave the Inventory workspace');
+  assert.ok(controller.includes("document.querySelector('.inventory-header .inventory-shared-button')?.remove()"), 'Shared strategies should not compete with Inventory in its header');
+
+  assert.ok(css.includes('.inventory-page .inventory-main > .inventory-actions'), 'system controls should be hidden before JS to prevent flash');
+  assert.ok(css.includes('inset: auto 0 0 0;'), 'mobile Menu should present as a lightweight bottom sheet');
+});
+
+test('Menu activation remains reliable when magnet physics suppresses synthetic clicks', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  assert.ok(controller.includes("menuMagnet.addEventListener('pointerup'"), 'Menu should respond to a deliberate pointer release');
+  assert.ok(controller.includes('TAP_MOVE_THRESHOLD'), 'Menu should distinguish a tap from a drag');
+  assert.ok(controller.includes("menuMagnet.addEventListener('keydown'"), 'Menu should retain keyboard activation independent of click suppression');
 });
