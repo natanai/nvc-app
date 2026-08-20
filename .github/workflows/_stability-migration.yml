@@ -33,3 +33,5 @@ jobs:
           git add -A
           git commit -m "Make generator the static UI source of truth"
           git push origin HEAD:stability-generated-source-of-truth
+
+# Intentionally branch-local and self-removing after one successful run.
