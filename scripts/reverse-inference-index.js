@@ -25,9 +25,6 @@ const CATEGORY_TO_SDT = new Map([
   ['meaning/contribution', 'competence'],
 ]);
 
-// Body-cue and page data use user-facing adjective forms for several positive
-// feelings, while the circumplex model still uses noun forms. Keep the public
-// keys stable and resolve only the internal circumplex lookup through aliases.
 const CIRCUMPLEX_KEY_ALIASES = new Map([
   ['contented', 'contentment'],
   ['excited', 'excitement'],
@@ -241,9 +238,6 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [], bodyRegi
     };
   });
 
-  // Reverse-inference metadata should never advertise a slug whose target was
-  // not actually generated. Keep broader UI aliases in their source module,
-  // but expose only resolvable targets in this artifact.
   const resolvableSlugMap = Object.fromEntries(
     Object.entries(slugMap).filter(([, feelingKey]) => Boolean(index[feelingKey])),
   );
