@@ -18,9 +18,19 @@
     });
   }
 
+  function normalizeJournalEntryCopy(root = document) {
+    root.querySelectorAll?.('.journal-form-section__header').forEach((header) => {
+      const heading = header.querySelector('.section-title');
+      const hint = header.querySelector('.journal-form-section__hint');
+      if (heading) heading.textContent = 'New entry';
+      if (hint) hint.textContent = 'Tag what’s present now. Feeling optional—notes are enough.';
+    });
+  }
+
   function polish(root = document) {
     normalizeStrategyNotices(root);
     normalizeStrategyActionLabels(root);
+    normalizeJournalEntryCopy(root);
   }
 
   function start() {
