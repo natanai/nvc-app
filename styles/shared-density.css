@@ -4,7 +4,7 @@
 
 /* Strategy creation: the actions already explain local vs profile storage.
    Keep the final note compact and current. */
-.strategy-form__notice {
+body .strategy-form__notice {
   max-width: 46ch;
 }
 
@@ -25,12 +25,14 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
 }
 
 @media (max-width: 720px) {
-  /* Full-screen Journal: use the viewport for the entry, not for chrome. */
-  .support-journal__dialog {
+  /* Full-screen Journal: use the viewport for the entry, not for chrome. The
+     body prefix deliberately outranks the older generated mobile rules that
+     are parsed later in styles.css. */
+  body .support-journal__dialog {
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .support-journal__header {
+  body .support-journal__header {
     min-height: 0;
     padding:
       max(0.48rem, env(safe-area-inset-top))
@@ -43,23 +45,23 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
     box-shadow: 0 3px 12px color-mix(in srgb, var(--outline) 12%, transparent);
   }
 
-  .support-journal__titles {
+  body .support-journal__titles {
     min-width: 0;
     display: flex;
     align-items: center;
   }
 
-  .support-journal__heading {
+  body .support-journal__heading {
     margin: 0;
     font-size: clamp(1rem, 4.8vw, 1.22rem);
     line-height: 1.1;
   }
 
-  .support-journal__eyebrow {
+  body .support-journal__eyebrow {
     display: none;
   }
 
-  .support-journal__close {
+  body .support-journal__close {
     width: 44px;
     height: 44px;
     min-width: 44px;
@@ -71,7 +73,7 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
     flex: 0 0 auto;
   }
 
-  .support-journal__body {
+  body .support-journal__body {
     gap: 0.75rem;
     padding:
       0.72rem
@@ -80,22 +82,22 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
       max(0.62rem, env(safe-area-inset-left));
   }
 
-  .support-journal__content,
-  .support-journal__content .journal-form,
-  .support-journal__content .journal-form__layout {
+  body .support-journal__content,
+  body .support-journal__content .journal-form,
+  body .support-journal__content .journal-form__layout {
     width: 100%;
     max-width: none;
   }
 
-  .support-journal__content {
+  body .support-journal__content {
     gap: 0.72rem;
   }
 
-  .support-journal__content .journal-form__layout {
+  body .support-journal__content .journal-form__layout {
     gap: 0.68rem;
   }
 
-  .support-journal__content .journal-form textarea {
+  body .support-journal__content .journal-form textarea {
     min-height: clamp(15rem, 52dvh, 28rem);
   }
 
