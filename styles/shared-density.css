@@ -1,0 +1,234 @@
+/* Shared mobile density refinements.
+   Keep global rules narrowly scoped to established shared UI surfaces so
+   generated content and page-specific visual systems remain untouched. */
+
+/* Strategy creation: the actions already explain local vs profile storage.
+   Keep the final note compact and current. */
+.strategy-form__notice {
+  max-width: 46ch;
+}
+
+/* Shared strategies should read like a feed, not a settings screen. Hide the
+   legacy explanatory/button UI before the feed module takes over. */
+body:has(#main [data-feed-list]) #main .inventory-header .page-description,
+body:has(#main [data-feed-list]) #main .feed-controls > .section-heading,
+body:has(#main [data-feed-list]) #main .feed-controls__icon-button,
+body:has(#main [data-feed-list]) #main .feed-controls__button,
+body:has(#main [data-feed-list]) #main .feed-action-hint,
+body:has(#main [data-feed-list]) #main .feed-follows-status {
+  display: none !important;
+}
+
+body:has(#main [data-feed-list]) #main .feed-status:empty,
+body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  /* Full-screen Journal: use the viewport for the entry, not for chrome. */
+  .support-journal__dialog {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .support-journal__header {
+    min-height: 0;
+    padding:
+      max(0.48rem, env(safe-area-inset-top))
+      max(0.72rem, env(safe-area-inset-right))
+      0.48rem
+      max(0.72rem, env(safe-area-inset-left));
+    align-items: center;
+    gap: 0.55rem;
+    border-bottom-width: 1.5px;
+    box-shadow: 0 3px 12px color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  .support-journal__titles {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .support-journal__heading {
+    margin: 0;
+    font-size: clamp(1rem, 4.8vw, 1.22rem);
+    line-height: 1.1;
+  }
+
+  .support-journal__eyebrow {
+    display: none;
+  }
+
+  .support-journal__close {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0;
+    border-width: 1.5px;
+    box-shadow: none;
+    flex: 0 0 auto;
+  }
+
+  .support-journal__body {
+    gap: 0.75rem;
+    padding:
+      0.72rem
+      max(0.62rem, env(safe-area-inset-right))
+      max(1rem, env(safe-area-inset-bottom))
+      max(0.62rem, env(safe-area-inset-left));
+  }
+
+  .support-journal__content,
+  .support-journal__content .journal-form,
+  .support-journal__content .journal-form__layout {
+    width: 100%;
+    max-width: none;
+  }
+
+  .support-journal__content {
+    gap: 0.72rem;
+  }
+
+  .support-journal__content .journal-form__layout {
+    gap: 0.68rem;
+  }
+
+  .support-journal__content .journal-form textarea {
+    min-height: clamp(15rem, 52dvh, 28rem);
+  }
+
+  /* Shared strategies: lightweight header + filter toolbar + feed. */
+  body:has(#main [data-feed-list]) #main.page {
+    gap: 0.65rem;
+    padding-top: 0.72rem;
+  }
+
+  body:has(#main [data-feed-list]) #main > .inventory-header {
+    margin-inline: 0.78rem;
+    gap: 0;
+  }
+
+  body:has(#main [data-feed-list]) #main .inventory-header__content,
+  body:has(#main [data-feed-list]) #main .inventory-header__layout {
+    gap: 0;
+  }
+
+  body:has(#main [data-feed-list]) #main .page-title {
+    font-size: clamp(1.38rem, 7vw, 1.72rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    text-transform: none;
+  }
+
+  body:has(#main [data-feed-list]) #main > .feed-controls {
+    margin-inline: 0.72rem;
+    padding: 0.62rem;
+    border: 1.5px solid color-mix(in srgb, var(--outline) 26%, transparent);
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, #ffffff 70%, var(--lavender) 30%);
+    box-shadow: none;
+  }
+
+  body:has(#main [data-feed-list]) #main .feed-controls__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.48rem;
+    align-items: end;
+  }
+
+  body:has(#main [data-feed-list]) #main .feed-controls__group {
+    min-width: 0;
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  body:has(#main [data-feed-list]) #main .feed-controls__label {
+    font-size: 0.66rem;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  body:has(#main [data-feed-list]) #main .feed-controls select {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 0.4rem 1.7rem 0.4rem 0.55rem;
+    border-width: 1.5px;
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+    font-size: 0.78rem;
+    line-height: 1.2;
+  }
+
+  body:has(#main [data-feed-list]) #main .feed-status,
+  body:has(#main [data-feed-list]) #main .feed-auth-hint {
+    margin: 0.42rem 0.05rem 0;
+    font-size: 0.7rem;
+    line-height: 1.35;
+    color: var(--ink-soft);
+  }
+
+  body:has(#main [data-feed-list]) #main > .feed-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-list {
+    width: 100%;
+    padding-inline: 0.72rem;
+    gap: 0.62rem;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card {
+    margin: 0;
+    padding: 0.85rem;
+    border-width: 2px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 16%, transparent);
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card__header {
+    gap: 0.18rem;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card__title {
+    font-size: 1.05rem;
+    line-height: 1.18;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card__meta {
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card__body {
+    margin-top: 0.62rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card__footer {
+    margin-top: 0.72rem;
+    gap: 0.48rem;
+  }
+
+  body:has(#main [data-feed-list]) #main .strategy-card__badge,
+  body:has(#main [data-feed-list]) #main .strategy-card__needs summary,
+  body:has(#main [data-feed-list]) #main .strategy-card__action {
+    min-height: 40px;
+    border-width: 1.5px;
+    box-shadow: none;
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 360px) {
+  body:has(#main [data-feed-list]) #main .feed-controls__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
