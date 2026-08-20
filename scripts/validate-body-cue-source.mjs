@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+// A duplicate mapping makes generated weights depend on CSV row order. Treat
+// that as invalid source data rather than silently choosing one value.
 const rootDir = process.cwd();
 const sourcePath = join(rootDir, 'data', 'Feelings.csv');
 const text = readFileSync(sourcePath, 'utf8').replace(/^\ufeff/, '');
