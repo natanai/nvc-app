@@ -29,11 +29,18 @@ function normalizePath(filePath) {
   return posix.normalize(relative(rootDir, filePath).replace(/\\/g, '/'));
 }
 
+function stripUrlSuffix(value) {
+  if (typeof value !== 'string') return '';
+  const suffixIndex = value.search(/[?#]/);
+  return suffixIndex >= 0 ? value.slice(0, suffixIndex) : value;
+}
+
 function resolveScriptFromHtml(htmlFile, src) {
-  if (!src || /^(?:[a-z]+:)?\/\//i.test(src) || src.startsWith('data:')) {
+  const cleanSrc = stripUrlSuffix(src);
+  if (!cleanSrc || /^(?:[a-z]+:)?\/\//i.test(cleanSrc) || cleanSrc.startsWith('data:')) {
     return null;
   }
-  const resolved = resolve(dirname(htmlFile), src);
+  const resolved = resolve(dirname(htmlFile), cleanSrc);
   if (!resolved.startsWith(rootDir) || !existsSync(resolved)) {
     return null;
   }
@@ -41,12 +48,15 @@ function resolveScriptFromHtml(htmlFile, src) {
 }
 
 function resolveImport(fromFile, specifier) {
-  if (!specifier || (!specifier.startsWith('.') && !specifier.startsWith('/'))) {
+  const cleanSpecifier = stripUrlSuffix(specifier);
+  if (!cleanSpecifier || (!cleanSpecifier.startsWith('.') && !cleanSpecifier.startsWith('/'))) {
     return null;
   }
 
   const baseDir = dirname(fromFile);
-  const attempt = specifier.startsWith('/') ? resolve(rootDir, `.${specifier}`) : resolve(baseDir, specifier);
+  const attempt = cleanSpecifier.startsWith('/')
+    ? resolve(rootDir, `.${cleanSpecifier}`)
+    : resolve(baseDir, cleanSpecifier);
   const candidates = [];
   const ext = extname(attempt);
   if (ext) {
@@ -62,6 +72,18 @@ function resolveImport(fromFile, specifier) {
   }
 
   return null;
+}
+
+function resolveSiteAssetLiteral(specifier) {
+  const cleanSpecifier = stripUrlSuffix(specifier).replace(/^\.\//, '').replace(/^\//, '');
+  if (!cleanSpecifier || (!cleanSpecifier.startsWith('scripts/') && !cleanSpecifier.startsWith('assets/js/'))) {
+    return null;
+  }
+  const resolved = resolve(rootDir, cleanSpecifier);
+  if (!resolved.startsWith(rootDir) || !existsSync(resolved)) {
+    return null;
+  }
+  return normalizePath(resolved);
 }
 
 const assetJsDir = join(rootDir, 'assets', 'js');
@@ -108,6 +130,7 @@ for (const htmlFile of htmlFiles) {
 const jsLikeFiles = walk(rootDir).filter((file) => file.endsWith('.js') || file.endsWith('.mjs'));
 const importPattern = /(?:import|export)\s+(?:[^'";]+?\s+from\s+)?["']([^"']+)["']/g;
 const dynamicImportPattern = /import\s*\(\s*["']([^"']+)["']\s*\)/g;
+const siteAssetLiteralPattern = /["'`]((?:\/?)(?:assets\/js|scripts)\/[^"'`?#]+\.js(?:[?#][^"'`]*)?)["'`]/g;
 
 for (const file of jsLikeFiles) {
   const contents = readFileSync(file, 'utf8');
@@ -124,6 +147,18 @@ for (const file of jsLikeFiles) {
     const resolved = resolveImport(file, specifier);
     if (resolved && referenceCounts.has(resolved)) {
       referenceCounts.set(resolved, referenceCounts.get(resolved) + 1);
+    }
+  }
+
+  // Some browser modules are loaded programmatically (for example by assigning
+  // a cache-busted path to script.src). Count those explicit site-asset paths
+  // as entrypoints too, instead of requiring a static <script> tag.
+  if (candidateFiles.has(normalizePath(file))) {
+    while ((match = siteAssetLiteralPattern.exec(contents))) {
+      const resolved = resolveSiteAssetLiteral(match[1]);
+      if (resolved && referenceCounts.has(resolved)) {
+        referenceCounts.set(resolved, referenceCounts.get(resolved) + 1);
+      }
     }
   }
 }
