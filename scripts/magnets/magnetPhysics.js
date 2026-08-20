@@ -369,6 +369,15 @@ const addPointerListeners = (state) => {
       return;
     }
     const magnetState = state.dragging;
+    const boardRect = state.board.getBoundingClientRect();
+    const { width, height } = getBoardSize(state);
+    const maxX = Math.max(width - magnetState.w, 0);
+    const maxY = Math.max(height - magnetState.h, 0);
+    magnetState.x = clamp(event.clientX - boardRect.left - magnetState.offsetX, 0, maxX);
+    magnetState.y = clamp(event.clientY - boardRect.top - magnetState.offsetY, 0, maxY);
+    magnetState.vx = 0;
+    magnetState.vy = 0;
+    applyTransform(magnetState);
     if (typeof magnetState.element.releasePointerCapture === 'function') {
       try {
         magnetState.element.releasePointerCapture(event.pointerId);
