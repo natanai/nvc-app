@@ -60,3 +60,35 @@ test('restore guard freezes runtime only after the user confirms replacement', a
   assert.ok(prepareIndex > acceptedIndex, 'magnet persistence should not pause before confirmation');
   assert.ok(baselineIndex > prepareIndex, 'comparison baseline must be captured after pausing can persist current magnet state');
 });
+
+test('restored palette is reconciled on the current page and after reload', async () => {
+  const helper = await fs.readFile(path.join(root, 'scripts/profile-restore-rehydration.js'), 'utf8');
+
+  assert.ok(
+    helper.includes("const RESTORED_PALETTE_PENDING_KEY = 'allneeds:restore-palette-rehydrate';"),
+    'a one-time session marker should carry palette reconciliation across the restore reload',
+  );
+  assert.ok(
+    helper.includes("plum: '--plum'")
+      && helper.includes("lavender: '--lavender'")
+      && helper.includes("inkSoft: '--ink-soft'")
+      && helper.includes("outline: '--outline'"),
+    'all persisted palette colors should map back to their root CSS variables',
+  );
+  assert.ok(
+    helper.includes('root.style.setProperty(cssVariable, color);'),
+    'restored palette colors must be written directly to the current page DOM',
+  );
+  assert.ok(
+    helper.includes('applyStoredPaletteToCurrentPage();\n        markPaletteRehydrateForNextLoad();'),
+    'palette should reconcile immediately before the restore-triggered reload',
+  );
+  assert.ok(
+    helper.includes('rehydratePendingPaletteAfterReload();\n  installProfileRestoreRehydration();'),
+    'the reloaded page should reconcile the palette before normal restore wiring continues',
+  );
+  assert.ok(
+    helper.includes("window.sessionStorage.removeItem(RESTORED_PALETTE_PENDING_KEY);"),
+    'the palette reconciliation marker should be consumed after a successful application',
+  );
+});
