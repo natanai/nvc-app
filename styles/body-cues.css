@@ -421,6 +421,10 @@
 /* Desktop keeps the useful two-pane explorer, but clearly marks the right pane
    as the scrollable cue list and keeps the result summary in view. */
 @media (min-width: 900px) {
+  .body-cues-page .body-cues-tool__region {
+    flex-shrink: 0;
+  }
+
   .body-cues-page .body-cues-tool {
     grid-template-columns: minmax(17rem, 0.82fr) minmax(0, 1.18fr);
     align-items: start;
