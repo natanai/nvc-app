@@ -1,6 +1,66 @@
 (function (global) {
   const namespace = global.NVCContrast || {};
 
+  function getSiteRootFromCurrentScript() {
+    if (typeof document === 'undefined') {
+      return null;
+    }
+    const script = document.currentScript;
+    if (!script || !script.src) {
+      return null;
+    }
+    try {
+      return new URL('../../../', script.src);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function loadSharedPolishAssets() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const rootUrl = getSiteRootFromCurrentScript();
+    if (!rootUrl) {
+      return;
+    }
+
+    const styleHref = new URL('styles/shared-density.css', rootUrl).href;
+    const scriptHref = new URL('scripts/shared-ui-polish.js', rootUrl).href;
+
+    if (!document.querySelector('link[data-shared-density-styles]')) {
+      if (document.readyState === 'loading' && typeof document.write === 'function') {
+        document.write(
+          '<link rel="stylesheet" href="' + styleHref + '" data-shared-density-styles="true">'
+        );
+      } else {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = styleHref;
+        link.dataset.sharedDensityStyles = 'true';
+        link.setAttribute('blocking', 'render');
+        document.head.appendChild(link);
+      }
+    }
+
+    if (!document.querySelector('script[data-shared-ui-polish]')) {
+      if (document.readyState === 'loading' && typeof document.write === 'function') {
+        document.write(
+          '<script defer src="' + scriptHref + '" data-shared-ui-polish="true"><\/script>'
+        );
+      } else {
+        const script = document.createElement('script');
+        script.src = scriptHref;
+        script.defer = true;
+        script.dataset.sharedUiPolish = 'true';
+        document.head.appendChild(script);
+      }
+    }
+  }
+
+  loadSharedPolishAssets();
+
   function isInventoryWorkspacePath() {
     if (typeof window === 'undefined') {
       return false;
