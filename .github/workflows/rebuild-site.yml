@@ -3,24 +3,29 @@ name: Rebuild Site from Spreadsheets
 on:
   workflow_dispatch:
     inputs:
-      commit-message:
+      target_branch:
+        description: "Branch to rebuild (published branch by default)"
+        required: true
+        default: "inventory-core-overhaul"
+      commit_message:
         description: "Commit message for the rebuilt site"
         required: false
         default: "Rebuild site from spreadsheets"
-      base-branch:
-        description: "Branch to rebuild the site on (defaults to the repository's default branch if omitted)"
-        required: false
 
 permissions:
   contents: write
+
+concurrency:
+  group: rebuild-site-${{ inputs.target_branch }}
+  cancel-in-progress: false
 
 jobs:
   rebuild-site:
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.event.repository.default_branch }}
+      TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
-      - name: Checkout repository
+      - name: Checkout target branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -29,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -42,6 +47,8 @@ jobs:
 
       - name: Commit rebuilt site
         id: commit
+        env:
+          COMMIT_MESSAGE: ${{ inputs.commit_message }}
         run: |
           if [[ -z "$(git status --porcelain)" ]]; then
             echo "No changes detected after rebuilding the site."
@@ -52,7 +59,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "${{ github.event.inputs.commit-message }}"
+          git commit -m "$COMMIT_MESSAGE"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
       - name: Push updates
@@ -62,14 +69,11 @@ jobs:
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Rebuilt dataset and pages from spreadsheets and pushed updates to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Rebuilt dataset and pages and pushed updates to ${{ env.TARGET_BRANCH }}."
           else
-            SUMMARY="No updates were detected after rebuilding the site from spreadsheets."
+            SUMMARY="No updates were detected after rebuilding the site."
           fi
-
-          if [ -n "$GITHUB_STEP_SUMMARY" ]; then
-            {
-              echo "## Rebuild Site"
-              echo "$SUMMARY"
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+          {
+            echo "## Rebuild Site"
+            echo "$SUMMARY"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -4,35 +4,41 @@ on:
   workflow_dispatch:
     inputs:
       target_branch:
-        description: 'Branch to rebuild (defaults to main).'
-        required: false
-        default: main
+        description: 'Branch to rebuild (published branch by default).'
+        required: true
+        default: inventory-core-overhaul
 
 permissions:
   contents: write
+
+concurrency:
+  group: observation-guide-builder-${{ inputs.target_branch }}
+  cancel-in-progress: false
 
 jobs:
   rebuild:
     name: Rebuild observation guide page
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
-      - name: Checkout repository
+      - name: Checkout target branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.target_branch }}
+          ref: ${{ env.TARGET_BRANCH }}
           fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Rebuild observation guide page
-        run: npm run build:pages
+        run: node scripts/build-pages.mjs --scope=observation-guide
 
       - name: Commit updated observation guide
         id: commit
@@ -45,26 +51,22 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add observations/index.html
           git commit -m "chore: rebuild observation guide page"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
       - name: Push changes
         if: steps.commit.outputs.changes == 'true'
-        run: |
-          git push origin HEAD:${{ github.event.inputs.target_branch }}
+        run: git push origin HEAD:${{ env.TARGET_BRANCH }}
 
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Rebuilt observation guide page and pushed updated markup."
+            SUMMARY="Rebuilt the observation guide and pushed updated markup to ${{ env.TARGET_BRANCH }}."
           else
-            SUMMARY="No changes were needed; observation guide page already up to date."
+            SUMMARY="No changes were needed; the observation guide is already up to date."
           fi
-
-          if [ -n "$GITHUB_STEP_SUMMARY" ]; then
-            {
-              echo "## Observation Guide Builder"
-              echo "${SUMMARY}"
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+          {
+            echo "## Observation Guide Builder"
+            echo "$SUMMARY"
+          } >> "$GITHUB_STEP_SUMMARY"

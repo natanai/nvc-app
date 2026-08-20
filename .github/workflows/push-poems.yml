@@ -3,31 +3,40 @@ name: Push Poems
 on:
   workflow_dispatch:
     inputs:
+      target_branch:
+        description: 'Branch to update (published branch by default)'
+        required: true
+        default: inventory-core-overhaul
       run_build_pages:
-        description: 'Rebuild static pages after updating data'
+        description: 'Rebuild feelings pages after updating data'
         required: false
         default: 'true'
 
 permissions:
   contents: write
 
+concurrency:
+  group: push-poems-${{ inputs.target_branch }}
+  cancel-in-progress: false
+
 jobs:
   push-poems:
     name: Publish poems to site
     runs-on: ubuntu-latest
     env:
-      BRANCH: ${{ github.ref_name }}
+      TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
-      - name: Checkout repository
+      - name: Checkout target branch
         uses: actions/checkout@v4
         with:
+          ref: ${{ env.TARGET_BRANCH }}
           fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: 22
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
@@ -35,9 +44,11 @@ jobs:
       - name: Rebuild datasets
         run: npm run build:data
 
-      - name: Rebuild static pages
-        if: ${{ github.event.inputs.run_build_pages != 'false' }}
-        run: node scripts/build-pages.mjs --scope=feelings,faux-feelings
+      - name: Rebuild feelings pages
+        if: ${{ inputs.run_build_pages != 'false' }}
+        run: |
+          node scripts/build-pages.mjs --scope=feelings,faux-feelings
+          node scripts/finalize-static-assets.mjs
 
       - name: Commit and push updates
         id: commit
@@ -51,18 +62,17 @@ jobs:
           fi
           git add -A
           git commit -m "Update poems from poems_formatted.txt"
-          git push origin "HEAD:$BRANCH"
+          git push origin "HEAD:${TARGET_BRANCH}"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
       - name: Summarize updates
-        if: success()
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Push Poems workflow committed updates to branch $BRANCH."
+            SUMMARY="Push Poems committed updates to ${{ env.TARGET_BRANCH }}."
           else
-            SUMMARY="Push Poems workflow completed. No changes were committed."
+            SUMMARY="Push Poems completed with no changes to commit."
           fi
-          if [ -n "${GITHUB_STEP_SUMMARY}" ]; then
-            echo "## Push Poems" >> "$GITHUB_STEP_SUMMARY"
-            echo "${SUMMARY}" >> "$GITHUB_STEP_SUMMARY"
-          fi
+          {
+            echo "## Push Poems"
+            echo "$SUMMARY"
+          } >> "$GITHUB_STEP_SUMMARY"

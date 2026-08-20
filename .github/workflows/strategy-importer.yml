@@ -1,25 +1,30 @@
-name: strategy-importer
+name: Strategy Importer
 
 on:
   workflow_dispatch:
     inputs:
+      target_branch:
+        description: "Branch to update (published branch by default)"
+        required: true
+        default: "inventory-core-overhaul"
       note:
         description: Optional note about the incoming batch
-        required: false
-      base-branch:
-        description: "Branch to apply strategy import to (defaults to repo default branch)"
         required: false
 
 permissions:
   contents: write
 
+concurrency:
+  group: strategy-importer-${{ inputs.target_branch }}
+  cancel-in-progress: false
+
 jobs:
   import-strategies:
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.event.repository.default_branch }}
+      TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
-      - name: Check out repository
+      - name: Check out target branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -28,7 +33,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
 
       - name: Import personal strategies
         id: import
