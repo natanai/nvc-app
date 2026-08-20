@@ -7,21 +7,17 @@ import {
   BACKEND_BASE_URL,
 } from './bluesky-oauth.js?v=2024-07-11';
 
-// Updating this string makes it easier to verify that the current feed bundle is running.
-const FEED_ASSET_VERSION = '2026-08-19';
+const FEED_ASSET_VERSION = '2026-08-19-feed-first';
 
 const state = {
   strategies: [],
   feedList: null,
   statusEl: null,
-  followStatusEl: null,
   authHintEl: null,
   scopeSelect: null,
   sortSelect: null,
-  fetchButton: null,
-  followCheckButton: null,
-  followCheckInFlight: false,
   session: null,
+  requestId: 0,
 };
 
 function normalizeVisibility(value) {
@@ -58,39 +54,35 @@ function setStatus(message) {
   state.statusEl.textContent = message || '';
 }
 
-function setFollowStatus(message) {
-  if (!state.followStatusEl) return;
-  state.followStatusEl.textContent = message || '';
-}
-
 function setAuthHint(session) {
   if (!state.authHintEl) return;
-  if (session && session.did) {
-    state.authHintEl.textContent =
-      'Signed in with Bluesky. You can see strategies shared by accounts you follow and save them to your inventory.';
-  } else {
-    state.authHintEl.textContent =
-      'You can browse public strategies without signing in. To see strategies from people you follow, open Menu → Account & data and sign in with Bluesky.';
-  }
+  state.authHintEl.textContent = session?.did
+    ? ''
+    : 'Following requires Bluesky sign-in in Menu → Account & data.';
 }
 
 function setScopeAvailability(session) {
   if (!state.scopeSelect) return;
   const followsOption = state.scopeSelect.querySelector('option[value="follows"]');
-  if (!session || !session.did) {
+  if (!session?.did) {
     if (state.scopeSelect.value === 'follows') {
       state.scopeSelect.value = 'public';
     }
-    if (followsOption) {
-      followsOption.disabled = true;
-    }
+    if (followsOption) followsOption.disabled = true;
   } else if (followsOption) {
     followsOption.disabled = false;
   }
 }
 
-function setFilterHint(message) {
-  setStatus(message || 'Choose filters, then pull strategies.');
+function prepareFeedUi() {
+  const title = document.querySelector('#main .page-title');
+  if (title) title.textContent = 'Shared strategies';
+
+  document.querySelectorAll('#main .inventory-header .page-description').forEach((node) => node.remove());
+  document.querySelector('#main .feed-controls > .section-heading')?.remove();
+  document.querySelectorAll(
+    '#main .feed-action-hint, #main .feed-follows-status, #main [data-feed-follows-check], #main [data-feed-fetch]',
+  ).forEach((node) => node.remove());
 }
 
 function normalizeStrategyNeeds(strategy) {
@@ -115,7 +107,7 @@ function renderFeed(strategies) {
   state.feedList.textContent = '';
 
   if (!Array.isArray(strategies) || !strategies.length) {
-    setStatus('No strategies found for this filter yet.');
+    setStatus('No shared strategies found for this view yet.');
     return;
   }
 
@@ -184,14 +176,13 @@ function renderFeed(strategies) {
     addButton.type = 'button';
     addButton.className = 'strategy-card__action';
     addButton.dataset.addToInventory = 'true';
-    addButton.textContent = '💾 Save to device';
+    addButton.textContent = 'Save to inventory';
     addButton.addEventListener('click', () => {
       handleAddToInventory(strategy);
     });
     footer.appendChild(addButton);
 
     card.appendChild(footer);
-
     state.feedList.appendChild(card);
   });
 }
@@ -228,7 +219,7 @@ function addStrategyLocally(strategy) {
   try {
     localStorage.setItem('nvcApp.inventory', JSON.stringify(current));
   } catch (error) {
-    // ignore storage errors
+    // Ignore storage errors; the backend count update can still proceed.
   }
   return { snapshot: current, entry };
 }
@@ -251,15 +242,13 @@ async function notifyBackendAdd(strategy) {
 
 async function handleAddToInventory(strategy) {
   addStrategyLocally(strategy);
-  setStatus('Added to your local inventory.');
+  setStatus('Saved to your inventory.');
 
   let updated = null;
   try {
     updated = await notifyBackendAdd(strategy);
   } catch (error) {
-    setStatus(
-      'Added to your local inventory, but couldn’t update shared “add” count (you might be signed out).',
-    );
+    setStatus('Saved to your inventory. Shared add count could not be updated.');
   }
 
   const baseCount = Number.isFinite(strategy?.addCount)
@@ -270,10 +259,11 @@ async function handleAddToInventory(strategy) {
 }
 
 async function fetchAndRenderFeed() {
+  const requestId = ++state.requestId;
   const scope = state.scopeSelect?.value || 'public';
   const sort = state.sortSelect?.value || 'recent';
   const params = new URLSearchParams({ scope, sort });
-  setStatus('Loading strategies...');
+  setStatus('Loading…');
   let authFollowError = false;
 
   try {
@@ -283,92 +273,39 @@ async function fetchAndRenderFeed() {
     });
     const data = await res.json();
     if (!res.ok || !data || data.status !== 'ok') {
-      if (data?.message === 'auth_follow_fetch_failed') {
-        authFollowError = true;
-      }
+      if (data?.message === 'auth_follow_fetch_failed') authFollowError = true;
       throw new Error(data?.message || 'Unable to load feed');
     }
+    if (requestId !== state.requestId) return;
+
     state.strategies = Array.isArray(data.strategies) ? data.strategies : [];
     renderFeed(state.strategies);
-    if (!state.strategies.length) {
-      setStatus('No strategies found for this filter yet.');
-    }
   } catch (error) {
+    if (requestId !== state.requestId) return;
     console.error('Error loading strategy feed', error);
     if (authFollowError) {
-      setStatus(
-        'We couldn’t load your follows feed because your Bluesky session needs attention. Open Menu → Account & data and sign in again.',
-      );
+      setStatus('Your Bluesky session needs attention. Sign in again in Menu → Account & data.');
     } else {
-      setStatus('Unable to load the strategy feed right now. Please try again later.');
+      setStatus('Unable to load shared strategies right now.');
     }
-    if (state.feedList) {
-      state.feedList.textContent = '';
-    }
+    if (state.feedList) state.feedList.textContent = '';
   }
 }
 
-async function fetchFollowsStatus() {
-  if (state.followCheckInFlight) return;
-  if (!state.session?.did) {
-    setFollowStatus('Sign in with Bluesky to check follow visibility.');
-    return;
-  }
-
-  state.followCheckInFlight = true;
-  if (state.followCheckButton) {
-    state.followCheckButton.disabled = true;
-  }
-
-  setFollowStatus('Checking follow visibility...');
-
-  try {
-    try {
-      await ensureBackendSession(state.session);
-    } catch (error) {
-      console.warn('Unable to refresh backend session before follow check', error);
-    }
-
-    const res = await fetch(`${BACKEND_BASE_URL}/bluesky/follows-status`, {
-      credentials: 'include',
-      cache: 'no-store',
-    });
-    const data = await res.json().catch(() => null);
-    if (!res.ok || !data) {
-      const errorMessage = data?.error || data?.message || `Backend responded with ${res.status}`;
-      setFollowStatus(`Follow visibility check failed: ${errorMessage}.`);
-      return;
-    }
-    if (data.status !== 'ok') {
-      const errorMessage = data.error || 'Unknown error';
-      setFollowStatus(`Follow visibility check failed: ${errorMessage}.`);
-      return;
-    }
-
-    const count = Number.isFinite(data.followerCount)
-      ? data.followerCount
-      : Number(data?.followerCount || 0);
-    setFollowStatus(`Bluesky follows visible: ${count}.`);
-  } catch (error) {
-    console.error('Error checking follow visibility', error);
-    setFollowStatus('Follow visibility check failed. Please try again.');
-  } finally {
-    state.followCheckInFlight = false;
-    if (state.followCheckButton) {
-      state.followCheckButton.disabled = false;
-    }
-  }
+function applySession(session) {
+  state.session = session?.did ? session : null;
+  setAuthHint(state.session);
+  setScopeAvailability(state.session);
 }
 
 async function init() {
+  prepareFeedUi();
+
   state.feedList = document.querySelector('[data-feed-list]');
   state.statusEl = document.querySelector('[data-feed-status]');
-  state.followStatusEl = document.querySelector('[data-feed-follows-status]');
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
   state.scopeSelect = document.getElementById('feed-scope-select');
   state.sortSelect = document.getElementById('feed-sort-select');
-  state.fetchButton = document.querySelector('[data-feed-fetch]');
-  state.followCheckButton = document.querySelector('[data-feed-follows-check]');
 
   if (document?.documentElement) {
     document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
@@ -377,9 +314,7 @@ async function init() {
   let session = null;
   try {
     session = await initBlueskyOAuth();
-    if (session) {
-      await ensureBackendSession(session);
-    }
+    if (session) await ensureBackendSession(session);
   } catch (error) {
     console.warn('Could not initialize Bluesky OAuth session', error);
   }
@@ -392,33 +327,24 @@ async function init() {
     }
   }
 
-  state.session = session || null;
-  setAuthHint(state.session);
-  setScopeAvailability(state.session);
-  setFilterHint();
+  applySession(session);
 
-  const updateHint = () => {
-    setFilterHint();
-  };
+  state.scopeSelect?.addEventListener('change', () => {
+    setScopeAvailability(state.session);
+    fetchAndRenderFeed();
+  });
+  state.sortSelect?.addEventListener('change', fetchAndRenderFeed);
 
-  if (state.scopeSelect) {
-    state.scopeSelect.addEventListener('change', () => {
-      if (!state.session?.did && state.scopeSelect.value === 'follows') {
-        state.scopeSelect.value = 'public';
-      }
-      setScopeAvailability(state.session);
-      updateHint();
-    });
-  }
-  if (state.sortSelect) {
-    state.sortSelect.addEventListener('change', updateHint);
-  }
-  if (state.fetchButton) {
-    state.fetchButton.addEventListener('click', fetchAndRenderFeed);
-  }
-  if (state.followCheckButton) {
-    state.followCheckButton.addEventListener('click', fetchFollowsStatus);
-  }
+  window.addEventListener('allneeds:bsky-login-changed', (event) => {
+    applySession(event?.detail || window.allneedsSession || null);
+    fetchAndRenderFeed();
+  });
+
+  await fetchAndRenderFeed();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init, { once: true });
+} else {
+  init();
+}
