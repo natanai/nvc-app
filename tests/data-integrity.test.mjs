@@ -232,7 +232,7 @@ function checkReferenceList({
 }
 
 const EXTRA_DIRECTORY_ALLOWLIST = {
-  feelings: new Set(['body-cues']),
+  feelings: new Set(['body-cues', 'emotions-wheel']),
   needs: new Set(),
   'faux-feelings': new Set(),
 };
@@ -279,9 +279,6 @@ function checkBodySignals(feeling) {
   });
 }
 
-// Some reverse inference entries are intentionally absent while data is collected.
-// Track those keys explicitly so the integrity check still passes but we can
-// continue catching unexpected omissions if new feelings point to missing data.
 const KNOWN_INFERENCE_GAPS = new Set(['uncertain']);
 
 clearMissingVocabularySpreadsheet();
@@ -328,38 +325,38 @@ try {
   const fauxFeelingsByTitle = buildTitleIndex(fauxFeelingsBySlug);
   const strategiesByTitle = buildTitleIndex(strategiesBySlug);
 
-function trackMissingReference(map, word, context) {
-  const normalized = typeof word === 'string' ? word.trim() : '';
-  if (!normalized) {
-    return;
+  function trackMissingReference(map, word, context) {
+    const normalized = typeof word === 'string' ? word.trim() : '';
+    if (!normalized) {
+      return;
+    }
+
+    const entry = map.get(normalized) ?? new Set();
+    entry.add(context);
+    map.set(normalized, entry);
   }
 
-  const entry = map.get(normalized) ?? new Set();
-  entry.add(context);
-  map.set(normalized, entry);
-}
+  function ensureFeelingWordHasPage(word, context) {
+    const normalized = typeof word === 'string' ? word.trim().toLowerCase() : '';
+    if (!normalized) {
+      return;
+    }
 
-function ensureFeelingWordHasPage(word, context) {
-  const normalized = typeof word === 'string' ? word.trim().toLowerCase() : '';
-  if (!normalized) {
-    return;
+    if (!feelingsByTitle.has(normalized)) {
+      trackMissingReference(alexithymiaFeelingReferences, word, context);
+    }
   }
 
-  if (!feelingsByTitle.has(normalized)) {
-    trackMissingReference(alexithymiaFeelingReferences, word, context);
-  }
-}
+  function ensureNeedWordHasPage(word, context) {
+    const normalized = typeof word === 'string' ? word.trim().toLowerCase() : '';
+    if (!normalized) {
+      return;
+    }
 
-function ensureNeedWordHasPage(word, context) {
-  const normalized = typeof word === 'string' ? word.trim().toLowerCase() : '';
-  if (!normalized) {
-    return;
+    if (!needsByTitle.has(normalized)) {
+      trackMissingReference(alexithymiaNeedReferences, word, context);
+    }
   }
-
-  if (!needsByTitle.has(normalized)) {
-    trackMissingReference(alexithymiaNeedReferences, word, context);
-  }
-}
 
   BODY_REGIONS.forEach((region) => {
     region?.options?.forEach((option) => {
