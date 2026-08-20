@@ -3,24 +3,29 @@ name: Apply Fact-Checking Spreadsheets
 on:
   workflow_dispatch:
     inputs:
-      commit-message:
+      target_branch:
+        description: "Branch to update (published branch by default)"
+        required: true
+        default: "inventory-core-overhaul"
+      commit_message:
         description: "Commit message for the generated changes"
         required: false
         default: "Apply fact-checking spreadsheets"
-      base-branch:
-        description: "Branch to apply the fact-checking spreadsheets to (defaults to the repository's default branch if omitted)"
-        required: false
 
 permissions:
   contents: write
+
+concurrency:
+  group: fact-checking-import-${{ inputs.target_branch }}
+  cancel-in-progress: false
 
 jobs:
   import-fact-checking:
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.event.repository.default_branch }}
+      TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
-      - name: Checkout repository
+      - name: Checkout target branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -29,7 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -46,6 +51,8 @@ jobs:
 
       - name: Commit applied data
         id: commit
+        env:
+          COMMIT_MESSAGE: ${{ inputs.commit_message }}
         run: |
           if [[ -z "$(git status --porcelain)" ]]; then
             echo "No changes to commit after applying fact-checking spreadsheets."
@@ -56,7 +63,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "${{ github.event.inputs.commit-message }}"
+          git commit -m "$COMMIT_MESSAGE"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
       - name: Push updates
@@ -71,9 +78,7 @@ jobs:
             SUMMARY="No updates detected after running the fact-checking import; nothing was pushed."
           fi
 
-          if [ -n "$GITHUB_STEP_SUMMARY" ]; then
-            {
-              echo "## Apply Fact-Checking Spreadsheets"
-              echo "${SUMMARY}"
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+          {
+            echo "## Apply Fact-Checking Spreadsheets"
+            echo "$SUMMARY"
+          } >> "$GITHUB_STEP_SUMMARY"
