@@ -1162,6 +1162,9 @@ const handlePositionsUpdate = (state, list) => {
     magnet.x = item.x;
     magnet.y = item.y;
   });
+  if (state.playActive) {
+    return;
+  }
   updateBoardHeight(state);
   updateLayout(state);
   persistLayout(state);
