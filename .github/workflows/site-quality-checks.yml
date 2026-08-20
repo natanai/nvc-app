@@ -40,13 +40,14 @@ jobs:
         run: npm ci
 
       - name: Build site
+        id: build-site
         run: npm run build
         env:
           LINK_CHECK_REPORT_ONLY: "1"
 
       - name: Verify generated artifacts are committed
         id: generated-artifacts
-        continue-on-error: true
+        if: ${{ always() && steps.build-site.outcome == 'success' }}
         run: |
           if git diff --quiet; then
             echo "Generated artifacts are up to date."
@@ -66,48 +67,41 @@ jobs:
 
       - name: Verify data integrity
         id: data-integrity
-        continue-on-error: true
+        if: always()
         run: npm run test:data-integrity
 
       - name: Verify customizer preload
         id: customizer-preload
-        continue-on-error: true
+        if: always()
         run: npm run test:customizer
 
       - name: Run flicker and jitter checker
         id: flicker-jitter
-        continue-on-error: true
+        if: always()
         run: npm run test:flicker-jitter
 
       - name: Verify navigation magnets
         id: navigation-magnets
-        continue-on-error: true
+        if: always()
         run: npm run test:nav-magnets
 
       - name: Summarize site quality
         if: always()
         run: |
+          echo "Build: ${{ steps.build-site.outcome }}"
           echo "Generated artifacts: ${{ steps.generated-artifacts.outcome }}"
           echo "Data integrity: ${{ steps.data-integrity.outcome }}"
           echo "Customizer preload: ${{ steps.customizer-preload.outcome }}"
           echo "Flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
           echo "Navigation magnets: ${{ steps.navigation-magnets.outcome }}"
 
-          failed=0
-          for result in \
-            "${{ steps.generated-artifacts.outcome }}" \
-            "${{ steps.data-integrity.outcome }}" \
-            "${{ steps.customizer-preload.outcome }}" \
-            "${{ steps.flicker-jitter.outcome }}" \
-            "${{ steps.navigation-magnets.outcome }}"; do
-            if [ "$result" != "success" ]; then
-              failed=1
-            fi
-          done
-
-          if [ "$failed" -ne 0 ]; then
-            echo "::error title=Site quality checks failed::See the individual checks above for the specific failure(s)."
-            exit 1
+          if [ "${{ steps.build-site.outcome }}" = "success" ] \
+            && [ "${{ steps.generated-artifacts.outcome }}" = "success" ] \
+            && [ "${{ steps.data-integrity.outcome }}" = "success" ] \
+            && [ "${{ steps.customizer-preload.outcome }}" = "success" ] \
+            && [ "${{ steps.flicker-jitter.outcome }}" = "success" ] \
+            && [ "${{ steps.navigation-magnets.outcome }}" = "success" ]; then
+            echo "All site quality checks passed."
+          else
+            echo "One or more site quality checks failed; see the individual red checks above."
           fi
-
-          echo "All site quality checks passed."
