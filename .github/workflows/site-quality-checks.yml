@@ -1,16 +1,20 @@
-name: Site Quality Checks
+name: Site Quality
 
 on:
-  push:
-    branches: [inventory-core-overhaul]
   pull_request:
     branches: [inventory-core-overhaul]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
   workflow_dispatch:
     inputs:
       target_branch:
-        description: 'Branch to run checks against'
+        description: "Branch to check"
         required: true
-        default: inventory-core-overhaul
+        default: "inventory-core-overhaul"
+
+permissions:
+  contents: read
 
 concurrency:
   group: site-quality-${{ github.event.pull_request.number || github.ref }}
@@ -26,8 +30,8 @@ jobs:
         with:
           ref: ${{ inputs.target_branch }}
 
-      - name: Checkout event revision
-        if: github.event_name != 'workflow_dispatch'
+      - name: Checkout pull request
+        if: github.event_name == 'pull_request'
         uses: actions/checkout@v7
 
       - name: Setup Node.js
@@ -39,13 +43,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site
-        run: npm run build
-        env:
-          LINK_CHECK_REPORT_ONLY: "1"
-
-      - name: Verify generated artifacts are committed
+      - name: Build and verify generated output
         run: |
+          npm run build
           if [[ -n "$(git status --porcelain)" ]]; then
             echo "The build changed tracked or untracked artifacts. Commit generated output before merging."
             git status --short
@@ -53,37 +53,13 @@ jobs:
             git diff
             exit 1
           fi
+          npm run verify:build-idempotent
 
-      - name: Verify full build is idempotent
-        run: npm run verify:build-idempotent
+      - name: Verify architecture and workflow contracts
+        run: npm run test:architecture
 
-      - name: Verify generator source-of-truth
-        run: npm run test:generator-stability
+      - name: Verify content integrity
+        run: npm run test:content-integrity
 
-      - name: Verify browser entrypoint graph
-        run: node tests/entrypoint-integrity.test.mjs
-
-      - name: Verify workflow safety contracts
-        run: npm run test:workflow-safety
-
-      - name: Verify internal links and fragments
-        run: npm run test:internal-links
-
-      - name: Verify static-first UI contracts
-        run: |
-          node tests/shared-density-polish.test.mjs
-          node tests/body-cues-static-first.test.mjs
-          npm run test:home-regressions
-          npm run test:obsolete
-
-      - name: Verify data integrity
-        run: npm run test:data-integrity
-
-      - name: Verify customizer preload
-        run: npm run test:customizer
-
-      - name: Run flicker and jitter checker
-        run: npm run test:flicker-jitter
-
-      - name: Verify navigation magnets
-        run: npm run test:nav-magnets
+      - name: Verify UI regressions
+        run: npm run test:ui-regressions

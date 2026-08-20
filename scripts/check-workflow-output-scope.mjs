@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 const mode = process.argv[2];
 const VALID_MODES = new Set([
   'site-rebuild',
+  'fact-checking-export',
   'fact-checking',
   'strategy-import',
   'push-poems',
@@ -64,6 +65,10 @@ function isAllowed(file) {
 
   if (mode === 'site-rebuild') {
     return GENERATED_DATA_FILES.has(file) || isGeneratedHtml(file);
+  }
+
+  if (mode === 'fact-checking-export') {
+    return file.startsWith('fact-checking/');
   }
 
   if (mode === 'strategy-import') {

@@ -1,0 +1,183 @@
+name: Site Maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Maintenance task to run"
+        required: true
+        type: choice
+        options:
+          - rebuild-site
+          - export-fact-checking
+          - apply-fact-checking
+          - rebuild-observation-guide
+          - publish-poems
+          - import-strategies
+      target_branch:
+        description: "Branch to update"
+        required: true
+        default: "inventory-core-overhaul"
+      commit_message:
+        description: "Optional commit message override"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nvc-app-write-${{ inputs.target_branch }}
+  cancel-in-progress: false
+
+jobs:
+  maintain:
+    name: ${{ inputs.task }}
+    runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ inputs.target_branch }}
+      TASK: ${{ inputs.task }}
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TARGET_BRANCH }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run selected maintenance task
+        run: |
+          case "$TASK" in
+            rebuild-site)
+              npm run build:data
+              npm run build:pages
+              npm run verify:build-idempotent
+              npm run guard:workflow-output -- site-rebuild
+              npm run test:generator-stability
+              npm run test:data-integrity
+              ;;
+            export-fact-checking)
+              npm run export:fact-checking
+              npm run guard:workflow-output -- fact-checking-export
+              ;;
+            apply-fact-checking)
+              npm run import:fact-checking
+              npm run replace:needs-sources
+              npm run build:data
+              npm run build:pages
+              npm run verify:build-idempotent
+              npm run guard:workflow-output -- fact-checking
+              npm run test:generator-stability
+              npm run test:data-integrity
+              ;;
+            rebuild-observation-guide)
+              node scripts/build-pages.mjs --scope=observation-guide
+              npm run verify:observation-idempotent
+              npm run guard:workflow-output -- observation-guide
+              npm run test:generator-stability
+              ;;
+            publish-poems)
+              npm run build:data
+              node scripts/build-pages.mjs --scope=feelings,faux-feelings
+              npm run verify:feelings-idempotent
+              npm run guard:workflow-output -- push-poems
+              npm run test:generator-stability
+              npm run test:data-integrity
+              ;;
+            import-strategies)
+              node strategy-importer/import-personal-strategies.mjs
+              if ! git diff --quiet --exit-code data/Strategies.csv; then
+                npm run build:data
+                npm run build:pages
+                npm run verify:build-idempotent
+                npm run guard:workflow-output -- strategy-import
+                npm run test:generator-stability
+                npm run test:data-integrity
+              fi
+              ;;
+            *)
+              echo "Unknown maintenance task: $TASK" >&2
+              exit 1
+              ;;
+          esac
+
+      - name: Commit validated changes
+        id: commit
+        env:
+          COMMIT_MESSAGE_OVERRIDE: ${{ inputs.commit_message }}
+        run: |
+          if [[ -z "$(git status --porcelain)" ]]; then
+            echo "No repository changes were produced."
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          case "$TASK" in
+            rebuild-site)
+              git add data/index.json data/body-regions.json data/reverse-inference.json \
+                index.html alexithymia-support faux-feelings feelings needs inventory observations
+              default_message="chore: rebuild generated site"
+              ;;
+            export-fact-checking)
+              git add fact-checking
+              default_message="chore: refresh fact-checking spreadsheets"
+              ;;
+            apply-fact-checking)
+              git add data _evidence/citations.csv _evidence/citations.json \
+                index.html alexithymia-support faux-feelings feelings needs inventory observations
+              default_message="chore: apply fact-checking spreadsheets"
+              ;;
+            rebuild-observation-guide)
+              git add observations/index.html
+              default_message="chore: rebuild observation guide"
+              ;;
+            publish-poems)
+              git add data/index.json data/body-regions.json data/reverse-inference.json feelings faux-feelings
+              default_message="chore: publish poems"
+              ;;
+            import-strategies)
+              git add data/Strategies.csv data/index.json data/body-regions.json data/reverse-inference.json \
+                index.html alexithymia-support faux-feelings feelings needs inventory observations
+              default_message="chore: import strategies"
+              ;;
+          esac
+
+          unstaged="$(git diff --name-only)"
+          untracked="$(git ls-files --others --exclude-standard)"
+          if [[ -n "$unstaged" || -n "$untracked" ]]; then
+            echo "Maintenance task left files outside its staged output set:" >&2
+            git status --short >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [[ -n "$COMMIT_MESSAGE_OVERRIDE" ]]; then
+            message="$COMMIT_MESSAGE_OVERRIDE"
+          else
+            message="$default_message"
+          fi
+
+          git commit -m "$message"
+          echo "changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push changes
+        if: steps.commit.outputs.changes == 'true'
+        run: git push origin "HEAD:${TARGET_BRANCH}"
+
+      - name: Summary
+        run: |
+          if [[ "${{ steps.commit.outputs.changes }}" == "true" ]]; then
+            echo "Completed \`$TASK\`, validated its output, and pushed the result to \`$TARGET_BRANCH\`." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Completed \`$TASK\`; the repository was already up to date." >> "$GITHUB_STEP_SUMMARY"
+          fi
