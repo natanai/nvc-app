@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: fact-checking-import-${{ inputs.target_branch }}
+  group: nvc-app-write-${{ inputs.target_branch }}
   cancel-in-progress: false
 
 jobs:
@@ -49,6 +49,13 @@ jobs:
           npm run build:data
           npm run build:pages
 
+      - name: Verify generated output stability and scope
+        run: |
+          npm run verify:build-idempotent
+          npm run guard:workflow-output -- fact-checking
+          npm run test:generator-stability
+          npm run test:data-integrity
+
       - name: Commit applied data
         id: commit
         env:
@@ -62,7 +69,8 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add data _evidence/citations.csv _evidence/citations.json \
+            index.html alexithymia-support faux-feelings feelings needs inventory observations
           git commit -m "$COMMIT_MESSAGE"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
@@ -73,7 +81,7 @@ jobs:
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Applied fact-checking spreadsheets, refreshed needs citations, rebuilt data + pages, and pushed changes to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Applied fact-checking spreadsheets, validated generated output, and pushed changes to ${{ env.TARGET_BRANCH }}."
           else
             SUMMARY="No updates detected after running the fact-checking import; nothing was pushed."
           fi
