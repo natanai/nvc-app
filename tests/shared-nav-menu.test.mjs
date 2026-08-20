@@ -110,6 +110,25 @@ test('Account & data reuses existing allneeds capabilities instead of duplicatin
   assert.ok(bluesky.includes('let initialized = false'), 'Bluesky module should guard duplicate initialization');
 });
 
+test('Account & data actions are bound by the global Menu controller, not Inventory page presence', async () => {
+  const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const home = await fs.readFile(path.join(root, 'index.html'), 'utf8');
+
+  assert.ok(controller.includes('function setupAccountDataControls(menu)'), 'Menu should own a global Account & data initializer');
+  assert.ok(controller.includes('setupAccountDataControls(menu);'), 'global Menu initialization must bind Account & data on every page');
+  assert.ok(controller.includes("invokeInventoryControl('handleExportInventory')"), 'backup should call the canonical inventory export implementation');
+  assert.ok(controller.includes("invokeInventoryControl('handleImportInventory', file)"), 'restore should call the canonical inventory import implementation');
+  assert.ok(controller.includes("invokeInventoryControl('saveSnapshotToBackend')"), 'profile save should call the canonical backend snapshot implementation');
+  assert.ok(controller.includes("invokeInventoryControl('loadSnapshotFromBackend')"), 'profile load should call the canonical backend snapshot implementation');
+  assert.ok(controller.includes('event.stopImmediatePropagation();'), 'Menu-owned controls should prevent legacy Inventory-only listeners from double-firing');
+
+  const inventoryScript = home.indexOf('<script src="scripts/inventory.js" defer></script>');
+  const menuScript = home.indexOf('<script defer src="scripts/inventory-core-shell.js"></script>');
+  assert.ok(inventoryScript >= 0 && menuScript > inventoryScript,
+    'classic inventory implementation must load before the Menu controller that binds its global actions');
+  assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should be a non-Inventory page');
+});
+
 test('Inventory keeps system management out of its primary workspace', async () => {
   const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
