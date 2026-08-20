@@ -97,6 +97,24 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
     gap: 0.68rem;
   }
 
+  body .support-journal__content .journal-form-section__header {
+    gap: 0.18rem;
+  }
+
+  body .support-journal__content .journal-form-section__header .section-title {
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.15;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  body .support-journal__content .journal-form-section__hint {
+    margin: 0;
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+
   body .support-journal__content .journal-form textarea {
     min-height: clamp(15rem, 52dvh, 28rem);
   }
