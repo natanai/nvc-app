@@ -1,50 +1,35 @@
 name: Rebuild Site from Spreadsheets
 
 on:
-  workflow_dispatch:
-    inputs:
-      commit-message:
-        description: "Commit message for the rebuilt site"
-        required: false
-        default: "Rebuild site from spreadsheets"
-      base-branch:
-        description: "Branch to rebuild the site on (defaults to the repository's default branch if omitted)"
-        required: false
+  push:
+    branches:
+      - remove-runtime-ui-polish
 
 permissions:
   contents: write
 
 jobs:
-  rebuild-site:
+  finalize-static-ui:
     runs-on: ubuntu-latest
-    env:
-      TARGET_BRANCH: ${{ github.event.inputs.base-branch || github.event.repository.default_branch }}
     steps:
-      - name: Checkout repository
+      - name: Checkout repair branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ env.TARGET_BRANCH }}
+          ref: remove-runtime-ui-polish
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Finalize checked-in static assets
+        run: node scripts/finalize-static-assets.mjs
 
-      - name: Rebuild dataset and pages
-        run: |
-          npm run build:data
-          npm run build:pages
-
-      - name: Commit rebuilt site
+      - name: Commit finalized static assets
         id: commit
         run: |
           if [[ -z "$(git status --porcelain)" ]]; then
-            echo "No changes detected after rebuilding the site."
             echo "changes=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -52,24 +37,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "${{ github.event.inputs.commit-message }}"
+          git commit -m "Finalize static UI from source"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
-      - name: Push updates
+      - name: Push finalized assets
         if: steps.commit.outputs.changes == 'true'
-        run: git push origin HEAD:${{ env.TARGET_BRANCH }}
-
-      - name: Summarize run
-        run: |
-          if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Rebuilt dataset and pages from spreadsheets and pushed updates to ${{ env.TARGET_BRANCH }}."
-          else
-            SUMMARY="No updates were detected after rebuilding the site from spreadsheets."
-          fi
-
-          if [ -n "$GITHUB_STEP_SUMMARY" ]; then
-            {
-              echo "## Rebuild Site"
-              echo "$SUMMARY"
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+        run: git push origin HEAD:remove-runtime-ui-polish
