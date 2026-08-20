@@ -33,7 +33,6 @@ const AROUSAL_LABELS = {
   low: 'Low energy',
 };
 
-const POLISH_STYLESHEET_ID = 'feeling-inference-mobile-styles';
 let reverseIndexPromise = null;
 
 function slugify(text) {
@@ -45,23 +44,6 @@ function slugify(text) {
 
 function getBasePath() {
   return document.body?.dataset?.basePath || '';
-}
-
-function loadPolishStyles() {
-  const existing = document.getElementById(POLISH_STYLESHEET_ID);
-  if (existing) {
-    return Promise.resolve();
-  }
-
-  return new Promise((resolve) => {
-    const link = document.createElement('link');
-    link.id = POLISH_STYLESHEET_ID;
-    link.rel = 'stylesheet';
-    link.href = `${getBasePath()}styles/feeling-inference-mobile.css`;
-    link.addEventListener('load', resolve, { once: true });
-    link.addEventListener('error', resolve, { once: true });
-    document.head.appendChild(link);
-  });
 }
 
 function fetchReverseIndex() {
@@ -525,7 +507,7 @@ ready(() => {
   const main = document.querySelector('main[data-feeling-slug]');
   const slug = main?.dataset?.feelingSlug;
 
-  Promise.all([loadPolishStyles(), fetchReverseIndex()]).then(([, data]) => {
+  fetchReverseIndex().then((data) => {
     if (!data) {
       removeWrapper();
       return;
@@ -543,7 +525,6 @@ ready(() => {
     renderPanel(container, feelingKey, entry);
     setExpanded(false);
     toggle.disabled = false;
-    wrapper.hidden = false;
     panelShell.setAttribute('aria-hidden', 'true');
   });
 });
