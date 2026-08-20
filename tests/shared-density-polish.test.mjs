@@ -21,12 +21,16 @@ test('strategy creation copy is current and emoji action labels are normalized',
   assert.ok(polish.includes("button.textContent = 'Save to profile'"));
 });
 
-test('mobile journal chrome is compact and content uses the available viewport', async () => {
+test('mobile journal chrome and entry copy are compact', async () => {
   const css = await fs.readFile(path.join(root, 'styles/shared-density.css'), 'utf8');
+  const polish = await fs.readFile(path.join(root, 'scripts/shared-ui-polish.js'), 'utf8');
+
   assert.ok(css.includes('body .support-journal__header'));
   assert.ok(css.includes('max(0.48rem, env(safe-area-inset-top))'));
   assert.ok(css.includes('body .support-journal__content .journal-form'));
   assert.ok(css.includes('min-height: clamp(15rem, 52dvh, 28rem)'));
+  assert.ok(polish.includes("heading.textContent = 'New entry'"));
+  assert.ok(polish.includes('Tag what’s present now. Feeling optional—notes are enough.'));
 });
 
 test('shared strategies is feed-first rather than pull-button driven', async () => {
