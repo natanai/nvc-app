@@ -1,26 +1,76 @@
 import { spawnSync } from 'node:child_process';
 
 const mode = process.argv[2];
-const GENERATED_SITE_PREFIXES = [
-  'data/',
-  'index.html',
-  'alexithymia-support/',
-  'faux-feelings/',
-  'feelings/',
-  'needs/',
-  'inventory/',
-  'observations/',
+
+const GENERATED_DATA_FILES = new Set([
+  'data/index.json',
+  'data/body-regions.json',
+  'data/reverse-inference.json',
+]);
+
+const FACT_CHECKING_SOURCE_FILES = new Set([
+  'data/Needs.csv',
+  'data/Feelings.csv',
+  'data/Faux Feelings.csv',
+  'data/Strategies.csv',
+  'data/color-palettes.csv',
+  'data/observation_taxonomy.json',
+  'data/observation_lexicon.json',
+  'data/observation_need_templates.json',
+  'data/observation_module_blueprints.json',
+  'data/observation_detector_stats.json',
+  'data/observation-guide.json',
+  '_evidence/citations.csv',
+  '_evidence/citations.json',
+]);
+
+const PROTECTED_STATIC_PREFIXES = [
+  'feelings/emotions-wheel/',
 ];
 
-const allowedByMode = {
-  'site-rebuild': GENERATED_SITE_PREFIXES,
-  'fact-checking': GENERATED_SITE_PREFIXES,
-  'strategy-import': GENERATED_SITE_PREFIXES,
-  'push-poems': ['data/', 'feelings/', 'faux-feelings/'],
-  'observation-guide': ['observations/index.html'],
-};
+function isGeneratedHtml(file) {
+  if (file === 'index.html') return true;
+  if (file === 'alexithymia-support/index.html') return true;
+  if (file === 'observations/index.html') return true;
+  if (file === 'inventory/index.html' || file === 'inventory/journal/index.html') return true;
+  if (/^(?:faux-feelings|needs)\/[^/]+\/index\.html$/.test(file)) return true;
+  if (file === 'faux-feelings/index.html' || file === 'needs/index.html') return true;
+  if (/^feelings\/[^/]+\/index\.html$/.test(file) && !file.startsWith('feelings/emotions-wheel/')) return true;
+  if (file === 'feelings/index.html') return true;
+  return false;
+}
 
-if (!allowedByMode[mode]) {
+function isFeelingsHtml(file) {
+  if (file === 'faux-feelings/index.html' || /^faux-feelings\/[^/]+\/index\.html$/.test(file)) return true;
+  if (file === 'feelings/index.html') return true;
+  return /^feelings\/[^/]+\/index\.html$/.test(file) && !file.startsWith('feelings/emotions-wheel/');
+}
+
+function isAllowed(file) {
+  if (PROTECTED_STATIC_PREFIXES.some((prefix) => file.startsWith(prefix))) {
+    return false;
+  }
+
+  if (mode === 'site-rebuild') {
+    return GENERATED_DATA_FILES.has(file) || isGeneratedHtml(file);
+  }
+
+  if (mode === 'strategy-import') {
+    return file === 'data/Strategies.csv' || GENERATED_DATA_FILES.has(file) || isGeneratedHtml(file);
+  }
+
+  if (mode === 'push-poems') {
+    return GENERATED_DATA_FILES.has(file) || isFeelingsHtml(file);
+  }
+
+  if (mode === 'observation-guide') {
+    return file === 'observations/index.html';
+  }
+
+  if (mode === 'fact-checking') {
+    return FACT_CHECKING_SOURCE_FILES.has(file) || GENERATED_DATA_FILES.has(file) || isGeneratedHtml(file);
+  }
+
   throw new Error(`Unknown workflow output mode: ${mode || '(missing)'}`);
 }
 
@@ -32,15 +82,17 @@ function capture(command, args) {
   return result.stdout;
 }
 
-const changed = capture('git', ['diff', '--name-only', '-z'])
+const unstaged = capture('git', ['diff', '--name-only', '-z'])
+  .split('\0')
+  .filter(Boolean);
+const staged = capture('git', ['diff', '--cached', '--name-only', '-z'])
   .split('\0')
   .filter(Boolean);
 const untracked = capture('git', ['ls-files', '--others', '--exclude-standard', '-z'])
   .split('\0')
   .filter(Boolean);
-const files = Array.from(new Set([...changed, ...untracked]));
-const allowed = allowedByMode[mode];
-const unexpected = files.filter((file) => !allowed.some((prefix) => file === prefix || file.startsWith(prefix)));
+const files = Array.from(new Set([...unstaged, ...staged, ...untracked])).sort();
+const unexpected = files.filter((file) => !isAllowed(file));
 
 if (unexpected.length) {
   console.error(`Workflow produced files outside its allowed ${mode} output scope:`);
