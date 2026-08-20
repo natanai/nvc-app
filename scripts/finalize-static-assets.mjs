@@ -1,9 +1,24 @@
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
+
+const staticPageSources = [
+  {
+    source: join(rootDir, 'static-pages', 'feelings', 'emotions-wheel'),
+    destination: join(rootDir, 'feelings', 'emotions-wheel'),
+  },
+];
+
+for (const { source, destination } of staticPageSources) {
+  if (!existsSync(source)) {
+    throw new Error(`Static page source missing: ${relative(rootDir, source)}`);
+  }
+  mkdirSync(dirname(destination), { recursive: true });
+  cpSync(source, destination, { recursive: true, force: true });
+}
 
 const htmlTargets = [
   'index.html',
