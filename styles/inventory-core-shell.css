@@ -1,7 +1,6 @@
-/* Inventory core overhaul — diegetic navigation prototype.
-   The existing navigation magnet board remains the primary navigation object.
-   This stylesheet only adds a tangible More magnet + its secondary drawer and
-   keeps Inventory utility panels out of the first viewport. */
+/* Shared allneeds Menu + focused Inventory experience.
+   The navigation magnet board stays primary; Menu is one persistent magnet
+   that exposes the site's deeper hierarchy and system controls. */
 
 .site-nav__magnet--menu {
   padding: 0.45rem;
@@ -28,30 +27,28 @@
   box-shadow: inset 0 -8px 0 color-mix(in srgb, var(--outline) 18%, transparent);
 }
 
-/* The drawer is a secondary physical object opened by the More magnet. It does
-   not replace or cover the navigation board as the site's primary navigation. */
 .inventory-more-menu[popover] {
   position: fixed;
   inset: 0 auto auto 0;
-  width: min(390px, calc(100vw - 1rem));
+  width: min(410px, calc(100vw - 1rem));
   max-width: calc(100vw - 1rem);
   max-height: calc(100dvh - 1rem);
   margin: 0.5rem;
   padding: 0;
-  border: 3px solid var(--outline);
+  border: 2px solid color-mix(in srgb, var(--outline) 82%, transparent);
   border-radius: var(--radius-3xl);
-  background: color-mix(in srgb, #ffffff 91%, var(--lavender) 9%);
+  background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
   color: var(--ink);
   box-shadow:
-    0 12px 0 color-mix(in srgb, var(--outline) 22%, transparent),
-    0 28px 60px color-mix(in srgb, var(--outline) 24%, transparent);
+    0 8px 0 color-mix(in srgb, var(--outline) 15%, transparent),
+    0 24px 64px color-mix(in srgb, var(--outline) 22%, transparent);
   overflow: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
 .inventory-more-menu[popover]::backdrop {
-  background: color-mix(in srgb, var(--outline) 16%, transparent);
+  background: color-mix(in srgb, var(--outline) 14%, transparent);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
 }
@@ -61,28 +58,47 @@
   position: fixed;
   z-index: 500;
   inset: 0 auto auto 0;
-  width: min(390px, calc(100vw - 1rem));
+  width: min(410px, calc(100vw - 1rem));
   max-height: calc(100vh - 1rem);
   margin: 0.5rem;
 }
 
 .inventory-more-menu__inner {
-  display: grid;
-  gap: 0;
-  padding: max(0.85rem, env(safe-area-inset-top)) 0.78rem max(1rem, env(safe-area-inset-bottom));
+  min-height: 100%;
+  padding: max(0.8rem, env(safe-area-inset-top)) 0.72rem max(1rem, env(safe-area-inset-bottom));
 }
 
-.inventory-more-menu__header {
+.inventory-more-menu__view[hidden] {
+  display: none !important;
+}
+
+.inventory-more-menu__header,
+.inventory-more-menu__subheader {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.75rem;
   align-items: start;
-  padding: 0.2rem 0.35rem 0.75rem;
+}
+
+.inventory-more-menu__header {
+  padding: 0.2rem 0.35rem 0.72rem;
+}
+
+.inventory-more-menu__subheader {
+  align-items: center;
+  padding: 0.08rem 0.18rem 0.7rem;
+}
+
+.inventory-more-menu__account-heading {
+  padding: 0 0.35rem 0.82rem;
 }
 
 .inventory-more-menu__eyebrow,
 .inventory-more-menu__title,
-.inventory-more-menu__intro {
+.inventory-more-menu__intro,
+.inventory-more-menu__system-copy,
+.inventory-more-menu__privacy-note,
+.inventory-more-menu__system-status {
   margin: 0;
 }
 
@@ -95,19 +111,29 @@
 }
 
 .inventory-more-menu__title {
-  margin-top: 0.06rem;
+  margin-top: 0.05rem;
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  line-height: 1.05;
+  font-size: 1.45rem;
+  line-height: 1.08;
   letter-spacing: -0.02em;
 }
 
 .inventory-more-menu__intro {
-  margin-top: 0.25rem;
-  max-width: 31ch;
-  font-size: 0.75rem;
-  line-height: 1.35;
+  margin-top: 0.26rem;
+  max-width: 34ch;
+  font-size: 0.76rem;
+  line-height: 1.4;
   color: var(--ink-soft);
+}
+
+.inventory-more-menu__close,
+.inventory-more-menu__back {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+  cursor: pointer;
+  font-family: var(--font-body);
 }
 
 .inventory-more-menu__close {
@@ -116,39 +142,55 @@
   min-width: 42px;
   min-height: 42px;
   padding: 0;
-  border: 2px solid var(--outline);
   border-radius: var(--radius-circle);
-  background: color-mix(in srgb, var(--rose) 62%, #ffffff 38%);
-  color: var(--ink);
-  box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-  font: 700 1.2rem/1 var(--font-body);
-  cursor: pointer;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.inventory-more-menu__back {
+  min-height: 42px;
+  width: fit-content;
+  padding: 0.25rem 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+}
+
+.inventory-more-menu__back > span[aria-hidden='true'] {
+  font-size: 1.4rem;
+  line-height: 1;
 }
 
 .inventory-more-menu__close:hover,
-.inventory-more-menu__close:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 23%, transparent);
+.inventory-more-menu__close:focus-visible,
+.inventory-more-menu__back:hover,
+.inventory-more-menu__back:focus-visible {
+  background: color-mix(in srgb, var(--sky) 26%, #ffffff 74%);
+  outline: 2px solid color-mix(in srgb, var(--outline) 22%, transparent);
+  outline-offset: -2px;
 }
 
-.inventory-more-menu__section {
-  padding: 0.62rem 0.1rem 0.5rem;
-  border-top: 1.5px solid color-mix(in srgb, var(--outline) 17%, transparent);
+.inventory-more-menu__section,
+.inventory-more-menu__system-section {
+  padding: 0.58rem 0.08rem 0.48rem;
+  border-top: 1px solid color-mix(in srgb, var(--outline) 15%, transparent);
 }
 
 .inventory-more-menu__section-title {
-  margin: 0 0 0.2rem 0.48rem;
-  font-size: 0.66rem;
+  margin: 0 0 0.2rem 0.46rem;
+  font-size: 0.64rem;
   font-weight: 850;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink-soft) 82%, transparent);
+  color: color-mix(in srgb, var(--ink-soft) 80%, transparent);
 }
 
 .inventory-more-menu__row {
   width: 100%;
-  min-height: 50px;
-  padding: 0.62rem 0.68rem;
+  min-height: 48px;
+  padding: 0.6rem 0.68rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -168,12 +210,17 @@
 }
 
 .inventory-more-menu__row:hover,
-.inventory-more-menu__row:focus-visible {
+.inventory-more-menu__row:focus-visible,
+.inventory-more-menu__row.is-current {
   transform: none;
-  background: color-mix(in srgb, var(--sky) 28%, #ffffff 72%);
+  background: color-mix(in srgb, var(--sky) 24%, #ffffff 76%);
   box-shadow: none;
-  outline: 2px solid color-mix(in srgb, var(--outline) 24%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--outline) 20%, transparent);
   outline-offset: -2px;
+}
+
+.inventory-more-menu__row.is-current {
+  background: color-mix(in srgb, var(--lavender) 48%, #ffffff 52%);
 }
 
 .inventory-more-menu__row-copy {
@@ -183,30 +230,133 @@
 }
 
 .inventory-more-menu__row-title {
-  font-weight: 800;
-  line-height: 1.15;
+  font-weight: 760;
+  line-height: 1.2;
 }
 
 .inventory-more-menu__row-note {
   font-size: 0.7rem;
-  line-height: 1.28;
+  line-height: 1.3;
   color: var(--ink-soft);
 }
 
-/* Inventory workspace cleanup retained from the experiment: the dedicated
-   Journal magnet, Shared Strategies in More, and Sync/Backup utilities make
-   their old header promotions redundant. Hide them before JS to avoid flash. */
-.inventory-page .inventory-header .inventory-journal-button,
-.inventory-page .inventory-header .inventory-shared-button {
+.inventory-more-menu__disclosure {
+  flex: 0 0 auto;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+}
+
+.inventory-more-menu__badge {
+  flex: 0 0 auto;
+  min-width: 1.55rem;
+  min-height: 1.55rem;
+  padding: 0.12rem 0.42rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--mint) 48%, #ffffff 52%);
+  border: 1px solid color-mix(in srgb, var(--outline) 25%, transparent);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.inventory-more-menu__badge[hidden] {
   display: none !important;
 }
 
-.inventory-page .inventory-header .inventory-bluesky-panel {
+.inventory-more-menu__system-section {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.inventory-more-menu__system-card {
+  margin: 0 0.18rem;
+  padding: 0.82rem;
+  display: grid;
+  gap: 0.58rem;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 22%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, #ffffff 89%, var(--lavender) 11%);
+  box-shadow: none;
+}
+
+.inventory-more-menu__system-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  line-height: 1.25;
+}
+
+.inventory-more-menu__system-copy,
+.inventory-more-menu__privacy-note,
+.inventory-more-menu__system-status,
+.inventory-more-menu .inventory-auth-panel__status-text,
+.inventory-more-menu .inventory-backend-sync__status {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.inventory-more-menu__privacy-note {
+  color: color-mix(in srgb, var(--ink-soft) 82%, transparent);
+}
+
+.inventory-more-menu .inventory-auth-panel__field {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.inventory-more-menu .inventory-auth-panel__field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.inventory-more-menu .inventory-auth-panel__field input {
+  width: 100%;
+  min-height: 44px;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 48%, transparent);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0.58rem 0.66rem;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.inventory-more-menu__system-actions,
+.inventory-more-menu .inventory-backend-sync__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.inventory-more-menu__system-action {
+  min-height: 42px;
+  padding: 0.48rem 0.68rem;
+  border-width: 1.5px;
+  box-shadow: none;
+  font-size: 0.75rem;
+}
+
+.inventory-more-menu__personal-share {
+  margin-top: 0.1rem;
+}
+
+.inventory-more-menu__personal-share .inventory-button__glyph {
   display: none;
 }
 
-.inventory-page .inventory-main > .inventory-bluesky-panel.inventory-settings-panel {
-  display: block;
+/* Inventory should be about the inventory itself. System/account controls live
+   in Menu → Account & data, and Shared strategies lives under Discover. Hide
+   the old placements before JS runs so the page never flashes as a settings
+   dashboard. */
+.inventory-page .inventory-header .inventory-journal-button,
+.inventory-page .inventory-header .inventory-shared-button,
+.inventory-page .inventory-header .inventory-bluesky-panel,
+.inventory-page .inventory-main > .inventory-actions {
+  display: none !important;
 }
 
 .inventory-page .inventory-header__title-row {
@@ -225,17 +375,8 @@
   justify-content: flex-start;
 }
 
-.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-  width: auto;
-}
-
-.inventory-page .inventory-settings-panel {
-  order: 4;
-}
-
-.inventory-page #inventory-sync-settings,
-.inventory-page #inventory-backup-settings {
-  scroll-margin-top: 1rem;
+.inventory-page .inventory-main > .inventory-overview {
+  margin-top: 0;
 }
 
 @media (max-width: 640px) {
@@ -250,19 +391,35 @@
 
   .inventory-more-menu[popover],
   .inventory-more-menu[data-open='true'] {
-    width: calc(100vw - 0.7rem);
-    max-width: calc(100vw - 0.7rem);
-    max-height: calc(100dvh - 0.7rem);
-    margin: 0.35rem;
-    border-radius: var(--radius-3xl);
+    inset: auto 0 0 0;
+    width: 100vw;
+    max-width: 100vw;
+    max-height: min(92dvh, 760px);
+    margin: 0;
+    border-width: 1.5px 0 0;
+    border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
+    box-shadow: 0 -18px 52px color-mix(in srgb, var(--outline) 22%, transparent);
   }
 
   .inventory-more-menu__inner {
-    padding-inline: 0.68rem;
+    padding: 0.72rem 0.62rem max(0.9rem, env(safe-area-inset-bottom));
   }
 
   .inventory-more-menu__header {
-    padding-bottom: 0.68rem;
+    padding-bottom: 0.62rem;
+  }
+
+  .inventory-more-menu__intro {
+    max-width: 38ch;
+  }
+
+  .inventory-more-menu__row {
+    min-height: 50px;
+    padding-block: 0.62rem;
+  }
+
+  .inventory-more-menu__system-card {
+    padding: 0.72rem;
   }
 
   body .inventory-page.inventory-page {
@@ -271,11 +428,11 @@
 
   body .inventory-page.inventory-page .inventory-header {
     margin-inline: 0.85rem;
-    gap: 0.35rem;
+    gap: 0.45rem;
   }
 
   body .inventory-page.inventory-page .inventory-header__content {
-    gap: 0.35rem;
+    gap: 0.45rem;
   }
 
   body .inventory-page.inventory-page .inventory-header .page-title {
@@ -284,27 +441,28 @@
   }
 
   body .inventory-page.inventory-page .inventory-header .page-description {
-    display: none;
+    display: block;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    max-width: 42ch;
   }
 
   body .inventory-page.inventory-page .inventory-header__quick-actions {
-    margin: 0.05rem 0 0;
+    margin: 0.04rem 0 0;
     display: flex;
   }
 
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-    width: auto;
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link {
     min-height: 42px;
     padding: 0.42rem 0.72rem;
     border-width: 1.5px;
     border-radius: var(--radius-pill);
     box-shadow: none;
     font-size: 0.76rem;
-    letter-spacing: 0.055em;
   }
 
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child:hover,
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child:focus-visible {
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:hover,
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:focus-visible {
     transform: none;
     box-shadow: none;
   }
@@ -315,18 +473,6 @@
     min-width: 1.35rem;
     min-height: 1.35rem;
     border-width: 1.5px;
-    box-shadow: none;
-  }
-
-  body .inventory-page.inventory-page .inventory-settings-panel,
-  body .inventory-page.inventory-page .inventory-actions--collapsible,
-  body .inventory-page.inventory-page .inventory-form--collapsible {
-    margin-inline: 0.85rem;
-  }
-
-  body .inventory-page.inventory-page .inventory-settings-panel {
-    border: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);
-    border-radius: var(--radius-lg);
     box-shadow: none;
   }
 }

@@ -7,16 +7,13 @@ import {
 } from './bluesky-oauth.js?v=2024-07-11';
 
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
+let initialized = false;
 
 function consumeLoginIntent() {
   try {
-    if (!window.sessionStorage) {
-      return false;
-    }
+    if (!window.sessionStorage) return false;
     const hasIntent = window.sessionStorage.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
-    if (hasIntent) {
-      window.sessionStorage.removeItem(LOGIN_INTENT_STORAGE_KEY);
-    }
+    if (hasIntent) window.sessionStorage.removeItem(LOGIN_INTENT_STORAGE_KEY);
     return hasIntent;
   } catch (error) {
     return false;
@@ -25,44 +22,31 @@ function consumeLoginIntent() {
 
 function setLoginIntent() {
   try {
-    if (window.sessionStorage) {
-      window.sessionStorage.setItem(LOGIN_INTENT_STORAGE_KEY, '1');
-    }
+    if (window.sessionStorage) window.sessionStorage.setItem(LOGIN_INTENT_STORAGE_KEY, '1');
   } catch (error) {
-    // ignore storage errors
+    // Ignore storage errors. Sign-in can still proceed.
   }
 }
 
 function setGlobalBlueskySession(session, { reason = '' } = {}) {
   const normalizedDid = session?.did || session?.sub || null;
-  const normalizedHandle =
-    session?.preferred_username || session?.handle || session?.username || null;
+  const normalizedHandle = session?.preferred_username || session?.handle || session?.username || null;
 
-  if (normalizedDid) {
-    window.allneedsSession = {
-      did: normalizedDid,
-      handle: normalizedHandle,
-    };
-  } else {
-    window.allneedsSession = null;
-  }
+  window.allneedsSession = normalizedDid
+    ? { did: normalizedDid, handle: normalizedHandle }
+    : null;
 
-  const evt = new CustomEvent('allneeds:bsky-login-changed', {
+  window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed', {
     detail: {
       ...(window.allneedsSession || {}),
       reason,
     },
-  });
-  window.dispatchEvent(evt);
+  }));
 }
 
 function describeSession(session) {
   const handle = session?.preferred_username || session?.handle || session?.username || '';
-
-  if (handle) {
-    return `Signed in as @${handle}`;
-  }
-  return 'Signed in with Bluesky';
+  return handle ? `Signed in as @${String(handle).replace(/^@/, '')}` : 'Signed in with Bluesky';
 }
 
 function updateBlueskyAuthUi(session) {
@@ -106,7 +90,10 @@ function setStatusText(message, { isError = false } = {}) {
 async function onBlueskySignInClick() {
   const input = document.querySelector('#bluesky-handle-input');
   const handle = input?.value?.trim();
-  if (!handle) return;
+  if (!handle) {
+    setStatusText('Enter your Bluesky handle first.', { isError: true });
+    return;
+  }
 
   try {
     setStatusText('Opening Bluesky sign-in…');
@@ -114,8 +101,7 @@ async function onBlueskySignInClick() {
     await signInWithBluesky(handle);
   } catch (err) {
     console.error('Error during Bluesky OAuth sign-in', err);
-    const message = err?.message || 'Unable to start Bluesky sign-in. Please check your handle.';
-    setStatusText(message, { isError: true });
+    setStatusText(err?.message || 'Unable to start Bluesky sign-in. Please check your handle.', { isError: true });
   }
 }
 
@@ -125,25 +111,30 @@ async function onBlueskySignOutClick() {
   } catch (err) {
     console.error('Error during Bluesky OAuth sign-out', err);
   }
-  setGlobalBlueskySession(null);
+  setGlobalBlueskySession(null, { reason: 'signout' });
   updateBlueskyAuthUi(null);
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function initBlueskyUi() {
+  if (initialized) return;
+  initialized = true;
+
   const authButton = document.querySelector('#bluesky-auth-button');
   if (authButton) {
     authButton.addEventListener('click', () => {
-      if (window.allneedsSession) {
-        onBlueskySignOutClick();
-      } else {
-        onBlueskySignInClick();
-      }
+      if (window.allneedsSession) onBlueskySignOutClick();
+      else onBlueskySignInClick();
     });
   }
+
   const handleInput = document.querySelector('#bluesky-handle-input');
   if (handleInput) {
-    handleInput.addEventListener('input', () => {
-      setStatusText('');
+    handleInput.addEventListener('input', () => setStatusText(''));
+    handleInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !window.allneedsSession) {
+        event.preventDefault();
+        onBlueskySignInClick();
+      }
     });
   }
 
@@ -155,9 +146,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Error initializing Bluesky OAuth', err);
   }
 
-  if (!session) {
-    session = getCurrentBlueskySession();
-  }
+  if (!session) session = getCurrentBlueskySession();
 
   if (session) {
     try {
@@ -170,4 +159,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const reason = session ? (loginIntent ? 'signin' : 'restore') : 'signout';
   setGlobalBlueskySession(session || null, { reason });
   updateBlueskyAuthUi(session);
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBlueskyUi, { once: true });
+} else {
+  initBlueskyUi();
+}
