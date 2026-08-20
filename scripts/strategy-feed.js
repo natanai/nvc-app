@@ -7,7 +7,7 @@ import {
   BACKEND_BASE_URL,
 } from './bluesky-oauth.js?v=2024-07-11';
 
-const FEED_ASSET_VERSION = '2026-08-19-feed-first';
+const FEED_ASSET_VERSION = '2026-08-19-static-feed';
 
 const state = {
   strategies: [],
@@ -72,17 +72,6 @@ function setScopeAvailability(session) {
   } else if (followsOption) {
     followsOption.disabled = false;
   }
-}
-
-function prepareFeedUi() {
-  const title = document.querySelector('#main .page-title');
-  if (title) title.textContent = 'Shared strategies';
-
-  document.querySelectorAll('#main .inventory-header .page-description').forEach((node) => node.remove());
-  document.querySelector('#main .feed-controls > .section-heading')?.remove();
-  document.querySelectorAll(
-    '#main .feed-action-hint, #main .feed-follows-status, #main [data-feed-follows-check], #main [data-feed-fetch]',
-  ).forEach((node) => node.remove());
 }
 
 function normalizeStrategyNeeds(strategy) {
@@ -299,8 +288,6 @@ function applySession(session) {
 }
 
 async function init() {
-  prepareFeedUi();
-
   state.feedList = document.querySelector('[data-feed-list]');
   state.statusEl = document.querySelector('[data-feed-status]');
   state.authHintEl = document.querySelector('[data-feed-auth-hint]');
