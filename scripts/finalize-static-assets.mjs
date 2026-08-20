@@ -86,17 +86,4 @@ for (const file of htmlFiles) {
   }
 }
 
-// These buttons are created only when profile saving becomes available, so the
-// source implementation itself must carry the final user-facing label. This is
-// still a build-time source normalization: no browser-side label repair exists.
-const inventoryScriptPath = join(rootDir, 'scripts', 'inventory.js');
-if (existsSync(inventoryScriptPath)) {
-  const before = readFileSync(inventoryScriptPath, 'utf8');
-  const after = before.replaceAll('☁️ Save to profile', 'Save to profile');
-  if (after !== before) {
-    writeFileSync(inventoryScriptPath, after);
-    changedFiles += 1;
-  }
-}
-
 console.log(`Finalized static UI in ${changedFiles} file${changedFiles === 1 ? '' : 's'}.`);
