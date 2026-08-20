@@ -7,16 +7,12 @@ on:
         description: 'Branch to update (published branch by default)'
         required: true
         default: inventory-core-overhaul
-      run_build_pages:
-        description: 'Rebuild feelings pages after updating data'
-        required: false
-        default: 'true'
 
 permissions:
   contents: write
 
 concurrency:
-  group: push-poems-${{ inputs.target_branch }}
+  group: nvc-app-write-${{ inputs.target_branch }}
   cancel-in-progress: false
 
 jobs:
@@ -45,10 +41,14 @@ jobs:
         run: npm run build:data
 
       - name: Rebuild feelings pages
-        if: ${{ inputs.run_build_pages != 'false' }}
+        run: node scripts/build-pages.mjs --scope=feelings,faux-feelings
+
+      - name: Verify poem rebuild stability and scope
         run: |
-          node scripts/build-pages.mjs --scope=feelings,faux-feelings
-          node scripts/finalize-static-assets.mjs
+          npm run verify:feelings-idempotent
+          npm run guard:workflow-output -- push-poems
+          npm run test:generator-stability
+          npm run test:data-integrity
 
       - name: Commit and push updates
         id: commit
@@ -60,7 +60,7 @@ jobs:
             echo "No changes detected after rebuild."
             exit 0
           fi
-          git add -A
+          git add data/index.json data/body-regions.json data/reverse-inference.json feelings faux-feelings
           git commit -m "Update poems from poems_formatted.txt"
           git push origin "HEAD:${TARGET_BRANCH}"
           echo "changes=true" >> "$GITHUB_OUTPUT"
@@ -68,7 +68,7 @@ jobs:
       - name: Summarize updates
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Push Poems committed updates to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Push Poems validated and committed updates to ${{ env.TARGET_BRANCH }}."
           else
             SUMMARY="Push Poems completed with no changes to commit."
           fi
