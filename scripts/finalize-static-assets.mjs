@@ -25,7 +25,7 @@ function collectHtml(target, output = []) {
   }
 
   for (const entry of readdirSync(target)) {
-    collectHtml(join(target, entry), extensions, output);
+    collectHtml(join(target, entry), output);
   }
   return output;
 }
