@@ -13,7 +13,8 @@ The following are first-class app systems and must continue to work across refac
 - **Magnet physics:** play on/off state, dragging, shuffle, pointer behavior, optional device tilt, and permission-denied/unsupported paths.
 - **Inventory and strategies:** local inventory data, filters, editing, import/export, and strategy save targets.
 - **Journal:** journal storage, overlay/history paths, and legacy navigation handling.
-- **Profile/backup restoration:** restoring localStorage must reconcile Customizer mirrors and reload before running magnet state can overwrite imported positions.
+- **Profile/backup restoration:** a full saved snapshot is authoritative. Replacing localStorage must synchronize the Customizer's `nvcApp.theme` and `nvcApp.navSettings` sessionStorage mirrors before the running page rehydrates, and successful full restore must restart before live magnet state can overwrite imported positions.
+- **Automatic post-sign-in restore:** Bluesky sign-in may not use a weaker restore path than the explicit “Load saved profile” action. The same restore guard must be installed before the automatic backend snapshot is applied.
 - **Account/Bluesky paths:** disconnected, sign-in, callback, backend save/load, and shared-strategy behavior remain available even when hidden from the main Inventory surface.
 
 ## Architecture rule
@@ -21,6 +22,10 @@ The following are first-class app systems and must continue to work across refac
 Use static/parser-discovered HTML and CSS whenever the correct result is deterministic from the route/build. Keep runtime code where the correct result genuinely depends on persisted user state, permissions, authentication, device capabilities, or interaction.
 
 A feature is not dead merely because it is invisible in the default state. Before removing runtime code, identify its caller, activation condition, persisted state, and restoration path.
+
+### Full-snapshot transaction invariant
+
+A full profile/backup restore is one storage transaction, not a sequence of loosely related UI repairs. The snapshot replacement owner must leave localStorage and any sessionStorage mirrors coherent *before* the current document reads restored presentation state. Page-specific repaint workarounds are not an acceptable substitute for completing that transaction at its source.
 
 ## Full-pass v1 changes
 
@@ -43,7 +48,7 @@ When this branch is published, compare it directly with the legacy/live branch. 
 7. On Inventory mobile, compare title, Add strategy action, Needs/Strategies tabs, filters, empty/filled need rows, scrolling, and tap targets with the legacy branch.
 8. Add/edit a strategy, search/filter it, export/import data, and verify Inventory counts update.
 9. Open Journal and verify existing entries/history and new-entry behavior.
-10. If using profile/Bluesky features, verify sign-in/account data controls and a restore path; restored Customizer/nav/magnet state must survive the reload.
+10. If using profile/Bluesky features, verify sign-in/account data controls and a restore path. The saved palette/roundness/nav state must reconcile on the callback/current page rather than waiting for a later navigation, and restored magnet state must survive the restore restart.
 11. Watch specifically for any first-paint jump: theme flash, nav magnet visibility flash, magnet layout jump, Inventory mobile restyling after load, or Body Cues restyling after load.
 
 Any difference in pixels, interaction, stored state, or conditional behavior is a regression unless it is explicitly approved as a separate product change.
