@@ -1,0 +1,69 @@
+name: Bedrock Home canary v5 diagnostic
+
+on:
+  push:
+    branches:
+      - bedrock/production-finalization-v2
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: bedrock/production-finalization-v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run pipeline and capture exact stopping point
+        shell: bash
+        run: |
+          set +e
+          {
+            echo '== node check transformer =='
+            node --check scripts/bedrock-home-canary-transform.mjs || exit $?
+            echo '== apply transformer =='
+            node scripts/bedrock-home-canary-transform.mjs || exit $?
+            echo '== safe page build =='
+            npm run build:pages || exit $?
+            echo '== focused Home test =='
+            node --test tests/home-runtime-canary.test.mjs || exit $?
+            echo '== flicker/load graph =='
+            npm run test:flicker-jitter || exit $?
+            echo '== customizer =='
+            npm run test:customizer || exit $?
+            echo '== home regressions =='
+            npm run test:home-regressions || exit $?
+            echo '== nav magnets =='
+            npm run test:nav-magnets || exit $?
+            echo '== data integrity =='
+            npm run test:data-integrity || exit $?
+            echo '== stage simulated final state =='
+            git add index.html package.json scripts/build-pages.mjs scripts/inventory.js scripts/shell-runtime-loader.js tests/home-runtime-canary.test.mjs tests/journal-load-graph.test.mjs tests/shared-nav-menu.test.mjs || exit $?
+            echo '== full build after staging =='
+            npm run build || exit $?
+            echo '== unstaged diff after full build =='
+            git diff --exit-code || exit $?
+            echo 'DIAGNOSTIC PIPELINE WOULD PASS'
+          } > /tmp/home-canary-v5-diagnostic.txt 2>&1
+          status=$?
+          git reset --hard HEAD
+          git clean -fd
+          mkdir -p docs/bedrock-diagnostics
+          cp /tmp/home-canary-v5-diagnostic.txt docs/bedrock-diagnostics/home-canary-v5-diagnostic.txt
+          echo "exit_status=$status" >> docs/bedrock-diagnostics/home-canary-v5-diagnostic.txt
+      - name: Commit diagnostic only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/bedrock-home-canary-v5-diagnostic.yml
+          git add docs/bedrock-diagnostics/home-canary-v5-diagnostic.txt
+          git commit -m "Record Home canary v5 diagnostic"
+          git push origin HEAD:bedrock/production-finalization-v2
