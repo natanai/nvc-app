@@ -43,63 +43,32 @@ jobs:
 
           replace_once(
               'scripts/inventory.js',
-              """  if (!panel) {
-            setupStandaloneJournalOverlay();
-            registerJournalStoreListeners();
-            return;
-          }""",
-              """  if (!panel) {
-            setupJournalOverlay();
-            registerJournalStoreListeners();
-            return;
-          }""",
+              "  if (!panel) {\n    setupStandaloneJournalOverlay();\n    registerJournalStoreListeners();\n    return;\n  }",
+              "  if (!panel) {\n    setupJournalOverlay();\n    registerJournalStoreListeners();\n    return;\n  }",
           )
 
           replace_once(
               'scripts/inventory.js',
-              """  state.journalOverlayActiveTrigger = button;
-          openJournalOverlay();""",
-              """  if (!state.journalFormSectionEl) {
-            setupStandaloneJournalOverlay();
-            loadJournalReferenceData();
-          }
-          state.journalOverlayActiveTrigger = button;
-          openJournalOverlay();""",
+              "  state.journalOverlayActiveTrigger = button;\n  openJournalOverlay();",
+              "  if (!state.journalFormSectionEl) {\n    setupStandaloneJournalOverlay();\n    loadJournalReferenceData();\n  }\n  state.journalOverlayActiveTrigger = button;\n  openJournalOverlay();",
           )
 
           replace_once(
               'scripts/inventory.js',
-              """  state.journalOverlayActiveTrigger = trigger;
-          openJournalOverlay();""",
-              """  if (!state.journalFormSectionEl) {
-            setupStandaloneJournalOverlay();
-            loadJournalReferenceData();
-          }
-          state.journalOverlayActiveTrigger = trigger;
-          openJournalOverlay();""",
+              "  state.journalOverlayActiveTrigger = trigger;\n  openJournalOverlay();",
+              "  if (!state.journalFormSectionEl) {\n    setupStandaloneJournalOverlay();\n    loadJournalReferenceData();\n  }\n  state.journalOverlayActiveTrigger = trigger;\n  openJournalOverlay();",
           )
 
           replace_once(
               'scripts/inventory.js',
-              """  setupJournalSection();
-            renderJournalViews();
-            loadJournalReferenceData();
-            setupScrollTopButton();""",
-              """  setupJournalSection();
-            renderJournalViews();
-            if (document.querySelector('[data-inventory-section=\"journal\"]')) {
-              loadJournalReferenceData();
-            }
-            setupScrollTopButton();""",
+              "  setupJournalSection();\n  renderJournalViews();\n  loadJournalReferenceData();\n  setupScrollTopButton();",
+              "  setupJournalSection();\n  renderJournalViews();\n  if (document.querySelector('[data-inventory-section=\"journal\"]')) {\n    loadJournalReferenceData();\n  }\n  setupScrollTopButton();",
           )
 
           replace_once(
               'scripts/build-pages.mjs',
-              """  const baseScripts = [
-              { src: 'assets/js/journal/store.js', module: true },
-              { src: 'scripts/inventory-core-shell.js', defer: true },""",
-              """  const baseScripts = [
-              { src: 'scripts/inventory-core-shell.js', defer: true },""",
+              "  const baseScripts = [\n    { src: 'assets/js/journal/store.js', module: true },\n    { src: 'scripts/inventory-core-shell.js', defer: true },",
+              "  const baseScripts = [\n    { src: 'scripts/inventory-core-shell.js', defer: true },",
           )
 
           replace_once(
