@@ -1,5 +1,3 @@
-import './inventory.js?v=2026-08-19-feed-ui';
-
 import {
   initBlueskyOAuth,
   getCurrentBlueskySession,
@@ -8,6 +6,46 @@ import {
 } from './bluesky-oauth.js?v=2024-07-11';
 
 const FEED_ASSET_VERSION = '2026-08-19-static-feed';
+const INVENTORY_RUNTIME_URL = new URL('./inventory.js?v=2026-08-19-feed-ui', import.meta.url).href;
+
+function ensureInventoryClassicRuntime() {
+  if (typeof window.handleExportInventory === 'function') {
+    return Promise.resolve();
+  }
+
+  const existing = Array.from(document.scripts).find((script) => {
+    if (!script.src) return false;
+    try {
+      const url = new URL(script.src, window.location.href);
+      return /\/scripts\/inventory\.js$/i.test(url.pathname);
+    } catch (error) {
+      return false;
+    }
+  });
+
+  if (existing) {
+    return new Promise((resolve, reject) => {
+      if (typeof window.handleExportInventory === 'function') {
+        resolve();
+        return;
+      }
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error('Unable to load shared Inventory runtime')), { once: true });
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = INVENTORY_RUNTIME_URL;
+    script.async = false;
+    script.dataset.feedInventoryRuntime = 'true';
+    script.addEventListener('load', () => resolve(), { once: true });
+    script.addEventListener('error', () => reject(new Error('Unable to load shared Inventory runtime')), { once: true });
+    document.body.appendChild(script);
+  });
+}
+
+await ensureInventoryClassicRuntime();
 
 const state = {
   strategies: [],
