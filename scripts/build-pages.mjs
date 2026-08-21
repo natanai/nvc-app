@@ -812,7 +812,9 @@ function normalizeScripts(scripts) {
     { src: 'scripts/inventory.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
   ];
-  const entries = [...baseScripts, ...scripts];
+  const beforeBaseScripts = scripts.filter((entry) => entry && typeof entry === 'object' && entry.beforeBase === true);
+  const regularScripts = scripts.filter((entry) => !(entry && typeof entry === 'object' && entry.beforeBase === true));
+  const entries = [...beforeBaseScripts, ...baseScripts, ...regularScripts];
   const seen = new Set();
   const normalized = [];
   for (const entry of entries) {
@@ -3582,7 +3584,7 @@ function renderInventoryJournalPage(needsList = []) {
     mainAttributes: 'data-page-id="inventory-journal"',
     headExtras: journalPageStyles,
     scripts: [
-      { src: 'assets/js/journal/store.js', type: 'module' },
+      { src: 'assets/js/journal/store.js', type: 'module', beforeBase: true },
       { src: 'assets/js/journal/module.js', type: 'module' },
       { src: 'scripts/inventory.js', defer: true },
     ],
