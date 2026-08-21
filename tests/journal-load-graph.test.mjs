@@ -40,7 +40,7 @@ test('the dedicated Journal surface remains eager and self-contained', async () 
 test('shared generator no longer assigns the Journal store to every page', async () => {
   const buildPages = await read('scripts/build-pages.mjs');
 
-  const baseScriptsStart = buildPages.indexOf('function normalizeScripts(scripts)');
+  const baseScriptsStart = buildPages.indexOf('function normalizeScripts(');
   const baseScriptsEnd = buildPages.indexOf('function htmlPage(', baseScriptsStart);
   const baseScripts = buildPages.slice(baseScriptsStart, baseScriptsEnd);
   assert.ok(baseScriptsStart >= 0 && baseScriptsEnd > baseScriptsStart);

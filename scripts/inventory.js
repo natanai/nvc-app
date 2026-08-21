@@ -2552,23 +2552,30 @@ function resolveNavCustomizerToggle(nav) {
 }
 
 function buildPaletteUi() {
-  const container = document.createElement('div');
+  const staticContainer = document.querySelector('[data-shell-customizer-placeholder]');
+  const staticToggle = staticContainer?.querySelector('.palette-corner__toggle');
+  const container =
+    staticContainer instanceof HTMLElement ? staticContainer : document.createElement('div');
   container.className = 'palette-corner';
+  container.removeAttribute('data-shell-customizer-placeholder');
 
-  const toggle = document.createElement('button');
+  const toggle =
+    staticToggle instanceof HTMLButtonElement ? staticToggle : document.createElement('button');
   toggle.type = 'button';
   toggle.className = 'palette-corner__toggle';
   toggle.setAttribute('aria-haspopup', 'dialog');
 
-  const glyph = document.createElement('span');
-  glyph.className = 'palette-corner__glyph';
-  glyph.textContent = '+';
-  toggle.appendChild(glyph);
+  if (!(staticToggle instanceof HTMLButtonElement)) {
+    const glyph = document.createElement('span');
+    glyph.className = 'palette-corner__glyph';
+    glyph.textContent = '+';
+    toggle.appendChild(glyph);
 
-  const srLabel = document.createElement('span');
-  srLabel.className = 'visually-hidden';
-  srLabel.textContent = 'Open customizer';
-  toggle.appendChild(srLabel);
+    const srLabel = document.createElement('span');
+    srLabel.className = 'visually-hidden';
+    srLabel.textContent = 'Open customizer';
+    toggle.appendChild(srLabel);
+  }
 
   const nav = document.querySelector('.site-nav');
   const mobileToggle = resolveNavCustomizerToggle(nav);
@@ -2894,7 +2901,9 @@ function buildPaletteUi() {
 
   panel.appendChild(panelScroll);
   container.append(toggle, panel);
-  document.body.appendChild(container);
+  if (!container.isConnected) {
+    document.body.appendChild(container);
+  }
 
   const handleToggle = (element) => {
     if (!element) {

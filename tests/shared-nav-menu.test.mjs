@@ -149,10 +149,23 @@ test('Account & data actions are bound by the global Menu controller, not Invent
   assert.ok(controller.includes("invokeInventoryControl('loadSnapshotFromBackend')"), 'profile load should call the canonical backend snapshot implementation');
   assert.ok(controller.includes('event.stopImmediatePropagation();'), 'Menu-owned controls should prevent legacy Inventory-only listeners from double-firing');
 
-  const inventoryScript = home.indexOf('<script src="scripts/inventory.js" defer></script>');
-  const menuScript = home.indexOf('<script defer src="scripts/inventory-core-shell.js"></script>');
-  assert.ok(inventoryScript >= 0 && menuScript > inventoryScript,
-    'classic inventory implementation must load before the Menu controller that binds its global actions');
+  const inventoryScript = home.indexOf('scripts/inventory.js');
+  const loaderScript = home.indexOf('scripts/shell-runtime-loader.js');
+  const menuScript = home.indexOf('scripts/inventory-core-shell.js');
+  const eagerRuntimeIsReady = inventoryScript >= 0 && menuScript > inventoryScript;
+  const lazyRuntimeIsGuarded = loaderScript >= 0 && menuScript > loaderScript;
+  assert.ok(eagerRuntimeIsReady || lazyRuntimeIsGuarded,
+    'Menu actions require either the eager Inventory runtime or a pre-Menu intent loader');
+  if (lazyRuntimeIsGuarded) {
+    const loader = await fs.readFile(path.join(root, 'scripts/shell-runtime-loader.js'), 'utf8');
+    assert.ok(loader.includes("'[data-menu-drill=\"account-data\"]'"), 'Account drill should warm the canonical runtime');
+    assert.ok(loader.includes("'#inventory-export'"), 'backup action should be capture-guarded');
+    assert.ok(loader.includes("'#inventory-import-trigger'"), 'restore action should be capture-guarded');
+    assert.ok(loader.includes("'[data-backend-save-button]'"), 'profile save should be capture-guarded');
+    assert.ok(loader.includes("'[data-backend-load-button]'"), 'profile load should be capture-guarded');
+    assert.ok(loader.includes('event.stopImmediatePropagation();'), 'lazy actions must not reach Menu handlers before canonical runtime readiness');
+    assert.ok(loader.includes('window.requestAnimationFrame(() => replayTrigger.click());'), 'held actions must replay after canonical runtime readiness');
+  }
   assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should be a non-Inventory page');
 });
 

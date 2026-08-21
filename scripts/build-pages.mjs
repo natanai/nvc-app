@@ -806,10 +806,18 @@ function basePathFromDepth(depth) {
 const localStorageReminderHtml =
   '<p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>';
 
-function normalizeScripts(scripts) {
+const customizerShellPlaceholderHtml = `    <div class="palette-corner" data-shell-customizer-placeholder>
+      <button type="button" class="palette-corner__toggle" aria-haspopup="dialog" aria-expanded="false">
+        <span class="palette-corner__glyph">+</span>
+        <span class="visually-hidden">Open customizer</span>
+      </button>
+    </div>`;
+
+function normalizeScripts(scripts, options = {}) {
+  const includeInventoryRuntime = options.includeInventoryRuntime !== false;
   const baseScripts = [
     { src: 'scripts/inventory-core-shell.js', defer: true },
-    { src: 'scripts/inventory.js', defer: true },
+    ...(includeInventoryRuntime ? [{ src: 'scripts/inventory.js', defer: true }] : []),
     { src: 'scripts/magnets.js', module: true },
   ];
   const beforeBaseScripts = scripts.filter((entry) => entry && typeof entry === 'object' && entry.beforeBase === true);
@@ -865,6 +873,8 @@ function htmlPage({
   twitterImage = TWITTER_CARD_SRC,
   socialAlt = 'Three colorful doorways symbolizing allneeds.app',
   headExtras = '',
+  bodyExtras = '',
+  includeInventoryRuntime = true,
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
@@ -908,7 +918,7 @@ function htmlPage({
       </nav>`
     : '';
 
-  const scriptEntries = normalizeScripts(scripts);
+  const scriptEntries = normalizeScripts(scripts, { includeInventoryRuntime });
   const scriptsHtml = scriptEntries
     .map((script) => {
       const attrs = [`src="${basePath}${script.src}"`];
@@ -941,6 +951,7 @@ function htmlPage({
   const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
   const criticalStyles = navCriticalCss ? `    <style>${navCriticalCss}</style>` : '';
   const extraHead = headExtras ? `\n${headExtras}` : '';
+  const extraBody = bodyExtras ? `${bodyExtras}\n` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -994,7 +1005,7 @@ ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cs
         ${main}
       </main>
     </div>
-${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
+${extraBody}${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
 </html>
 `;
 }
@@ -1462,8 +1473,11 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
+    scripts: [{ src: 'scripts/shell-runtime-loader.js', defer: true, beforeBase: true }],
     activeNav: 'home',
     canonicalPath: '/',
+    bodyExtras: customizerShellPlaceholderHtml,
+    includeInventoryRuntime: false,
   });
 
   writePage('index.html', html);
