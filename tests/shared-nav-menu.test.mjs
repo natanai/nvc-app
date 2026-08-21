@@ -49,7 +49,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
 
   const contrast = await fs.readFile(path.join(root, 'assets/js/ui/contrast.js'), 'utf8');
   assert.ok(!contrast.includes('loadSharedMoreNavigationBeforeMagnets'), 'Menu must not be parser-injected from contrast.js');
-  assert.ok(contrast.includes('loadBodyCuesStylesBeforePaint();'), 'Body Cues prepaint loader must remain intact');
+  assert.ok(!contrast.includes('loadBodyCuesStylesBeforePaint'), 'Body Cues CSS must remain parser-discovered instead of JS-injected');
 
   const magnets = await fs.readFile(path.join(root, 'scripts/magnets.js'), 'utf8');
   assert.ok(magnets.includes('hasMissingVisibleNavMagnet'), 'nav engine must reseed when a visible magnet is absent from saved state');
@@ -103,7 +103,8 @@ test('Menu information architecture separates destinations, actions, personal co
 test('Account & data reuses existing allneeds capabilities instead of duplicating them', async () => {
   const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
   const inventory = await fs.readFile(path.join(root, 'scripts/inventory.js'), 'utf8');
-  const bluesky = await fs.readFile(path.join(root, 'scripts/inventory-bluesky.js'), 'utf8');
+  const blueskyLoader = await fs.readFile(path.join(root, 'scripts/inventory-bluesky.js'), 'utf8');
+  const blueskyRuntime = await fs.readFile(path.join(root, 'scripts/inventory-bluesky-runtime.js'), 'utf8');
 
   assert.ok(controller.includes('id="inventory-export"'), 'Menu should expose the existing backup trigger ID');
   assert.ok(controller.includes('id="inventory-import-trigger"'), 'Menu should expose the existing restore trigger ID');
@@ -116,8 +117,9 @@ test('Account & data reuses existing allneeds capabilities instead of duplicatin
   assert.ok(inventory.includes("document.getElementById('inventory-import-trigger')"), 'existing inventory controller should remain the restore implementation');
   assert.ok(inventory.includes("document.querySelectorAll('[data-support-journal-open]')"), 'existing journal trigger architecture should remain reusable');
 
-  assert.ok(bluesky.includes("document.readyState === 'loading'"), 'Bluesky module should initialize both before and after DOMContentLoaded');
-  assert.ok(bluesky.includes('let initialized = false'), 'Bluesky module should guard duplicate initialization');
+  assert.ok(blueskyLoader.includes("import('./inventory-bluesky-runtime.js?v=2026-08-21-session-hint')"), 'generic Menu loader should defer the full Bluesky implementation');
+  assert.ok(blueskyRuntime.includes("document.readyState === 'loading'"), 'Bluesky runtime should initialize both before and after DOMContentLoaded');
+  assert.ok(blueskyRuntime.includes('let initialized = false'), 'Bluesky runtime should guard duplicate initialization');
 });
 
 test('Account & data uses compact menu-native labels and explicit data direction', async () => {
@@ -194,7 +196,8 @@ test('strategy feed participates in the shared UI architecture and mobile app su
   const feed = await fs.readFile(path.join(root, 'scripts/strategy-feed.js'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
 
-  assert.ok(feed.startsWith("import './inventory.js"), 'Feed should initialize the existing shared Customizer, Journal, and data controller instead of duplicating handlers');
+  assert.ok(!feed.includes("import './inventory.js"), 'Feed must not execute the shared controller with ES-module semantics');
+  assert.ok(feed.includes('await ensureInventoryClassicRuntime();'), 'Feed should initialize the canonical classic controller exactly once while it remains an immediate dependency');
   assert.ok(feed.includes('Menu → Account & data'), 'Feed sign-in guidance should point to the current Account & data location');
   assert.ok(!feed.includes('sign in with Bluesky on the Inventory page'), 'Feed should not send account management back to Inventory');
   assert.ok(css.includes('body:has(#main [data-feed-list]) #main.page'), 'Feed should use the same full-bleed mobile app-surface direction as Inventory');
