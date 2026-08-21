@@ -12,6 +12,7 @@
     "build": "npm run lint:evidence && npm run build:data && npm run build:pages && npm run lint:entrypoints",
     "test:customizer": "node --test tests/profile-restore-rehydration.test.mjs tests/bedrock-state-contract.test.mjs && node tests/customizer-integrity.test.mjs",
     "test:data-integrity": "node tests/data-integrity.test.mjs",
+    "test:generator-ownership": "node --test tests/page-generator-ownership.test.mjs",
     "test:obsolete": "node tests/obsolete-references.test.mjs",
     "test:flicker-jitter": "node --test tests/navigation-highlight.test.mjs tests/runtime-load-graph.test.mjs tests/shared-nav-menu.test.mjs tests/shared-density-polish.test.mjs tests/journal-load-graph.test.mjs tests/home-runtime-canary.test.mjs tests/route-runtime-ownership.test.mjs",
     "test:home-regressions": "node tests/home-page-regressions.test.mjs",
@@ -20,7 +21,7 @@
     "extract:citations": "node scripts/extract-citations.mjs",
     "replace:needs-sources": "node scripts/replace-needs-sources.mjs",
     "validate:taxonomy": "node scripts/validateTaxonomy.mjs",
-    "validate:observation-cues": "node scripts/validateObservationCues.mjs",
+    "validate:observation-cues": "node scripts/generateNeedObservationBlueprint.mjs && node scripts/buildObservationCueLibrary.mjs",
     "build:observation-cues": "node scripts/generateNeedObservationBlueprint.mjs && node scripts/buildObservationCueLibrary.mjs",
     "export:fact-checking": "node scripts/export-fact-checking.mjs",
     "import:fact-checking": "node scripts/import-fact-checking.mjs"
