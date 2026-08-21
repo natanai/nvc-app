@@ -68,3 +68,15 @@ test('OAuth returns and explicit account intent still load the real runtime', as
   // keeps its direct OAuth dependency rather than using the generic menu loader.
   assert.ok(feed.includes("from './bluesky-oauth.js?v=2024-07-11'"));
 });
+
+test('Shared Strategies executes Inventory with classic-script semantics exactly once', async () => {
+  const feed = await read('scripts/strategy-feed.js');
+  const feedHtml = await read('feed/index.html');
+
+  assert.ok(!feed.includes("import './inventory.js"), 'Feed must not execute Inventory as an ES module');
+  assert.ok(feed.includes("const INVENTORY_RUNTIME_URL = new URL('./inventory.js?v=2026-08-19-feed-ui', import.meta.url).href;"));
+  assert.ok(feed.includes('script.async = false;'));
+  assert.ok(feed.includes('await ensureInventoryClassicRuntime();'));
+  assert.ok(feed.includes("typeof window.handleExportInventory === 'function'"), 'classic runtime readiness should be verified through its global Menu API');
+  assert.ok(!feedHtml.includes('<script src="../scripts/inventory.js" defer></script>'), 'Feed HTML must not add a second Inventory execution path');
+});
