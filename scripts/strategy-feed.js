@@ -29,6 +29,19 @@ let oauthModulePromise = null;
 let inventoryRuntimePromise = null;
 let inventoryRuntimeReady = false;
 
+function finishAfterInventoryInitialization(resolve) {
+  const finish = () => {
+    inventoryRuntimeReady = true;
+    resolve();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', finish, { once: true });
+  } else {
+    finish();
+  }
+}
+
 function ensureInventoryClassicRuntime() {
   if (inventoryRuntimeReady || typeof window.handleExportInventory === 'function') {
     inventoryRuntimeReady = true;
@@ -39,10 +52,7 @@ function ensureInventoryClassicRuntime() {
   }
 
   inventoryRuntimePromise = new Promise((resolve, reject) => {
-    const finish = () => {
-      inventoryRuntimeReady = true;
-      resolve();
-    };
+    const finish = () => finishAfterInventoryInitialization(resolve);
     const fail = () => {
       inventoryRuntimePromise = null;
       reject(new Error('Unable to load shared Inventory runtime'));

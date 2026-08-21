@@ -120,6 +120,10 @@ test('Shared Strategies keeps the shared Inventory controller off first load and
   assert.ok(feed.includes("document.addEventListener('focusin', warmInventoryRuntime"));
   assert.ok(feed.includes('event.stopImmediatePropagation();'), 'direct activation should wait for its owner instead of falling through');
   assert.ok(feed.includes('window.requestAnimationFrame(() => replayTrigger.click());'), 'held interactions should replay after the controller is ready');
+  assert.ok(feed.includes('function finishAfterInventoryInitialization(resolve)'), 'Feed must distinguish script load from controller initialization');
+  assert.ok(feed.includes("if (document.readyState === 'loading')"), 'early Feed activation must wait for DOMContentLoaded');
+  assert.ok(feed.includes("document.addEventListener('DOMContentLoaded', finish, { once: true });"), 'Feed should release held interactions only after the controller initializer runs');
+  assert.ok(feed.includes('const finish = () => finishAfterInventoryInitialization(resolve);'));
   assert.ok(feed.includes("script.dataset.feedInventoryRuntime = 'true';"));
   assert.ok(feed.includes('installInventoryRuntimeIntentLoader();\ninit();'));
   assert.ok(!feed.includes('const inventoryRuntimeReady = ensureInventoryClassicRuntime();'));
