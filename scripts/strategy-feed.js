@@ -1,12 +1,12 @@
-import {
-  initBlueskyOAuth,
-  getCurrentBlueskySession,
-  ensureBackendSession,
-  BACKEND_BASE_URL,
-} from './bluesky-oauth.js?v=2024-07-11';
-
+const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
+const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';
+const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
+const SESSION_HINT_ACTIVE = 'active';
+const SESSION_HINT_NONE = 'none';
 const FEED_ASSET_VERSION = '2026-08-19-static-feed';
 const INVENTORY_RUNTIME_URL = new URL('./inventory.js?v=2026-08-19-feed-ui', import.meta.url).href;
+
+let oauthModulePromise = null;
 
 function ensureInventoryClassicRuntime() {
   if (typeof window.handleExportInventory === 'function') {
@@ -43,6 +43,67 @@ function ensureInventoryClassicRuntime() {
     script.addEventListener('error', () => reject(new Error('Unable to load shared Inventory runtime')), { once: true });
     document.body.appendChild(script);
   });
+}
+
+function readSessionHint() {
+  try {
+    const hint = window.localStorage?.getItem(SESSION_HINT_STORAGE_KEY);
+    return hint === SESSION_HINT_ACTIVE || hint === SESSION_HINT_NONE ? hint : '';
+  } catch (error) {
+    return '';
+  }
+}
+
+function hasLoginIntent() {
+  try {
+    return window.sessionStorage?.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
+  } catch (error) {
+    return false;
+  }
+}
+
+function isOAuthReturn() {
+  try {
+    const params = new URL(window.location.href).searchParams;
+    return params.has('state') && (params.has('code') || params.has('error') || params.has('iss'));
+  } catch (error) {
+    return false;
+  }
+}
+
+function shouldLoadFeedOAuth() {
+  return readSessionHint() !== SESSION_HINT_NONE || hasLoginIntent() || isOAuthReturn();
+}
+
+function loadFeedOAuthRuntime() {
+  if (!oauthModulePromise) {
+    oauthModulePromise = import('./bluesky-oauth.js?v=2024-07-11').catch((error) => {
+      oauthModulePromise = null;
+      throw error;
+    });
+  }
+  return oauthModulePromise;
+}
+
+async function loadFeedSession() {
+  if (!shouldLoadFeedOAuth()) {
+    return null;
+  }
+
+  try {
+    const oauth = await loadFeedOAuthRuntime();
+    let session = await oauth.initBlueskyOAuth();
+    if (!session) {
+      session = oauth.getCurrentBlueskySession();
+    }
+    if (session) {
+      await oauth.ensureBackendSession(session);
+    }
+    return session || null;
+  } catch (error) {
+    console.warn('Could not initialize Bluesky OAuth session', error);
+    return null;
+  }
 }
 
 await ensureInventoryClassicRuntime();
@@ -319,10 +380,31 @@ async function fetchAndRenderFeed() {
   }
 }
 
-function applySession(session) {
+function publishGlobalSession(session) {
+  const normalized = session?.did
+    ? { did: session.did, handle: session.handle || null }
+    : null;
+  const previous = window.allneedsSession || null;
+  const changed = previous?.did !== normalized?.did || previous?.handle !== normalized?.handle;
+
+  window.allneedsSession = normalized;
+  if (!changed) return;
+
+  window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed', {
+    detail: {
+      ...(normalized || {}),
+      reason: normalized ? 'feed-restore' : 'feed-signout',
+    },
+  }));
+}
+
+function applySession(session, { publish = false } = {}) {
   state.session = session?.did ? session : null;
   setAuthHint(state.session);
   setScopeAvailability(state.session);
+  if (publish) {
+    publishGlobalSession(state.session);
+  }
 }
 
 async function init() {
@@ -336,23 +418,8 @@ async function init() {
     document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
   }
 
-  let session = null;
-  try {
-    session = await initBlueskyOAuth();
-    if (session) await ensureBackendSession(session);
-  } catch (error) {
-    console.warn('Could not initialize Bluesky OAuth session', error);
-  }
-
-  if (!session) {
-    try {
-      session = getCurrentBlueskySession();
-    } catch (error) {
-      session = null;
-    }
-  }
-
-  applySession(session);
+  const session = await loadFeedSession();
+  applySession(session, { publish: true });
 
   state.scopeSelect?.addEventListener('change', () => {
     setScopeAvailability(state.session);
