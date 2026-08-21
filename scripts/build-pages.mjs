@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -22,23 +22,6 @@ const KNOWN_SCOPES = new Set([
   'inventory',
   'observation-guide',
   'support-lane',
-]);
-
-const DEFAULT_SCOPES = [
-  'home',
-  'faux-feelings',
-  'feelings',
-  'needs',
-  'inventory',
-  'observation-guide',
-  'support-lane',
-];
-
-const DIRECTORIES_BY_SCOPE = new Map([
-  ['faux-feelings', ['faux-feelings']],
-  ['feelings', ['feelings']],
-  ['needs', ['needs']],
-  ['inventory', ['inventory']],
 ]);
 
 function parseScopeArgs(argv) {
@@ -86,20 +69,6 @@ function parseScopeArgs(argv) {
 }
 
 const requestedScopes = parseScopeArgs(process.argv.slice(2));
-const activeScopes = requestedScopes ? Array.from(requestedScopes) : DEFAULT_SCOPES;
-const directoriesToResetSet = new Set();
-
-for (const scope of activeScopes) {
-  const directories = DIRECTORIES_BY_SCOPE.get(scope);
-  if (!directories) {
-    continue;
-  }
-  for (const directory of directories) {
-    directoriesToResetSet.add(directory);
-  }
-}
-
-const directoriesToReset = Array.from(directoriesToResetSet);
 
 const HOME_ICON_INLINE = (basePath = '') => {
   const normalizedBase = basePath || '';
@@ -795,10 +764,6 @@ const themePreloadScript = (basePath) => {
       })();
     </script>`;
 };
-for (const dir of directoriesToReset) {
-  rmSync(join(rootDir, dir), { recursive: true, force: true });
-}
-
 function basePathFromDepth(depth) {
   return depth === 0 ? '' : '../'.repeat(depth);
 }

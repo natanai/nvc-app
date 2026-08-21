@@ -244,11 +244,10 @@ const stageRoot = join(stageParent, 'repo');
 try {
   copyRepositoryToStage(stageRoot);
   const scopeArgs = requestedScopes ? ['--scope', activeScopes.join(',')] : [];
-  // The legacy generator is intentionally destructive inside its workspace.
-  // Run it only in an isolated staging copy, then publish exactly the files the
-  // selected scopes own. Existing pages also retain their already-tested order
-  // for the two deferred shell scripts rather than changing boot sequencing as
-  // a side effect of an unrelated rebuild.
+  // The page compiler now preserves mixed-ownership route directories. This
+  // staging publisher remains temporarily only to shield production pages from
+  // historical serialization/script-order differences while those are moved
+  // into one canonical compiler output.
   runNode(stageRoot, 'scripts/build-pages.mjs', scopeArgs);
   const { published, byteStable } = copyOwnedOutputs(stageRoot, outputs);
   console.log(
