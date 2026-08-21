@@ -1,7 +1,8 @@
-import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, sep } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -66,28 +67,57 @@ function runScript(stageRoot, relativeScript) {
   if (result.status !== 0) throw new Error(`${relativeScript} exited with status ${result.status}`);
 }
 
+function jsonSemanticallyEqual(leftPath, rightPath) {
+  if (!existsSync(leftPath) || !existsSync(rightPath)) return false;
+  try {
+    const left = JSON.parse(readFileSync(leftPath, 'utf8'));
+    const right = JSON.parse(readFileSync(rightPath, 'utf8'));
+    return isDeepStrictEqual(left, right);
+  } catch {
+    return false;
+  }
+}
+
 const scopes = parseScope(process.argv.slice(2));
 const stageParent = mkdtempSync(join(tmpdir(), 'allneeds-data-'));
 const stageRoot = join(stageParent, 'repo');
+let published = 0;
+let byteStable = 0;
 
 try {
   copyRepository(stageRoot);
 
   // The canonical compiler reads the editable data sources (including the
-  // Body Cues rows in data/Feelings.csv) in an isolated workspace. Only the
-  // explicitly requested outputs are allowed back into the real repository.
+  // Body Cues rows in data/Feelings.csv) in an isolated workspace. A small
+  // deterministic finalization step removes historical duplicate-row ordering
+  // from Body Cues and adapts page-facing feeling slugs to the internal emotion
+  // model while calculating reverse inference.
   runScript(stageRoot, 'scripts/build-data.mjs');
+  runScript(stageRoot, 'scripts/finalize-generated-data.mjs');
 
   for (const scope of scopes) {
     const relativePath = OUTPUTS[scope];
     const stagedPath = join(stageRoot, relativePath);
     if (!existsSync(stagedPath)) throw new Error(`Generator did not produce declared data output: ${relativePath}`);
     const destination = join(rootDir, relativePath);
+
+    // JSON object key order and trailing-newline style are not data semantics.
+    // If the source compiler reproduces the committed value exactly as parsed,
+    // keep the existing bytes so a no-op production build is genuinely a no-op.
+    if (jsonSemanticallyEqual(stagedPath, destination)) {
+      byteStable += 1;
+      continue;
+    }
+
     mkdirSync(dirname(destination), { recursive: true });
     cpSync(stagedPath, destination, { force: true });
+    published += 1;
   }
 
-  console.log(`Published ${scopes.size} ownership-declared data output${scopes.size === 1 ? '' : 's'} from isolated staging.`);
+  console.log(
+    `Data build complete: ${published} changed output${published === 1 ? '' : 's'}, ` +
+      `${byteStable} semantically identical output${byteStable === 1 ? '' : 's'} kept byte-stable.`,
+  );
 } finally {
   rmSync(stageParent, { recursive: true, force: true });
 }
