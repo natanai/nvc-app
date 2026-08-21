@@ -9,13 +9,19 @@
     display: none;
   }
 
-  body .inventory-page.inventory-page {
-    padding-top: 0.45rem;
-    gap: 0.62rem;
+  /* With the breadcrumb gone, close the leftover web-page spacing between the
+     magnet board and the app surface. */
+  body:has(#main.inventory-page) .page-wrapper {
+    gap: 0.45rem;
   }
 
-  /* Large app title + one quiet trailing action. Avoid another full-width card
-     before the user reaches the actual inventory. */
+  body .inventory-page.inventory-page {
+    padding-top: 0.18rem;
+    gap: 0.48rem;
+  }
+
+  /* Let the large title own the full width. Add strategy is a quiet trailing
+     toolbar action below it, not a competing second column or full-width CTA. */
   body .inventory-page.inventory-page .inventory-header {
     margin-inline: 0.95rem;
     padding: 0;
@@ -33,11 +39,12 @@
 
   body .inventory-page.inventory-page .inventory-header__content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'title action';
-    align-items: center;
-    column-gap: 0.7rem;
-    row-gap: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'title'
+      'action';
+    align-items: start;
+    gap: 0.08rem;
   }
 
   body .inventory-page.inventory-page .inventory-header__title-row {
@@ -48,22 +55,23 @@
 
   body .inventory-page.inventory-page .inventory-header .page-title {
     margin: 0;
-    font-size: clamp(1.62rem, 8.2vw, 2.05rem);
-    line-height: 1.04;
-    letter-spacing: -0.025em;
+    font-size: clamp(1.55rem, 7.35vw, 1.88rem);
+    line-height: 1.03;
+    letter-spacing: -0.028em;
     text-transform: none;
   }
 
-  /* The title, view tabs, and section labels explain the screen without a
-     paragraph of web-page introduction competing for the first viewport. */
+  /* Returning users do not need a paragraph before reaching their inventory.
+     !important is intentional here because an older shared mobile shell rule is
+     parsed later; this dedicated page stylesheet is the mobile source of truth. */
   body .inventory-page.inventory-page .inventory-header .page-description {
-    display: none;
+    display: none !important;
   }
 
   body .inventory-page.inventory-page .inventory-header__quick-actions {
     grid-area: action;
     width: auto;
-    margin: 0;
+    margin: -0.05rem 0 0;
     display: flex;
     align-items: center;
     justify-self: end;
@@ -72,9 +80,9 @@
   body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link {
     width: auto;
     min-width: 44px;
-    min-height: 44px;
+    min-height: 40px;
     margin: 0;
-    padding: 0.3rem 0.18rem;
+    padding: 0.24rem 0.12rem;
     gap: 0.24rem;
     justify-content: flex-end;
     border: 0;
@@ -83,7 +91,7 @@
     box-shadow: none;
     transform: none;
     color: var(--ink);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 780;
     line-height: 1;
     letter-spacing: 0;
@@ -107,24 +115,24 @@
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    font-size: 1.32rem;
+    font-size: 1.18rem;
     line-height: 1;
   }
 
   body .inventory-page.inventory-page .inventory-main {
-    gap: 0.55rem;
+    gap: 0.42rem;
   }
 
   body .inventory-page.inventory-page .inventory-overview {
-    gap: 0.48rem;
+    gap: 0.38rem;
   }
 
   /* Needs / Strategies is the primary content-level navigation. Give it the
      visual grammar of tabs rather than another segmented capsule. */
   body .inventory-page.inventory-page .inventory-view-switch {
     width: auto;
-    min-height: 46px;
-    margin: 0.1rem 0.95rem 0;
+    min-height: 42px;
+    margin: 0 0.95rem;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -139,14 +147,14 @@
   body .inventory-page.inventory-page .inventory-view-switch__button {
     position: relative;
     min-width: 0;
-    min-height: 45px;
-    padding: 0.5rem 0.55rem 0.55rem;
+    min-height: 41px;
+    padding: 0.42rem 0.55rem 0.48rem;
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    color: color-mix(in srgb, var(--ink-soft) 84%, transparent);
-    font-size: 0.86rem;
+    color: color-mix(in srgb, var(--ink-soft) 82%, transparent);
+    font-size: 0.82rem;
     font-weight: 760;
     line-height: 1;
   }
@@ -169,8 +177,8 @@
   body .inventory-page.inventory-page .inventory-view-switch__button[aria-selected='true']::after {
     content: '';
     position: absolute;
-    left: 27%;
-    right: 27%;
+    left: 30%;
+    right: 30%;
     bottom: -1px;
     height: 3px;
     border-radius: var(--radius-pill);
@@ -181,21 +189,19 @@
     min-width: 0;
     padding: 0;
     background: transparent;
-    font-size: 0.68rem;
+    font-size: 0.66rem;
   }
 
   body .inventory-page.inventory-page .inventory-view-panel--needs {
-    gap: 0.48rem;
+    gap: 0.38rem;
   }
 
-  /* Section information is informational, not another set of controls. Keep
-     the count as secondary text and reserve capsule styling for the filter. */
+  /* Section information is informational, not another set of controls. */
   body .inventory-page.inventory-page .inventory-view-panel--needs .inventory-view-panel__header {
-    margin: 0.22rem 0.95rem 0;
+    margin: 0.12rem 0.95rem 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 0.6rem;
-    row-gap: 0.14rem;
     align-items: baseline;
   }
 
@@ -208,20 +214,16 @@
     grid-row: 1;
     margin: 0;
     font-family: var(--font-body);
-    font-size: 1.08rem;
+    font-size: 1.04rem;
     font-weight: 820;
     line-height: 1.15;
     letter-spacing: -0.01em;
     text-transform: none;
   }
 
+  /* The rows and chevrons already communicate that needs are tappable. */
   body .inventory-page.inventory-page .inventory-overview__hint {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin: 0;
-    font-size: 0.76rem;
-    line-height: 1.32;
-    color: var(--ink-soft);
+    display: none !important;
   }
 
   body .inventory-page.inventory-page .inventory-needs-status {
@@ -233,7 +235,7 @@
     border-radius: 0;
     background: transparent;
     color: var(--ink-soft);
-    font-size: 0.64rem;
+    font-size: 0.62rem;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
@@ -246,16 +248,16 @@
   }
 
   /* Keep the three-state filter as the one true segmented control on this
-     screen. Its compact capsule now has a distinct role in the hierarchy. */
+     screen, but let it support the content rather than dominate it. */
   body .inventory-page.inventory-page .inventory-summary__filters {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 3px;
+    gap: 2px;
     padding: 3px;
-    border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    border: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);
     border-radius: var(--radius-pill);
-    background: color-mix(in srgb, #ffffff 52%, var(--lavender) 48%);
+    background: color-mix(in srgb, #ffffff 54%, var(--lavender) 46%);
   }
 
   body .inventory-page.inventory-page .inventory-summary__filter-button,
@@ -264,15 +266,15 @@
   body .inventory-page.inventory-page .inventory-summary__filter-button[data-summary-filter='none'] {
     width: auto;
     min-width: 0;
-    height: 38px;
-    min-height: 38px;
-    padding: 0.3rem 0.38rem;
+    height: 36px;
+    min-height: 36px;
+    padding: 0.28rem 0.35rem;
     border: 0;
     border-radius: var(--radius-pill);
     background: transparent;
     box-shadow: none;
     transform: none;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 800;
     line-height: 1;
   }
@@ -297,6 +299,47 @@
     background: color-mix(in srgb, var(--mint) 55%, #ffffff 45%);
   }
 
+  /* Empty needs are the default state, so do not repeat "No strategies" and a
+     hollow status dot dozens of times. A name + chevron is enough. Needs with
+     saved strategies keep their count and mint status treatment. */
+  body .inventory-page.inventory-page .inventory-summary__item--missing {
+    background: #ffffff;
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__focus {
+    min-height: 54px;
+    padding: 0.6rem 0.82rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.45rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__status,
+  body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__count {
+    display: none;
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__text {
+    gap: 0;
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__label {
+    font-size: 0.92rem;
+    line-height: 1.18;
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__chevron {
+    font-size: 1.15rem;
+    color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--ready .inventory-summary__focus {
+    min-height: 58px;
+  }
+
+  body .inventory-page.inventory-page .inventory-summary__item--ready .inventory-summary__count {
+    font-size: 0.72rem;
+  }
+
   /* Long multi-word labels must be allowed to wrap. Single long words such as
      Acknowledgement remain compact and naturally stay on one line when they fit. */
   body .inventory-page.inventory-page .inventory-summary__label--compact {
@@ -307,7 +350,7 @@
   }
 
   body .inventory-page.inventory-page .inventory-summary {
-    margin-top: 0.06rem;
+    margin-top: 0.02rem;
   }
 }
 
@@ -317,11 +360,11 @@
   }
 
   body .inventory-page.inventory-page .inventory-header .page-title {
-    font-size: clamp(1.48rem, 8.4vw, 1.78rem);
+    font-size: clamp(1.43rem, 7.7vw, 1.62rem);
   }
 
   body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
   }
 
   body .inventory-page.inventory-page .inventory-view-switch,
@@ -331,6 +374,6 @@
   }
 
   body .inventory-page.inventory-page .inventory-needs-status {
-    font-size: 0.58rem;
+    font-size: 0.56rem;
   }
 }
