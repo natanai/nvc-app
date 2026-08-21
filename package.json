@@ -10,7 +10,7 @@
     "lint:evidence": "node scripts/lint-evidence.mjs",
     "lint:entrypoints": "node scripts/lint-entrypoints.mjs",
     "build": "npm run lint:evidence && npm run lint:links && npm run build:data && npm run build:pages && npm run lint:entrypoints",
-    "test:customizer": "node tests/customizer-integrity.test.mjs && node --test tests/profile-restore-rehydration.test.mjs tests/bedrock-state-contract.test.mjs",
+    "test:customizer": "node --test tests/profile-restore-rehydration.test.mjs tests/bedrock-state-contract.test.mjs && node tests/customizer-integrity.test.mjs",
     "test:data-integrity": "node tests/data-integrity.test.mjs",
     "test:obsolete": "node tests/obsolete-references.test.mjs",
     "test:flicker-jitter": "node tests/navigation-highlight.test.mjs",
