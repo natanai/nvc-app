@@ -1587,7 +1587,25 @@ if (typeof window !== 'undefined') {
       return;
     }
 
-    loadSnapshotFromBackend().catch((error) => {
+    (async () => {
+      // Automatic post-sign-in restore must use the same full-storage guard as
+      // an explicit profile load. This prevents running magnet persistence from
+      // racing the newly restored snapshot.
+      const restoreModule = await import('./profile-restore-rehydration.js?v=2026-08-21-lazy');
+      if (typeof restoreModule.installProfileRestoreRehydration === 'function') {
+        restoreModule.installProfileRestoreRehydration();
+      }
+
+      const guardedLoad = window.loadSnapshotFromBackend;
+      if (
+        typeof guardedLoad !== 'function' ||
+        guardedLoad.__allneedsRestoreRehydrationWrapped !== true
+      ) {
+        throw new Error('Profile restore guard did not attach before automatic sign-in restore');
+      }
+
+      await guardedLoad();
+    })().catch((error) => {
       console.error('Failed to auto-load backend snapshot after sign-in', error);
     });
   });
@@ -6911,6 +6929,23 @@ function replaceLocalStorageWithSnapshot(nextSnapshot, previousSnapshot) {
   return { success: true };
 }
 
+function syncRestoredCustomizerMirrors(snapshot) {
+  if (typeof window === 'undefined' || !window.sessionStorage) return;
+
+  [THEME_STORAGE_KEY, NAV_SETTINGS_STORAGE_KEY].forEach((key) => {
+    try {
+      const value = snapshot?.[key];
+      if (typeof value === 'string' && value.trim()) {
+        window.sessionStorage.setItem(key, value);
+      } else {
+        window.sessionStorage.removeItem(key);
+      }
+    } catch (error) {
+      console.warn(`Unable to synchronize restored customizer key ${key}`, error);
+    }
+  });
+}
+
 async function importLocalStorageSnapshot(payload) {
   const normalized = normalizeBackupPayload(payload);
   if (!normalized.localStorage || !Object.keys(normalized.localStorage).length) {
@@ -6933,6 +6968,11 @@ async function importLocalStorageSnapshot(payload) {
     broadcastDataMessage('Import failed. Unable to write to localStorage.', 'error');
     return;
   }
+
+  // A full snapshot is authoritative. Theme and nav settings are mirrored
+  // into sessionStorage during normal Customizer use, so update those mirrors
+  // before the running page re-reads presentation state.
+  syncRestoredCustomizerMirrors(normalized.localStorage);
 
   const counts = await refreshStateFromLocalStorageSnapshot(normalized.localStorage);
   const inventoryCount = counts?.inventoryCount ?? 0;

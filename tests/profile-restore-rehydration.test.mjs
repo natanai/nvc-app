@@ -95,3 +95,31 @@ test('restored palette is reconciled on the current page and after reload', asyn
     'the palette reconciliation marker should be consumed after a successful application',
   );
 });
+
+
+test('canonical snapshot replacement synchronizes Customizer mirrors before live rehydration', async () => {
+  const inventory = await fs.readFile(path.join(root, 'scripts/inventory.js'), 'utf8');
+
+  const helperIndex = inventory.indexOf('function syncRestoredCustomizerMirrors(snapshot)');
+  const callIndex = inventory.indexOf('syncRestoredCustomizerMirrors(normalized.localStorage);');
+  const refreshIndex = inventory.indexOf('const counts = await refreshStateFromLocalStorageSnapshot(normalized.localStorage);');
+
+  assert.ok(helperIndex >= 0, 'canonical snapshot import must own Customizer mirror synchronization');
+  assert.ok(inventory.includes('[THEME_STORAGE_KEY, NAV_SETTINGS_STORAGE_KEY].forEach((key) => {'));
+  assert.ok(inventory.includes('window.sessionStorage.setItem(key, value)'));
+  assert.ok(inventory.includes('window.sessionStorage.removeItem(key)'));
+  assert.ok(callIndex >= 0 && refreshIndex > callIndex, 'session mirrors must match the imported snapshot before current-page theme/nav rehydration');
+});
+
+test('automatic post-sign-in profile restore installs the full restore guard first', async () => {
+  const inventory = await fs.readFile(path.join(root, 'scripts/inventory.js'), 'utf8');
+
+  const listenerIndex = inventory.indexOf("window.addEventListener('allneeds:bsky-login-changed'");
+  const guardImportIndex = inventory.indexOf("import('./profile-restore-rehydration.js?v=2026-08-21-lazy')", listenerIndex);
+  const wrappedCheckIndex = inventory.indexOf('guardedLoad.__allneedsRestoreRehydrationWrapped !== true', guardImportIndex);
+  const loadIndex = inventory.indexOf('await guardedLoad();', wrappedCheckIndex);
+
+  assert.ok(listenerIndex >= 0 && guardImportIndex > listenerIndex, 'sign-in restoration should prepare restore protection inside the login path');
+  assert.ok(wrappedCheckIndex > guardImportIndex, 'automatic restore must verify that the backend loader is actually wrapped');
+  assert.ok(loadIndex > wrappedCheckIndex, 'the saved profile may load only after restore protection is installed');
+});
