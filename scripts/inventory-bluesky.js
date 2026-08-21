@@ -1,7 +1,6 @@
-import './profile-restore-rehydration.js';
-
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
 const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';
+const RESTORE_PENDING_STORAGE_KEY = 'allneeds:restore-palette-rehydrate';
 const SESSION_HINT_ACTIVE = 'active';
 const SESSION_HINT_NONE = 'none';
 const ACCOUNT_TRIGGER_SELECTOR = [
@@ -12,9 +11,16 @@ const ACCOUNT_TRIGGER_SELECTOR = [
   '[data-save-to-profile-button]',
   '.strategy-card__save--profile',
 ].join(',');
+const RESTORE_TRIGGER_SELECTOR = [
+  '[data-menu-drill="account-data"]',
+  '[data-backend-load-button]',
+  '#inventory-import-trigger',
+].join(',');
 
 let runtimePromise = null;
 let runtimeReady = false;
+let restorePromise = null;
+let restoreReady = false;
 
 function loadBlueskyRuntime() {
   if (!runtimePromise) {
@@ -32,9 +38,33 @@ function loadBlueskyRuntime() {
   return runtimePromise;
 }
 
+function loadRestoreRuntime() {
+  if (!restorePromise) {
+    restorePromise = import('./profile-restore-rehydration.js?v=2026-08-21-lazy')
+      .then((module) => {
+        restoreReady = true;
+        return module;
+      })
+      .catch((error) => {
+        restorePromise = null;
+        console.error('Unable to load profile restore protection', error);
+        throw error;
+      });
+  }
+  return restorePromise;
+}
+
 function hasLoginIntent() {
   try {
     return window.sessionStorage?.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
+  } catch (error) {
+    return false;
+  }
+}
+
+function hasPendingRestoreRehydrate() {
+  try {
+    return window.sessionStorage?.getItem(RESTORE_PENDING_STORAGE_KEY) === '1';
   } catch (error) {
     return false;
   }
@@ -58,35 +88,63 @@ function isOAuthReturn() {
   }
 }
 
-function closestAccountTrigger(target) {
-  return target instanceof Element ? target.closest(ACCOUNT_TRIGGER_SELECTOR) : null;
+function closestTrigger(target, selector) {
+  return target instanceof Element ? target.closest(selector) : null;
 }
 
-function warmAccountRuntime(event) {
-  if (closestAccountTrigger(event.target)) loadBlueskyRuntime().catch(() => {});
+function warmOptionalRuntimes(event) {
+  if (closestTrigger(event.target, ACCOUNT_TRIGGER_SELECTOR)) {
+    loadBlueskyRuntime().catch(() => {});
+  }
+  if (closestTrigger(event.target, RESTORE_TRIGGER_SELECTOR)) {
+    loadRestoreRuntime().catch(() => {});
+  }
 }
 
 // Pointer/focus intent begins fetching before the eventual click without
-// changing the interaction itself. The Account & data drill can open normally
-// while its optional network-backed controls finish becoming ready.
-document.addEventListener('pointerover', warmAccountRuntime, { capture: true, passive: true });
-document.addEventListener('focusin', warmAccountRuntime, { capture: true });
+// changing the interaction itself. Account & data can open normally while its
+// optional local/remote runtimes finish becoming ready.
+document.addEventListener('pointerover', warmOptionalRuntimes, { capture: true, passive: true });
+document.addEventListener('focusin', warmOptionalRuntimes, { capture: true });
 
-// A direct first click on the sign-in button can happen before a pointerover
-// (keyboard activation, automation, accessibility tooling). Hold only that
-// action long enough to install the real handler, then replay it once.
+// Direct activation can happen without pointer/focus warming (automation,
+// assistive tooling, synthetic clicks). Hold only the affected action until the
+// runtime that owns it is installed, then replay the same click once.
 document.addEventListener('click', async (event) => {
-  const button = event.target instanceof Element ? event.target.closest('#bluesky-auth-button') : null;
-  if (!(button instanceof HTMLElement) || runtimeReady) return;
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target) return;
 
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  try {
-    await loadBlueskyRuntime();
-    window.requestAnimationFrame(() => button.click());
-  } catch (error) {
-    const status = document.querySelector('#bluesky-auth-status-text');
-    if (status) status.textContent = 'Unable to load Bluesky sign-in right now.';
+  const authButton = target.closest('#bluesky-auth-button');
+  if (authButton instanceof HTMLElement && !runtimeReady) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    try {
+      await loadBlueskyRuntime();
+      window.requestAnimationFrame(() => authButton.click());
+    } catch (error) {
+      const status = document.querySelector('#bluesky-auth-status-text');
+      if (status) status.textContent = 'Unable to load Bluesky sign-in right now.';
+    }
+    return;
+  }
+
+  const restoreTrigger = target.closest('#inventory-import-trigger, [data-backend-load-button]');
+  const needsBluesky = restoreTrigger?.matches('[data-backend-load-button]') === true;
+  if (
+    restoreTrigger instanceof HTMLElement &&
+    (!restoreReady || (needsBluesky && !runtimeReady))
+  ) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    try {
+      const loads = [loadRestoreRuntime()];
+      if (needsBluesky) loads.push(loadBlueskyRuntime());
+      await Promise.all(loads);
+      window.requestAnimationFrame(() => restoreTrigger.click());
+    } catch (error) {
+      const status = document.querySelector('[data-backend-sync-status]');
+      if (status) status.textContent = 'Unable to prepare restore right now.';
+    }
   }
 }, true);
 
@@ -104,6 +162,12 @@ function schedulePostLoadRestore({ knownActive = false } = {}) {
 
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start, { once: true });
+}
+
+// Restore reconciliation is only needed on the one reload following a restore;
+// ordinary pages do not parse the restore/magnet suspension machinery.
+if (hasPendingRestoreRehydrate()) {
+  loadRestoreRuntime().catch(() => {});
 }
 
 // OAuth returns must be consumed immediately. A browser with a previously
