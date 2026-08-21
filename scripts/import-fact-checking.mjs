@@ -6,25 +6,6 @@ const DATA_DIR = path.join(ROOT, "data");
 const EVIDENCE_DIR = path.join(ROOT, "_evidence");
 const INPUT_DIR = path.join(ROOT, "fact-checking");
 
-function csvEscape(value) {
-  if (value == null) return "";
-  const str = String(value);
-  if (/[,\n"\r]/.test(str)) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
-
-function serializeCsv(rows) {
-  if (!rows.length) return "";
-  const headers = Object.keys(rows[0]);
-  const lines = [headers.map(csvEscape).join(",")];
-  for (const row of rows) {
-    lines.push(headers.map((key) => csvEscape(row[key])).join(","));
-  }
-  return lines.join("\n") + "\n";
-}
-
 function parseCsv(text) {
   const rows = [];
   let current = [];
@@ -85,71 +66,6 @@ async function readCsvFile(name) {
 function parseNumber(value) {
   const n = Number(value);
   return Number.isFinite(n) ? n : undefined;
-}
-
-function parseEmotions(value) {
-  const pairs = value ? value.split("|") : [];
-  const result = {};
-  for (const pair of pairs) {
-    const [emotion, weight] = pair.split(":");
-    if (emotion && weight !== undefined) {
-      const parsed = parseFloat(weight);
-      if (Number.isFinite(parsed)) {
-        result[emotion.trim()] = parsed;
-      }
-    }
-  }
-  return result;
-}
-
-async function restoreReverseInference() {
-  const rows = await readCsvFile("reverse-inference.csv");
-  const grouped = {};
-  for (const row of rows) {
-    const feeling = row.feeling;
-    if (!feeling) continue;
-    if (!grouped[feeling]) {
-      grouped[feeling] = { zones: row.zones ? row.zones.split("|") : [], bodyCues: [] };
-    }
-    grouped[feeling].bodyCues.push({
-      regionId: row.regionId,
-      regionLabel: row.regionLabel,
-      optionId: row.optionId,
-      title: row.title,
-      note: row.note,
-      intensityBand: [parseNumber(row.intensityMin), parseNumber(row.intensityMax)].filter((n) => n !== undefined),
-      arousal: row.arousal || undefined,
-      relativeWeight: parseNumber(row.relativeWeight),
-      evidenceKey: row.evidenceKey || undefined
-    });
-  }
-  await fs.writeFile(path.join(DATA_DIR, "reverse-inference.json"), JSON.stringify(grouped, null, 2) + "\n");
-  console.log("• restored data/reverse-inference.json from fact-checking/reverse-inference.csv");
-}
-
-async function restoreBodyRegions() {
-  const rows = await readCsvFile("body-regions.csv");
-  const grouped = new Map();
-  for (const row of rows) {
-    if (!grouped.has(row.regionId)) {
-      grouped.set(row.regionId, {
-        id: row.regionId,
-        label: row.regionLabel,
-        prompt: row.prompt,
-        options: []
-      });
-    }
-    const region = grouped.get(row.regionId);
-    region.options.push({
-      id: row.optionId,
-      title: row.optionTitle,
-      note: row.optionNote,
-      insight: row.optionInsight,
-      emotions: parseEmotions(row.emotions)
-    });
-  }
-  await fs.writeFile(path.join(DATA_DIR, "body-regions.json"), JSON.stringify(Array.from(grouped.values()), null, 2) + "\n");
-  console.log("• restored data/body-regions.json from fact-checking/body-regions.csv");
 }
 
 async function restoreObservationTaxonomy() {
@@ -275,10 +191,16 @@ async function run() {
   await copyCsvBack("Strategies.csv", path.join(DATA_DIR, "Strategies.csv"));
   await copyCsvBack("color-palettes.csv", path.join(DATA_DIR, "color-palettes.csv"));
   await copyCsvBack("citations.csv", path.join(EVIDENCE_DIR, "citations.csv"));
-  console.log("• copied core CSVs and citations back into place");
+  console.log("• copied authoritative core CSVs and citations back into place");
 
-  await restoreReverseInference();
-  await restoreBodyRegions();
+  // Body Cues is authored in data/Feelings.csv and rebuilt from those cue rows.
+  // reverse-inference.json currently contains curated production fields that the
+  // historical CSV export cannot round-trip without data loss. Keep the
+  // body-regions.csv and reverse-inference.csv exports as review/reference
+  // snapshots only; never let a fact-checking import overwrite newer canonical
+  // production data from either of them.
+  console.log("• kept body-regions.csv and reverse-inference.csv reference-only; neither overwrites canonical production data");
+
   await restoreObservationTaxonomy();
   await restoreObservationLexicon();
   await restoreObservationTemplates();
@@ -286,7 +208,7 @@ async function run() {
   await restoreDetectorStats();
   await restoreObservationGuide();
 
-  console.log("Fact-checking spreadsheets applied. Re-run npm run build:data && npm run build:pages to regenerate the site.");
+  console.log("Fact-checking spreadsheets applied. Re-run npm run build:data && npm run build:pages to regenerate owned site artifacts.");
 }
 
 run().catch((error) => {
