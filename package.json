@@ -4,7 +4,7 @@
   "description": "Retro Nonviolent Communication explorer with magnet play, journaling, and a localStorage-powered strategy inventory for allneeds.app",
   "type": "module",
   "scripts": {
-    "build:data": "node scripts/build-data.mjs",
+    "build:data": "node scripts/build-data-safe.mjs",
     "build:pages": "node scripts/build-pages-safe.mjs",
     "lint:links": "node scripts/check-links.mjs",
     "lint:evidence": "node scripts/lint-evidence.mjs",
