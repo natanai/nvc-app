@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, sep } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -26,6 +26,13 @@ const DEFAULT_SCOPES = [
   'inventory',
   'observation-guide',
   'support-lane',
+];
+
+const REDUNDANT_INLINE_CRITICAL_RULES = [
+  /\n\.magnet-board:not\(\[data-ready='1'\]\) \.magnet \{\n  position: absolute;\n  touch-action: none;\n  transition: none;\n  visibility: hidden;\n\}\n/g,
+  /\n\.site-nav__magnet--menu \{\n  padding: 0\.45rem;\n  gap: 0;\n  justify-content: center;\n  min-width: 0;\n  background: color-mix\(in srgb, var\(--gold\) 72%, #ffffff 28%\);\n\}\n/g,
+  /\n\.site-nav__menu-icon \{\n  width: 1\.4rem;\n  height: 1\.4rem;\n  display: block;\n  flex-shrink: 0;\n  fill: none;\n  stroke: var\(--outline\);\n  stroke-width: 2\.2;\n  stroke-linecap: round;\n  pointer-events: none;\n\}\n/g,
+  /\n\.site-nav__magnet--menu\[aria-expanded='true'\] \{\n  background: color-mix\(in srgb, var\(--gold\) 88%, #ffffff 12%\);\n  box-shadow: inset 0 -8px 0 color-mix\(in srgb, var\(--outline\) 18%, transparent\);\n\}\n/g,
 ];
 
 function parseScopeArgs(argv) {
@@ -175,14 +182,44 @@ function normalizeNavigationSerialization(html) {
   return `${html.slice(0, start)}[[SITE_NAV:${canonicalizeNavigation(nav)}]]${html.slice(end)}`;
 }
 
+function stripRedundantInlineCriticalRules(html) {
+  let normalized = html;
+  for (const pattern of REDUNDANT_INLINE_CRITICAL_RULES) {
+    normalized = normalized.replace(pattern, '\n');
+  }
+  return normalized;
+}
+
+function finalizeGeneratedShellSerialization(html) {
+  // Most checked production pages execute inventory.js before the shell adapter.
+  // Preserve that proven order for defer scripts. The generator historically
+  // emitted the inverse order on newly rebuilt pages, creating needless artifact
+  // churn and two subtly different boot sequences across the site.
+  return html.replace(
+    /(\s*)<script src="([^"]*scripts\/inventory-core-shell\.js)" defer><\/script>\n\1<script src="([^"]*scripts\/inventory\.js)" defer><\/script>/g,
+    (_full, indent, coreSrc, inventorySrc) =>
+      `${indent}<script src="${inventorySrc}" defer></script>\n${indent}<script defer src="${coreSrc}"></script>`,
+  );
+}
+
+function normalizeForComparison(html) {
+  // nav-critical.css is embedded as a first-paint snapshot, while the same
+  // rules are also present in the render-blocking styles.css graph. Several
+  // recently regenerated pages contain four newer duplicate rules that older
+  // production pages do not. Ignore only those exact redundant rules when
+  // deciding whether a rebuild changed actual page structure/content.
+  return normalizeNavigationSerialization(stripRedundantInlineCriticalRules(html));
+}
+
 function normalizedPair(stagedPath, destination) {
-  const staged = readFileSync(stagedPath, 'utf8');
+  const stagedRaw = readFileSync(stagedPath, 'utf8');
+  const staged = finalizeGeneratedShellSerialization(stagedRaw);
   const current = readFileSync(destination, 'utf8');
   return {
     staged,
     current,
-    normalizedStaged: normalizeNavigationSerialization(staged),
-    normalizedCurrent: normalizeNavigationSerialization(current),
+    normalizedStaged: normalizeForComparison(staged),
+    normalizedCurrent: normalizeForComparison(current),
   };
 }
 
@@ -223,11 +260,8 @@ function copyOwnedOutputs(stageRoot, outputs) {
     if (!existsSync(stagedPath)) throw new Error(`Generator did not produce declared output: ${relativePath}`);
     const destination = join(rootDir, relativePath);
 
-    // The current production tree contains historical indentation and attribute
-    // ordering in the shared nav shell. If the staged generator reproduces the
-    // exact same shell structure/attributes/text and the rest of the page is
-    // byte-identical, retain the already-tested production serialization. Any
-    // actual page or shell markup difference is still copied and becomes a diff.
+    // Keep already-tested production bytes when the only differences are
+    // semantically irrelevant shell serialization or duplicate critical CSS.
     if (shellSerializationEquivalent(stagedPath, destination)) {
       byteStable += 1;
       continue;
@@ -239,8 +273,9 @@ function copyOwnedOutputs(stageRoot, outputs) {
       diagnosticPrinted = true;
     }
 
+    const staged = finalizeGeneratedShellSerialization(readFileSync(stagedPath, 'utf8'));
     mkdirSync(dirname(destination), { recursive: true });
-    cpSync(stagedPath, destination, { force: true });
+    writeFileSync(destination, staged);
     published += 1;
   }
 
