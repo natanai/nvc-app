@@ -40,10 +40,43 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Rebuild dataset and pages
+      - name: Rebuild dataset and pages in ownership-safe staging
         run: |
           npm run build:data
           npm run build:pages
+
+      - name: Reject changes outside generated ownership
+        run: |
+          unexpected=""
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            case "$file" in
+              data/index.json|data/body-regions.json|data/reverse-inference.json|index.html|alexithymia-support/index.html|observations/index.html|faux-feelings/index.html|faux-feelings/*/index.html|needs/index.html|needs/*/index.html|inventory/index.html|inventory/journal/index.html|feelings/index.html|feelings/body-cues/index.html|feelings/*/index.html)
+                if [ "$file" = "feelings/emotions-wheel/index.html" ]; then
+                  unexpected="${unexpected}${file}\n"
+                fi
+                ;;
+              *)
+                unexpected="${unexpected}${file}\n"
+                ;;
+            esac
+          done < <(git diff --name-only)
+
+          if [ -n "$unexpected" ]; then
+            echo "::error title=Rebuild changed files outside generator ownership::A production rebuild may only change declared generated data/pages."
+            printf '%b' "$unexpected"
+            exit 1
+          fi
+
+      - name: Validate rebuilt site before commit
+        run: |
+          npm run test:data-integrity
+          npm run test:customizer
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+          node --test tests/shared-density-polish.test.mjs
+          node tests/body-cues-static-first.test.mjs
+          npm run lint:entrypoints
 
       - name: Commit rebuilt site
         id: commit
@@ -58,7 +91,13 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+
+          # The ownership guard above has already rejected any collateral path.
+          # Stage only files that actually changed rather than using git add -A.
+          while IFS= read -r file; do
+            [ -n "$file" ] && git add -- "$file"
+          done < <(git diff --name-only)
+
           git commit -m "$COMMIT_MESSAGE"
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
@@ -69,7 +108,7 @@ jobs:
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Rebuilt dataset and pages and pushed updates to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Rebuilt declared generated outputs, validated the result, and pushed updates to ${{ env.TARGET_BRANCH }}."
           else
             SUMMARY="No updates were detected after rebuilding the site."
           fi
