@@ -103,3 +103,19 @@ test('desktop Inventory keeps the Needs header left-aligned and uses one segment
   assert.ok(inventoryHtml.includes('data-summary-filter="missing"'));
   assert.ok(inventoryHtml.includes('data-summary-filter="ready"'));
 });
+
+test('mobile Inventory uses app hierarchy instead of stacked pill controls', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/inventory-mobile.css'), 'utf8');
+
+  assert.ok(css.includes('body:has(#main.inventory-page) .breadcrumbs'));
+  assert.ok(css.includes("grid-template-areas: 'title action';"));
+  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link'));
+  assert.ok(css.includes('background: transparent;'));
+  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-view-switch'));
+  assert.ok(css.includes('border-bottom: 1px solid'));
+  assert.ok(css.includes("body .inventory-page.inventory-page .inventory-view-switch__button[aria-selected='true']::after"));
+  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-needs-status'));
+  assert.ok(css.includes('border-radius: 0;'));
+  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-summary__filters'));
+  assert.ok(css.includes('grid-template-columns: repeat(3, minmax(0, 1fr));'));
+});
