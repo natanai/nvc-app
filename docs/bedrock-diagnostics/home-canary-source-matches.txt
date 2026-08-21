@@ -1,0 +1,11 @@
+Home canary source-match diagnostic
+generator.normalizeScripts: 1
+generator.baseInventoryScript: 2
+generator.htmlPageHeadExtras: 1
+generator.scriptEntries: 1
+generator.extraHead: 1
+generator.bodyScriptBoundary: 1
+generator.homeCall: 1
+controller.buildPaletteUi: 1
+controller.paletteAppend: 1
+package.flickerCommand: 1
