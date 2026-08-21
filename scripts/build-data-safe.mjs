@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, sep } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -56,14 +56,14 @@ function copyRepository(stageRoot) {
   });
 }
 
-function runGenerator(stageRoot) {
-  const result = spawnSync(process.execPath, [join(stageRoot, 'scripts', 'build-data.mjs')], {
+function runScript(stageRoot, relativeScript) {
+  const result = spawnSync(process.execPath, [join(stageRoot, relativeScript)], {
     cwd: stageRoot,
     stdio: 'inherit',
     env: process.env,
   });
   if (result.error) throw result.error;
-  if (result.status !== 0) throw new Error(`scripts/build-data.mjs exited with status ${result.status}`);
+  if (result.status !== 0) throw new Error(`${relativeScript} exited with status ${result.status}`);
 }
 
 const scopes = parseScope(process.argv.slice(2));
@@ -72,7 +72,13 @@ const stageRoot = join(stageParent, 'repo');
 
 try {
   copyRepository(stageRoot);
-  runGenerator(stageRoot);
+
+  // The core compiler owns data/index.json. It still computes its historical
+  // body/reverse outputs in staging, but those are deliberately replaced below
+  // by the reviewed spreadsheets that are the canonical source for those two
+  // datasets.
+  runScript(stageRoot, 'scripts/build-data.mjs');
+  runScript(stageRoot, 'scripts/build-reviewed-body-data.mjs');
 
   for (const scope of scopes) {
     const relativePath = OUTPUTS[scope];
