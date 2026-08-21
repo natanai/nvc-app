@@ -23,12 +23,12 @@ const INVENTORY_RUNTIME_REPLAY_SELECTOR = [
 
 const loaderScript = document.currentScript;
 const inventoryRuntimeUrl = new URL(
-  './inventory.js?v=2026-08-21-home-canary',
+  './inventory.js?v=2026-08-21-home-canary-ready',
   loaderScript?.src || document.baseURI,
 ).href;
 
 let inventoryRuntimePromise = null;
-let inventoryRuntimeReady = typeof window.handleExportInventory === 'function';
+let inventoryRuntimeReady = false;
 
 function readInventoryCount() {
   try {
@@ -54,18 +54,27 @@ function syncInventoryCount() {
   counter.hidden = false;
 }
 
-function ensureInventoryClassicRuntime() {
-  if (inventoryRuntimeReady || typeof window.handleExportInventory === 'function') {
+function finishAfterInventoryInitialization(resolve) {
+  const finish = () => {
     inventoryRuntimeReady = true;
+    resolve();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', finish, { once: true });
+  } else {
+    finish();
+  }
+}
+
+function ensureInventoryClassicRuntime() {
+  if (inventoryRuntimeReady) {
     return Promise.resolve();
   }
   if (inventoryRuntimePromise) return inventoryRuntimePromise;
 
   inventoryRuntimePromise = new Promise((resolve, reject) => {
-    const finish = () => {
-      inventoryRuntimeReady = true;
-      resolve();
-    };
+    const finish = () => finishAfterInventoryInitialization(resolve);
     const fail = () => {
       inventoryRuntimePromise = null;
       reject(new Error('Unable to load shared Inventory runtime'));
