@@ -1,0 +1,67 @@
+name: Bedrock Home canary diagnostic
+
+on:
+  push:
+    branches:
+      - bedrock/production-finalization-v2
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Bedrock branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: bedrock/production-finalization-v2
+
+      - name: Record exact source-match counts
+        run: |
+          mkdir -p docs/bedrock-diagnostics
+          python - <<'PY' > docs/bedrock-diagnostics/home-canary-source-matches.txt
+          from pathlib import Path
+
+          generator = Path('scripts/build-pages.mjs').read_text(encoding='utf-8')
+          controller = Path('scripts/inventory.js').read_text(encoding='utf-8')
+          package = Path('package.json').read_text(encoding='utf-8')
+
+          anchors = {
+              'generator.normalizeScripts': "function normalizeScripts(scripts) {",
+              'generator.baseInventoryScript': "    { src: 'scripts/inventory.js', defer: true },",
+              'generator.htmlPageHeadExtras': "  headExtras = '',\n}) {",
+              'generator.scriptEntries': '  const scriptEntries = normalizeScripts(scripts);',
+              'generator.extraHead': "  const extraHead = headExtras ? `\\n${headExtras}` : '';",
+              'generator.bodyScriptBoundary': "    </div>\n${scriptsHtml ? `${scriptsHtml}\\n` : ''}  </body>",
+              'generator.homeCall': "    main,\n    activeNav: 'home',\n    canonicalPath: '/',",
+              'controller.buildPaletteUi': "function buildPaletteUi() {\n  const container = document.createElement('div');",
+              'controller.paletteAppend': "  container.append(toggle, panel);\n  document.body.appendChild(container);",
+              'package.flickerCommand': '"test:flicker-jitter": "node --test tests/navigation-highlight.test.mjs tests/runtime-load-graph.test.mjs tests/shared-nav-menu.test.mjs tests/shared-density-polish.test.mjs tests/journal-load-graph.test.mjs"',
+          }
+
+          sources = {
+              'generator': generator,
+              'controller': controller,
+              'package': package,
+          }
+
+          print('Home canary source-match diagnostic')
+          for name, anchor in anchors.items():
+              source = sources[name.split('.', 1)[0]]
+              print(f'{name}: {source.count(anchor)}')
+          PY
+
+      - name: Commit diagnostic and remove temporary workflows
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/bedrock-one-time-home-runtime-canary.yml
+          git rm .github/workflows/bedrock-one-time-home-runtime-canary-v2.yml
+          git rm .github/workflows/bedrock-home-canary-diagnostic.yml
+          git add docs/bedrock-diagnostics/home-canary-source-matches.txt
+          git diff --cached --check
+          git commit -m "Record Home canary source diagnostics"
+          git push origin HEAD:bedrock/production-finalization-v2
