@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
-    "build:pages": "node scripts/build-pages.mjs && node scripts/finalize-static-assets.mjs",
+    "build:pages": "node scripts/build-pages-safe.mjs",
     "lint:links": "node scripts/check-links.mjs",
     "lint:evidence": "node scripts/lint-evidence.mjs",
     "lint:entrypoints": "node scripts/lint-entrypoints.mjs",
