@@ -5,44 +5,119 @@ const SESSION_HINT_ACTIVE = 'active';
 const SESSION_HINT_NONE = 'none';
 const FEED_ASSET_VERSION = '2026-08-19-static-feed';
 const INVENTORY_RUNTIME_URL = new URL('./inventory.js?v=2026-08-19-feed-ui', import.meta.url).href;
+const INVENTORY_RUNTIME_WARM_SELECTOR = [
+  '[data-palette-toggle]',
+  '[data-support-journal-open]',
+  '[data-menu-drill="account-data"]',
+  '[data-menu-action="share-with-nat"]',
+  '#inventory-export',
+  '#inventory-import-trigger',
+  '[data-backend-save-button]',
+  '[data-backend-load-button]',
+].join(',');
+const INVENTORY_RUNTIME_REPLAY_SELECTOR = [
+  '[data-palette-toggle]',
+  '[data-support-journal-open]',
+  '[data-menu-action="share-with-nat"]',
+  '#inventory-export',
+  '#inventory-import-trigger',
+  '[data-backend-save-button]',
+  '[data-backend-load-button]',
+].join(',');
 
 let oauthModulePromise = null;
+let inventoryRuntimePromise = null;
+let inventoryRuntimeReady = false;
 
 function ensureInventoryClassicRuntime() {
-  if (typeof window.handleExportInventory === 'function') {
+  if (inventoryRuntimeReady || typeof window.handleExportInventory === 'function') {
+    inventoryRuntimeReady = true;
     return Promise.resolve();
   }
-
-  const existing = Array.from(document.scripts).find((script) => {
-    if (!script.src) return false;
-    try {
-      const url = new URL(script.src, window.location.href);
-      return /\/scripts\/inventory\.js$/i.test(url.pathname);
-    } catch (error) {
-      return false;
-    }
-  });
-
-  if (existing) {
-    return new Promise((resolve, reject) => {
-      if (typeof window.handleExportInventory === 'function') {
-        resolve();
-        return;
-      }
-      existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error('Unable to load shared Inventory runtime')), { once: true });
-    });
+  if (inventoryRuntimePromise) {
+    return inventoryRuntimePromise;
   }
 
-  return new Promise((resolve, reject) => {
+  inventoryRuntimePromise = new Promise((resolve, reject) => {
+    const finish = () => {
+      inventoryRuntimeReady = true;
+      resolve();
+    };
+    const fail = () => {
+      inventoryRuntimePromise = null;
+      reject(new Error('Unable to load shared Inventory runtime'));
+    };
+
+    const existing = Array.from(document.scripts).find((script) => {
+      if (!script.src) return false;
+      try {
+        const url = new URL(script.src, window.location.href);
+        return /\/scripts\/inventory\.js$/i.test(url.pathname);
+      } catch (error) {
+        return false;
+      }
+    });
+
+    if (existing) {
+      if (typeof window.handleExportInventory === 'function') {
+        finish();
+        return;
+      }
+      existing.addEventListener('load', finish, { once: true });
+      existing.addEventListener('error', fail, { once: true });
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = INVENTORY_RUNTIME_URL;
-    script.async = false;
+    script.async = true;
     script.dataset.feedInventoryRuntime = 'true';
-    script.addEventListener('load', () => resolve(), { once: true });
-    script.addEventListener('error', () => reject(new Error('Unable to load shared Inventory runtime')), { once: true });
+    script.addEventListener('load', finish, { once: true });
+    script.addEventListener('error', fail, { once: true });
     document.body.appendChild(script);
   });
+
+  return inventoryRuntimePromise;
+}
+
+function closestInventoryRuntimeTrigger(target, selector) {
+  return target instanceof Element ? target.closest(selector) : null;
+}
+
+function warmInventoryRuntime(event) {
+  if (inventoryRuntimeReady) return;
+  if (closestInventoryRuntimeTrigger(event.target, INVENTORY_RUNTIME_WARM_SELECTOR)) {
+    ensureInventoryClassicRuntime().catch(() => {});
+  }
+}
+
+function installInventoryRuntimeIntentLoader() {
+  document.addEventListener('pointerover', warmInventoryRuntime, { capture: true, passive: true });
+  document.addEventListener('focusin', warmInventoryRuntime, { capture: true });
+
+  document.addEventListener('click', async (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target || inventoryRuntimeReady) return;
+
+    const warmTrigger = target.closest(INVENTORY_RUNTIME_WARM_SELECTOR);
+    if (!warmTrigger) return;
+
+    const runtime = ensureInventoryClassicRuntime();
+    const replayTrigger = target.closest(INVENTORY_RUNTIME_REPLAY_SELECTOR);
+    if (!replayTrigger) {
+      runtime.catch(() => {});
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    try {
+      await runtime;
+      window.requestAnimationFrame(() => replayTrigger.click());
+    } catch (error) {
+      console.error('Unable to prepare shared allneeds controls', error);
+    }
+  }, true);
 }
 
 function readSessionHint() {
@@ -433,10 +508,5 @@ async function init() {
   await fetchAndRenderFeed();
 }
 
-// Module scripts run after the document has been parsed. Start the visible Feed
-// immediately while the legacy shared controller downloads in parallel. The
-// top-level await keeps DOMContentLoaded from firing until inventory.js has
-// registered its existing DOMContentLoaded initializer.
-const inventoryRuntimeReady = ensureInventoryClassicRuntime();
+installInventoryRuntimeIntentLoader();
 init();
-await inventoryRuntimeReady;
