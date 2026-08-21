@@ -1,6 +1,9 @@
 import './profile-restore-rehydration.js';
 
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
+const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';
+const SESSION_HINT_ACTIVE = 'active';
+const SESSION_HINT_NONE = 'none';
 const ACCOUNT_TRIGGER_SELECTOR = [
   '[data-menu-drill="account-data"]',
   '#bluesky-auth-button',
@@ -15,7 +18,7 @@ let runtimeReady = false;
 
 function loadBlueskyRuntime() {
   if (!runtimePromise) {
-    runtimePromise = import('./inventory-bluesky-runtime.js?v=2026-08-21-lazy')
+    runtimePromise = import('./inventory-bluesky-runtime.js?v=2026-08-21-session-hint')
       .then((module) => {
         runtimeReady = true;
         return module;
@@ -34,6 +37,15 @@ function hasLoginIntent() {
     return window.sessionStorage?.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
   } catch (error) {
     return false;
+  }
+}
+
+function readSessionHint() {
+  try {
+    const hint = window.localStorage?.getItem(SESSION_HINT_STORAGE_KEY);
+    return hint === SESSION_HINT_ACTIVE || hint === SESSION_HINT_NONE ? hint : '';
+  } catch (error) {
+    return '';
   }
 }
 
@@ -78,12 +90,15 @@ document.addEventListener('click', async (event) => {
   }
 }, true);
 
-function scheduleIdleRestore() {
+function schedulePostLoadRestore({ knownActive = false } = {}) {
   const start = () => {
     if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(() => loadBlueskyRuntime().catch(() => {}), { timeout: 1800 });
+      window.requestIdleCallback(
+        () => loadBlueskyRuntime().catch(() => {}),
+        { timeout: knownActive ? 600 : 1800 },
+      );
     } else {
-      window.setTimeout(() => loadBlueskyRuntime().catch(() => {}), 900);
+      window.setTimeout(() => loadBlueskyRuntime().catch(() => {}), knownActive ? 0 : 900);
     }
   };
 
@@ -91,12 +106,15 @@ function scheduleIdleRestore() {
   else window.addEventListener('load', start, { once: true });
 }
 
-// OAuth returns must be consumed immediately. Ordinary page views defer the
-// remote AT Protocol SDK until after the page has loaded (or until the user
-// approaches Account & data), so a third-party module is no longer part of the
-// first-render network path.
+// OAuth returns must be consumed immediately. A browser with a previously
+// confirmed session restores it after first paint. Once a browser has confirmed
+// there is no Bluesky session, ordinary page navigation does no OAuth work at
+// all until the user approaches Account & data. Unknown/legacy browsers perform
+// one idle discovery, and the runtime records the result for later navigations.
 if (isOAuthReturn() || hasLoginIntent()) {
   loadBlueskyRuntime().catch(() => {});
 } else {
-  scheduleIdleRestore();
+  const hint = readSessionHint();
+  if (hint === SESSION_HINT_ACTIVE) schedulePostLoadRestore({ knownActive: true });
+  else if (hint !== SESSION_HINT_NONE) schedulePostLoadRestore();
 }

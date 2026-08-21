@@ -7,6 +7,9 @@ import {
 } from './bluesky-oauth.js?v=2024-07-11';
 
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
+const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';
+const SESSION_HINT_ACTIVE = 'active';
+const SESSION_HINT_NONE = 'none';
 let initialized = false;
 
 function consumeLoginIntent() {
@@ -28,6 +31,19 @@ function setLoginIntent() {
   }
 }
 
+function writeSessionHint(hasSession) {
+  try {
+    if (!window.localStorage) return;
+    window.localStorage.setItem(
+      SESSION_HINT_STORAGE_KEY,
+      hasSession ? SESSION_HINT_ACTIVE : SESSION_HINT_NONE,
+    );
+  } catch (error) {
+    // The hint is only a performance optimization. OAuth remains functional
+    // when storage is unavailable; the compatibility loader will rediscover it.
+  }
+}
+
 function setGlobalBlueskySession(session, { reason = '' } = {}) {
   const normalizedDid = session?.did || session?.sub || null;
   const normalizedHandle = session?.preferred_username || session?.handle || session?.username || null;
@@ -35,6 +51,7 @@ function setGlobalBlueskySession(session, { reason = '' } = {}) {
   window.allneedsSession = normalizedDid
     ? { did: normalizedDid, handle: normalizedHandle }
     : null;
+  writeSessionHint(Boolean(normalizedDid));
 
   window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed', {
     detail: {
