@@ -44,12 +44,14 @@ test('shared generator no longer assigns the Journal store to every page', async
   const baseScriptsEnd = buildPages.indexOf('function htmlPage(', baseScriptsStart);
   const baseScripts = buildPages.slice(baseScriptsStart, baseScriptsEnd);
   assert.ok(baseScriptsStart >= 0 && baseScriptsEnd > baseScriptsStart);
-  assert.ok(!baseScripts.includes('assets/js/journal/store.js'));
+  assert.ok(!baseScripts.includes("{ src: 'assets/js/journal/store.js', module: true }"));
+  assert.ok(baseScripts.includes('const beforeBaseScripts = scripts.filter'));
+  assert.ok(baseScripts.includes('const entries = [...beforeBaseScripts, ...baseScripts, ...regularScripts];'));
 
   const journalPageStart = buildPages.indexOf("mainAttributes: 'data-page-id=\"inventory-journal\"'");
   const journalPageBlock = buildPages.slice(journalPageStart, journalPageStart + 900);
   assert.ok(journalPageStart >= 0);
-  assert.ok(journalPageBlock.includes("{ src: 'assets/js/journal/store.js', type: 'module' }"));
+  assert.ok(journalPageBlock.includes("{ src: 'assets/js/journal/store.js', type: 'module', beforeBase: true }"));
   assert.ok(journalPageBlock.includes("{ src: 'assets/js/journal/module.js', type: 'module' }"));
 });
 
