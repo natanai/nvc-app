@@ -3,6 +3,9 @@ import { join, relative } from 'path';
 
 const rootDir = process.cwd();
 const ignoredDirectories = new Set(['node_modules', '.git', '.github', '.vscode']);
+// Standalone tools intentionally outside the generated app shell. Keep this
+// explicit so a new ordinary page cannot silently ship without the Customizer.
+const standaloneHtmlFiles = new Set(['feelings/emotions-wheel/index.html']);
 
 function collectHtmlFiles(directory) {
   const entries = readdirSync(directory, { withFileTypes: true });
@@ -43,7 +46,11 @@ const staleContrastAttribute = [];
 
 for (const file of htmlFiles) {
   const contents = readFileSync(file, 'utf8');
-  const relativePath = relative(rootDir, file);
+  const relativePath = relative(rootDir, file).replaceAll('\\', '/');
+
+  if (standaloneHtmlFiles.has(relativePath)) {
+    continue;
+  }
 
   if (!contents.includes("const STORAGE_KEY = 'nvcApp.theme'")) {
     missingStorageSnippet.push(relativePath);
@@ -97,4 +104,7 @@ if (issues.length) {
   throw new Error(`Customizer integrity check failed:\n${message}`);
 }
 
-console.log(`Customizer integrity check passed for ${htmlFiles.length} HTML files.`);
+console.log(
+  `Customizer integrity check passed for ${htmlFiles.length - standaloneHtmlFiles.size} app-shell HTML files ` +
+    `(${standaloneHtmlFiles.size} explicit standalone tool excluded).`,
+);
