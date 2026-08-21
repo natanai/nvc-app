@@ -181,15 +181,17 @@ jobs:
               raise SystemExit(f'Feed readiness anchor count: {feed.count(anchor)}')
           feed = feed.replace(anchor, replacement)
 
-          old_finish = """  inventoryRuntimePromise = new Promise((resolve, reject) => {
-            const finish = () => {
-              inventoryRuntimeReady = true;
-              resolve();
-            };
-          """.replace('          ', '')
-          new_finish = """  inventoryRuntimePromise = new Promise((resolve, reject) => {
-            const finish = () => finishAfterInventoryInitialization(resolve);
-          """.replace('          ', '')
+          old_finish = (
+              "  inventoryRuntimePromise = new Promise((resolve, reject) => {\n"
+              "    const finish = () => {\n"
+              "      inventoryRuntimeReady = true;\n"
+              "      resolve();\n"
+              "    };\n"
+          )
+          new_finish = (
+              "  inventoryRuntimePromise = new Promise((resolve, reject) => {\n"
+              "    const finish = () => finishAfterInventoryInitialization(resolve);\n"
+          )
           if feed.count(old_finish) != 1:
               raise SystemExit(f'Feed finish block count: {feed.count(old_finish)}')
           feed_path.write_text(feed.replace(old_finish, new_finish), encoding='utf-8')
