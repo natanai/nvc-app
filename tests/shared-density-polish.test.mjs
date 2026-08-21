@@ -57,20 +57,22 @@ test('there is no browser-side DOM normalizer for static UI copy', async () => {
   assert.ok(!feed.includes("document.querySelectorAll('#main .inventory-header .page-description')"));
 });
 
-test('build pipeline writes final user-facing static markup before deployment', async () => {
+test('page compiler emits final user-facing markup without a post-generation UI repair pass', async () => {
   const packageJson = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
   const safeBuilder = await fs.readFile(path.join(root, 'scripts/build-pages-safe.mjs'), 'utf8');
-  const finalizer = await fs.readFile(path.join(root, 'scripts/finalize-static-assets.mjs'), 'utf8');
+  const buildPages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
 
   assert.equal(packageJson.scripts['build:pages'], 'node scripts/build-pages-safe.mjs');
   assert.ok(safeBuilder.includes("runNode(stageRoot, 'scripts/build-pages.mjs'"));
-  assert.ok(safeBuilder.includes("runNode(stageRoot, 'scripts/finalize-static-assets.mjs'"));
-  assert.ok(safeBuilder.includes('copyOwnedOutputs(stageRoot, outputs)'));
-  assert.ok(finalizer.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
-  assert.ok(finalizer.includes(".replaceAll('💾 Save to device', 'Save to device')"));
-  assert.ok(finalizer.includes(".replaceAll('☁️ Save to profile', 'Save to profile')"));
-  assert.ok(finalizer.includes('Tag what’s present now. Feeling optional—notes are enough.'));
-  assert.ok(finalizer.includes("relative(rootDir, file).replaceAll('\\\\', '/') === 'feed/index.html'"));
+  assert.ok(!safeBuilder.includes('finalize-static-assets.mjs'));
+  await assert.rejects(fs.access(path.join(root, 'scripts/finalize-static-assets.mjs')), { code: 'ENOENT' });
+
+  assert.ok(buildPages.includes("submitLabel: 'Save to device'"));
+  assert.ok(!buildPages.includes('💾 Save to device'));
+  assert.ok(buildPages.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
+  assert.ok(buildPages.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(buildPages.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
+  assert.ok(!buildPages.includes('Personal strategies you add stay on this browser.'));
 });
 
 test('checked-in static artifacts already contain the final UI', async () => {
@@ -102,9 +104,9 @@ test('mobile journal chrome remains compact without runtime mutation', async () 
   assert.ok(css.includes('min-height: clamp(15rem, 52dvh, 28rem)'));
 });
 
-test('shared strategies behavior is feed-first without repairing static chrome in JS', async () => {
+test('shared strategies static chrome is already final and runtime stays behavior-only', async () => {
   const feed = await fs.readFile(path.join(root, 'scripts/strategy-feed.js'), 'utf8');
-  const finalizer = await fs.readFile(path.join(root, 'scripts/finalize-static-assets.mjs'), 'utf8');
+  const feedHtml = await fs.readFile(path.join(root, 'feed/index.html'), 'utf8');
 
   assert.ok(feed.includes("addButton.textContent = 'Save to inventory'"));
   assert.ok(feed.includes('await fetchAndRenderFeed();'));
@@ -112,9 +114,9 @@ test('shared strategies behavior is feed-first without repairing static chrome i
   assert.ok(feed.includes("state.sortSelect?.addEventListener('change', fetchAndRenderFeed)"));
   assert.ok(!feed.includes('[data-feed-follows-check]'));
   assert.ok(!feed.includes('[data-feed-fetch]'));
-  assert.ok(finalizer.includes('<h1 class="page-title">Shared strategies</h1>'));
-  assert.ok(finalizer.includes('data-feed-follows-check'));
-  assert.ok(finalizer.includes('data-feed-fetch'));
+  assert.ok(feedHtml.includes('<h1 class="page-title">Shared strategies</h1>'));
+  assert.ok(!feedHtml.includes('data-feed-follows-check'));
+  assert.ok(!feedHtml.includes('data-feed-fetch'));
 });
 
 test('desktop Inventory keeps the Needs header left-aligned and uses one segmented filter control', async () => {

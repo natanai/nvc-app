@@ -250,7 +250,6 @@ try {
   // for the two deferred shell scripts rather than changing boot sequencing as
   // a side effect of an unrelated rebuild.
   runNode(stageRoot, 'scripts/build-pages.mjs', scopeArgs);
-  runNode(stageRoot, 'scripts/finalize-static-assets.mjs');
   const { published, byteStable } = copyOwnedOutputs(stageRoot, outputs);
   console.log(
     `Page build complete: ${published} changed output${published === 1 ? '' : 's'}, ` +
