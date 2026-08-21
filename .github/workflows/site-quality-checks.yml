@@ -61,6 +61,13 @@ jobs:
         if: always()
         run: npm run test:nav-magnets
 
+      - name: Verify static layout contracts
+        id: static-layout-contracts
+        if: always()
+        run: |
+          node --test tests/shared-density-polish.test.mjs
+          node tests/body-cues-static-first.test.mjs
+
       - name: Build site
         id: build-site
         if: always()
@@ -95,13 +102,15 @@ jobs:
           echo "Committed customizer preload: ${{ steps.customizer-preload.outcome }}"
           echo "Committed flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
           echo "Committed navigation magnets: ${{ steps.navigation-magnets.outcome }}"
+          echo "Committed static layout contracts: ${{ steps.static-layout-contracts.outcome }}"
           echo "Authoring build: ${{ steps.build-site.outcome }}"
           echo "Build reproducibility: ${{ steps.generated-artifacts.outcome }}"
 
           if [ "${{ steps.data-integrity.outcome }}" = "success" ] \
             && [ "${{ steps.customizer-preload.outcome }}" = "success" ] \
             && [ "${{ steps.flicker-jitter.outcome }}" = "success" ] \
-            && [ "${{ steps.navigation-magnets.outcome }}" = "success" ]; then
+            && [ "${{ steps.navigation-magnets.outcome }}" = "success" ] \
+            && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ]; then
             echo "Committed static-site runtime checks passed."
           else
             echo "One or more committed-site checks failed; inspect those before publishing this branch."
