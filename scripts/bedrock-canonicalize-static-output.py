@@ -32,7 +32,7 @@ pages = replace_exact(
 )
 pages_path.write_text(pages, encoding='utf-8')
 
-# The safe publisher should no longer need a post-generation HTML repair pass.
+# The ownership-safe publisher should no longer need a post-generation HTML repair pass.
 safe_path = Path('scripts/build-pages-safe.mjs')
 safe = safe_path.read_text(encoding='utf-8')
 safe = replace_exact(
@@ -42,24 +42,6 @@ safe = replace_exact(
     'safe-builder finalizer call',
 )
 safe_path.write_text(safe, encoding='utf-8')
-
-# Push Poems must use the ownership-safe page entry point rather than invoking
-# the destructive historical generator + finalizer directly.
-poems_path = Path('.github/workflows/push-poems.yml')
-poems = poems_path.read_text(encoding='utf-8')
-poems = replace_exact(
-    poems,
-    '''      - name: Rebuild feelings pages\n        if: ${{ inputs.run_build_pages != 'false' }}\n        run: |\n          node scripts/build-pages.mjs --scope=feelings,faux-feelings\n          node scripts/finalize-static-assets.mjs\n''',
-    '''      - name: Rebuild feelings pages\n        if: ${{ inputs.run_build_pages != 'false' }}\n        run: npm run build:pages -- --scope feelings,faux-feelings\n''',
-    'Push Poems page build',
-)
-poems = replace_exact(
-    poems,
-    '''          git add -A\n          git commit -m "Update poems from poems_formatted.txt"\n''',
-    '''          unexpected="$(git diff --name-only | grep -Ev '^(data/(index|body-regions)\\.json|feelings/|faux-feelings/)' || true)"\n          if [ -n "$unexpected" ]; then\n            echo "Unexpected files changed by Push Poems:" >&2\n            printf '%s\\n' "$unexpected" >&2\n            exit 1\n          fi\n          git add data/index.json data/body-regions.json feelings faux-feelings\n          git diff --cached --check\n          git commit -m "Update poems from poems_formatted.txt"\n''',
-    'Push Poems staging',
-)
-poems_path.write_text(poems, encoding='utf-8')
 
 # Rewrite regression expectations around direct template ownership.
 test_path = Path('tests/shared-density-polish.test.mjs')
