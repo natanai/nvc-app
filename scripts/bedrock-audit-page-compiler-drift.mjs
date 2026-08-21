@@ -48,6 +48,13 @@ const REDUNDANT_INLINE_CRITICAL_RULES = [
   /\n\.site-nav__magnet--menu\[aria-expanded='true'\] \{\n  background: color-mix\(in srgb, var\(--gold\) 88%, #ffffff 12%\);\n  box-shadow: inset 0 -8px 0 color-mix\(in srgb, var\(--outline\) 18%, transparent\);\n\}\n/g,
 ];
 
+const CRITICAL_NEEDLES = [
+  ".magnet-board:not([data-ready='1']) .magnet {",
+  '.site-nav__magnet--menu {',
+  '.site-nav__menu-icon {',
+  ".site-nav__magnet--menu[aria-expanded='true'] {",
+];
+
 function canonicalizeOpeningTag(tagName, rawAttributes) {
   const attributes = [];
   const source = String(rawAttributes || '').replace(/\/$/, '').trim();
@@ -106,6 +113,32 @@ function firstMismatch(a, b) {
   let i = 0;
   while (i < limit && a[i] === b[i]) i += 1;
   return i;
+}
+
+function countNeedle(source, needle) {
+  if (!needle) return 0;
+  let count = 0;
+  let cursor = 0;
+  while (true) {
+    const next = source.indexOf(needle, cursor);
+    if (next < 0) return count;
+    count += 1;
+    cursor = next + needle.length;
+  }
+}
+
+function shellOrder(source) {
+  const core = source.indexOf('scripts/inventory-core-shell.js');
+  const inventory = source.indexOf('scripts/inventory.js');
+  if (core < 0 || inventory < 0) return 'not-both-present';
+  return core < inventory ? 'core-shell -> inventory' : 'inventory -> core-shell';
+}
+
+function navOpening(source) {
+  const start = source.indexOf('<nav class="site-nav magnet-section"');
+  if (start < 0) return '(no shared nav)';
+  const end = source.indexOf('>', start);
+  return source.slice(start, end + 1).replace(/\s+/g, ' ');
 }
 
 const parent = mkdtempSync(join(tmpdir(), 'allneeds-page-drift-'));
@@ -167,6 +200,18 @@ try {
   if (unresolved.length) {
     console.log('Unresolved differences:');
     for (const item of unresolved.slice(0, 30)) console.log(`- ${item}`);
+  }
+
+  const sampleRel = 'feelings/hopeful/index.html';
+  const sampleCurrent = readFileSync(join(root, sampleRel), 'utf8');
+  const sampleStaged = readFileSync(join(stage, sampleRel), 'utf8');
+  console.log(`Representative diagnostics: ${sampleRel}`);
+  console.log(`- checked-in shell order: ${shellOrder(sampleCurrent)}`);
+  console.log(`- direct compiler shell order: ${shellOrder(sampleStaged)}`);
+  console.log(`- checked-in nav opening: ${navOpening(sampleCurrent)}`);
+  console.log(`- direct compiler nav opening: ${navOpening(sampleStaged)}`);
+  for (const needle of CRITICAL_NEEDLES) {
+    console.log(`- critical rule ${JSON.stringify(needle)} checked-in=${countNeedle(sampleCurrent, needle)} direct=${countNeedle(sampleStaged, needle)}`);
   }
 } finally {
   rmSync(parent, { recursive: true, force: true });
