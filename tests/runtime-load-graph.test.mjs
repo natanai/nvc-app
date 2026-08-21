@@ -45,8 +45,8 @@ test('restore protection loads only for restore intent or post-restore reconcili
   const restore = await read('scripts/profile-restore-rehydration.js');
 
   assert.ok(loader.includes("const RESTORE_PENDING_STORAGE_KEY = 'allneeds:restore-palette-rehydrate';"));
-  assert.ok(loader.includes("'#inventory-import-trigger'"));
-  assert.ok(loader.includes("'[data-backend-load-button]'"));
+  assert.ok(loader.includes("const RESTORE_TRIGGER_SELECTOR = [\n  '[data-backend-load-button]',\n  '#inventory-import-trigger',\n].join(',');"));
+  assert.ok(!loader.match(/RESTORE_TRIGGER_SELECTOR\s*=\s*\[[\s\S]*?data-menu-drill/));
   assert.ok(loader.includes('if (hasPendingRestoreRehydrate())'));
   assert.ok(loader.includes('const loads = [loadRestoreRuntime()];'));
   assert.ok(restore.includes('pauseActiveMagnetBoards()'));
