@@ -87,6 +87,10 @@ function isOAuthReturn() {
   }
 }
 
+function isStrategyFeedRoute() {
+  return Boolean(document.querySelector('[data-feed-list]'));
+}
+
 function closestTrigger(target, selector) {
   return target instanceof Element ? target.closest(selector) : null;
 }
@@ -164,21 +168,27 @@ function schedulePostLoadRestore({ knownActive = false } = {}) {
   else window.addEventListener('load', start, { once: true });
 }
 
-// Restore reconciliation is only needed on the one reload following a restore;
-// ordinary pages do not parse the restore/magnet suspension machinery.
+// Restore reconciliation is local-state protection rather than account UI, so
+// it remains global even on routes that own their own account/session restore.
 if (hasPendingRestoreRehydrate()) {
   loadRestoreRuntime().catch(() => {});
 }
 
-// OAuth returns must be consumed immediately. A browser with a previously
-// confirmed session restores it after first paint. Once a browser has confirmed
-// there is no Bluesky session, ordinary page navigation does no OAuth work at
-// all until the user approaches Account & data. Unknown/legacy browsers perform
-// one idle discovery, and the runtime records the result for later navigations.
-if (isOAuthReturn() || hasLoginIntent()) {
-  loadBlueskyRuntime().catch(() => {});
-} else {
-  const hint = readSessionHint();
-  if (hint === SESSION_HINT_ACTIVE) schedulePostLoadRestore({ knownActive: true });
-  else if (hint !== SESSION_HINT_NONE) schedulePostLoadRestore();
+// Shared Strategies owns its route-level session restoration because it needs
+// that session to choose between the public and followed feeds. Do not schedule
+// a second account-runtime restore there; Account & data still prewarms/loads
+// this runtime on intent through the listeners above.
+if (!isStrategyFeedRoute()) {
+  // OAuth returns must be consumed immediately. A browser with a previously
+  // confirmed session restores it after first paint. Once a browser has confirmed
+  // there is no Bluesky session, ordinary page navigation does no OAuth work at
+  // all until the user approaches Account & data. Unknown/legacy browsers perform
+  // one idle discovery, and the runtime records the result for later navigations.
+  if (isOAuthReturn() || hasLoginIntent()) {
+    loadBlueskyRuntime().catch(() => {});
+  } else {
+    const hint = readSessionHint();
+    if (hint === SESSION_HINT_ACTIVE) schedulePostLoadRestore({ knownActive: true });
+    else if (hint !== SESSION_HINT_NONE) schedulePostLoadRestore();
+  }
 }
