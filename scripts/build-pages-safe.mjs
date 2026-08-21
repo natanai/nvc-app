@@ -74,9 +74,7 @@ function expectedOutputs(scopeSet) {
   const shouldBuild = (scope) => !scopeSet || scopeSet.has(scope);
   const outputs = new Set();
 
-  if (shouldBuild('home')) {
-    outputs.add('index.html');
-  }
+  if (shouldBuild('home')) outputs.add('index.html');
 
   if (shouldBuild('faux-feelings')) {
     outputs.add('faux-feelings/index.html');
@@ -105,13 +103,8 @@ function expectedOutputs(scopeSet) {
     outputs.add('inventory/journal/index.html');
   }
 
-  if (shouldBuild('observation-guide')) {
-    outputs.add('observations/index.html');
-  }
-
-  if (shouldBuild('support-lane')) {
-    outputs.add('alexithymia-support/index.html');
-  }
+  if (shouldBuild('observation-guide')) outputs.add('observations/index.html');
+  if (shouldBuild('support-lane')) outputs.add('alexithymia-support/index.html');
 
   return outputs;
 }
@@ -136,12 +129,8 @@ function runNode(stageRoot, relativeScript, args = []) {
     env: process.env,
   });
 
-  if (result.error) {
-    throw result.error;
-  }
-  if (result.status !== 0) {
-    throw new Error(`${relativeScript} exited with status ${result.status}`);
-  }
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(`${relativeScript} exited with status ${result.status}`);
 }
 
 function canonicalizeOpeningTag(tagName, rawAttributes) {
@@ -186,24 +175,52 @@ function normalizeNavigationSerialization(html) {
   return `${html.slice(0, start)}[[SITE_NAV:${canonicalizeNavigation(nav)}]]${html.slice(end)}`;
 }
 
-function shellSerializationEquivalent(stagedPath, destination) {
-  if (!existsSync(destination)) return false;
+function normalizedPair(stagedPath, destination) {
   const staged = readFileSync(stagedPath, 'utf8');
   const current = readFileSync(destination, 'utf8');
-  if (staged === current) return true;
-  return normalizeNavigationSerialization(staged) === normalizeNavigationSerialization(current);
+  return {
+    staged,
+    current,
+    normalizedStaged: normalizeNavigationSerialization(staged),
+    normalizedCurrent: normalizeNavigationSerialization(current),
+  };
+}
+
+function shellSerializationEquivalent(stagedPath, destination) {
+  if (!existsSync(destination)) return false;
+  const pair = normalizedPair(stagedPath, destination);
+  return pair.staged === pair.current || pair.normalizedStaged === pair.normalizedCurrent;
+}
+
+function describeFirstMismatch(relativePath, stagedPath, destination) {
+  if (!existsSync(destination)) return `No existing destination for ${relativePath}`;
+  const { normalizedStaged, normalizedCurrent } = normalizedPair(stagedPath, destination);
+  const limit = Math.min(normalizedStaged.length, normalizedCurrent.length);
+  let index = 0;
+  while (index < limit && normalizedStaged[index] === normalizedCurrent[index]) index += 1;
+  if (index === limit && normalizedStaged.length === normalizedCurrent.length) return '';
+
+  const radius = 220;
+  const start = Math.max(0, index - radius);
+  const endCurrent = Math.min(normalizedCurrent.length, index + radius);
+  const endStaged = Math.min(normalizedStaged.length, index + radius);
+  const currentContext = normalizedCurrent.slice(start, endCurrent).replace(/\n/g, '\\n');
+  const stagedContext = normalizedStaged.slice(start, endStaged).replace(/\n/g, '\\n');
+  return [
+    `First non-shell-serialization mismatch: ${relativePath} at normalized offset ${index}`,
+    `CURRENT: ${currentContext}`,
+    `STAGED:  ${stagedContext}`,
+  ].join('\n');
 }
 
 function copyOwnedOutputs(stageRoot, outputs) {
   let published = 0;
   let byteStable = 0;
+  let diagnosticPrinted = false;
 
   for (const relativePath of outputs) {
     const stagedPath = join(stageRoot, relativePath);
-    if (!existsSync(stagedPath)) {
-      throw new Error(`Generator did not produce declared output: ${relativePath}`);
-    }
-
+    if (!existsSync(stagedPath)) throw new Error(`Generator did not produce declared output: ${relativePath}`);
     const destination = join(rootDir, relativePath);
 
     // The current production tree contains historical indentation and attribute
@@ -214,6 +231,12 @@ function copyOwnedOutputs(stageRoot, outputs) {
     if (shellSerializationEquivalent(stagedPath, destination)) {
       byteStable += 1;
       continue;
+    }
+
+    if (!diagnosticPrinted) {
+      const diagnostic = describeFirstMismatch(relativePath, stagedPath, destination);
+      if (diagnostic) console.log(diagnostic);
+      diagnosticPrinted = true;
     }
 
     mkdirSync(dirname(destination), { recursive: true });
@@ -233,9 +256,7 @@ const stageRoot = join(stageParent, 'repo');
 try {
   copyRepositoryToStage(stageRoot);
 
-  const scopeArgs = requestedScopes
-    ? ['--scope', activeScopes.join(',')]
-    : [];
+  const scopeArgs = requestedScopes ? ['--scope', activeScopes.join(',')] : [];
 
   // The legacy generator is intentionally destructive inside its workspace.
   // Run it only in an isolated staging copy, then publish the files that the
