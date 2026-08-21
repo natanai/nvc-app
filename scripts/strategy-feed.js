@@ -106,8 +106,6 @@ async function loadFeedSession() {
   }
 }
 
-await ensureInventoryClassicRuntime();
-
 const state = {
   strategies: [],
   feedList: null,
@@ -435,8 +433,10 @@ async function init() {
   await fetchAndRenderFeed();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init, { once: true });
-} else {
-  init();
-}
+// Module scripts run after the document has been parsed. Start the visible Feed
+// immediately while the legacy shared controller downloads in parallel. The
+// top-level await keeps DOMContentLoaded from firing until inventory.js has
+// registered its existing DOMContentLoaded initializer.
+const inventoryRuntimeReady = ensureInventoryClassicRuntime();
+init();
+await inventoryRuntimeReady;
