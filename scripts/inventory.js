@@ -1559,7 +1559,9 @@ function initializeInventoryRuntime() {
   attachDelegatedJournalOverlayTriggerListener();
   setupJournalSection();
   renderJournalViews();
-  loadJournalReferenceData();
+  if (document.querySelector('[data-inventory-section="journal"]')) {
+    loadJournalReferenceData();
+  }
   setupScrollTopButton();
   updateBackendSyncButtons();
   updateVisibilityControls();
@@ -3854,7 +3856,7 @@ function renderInventoryViews() {
 function setupJournalSection() {
   const panel = document.querySelector('[data-inventory-section="journal"]');
   if (!panel) {
-    setupStandaloneJournalOverlay();
+    setupJournalOverlay();
     registerJournalStoreListeners();
     return;
   }
@@ -4134,6 +4136,10 @@ function handleJournalOverlayTriggerClick(event) {
   if (state.journalOverlayOpenTriggers.indexOf(button) === -1) {
     state.journalOverlayOpenTriggers.push(button);
   }
+  if (!state.journalFormSectionEl) {
+    setupStandaloneJournalOverlay();
+    loadJournalReferenceData();
+  }
   state.journalOverlayActiveTrigger = button;
   openJournalOverlay();
 }
@@ -4157,6 +4163,10 @@ function handleDelegatedJournalOverlayTrigger(event) {
   bindJournalOverlayTrigger(trigger, overlayId);
   trigger.setAttribute('aria-expanded', trigger.getAttribute('aria-expanded') || 'false');
   event.preventDefault();
+  if (!state.journalFormSectionEl) {
+    setupStandaloneJournalOverlay();
+    loadJournalReferenceData();
+  }
   state.journalOverlayActiveTrigger = trigger;
   openJournalOverlay();
 }

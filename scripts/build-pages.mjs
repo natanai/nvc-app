@@ -808,7 +808,6 @@ const localStorageReminderHtml =
 
 function normalizeScripts(scripts) {
   const baseScripts = [
-    { src: 'assets/js/journal/store.js', module: true },
     { src: 'scripts/inventory-core-shell.js', defer: true },
     { src: 'scripts/inventory.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
