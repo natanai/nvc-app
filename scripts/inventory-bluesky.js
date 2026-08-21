@@ -12,7 +12,6 @@ const ACCOUNT_TRIGGER_SELECTOR = [
   '.strategy-card__save--profile',
 ].join(',');
 const RESTORE_TRIGGER_SELECTOR = [
-  '[data-menu-drill="account-data"]',
   '[data-backend-load-button]',
   '#inventory-import-trigger',
 ].join(',');
@@ -103,7 +102,8 @@ function warmOptionalRuntimes(event) {
 
 // Pointer/focus intent begins fetching before the eventual click without
 // changing the interaction itself. Account & data can open normally while its
-// optional local/remote runtimes finish becoming ready.
+// optional network runtime becomes ready; restore protection is warmed only
+// when the person approaches an action that can replace local data.
 document.addEventListener('pointerover', warmOptionalRuntimes, { capture: true, passive: true });
 document.addEventListener('focusin', warmOptionalRuntimes, { capture: true });
 
