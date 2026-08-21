@@ -187,7 +187,10 @@ function stripRedundantInlineCriticalRules(html) {
   for (const pattern of REDUNDANT_INLINE_CRITICAL_RULES) {
     normalized = normalized.replace(pattern, '\n');
   }
-  return normalized;
+  // Removing an entire CSS rule can leave one additional blank line at the
+  // deletion boundary. Collapse only runs of 3+ line breaks; ordinary authored
+  // blank lines remain significant to the comparison everywhere else.
+  return normalized.replace(/\n{3,}/g, '\n\n');
 }
 
 function finalizeGeneratedShellSerialization(html) {
