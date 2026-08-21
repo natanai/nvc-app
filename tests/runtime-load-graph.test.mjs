@@ -94,21 +94,39 @@ test('OAuth returns and explicit account intent still load the real runtime', as
   assert.ok(feed.includes("import('./bluesky-oauth.js?v=2024-07-11')"));
 });
 
-test('Shared Strategies executes Inventory with classic-script semantics exactly once without serializing Feed rendering behind it', async () => {
+test('shared Inventory controller initializes safely before or after DOMContentLoaded', async () => {
+  const inventory = await read('scripts/inventory.js');
+
+  assert.ok(inventory.includes('let inventoryRuntimeInitialized = false;'));
+  assert.ok(inventory.includes('function initializeInventoryRuntime() {'));
+  assert.ok(inventory.includes('if (inventoryRuntimeInitialized) {\n    return;\n  }'));
+  assert.ok(inventory.includes("if (document.readyState === 'loading') {"));
+  assert.ok(inventory.includes("document.addEventListener('DOMContentLoaded', initializeInventoryRuntime, { once: true });"));
+  assert.ok(inventory.includes('} else {\n  initializeInventoryRuntime();\n}'));
+  assert.ok(!inventory.includes("document.addEventListener('DOMContentLoaded', () => {"));
+});
+
+test('Shared Strategies keeps the shared Inventory controller off first load and restores it on owned interaction intent', async () => {
   const feed = await read('scripts/strategy-feed.js');
   const feedHtml = await read('feed/index.html');
 
   assert.ok(!feed.includes("import './inventory.js"), 'Feed must not execute Inventory as an ES module');
   assert.ok(feed.includes("const INVENTORY_RUNTIME_URL = new URL('./inventory.js?v=2026-08-19-feed-ui', import.meta.url).href;"));
-  assert.ok(feed.includes('script.async = false;'));
-  assert.ok(feed.includes("typeof window.handleExportInventory === 'function'"), 'classic runtime readiness should be verified through its global Menu API');
-  assert.ok(!feedHtml.includes('<script src="../scripts/inventory.js" defer></script>'), 'Feed HTML must not add a second Inventory execution path');
+  assert.ok(feed.includes("'[data-palette-toggle]'"), 'Customizer intent must warm the shared controller');
+  assert.ok(feed.includes("'[data-support-journal-open]'"), 'Journal intent must warm the shared controller');
+  assert.ok(feed.includes("'[data-menu-drill=\"account-data\"]'"), 'Account & data intent must warm the shared controller');
+  assert.ok(feed.includes("'[data-menu-action=\"share-with-nat\"]'"), 'personal sharing must warm the shared controller');
+  assert.ok(feed.includes("document.addEventListener('pointerover', warmInventoryRuntime"));
+  assert.ok(feed.includes("document.addEventListener('focusin', warmInventoryRuntime"));
+  assert.ok(feed.includes('event.stopImmediatePropagation();'), 'direct activation should wait for its owner instead of falling through');
+  assert.ok(feed.includes('window.requestAnimationFrame(() => replayTrigger.click());'), 'held interactions should replay after the controller is ready');
+  assert.ok(feed.includes("script.dataset.feedInventoryRuntime = 'true';"));
+  assert.ok(feed.includes('installInventoryRuntimeIntentLoader();\ninit();'));
+  assert.ok(!feed.includes('const inventoryRuntimeReady = ensureInventoryClassicRuntime();'));
+  assert.ok(!feed.includes('await inventoryRuntimeReady;'));
+  assert.ok(!feedHtml.includes('<script src="../scripts/inventory.js" defer></script>'), 'Feed HTML must not restore the controller to the parser graph');
 
-  const runtimeStart = feed.indexOf('const inventoryRuntimeReady = ensureInventoryClassicRuntime();');
-  const feedStart = feed.indexOf('\ninit();', runtimeStart);
-  const compatibilityWait = feed.indexOf('await inventoryRuntimeReady;', feedStart);
-  assert.ok(runtimeStart >= 0, 'Feed should start the shared controller load once');
-  assert.ok(feedStart > runtimeStart, 'visible Feed initialization should start after the compatibility download has begun');
-  assert.ok(compatibilityWait > feedStart, 'Feed rendering must begin before waiting for the legacy controller');
-  assert.ok(!feed.includes("document.addEventListener('DOMContentLoaded', init"), 'module execution already occurs after parsing and must not serialize Feed initialization behind DOMContentLoaded');
+  assert.ok(feedHtml.includes('data-magnet-id="nav-faux-feelings"'), 'optional nav magnets must exist statically before the controller loads');
+  assert.ok(feedHtml.includes('data-magnet-id="nav-body-cues"'), 'Body Cues nav state must remain prepaint-restorable');
+  assert.ok(feedHtml.includes('data-magnet-id="nav-journal-dashboard"'), 'Journal History nav state must remain prepaint-restorable');
 });
