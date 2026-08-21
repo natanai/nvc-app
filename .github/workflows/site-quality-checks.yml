@@ -181,7 +181,8 @@ jobs:
           rm scripts/bedrock-canonicalize-static-output.py
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .github/workflows/site-quality-checks.yml .github/workflows/push-poems.yml scripts/build-pages.mjs scripts/build-pages-safe.mjs scripts/finalize-static-assets.mjs tests/shared-density-polish.test.mjs scripts/bedrock-canonicalize-static-output.py
+          git add .github/workflows/site-quality-checks.yml
+          git add -u -- scripts/bedrock-canonicalize-static-output.py
           git diff --cached --check
           git commit -m "Make page templates emit final static UI"
           git push origin HEAD:bedrock/production-finalization-v2
