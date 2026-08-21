@@ -1,0 +1,327 @@
+Home canary v4 failed. Runtime/generated source was NOT committed.
+
+
+> nvc-app@1.0.0 build:pages
+> node scripts/build-pages-safe.mjs
+
+Finalized static UI in 69 files.
+First non-shell-serialization mismatch: index.html at normalized offset 42168
+CURRENT:      </a>\n          </div>\n        </div>\n        <p class="home-doorways__support-note">\n          <a href="alexithymia-support/">Alexithymia Support</a>\n        </p>\n      </section>\n    \n      </main>\n    </div>\n    <script src="scripts/inventory.js" defer></script>\n    <script defer src="scripts/inventory-core-shell.js"></script>\n    <script src="scripts/magnets.js" type="module"></script>\n  </body>\n</html>\n
+STAGED:       </a>\n          </div>\n        </div>\n        <p class="home-doorways__support-note">\n          <a href="alexithymia-support/">Alexithymia Support</a>\n        </p>\n      </section>\n    \n      </main>\n    </div>\n    <div class="palette-corner" data-shell-customizer-placeholder>\n      <button type="button" class="palette-corner__toggle" aria-haspopup="dialog" aria-expanded="false">\n        <span class="palette-corner__glyph">+</span>\n
+Page build complete: 1 changed output, 179 structurally identical outputs kept byte-stable.
+TAP version 13
+# Subtest: Home keeps first-paint shell state while leaving the shared Inventory controller off first load
+ok 1 - Home keeps first-paint shell state while leaving the shared Inventory controller off first load
+  ---
+  duration_ms: 6.56333
+  type: 'test'
+  ...
+# Subtest: Home intent loader preserves the Inventory badge and replays runtime-owned actions
+ok 2 - Home intent loader preserves the Inventory badge and replays runtime-owned actions
+  ---
+  duration_ms: 1.990802
+  type: 'test'
+  ...
+# Subtest: Customizer runtime adopts the static Home shell instead of replacing a visible desktop control
+ok 3 - Customizer runtime adopts the static Home shell instead of replacing a visible desktop control
+  ---
+  duration_ms: 3.570695
+  type: 'test'
+  ...
+# Subtest: generator models the Home canary explicitly rather than creating checked-in HTML exceptions
+ok 4 - generator models the Home canary explicitly rather than creating checked-in HTML exceptions
+  ---
+  duration_ms: 2.029264
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69.613596
+
+> nvc-app@1.0.0 test:flicker-jitter
+> node --test tests/navigation-highlight.test.mjs tests/runtime-load-graph.test.mjs tests/shared-nav-menu.test.mjs tests/shared-density-polish.test.mjs tests/journal-load-graph.test.mjs tests/home-runtime-canary.test.mjs
+
+TAP version 13
+# Subtest: Home keeps first-paint shell state while leaving the shared Inventory controller off first load
+ok 1 - Home keeps first-paint shell state while leaving the shared Inventory controller off first load
+  ---
+  duration_ms: 9.937778
+  type: 'test'
+  ...
+# Subtest: Home intent loader preserves the Inventory badge and replays runtime-owned actions
+ok 2 - Home intent loader preserves the Inventory badge and replays runtime-owned actions
+  ---
+  duration_ms: 2.856069
+  type: 'test'
+  ...
+# Subtest: Customizer runtime adopts the static Home shell instead of replacing a visible desktop control
+ok 3 - Customizer runtime adopts the static Home shell instead of replacing a visible desktop control
+  ---
+  duration_ms: 4.140941
+  type: 'test'
+  ...
+# Subtest: generator models the Home canary explicitly rather than creating checked-in HTML exceptions
+ok 4 - generator models the Home canary explicitly rather than creating checked-in HTML exceptions
+  ---
+  duration_ms: 3.923505
+  type: 'test'
+  ...
+# Subtest: ordinary pages keep the Journal store out of the parser graph
+ok 5 - ordinary pages keep the Journal store out of the parser graph
+  ---
+  duration_ms: 8.540225
+  type: 'test'
+  ...
+# Subtest: the dedicated Journal surface remains eager and self-contained
+ok 6 - the dedicated Journal surface remains eager and self-contained
+  ---
+  duration_ms: 3.261227
+  type: 'test'
+  ...
+# Subtest: shared generator no longer assigns the Journal store to every page
+not ok 7 - shared generator no longer assigns the Journal store to every page
+  ---
+  duration_ms: 11.438777
+  type: 'test'
+  location: '/home/runner/work/nvc-app/nvc-app/tests/journal-load-graph.test.mjs:40:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(baseScriptsStart >= 0 && baseScriptsEnd > baseScriptsStart)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/nvc-app/nvc-app/tests/journal-load-graph.test.mjs:46:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: ordinary Journal overlay binds cheaply and initializes its module only on activation
+ok 8 - ordinary Journal overlay binds cheaply and initializes its module only on activation
+  ---
+  duration_ms: 4.818468
+  type: 'test'
+  ...
+# Subtest: highlightNavigation leaves pre-rendered active link unchanged
+ok 9 - highlightNavigation leaves pre-rendered active link unchanged
+  ---
+  duration_ms: 1.594841
+  type: 'test'
+  ...
+# Subtest: highlightNavigation prefers the most specific matching link
+ok 10 - highlightNavigation prefers the most specific matching link
+  ---
+  duration_ms: 2.04331
+  type: 'test'
+  ...
+# Subtest: highlightNavigation falls back to alias when needed
+ok 11 - highlightNavigation falls back to alias when needed
+  ---
+  duration_ms: 0.347098
+  type: 'test'
+  ...
+# Subtest: highlightNavigation activates direct path when aria-current missing
+ok 12 - highlightNavigation activates direct path when aria-current missing
+  ---
+  duration_ms: 0.384018
+  type: 'test'
+  ...
+# Subtest: resolveNavCustomizerToggle reuses existing toggle
+ok 13 - resolveNavCustomizerToggle reuses existing toggle
+  ---
+  duration_ms: 0.566239
+  type: 'test'
+  ...
+# Subtest: resolveNavCustomizerToggle creates toggle when missing
+ok 14 - resolveNavCustomizerToggle creates toggle when missing
+  ---
+  duration_ms: 0.575366
+  type: 'test'
+  ...
+# Subtest: ordinary app pages keep optional account runtimes out of the first-render graph
+ok 15 - ordinary app pages keep optional account runtimes out of the first-render graph
+  ---
+  duration_ms: 12.717755
+  type: 'test'
+  ...
+# Subtest: known signed-out browsers do no idle OAuth work on ordinary navigation
+ok 16 - known signed-out browsers do no idle OAuth work on ordinary navigation
+  ---
+  duration_ms: 2.045585
+  type: 'test'
+  ...
+# Subtest: known signed-out Shared Strategies renders the public feed without loading OAuth
+ok 17 - known signed-out Shared Strategies renders the public feed without loading OAuth
+  ---
+  duration_ms: 1.495495
+  type: 'test'
+  ...
+# Subtest: Shared Strategies owns route session restore instead of duplicating it in the generic Account loader
+ok 18 - Shared Strategies owns route session restore instead of duplicating it in the generic Account loader
+  ---
+  duration_ms: 1.835792
+  type: 'test'
+  ...
+# Subtest: restore protection loads only for restore intent or post-restore reconciliation
+ok 19 - restore protection loads only for restore intent or post-restore reconciliation
+  ---
+  duration_ms: 2.550578
+  type: 'test'
+  ...
+# Subtest: OAuth returns and explicit account intent still load the real runtime
+ok 20 - OAuth returns and explicit account intent still load the real runtime
+  ---
+  duration_ms: 2.238032
+  type: 'test'
+  ...
+# Subtest: shared Inventory controller initializes safely before or after DOMContentLoaded
+ok 21 - shared Inventory controller initializes safely before or after DOMContentLoaded
+  ---
+  duration_ms: 1.920701
+  type: 'test'
+  ...
+# Subtest: Shared Strategies keeps the shared Inventory controller off first load and restores it on owned interaction intent
+ok 22 - Shared Strategies keeps the shared Inventory controller off first load and restores it on owned interaction intent
+  ---
+  duration_ms: 1.633123
+  type: 'test'
+  ...
+# Subtest: shared density styles are parser-discovered without a nested CSS import
+ok 23 - shared density styles are parser-discovered without a nested CSS import
+  ---
+  duration_ms: 12.392076
+  type: 'test'
+  ...
+# Subtest: deterministic Inventory and Body Cues styles are parser-discovered
+ok 24 - deterministic Inventory and Body Cues styles are parser-discovered
+  ---
+  duration_ms: 5.775897
+  type: 'test'
+  ...
+# Subtest: there is no browser-side DOM normalizer for static UI copy
+ok 25 - there is no browser-side DOM normalizer for static UI copy
+  ---
+  duration_ms: 2.679129
+  type: 'test'
+  ...
+# Subtest: build pipeline writes final user-facing static markup before deployment
+ok 26 - build pipeline writes final user-facing static markup before deployment
+  ---
+  duration_ms: 2.719564
+  type: 'test'
+  ...
+# Subtest: checked-in static artifacts already contain the final UI
+ok 27 - checked-in static artifacts already contain the final UI
+  ---
+  duration_ms: 5.2812
+  type: 'test'
+  ...
+# Subtest: mobile journal chrome remains compact without runtime mutation
+ok 28 - mobile journal chrome remains compact without runtime mutation
+  ---
+  duration_ms: 0.890114
+  type: 'test'
+  ...
+# Subtest: shared strategies behavior is feed-first without repairing static chrome in JS
+ok 29 - shared strategies behavior is feed-first without repairing static chrome in JS
+  ---
+  duration_ms: 1.778324
+  type: 'test'
+  ...
+# Subtest: desktop Inventory keeps the Needs header left-aligned and uses one segmented filter control
+ok 30 - desktop Inventory keeps the Needs header left-aligned and uses one segmented filter control
+  ---
+  duration_ms: 1.978338
+  type: 'test'
+  ...
+# Subtest: mobile Inventory foregrounds the inventory with one phone-layout owner
+ok 31 - mobile Inventory foregrounds the inventory with one phone-layout owner
+  ---
+  duration_ms: 2.9472
+  type: 'test'
+  ...
+# Subtest: shared Menu magnet uses the established prepaint nav contract
+ok 32 - shared Menu magnet uses the established prepaint nav contract
+  ---
+  duration_ms: 125.180752
+  type: 'test'
+  ...
+# Subtest: Menu information architecture separates destinations, actions, personal connection, and drill-in settings
+ok 33 - Menu information architecture separates destinations, actions, personal connection, and drill-in settings
+  ---
+  duration_ms: 1.055342
+  type: 'test'
+  ...
+# Subtest: Account & data reuses existing allneeds capabilities instead of duplicating them
+ok 34 - Account & data reuses existing allneeds capabilities instead of duplicating them
+  ---
+  duration_ms: 2.55207
+  type: 'test'
+  ...
+# Subtest: Account & data uses compact menu-native labels and explicit data direction
+ok 35 - Account & data uses compact menu-native labels and explicit data direction
+  ---
+  duration_ms: 1.456712
+  type: 'test'
+  ...
+# Subtest: Account & data actions are bound by the global Menu controller, not Inventory page presence
+not ok 36 - Account & data actions are bound by the global Menu controller, not Inventory page presence
+  ---
+  duration_ms: 2.741463
+  type: 'test'
+  location: '/home/runner/work/nvc-app/nvc-app/tests/shared-nav-menu.test.mjs:140:1'
+  failureType: 'testCodeFailure'
+  error: 'classic inventory implementation must load before the Menu controller that binds its global actions'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/runner/work/nvc-app/nvc-app/tests/shared-nav-menu.test.mjs:154:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: From Nat sharing is global and reuses the canonical Inventory sharing implementation
+ok 37 - From Nat sharing is global and reuses the canonical Inventory sharing implementation
+  ---
+  duration_ms: 4.697
+  type: 'test'
+  ...
+# Subtest: Inventory keeps system management out of its primary workspace
+ok 38 - Inventory keeps system management out of its primary workspace
+  ---
+  duration_ms: 1.589294
+  type: 'test'
+  ...
+# Subtest: Menu activation remains reliable when magnet physics suppresses synthetic clicks
+ok 39 - Menu activation remains reliable when magnet physics suppresses synthetic clicks
+  ---
+  duration_ms: 1.172852
+  type: 'test'
+  ...
+# Subtest: strategy feed participates in the shared UI architecture and mobile app surface
+ok 40 - strategy feed participates in the shared UI architecture and mobile app surface
+  ---
+  duration_ms: 1.768887
+  type: 'test'
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 38
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 309.97126
