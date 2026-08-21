@@ -23,15 +23,16 @@ The final architecture should not depend on a second layer repairing what the fi
 
 ### Current Bedrock transition
 
-The branch currently uses safety wrappers while the historical generators are being canonicalized:
+The historical generators are being canonicalized in small, regression-guarded slices:
 
-- `scripts/build-pages-safe.mjs` runs the legacy page generator in an isolated staging copy and publishes only declared route outputs. This prevents destructive historical generation behavior from touching unrelated routes.
-- `scripts/finalize-static-assets.mjs` still contains post-generation HTML corrections. Those corrections are being moved upstream into their owning templates; the finalizer should then be deleted.
+- `scripts/build-pages.mjs` now emits the current user-facing static copy directly. The former `scripts/finalize-static-assets.mjs` post-generation UI repair pass has been deleted after the full build proved all 180 owned page outputs remained byte-stable without it.
+- `scripts/build-pages-safe.mjs` is still transitional. It runs the legacy page generator in an isolated staging copy and publishes only declared route outputs because `build-pages.mjs` still contains historical recursive directory-reset behavior and some serialization compatibility debt. The next page-compiler milestone is to move that ownership protection into `build-pages.mjs` itself and then delete the safe wrapper.
+- the **Push Poems** workflow now rebuilds through the ownership-safe scoped page command and stages only declared outputs rather than invoking the destructive generator/finalizer pair or using `git add -A`.
 - `scripts/build-data-safe.mjs` similarly isolates the historical data compiler and publishes only declared outputs.
 - `scripts/finalize-generated-data.mjs` currently normalizes historical Body Cues/source-model inconsistencies. Those rules should ultimately live in the canonical data compiler/source model rather than a second pass.
 - `data/reverse-inference.json` is currently treated conservatively as a reviewed production asset because the historical reverse-inference formula does not yet reproduce all of its live semantics. It must not be silently regenerated until that source model is reconciled.
 
-The target is to delete these safety/finalization layers once `build-pages.mjs` and `build-data.mjs` directly own their exact outputs and reproduce the committed production tree deterministically. Bedrock status and protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
+The target is to delete the remaining safety/finalization layers once `build-pages.mjs` and `build-data.mjs` directly own their exact outputs and reproduce the committed production tree deterministically. Bedrock status and protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
 
 ## How information is organised
 
@@ -144,8 +145,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
     ├── build-data-safe.mjs    # transitional ownership/safety wrapper
     ├── build-pages.mjs
     ├── build-pages-safe.mjs   # transitional ownership/safety wrapper
-    ├── finalize-generated-data.mjs # transitional data normalization
-    └── finalize-static-assets.mjs  # transitional post-generation UI normalization
+    └── finalize-generated-data.mjs # transitional data normalization
 ```
 
 ### Spreadsheet columns
