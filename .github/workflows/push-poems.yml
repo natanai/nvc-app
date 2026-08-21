@@ -46,9 +46,7 @@ jobs:
 
       - name: Rebuild feelings pages
         if: ${{ inputs.run_build_pages != 'false' }}
-        run: |
-          node scripts/build-pages.mjs --scope=feelings,faux-feelings
-          node scripts/finalize-static-assets.mjs
+        run: npm run build:pages -- --scope feelings,faux-feelings
 
       - name: Commit and push updates
         id: commit
@@ -60,7 +58,14 @@ jobs:
             echo "No changes detected after rebuild."
             exit 0
           fi
-          git add -A
+          unexpected="$(git diff --name-only | grep -Ev '^(data/(index|body-regions)\.json|feelings/|faux-feelings/)' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected files changed by Push Poems:" >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+          git add data/index.json data/body-regions.json feelings faux-feelings
+          git diff --cached --check
           git commit -m "Update poems from poems_formatted.txt"
           git push origin "HEAD:${TARGET_BRANCH}"
           echo "changes=true" >> "$GITHUB_OUTPUT"
