@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&family=Manrope:wght@500;600;700&display=swap');
 @import url('styles/feelings-magnet-icons.css');
 @import url('styles/needs-magnet-icons.css');
+@import url('styles/shared-density.css');
 @import url('styles/inventory-core-shell.css');
 
 :root {

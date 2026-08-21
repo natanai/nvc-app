@@ -1534,7 +1534,14 @@ function setupScrollTopButton() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+let inventoryRuntimeInitialized = false;
+
+function initializeInventoryRuntime() {
+  if (inventoryRuntimeInitialized) {
+    return;
+  }
+  inventoryRuntimeInitialized = true;
+
   state.basePath = document.body?.dataset?.basePath || '';
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
   setupViewportHeightProperty();
@@ -1557,7 +1564,13 @@ document.addEventListener('DOMContentLoaded', () => {
   updateBackendSyncButtons();
   updateVisibilityControls();
   updateProfileSaveButtonStates();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeInventoryRuntime, { once: true });
+} else {
+  initializeInventoryRuntime();
+}
 
 if (typeof window !== 'undefined') {
   window.addEventListener('allneeds:bsky-login-changed', (event) => {
