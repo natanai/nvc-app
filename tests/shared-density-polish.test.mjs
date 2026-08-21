@@ -7,11 +7,18 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
-test('shared density styles are part of the static CSS graph', async () => {
+test('shared density styles are parser-discovered without a nested CSS import', async () => {
+  const styles = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
   const shell = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
   const contrast = await fs.readFile(path.join(root, 'assets/js/ui/contrast.js'), 'utf8');
 
-  assert.ok(shell.startsWith("@import url('shared-density.css');"));
+  const densityImport = "@import url('styles/shared-density.css');";
+  const shellImport = "@import url('styles/inventory-core-shell.css');";
+  const densityIndex = styles.indexOf(densityImport);
+  const shellIndex = styles.indexOf(shellImport);
+  assert.ok(densityIndex >= 0, 'styles.css should discover shared-density.css directly');
+  assert.ok(shellIndex > densityIndex, 'shared density must retain its cascade position before the shell');
+  assert.ok(!shell.includes("@import url('shared-density.css');"), 'inventory-core-shell.css must not create a serial CSS discovery chain');
   assert.ok(!contrast.includes('loadSharedPolishAssets'));
   assert.ok(!contrast.includes('shared-ui-polish.js'));
   assert.ok(!contrast.includes('styles/shared-density.css'));
