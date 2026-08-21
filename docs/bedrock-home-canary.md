@@ -28,12 +28,14 @@ It must not become a second implementation of Inventory, Journal, Customizer, ac
 
 When `scripts/inventory.js` loads, `buildPaletteUi()` must adopt the already-rendered Home Customizer container and button rather than replacing the visible desktop control.
 
+A script `load` event is not by itself proof that the controller is ready. If `inventory.js` executes while the document is still parsing, its initializer intentionally waits for `DOMContentLoaded`. The Home intent loader therefore must not replay a held activation until that DOM initialization boundary has passed. This protects very early taps/clicks from reaching Customizer, Journal, or Menu-owned actions before their canonical listeners exist.
+
 ## Browser acceptance checklist
 
 Before applying the same loading model to more routes, verify Home on both desktop and phone with normal browsing as well as saved state:
 
 1. Home first paint looks unchanged; no Customizer, nav, theme, or magnet-position pop-in is visible.
-2. Desktop floating Customizer `+` is present immediately and opens on the first activation.
+2. Desktop floating Customizer `+` is present immediately and opens on the first activation, including a very fast first click/tap during initial page load.
 3. Mobile nav Customizer opens on the first activation; there is no extra floating desktop control on phone.
 4. A saved custom palette and unusual roundness appear correctly before and after reload/navigation.
 5. Saved optional nav magnets remain shown/hidden correctly before and after reload.
