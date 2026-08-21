@@ -52,12 +52,13 @@ test('there is no browser-side DOM normalizer for static UI copy', async () => {
 
 test('build pipeline writes final user-facing static markup before deployment', async () => {
   const packageJson = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
+  const safeBuilder = await fs.readFile(path.join(root, 'scripts/build-pages-safe.mjs'), 'utf8');
   const finalizer = await fs.readFile(path.join(root, 'scripts/finalize-static-assets.mjs'), 'utf8');
 
-  assert.equal(
-    packageJson.scripts['build:pages'],
-    'node scripts/build-pages.mjs && node scripts/finalize-static-assets.mjs',
-  );
+  assert.equal(packageJson.scripts['build:pages'], 'node scripts/build-pages-safe.mjs');
+  assert.ok(safeBuilder.includes("runNode(stageRoot, 'scripts/build-pages.mjs'"));
+  assert.ok(safeBuilder.includes("runNode(stageRoot, 'scripts/finalize-static-assets.mjs'"));
+  assert.ok(safeBuilder.includes('copyOwnedOutputs(stageRoot, outputs)'));
   assert.ok(finalizer.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
   assert.ok(finalizer.includes(".replaceAll('💾 Save to device', 'Save to device')"));
   assert.ok(finalizer.includes(".replaceAll('☁️ Save to profile', 'Save to profile')"));
