@@ -26,39 +26,41 @@ jobs:
         shell: bash
         run: |
           set +e
-          {
+          (
+            set -e
             echo '== node check transformer =='
-            node --check scripts/bedrock-home-canary-transform.mjs || exit $?
+            node --check scripts/bedrock-home-canary-transform.mjs
             echo '== apply transformer =='
-            node scripts/bedrock-home-canary-transform.mjs || exit $?
+            node scripts/bedrock-home-canary-transform.mjs
             echo '== safe page build =='
-            npm run build:pages || exit $?
+            npm run build:pages
             echo '== focused Home test =='
-            node --test tests/home-runtime-canary.test.mjs || exit $?
+            node --test tests/home-runtime-canary.test.mjs
             echo '== flicker/load graph =='
-            npm run test:flicker-jitter || exit $?
+            npm run test:flicker-jitter
             echo '== customizer =='
-            npm run test:customizer || exit $?
+            npm run test:customizer
             echo '== home regressions =='
-            npm run test:home-regressions || exit $?
+            npm run test:home-regressions
             echo '== nav magnets =='
-            npm run test:nav-magnets || exit $?
+            npm run test:nav-magnets
             echo '== data integrity =='
-            npm run test:data-integrity || exit $?
+            npm run test:data-integrity
             echo '== stage simulated final state =='
-            git add index.html package.json scripts/build-pages.mjs scripts/inventory.js scripts/shell-runtime-loader.js tests/home-runtime-canary.test.mjs tests/journal-load-graph.test.mjs tests/shared-nav-menu.test.mjs || exit $?
+            git add index.html package.json scripts/build-pages.mjs scripts/inventory.js scripts/shell-runtime-loader.js tests/home-runtime-canary.test.mjs tests/journal-load-graph.test.mjs tests/shared-nav-menu.test.mjs
             echo '== full build after staging =='
-            npm run build || exit $?
+            npm run build
             echo '== unstaged diff after full build =='
-            git diff --exit-code || exit $?
+            git diff --exit-code
             echo 'DIAGNOSTIC PIPELINE WOULD PASS'
-          } > /tmp/home-canary-v5-diagnostic.txt 2>&1
+          ) > /tmp/home-canary-v5-diagnostic.txt 2>&1
           status=$?
           git reset --hard HEAD
           git clean -fd
           mkdir -p docs/bedrock-diagnostics
           cp /tmp/home-canary-v5-diagnostic.txt docs/bedrock-diagnostics/home-canary-v5-diagnostic.txt
           echo "exit_status=$status" >> docs/bedrock-diagnostics/home-canary-v5-diagnostic.txt
+          exit 0
       - name: Commit diagnostic only
         run: |
           git config user.name "github-actions[bot]"
