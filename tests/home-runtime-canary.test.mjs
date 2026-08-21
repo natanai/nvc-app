@@ -37,6 +37,16 @@ test('Home loader preserves count and capture/replay readiness for shell-owned a
   assert.ok(source.includes('window.requestAnimationFrame(() => replayTrigger.click());'));
 });
 
+test('Home waits for Inventory DOM initialization before replaying an early interaction', async () => {
+  const source = await read('scripts/shell-runtime-loader.js');
+  assert.ok(source.includes('let inventoryRuntimeReady = false;'));
+  assert.ok(source.includes('function finishAfterInventoryInitialization(resolve)'));
+  assert.ok(source.includes("if (document.readyState === 'loading')"));
+  assert.ok(source.includes("document.addEventListener('DOMContentLoaded', finish, { once: true });"));
+  assert.ok(source.includes('const finish = () => finishAfterInventoryInitialization(resolve);'));
+  assert.ok(!source.includes("let inventoryRuntimeReady = typeof window.handleExportInventory === 'function';"));
+});
+
 test('Customizer adopts the static Home control instead of replacing it', async () => {
   const controller = await read('scripts/inventory.js');
   assert.ok(controller.includes("document.querySelector('[data-shell-customizer-placeholder]')"));
