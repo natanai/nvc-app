@@ -54,6 +54,18 @@ test('known signed-out Shared Strategies renders the public feed without loading
   assert.ok(feed.includes("window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed'"));
 });
 
+test('Shared Strategies owns route session restore instead of duplicating it in the generic Account loader', async () => {
+  const loader = await read('scripts/inventory-bluesky.js');
+  const feed = await read('scripts/strategy-feed.js');
+
+  assert.ok(loader.includes("function isStrategyFeedRoute() {\n  return Boolean(document.querySelector('[data-feed-list]'));\n}"));
+  assert.ok(loader.includes('if (!isStrategyFeedRoute()) {'));
+  assert.ok(feed.includes('const session = await loadFeedSession();'));
+  assert.ok(feed.includes('applySession(session, { publish: true });'));
+  assert.ok(loader.includes("document.addEventListener('pointerover', warmOptionalRuntimes"), 'Account intent warming must remain available on Feed');
+  assert.ok(loader.includes('if (hasPendingRestoreRehydrate())'), 'post-restore local-state reconciliation must remain global');
+});
+
 test('restore protection loads only for restore intent or post-restore reconciliation', async () => {
   const loader = await read('scripts/inventory-bluesky.js');
   const restore = await read('scripts/profile-restore-rehydration.js');
