@@ -13,6 +13,7 @@ const OUTPUTS = {
   'body-regions': 'data/body-regions.json',
   'reverse-inference': 'data/reverse-inference.json',
 };
+const PRODUCTION_DEFAULT_SCOPES = ['index', 'body-regions'];
 
 function parseScope(argv) {
   let raw = null;
@@ -28,7 +29,16 @@ function parseScope(argv) {
     }
   }
 
-  if (!raw || raw.trim().toLowerCase() === 'all') {
+  // reverse-inference.json is currently a curated production asset whose
+  // rankings/intensity metadata are richer than the historical formula in
+  // build-data.mjs can reproduce. Routine builds therefore validate/preserve
+  // it rather than silently replacing live behavior. It can still be rebuilt
+  // explicitly with --scope reverse-inference or --scope all while its source
+  // model is being reconciled.
+  if (!raw) {
+    return new Set(PRODUCTION_DEFAULT_SCOPES);
+  }
+  if (raw.trim().toLowerCase() === 'all') {
     return new Set(Object.keys(OUTPUTS));
   }
 
@@ -87,11 +97,10 @@ let byteStable = 0;
 try {
   copyRepository(stageRoot);
 
-  // The canonical compiler reads the editable data sources (including the
-  // Body Cues rows in data/Feelings.csv) in an isolated workspace. A small
-  // deterministic finalization step removes historical duplicate-row ordering
-  // from Body Cues and adapts page-facing feeling slugs to the internal emotion
-  // model while calculating reverse inference.
+  // The canonical compiler reads editable spreadsheet data in an isolated
+  // workspace. The deterministic finalization step removes historical
+  // duplicate-row ordering from Body Cues. Only explicitly owned outputs are
+  // ever copied back into the real repository.
   runScript(stageRoot, 'scripts/build-data.mjs');
   runScript(stageRoot, 'scripts/finalize-generated-data.mjs');
 
