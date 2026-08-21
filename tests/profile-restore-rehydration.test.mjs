@@ -12,8 +12,11 @@ test('profile and backup restore reload from the imported customizer snapshot', 
   const bluesky = await fs.readFile(path.join(root, 'scripts/inventory-bluesky.js'), 'utf8');
 
   assert.ok(
-    bluesky.includes("import './profile-restore-rehydration.js';"),
-    'Bluesky account UI must install the restore guard before save/load can be used',
+    bluesky.includes("import('./profile-restore-rehydration.js?v=2026-08-21-lazy')")
+      && bluesky.includes("target.closest('#inventory-import-trigger, [data-backend-load-button]')")
+      && bluesky.includes('const loads = [loadRestoreRuntime()];')
+      && bluesky.includes('await Promise.all(loads);'),
+    'restore actions must await the restore guard before profile load or backup restore is replayed',
   );
   assert.ok(
     helper.includes("const RESTORE_FUNCTION_NAMES = ['loadSnapshotFromBackend', 'handleImportInventory'];"),
