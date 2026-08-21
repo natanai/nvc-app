@@ -129,3 +129,18 @@ jobs:
           else
             echo "Authoring pipeline has reproducibility debt; see the build/artifact check above."
           fi
+
+  page-compiler-drift-audit:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'bedrock/production-finalization-v2' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout event revision
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Classify direct compiler drift
+        run: node scripts/bedrock-audit-page-compiler-drift.mjs
