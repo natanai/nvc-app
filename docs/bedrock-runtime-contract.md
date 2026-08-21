@@ -27,6 +27,8 @@ A feature is not dead merely because it is invisible in the default state. Befor
 
 A full profile/backup restore is one storage transaction, not a sequence of loosely related UI repairs. The snapshot replacement owner must leave localStorage and any sessionStorage mirrors coherent *before* the current document reads restored presentation state. Page-specific repaint workarounds are not an acceptable substitute for completing that transaction at its source.
 
+The canonical implementation is `importLocalStorageSnapshot()` in `scripts/inventory.js`: after localStorage replacement succeeds, it synchronizes the restored theme/navigation mirrors before `refreshStateFromLocalStorageSnapshot()` reads them. The post-sign-in path also installs and verifies the existing full-restore guard before invoking the backend profile loader, so automatic and explicit profile loads share the same magnet/reload safety boundary.
+
 ## Full-pass v1 changes
 
 - Inventory phone CSS is linked statically by the generator after shared/base Inventory styles.
