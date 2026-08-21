@@ -37,39 +37,24 @@ const REDUNDANT_INLINE_CRITICAL_RULES = [
 
 function parseScopeArgs(argv) {
   let raw = null;
-
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === '--scope') {
       const value = argv[index + 1];
-      if (!value || value.startsWith('-')) {
-        throw new Error('Missing value for --scope option.');
-      }
+      if (!value || value.startsWith('-')) throw new Error('Missing value for --scope option.');
       raw = value;
       index += 1;
     } else if (arg.startsWith('--scope=')) {
       raw = arg.slice('--scope='.length);
     }
   }
-
-  if (raw == null) {
-    return null;
-  }
-
-  const scopes = raw
-    .split(',')
-    .map((value) => value.trim().toLowerCase())
-    .filter(Boolean);
-
-  if (!scopes.length) {
-    throw new Error('The --scope option requires at least one scope name.');
-  }
-
+  if (raw == null) return null;
+  const scopes = raw.split(',').map((value) => value.trim().toLowerCase()).filter(Boolean);
+  if (!scopes.length) throw new Error('The --scope option requires at least one scope name.');
   const invalid = scopes.filter((scope) => !KNOWN_SCOPES.has(scope));
   if (invalid.length) {
     throw new Error(`Unknown scope(s): ${invalid.join(', ')}. Valid scopes: ${Array.from(KNOWN_SCOPES).join(', ')}`);
   }
-
   return new Set(scopes);
 }
 
@@ -80,39 +65,26 @@ function normalizeRelativePath(path) {
 function expectedOutputs(scopeSet) {
   const shouldBuild = (scope) => !scopeSet || scopeSet.has(scope);
   const outputs = new Set();
-
   if (shouldBuild('home')) outputs.add('index.html');
-
   if (shouldBuild('faux-feelings')) {
     outputs.add('faux-feelings/index.html');
-    for (const item of indexData.fauxFeelings || []) {
-      if (item?.slug) outputs.add(`faux-feelings/${item.slug}/index.html`);
-    }
+    for (const item of indexData.fauxFeelings || []) if (item?.slug) outputs.add(`faux-feelings/${item.slug}/index.html`);
   }
-
   if (shouldBuild('feelings')) {
     outputs.add('feelings/index.html');
     outputs.add('feelings/body-cues/index.html');
-    for (const item of indexData.feelings || []) {
-      if (item?.slug) outputs.add(`feelings/${item.slug}/index.html`);
-    }
+    for (const item of indexData.feelings || []) if (item?.slug) outputs.add(`feelings/${item.slug}/index.html`);
   }
-
   if (shouldBuild('needs')) {
     outputs.add('needs/index.html');
-    for (const item of indexData.needs || []) {
-      if (item?.slug) outputs.add(`needs/${item.slug}/index.html`);
-    }
+    for (const item of indexData.needs || []) if (item?.slug) outputs.add(`needs/${item.slug}/index.html`);
   }
-
   if (shouldBuild('inventory')) {
     outputs.add('inventory/index.html');
     outputs.add('inventory/journal/index.html');
   }
-
   if (shouldBuild('observation-guide')) outputs.add('observations/index.html');
   if (shouldBuild('support-lane')) outputs.add('alexithymia-support/index.html');
-
   return outputs;
 }
 
@@ -135,7 +107,6 @@ function runNode(stageRoot, relativeScript, args = []) {
     stdio: 'inherit',
     env: process.env,
   });
-
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`${relativeScript} exited with status ${result.status}`);
 }
@@ -145,19 +116,14 @@ function canonicalizeOpeningTag(tagName, rawAttributes) {
   const source = String(rawAttributes || '').replace(/\/$/, '').trim();
   const attributePattern = /([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
   let match;
-
   while ((match = attributePattern.exec(source))) {
     const [, name, doubleQuoted, singleQuoted, unquoted] = match;
     const hasValue = doubleQuoted !== undefined || singleQuoted !== undefined || unquoted !== undefined;
     const value = doubleQuoted ?? singleQuoted ?? unquoted ?? '';
     attributes.push({ name, hasValue, value });
   }
-
   attributes.sort((left, right) => left.name.localeCompare(right.name));
-  const serialized = attributes
-    .map(({ name, hasValue, value }) => (hasValue ? `${name}="${value}"` : name))
-    .join(' ');
-
+  const serialized = attributes.map(({ name, hasValue, value }) => (hasValue ? `${name}="${value}"` : name)).join(' ');
   return serialized ? `<${tagName} ${serialized}>` : `<${tagName}>`;
 }
 
@@ -184,21 +150,19 @@ function normalizeNavigationSerialization(html) {
 
 function stripRedundantInlineCriticalRules(html) {
   let normalized = html;
-  for (const pattern of REDUNDANT_INLINE_CRITICAL_RULES) {
-    normalized = normalized.replace(pattern, '\n');
-  }
-  // Removing an entire CSS rule can leave one additional blank line at the
-  // deletion boundary. Collapse only runs of 3+ line breaks; ordinary authored
-  // blank lines remain significant to the comparison everywhere else.
+  for (const pattern of REDUNDANT_INLINE_CRITICAL_RULES) normalized = normalized.replace(pattern, '\n');
   return normalized.replace(/\n{3,}/g, '\n\n');
 }
 
-function finalizeGeneratedShellSerialization(html) {
-  // Most checked production pages execute inventory.js before the shell adapter.
-  // Preserve that proven order for defer scripts. The generator historically
-  // emitted the inverse order on newly rebuilt pages, creating needless artifact
-  // churn and two subtly different boot sequences across the site.
-  return html.replace(
+function preserveExistingShellScriptOrder(staged, current = '') {
+  const coreToken = 'scripts/inventory-core-shell.js';
+  const inventoryToken = 'scripts/inventory.js';
+  const currentCore = current.indexOf(coreToken);
+  const currentInventory = current.indexOf(inventoryToken);
+  const prefersInventoryFirst = currentCore >= 0 && currentInventory >= 0 && currentInventory < currentCore;
+  if (!prefersInventoryFirst) return staged;
+
+  return staged.replace(
     /(\s*)<script src="([^"]*scripts\/inventory-core-shell\.js)" defer><\/script>\n\1<script src="([^"]*scripts\/inventory\.js)" defer><\/script>/g,
     (_full, indent, coreSrc, inventorySrc) =>
       `${indent}<script src="${inventorySrc}" defer></script>\n${indent}<script defer src="${coreSrc}"></script>`,
@@ -206,18 +170,13 @@ function finalizeGeneratedShellSerialization(html) {
 }
 
 function normalizeForComparison(html) {
-  // nav-critical.css is embedded as a first-paint snapshot, while the same
-  // rules are also present in the render-blocking styles.css graph. Several
-  // recently regenerated pages contain four newer duplicate rules that older
-  // production pages do not. Ignore only those exact redundant rules when
-  // deciding whether a rebuild changed actual page structure/content.
   return normalizeNavigationSerialization(stripRedundantInlineCriticalRules(html));
 }
 
 function normalizedPair(stagedPath, destination) {
-  const stagedRaw = readFileSync(stagedPath, 'utf8');
-  const staged = finalizeGeneratedShellSerialization(stagedRaw);
   const current = readFileSync(destination, 'utf8');
+  const stagedRaw = readFileSync(stagedPath, 'utf8');
+  const staged = preserveExistingShellScriptOrder(stagedRaw, current);
   return {
     staged,
     current,
@@ -239,13 +198,10 @@ function describeFirstMismatch(relativePath, stagedPath, destination) {
   let index = 0;
   while (index < limit && normalizedStaged[index] === normalizedCurrent[index]) index += 1;
   if (index === limit && normalizedStaged.length === normalizedCurrent.length) return '';
-
   const radius = 220;
   const start = Math.max(0, index - radius);
-  const endCurrent = Math.min(normalizedCurrent.length, index + radius);
-  const endStaged = Math.min(normalizedStaged.length, index + radius);
-  const currentContext = normalizedCurrent.slice(start, endCurrent).replace(/\n/g, '\\n');
-  const stagedContext = normalizedStaged.slice(start, endStaged).replace(/\n/g, '\\n');
+  const currentContext = normalizedCurrent.slice(start, Math.min(normalizedCurrent.length, index + radius)).replace(/\n/g, '\\n');
+  const stagedContext = normalizedStaged.slice(start, Math.min(normalizedStaged.length, index + radius)).replace(/\n/g, '\\n');
   return [
     `First non-shell-serialization mismatch: ${relativePath} at normalized offset ${index}`,
     `CURRENT: ${currentContext}`,
@@ -257,31 +213,25 @@ function copyOwnedOutputs(stageRoot, outputs) {
   let published = 0;
   let byteStable = 0;
   let diagnosticPrinted = false;
-
   for (const relativePath of outputs) {
     const stagedPath = join(stageRoot, relativePath);
     if (!existsSync(stagedPath)) throw new Error(`Generator did not produce declared output: ${relativePath}`);
     const destination = join(rootDir, relativePath);
-
-    // Keep already-tested production bytes when the only differences are
-    // semantically irrelevant shell serialization or duplicate critical CSS.
     if (shellSerializationEquivalent(stagedPath, destination)) {
       byteStable += 1;
       continue;
     }
-
     if (!diagnosticPrinted) {
       const diagnostic = describeFirstMismatch(relativePath, stagedPath, destination);
       if (diagnostic) console.log(diagnostic);
       diagnosticPrinted = true;
     }
-
-    const staged = finalizeGeneratedShellSerialization(readFileSync(stagedPath, 'utf8'));
+    const current = existsSync(destination) ? readFileSync(destination, 'utf8') : '';
+    const staged = preserveExistingShellScriptOrder(readFileSync(stagedPath, 'utf8'), current);
     mkdirSync(dirname(destination), { recursive: true });
     writeFileSync(destination, staged);
     published += 1;
   }
-
   return { published, byteStable };
 }
 
@@ -293,17 +243,15 @@ const stageRoot = join(stageParent, 'repo');
 
 try {
   copyRepositoryToStage(stageRoot);
-
   const scopeArgs = requestedScopes ? ['--scope', activeScopes.join(',')] : [];
-
   // The legacy generator is intentionally destructive inside its workspace.
-  // Run it only in an isolated staging copy, then publish the files that the
-  // selected scopes explicitly own. Standalone tools and unrelated routes can
-  // therefore never be deleted by a broad page rebuild.
+  // Run it only in an isolated staging copy, then publish exactly the files the
+  // selected scopes own. Existing pages also retain their already-tested order
+  // for the two deferred shell scripts rather than changing boot sequencing as
+  // a side effect of an unrelated rebuild.
   runNode(stageRoot, 'scripts/build-pages.mjs', scopeArgs);
   runNode(stageRoot, 'scripts/finalize-static-assets.mjs');
   const { published, byteStable } = copyOwnedOutputs(stageRoot, outputs);
-
   console.log(
     `Page build complete: ${published} changed output${published === 1 ? '' : 's'}, ` +
       `${byteStable} structurally identical output${byteStable === 1 ? '' : 's'} kept byte-stable.`,
