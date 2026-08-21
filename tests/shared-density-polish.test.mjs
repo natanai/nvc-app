@@ -135,6 +135,11 @@ test('mobile Inventory foregrounds the inventory with one phone-layout owner', a
   assert.ok(css.includes('body:has(#main.inventory-page) .breadcrumbs'));
   assert.ok(css.includes('body:has(#main.inventory-page) .page-wrapper'));
   assert.ok(css.includes('gap: 0.45rem;'));
+  assert.ok(css.includes('width: calc(100% + 2rem);'));
+  assert.ok(css.includes('margin-inline: -1rem;'));
+  assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr));'));
+  assert.ok(css.includes('border-left: 0;'));
+  assert.ok(css.includes('border-right: 0;'));
   assert.ok(css.includes('grid-template-areas:'));
   assert.ok(css.includes("'title'"));
   assert.ok(css.includes("'action';"));
