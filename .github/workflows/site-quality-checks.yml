@@ -68,6 +68,11 @@ jobs:
           node --test tests/shared-density-polish.test.mjs
           node tests/body-cues-static-first.test.mjs
 
+      - name: Verify page generator ownership
+        id: generator-ownership
+        if: always()
+        run: npm run test:generator-ownership
+
       - name: Build site
         id: build-site
         if: always()
@@ -103,6 +108,7 @@ jobs:
           echo "Committed flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
           echo "Committed navigation magnets: ${{ steps.navigation-magnets.outcome }}"
           echo "Committed static layout contracts: ${{ steps.static-layout-contracts.outcome }}"
+          echo "Page generator ownership: ${{ steps.generator-ownership.outcome }}"
           echo "Authoring build: ${{ steps.build-site.outcome }}"
           echo "Build reproducibility: ${{ steps.generated-artifacts.outcome }}"
 
@@ -110,8 +116,9 @@ jobs:
             && [ "${{ steps.customizer-preload.outcome }}" = "success" ] \
             && [ "${{ steps.flicker-jitter.outcome }}" = "success" ] \
             && [ "${{ steps.navigation-magnets.outcome }}" = "success" ] \
-            && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ]; then
-            echo "Committed static-site runtime checks passed."
+            && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ] \
+            && [ "${{ steps.generator-ownership.outcome }}" = "success" ]; then
+            echo "Committed static-site runtime and generator ownership checks passed."
           else
             echo "One or more committed-site checks failed; inspect those before publishing this branch."
           fi
@@ -122,63 +129,3 @@ jobs:
           else
             echo "Authoring pipeline has reproducibility debt; see the build/artifact check above."
           fi
-
-  # BEDROCK_PAGE_OWNERSHIP_JOB_START
-  bedrock-page-ownership-once:
-    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'bedrock/production-finalization-v2' && github.actor != 'github-actions[bot]' }}
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Bedrock branch
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-          ref: bedrock/production-finalization-v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Remove recursive route-directory resets
-        run: |
-          python scripts/bedrock-remove-page-directory-reset.py
-          git diff --check
-          node --check scripts/build-pages.mjs
-          node --check scripts/build-pages-safe.mjs
-
-      - name: Prove scoped generation preserves unowned files
-        run: node --test tests/page-generator-ownership.test.mjs
-
-      - name: Run protected suites
-        run: |
-          npm run test:flicker-jitter
-          npm run test:customizer
-          npm run test:home-regressions
-          npm run test:nav-magnets
-          npm run test:data-integrity
-
-      - name: Prove production output remains byte-stable
-        run: |
-          git add scripts/build-pages.mjs scripts/build-pages-safe.mjs
-          npm run build
-          git diff --exit-code
-
-      - name: Commit the validated compiler ownership change
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          unexpected="$(git diff --cached --name-only | grep -Ev '^scripts/(build-pages|build-pages-safe)\.mjs$' || true)"
-          if [ -n "$unexpected" ]; then
-            echo "Unexpected staged files:" >&2
-            printf '%s\n' "$unexpected" >&2
-            exit 1
-          fi
-          git diff --cached --check
-          git commit -m "Make page generation preserve unowned routes"
-          git push origin HEAD:bedrock/production-finalization-v2
