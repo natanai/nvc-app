@@ -197,7 +197,8 @@ test('strategy feed participates in the shared UI architecture and mobile app su
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
 
   assert.ok(!feed.includes("import './inventory.js"), 'Feed must not execute the shared controller with ES-module semantics');
-  assert.ok(feed.includes('await ensureInventoryClassicRuntime();'), 'Feed should initialize the canonical classic controller exactly once while it remains an immediate dependency');
+  assert.ok(feed.includes('const inventoryRuntimeReady = ensureInventoryClassicRuntime();'), 'Feed should begin the canonical classic controller load exactly once');
+  assert.ok(feed.includes('init();\nawait inventoryRuntimeReady;'), 'visible Feed work should begin before the compatibility runtime wait');
   assert.ok(feed.includes('Menu → Account & data'), 'Feed sign-in guidance should point to the current Account & data location');
   assert.ok(!feed.includes('sign in with Bluesky on the Inventory page'), 'Feed should not send account management back to Inventory');
   assert.ok(css.includes('body:has(#main [data-feed-list]) #main.page'), 'Feed should use the same full-bleed mobile app-surface direction as Inventory');
