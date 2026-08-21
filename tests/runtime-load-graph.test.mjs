@@ -40,6 +40,20 @@ test('known signed-out browsers do no idle OAuth work on ordinary navigation', a
   assert.ok(runtime.includes('hasSession ? SESSION_HINT_ACTIVE : SESSION_HINT_NONE'));
 });
 
+test('known signed-out Shared Strategies renders the public feed without loading OAuth', async () => {
+  const feed = await read('scripts/strategy-feed.js');
+
+  assert.ok(feed.includes("const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';"));
+  assert.ok(feed.includes("const SESSION_HINT_NONE = 'none';"));
+  assert.ok(feed.includes("const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';"));
+  assert.ok(feed.includes('if (!shouldLoadFeedOAuth()) {\n    return null;\n  }'));
+  assert.ok(feed.includes("import('./bluesky-oauth.js?v=2024-07-11')"));
+  assert.ok(!feed.includes("from './bluesky-oauth.js?v=2024-07-11'"));
+  assert.ok(feed.includes('readSessionHint() !== SESSION_HINT_NONE || hasLoginIntent() || isOAuthReturn()'));
+  assert.ok(feed.includes('applySession(session, { publish: true });'));
+  assert.ok(feed.includes("window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed'"));
+});
+
 test('restore protection loads only for restore intent or post-restore reconciliation', async () => {
   const loader = await read('scripts/inventory-bluesky.js');
   const restore = await read('scripts/profile-restore-rehydration.js');
@@ -64,9 +78,8 @@ test('OAuth returns and explicit account intent still load the real runtime', as
   assert.ok(loader.includes("document.addEventListener('pointerover', warmOptionalRuntimes"));
   assert.ok(loader.includes("document.addEventListener('focusin', warmOptionalRuntimes"));
 
-  // Shared Strategies is itself a network-backed route, so it intentionally
-  // keeps its direct OAuth dependency rather than using the generic menu loader.
-  assert.ok(feed.includes("from './bluesky-oauth.js?v=2024-07-11'"));
+  assert.ok(feed.includes('hasLoginIntent() || isOAuthReturn()'));
+  assert.ok(feed.includes("import('./bluesky-oauth.js?v=2024-07-11')"));
 });
 
 test('Shared Strategies executes Inventory with classic-script semantics exactly once', async () => {
