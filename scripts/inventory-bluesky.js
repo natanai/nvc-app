@@ -1,169 +1,102 @@
-import {
-  initBlueskyOAuth,
-  getCurrentBlueskySession,
-  signInWithBluesky,
-  signOutFromBluesky,
-  ensureBackendSession,
-} from './bluesky-oauth.js?v=2024-07-11';
 import './profile-restore-rehydration.js';
 
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
-let initialized = false;
+const ACCOUNT_TRIGGER_SELECTOR = [
+  '[data-menu-drill="account-data"]',
+  '#bluesky-auth-button',
+  '[data-backend-save-button]',
+  '[data-backend-load-button]',
+  '[data-save-to-profile-button]',
+  '.strategy-card__save--profile',
+].join(',');
 
-function consumeLoginIntent() {
+let runtimePromise = null;
+let runtimeReady = false;
+
+function loadBlueskyRuntime() {
+  if (!runtimePromise) {
+    runtimePromise = import('./inventory-bluesky-runtime.js?v=2026-08-21-lazy')
+      .then((module) => {
+        runtimeReady = true;
+        return module;
+      })
+      .catch((error) => {
+        runtimePromise = null;
+        console.error('Unable to load Bluesky account runtime', error);
+        throw error;
+      });
+  }
+  return runtimePromise;
+}
+
+function hasLoginIntent() {
   try {
-    if (!window.sessionStorage) return false;
-    const hasIntent = window.sessionStorage.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
-    if (hasIntent) window.sessionStorage.removeItem(LOGIN_INTENT_STORAGE_KEY);
-    return hasIntent;
+    return window.sessionStorage?.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
   } catch (error) {
     return false;
   }
 }
 
-function setLoginIntent() {
+function isOAuthReturn() {
   try {
-    if (window.sessionStorage) window.sessionStorage.setItem(LOGIN_INTENT_STORAGE_KEY, '1');
+    const params = new URL(window.location.href).searchParams;
+    return params.has('state') && (params.has('code') || params.has('error') || params.has('iss'));
   } catch (error) {
-    // Ignore storage errors. Sign-in can still proceed.
+    return false;
   }
 }
 
-function setGlobalBlueskySession(session, { reason = '' } = {}) {
-  const normalizedDid = session?.did || session?.sub || null;
-  const normalizedHandle = session?.preferred_username || session?.handle || session?.username || null;
-
-  window.allneedsSession = normalizedDid
-    ? { did: normalizedDid, handle: normalizedHandle }
-    : null;
-
-  window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed', {
-    detail: {
-      ...(window.allneedsSession || {}),
-      reason,
-    },
-  }));
+function closestAccountTrigger(target) {
+  return target instanceof Element ? target.closest(ACCOUNT_TRIGGER_SELECTOR) : null;
 }
 
-function describeSession(session) {
-  const handle = session?.preferred_username || session?.handle || session?.username || '';
-  return handle ? `Signed in as @${String(handle).replace(/^@/, '')}` : 'Signed in with Bluesky';
+function warmAccountRuntime(event) {
+  if (closestAccountTrigger(event.target)) loadBlueskyRuntime().catch(() => {});
 }
 
-function updateBlueskyAuthUi(session) {
-  const handleField = document.querySelector('[data-bluesky-handle-field]');
-  const statusText = document.querySelector('#bluesky-auth-status-text');
-  const authButton = document.querySelector('#bluesky-auth-button');
-  const authButtonText = authButton?.querySelector('.inventory-button__text');
+// Pointer/focus intent begins fetching before the eventual click without
+// changing the interaction itself. The Account & data drill can open normally
+// while its optional network-backed controls finish becoming ready.
+document.addEventListener('pointerover', warmAccountRuntime, { capture: true, passive: true });
+document.addEventListener('focusin', warmAccountRuntime, { capture: true });
 
-  if (session) {
-    if (handleField) handleField.hidden = true;
-    if (statusText) {
-      statusText.textContent = describeSession(session);
-      statusText.classList.remove('inventory-auth-panel__status-text--error');
-    }
-    if (authButton) {
-      authButton.classList.add('inventory-button--ghost');
-      if (authButtonText) authButtonText.textContent = 'Sign out';
-      authButton.setAttribute('aria-label', 'Sign out of Bluesky');
-    }
-  } else {
-    if (handleField) handleField.hidden = false;
-    if (statusText) {
-      statusText.textContent = '';
-      statusText.classList.remove('inventory-auth-panel__status-text--error');
-    }
-    if (authButton) {
-      authButton.classList.remove('inventory-button--ghost');
-      if (authButtonText) authButtonText.textContent = 'Sign in';
-      authButton.setAttribute('aria-label', 'Sign in with Bluesky');
-    }
-  }
-}
+// A direct first click on the sign-in button can happen before a pointerover
+// (keyboard activation, automation, accessibility tooling). Hold only that
+// action long enough to install the real handler, then replay it once.
+document.addEventListener('click', async (event) => {
+  const button = event.target instanceof Element ? event.target.closest('#bluesky-auth-button') : null;
+  if (!(button instanceof HTMLElement) || runtimeReady) return;
 
-function setStatusText(message, { isError = false } = {}) {
-  const statusText = document.querySelector('#bluesky-auth-status-text');
-  if (!statusText) return;
-  statusText.textContent = message || '';
-  statusText.classList.toggle('inventory-auth-panel__status-text--error', Boolean(isError));
-}
-
-async function onBlueskySignInClick() {
-  const input = document.querySelector('#bluesky-handle-input');
-  const handle = input?.value?.trim();
-  if (!handle) {
-    setStatusText('Enter your Bluesky handle first.', { isError: true });
-    return;
-  }
-
+  event.preventDefault();
+  event.stopImmediatePropagation();
   try {
-    setStatusText('Opening Bluesky sign-in…');
-    setLoginIntent();
-    await signInWithBluesky(handle);
-  } catch (err) {
-    console.error('Error during Bluesky OAuth sign-in', err);
-    setStatusText(err?.message || 'Unable to start Bluesky sign-in. Please check your handle.', { isError: true });
+    await loadBlueskyRuntime();
+    window.requestAnimationFrame(() => button.click());
+  } catch (error) {
+    const status = document.querySelector('#bluesky-auth-status-text');
+    if (status) status.textContent = 'Unable to load Bluesky sign-in right now.';
   }
-}
+}, true);
 
-async function onBlueskySignOutClick() {
-  try {
-    await signOutFromBluesky();
-  } catch (err) {
-    console.error('Error during Bluesky OAuth sign-out', err);
-  }
-  setGlobalBlueskySession(null, { reason: 'signout' });
-  updateBlueskyAuthUi(null);
-}
-
-async function initBlueskyUi() {
-  if (initialized) return;
-  initialized = true;
-
-  const authButton = document.querySelector('#bluesky-auth-button');
-  if (authButton) {
-    authButton.addEventListener('click', () => {
-      if (window.allneedsSession) onBlueskySignOutClick();
-      else onBlueskySignInClick();
-    });
-  }
-
-  const handleInput = document.querySelector('#bluesky-handle-input');
-  if (handleInput) {
-    handleInput.addEventListener('input', () => setStatusText(''));
-    handleInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !window.allneedsSession) {
-        event.preventDefault();
-        onBlueskySignInClick();
-      }
-    });
-  }
-
-  let session = null;
-  const loginIntent = consumeLoginIntent();
-  try {
-    session = await initBlueskyOAuth();
-  } catch (err) {
-    console.error('Error initializing Bluesky OAuth', err);
-  }
-
-  if (!session) session = getCurrentBlueskySession();
-
-  if (session) {
-    try {
-      await ensureBackendSession(session);
-    } catch (err) {
-      console.error('Could not start backend session', err);
+function scheduleIdleRestore() {
+  const start = () => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(() => loadBlueskyRuntime().catch(() => {}), { timeout: 1800 });
+    } else {
+      window.setTimeout(() => loadBlueskyRuntime().catch(() => {}), 900);
     }
-  }
+  };
 
-  const reason = session ? (loginIntent ? 'signin' : 'restore') : 'signout';
-  setGlobalBlueskySession(session || null, { reason });
-  updateBlueskyAuthUi(session);
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initBlueskyUi, { once: true });
+// OAuth returns must be consumed immediately. Ordinary page views defer the
+// remote AT Protocol SDK until after the page has loaded (or until the user
+// approaches Account & data), so a third-party module is no longer part of the
+// first-render network path.
+if (isOAuthReturn() || hasLoginIntent()) {
+  loadBlueskyRuntime().catch(() => {});
 } else {
-  initBlueskyUi();
+  scheduleIdleRestore();
 }
