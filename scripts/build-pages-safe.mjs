@@ -144,7 +144,60 @@ function runNode(stageRoot, relativeScript, args = []) {
   }
 }
 
+function canonicalizeOpeningTag(tagName, rawAttributes) {
+  const attributes = [];
+  const source = String(rawAttributes || '').replace(/\/$/, '').trim();
+  const attributePattern = /([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
+  let match;
+
+  while ((match = attributePattern.exec(source))) {
+    const [, name, doubleQuoted, singleQuoted, unquoted] = match;
+    const hasValue = doubleQuoted !== undefined || singleQuoted !== undefined || unquoted !== undefined;
+    const value = doubleQuoted ?? singleQuoted ?? unquoted ?? '';
+    attributes.push({ name, hasValue, value });
+  }
+
+  attributes.sort((left, right) => left.name.localeCompare(right.name));
+  const serialized = attributes
+    .map(({ name, hasValue, value }) => (hasValue ? `${name}="${value}"` : name))
+    .join(' ');
+
+  return serialized ? `<${tagName} ${serialized}>` : `<${tagName}>`;
+}
+
+function canonicalizeNavigation(navHtml) {
+  return navHtml
+    .replace(/<([A-Za-z][A-Za-z0-9:-]*)([^<>]*?)>/g, (full, tagName, attributes) => {
+      if (full.startsWith('</') || full.startsWith('<!')) return full;
+      return canonicalizeOpeningTag(tagName, attributes);
+    })
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function normalizeNavigationSerialization(html) {
+  const startMarker = '<nav class="site-nav magnet-section"';
+  const start = html.indexOf(startMarker);
+  if (start < 0) return html;
+  const close = html.indexOf('</nav>', start);
+  if (close < 0) return html;
+  const end = close + '</nav>'.length;
+  const nav = html.slice(start, end);
+  return `${html.slice(0, start)}[[SITE_NAV:${canonicalizeNavigation(nav)}]]${html.slice(end)}`;
+}
+
+function shellSerializationEquivalent(stagedPath, destination) {
+  if (!existsSync(destination)) return false;
+  const staged = readFileSync(stagedPath, 'utf8');
+  const current = readFileSync(destination, 'utf8');
+  if (staged === current) return true;
+  return normalizeNavigationSerialization(staged) === normalizeNavigationSerialization(current);
+}
+
 function copyOwnedOutputs(stageRoot, outputs) {
+  let published = 0;
+  let byteStable = 0;
+
   for (const relativePath of outputs) {
     const stagedPath = join(stageRoot, relativePath);
     if (!existsSync(stagedPath)) {
@@ -152,9 +205,23 @@ function copyOwnedOutputs(stageRoot, outputs) {
     }
 
     const destination = join(rootDir, relativePath);
+
+    // The current production tree contains historical indentation and attribute
+    // ordering in the shared nav shell. If the staged generator reproduces the
+    // exact same shell structure/attributes/text and the rest of the page is
+    // byte-identical, retain the already-tested production serialization. Any
+    // actual page or shell markup difference is still copied and becomes a diff.
+    if (shellSerializationEquivalent(stagedPath, destination)) {
+      byteStable += 1;
+      continue;
+    }
+
     mkdirSync(dirname(destination), { recursive: true });
     cpSync(stagedPath, destination, { force: true });
+    published += 1;
   }
+
+  return { published, byteStable };
 }
 
 const requestedScopes = parseScopeArgs(process.argv.slice(2));
@@ -176,9 +243,12 @@ try {
   // therefore never be deleted by a broad page rebuild.
   runNode(stageRoot, 'scripts/build-pages.mjs', scopeArgs);
   runNode(stageRoot, 'scripts/finalize-static-assets.mjs');
-  copyOwnedOutputs(stageRoot, outputs);
+  const { published, byteStable } = copyOwnedOutputs(stageRoot, outputs);
 
-  console.log(`Published ${outputs.size} ownership-declared page output${outputs.size === 1 ? '' : 's'} from isolated staging.`);
+  console.log(
+    `Page build complete: ${published} changed output${published === 1 ? '' : 's'}, ` +
+      `${byteStable} structurally identical output${byteStable === 1 ? '' : 's'} kept byte-stable.`,
+  );
 } finally {
   rmSync(stageParent, { recursive: true, force: true });
 }
