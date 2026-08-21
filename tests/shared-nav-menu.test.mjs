@@ -194,11 +194,14 @@ test('Menu activation remains reliable when magnet physics suppresses synthetic 
 
 test('strategy feed participates in the shared UI architecture and mobile app surface', async () => {
   const feed = await fs.readFile(path.join(root, 'scripts/strategy-feed.js'), 'utf8');
+  const feedHtml = await fs.readFile(path.join(root, 'feed/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
 
   assert.ok(!feed.includes("import './inventory.js"), 'Feed must not execute the shared controller with ES-module semantics');
-  assert.ok(feed.includes('const inventoryRuntimeReady = ensureInventoryClassicRuntime();'), 'Feed should begin the canonical classic controller load exactly once');
-  assert.ok(feed.includes('init();\nawait inventoryRuntimeReady;'), 'visible Feed work should begin before the compatibility runtime wait');
+  assert.ok(feed.includes('installInventoryRuntimeIntentLoader();\ninit();'), 'Feed should initialize its own feature without starting the shared controller');
+  assert.ok(feed.includes("document.addEventListener('pointerover', warmInventoryRuntime"), 'Feed should warm the shared controller only when an owned interaction is approached');
+  assert.ok(feed.includes('window.requestAnimationFrame(() => replayTrigger.click());'), 'direct taps should replay after the shared owner becomes ready');
+  assert.ok(!feedHtml.includes('<script src="../scripts/inventory.js" defer></script>'), 'Feed must keep the 238 KB shared controller out of its parser graph');
   assert.ok(feed.includes('Menu → Account & data'), 'Feed sign-in guidance should point to the current Account & data location');
   assert.ok(!feed.includes('sign in with Bluesky on the Inventory page'), 'Feed should not send account management back to Inventory');
   assert.ok(css.includes('body:has(#main [data-feed-list]) #main.page'), 'Feed should use the same full-bleed mobile app-surface direction as Inventory');
