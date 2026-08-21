@@ -3,274 +3,200 @@
    Keep this file presentation-only: no inventory, auth, sync, or storage behavior lives here. */
 
 @media (max-width: 640px) {
-  /* Use deliberately higher specificity than the generated inline Inventory CSS.
-     This stylesheet is parser-loaded before that inline CSS to avoid a paint flash. */
-  body .inventory-page.inventory-page {
-    padding-top: 0.8rem;
-    gap: 0.8rem;
+  /* Inventory is a first-class app screen. The persistent magnet board already
+     provides global navigation, so the web-style breadcrumb is redundant here. */
+  body:has(#main.inventory-page) .breadcrumbs {
+    display: none;
   }
 
+  body .inventory-page.inventory-page {
+    padding-top: 0.45rem;
+    gap: 0.62rem;
+  }
+
+  /* Large app title + one quiet trailing action. Avoid another full-width card
+     before the user reaches the actual inventory. */
   body .inventory-page.inventory-page .inventory-header {
-    margin-inline: 0.85rem;
+    margin-inline: 0.95rem;
     padding: 0;
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    gap: 0.65rem;
+    gap: 0;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__layout,
+  body .inventory-page.inventory-page .inventory-header__content {
+    width: 100%;
   }
 
   body .inventory-page.inventory-page .inventory-header__content {
     display: grid;
-    gap: 0.62rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'title action';
+    align-items: center;
+    column-gap: 0.7rem;
+    row-gap: 0;
   }
 
   body .inventory-page.inventory-page .inventory-header__title-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'title button';
-    align-items: center;
-    gap: 0.75rem;
+    grid-area: title;
+    display: block;
+    min-width: 0;
   }
 
   body .inventory-page.inventory-page .inventory-header .page-title {
-    grid-area: title;
     margin: 0;
-    font-size: clamp(1.48rem, 7.5vw, 1.9rem);
-    line-height: 1.05;
-    letter-spacing: 0.045em;
+    font-size: clamp(1.62rem, 8.2vw, 2.05rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-transform: none;
   }
 
-  /* The title and controls make the purpose clear on a small screen; the longer
-     explanatory paragraph remains available on wider layouts. */
+  /* The title, view tabs, and section labels explain the screen without a
+     paragraph of web-page introduction competing for the first viewport. */
   body .inventory-page.inventory-page .inventory-header .page-description {
     display: none;
   }
 
-  body .inventory-page.inventory-page .inventory-journal-button {
-    grid-area: button;
-    justify-self: end;
-    align-self: center;
-    width: auto;
-    min-height: 38px;
-    margin: 0;
-    padding: 0.34rem 0.58rem;
-    gap: 0.38rem;
-    border: 1.5px solid color-mix(in srgb, var(--outline) 48%, transparent);
-    border-radius: var(--radius-pill);
-    background: color-mix(in srgb, var(--sky) 34%, #ffffff 66%);
-    box-shadow: none;
-    text-transform: none;
-    letter-spacing: 0.015em;
-  }
-
-  body .inventory-page.inventory-page .inventory-journal-button:hover,
-  body .inventory-page.inventory-page .inventory-journal-button:focus-visible {
-    transform: none;
-    box-shadow: none;
-    background: color-mix(in srgb, var(--sky) 50%, #ffffff 50%);
-  }
-
-  body .inventory-page.inventory-page .inventory-journal-button__icon {
-    width: 1.15rem;
-    height: 1.15rem;
-  }
-
-  body .inventory-page.inventory-page .inventory-journal-button__label {
-    font-size: 0.78rem;
-    font-weight: 800;
-  }
-
-  /* Primary destinations sit together instead of becoming a vertical stack of cards. */
   body .inventory-page.inventory-page .inventory-header__quick-actions {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: stretch;
-    gap: 0.5rem;
-    margin: 0.05rem 0 0;
+    grid-area: action;
+    width: auto;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-self: end;
   }
 
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link,
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .inventory-shared-button {
-    width: 100%;
-    min-width: 0;
-    min-height: 48px;
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link {
+    width: auto;
+    min-width: 44px;
+    min-height: 44px;
     margin: 0;
-    padding: 0.5rem 0.62rem;
-    justify-content: center;
-    border-radius: var(--radius-lg);
+    padding: 0.3rem 0.18rem;
+    gap: 0.24rem;
+    justify-content: flex-end;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
     box-shadow: none;
     transform: none;
-  }
-
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-    grid-column: auto;
-    border-width: 2px;
-    background: color-mix(in srgb, var(--rose) 82%, #ffffff 18%);
-    font-size: 0.82rem;
-    letter-spacing: 0.07em;
-  }
-
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .inventory-shared-button {
-    border: 1.5px solid color-mix(in srgb, var(--outline) 42%, transparent);
-    background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
-  }
-
-  body .inventory-page.inventory-page .inventory-header__quick-actions .strategy-quick-actions__icon,
-  body .inventory-page.inventory-page .inventory-header__quick-actions .inventory-shared-button__icon {
-    width: 1.65rem;
-    height: 1.65rem;
-    min-width: 1.65rem;
-    min-height: 1.65rem;
-    border-width: 1.5px;
-    box-shadow: none;
-    font-size: 0.9rem;
-  }
-
-  body .inventory-page.inventory-page .inventory-header__quick-actions .inventory-shared-button__text {
-    min-width: 0;
-    gap: 0;
-  }
-
-  body .inventory-page.inventory-page .inventory-header__quick-actions .inventory-shared-button__eyebrow {
-    display: none;
-  }
-
-  body .inventory-page.inventory-page .inventory-header__quick-actions .inventory-shared-button__label {
+    color: var(--ink);
     font-size: 0.78rem;
-    font-weight: 800;
-    line-height: 1.12;
+    font-weight: 780;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
-  /* Sync is a utility/settings affordance when collapsed, not a third destination card. */
-  body .inventory-page.inventory-page .inventory-bluesky-panel {
-    margin: 0.05rem 0 0;
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:hover,
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:focus-visible {
+    transform: none;
+    background: color-mix(in srgb, var(--sky) 22%, transparent);
+    box-shadow: none;
+  }
+
+  body .inventory-page.inventory-page .inventory-header__quick-actions .strategy-quick-actions__icon {
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
     border: 0;
-    border-top: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    overflow: visible;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel__summary {
-    min-height: 42px;
-    padding: 0.45rem 0;
-    gap: 0.55rem;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel__titles {
-    gap: 0;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel__title {
-    font-size: 0.72rem;
-    line-height: 1.15;
-    letter-spacing: 0.075em;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel__subtitle {
-    display: none;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel__chevron {
-    width: 1.7rem;
-    height: 1.7rem;
-    min-width: 1.7rem;
-    min-height: 1.7rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid color-mix(in srgb, var(--outline) 34%, transparent);
-    border-radius: var(--radius-circle);
-    background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
-    box-shadow: none;
-    font-size: 0.7rem;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel[open] {
-    border: 1.5px solid color-mix(in srgb, var(--outline) 32%, transparent);
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, #ffffff 88%, var(--lavender) 12%);
-    overflow: hidden;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel[open] .inventory-bluesky-panel__summary {
-    padding: 0.62rem 0.7rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel[open] .inventory-bluesky-panel__subtitle {
-    display: block;
-    margin-top: 0.16rem;
-    font-size: 0.7rem;
-    line-height: 1.3;
-  }
-
-  body .inventory-page.inventory-page .inventory-bluesky-panel[open] .inventory-bluesky-panel__content {
-    padding: 0.72rem;
+    font-size: 1.32rem;
+    line-height: 1;
   }
 
   body .inventory-page.inventory-page .inventory-main {
-    gap: 0.65rem;
-  }
-
-  body .inventory-page.inventory-page .inventory-overview {
     gap: 0.55rem;
   }
 
-  /* A lighter app-style view switch replaces the heavy floating segmented card. */
+  body .inventory-page.inventory-page .inventory-overview {
+    gap: 0.48rem;
+  }
+
+  /* Needs / Strategies is the primary content-level navigation. Give it the
+     visual grammar of tabs rather than another segmented capsule. */
   body .inventory-page.inventory-page .inventory-view-switch {
     width: auto;
     min-height: 46px;
-    margin-inline: 0.85rem;
-    padding: 3px;
+    margin: 0.1rem 0.95rem 0;
+    padding: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0;
-    border: 1.5px solid color-mix(in srgb, var(--outline) 32%, transparent);
-    border-radius: var(--radius-pill);
-    background: color-mix(in srgb, #ffffff 56%, var(--lavender) 44%);
+    border: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+    border-radius: 0;
+    background: transparent;
     box-shadow: none;
   }
 
   body .inventory-page.inventory-page .inventory-view-switch__button {
+    position: relative;
     min-width: 0;
-    min-height: 40px;
-    padding: 0.38rem 0.55rem;
+    min-height: 45px;
+    padding: 0.5rem 0.55rem 0.55rem;
     border: 0;
-    border-radius: var(--radius-pill);
+    border-radius: 0;
     background: transparent;
     box-shadow: none;
-    font-size: 0.88rem;
-    font-weight: 800;
+    color: color-mix(in srgb, var(--ink-soft) 84%, transparent);
+    font-size: 0.86rem;
+    font-weight: 760;
     line-height: 1;
   }
 
   body .inventory-page.inventory-page .inventory-view-switch__button:hover,
   body .inventory-page.inventory-page .inventory-view-switch__button:focus-visible {
     transform: none;
+    background: color-mix(in srgb, var(--sky) 14%, transparent);
     box-shadow: none;
   }
 
   body .inventory-page.inventory-page .inventory-view-switch__button.is-active,
   body .inventory-page.inventory-page .inventory-view-switch__button[aria-selected='true'] {
-    background: #ffffff;
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--outline) 12%, transparent);
+    background: transparent;
+    box-shadow: none;
+    color: var(--ink);
+  }
+
+  body .inventory-page.inventory-page .inventory-view-switch__button.is-active::after,
+  body .inventory-page.inventory-page .inventory-view-switch__button[aria-selected='true']::after {
+    content: '';
+    position: absolute;
+    left: 27%;
+    right: 27%;
+    bottom: -1px;
+    height: 3px;
+    border-radius: var(--radius-pill);
+    background: var(--plum);
+  }
+
+  body .inventory-page.inventory-page .inventory-view-switch__count {
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+    font-size: 0.68rem;
   }
 
   body .inventory-page.inventory-page .inventory-view-panel--needs {
-    gap: 0.5rem;
+    gap: 0.48rem;
   }
 
-  /* The section title, status, explanation, and filters now read as one toolbar. */
+  /* Section information is informational, not another set of controls. Keep
+     the count as secondary text and reserve capsule styling for the filter. */
   body .inventory-page.inventory-page .inventory-view-panel--needs .inventory-view-panel__header {
-    margin-inline: 0.85rem;
+    margin: 0.22rem 0.95rem 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: 0.55rem;
-    row-gap: 0.12rem;
-    align-items: center;
+    column-gap: 0.6rem;
+    row-gap: 0.14rem;
+    align-items: baseline;
   }
 
   body .inventory-page.inventory-page .inventory-view-panel--needs .inventory-view-panel__header > div {
@@ -281,17 +207,20 @@
     grid-column: 1;
     grid-row: 1;
     margin: 0;
-    font-size: 1rem;
-    line-height: 1.1;
-    letter-spacing: 0.075em;
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    font-weight: 820;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-transform: none;
   }
 
   body .inventory-page.inventory-page .inventory-overview__hint {
     grid-column: 1 / -1;
     grid-row: 2;
     margin: 0;
-    font-size: 0.78rem;
-    line-height: 1.3;
+    font-size: 0.76rem;
+    line-height: 1.32;
     color: var(--ink-soft);
   }
 
@@ -299,21 +228,25 @@
     grid-column: 2;
     grid-row: 1;
     margin: 0;
-    padding: 0.18rem 0.42rem;
-    border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
-    border-radius: var(--radius-pill);
-    background: color-mix(in srgb, #ffffff 66%, var(--lavender) 34%);
-    font-size: 0.63rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.64rem;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
+    text-align: right;
   }
 
   body .inventory-page.inventory-page .inventory-overview__tools {
-    margin-inline: 0.85rem;
+    margin-inline: 0.95rem;
     display: block;
   }
 
+  /* Keep the three-state filter as the one true segmented control on this
+     screen. Its compact capsule now has a distinct role in the hierarchy. */
   body .inventory-page.inventory-page .inventory-summary__filters {
     width: 100%;
     display: grid;
@@ -374,17 +307,27 @@
   }
 
   body .inventory-page.inventory-page .inventory-summary {
-    margin-top: 0.08rem;
+    margin-top: 0.06rem;
   }
 }
 
 @media (max-width: 360px) {
-  body .inventory-page.inventory-page .inventory-header__quick-actions {
-    grid-template-columns: minmax(0, 1fr);
+  body .inventory-page.inventory-page .inventory-header {
+    margin-inline: 0.8rem;
   }
 
-  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-    grid-column: auto;
+  body .inventory-page.inventory-page .inventory-header .page-title {
+    font-size: clamp(1.48rem, 8.4vw, 1.78rem);
+  }
+
+  body .inventory-page.inventory-page .inventory-header__quick-actions > .strategy-quick-actions__link {
+    font-size: 0.72rem;
+  }
+
+  body .inventory-page.inventory-page .inventory-view-switch,
+  body .inventory-page.inventory-page .inventory-view-panel--needs .inventory-view-panel__header,
+  body .inventory-page.inventory-page .inventory-overview__tools {
+    margin-inline: 0.8rem;
   }
 
   body .inventory-page.inventory-page .inventory-needs-status {
