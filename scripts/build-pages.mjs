@@ -2380,9 +2380,9 @@ function renderInventoryPage() {
         margin-top: 0.25rem;
       }
 
-      /* Small screens */
+      /* Small non-phone screens. Inventory phone layout is owned by inventory-mobile.css. */
 
-      @media (max-width: 720px) {
+      @media (min-width: 641px) and (max-width: 720px) {
         .inventory-bluesky-panel__summary {
           align-items: center;
         }
@@ -2402,7 +2402,7 @@ function renderInventoryPage() {
       }
 
 
-      /* Inventory UX first pass v2 — inline pre-paint overrides */
+      /* Inventory UX first pass v2 — inline pre-paint base styles */
       .inventory-header {
         gap: clamp(0.85rem, 2vw, 1.25rem);
       }
@@ -2560,7 +2560,7 @@ function renderInventoryPage() {
         flex: 0 0 auto;
       }
 
-      @media (max-width: 760px) {
+      @media (min-width: 641px) and (max-width: 760px) {
         .inventory-header__quick-actions {
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         }
@@ -2570,82 +2570,7 @@ function renderInventoryPage() {
         }
       }
 
-      @media (max-width: 640px) {
-        .inventory-header {
-          gap: 0.8rem;
-        }
-
-        .inventory-header__title-row {
-          grid-template-columns: minmax(0, 1fr);
-          grid-template-areas:
-            'title'
-            'button';
-          gap: 0.5rem;
-          align-items: start;
-        }
-
-        .inventory-journal-button {
-          justify-self: start;
-          width: auto;
-          margin: 0;
-        }
-
-        .inventory-header .page-description {
-          font-size: 0.9rem;
-          line-height: 1.4;
-        }
-
-        .inventory-header__quick-actions {
-          grid-template-columns: minmax(0, 1fr);
-          gap: 0.5rem;
-          margin-top: 0.1rem;
-        }
-
-        .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-          grid-column: auto;
-          min-height: 54px;
-          justify-content: center;
-        }
-
-        .inventory-header__quick-actions .strategy-quick-actions__link--secondary,
-        .inventory-header__quick-actions .inventory-shared-button {
-          min-height: 46px;
-          padding: 0.52rem 0.7rem;
-          justify-content: flex-start;
-        }
-
-        .inventory-header__quick-actions .strategy-quick-actions__link--secondary {
-          font-size: 0.86rem;
-        }
-
-        .inventory-header__quick-actions .inventory-shared-button__eyebrow {
-          display: none;
-        }
-
-        .inventory-header__quick-actions .inventory-shared-button__label {
-          font-size: 0.86rem;
-        }
-
-        .inventory-bluesky-panel {
-          margin-top: 0.3rem;
-        }
-
-        .inventory-bluesky-panel__summary {
-          padding: 0.65rem 0.75rem;
-        }
-
-        .inventory-bluesky-panel__title {
-          font-size: 0.82rem;
-        }
-
-        .inventory-bluesky-panel__subtitle {
-          font-size: 0.74rem;
-        }
-      }
-
-
-
-      /* Inventory model prototype v1 */
+      /* Inventory model prototype v1 — base presentation only. */
       .inventory-main {
         display: flex;
         flex-direction: column;
@@ -3017,189 +2942,12 @@ function renderInventoryPage() {
       }
 
       .inventory-actions--collapsible .inventory-actions__header .section-title { display: none; }
-
-      @media (max-width: 640px) {
-      /* Inventory is the app surface on phones, not a card inside the page. */
-      .inventory-page {
-        width: calc(100% + 2rem);
-        margin-inline: -1rem;
-        padding: 1rem 0 2rem;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        gap: 1rem;
-      }
-
-      .inventory-page .inventory-header,
-      .inventory-page .inventory-form--collapsible,
-      .inventory-page .inventory-actions--collapsible {
-        margin-inline: 1rem;
-      }
-
-      .inventory-page .inventory-main {
-        gap: 1rem;
-      }
-
-      .inventory-page .inventory-overview {
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        gap: 0.75rem;
-      }
-
-      .inventory-page .inventory-view-switch,
-      .inventory-page .inventory-view-panel__header,
-      .inventory-page .inventory-overview__tools,
-      .inventory-page .inventory-strategy-search {
-        margin-inline: 1rem;
-      }
-
-      .inventory-page .inventory-view-panel__header {
-        align-items: start;
-      }
-
-      .inventory-page .inventory-summary {
-        border-left: 0;
-        border-right: 0;
-        border-radius: 0;
-        border-top: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-        border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      .inventory-page .inventory-summary {
-
-
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__focus {
-
-
-        min-width: 0;
-
-
-        min-height: 60px;
-
-
-        padding: 0.68rem 0.7rem;
-
-
-        gap: 0.45rem;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__status {
-
-
-        width: 0.72rem;
-
-
-        height: 0.72rem;
-
-
-        flex: 0 0 auto;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__text {
-
-
-        min-width: 0;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__label {
-
-
-        font-size: 0.9rem;
-
-
-        line-height: 1.16;
-
-
-        letter-spacing: -0.01em;
-
-
-        text-wrap: balance;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__label--compact {
-
-
-        font-size: 0.82rem;
-
-
-        letter-spacing: -0.025em;
-
-
-        white-space: nowrap;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__count {
-
-
-        font-size: 0.72rem;
-
-
-        line-height: 1.2;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__chevron {
-
-
-        font-size: 1.08rem;
-
-
-        flex: 0 0 auto;
-
-
-      }
-
-      .inventory-page .inventory-summary__detail {
-        padding: 0.72rem 1rem;
-      }
-
-      .inventory-page .inventory-list-panel {
-        margin-inline: 1rem;
-      }
-
-      .inventory-page .inventory-needs-status,
-      .inventory-page .inventory-strategy-count {
-        font-size: 0.72rem;
-      }
-
-      .inventory-page .inventory-header__quick-actions {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
     </style>`;
+
+  /* Keep the phone stylesheet after the shared graph and Inventory base styles so
+     its <=640px rules are the final, single owner of the phone presentation. */
+  const inventoryMobileStyles =
+    '    <link rel="stylesheet" href="../styles/inventory-mobile.css" media="(max-width: 640px)" />';
 
   const main = `
       <header class="page-header inventory-header">
@@ -3474,7 +3222,7 @@ function renderInventoryPage() {
       { label: 'Inventory' },
     ],
     scripts: [{ src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true }],
-    headExtras: blueskyPanelStyles,
+    headExtras: `${blueskyPanelStyles}\n${inventoryMobileStyles}`,
     main,
     mainClass: 'page inventory-page',
     activeNav: 'inventory',
