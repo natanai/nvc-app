@@ -73,12 +73,10 @@ const stageRoot = join(stageParent, 'repo');
 try {
   copyRepository(stageRoot);
 
-  // The core compiler owns data/index.json. It still computes its historical
-  // body/reverse outputs in staging, but those are deliberately replaced below
-  // by the reviewed spreadsheets that are the canonical source for those two
-  // datasets.
+  // The canonical compiler reads the editable data sources (including the
+  // Body Cues rows in data/Feelings.csv) in an isolated workspace. Only the
+  // explicitly requested outputs are allowed back into the real repository.
   runScript(stageRoot, 'scripts/build-data.mjs');
-  runScript(stageRoot, 'scripts/build-reviewed-body-data.mjs');
 
   for (const scope of scopes) {
     const relativePath = OUTPUTS[scope];
