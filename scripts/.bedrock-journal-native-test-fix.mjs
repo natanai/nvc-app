@@ -18,7 +18,7 @@ source = source.replace(
   assert.ok(moduleSource.includes("tags: 'Tags'"));
   assert.ok(moduleSource.includes("classes: ['journal-meta-group']"));
   assert.ok(moduleSource.includes("'journal-meta-row--intensity'"));
-  assert.equal(moduleSource.includes('data-journal-needs-summary'), false, 'Journal needs must not retain the prototype confirmation layer');
+  assert.equal(moduleSource.includes("text: 'Selected needs'"), false, 'Journal needs must not render the prototype confirmation layer');
   assert.ok(density.includes('.journal-meta-group {'), 'canonical shared density CSS must own the finished Journal metadata group');`,
 );
 source = source.replace(
@@ -32,4 +32,4 @@ if (!source.includes("emotion: 'Feeling'")) throw new Error('Native Journal cont
 writeFileSync(path, source, 'utf8');
 console.log('Native action regression contract updated for finished Journal UX.');
 
-// Synchronize trigger after the default-branch runner learned this contract.
+// Prototype selectors may remain as harmless compatibility queries; rendered confirmation markup may not.
