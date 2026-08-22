@@ -68,6 +68,9 @@ jobs:
                   raise SystemExit(f'canonical density simplification anchor missing: {old.strip()}')
               text = text.replace(old, new, 1)
           path.write_text(text.rstrip() + '\n', encoding='utf-8')
+
+          test_path = Path('tests/native-action-controls.test.mjs')
+          test_path.write_text(test_path.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
           PY
 
       - name: Remove temporary repair script
