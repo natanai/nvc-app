@@ -80,13 +80,13 @@ const HOME_ICON_INLINE = (basePath = '') => {
 
 const NAV_MAGNET_STORAGE_KEY = 'site-nav';
 
-const navPrefillScript = () => String.raw`
+const magnetPrefillScript = (storageKey) => String.raw`
       <script>
         (function() {
           if (typeof window === 'undefined' || typeof document === 'undefined') {
             return;
           }
-          var root = document.querySelector('[data-magnet-root][data-magnet-key="${NAV_MAGNET_STORAGE_KEY}"]');
+          var root = document.querySelector('[data-magnet-root][data-magnet-key="${storageKey}"]');
           if (!root) {
             return;
           }
@@ -94,7 +94,7 @@ const navPrefillScript = () => String.raw`
           if (!board) {
             return;
           }
-          var STORAGE_KEY = 'magnetPositions:${NAV_MAGNET_STORAGE_KEY}';
+          var STORAGE_KEY = 'magnetPositions:${storageKey}';
           var raw;
           try {
             if (!('localStorage' in window)) {
@@ -1070,7 +1070,7 @@ function renderNav(basePath, activeNav, options = {}) {
     .join('\n');
 
   const navVisibilityBootstrap = navVisibilityBootstrapScript();
-  const prefill = navPrefillScript();
+  const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);
 
   return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="${NAV_MAGNET_STORAGE_KEY}">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
@@ -1668,6 +1668,7 @@ function renderCategory(type, items) {
           </div>
         </div>
       </section>
+${magnetPrefillScript(type + '-hub-v4')}
     `;
 
   const html = htmlPage({
