@@ -43,6 +43,35 @@ jobs:
         run: |
           sed -i '0,/expected=3,/s//expected=4,/' .github/scripts/native-action-controls-migration.py
           python3 .github/scripts/native-action-controls-migration.py
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/inventory.js')
+          text = path.read_text(encoding='utf-8')
+          old_reset = """    state.inventoryEditingId = null;
+              state.inventorySubmitButton.textContent = 'Device';
+              state.inventoryForm.removeAttribute('data-editing');"""
+          new_reset = """    state.inventoryEditingId = null;
+              state.inventorySubmitButton.textContent = 'Device';
+              state.inventorySubmitButton.setAttribute('aria-label', 'Save to device');
+              state.inventorySubmitButton.setAttribute('title', 'Save to device');
+              state.inventoryForm.removeAttribute('data-editing');"""
+          old_edit = """  state.inventoryEditingId = entry.id;
+            state.inventoryForm.setAttribute('data-editing', 'true');
+            state.inventorySubmitButton.textContent = '💾 Save changes to device';"""
+          new_edit = """  state.inventoryEditingId = entry.id;
+            state.inventoryForm.setAttribute('data-editing', 'true');
+            state.inventorySubmitButton.textContent = 'Save changes';
+            state.inventorySubmitButton.setAttribute('aria-label', 'Save changes to device');
+            state.inventorySubmitButton.setAttribute('title', 'Save changes to device');"""
+
+          if old_reset not in text:
+              raise SystemExit('Inventory new-entry action-state anchor not found after migration')
+          if old_edit not in text:
+              raise SystemExit('Inventory edit action-state anchor not found after migration')
+          text = text.replace(old_reset, new_reset, 1).replace(old_edit, new_edit, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
 
       - name: Remove migration script before validation
         if: steps.detect.outputs.pending == 'true'
