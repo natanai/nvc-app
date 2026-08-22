@@ -4537,6 +4537,30 @@ main[data-need-slug] .page-title::before {
   gap: clamp(1rem, 3vw, 1.4rem);
 }
 
+.journal-inline-fallback:not([open]) > .journal-inline-fallback__body {
+  display: none;
+}
+
+.journal-inline-fallback[open] .journal-panel--form-shell {
+  padding: clamp(0.7rem, 2vw, 1rem);
+}
+
+.journal-inline-fallback[open] .journal-form__layout,
+.journal-inline-fallback[open] .journal-form__page {
+  gap: clamp(0.6rem, 2vw, 0.85rem);
+}
+
+.journal-inline-fallback[open] .journal-form__sheet {
+  min-height: 0;
+  height: auto;
+  padding: clamp(0.7rem, 2vw, 1rem);
+  box-shadow: none;
+}
+
+.journal-inline-fallback[open] .journal-form__notes {
+  min-height: 8rem;
+}
+
 .journal-inline-fallback__note {
   margin: 0;
   padding: clamp(0.75rem, 2.6vw, 1.1rem) clamp(1rem, 3vw, 1.4rem);

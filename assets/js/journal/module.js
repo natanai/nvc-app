@@ -332,6 +332,13 @@ const parseDatasetOptions = (dataset = {}) => {
     options.placeholders = options.placeholders || {};
     options.placeholders.notes = dataset.journalNotesPlaceholder;
   }
+  if (dataset.journalNotesRows) {
+    const rows = Number.parseInt(dataset.journalNotesRows, 10);
+    if (Number.isFinite(rows) && rows > 0) {
+      options.notes = options.notes || {};
+      options.notes.rows = Math.min(24, rows);
+    }
+  }
   if (dataset.journalNotesLabel) {
     options.labels = options.labels || {};
     options.labels.notes = dataset.journalNotesLabel;

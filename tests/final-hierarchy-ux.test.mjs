@@ -9,6 +9,8 @@ const load = (relative) => fs.readFile(path.join(root, relative), 'utf8');
 test('Journal history is the primary surface and utilities are native disclosures', async () => {
   const build = await load('scripts/build-pages.mjs');
   const runtime = await load('scripts/inventory.js');
+  const moduleSource = await load('assets/js/journal/module.js');
+  const css = await load('styles.css');
   const html = await load('inventory/journal/index.html');
   for (const source of [build, html]) {
     assert.ok(source.includes('journal-fullscreen-button--compact'));
@@ -22,6 +24,11 @@ test('Journal history is the primary surface and utilities are native disclosure
   }
   assert.equal(runtime.includes('journalSummaryToggle'), false);
   assert.equal(runtime.includes('updateJournalSummaryVisibility'), false);
+  assert.ok(build.includes(".journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body"), 'closed Journal utility disclosures must hide their bodies explicitly for Safari');
+  assert.ok(css.includes('.journal-inline-fallback:not([open]) > .journal-inline-fallback__body'), 'closed inline fallback must not render its body');
+  assert.ok(build.includes('data-journal-notes-rows="5"'), 'fallback Journal editor must request a compact reflection field');
+  assert.ok(moduleSource.includes('dataset.journalNotesRows'), 'Journal module must support per-instance reflection row density');
+  assert.ok(css.includes('.journal-inline-fallback[open] .journal-form__sheet'), 'fallback editor must neutralize the full-screen sheet minimum height');
 });
 
 test('Need strategy browsing and personal strategy editing use compact final hierarchy', async () => {

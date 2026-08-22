@@ -3486,6 +3486,8 @@ function renderInventoryJournalPage(needsList = []) {
       }
 
       main[data-page-id='inventory-journal'] .journal-utility-disclosure {
+        display: block;
+        min-height: 0;
         border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
         border-radius: var(--radius-xl);
         background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
@@ -3523,6 +3525,10 @@ function renderInventoryJournalPage(needsList = []) {
         display: grid;
         gap: 0.55rem;
         padding: 0 0.72rem 0.72rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body {
+        display: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-actions__hint {
@@ -3667,7 +3673,7 @@ function renderInventoryJournalPage(needsList = []) {
           </summary>
           <div class="journal-inline-fallback__body">
             <p class="journal-inline-fallback__note">Use this inline form only if the full-screen editor will not open.</p>
-            <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>
+            <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container data-journal-notes-rows="5">
               <section class="journal-form-section" aria-labelledby="journal-form-heading">
                 <div class="journal-form-section__header">
                   <h2 id="journal-form-heading" class="section-title">New entry</h2>
