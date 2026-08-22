@@ -71,6 +71,14 @@ jobs:
               raise SystemExit('Inventory edit action-state anchor not found after migration')
           text = text.replace(old_reset, new_reset, 1).replace(old_edit, new_edit, 1)
           path.write_text(text, encoding='utf-8')
+
+          styles_path = Path('styles.css')
+          styles = styles_path.read_text(encoding='utf-8')
+          for redundant in ('  justify-content: stretch;\n', '  align-self: stretch;\n'):
+              if redundant not in styles:
+                  raise SystemExit(f'Redundant compact-control declaration missing: {redundant.strip()}')
+              styles = styles.replace(redundant, '', 1)
+          styles_path.write_text(styles, encoding='utf-8')
           PY
 
       - name: Remove migration script before validation
