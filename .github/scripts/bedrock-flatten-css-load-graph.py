@@ -120,7 +120,7 @@ test('shared styles are parser-discovered directly with the established cascade 
     }
   }
   assert.ok(checked >= 181, `expected all styles.css surfaces, checked ${checked}`);
-  assert.equal(failures.length, 0, `CSS load-graph exceptions:\n${failures.join('\n')}`);
+  assert.equal(failures.length, 0, `CSS load-graph exceptions:\n${failures.join('\\n')}`);
 });
 
 test('page compiler owns the generated shared stylesheet graph and standalone wheel mirrors it explicitly', async () => {
