@@ -12,6 +12,7 @@ The current Bedrock branch is expected to keep all of these green in Site Qualit
 - navigation magnet coverage and saved-layout ownership;
 - static layout contracts for shared density, Inventory, Journal, and Body Cues;
 - the Journal native-UX contract: Feeling and Needs use catalog-backed popups whose options stay hidden until opened; each Feeling row owns its own 0–10 intensity where 0 means unselected; Tags retain example text and free-form tagging; and Journal History preserves, displays, summarizes, and filters individual Feeling/intensity pairs;
+- the final hierarchy contract: Journal History is the primary dedicated-Journal surface, Patterns and Backup are secondary native disclosures, Need-page strategy browsing shares one compact title/action header, and the personal-strategy editor uses light-weight grouped controls rather than nested card-strength controls;
 - legacy Journal entries remain readable: when an older entry has multiple Feelings but only one historical intensity value, that value is applied to each old Feeling during normalization because no per-Feeling information existed to recover;
 - page-generator ownership and clean scoped generation;
 - retired-architecture tombstones: deleted safe-build/finalizer layers stay deleted, temporary migration scaffolding does not remain, and the legacy Journal hash has one compatibility owner;
@@ -92,15 +93,38 @@ Pass condition: the primary Inventory surface and lazy Shared Strategies route r
 
 Pass condition: each selected Feeling owns an independent 1–10 rating and setting it to 0 removes that Feeling; Needs exposes only valid site vocabulary through a collapsed-by-default multi-select popup; Tags remains lightweight/free-form with examples; Feeling/intensity pairs round-trip through save/edit/history correctly; touch targets remain comfortable; and dedicated/overlay paths both initialize correctly.
 
-### 7. Screenshot-derived hierarchy acceptance
+### 7. Final hierarchy acceptance
 
-Recheck the remaining surfaces that were identified during the final phone-density review:
+These are the screenshot-derived surfaces that were rebuilt at their canonical owners rather than patched after paint.
 
-- the Journal landing page should not feel like breadcrumb card → large Journal card → large Patterns card → Backup card ceremony; if that hierarchy still dominates the viewport, it remains a Bedrock acceptance defect rather than post-Bedrock polish;
-- the Strategies toolbar should remain compact, with browsing actions secondary to strategy content and without the obsolete local-storage reminder taking over a section;
-- **Add a personal strategy** should read as one editor containing light-weight controls, not a giant green card containing several equally strong cards.
+#### Dedicated Journal / History
 
-Pass condition: each screen's hierarchy is understandable at a glance and the task/content, rather than explanatory chrome or nested physical containers, dominates the phone viewport.
+1. Open the dedicated Journal page. The top of the page should be a compact **Journal** title with one **New entry** action, not a large Journal hero card with explanatory copy.
+2. **History** should be the first substantial surface on the page. Search should be immediately available, with Feeling, Need, Tag, Date, Sort, and Clear presented as a compact horizontally scrollable filter row on a phone rather than large stacked filter panels.
+3. Saved entries should scan like a dense native log/list: Feeling/intensity first, quiet date metadata, a concise note body when present, small Need/Tag facets, and secondary Edit/Delete actions. Entries should be separated without each becoming another heavy shadowed card.
+4. **Patterns** and **Backup & restore** should sit below History as compact collapsed disclosure rows. Opening either should reveal its contents without a custom Hide/Show-summary button or another hero-sized panel.
+5. Confirm the full-screen Journal editor still opens from **New entry** and that the accepted per-Feeling intensity, Needs popup, and Tags interactions from section 6 are unchanged.
+
+Pass condition: History, not navigation ceremony or utility cards, dominates the dedicated Journal screen; filters and entries are easy to scan within one phone viewport; and Patterns/Backup remain available without competing with the primary task.
+
+#### Need-page Strategies
+
+1. Open any Need page with built-in strategies.
+2. **Strategies**, **Shuffle**, and **View all** should share one compact header row. The old local-storage reminder must not appear above the deck.
+3. The first strategy card should begin substantially closer to the section title than in the earlier screenshot, with Shuffle/View all clearly functioning as secondary browsing utilities rather than giant primary buttons.
+4. Shuffle and View all must remain at least 44px tall and work on first interaction.
+
+Pass condition: strategy content is visually primary and the browsing utilities consume only the space their function requires.
+
+#### Add a personal strategy
+
+1. Open **Add a personal strategy** on a Need page.
+2. The mint outer editor should remain recognizable as one allneeds.app object, but its individual fields should read as light-weight controls inside that object: thin outlines, no independent heavy shadows, compact labels, and tighter vertical gaps.
+3. The strategy-name field should use the same restrained focus treatment as the rest of the form rather than a large dashed inner-card effect.
+4. **How do you put it into practice?** should begin at a compact editable height and remain vertically resizable where the platform permits.
+5. Paired fields should use available width sensibly; Device/Profile must remain comfortable touch targets. The save-target helper text should be visually quiet and should not become another block competing with the form.
+
+Pass condition: the eye immediately reads one editor containing controls, not a giant green card containing several equally strong cards, while all fields and save destinations remain comfortably usable.
 
 ### 8. Explicit nonstandard page owners
 
