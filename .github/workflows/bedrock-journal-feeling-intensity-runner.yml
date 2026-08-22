@@ -28,8 +28,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Apply root-level per-feeling intensity refactor
-        run: node scripts/.bedrock-journal-per-feeling-intensity.mjs
+      - name: Repair and apply root-level per-feeling intensity refactor
+        run: |
+          node scripts/.fix-bedrock-journal-per-feeling-migration.mjs
+          node scripts/.bedrock-journal-per-feeling-intensity.mjs
 
       - name: Regenerate canonical pages
         run: npm run build:pages
@@ -59,6 +61,7 @@ jobs:
       - name: Remove one-shot migration scaffolding
         run: |
           rm -f scripts/.bedrock-journal-per-feeling-intensity.mjs
+          rm -f scripts/.fix-bedrock-journal-per-feeling-migration.mjs
           rm -f scripts/.bedrock-journal-feeling-intensity-trigger
 
       - name: Verify obsolete architecture stays gone
