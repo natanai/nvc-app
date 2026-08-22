@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Correct one-shot matchers
+        run: node scripts/.fix-journal-refactor-patterns.mjs
+
       - name: Apply root-level Journal refactor
         run: node scripts/.bedrock-journal-native-refactor.mjs
 
@@ -60,6 +63,7 @@ jobs:
       - name: Remove one-shot Bedrock scaffolding
         run: |
           rm scripts/.bedrock-journal-native-refactor.mjs
+          rm scripts/.fix-journal-refactor-patterns.mjs
           rm .github/workflows/bedrock-journal-native-refactor.yml
 
       - name: Commit and prove clean head
