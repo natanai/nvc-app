@@ -31,3 +31,5 @@ source = source.replace(
 if (!source.includes("emotion: 'Feeling'")) throw new Error('Native Journal contract update did not apply');
 writeFileSync(path, source, 'utf8');
 console.log('Native action regression contract updated for finished Journal UX.');
+
+// Synchronize trigger after the default-branch runner learned this contract.
