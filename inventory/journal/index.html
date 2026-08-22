@@ -770,25 +770,26 @@ button.site-nav__magnet {
     <link rel="stylesheet" href="../../styles/inventory-core-shell.css" />
     <link rel="stylesheet" href="../../styles.css" fetchpriority="high" />
     <style>
-      /* Journal UX first pass v1 — inline pre-paint overrides */
+      /* Journal final shell: history first, compact controls, secondary disclosures. */
       main[data-page-id='inventory-journal'] {
-        gap: clamp(1rem, 2.4vw, 1.5rem);
+        gap: clamp(0.65rem, 1.8vw, 0.95rem);
       }
 
       main[data-page-id='inventory-journal'] .journal-page-header {
-        padding: clamp(1rem, 3vw, 1.35rem);
-        border: 2px solid color-mix(in srgb, var(--outline) 58%, transparent);
-        border-radius: var(--radius-2xl);
-        background: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
-        box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 14%, transparent);
-        gap: 0.8rem;
+        padding: 0.2rem 0.08rem 0.35rem;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        gap: 0;
       }
 
       main[data-page-id='inventory-journal'] .journal-page-title-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr);
-        gap: 0.85rem;
+        display: flex;
         align-items: center;
+        justify-content: space-between;
+        gap: 0.65rem;
+        min-width: 0;
       }
 
       main[data-page-id='inventory-journal'] .journal-page-header .page-title {
@@ -800,181 +801,338 @@ button.site-nav__magnet {
         overflow: visible;
         clip: auto;
         white-space: normal;
-        font-size: clamp(1.45rem, 4.8vw, 2.2rem);
-        line-height: 1.08;
-        text-transform: uppercase;
-        letter-spacing: 0.055em;
+        font-size: clamp(1.45rem, 5.6vw, 2rem);
+        line-height: 1.05;
+        text-transform: none;
+        letter-spacing: -0.015em;
       }
 
       main[data-page-id='inventory-journal'] .journal-page-title-row__actions {
-        width: 100%;
-        justify-content: stretch;
+        width: auto;
+        display: flex;
+        flex: 0 0 auto;
       }
 
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight {
-        width: 100%;
-        min-height: 58px;
-        justify-content: center;
-        padding: 0.72rem 0.9rem;
-        border: 3px solid var(--outline);
-        border-radius: var(--radius-lg);
-        background: color-mix(in srgb, var(--rose) 84%, #ffffff 16%);
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact {
+        min-width: 0;
+        min-height: 44px;
+        padding: 0.42rem 0.7rem;
+        gap: 0.42rem;
+        border: 1.5px solid color-mix(in srgb, var(--outline) 58%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, var(--rose) 56%, #ffffff 44%);
         color: var(--ink);
-        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 34%, transparent);
-        font-weight: 700;
+        box-shadow: none;
+        font-weight: 750;
       }
 
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight:hover,
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight:focus-visible {
-        transform: translateY(-2px);
-        border-color: var(--outline);
-        background: color-mix(in srgb, var(--rose) 90%, #ffffff 10%);
-        box-shadow: 0 11px 0 color-mix(in srgb, var(--outline) 38%, transparent);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button__icon {
-        width: 2rem;
-        height: 2rem;
-        min-width: 2rem;
-        min-height: 2rem;
-        border-width: 2px;
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact:hover,
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact:focus-visible {
+        transform: none;
+        background: color-mix(in srgb, var(--rose) 68%, #ffffff 32%);
         box-shadow: none;
       }
 
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button__title {
-        font-size: 0.95rem;
-        letter-spacing: 0.035em;
-        text-transform: uppercase;
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact .journal-fullscreen-button__icon {
+        width: 1.45rem;
+        height: 1.45rem;
+        min-width: 1.45rem;
+        min-height: 1.45rem;
+        border-width: 1.5px;
+        box-shadow: none;
       }
 
-      main[data-page-id='inventory-journal'] .journal-page-description {
-        max-width: 62ch;
-        font-size: 0.94rem;
-        line-height: 1.45;
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact .journal-fullscreen-button__title {
+        font-size: 0.82rem;
+        letter-spacing: 0;
+        text-transform: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-page {
         display: grid;
-        gap: clamp(0.9rem, 2.5vw, 1.25rem);
+        gap: clamp(0.65rem, 1.8vw, 0.95rem);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-section {
+        padding: clamp(0.7rem, 2vw, 0.9rem);
+        border: 1.5px solid color-mix(in srgb, var(--outline) 22%, transparent);
+        border-radius: var(--radius-2xl);
+        background: color-mix(in srgb, #ffffff 97%, var(--lavender) 3%);
+        box-shadow: none;
+        display: grid;
+        gap: 0.62rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-section__header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.55rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-section__header .section-title {
+        font-size: 1.02rem;
+        line-height: 1.15;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls {
+        display: grid;
+        gap: 0.48rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__search input {
+        min-height: 44px;
+        border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+        border-radius: var(--radius-lg);
+        background: #ffffff;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__filters {
+        display: flex;
+        gap: 0.34rem;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scrollbar-width: none;
+        padding-bottom: 0.08rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__filters::-webkit-scrollbar {
+        display: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-control {
+        flex: 0 0 auto;
+        display: block;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-control > span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-control select,
+      main[data-page-id='inventory-journal'] .journal-history-controls__clear {
+        width: auto;
+        min-width: 0;
+        min-height: 40px;
+        padding: 0.38rem 1.55rem 0.38rem 0.62rem;
+        border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+        border-radius: var(--radius-pill);
+        background-color: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+        box-shadow: none;
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.76rem;
+        font-weight: 650;
+        white-space: nowrap;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__clear {
+        padding-inline: 0.7rem;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history--cards {
+        display: grid;
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+        border-radius: var(--radius-xl);
+        background: #ffffff;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry {
+        margin: 0;
+        padding: 0.72rem 0.78rem;
+        gap: 0.42rem;
+        border: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--outline) 10%, transparent);
+        border-radius: 0;
+        background: #ffffff;
+        box-shadow: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry:last-child {
+        border-bottom: 0;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__emotion {
+        margin: 0;
+        font-size: 0.96rem;
+        line-height: 1.25;
+        font-weight: 760;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__meta {
+        font-size: 0.72rem;
+        line-height: 1.25;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__notes {
+        margin: 0;
+        font-size: 0.86rem;
+        line-height: 1.38;
+        color: color-mix(in srgb, var(--ink) 84%, var(--ink-soft) 16%);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__facets {
+        gap: 0.28rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-value-token {
+        min-height: 28px;
+        padding: 0.16rem 0.45rem;
+        border-width: 1px;
+        box-shadow: none;
+        font-size: 0.72rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__actions {
+        margin-top: 0.08rem;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.34rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__edit,
+      main[data-page-id='inventory-journal'] .journal-entry__delete {
+        min-width: 0;
+        min-height: 36px;
+        padding: 0.3rem 0.55rem;
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: transparent;
+        box-shadow: none;
+        color: var(--ink-soft);
+        font: inherit;
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__edit:hover,
+      main[data-page-id='inventory-journal'] .journal-entry__edit:focus-visible,
+      main[data-page-id='inventory-journal'] .journal-entry__delete:hover,
+      main[data-page-id='inventory-journal'] .journal-entry__delete:focus-visible {
+        transform: none;
+        background: color-mix(in srgb, var(--lavender) 38%, #ffffff 62%);
+        box-shadow: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-overview-grid {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-          'summary'
-          'backup';
-        gap: clamp(0.75rem, 2vw, 1rem);
+        gap: 0.48rem;
       }
 
-      main[data-page-id='inventory-journal'] .journal-summary-section {
-        grid-area: summary;
-        border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
-        background: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-actions {
-        grid-area: backup;
-        border: 2px solid color-mix(in srgb, var(--outline) 34%, transparent);
-        background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-panel {
-        padding: clamp(0.9rem, 2.6vw, 1.15rem);
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure {
+        border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
         border-radius: var(--radius-xl);
-        box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 10%, transparent);
+        background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+        box-shadow: none;
+        overflow: hidden;
       }
 
-      main[data-page-id='inventory-journal'] .journal-actions__header,
-      main[data-page-id='inventory-journal'] .journal-history-section__header {
-        gap: 0.25rem;
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__summary {
+        min-height: 48px;
+        padding: 0.62rem 0.72rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.65rem;
+        cursor: pointer;
+        list-style: none;
+        font-size: 0.84rem;
+        font-weight: 760;
       }
 
-      main[data-page-id='inventory-journal'] .journal-actions__hint,
-      main[data-page-id='inventory-journal'] .journal-form-section__hint,
-      main[data-page-id='inventory-journal'] .journal-list__hint {
-        line-height: 1.4;
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__summary::-webkit-details-marker {
+        display: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__chevron {
+        color: var(--ink-soft);
+        transition: transform 0.16s ease;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure[open] .journal-utility-disclosure__chevron {
+        transform: rotate(90deg);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__body {
+        display: grid;
+        gap: 0.55rem;
+        padding: 0 0.72rem 0.72rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-actions__hint {
+        margin: 0;
+        font-size: 0.76rem;
+        line-height: 1.35;
+        color: var(--ink-soft);
       }
 
       main[data-page-id='inventory-journal'] .journal-actions__buttons {
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0.55rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.42rem;
       }
 
       main[data-page-id='inventory-journal'] .journal-actions__buttons .inventory-button {
         width: 100%;
-        min-height: 46px;
-        padding: 0.55rem 0.7rem;
-        border-width: 2px;
-        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 15%, transparent);
-        font-size: 0.82rem;
+        min-height: 42px;
+        padding: 0.4rem 0.58rem;
+        border-width: 1.5px;
+        border-radius: var(--radius-lg);
+        box-shadow: none;
+        font-size: 0.74rem;
       }
 
-      main[data-page-id='inventory-journal'] .journal-summary__header {
-        align-items: center;
-        gap: 0.65rem;
-      }
-
-      main[data-page-id='inventory-journal'] .journal-summary__header .inventory-button {
-        min-height: 44px;
-        padding: 0.45rem 0.7rem;
-        border-width: 2px;
-        font-size: 0.78rem;
-      }
-
-      main[data-page-id='inventory-journal'] .journal-history-section {
-        border: 2px solid color-mix(in srgb, var(--outline) 52%, transparent);
-        background: #ffffff;
-        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-filters {
-        gap: 0.65rem;
+      main[data-page-id='inventory-journal'] .journal-summary {
+        padding-top: 0.05rem;
       }
 
       main[data-page-id='inventory-journal'] .journal-inline-fallback {
-        margin-top: 0.1rem;
-        border-width: 2px;
-        border-color: color-mix(in srgb, var(--outline) 30%, transparent);
-        background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+        margin-top: 0;
+        border: 0;
+        background: transparent;
         box-shadow: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-inline-fallback__summary {
-        padding: 0.72rem 0.85rem;
-        font-size: 0.82rem;
+        min-height: 40px;
+        padding: 0.35rem 0.15rem;
+        font-size: 0.72rem;
+        color: var(--ink-soft);
       }
 
       @media (min-width: 760px) {
         main[data-page-id='inventory-journal'] .journal-overview-grid {
-          grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
-          grid-template-areas: 'summary backup';
-          align-items: start;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        main[data-page-id='inventory-journal'] .journal-history-controls__filters {
+          overflow-x: visible;
+          flex-wrap: wrap;
         }
       }
 
-      @media (max-width: 640px) {
-        main[data-page-id='inventory-journal'] .journal-page-header {
-          padding: 0.95rem;
-          gap: 0.7rem;
+      @media (max-width: 420px) {
+        main[data-page-id='inventory-journal'] .journal-page-header .page-title {
+          font-size: 1.35rem;
         }
 
-        main[data-page-id='inventory-journal'] .journal-page-title-row {
-          grid-template-columns: minmax(0, 1fr);
-          gap: 0.65rem;
-        }
-
-        main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight {
-          min-height: 62px;
-        }
-
-        main[data-page-id='inventory-journal'] .journal-page-description {
-          font-size: 0.9rem;
-        }
-
-        main[data-page-id='inventory-journal'] .journal-panel {
-          padding: 0.85rem;
+        main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact {
+          padding-inline: 0.58rem;
         }
 
         main[data-page-id='inventory-journal'] .journal-actions__buttons {
@@ -1484,99 +1642,81 @@ button.site-nav__magnet {
           <div class="journal-page-title-row__actions">
             <button
               type="button"
-              class="journal-fullscreen-button journal-fullscreen-button--spotlight"
+              class="journal-fullscreen-button journal-fullscreen-button--compact"
               data-support-journal-open
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
             >
               <span class="journal-fullscreen-button__icon" aria-hidden="true"></span>
-              <span class="journal-fullscreen-button__text">
-                <span class="journal-fullscreen-button__title">Open journal</span>
-              </span>
+              <span class="journal-fullscreen-button__title">New entry</span>
             </button>
           </div>
         </div>
-        <p class="page-description journal-page-description">
-          Log feelings, needs, and notes from any check-in. Review patterns over time, or export a backup when you want one.
-        </p>
       </header>
       <section class="journal-page" data-inventory-section="journal">
-        <div class="journal-overview-grid">
-          <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
-            <div class="journal-actions__header">
-              <h2 id="journal-actions-heading" class="section-title">Backup &amp; restore</h2>
-              <p class="journal-actions__hint">
-                Export or import a backup of your journal, inventory, and customizer settings.
-              </p>
-            </div>
-            <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export backup</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import backup</button>
-              <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
-            </div>
-            <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
-          </section>
-
-          <section class="journal-summary-section journal-panel" aria-labelledby="journal-summary-heading">
-            <div class="journal-summary__header">
-              <h2 id="journal-summary-heading" class="section-title">Patterns at a glance</h2>
-              <button
-                type="button"
-                class="inventory-button inventory-button--ghost"
-                data-journal-summary-toggle
-                aria-expanded="true"
-              >
-                Hide summary
-              </button>
-            </div>
-            <div class="journal-summary" data-journal-summary></div>
-          </section>
-        </div>
-
         <section class="journal-history-section journal-panel journal-panel--history" aria-labelledby="journal-history-heading">
           <div class="journal-history-section__header">
-            <h2 id="journal-history-heading" class="section-title">Journal history</h2>
+            <h2 id="journal-history-heading" class="section-title">History</h2>
           </div>
           <form class="journal-history-controls" data-journal-filters>
             <div class="journal-history-controls__search">
               <label class="visually-hidden" for="journal-filter-search">Search journal</label>
               <input id="journal-filter-search" name="search" type="search" placeholder="Search journal" autocomplete="off" />
             </div>
-            <div class="journal-history-controls__choices" aria-label="Filter journal history">
-              <label class="journal-history-control" for="journal-filter-emotion"><span>Feeling</span><select id="journal-filter-emotion" name="emotion"><option value="">All</option></select></label>
-              <label class="journal-history-control" for="journal-filter-need"><span>Need</span><select id="journal-filter-need" name="need"><option value="">All</option></select></label>
-              <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag"><option value="">All</option></select></label>
-            </div>
-            <div class="journal-history-controls__secondary">
-              <label class="journal-history-control" for="journal-filter-range"><span>Date</span><select id="journal-filter-range" name="range"><option value="all">Any time</option><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
-              <label class="journal-history-control" for="journal-filter-sort"><span>Sort</span><select id="journal-filter-sort" name="sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="intensity-high">Highest intensity</option><option value="intensity-low">Lowest intensity</option></select></label>
-              <button type="button" class="journal-history-controls__clear app-action app-action--quiet" data-journal-filters-reset>Clear</button>
+            <div class="journal-history-controls__filters" aria-label="Filter journal history">
+              <label class="journal-history-control" for="journal-filter-emotion"><span>Feeling</span><select id="journal-filter-emotion" name="emotion" aria-label="Feeling"><option value="">Feeling</option></select></label>
+              <label class="journal-history-control" for="journal-filter-need"><span>Need</span><select id="journal-filter-need" name="need" aria-label="Need"><option value="">Need</option></select></label>
+              <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag" aria-label="Tag"><option value="">Tag</option></select></label>
+              <label class="journal-history-control" for="journal-filter-range"><span>Date</span><select id="journal-filter-range" name="range" aria-label="Date"><option value="all">Any time</option><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
+              <label class="journal-history-control" for="journal-filter-sort"><span>Sort</span><select id="journal-filter-sort" name="sort" aria-label="Sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="intensity-high">Highest intensity</option><option value="intensity-low">Lowest intensity</option></select></label>
+              <button type="button" class="journal-history-controls__clear" data-journal-filters-reset>Clear</button>
             </div>
           </form>
           <p class="journal-empty" data-journal-empty hidden>Save an entry to see it here.</p>
           <div class="journal-history journal-history--cards" data-journal-history></div>
-        </section>          <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
+
+        <div class="journal-overview-grid" aria-label="Journal tools">
+          <details class="journal-summary-section journal-utility-disclosure">
+            <summary class="journal-utility-disclosure__summary">
+              <span>Patterns</span>
+              <span class="journal-utility-disclosure__chevron" aria-hidden="true">›</span>
+            </summary>
+            <div class="journal-utility-disclosure__body">
+              <div class="journal-summary" data-journal-summary></div>
+            </div>
+          </details>
+
+          <details class="journal-actions journal-utility-disclosure">
+            <summary class="journal-utility-disclosure__summary">
+              <span>Backup &amp; restore</span>
+              <span class="journal-utility-disclosure__chevron" aria-hidden="true">›</span>
+            </summary>
+            <div class="journal-utility-disclosure__body">
+              <p class="journal-actions__hint">Export or import your journal, inventory, and customizer settings.</p>
+              <div class="journal-actions__buttons">
+                <button type="button" id="journal-export" class="inventory-button">Export</button>
+                <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import</button>
+                <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
+              </div>
+              <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
+            </div>
+          </details>
+        </div>
 
         <details class="journal-inline-fallback" data-journal-inline-fallback>
           <summary class="journal-inline-fallback__summary">
-            <span class="journal-inline-fallback__summary-text">Need the legacy inline journal form?</span>
+            <span class="journal-inline-fallback__summary-text">Trouble opening the journal?</span>
           </summary>
           <div class="journal-inline-fallback__body">
-            <p class="journal-inline-fallback__note">
-              The full screen journal above is the best experience&mdash;it's roomier, faster, and stays current with
-              new features. This legacy form is more constrained and less polished, so only use it if the primary
-              journal will not load.
-            </p>
+            <p class="journal-inline-fallback__note">Use this inline form only if the full-screen editor will not open.</p>
             <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>
               <section class="journal-form-section" aria-labelledby="journal-form-heading">
                 <div class="journal-form-section__header">
                   <h2 id="journal-form-heading" class="section-title">New entry</h2>
                 </div>
                 <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
-                  <noscript>
-                    <p class="journal-status">Enable JavaScript to use the journal form.</p>
-                  </noscript>
+                  <noscript><p class="journal-status">Enable JavaScript to use the journal form.</p></noscript>
                 </div>
               </section>
             </div>

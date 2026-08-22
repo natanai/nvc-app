@@ -1285,23 +1285,12 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
-          <div class="strategy-deck-header">
-            <button
-              type="button"
-              class="strategy-deck__shuffle"
-              data-strategy-shuffle
-            >
-              Shuffle cards
-            </button>
-            <button
-              type="button"
-              class="strategy-deck__toggle"
-              data-strategy-toggle
-              aria-pressed="false"
-            >
-              View all
-            </button>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-deck-header" aria-label="Strategy browsing controls">
+              <button type="button" class="strategy-deck__shuffle" data-strategy-shuffle aria-label="Shuffle strategy cards">Shuffle</button>
+              <button type="button" class="strategy-deck__toggle" data-strategy-toggle aria-pressed="false">View all</button>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>

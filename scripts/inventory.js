@@ -453,7 +453,6 @@ const state = {
   journalHistoryEl: null,
   journalEmptyEl: null,
   journalSummaryEl: null,
-  journalSummaryToggle: null,
   journalFiltersForm: null,
   journalIntensityDisplay: null,
   journalIntensityInput: null,
@@ -485,7 +484,6 @@ const state = {
   journalEditingId: '',
   journalEditingEntry: null,
   journalFilters: { search: '', emotion: '', need: '', tag: '', sort: 'newest', range: 'all' },
-  journalSummaryCollapsed: false,
   journalSavedTimer: null,
   journalSaveLabel: '',
   viewportHeightListenersAttached: false,
@@ -3901,7 +3899,6 @@ function setupJournalSection() {
     state.journalHistoryEl = panel.querySelector('[data-journal-history]');
     state.journalEmptyEl = panel.querySelector('[data-journal-empty]');
     state.journalSummaryEl = panel.querySelector('[data-journal-summary]');
-    state.journalSummaryToggle = panel.querySelector('[data-journal-summary-toggle]');
     state.journalFiltersForm = panel.querySelector('[data-journal-filters]');
     state.journalIntensityDisplay =
       state.journalController?.intensityDisplay || panel.querySelector('[data-journal-intensity-display]');
@@ -3937,13 +3934,6 @@ function setupJournalSection() {
     const filtersReset = panel.querySelector('[data-journal-filters-reset]');
     filtersReset?.addEventListener('click', handleJournalFiltersReset);
 
-    if (state.journalSummaryToggle) {
-      state.journalSummaryToggle.addEventListener('click', () => {
-        state.journalSummaryCollapsed = !state.journalSummaryCollapsed;
-        updateJournalSummaryVisibility();
-      });
-    }
-
     if (state.journalNeedsSelect) {
       const needsEvent = state.journalNeedsSelect instanceof HTMLSelectElement ? 'change' : 'input';
       state.journalNeedsSelect.addEventListener(needsEvent, () => {
@@ -3973,7 +3963,6 @@ function setupJournalSection() {
       const initialIntensity = Number(state.journalIntensityInput?.value);
       updateJournalIntensityDisplay(Number.isFinite(initialIntensity) ? initialIntensity : 5);
     }
-    updateJournalSummaryVisibility();
     applyJournalDraft();
   };
 
@@ -4506,7 +4495,6 @@ function renderJournalViews() {
   renderJournalSummary();
   renderJournalHistory();
   renderJournalOverlayHistory();
-  updateJournalSummaryVisibility();
 }
 
 function normalizeJournalTags(value) {
@@ -5007,16 +4995,6 @@ function handleTagSuggestionMouseOver(event) {
 function handleJournalFormInput() {
   resetJournalSaveButton();
   scheduleJournalDraftSave();
-}
-
-function updateJournalSummaryVisibility() {
-  if (!state.journalSummaryEl || !state.journalSummaryToggle) {
-    return;
-  }
-  const collapsed = !!state.journalSummaryCollapsed;
-  state.journalSummaryEl.hidden = collapsed;
-  state.journalSummaryToggle.textContent = collapsed ? 'Show summary' : 'Hide summary';
-  state.journalSummaryToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 }
 
 function updateJournalIntensityDisplay(value) {

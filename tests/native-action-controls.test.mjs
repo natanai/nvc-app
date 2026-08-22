@@ -70,10 +70,13 @@ test('Journal and personal strategy density live at canonical owners across phon
   assert.equal(pages.includes('const strategiesNote'), false, 'built-in strategy browsing must not carry a storage reminder unrelated to browsing');
   assert.equal(inventory.includes('strategy-save-target-hint'), false, 'save-target explanatory chrome must not be injected after paint');
   assert.ok(density.includes('.journal-meta-row + .journal-meta-row'));
-  assert.ok(density.includes('.journal-history-controls__choices'));
-  assert.match(styles, /\.strategy-card--form \{[\s\S]*?border-width:\s*2px;[\s\S]*?box-shadow:\s*0 6px/);
-  assert.match(styles, /\.strategy-card--form \.strategy-card--input \{[\s\S]*?border-width:\s*2px;[\s\S]*?box-shadow:\s*0 3px/);
-  assert.ok(styles.includes('min-height: 6.5rem'));
+  assert.ok(pages.includes('journal-history-controls__filters'));
+  assert.ok(pages.includes('journal-utility-disclosure'));
+  assert.equal(pages.includes('data-journal-summary-toggle'), false, 'Patterns disclosure must use native details state rather than a custom runtime toggle');
+  assert.match(styles, /\.strategy-card--form \{[\s\S]*?border:\s*1\.5px solid[\s\S]*?box-shadow:\s*none/);
+  assert.match(styles, /\.strategy-card--form \.strategy-card--input \{[\s\S]*?border:\s*1px solid[\s\S]*?box-shadow:\s*none/);
+  assert.ok(styles.includes('min-height: 4.75rem'));
+  assert.ok(styles.includes('.strategy-section__header {'));
   assert.ok(pages.includes('strategy-card strategy-card--form'), 'generated strategy forms must still originate in the page compiler');
   assert.equal(styles.includes('.inventory-journal-form__actions .inventory-button'), false);
   assert.ok(readme.includes('### Root-level UX changes'));

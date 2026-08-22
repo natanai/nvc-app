@@ -3038,10 +3038,9 @@ main[data-need-slug] .page-title::before {
   }
 }
 
-.strategy-section,
-.suggestion {
+.strategy-section {
   display: grid;
-  gap: 1rem;
+  gap: 0.58rem;
 }
 
 .need-evidence {
@@ -3424,35 +3423,37 @@ main[data-need-slug] .page-title::before {
 }
 
 /* Header row: shuffle button */
-.strategy-deck-header {
+.strategy-section__header {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.45rem;
+  justify-content: space-between;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.strategy-deck {
+  width: min(520px, 100%);
+  max-width: 100%;
+  margin-inline: auto;
+  margin-bottom: 0.75rem;
+  display: grid;
+  gap: 0.58rem;
+  touch-action: pan-y;
 }
 
 .strategy-deck__shuffle,
 .strategy-deck__toggle {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  border-radius: var(--radius-pill);
-  border: 2px solid var(--outline);
-  background: color-mix(in srgb, var(--btn-bg) 70%, #ffffff 30%);
-  color: var(--btn-fg);
-  padding: 0.42rem 0.8rem;
-  cursor: pointer;
-  box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 72%, transparent);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
 }
 
 .strategy-deck__shuffle:hover,
 .strategy-deck__shuffle:focus-visible,
 .strategy-deck__toggle:hover,
 .strategy-deck__toggle:focus-visible {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 0 var(--shadow);
+  transform: none;
+  background: color-mix(in srgb, var(--rose) 58%, #ffffff 42%);
+  border-color: color-mix(in srgb, var(--outline) 62%, transparent);
+  box-shadow: none;
 }
 
 .strategy-deck__toggle {
@@ -3638,18 +3639,19 @@ main[data-need-slug] .page-title::before {
   display: none;
 }
 
-.strategy-form__container {
+.strategy-form {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.42rem;
 }
 
 .strategy-card--form {
   display: grid;
-  padding: clamp(0.7rem, 1.8vw, 0.95rem);
-  gap: 0.58rem;
-  border-width: 2px;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 6px 0 color-mix(in srgb, var(--shadow) 52%, transparent);
+  padding: clamp(0.58rem, 1.6vw, 0.78rem);
+  gap: 0.42rem;
+  border: 1.5px solid color-mix(in srgb, var(--outline) 28%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--mint) 30%, #ffffff 70%);
+  box-shadow: none;
 }
 
 .strategy-form {
@@ -3659,15 +3661,18 @@ main[data-need-slug] .page-title::before {
 
 .strategy-form__field {
   display: grid;
-  gap: 0.28rem;
+  gap: 0.16rem;
+  min-width: 0;
 }
 
 .strategy-form__field label {
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 720;
   line-height: 1.2;
   text-transform: none;
-  letter-spacing: normal;
+  letter-spacing: 0;
+  color: var(--ink-soft);
 }
 
 .strategy-form__hint {
@@ -3697,7 +3702,7 @@ main[data-need-slug] .page-title::before {
 .strategy-form__row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
+  gap: 0.42rem;
 }
 
 .strategy-form__actions {
@@ -3758,24 +3763,17 @@ main[data-need-slug] .page-title::before {
 }
 
 .strategy-card--form .strategy-card--input {
-  border-width: 2px;
-  border-color: color-mix(in srgb, var(--outline) 58%, transparent);
+  border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, #fff 22%, var(--mint) 78%);
-  box-shadow: 0 3px 0 color-mix(in srgb, var(--shadow) 46%, transparent);
+  background: color-mix(in srgb, #ffffff 94%, var(--mint) 6%);
+  box-shadow: none;
 }
 
 .strategy-card--form .strategy-card--input input[type='text'],
 .strategy-card--form .strategy-card--input select,
 .strategy-card--form .strategy-card--input textarea {
-  width: 100%;
-  min-height: 44px;
-  padding: 0.48rem 0.65rem;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  color: inherit;
-  box-shadow: none;
+  min-height: 4.75rem;
+  resize: vertical;
 }
 
 .strategy-card--form .strategy-card--input textarea {
@@ -3810,7 +3808,7 @@ main[data-need-slug] .page-title::before {
 }
 
 .strategy-card--form .strategy-card__actions {
-  margin-top: 0.15rem;
+  margin-top: 0.05rem;
 }
 
 .strategy-card__save {
@@ -3884,8 +3882,8 @@ main[data-need-slug] .page-title::before {
 }
 
 .strategy-card--input:focus-within {
-  outline: 3px dashed var(--outline);
-  outline-offset: 4px;
+  outline: 2px solid color-mix(in srgb, var(--plum) 48%, #ffffff 52%);
+  outline-offset: 1px;
 }
 
 .inventory-feedback,
@@ -7703,8 +7701,11 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
 .strategy-card__actions--save-targets .local-storage-note {
   grid-column: 1 / -1;
   justify-self: stretch;
-  margin: 0.1rem 0 0;
+  margin: 0.02rem 0 0;
   text-align: left;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
 }
 
 .strategy-card__save--profile.app-action,
