@@ -781,8 +781,8 @@ const customizerShellPlaceholderHtml = `    <div class="palette-corner" data-she
 function normalizeScripts(scripts, options = {}) {
   const includeInventoryRuntime = options.includeInventoryRuntime !== false;
   const baseScripts = [
-    { src: 'scripts/inventory-core-shell.js', defer: true },
     ...(includeInventoryRuntime ? [{ src: 'scripts/inventory.js', defer: true }] : []),
+    { src: 'scripts/inventory-core-shell.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
   ];
   const beforeBaseScripts = scripts.filter((entry) => entry && typeof entry === 'object' && entry.beforeBase === true);
