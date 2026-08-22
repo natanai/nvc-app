@@ -96,7 +96,7 @@ Pass condition: each selected Feeling owns an independent 1–10 rating and sett
 
 Recheck the remaining surfaces that were identified during the final phone-density review:
 
-- the Journal landing page should not feel like breadcrumb card → large Journal card → Patterns → Backup ceremony; if that hierarchy still dominates the viewport, it remains a Bedrock acceptance defect rather than post-Bedrock polish;
+- the Journal landing page should not feel like breadcrumb card → large Journal card → large Patterns card → Backup card ceremony; if that hierarchy still dominates the viewport, it remains a Bedrock acceptance defect rather than post-Bedrock polish;
 - the Strategies toolbar should remain compact, with browsing actions secondary to strategy content and without the obsolete local-storage reminder taking over a section;
 - **Add a personal strategy** should read as one editor containing light-weight controls, not a giant green card containing several equally strong cards.
 
