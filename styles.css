@@ -2432,9 +2432,6 @@ main[data-need-slug] .page-title::before {
   pointer-events: none;
   z-index: 0;
   mix-blend-mode: normal;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);
 }
 
 .magnet[data-magnet-id^='feelings-'] > * {

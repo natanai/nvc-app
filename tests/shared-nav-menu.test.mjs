@@ -65,7 +65,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
 
   const critical = await fs.readFile(path.join(root, 'styles/nav-critical.css'), 'utf8');
   assert.ok(critical.includes('.site-nav__magnet--menu {'), 'Menu must have critical prepaint styling');
-  assert.ok(critical.includes(".magnet-board:not([data-ready='1']) .magnet"), 'critical nav CSS must hide unpositioned magnets');
+  assert.ok(!critical.includes(".magnet-board:not([data-ready='1']) .magnet"), 'critical nav CSS must not gate the whole magnet board on JavaScript readiness');
 
   const styles = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
   assert.ok(styles.includes('100svh - clamp(7rem, 22vw, 10rem)'), 'mobile Customizer must respect Safari safe viewport height');

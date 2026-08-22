@@ -79,23 +79,7 @@ const HOME_ICON_INLINE = (basePath = '') => {
 };
 
 const NAV_MAGNET_STORAGE_KEY = 'site-nav';
-const HUB_MAGNET_TILT_OPTIONS = [-2, -1, 0, 1, 2];
-const HUB_MAGNET_OFFSET_OPTIONS = [-3, -2, -1, 0, 1, 2, 3];
-
-const stableHubMagnetDecorationStyle = (magnetId) => {
-  let hash = 2166136261;
-  const value = String(magnetId || '');
-  for (let index = 0; index < value.length; index += 1) {
-    hash ^= value.charCodeAt(index);
-    hash = Math.imul(hash, 16777619) >>> 0;
-  }
-  const tilt = HUB_MAGNET_TILT_OPTIONS[hash % HUB_MAGNET_TILT_OPTIONS.length];
-  const offsetHash = Math.imul(hash ^ 0x9e3779b9, 2654435761) >>> 0;
-  const offset = HUB_MAGNET_OFFSET_OPTIONS[offsetHash % HUB_MAGNET_OFFSET_OPTIONS.length];
-  return `--magnet-tilt: ${tilt}deg; --magnet-offset: ${offset}px;`;
-};
-
-const magnetPrefillScript = (storageKey, includeDecoration = false) => String.raw`
+const magnetPrefillScript = (storageKey) => String.raw`
       <script>
         (function() {
           if (typeof window === 'undefined' || typeof document === 'undefined') {
@@ -202,9 +186,7 @@ const magnetPrefillScript = (storageKey, includeDecoration = false) => String.ra
             var yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
             var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
             var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
-${includeDecoration
-              ? "            el.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0) translateY(calc(var(--magnet-offset, 0px) + var(--magnet-hover-offset, 0px))) rotate(var(--magnet-tilt, 0))';"
-              : "            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';"}
+            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
           }
 
           if (hasMissingVisiblePlacement) {
@@ -1485,9 +1467,7 @@ function renderCategory(type, items) {
   const magnets = items
   .map((item) => {
     const label = escapeHtml(item.title);
-    const magnetId = `${type}-${item.slug}`;
-    const decorationStyle = stableHubMagnetDecorationStyle(magnetId);
-    return `<a class="pill magnet" data-magnet-id="${magnetId}" style="${decorationStyle}" href="${item.slug}/"><span class="magnet__label">${label}</span></a>`;
+    return `<a class="pill magnet" data-magnet-id="${type}-${item.slug}" href="${item.slug}/"><span class="magnet__label">${label}</span></a>`;
   })
   .join('');
 
@@ -1687,7 +1667,6 @@ function renderCategory(type, items) {
           </div>
         </div>
       </section>
-${magnetPrefillScript(type + '-hub-v4', true)}
     `;
 
   const html = htmlPage({

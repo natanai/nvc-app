@@ -112,14 +112,10 @@ const fontsReady = typeof document !== 'undefined' && document.fonts && document
 const applyMagnetDecorations = (element, index) => {
   element.classList.add('magnet');
   element.style.order = String(index);
-  if (!element.style.getPropertyValue('--magnet-tilt').trim()) {
-    const tilt = randomFrom(TILT_OPTIONS);
-    element.style.setProperty('--magnet-tilt', `${tilt}deg`);
-  }
-  if (!element.style.getPropertyValue('--magnet-offset').trim()) {
-    const offset = randomFrom(OFFSET_OPTIONS);
-    element.style.setProperty('--magnet-offset', `${offset}px`);
-  }
+  const tilt = randomFrom(TILT_OPTIONS);
+  const offset = randomFrom(OFFSET_OPTIONS);
+  element.style.setProperty('--magnet-tilt', `${tilt}deg`);
+  element.style.setProperty('--magnet-offset', `${offset}px`);
 };
 
 const reorderNavMagnetsForMobile = (board) => {

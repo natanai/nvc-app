@@ -14,76 +14,53 @@ const HUBS = [
   ['faux-feelings/index.html', 'faux-feelings-hub-v4'],
 ];
 
-test('canonical page compiler owns one reusable saved-layout prepaint helper', async () => {
+test('navigation alone keeps the lightweight saved-layout prepaint path', async () => {
   const compiler = await read('scripts/build-pages.mjs');
-
-  assert.ok(
-    compiler.includes('const magnetPrefillScript = (storageKey, includeDecoration = false) => String.raw`'),
-    'saved-layout prepaint should have one generic compiler owner with an opt-in final-pose path',
-  );
-  assert.ok(
-    compiler.includes("const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);"),
-    'navigation should continue using the existing prepaint output',
-  );
-  assert.ok(
-    compiler.includes("magnetPrefillScript(type + '-hub-v4', true)"),
-    'category hubs should opt into visually final prepaint transforms',
-  );
-  assert.ok(compiler.includes('stableHubMagnetDecorationStyle'), 'generated hubs should own deterministic handmade pose values');
-  assert.ok(!compiler.includes('const navPrefillScript ='), 'nav-only duplicate prefill owner should be gone');
+  assert.ok(compiler.includes('const magnetPrefillScript = (storageKey) => String.raw`'));
+  assert.ok(compiler.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
+  assert.ok(!compiler.includes("magnetPrefillScript(type + '-hub-v4'"));
+  assert.ok(!compiler.includes('stableHubMagnetDecorationStyle'));
 });
 
-test('saved category-hub layouts are visually final before the normal magnet module can reveal them', async () => {
+test('category hubs paint normally and let the magnet runtime restore their state', async () => {
   for (const [relativePath, storageKey] of HUBS) {
     const html = await read(relativePath);
-    const rootMarker = `data-magnet-key="${storageKey}"`;
-    const storageMarker = `magnetPositions:${storageKey}`;
-    const moduleMarker = 'scripts/magnets.js';
-
-    const rootAt = html.indexOf(rootMarker);
-    const storageAt = html.indexOf(storageMarker, rootAt);
-    const moduleAt = html.indexOf(moduleMarker, storageAt);
-
-    assert.ok(rootAt >= 0, `${relativePath} should contain its canonical magnet root`);
-    assert.ok(storageAt > rootAt, `${relativePath} should preapply its saved localStorage layout after the board markup exists`);
-    assert.ok(moduleAt > storageAt, `${relativePath} should restore saved coordinates before loading the normal magnet module`);
-    assert.ok(html.includes('--magnet-tilt:'), `${relativePath} should author stable tilt before runtime hydration`);
-    assert.ok(html.includes('--magnet-offset:'), `${relativePath} should author stable offset before runtime hydration`);
-
-    const prefillSlice = html.slice(storageAt, moduleAt);
-    assert.ok(prefillSlice.includes("board.dataset.ready = '1'"), `${relativePath} should reveal the board from the prepaint restore`);
-    assert.ok(prefillSlice.includes('hasMissingVisiblePlacement'), `${relativePath} should fail closed when saved layout does not cover every visible magnet`);
-    assert.ok(prefillSlice.includes('translateY(calc(var(--magnet-offset, 0px)'), `${relativePath} should include the authored vertical pose in first visible transform`);
-    assert.ok(prefillSlice.includes('rotate(var(--magnet-tilt, 0))'), `${relativePath} should include the authored tilt in first visible transform`);
+    assert.ok(html.includes(`data-magnet-key="${storageKey}"`));
+    assert.ok(!html.includes(`magnetPositions:${storageKey}`), `${relativePath} should not inline a second hub restore owner`);
   }
 });
 
-test('normal magnet hydration preserves compiler-authored hub pose values', async () => {
-  const runtime = await read('scripts/magnets.js');
-  assert.ok(runtime.includes("if (!element.style.getPropertyValue('--magnet-tilt').trim())"));
-  assert.ok(runtime.includes("if (!element.style.getPropertyValue('--magnet-offset').trim())"));
-});
-
-test('unrestored boards remain hidden rather than flashing a temporary seed layout', async () => {
+test('critical paint never gates all magnets on JavaScript readiness', async () => {
   const criticalCss = await read('styles/nav-critical.css');
-  assert.ok(
-    criticalCss.includes(".magnet-board:not([data-ready='1']) .magnet"),
-    'critical CSS should keep a board gated until either prepaint restore or normal initialization is ready',
-  );
-  assert.ok(criticalCss.includes('visibility: hidden;'));
+  assert.ok(!criticalCss.includes(".magnet-board:not([data-ready='1']) .magnet"));
+  for (const relativePath of ['feelings/index.html', 'feelings/afraid/index.html', 'needs/index.html']) {
+    const html = await read(relativePath);
+    assert.ok(!html.includes(".magnet-board:not([data-ready='1']) .magnet"), `${relativePath} must not inline the readiness visibility gate`);
+  }
 });
 
-test('Feeling illustration stabilization stays isolated from whole-page mobile compositing', async () => {
-  const styles = await read('styles.css');
-  assert.ok(
-    !styles.includes('@media (hover: none) and (pointer: coarse) {\n  html {\n    /* Fixed root backgrounds'),
-    'magnet repair must not change the root background compositing model after critical paint',
-  );
+test('critical paint never installs a fixed root background on mobile', async () => {
+  const criticalCss = await read('styles/nav-critical.css');
+  assert.ok(!criticalCss.includes('background-attachment: fixed'));
+  for (const relativePath of ['feelings/index.html', 'feelings/afraid/index.html', 'needs/index.html']) {
+    const html = await read(relativePath);
+    assert.ok(!html.includes('background-attachment: fixed'), `${relativePath} must not inline the mobile repaint trigger`);
+  }
+});
 
+test('Feeling art uses the normal paint path without a compensating compositor layer', async () => {
+  const styles = await read('styles.css');
   const artStart = styles.indexOf(".magnet[data-magnet-id^='feelings-']::after");
-  assert.ok(artStart >= 0, 'Feeling illustration pseudo-element should remain explicitly owned');
+  assert.ok(artStart >= 0);
   const artBlock = styles.slice(artStart, styles.indexOf('}', artStart) + 1);
-  assert.ok(artBlock.includes('-webkit-backface-visibility: hidden;'));
-  assert.ok(artBlock.includes('backface-visibility: hidden;'));
-  assert.ok(artBlock.includes('transform: translateZ(0);'));
+  assert.ok(!artBlock.includes('backface-visibility'));
+  assert.ok(!artBlock.includes('translateZ(0)'));
+});
+
+test('magnet runtime remains the single owner of handmade tilt and offset', async () => {
+  const runtime = await read('scripts/magnets.js');
+  assert.ok(runtime.includes('const tilt = randomFrom(TILT_OPTIONS);'));
+  assert.ok(runtime.includes('const offset = randomFrom(OFFSET_OPTIONS);'));
+  assert.ok(!runtime.includes("element.style.getPropertyValue('--magnet-tilt')"));
+  assert.ok(!runtime.includes("element.style.getPropertyValue('--magnet-offset')"));
 });
