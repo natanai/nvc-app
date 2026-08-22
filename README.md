@@ -25,7 +25,7 @@ The final architecture should not depend on a second layer repairing what the fi
 
 The core page and data authoring pipelines have completed their canonicalization passes:
 
-- `scripts/build-pages.mjs` is the canonical owner for all 180 generated page outputs. It has explicit route scopes, does not recursively reset mixed-ownership directories, and directly emits the final committed HTML, including the shared navigation serialization, prepaint-critical navigation CSS, and canonical shell script order.
+- `scripts/build-pages.mjs` is the canonical owner for all 180 generated page outputs. It has explicit route scopes, does not recursively reset mixed-ownership directories, and directly emits the final committed HTML, including the shared navigation serialization, repaired prepaint-critical navigation CSS, canonical shared stylesheet graph, and canonical shell script order.
 - the former `scripts/finalize-static-assets.mjs` post-generation repair pass and `scripts/build-pages-safe.mjs` staging/semantic-preservation wrapper have been deleted. Direct generation was converged against all 180 owned outputs, the page regression suite passed, and the normal authoring build adds no further page diff.
 - `scripts/build-data.mjs` is the canonical owner for `data/index.json`, `data/body-regions.json`, and `data/reverse-inference.json`. `npm run build:data` invokes it directly.
 - Body Cue rows are authored in `data/Feelings.csv`. Duplicate region/option/feeling rows and the legacy `love` cue key were removed from the canonical source, and the permanent data-authoring contract prevents either source defect from returning.
@@ -34,11 +34,13 @@ The core page and data authoring pipelines have completed their canonicalization
 - `npm run build` now runs both canonical compilers directly. Site Quality CI validates the committed site first, runs the real authoring build, and fails if generated artifacts differ from the committed tree.
 - the **Push Poems**, rebuild, and fact-checking workflows route regeneration through these same declared owners rather than a second repair layer or broad collateral staging.
 - representative first-load JavaScript graphs and the largest shared browser assets have explicit regression ceilings in `tests/performance-budget.test.mjs`, so Home/Shared Strategies lazy-loading gains cannot silently disappear as the codebase evolves.
-- Feelings, Needs, and Faux Feelings hubs preapply complete saved magnet layouts before reveal. Generated hub magnets also receive deterministic tilt/offset values that the normal runtime preserves, preventing a second-stage pose change after hydration. Feeling illustration layers have an isolated compositor stabilization for the mobile scrolling flicker acceptance case without changing the whole-page background model.
+- a real-phone bisect isolated two Bedrock-only paint regressions to page canonicalization accidentally activating dormant critical-CSS behavior: a global magnet visibility gate caused page-load flashing, and a fixed root background caused Feeling-art flicker during mobile scrolling. Both were removed at the canonical CSS owner. Category hubs now paint normally and let `scripts/magnets.js` own saved-position restoration and handmade pose; navigation alone keeps its established lightweight saved-layout prepaint path. Permanent tests prevent the global visibility gate, fixed-root background, or compensating Feeling-art GPU workaround from returning. The repaired behavior passed repeat testing on the same phone.
 - the Need strategy-card deck has been extracted byte-for-byte from the former `inventory.js` tail into route-owned `scripts/strategy-deck.js`. Need pages still load the Inventory runtime for their real save controls, while unrelated eager routes no longer parse the deck behavior.
+- the legacy `#journal-dashboard` compatibility redirect has been extracted from `inventory.js` into Inventory-only `scripts/inventory-legacy-journal-redirect.js`. The page compiler places that tiny compatibility owner immediately before `inventory.js`, preserving redirect timing without making unrelated eager routes parse it.
+- `styles.css` no longer hides shared dependencies behind `@import`. Generated pages directly expose Google Fonts, Feeling magnet icons, Need magnet icons, shared density, and Inventory shell CSS to the parser in the established cascade order before the main stylesheet. Feed, Observations, and the standalone Emotions Wheel explicitly mirror the blocking graph; Alexithymia Support explicitly mirrors it through its existing non-blocking `media="print"`/`onload` path and `<noscript>` fallback. The invalid late `@import './styles/nav-critical.css'` was removed; generated pages continue to receive repaired critical navigation CSS from the compiler.
 - the earlier root-scoped Bedrock service-worker cache canary has been retired during the rapid phone-acceptance phase. Home no longer registers a cache worker; it only removes a lingering `/service-worker.js` registration and the retired `allneeds-static-*` cache namespace after normal load/idle. `service-worker.js` is a fetch-free retirement shim for browsers that previously installed the experiment. Full-site background warming remains a post-Bedrock performance/PWA opportunity rather than a Bedrock completion requirement.
 
-With page and core-data authoring canonicalized, the remaining Bedrock work is primarily browser/device acceptance, audited runtime ownership changes, continued monolith extraction, and final network/packaging optimization. Protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, `docs/bedrock-route-runtime-matrix.md`, `docs/bedrock-performance-budget.md`, and `docs/bedrock-offline-cache.md`.
+With page and core-data authoring canonicalized, the remaining Bedrock work is primarily browser/device acceptance, audited runtime ownership changes, continued monolith extraction where a real independent owner exists, and final network/packaging verification. Protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, `docs/bedrock-route-runtime-matrix.md`, `docs/bedrock-performance-budget.md`, and `docs/bedrock-offline-cache.md`.
 
 ## How information is organised
 
@@ -85,7 +87,7 @@ For a full production verification, run `npm run build` from a clean checkout an
   - `npm run test:customizer`
   - `npm run test:home-regressions`
   - `npm run test:nav-magnets`
-  - `npm run test:flicker-jitter` (includes Home runtime, cache-retirement, magnet first-paint/mobile compositing, and strategy-deck ownership contracts)
+  - `npm run test:flicker-jitter` (includes Home/runtime ownership, cache retirement, CSS load-graph ownership, legacy Journal redirect ownership, accepted magnet paint regressions, and strategy-deck ownership contracts)
   - `npm run test:performance`
   - `npm run test:obsolete`
 
@@ -140,7 +142,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 ├── inventory/                 # generated Inventory + dedicated Journal
 ├── feed/                      # Shared Strategies route
 ├── observations/              # observation tools
-├── styles.css                 # shared base styling
+├── styles.css                 # shared base styling; dependencies are linked directly by page owners
 ├── data/
 │   ├── Feelings.csv                       # feelings + canonical Body Cue rows
 │   ├── Needs.csv
@@ -151,10 +153,11 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 │   ├── body-regions.json                  # generated Body Cues data
 │   └── reverse-inference.json             # generated reverse-inference index
 └── scripts/
-    ├── build-data.mjs          # canonical data compiler
-    ├── build-pages.mjs         # canonical page compiler
-    ├── strategy-deck.js        # Need-only strategy card deck runtime
-    └── shell-runtime-loader.js # Home lazy-runtime + retired-cache cleanup owner
+    ├── build-data.mjs                     # canonical data compiler
+    ├── build-pages.mjs                    # canonical page compiler
+    ├── strategy-deck.js                   # Need-only strategy card deck runtime
+    ├── inventory-legacy-journal-redirect.js # Inventory-only legacy URL compatibility owner
+    └── shell-runtime-loader.js            # Home lazy-runtime + retired-cache cleanup owner
 ```
 
 ### Spreadsheet columns
@@ -178,6 +181,8 @@ The data build validates strategy slugs and relationship lookups, failing fast w
 ## Interaction safeguards
 
 - **Strategy deck controls:** `scripts/strategy-deck.js` owns the Need-page deck and preserves the pointer-swipe guard that prevents gestures from intercepting clicks on interactive elements such as "Save to inventory" buttons inside strategy cards.
+- **Magnet rendering contract:** category hubs paint normally; the shared magnet runtime owns their saved positions and handmade pose. Navigation alone uses its lightweight saved-layout prepaint path. Critical CSS must not globally hide magnets pending JavaScript readiness or install the fixed root background that caused the accepted mobile regressions.
 - **Restore ownership:** full profile/backup restore must synchronize required storage mirrors before rehydrating the current document and must protect restored magnet state from the running persistence engine.
 - **Route runtime ownership:** Home and Shared Strategies currently prove the lazy-controller model; Inventory, Need detail pages, and the dedicated Journal remain eager until their visible first-load responsibilities are explicitly separated.
+- **CSS delivery ownership:** every `styles.css` consumer must directly discover the shared font/icon/density/shell dependencies in the established cascade order. Alexithymia Support preserves its non-blocking stylesheet strategy rather than being silently converted into a blocking route.
 - **Offline-cache retirement:** Home does not register a root cache worker during Bedrock acceptance. It only cleans the abandoned worker/cache namespace after load/idle, and the retirement shim itself owns no fetch traffic. Full-site warming is deferred to the separate post-Bedrock design in `docs/bedrock-offline-cache.md`.
