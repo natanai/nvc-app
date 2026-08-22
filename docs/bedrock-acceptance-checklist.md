@@ -11,6 +11,7 @@ The current Bedrock branch is expected to keep all of these green in Site Qualit
 - flicker/jitter/runtime-load-graph regressions, including the repaired magnet paint path;
 - navigation magnet coverage and saved-layout ownership;
 - static layout contracts for shared density, Inventory, Journal, and Body Cues;
+- the Journal native-UX contract: Feeling, Intensity, Needs, and Tags share one compact metadata group; Journal History reuses the same Feeling/Need/Tag vocabulary; prototype instruction/confirmation layers stay removed;
 - page-generator ownership and clean scoped generation;
 - retired-architecture tombstones: deleted safe-build/finalizer layers stay deleted, temporary migration scaffolding does not remain, and the legacy Journal hash has one compatibility owner;
 - first-load JavaScript and shared-asset performance ceilings;
@@ -71,16 +72,32 @@ Pass condition: global Menu/Account controls work outside the Inventory page and
 
 Pass condition: the primary Inventory surface and lazy Shared Strategies route remain usable on first interaction.
 
-### 6. Journal
+### 6. Journal creation, editing, and history
 
-1. Open the dedicated Journal page.
-2. Confirm the form and history surface render normally.
-3. If convenient, create a temporary entry such as `Bedrock acceptance test`, confirm it appears in history, then delete it.
-4. Open the Journal overlay from one ordinary non-Journal page and confirm it opens on the first tap.
+1. Open the dedicated Journal page and then open the Journal editor.
+2. Confirm Feeling, Intensity, Needs, and Tags read as one compact metadata group rather than four unrelated cards. Feeling and Intensity should be immediately adjacent.
+3. Confirm the old explanatory helper paragraphs and the separate **Selected needs / No needs selected yet** confirmation layer are absent.
+4. Choose or type a Feeling, adjust Intensity, add more than one Need, and add more than one Tag. Confirm suggestions, keyboard interaction, and multi-value entry feel coherent on iPhone.
+5. Save a temporary entry and confirm it appears in Journal History with Feeling and intensity together and Needs/Tags represented compactly.
+6. Edit that entry and confirm its metadata is restored correctly, then save the edit.
+7. In Journal History, exercise Search and the Feeling, Need, Tag, Date, and Sort controls. Confirm **Clear** returns to the unfiltered history.
+8. Delete the temporary entry.
+9. Open the Journal overlay from one ordinary non-Journal page and confirm it opens on the first tap and uses the same editor interaction model.
+10. Repeat the editor check once with Safari's on-screen keyboard visible and once after the browser chrome has collapsed/expanded.
 
-Pass condition: dedicated and overlay Journal paths both initialize correctly on a real phone.
+Pass condition: the Journal uses one coherent selection vocabulary across entry creation/editing and history, touch targets remain comfortable, the keyboard/chrome do not create broken geometry, and dedicated/overlay paths both initialize correctly.
 
-### 7. Explicit nonstandard page owners
+### 7. Screenshot-derived hierarchy acceptance
+
+Recheck the remaining surfaces that were identified during the final phone-density review:
+
+- the Journal landing page should not feel like breadcrumb card → large Journal card → large Patterns card → Backup card ceremony; if that hierarchy still dominates the viewport, it remains a Bedrock acceptance defect rather than post-Bedrock polish;
+- the Strategies toolbar should remain compact, with browsing actions secondary to strategy content and without the obsolete local-storage reminder taking over a section;
+- **Add a personal strategy** should read as one editor containing light-weight controls, not a giant green card containing several equally strong cards.
+
+Pass condition: each screen's hierarchy is understandable at a glance and the task/content, rather than explanatory chrome or nested physical containers, dominates the phone viewport.
+
+### 8. Explicit nonstandard page owners
 
 Spot-check these because their HTML/CSS ownership differs from the main generated-page path:
 
@@ -96,8 +113,8 @@ A short desktop pass is enough after the phone pass unless a change was desktop-
 
 - Home/Menu/Customizer;
 - Inventory desktop layout;
-- Journal;
-- one Feeling and one Need page;
+- Journal creation/editing and Journal History filtering;
+- one Feeling and one Need page, including the personal-strategy form;
 - Observations.
 
 The purpose is to catch viewport-specific layout regressions, not to duplicate every phone interaction.
