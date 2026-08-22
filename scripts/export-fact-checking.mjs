@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 
+import { flattenReverseInferenceOverrides } from "./reverse-inference-overrides-csv.mjs";
+
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const EVIDENCE_DIR = path.join(ROOT, "_evidence");
@@ -230,6 +232,17 @@ async function run() {
   await copyCsv(path.join(EVIDENCE_DIR, "citations.csv"), "citations.csv");
   console.log("• copied core CSV sources and citations");
 
+  const reverseInferenceOverrides = JSON.parse(
+    await fs.readFile(path.join(DATA_DIR, "reverse-inference-overrides.json"), "utf8"),
+  );
+  await exportJsonCsv(
+    "reverse-inference-overrides.json",
+    flattenReverseInferenceOverrides(reverseInferenceOverrides),
+    "reverse-inference-overrides.csv",
+  );
+
+  // These two generated tables remain useful review snapshots. Their editable
+  // canonical inputs are Feelings.csv and reverse-inference-overrides.csv.
   const reverseInference = JSON.parse(await fs.readFile(path.join(DATA_DIR, "reverse-inference.json"), "utf8"));
   await exportJsonCsv("reverse-inference.json", flattenReverseInference(reverseInference), "reverse-inference.csv");
 
