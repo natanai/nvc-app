@@ -1,0 +1,78 @@
+name: Bedrock canonical script order
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bedrock-canonical-script-order-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  canonicalize-script-order:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Bedrock head branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Canonicalize deployed shell script order
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/build-pages.mjs')
+          source = path.read_text()
+          old = """  const baseScripts = [
+            { src: 'scripts/inventory-core-shell.js', defer: true },
+            ...(includeInventoryRuntime ? [{ src: 'scripts/inventory.js', defer: true }] : []),
+            { src: 'scripts/magnets.js', module: true },
+          ];"""
+          new = """  const baseScripts = [
+            ...(includeInventoryRuntime ? [{ src: 'scripts/inventory.js', defer: true }] : []),
+            { src: 'scripts/inventory-core-shell.js', defer: true },
+            { src: 'scripts/magnets.js', module: true },
+          ];"""
+
+          if new in source and old not in source:
+              print('Compiler already emits the deployed script order.')
+          elif old in source:
+              source = source.replace(old, new, 1)
+              path.write_text(source)
+          else:
+              raise SystemExit('Expected normalizeScripts baseScripts block not found; refusing to patch.')
+          PY
+
+          node --check scripts/build-pages.mjs
+          git diff --check
+
+      - name: Confirm drift remains classified
+        run: node scripts/bedrock-audit-page-compiler-drift.mjs
+
+      - name: Commit compiler source only
+        shell: bash
+        run: |
+          if git diff --quiet -- scripts/build-pages.mjs; then
+            echo "No compiler change required."
+            exit 0
+          fi
+
+          changed="$(git diff --name-only)"
+          if [ "$changed" != "scripts/build-pages.mjs" ]; then
+            echo "Unexpected changed paths:"
+            printf '%s\n' "$changed"
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- scripts/build-pages.mjs
+          git commit -m "Canonicalize page compiler shell script order"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
