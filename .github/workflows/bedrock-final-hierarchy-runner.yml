@@ -31,6 +31,7 @@ jobs:
       - name: Repair and apply final hierarchy refactor
         run: |
           node scripts/.fix-bedrock-final-hierarchy-refactor.mjs
+          node scripts/.fix-bedrock-final-hierarchy-test-order.mjs
           node --check scripts/.bedrock-final-hierarchy-refactor.mjs
           node scripts/.bedrock-final-hierarchy-refactor.mjs
 
@@ -66,6 +67,7 @@ jobs:
         run: |
           rm -f scripts/.bedrock-final-hierarchy-refactor.mjs
           rm -f scripts/.fix-bedrock-final-hierarchy-refactor.mjs
+          rm -f scripts/.fix-bedrock-final-hierarchy-test-order.mjs
           rm -f scripts/.bedrock-final-hierarchy-trigger
 
       - name: Verify obsolete architecture stays gone
