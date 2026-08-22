@@ -34,6 +34,7 @@ jobs:
           node scripts/.fix-bedrock-final-hierarchy-test-order.mjs
           node --check scripts/.bedrock-final-hierarchy-refactor.mjs
           node scripts/.bedrock-final-hierarchy-refactor.mjs
+          node scripts/.fix-bedrock-final-hierarchy-native-action-test.mjs
 
       - name: Regenerate canonical pages
         run: npm run build:pages
@@ -45,7 +46,7 @@ jobs:
           git diff --check
 
       - name: Verify final hierarchy contract
-        run: node --test tests/final-hierarchy-ux.test.mjs tests/shared-density-polish.test.mjs tests/journal-native-ux.test.mjs tests/journal-per-feeling-intensity.test.mjs tests/strategy-deck-ownership.test.mjs
+        run: node --test tests/final-hierarchy-ux.test.mjs tests/shared-density-polish.test.mjs tests/journal-native-ux.test.mjs tests/journal-per-feeling-intensity.test.mjs tests/strategy-deck-ownership.test.mjs tests/native-action-controls.test.mjs
 
       - name: Run Bedrock regressions
         run: |
@@ -68,6 +69,7 @@ jobs:
           rm -f scripts/.bedrock-final-hierarchy-refactor.mjs
           rm -f scripts/.fix-bedrock-final-hierarchy-refactor.mjs
           rm -f scripts/.fix-bedrock-final-hierarchy-test-order.mjs
+          rm -f scripts/.fix-bedrock-final-hierarchy-native-action-test.mjs
           rm -f scripts/.bedrock-final-hierarchy-trigger
 
       - name: Verify obsolete architecture stays gone
