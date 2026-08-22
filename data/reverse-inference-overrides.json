@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "description": "Reviewed production exceptions applied after formula-derived reverse inference. Keep this file limited to intentional deviations that cannot yet be derived from the shared Body Cues/emotion model.",
+  "description": "Canonical source for reviewed exceptions applied after formula-derived reverse inference. Keep this file limited to intentional deviations that cannot yet be derived from the shared Body Cues/emotion model.",
   "entries": {
     "anxiety": {
       "bodyCueOrder": [
