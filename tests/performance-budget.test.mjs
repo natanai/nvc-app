@@ -15,15 +15,16 @@ const ROUTE_BUDGETS = [
   { label: 'Home', html: 'index.html', maxBytes: 110_000 },
   { label: 'Shared Strategies', html: 'feed/index.html', maxBytes: 125_000 },
   { label: 'Need detail', html: 'needs/acceptance/index.html', maxBytes: 355_000 },
-  { label: 'Feeling detail', html: 'feelings/afraid/index.html', maxBytes: 365_000 },
-  { label: 'Faux-feeling detail', html: 'faux-feelings/abandoned/index.html', maxBytes: 345_000 },
-  { label: 'Body Cues', html: 'feelings/body-cues/index.html', maxBytes: 365_000 },
-  { label: 'Inventory', html: 'inventory/index.html', maxBytes: 355_000 },
-  { label: 'Journal', html: 'inventory/journal/index.html', maxBytes: 425_000 },
+  { label: 'Feeling detail', html: 'feelings/afraid/index.html', maxBytes: 355_000 },
+  { label: 'Faux-feeling detail', html: 'faux-feelings/abandoned/index.html', maxBytes: 337_000 },
+  { label: 'Body Cues', html: 'feelings/body-cues/index.html', maxBytes: 355_000 },
+  { label: 'Inventory', html: 'inventory/index.html', maxBytes: 345_000 },
+  { label: 'Journal', html: 'inventory/journal/index.html', maxBytes: 415_000 },
 ];
 
 const ASSET_BUDGETS = [
-  { path: 'scripts/inventory.js', maxBytes: 245_000 },
+  { path: 'scripts/inventory.js', maxBytes: 238_000 },
+  { path: 'scripts/strategy-deck.js', maxBytes: 10_000 },
   { path: 'styles.css', maxBytes: 175_000 },
   { path: 'scripts/magnets.js', maxBytes: 65_000 },
   { path: 'scripts/inventory-core-shell.js', maxBytes: 30_000 },
