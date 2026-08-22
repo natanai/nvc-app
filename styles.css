@@ -1958,7 +1958,6 @@ body.has-support-journal-open {
 
 .magnet-search__shuffle {
   margin-left: 0;
-  align-self: stretch;
   flex: 0 0 auto;
 }
 
@@ -3854,8 +3853,7 @@ main[data-need-slug] .page-title::before {
 
 @media (max-width: 600px) {
   .strategy-card--form .strategy-card__actions {
-    justify-content: stretch;
-  }
+    }
 
   .strategy-card--form .strategy-card__save {
     width: 100%;
@@ -7563,5 +7561,179 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   .alexithymia-support-page .support-step__nav-primary .support-button {
     width: 100%;
     padding-inline: 0.65rem;
+  }
+}
+
+/* Compact native action controls */
+.app-action-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-action {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  padding: 0.56rem 0.78rem;
+  border: 1px solid color-mix(in srgb, var(--outline) 26%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--outline) 16%, transparent);
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-action:hover,
+.app-action:focus-visible {
+  transform: none;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--outline) 16%, transparent);
+}
+
+.app-action:active {
+  transform: scale(0.97);
+}
+
+.app-action:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--outline) 44%, transparent);
+  outline-offset: 2px;
+}
+
+.app-action--primary {
+  background: color-mix(in srgb, var(--rose) 82%, #ffffff 18%);
+  border-color: color-mix(in srgb, var(--outline) 34%, transparent);
+  color: var(--btn-fg);
+}
+
+.app-action--primary:hover,
+.app-action--primary:focus-visible {
+  background: color-mix(in srgb, var(--rose) 90%, #ffffff 10%);
+}
+
+.app-action--secondary {
+  background: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
+  border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+  color: var(--ink-soft);
+}
+
+.app-action--quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-soft);
+  box-shadow: none;
+}
+
+.app-action--quiet:hover,
+.app-action--quiet:focus-visible {
+  background: color-mix(in srgb, var(--lavender) 44%, transparent);
+  box-shadow: none;
+}
+
+.app-action:disabled,
+.app-action[aria-disabled='true'] {
+  opacity: 0.46;
+  cursor: not-allowed;
+  border-style: solid;
+  box-shadow: none;
+  transform: none;
+}
+
+.app-action[data-app-icon]::before {
+  content: '';
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 1.05rem;
+  background: currentColor;
+  -webkit-mask: var(--app-action-icon) center / contain no-repeat;
+  mask: var(--app-action-icon) center / contain no-repeat;
+}
+
+.app-action[data-app-icon='device'] {
+  --app-action-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M11 3h2v8.17l2.59-2.58L17 10l-5 5-5-5 1.41-1.41L11 11.17V3ZM5 17h14v3H5v-3Z'/%3E%3C/svg%3E");
+}
+
+.app-action[data-app-icon='profile'] {
+  --app-action-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z'/%3E%3C/svg%3E");
+}
+
+.app-action[data-app-icon='clear'] {
+  --app-action-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m6.7 5.3 5.3 5.3 5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3 1.4-1.4Z'/%3E%3C/svg%3E");
+}
+
+.app-action[data-app-icon='save'] {
+  --app-action-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='m9.4 18.4-5-5 1.4-1.4 3.6 3.6 8.8-8.8 1.4 1.4-10.2 10.2Z'/%3E%3C/svg%3E");
+}
+
+.strategy-card__actions--save-targets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.strategy-card__actions--save-targets .strategy-card__save.app-action {
+  width: 100%;
+  min-width: 0;
+  align-self: stretch;
+  text-align: center;
+}
+
+.strategy-card__actions--save-targets .strategy-save-target-hint,
+.strategy-card__actions--save-targets .local-storage-note {
+  grid-column: 1 / -1;
+  justify-self: stretch;
+  margin: 0.1rem 0 0;
+  text-align: left;
+}
+
+.strategy-card__save--profile.app-action,
+.strategy-card__save--profile.app-action:hover,
+.strategy-card__save--profile.app-action:focus-visible {
+  border-style: solid;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--outline) 14%, transparent);
+  transform: none;
+}
+
+.strategy-card__save--saved.app-action {
+  background: color-mix(in srgb, var(--mint) 78%, #ffffff 22%);
+  color: var(--ink);
+}
+
+.journal-form__action-buttons {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.journal-form__action-buttons .app-action--quiet {
+  margin-right: auto;
+}
+
+.journal-form__action-buttons .app-action--primary {
+  margin-left: auto;
+  min-width: 6.5rem;
+}
+
+@media (max-width: 420px) {
+  .app-action {
+    padding-inline: 0.68rem;
+    font-size: 0.86rem;
+  }
+
+  .strategy-card__actions--save-targets {
+    gap: 0.4rem;
   }
 }

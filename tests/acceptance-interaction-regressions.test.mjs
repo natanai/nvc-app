@@ -45,7 +45,7 @@ test('journal save reset preserves confirmation and does not refocus an empty dr
     'successful save may dismiss the blank editor instead of refocusing it',
   );
   assert.ok(
-    inventory.includes("Saved ✓ Your entry is in Journal History below. The form is ready for a new entry."),
+    inventory.includes("Saved. Your entry is in Journal History below. The form is ready for a new entry."),
     'new-entry save must leave an explicit visible explanation of what happened',
   );
   assert.ok(

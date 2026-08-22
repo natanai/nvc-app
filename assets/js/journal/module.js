@@ -213,15 +213,15 @@ const JOURNAL_BASE_CONFIG = {
   actions: {
     layout: 'inline',
     statusPlacement: 'inline',
-    submitLabel: 'Save entry',
-    clearLabel: 'Clear form',
+    submitLabel: 'Save',
+    clearLabel: 'Clear',
     noteClasses: ['journal-actions__note'],
     statusAttributes: { 'aria-live': 'polite' },
     classes: {
       container: ['journal-form__actions', 'inventory-journal-form__actions'],
       status: ['journal-status'],
-      submit: ['inventory-button'],
-      clear: ['inventory-button', 'inventory-button--ghost'],
+      submit: ['app-action', 'app-action--primary'],
+      clear: ['app-action', 'app-action--quiet'],
     },
   },
   classes: {
@@ -562,9 +562,10 @@ const buildActions = (config) => {
     const submit = createElement('button', {
       classes: classes.submit || [],
       attrs: { type: 'submit' },
-      text: actions.submitLabel || 'Save entry',
+      text: actions.submitLabel || 'Save',
     });
     submit.setAttribute('data-journal-submit', '');
+    submit.dataset.appIcon = 'save';
     primary.append(submit);
     if (actions.openLink) {
       const linkConfig = actions.openLink;
@@ -589,6 +590,7 @@ const buildActions = (config) => {
         text: actions.clearLabel,
       });
       clear.setAttribute('data-journal-clear', '');
+      clear.dataset.appIcon = 'clear';
       container.append(clear);
     }
     if (classes.status || actions.statusPlacement === 'inline') {
@@ -625,6 +627,9 @@ const buildActions = (config) => {
   });
   statusEl.setAttribute('data-journal-status', '');
   container.append(statusEl);
+  const buttonBar = createElement('div', {
+    classes: ['journal-form__action-buttons', 'app-action-bar'],
+  });
   if (actions.clearLabel) {
     const clear = createElement('button', {
       classes: classes.clear || [],
@@ -632,15 +637,18 @@ const buildActions = (config) => {
       text: actions.clearLabel,
     });
     clear.setAttribute('data-journal-clear', '');
-    container.append(clear);
+    clear.dataset.appIcon = 'clear';
+    buttonBar.append(clear);
   }
   const submit = createElement('button', {
     classes: classes.submit || [],
     attrs: { type: 'submit' },
-    text: actions.submitLabel || 'Save entry',
+    text: actions.submitLabel || 'Save',
   });
   submit.setAttribute('data-journal-submit', '');
-  container.append(submit);
+  submit.dataset.appIcon = 'save';
+  buttonBar.append(submit);
+  container.append(buttonBar);
   return { container, statusEl, openLink };
 };
 
@@ -862,7 +870,7 @@ class JournalFormController {
       this.defaultIntensity = DEFAULT_INTENSITY;
     }
 
-    this.defaultSaveLabel = this.saveButton?.textContent?.trim() || 'Save entry';
+    this.defaultSaveLabel = this.saveButton?.textContent?.trim() || 'Save';
     if (this.saveButton) {
       this.saveButton.dataset.defaultLabel = this.defaultSaveLabel;
     }
@@ -1293,7 +1301,7 @@ class JournalFormController {
     if (!this.saveButton) {
       return;
     }
-    const label = this.defaultSaveLabel || this.saveButton.dataset.defaultLabel || this.saveButton.textContent || 'Save entry';
+    const label = this.defaultSaveLabel || this.saveButton.dataset.defaultLabel || this.saveButton.textContent || 'Save';
     this.saveButton.textContent = label;
     this.saveButton.disabled = false;
     this.saveButton.removeAttribute('aria-disabled');

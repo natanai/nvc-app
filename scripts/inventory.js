@@ -12,6 +12,34 @@ const VISIBILITY_VALUES = ['private', 'followers', 'public'];
 const SAVE_TARGET_DEVICE = 'device';
 const SAVE_TARGET_PROFILE = 'profile';
 
+function applyCompactSaveTargetControls(deviceButton, profileButton) {
+  if (deviceButton) {
+    deviceButton.textContent = 'Device';
+    deviceButton.classList.add('app-action', 'app-action--primary');
+    deviceButton.dataset.appIcon = 'device';
+    deviceButton.setAttribute('aria-label', 'Save to device');
+    deviceButton.setAttribute('title', 'Save to device');
+  }
+
+  if (profileButton) {
+    profileButton.textContent = 'Profile';
+    profileButton.classList.remove(
+      'strategy-form__submit--secondary',
+      'strategy-card__save--device',
+      'app-action--primary',
+    );
+    profileButton.classList.add('app-action', 'app-action--secondary', 'strategy-card__save--profile');
+    profileButton.dataset.appIcon = 'profile';
+    profileButton.setAttribute('aria-label', 'Save to profile');
+    profileButton.setAttribute('title', 'Save to profile');
+  }
+
+  const actionBar = deviceButton?.parentElement;
+  if (actionBar && profileButton?.parentElement === actionBar) {
+    actionBar.classList.add('strategy-card__actions--save-targets');
+  }
+}
+
 function normalizeVisibilityValue(value) {
   try {
     if (window?.NVCInventoryStore?.normalizeVisibility) {
@@ -1664,16 +1692,17 @@ function updateStrategySaveButton(button, isSaved) {
     return;
   }
   if (!button.dataset.defaultLabel) {
-    button.dataset.defaultLabel = button.textContent?.trim() || '💾 Save to device';
+    button.dataset.defaultLabel = button.textContent?.trim() || 'Device';
   }
   if (!button.dataset.savedLabel) {
-    button.dataset.savedLabel = '✓ Saved on this device';
+    button.dataset.savedLabel = 'Saved';
   }
   const defaultLabel = button.dataset.defaultLabel;
   const savedLabel = button.dataset.savedLabel;
   button.textContent = isSaved ? savedLabel : defaultLabel;
   button.dataset.saved = isSaved ? 'true' : 'false';
   button.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+  button.setAttribute('aria-label', isSaved ? 'Saved to device' : 'Save to device');
   button.classList.toggle('strategy-card__save--saved', Boolean(isSaved));
 }
 
@@ -1718,7 +1747,7 @@ function setupNeedPage() {
       return;
     }
 
-    saveToDeviceButton.textContent = '💾 Save to device';
+    saveToDeviceButton.textContent = 'Device';
     saveToDeviceButton.classList.add('strategy-card__save--device');
 
     let saveToProfileButton = card.querySelector('[data-save-to-profile-button="true"]');
@@ -1727,10 +1756,11 @@ function setupNeedPage() {
       saveToProfileButton.type = 'button';
       saveToProfileButton.className = saveToDeviceButton.className;
       saveToProfileButton.dataset.saveToProfileButton = 'true';
-      saveToProfileButton.textContent = 'Save to profile';
+      saveToProfileButton.textContent = 'Profile';
       saveToDeviceButton.insertAdjacentElement('afterend', saveToProfileButton);
     }
     saveToProfileButton.classList.add('strategy-card__save--profile');
+    applyCompactSaveTargetControls(saveToDeviceButton, saveToProfileButton);
     registerProfileSaveButton(saveToProfileButton);
 
     const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
@@ -1833,7 +1863,7 @@ function setupNeedPage() {
 
     const formSaveToDevice = suggestionForm.querySelector('.strategy-form__submit');
     if (formSaveToDevice) {
-      formSaveToDevice.textContent = '💾 Save to device';
+      formSaveToDevice.textContent = 'Device';
       formSaveToDevice.classList.add('strategy-card__save--device');
       formSaveToDevice.addEventListener('click', () => {
         saveTargetField.value = SAVE_TARGET_DEVICE;
@@ -1845,13 +1875,14 @@ function setupNeedPage() {
         formSaveToProfile.type = 'submit';
         formSaveToProfile.className = formSaveToDevice.className;
         formSaveToProfile.dataset.saveToProfileButton = 'true';
-        formSaveToProfile.textContent = 'Save to profile';
+        formSaveToProfile.textContent = 'Profile';
         formSaveToProfile.addEventListener('click', () => {
           saveTargetField.value = SAVE_TARGET_PROFILE;
         });
         formSaveToDevice.insertAdjacentElement('afterend', formSaveToProfile);
       }
       formSaveToProfile.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
+      applyCompactSaveTargetControls(formSaveToDevice, formSaveToProfile);
       registerProfileSaveButton(formSaveToProfile);
 
       let saveTargetHint = suggestionForm.querySelector('[data-save-target-hint="true"]');
@@ -2064,7 +2095,7 @@ function setupInventoryPage() {
     form.appendChild(saveTargetField);
 
     if (state.inventorySubmitButton) {
-      state.inventorySubmitButton.textContent = '💾 Save to device';
+      state.inventorySubmitButton.textContent = 'Device';
       state.inventorySubmitButton.classList.add('strategy-card__save--device');
       state.inventorySubmitButton.addEventListener('click', () => {
         saveTargetField.value = SAVE_TARGET_DEVICE;
@@ -2076,13 +2107,14 @@ function setupInventoryPage() {
         saveToProfileButton.type = 'submit';
         saveToProfileButton.className = state.inventorySubmitButton.className;
         saveToProfileButton.dataset.saveToProfileButton = 'true';
-        saveToProfileButton.textContent = 'Save to profile';
+        saveToProfileButton.textContent = 'Profile';
         saveToProfileButton.addEventListener('click', () => {
           saveTargetField.value = SAVE_TARGET_PROFILE;
         });
         state.inventorySubmitButton.insertAdjacentElement('afterend', saveToProfileButton);
       }
       saveToProfileButton.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
+      applyCompactSaveTargetControls(state.inventorySubmitButton, saveToProfileButton);
       registerProfileSaveButton(saveToProfileButton);
 
       let saveTargetHint = form.querySelector('[data-save-target-hint="true"]');
@@ -3900,7 +3932,7 @@ function setupJournalSection() {
       state.journalController?.tagSuggestionsEl || panel.querySelector('[data-journal-tag-suggestions]');
     state.journalSaveButton = state.journalController?.saveButton || panel.querySelector('[data-journal-submit]');
     if (state.journalSaveButton) {
-      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save entry';
+      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save';
       state.journalSaveButton.dataset.defaultLabel = state.journalSaveLabel;
     }
 
@@ -4263,7 +4295,7 @@ function setupStandaloneJournalOverlay() {
       state.journalController?.tagSuggestionsEl || formSection.querySelector('[data-journal-tag-suggestions]');
     state.journalSaveButton = state.journalController?.saveButton || formSection.querySelector('[data-journal-submit]');
     if (state.journalSaveButton) {
-      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save entry';
+      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save';
       state.journalSaveButton.dataset.defaultLabel = state.journalSaveLabel;
     }
 
@@ -5456,7 +5488,7 @@ function resetJournalSaveButton() {
     clearTimeout(state.journalSavedTimer);
     state.journalSavedTimer = null;
   }
-  const label = state.journalSaveLabel || state.journalSaveButton.dataset.defaultLabel || state.journalSaveButton.textContent || 'Save entry';
+  const label = state.journalSaveLabel || state.journalSaveButton.dataset.defaultLabel || state.journalSaveButton.textContent || 'Save';
   state.journalSaveButton.textContent = label;
   state.journalSaveButton.disabled = false;
   state.journalSaveButton.removeAttribute('aria-disabled');
@@ -5464,7 +5496,7 @@ function resetJournalSaveButton() {
 
 function showJournalSavedFeedback() {
   if (state.journalController && typeof state.journalController.markSaved === 'function') {
-    state.journalController.markSaved('Saved ✓', 1500);
+    state.journalController.markSaved('Saved', 1500);
     state.journalSaveButton = state.journalController.saveButton;
     return;
   }
@@ -5472,7 +5504,7 @@ function showJournalSavedFeedback() {
     return;
   }
   resetJournalSaveButton();
-  state.journalSaveButton.textContent = 'Saved ✓';
+  state.journalSaveButton.textContent = 'Saved';
   state.journalSaveButton.disabled = true;
   state.journalSaveButton.setAttribute('aria-disabled', 'true');
   state.journalSavedTimer = setTimeout(() => {
@@ -5533,7 +5565,7 @@ function handleJournalFormSubmit(event) {
       notes: formData.notes,
     });
     savedEntry = store.create(entry);
-    showJournalStatus('Saved ✓ Your entry is in Journal History below. The form is ready for a new entry.');
+    showJournalStatus('Saved. Your entry is in Journal History below. The form is ready for a new entry.');
     resetJournalForm({ keepStatus: true, focusNotes: false });
     setJournalEditState('');
   }
@@ -6023,14 +6055,18 @@ function setInventoryFormMode({ entry }) {
 
   if (!entry) {
     state.inventoryEditingId = null;
-    state.inventorySubmitButton.textContent = '💾 Save to device';
+    state.inventorySubmitButton.textContent = 'Device';
+    state.inventorySubmitButton.setAttribute('aria-label', 'Save to device');
+    state.inventorySubmitButton.setAttribute('title', 'Save to device');
     state.inventoryForm.removeAttribute('data-editing');
     return;
   }
 
   state.inventoryEditingId = entry.id;
   state.inventoryForm.setAttribute('data-editing', 'true');
-  state.inventorySubmitButton.textContent = '💾 Save changes to device';
+  state.inventorySubmitButton.textContent = 'Save changes';
+  state.inventorySubmitButton.setAttribute('aria-label', 'Save changes to device');
+  state.inventorySubmitButton.setAttribute('title', 'Save changes to device');
 
   const titleInput = state.inventoryForm.querySelector('#inventory-title');
   const descriptionInput = state.inventoryForm.querySelector('#inventory-description');
