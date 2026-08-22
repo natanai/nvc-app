@@ -73,6 +73,7 @@ jobs:
           npm run test:data-integrity
           npm run test:customizer
           npm run test:flicker-jitter
+          npm run test:delivery
           npm run test:nav-magnets
           node --test tests/shared-density-polish.test.mjs
           node tests/body-cues-static-first.test.mjs
