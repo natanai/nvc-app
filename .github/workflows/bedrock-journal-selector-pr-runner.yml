@@ -28,6 +28,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Repair one-shot migration matcher
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/.bedrock-journal-catalog-multiselect.mjs')
+          source = path.read_text()
+          old = '''  source = replaceOnce(source, "  needsMode: 'combobox',", "  needsMode: 'catalog-multiselect',", 'Journal needs mode');'''
+          new = '''  source = source.replaceAll("  needsMode: 'combobox',", "  needsMode: 'catalog-multiselect',");'''
+          if old not in source:
+              raise SystemExit('needsMode matcher line not found')
+          path.write_text(source.replace(old, new, 1))
+          PY
+
       - name: Apply Journal catalog multi-select repair
         run: node scripts/.bedrock-journal-catalog-multiselect.mjs
 
