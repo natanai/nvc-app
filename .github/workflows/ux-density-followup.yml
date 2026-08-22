@@ -1,0 +1,242 @@
+name: UX Density Follow-up
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+jobs:
+  repair:
+    if: ${{ github.head_ref == 'bedrock/production-finalization-v2' }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Bedrock head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply root-owned responsive cleanup
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected one anchor, found {count}')
+              return text.replace(old, new, 1)
+
+          def sub_once(text, pattern, replacement, label, flags=0):
+              text, count = re.subn(pattern, replacement, text, count=1, flags=flags)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected one regex anchor, found {count}')
+              return text
+
+          # The page compiler owns deterministic strategy-deck chrome.
+          path = Path('scripts/build-pages.mjs')
+          text = path.read_text(encoding='utf-8')
+          text = replace_once(
+              text,
+              "  const strategiesNote = `          ${localStorageReminderHtml}`;\n\n",
+              '',
+              'remove unrelated strategy-deck storage reminder owner',
+          )
+          text = replace_once(
+              text,
+              '${strategiesNote}\n          <div class="strategy-deck-header">',
+              '          <div class="strategy-deck-header">',
+              'remove reminder from built-in strategy deck output',
+          )
+          text = replace_once(
+              text,
+              '''              Shuffle cards\n            </button>\n          </div>''',
+              '''              Shuffle cards\n            </button>\n            <button\n              type="button"\n              class="strategy-deck__toggle"\n              data-strategy-toggle\n              aria-pressed="false"\n            >\n              View all\n            </button>\n          </div>''',
+              'compiler-authored strategy view toggle',
+          )
+          path.write_text(text, encoding='utf-8')
+
+          # Runtime only binds/updates the compiler-authored toggle; it no longer creates deterministic markup.
+          path = Path('scripts/strategy-deck.js')
+          text = path.read_text(encoding='utf-8')
+          text = replace_once(text, "  const deckHeader = document.querySelector('.strategy-deck-header');\n", '', 'remove runtime deck-header author')
+          text = replace_once(text, "  let toggleBtn = document.querySelector('[data-strategy-toggle]');\n", "  const toggleBtn = document.querySelector('[data-strategy-toggle]');\n", 'make deck toggle a bound static control')
+          text = sub_once(
+              text,
+              r"\n  if \(!toggleBtn && deckHeader\) \{[\s\S]*?\n  \}\n\n",
+              '\n',
+              'remove runtime-created View all button',
+          )
+          path.write_text(text, encoding='utf-8')
+
+          # Remove deterministic helper copy that was being injected after paint.
+          path = Path('scripts/inventory.js')
+          text = path.read_text(encoding='utf-8')
+          hint_pattern = re.compile(
+              r"\n\s*let saveTargetHint = (?:suggestionForm|form)\.querySelector\('\[data-save-target-hint=\"true\"\]'\);"
+              r"\n\s*if \(!saveTargetHint\) \{"
+              r"\n\s*saveTargetHint = document\.createElement\('p'\);"
+              r"\n\s*saveTargetHint\.className = 'strategy-save-target-hint';"
+              r"\n\s*saveTargetHint\.dataset\.saveTargetHint = 'true';"
+              r"\n\s*saveTargetHint\.textContent = 'Device keeps it local\. Profile also syncs to backend\.';"
+              r"\n\s*(?:formSaveToProfile|saveToProfileButton)\.insertAdjacentElement\('afterend', saveTargetHint\);"
+              r"\n\s*\}\n"
+          )
+          text, count = hint_pattern.subn('\n', text)
+          if count != 2:
+              raise SystemExit(f'remove runtime save-target helper: expected 2 blocks, found {count}')
+          path.write_text(text, encoding='utf-8')
+
+          # The Journal module owns selection state, but it should not author an empty confirmation UI.
+          path = Path('assets/js/journal/module.js')
+          text = path.read_text(encoding='utf-8')
+          text = sub_once(
+              text,
+              r"\n  const summaryEmpty = createElement\('p', \{\n    classes: \['journal-needs-summary__empty'\],[\s\S]*?\n  \}\);",
+              '',
+              'remove empty needs confirmation element',
+          )
+          text = replace_once(
+              text,
+              '  summary.append(summaryLabel, summaryStatus, summaryEmpty, summaryList);',
+              '  summary.append(summaryLabel, summaryStatus, summaryList);',
+              'remove empty needs node from summary',
+          )
+          text = replace_once(
+              text,
+              "    this.needsSummaryEmpty = this.root.querySelector('[data-journal-needs-summary-empty]');\n",
+              '',
+              'remove empty needs instance reference',
+          )
+          text = sub_once(
+              text,
+              r"\n    if \(this\.needsSummaryEmpty\) \{\n      this\.needsSummaryEmpty\.hidden = hasSelection;\n    \}",
+              '',
+              'remove obsolete empty-summary toggle',
+          )
+          path.write_text(text, encoding='utf-8')
+
+          # Canonical presentation: honor hidden state, size breadcrumb art, compact utilities,
+          # and keep the shorter strategy card frame phone-only so desktop still uses its space.
+          path = Path('styles.css')
+          text = path.read_text(encoding='utf-8')
+          text = replace_once(
+              text,
+              ".breadcrumbs a {\n  text-decoration: underline;\n  text-decoration-thickness: 2px;\n  text-underline-offset: 4px;\n}\n",
+              ".breadcrumbs a {\n  text-decoration: underline;\n  text-decoration-thickness: 2px;\n  text-underline-offset: 4px;\n}\n\n.breadcrumbs__label {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.35rem;\n}\n\n.journal-label-icon {\n  width: 1.35rem;\n  height: 1.35rem;\n  flex: 0 0 auto;\n}\n",
+              'size Journal breadcrumb icon at its canonical style owner',
+          )
+          text = replace_once(
+              text,
+              '.journal-needs-summary {\n',
+              '.journal-needs-summary[hidden] {\n  display: none;\n}\n\n.journal-needs-summary {\n',
+              'Journal needs summary hidden contract',
+          )
+          text = sub_once(
+              text,
+              r"\n\.journal-needs-summary__empty \{[^{}]*\}\n",
+              '\n',
+              'remove dead empty-summary styles',
+          )
+          text = sub_once(
+              text,
+              r"(\.strategy-deck-header \{[^{}]*?)justify-content:\s*space-between;([^{}]*?)gap:\s*0\.5rem 0\.75rem;([^{}]*?\})",
+              r"\1justify-content: flex-start;\2gap: 0.45rem;\3",
+              'compact strategy utility row',
+          )
+
+          control_pattern = re.compile(r"(\.strategy-deck__shuffle,\n\.strategy-deck__toggle \{)([^{}]*)(\})")
+          match = control_pattern.search(text)
+          if not match:
+              raise SystemExit('strategy utility control block missing')
+          body = match.group(2)
+          body = body.replace('font-size: 0.75rem;', 'font-size: 0.72rem;')
+          body = body.replace('border: 3px solid var(--outline);', 'border: 2px solid var(--outline);')
+          body, pad_count = re.subn(r'padding:\s*[^;]+;', 'padding: 0.42rem 0.8rem;', body, count=1)
+          if pad_count != 1:
+              raise SystemExit('strategy utility padding declaration missing')
+          body = body.replace('box-shadow: 0 10px 0 var(--shadow);', 'box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 72%, transparent);')
+          text = text[:match.start()] + match.group(1) + body + match.group(3) + text[match.end():]
+          text = replace_once(text, '  transform: translateY(-3px);\n  box-shadow: 0 14px 0 var(--shadow);', '  transform: translateY(-1px);\n  box-shadow: 0 6px 0 var(--shadow);', 'compact strategy utility interaction lift')
+
+          stack_anchor = ".strategy-deck__stack {\n  position: relative;\n  height: clamp(22rem, 70vh, 27rem);\n}\n"
+          text = replace_once(
+              text,
+              stack_anchor,
+              stack_anchor + "\n@media (max-width: 640px) {\n  .strategy-deck__stack {\n    height: clamp(18rem, 50dvh, 21rem);\n  }\n}\n",
+              'phone strategy deck frame density',
+          )
+
+          # Remove the now-dead save-target hint styling and keep local-storage-note ownership intact.
+          text, hint_style_count = re.subn(r"\n\s*\.strategy-save-target-hint \{[^{}]*\}\n", '\n', text)
+          if hint_style_count != 2:
+              raise SystemExit(f'remove save-target hint styles: expected 2 blocks, found {hint_style_count}')
+          text = replace_once(
+              text,
+              '.strategy-card__actions--save-targets .strategy-save-target-hint,\n.strategy-card__actions--save-targets .local-storage-note {',
+              '.strategy-card__actions--save-targets .local-storage-note {',
+              'keep local storage note grid ownership without removed hint',
+          )
+          text = text.replace("  .strategy-card--form .strategy-card__actions {\n    }\n\n", '')
+
+          # On phones, title + Open Journal is one compact header row instead of a stacked hero.
+          text = replace_once(
+              text,
+              "  .journal-page-title-row {\n    gap: clamp(0.5rem, 3.6vw, 0.85rem);\n  }\n\n  .journal-page-title-row__actions {\n    width: 100%;\n    justify-content: stretch;\n  }\n\n  .journal-page-title-row__actions .journal-fullscreen-button {\n    width: 100%;\n    justify-content: center;\n  }",
+              "  .journal-page-title-row {\n    flex-wrap: nowrap;\n    justify-content: space-between;\n    gap: 0.55rem;\n  }\n\n  .journal-page-title-row__actions {\n    width: auto;\n    flex: 0 0 auto;\n  }\n\n  .journal-page-title-row__actions .journal-fullscreen-button {\n    width: auto;\n    justify-content: center;\n  }",
+              'compact mobile Journal header row',
+          )
+          path.write_text(text.rstrip() + '\n', encoding='utf-8')
+
+          # Make the ownership decisions permanent.
+          path = Path('tests/native-action-controls.test.mjs')
+          text = path.read_text(encoding='utf-8')
+          text = replace_once(
+              text,
+              "  const pages = read('scripts/build-pages.mjs');\n  const styles = read('styles.css');",
+              "  const pages = read('scripts/build-pages.mjs');\n  const deck = read('scripts/strategy-deck.js');\n  const styles = read('styles.css');",
+              'load deck source in density regression',
+          )
+          text = replace_once(
+              text,
+              "  assert.ok(moduleSource.includes(\"this.needsSummaryEl.hidden = !hasSelection\"));\n",
+              "  assert.ok(moduleSource.includes(\"this.needsSummaryEl.hidden = !hasSelection\"));\n  assert.equal(moduleSource.includes('No needs selected yet.'), false, 'empty needs state must not render a redundant confirmation card');\n  assert.ok(styles.includes('.journal-needs-summary[hidden]'), 'canonical Journal CSS must honor the module hidden state');\n  assert.ok(styles.includes('.journal-label-icon'), 'Journal breadcrumb art must have deterministic dimensions');\n  assert.ok(pages.includes('data-strategy-toggle'), 'View all must be compiler-authored before first paint');\n  assert.equal(deck.includes(\"document.createElement('button')\"), false, 'strategy deck runtime must not create deterministic controls');\n  assert.equal(pages.includes('const strategiesNote'), false, 'built-in strategy browsing must not carry a storage reminder unrelated to browsing');\n  assert.equal(inventory.includes('strategy-save-target-hint'), false, 'save-target explanatory chrome must not be injected after paint');\n",
+              'permanent root density ownership assertions',
+          )
+          path.write_text(text.rstrip() + '\n', encoding='utf-8')
+
+          print('Prepared second root-owned responsive density cleanup.')
+          PY
+
+      - name: Validate responsive UX and Bedrock contracts
+        run: |
+          npm run test:flicker-jitter
+          npm run test:customizer
+          npm run test:obsolete
+          npm run test:performance
+          npm run lint:entrypoints
+          npm run build
+          git diff --check
+
+      - name: Publish responsive cleanup
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- ':!.github/workflows/ux-density-followup.yml'
+          git diff --cached --check
+          git commit -m "Compact strategy and Journal chrome at root owners"
+          git push origin HEAD:"${HEAD_REF}"
