@@ -24,11 +24,15 @@ test('Bedrock preserves persisted presentation-state namespaces and first-paint 
   assert.ok(magnets.includes('export function savePositions('));
 
   assert.ok(buildPages.includes("const NAV_MAGNET_STORAGE_KEY = 'site-nav';"));
-  assert.ok(buildPages.includes("var STORAGE_KEY = 'magnetPositions:${NAV_MAGNET_STORAGE_KEY}';"));
+  assert.ok(buildPages.includes('const magnetPrefillScript = (storageKey) => String.raw`'));
+  assert.ok(buildPages.includes("var STORAGE_KEY = 'magnetPositions:${storageKey}';"));
+  assert.ok(buildPages.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
+  assert.ok(buildPages.includes("magnetPrefillScript(type + '-hub-v4')"));
   assert.ok(buildPages.includes("var storageKey = 'nvcApp.navSettings';"));
   assert.ok(inventoryHtml.includes("var STORAGE_KEY = 'magnetPositions:site-nav';"));
   assert.ok(inventoryHtml.includes("var storageKey = 'nvcApp.navSettings';"));
   assert.ok(needsHtml.includes("var STORAGE_KEY = 'magnetPositions:site-nav';"));
+  assert.ok(needsHtml.includes("var STORAGE_KEY = 'magnetPositions:needs-hub-v4';"));
   assert.ok(needsHtml.includes("var storageKey = 'nvcApp.navSettings';"));
 });
 
