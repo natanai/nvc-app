@@ -3504,32 +3504,26 @@ function renderInventoryJournalPage(needsList = []) {
         <section class="journal-history-section journal-panel journal-panel--history" aria-labelledby="journal-history-heading">
           <div class="journal-history-section__header">
             <h2 id="journal-history-heading" class="section-title">Journal history</h2>
-            <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
           </div>
-          <form class="journal-filters" data-journal-filters>
-            <div class="journal-filters__field">
-              <label for="journal-filter-search">Search notes</label>
-              <input id="journal-filter-search" name="search" type="search" placeholder="Search text" />
+          <form class="journal-history-controls" data-journal-filters>
+            <div class="journal-history-controls__search">
+              <label class="visually-hidden" for="journal-filter-search">Search journal</label>
+              <input id="journal-filter-search" name="search" type="search" placeholder="Search journal" autocomplete="off" />
             </div>
-            <div class="journal-filters__field">
-              <label for="journal-filter-tag">Filter tags</label>
-              <input id="journal-filter-tag" name="tag" type="text" placeholder="e.g. work" />
+            <div class="journal-history-controls__choices" aria-label="Filter journal history">
+              <label class="journal-history-control" for="journal-filter-emotion"><span>Feeling</span><select id="journal-filter-emotion" name="emotion"><option value="">All</option></select></label>
+              <label class="journal-history-control" for="journal-filter-need"><span>Need</span><select id="journal-filter-need" name="need"><option value="">All</option></select></label>
+              <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag"><option value="">All</option></select></label>
             </div>
-            <div class="journal-filters__field">
-              <label for="journal-filter-sort">Sort order</label>
-              <select id="journal-filter-sort" name="sort">
-                <option value="newest">Newest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="intensity-high">Highest intensity</option>
-                <option value="intensity-low">Lowest intensity</option>
-              </select>
-            </div>
-            <div class="journal-filters__actions">
-              <button type="button" class="inventory-button inventory-button--ghost" data-journal-filters-reset>Reset filters</button>
+            <div class="journal-history-controls__secondary">
+              <label class="journal-history-control" for="journal-filter-range"><span>Date</span><select id="journal-filter-range" name="range"><option value="all">Any time</option><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
+              <label class="journal-history-control" for="journal-filter-sort"><span>Sort</span><select id="journal-filter-sort" name="sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="intensity-high">Highest intensity</option><option value="intensity-low">Lowest intensity</option></select></label>
+              <button type="button" class="journal-history-controls__clear app-action app-action--quiet" data-journal-filters-reset>Clear</button>
             </div>
           </form>
-          <p class="journal-empty" data-journal-empty hidden>Save entries to see them listed here.</p>
+          <p class="journal-empty" data-journal-empty hidden>Save an entry to see it here.</p>
           <div class="journal-history journal-history--cards" data-journal-history></div>
+        </section>          <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
 
         <details class="journal-inline-fallback" data-journal-inline-fallback>
@@ -3546,7 +3540,6 @@ function renderInventoryJournalPage(needsList = []) {
               <section class="journal-form-section" aria-labelledby="journal-form-heading">
                 <div class="journal-form-section__header">
                   <h2 id="journal-form-heading" class="section-title">New entry</h2>
-                  <p class="journal-form-section__hint">Tag what’s present now. Feeling optional—notes are enough.</p>
                 </div>
                 <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
                   <noscript>

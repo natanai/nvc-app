@@ -334,3 +334,31 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* Journal metadata and history: compact native-app interaction contract. */
+.journal-meta-group { display:grid; gap:0; overflow:visible; border:1px solid color-mix(in srgb,var(--outline) 16%,transparent); border-radius:var(--radius-xl); background:color-mix(in srgb,#fff 96%,var(--lavender) 4%); }
+.journal-meta-row { position:relative; display:grid; grid-template-columns:minmax(4.8rem,.72fr) minmax(0,1.65fr); align-items:center; min-height:52px; gap:.6rem; padding:.25rem .68rem; min-width:0; }
+.journal-meta-row + .journal-meta-row { border-top:1px solid color-mix(in srgb,var(--outline) 10%,transparent); }
+.journal-meta-row > label { margin:0; font-size:.88rem; font-weight:700; line-height:1.15; letter-spacing:0; text-transform:none; color:var(--ink); }
+.journal-meta-row__control { position:relative; min-width:0; }
+.journal-meta-row__control > input[type='text'] { width:100%; min-height:44px; margin:0; padding:.4rem .1rem; border:0; border-radius:var(--radius-sm); background:transparent; box-shadow:none; color:var(--ink); font:inherit; font-size:.95rem; text-align:right; }
+.journal-meta-row__control > input[type='text']::placeholder { color:color-mix(in srgb,var(--ink-soft) 58%,transparent); opacity:1; }
+.journal-meta-row__control > input[type='text']:focus-visible { outline:2px solid color-mix(in srgb,var(--plum) 62%,#fff); outline-offset:1px; }
+.journal-meta-row .journal-form__intensity, .journal-meta-row .inventory-journal-form__intensity { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.55rem; min-width:0; }
+.journal-meta-row .journal-form__intensity-display { min-width:2.8rem; font-size:.88rem; font-weight:700; text-align:right; color:var(--ink-soft); }
+.journal-meta-row .journal-tag-suggestions { left:0; right:0; top:calc(100% + .2rem); z-index:15; }
+.journal-history-controls { display:grid; gap:.5rem; margin:0; }
+.journal-history-controls__search input { width:100%; min-height:44px; padding:.52rem .68rem; border:1px solid color-mix(in srgb,var(--outline) 16%,transparent); border-radius:var(--radius-md); background:color-mix(in srgb,#fff 96%,var(--lavender) 4%); box-shadow:none; color:var(--ink); font:inherit; }
+.journal-history-controls__choices, .journal-history-controls__secondary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.38rem; }
+.journal-history-control { display:grid; gap:.12rem; min-width:0; }
+.journal-history-control > span { padding-inline:.12rem; font-size:.7rem; font-weight:700; line-height:1.1; color:var(--ink-soft); }
+.journal-history-control select { width:100%; min-width:0; min-height:44px; padding:.4rem 1.4rem .4rem .5rem; border:1px solid color-mix(in srgb,var(--outline) 16%,transparent); border-radius:var(--radius-md); background-color:color-mix(in srgb,#fff 96%,var(--lavender) 4%); box-shadow:none; color:var(--ink); font:inherit; font-size:.8rem; text-overflow:ellipsis; }
+.journal-history-controls__clear { align-self:end; min-height:44px; padding-inline:.55rem; font-size:.8rem; }
+.journal-entry__title-row { display:flex; align-items:baseline; justify-content:space-between; gap:.65rem; }
+.journal-entry__intensity { flex:0 0 auto; font-size:.84rem; font-weight:700; color:var(--ink-soft); }
+.journal-entry__facets { display:flex; flex-wrap:wrap; gap:.32rem; }
+.journal-value-token { display:inline-flex; align-items:center; min-height:32px; padding:.24rem .54rem; border:1px solid color-mix(in srgb,var(--outline) 13%,transparent); border-radius:var(--radius-pill); background:color-mix(in srgb,#fff 88%,var(--lavender) 12%); color:var(--ink); font-size:.8rem; font-weight:650; line-height:1.2; text-decoration:none; }
+.journal-value-token--need { background:color-mix(in srgb,#fff 82%,var(--mint) 18%); }
+.journal-value-token--tag { color:var(--ink-soft); }
+@media (max-width:720px) { .journal-meta-row { grid-template-columns:minmax(4.5rem,.68fr) minmax(0,1.72fr); padding-inline:.58rem; } .journal-history-controls__choices, .journal-history-controls__secondary { gap:.3rem; } .journal-history-control select, .journal-history-controls__clear { font-size:.76rem; } }

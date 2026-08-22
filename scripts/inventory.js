@@ -484,7 +484,7 @@ const state = {
   journalDraftTimer: null,
   journalEditingId: '',
   journalEditingEntry: null,
-  journalFilters: { search: '', tag: '', sort: 'newest', range: 'all' },
+  journalFilters: { search: '', emotion: '', need: '', tag: '', sort: 'newest', range: 'all' },
   journalSummaryCollapsed: false,
   journalSavedTimer: null,
   journalSaveLabel: '',
@@ -5199,18 +5199,14 @@ function formatJournalDate(timestamp) {
 }
 
 function renderJournalHistory() {
-  if (!state.journalHistoryEl) {
-    return;
-  }
+  if (!state.journalHistoryEl) return;
+  syncJournalHistoryFilterOptions();
   const container = state.journalHistoryEl;
   container.innerHTML = '';
   const entries = getFilteredJournalEntries();
-  if (state.journalEmptyEl) {
-    state.journalEmptyEl.hidden = entries.length > 0;
-  }
-  if (!entries.length) {
-    return;
-  }
+  if (state.journalEmptyEl) state.journalEmptyEl.hidden = entries.length > 0;
+  if (!entries.length) return;
+
   entries.forEach((entry) => {
     const card = document.createElement('article');
     card.className = 'journal-entry';
@@ -5218,49 +5214,25 @@ function renderJournalHistory() {
 
     const header = document.createElement('div');
     header.className = 'journal-entry__header';
+    const titleRow = document.createElement('div');
+    titleRow.className = 'journal-entry__title-row';
     const emotion = document.createElement('h4');
     emotion.className = 'journal-entry__emotion';
     emotion.textContent = entry.emotion ? capitalizeWord(entry.emotion) : 'Reflection';
-    header.appendChild(emotion);
-
-    const meta = document.createElement('div');
-    meta.className = 'journal-entry__meta';
-    const date = document.createElement('span');
-    date.textContent = formatJournalDate(entry.dateISO);
-    meta.appendChild(date);
+    titleRow.appendChild(emotion);
     if (Number.isFinite(entry.intensity)) {
       const intensity = document.createElement('span');
-      intensity.textContent = `Intensity ${entry.intensity}/10`;
-      meta.appendChild(intensity);
+      intensity.className = 'journal-entry__intensity';
+      intensity.textContent = `${entry.intensity}/10`;
+      intensity.setAttribute('aria-label', `Intensity ${entry.intensity} out of 10`);
+      titleRow.appendChild(intensity);
     }
+    header.appendChild(titleRow);
+    const meta = document.createElement('div');
+    meta.className = 'journal-entry__meta';
+    meta.textContent = formatJournalDate(entry.dateISO);
     header.appendChild(meta);
     card.appendChild(header);
-
-    if (Array.isArray(entry.tags) && entry.tags.length) {
-      const tagsList = document.createElement('div');
-      tagsList.className = 'journal-entry__tags';
-      entry.tags.forEach((tag) => {
-        const chip = document.createElement('span');
-        chip.className = 'journal-tag';
-        chip.textContent = `#${tag}`;
-        tagsList.appendChild(chip);
-      });
-      card.appendChild(tagsList);
-    }
-
-    if (Array.isArray(entry.needs) && entry.needs.length) {
-      const needsList = document.createElement('div');
-      needsList.className = 'journal-entry__needs';
-      entry.needs.forEach((needValue) => {
-        const { href, label } = buildNeedLink(needValue);
-        const link = document.createElement('a');
-        link.className = 'journal-need-link';
-        link.href = href;
-        link.textContent = label;
-        needsList.appendChild(link);
-      });
-      card.appendChild(needsList);
-    }
 
     if (entry.notes) {
       const notes = document.createElement('p');
@@ -5269,25 +5241,38 @@ function renderJournalHistory() {
       card.appendChild(notes);
     }
 
+    if ((entry.needs || []).length || (entry.tags || []).length) {
+      const facets = document.createElement('div');
+      facets.className = 'journal-entry__facets';
+      (entry.needs || []).forEach((needValue) => {
+        const { href, label } = buildNeedLink(needValue);
+        const link = document.createElement('a');
+        link.className = 'journal-value-token journal-value-token--need';
+        link.href = href;
+        link.textContent = label;
+        facets.appendChild(link);
+      });
+      (entry.tags || []).forEach((tag) => {
+        const chip = document.createElement('span');
+        chip.className = 'journal-value-token journal-value-token--tag';
+        chip.textContent = `#${tag}`;
+        facets.appendChild(chip);
+      });
+      card.appendChild(facets);
+    }
+
     const actions = document.createElement('div');
     actions.className = 'journal-entry__actions';
-    const editButton = document.createElement('button');
-    editButton.type = 'button';
-    editButton.className = 'journal-entry__edit';
-    editButton.dataset.journalAction = 'edit';
-    editButton.dataset.journalId = entry.id;
-    editButton.textContent = 'Edit';
-    actions.appendChild(editButton);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.className = 'journal-entry__delete';
-    deleteButton.dataset.journalAction = 'delete';
-    deleteButton.dataset.journalId = entry.id;
-    deleteButton.textContent = 'Delete';
-    actions.appendChild(deleteButton);
+    for (const [action, label] of [['edit', 'Edit'], ['delete', 'Delete']]) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `journal-entry__${action}`;
+      button.dataset.journalAction = action;
+      button.dataset.journalId = entry.id;
+      button.textContent = label;
+      actions.appendChild(button);
+    }
     card.appendChild(actions);
-
     container.appendChild(card);
   });
 }
@@ -5341,68 +5326,61 @@ function renderJournalOverlayHistory() {
   container.appendChild(link);
 }
 
+function populateJournalHistorySelect(select, entries) {
+  if (!select) return;
+  const current = select.value || '';
+  select.replaceChildren(new Option('All', ''), ...entries.map(({ value, label }) => new Option(label, value)));
+  if ([...select.options].some((option) => option.value === current)) select.value = current;
+}
+
+function syncJournalHistoryFilterOptions() {
+  if (!state.journalFiltersForm) return;
+  const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+  const unique = (values, labeler = (value) => value) => {
+    const map = new Map();
+    values.filter(Boolean).forEach((value) => {
+      const raw = value.toString().trim();
+      if (raw && !map.has(raw.toLowerCase())) map.set(raw.toLowerCase(), { value: raw, label: labeler(raw) });
+    });
+    return [...map.values()].sort((a, b) => a.label.localeCompare(b.label));
+  };
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="emotion"]'), unique(entries.map((entry) => entry.emotion), capitalizeWord));
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="need"]'), unique(entries.flatMap((entry) => entry.needs || []), (value) => buildNeedLink(value).label));
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="tag"]'), unique(entries.flatMap((entry) => entry.tags || []), (value) => `#${value}`));
+}
+
 function getFilteredJournalEntries() {
   const entries = Array.isArray(state.journalEntries) ? [...state.journalEntries] : [];
-  const searchTerm = state.journalFilters.search?.trim().toLowerCase();
-  const tagFilter = state.journalFilters.tag?.trim().toLowerCase();
+  const normalize = (value) => (value || '').toString().trim().toLowerCase();
+  const searchTerm = normalize(state.journalFilters.search);
+  const emotionFilter = normalize(state.journalFilters.emotion);
+  const needFilter = normalize(state.journalFilters.need);
+  const tagFilter = normalize(state.journalFilters.tag);
   const sort = state.journalFilters.sort || 'newest';
   const range = state.journalFilters.range || 'all';
-
   let filtered = entries;
-  if (searchTerm) {
-    filtered = filtered.filter((entry) => {
-      const haystack = [entry.notes || '', entry.emotion || '', ...(entry.tags || []), ...(entry.needs || [])]
-        .join(' ')
-        .toLowerCase();
-      return haystack.includes(searchTerm);
-    });
-  }
 
-  if (tagFilter) {
-    filtered = filtered.filter((entry) =>
-      Array.isArray(entry.tags) && entry.tags.some((tag) => tag.toLowerCase().includes(tagFilter))
-    );
-  }
+  if (searchTerm) filtered = filtered.filter((entry) => [entry.notes || '', entry.emotion || '', ...(entry.tags || []), ...(entry.needs || [])].join(' ').toLowerCase().includes(searchTerm));
+  if (emotionFilter) filtered = filtered.filter((entry) => normalize(entry.emotion) === emotionFilter);
+  if (needFilter) filtered = filtered.filter((entry) => (entry.needs || []).some((need) => normalize(need) === needFilter));
+  if (tagFilter) filtered = filtered.filter((entry) => (entry.tags || []).some((tag) => normalize(tag) === tagFilter));
 
   if (range !== 'all') {
     const days = Number(range);
     if (Number.isFinite(days) && days > 0) {
-      const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+      const cutoff = Date.now() - days * 86400000;
       filtered = filtered.filter((entry) => {
         const time = new Date(entry.dateISO || 0).getTime();
-        if (!Number.isFinite(time)) {
-          return false;
-        }
-        return time >= cutoff;
+        return Number.isFinite(time) && time >= cutoff;
       });
     }
   }
 
-  const sortByTimestamp = (a, b) => new Date(b.dateISO || 0) - new Date(a.dateISO || 0);
-  if (sort === 'oldest') {
-    filtered.sort((a, b) => new Date(a.dateISO || 0) - new Date(b.dateISO || 0));
-  } else if (sort === 'intensity-high') {
-    filtered.sort((a, b) => {
-      const aVal = Number.isFinite(a.intensity) ? a.intensity : -Infinity;
-      const bVal = Number.isFinite(b.intensity) ? b.intensity : -Infinity;
-      if (bVal === aVal) {
-        return sortByTimestamp(a, b);
-      }
-      return bVal - aVal;
-    });
-  } else if (sort === 'intensity-low') {
-    filtered.sort((a, b) => {
-      const aVal = Number.isFinite(a.intensity) ? a.intensity : Infinity;
-      const bVal = Number.isFinite(b.intensity) ? b.intensity : Infinity;
-      if (aVal === bVal) {
-        return sortByTimestamp(a, b);
-      }
-      return aVal - bVal;
-    });
-  } else {
-    filtered.sort(sortByTimestamp);
-  }
-
+  const newest = (a, b) => new Date(b.dateISO || 0) - new Date(a.dateISO || 0);
+  if (sort === 'oldest') filtered.sort((a, b) => new Date(a.dateISO || 0) - new Date(b.dateISO || 0));
+  else if (sort === 'intensity-high') filtered.sort((a, b) => (Number.isFinite(b.intensity) ? b.intensity : -Infinity) - (Number.isFinite(a.intensity) ? a.intensity : -Infinity) || newest(a, b));
+  else if (sort === 'intensity-low') filtered.sort((a, b) => (Number.isFinite(a.intensity) ? a.intensity : Infinity) - (Number.isFinite(b.intensity) ? b.intensity : Infinity) || newest(a, b));
+  else filtered.sort(newest);
   return filtered;
 }
 
@@ -5604,12 +5582,12 @@ function handleJournalHistoryClick(event) {
 }
 
 function handleJournalFiltersChange() {
-  if (!state.journalFiltersForm) {
-    return;
-  }
+  if (!state.journalFiltersForm) return;
   const formData = new FormData(state.journalFiltersForm);
   state.journalFilters = {
     search: (formData.get('search') || '').toString().trim(),
+    emotion: (formData.get('emotion') || '').toString().trim(),
+    need: (formData.get('need') || '').toString().trim(),
     tag: (formData.get('tag') || '').toString().trim(),
     sort: (formData.get('sort') || 'newest').toString(),
     range: (formData.get('range') || 'all').toString(),
@@ -5618,11 +5596,9 @@ function handleJournalFiltersChange() {
 }
 
 function handleJournalFiltersReset() {
-  if (!state.journalFiltersForm) {
-    return;
-  }
+  if (!state.journalFiltersForm) return;
   state.journalFiltersForm.reset();
-  state.journalFilters = { search: '', tag: '', sort: 'newest', range: 'all' };
+  state.journalFilters = { search: '', emotion: '', need: '', tag: '', sort: 'newest', range: 'all' };
   renderJournalHistory();
 }
 

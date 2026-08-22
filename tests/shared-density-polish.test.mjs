@@ -63,7 +63,8 @@ test('page compiler is the canonical authoring path and emits final user-facing 
   assert.ok(buildPages.includes("submitLabel: 'Save to device'"));
   assert.ok(!buildPages.includes('💾 Save to device'));
   assert.ok(buildPages.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
-  assert.ok(buildPages.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(!buildPages.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(buildPages.includes('class="journal-history-controls" data-journal-filters'));
   assert.ok(buildPages.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
   assert.ok(!buildPages.includes('Personal strategies you add stay on this browser.'));
 });
@@ -83,7 +84,8 @@ test('checked-in static artifacts already contain the final UI', async () => {
   assert.ok(!needHtml.includes('💾 Save to device'));
   assert.ok(needHtml.includes('>Save to device</button>'));
   assert.ok(journalHtml.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
-  assert.ok(journalHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(!journalHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(journalHtml.includes('class="journal-history-controls" data-journal-filters'));
   assert.ok(!css.includes('.feed-controls__icon-button'));
   assert.ok(!css.includes('.feed-controls__button'));
 });

@@ -175,27 +175,27 @@ const deepMerge = (...sources) => {
 const JOURNAL_BASE_CONFIG = {
   variant: 'inventory',
   idPrefix: 'journal',
-  needsMode: 'select',
+  needsMode: 'combobox',
   intensityRange: { min: 1, max: 10, defaultValue: DEFAULT_INTENSITY },
   notes: { rows: 12 },
   labels: {
-    emotion: 'Emotion (optional)',
+    emotion: 'Feeling',
     intensity: 'Intensity',
-    needs: 'Related needs',
-    tags: 'Tags (optional)',
+    needs: 'Needs',
+    tags: 'Tags',
     notes: 'Reflection',
   },
   hints: {
-    emotion: 'Use any word that fits. Leave blank if unsure.',
-    intensity: 'How strong is it right now?',
-    needs: 'Choose any needs that connect. Leave blank if unsure.',
-    tags: 'Separate tags with commas.',
+    emotion: '',
+    intensity: '',
+    needs: '',
+    tags: '',
     notes: '',
   },
   placeholders: {
-    emotion: '',
-    needs: '',
-    tags: 'work, weekend, boundaries',
+    emotion: 'Choose or type',
+    needs: 'Add needs',
+    tags: 'Add tags',
     notes: '',
   },
   prompts: {
@@ -409,121 +409,42 @@ const buildJournalField = ({
   return field;
 };
 
+const buildJournalMetaRow = ({ label, id, input, modifier = '', suggestions = null }) => {
+  const classes = ['journal-meta-row'];
+  if (modifier) classes.push(`journal-meta-row--${modifier}`);
+  const row = createElement('div', { classes });
+  row.append(createElement('label', { attrs: { for: id }, text: label }));
+  const control = createElement('div', { classes: ['journal-meta-row__control'] });
+  control.append(input);
+  if (suggestions) control.append(suggestions);
+  row.append(control);
+  return row;
+};
+
 const buildNeedsField = (config) => {
   const id = `${config.idPrefix}-needs`;
-  if (config.needsMode === 'combobox') {
-    const input = createElement('input', {
-      attrs: {
-        id,
-        name: 'needs',
-        type: 'text',
-        autocomplete: 'off',
-        placeholder: config.placeholders.needs || '',
-      },
-    });
-    input.setAttribute('data-journal-needs', '');
-    const field = buildJournalField({
-      config,
-      label: config.labels.needs,
-      id,
-      input,
-      hint: config.hints.needs,
-    });
-    const suggestions = createElement('div', {
-      classes: ['journal-tag-suggestions'],
-      attrs: {
-        'data-journal-need-suggestions': '',
-        hidden: true,
-        role: 'listbox',
-        'aria-label': config.aria.needSuggestions,
-      },
-    });
-    field.append(suggestions);
-    return field;
-  }
-
-  const select = createElement('select', {
-    attrs: {
-      id,
-      name: 'needs',
-      multiple: true,
-    },
+  const input = createElement('input', {
+    attrs: { id, name: 'needs', type: 'text', autocomplete: 'off', placeholder: config.placeholders.needs || '' },
   });
-  select.setAttribute('data-journal-needs', '');
-  const hintText = config.hints.needs;
-  const field = buildJournalField({
-    config,
-    label: config.labels.needs,
-    id,
-    input: select,
-    hint: null,
+  input.setAttribute('data-journal-needs', '');
+  const suggestions = createElement('div', {
+    classes: ['journal-tag-suggestions'],
+    attrs: { 'data-journal-need-suggestions': '', hidden: true, role: 'listbox', 'aria-label': config.aria.needSuggestions },
   });
-
-  const summary = createElement('div', {
-    classes: ['journal-needs-summary'],
-    attrs: {
-      'data-journal-needs-summary': '',
-      'aria-live': 'polite',
-      hidden: true,
-    },
-  });
-  const summaryLabel = createElement('div', {
-    classes: ['journal-needs-summary__label'],
-    text: 'Selected needs',
-  });
-  summaryLabel.id = createUniqueId(`${config.idPrefix}-needs-summary-label`);
-  const summaryStatus = createElement('span', {
-    classes: ['visually-hidden'],
-    attrs: { 'data-journal-needs-summary-status': '' },
-  });
-  const summaryList = createElement('ul', {
-    classes: ['journal-needs-summary__list'],
-    attrs: { 'data-journal-needs-summary-list': '', role: 'list' },
-  });
-  summary.append(summaryLabel, summaryStatus, summaryList);
-  const describedBy = [select.getAttribute('aria-describedby'), summaryLabel.id]
-    .filter(Boolean)
-    .join(' ');
-  if (describedBy) {
-    select.setAttribute('aria-describedby', describedBy);
-  }
-  field.append(summary);
-  if (hintText) {
-    field.append(createElement('p', { classes: config.classes.hint, text: hintText }));
-  }
-  return field;
+  return buildJournalMetaRow({ label: config.labels.needs, id, input, modifier: 'needs', suggestions });
 };
 
 const buildTagsField = (config) => {
   const id = `${config.idPrefix}-tags`;
   const input = createElement('input', {
-    attrs: {
-      id,
-      name: 'tags',
-      type: 'text',
-      autocomplete: 'off',
-      placeholder: config.placeholders.tags || '',
-    },
+    attrs: { id, name: 'tags', type: 'text', autocomplete: 'off', placeholder: config.placeholders.tags || '' },
   });
   input.setAttribute('data-journal-tags', '');
-  const field = buildJournalField({
-    config,
-    label: config.labels.tags,
-    id,
-    input,
-    hint: config.hints.tags,
-  });
   const suggestions = createElement('div', {
     classes: ['journal-tag-suggestions'],
-    attrs: {
-      'data-journal-tag-suggestions': '',
-      hidden: true,
-      role: 'listbox',
-      'aria-label': config.aria.tagSuggestions,
-    },
+    attrs: { 'data-journal-tag-suggestions': '', hidden: true, role: 'listbox', 'aria-label': config.aria.tagSuggestions },
   });
-  field.append(suggestions);
-  return field;
+  return buildJournalMetaRow({ label: config.labels.tags, id, input, modifier: 'tags', suggestions });
 };
 
 const buildPrompts = (config) => {
@@ -671,42 +592,18 @@ export function renderJournalForm(root, overrides = {}) {
   });
   form.dataset.journalVariant = config.variant;
 
-  const grid = createElement('div', { classes: config.classes.grid || [] });
+  const grid = createElement('div', { classes: ['journal-meta-group'] });
 
   const emotionId = `${config.idPrefix}-emotion`;
   const emotionInput = createElement('input', {
-    attrs: {
-      id: emotionId,
-      name: 'emotion',
-      type: 'text',
-      autocomplete: 'off',
-      placeholder: config.placeholders.emotion || '',
-    },
+    attrs: { id: emotionId, name: 'emotion', type: 'text', autocomplete: 'off', placeholder: config.placeholders.emotion || '' },
   });
   emotionInput.setAttribute('data-journal-emotion', '');
-  grid.append(
-    buildJournalField({
-      config,
-      label: config.labels.emotion,
-      id: emotionId,
-      input: emotionInput,
-      hint: config.hints.emotion,
-    }),
-  );
+  grid.append(buildJournalMetaRow({ label: config.labels.emotion, id: emotionId, input: emotionInput, modifier: 'feeling' }));
 
   const intensityId = `${config.idPrefix}-intensity`;
-  const intensityField = createElement('div', { classes: config.classes.intensityField || config.classes.field || [] });
-  const intensityLabel = createElement('label', { attrs: { for: intensityId }, text: config.labels.intensity });
-  const intensityWrapper = createElement('div', { classes: config.classes.intensityWrap || [] });
   const intensityInput = createElement('input', {
-    attrs: {
-      id: intensityId,
-      name: 'intensity',
-      type: 'range',
-      min: config.intensityRange.min,
-      max: config.intensityRange.max,
-      value: config.intensityRange.defaultValue,
-    },
+    attrs: { id: intensityId, name: 'intensity', type: 'range', min: config.intensityRange.min, max: config.intensityRange.max, value: config.intensityRange.defaultValue, step: 1 },
   });
   intensityInput.setAttribute('data-journal-intensity', '');
   const intensityOutput = createElement('output', {
@@ -715,18 +612,13 @@ export function renderJournalForm(root, overrides = {}) {
     text: `${config.intensityRange.defaultValue}/${config.intensityRange.max}`,
   });
   intensityOutput.setAttribute('data-journal-intensity-display', '');
-  intensityWrapper.append(intensityInput, intensityOutput);
-  intensityField.append(intensityLabel, intensityWrapper);
-  if (config.hints.intensity) {
-    intensityField.append(createElement('p', { classes: config.classes.hint, text: config.hints.intensity }));
-  }
-  grid.append(intensityField);
-
-  const needsField = buildNeedsField(config);
-  grid.append(needsField);
-
-  const tagsField = buildTagsField(config);
-  grid.append(tagsField);
+  const intensityWrap = createElement('div', { classes: config.classes.intensityWrap || [] });
+  intensityWrap.append(intensityInput, intensityOutput);
+  const intensityControl = createElement('div', { classes: ['journal-meta-row__control'] });
+  intensityControl.append(intensityWrap);
+  const intensityRow = createElement('div', { classes: ['journal-meta-row', 'journal-meta-row--intensity'] });
+  intensityRow.append(createElement('label', { attrs: { for: intensityId }, text: config.labels.intensity }), intensityControl);
+  grid.append(intensityRow, buildNeedsField(config), buildTagsField(config));
 
   const notesId = `${config.idPrefix}-notes`;
   const notesTextarea = createElement('textarea', {
