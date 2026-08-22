@@ -11,7 +11,7 @@ The current Bedrock branch is expected to keep all of these green in Site Qualit
 - flicker/jitter/runtime-load-graph regressions, including the repaired magnet paint path;
 - navigation magnet coverage and saved-layout ownership;
 - static layout contracts for shared density, Inventory, Journal, and Body Cues;
-- the Journal native-UX contract: Feeling and Needs are catalog-backed popup multi-selectors whose options stay hidden until opened, Tags retain example text and free-form tagging, Feeling/Intensity/Needs/Tags share one compact metadata group, and Journal History can filter individual values from multi-feeling entries;
+- the Journal native-UX contract: Feeling and Needs use catalog-backed popups whose options stay hidden until opened; each Feeling row owns its own 0–10 intensity where 0 means unselected; Tags retain example text and free-form tagging; and Journal History preserves, displays, summarizes, and filters individual Feeling/intensity pairs;
 - page-generator ownership and clean scoped generation;
 - retired-architecture tombstones: deleted safe-build/finalizer layers stay deleted, temporary migration scaffolding does not remain, and the legacy Journal hash has one compatibility owner;
 - first-load JavaScript and shared-asset performance ceilings;
@@ -75,20 +75,21 @@ Pass condition: the primary Inventory surface and lazy Shared Strategies route r
 ### 6. Journal creation, editing, and history
 
 1. Open the dedicated Journal page and then open the Journal editor.
-2. Confirm Feeling, Intensity, Needs, and Tags read as one compact metadata group rather than four unrelated cards. Feeling and Intensity should be immediately adjacent.
+2. Confirm the resting metadata group is compact: **Feeling**, **Needs**, and **Tags**. There should be no standalone Intensity row because intensity now belongs to each Feeling.
 3. Before tapping either selector, confirm **no Feeling or Need words are already displayed as an option list**. The rows should simply offer **Choose feelings** and **Choose needs**.
-4. Open Feeling. Confirm a popup/dropout list appears containing valid Feelings from the site's feelings catalog, that more than one Feeling can be selected, and that closing the popup collapses the catalog again.
-5. Open Needs. Confirm a popup/dropout list appears containing valid Needs from the site's needs catalog, that more than one Need can be selected, and that closing the popup collapses the catalog again.
-6. Confirm opening either selector does not automatically summon the iPhone keyboard; use the popup search field separately when you actually want to search.
-7. Confirm Tags remains a free-form field and shows useful examples such as `work, weekend, boundaries` when empty.
-8. Adjust Intensity, choose multiple Feelings and Needs, add multiple Tags, and save a temporary entry. Confirm it appears in Journal History with the selected Feelings and intensity together and Needs/Tags represented compactly.
-9. Edit that entry and confirm all selected Feelings, Needs, Tags, and Intensity are restored correctly, then save the edit.
-10. In Journal History, exercise Search and the Feeling, Need, Tag, Date, and Sort controls. For a multi-feeling entry, confirm filtering by either individual selected Feeling finds the entry. Confirm **Clear** returns to the unfiltered history.
-11. Delete the temporary entry.
-12. Open the Journal overlay from one ordinary non-Journal page and confirm it opens on the first tap and uses the same popup multi-selector interaction model.
-13. Repeat the editor check once with Safari's on-screen keyboard visible from another field and once after the browser chrome has collapsed/expanded.
+4. Open Feeling. Confirm a popup/dropout list appears containing valid Feelings from the site's feelings catalog. Each row should place the Feeling word on the left and its own **0–10 intensity scale** on the right.
+5. Confirm all Feeling scales begin at **0** when unselected. Move one Feeling above 0 and confirm it becomes selected; choose a different intensity for a second Feeling; return one scale to 0 and confirm that Feeling is removed from the selection.
+6. Close and reopen Feeling and confirm the independent ratings are preserved. Opening the selector should not automatically summon the iPhone keyboard; use search only when wanted.
+7. Open Needs. Confirm a popup/dropout list appears containing valid Needs from the site's needs catalog, that more than one Need can be selected, and that closing the popup collapses the catalog again.
+8. Confirm Tags remains a free-form field and shows useful examples such as `work, weekend, boundaries` when empty.
+9. Save a temporary entry with at least two Feelings at different non-zero intensities, multiple Needs, and multiple Tags. Confirm Journal History displays each Feeling with its own intensity rather than one intensity for the whole entry.
+10. Edit that entry and confirm every Feeling/intensity pair, Need, and Tag is restored correctly, then save the edit.
+11. In Journal History, exercise Search and the Feeling, Need, Tag, Date, and Sort controls. For a multi-feeling entry, confirm filtering by either individual Feeling finds the entry. Confirm **Clear** returns to the unfiltered history.
+12. Delete the temporary entry.
+13. Open the Journal overlay from one ordinary non-Journal page and confirm it opens on the first tap and uses the same per-Feeling intensity selector and Needs popup.
+14. Repeat the editor check once with Safari's on-screen keyboard visible from another field and once after the browser chrome has collapsed/expanded.
 
-Pass condition: Feeling and Needs expose only valid site vocabulary through collapsed-by-default multi-select popups, Tags remains lightweight/free-form with examples, selected values round-trip through save/edit/history correctly, touch targets remain comfortable, and dedicated/overlay paths both initialize correctly.
+Pass condition: each selected Feeling owns an independent 1–10 rating and setting it to 0 removes that Feeling; Needs exposes only valid site vocabulary through a collapsed-by-default multi-select popup; Tags remains lightweight/free-form with examples; Feeling/intensity pairs round-trip through save/edit/history correctly; touch targets remain comfortable; and dedicated/overlay paths both initialize correctly.
 
 ### 7. Screenshot-derived hierarchy acceptance
 

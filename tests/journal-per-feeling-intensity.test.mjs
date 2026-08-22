@@ -16,3 +16,10 @@ test('Journal canonical model stores intensity per feeling with legacy compatibi
   assert.ok(moduleSource.includes('return { feelings, emotion, intensity: intensityValue, needs, tags, notes }'));
   assert.ok(moduleSource.includes("0 means not selected"));
 });
+
+
+test('Journal module remains importable after the per-feeling refactor', async () => {
+  const moduleUrl = new URL('../assets/js/journal/module.js', import.meta.url);
+  const loaded = await import(`${moduleUrl.href}?syntax=${Date.now()}`);
+  assert.equal(typeof loaded.renderJournalForm, 'function');
+});

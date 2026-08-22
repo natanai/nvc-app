@@ -682,7 +682,7 @@ export function renderJournalForm(root, overrides = {}) {
 
   grid.append(buildFeelingField(config), buildNeedsField(config), buildTagsField(config));
 
-  const notesId = `${config.idPrefix}-notes`;  const notesId = `${config.idPrefix}-notes`;
+  const notesId = `${config.idPrefix}-notes`;
   const notesTextarea = createElement('textarea', {
     classes: config.classes.notesInput || [],
     attrs: {
