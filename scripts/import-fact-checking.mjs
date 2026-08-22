@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { isDeepStrictEqual } from "node:util";
 
 import { buildReverseInferenceOverridesFromRows } from "./reverse-inference-overrides-csv.mjs";
 
@@ -73,8 +74,15 @@ function parseNumber(value) {
 async function restoreReverseInferenceOverrides() {
   const rows = await readCsvFile("reverse-inference-overrides.csv");
   const sourcePath = path.join(DATA_DIR, "reverse-inference-overrides.json");
-  const existing = JSON.parse(await fs.readFile(sourcePath, "utf8"));
+  const existingText = await fs.readFile(sourcePath, "utf8");
+  const existing = JSON.parse(existingText);
   const payload = buildReverseInferenceOverridesFromRows(rows, existing);
+
+  if (isDeepStrictEqual(existing, payload)) {
+    console.log("• reverse-inference overrides are unchanged; preserved canonical JSON bytes");
+    return;
+  }
+
   await fs.writeFile(sourcePath, JSON.stringify(payload, null, 2) + "\n");
   console.log("• restored data/reverse-inference-overrides.json from fact-checking/reverse-inference-overrides.csv");
 }
