@@ -31,6 +31,9 @@ jobs:
       - name: Apply Journal inline-size repair
         run: node scripts/.bedrock-journal-width-fix.mjs
 
+      - name: Regenerate canonical Journal output
+        run: node scripts/build-pages.mjs --scope inventory
+
       - name: Check focused contracts
         run: |
           git diff --check
