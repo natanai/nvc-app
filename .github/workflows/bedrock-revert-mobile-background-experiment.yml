@@ -1,0 +1,64 @@
+name: Bedrock mobile background rollback
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bedrock-mobile-background-rollback-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  rollback-mobile-background:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Bedrock test branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Remove mobile background experiment
+        run: |
+          node --check scripts/bedrock-revert-mobile-background-experiment.mjs
+          node scripts/bedrock-revert-mobile-background-experiment.mjs
+          git diff --check
+
+      - name: Verify rollback scope
+        shell: bash
+        run: |
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          if [ "$changed" != "styles.css" ]; then
+            echo "Rollback must change only styles.css"
+            exit 1
+          fi
+
+      - name: Verify Bedrock regressions
+        run: |
+          node --test tests/magnet-prepaint.test.mjs tests/offline-cache.test.mjs
+          npm run test:customizer
+          npm run test:flicker-jitter
+          npm run test:performance
+
+      - name: Commit rollback
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- styles.css
+          git commit -m "Revert mobile background repaint experiment"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
