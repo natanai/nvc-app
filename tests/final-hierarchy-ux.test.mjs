@@ -45,6 +45,9 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(runtime.includes("state.journalFiltersForm.hidden = !hasJournalEntries"), 'filters must disappear when there is nothing to filter');
   assert.ok(runtime.includes("control.hidden = entries.length === 0"), 'empty filter dimensions must stay out of the UI');
   assert.ok(runtime.includes("'No matches'"), 'filtered-empty history must distinguish no matches from no entries');
+
+  // Regression target: populated Journal content may scroll inside the filter
+  // rail, but its intrinsic width must never make the document itself pan.
   for (const source of [build, html]) {
     assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-history-controls__filters {"), 'Journal must own its populated filter rail at the generator layer');
     assert.ok(source.includes('contain: inline-size;'), 'the horizontal Journal filter rail must contain its intrinsic width instead of widening the document');
