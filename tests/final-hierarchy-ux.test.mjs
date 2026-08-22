@@ -31,6 +31,13 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(html.includes('data-journal-notes-rows="5"'), 'generated Journal must ship the compact fallback reflection density');
   assert.ok(moduleSource.includes('dataset.journalNotesRows'), 'Journal module must support per-instance reflection row density');
   assert.ok(css.includes('.journal-inline-fallback[open] .journal-form__sheet'), 'fallback editor must neutralize the full-screen sheet minimum height');
+  assert.ok(build.includes('data-journal-filters-reset hidden>Clear filters</button>'), 'filter reset must stay outside the horizontal filter strip until needed');
+  assert.ok(runtime.includes('updateJournalFiltersResetVisibility'), 'filter reset visibility must be state-driven');
+  assert.ok(build.includes('journal-utility-disclosure__hint">Trends across entries'), 'Patterns must explain its role before it is opened');
+  assert.ok(runtime.includes('Patterns grow with your journal.'), 'empty Patterns must explain what will appear later');
+  assert.ok(build.includes('journal-inline-fallback__summary-text">Fallback editor'), 'fallback editor must be labeled as secondary recovery UI');
+  assert.ok(css.includes('border-top: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);'), 'fallback editor must use pushed-back separator styling');
+  assert.ok(css.includes('.journal-inline-fallback[open] .journal-form,'), 'fallback form must use the full available inline width');
 });
 
 test('Need strategy browsing and personal strategy editing use compact final hierarchy', async () => {

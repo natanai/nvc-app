@@ -102,10 +102,10 @@ These are the screenshot-derived surfaces that were rebuilt at their canonical o
 1. Open the dedicated Journal page. The top of the page should be a compact **Journal** title with one **New entry** action, not a large Journal hero card with explanatory copy.
 2. **History** should be the first substantial surface on the page. Search should be immediately available, with Feeling, Need, Tag, Date, Sort, and Clear presented as a compact horizontally scrollable filter row on a phone rather than large stacked filter panels.
 3. Saved entries should scan like a dense native log/list: Feeling/intensity first, quiet date metadata, a concise note body when present, small Need/Tag facets, and secondary Edit/Delete actions. Entries should be separated without each becoming another heavy shadowed card.
-4. **Patterns** and **Backup & restore** should sit below History as compact collapsed disclosure rows. Opening either should reveal its contents without a custom Hide/Show-summary button or another hero-sized panel.
+4. **Patterns** is a core Journal surface: its collapsed row should identify it as trends across entries, and opening it with no entries should explain that recurring feelings, needs, tags, and intensity trends will appear as entries accumulate. **Backup & restore** remains available below it but visually quieter.
 5. Confirm the full-screen Journal editor still opens from **New entry** and that the accepted per-Feeling intensity, Needs popup, and Tags interactions from section 6 are unchanged.
 
-Pass condition: History, not navigation ceremony or utility cards, dominates the dedicated Journal screen; filters and entries are easy to scan within one phone viewport; and Patterns/Backup remain available without competing with the primary task.
+Pass condition: History and Patterns read as the two core dedicated-Journal surfaces; filters and entries are easy to scan within one phone viewport; Clear filters only appears when there is something to clear; Backup remains secondary; and the fallback editor is visually pushed back, compact when closed, and uses the available width when deliberately opened.
 
 #### Need-page Strategies
 

@@ -5026,9 +5026,13 @@ function renderJournalSummary() {
   container.innerHTML = '';
   const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
   if (!entries.length) {
-    const empty = document.createElement('p');
-    empty.className = 'journal-empty';
-    empty.textContent = 'Save entries to see a snapshot of your progress.';
+    const empty = document.createElement('div');
+    empty.className = 'journal-patterns-empty';
+    const title = document.createElement('strong');
+    title.textContent = 'Patterns grow with your journal.';
+    const description = document.createElement('span');
+    description.textContent = 'Recurring feelings, needs, tags, and intensity trends will appear here as you save entries.';
+    empty.append(title, description);
     container.appendChild(empty);
     return;
   }
@@ -5199,9 +5203,25 @@ function parseJournalFeelingRatings(entry) {
   return parseJournalFeelings(entry?.emotion).map((feeling) => ({ feeling, intensity: fallback }));
 }
 
+function updateJournalFiltersResetVisibility() {
+  const button = state.journalFiltersForm?.querySelector('[data-journal-filters-reset]');
+  if (!button) return;
+  const filters = state.journalFilters || {};
+  const active = Boolean(
+    filters.search ||
+      filters.emotion ||
+      filters.need ||
+      filters.tag ||
+      (filters.sort && filters.sort !== 'newest') ||
+      (filters.range && filters.range !== 'all')
+  );
+  button.hidden = !active;
+}
+
 function renderJournalHistory() {
   if (!state.journalHistoryEl) return;
   syncJournalHistoryFilterOptions();
+  updateJournalFiltersResetVisibility();
   const container = state.journalHistoryEl;
   container.innerHTML = '';
   const entries = getFilteredJournalEntries();

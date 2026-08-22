@@ -3226,6 +3226,12 @@ function renderInventoryJournalPage(needsList = []) {
         gap: clamp(0.65rem, 1.8vw, 0.95rem);
       }
 
+      @media (max-width: 720px) {
+        main[data-page-id='inventory-journal'].page {
+          padding-inline: max(0.78rem, env(safe-area-inset-left));
+        }
+      }
+
       main[data-page-id='inventory-journal'] .journal-page-header {
         padding: 0.2rem 0.08rem 0.35rem;
         border: 0;
@@ -3370,26 +3376,51 @@ function renderInventoryJournalPage(needsList = []) {
         border: 0;
       }
 
-      main[data-page-id='inventory-journal'] .journal-history-control select,
-      main[data-page-id='inventory-journal'] .journal-history-controls__clear {
+      main[data-page-id='inventory-journal'] .journal-history-control select {
         width: auto;
-        min-width: 0;
-        min-height: 40px;
-        padding: 0.38rem 1.55rem 0.38rem 0.62rem;
+        min-width: 7rem;
+        min-height: 44px;
+        padding: 0.42rem 1.55rem 0.42rem 0.68rem;
         border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
         border-radius: var(--radius-pill);
-        background-color: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+        background-color: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
         box-shadow: none;
         color: var(--ink);
         font: inherit;
-        font-size: 0.76rem;
+        font-size: 0.78rem;
         font-weight: 650;
         white-space: nowrap;
       }
 
+      main[data-page-id='inventory-journal'] #journal-filter-range {
+        min-width: 7.4rem;
+      }
+
+      main[data-page-id='inventory-journal'] #journal-filter-sort {
+        min-width: 8.5rem;
+      }
+
       main[data-page-id='inventory-journal'] .journal-history-controls__clear {
-        padding-inline: 0.7rem;
+        justify-self: end;
+        min-width: 0;
+        min-height: 44px;
+        margin: -0.08rem 0 0;
+        padding: 0.22rem 0.18rem;
+        border: 0;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        box-shadow: none;
         color: var(--ink-soft);
+        font: inherit;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__clear[hidden] {
+        display: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-history--cards {
@@ -3527,6 +3558,57 @@ function renderInventoryJournalPage(needsList = []) {
         padding: 0 0.72rem 0.72rem;
       }
 
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__label {
+        min-width: 0;
+        display: grid;
+        gap: 0.04rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__hint {
+        font-size: 0.68rem;
+        font-weight: 560;
+        line-height: 1.2;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-summary-section.journal-utility-disclosure {
+        border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+        background: #ffffff;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-summary-section .journal-utility-disclosure__summary {
+        min-height: 54px;
+        font-size: 0.9rem;
+        font-weight: 780;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-actions.journal-utility-disclosure {
+        border-color: color-mix(in srgb, var(--outline) 12%, transparent);
+        background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-actions .journal-utility-disclosure__summary {
+        font-size: 0.78rem;
+        font-weight: 680;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-patterns-empty {
+        display: grid;
+        gap: 0.18rem;
+        padding: 0.62rem 0.68rem;
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--lavender) 24%, #ffffff 76%);
+        color: var(--ink-soft);
+        font-size: 0.76rem;
+        line-height: 1.38;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-patterns-empty strong {
+        color: var(--ink);
+        font-size: 0.8rem;
+      }
+
       main[data-page-id='inventory-journal'] .journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body {
         display: none;
       }
@@ -3632,8 +3714,8 @@ function renderInventoryJournalPage(needsList = []) {
               <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag" aria-label="Tag"><option value="">Tag</option></select></label>
               <label class="journal-history-control" for="journal-filter-range"><span>Date</span><select id="journal-filter-range" name="range" aria-label="Date"><option value="all">Any time</option><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
               <label class="journal-history-control" for="journal-filter-sort"><span>Sort</span><select id="journal-filter-sort" name="sort" aria-label="Sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="intensity-high">Highest intensity</option><option value="intensity-low">Lowest intensity</option></select></label>
-              <button type="button" class="journal-history-controls__clear" data-journal-filters-reset>Clear</button>
             </div>
+            <button type="button" class="journal-history-controls__clear" data-journal-filters-reset hidden>Clear filters</button>
           </form>
           <p class="journal-empty" data-journal-empty hidden>Save an entry to see it here.</p>
           <div class="journal-history journal-history--cards" data-journal-history></div>
@@ -3642,11 +3724,19 @@ function renderInventoryJournalPage(needsList = []) {
         <div class="journal-overview-grid" aria-label="Journal tools">
           <details class="journal-summary-section journal-utility-disclosure">
             <summary class="journal-utility-disclosure__summary">
-              <span>Patterns</span>
+              <span class="journal-utility-disclosure__label">
+                <span>Patterns</span>
+                <span class="journal-utility-disclosure__hint">Trends across entries</span>
+              </span>
               <span class="journal-utility-disclosure__chevron" aria-hidden="true">›</span>
             </summary>
             <div class="journal-utility-disclosure__body">
-              <div class="journal-summary" data-journal-summary></div>
+              <div class="journal-summary" data-journal-summary>
+                <div class="journal-patterns-empty" data-journal-patterns-placeholder>
+                  <strong>Patterns grow with your journal.</strong>
+                  <span>Recurring feelings, needs, tags, and intensity trends will appear here as you save entries.</span>
+                </div>
+              </div>
             </div>
           </details>
 
@@ -3669,10 +3759,10 @@ function renderInventoryJournalPage(needsList = []) {
 
         <details class="journal-inline-fallback" data-journal-inline-fallback>
           <summary class="journal-inline-fallback__summary">
-            <span class="journal-inline-fallback__summary-text">Trouble opening the journal?</span>
+            <span class="journal-inline-fallback__summary-text">Fallback editor</span>
           </summary>
           <div class="journal-inline-fallback__body">
-            <p class="journal-inline-fallback__note">Use this inline form only if the full-screen editor will not open.</p>
+            <p class="journal-inline-fallback__note">Use only if New entry does not open.</p>
             <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container data-journal-notes-rows="5">
               <section class="journal-form-section" aria-labelledby="journal-form-heading">
                 <div class="journal-form-section__header">
