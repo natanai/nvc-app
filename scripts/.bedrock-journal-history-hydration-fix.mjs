@@ -57,35 +57,39 @@ function replaceOnce(source, search, replacement, label) {
 
 {
   const path = 'tests/journal-initial-history-hydration.test.mjs';
-  const testSource = `import test from 'node:test';
-import assert from 'node:assert/strict';
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const load = (relative) => fs.readFile(path.join(root, relative), 'utf8');
-
-test('Journal history hydrates persisted entries after async Journal setup without user interaction', async () => {
-  const runtime = await load('scripts/inventory.js');
-  const updateStart = runtime.indexOf('function updateJournalEntriesFromStore() {');
-  const updateEnd = runtime.indexOf('\n}', updateStart) + 2;
-  assert.ok(updateStart >= 0 && updateEnd > updateStart);
-  const updateBlock = runtime.slice(updateStart, updateEnd);
-  assert.ok(updateBlock.includes("store && typeof store.list === 'function' ? store.list() : []"));
-  assert.ok(updateBlock.includes('renderJournalViews();'));
-  assert.equal(updateBlock.includes('renderJournalHistory();'), false);
-
-  const finalizer = ` + "`" + `  const finalizeJournalSetup = () => {
-    setupJournalOverlay();
-    state.journalStore = resolveJournalStore() || state.journalStore;
-    registerJournalStoreListeners();
-    updateJournalEntriesFromStore();
-  };` + "`" + `;
-  assert.ok(runtime.includes(finalizer));
-  assert.equal(/updateJournalEntriesFromStore\(\);\n\s*renderJournalViews\(\);/.test(runtime), false);
-});
-`;
+  const testSource = [
+    "import test from 'node:test';",
+    "import assert from 'node:assert/strict';",
+    "import { promises as fs } from 'node:fs';",
+    "import path from 'node:path';",
+    "import { fileURLToPath } from 'node:url';",
+    '',
+    "const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');",
+    "const load = (relative) => fs.readFile(path.join(root, relative), 'utf8');",
+    '',
+    "test('Journal history hydrates persisted entries after async Journal setup without user interaction', async () => {",
+    "  const runtime = await load('scripts/inventory.js');",
+    "  assert.ok(runtime.includes(\"state.journalEntries = store && typeof store.list === 'function' ? store.list() : [];\"));",
+    "  const updateStart = runtime.indexOf('function updateJournalEntriesFromStore() {');",
+    "  const finalizerStart = runtime.indexOf('const finalizeJournalSetup = () => {');",
+    "  assert.ok(updateStart >= 0);",
+    "  assert.ok(finalizerStart > updateStart);",
+    "  const updateBlock = runtime.slice(updateStart, finalizerStart);",
+    "  assert.ok(updateBlock.includes('renderJournalViews();'));",
+    "  assert.equal(updateBlock.includes('renderJournalHistory();'), false);",
+    '',
+    "  const overlayIndex = runtime.indexOf('setupJournalOverlay();', finalizerStart);",
+    "  const reconcileIndex = runtime.indexOf('state.journalStore = resolveJournalStore() || state.journalStore;', finalizerStart);",
+    "  const listenerIndex = runtime.indexOf('registerJournalStoreListeners();', finalizerStart);",
+    "  const hydrateIndex = runtime.indexOf('updateJournalEntriesFromStore();', finalizerStart);",
+    "  assert.ok(overlayIndex > finalizerStart);",
+    "  assert.ok(reconcileIndex > overlayIndex);",
+    "  assert.ok(listenerIndex > reconcileIndex);",
+    "  assert.ok(hydrateIndex > listenerIndex);",
+    "  assert.equal(/updateJournalEntriesFromStore\\(\\);\\s*renderJournalViews\\(\\);/.test(runtime), false);",
+    '});',
+    '',
+  ].join('\n');
   write(path, testSource);
 
   const packagePath = 'package.json';
