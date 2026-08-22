@@ -73,6 +73,11 @@ jobs:
         if: always()
         run: npm run test:generator-ownership
 
+      - name: Verify first-load performance budgets
+        id: performance-budgets
+        if: always()
+        run: npm run test:performance
+
       - name: Verify fact-checking authoring round-trip
         id: fact-checking-roundtrip
         if: always()
@@ -151,6 +156,7 @@ jobs:
           echo "Committed navigation magnets: ${{ steps.navigation-magnets.outcome }}"
           echo "Committed static layout contracts: ${{ steps.static-layout-contracts.outcome }}"
           echo "Page generator ownership: ${{ steps.generator-ownership.outcome }}"
+          echo "First-load performance budgets: ${{ steps.performance-budgets.outcome }}"
           echo "Fact-checking round-trip: ${{ steps.fact-checking-roundtrip.outcome }}"
           echo "Authoring build: ${{ steps.build-site.outcome }}"
           echo "Build reproducibility: ${{ steps.generated-artifacts.outcome }}"
@@ -161,8 +167,9 @@ jobs:
             && [ "${{ steps.navigation-magnets.outcome }}" = "success" ] \
             && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ] \
             && [ "${{ steps.generator-ownership.outcome }}" = "success" ] \
+            && [ "${{ steps.performance-budgets.outcome }}" = "success" ] \
             && [ "${{ steps.fact-checking-roundtrip.outcome }}" = "success" ]; then
-            echo "Committed static-site runtime, generator ownership, and fact-checking round-trip checks passed."
+            echo "Committed static-site runtime, generator ownership, performance-budget, and fact-checking round-trip checks passed."
           else
             echo "One or more committed-site/authoring checks failed; inspect those before publishing this branch."
           fi
