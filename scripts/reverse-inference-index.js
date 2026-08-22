@@ -25,6 +25,13 @@ const CATEGORY_TO_SDT = new Map([
   ['meaning/contribution', 'competence'],
 ]);
 
+const CIRCUMPLEX_KEY_ALIASES = new Map([
+  ['contented', 'contentment'],
+  ['excited', 'excitement'],
+  ['hopeful', 'hope'],
+  ['joyful', 'joy'],
+]);
+
 function slugify(text) {
   return String(text || '')
     .toLowerCase()
@@ -156,7 +163,8 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [], bodyRegi
     if (total <= 0) {
       return;
     }
-    const anchor = EMOTION_CIRCUMPLEX[feelingKey];
+    const circumplexKey = CIRCUMPLEX_KEY_ALIASES.get(feelingKey) || feelingKey;
+    const anchor = EMOTION_CIRCUMPLEX[circumplexKey];
     if (!anchor) {
       return;
     }
@@ -212,7 +220,7 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [], bodyRegi
     const skills = skillsForArousal(arousal).slice(0, 2);
     const evidenceKeys = new Set();
     evidenceKeys.add(`zone-${anchor.valence}-${anchor.arousal}`);
-    evidenceKeys.add(`emotion-${feelingKey}`);
+    evidenceKeys.add(`emotion-${circumplexKey}`);
     skills.forEach((skill) => {
       evidenceKeys.add(`skill-${skill}`);
     });
@@ -230,8 +238,12 @@ export function buildReverseInferenceIndex({ needs = [], feelings = [], bodyRegi
     };
   });
 
+  const resolvableSlugMap = Object.fromEntries(
+    Object.entries(slugMap).filter(([, feelingKey]) => Boolean(index[feelingKey])),
+  );
+
   index._meta = {
-    slugMap,
+    slugMap: resolvableSlugMap,
   };
 
   return index;

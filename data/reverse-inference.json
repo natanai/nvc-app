@@ -64,20 +64,6 @@
       {
         "regionId": "head",
         "regionLabel": "Head and mind space",
-        "optionId": "head-pressure",
-        "title": "Pressure or band",
-        "note": "Helmet feeling, squeezing temples",
-        "intensityBand": [
-          5,
-          9
-        ],
-        "arousal": "medium",
-        "relativeWeight": 0.1,
-        "evidenceKey": "head-pressure"
-      },
-      {
-        "regionId": "head",
-        "regionLabel": "Head and mind space",
         "optionId": "head-buzzing",
         "title": "Buzzing or static",
         "note": "Quick thoughts, humming energy",
@@ -188,6 +174,20 @@
         "evidenceKey": "jaw-tremble"
       },
       {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-pressure",
+        "title": "Pressure or band",
+        "note": "Helmet feeling, squeezing temples",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "arousal": "high",
+        "relativeWeight": 0.1,
+        "evidenceKey": "head-pressure"
+      },
+      {
         "regionId": "overall",
         "regionLabel": "Whole-body sense",
         "optionId": "overall-floating",
@@ -257,7 +257,6 @@
       "chest-pounding",
       "limbs-restless",
       "gut-rolling",
-      "head-pressure",
       "head-buzzing",
       "shoulders-braced",
       "temp-chill",
@@ -266,9 +265,9 @@
       "throat-dry",
       "jaw-clench",
       "jaw-tremble",
+      "head-pressure",
       "overall-floating",
-      "throat-tight",
-      "zone-unpleasant-medium"
+      "throat-tight"
     ]
   },
   "fear": {
@@ -1330,7 +1329,8 @@
   },
   "excited": {
     "zones": [
-      "high-pleasant"
+      "high-pleasant",
+      "high-neutral"
     ],
     "bodyCues": [
       {
@@ -1340,26 +1340,12 @@
         "title": "Tingly or sparkly",
         "note": "Buzzing skin, energetic tingles",
         "intensityBand": [
-          6,
-          10
-        ],
-        "arousal": "high",
-        "relativeWeight": 0.16,
-        "evidenceKey": "limbs-tingly"
-      },
-      {
-        "regionId": "chest",
-        "regionLabel": "Chest or heart space",
-        "optionId": "chest-pounding",
-        "title": "Pounding or racing heartbeat",
-        "note": "Heart racing, flutter, sudden surges of beats",
-        "intensityBand": [
-          6,
+          5,
           10
         ],
         "arousal": "high",
         "relativeWeight": 0.15,
-        "evidenceKey": "chest-pounding"
+        "evidenceKey": "limbs-tingly"
       },
       {
         "regionId": "limbs",
@@ -1372,22 +1358,22 @@
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.15,
+        "relativeWeight": 0.14,
         "evidenceKey": "limbs-restless"
       },
       {
-        "regionId": "temperature",
-        "regionLabel": "Temperature shifts",
-        "optionId": "temp-flush",
-        "title": "Flush of heat",
-        "note": "Cheeks glowing, warmth rushing outward",
+        "regionId": "chest",
+        "regionLabel": "Chest or heart space",
+        "optionId": "chest-pounding",
+        "title": "Pounding or racing heartbeat",
+        "note": "Heart racing, flutter, sudden surges of beats",
         "intensityBand": [
           6,
           10
         ],
         "arousal": "high",
-        "relativeWeight": 0.15,
-        "evidenceKey": "temp-flush"
+        "relativeWeight": 0.13,
+        "evidenceKey": "chest-pounding"
       },
       {
         "regionId": "gut",
@@ -1404,18 +1390,18 @@
         "evidenceKey": "gut-rolling"
       },
       {
-        "regionId": "head",
-        "regionLabel": "Head and mind space",
-        "optionId": "head-buzzing",
-        "title": "Buzzing or static",
-        "note": "Quick thoughts, humming energy",
+        "regionId": "temperature",
+        "regionLabel": "Temperature shifts",
+        "optionId": "temp-flush",
+        "title": "Flush of heat",
+        "note": "Cheeks glowing, warmth rushing outward",
         "intensityBand": [
           6,
           10
         ],
         "arousal": "high",
         "relativeWeight": 0.13,
-        "evidenceKey": "head-buzzing"
+        "evidenceKey": "temp-flush"
       },
       {
         "regionId": "temperature",
@@ -1430,6 +1416,34 @@
         "arousal": "high",
         "relativeWeight": 0.13,
         "evidenceKey": "temp-prickly"
+      },
+      {
+        "regionId": "head",
+        "regionLabel": "Head and mind space",
+        "optionId": "head-buzzing",
+        "title": "Buzzing or static",
+        "note": "Quick thoughts, humming energy",
+        "intensityBand": [
+          6,
+          10
+        ],
+        "arousal": "high",
+        "relativeWeight": 0.11,
+        "evidenceKey": "head-buzzing"
+      },
+      {
+        "regionId": "throat",
+        "regionLabel": "Throat and voice",
+        "optionId": "throat-dry",
+        "title": "Dry or closed off",
+        "note": "Scratchy, hard to speak, voice fades",
+        "intensityBand": [
+          7,
+          10
+        ],
+        "arousal": "high",
+        "relativeWeight": 0.1,
+        "evidenceKey": "throat-dry"
       }
     ],
     "needsHypotheses": {
@@ -1450,6 +1464,10 @@
         {
           "title": "Connection",
           "slug": "connection"
+        },
+        {
+          "title": "Predictability",
+          "slug": "predictability"
         }
       ]
     },
@@ -1459,16 +1477,17 @@
     ],
     "evidenceKeys": [
       "zone-pleasant-high",
-      "emotion-excited",
+      "emotion-excitement",
       "skill-labeling",
       "skill-physiological_sigh",
       "limbs-tingly",
-      "chest-pounding",
       "limbs-restless",
-      "temp-flush",
+      "chest-pounding",
       "gut-rolling",
+      "temp-flush",
+      "temp-prickly",
       "head-buzzing",
-      "temp-prickly"
+      "throat-dry"
     ]
   },
   "calm": {
@@ -1679,7 +1698,7 @@
     ],
     "evidenceKeys": [
       "zone-pleasant-high",
-      "emotion-joyful",
+      "emotion-joy",
       "skill-labeling",
       "skill-physiological_sigh",
       "chest-open",
@@ -2007,7 +2026,7 @@
     ],
     "evidenceKeys": [
       "zone-pleasant-medium",
-      "emotion-hopeful",
+      "emotion-hope",
       "skill-labeling",
       "skill-slow_446",
       "gut-warm"
@@ -2074,7 +2093,7 @@
     ],
     "evidenceKeys": [
       "zone-pleasant-medium",
-      "emotion-contented",
+      "emotion-contentment",
       "skill-labeling",
       "skill-slow_446",
       "overall-calm",
@@ -2563,8 +2582,6 @@
       "scared": "fear",
       "terrified": "fear",
       "alarmed": "fear",
-      "bewildered": "uncertain",
-      "confused": "uncertain",
       "defiant": "determined",
       "anxiousness": "anxiety",
       "humiliated": "shame",
@@ -2579,11 +2596,10 @@
       "desperation": "overwhelm",
       "worry": "anxiety",
       "jealous": "anxiety",
-      "tired": "tired",
-      "calm": "calm",
-      "love": "love-caring",
       "contented": "contented",
-      "anticipation": "excited"
+      "anticipation": "excited",
+      "tired": "tired",
+      "calm": "calm"
     }
   }
 }
