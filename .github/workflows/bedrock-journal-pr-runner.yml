@@ -29,7 +29,9 @@ jobs:
         run: npm ci
 
       - name: Apply final root-level Journal refactor
-        run: node scripts/.bedrock-journal-native-finalize.mjs
+        run: |
+          node scripts/.bedrock-journal-native-finalize.mjs
+          node scripts/.bedrock-journal-native-test-fix.mjs
 
       - name: Regenerate canonical pages
         run: npm run build:pages
@@ -38,7 +40,7 @@ jobs:
         run: git diff --check
 
       - name: Verify Journal contract
-        run: node --test tests/journal-native-ux.test.mjs
+        run: node --test tests/journal-native-ux.test.mjs tests/native-action-controls.test.mjs
 
       - name: Run Bedrock regressions
         run: |
@@ -61,6 +63,7 @@ jobs:
           rm -f scripts/.bedrock-journal-native-refactor.mjs
           rm -f scripts/.fix-journal-refactor-patterns.mjs
           rm -f scripts/.bedrock-journal-native-finalize.mjs
+          rm -f scripts/.bedrock-journal-native-test-fix.mjs
           rm -f .github/workflows/bedrock-journal-native-refactor.yml
 
       - name: Verify obsolete architecture stays gone
