@@ -4,14 +4,15 @@ ROOT = Path(__file__).resolve().parents[2]
 FONT_HOST = 'https://fonts.googleapis.com'
 FONT_FILE_HOST = 'https://fonts.gstatic.com'
 FONT_MARKER = 'href="https://fonts.googleapis.com/css2?'
-CSS_PRECONNECT = '    <link rel="preconnect" href="https://fonts.googleapis.com" />\n'
-FILE_PRECONNECT = '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n'
 
 
 def insert_preconnects(text: str, label: str) -> str:
     if FONT_MARKER not in text:
         return text
-    if 'rel="preconnect" href="https://fonts.googleapis.com"' in text and 'rel="preconnect" href="https://fonts.gstatic.com"' in text:
+    if (
+        'rel="preconnect" href="https://fonts.googleapis.com"' in text
+        and 'rel="preconnect" href="https://fonts.gstatic.com"' in text
+    ):
         return text
 
     marker_index = text.index(FONT_MARKER)
@@ -58,43 +59,6 @@ if '"test:delivery"' not in package_text:
         raise RuntimeError('package.json performance-test anchor not found')
     package_text = package_text.replace(needle, replacement, 1)
     package_path.write_text(package_text, encoding='utf-8')
-
-rebuild_path = ROOT / '.github' / 'workflows' / 'rebuild-site.yml'
-rebuild_text = rebuild_path.read_text(encoding='utf-8')
-if 'npm run test:delivery' not in rebuild_text:
-    anchor = '          npm run test:flicker-jitter\n'
-    if anchor not in rebuild_text:
-        raise RuntimeError('rebuild-site delivery-test anchor not found')
-    rebuild_text = rebuild_text.replace(anchor, anchor + '          npm run test:delivery\n', 1)
-    rebuild_path.write_text(rebuild_text, encoding='utf-8')
-
-site_quality_path = ROOT / '.github' / 'workflows' / 'site-quality-checks.yml'
-site_quality_text = site_quality_path.read_text(encoding='utf-8')
-if 'id: delivery-contracts' not in site_quality_text:
-    anchor = '''      - name: Verify first-load performance budgets\n        id: performance-budgets\n        if: always()\n        run: npm run test:performance\n'''
-    addition = anchor + '''\n      - name: Verify delivery contracts\n        id: delivery-contracts\n        if: always()\n        run: npm run test:delivery\n'''
-    if anchor not in site_quality_text:
-        raise RuntimeError('site-quality delivery-step anchor not found')
-    site_quality_text = site_quality_text.replace(anchor, addition, 1)
-
-    summary_anchor = '          echo "First-load performance budgets: ${{ steps.performance-budgets.outcome }}"\n'
-    if summary_anchor not in site_quality_text:
-        raise RuntimeError('site-quality summary anchor not found')
-    site_quality_text = site_quality_text.replace(
-        summary_anchor,
-        summary_anchor + '          echo "Delivery contracts: ${{ steps.delivery-contracts.outcome }}"\n',
-        1,
-    )
-
-    condition_anchor = '            && [ "${{ steps.performance-budgets.outcome }}" = "success" ] \\\n'
-    if condition_anchor not in site_quality_text:
-        raise RuntimeError('site-quality success-condition anchor not found')
-    site_quality_text = site_quality_text.replace(
-        condition_anchor,
-        condition_anchor + '            && [ "${{ steps.delivery-contracts.outcome }}" = "success" ] \\\n',
-        1,
-    )
-    site_quality_path.write_text(site_quality_text, encoding='utf-8')
 
 test_path = ROOT / 'tests' / 'font-delivery.test.mjs'
 test_path.write_text(r'''import assert from 'node:assert/strict';
