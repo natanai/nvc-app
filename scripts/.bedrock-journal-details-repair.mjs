@@ -38,8 +38,8 @@ function replaceOnce(source, before, after, label) {
 
   source = replaceOnce(
     source,
-    '<div class=\\"journal-inline-container journal-panel journal-panel--form-shell\\" data-journal-inline-container>',
-    '<div class=\\"journal-inline-container journal-panel journal-panel--form-shell\\" data-journal-inline-container data-journal-notes-rows=\\"5\\">',
+    '<div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>',
+    '<div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container data-journal-notes-rows="5">',
     'Journal inline fallback container',
   );
 
@@ -85,7 +85,7 @@ function replaceOnce(source, before, after, label) {
   source = insertAfter(
     source,
     marker,
-    `\n  assert.ok(build.includes(\".journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body\"), 'closed Journal utility disclosures must hide their bodies explicitly for Safari');\n  assert.ok(css.includes('.journal-inline-fallback:not([open]) > .journal-inline-fallback__body'), 'closed inline fallback must not render its body');\n  assert.ok(build.includes('data-journal-notes-rows=\\"5\\"'), 'fallback Journal editor must request a compact reflection field');\n  assert.ok(moduleSource.includes('dataset.journalNotesRows'), 'Journal module must support per-instance reflection row density');\n  assert.ok(css.includes('.journal-inline-fallback[open] .journal-form__sheet'), 'fallback editor must neutralize the full-screen sheet minimum height');`,
+    `\n  assert.ok(build.includes(\".journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body\"), 'closed Journal utility disclosures must hide their bodies explicitly for Safari');\n  assert.ok(css.includes('.journal-inline-fallback:not([open]) > .journal-inline-fallback__body'), 'closed inline fallback must not render its body');\n  assert.ok(build.includes('data-journal-notes-rows=\"5\"'), 'fallback Journal editor must request a compact reflection field');\n  assert.ok(moduleSource.includes('dataset.journalNotesRows'), 'Journal module must support per-instance reflection row density');\n  assert.ok(css.includes('.journal-inline-fallback[open] .journal-form__sheet'), 'fallback editor must neutralize the full-screen sheet minimum height');`,
     'Journal hierarchy assertions',
   );
   write(path, source);
