@@ -823,3 +823,5 @@ test('Journal history reuses Feeling Need Tag vocabulary without prototype instr
 }
 
 console.log('Bedrock Journal native UX refactor staged successfully.');
+
+// Push-trigger marker: the workflow already exists on this branch.
