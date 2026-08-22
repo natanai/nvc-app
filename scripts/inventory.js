@@ -587,10 +587,9 @@ function ensureJournalStore() {
 
 function updateJournalEntriesFromStore() {
   const store = ensureJournalStore();
-  state.journalEntries = store ? store.list() : [];
+  state.journalEntries = store && typeof store.list === 'function' ? store.list() : [];
   updateJournalTagSource();
-  renderJournalOverlayHistory();
-  renderJournalHistory();
+  renderJournalViews();
 }
 
 function updateJournalTagSource() {
@@ -3968,7 +3967,9 @@ function setupJournalSection() {
 
   const finalizeJournalSetup = () => {
     setupJournalOverlay();
+    state.journalStore = resolveJournalStore() || state.journalStore;
     registerJournalStoreListeners();
+    updateJournalEntriesFromStore();
   };
 
   if (isJournalModuleReady()) {
@@ -4323,7 +4324,6 @@ function registerJournalStoreListeners() {
     window.addEventListener('nvc-journal-store-ready', () => {
       state.journalStore = resolveJournalStore();
       updateJournalEntriesFromStore();
-      renderJournalViews();
       if (!state.journalEditingId) {
         const editId = getJournalEditIdFromLocation();
         if (editId) {
@@ -5575,7 +5575,6 @@ function handleJournalFormSubmit(event) {
 
   state.journalStore = store;
   updateJournalEntriesFromStore();
-  renderJournalViews();
   state.journalStore.clearDraft(state.journalDraftPath);
   showJournalMessage('');
   showJournalSavedFeedback();
@@ -5617,7 +5616,6 @@ function handleJournalHistoryClick(event) {
   }
   store.remove(journalId);
   updateJournalEntriesFromStore();
-  renderJournalViews();
   showJournalStatus('Entry deleted.');
   if (state.journalStore && state.journalDraftPath) {
     state.journalStore.clearDraft(state.journalDraftPath);
@@ -7177,7 +7175,6 @@ async function importLegacyJournalEntries(entries) {
       return false;
     }
     updateJournalEntriesFromStore();
-    renderJournalViews();
     const total = result.added + result.updated;
     showJournalStatus(`Imported ${total} ${total === 1 ? 'entry' : 'entries'}.`);
     showJournalMessage('Import complete. Entries stay on this device unless you export them.', 'success');
