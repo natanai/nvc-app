@@ -174,15 +174,18 @@ jobs:
               groups[item[1:4]].append(item)
 
           duplicates = [(key, values) for key, values in groups.items() if len(values) > 1]
+          aliases = [item for item in rows if item[3] == 'love']
+
           print('\nBody Cue source audit:')
           print(f'- cue rows: {len(rows)}')
           print(f'- duplicate region/option/feeling keys: {len(duplicates)}')
           for (region, option, feeling), values in duplicates:
               details = ', '.join(f'line {line_no} weight={weight}' for line_no, _, _, _, weight in values)
               print(f'  {region}/{option}/{feeling}: {details}')
-
-          aliases = [item for item in rows if item[3] == 'love']
           print(f'- legacy love-key rows: {len(aliases)}')
           for line_no, region, option, feeling, weight in aliases:
               print(f'  line {line_no}: {region}/{option}/{feeling} weight={weight}')
+
+          if duplicates or aliases:
+              raise SystemExit('Body Cue source must remain duplicate-free and use canonical feeling keys.')
           PY
