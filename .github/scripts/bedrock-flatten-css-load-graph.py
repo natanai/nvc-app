@@ -44,7 +44,7 @@ replace_once(
     <link rel=\"stylesheet\" href=\"${cssHref}\" fetchpriority=\"high\" />${extraHead}""",
 )
 
-# The Emotions Wheel is the single explicit standalone HTML surface outside the page compiler.
+# The Emotions Wheel is the explicit standalone HTML surface outside the page compiler.
 replace_once(
     'feelings/emotions-wheel/index.html',
     '    <link rel="stylesheet" href="../../styles.css" />',
@@ -90,28 +90,37 @@ test('shared styles are parser-discovered directly with the established cascade 
   assert.ok(!styles.includes('@import'), 'styles.css must not hide shared dependencies behind nested @import discovery');
 
   const htmlFiles = await collectHtml(root);
+  const failures = [];
   let checked = 0;
   for (const file of htmlFiles) {
     const html = await fs.readFile(file, 'utf8');
-    const mainMatch = html.match(/<link rel="stylesheet" href="([^"]*styles[.]css)"(?: fetchpriority="high")? [/]>/);
+    const mainMatch = html.match(/<link rel="stylesheet" href="([^"]*styles[.]css)"(?: fetchpriority="high")? [/]>/)
+      || html.match(/<link rel="stylesheet" href="([^"]*styles[.]css)" media="print" onload="this[.]media='all'" [/]>/);
     if (!mainMatch) continue;
     checked += 1;
+    const relative = path.relative(root, file);
     const mainHref = mainMatch[1];
     const basePath = mainHref.slice(0, -'styles.css'.length);
-    const indices = [html.indexOf(`href="${FONT_HREF}"`)];
-    for (const dependency of LOCAL_DEPENDENCIES) {
-      indices.push(html.indexOf(`href="${basePath}${dependency}"`));
+    const expected = [FONT_HREF, ...LOCAL_DEPENDENCIES.map((dependency) => `${basePath}${dependency}`)];
+    const indices = expected.map((href) => html.indexOf(`href="${href}"`));
+    const missing = expected.filter((_, index) => indices[index] < 0);
+    if (missing.length) {
+      failures.push(`${relative}: missing ${missing.join(', ')}`);
+      continue;
+    }
+    for (let index = 1; index < indices.length; index += 1) {
+      if (indices[index] <= indices[index - 1]) {
+        failures.push(`${relative}: shared stylesheet cascade order changed`);
+        break;
+      }
     }
     const mainIndex = html.indexOf(mainMatch[0]);
-    indices.forEach((index, position) => {
-      assert.ok(index >= 0, `${path.relative(root, file)} missing shared stylesheet dependency ${position}`);
-    });
-    for (let index = 1; index < indices.length; index += 1) {
-      assert.ok(indices[index] > indices[index - 1], `${path.relative(root, file)} changed shared stylesheet cascade order`);
+    if (mainIndex <= indices.at(-1)) {
+      failures.push(`${relative}: main styles.css must follow shared dependencies`);
     }
-    assert.ok(mainIndex > indices.at(-1), `${path.relative(root, file)} must load main styles.css after shared dependencies`);
   }
-  assert.ok(checked >= 181, `expected all app-shell plus standalone styles.css surfaces, checked ${checked}`);
+  assert.ok(checked >= 181, `expected all styles.css surfaces, checked ${checked}`);
+  assert.equal(failures.length, 0, `CSS load-graph exceptions:\n${failures.join('\n')}`);
 });
 
 test('page compiler owns the generated shared stylesheet graph and standalone wheel mirrors it explicitly', async () => {
