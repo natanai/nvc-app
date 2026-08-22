@@ -45,6 +45,14 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(runtime.includes("state.journalFiltersForm.hidden = !hasJournalEntries"), 'filters must disappear when there is nothing to filter');
   assert.ok(runtime.includes("control.hidden = entries.length === 0"), 'empty filter dimensions must stay out of the UI');
   assert.ok(runtime.includes("'No matches'"), 'filtered-empty history must distinguish no matches from no entries');
+  for (const source of [build, html]) {
+    assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-history-controls__filters {"), 'Journal must own its populated filter rail at the generator layer');
+    assert.ok(source.includes('contain: inline-size;'), 'the horizontal Journal filter rail must contain its intrinsic width instead of widening the document');
+    assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-summary__stat,"), 'Patterns cards must participate in the Journal shrink-to-viewport contract');
+    assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-entry__title-row {"), 'populated entries must participate in the Journal shrink-to-viewport contract');
+    assert.ok(source.includes('grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));'), 'Patterns grid minimums must never exceed their available inline size');
+    assert.ok(source.includes('overflow-wrap: anywhere;'), 'user Journal content must not export long-token width to the document');
+  }
 });
 
 test('Need strategy browsing and personal strategy editing use compact final hierarchy', async () => {
