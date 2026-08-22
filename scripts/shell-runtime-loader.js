@@ -1,4 +1,6 @@
 const INVENTORY_STORAGE_KEY = 'nvcApp.inventory';
+const RETIRED_OFFLINE_CACHE_PREFIX = 'allneeds-static-';
+const RETIRED_OFFLINE_WORKER_PATH = '/service-worker.js';
 const INVENTORY_RUNTIME_WARM_SELECTOR = [
   '[data-shell-customizer-placeholder] .palette-corner__toggle',
   '[data-palette-toggle]',
@@ -26,11 +28,6 @@ const inventoryRuntimeUrl = new URL(
   './inventory.js?v=2026-08-21-home-canary-ready',
   loaderScript?.src || document.baseURI,
 ).href;
-const offlineWorkerUrl = new URL(
-  '../service-worker.js',
-  loaderScript?.src || document.baseURI,
-).href;
-const offlineWorkerScope = new URL('../', loaderScript?.src || document.baseURI).pathname;
 
 let inventoryRuntimePromise = null;
 let inventoryRuntimeReady = false;
@@ -158,39 +155,60 @@ function installInventoryRuntimeIntentLoader() {
   }, true);
 }
 
-function canRegisterOfflineWorker() {
-  if (!('serviceWorker' in navigator)) return false;
-  if (window.location.protocol === 'https:') return true;
-  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+function isRetiredOfflineWorkerRegistration(registration) {
+  const worker = registration?.active || registration?.waiting || registration?.installing;
+  if (!worker?.scriptURL) return false;
+  try {
+    return new URL(worker.scriptURL).pathname === RETIRED_OFFLINE_WORKER_PATH;
+  } catch (error) {
+    return false;
+  }
 }
 
-function registerOfflineCacheCanary() {
-  if (!canRegisterOfflineWorker()) return;
+async function retireOfflineCacheCanary() {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(
+        registrations
+          .filter(isRetiredOfflineWorkerRegistration)
+          .map((registration) => registration.unregister()),
+      );
+    } catch (error) {
+      console.warn('Unable to retire old allneeds service worker', error);
+    }
+  }
 
-  navigator.serviceWorker.register(offlineWorkerUrl, {
-    scope: offlineWorkerScope,
-    updateViaCache: 'none',
-  }).catch((error) => {
-    console.warn('Unable to register allneeds offline cache', error);
-  });
+  if ('caches' in window) {
+    try {
+      const keys = await window.caches.keys();
+      await Promise.all(
+        keys
+          .filter((key) => key.startsWith(RETIRED_OFFLINE_CACHE_PREFIX))
+          .map((key) => window.caches.delete(key)),
+      );
+    } catch (error) {
+      console.warn('Unable to clear old allneeds offline cache', error);
+    }
+  }
 }
 
-function scheduleOfflineCacheCanary() {
-  const register = () => {
+function scheduleOfflineCacheRetirement() {
+  const retire = () => {
     if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(registerOfflineCacheCanary, { timeout: 2500 });
+      window.requestIdleCallback(() => retireOfflineCacheCanary(), { timeout: 1500 });
     } else {
-      window.setTimeout(registerOfflineCacheCanary, 0);
+      window.setTimeout(() => retireOfflineCacheCanary(), 0);
     }
   };
 
   if (document.readyState === 'complete') {
-    register();
+    retire();
   } else {
-    window.addEventListener('load', register, { once: true });
+    window.addEventListener('load', retire, { once: true });
   }
 }
 
 syncInventoryCount();
 installInventoryRuntimeIntentLoader();
-scheduleOfflineCacheCanary();
+scheduleOfflineCacheRetirement();
