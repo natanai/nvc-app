@@ -169,7 +169,12 @@ jobs:
               raise SystemExit('strategy utility padding declaration missing')
           body = body.replace('box-shadow: 0 10px 0 var(--shadow);', 'box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 72%, transparent);')
           text = text[:match.start()] + match.group(1) + body + match.group(3) + text[match.end():]
-          text = replace_once(text, '  transform: translateY(-3px);\n  box-shadow: 0 14px 0 var(--shadow);', '  transform: translateY(-1px);\n  box-shadow: 0 6px 0 var(--shadow);', 'compact strategy utility interaction lift')
+          text = sub_once(
+              text,
+              r"(\.strategy-deck__shuffle:hover,\n\.strategy-deck__shuffle:focus-visible,\n\.strategy-deck__toggle:hover,\n\.strategy-deck__toggle:focus-visible \{)\n\s*transform: translateY\(-3px\);\n\s*box-shadow: 0 14px 0 var\(--shadow\);\n\}",
+              r"\1\n  transform: translateY(-1px);\n  box-shadow: 0 6px 0 var(--shadow);\n}",
+              'compact strategy utility interaction lift',
+          )
 
           stack_anchor = ".strategy-deck__stack {\n  position: relative;\n  height: clamp(22rem, 70vh, 27rem);\n}\n"
           text = replace_once(
