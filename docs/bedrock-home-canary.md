@@ -50,6 +50,20 @@ Before applying the same loading model to more routes, verify Home on both deskt
 
 Any visible, interaction, persistence, or conditional-behavior difference from the pre-canary Home should be treated as a regression unless separately approved.
 
+## Magnet object-permanence acceptance
+
+The Feelings, Needs, and Faux Feelings hubs now use the same compiler-owned prepaint persistence path as navigation magnets. A saved hub layout is restored before the normal magnet module reveals the board, generated hub magnets have deterministic tilt/offset values, and runtime hydration preserves those authored values rather than replacing them with a new random pose.
+
+On phone, verify this specifically:
+
+1. Move several Feelings and Needs magnets to unmistakable positions, leave the page, return, and reload. The first visible frame should already show the saved positions; there should be no tiny seed-layout flash or second-stage pose change.
+2. Scroll the Feelings hub repeatedly with normal and momentum scrolling. The illustrated SVG art inside the magnets should remain continuously painted rather than blinking while the magnet shell remains visible.
+3. Repeat the scroll check after toggling magnet physics on and off and after a shuffle.
+4. Verify the page background still looks intentional on phone. Touch-first devices intentionally use a scrolling root background rather than the desktop fixed-root treatment to avoid full-page mobile recomposition during momentum scrolling.
+5. Verify Needs and Faux Feelings retain stable labels/poses and saved positions even though they do not use the Feeling illustration layer.
+
+The published Bedrock test branch advances the service-worker static cache version with this repair so a phone that previously installed the cache can fetch the new CSS and magnet runtime. After a new deployment, allow one normal load for the worker update and then reload before judging whether an older cached rendering behavior remains.
+
 ## Rollout gate
 
 Do not remove `scripts/inventory.js` from additional ordinary routes solely because Home's source-level tests pass. Expand this loading model only after the Home canary has passed the browser acceptance checklist and each candidate route has been audited for route-specific immediate Inventory/controller behavior.
