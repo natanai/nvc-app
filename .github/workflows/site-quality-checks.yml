@@ -17,6 +17,79 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  bedrock-font-delivery:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'bedrock/production-finalization-v2' }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Bedrock head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Detect pending font delivery migration
+        id: detect
+        shell: bash
+        run: |
+          if [ -f .github/scripts/bedrock-font-delivery-migration.py ]; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        if: steps.detect.outputs.pending == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.detect.outputs.pending == 'true'
+        run: npm ci
+
+      - name: Apply font delivery migration
+        if: steps.detect.outputs.pending == 'true'
+        run: python3 .github/scripts/bedrock-font-delivery-migration.py
+
+      - name: Regenerate canonical pages
+        if: steps.detect.outputs.pending == 'true'
+        run: npm run build:pages
+
+      - name: Prove second page build is byte-stable
+        if: steps.detect.outputs.pending == 'true'
+        run: |
+          git diff > /tmp/first.diff
+          npm run build:pages
+          git diff > /tmp/second.diff
+          cmp /tmp/first.diff /tmp/second.diff
+
+      - name: Validate delivery and Bedrock contracts
+        if: steps.detect.outputs.pending == 'true'
+        run: |
+          npm run test:delivery
+          npm run test:flicker-jitter
+          npm run test:customizer
+          npm run test:generator-ownership
+          npm run test:performance
+          npm run lint:entrypoints
+          git diff --check
+
+      - name: Publish font delivery ownership
+        if: steps.detect.outputs.pending == 'true'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          rm -f .github/scripts/bedrock-font-delivery-migration.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Warm Google Fonts connections before stylesheet load"
+          git push origin HEAD:"${HEAD_REF}"
+
   site-quality:
     runs-on: ubuntu-latest
     steps:
