@@ -152,3 +152,37 @@ jobs:
             }
           }
           NODE
+
+          python - <<'PY'
+          import csv
+          from collections import defaultdict
+
+          rows = []
+          with open('data/Feelings.csv', newline='', encoding='utf-8-sig') as handle:
+              for line_no, row in enumerate(csv.DictReader(handle), start=2):
+                  if (row.get('Row Type', '').strip().lower() != 'cue':
+                      continue
+                  region = row.get('Cue Region ID', '').strip()
+                  option = row.get('Cue Option ID', '').strip()
+                  feeling = row.get('Cue Feeling Key', '').strip()
+                  if not region or not option or not feeling:
+                      continue
+                  rows.append((line_no, region, option, feeling, row.get('Cue Weight', '').strip()))
+
+          groups = defaultdict(list)
+          for item in rows:
+              groups[item[1:4]].append(item)
+
+          duplicates = [(key, values) for key, values in groups.items() if len(values) > 1]
+          print('\nBody Cue source audit:')
+          print(f'- cue rows: {len(rows)}')
+          print(f'- duplicate region/option/feeling keys: {len(duplicates)}')
+          for (region, option, feeling), values in duplicates:
+              details = ', '.join(f'line {line_no} weight={weight}' for line_no, _, _, _, weight in values)
+              print(f'  {region}/{option}/{feeling}: {details}')
+
+          aliases = [item for item in rows if item[3] == 'love']
+          print(f'- legacy love-key rows: {len(aliases)}')
+          for line_no, region, option, feeling, weight in aliases:
+              print(f'  line {line_no}: {region}/{option}/{feeling} weight={weight}')
+          PY
