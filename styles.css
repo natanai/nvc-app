@@ -48,6 +48,15 @@ html {
   }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  html {
+    /* Fixed root backgrounds can force expensive full-page recompositing during
+       momentum scrolling on mobile browsers. Keep the same gradient but let it
+       move with the document on touch-first devices. */
+    background-attachment: scroll;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -2432,6 +2441,9 @@ main[data-need-slug] .page-title::before {
   pointer-events: none;
   z-index: 0;
   mix-blend-mode: normal;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .magnet[data-magnet-id^='feelings-'] > * {

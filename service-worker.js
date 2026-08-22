@@ -10,7 +10,7 @@
  */
 
 const CACHE_PREFIX = 'allneeds-static-';
-const CACHE_VERSION = 'bedrock-v1';
+const CACHE_VERSION = 'bedrock-v2';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 const CORE_URLS = [
