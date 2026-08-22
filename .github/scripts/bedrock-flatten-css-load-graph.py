@@ -10,6 +10,8 @@ def replace_once(path, old, new):
     p.write_text(text.replace(old, new, 1))
 
 
+FONT_HREF = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap'
+
 # Move top-level imports into parser-visible HTML while preserving their cascade order.
 replace_once(
     'styles.css',
@@ -30,9 +32,8 @@ replace_once(
     '',
 )
 
-# Keep the existing styles.css preload exactly where it is. Replace only the
-# main stylesheet line with the formerly imported dependencies followed by the
-# main stylesheet, preserving the established cascade order.
+# Canonical generated pages: preserve the current blocking cascade but expose
+# imported dependencies to the parser immediately.
 replace_once(
     'scripts/build-pages.mjs',
     '    <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />${extraHead}',
@@ -44,16 +45,54 @@ replace_once(
     <link rel=\"stylesheet\" href=\"${cssHref}\" fetchpriority=\"high\" />${extraHead}""",
 )
 
-# The Emotions Wheel is the explicit standalone HTML surface outside the page compiler.
+blocking_root_dependencies = f"""    <link rel=\"stylesheet\" href=\"{FONT_HREF}\" />
+    <link rel=\"stylesheet\" href=\"../styles/feelings-magnet-icons.css\" />
+    <link rel=\"stylesheet\" href=\"../styles/needs-magnet-icons.css\" />
+    <link rel=\"stylesheet\" href=\"../styles/shared-density.css\" />
+    <link rel=\"stylesheet\" href=\"../styles/inventory-core-shell.css\" />
+    <link rel=\"stylesheet\" href=\"../styles.css\" fetchpriority=\"high\" />"""
+for special_page in ('feed/index.html', 'observations/index.html'):
+    replace_once(
+        special_page,
+        '    <link rel="stylesheet" href="../styles.css" fetchpriority="high" />',
+        blocking_root_dependencies,
+    )
+
+# Emotions Wheel is a blocking standalone surface outside the page compiler.
 replace_once(
     'feelings/emotions-wheel/index.html',
     '    <link rel="stylesheet" href="../../styles.css" />',
-    """    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap\" />
+    f"""    <link rel=\"stylesheet\" href=\"{FONT_HREF}\" />
     <link rel=\"stylesheet\" href=\"../../styles/feelings-magnet-icons.css\" />
     <link rel=\"stylesheet\" href=\"../../styles/needs-magnet-icons.css\" />
     <link rel=\"stylesheet\" href=\"../../styles/shared-density.css\" />
     <link rel=\"stylesheet\" href=\"../../styles/inventory-core-shell.css\" />
     <link rel=\"stylesheet\" href=\"../../styles.css\" />""",
+)
+
+# Alexithymia Support deliberately keeps shared CSS off the blocking first-paint
+# path. Flatten its dependencies using the same media=print/onload strategy and
+# preserve a complete noscript fallback in the same cascade order.
+replace_once(
+    'alexithymia-support/index.html',
+    """    <link rel=\"preload\" href=\"../styles.css\" as=\"style\" />
+    <link rel=\"stylesheet\" href=\"../styles.css\" media=\"print\" onload=\"this.media='all'\" />
+    <noscript><link rel=\"stylesheet\" href=\"../styles.css\" /></noscript>""",
+    f"""    <link rel=\"preload\" href=\"../styles.css\" as=\"style\" />
+    <link rel=\"stylesheet\" href=\"{FONT_HREF}\" media=\"print\" onload=\"this.media='all'\" />
+    <link rel=\"stylesheet\" href=\"../styles/feelings-magnet-icons.css\" media=\"print\" onload=\"this.media='all'\" />
+    <link rel=\"stylesheet\" href=\"../styles/needs-magnet-icons.css\" media=\"print\" onload=\"this.media='all'\" />
+    <link rel=\"stylesheet\" href=\"../styles/shared-density.css\" media=\"print\" onload=\"this.media='all'\" />
+    <link rel=\"stylesheet\" href=\"../styles/inventory-core-shell.css\" media=\"print\" onload=\"this.media='all'\" />
+    <link rel=\"stylesheet\" href=\"../styles.css\" media=\"print\" onload=\"this.media='all'\" />
+    <noscript>
+      <link rel=\"stylesheet\" href=\"{FONT_HREF}\" />
+      <link rel=\"stylesheet\" href=\"../styles/feelings-magnet-icons.css\" />
+      <link rel=\"stylesheet\" href=\"../styles/needs-magnet-icons.css\" />
+      <link rel=\"stylesheet\" href=\"../styles/shared-density.css\" />
+      <link rel=\"stylesheet\" href=\"../styles/inventory-core-shell.css\" />
+      <link rel=\"stylesheet\" href=\"../styles.css\" />
+    </noscript>""",
 )
 
 Path('tests/css-load-graph.test.mjs').write_text("""import test from 'node:test';
@@ -85,9 +124,9 @@ async function collectHtml(directory) {
   return files;
 }
 
-test('shared styles are parser-discovered directly with the established cascade order', async () => {
+test('every styles.css consumer directly discovers shared dependencies in cascade order', async () => {
   const styles = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
-  assert.ok(!styles.includes('@import'), 'styles.css must not hide shared dependencies behind nested @import discovery');
+  assert.ok(!styles.includes('@import'), 'styles.css must not hide dependencies behind nested @import discovery');
 
   const htmlFiles = await collectHtml(root);
   const failures = [];
@@ -115,31 +154,41 @@ test('shared styles are parser-discovered directly with the established cascade 
       }
     }
     const mainIndex = html.indexOf(mainMatch[0]);
-    if (mainIndex <= indices.at(-1)) {
-      failures.push(`${relative}: main styles.css must follow shared dependencies`);
-    }
+    if (mainIndex <= indices.at(-1)) failures.push(`${relative}: main styles.css must follow shared dependencies`);
   }
   assert.ok(checked >= 181, `expected all styles.css surfaces, checked ${checked}`);
   assert.equal(failures.length, 0, `CSS load-graph exceptions:\n${failures.join('\\n')}`);
 });
 
-test('page compiler owns the generated shared stylesheet graph and standalone wheel mirrors it explicitly', async () => {
-  const [compiler, wheel] = await Promise.all([
+test('generated and explicit blocking owners share the same dependency order', async () => {
+  const [compiler, wheel, feed, observations] = await Promise.all([
     fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8'),
     fs.readFile(path.join(root, 'feelings/emotions-wheel/index.html'), 'utf8'),
+    fs.readFile(path.join(root, 'feed/index.html'), 'utf8'),
+    fs.readFile(path.join(root, 'observations/index.html'), 'utf8'),
   ]);
-  const compilerIndices = [];
   for (const dependency of LOCAL_DEPENDENCIES) {
-    const index = compiler.indexOf(dependency);
-    assert.ok(index >= 0, `compiler missing ${dependency}`);
-    compilerIndices.push(index);
+    assert.ok(compiler.includes(dependency), `compiler missing ${dependency}`);
     assert.ok(wheel.includes(`href="../../${dependency}"`));
-  }
-  for (let index = 1; index < compilerIndices.length; index += 1) {
-    assert.ok(compilerIndices[index] > compilerIndices[index - 1], 'compiler changed shared stylesheet cascade order');
+    assert.ok(feed.includes(`href="../${dependency}"`));
+    assert.ok(observations.includes(`href="../${dependency}"`));
   }
   assert.ok(compiler.includes('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible'));
-  assert.ok(wheel.includes('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible'));
+});
+
+test('Alexithymia Support preserves its non-blocking stylesheet strategy while flattening dependencies', async () => {
+  const html = await fs.readFile(path.join(root, 'alexithymia-support/index.html'), 'utf8');
+  const expectedHrefs = [FONT_HREF, ...LOCAL_DEPENDENCIES.map((dependency) => `../${dependency}`), '../styles.css'];
+  for (const href of expectedHrefs) {
+    assert.ok(
+      html.includes(`<link rel="stylesheet" href="${href}" media="print" onload="this.media='all'" />`),
+      `Alexithymia async graph missing ${href}`,
+    );
+  }
+  assert.ok(html.includes('<noscript>'));
+  for (const href of expectedHrefs) {
+    assert.ok(html.includes(`<link rel="stylesheet" href="${href}" />`), `Alexithymia noscript graph missing ${href}`);
+  }
 });
 """)
 
@@ -151,7 +200,6 @@ if package.count(needle) != 1:
     raise SystemExit(f'package.json: expected one CSS test insertion point, found {package.count(needle)}')
 package_path.write_text(package.replace(needle, replacement, 1))
 
-# Update the old contract to assert direct parser discovery instead of the former top-level import chain.
 shared_test = Path('tests/shared-density-polish.test.mjs')
 text = shared_test.read_text()
 old_contract = """  const densityImport = \"@import url('styles/shared-density.css');\";
