@@ -148,35 +148,28 @@ function normalizeNavigationSerialization(html) {
   return `${html.slice(0, start)}[[SITE_NAV:${canonicalizeNavigation(nav)}]]${html.slice(end)}`;
 }
 
+function normalizeShellScriptSerialization(html) {
+  return html.replace(/<script([^<>]*?)><\/script>/g, (full, attributes) => {
+    if (!/scripts\/(?:inventory-core-shell|inventory)\.js/.test(attributes)) return full;
+    return `${canonicalizeOpeningTag('script', attributes)}</script>`;
+  });
+}
+
 function stripRedundantInlineCriticalRules(html) {
   let normalized = html;
   for (const pattern of REDUNDANT_INLINE_CRITICAL_RULES) normalized = normalized.replace(pattern, '\n');
   return normalized.replace(/\n{3,}/g, '\n\n');
 }
 
-function preserveExistingShellScriptOrder(staged, current = '') {
-  const coreToken = 'scripts/inventory-core-shell.js';
-  const inventoryToken = 'scripts/inventory.js';
-  const currentCore = current.indexOf(coreToken);
-  const currentInventory = current.indexOf(inventoryToken);
-  const prefersInventoryFirst = currentCore >= 0 && currentInventory >= 0 && currentInventory < currentCore;
-  if (!prefersInventoryFirst) return staged;
-
-  return staged.replace(
-    /(\s*)<script src="([^"]*scripts\/inventory-core-shell\.js)" defer><\/script>\n\1<script src="([^"]*scripts\/inventory\.js)" defer><\/script>/g,
-    (_full, indent, coreSrc, inventorySrc) =>
-      `${indent}<script src="${inventorySrc}" defer></script>\n${indent}<script defer src="${coreSrc}"></script>`,
-  );
-}
-
 function normalizeForComparison(html) {
-  return normalizeNavigationSerialization(stripRedundantInlineCriticalRules(html));
+  return normalizeNavigationSerialization(
+    stripRedundantInlineCriticalRules(normalizeShellScriptSerialization(html)),
+  );
 }
 
 function normalizedPair(stagedPath, destination) {
   const current = readFileSync(destination, 'utf8');
-  const stagedRaw = readFileSync(stagedPath, 'utf8');
-  const staged = preserveExistingShellScriptOrder(stagedRaw, current);
+  const staged = readFileSync(stagedPath, 'utf8');
   return {
     staged,
     current,
@@ -185,7 +178,7 @@ function normalizedPair(stagedPath, destination) {
   };
 }
 
-function shellSerializationEquivalent(stagedPath, destination) {
+function serializationEquivalent(stagedPath, destination) {
   if (!existsSync(destination)) return false;
   const pair = normalizedPair(stagedPath, destination);
   return pair.staged === pair.current || pair.normalizedStaged === pair.normalizedCurrent;
@@ -203,7 +196,7 @@ function describeFirstMismatch(relativePath, stagedPath, destination) {
   const currentContext = normalizedCurrent.slice(start, Math.min(normalizedCurrent.length, index + radius)).replace(/\n/g, '\\n');
   const stagedContext = normalizedStaged.slice(start, Math.min(normalizedStaged.length, index + radius)).replace(/\n/g, '\\n');
   return [
-    `First non-shell-serialization mismatch: ${relativePath} at normalized offset ${index}`,
+    `First non-normalized mismatch: ${relativePath} at normalized offset ${index}`,
     `CURRENT: ${currentContext}`,
     `STAGED:  ${stagedContext}`,
   ].join('\n');
@@ -217,7 +210,7 @@ function copyOwnedOutputs(stageRoot, outputs) {
     const stagedPath = join(stageRoot, relativePath);
     if (!existsSync(stagedPath)) throw new Error(`Generator did not produce declared output: ${relativePath}`);
     const destination = join(rootDir, relativePath);
-    if (shellSerializationEquivalent(stagedPath, destination)) {
+    if (serializationEquivalent(stagedPath, destination)) {
       byteStable += 1;
       continue;
     }
@@ -226,8 +219,7 @@ function copyOwnedOutputs(stageRoot, outputs) {
       if (diagnostic) console.log(diagnostic);
       diagnosticPrinted = true;
     }
-    const current = existsSync(destination) ? readFileSync(destination, 'utf8') : '';
-    const staged = preserveExistingShellScriptOrder(readFileSync(stagedPath, 'utf8'), current);
+    const staged = readFileSync(stagedPath, 'utf8');
     mkdirSync(dirname(destination), { recursive: true });
     writeFileSync(destination, staged);
     published += 1;
@@ -244,10 +236,10 @@ const stageRoot = join(stageParent, 'repo');
 try {
   copyRepositoryToStage(stageRoot);
   const scopeArgs = requestedScopes ? ['--scope', activeScopes.join(',')] : [];
-  // The page compiler now preserves mixed-ownership route directories. This
-  // staging publisher remains temporarily only to shield production pages from
-  // historical serialization/script-order differences while those are moved
-  // into one canonical compiler output.
+  // The page compiler now owns its route scope and emits the deployed shell
+  // execution order directly. This staging publisher remains only while the
+  // remaining non-behavioral serialization and critical-CSS drift is made
+  // canonical in build-pages.mjs and the checked-in production pages.
   runNode(stageRoot, 'scripts/build-pages.mjs', scopeArgs);
   const { published, byteStable } = copyOwnedOutputs(stageRoot, outputs);
   console.log(
