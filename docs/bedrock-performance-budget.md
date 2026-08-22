@@ -21,38 +21,41 @@ Those require browser/network measurement. The static budget exists to catch arc
 
 The ceilings intentionally leave a small amount of breathing room above the current branch. They are **regression ceilings, not optimization targets**. When a validated optimization lowers a route's normal first-load graph, the ceiling should be ratcheted downward.
 
-| Representative route | Raw direct first-party JS ceiling |
-| --- | ---: |
-| Home | 110 KB |
-| Shared Strategies | 125 KB |
-| Need detail | 355 KB |
-| Feeling detail | 365 KB |
-| Faux-feeling detail | 345 KB |
-| Body Cues | 365 KB |
-| Inventory | 355 KB |
-| Journal | 425 KB |
+| Representative route | Current raw direct JS | Ceiling |
+| --- | ---: | ---: |
+| Home | ~101.3 KiB | 110 KB |
+| Shared Strategies | ~115.2 KiB | 125 KB |
+| Need detail | ~336.7 KiB | 355 KB |
+| Feeling detail | ~338.6 KiB | 355 KB |
+| Faux-feeling detail | ~321.7 KiB | 337 KB |
+| Body Cues | ~336.6 KiB | 355 KB |
+| Inventory | ~328.3 KiB | 345 KB |
+| Journal | ~395.6 KiB | 415 KB |
 
 The test also requires Home to remain at or below 40% of the representative Need-detail parser graph. This protects the Home lazy-controller canary independently of absolute file-size changes.
 
+The first internal controller extraction moved the Need strategy-card deck into `scripts/strategy-deck.js`. Need detail remains essentially flat because that route still needs the deck, but other eager routes no longer parse it. The measured reduction was about 8.3 KiB on Feeling, Faux Feeling, Body Cues, Inventory, and Journal, so those route ceilings were ratcheted downward.
+
 ## Largest shared-asset ceilings
 
-| Asset | Raw-size ceiling |
-| --- | ---: |
-| `scripts/inventory.js` | 245 KB |
-| `styles.css` | 175 KB |
-| `scripts/magnets.js` | 65 KB |
-| `scripts/inventory-core-shell.js` | 30 KB |
-| `scripts/alexithymia-support.js` | 85 KB |
+| Asset | Current raw size | Ceiling |
+| --- | ---: | ---: |
+| `scripts/inventory.js` | ~226.2 KiB | 238 KB |
+| `scripts/strategy-deck.js` | ~8.5 KiB | 10 KB |
+| `styles.css` | ~166.8 KiB | 175 KB |
+| `scripts/magnets.js` | ~60.2 KiB | 65 KB |
+| `scripts/inventory-core-shell.js` | ~27.5 KiB | 30 KB |
+| `scripts/alexithymia-support.js` | ~81.2 KiB | 85 KB |
 
 Raising one of these ceilings should be an explicit architectural decision. Prefer reducing ownership scope or extracting a real capability boundary rather than moving code between equally eager files merely to satisfy the test.
 
 ## What the current numbers tell us
 
-Bedrock has already removed a large amount of ordinary first-load work from Home and Shared Strategies, but the site still has meaningful performance headroom:
+Bedrock has already removed a large amount of ordinary first-load work from Home and Shared Strategies, and the first monolith extraction has now produced a measurable shared-route reduction. The site still has meaningful performance headroom:
 
-1. **The shared Inventory controller remains large.** Need details, Feeling/Faux Feeling details, Inventory, Body Cues, and the dedicated Journal still eagerly load the roughly 240 KB controller because some visible or shell behavior remains owned there.
-2. **The global stylesheet remains broad.** `styles.css` is roughly 170 KB before its imported stylesheets, and it currently discovers Google Fonts through CSS. Route-specific CSS ownership, selector pruning, font delivery, and final packaging remain separate optimization opportunities after behavior is locked.
-3. **Magnet behavior is substantial.** `scripts/magnets.js` is roughly 62 KB and is intentionally shared because magnet persistence/physics is a core interaction. Future work should profile its parse/execution cost before splitting it arbitrarily.
+1. **The shared Inventory controller remains large.** Need details, Feeling/Faux Feeling details, Inventory, Body Cues, and the dedicated Journal still eagerly load the roughly 226 KiB controller because some visible or shell behavior remains owned there.
+2. **The global stylesheet remains broad.** `styles.css` is roughly 167 KiB before its imported stylesheets, and it currently discovers Google Fonts through CSS. Route-specific CSS ownership, selector pruning, font delivery, and final packaging remain separate optimization opportunities after behavior is locked.
+3. **Magnet behavior is substantial.** `scripts/magnets.js` is roughly 60 KiB and is intentionally shared because magnet persistence/physics is a core interaction. Future work should profile its parse/execution cost before splitting it arbitrarily.
 4. **Dedicated feature surfaces are intentionally heavier.** Journal and Alexithymia Support own real interactive behavior. Their goal is not minimum bytes at any cost; it is to avoid loading unrelated capabilities and to keep expensive work off routes that do not need it.
 
 ## Remaining performance work after Bedrock behavior is accepted
