@@ -33,8 +33,10 @@ The core page and data authoring pipelines have completed their canonicalization
 - the former `scripts/build-data-safe.mjs` staging wrapper and `scripts/finalize-generated-data.mjs` repair pass have been deleted. Direct data generation preserves the reviewed production semantics and is byte-deterministic on repeated runs.
 - `npm run build` now runs both canonical compilers directly. Site Quality CI validates the committed site first, runs the real authoring build, and fails if generated artifacts differ from the committed tree.
 - the **Push Poems**, rebuild, and fact-checking workflows route regeneration through these same declared owners rather than a second repair layer or broad collateral staging.
+- representative first-load JavaScript graphs and the largest shared browser assets have explicit regression ceilings in `tests/performance-budget.test.mjs`, so Home/Shared Strategies lazy-loading gains cannot silently disappear as the codebase evolves.
+- Home now owns a Bedrock service-worker canary through its existing small `scripts/shell-runtime-loader.js`: registration waits until normal page load and idle time, the worker is rooted at `/`, and only safe same-origin static `GET` traffic is cached. API paths, authorized requests, mutations, and cross-origin services remain outside Cache Storage ownership. Full-site background warming is deliberately deferred until browser/device acceptance.
 
-With page and core-data authoring canonicalized, the remaining Bedrock work is primarily browser/device acceptance, audited runtime ownership changes, monolith extraction, and later network/packaging optimization. Protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
+With page and core-data authoring canonicalized, the remaining Bedrock work is primarily browser/device acceptance, audited runtime ownership changes, monolith extraction, expansion of the offline/warm-cache model after its canary passes, and final network/packaging optimization. Protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, `docs/bedrock-route-runtime-matrix.md`, `docs/bedrock-performance-budget.md`, and `docs/bedrock-offline-cache.md`.
 
 ## How information is organised
 
@@ -65,7 +67,7 @@ python -m http.server  # or any static server
 # visit http://localhost:8000/
 ```
 
-For a full production verification, run `npm run build` from a clean checkout and confirm it leaves no Git diff.
+For a full production verification, run `npm run build` from a clean checkout and confirm it leaves no Git diff. Service workers require HTTPS in normal deployment, but the Bedrock canary is also permitted on `localhost`/`127.0.0.1` for development testing.
 
 ## Development workflow
 
@@ -81,7 +83,8 @@ For a full production verification, run `npm run build` from a clean checkout an
   - `npm run test:customizer`
   - `npm run test:home-regressions`
   - `npm run test:nav-magnets`
-  - `npm run test:flicker-jitter`
+  - `npm run test:flicker-jitter` (includes the Home/offline-cache canary contracts)
+  - `npm run test:performance`
   - `npm run test:obsolete`
 
 Re-run `npm run build:data` after changing canonical data sources and `npm run build:pages` when the generated HTML depends on those changes. Prefer open-access citations so readers can check the evidence without paywalls.
@@ -128,6 +131,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 
 ```
 ├── index.html                 # generated home page
+├── service-worker.js          # Bedrock root-scoped static-cache canary
 ├── feelings/                  # generated feeling hub + individual pages
 ├── needs/                     # generated need hub + individual pages
 ├── faux-feelings/             # generated situation hub + individual pages
@@ -146,7 +150,8 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 │   └── reverse-inference.json             # generated reverse-inference index
 └── scripts/
     ├── build-data.mjs         # canonical data compiler
-    └── build-pages.mjs        # canonical page compiler
+    ├── build-pages.mjs        # canonical page compiler
+    └── shell-runtime-loader.js # Home lazy-runtime + service-worker canary owner
 ```
 
 ### Spreadsheet columns
@@ -172,3 +177,4 @@ The data build validates strategy slugs and relationship lookups, failing fast w
 - **Strategy deck controls:** keep pointer-driven swipe handlers from intercepting clicks on interactive elements like the "Save to inventory" buttons inside strategy cards, especially on desktop, so inventory actions remain reliable when updating the deck behavior in `scripts/inventory.js`.
 - **Restore ownership:** full profile/backup restore must synchronize required storage mirrors before rehydrating the current document and must protect restored magnet state from the running persistence engine.
 - **Route runtime ownership:** Home and Shared Strategies currently prove the lazy-controller model; Inventory, Need detail pages, and the dedicated Journal remain eager until their visible first-load responsibilities are explicitly separated.
+- **Offline-cache ownership:** Home alone registers the root service worker during the Bedrock canary, and it does so only after normal load/idle. Cache Storage may accelerate same-origin static `GET` resources but must not become an owner for authenticated, mutating, API, or cross-origin behavior. Expand to full-site warming only after the device acceptance gate in `docs/bedrock-offline-cache.md` passes.
