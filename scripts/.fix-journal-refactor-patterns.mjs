@@ -24,3 +24,5 @@ source = source.replace(
 
 writeFileSync(path, source, 'utf8');
 console.log('Journal refactor matchers corrected.');
+
+// Retry marker after reviewing the current Journal renderer.
