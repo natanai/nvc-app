@@ -958,6 +958,11 @@ function htmlPage({
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
         ${themePreloadScript(basePath)}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" />
+    <link rel="stylesheet" href="${basePath}styles/feelings-magnet-icons.css" />
+    <link rel="stylesheet" href="${basePath}styles/needs-magnet-icons.css" />
+    <link rel="stylesheet" href="${basePath}styles/shared-density.css" />
+    <link rel="stylesheet" href="${basePath}styles/inventory-core-shell.css" />
     <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />${extraHead}
   </head>
   <body data-base-path="${basePath}">
