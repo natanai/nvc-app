@@ -1,0 +1,114 @@
+name: Bedrock data compiler drift audit
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+permissions:
+  contents: read
+
+jobs:
+  data-drift-audit:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout event revision
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Classify raw and finalized data compiler drift
+        shell: bash
+        run: |
+          mkdir -p /tmp/bedrock-data/current /tmp/bedrock-data/raw /tmp/bedrock-data/finalized
+          cp data/index.json data/body-regions.json data/reverse-inference.json /tmp/bedrock-data/current/
+
+          node scripts/build-data.mjs
+          cp data/index.json data/body-regions.json data/reverse-inference.json /tmp/bedrock-data/raw/
+
+          node scripts/finalize-generated-data.mjs
+          cp data/index.json data/body-regions.json data/reverse-inference.json /tmp/bedrock-data/finalized/
+
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const { isDeepStrictEqual } = require('node:util');
+          const base = '/tmp/bedrock-data';
+          const files = ['index.json', 'body-regions.json', 'reverse-inference.json'];
+
+          function read(layer, file) {
+            const text = fs.readFileSync(`${base}/${layer}/${file}`, 'utf8');
+            return { text, value: JSON.parse(text) };
+          }
+
+          function firstDiff(a, b, path = '$', depth = 0) {
+            if (Object.is(a, b)) return null;
+            if (depth > 12) return `${path}: depth limit`;
+            if (typeof a !== typeof b) return `${path}: type ${typeof a} != ${typeof b}`;
+            if (a === null || b === null) return `${path}: ${String(a)} != ${String(b)}`;
+            if (Array.isArray(a) !== Array.isArray(b)) return `${path}: array/object mismatch`;
+            if (Array.isArray(a)) {
+              if (a.length !== b.length) return `${path}.length: ${a.length} != ${b.length}`;
+              for (let i = 0; i < a.length; i += 1) {
+                const diff = firstDiff(a[i], b[i], `${path}[${i}]`, depth + 1);
+                if (diff) return diff;
+              }
+              return null;
+            }
+            if (typeof a === 'object') {
+              const aKeys = Object.keys(a);
+              const bKeys = Object.keys(b);
+              const all = [...new Set([...aKeys, ...bKeys])];
+              for (const key of all) {
+                if (!(key in a)) return `${path}.${key}: missing current`;
+                if (!(key in b)) return `${path}.${key}: missing candidate`;
+                const diff = firstDiff(a[key], b[key], `${path}.${key}`, depth + 1);
+                if (diff) return diff;
+              }
+              return null;
+            }
+            return `${path}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`;
+          }
+
+          console.log('Data compiler drift matrix:');
+          for (const file of files) {
+            const current = read('current', file);
+            const raw = read('raw', file);
+            const finalized = read('finalized', file);
+            console.log(`\n${file}`);
+            console.log(`- current vs raw: exact=${current.text === raw.text} semantic=${isDeepStrictEqual(current.value, raw.value)}`);
+            if (!isDeepStrictEqual(current.value, raw.value)) console.log(`  first semantic diff: ${firstDiff(current.value, raw.value)}`);
+            console.log(`- current vs finalized: exact=${current.text === finalized.text} semantic=${isDeepStrictEqual(current.value, finalized.value)}`);
+            if (!isDeepStrictEqual(current.value, finalized.value)) console.log(`  first semantic diff: ${firstDiff(current.value, finalized.value)}`);
+            console.log(`- raw vs finalized: exact=${raw.text === finalized.text} semantic=${isDeepStrictEqual(raw.value, finalized.value)}`);
+            if (!isDeepStrictEqual(raw.value, finalized.value)) console.log(`  first semantic diff: ${firstDiff(raw.value, finalized.value)}`);
+          }
+
+          const currentReverse = read('current', 'reverse-inference.json').value;
+          const finalReverse = read('finalized', 'reverse-inference.json').value;
+          const currentKeys = Object.keys(currentReverse).filter(k => k !== '_meta');
+          const finalKeys = Object.keys(finalReverse).filter(k => k !== '_meta');
+          console.log('\nReverse-inference structure:');
+          console.log(`- current feelings: ${currentKeys.length}`);
+          console.log(`- formula feelings: ${finalKeys.length}`);
+          console.log(`- current-only keys: ${currentKeys.filter(k => !finalKeys.includes(k)).join(', ') || '(none)'}`);
+          console.log(`- formula-only keys: ${finalKeys.filter(k => !currentKeys.includes(k)).join(', ') || '(none)'}`);
+
+          const shared = currentKeys.filter(k => finalKeys.includes(k));
+          let differing = 0;
+          const examples = [];
+          for (const key of shared) {
+            if (!isDeepStrictEqual(currentReverse[key], finalReverse[key])) {
+              differing += 1;
+              if (examples.length < 12) examples.push(`${key}: ${firstDiff(currentReverse[key], finalReverse[key], `$['${key}']`)}`);
+            }
+          }
+          console.log(`- shared entries with semantic differences: ${differing}/${shared.length}`);
+          for (const example of examples) console.log(`  ${example}`);
+          console.log(`- _meta equal: ${isDeepStrictEqual(currentReverse._meta, finalReverse._meta)}`);
+          if (!isDeepStrictEqual(currentReverse._meta, finalReverse._meta)) {
+            console.log(`  _meta first diff: ${firstDiff(currentReverse._meta, finalReverse._meta, '$._meta')}`);
+          }
+          NODE
