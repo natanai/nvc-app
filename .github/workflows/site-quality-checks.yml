@@ -12,102 +12,11 @@ on:
         required: true
         default: inventory-core-overhaul
 
-permissions:
-  contents: write
-
 concurrency:
   group: site-quality-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  bedrock-regression-repair:
-    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'bedrock/production-finalization-v2' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for pending one-shot repair
-        id: pending
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-
-      - name: Detect repair script
-        id: detect
-        shell: bash
-        run: |
-          if [ -f .github/scripts/bedrock-regression-repair.py ]; then
-            echo "pending=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "pending=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Setup Node.js
-        if: steps.detect.outputs.pending == 'true'
-        uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        if: steps.detect.outputs.pending == 'true'
-        run: npm ci
-
-      - name: Apply root-cause repair
-        if: steps.detect.outputs.pending == 'true'
-        run: python3 .github/scripts/bedrock-regression-repair.py
-
-      - name: Regenerate canonical pages
-        if: steps.detect.outputs.pending == 'true'
-        run: npm run build:pages
-
-      - name: Prove second page build is byte-stable
-        if: steps.detect.outputs.pending == 'true'
-        run: |
-          git diff > /tmp/first.diff
-          npm run build:pages
-          git diff > /tmp/second.diff
-          cmp /tmp/first.diff /tmp/second.diff
-
-      - name: Validate repaired paint/runtime ownership
-        if: steps.detect.outputs.pending == 'true'
-        run: |
-          node --test tests/magnet-prepaint.test.mjs
-          npm run test:customizer
-          npm run test:flicker-jitter
-          npm run test:nav-magnets
-          npm run test:performance
-          node --test tests/runtime-load-graph.test.mjs
-          node --test tests/route-runtime-ownership.test.mjs
-          npm run lint:entrypoints
-
-      - name: Remove repair scaffolding and publish clean checkpoint
-        if: steps.detect.outputs.pending == 'true'
-        env:
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        run: |
-          rm -f .github/workflows/bedrock-run-regression-repair.yml
-          rm -f .github/workflows/bedrock-remove-canonicalization-regressions.yml
-          rm -f .github/scripts/bedrock-regression-repair.py
-
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path('.github/workflows/site-quality-checks.yml')
-          text = path.read_text()
-          start = text.index('permissions:\n  contents: write\n\n')
-          jobs = text.index('jobs:\n', start)
-          site = text.index('  site-quality:\n', jobs)
-          prefix = text[:start]
-          suffix = text[site:]
-          path.write_text(prefix + 'jobs:\n' + suffix)
-          PY
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --check
-          git commit -m "Remove Bedrock canonicalization paint regressions"
-          git push origin HEAD:"${HEAD_REF}"
-
   site-quality:
     runs-on: ubuntu-latest
     steps:
