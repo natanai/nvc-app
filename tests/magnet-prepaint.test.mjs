@@ -73,10 +73,12 @@ test('unrestored boards remain hidden rather than flashing a temporary seed layo
   assert.ok(criticalCss.includes('visibility: hidden;'));
 });
 
-test('mobile scrolling avoids known repaint triggers around illustrated feeling magnets', async () => {
+test('Feeling illustration stabilization stays isolated from whole-page mobile compositing', async () => {
   const styles = await read('styles.css');
-  assert.ok(styles.includes('@media (hover: none) and (pointer: coarse)'));
-  assert.ok(styles.includes('background-attachment: scroll;'), 'touch-first devices should not keep the fixed root background during momentum scrolling');
+  assert.ok(
+    !styles.includes('@media (hover: none) and (pointer: coarse) {\n  html {\n    /* Fixed root backgrounds'),
+    'magnet repair must not change the root background compositing model after critical paint',
+  );
 
   const artStart = styles.indexOf(".magnet[data-magnet-id^='feelings-']::after");
   assert.ok(artStart >= 0, 'Feeling illustration pseudo-element should remain explicitly owned');
