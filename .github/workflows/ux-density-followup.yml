@@ -211,8 +211,8 @@ jobs:
           text = replace_once(
               text,
               "  const pages = read('scripts/build-pages.mjs');\n  const styles = read('styles.css');",
-              "  const pages = read('scripts/build-pages.mjs');\n  const deck = read('scripts/strategy-deck.js');\n  const styles = read('styles.css');",
-              'load deck source in density regression',
+              "  const pages = read('scripts/build-pages.mjs');\n  const deck = read('scripts/strategy-deck.js');\n  const inventory = read('scripts/inventory.js');\n  const styles = read('styles.css');",
+              'load deck and inventory sources in density regression',
           )
           text = replace_once(
               text,
