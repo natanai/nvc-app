@@ -57,8 +57,13 @@ jobs:
               1,
           )
           source = source.replace(
-              '''      emotion: "Begin typing to autocomplete from the feelings library, or leave it blank if you're unsure.",\n      needs: 'Begin typing to autocomplete needs from the library. Separate multiple needs with commas.',\n      tags: 'Separate tags with commas to group related reflections.', ''',
-              '''      emotion: '',\n      needs: '',\n      tags: 'Separate tags with commas to group related reflections.', ''',
+              '''      emotion: "Begin typing to autocomplete from the feelings library, or leave it blank if you're unsure.",''',
+              "      emotion: '',",
+              1,
+          )
+          source = source.replace(
+              "      needs: 'Begin typing to autocomplete needs from the library. Separate multiple needs with commas.',",
+              "      needs: '',",
               1,
           )
           source = source.replace(
@@ -76,6 +81,8 @@ jobs:
               raise SystemExit('duplicate draftPath assignment remains')
           if 'Begin typing to autocomplete from the feelings library' in source:
               raise SystemExit('stale Feeling autocomplete hint remains')
+          if 'Begin typing to autocomplete needs from the library' in source:
+              raise SystemExit('stale Needs autocomplete hint remains')
           if "needs: 'Start typing a need'" in source:
               raise SystemExit('stale Needs typing placeholder remains')
           if 'if (focusNotes) {\n        this.notesInput.focus();' not in source:
