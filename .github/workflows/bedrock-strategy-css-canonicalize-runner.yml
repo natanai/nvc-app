@@ -28,8 +28,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Canonicalize strategy CSS
-        run: node scripts/.bedrock-strategy-css-canonicalize.mjs
+      - name: Repair and canonicalize strategy CSS
+        run: |
+          node scripts/.fix-bedrock-strategy-css-canonicalize.mjs
+          node scripts/.bedrock-strategy-css-canonicalize.mjs
 
       - name: Regenerate canonical pages
         run: npm run build:pages
@@ -62,6 +64,7 @@ jobs:
       - name: Remove one-shot migration scaffolding
         run: |
           rm -f scripts/.bedrock-strategy-css-canonicalize.mjs
+          rm -f scripts/.fix-bedrock-strategy-css-canonicalize.mjs
           rm -f scripts/.bedrock-strategy-css-trigger
 
       - name: Verify obsolete architecture stays gone
