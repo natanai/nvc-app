@@ -88,24 +88,21 @@ function normalizeNavigationSerialization(html) {
   return `${html.slice(0, start)}[[SITE_NAV:${nav}]]${html.slice(end)}`;
 }
 
+function normalizeShellScriptSerialization(html) {
+  return html.replace(/<script([^<>]*?)><\/script>/g, (full, attributes) => {
+    if (!/scripts\/(?:inventory-core-shell|inventory)\.js/.test(attributes)) return full;
+    return `${canonicalizeOpeningTag('script', attributes)}</script>`;
+  });
+}
+
 function stripCritical(html) {
   let output = html;
   for (const pattern of REDUNDANT_INLINE_CRITICAL_RULES) output = output.replace(pattern, '\n');
   return output.replace(/\n{3,}/g, '\n\n');
 }
 
-function preserveExistingShellScriptOrder(staged, current) {
-  const coreToken = 'scripts/inventory-core-shell.js';
-  const inventoryToken = 'scripts/inventory.js';
-  const currentCore = current.indexOf(coreToken);
-  const currentInventory = current.indexOf(inventoryToken);
-  const prefersInventoryFirst = currentCore >= 0 && currentInventory >= 0 && currentInventory < currentCore;
-  if (!prefersInventoryFirst) return staged;
-  return staged.replace(
-    /(\s*)<script src="([^"]*scripts\/inventory-core-shell\.js)" defer><\/script>\n\1<script src="([^"]*scripts\/inventory\.js)" defer><\/script>/g,
-    (_full, indent, coreSrc, inventorySrc) =>
-      `${indent}<script src="${inventorySrc}" defer></script>\n${indent}<script defer src="${coreSrc}"></script>`,
-  );
+function fullyNormalize(html) {
+  return normalizeNavigationSerialization(stripCritical(normalizeShellScriptSerialization(html)));
 }
 
 function firstMismatch(a, b) {
@@ -132,6 +129,15 @@ function shellOrder(source) {
   const inventory = source.indexOf('scripts/inventory.js');
   if (core < 0 || inventory < 0) return 'not-both-present';
   return core < inventory ? 'core-shell -> inventory' : 'inventory -> core-shell';
+}
+
+function shellTag(source, token) {
+  const tokenAt = source.indexOf(token);
+  if (tokenAt < 0) return '(not present)';
+  const start = source.lastIndexOf('<script', tokenAt);
+  const end = source.indexOf('>', tokenAt);
+  if (start < 0 || end < 0) return '(unresolved)';
+  return source.slice(start, end + 1).replace(/\s+/g, ' ');
 }
 
 function navOpening(source) {
@@ -168,20 +174,23 @@ try {
       continue;
     }
     const current = readFileSync(currentPath, 'utf8');
-    const stagedRaw = readFileSync(stagedPath, 'utf8');
-    const stagedOrdered = preserveExistingShellScriptOrder(stagedRaw, current);
+    const staged = readFileSync(stagedPath, 'utf8');
+    const shellCurrent = normalizeShellScriptSerialization(current);
+    const shellStaged = normalizeShellScriptSerialization(staged);
 
     let kind = '';
-    if (stagedRaw === current) kind = 'exact';
-    else if (stagedOrdered === current) kind = 'script-order-only';
-    else if (normalizeNavigationSerialization(stagedRaw) === normalizeNavigationSerialization(current)) kind = 'nav-only';
-    else if (stripCritical(stagedRaw) === stripCritical(current)) kind = 'critical-css-only';
-    else if (normalizeNavigationSerialization(stripCritical(stagedRaw)) === normalizeNavigationSerialization(stripCritical(current))) kind = 'nav+critical-css';
-    else if (normalizeNavigationSerialization(stripCritical(stagedOrdered)) === normalizeNavigationSerialization(stripCritical(current))) kind = 'script-order+nav+critical-css';
+    if (staged === current) kind = 'exact';
+    else if (shellStaged === shellCurrent) kind = 'shell-attrs-only';
+    else if (normalizeNavigationSerialization(staged) === normalizeNavigationSerialization(current)) kind = 'nav-only';
+    else if (stripCritical(staged) === stripCritical(current)) kind = 'critical-css-only';
+    else if (normalizeNavigationSerialization(shellStaged) === normalizeNavigationSerialization(shellCurrent)) kind = 'shell-attrs+nav';
+    else if (stripCritical(shellStaged) === stripCritical(shellCurrent)) kind = 'shell-attrs+critical-css';
+    else if (normalizeNavigationSerialization(stripCritical(staged)) === normalizeNavigationSerialization(stripCritical(current))) kind = 'nav+critical-css';
+    else if (fullyNormalize(staged) === fullyNormalize(current)) kind = 'shell-attrs+nav+critical-css';
     else {
       kind = 'unresolved';
-      const normalizedCurrent = normalizeNavigationSerialization(stripCritical(current));
-      const normalizedStaged = normalizeNavigationSerialization(stripCritical(stagedOrdered));
+      const normalizedCurrent = fullyNormalize(current);
+      const normalizedStaged = fullyNormalize(staged);
       const offset = firstMismatch(normalizedCurrent, normalizedStaged);
       unresolved.push(`${rel}: normalized mismatch at ${offset}`);
     }
@@ -208,6 +217,8 @@ try {
   console.log(`Representative diagnostics: ${sampleRel}`);
   console.log(`- checked-in shell order: ${shellOrder(sampleCurrent)}`);
   console.log(`- direct compiler shell order: ${shellOrder(sampleStaged)}`);
+  console.log(`- checked-in core-shell tag: ${shellTag(sampleCurrent, 'scripts/inventory-core-shell.js')}`);
+  console.log(`- direct compiler core-shell tag: ${shellTag(sampleStaged, 'scripts/inventory-core-shell.js')}`);
   console.log(`- checked-in nav opening: ${navOpening(sampleCurrent)}`);
   console.log(`- direct compiler nav opening: ${navOpening(sampleStaged)}`);
   for (const needle of CRITICAL_NEEDLES) {
