@@ -23,22 +23,19 @@ replace_once(
     '',
 )
 
-build_path = Path('scripts/build-pages.mjs')
-build = build_path.read_text()
-old = """${criticalStyles ? `${criticalStyles}\\
-` : ''}    <link rel=\"preload\" href=\"${cssHref}\" as=\"style\" />
-    <link rel=\"stylesheet\" href=\"${cssHref}\" fetchpriority=\"high\" />${extraHead}"""
-new = """${criticalStyles ? `${criticalStyles}\\
-` : ''}    <link rel=\"preload\" href=\"${cssHref}\" as=\"style\" />
-    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap\" />
+# Keep the existing styles.css preload exactly where it is. Replace only the
+# main stylesheet line with the formerly imported dependencies followed by the
+# main stylesheet, preserving the established cascade order.
+replace_once(
+    'scripts/build-pages.mjs',
+    '    <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />${extraHead}',
+    """    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap\" />
     <link rel=\"stylesheet\" href=\"${basePath}styles/feelings-magnet-icons.css\" />
     <link rel=\"stylesheet\" href=\"${basePath}styles/needs-magnet-icons.css\" />
     <link rel=\"stylesheet\" href=\"${basePath}styles/shared-density.css\" />
     <link rel=\"stylesheet\" href=\"${basePath}styles/inventory-core-shell.css\" />
-    <link rel=\"stylesheet\" href=\"${cssHref}\" fetchpriority=\"high\" />${extraHead}"""
-if build.count(old) != 1:
-    raise SystemExit(f'scripts/build-pages.mjs: expected one shared stylesheet insertion point, found {build.count(old)}')
-build_path.write_text(build.replace(old, new, 1))
+    <link rel=\"stylesheet\" href=\"${cssHref}\" fetchpriority=\"high\" />${extraHead}""",
+)
 
 # The Emotions Wheel is the single explicit standalone HTML surface outside the page compiler.
 replace_once(
@@ -89,14 +86,14 @@ test('shared styles are parser-discovered directly with the established cascade 
   let checked = 0;
   for (const file of htmlFiles) {
     const html = await fs.readFile(file, 'utf8');
-    const mainMatch = html.match(/<link rel=\"stylesheet\" href=\"([^\"]*styles\.css)\"(?: fetchpriority=\"high\")? \/>/);
+    const mainMatch = html.match(/<link rel="stylesheet" href="([^"]*styles[.]css)"(?: fetchpriority="high")? \/>/);
     if (!mainMatch) continue;
     checked += 1;
     const mainHref = mainMatch[1];
     const basePath = mainHref.slice(0, -'styles.css'.length);
-    const indices = [html.indexOf(`href=\"${FONT_HREF}\"`)];
+    const indices = [html.indexOf(`href="${FONT_HREF}"`)];
     for (const dependency of LOCAL_DEPENDENCIES) {
-      indices.push(html.indexOf(`href=\"${basePath}${dependency}\"`));
+      indices.push(html.indexOf(`href="${basePath}${dependency}"`));
     }
     const mainIndex = html.indexOf(mainMatch[0]);
     indices.forEach((index, position) => {
@@ -115,9 +112,15 @@ test('page compiler owns the generated shared stylesheet graph and standalone wh
     fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8'),
     fs.readFile(path.join(root, 'feelings/emotions-wheel/index.html'), 'utf8'),
   ]);
+  const compilerIndices = [];
   for (const dependency of LOCAL_DEPENDENCIES) {
-    assert.ok(compiler.includes(`href=\\\"${'${basePath}'}${dependency}\\\"`));
-    assert.ok(wheel.includes(`href=\"../../${dependency}\"`));
+    const index = compiler.indexOf(dependency);
+    assert.ok(index >= 0, `compiler missing ${dependency}`);
+    compilerIndices.push(index);
+    assert.ok(wheel.includes(`href="../../${dependency}"`));
+  }
+  for (let index = 1; index < compilerIndices.length; index += 1) {
+    assert.ok(compilerIndices[index] > compilerIndices[index - 1], 'compiler changed shared stylesheet cascade order');
   }
   assert.ok(compiler.includes('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible'));
   assert.ok(wheel.includes('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible'));
