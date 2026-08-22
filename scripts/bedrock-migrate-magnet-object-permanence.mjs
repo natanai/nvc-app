@@ -32,7 +32,7 @@ const stableHubMagnetDecorationStyle = (magnetId) => {
   return \`--magnet-tilt: \${tilt}deg; --magnet-offset: \${offset}px;\`;
 };
 
-const magnetPrefillScript = (storageKey, includeDecoration = false) => String.raw``,
+const magnetPrefillScript = (storageKey, includeDecoration = false) => String.raw\``,
 );
 
 compiler = replaceOnce(
