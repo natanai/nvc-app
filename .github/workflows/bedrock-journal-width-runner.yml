@@ -1,15 +1,16 @@
 name: Bedrock Journal width runner
 
 on:
-  push:
-    branches: [bedrock/production-finalization-v2]
+  pull_request:
+    branches: [inventory-core-overhaul]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   apply:
-    if: github.actor != 'github-actions[bot]'
+    if: github.head_ref == 'bedrock/production-finalization-v2' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Bedrock head
