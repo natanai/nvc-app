@@ -12,6 +12,7 @@ The current Bedrock branch is expected to keep all of these green in Site Qualit
 - navigation magnet coverage and saved-layout ownership;
 - static layout contracts for shared density, Inventory, Journal, and Body Cues;
 - the Journal native-UX contract: Feeling and Needs use catalog-backed popups whose options stay hidden until opened; each Feeling row owns its own 0–10 intensity where 0 means unselected; Tags retain example text and free-form tagging; and Journal History preserves, displays, summarizes, and filters individual Feeling/intensity pairs;
+- legacy Journal entries remain readable: when an older entry has multiple Feelings but only one historical intensity value, that value is applied to each old Feeling during normalization because no per-Feeling information existed to recover;
 - page-generator ownership and clean scoped generation;
 - retired-architecture tombstones: deleted safe-build/finalizer layers stay deleted, temporary migration scaffolding does not remain, and the legacy Journal hash has one compatibility owner;
 - first-load JavaScript and shared-asset performance ceilings;
@@ -95,7 +96,7 @@ Pass condition: each selected Feeling owns an independent 1–10 rating and sett
 
 Recheck the remaining surfaces that were identified during the final phone-density review:
 
-- the Journal landing page should not feel like breadcrumb card → large Journal card → large Patterns card → Backup card ceremony; if that hierarchy still dominates the viewport, it remains a Bedrock acceptance defect rather than post-Bedrock polish;
+- the Journal landing page should not feel like breadcrumb card → large Journal card → Patterns → Backup ceremony; if that hierarchy still dominates the viewport, it remains a Bedrock acceptance defect rather than post-Bedrock polish;
 - the Strategies toolbar should remain compact, with browsing actions secondary to strategy content and without the obsolete local-storage reminder taking over a section;
 - **Add a personal strategy** should read as one editor containing light-weight controls, not a giant green card containing several equally strong cards.
 
