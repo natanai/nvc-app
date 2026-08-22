@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 
+import { buildReverseInferenceOverridesFromRows } from "./reverse-inference-overrides-csv.mjs";
+
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const EVIDENCE_DIR = path.join(ROOT, "_evidence");
@@ -66,6 +68,15 @@ async function readCsvFile(name) {
 function parseNumber(value) {
   const n = Number(value);
   return Number.isFinite(n) ? n : undefined;
+}
+
+async function restoreReverseInferenceOverrides() {
+  const rows = await readCsvFile("reverse-inference-overrides.csv");
+  const sourcePath = path.join(DATA_DIR, "reverse-inference-overrides.json");
+  const existing = JSON.parse(await fs.readFile(sourcePath, "utf8"));
+  const payload = buildReverseInferenceOverridesFromRows(rows, existing);
+  await fs.writeFile(sourcePath, JSON.stringify(payload, null, 2) + "\n");
+  console.log("• restored data/reverse-inference-overrides.json from fact-checking/reverse-inference-overrides.csv");
 }
 
 async function restoreObservationTaxonomy() {
@@ -193,13 +204,12 @@ async function run() {
   await copyCsvBack("citations.csv", path.join(EVIDENCE_DIR, "citations.csv"));
   console.log("• copied authoritative core CSVs and citations back into place");
 
-  // Body Cues is authored in data/Feelings.csv and rebuilt from those cue rows.
-  // reverse-inference.json currently contains curated production fields that the
-  // historical CSV export cannot round-trip without data loss. Keep the
-  // body-regions.csv and reverse-inference.csv exports as review/reference
-  // snapshots only; never let a fact-checking import overwrite newer canonical
-  // production data from either of them.
-  console.log("• kept body-regions.csv and reverse-inference.csv reference-only; neither overwrites canonical production data");
+  await restoreReverseInferenceOverrides();
+
+  // Body Cues is authored in Feelings.csv. The two generated spreadsheets are
+  // review snapshots only; edits that need to survive regeneration belong in
+  // Feelings.csv or reverse-inference-overrides.csv.
+  console.log("• kept body-regions.csv and reverse-inference.csv reference-only; canonical edits round-trip through Feelings.csv and reverse-inference-overrides.csv");
 
   await restoreObservationTaxonomy();
   await restoreObservationLexicon();
