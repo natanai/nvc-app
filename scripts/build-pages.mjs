@@ -3339,6 +3339,30 @@ function renderInventoryJournalPage(needsList = []) {
         gap: 0.48rem;
       }
 
+      main[data-page-id='inventory-journal'] .journal-history-controls[hidden],
+      main[data-page-id='inventory-journal'] .journal-history-control[hidden] {
+        display: none !important;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-empty--history {
+        gap: 0.28rem;
+        padding: 0.78rem 0.85rem;
+        border-style: solid;
+        border-color: color-mix(in srgb, var(--outline) 14%, transparent);
+        background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-empty--history .journal-empty__title {
+        font-size: 0.9rem;
+        font-weight: 760;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-empty--history .journal-empty__description {
+        font-size: 0.78rem;
+        line-height: 1.35;
+        color: var(--ink-soft);
+      }
+
       main[data-page-id='inventory-journal'] .journal-history-controls__search input {
         min-height: 44px;
         border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
@@ -3709,15 +3733,15 @@ function renderInventoryJournalPage(needsList = []) {
               <input id="journal-filter-search" name="search" type="search" placeholder="Search journal" autocomplete="off" />
             </div>
             <div class="journal-history-controls__filters" aria-label="Filter journal history">
-              <label class="journal-history-control" for="journal-filter-emotion"><span>Feeling</span><select id="journal-filter-emotion" name="emotion" aria-label="Feeling"><option value="">Feeling</option></select></label>
-              <label class="journal-history-control" for="journal-filter-need"><span>Need</span><select id="journal-filter-need" name="need" aria-label="Need"><option value="">Need</option></select></label>
-              <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag" aria-label="Tag"><option value="">Tag</option></select></label>
+              <label class="journal-history-control" for="journal-filter-emotion"><span>Feeling</span><select id="journal-filter-emotion" name="emotion" aria-label="Feeling"><option value="">Any feeling</option></select></label>
+              <label class="journal-history-control" for="journal-filter-need"><span>Need</span><select id="journal-filter-need" name="need" aria-label="Need"><option value="">Any need</option></select></label>
+              <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag" aria-label="Tag"><option value="">Any tag</option></select></label>
               <label class="journal-history-control" for="journal-filter-range"><span>Date</span><select id="journal-filter-range" name="range" aria-label="Date"><option value="all">Any time</option><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
               <label class="journal-history-control" for="journal-filter-sort"><span>Sort</span><select id="journal-filter-sort" name="sort" aria-label="Sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="intensity-high">Highest intensity</option><option value="intensity-low">Lowest intensity</option></select></label>
             </div>
             <button type="button" class="journal-history-controls__clear" data-journal-filters-reset hidden>Clear filters</button>
           </form>
-          <p class="journal-empty" data-journal-empty hidden>Save an entry to see it here.</p>
+          <div class="journal-empty journal-empty--history" data-journal-empty hidden><strong class="journal-empty__title">No entries yet</strong><span class="journal-empty__description">Save your first entry to start building history and patterns. Filters will appear once there is something to explore.</span></div>
           <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
 

@@ -38,6 +38,13 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(build.includes('journal-inline-fallback__summary-text">Fallback editor'), 'fallback editor must be labeled as secondary recovery UI');
   assert.ok(css.includes('border-top: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);'), 'fallback editor must use pushed-back separator styling');
   assert.ok(css.includes('.journal-inline-fallback[open] .journal-form,'), 'fallback form must use the full available inline width');
+  assert.ok(build.includes('>Any feeling</option>'), 'Feeling filter neutral state must be contextual');
+  assert.ok(build.includes('>Any need</option>'), 'Need filter neutral state must be contextual');
+  assert.ok(build.includes('>Any tag</option>'), 'Tag filter neutral state must be contextual');
+  assert.ok(build.includes('journal-empty--history'), 'Journal History must ship a purposeful empty state');
+  assert.ok(runtime.includes("state.journalFiltersForm.hidden = !hasJournalEntries"), 'filters must disappear when there is nothing to filter');
+  assert.ok(runtime.includes("control.hidden = entries.length === 0"), 'empty filter dimensions must stay out of the UI');
+  assert.ok(runtime.includes("'No matches'"), 'filtered-empty history must distinguish no matches from no entries');
 });
 
 test('Need strategy browsing and personal strategy editing use compact final hierarchy', async () => {

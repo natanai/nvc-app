@@ -5220,12 +5220,25 @@ function updateJournalFiltersResetVisibility() {
 
 function renderJournalHistory() {
   if (!state.journalHistoryEl) return;
+  const allEntries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+  const hasJournalEntries = allEntries.length > 0;
+  if (state.journalFiltersForm) state.journalFiltersForm.hidden = !hasJournalEntries;
   syncJournalHistoryFilterOptions();
   updateJournalFiltersResetVisibility();
   const container = state.journalHistoryEl;
   container.innerHTML = '';
   const entries = getFilteredJournalEntries();
-  if (state.journalEmptyEl) state.journalEmptyEl.hidden = entries.length > 0;
+  if (state.journalEmptyEl) {
+    const title = state.journalEmptyEl.querySelector('.journal-empty__title');
+    const description = state.journalEmptyEl.querySelector('.journal-empty__description');
+    state.journalEmptyEl.hidden = entries.length > 0;
+    if (title) title.textContent = hasJournalEntries ? 'No matches' : 'No entries yet';
+    if (description) {
+      description.textContent = hasJournalEntries
+        ? 'Try another filter or clear filters.'
+        : 'Save your first entry to start building history and patterns. Filters will appear once there is something to explore.';
+    }
+  }
   if (!entries.length) return;
 
   entries.forEach((entry) => {
@@ -5349,8 +5362,18 @@ function renderJournalOverlayHistory() {
 function populateJournalHistorySelect(select, entries) {
   if (!select) return;
   const current = select.value || '';
-  select.replaceChildren(new Option('All', ''), ...entries.map(({ value, label }) => new Option(label, value)));
+  const neutralLabels = {
+    emotion: 'Any feeling',
+    need: 'Any need',
+    tag: 'Any tag',
+  };
+  const neutralLabel = neutralLabels[select.name] || 'Any';
+  select.replaceChildren(new Option(neutralLabel, ''), ...entries.map(({ value, label }) => new Option(label, value)));
   if ([...select.options].some((option) => option.value === current)) select.value = current;
+  const control = select.closest('.journal-history-control');
+  if (control && Object.prototype.hasOwnProperty.call(neutralLabels, select.name)) {
+    control.hidden = entries.length === 0;
+  }
 }
 
 function syncJournalHistoryFilterOptions() {
