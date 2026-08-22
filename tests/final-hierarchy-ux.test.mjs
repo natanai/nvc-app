@@ -25,8 +25,10 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.equal(runtime.includes('journalSummaryToggle'), false);
   assert.equal(runtime.includes('updateJournalSummaryVisibility'), false);
   assert.ok(build.includes(".journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body"), 'closed Journal utility disclosures must hide their bodies explicitly for Safari');
+  assert.ok(html.includes(".journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body"), 'generated Journal must ship the Safari closed-details rule');
   assert.ok(css.includes('.journal-inline-fallback:not([open]) > .journal-inline-fallback__body'), 'closed inline fallback must not render its body');
   assert.ok(build.includes('data-journal-notes-rows="5"'), 'fallback Journal editor must request a compact reflection field');
+  assert.ok(html.includes('data-journal-notes-rows="5"'), 'generated Journal must ship the compact fallback reflection density');
   assert.ok(moduleSource.includes('dataset.journalNotesRows'), 'Journal module must support per-instance reflection row density');
   assert.ok(css.includes('.journal-inline-fallback[open] .journal-form__sheet'), 'fallback editor must neutralize the full-screen sheet minimum height');
 });
