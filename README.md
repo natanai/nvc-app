@@ -19,34 +19,36 @@ The final architecture should not depend on a second layer repairing what the fi
 - every generated file must have one declared owner, and a generator must be incapable of deleting or rewriting files it does not own;
 - a clean `npm run build` must produce zero diff, and running it a second time must also produce zero diff;
 - full profile/backup restoration is one storage transaction: localStorage plus required session mirrors must be coherent before the current document rehydrates;
-- compatibility wrappers are transitional scaffolding, not the desired final architecture.
+- compatibility wrappers are migration scaffolding, not production architecture.
 
 ### Current Bedrock status
 
-Page generation has completed its canonicalization pass. Data generation is the remaining transitional authoring layer:
+The core page and data authoring pipelines have completed their canonicalization passes:
 
 - `scripts/build-pages.mjs` is the canonical owner for all 180 generated page outputs. It has explicit route scopes, does not recursively reset mixed-ownership directories, and directly emits the final committed HTML, including the shared navigation serialization, prepaint-critical navigation CSS, and canonical shell script order.
-- the former `scripts/finalize-static-assets.mjs` post-generation repair pass and `scripts/build-pages-safe.mjs` staging/semantic-preservation wrapper have been deleted. Direct generation was converged against all 180 owned outputs, the complete page regression suite passed, and the normal authoring build added no further page diff.
-- `npm run build:pages` now invokes `scripts/build-pages.mjs` directly. CI verifies generator ownership first, then runs the real authoring build and fails if generated artifacts differ from the committed tree.
-- the **Push Poems** workflow rebuilds through the same ownership-scoped page compiler and stages only declared outputs rather than invoking a destructive generator/finalizer pair or using `git add -A`.
-- `scripts/build-data-safe.mjs` still isolates the historical data compiler and publishes only declared outputs.
-- `scripts/finalize-generated-data.mjs` currently normalizes historical Body Cues/source-model inconsistencies. Those rules should ultimately live in the canonical data compiler/source model rather than a second pass.
-- `data/reverse-inference.json` is currently treated conservatively as a reviewed production asset because the historical reverse-inference formula does not yet reproduce all of its live semantics. It must not be silently regenerated until that source model is reconciled.
+- the former `scripts/finalize-static-assets.mjs` post-generation repair pass and `scripts/build-pages-safe.mjs` staging/semantic-preservation wrapper have been deleted. Direct generation was converged against all 180 owned outputs, the page regression suite passed, and the normal authoring build adds no further page diff.
+- `scripts/build-data.mjs` is the canonical owner for `data/index.json`, `data/body-regions.json`, and `data/reverse-inference.json`. `npm run build:data` invokes it directly.
+- Body Cue rows are authored in `data/Feelings.csv`. Duplicate region/option/feeling rows and the legacy `love` cue key were removed from the canonical source, and the permanent data-authoring contract prevents either source defect from returning.
+- formula-derived reverse inference remains the default. The small set of reviewed production exceptions lives explicitly in `data/reverse-inference-overrides.json`, which the canonical compiler validates and applies while generating `data/reverse-inference.json`.
+- the former `scripts/build-data-safe.mjs` staging wrapper and `scripts/finalize-generated-data.mjs` repair pass have been deleted. Direct data generation preserves the reviewed production semantics and is byte-deterministic on repeated runs.
+- `npm run build` now runs both canonical compilers directly. Site Quality CI validates the committed site first, runs the real authoring build, and fails if generated artifacts differ from the committed tree.
+- the **Push Poems**, rebuild, and fact-checking workflows route regeneration through these same declared owners rather than a second repair layer or broad collateral staging.
 
-The next authoring milestone is therefore the same operation on data: make `build-data.mjs` directly own the exact production JSON, reconcile the reviewed reverse-inference source model, then delete `build-data-safe.mjs` and `finalize-generated-data.mjs`. Bedrock status and protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
+With page and core-data authoring canonicalized, the remaining Bedrock work is primarily browser/device acceptance, audited runtime ownership changes, monolith extraction, and later network/packaging optimization. Protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
 
 ## How information is organised
 
-- Core editable content lives primarily in `data/*.csv` plus the reviewed JSON/template sources described in the fact-checking playbook. Editors should change the canonical source rather than generated output.
-- `npm run build:pages` invokes the canonical page compiler directly. `npm run build:data` still routes through the transitional ownership-safe data builder while the data source model is canonicalized.
+- Core editable content lives primarily in `data/*.csv` plus reviewed JSON/template sources. Editors should change canonical source rather than generated output.
+- `data/Feelings.csv` owns Body Cue source rows; `data/reverse-inference-overrides.json` owns only the reviewed exceptions that intentionally differ from formula-derived reverse inference.
+- `npm run build:data` invokes the canonical data compiler directly, and `npm run build:pages` invokes the canonical page compiler directly.
 - Generated pages store citation metadata from `_evidence/` so each claim on a need page can be traced back to its source.
-- Generated output is committed, but it is not an authoring source. A correct source change should be reproducible from a clean checkout.
+- Generated output is committed, but it is not an authoring source. A correct source change must be reproducible from a clean checkout.
 
 ## Fact-checking the site
 
 - **Spreadsheet-first workflow (GitHub Actions):** trigger the **“Fact-Checking Spreadsheets”** workflow from the Actions tab to download the current `fact-checking/` CSV bundle as an artifact. After editing those sheets, run the **“Apply Fact-Checking Spreadsheets”** workflow to import the folder, rebuild data + pages, and open a pull request with the generated changes—no local Node.js setup required. Both workflows default to the branch that triggered them; use the optional `base-branch` input when you intentionally need to target a different branch.
-  - **Web-only checklist:** edit `fact-checking/` files on your branch → run **Fact-Checking Spreadsheets** on the same branch → run **Apply Fact-Checking Spreadsheets** on that branch to push the imports into `_evidence/` and regenerate the site outputs.
-- **Local workflow (optional):** run `npm run export:fact-checking` to populate the `fact-checking/` folder with every dataset as spreadsheets (core CSVs, citations, reverse-inference weights, body-region cues, and observation metadata). After editing those sheets, run `npm run import:fact-checking` to write the changes back into the `data/` and `_evidence/` sources.
+  - **Web-only checklist:** edit `fact-checking/` files on your branch → run **Fact-Checking Spreadsheets** on the same branch → run **Apply Fact-Checking Spreadsheets** on that branch to push the imports into canonical sources and regenerate the site outputs.
+- **Local workflow (optional):** run `npm run export:fact-checking` to populate the `fact-checking/` folder with the editable source spreadsheets plus generated review snapshots. `reverse-inference-overrides.csv` round-trips the reviewed reverse-inference exceptions; `reverse-inference.csv` and `body-regions.csv` are reference snapshots generated from canonical source. After editing source sheets, run `npm run import:fact-checking`, then rebuild.
 - **Start with the Fact-Checking Playbook:** see `docs/fact-checking-playbook.md` for a single map of every data file, where each set of numbers or citations lives, and how to rebuild pages after edits.
 - **On-page checks:** open any need page and follow the "Supporting Sources" links to the cited material.
 - **Link hygiene:** run `npm run lint:links` to verify every URL under `Source Links` in `data/Needs.csv` responds correctly.
@@ -82,7 +84,7 @@ For a full production verification, run `npm run build` from a clean checkout an
   - `npm run test:flicker-jitter`
   - `npm run test:obsolete`
 
-Re-run `npm run build:pages` before tests if you updated data or templates. Prefer open-access citations so readers can check the evidence without paywalls.
+Re-run `npm run build:data` after changing canonical data sources and `npm run build:pages` when the generated HTML depends on those changes. Prefer open-access citations so readers can check the evidence without paywalls.
 
 ## Stable local release snapshot
 
@@ -134,30 +136,29 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 ├── observations/              # observation tools
 ├── styles.css                 # shared base styling
 ├── data/
-│   ├── Feelings.csv
+│   ├── Feelings.csv                       # feelings + canonical Body Cue rows
 │   ├── Needs.csv
 │   ├── Faux Feelings.csv
 │   ├── Strategies.csv
-│   ├── index.json             # generated dataset
-│   ├── body-regions.json      # generated Body Cues data
-│   └── reverse-inference.json # reviewed production asset pending source-model reconciliation
+│   ├── reverse-inference-overrides.json   # reviewed exceptions to formula output
+│   ├── index.json                         # generated dataset
+│   ├── body-regions.json                  # generated Body Cues data
+│   └── reverse-inference.json             # generated reverse-inference index
 └── scripts/
-    ├── build-data.mjs
-    ├── build-data-safe.mjs    # transitional ownership/safety wrapper
-    ├── build-pages.mjs        # canonical page compiler
-    └── finalize-generated-data.mjs # transitional data normalization
+    ├── build-data.mjs         # canonical data compiler
+    └── build-pages.mjs        # canonical page compiler
 ```
 
 ### Spreadsheet columns
 
 The three primary spreadsheets (`Feelings.csv`, `Needs.csv`, and `Faux Feelings.csv`) own most core relationships used across the site.
 
-- **Feelings.csv** – each feeling row uses `Row Type = feeling` with fields for `Feeling Title`, `Page Summary`, `Related Faux feelings`, `Related Needs`, `Body Signal Notes`, and optional `Slug Override`. Additional rows with `Row Type = cue` capture body cues through the `Cue Region *` and `Cue Option *` columns.
+- **Feelings.csv** – each feeling row uses `Row Type = feeling` with fields for `Feeling Title`, `Page Summary`, `Related Faux feelings`, `Related Needs`, `Body Signal Notes`, and optional `Slug Override`. Additional rows with `Row Type = cue` capture Body Cues through the `Cue Region *` and `Cue Option *` columns. Cue source keys must be unique by region/option/feeling and must use canonical feeling keys such as `love-caring` rather than legacy aliases.
 - **Needs.csv** – the need copy is organised into `Need Title`, `Category Label`, `Page Summary`, `Related Strategies`, `Related Faux feelings`, `Related Feelings`, and the claim text pair (`Claim Summary`, `Claim Narrative`). Evidence links live under the `Source Links` column.
 - **Faux Feelings.csv** – faux feelings list their relationships via `Related Feelings` and `Related Needs`, with an optional `Slug Override` to customise URLs.
 - **Strategies.csv** – each row keeps the contributor details inline and offers an optional `Slug Override` column alongside `Strategy Summary`, `Supports Needs`, `Contributor Name`, and `Contributor Location` so editors can lock URLs before renaming a strategy.
 
-The data build validates strategy slugs and relationship lookups, failing fast when a row references an unknown related item or when two strategies share the same slug. Run `npm run build:data` after editing canonical data sources, then `npm run build:pages` when generated HTML depends on those changes.
+The data build validates strategy slugs and relationship lookups, failing fast when a row references an unknown related item or when two strategies share the same slug. The data-authoring contract additionally validates Body Cue source uniqueness and reviewed reverse-inference override references. Run `npm run build:data` after editing canonical data sources, then `npm run build:pages` when generated HTML depends on those changes.
 
 ## Layout highlights
 
