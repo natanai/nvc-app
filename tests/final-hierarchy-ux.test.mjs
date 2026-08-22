@@ -36,4 +36,8 @@ test('Need strategy browsing and personal strategy editing use compact final hie
   assert.ok(css.includes('background: color-mix(in srgb, var(--mint) 30%, #ffffff 70%);'));
   assert.ok(css.includes('min-height: 4.75rem;'));
   assert.ok(css.includes('font-size: 0.68rem;'));
+  assert.equal((css.match(/\n\.strategy-section \{/g) || []).length, 1, 'strategy section must have one canonical base rule');
+  assert.equal((css.match(/\n\.strategy-deck__shuffle,\n\.strategy-deck__toggle \{/g) || []).length, 1, 'strategy browsing controls must have one canonical base rule');
+  assert.equal((css.match(/\n\.strategy-form \{/g) || []).length, 1, 'personal strategy form must have one canonical base rule');
+  assert.equal(css.includes('min-height: 6.5rem'), false, 'prototype textarea height must stay retired');
 });

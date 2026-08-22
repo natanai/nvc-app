@@ -77,6 +77,7 @@ test('Journal and personal strategy density live at canonical owners across phon
   assert.match(styles, /\.strategy-card--form \.strategy-card--input \{[\s\S]*?border:\s*1px solid[\s\S]*?box-shadow:\s*none/);
   assert.ok(styles.includes('min-height: 4.75rem'));
   assert.ok(styles.includes('.strategy-section__header {'));
+  assert.equal(styles.includes('min-height: 6.5rem'), false, 'prototype personal-strategy textarea height must not remain in the canonical CSS block');
   assert.ok(pages.includes('strategy-card strategy-card--form'), 'generated strategy forms must still originate in the page compiler');
   assert.equal(styles.includes('.inventory-journal-form__actions .inventory-button'), false);
   assert.ok(readme.includes('### Root-level UX changes'));
