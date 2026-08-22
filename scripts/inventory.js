@@ -1884,15 +1884,6 @@ function setupNeedPage() {
       formSaveToProfile.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
       applyCompactSaveTargetControls(formSaveToDevice, formSaveToProfile);
       registerProfileSaveButton(formSaveToProfile);
-
-      let saveTargetHint = suggestionForm.querySelector('[data-save-target-hint="true"]');
-      if (!saveTargetHint) {
-        saveTargetHint = document.createElement('p');
-        saveTargetHint.className = 'strategy-save-target-hint';
-        saveTargetHint.dataset.saveTargetHint = 'true';
-        saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
-        formSaveToProfile.insertAdjacentElement('afterend', saveTargetHint);
-      }
     }
 
     suggestionForm.addEventListener('submit', async (event) => {
@@ -2116,15 +2107,6 @@ function setupInventoryPage() {
       saveToProfileButton.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
       applyCompactSaveTargetControls(state.inventorySubmitButton, saveToProfileButton);
       registerProfileSaveButton(saveToProfileButton);
-
-      let saveTargetHint = form.querySelector('[data-save-target-hint="true"]');
-      if (!saveTargetHint) {
-        saveTargetHint = document.createElement('p');
-        saveTargetHint.className = 'strategy-save-target-hint';
-        saveTargetHint.dataset.saveTargetHint = 'true';
-        saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
-        saveToProfileButton.insertAdjacentElement('afterend', saveTargetHint);
-      }
     }
 
     setInventoryFormMode({ entry: null });

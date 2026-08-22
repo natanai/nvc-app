@@ -476,16 +476,11 @@ const buildNeedsField = (config) => {
     classes: ['visually-hidden'],
     attrs: { 'data-journal-needs-summary-status': '' },
   });
-  const summaryEmpty = createElement('p', {
-    classes: ['journal-needs-summary__empty'],
-    attrs: { 'data-journal-needs-summary-empty': '' },
-    text: 'No needs selected yet.',
-  });
   const summaryList = createElement('ul', {
     classes: ['journal-needs-summary__list'],
     attrs: { 'data-journal-needs-summary-list': '', role: 'list' },
   });
-  summary.append(summaryLabel, summaryStatus, summaryEmpty, summaryList);
+  summary.append(summaryLabel, summaryStatus, summaryList);
   const describedBy = [select.getAttribute('aria-describedby'), summaryLabel.id]
     .filter(Boolean)
     .join(' ');
@@ -842,7 +837,6 @@ class JournalFormController {
     this.needsSummaryEl = this.root.querySelector('[data-journal-needs-summary]');
     this.needsSummaryList = this.root.querySelector('[data-journal-needs-summary-list]');
     this.needsSummaryStatus = this.root.querySelector('[data-journal-needs-summary-status]');
-    this.needsSummaryEmpty = this.root.querySelector('[data-journal-needs-summary-empty]');
     this.emotionInput = this.root.querySelector('[data-journal-emotion]');
     this.intensityInput = this.root.querySelector('[data-journal-intensity]');
     this.intensityDisplay = this.root.querySelector('[data-journal-intensity-display]');
@@ -1048,9 +1042,6 @@ class JournalFormController {
     const hasSelection = labels.length > 0;
     if (this.needsSummaryEl) {
       this.needsSummaryEl.hidden = !hasSelection;
-    }
-    if (this.needsSummaryEmpty) {
-      this.needsSummaryEmpty.hidden = hasSelection;
     }
     this.needsSummaryEl.dataset.count = String(labels.length);
     if (this.needsSummaryStatus) {

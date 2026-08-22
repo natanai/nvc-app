@@ -4,9 +4,8 @@
   const nextBtn = document.querySelector('[data-strategy-next]');
   const prevBtn = document.querySelector('[data-strategy-prev]');
   const shuffleBtn = document.querySelector('[data-strategy-shuffle]');
-  const deckHeader = document.querySelector('.strategy-deck-header');
   const counter = document.querySelector('[data-strategy-count]');
-  let toggleBtn = document.querySelector('[data-strategy-toggle]');
+  const toggleBtn = document.querySelector('[data-strategy-toggle]');
 
   if (!stack) {
     return;
@@ -15,15 +14,6 @@
   let cards = Array.from(stack.querySelectorAll('.strategy-card'));
   if (!cards.length) {
     return;
-  }
-
-  if (!toggleBtn && deckHeader) {
-    toggleBtn = document.createElement('button');
-    toggleBtn.type = 'button';
-    toggleBtn.className = 'strategy-deck__toggle';
-    toggleBtn.setAttribute('data-strategy-toggle', '');
-    toggleBtn.textContent = 'View all';
-    deckHeader.appendChild(toggleBtn);
   }
 
   function shuffleArray(arr) {

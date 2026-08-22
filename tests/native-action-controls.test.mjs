@@ -47,12 +47,21 @@ test('Journal uses one compact horizontal Clear and Save action row', () => {
 test('Journal and personal strategy density live at canonical owners across phone and desktop', () => {
   const moduleSource = read('assets/js/journal/module.js');
   const pages = read('scripts/build-pages.mjs');
+  const deck = read('scripts/strategy-deck.js');
+  const inventory = read('scripts/inventory.js');
   const styles = read('styles.css');
   const readme = read('README.md');
 
   assert.ok(moduleSource.includes("emotion: 'Use any word that fits. Leave blank if unsure.'"));
   assert.ok(moduleSource.includes("needs: 'Choose any needs that connect. Leave blank if unsure.'"));
   assert.ok(moduleSource.includes("this.needsSummaryEl.hidden = !hasSelection"));
+  assert.equal(moduleSource.includes('No needs selected yet.'), false, 'empty needs state must not render a redundant confirmation card');
+  assert.ok(styles.includes('.journal-needs-summary[hidden]'), 'canonical Journal CSS must honor the module hidden state');
+  assert.ok(styles.includes('.journal-label-icon'), 'Journal breadcrumb art must have deterministic dimensions');
+  assert.ok(pages.includes('data-strategy-toggle'), 'View all must be compiler-authored before first paint');
+  assert.equal(deck.includes("document.createElement('button')"), false, 'strategy deck runtime must not create deterministic controls');
+  assert.equal(pages.includes('const strategiesNote'), false, 'built-in strategy browsing must not carry a storage reminder unrelated to browsing');
+  assert.equal(inventory.includes('strategy-save-target-hint'), false, 'save-target explanatory chrome must not be injected after paint');
   assert.match(styles, /@media \(min-width: 860px\)[\s\S]*?\.journal-form__grid,[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(styles, /\.journal-form__field,[\s\S]*?border:\s*1px solid/);
   assert.match(styles, /\.strategy-card--form \{[\s\S]*?border-width:\s*2px;[\s\S]*?box-shadow:\s*0 6px/);

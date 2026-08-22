@@ -268,6 +268,18 @@ a:focus-visible {
   text-underline-offset: 4px;
 }
 
+.breadcrumbs__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.journal-label-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 auto;
+}
+
 .page {
   background: var(--lavender);
   border: 4px solid var(--outline);
@@ -3416,22 +3428,22 @@ main[data-need-slug] .page-title::before {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 0.75rem;
+  justify-content: flex-start;
+  gap: 0.45rem;
 }
 
 .strategy-deck__shuffle,
 .strategy-deck__toggle {
   font-family: var(--font-display);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   border-radius: var(--radius-pill);
-  border: 3px solid var(--outline);
+  border: 2px solid var(--outline);
   background: color-mix(in srgb, var(--btn-bg) 70%, #ffffff 30%);
   color: var(--btn-fg);
-  padding: 0.45rem 0.9rem;
+  padding: 0.42rem 0.8rem;
   cursor: pointer;
-  box-shadow: 0 10px 0 var(--shadow);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 72%, transparent);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
@@ -3439,8 +3451,8 @@ main[data-need-slug] .page-title::before {
 .strategy-deck__shuffle:focus-visible,
 .strategy-deck__toggle:hover,
 .strategy-deck__toggle:focus-visible {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 0 var(--shadow);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 var(--shadow);
 }
 
 .strategy-deck__toggle {
@@ -3462,6 +3474,12 @@ main[data-need-slug] .page-title::before {
 .strategy-deck__stack {
   position: relative;
   height: clamp(22rem, 70vh, 27rem);
+}
+
+@media (max-width: 640px) {
+  .strategy-deck__stack {
+    height: clamp(18rem, 50dvh, 21rem);
+  }
 }
 
 /* Base card styling when inside the deck stack */
@@ -3845,21 +3863,7 @@ main[data-need-slug] .page-title::before {
   box-shadow: 0 4px 0 color-mix(in srgb, var(--shadow) 60%, #ffffff 40%);
 }
 
-.strategy-save-target-hint {
-  margin: 0.15rem 0 0;
-  max-width: 30ch;
-  font-size: 0.72rem;
-  line-height: 1.25;
-  text-transform: none;
-  letter-spacing: 0.01em;
-  color: color-mix(in srgb, var(--ink-soft) 82%, #ffffff 18%);
-  text-align: right;
-}
-
 @media (max-width: 600px) {
-  .strategy-card--form .strategy-card__actions {
-    }
-
   .strategy-card--form .strategy-card__save {
     width: 100%;
     text-align: center;
@@ -3872,11 +3876,6 @@ main[data-need-slug] .page-title::before {
   .strategy-card__actions--stacked .strategy-card__save {
     width: 100%;
     text-align: center;
-  }
-
-  .strategy-save-target-hint {
-    max-width: none;
-    text-align: left;
   }
 
   .strategy-form__row {
@@ -4993,6 +4992,10 @@ main[data-need-slug] .page-title::before {
   color: var(--ink-soft);
 }
 
+.journal-needs-summary[hidden] {
+  display: none;
+}
+
 .journal-needs-summary {
   display: flex;
   flex-wrap: wrap;
@@ -5022,11 +5025,6 @@ main[data-need-slug] .page-title::before {
   color: color-mix(in srgb, var(--ink) 74%, var(--mint) 26%);
 }
 
-.journal-needs-summary__empty {
-  margin: 0;
-  font-size: 0.92rem;
-  color: color-mix(in srgb, var(--ink-soft) 74%, transparent);
-}
 
 .journal-needs-summary__list {
   display: flex;
@@ -5531,16 +5529,18 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   }
 
   .journal-page-title-row {
-    gap: clamp(0.5rem, 3.6vw, 0.85rem);
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0.55rem;
   }
 
   .journal-page-title-row__actions {
-    width: 100%;
-    justify-content: stretch;
+    width: auto;
+    flex: 0 0 auto;
   }
 
   .journal-page-title-row__actions .journal-fullscreen-button {
-    width: 100%;
+    width: auto;
     justify-content: center;
   }
 
@@ -7700,7 +7700,6 @@ main[data-page-id='inventory-journal'] .journal-entry__actions {
   text-align: center;
 }
 
-.strategy-card__actions--save-targets .strategy-save-target-hint,
 .strategy-card__actions--save-targets .local-storage-note {
   grid-column: 1 / -1;
   justify-self: stretch;

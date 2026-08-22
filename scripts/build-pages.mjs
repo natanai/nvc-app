@@ -1926,12 +1926,9 @@ function renderNeed(item, allStrategies) {
   const displayTitle = hasPrefix ? item.title.replace(/^Need for\s*/i, '') : item.title;
   const fullTitle = `Need for ${displayTitle}`;
 
-  const strategiesNote = `          ${localStorageReminderHtml}`;
-
   const strategiesHtml = strategiesForNeed.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
-${strategiesNote}
           <div class="strategy-deck-header">
             <button
               type="button"
@@ -1939,6 +1936,14 @@ ${strategiesNote}
               data-strategy-shuffle
             >
               Shuffle cards
+            </button>
+            <button
+              type="button"
+              class="strategy-deck__toggle"
+              data-strategy-toggle
+              aria-pressed="false"
+            >
+              View all
             </button>
           </div>
 
