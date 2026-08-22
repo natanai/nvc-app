@@ -12,11 +12,85 @@ on:
         required: true
         default: inventory-core-overhaul
 
+permissions:
+  contents: write
+
 concurrency:
   group: site-quality-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  bedrock-journal-redirect-extraction:
+    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'bedrock/production-finalization-v2' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Bedrock head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Detect pending extraction
+        id: detect
+        shell: bash
+        run: |
+          if [ -f .github/scripts/bedrock-extract-legacy-journal-redirect.py ]; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        if: steps.detect.outputs.pending == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.detect.outputs.pending == 'true'
+        run: npm ci
+
+      - name: Apply route-owner extraction
+        if: steps.detect.outputs.pending == 'true'
+        run: python3 .github/scripts/bedrock-extract-legacy-journal-redirect.py
+
+      - name: Build Inventory scope
+        if: steps.detect.outputs.pending == 'true'
+        run: node scripts/build-pages.mjs --scope inventory
+
+      - name: Prove scoped rebuild is byte-stable
+        if: steps.detect.outputs.pending == 'true'
+        run: |
+          git diff > /tmp/first.diff
+          node scripts/build-pages.mjs --scope inventory
+          git diff > /tmp/second.diff
+          cmp /tmp/first.diff /tmp/second.diff
+
+      - name: Validate redirect behavior and Bedrock contracts
+        if: steps.detect.outputs.pending == 'true'
+        run: |
+          node --check scripts/inventory-legacy-journal-redirect.js
+          node --test tests/inventory-legacy-journal-redirect.test.mjs
+          npm run test:flicker-jitter
+          npm run test:generator-ownership
+          npm run test:performance
+          npm run lint:entrypoints
+          git diff --check
+
+      - name: Publish extracted owner
+        if: steps.detect.outputs.pending == 'true'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          rm -f .github/scripts/bedrock-extract-legacy-journal-redirect.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Extract legacy Journal redirect from shared controller"
+          git push origin HEAD:"${HEAD_REF}"
+
   site-quality:
     runs-on: ubuntu-latest
     steps:
@@ -116,8 +190,6 @@ jobs:
             exit 1
           fi
 
-          # Export was already proven byte-identical; restore it explicitly so
-          # the later full-build reproducibility check starts from a clean tree.
           git checkout -- fact-checking
 
       - name: Build site
