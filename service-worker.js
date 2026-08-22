@@ -77,14 +77,7 @@ async function cacheFirstWithRefresh(event) {
   }
 
   const response = await refresh(cache, request, key);
-  if (response) return response;
-
-  if (request.mode === 'navigate') {
-    const fallback = await cache.match(new Request(`${self.location.origin}/`));
-    if (fallback) return fallback;
-  }
-
-  return Response.error();
+  return response || Response.error();
 }
 
 self.addEventListener('install', (event) => {
@@ -95,7 +88,6 @@ self.addEventListener('install', (event) => {
     // installing. Each core resource is therefore warmed independently.
     await Promise.allSettled(CORE_URLS.map(async (path) => {
       const request = new Request(new URL(path, self.location.origin), {
-        cache: 'reload',
         credentials: 'same-origin',
       });
       const response = await fetch(request);
