@@ -83,7 +83,8 @@ For each extraction:
 4. regenerate only the compiler scopes/routes that actually own the new runtime;
 5. reject collateral generated paths;
 6. add a regression that asserts the old monolith no longer owns the extracted behavior and the correct route does;
-7. run Site Quality and require the full authoring build to remain zero-diff.
+7. run entrypoint lint as part of the extraction proof so a new browser asset cannot exist in a half-extracted, unreferenced state;
+8. run Site Quality and require the full authoring build to remain zero-diff.
 
 ## Order of work
 
