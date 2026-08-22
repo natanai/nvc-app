@@ -23,6 +23,7 @@ export const makeEntry = (overrides = {}) => ({
   dateISO: new Date().toISOString(),
   emotion: '',
   intensity: undefined,
+  feelings: [],
   confidence: undefined,
   sensations: [],
   needs: [],

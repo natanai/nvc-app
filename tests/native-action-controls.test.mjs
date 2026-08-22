@@ -57,7 +57,9 @@ test('Journal and personal strategy density live at canonical owners across phon
   assert.ok(moduleSource.includes("needs: 'Needs'"));
   assert.ok(moduleSource.includes("tags: 'Tags'"));
   assert.ok(moduleSource.includes("classes: ['journal-meta-group']"));
-  assert.ok(moduleSource.includes("'journal-meta-row--intensity'"));
+  assert.equal(moduleSource.includes("'journal-meta-row--intensity'"), false, 'Journal intensity belongs to each Feeling in the Feeling popup');
+  assert.ok(moduleSource.includes('data-journal-feeling-intensity'));
+  assert.ok(density.includes('.journal-feeling-rating {'));
   assert.ok(moduleSource.includes("needsMode: 'catalog-multiselect'"));
   assert.ok(moduleSource.includes("tags: 'work, weekend, boundaries'"));
   assert.equal(moduleSource.includes("text: 'Selected needs'"), false, 'Journal needs must not render the prototype confirmation layer');

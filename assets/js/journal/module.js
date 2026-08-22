@@ -167,7 +167,7 @@ const JOURNAL_BASE_CONFIG = {
   variant: 'inventory',
   idPrefix: 'journal',
   needsMode: 'catalog-multiselect',
-  intensityRange: { min: 1, max: 10, defaultValue: DEFAULT_INTENSITY },
+  intensityRange: { min: 0, max: 10, defaultValue: DEFAULT_INTENSITY },
   notes: { rows: 12 },
   labels: {
     emotion: 'Feeling',
@@ -680,28 +680,9 @@ export function renderJournalForm(root, overrides = {}) {
 
   const grid = createElement('div', { classes: ['journal-meta-group'] });
 
-  grid.append(buildFeelingField(config));
+  grid.append(buildFeelingField(config), buildNeedsField(config), buildTagsField(config));
 
-  const intensityId = `${config.idPrefix}-intensity`;
-  const intensityInput = createElement('input', {
-    attrs: { id: intensityId, name: 'intensity', type: 'range', min: config.intensityRange.min, max: config.intensityRange.max, value: config.intensityRange.defaultValue, step: 1 },
-  });
-  intensityInput.setAttribute('data-journal-intensity', '');
-  const intensityOutput = createElement('output', {
-    classes: config.classes.intensityOutput || [],
-    attrs: { for: intensityId },
-    text: `${config.intensityRange.defaultValue}/${config.intensityRange.max}`,
-  });
-  intensityOutput.setAttribute('data-journal-intensity-display', '');
-  const intensityWrap = createElement('div', { classes: config.classes.intensityWrap || [] });
-  intensityWrap.append(intensityInput, intensityOutput);
-  const intensityControl = createElement('div', { classes: ['journal-meta-row__control'] });
-  intensityControl.append(intensityWrap);
-  const intensityRow = createElement('div', { classes: ['journal-meta-row', 'journal-meta-row--intensity'] });
-  intensityRow.append(createElement('label', { attrs: { for: intensityId }, text: config.labels.intensity }), intensityControl);
-  grid.append(intensityRow, buildNeedsField(config), buildTagsField(config));
-
-  const notesId = `${config.idPrefix}-notes`;
+  const notesId = `${config.idPrefix}-notes`;  const notesId = `${config.idPrefix}-notes`;
   const notesTextarea = createElement('textarea', {
     classes: config.classes.notesInput || [],
     attrs: {
@@ -819,6 +800,7 @@ class JournalFormController {
     this.notesBaseHeight = null;
 
     this.emotionOptions = [];
+    this.feelingIntensities = new Map();
     this.needsOptions = [];
 
     this.draftPath = this.options.draftPath;
@@ -953,9 +935,28 @@ class JournalFormController {
       });
       search?.addEventListener('input', () => this.renderCatalogOptions(kind));
       options?.addEventListener('click', (event) => {
+        if (kind === 'feeling') return;
         const option = event.target.closest('[data-journal-catalog-option]');
         if (!option) return;
         this.toggleCatalogValue(kind, option.dataset.value || '');
+      });
+      options?.addEventListener('input', (event) => {
+        if (kind !== 'feeling') return;
+        const slider = event.target.closest('[data-journal-feeling-intensity]');
+        if (!slider) return;
+        const feeling = slider.dataset.value || '';
+        const intensity = normalizeNumber(slider.value, 0, this.options.intensityRange.max) ?? 0;
+        this.setFeelingIntensity(feeling, intensity, { render: false });
+        const row = slider.closest('[data-journal-feeling-row]');
+        const output = row?.querySelector('[data-journal-feeling-intensity-output]');
+        if (output) output.textContent = String(intensity);
+        row?.classList.toggle('is-selected', intensity > 0);
+      });
+      options?.addEventListener('change', (event) => {
+        if (kind !== 'feeling') return;
+        const slider = event.target.closest('[data-journal-feeling-intensity]');
+        if (!slider) return;
+        this.dispatchCatalogChange('feeling');
       });
       clear?.addEventListener('click', () => {
         this.setCatalogValues(kind, []);
@@ -1001,8 +1002,46 @@ class JournalFormController {
   }
 
   getCatalogValues(kind) {
+    if (kind === 'feeling') return this.getFeelingRatings().map((item) => item.feeling);
     const input = this.getCatalogInput(kind);
     return normalizeList(input?.value || '');
+  }
+
+  getFeelingRatings() {
+    return Array.from(this.feelingIntensities.entries())
+      .filter(([, intensity]) => Number.isFinite(intensity) && intensity > 0)
+      .map(([feeling, intensity]) => ({ feeling, intensity }));
+  }
+
+  setFeelingIntensity(feeling, intensity, { render = true } = {}) {
+    const normalized = this.normalizeCatalogValues('feeling', [feeling])[0] || '';
+    if (!normalized) return;
+    const value = normalizeNumber(intensity, 0, this.options.intensityRange.max) ?? 0;
+    if (value > 0) this.feelingIntensities.set(normalized, value);
+    else this.feelingIntensities.delete(normalized);
+    if (this.emotionInput) this.emotionInput.value = joinListValues(this.getFeelingRatings().map((item) => item.feeling));
+    this.updateCatalogSummary('feeling');
+    if (render) {
+      const popover = this.feelingSelectRoot?.querySelector('[data-journal-catalog-popover]');
+      if (popover && !popover.hidden) this.renderCatalogOptions('feeling');
+    }
+  }
+
+  setFeelingRatings(values = []) {
+    const items = Array.isArray(values) ? values : [];
+    const next = new Map();
+    items.forEach((item) => {
+      const rawFeeling = typeof item === 'string' ? item : item?.feeling ?? item?.emotion ?? item?.label ?? '';
+      const feeling = this.normalizeCatalogValues('feeling', [rawFeeling])[0] || (!this.emotionOptions.length ? String(rawFeeling || '').trim() : '');
+      const rawIntensity = typeof item === 'string' ? this.defaultIntensity : item?.intensity;
+      const intensity = normalizeNumber(rawIntensity, 0, this.options.intensityRange.max) ?? this.defaultIntensity;
+      if (feeling && intensity > 0) next.set(feeling, intensity);
+    });
+    this.feelingIntensities = next;
+    if (this.emotionInput) this.emotionInput.value = joinListValues(this.getFeelingRatings().map((item) => item.feeling));
+    this.updateCatalogSummary('feeling');
+    const popover = this.feelingSelectRoot?.querySelector('[data-journal-catalog-popover]');
+    if (popover && !popover.hidden) this.renderCatalogOptions('feeling');
   }
 
   normalizeCatalogValues(kind, values) {
@@ -1035,6 +1074,14 @@ class JournalFormController {
   }
 
   setCatalogValues(kind, values) {
+    if (kind === 'feeling') {
+      const normalized = this.normalizeCatalogValues(kind, values);
+      this.setFeelingRatings(normalized.map((feeling) => ({
+        feeling,
+        intensity: this.feelingIntensities.get(feeling) || this.defaultIntensity,
+      })));
+      return;
+    }
     const input = this.getCatalogInput(kind);
     if (!input) return;
     const normalized = this.normalizeCatalogValues(kind, values);
@@ -1061,6 +1108,12 @@ class JournalFormController {
       return;
     }
     valueEl.classList.remove('is-placeholder');
+    if (kind === 'feeling') {
+      const ratings = this.getFeelingRatings();
+      const labels = ratings.map(({ feeling, intensity }) => `${feeling} ${intensity}`);
+      valueEl.textContent = labels.length <= 2 ? labels.join(', ') : `${labels[0]}, ${labels[1]} +${labels.length - 2}`;
+      return;
+    }
     valueEl.textContent = values.length <= 2 ? values.join(', ') : `${values[0]}, ${values[1]} +${values.length - 2}`;
   }
 
@@ -1097,6 +1150,38 @@ class JournalFormController {
     if (!options.length) {
       const empty = createElement('p', { classes: ['journal-catalog-popover__empty'], text: 'No matches' });
       list.append(empty);
+      return;
+    }
+    if (kind === 'feeling') {
+      const ratings = new Map(this.getFeelingRatings().map(({ feeling, intensity }) => [feeling.toLowerCase(), intensity]));
+      options.forEach((option) => {
+        const intensity = ratings.get(option.label.toLowerCase()) || 0;
+        const row = createElement('div', {
+          classes: ['journal-feeling-rating', ...(intensity > 0 ? ['is-selected'] : [])],
+          attrs: { role: 'group', 'aria-label': option.label },
+        });
+        row.setAttribute('data-journal-feeling-row', '');
+        const label = createElement('span', { classes: ['journal-feeling-rating__label'], text: option.label });
+        const control = createElement('div', { classes: ['journal-feeling-rating__control'] });
+        const slider = createElement('input', {
+          classes: ['journal-feeling-rating__slider'],
+          attrs: {
+            type: 'range',
+            min: 0,
+            max: this.options.intensityRange.max,
+            step: 1,
+            value: intensity,
+            'aria-label': `${option.label} intensity; 0 means not selected`,
+          },
+        });
+        slider.setAttribute('data-journal-feeling-intensity', '');
+        slider.dataset.value = option.label;
+        const output = createElement('output', { classes: ['journal-feeling-rating__value'], text: String(intensity) });
+        output.setAttribute('data-journal-feeling-intensity-output', '');
+        control.append(slider, output);
+        row.append(label, control);
+        list.append(row);
+      });
       return;
     }
     options.forEach((option) => {
@@ -1183,12 +1268,9 @@ class JournalFormController {
   }
 
   collectData() {
-    const emotion = this.emotionInput?.value?.trim() || '';
-    const intensityValue = normalizeNumber(
-      this.intensityInput?.value,
-      this.options.intensityRange.min,
-      this.options.intensityRange.max,
-    );
+    const feelings = this.getFeelingRatings();
+    const emotion = feelings.map((item) => item.feeling).join(', ');
+    const intensityValue = feelings.length ? Math.max(...feelings.map((item) => item.intensity)) : undefined;
     let needs = [];
     if (this.needsSelect instanceof HTMLSelectElement) {
       needs = Array.from(this.needsSelect.selectedOptions || [])
@@ -1200,24 +1282,20 @@ class JournalFormController {
     }
     const tags = this.tagsInput ? normalizeTags(this.tagsInput.value) : [];
     const notes = this.notesInput?.value?.trim() || '';
-    return { emotion, intensity: intensityValue, needs, tags, notes };
+    return { feelings, emotion, intensity: intensityValue, needs, tags, notes };
   }
 
   setValues(values = {}, { trailingTags = false } = {}) {
     const data = values && typeof values === 'object' ? values : {};
-    this.setCatalogValues('feeling', normalizeList(data.emotion));
+    const legacyFeelings = normalizeList(data.emotion);
+    const legacyIntensity = normalizeNumber(data.intensity, 0, this.options.intensityRange.max) ?? this.defaultIntensity;
+    const feelingRatings = Array.isArray(data.feelings) && data.feelings.length
+      ? data.feelings
+      : legacyFeelings.map((feeling) => ({ feeling, intensity: legacyIntensity }));
+    this.setFeelingRatings(feelingRatings);
     if (this.notesInput) {
       this.notesInput.value = data.notes || '';
       this.autoResizeNotes();
-    }
-    if (this.intensityInput) {
-      const intensityValue = normalizeNumber(
-        data.intensity,
-        this.options.intensityRange.min,
-        this.options.intensityRange.max,
-      );
-      this.intensityInput.value = intensityValue !== undefined ? String(intensityValue) : String(this.defaultIntensity);
-      this.updateIntensityDisplay(intensityValue ?? this.defaultIntensity);
     }
     this.setCatalogValues('needs', normalizeList(data.needs));
     if (this.tagsInput) {
@@ -1276,8 +1354,9 @@ class JournalFormController {
           .filter(Boolean)
           .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
       : [];
+    const existingRatings = this.getFeelingRatings();
     this.emotionOptions = [...new Map(options.map((label) => [label.toLowerCase(), label])).values()];
-    this.setCatalogValues('feeling', this.getCatalogValues('feeling'));
+    this.setFeelingRatings(existingRatings);
   }
 
   showStatus(message = '') {

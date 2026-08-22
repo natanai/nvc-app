@@ -386,3 +386,14 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
 .journal-catalog-popover__action { min-height:44px; border:1px solid color-mix(in srgb,var(--outline) 16%,transparent); border-radius:var(--radius-md); background:#fff; color:var(--ink); font:inherit; font-size:.84rem; font-weight:700; }
 .journal-catalog-popover__action--done { background:color-mix(in srgb,#fff 72%,var(--mint) 28%); }
 @media (max-width:720px) { .journal-catalog-popover { width:min(24rem,82vw); max-height:min(58dvh,30rem); } }
+
+
+/* Journal Feeling popup: each Feeling owns its own 0–10 intensity. */
+.journal-feeling-rating { min-height:48px; display:grid; grid-template-columns:minmax(7.2rem,.9fr) minmax(8.5rem,1.25fr); align-items:center; gap:.7rem; padding:.42rem .55rem; border-radius:var(--radius-md); color:var(--ink); }
+.journal-feeling-rating + .journal-feeling-rating { border-top:1px solid color-mix(in srgb,var(--outline) 8%,transparent); border-radius:0; }
+.journal-feeling-rating.is-selected { background:color-mix(in srgb,#fff 72%,var(--mint) 28%); }
+.journal-feeling-rating__label { min-width:0; font-size:.88rem; font-weight:650; line-height:1.2; }
+.journal-feeling-rating__control { display:grid; grid-template-columns:minmax(0,1fr) 1.6rem; align-items:center; gap:.42rem; min-width:0; }
+.journal-feeling-rating__slider { width:100%; min-width:0; margin:0; accent-color:var(--plum); }
+.journal-feeling-rating__value { font-size:.78rem; font-weight:750; color:var(--ink-soft); text-align:right; font-variant-numeric:tabular-nums; }
+@media (max-width:420px) { .journal-feeling-rating { grid-template-columns:minmax(6.4rem,.82fr) minmax(7.6rem,1.18fr); gap:.48rem; padding-inline:.42rem; } .journal-feeling-rating__label { font-size:.82rem; } }

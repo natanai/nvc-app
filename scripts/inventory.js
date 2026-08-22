@@ -5058,23 +5058,19 @@ function renderJournalSummary() {
   const totalStat = createJournalSummaryStat('Entries logged', String(entries.length));
   container.appendChild(totalStat);
 
-  const intensityEntries = entries.filter((entry) => Number.isFinite(entry.intensity));
-  const averageIntensity = intensityEntries.length
-    ? (intensityEntries.reduce((sum, entry) => sum + entry.intensity, 0) / intensityEntries.length).toFixed(1)
+  const feelingRatings = entries.flatMap((entry) => parseJournalFeelingRatings(entry));
+  const averageIntensity = feelingRatings.length
+    ? (feelingRatings.reduce((sum, item) => sum + item.intensity, 0) / feelingRatings.length).toFixed(1)
     : '—';
   const intensityStat = createJournalSummaryStat('Average intensity', `${averageIntensity}`);
   container.appendChild(intensityStat);
 
   const emotionCounts = new Map();
   entries.forEach((entry) => {
-    if (!entry.emotion) {
-      return;
-    }
-    const key = entry.emotion.trim().toLowerCase();
-    if (!key) {
-      return;
-    }
-    emotionCounts.set(key, (emotionCounts.get(key) || 0) + 1);
+    parseJournalFeelingRatings(entry).forEach(({ feeling }) => {
+      const key = feeling.trim().toLowerCase();
+      if (key) emotionCounts.set(key, (emotionCounts.get(key) || 0) + 1);
+    });
   });
   const topEmotions = Array.from(emotionCounts.entries())
     .sort((a, b) => b[1] - a[1])
@@ -5212,6 +5208,19 @@ function parseJournalFeelings(value) {
     });
 }
 
+function parseJournalFeelingRatings(entry) {
+  if (Array.isArray(entry?.feelings) && entry.feelings.length) {
+    return entry.feelings
+      .map((item) => ({
+        feeling: (item?.feeling || item?.emotion || '').toString().trim(),
+        intensity: Number(item?.intensity),
+      }))
+      .filter((item) => item.feeling && Number.isFinite(item.intensity) && item.intensity > 0);
+  }
+  const fallback = Number.isFinite(Number(entry?.intensity)) ? Math.min(10, Math.max(1, Math.round(Number(entry.intensity)))) : 5;
+  return parseJournalFeelings(entry?.emotion).map((feeling) => ({ feeling, intensity: fallback }));
+}
+
 function renderJournalHistory() {
   if (!state.journalHistoryEl) return;
   syncJournalHistoryFilterOptions();
@@ -5232,16 +5241,11 @@ function renderJournalHistory() {
     titleRow.className = 'journal-entry__title-row';
     const emotion = document.createElement('h4');
     emotion.className = 'journal-entry__emotion';
-    const feelings = parseJournalFeelings(entry.emotion);
-    emotion.textContent = feelings.length ? feelings.join(', ') : 'Reflection';
+    const feelings = parseJournalFeelingRatings(entry);
+    emotion.textContent = feelings.length
+      ? feelings.map(({ feeling, intensity }) => `${feeling} ${intensity}/10`).join(' · ')
+      : 'Reflection';
     titleRow.appendChild(emotion);
-    if (Number.isFinite(entry.intensity)) {
-      const intensity = document.createElement('span');
-      intensity.className = 'journal-entry__intensity';
-      intensity.textContent = `${entry.intensity}/10`;
-      intensity.setAttribute('aria-label', `Intensity ${entry.intensity} out of 10`);
-      titleRow.appendChild(intensity);
-    }
     header.appendChild(titleRow);
     const meta = document.createElement('div');
     meta.className = 'journal-entry__meta';
@@ -5324,8 +5328,10 @@ function renderJournalOverlayHistory() {
       if (dateLabel) {
         segments.push(dateLabel);
       }
-      const feelings = parseJournalFeelings(entry.emotion);
-      const emotionLabel = feelings.length ? `${feelings.join(', ')} — ` : '';
+      const feelings = parseJournalFeelingRatings(entry);
+      const emotionLabel = feelings.length
+        ? `${feelings.map(({ feeling, intensity }) => `${feeling} ${intensity}/10`).join(', ')} — `
+        : '';
       const detail = `${emotionLabel}${entry.notes || ''}`.trim();
       if (detail) {
         segments.push(detail);
@@ -5360,7 +5366,7 @@ function syncJournalHistoryFilterOptions() {
     });
     return [...map.values()].sort((a, b) => a.label.localeCompare(b.label));
   };
-  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="emotion"]'), unique(entries.flatMap((entry) => parseJournalFeelings(entry.emotion))));
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="emotion"]'), unique(entries.flatMap((entry) => parseJournalFeelingRatings(entry).map((item) => item.feeling))));
   populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="need"]'), unique(entries.flatMap((entry) => entry.needs || []), (value) => buildNeedLink(value).label));
   populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="tag"]'), unique(entries.flatMap((entry) => entry.tags || []), (value) => `#${value}`));
 }
@@ -5377,7 +5383,7 @@ function getFilteredJournalEntries() {
   let filtered = entries;
 
   if (searchTerm) filtered = filtered.filter((entry) => [entry.notes || '', entry.emotion || '', ...(entry.tags || []), ...(entry.needs || [])].join(' ').toLowerCase().includes(searchTerm));
-  if (emotionFilter) filtered = filtered.filter((entry) => parseJournalFeelings(entry.emotion).some((feeling) => normalize(feeling) === emotionFilter));
+  if (emotionFilter) filtered = filtered.filter((entry) => parseJournalFeelingRatings(entry).some(({ feeling }) => normalize(feeling) === emotionFilter));
   if (needFilter) filtered = filtered.filter((entry) => (entry.needs || []).some((need) => normalize(need) === needFilter));
   if (tagFilter) filtered = filtered.filter((entry) => (entry.tags || []).some((tag) => normalize(tag) === tagFilter));
 
