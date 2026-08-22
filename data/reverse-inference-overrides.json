@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "description": "Reviewed production exceptions applied after formula-derived reverse inference. Keep this file limited to intentional deviations that cannot yet be derived from the shared Body Cues/emotion model.",
+  "entries": {
+    "anxiety": {
+      "bodyCueOrder": [
+        "chest-tight",
+        "chest-pounding",
+        "limbs-restless",
+        "gut-rolling",
+        "head-pressure",
+        "head-buzzing",
+        "shoulders-braced",
+        "temp-chill",
+        "temp-prickly",
+        "gut-nausea",
+        "throat-dry",
+        "jaw-clench",
+        "jaw-tremble",
+        "overall-floating",
+        "throat-tight"
+      ],
+      "bodyCueOverrides": {
+        "head-pressure": {
+          "intensityBand": [5, 9],
+          "arousal": "medium"
+        }
+      },
+      "evidenceKeysAppend": ["zone-unpleasant-medium"]
+    },
+    "excited": {
+      "needsHypotheses": {
+        "sdt": ["autonomy", "competence", "relatedness"],
+        "nvc": [
+          { "title": "Appreciation", "slug": "appreciation" },
+          { "title": "Self expression", "slug": "self-expression" },
+          { "title": "Connection", "slug": "connection" }
+        ]
+      },
+      "bodyCueOrder": [
+        "limbs-tingly",
+        "chest-pounding",
+        "limbs-restless",
+        "temp-flush",
+        "gut-rolling",
+        "head-buzzing",
+        "temp-prickly"
+      ],
+      "bodyCueOverrides": {
+        "limbs-tingly": {
+          "intensityBand": [6, 10],
+          "relativeWeight": 0.16
+        },
+        "chest-pounding": {
+          "relativeWeight": 0.15
+        },
+        "limbs-restless": {
+          "relativeWeight": 0.15
+        },
+        "temp-flush": {
+          "relativeWeight": 0.15
+        },
+        "head-buzzing": {
+          "relativeWeight": 0.13
+        }
+      }
+    },
+    "joyful": {
+      "needsHypotheses": {
+        "sdt": ["relatedness", "competence", "autonomy"],
+        "nvc": [
+          { "title": "Connection", "slug": "connection" },
+          { "title": "Self expression", "slug": "self-expression" },
+          { "title": "Freedom", "slug": "freedom" }
+        ]
+      }
+    },
+    "hopeful": {
+      "needsHypotheses": {
+        "sdt": ["competence", "autonomy"],
+        "nvc": [
+          { "title": "Growth", "slug": "growth" },
+          { "title": "Support", "slug": "support" },
+          { "title": "Empowerment", "slug": "empowerment" }
+        ]
+      }
+    },
+    "contented": {
+      "zones": ["medium-pleasant", "low-pleasant"],
+      "needsHypotheses": {
+        "sdt": ["autonomy", "relatedness"],
+        "nvc": [
+          { "title": "Appreciation", "slug": "appreciation" },
+          { "title": "Belonging", "slug": "belonging" },
+          { "title": "Peace", "slug": "peace" }
+        ]
+      }
+    }
+  }
+}
