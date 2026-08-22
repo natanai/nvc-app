@@ -53,6 +53,22 @@ jobs:
           path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
           PY
           python3 .github/scripts/form-density-root-repair.py
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('styles.css')
+          text = path.read_text(encoding='utf-8')
+          replacements = (
+              ('  background: color-mix(in srgb, var(--mint) 82%, #fff 18%);\n', ''),
+              ('  background: color-mix(in srgb, #ffffff 88%, var(--mint) 12%);\n', '  background: #fff;\n'),
+              ('  color: color-mix(in srgb, var(--ink) 78%, var(--mint) 22%);\n', '  color: var(--ink-soft);\n'),
+              ('  background: color-mix(in srgb, #ffffff 95%, var(--lavender) 5%);\n', '  background: #fff;\n'),
+          )
+          for old, new in replacements:
+              if old not in text:
+                  raise SystemExit(f'canonical density simplification anchor missing: {old.strip()}')
+              text = text.replace(old, new, 1)
+          path.write_text(text.rstrip() + '\n', encoding='utf-8')
+          PY
 
       - name: Remove temporary repair script
         if: steps.detect.outputs.pending == 'true'
