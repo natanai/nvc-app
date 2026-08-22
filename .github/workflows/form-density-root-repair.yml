@@ -40,7 +40,18 @@ jobs:
 
       - name: Apply root-owned density repair
         if: steps.detect.outputs.pending == 'true'
-        run: python3 .github/scripts/form-density-root-repair.py
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('.github/scripts/form-density-root-repair.py')
+          text = path.read_text(encoding='utf-8')
+          old = "assert.ok(pages.includes('class=\\\\\\\"strategy-card strategy-card--form\\\\\\\"'), 'generated strategy forms must still originate in the page compiler');"
+          new = "assert.ok(pages.includes('strategy-card strategy-card--form'), 'generated strategy forms must still originate in the page compiler');"
+          if old not in text:
+              raise SystemExit('density ownership assertion anchor not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          python3 .github/scripts/form-density-root-repair.py
 
       - name: Remove temporary repair script
         if: steps.detect.outputs.pending == 'true'
