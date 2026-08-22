@@ -18,6 +18,7 @@
     "test:home-regressions": "node tests/home-page-regressions.test.mjs",
     "test:nav-magnets": "node tests/nav-magnet-coverage.test.mjs",
     "test:performance": "node --test tests/performance-budget.test.mjs",
+    "test:delivery": "node --test tests/font-delivery.test.mjs",
     "calculate:observation-feelings": "node scripts/calculateObservationFeelingCoverage.mjs",
     "extract:citations": "node scripts/extract-citations.mjs",
     "replace:needs-sources": "node scripts/replace-needs-sources.mjs",
