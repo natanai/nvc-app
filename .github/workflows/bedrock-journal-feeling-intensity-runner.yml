@@ -61,7 +61,9 @@ jobs:
           LINK_CHECK_REPORT_ONLY: '1'
 
       - name: Remove one-shot finalizer
-        run: rm -f scripts/.bedrock-journal-per-feeling-finalize.mjs
+        run: |
+          rm -f scripts/.bedrock-journal-per-feeling-finalize.mjs
+          rm -f scripts/.bedrock-journal-per-feeling-finalize-trigger
 
       - name: Verify obsolete architecture stays gone
         run: npm run test:obsolete
