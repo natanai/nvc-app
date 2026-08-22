@@ -26,6 +26,11 @@ const inventoryRuntimeUrl = new URL(
   './inventory.js?v=2026-08-21-home-canary-ready',
   loaderScript?.src || document.baseURI,
 ).href;
+const offlineWorkerUrl = new URL(
+  '../service-worker.js',
+  loaderScript?.src || document.baseURI,
+).href;
+const offlineWorkerScope = new URL('../', loaderScript?.src || document.baseURI).pathname;
 
 let inventoryRuntimePromise = null;
 let inventoryRuntimeReady = false;
@@ -153,5 +158,39 @@ function installInventoryRuntimeIntentLoader() {
   }, true);
 }
 
+function canRegisterOfflineWorker() {
+  if (!('serviceWorker' in navigator)) return false;
+  if (window.location.protocol === 'https:') return true;
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+}
+
+function registerOfflineCacheCanary() {
+  if (!canRegisterOfflineWorker()) return;
+
+  navigator.serviceWorker.register(offlineWorkerUrl, {
+    scope: offlineWorkerScope,
+    updateViaCache: 'none',
+  }).catch((error) => {
+    console.warn('Unable to register allneeds offline cache', error);
+  });
+}
+
+function scheduleOfflineCacheCanary() {
+  const register = () => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(registerOfflineCacheCanary, { timeout: 2500 });
+    } else {
+      window.setTimeout(registerOfflineCacheCanary, 0);
+    }
+  };
+
+  if (document.readyState === 'complete') {
+    register();
+  } else {
+    window.addEventListener('load', register, { once: true });
+  }
+}
+
 syncInventoryCount();
 installInventoryRuntimeIntentLoader();
+scheduleOfflineCacheCanary();
