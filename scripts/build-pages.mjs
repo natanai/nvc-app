@@ -3200,7 +3200,10 @@ function renderInventoryPage() {
       { label: 'Home', href: '../' },
       { label: 'Inventory' },
     ],
-    scripts: [{ src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true }],
+    scripts: [
+      { src: 'scripts/inventory-legacy-journal-redirect.js', defer: true, beforeBase: true },
+      { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
+    ],
     headExtras: `${blueskyPanelStyles}\n${inventoryMobileStyles}`,
     main,
     mainClass: 'page inventory-page',
