@@ -1,0 +1,131 @@
+name: Bedrock canonical page regeneration
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bedrock-canonical-page-regeneration-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  regenerate-canonical-pages:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Bedrock head branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate canonical pages directly
+        run: node scripts/build-pages.mjs
+
+      - name: Verify generator touched only declared outputs
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const cp = require('node:child_process');
+          const data = JSON.parse(fs.readFileSync('data/index.json', 'utf8'));
+          const expected = new Set([
+            'index.html',
+            'faux-feelings/index.html',
+            ...((data.fauxFeelings || []).filter(x => x && x.slug).map(x => `faux-feelings/${x.slug}/index.html`)),
+            'feelings/index.html',
+            'feelings/body-cues/index.html',
+            ...((data.feelings || []).filter(x => x && x.slug).map(x => `feelings/${x.slug}/index.html`)),
+            'needs/index.html',
+            ...((data.needs || []).filter(x => x && x.slug).map(x => `needs/${x.slug}/index.html`)),
+            'inventory/index.html',
+            'inventory/journal/index.html',
+            'observations/index.html',
+            'alexithymia-support/index.html',
+          ]);
+          const changed = cp.execFileSync('git', ['diff', '--name-only'], { encoding: 'utf8' })
+            .trim().split(/\r?\n/).filter(Boolean);
+          const unexpected = changed.filter(path => !expected.has(path));
+          if (unexpected.length) {
+            console.error('Direct page compiler touched paths it does not own:');
+            for (const path of unexpected) console.error(`- ${path}`);
+            process.exit(1);
+          }
+          if (!changed.length) {
+            console.log('Canonical page outputs are already committed.');
+            process.exit(0);
+          }
+          console.log(`Direct compiler changed ${changed.length} declared page outputs.`);
+          if (changed.length !== 177) {
+            console.error(`Expected the audited 177-page canonicalization set, got ${changed.length}.`);
+            console.error(changed.join('\n'));
+            process.exit(1);
+          }
+          NODE
+          git diff --check
+
+      - name: Require 180 exact compiler outputs
+        shell: bash
+        run: |
+          audit="$(node scripts/bedrock-audit-page-compiler-drift.mjs)"
+          printf '%s\n' "$audit"
+          if ! grep -q -- '- exact: 180' <<<"$audit"; then
+            echo "Direct outputs have not fully converged to the compiler."
+            exit 1
+          fi
+          if grep -q -- '- unresolved:' <<<"$audit"; then
+            echo "Compiler audit still contains unresolved drift."
+            exit 1
+          fi
+          classifications="$(printf '%s\n' "$audit" | grep -E '^- [a-z].*: [0-9]+$' | grep -v -- '- exact: 180' || true)"
+          if [ -n "$classifications" ]; then
+            echo "Non-exact compiler classifications remain:"
+            printf '%s\n' "$classifications"
+            exit 1
+          fi
+
+      - name: Run focused Bedrock regressions
+        shell: bash
+        run: |
+          npm run test:customizer
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+          npm run test:generator-ownership
+          node tests/body-cues-static-first.test.mjs
+
+      - name: Prove normal build adds no additional diff
+        shell: bash
+        run: |
+          before="$(git diff)"
+          npm run build
+          after="$(git diff)"
+          if [ "$before" != "$after" ]; then
+            echo "Normal build changed the canonical direct-compiler output further."
+            git diff --stat
+            exit 1
+          fi
+
+      - name: Commit canonical generated pages
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No generated page migration remains to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -u
+          git commit -m "Canonicalize generated page output"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
