@@ -740,7 +740,7 @@ button.site-nav__magnet {
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-                        <button
+            <button
               class="pill magnet site-nav__magnet site-nav__magnet--menu"
               type="button"
               data-magnet-id="nav-menu"
@@ -754,7 +754,7 @@ button.site-nav__magnet {
               </svg>
               <span class="site-nav__magnet-label visually-hidden">More</span>
             </button>
-<a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
+            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
 
   <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
     <use href="../icons/nav-sprite.svg#icon-home" />
@@ -775,12 +775,15 @@ button.site-nav__magnet {
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
+              data-nav-hidden="true"
+              aria-hidden="true"
+              tabindex="-1"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
-             data-nav-hidden="true" aria-hidden="true" tabindex="-1">
+            >
               <span class="site-nav__magnet-label">Journal</span>
             </button>
             <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../inventory/">
