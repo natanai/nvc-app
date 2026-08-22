@@ -31,12 +31,13 @@ test('Home owns the Bedrock service-worker canary without adding it to parser fi
 test('offline worker caches only safe same-origin GET traffic', async () => {
   const worker = await read('service-worker.js');
 
+  assert.doesNotThrow(() => new Function(worker), 'service worker source should remain valid JavaScript');
   assert.ok(worker.includes("request.method !== 'GET'"), 'mutating requests must bypass Cache Storage');
   assert.ok(worker.includes('url.origin !== self.location.origin'), 'cross-origin requests must bypass this cache owner');
   assert.ok(worker.includes("url.pathname.startsWith('/api/')"), 'same-origin API traffic must bypass static caching');
   assert.ok(worker.includes("request.headers.get('authorization')"), 'authorized requests must bypass static caching');
   assert.ok(worker.includes("response.ok && response.type === 'basic'"), 'only successful same-origin basic responses should be stored');
-  assert.ok(worker.includes("request.mode === 'navigate'"), 'navigation requests should have a cached Home fallback when offline');
+  assert.ok(!worker.includes("request.mode === 'navigate'"), 'canary must not substitute Home HTML for uncached deep routes');
 });
 
 test('core offline cache paths are real browser-facing files', async () => {
