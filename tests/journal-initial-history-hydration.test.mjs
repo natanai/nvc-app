@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const load = (relative) => fs.readFile(path.join(root, relative), 'utf8');
 
-test('Journal history hydrates persisted entries after async Journal setup without user interaction', async () => {
+test('Journal history hydrates persisted entries on initial load before any sort or filter interaction', async () => {
   const runtime = await load('scripts/inventory.js');
   assert.ok(runtime.includes("state.journalEntries = store && typeof store.list === 'function' ? store.list() : [];"));
   const updateStart = runtime.indexOf('function updateJournalEntriesFromStore() {');
@@ -18,6 +18,8 @@ test('Journal history hydrates persisted entries after async Journal setup witho
   assert.ok(updateBlock.includes('renderJournalViews();'));
   assert.equal(updateBlock.includes('renderJournalHistory();'), false);
 
+  // Async Journal setup must reconcile the current store after the DOM/controller
+  // exists; a later user change to Sort/Search must never be the hydration trigger.
   const overlayIndex = runtime.indexOf('setupJournalOverlay();', finalizerStart);
   const reconcileIndex = runtime.indexOf('state.journalStore = resolveJournalStore() || state.journalStore;', finalizerStart);
   const listenerIndex = runtime.indexOf('registerJournalStoreListeners();', finalizerStart);
