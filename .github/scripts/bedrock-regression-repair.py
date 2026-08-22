@@ -71,6 +71,14 @@ replace_once(
 };""",
 )
 
+replace_once(
+    'tests/shared-nav-menu.test.mjs',
+    """  assert.ok(critical.includes('.site-nav__magnet--menu {'), 'Menu must have critical prepaint styling');
+  assert.ok(critical.includes(".magnet-board:not([data-ready='1']) .magnet"), 'critical nav CSS must hide unpositioned magnets');""",
+    """  assert.ok(critical.includes('.site-nav__magnet--menu {'), 'Menu must have critical prepaint styling');
+  assert.ok(!critical.includes(".magnet-board:not([data-ready='1']) .magnet"), 'critical nav CSS must not gate the whole magnet board on JavaScript readiness');""",
+)
+
 compiler = Path('scripts/build-pages.mjs')
 text = compiler.read_text()
 
