@@ -382,6 +382,9 @@ const addPointerListeners = (state) => {
     state.dragging = null;
     delete state.board.dataset.dragging;
     notifyPositions(state);
+    if (typeof state.onDragEnd === 'function') {
+      state.onDragEnd();
+    }
     if (
       state.dragIntent.pointerId === event.pointerId &&
       state.dragIntent.pointerType === 'mouse' &&
@@ -427,6 +430,9 @@ const addPointerListeners = (state) => {
     state.dragging = null;
     delete state.board.dataset.dragging;
     notifyPositions(state);
+    if (typeof state.onDragEnd === 'function') {
+      state.onDragEnd();
+    }
     if (state.dragIntent.pointerId === event.pointerId) {
       state.dragIntent.pointerId = null;
       state.dragIntent.pointerType = '';
@@ -867,6 +873,7 @@ export function startPhysics(options) {
     getBoardSize: options.getBoardSize,
     getObstacles: options.getObstacles,
     onDragRelease: options.onDragRelease,
+    onDragEnd: options.onDragEnd,
     isShuffling: false,
     shufflePromise: null,
     lastShuffleTime: 0,

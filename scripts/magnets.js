@@ -988,6 +988,10 @@ const persistLayout = (state, immediate = false) => {
   };
 
   if (immediate) {
+    if (state.saveTimer != null) {
+      window.clearTimeout(state.saveTimer);
+      state.saveTimer = null;
+    }
     flush();
     return;
   }
@@ -1347,6 +1351,10 @@ const setPlayState = (state, active) => {
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       getObstacles: () => getFixedObstacleRects(state, FIXED_OBSTACLE_PHYSICS_CLEARANCE),
       onDragRelease: () => state.setClickSuppress(),
+      onDragEnd: () => {
+        updateLayout(state);
+        persistLayout(state, true);
+      },
       onTiltPermissionDenied: (reason) => handleTiltPermissionDenied(state, reason),
     });
     if (state.tiltPermissionState === 'granted') {

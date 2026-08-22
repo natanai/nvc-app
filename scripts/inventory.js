@@ -4643,7 +4643,10 @@ function fillJournalForm(values = {}) {
 
 function resetJournalForm(options = {}) {
   if (state.journalController && typeof state.journalController.resetForm === 'function') {
-    state.journalController.resetForm();
+    state.journalController.resetForm({
+      keepStatus: Boolean(options.keepStatus),
+      focusNotes: options.focusNotes !== false,
+    });
   } else if (state.journalForm) {
     state.journalForm.reset();
     fillJournalForm({});
@@ -4674,11 +4677,17 @@ function escapeSelector(value) {
 }
 
 function focusJournalHistoryCard(id) {
-  if (!state.journalHistoryEl || !id) {
+  if (!id) {
     return;
   }
   const selector = `[data-journal-id="${escapeSelector(id)}"]`;
-  const card = state.journalHistoryEl.querySelector(selector);
+  const historyTargets = state.journalOverlayOpen
+    ? [state.journalOverlayHistoryEl, state.journalHistoryEl]
+    : [state.journalHistoryEl, state.journalOverlayHistoryEl];
+  const card = historyTargets
+    .filter((history) => history instanceof HTMLElement)
+    .map((history) => history.querySelector(selector))
+    .find((candidate) => candidate instanceof HTMLElement);
   if (!card) {
     return;
   }
@@ -5524,8 +5533,8 @@ function handleJournalFormSubmit(event) {
       notes: formData.notes,
     });
     savedEntry = store.create(entry);
-    showJournalStatus('Saved entry. It stays on this device until you export it.');
-    resetJournalForm({ keepStatus: true });
+    showJournalStatus('Saved ✓ Your entry is in Journal History below. The form is ready for a new entry.');
+    resetJournalForm({ keepStatus: true, focusNotes: false });
     setJournalEditState('');
   }
 

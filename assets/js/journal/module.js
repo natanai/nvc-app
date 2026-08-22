@@ -1147,7 +1147,7 @@ class JournalFormController {
     }
   }
 
-  resetForm() {
+  resetForm({ keepStatus = false, focusNotes = true } = {}) {
     if (this.formEl) {
       this.formEl.reset();
     }
@@ -1169,7 +1169,7 @@ class JournalFormController {
     this.hideNeedSuggestions();
     this.resetSaveButton();
     this.hideTagSuggestions();
-    if (this.statusEl) {
+    if (this.statusEl && !keepStatus) {
       this.statusEl.textContent = '';
     }
     this.showMessage('');
@@ -1178,7 +1178,11 @@ class JournalFormController {
     }
     if (this.notesInput) {
       this.autoResizeNotes();
-      this.notesInput.focus();
+      if (focusNotes) {
+        this.notesInput.focus();
+      } else {
+        this.notesInput.blur();
+      }
     }
   }
 
