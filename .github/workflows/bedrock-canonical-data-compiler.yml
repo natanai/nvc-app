@@ -1,0 +1,308 @@
+name: Bedrock canonical data compiler
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bedrock-canonical-data-compiler-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  canonicalize-data-compiler:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Bedrock head branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Move page/model translation and reviewed overrides into build-data
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/build-data.mjs')
+          source = path.read_text()
+
+          constants_anchor = "const DATA_DIR = join(ROOT, 'data');\n"
+          constants = """const DATA_DIR = join(ROOT, 'data');
+
+const PAGE_TO_MODEL_KEY = new Map([
+  ['excited', 'excitement'],
+  ['joyful', 'joy'],
+  ['hopeful', 'hope'],
+  ['contented', 'contentment'],
+]);
+const MODEL_TO_PAGE_KEY = new Map(
+  Array.from(PAGE_TO_MODEL_KEY.entries(), ([pageKey, modelKey]) => [modelKey, pageKey]),
+);
+"""
+          if 'const PAGE_TO_MODEL_KEY = new Map([' not in source:
+              if source.count(constants_anchor) != 1:
+                  raise SystemExit(f'Expected one DATA_DIR anchor, found {source.count(constants_anchor)}.')
+              source = source.replace(constants_anchor, constants, 1)
+
+          helpers_anchor = "const bodyRegions = buildBodyRegions(rawCueRows);\n"
+          helpers = r"""const bodyRegions = buildBodyRegions(rawCueRows);
+
+function bodyRegionsForInference(regions) {
+  return regions.map((region) => ({
+    ...region,
+    options: (region.options || []).map((option) => {
+      const emotions = {};
+      for (const [pageKey, weight] of Object.entries(option.emotions || {})) {
+        const modelKey = PAGE_TO_MODEL_KEY.get(pageKey) || pageKey;
+        const previous = emotions[modelKey];
+        emotions[modelKey] = Number.isFinite(previous) ? Math.max(previous, weight) : weight;
+      }
+      return { ...option, emotions };
+    }),
+  }));
+}
+
+function restorePageFacingInferenceKeys(index) {
+  const output = {};
+
+  for (const [modelKey, value] of Object.entries(index)) {
+    if (modelKey === '_meta') continue;
+    const pageKey = MODEL_TO_PAGE_KEY.get(modelKey) || modelKey;
+    const entry = value && typeof value === 'object' ? { ...value } : value;
+
+    if (entry && Array.isArray(entry.evidenceKeys)) {
+      entry.evidenceKeys = entry.evidenceKeys.map((key) =>
+        key === `emotion-${modelKey}` ? `emotion-${pageKey}` : key,
+      );
+    }
+    output[pageKey] = entry;
+  }
+
+  if (index._meta) output._meta = index._meta;
+  return output;
+}
+
+function cloneJson(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function applyReverseInferenceOverrides(index, source) {
+  if (!source || source.schemaVersion !== 1 || !source.entries || typeof source.entries !== 'object') {
+    throw new Error('data/reverse-inference-overrides.json must use schemaVersion 1 with an entries object.');
+  }
+
+  const output = cloneJson(index);
+  const allowedFields = new Set([
+    'zones',
+    'needsHypotheses',
+    'bodyCueOrder',
+    'bodyCueOverrides',
+    'evidenceKeysAppend',
+  ]);
+
+  for (const [pageKey, override] of Object.entries(source.entries)) {
+    const entry = output[pageKey];
+    if (!entry || pageKey === '_meta') {
+      throw new Error(`Reverse-inference override references unknown generated feeling "${pageKey}".`);
+    }
+    if (!override || typeof override !== 'object' || Array.isArray(override)) {
+      throw new Error(`Reverse-inference override for "${pageKey}" must be an object.`);
+    }
+
+    const unknownFields = Object.keys(override).filter((field) => !allowedFields.has(field));
+    if (unknownFields.length) {
+      throw new Error(
+        `Reverse-inference override for "${pageKey}" has unknown field(s): ${unknownFields.join(', ')}.`,
+      );
+    }
+
+    if (Object.hasOwn(override, 'zones')) {
+      if (!Array.isArray(override.zones)) {
+        throw new Error(`Override zones for "${pageKey}" must be an array.`);
+      }
+      entry.zones = cloneJson(override.zones);
+    }
+
+    if (Object.hasOwn(override, 'needsHypotheses')) {
+      if (
+        !override.needsHypotheses ||
+        typeof override.needsHypotheses !== 'object' ||
+        Array.isArray(override.needsHypotheses)
+      ) {
+        throw new Error(`Override needsHypotheses for "${pageKey}" must be an object.`);
+      }
+      entry.needsHypotheses = cloneJson(override.needsHypotheses);
+    }
+
+    const originalBodyCues = Array.isArray(entry.bodyCues)
+      ? entry.bodyCues.map((cue) => cloneJson(cue))
+      : [];
+    const originalBodyEvidence = new Set(
+      originalBodyCues.map((cue) => cue.evidenceKey).filter(Boolean),
+    );
+    let bodyCues = originalBodyCues;
+    let bodyCueChanged = false;
+
+    if (Object.hasOwn(override, 'bodyCueOrder')) {
+      if (!Array.isArray(override.bodyCueOrder)) {
+        throw new Error(`Override bodyCueOrder for "${pageKey}" must be an array.`);
+      }
+      if (new Set(override.bodyCueOrder).size !== override.bodyCueOrder.length) {
+        throw new Error(`Override bodyCueOrder for "${pageKey}" contains duplicate option IDs.`);
+      }
+
+      const byId = new Map(originalBodyCues.map((cue) => [cue.optionId, cue]));
+      bodyCues = override.bodyCueOrder.map((optionId) => {
+        const cue = byId.get(optionId);
+        if (!cue) {
+          throw new Error(
+            `Override bodyCueOrder for "${pageKey}" references unknown cue "${optionId}".`,
+          );
+        }
+        return cloneJson(cue);
+      });
+      bodyCueChanged = true;
+    }
+
+    if (Object.hasOwn(override, 'bodyCueOverrides')) {
+      if (
+        !override.bodyCueOverrides ||
+        typeof override.bodyCueOverrides !== 'object' ||
+        Array.isArray(override.bodyCueOverrides)
+      ) {
+        throw new Error(`Override bodyCueOverrides for "${pageKey}" must be an object.`);
+      }
+
+      const available = new Set(bodyCues.map((cue) => cue.optionId));
+      for (const optionId of Object.keys(override.bodyCueOverrides)) {
+        if (!available.has(optionId)) {
+          throw new Error(
+            `Override bodyCueOverrides for "${pageKey}" references unavailable cue "${optionId}".`,
+          );
+        }
+      }
+
+      bodyCues = bodyCues.map((cue) => {
+        const patch = override.bodyCueOverrides[cue.optionId];
+        return patch ? { ...cue, ...cloneJson(patch) } : cue;
+      });
+      bodyCueChanged = true;
+    }
+
+    if (bodyCueChanged) {
+      entry.bodyCues = bodyCues;
+      const nonBodyEvidence = (entry.evidenceKeys || []).filter(
+        (key) => !originalBodyEvidence.has(key),
+      );
+      entry.evidenceKeys = [
+        ...nonBodyEvidence,
+        ...bodyCues.map((cue) => cue.evidenceKey).filter(Boolean),
+      ];
+    }
+
+    if (Object.hasOwn(override, 'evidenceKeysAppend')) {
+      if (!Array.isArray(override.evidenceKeysAppend)) {
+        throw new Error(`Override evidenceKeysAppend for "${pageKey}" must be an array.`);
+      }
+      entry.evidenceKeys = Array.from(
+        new Set([...(entry.evidenceKeys || []), ...override.evidenceKeysAppend]),
+      );
+    }
+  }
+
+  return output;
+}
+"""
+          if 'function applyReverseInferenceOverrides(index, source)' not in source:
+              if source.count(helpers_anchor) != 1:
+                  raise SystemExit(f'Expected one bodyRegions anchor, found {source.count(helpers_anchor)}.')
+              source = source.replace(helpers_anchor, helpers, 1)
+
+          old_tail = """const reverseIndex = buildReverseInferenceIndex({ needs, feelings, bodyRegions });
+writeFileSync(join(DATA_DIR, 'reverse-inference.json'), `${JSON.stringify(reverseIndex, null, 2)}\n`);
+"""
+          new_tail = """const modelBodyRegions = bodyRegionsForInference(bodyRegions);
+const modelReverseIndex = buildReverseInferenceIndex({
+  needs,
+  feelings,
+  bodyRegions: modelBodyRegions,
+});
+const pageReverseIndex = restorePageFacingInferenceKeys(modelReverseIndex);
+const reverseInferenceOverrides = JSON.parse(
+  readFileSync(join(DATA_DIR, 'reverse-inference-overrides.json'), 'utf8'),
+);
+const reverseIndex = applyReverseInferenceOverrides(pageReverseIndex, reverseInferenceOverrides);
+writeFileSync(join(DATA_DIR, 'reverse-inference.json'), `${JSON.stringify(reverseIndex, null, 2)}\n`);
+"""
+          if new_tail not in source:
+              if source.count(old_tail) != 1:
+                  raise SystemExit(f'Expected one reverse-inference write block, found {source.count(old_tail)}.')
+              source = source.replace(old_tail, new_tail, 1)
+
+          path.write_text(source)
+          PY
+
+          node --check scripts/build-data.mjs
+          git diff --check
+
+      - name: Require direct compiler semantic equivalence
+        shell: bash
+        run: |
+          mkdir -p /tmp/bedrock-data-before /tmp/bedrock-data-first
+          cp data/index.json data/body-regions.json data/reverse-inference.json /tmp/bedrock-data-before/
+
+          node scripts/build-data.mjs
+          cp data/index.json data/body-regions.json data/reverse-inference.json /tmp/bedrock-data-first/
+
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const { isDeepStrictEqual } = require('node:util');
+          const files = ['index.json', 'body-regions.json', 'reverse-inference.json'];
+          let failed = false;
+          for (const file of files) {
+            const beforeText = fs.readFileSync(`/tmp/bedrock-data-before/${file}`, 'utf8');
+            const directText = fs.readFileSync(`data/${file}`, 'utf8');
+            const semantic = isDeepStrictEqual(JSON.parse(beforeText), JSON.parse(directText));
+            console.log(`${file}: exact=${beforeText === directText} semantic=${semantic}`);
+            if (!semantic) failed = true;
+          }
+          if (failed) process.exit(1);
+          NODE
+
+          node tests/data-integrity.test.mjs
+
+      - name: Require direct compiler byte determinism
+        shell: bash
+        run: |
+          node scripts/build-data.mjs
+          for file in index.json body-regions.json reverse-inference.json; do
+            if ! cmp -s "/tmp/bedrock-data-first/$file" "data/$file"; then
+              echo "Second direct data build changed data/$file."
+              diff -u "/tmp/bedrock-data-first/$file" "data/$file" | sed -n '1,200p'
+              exit 1
+            fi
+          done
+          echo "Second direct data build is byte-identical."
+
+      - name: Restore generated data and commit compiler source only
+        shell: bash
+        run: |
+          git checkout -- data/index.json data/body-regions.json data/reverse-inference.json
+
+          changed="$(git diff --name-only)"
+          if [ "$changed" != "scripts/build-data.mjs" ]; then
+            echo "Unexpected changed paths after restoring generated data:"
+            printf '%s\n' "$changed"
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- scripts/build-data.mjs
+          git commit -m "Make data compiler reproduce reviewed production semantics"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
