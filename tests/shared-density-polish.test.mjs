@@ -57,14 +57,12 @@ test('there is no browser-side DOM normalizer for static UI copy', async () => {
   assert.ok(!feed.includes("document.querySelectorAll('#main .inventory-header .page-description')"));
 });
 
-test('page compiler emits final user-facing markup without a post-generation UI repair pass', async () => {
+test('page compiler is the canonical authoring path and emits final user-facing markup', async () => {
   const packageJson = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
-  const safeBuilder = await fs.readFile(path.join(root, 'scripts/build-pages-safe.mjs'), 'utf8');
   const buildPages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
 
-  assert.equal(packageJson.scripts['build:pages'], 'node scripts/build-pages-safe.mjs');
-  assert.ok(safeBuilder.includes("runNode(stageRoot, 'scripts/build-pages.mjs'"));
-  assert.ok(!safeBuilder.includes('finalize-static-assets.mjs'));
+  assert.equal(packageJson.scripts['build:pages'], 'node scripts/build-pages.mjs');
+  await assert.rejects(fs.access(path.join(root, 'scripts/build-pages-safe.mjs')), { code: 'ENOENT' });
   await assert.rejects(fs.access(path.join(root, 'scripts/finalize-static-assets.mjs')), { code: 'ENOENT' });
 
   assert.ok(buildPages.includes("submitLabel: 'Save to device'"));
