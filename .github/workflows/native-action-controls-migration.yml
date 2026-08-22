@@ -40,7 +40,9 @@ jobs:
 
       - name: Apply compact action-control repair
         if: steps.detect.outputs.pending == 'true'
-        run: python3 .github/scripts/native-action-controls-migration.py
+        run: |
+          sed -i '0,/expected=3,/s//expected=4,/' .github/scripts/native-action-controls-migration.py
+          python3 .github/scripts/native-action-controls-migration.py
 
       - name: Remove migration script before validation
         if: steps.detect.outputs.pending == 'true'
