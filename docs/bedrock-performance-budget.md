@@ -8,7 +8,7 @@ This is deliberately a stable static metric, not a claim about real transferred 
 
 It does **not** include:
 
-- gzip/Brotli transfer compression;
+- gzip/Brotli/Zstandard transfer compression;
 - browser/CDN cache hits;
 - transitive ES-module imports;
 - JavaScript loaded later in response to user intent;
@@ -52,33 +52,48 @@ Two internal controller extractions have now reduced shared ownership without ch
 
 Raising one of these ceilings should be an explicit architectural decision. Prefer reducing ownership scope or extracting a real capability boundary rather than moving code between equally eager files merely to satisfy the test.
 
-## CSS delivery checkpoint
+## CSS and font delivery checkpoint
 
 The shared stylesheet is still broad, but its dependency graph is no longer hidden behind serial CSS imports. `styles.css` contains no `@import` rules. The page compiler now exposes Google Fonts, Feeling magnet icons, Need magnet icons, shared density, and Inventory shell styles directly in HTML before the main stylesheet, preserving the former cascade order while making those requests parser-discoverable immediately.
 
 The explicit hand-owned surfaces follow the same ownership rule: Feed, Observations, and the standalone Emotions Wheel declare the same blocking dependency order directly; Alexithymia Support declares the same graph through its existing non-blocking `media="print"`/`onload` strategy and mirrors it in its `<noscript>` fallback. The old late `@import './styles/nav-critical.css'` in `styles.css` was also removed because it occurred after ordinary rules and was therefore invalid/dormant; generated pages continue to receive repaired critical navigation CSS from the canonical page compiler.
 
-This is a delivery-graph improvement, not a claim that the CSS itself is fully minimized. Selector pruning, route-specific stylesheet ownership, and font packaging remain separate opportunities.
+Every page that requests the Google Fonts stylesheet now preconnects to both `fonts.googleapis.com` and `fonts.gstatic.com` first. `tests/font-delivery.test.mjs` enforces that ordering for every committed Google Fonts consumer and for the canonical page compiler, and the normal Site Quality and spreadsheet rebuild workflows run that delivery contract.
+
+This improves discovery/connection timing without changing typography or layout. Self-hosting, subsetting, or preloading font files would be a separate optimization and is not required merely to call the original Bedrock architecture complete.
+
+## Live production-delivery verification
+
+A one-shot live-header audit on 2026-08-22 verified the actual published delivery stack instead of assuming repository byte size equals network cost. The temporary audit workflow was removed after measurement.
+
+Observed behavior from `https://allneeds.app/` and representative static assets:
+
+- the public site is fronted by Cloudflare, with a Varnish-style upstream cache visible through `Via`/`X-Served-By` headers;
+- responses use HTTP/2 and correctly vary on `Accept-Encoding`;
+- HTML was served with Zstandard compression and `Cache-Control: max-age=600`;
+- CSS, JavaScript, and SVG responses were served compressed with gzip and `Cache-Control: max-age=14400`;
+- a repeated identical CSS request changed Cloudflare's status from `MISS` to `HIT`, confirming active edge caching for static assets.
+
+The exact encoding or cache node may vary by client/edge, but the important Bedrock conclusion is stable: production compression and static edge caching are active. There is no current architectural reason to add a repository-level pseudo-header layer or a second cache system just to satisfy the Bedrock finish line.
 
 ## What the current numbers tell us
 
-Bedrock has already removed a large amount of ordinary first-load work from Home and Shared Strategies, and the first controller extractions have produced measurable shared-route reductions. The site still has meaningful performance headroom:
+Bedrock has already removed a large amount of ordinary first-load work from Home and Shared Strategies, and the first controller extractions have produced measurable shared-route reductions. The site still has performance headroom, but not every possible optimization is a Bedrock blocker:
 
-1. **The shared Inventory controller remains large.** Need details, Feeling/Faux Feeling details, Inventory, Body Cues, and the dedicated Journal still eagerly load the roughly 225 KiB controller because some visible or shell behavior remains owned there. Further extraction should happen only where a real independent capability boundary exists; backup/restore, profile sync, and first-paint Customizer state are intentionally not being split merely to make the file smaller.
-2. **The global stylesheet remains broad.** `styles.css` is roughly 166 KiB. Its shared dependencies are now parser-visible rather than nested imports, so the next CSS gains should come from measuring actual unused selectors/route ownership rather than adding more discovery wrappers.
+1. **The shared Inventory controller remains large.** Need details, Feeling/Faux Feeling details, Inventory, Body Cues, and the dedicated Journal still eagerly load the roughly 225 KiB controller because some visible or shell behavior remains owned there. Further extraction should happen only where a real independent capability boundary exists; backup/restore, profile sync, Journal integration state, and first-paint Customizer state are intentionally not being split merely to make the file smaller.
+2. **The global stylesheet remains broad.** `styles.css` is roughly 166 KiB. Its shared dependencies are now parser-visible rather than nested imports, so future CSS gains should come from measuring actual unused selectors/route ownership rather than adding more discovery wrappers.
 3. **Magnet behavior is substantial.** `scripts/magnets.js` is roughly 60 KiB and is intentionally shared because magnet persistence/physics is a core interaction. Future work should profile its parse/execution cost before splitting it arbitrarily.
 4. **Dedicated feature surfaces are intentionally heavier.** Journal and Alexithymia Support own real interactive behavior. Their goal is not minimum bytes at any cost; it is to avoid loading unrelated capabilities and to keep expensive work off routes that do not need it.
 
-## Remaining performance work after Bedrock behavior is accepted
+## Further performance work after Bedrock acceptance
 
-The highest-value order is expected to be:
+These remain useful future optimizations, but they should be driven by measured browser benefit rather than continually moving the original Bedrock completion line:
 
-1. continue capability extraction from `inventory.js` only where a real independent owner exists;
-2. expand lazy-controller route ownership only after each candidate route passes explicit browser/device acceptance;
-3. audit `styles.css` and the directly linked shared CSS by route, moving deterministic route-only presentation to explicit route stylesheets where that lowers unused CSS without changing first paint;
-4. measure and improve font delivery (for example self-hosting/subsetting/preload only if the browser data supports it);
-5. add production minification, content-versioned assets, and deliberate long-lived cache policy;
-6. verify CDN/Cloudflare gzip/Brotli and cache headers rather than assuming raw repository size equals transfer size;
-7. use real-browser measurements for LCP, INP, CLS, long tasks, memory, and request waterfalls, then optimize whichever metric is actually limiting users.
+1. extract additional `inventory.js` capabilities only when a clean independent owner exists;
+2. expand lazy-controller ownership only after each candidate route passes explicit browser/device acceptance;
+3. measure unused CSS by route before pruning selectors or creating route-specific bundles;
+4. consider self-hosted/subset fonts only if real browser data shows external font delivery is materially limiting first paint;
+5. consider minification, content-versioned assets, and longer immutable cache lifetimes as a post-Bedrock packaging phase;
+6. use real-browser measurements for LCP, INP, CLS, long tasks, memory, and request waterfalls, then optimize whichever metric is actually limiting users.
 
 There is no meaningful state where a non-trivial web app is "as efficient as humanly possible." Performance has diminishing returns and tradeoffs. Bedrock's goal is instead to make ownership explicit enough that future performance work is measurable, safe, and local: reduce bytes/work where users benefit, without sacrificing correctness, accessibility, persistence, or maintainability.
