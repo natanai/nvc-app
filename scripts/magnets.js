@@ -757,7 +757,7 @@ const candidateOverlapsFixedObstacle = (state, magnet, x, y, obstacles) => {
   return obstacles.find((obstacle) => rectsOverlap(bounds, obstacle)) || null;
 };
 
-const resolveFixedObstacleOverlaps = (state) => {
+const resolveFixedObstacleOverlaps = (state, { allowReseed = true } = {}) => {
   if (!state?.magnets?.length) return false;
   const obstacles = getFixedObstacleRects(state);
   if (!obstacles.length) return false;
@@ -798,7 +798,7 @@ const resolveFixedObstacleOverlaps = (state) => {
   state.magnets.forEach((magnet) => setMagnetTransform(magnet));
   updateBoardHeight(state);
 
-  if (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state)) {
+  if (allowReseed && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state))) {
     applyRowPackedLayout(state, state.magnets, { persist: false });
   } else {
     updateLayout(state);
@@ -1836,8 +1836,9 @@ const initializeBoard = async (root, index) => {
     updateBoardHeight(state);
     updateLayout(state);
     state.lastLayoutType = 'restored';
-    if (!isNavBoardState(state) && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state))) {
-      shouldSeed = true;
+    if (!isNavBoardState(state) && layoutHasFixedObstacleOverlap(state)) {
+      resolveFixedObstacleOverlaps(state, { allowReseed: false });
+      updateLayout(state);
     }
   }
 

@@ -58,3 +58,26 @@ test('journal save reset preserves confirmation and does not refocus an empty dr
     'saved-entry focus must prefer the visible overlay history when the overlay is open',
   );
 });
+
+
+test('restored category hub layouts keep manual overlap instead of reseeding the board', () => {
+  const magnets = read('scripts/magnets.js');
+
+  assert.ok(
+    magnets.includes('const resolveFixedObstacleOverlaps = (state, { allowReseed = true } = {}) => {'),
+    'fixed-obstacle repair must be able to preserve a restored user layout without global reseeding',
+  );
+  assert.ok(
+    magnets.includes('if (allowReseed && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state)))'),
+    'global repacking must be explicitly opt-in at the obstacle resolver',
+  );
+  assert.ok(
+    !magnets.includes("if (!isNavBoardState(state) && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state))) {\n      shouldSeed = true;"),
+    'a restored category hub must not discard all saved coordinates just because magnets overlap',
+  );
+  assert.match(
+    magnets,
+    /state\.lastLayoutType = 'restored';[\s\S]*?layoutHasFixedObstacleOverlap\(state\)[\s\S]*?resolveFixedObstacleOverlaps\(state, \{ allowReseed: false \}\)/,
+    'restored category hubs may repair the fixed toggle locally without repacking every magnet',
+  );
+});
