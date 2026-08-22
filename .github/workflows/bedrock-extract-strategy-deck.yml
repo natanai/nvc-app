@@ -1,25 +1,24 @@
 name: Bedrock extract strategy deck runtime
 
 on:
-  pull_request:
-    branches: [inventory-core-overhaul]
+  push:
+    branches: [bedrock/production-finalization-v2]
 
 permissions:
   contents: write
 
 concurrency:
-  group: bedrock-extract-strategy-deck-${{ github.event.pull_request.number }}
+  group: bedrock-extract-strategy-deck
   cancel-in-progress: false
 
 jobs:
   extract-strategy-deck:
-    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Bedrock head branch
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: bedrock/production-finalization-v2
           fetch-depth: 1
 
       - name: Prove extracted runtime matches the old inline owner
@@ -48,7 +47,6 @@ jobs:
               print(diff[:12000])
               raise SystemExit('strategy-deck.js is not an exact extraction of the existing IIFE.')
 
-          # Remove only the proven tail block.
           inventory_path.write_text(source[:start].rstrip() + '\n')
           PY
 
@@ -131,4 +129,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- scripts/inventory.js scripts/build-pages.mjs needs
           git commit -m "Extract Need strategy deck from Inventory controller"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin HEAD:bedrock/production-finalization-v2
