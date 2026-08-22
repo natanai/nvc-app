@@ -1,83 +1,86 @@
 # Bedrock offline-cache architecture
 
-## Goal
+## Status during Bedrock acceptance
 
-allneeds.app is mostly a static application: generated HTML pages, shared JavaScript, CSS, icons, and generated JSON are served from the same origin. That makes it a strong candidate for a service-worker-backed warm cache.
+The earlier root-scoped service-worker cache canary is **retired** on the Bedrock test branch.
 
-The target user experience is not a blocking splash screen. Home should become usable as soon as its normal critical resources are ready. After that, a small unobtrusive progress indicator may warm the rest of the static application in the background. When that warm pass finishes, ordinary static navigation should be satisfiable from Cache Storage without waiting on the network.
+That experiment was useful for proving that allneeds.app is technically a strong candidate for a warm static cache, but it was a poor fit for the current rapid phone-acceptance loop: an installed root worker could place Cache Storage in front of freshly published test-branch HTML/CSS/JavaScript and make a real-device regression appear to persist after its source had already changed.
 
-Dynamic online capabilities are a separate ownership class and must not be presented as offline:
+Bedrock therefore does not currently install or use a service worker for ordinary navigation or static assets.
+
+`scripts/shell-runtime-loader.js` now performs a bounded cleanup after normal Home load/idle time on browsers that received the experiment:
+
+- it finds a lingering `/service-worker.js` registration and unregisters it;
+- it removes only Cache Storage entries whose names begin with `allneeds-static-`;
+- it does not register a replacement cache worker;
+- it does not intercept requests or implement another navigation owner.
+
+`service-worker.js` remains temporarily as a retirement shim for browsers that already installed the old worker. If the browser requests an update to that registration, the shim immediately replaces the old worker, removes only the retired `allneeds-static-*` cache namespace, unregisters itself, and owns no `fetch` events.
+
+This retirement path is CI-enforced in `tests/offline-cache.test.mjs`.
+
+## Why this is the right Bedrock boundary
+
+The original Bedrock finish line is deterministic ownership, preserved behavior/state, less unnecessary runtime work, and clean real-device first-paint/navigation behavior. A whole-site offline cache is not required to satisfy that goal.
+
+Keeping Cache Storage out of the test branch's ordinary request path makes phone acceptance easier to reason about:
+
+```text
+publish new Bedrock source
+        ↓
+normal browser/network cache rules
+        ↓
+phone receives the current test assets
+```
+
+rather than:
+
+```text
+publish new Bedrock source
+        ↓
+old root service worker may answer first
+        ↓
+phone can continue showing an obsolete test asset
+```
+
+On a phone that previously installed the canary, visit Home once and reload before judging a newly published visual/runtime repair. That gives the retirement path an opportunity to clear the old registration and cache namespace.
+
+## Post-Bedrock warm-cache opportunity
+
+allneeds.app remains unusually well suited to a deliberately designed warm/offline layer after Bedrock is accepted. Most of the application is static: generated HTML, same-origin CSS/JavaScript/icons, and generated JSON. Canonical `data/index.json` already identifies the generated Feeling, Need, and Faux Feeling vocabulary routes, so a future warmer would not need a second handwritten route registry.
+
+The target user experience should still be **render first, warm second**, not a blocking splash screen:
+
+1. Home becomes usable through its normal critical path.
+2. A small optional progress indicator begins after first render/idle time.
+3. Static application resources warm in bounded batches.
+4. A complete versioned cache is promoted only after its entire declared asset set is ready.
+5. Ordinary static navigation can then be served locally for that complete version.
+6. Dynamic online capabilities remain outside that static owner.
+
+A future implementation should use versioned/atomic cache ownership so an update never leaves the browser with a mixture of two application versions.
+
+## Dynamic capabilities remain online
+
+Even a future fully warmed static application should not pretend these are offline:
 
 - Bluesky OAuth and profile synchronization;
 - Shared Strategies/community network data;
-- any future authenticated or mutating API request;
-- third-party resources such as Google Fonts until those fonts are intentionally self-hosted.
+- authenticated or mutating API requests;
+- third-party resources such as Google Fonts unless they are intentionally self-hosted.
 
-## Bedrock canary
+Browsers may also evict Cache Storage under storage pressure, and a new allneeds release necessarily needs to download its new version once.
 
-The first service-worker milestone is intentionally narrower than the final warm-cache design.
+The useful future promise is therefore not literally "the browser never performs another network operation." It is: **after a complete static version is warmed, ordinary application navigation can have no user-visible network wait while online-only capabilities remain explicit.**
 
-Home already owns the lazy-runtime canary through `scripts/shell-runtime-loader.js`. That same small loader now owns service-worker registration during Bedrock testing. Registration happens only after the window `load` event and then during idle time when `requestIdleCallback` is available, so service-worker setup is not added to Home's critical parser/first-paint path.
+## Gate for revisiting this after Bedrock
 
-`service-worker.js` is rooted at `/`, giving it authority over the whole static site after registration. The canary:
+Do not reintroduce a root-scoped navigation cache during the remaining Bedrock acceptance/refactor cycle. Revisit whole-site warming only after:
 
-1. precaches a small core set: Home, global CSS, the manifest, shared shell/magnet runtimes, directly imported shell styles, and `data/index.json`;
-2. intercepts only same-origin `GET` requests;
-3. refuses `/api/` paths, requests carrying an `Authorization` header, cross-origin requests, and all mutations;
-4. serves an already cached static response immediately and refreshes it in the background;
-5. stores a successful same-origin response after the first network visit;
-6. does **not** substitute Home HTML for an uncached deep route when offline;
-7. deletes obsolete allneeds static-cache versions when a new cache version activates.
+- Home and representative mobile/desktop routes have passed the real-device first-paint and persistence checklist;
+- the magnet object-permanence/scrolling issues are accepted on phone;
+- remaining high-value runtime ownership work is complete or intentionally deferred;
+- the rapidly changing test branch no longer needs immediate asset visibility on every publish;
+- a versioned cache manifest/derivation strategy and update/rollback behavior are designed together rather than added incrementally.
 
-A failed optional core fetch does not prevent the service worker from installing. This keeps the cache layer an acceleration/offline feature rather than a new single point of failure.
-
-## Why the first version does not download the entire site
-
-There are roughly 180 generated pages plus standalone app surfaces. Their HTML repeats intentionally in order to preserve static-first rendering, accessibility, per-page metadata, and relative-link behavior. Downloading every page before allowing Home to become usable would move work away from later navigation but make the most important first visit slower and more data-heavy.
-
-The desired architecture is therefore **render first, warm second**.
-
-A future full-site warmer should:
-
-1. wait for Home's ordinary load and the service-worker canary to be healthy on real devices;
-2. derive Feeling, Need, and Faux Feeling routes from canonical `data/index.json` rather than maintaining a second handwritten list of generated vocabulary routes;
-3. add the fixed app surfaces (Home, indexes, Observations, Body Cues, Inventory, Journal, Guided Check-in, Shared Strategies, Emotions Wheel, and any other deliberate standalone route);
-4. discover or compile every browser-owned same-origin CSS/JS/icon/data dependency under an explicit offline ownership contract;
-5. warm in bounded batches so low-memory phones are not flooded with simultaneous requests;
-6. report progress to Home through `postMessage` so a small progress bar can represent the background warm operation;
-7. preserve the previous complete cache until the new version has finished warming, then atomically promote the new cache and retire the old one;
-8. record completion per cache version so an already-warm browser does not repeat the whole download on every visit;
-9. degrade gracefully if the browser denies storage, evicts Cache Storage, loses connectivity mid-warm, or does not support service workers.
-
-## Loading indicator
-
-The proposed progress UI should be informational, not a gate. A first-time visitor should be able to use Home while the bar advances. Suggested copy is closer to "Preparing allneeds for faster/offline use" than "Loading site", because the page is already usable.
-
-The indicator should appear only while meaningful background work is occurring and disappear after completion. If warming fails or is interrupted, the application remains usable and the worker can resume or retry on a later visit.
-
-## What "never load again" can and cannot mean
-
-Once a complete static cache is warm, ordinary pages and same-origin static resources can be returned without a network wait. This can make navigation feel effectively instantaneous and can support offline use.
-
-It cannot guarantee that a browser will literally never perform another network operation:
-
-- browsers may evict cache data under storage pressure;
-- application updates need a way to fetch the new version;
-- authenticated/community features inherently depend on remote services;
-- third-party fonts/resources are outside the allneeds service-worker origin;
-- browsers retain control over HTTP cache, Cache Storage quotas, memory, and process lifetime.
-
-The practical target is stronger and more useful: **no user-visible network wait for already-warmed static application behavior, while online-only capabilities remain explicit and updates remain safe.**
-
-## Acceptance gate before full-site warming
-
-Do not expand the Home canary into whole-site prewarming until desktop/mobile acceptance verifies:
-
-- first Home render is not delayed or visually shifted by worker registration;
-- Home, Menu, Customizer, Inventory count, Journal intent, and early first interaction still behave correctly;
-- navigating to a previously visited static page can be served from the cache without regressions;
-- refreshing and revisiting after a service-worker update does not create mixed-version behavior;
-- Bluesky sign-in/profile restore and Shared Strategies continue using their real network owners rather than Cache Storage;
-- disabling network after cached visits produces honest behavior: cached surfaces work and uncached/dynamic surfaces fail without misleading substitutions.
-
-Once that gate passes, the full-site background warmer and progress indicator are the next offline-performance milestone.
+At that point, full-site background warming and its progress indicator can be treated as a separate performance/PWA milestone without moving the Bedrock completion goal.
