@@ -86,7 +86,7 @@ Pass condition: the primary Inventory surface and lazy Shared Strategies route r
 8. Confirm Tags remains a free-form field and shows useful examples such as `work, weekend, boundaries` when empty.
 9. Save a temporary entry with at least two Feelings at different non-zero intensities, multiple Needs, and multiple Tags. Confirm Journal History displays each Feeling with its own intensity rather than one intensity for the whole entry.
 10. Edit that entry and confirm every Feeling/intensity pair, Need, and Tag is restored correctly, then save the edit.
-11. In Journal History, exercise Search and the Feeling, Need, Tag, Date, and Sort controls. For a multi-feeling entry, confirm filtering by either individual Feeling finds the entry. Confirm **Clear** returns to the unfiltered history.
+11. In Journal History, exercise Search and the Feeling, Need, Tag, Date, and Sort controls. For a multi-feeling entry, confirm filtering by either individual Feeling finds the entry. Confirm **Clear filters** returns to the unfiltered history and disappears again afterward.
 12. Delete the temporary entry.
 13. Open the Journal overlay from one ordinary non-Journal page and confirm it opens on the first tap and uses the same per-Feeling intensity selector and Needs popup.
 14. Repeat the editor check once with Safari's on-screen keyboard visible from another field and once after the browser chrome has collapsed/expanded.
@@ -100,12 +100,13 @@ These are the screenshot-derived surfaces that were rebuilt at their canonical o
 #### Dedicated Journal / History
 
 1. Open the dedicated Journal page. The top of the page should be a compact **Journal** title with one **New entry** action, not a large Journal hero card with explanatory copy.
-2. **History** should be the first substantial surface on the page. Search should be immediately available, with Feeling, Need, Tag, Date, Sort, and Clear presented as a compact horizontally scrollable filter row on a phone rather than large stacked filter panels.
-3. Saved entries should scan like a dense native log/list: Feeling/intensity first, quiet date metadata, a concise note body when present, small Need/Tag facets, and secondary Edit/Delete actions. Entries should be separated without each becoming another heavy shadowed card.
-4. **Patterns** is a core Journal surface: its collapsed row should identify it as trends across entries, and opening it with no entries should explain that recurring feelings, needs, tags, and intensity trends will appear as entries accumulate. **Backup & restore** remains available below it but visually quieter.
-5. Confirm the full-screen Journal editor still opens from **New entry** and that the accepted per-Feeling intensity, Needs popup, and Tags interactions from section 6 are unchanged.
+2. With no saved entries, **History** should show a purposeful empty state explaining that history, filters, and patterns grow after the first entry; Search and filter controls should not be shown because there is nothing to search or filter.
+3. After at least one entry exists, Search and the relevant filter dimensions should appear. Neutral picker values must be contextual—**Any feeling**, **Any need**, **Any tag**, **Any time**—rather than a row of ambiguous **All** values. A filter dimension with no available values should stay out of the UI, and **Clear filters** should appear only when a filter is active.
+4. Saved entries should scan like a dense native log/list: Feeling/intensity first, quiet date metadata, a concise note body when present, small Need/Tag facets, and secondary Edit/Delete actions. Entries should be separated without each becoming another heavy shadowed card.
+5. **Patterns** is a core Journal surface: its collapsed row should identify it as trends across entries, and opening it with no entries should explain that recurring feelings, needs, tags, and intensity trends will appear as entries accumulate. **Backup & restore** remains available below it but visually quieter.
+6. Confirm the full-screen Journal editor still opens from **New entry** and that the accepted per-Feeling intensity, Needs popup, and Tags interactions from section 6 are unchanged.
 
-Pass condition: History and Patterns read as the two core dedicated-Journal surfaces; filters and entries are easy to scan within one phone viewport; Clear filters only appears when there is something to clear; Backup remains secondary; and the fallback editor is visually pushed back, compact when closed, and uses the available width when deliberately opened.
+Pass condition: History and Patterns read as the two core dedicated-Journal surfaces; empty history does not expose meaningless controls; populated filters use self-explanatory neutral labels; entries are easy to scan within one phone viewport; Clear filters only appears when there is something to clear; Backup remains secondary; and the fallback editor is visually pushed back, compact when closed, and uses the available width when deliberately opened.
 
 #### Need-page Strategies
 
