@@ -43,3 +43,23 @@ test('Journal uses one compact horizontal Clear and Save action row', () => {
   assert.ok(inventory.includes("state.journalController.markSaved('Saved', 1500)"));
   assert.ok(inventory.includes("Saved. Your entry is in Journal History below. The form is ready for a new entry."));
 });
+
+test('Journal and personal strategy density live at canonical owners across phone and desktop', () => {
+  const moduleSource = read('assets/js/journal/module.js');
+  const pages = read('scripts/build-pages.mjs');
+  const styles = read('styles.css');
+  const readme = read('README.md');
+
+  assert.ok(moduleSource.includes("emotion: 'Use any word that fits. Leave blank if unsure.'"));
+  assert.ok(moduleSource.includes("needs: 'Choose any needs that connect. Leave blank if unsure.'"));
+  assert.ok(moduleSource.includes("this.needsSummaryEl.hidden = !hasSelection"));
+  assert.match(styles, /@media \(min-width: 860px\)[\s\S]*?\.journal-form__grid,[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.journal-form__field,[\s\S]*?border:\s*1px solid/);
+  assert.match(styles, /\.strategy-card--form \{[\s\S]*?border-width:\s*2px;[\s\S]*?box-shadow:\s*0 6px/);
+  assert.match(styles, /\.strategy-card--form \.strategy-card--input \{[\s\S]*?border-width:\s*2px;[\s\S]*?box-shadow:\s*0 3px/);
+  assert.ok(styles.includes('min-height: 6.5rem'));
+  assert.ok(pages.includes('strategy-card strategy-card--form'), 'generated strategy forms must still originate in the page compiler');
+  assert.equal(styles.includes('.inventory-journal-form__actions .inventory-button'), false);
+  assert.ok(readme.includes('### Root-level UX changes'));
+  assert.ok(readme.includes('Do not edit generated HTML as the source of a UI fix.'));
+});

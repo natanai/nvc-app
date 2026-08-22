@@ -186,10 +186,10 @@ const JOURNAL_BASE_CONFIG = {
     notes: 'Reflection',
   },
   hints: {
-    emotion: 'Use any word that fits. Unsure? Leave it blank for now.',
-    intensity: 'Slide to note how strong the feeling is.',
-    needs: 'Pick one or more needs that connect. Selected needs appear below so you can double-check them. Leave blank if you are not sure yet.',
-    tags: 'Separate tags with commas so you can filter later.',
+    emotion: 'Use any word that fits. Leave blank if unsure.',
+    intensity: 'How strong is it right now?',
+    needs: 'Choose any needs that connect. Leave blank if unsure.',
+    tags: 'Separate tags with commas.',
     notes: '',
   },
   placeholders: {
@@ -464,6 +464,7 @@ const buildNeedsField = (config) => {
     attrs: {
       'data-journal-needs-summary': '',
       'aria-live': 'polite',
+      hidden: true,
     },
   });
   const summaryLabel = createElement('div', {
@@ -1045,6 +1046,9 @@ class JournalFormController {
       this.needsSummaryList.append(item);
     });
     const hasSelection = labels.length > 0;
+    if (this.needsSummaryEl) {
+      this.needsSummaryEl.hidden = !hasSelection;
+    }
     if (this.needsSummaryEmpty) {
       this.needsSummaryEmpty.hidden = hasSelection;
     }

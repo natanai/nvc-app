@@ -21,6 +21,18 @@ The final architecture should not depend on a second layer repairing what the fi
 - full profile/backup restoration is one storage transaction: localStorage plus required session mirrors must be coherent before the current document rehydrates;
 - compatibility wrappers are migration scaffolding, not production architecture.
 
+### Root-level UX changes
+
+Bedrock changes how UI work should be made, not just how the current site happens to look. Before changing a rendered screen, trace the element back to the layer that actually owns it, then change that owner.
+
+- **Generated markup:** edit the template/compiler that emits it (normally `scripts/build-pages.mjs`), then rebuild. **Do not edit generated HTML as the source of a UI fix.**
+- **Deterministic presentation:** edit the existing component/style owner that should define the final first-paint appearance. Do not append a late corrective override merely to cancel an older rule; consolidate or remove the older rule so one layer remains authoritative.
+- **Runtime behavior:** JavaScript should own genuinely stateful behavior such as user choices, persisted data, authentication, drag state, or interaction lifecycle. It should not rewrite deterministic markup or CSS after paint just to make the page look correct.
+- **Responsive design:** start from one shared component contract. Use narrow-screen rules for genuine space constraints and wider-screen rules to use available room (for example, additional columns), rather than maintaining separate mobile and desktop versions of the same UI.
+- **Regression proof:** preserve accessibility hooks and storage contracts, add or update a focused test for the ownership/UX invariant, run the canonical build, and require zero generated diff on the clean final head.
+
+If you cannot name the canonical markup owner, style owner, and behavior owner for the thing you are changing, trace those first. A screenshot-specific override, generated-file edit, duplicate controller, or post-paint normalizer is not a Bedrock repair.
+
 ### Current Bedrock status
 
 The core page and data authoring pipelines have completed their canonicalization passes:
