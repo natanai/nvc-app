@@ -111,8 +111,6 @@ jobs:
             exit 1
           fi
 
-          # Export was already proven byte-identical; restore it explicitly so
-          # the later full-build reproducibility check starts from a clean tree.
           git checkout -- fact-checking
 
       - name: Build site
@@ -173,3 +171,108 @@ jobs:
           else
             echo "Authoring pipeline has reproducibility debt; see the build/artifact check above."
           fi
+
+  extract-strategy-deck:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'bedrock/production-finalization-v2'
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Bedrock head branch
+        uses: actions/checkout@v7
+        with:
+          ref: bedrock/production-finalization-v2
+          fetch-depth: 1
+
+      - name: Prove extracted runtime matches old Inventory tail exactly
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          inventory_path = Path('scripts/inventory.js')
+          deck_path = Path('scripts/strategy-deck.js')
+          source = inventory_path.read_text()
+          marker = "\n(function () {\n  const stack = document.querySelector('[data-strategy-stack]');"
+          start = source.rfind(marker)
+          if start < 0:
+              raise SystemExit('Could not find the self-contained strategy-deck IIFE at inventory.js tail.')
+          original = source[start + 1:]
+          expected = original.replace('(function () {', '(function initStrategyDeck() {', 1)
+          actual = deck_path.read_text()
+          if actual != expected:
+              import difflib
+              print(''.join(difflib.unified_diff(
+                  expected.splitlines(True), actual.splitlines(True),
+                  fromfile='expected-from-inventory.js', tofile='scripts/strategy-deck.js', n=3,
+              ))[:12000])
+              raise SystemExit('strategy-deck.js is not an exact extraction of the existing IIFE.')
+          inventory_path.write_text(source[:start].rstrip() + '\n')
+          PY
+          node --check scripts/inventory.js
+          node --check scripts/strategy-deck.js
+
+      - name: Give Need pages the route-specific deck owner
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/build-pages.mjs')
+          source = path.read_text()
+          old = """        scripts: [
+      { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
+    ],"""
+          new = """        scripts: [
+      { src: 'scripts/strategy-deck.js', defer: true },
+      { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
+    ],"""
+          if source.count(old) != 1:
+              raise SystemExit(f'Expected exactly one Need-page scripts block; found {source.count(old)}.')
+          path.write_text(source.replace(old, new, 1))
+          PY
+          node --check scripts/build-pages.mjs
+          node scripts/build-pages.mjs --scope needs
+          git diff --check
+
+      - name: Reject collateral output and validate ownership
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const cp = require('node:child_process');
+          const data = JSON.parse(fs.readFileSync('data/index.json', 'utf8'));
+          const needPages = new Set((data.needs || []).map(item => `needs/${item.slug}/index.html`));
+          const allowed = new Set(['scripts/inventory.js', 'scripts/build-pages.mjs', ...needPages]);
+          const changed = cp.execFileSync('git', ['diff', '--name-only'], { encoding: 'utf8' })
+            .trim().split(/\r?\n/).filter(Boolean);
+          const unexpected = changed.filter(path => !allowed.has(path));
+          if (unexpected.length) {
+            console.error(`Unexpected paths:\n${unexpected.join('\n')}`);
+            process.exit(1);
+          }
+          for (const page of needPages) {
+            const html = fs.readFileSync(page, 'utf8');
+            if (!html.includes('scripts/strategy-deck.js')) {
+              console.error(`${page} is missing strategy-deck.js`);
+              process.exit(1);
+            }
+          }
+          if (fs.readFileSync('scripts/inventory.js', 'utf8').includes("const stack = document.querySelector('[data-strategy-stack]');")) {
+            throw new Error('inventory.js still owns the strategy deck.');
+          }
+          console.log(`Verified route-specific strategy-deck ownership on ${needPages.size} Need pages.`);
+          NODE
+
+      - name: Run focused regressions
+        run: |
+          npm run test:flicker-jitter
+          npm run test:generator-ownership
+          npm run test:data-integrity
+
+      - name: Commit extraction
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- scripts/inventory.js scripts/build-pages.mjs needs
+          git commit -m "Extract Need strategy deck from Inventory controller"
+          git push origin HEAD:bedrock/production-finalization-v2
