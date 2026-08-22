@@ -160,7 +160,7 @@ jobs:
           rows = []
           with open('data/Feelings.csv', newline='', encoding='utf-8-sig') as handle:
               for line_no, row in enumerate(csv.DictReader(handle), start=2):
-                  if (row.get('Row Type', '').strip().lower() != 'cue':
+                  if row.get('Row Type', '').strip().lower() != 'cue':
                       continue
                   region = row.get('Cue Region ID', '').strip()
                   option = row.get('Cue Option ID', '').strip()
