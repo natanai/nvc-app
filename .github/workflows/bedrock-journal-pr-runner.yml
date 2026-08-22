@@ -28,11 +28,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Correct one-shot matchers
-        run: node scripts/.fix-journal-refactor-patterns.mjs
-
-      - name: Apply root-level Journal refactor
-        run: node scripts/.bedrock-journal-native-refactor.mjs
+      - name: Apply final root-level Journal refactor
+        run: node scripts/.bedrock-journal-native-finalize.mjs
 
       - name: Regenerate canonical pages
         run: npm run build:pages
@@ -51,29 +48,37 @@ jobs:
           npm run test:nav-magnets
           node tests/body-cues-static-first.test.mjs
           npm run test:generator-ownership
-          npm run test:obsolete
           npm run test:performance
           npm run test:delivery
 
-      - name: Verify authoring build
+      - name: Verify canonical authoring build
         run: npm run build
         env:
           LINK_CHECK_REPORT_ONLY: '1'
 
-      - name: Remove one-shot Bedrock scaffolding
+      - name: Remove all one-shot Bedrock scaffolding
         run: |
-          rm scripts/.bedrock-journal-native-refactor.mjs
-          rm scripts/.fix-journal-refactor-patterns.mjs
-          rm .github/workflows/bedrock-journal-native-refactor.yml
+          rm -f scripts/.bedrock-journal-native-refactor.mjs
+          rm -f scripts/.fix-journal-refactor-patterns.mjs
+          rm -f scripts/.bedrock-journal-native-finalize.mjs
+          rm -f .github/workflows/bedrock-journal-native-refactor.yml
 
-      - name: Commit and prove clean head
+      - name: Verify obsolete architecture stays gone
+        run: npm run test:obsolete
+
+      - name: Commit tested Bedrock result
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'Unify Journal metadata and history UX'
+
+      - name: Prove final head is byte deterministic
+        run: |
           npm run build
           git diff --exit-code
-          git push origin HEAD:bedrock/production-finalization-v2
         env:
           LINK_CHECK_REPORT_ONLY: '1'
+
+      - name: Push tested Bedrock head
+        run: git push origin HEAD:bedrock/production-finalization-v2
