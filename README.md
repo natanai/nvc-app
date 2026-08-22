@@ -21,23 +21,24 @@ The final architecture should not depend on a second layer repairing what the fi
 - full profile/backup restoration is one storage transaction: localStorage plus required session mirrors must be coherent before the current document rehydrates;
 - compatibility wrappers are transitional scaffolding, not the desired final architecture.
 
-### Current Bedrock transition
+### Current Bedrock status
 
-The historical generators are being canonicalized in small, regression-guarded slices:
+Page generation has completed its canonicalization pass. Data generation is the remaining transitional authoring layer:
 
-- `scripts/build-pages.mjs` now emits the current user-facing static copy directly. The former `scripts/finalize-static-assets.mjs` post-generation UI repair pass has been deleted after the full build proved all 180 owned page outputs remained byte-stable without it.
-- `scripts/build-pages-safe.mjs` is still transitional. It runs the legacy page generator in an isolated staging copy and publishes only declared route outputs because `build-pages.mjs` still contains historical recursive directory-reset behavior and some serialization compatibility debt. The next page-compiler milestone is to move that ownership protection into `build-pages.mjs` itself and then delete the safe wrapper.
-- the **Push Poems** workflow now rebuilds through the ownership-safe scoped page command and stages only declared outputs rather than invoking the destructive generator/finalizer pair or using `git add -A`.
-- `scripts/build-data-safe.mjs` similarly isolates the historical data compiler and publishes only declared outputs.
+- `scripts/build-pages.mjs` is the canonical owner for all 180 generated page outputs. It has explicit route scopes, does not recursively reset mixed-ownership directories, and directly emits the final committed HTML, including the shared navigation serialization, prepaint-critical navigation CSS, and canonical shell script order.
+- the former `scripts/finalize-static-assets.mjs` post-generation repair pass and `scripts/build-pages-safe.mjs` staging/semantic-preservation wrapper have been deleted. Direct generation was converged against all 180 owned outputs, the complete page regression suite passed, and the normal authoring build added no further page diff.
+- `npm run build:pages` now invokes `scripts/build-pages.mjs` directly. CI verifies generator ownership first, then runs the real authoring build and fails if generated artifacts differ from the committed tree.
+- the **Push Poems** workflow rebuilds through the same ownership-scoped page compiler and stages only declared outputs rather than invoking a destructive generator/finalizer pair or using `git add -A`.
+- `scripts/build-data-safe.mjs` still isolates the historical data compiler and publishes only declared outputs.
 - `scripts/finalize-generated-data.mjs` currently normalizes historical Body Cues/source-model inconsistencies. Those rules should ultimately live in the canonical data compiler/source model rather than a second pass.
 - `data/reverse-inference.json` is currently treated conservatively as a reviewed production asset because the historical reverse-inference formula does not yet reproduce all of its live semantics. It must not be silently regenerated until that source model is reconciled.
 
-The target is to delete the remaining safety/finalization layers once `build-pages.mjs` and `build-data.mjs` directly own their exact outputs and reproduce the committed production tree deterministically. Bedrock status and protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
+The next authoring milestone is therefore the same operation on data: make `build-data.mjs` directly own the exact production JSON, reconcile the reviewed reverse-inference source model, then delete `build-data-safe.mjs` and `finalize-generated-data.mjs`. Bedrock status and protected runtime invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, and `docs/bedrock-route-runtime-matrix.md`.
 
 ## How information is organised
 
 - Core editable content lives primarily in `data/*.csv` plus the reviewed JSON/template sources described in the fact-checking playbook. Editors should change the canonical source rather than generated output.
-- `npm run build:data` currently routes through the ownership-safe data builder; `npm run build:pages` routes through the ownership-safe page builder.
+- `npm run build:pages` invokes the canonical page compiler directly. `npm run build:data` still routes through the transitional ownership-safe data builder while the data source model is canonicalized.
 - Generated pages store citation metadata from `_evidence/` so each claim on a need page can be traced back to its source.
 - Generated output is committed, but it is not an authoring source. A correct source change should be reproducible from a clean checkout.
 
@@ -143,8 +144,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 └── scripts/
     ├── build-data.mjs
     ├── build-data-safe.mjs    # transitional ownership/safety wrapper
-    ├── build-pages.mjs
-    ├── build-pages-safe.mjs   # transitional ownership/safety wrapper
+    ├── build-pages.mjs        # canonical page compiler
     └── finalize-generated-data.mjs # transitional data normalization
 ```
 

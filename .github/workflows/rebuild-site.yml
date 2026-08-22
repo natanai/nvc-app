@@ -40,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Rebuild dataset and pages in ownership-safe staging
+      - name: Rebuild dataset and pages through declared owners
         run: |
           npm run build:data
           npm run build:pages
