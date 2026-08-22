@@ -73,6 +73,11 @@ jobs:
         if: always()
         run: npm run test:generator-ownership
 
+      - name: Verify retired architecture stays retired
+        id: obsolete-architecture
+        if: always()
+        run: npm run test:obsolete
+
       - name: Verify first-load performance budgets
         id: performance-budgets
         if: always()
@@ -161,6 +166,7 @@ jobs:
           echo "Committed navigation magnets: ${{ steps.navigation-magnets.outcome }}"
           echo "Committed static layout contracts: ${{ steps.static-layout-contracts.outcome }}"
           echo "Page generator ownership: ${{ steps.generator-ownership.outcome }}"
+          echo "Retired architecture guard: ${{ steps.obsolete-architecture.outcome }}"
           echo "First-load performance budgets: ${{ steps.performance-budgets.outcome }}"
           echo "Delivery contracts: ${{ steps.delivery-contracts.outcome }}"
           echo "Fact-checking round-trip: ${{ steps.fact-checking-roundtrip.outcome }}"
@@ -173,10 +179,11 @@ jobs:
             && [ "${{ steps.navigation-magnets.outcome }}" = "success" ] \
             && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ] \
             && [ "${{ steps.generator-ownership.outcome }}" = "success" ] \
+            && [ "${{ steps.obsolete-architecture.outcome }}" = "success" ] \
             && [ "${{ steps.performance-budgets.outcome }}" = "success" ] \
             && [ "${{ steps.delivery-contracts.outcome }}" = "success" ] \
             && [ "${{ steps.fact-checking-roundtrip.outcome }}" = "success" ]; then
-            echo "Committed static-site runtime, generator ownership, performance-budget, delivery, and fact-checking round-trip checks passed."
+            echo "Committed static-site runtime, generator ownership, architecture tombstones, performance-budget, delivery, and fact-checking round-trip checks passed."
           else
             echo "One or more committed-site/authoring checks failed; inspect those before publishing this branch."
           fi
