@@ -36,7 +36,7 @@ replaceOnce(
 );
 
 const categoryClose = `      </section>\n    \`;`;
-const categoryCloseWithPrefill = `      </section>\n      \${magnetPrefillScript(type + '-hub-v4')}\n    \`;`;
+const categoryCloseWithPrefill = `      </section>\n\${magnetPrefillScript(type + '-hub-v4')}\n    \`;`;
 
 const renderCategoryStart = source.indexOf('function renderCategory(type, items) {');
 const renderBodyCuesStart = source.indexOf('function renderBodyCueControls() {');
