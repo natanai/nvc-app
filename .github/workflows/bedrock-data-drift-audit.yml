@@ -97,18 +97,58 @@ jobs:
           console.log(`- formula-only keys: ${finalKeys.filter(k => !currentKeys.includes(k)).join(', ') || '(none)'}`);
 
           const shared = currentKeys.filter(k => finalKeys.includes(k));
-          let differing = 0;
-          const examples = [];
-          for (const key of shared) {
-            if (!isDeepStrictEqual(currentReverse[key], finalReverse[key])) {
-              differing += 1;
-              if (examples.length < 12) examples.push(`${key}: ${firstDiff(currentReverse[key], finalReverse[key], `$['${key}']`)}`);
+          const differingKeys = shared.filter(key => !isDeepStrictEqual(currentReverse[key], finalReverse[key]));
+          console.log(`- shared entries with semantic differences: ${differingKeys.length}/${shared.length}`);
+          for (const key of differingKeys) {
+            console.log(`  ${key}: ${firstDiff(currentReverse[key], finalReverse[key], `$['${key}']`)}`);
+          }
+          console.log(`- _meta equal: ${isDeepStrictEqual(currentReverse._meta, finalReverse._meta)}`);
+
+          function ids(entry) {
+            return (entry?.bodyCues || []).map(cue => cue.optionId);
+          }
+          function byId(entry) {
+            return new Map((entry?.bodyCues || []).map(cue => [cue.optionId, cue]));
+          }
+          function showField(key, label, currentValue, formulaValue) {
+            if (!isDeepStrictEqual(currentValue, formulaValue)) {
+              console.log(`  ${label}:`);
+              console.log(`    current=${JSON.stringify(currentValue)}`);
+              console.log(`    formula=${JSON.stringify(formulaValue)}`);
             }
           }
-          console.log(`- shared entries with semantic differences: ${differing}/${shared.length}`);
-          for (const example of examples) console.log(`  ${example}`);
-          console.log(`- _meta equal: ${isDeepStrictEqual(currentReverse._meta, finalReverse._meta)}`);
-          if (!isDeepStrictEqual(currentReverse._meta, finalReverse._meta)) {
-            console.log(`  _meta first diff: ${firstDiff(currentReverse._meta, finalReverse._meta, '$._meta')}`);
+
+          console.log('\nIntentional reverse-inference deviations:');
+          for (const key of differingKeys) {
+            const current = currentReverse[key];
+            const formula = finalReverse[key];
+            console.log(`\n[${key}]`);
+            showField(key, 'zones', current.zones, formula.zones);
+            showField(key, 'needsHypotheses.sdt', current.needsHypotheses?.sdt, formula.needsHypotheses?.sdt);
+            showField(key, 'needsHypotheses.nvc', current.needsHypotheses?.nvc, formula.needsHypotheses?.nvc);
+            showField(key, 'skills', current.skills, formula.skills);
+            showField(key, 'bodyCue order', ids(current), ids(formula));
+            showField(key, 'evidenceKeys', current.evidenceKeys, formula.evidenceKeys);
+
+            const currentById = byId(current);
+            const formulaById = byId(formula);
+            const cueIds = [...new Set([...currentById.keys(), ...formulaById.keys()])];
+            for (const cueId of cueIds) {
+              const currentCue = currentById.get(cueId);
+              const formulaCue = formulaById.get(cueId);
+              if (!currentCue) {
+                console.log(`  bodyCue ${cueId}: formula-only ${JSON.stringify(formulaCue)}`);
+                continue;
+              }
+              if (!formulaCue) {
+                console.log(`  bodyCue ${cueId}: current-only ${JSON.stringify(currentCue)}`);
+                continue;
+              }
+              if (!isDeepStrictEqual(currentCue, formulaCue)) {
+                console.log(`  bodyCue ${cueId}:`);
+                console.log(`    current=${JSON.stringify(currentCue)}`);
+                console.log(`    formula=${JSON.stringify(formulaCue)}`);
+              }
+            }
           }
           NODE
