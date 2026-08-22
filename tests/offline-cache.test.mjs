@@ -8,67 +8,40 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const read = (relativePath) => fs.readFile(path.join(root, relativePath), 'utf8');
 
-function extractCoreUrls(source) {
-  const block = source.match(/const CORE_URLS = \[([\s\S]*?)\];/);
-  assert.ok(block, 'service worker should declare an explicit core cache');
-  return Array.from(block[1].matchAll(/['"]([^'"]+)['"]/g), (match) => match[1]);
-}
-
-test('Home owns the Bedrock service-worker canary without adding it to parser first load', async () => {
+test('Home keeps the runtime loader but no longer registers a root-scoped cache worker', async () => {
   const [home, loader] = await Promise.all([
     read('index.html'),
     read('scripts/shell-runtime-loader.js'),
   ]);
 
-  assert.ok(home.includes('src="scripts/shell-runtime-loader.js"'), 'Home should retain its existing small intent loader');
-  assert.ok(!home.includes('service-worker.js'), 'service worker registration must stay out of generated HTML/parser first load');
-  assert.ok(loader.includes("'../service-worker.js'"), 'Home loader should resolve the root service worker from its own URL');
-  assert.ok(loader.includes("window.addEventListener('load', register, { once: true })"), 'registration should wait until normal page load finishes');
-  assert.ok(loader.includes("window.requestIdleCallback(registerOfflineCacheCanary, { timeout: 2500 })"), 'capable browsers should schedule registration in idle time');
-  assert.ok(loader.includes("updateViaCache: 'none'"), 'service-worker update checks should not be hidden behind HTTP cache reuse');
+  assert.ok(home.includes('src="scripts/shell-runtime-loader.js"'), 'Home should retain its small intent loader');
+  assert.ok(!home.includes('service-worker.js'), 'service-worker cleanup must stay out of parser first load');
+  assert.ok(!loader.includes('navigator.serviceWorker.register('), 'Home must not install a new service worker');
+  assert.ok(loader.includes('navigator.serviceWorker.getRegistrations()'), 'Home should remove lingering canary registrations');
+  assert.ok(loader.includes('registration.unregister()'), 'old root-scoped registrations should be unregistered');
+  assert.ok(loader.includes("key.startsWith(RETIRED_OFFLINE_CACHE_PREFIX)"), 'old Bedrock Cache Storage entries should be removed');
 });
 
-test('offline worker caches only safe same-origin GET traffic', async () => {
+test('retirement worker can replace an installed canary without owning fetch traffic', async () => {
   const worker = await read('service-worker.js');
 
-  assert.doesNotThrow(() => new Function(worker), 'service worker source should remain valid JavaScript');
-  assert.ok(worker.includes("request.method !== 'GET'"), 'mutating requests must bypass Cache Storage');
-  assert.ok(worker.includes('url.origin !== self.location.origin'), 'cross-origin requests must bypass this cache owner');
-  assert.ok(worker.includes("url.pathname.startsWith('/api/')"), 'same-origin API traffic must bypass static caching');
-  assert.ok(worker.includes("request.headers.get('authorization')"), 'authorized requests must bypass static caching');
-  assert.ok(worker.includes("response.ok && response.type === 'basic'"), 'only successful same-origin basic responses should be stored');
-  assert.ok(!worker.includes("request.mode === 'navigate'"), 'canary must not substitute Home HTML for uncached deep routes');
+  assert.doesNotThrow(() => new Function(worker), 'retirement worker source should remain valid JavaScript');
+  assert.ok(worker.includes('self.skipWaiting()'), 'retirement worker should replace an installed canary immediately');
+  assert.ok(worker.includes('self.registration.unregister()'), 'retirement worker should unregister itself after cleanup');
+  assert.ok(worker.includes("key.startsWith(RETIRED_CACHE_PREFIX)"), 'retirement worker should delete prior Bedrock caches');
+  assert.ok(!worker.includes("addEventListener('fetch'"), 'retirement worker must never intercept ordinary page or asset requests');
+  assert.ok(!worker.includes('CORE_URLS'), 'retirement worker must not precache site resources');
+  assert.ok(!worker.includes('cache.put('), 'retirement worker must not write a replacement static cache');
 });
 
-test('core offline cache paths are real browser-facing files', async () => {
-  const worker = await read('service-worker.js');
-  const coreUrls = extractCoreUrls(worker);
+test('service-worker retirement is scoped to the abandoned Bedrock cache namespace', async () => {
+  const [worker, loader] = await Promise.all([
+    read('service-worker.js'),
+    read('scripts/shell-runtime-loader.js'),
+  ]);
 
-  assert.ok(coreUrls.includes('/'), 'Home must be part of the core cache');
-  assert.ok(coreUrls.includes('/styles.css'), 'global presentation must be part of the core cache');
-  assert.ok(coreUrls.includes('/scripts/inventory-core-shell.js'), 'global menu shell must be part of the core cache');
-  assert.ok(coreUrls.includes('/scripts/magnets.js'), 'magnet behavior must be available from the core cache');
-  assert.ok(coreUrls.includes('/data/index.json'), 'canonical route vocabulary should be available for the later full-site warmer');
-
-  for (const urlPath of coreUrls) {
-    const relativePath = urlPath === '/' ? 'index.html' : urlPath.replace(/^\//, '');
-    const stat = await fs.stat(path.join(root, relativePath));
-    assert.ok(stat.isFile(), `core cache entry should resolve to a committed file: ${urlPath}`);
-  }
-});
-
-test('offline cache remains a canary rather than pretending dynamic services are offline', async () => {
-  const worker = await read('service-worker.js');
-  const forbidden = [
-    'bsky.social',
-    'public.api.bsky.app',
-    'allneeds-api',
-    'cloudflare-backend',
-  ];
-
-  for (const marker of forbidden) {
-    assert.ok(!worker.includes(marker), `service worker should not own dynamic service traffic: ${marker}`);
-  }
-
-  assert.ok(worker.includes('full-site background warming is a later layer'), 'canary scope should be explicit in source until browser/device acceptance');
+  assert.ok(worker.includes("const RETIRED_CACHE_PREFIX = 'allneeds-static-';"));
+  assert.ok(loader.includes("const RETIRED_OFFLINE_CACHE_PREFIX = 'allneeds-static-';"));
+  assert.ok(loader.includes("const RETIRED_OFFLINE_WORKER_PATH = '/service-worker.js';"));
+  assert.ok(!worker.includes('caches.delete(key))\n          .filter'), 'cleanup should not broaden into unrelated cache deletion');
 });
