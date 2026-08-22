@@ -1,0 +1,73 @@
+name: Bedrock align Body Cues script order
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bedrock-align-body-cues-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  align-body-cues:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Bedrock head branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Align Body Cues with canonical compiler order
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('feelings/body-cues/index.html')
+          source = path.read_text()
+          old = '''    <script src="../../scripts/inventory-core-shell.js" defer></script>\n    <script src="../../scripts/inventory.js" defer></script>'''
+          new = '''    <script src="../../scripts/inventory.js" defer></script>\n    <script src="../../scripts/inventory-core-shell.js" defer></script>'''
+
+          if new in source and old not in source:
+              print('Body Cues already uses canonical order.')
+          elif source.count(old) == 1:
+              path.write_text(source.replace(old, new, 1))
+          else:
+              raise SystemExit(f'Expected exactly one old Body Cues script pair; found {source.count(old)}.')
+          PY
+
+          node tests/body-cues-static-first.test.mjs
+          git diff --check
+
+      - name: Prove page build adds no further changes
+        shell: bash
+        run: |
+          before="$(git diff -- feelings/body-cues/index.html)"
+          npm run build:pages
+          after="$(git diff -- feelings/body-cues/index.html)"
+          if [ "$before" != "$after" ]; then
+            echo "Body Cues changed again during build; canonical source/output are not aligned."
+            git diff -- feelings/body-cues/index.html
+            exit 1
+          fi
+
+          changed="$(git diff --name-only)"
+          if [ "$changed" != "feelings/body-cues/index.html" ]; then
+            echo "Unexpected changed paths after page build:"
+            printf '%s\n' "$changed"
+            exit 1
+          fi
+
+      - name: Commit generated alignment only
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- feelings/body-cues/index.html
+          git commit -m "Align Body Cues with canonical shell order"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
