@@ -362,3 +362,27 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
 .journal-value-token--need { background:color-mix(in srgb,#fff 82%,var(--mint) 18%); }
 .journal-value-token--tag { color:var(--ink-soft); }
 @media (max-width:720px) { .journal-meta-row { grid-template-columns:minmax(4.5rem,.68fr) minmax(0,1.72fr); padding-inline:.58rem; } .journal-history-controls__choices, .journal-history-controls__secondary { gap:.3rem; } .journal-history-control select, .journal-history-controls__clear { font-size:.76rem; } }
+
+
+/* Journal catalog multi-selectors: valid site Feelings/Needs appear only inside an opened popup. */
+.journal-catalog-select { position:relative; min-width:0; }
+.journal-catalog-select__trigger { width:100%; min-height:44px; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.45rem; margin:0; padding:.38rem .08rem .38rem .4rem; border:0; border-radius:var(--radius-sm); background:transparent; box-shadow:none; color:var(--ink); font:inherit; font-size:.94rem; text-align:right; cursor:pointer; }
+.journal-catalog-select__trigger:focus-visible { outline:2px solid color-mix(in srgb,var(--plum) 62%,#fff); outline-offset:1px; }
+.journal-catalog-select__value { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.journal-catalog-select__value.is-placeholder { color:color-mix(in srgb,var(--ink-soft) 58%,transparent); }
+.journal-catalog-select__chevron { width:.55rem; height:.55rem; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-.12rem); transform-origin:center; opacity:.6; }
+.journal-catalog-select__trigger[aria-expanded='true'] .journal-catalog-select__chevron { transform:rotate(225deg) translate(-.08rem,-.08rem); }
+.journal-catalog-popover[hidden] { display:none !important; }
+.journal-catalog-popover { position:absolute; z-index:40; top:calc(100% + .28rem); right:0; width:min(22rem,78vw); max-height:min(56dvh,28rem); display:grid; grid-template-rows:auto minmax(0,1fr) auto; overflow:hidden; border:1px solid color-mix(in srgb,var(--outline) 22%,transparent); border-radius:var(--radius-lg); background:#fff; box-shadow:0 14px 34px color-mix(in srgb,var(--outline) 22%,transparent); text-align:left; }
+.journal-catalog-popover__toolbar { padding:.55rem; border-bottom:1px solid color-mix(in srgb,var(--outline) 10%,transparent); }
+.journal-catalog-popover__search { width:100%; min-height:44px; margin:0; padding:.5rem .62rem; border:1px solid color-mix(in srgb,var(--outline) 18%,transparent); border-radius:var(--radius-md); background:color-mix(in srgb,#fff 94%,var(--lavender) 6%); box-shadow:none; color:var(--ink); font:inherit; font-size:.9rem; }
+.journal-catalog-popover__options { min-height:0; overflow:auto; overscroll-behavior:contain; display:grid; align-content:start; padding:.35rem; }
+.journal-catalog-option { min-height:44px; display:grid; grid-template-columns:minmax(0,1fr) 1.2rem; align-items:center; gap:.5rem; width:100%; padding:.48rem .58rem; border:0; border-radius:var(--radius-md); background:transparent; box-shadow:none; color:var(--ink); font:inherit; font-size:.88rem; text-align:left; cursor:pointer; }
+.journal-catalog-option:hover, .journal-catalog-option:focus-visible { background:color-mix(in srgb,#fff 72%,var(--lavender) 28%); outline:none; }
+.journal-catalog-option.is-selected { background:color-mix(in srgb,#fff 70%,var(--mint) 30%); font-weight:700; }
+.journal-catalog-option__check { text-align:center; font-size:.88rem; }
+.journal-catalog-popover__empty { margin:0; padding:.8rem .65rem; color:var(--ink-soft); font-size:.84rem; }
+.journal-catalog-popover__footer { display:grid; grid-template-columns:1fr 1fr; gap:.4rem; padding:.45rem; border-top:1px solid color-mix(in srgb,var(--outline) 10%,transparent); background:color-mix(in srgb,#fff 94%,var(--lavender) 6%); }
+.journal-catalog-popover__action { min-height:44px; border:1px solid color-mix(in srgb,var(--outline) 16%,transparent); border-radius:var(--radius-md); background:#fff; color:var(--ink); font:inherit; font-size:.84rem; font-weight:700; }
+.journal-catalog-popover__action--done { background:color-mix(in srgb,#fff 72%,var(--mint) 28%); }
+@media (max-width:720px) { .journal-catalog-popover { width:min(24rem,82vw); max-height:min(58dvh,30rem); } }

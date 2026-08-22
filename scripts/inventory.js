@@ -5198,6 +5198,20 @@ function formatJournalDate(timestamp) {
   }
 }
 
+function parseJournalFeelings(value) {
+  const values = Array.isArray(value) ? value : (value || '').toString().split(/[,|]/);
+  const seen = new Set();
+  return values
+    .map((item) => item.toString().trim())
+    .filter((item) => {
+      if (!item) return false;
+      const key = item.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
 function renderJournalHistory() {
   if (!state.journalHistoryEl) return;
   syncJournalHistoryFilterOptions();
@@ -5218,7 +5232,8 @@ function renderJournalHistory() {
     titleRow.className = 'journal-entry__title-row';
     const emotion = document.createElement('h4');
     emotion.className = 'journal-entry__emotion';
-    emotion.textContent = entry.emotion ? capitalizeWord(entry.emotion) : 'Reflection';
+    const feelings = parseJournalFeelings(entry.emotion);
+    emotion.textContent = feelings.length ? feelings.join(', ') : 'Reflection';
     titleRow.appendChild(emotion);
     if (Number.isFinite(entry.intensity)) {
       const intensity = document.createElement('span');
@@ -5309,7 +5324,8 @@ function renderJournalOverlayHistory() {
       if (dateLabel) {
         segments.push(dateLabel);
       }
-      const emotionLabel = entry.emotion ? `${capitalizeWord(entry.emotion)} — ` : '';
+      const feelings = parseJournalFeelings(entry.emotion);
+      const emotionLabel = feelings.length ? `${feelings.join(', ')} — ` : '';
       const detail = `${emotionLabel}${entry.notes || ''}`.trim();
       if (detail) {
         segments.push(detail);
@@ -5344,7 +5360,7 @@ function syncJournalHistoryFilterOptions() {
     });
     return [...map.values()].sort((a, b) => a.label.localeCompare(b.label));
   };
-  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="emotion"]'), unique(entries.map((entry) => entry.emotion), capitalizeWord));
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="emotion"]'), unique(entries.flatMap((entry) => parseJournalFeelings(entry.emotion))));
   populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="need"]'), unique(entries.flatMap((entry) => entry.needs || []), (value) => buildNeedLink(value).label));
   populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="tag"]'), unique(entries.flatMap((entry) => entry.tags || []), (value) => `#${value}`));
 }
@@ -5361,7 +5377,7 @@ function getFilteredJournalEntries() {
   let filtered = entries;
 
   if (searchTerm) filtered = filtered.filter((entry) => [entry.notes || '', entry.emotion || '', ...(entry.tags || []), ...(entry.needs || [])].join(' ').toLowerCase().includes(searchTerm));
-  if (emotionFilter) filtered = filtered.filter((entry) => normalize(entry.emotion) === emotionFilter);
+  if (emotionFilter) filtered = filtered.filter((entry) => parseJournalFeelings(entry.emotion).some((feeling) => normalize(feeling) === emotionFilter));
   if (needFilter) filtered = filtered.filter((entry) => (entry.needs || []).some((need) => normalize(need) === needFilter));
   if (tagFilter) filtered = filtered.filter((entry) => (entry.tags || []).some((tag) => normalize(tag) === tagFilter));
 

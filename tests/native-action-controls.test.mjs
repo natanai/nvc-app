@@ -58,6 +58,8 @@ test('Journal and personal strategy density live at canonical owners across phon
   assert.ok(moduleSource.includes("tags: 'Tags'"));
   assert.ok(moduleSource.includes("classes: ['journal-meta-group']"));
   assert.ok(moduleSource.includes("'journal-meta-row--intensity'"));
+  assert.ok(moduleSource.includes("needsMode: 'catalog-multiselect'"));
+  assert.ok(moduleSource.includes("tags: 'work, weekend, boundaries'"));
   assert.equal(moduleSource.includes("text: 'Selected needs'"), false, 'Journal needs must not render the prototype confirmation layer');
   assert.ok(density.includes('.journal-meta-group {'), 'canonical shared density CSS must own the finished Journal metadata group');
   assert.ok(styles.includes('.journal-label-icon'), 'Journal breadcrumb art must have deterministic dimensions');

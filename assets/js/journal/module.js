@@ -71,15 +71,6 @@ const getTagFragment = (value) => {
   return fragment.replace(/^#/, '').trim();
 };
 
-const getNeedFragment = (value) => {
-  if (!value) {
-    return '';
-  }
-  const segments = value.split(',');
-  const fragment = segments[segments.length - 1] || '';
-  return fragment.trim();
-};
-
 const normalizeNeedOption = (need) => {
   if (!need) {
     return null;
@@ -175,7 +166,7 @@ const deepMerge = (...sources) => {
 const JOURNAL_BASE_CONFIG = {
   variant: 'inventory',
   idPrefix: 'journal',
-  needsMode: 'combobox',
+  needsMode: 'catalog-multiselect',
   intensityRange: { min: 1, max: 10, defaultValue: DEFAULT_INTENSITY },
   notes: { rows: 12 },
   labels: {
@@ -193,9 +184,9 @@ const JOURNAL_BASE_CONFIG = {
     notes: '',
   },
   placeholders: {
-    emotion: 'Choose or type',
-    needs: 'Add needs',
-    tags: 'Add tags',
+    emotion: 'Choose feelings',
+    needs: 'Choose needs',
+    tags: 'work, weekend, boundaries',
     notes: '',
   },
   prompts: {
@@ -268,14 +259,14 @@ const JOURNAL_VARIANT_CONFIG = {
   support: {
     variant: 'support',
     idPrefix: 'support-journal',
-    needsMode: 'combobox',
+    needsMode: 'catalog-multiselect',
     hints: {
-      emotion: "Begin typing to autocomplete from the feelings library, or leave it blank if you're unsure.",
-      needs: 'Begin typing to autocomplete needs from the library. Separate multiple needs with commas.',
+      emotion: '',
+      needs: '',
       tags: 'Separate tags with commas to group related reflections.',
     },
     placeholders: {
-      needs: 'Start typing a need',
+      needs: 'Choose needs',
       notes: 'Let your reflection spill across the page…',
     },
     notes: { rows: 12 },
@@ -421,18 +412,113 @@ const buildJournalMetaRow = ({ label, id, input, modifier = '', suggestions = nu
   return row;
 };
 
-const buildNeedsField = (config) => {
-  const id = `${config.idPrefix}-needs`;
-  const input = createElement('input', {
-    attrs: { id, name: 'needs', type: 'text', autocomplete: 'off', placeholder: config.placeholders.needs || '' },
+const buildCatalogSelectorField = (config, {
+  kind,
+  name,
+  label,
+  placeholder,
+  dataAttribute,
+  ariaLabel,
+}) => {
+  const inputId = `${config.idPrefix}-${kind}`;
+  const triggerId = `${inputId}-trigger`;
+  const popoverId = `${inputId}-popover`;
+
+  const hiddenInput = createElement('input', {
+    attrs: { id: inputId, name, type: 'hidden', value: '' },
   });
-  input.setAttribute('data-journal-needs', '');
-  const suggestions = createElement('div', {
-    classes: ['journal-tag-suggestions'],
-    attrs: { 'data-journal-need-suggestions': '', hidden: true, role: 'listbox', 'aria-label': config.aria.needSuggestions },
+  hiddenInput.setAttribute(dataAttribute, '');
+
+  const selector = createElement('div', {
+    classes: ['journal-catalog-select'],
+    attrs: { 'data-journal-catalog-select': kind },
   });
-  return buildJournalMetaRow({ label: config.labels.needs, id, input, modifier: 'needs', suggestions });
+
+  const trigger = createElement('button', {
+    classes: ['journal-catalog-select__trigger'],
+    attrs: {
+      id: triggerId,
+      type: 'button',
+      'aria-expanded': 'false',
+      'aria-controls': popoverId,
+      'aria-haspopup': 'dialog',
+    },
+  });
+  trigger.setAttribute('data-journal-catalog-trigger', '');
+  trigger.dataset.catalogKind = kind;
+  const value = createElement('span', {
+    classes: ['journal-catalog-select__value'],
+    text: placeholder,
+  });
+  value.setAttribute('data-journal-catalog-value', '');
+  const chevron = createElement('span', {
+    classes: ['journal-catalog-select__chevron'],
+    attrs: { 'aria-hidden': 'true' },
+  });
+  trigger.append(value, chevron);
+
+  const popover = createElement('div', {
+    classes: ['journal-catalog-popover'],
+    attrs: { id: popoverId, hidden: true, role: 'dialog', 'aria-label': ariaLabel },
+  });
+  popover.setAttribute('data-journal-catalog-popover', '');
+  popover.dataset.catalogKind = kind;
+
+  const toolbar = createElement('div', { classes: ['journal-catalog-popover__toolbar'] });
+  const search = createElement('input', {
+    classes: ['journal-catalog-popover__search'],
+    attrs: { type: 'search', autocomplete: 'off', placeholder: `Search ${kind === 'feeling' ? 'feelings' : 'needs'}` },
+  });
+  search.setAttribute('data-journal-catalog-search', '');
+  search.dataset.catalogKind = kind;
+  toolbar.append(search);
+
+  const options = createElement('div', {
+    classes: ['journal-catalog-popover__options'],
+    attrs: { role: 'listbox', 'aria-multiselectable': 'true' },
+  });
+  options.setAttribute('data-journal-catalog-options', '');
+  options.dataset.catalogKind = kind;
+
+  const footer = createElement('div', { classes: ['journal-catalog-popover__footer'] });
+  const clear = createElement('button', {
+    classes: ['journal-catalog-popover__action'],
+    attrs: { type: 'button' },
+    text: 'Clear',
+  });
+  clear.setAttribute('data-journal-catalog-clear', '');
+  clear.dataset.catalogKind = kind;
+  const done = createElement('button', {
+    classes: ['journal-catalog-popover__action', 'journal-catalog-popover__action--done'],
+    attrs: { type: 'button' },
+    text: 'Done',
+  });
+  done.setAttribute('data-journal-catalog-done', '');
+  done.dataset.catalogKind = kind;
+  footer.append(clear, done);
+
+  popover.append(toolbar, options, footer);
+  selector.append(hiddenInput, trigger, popover);
+  return buildJournalMetaRow({ label, id: triggerId, input: selector, modifier: kind });
 };
+
+const buildFeelingField = (config) => buildCatalogSelectorField(config, {
+  kind: 'feeling',
+  name: 'emotion',
+  label: config.labels.emotion,
+  placeholder: config.placeholders.emotion || 'Choose feelings',
+  dataAttribute: 'data-journal-emotion',
+  ariaLabel: 'Choose one or more feelings',
+});
+
+const buildNeedsField = (config) => buildCatalogSelectorField(config, {
+  kind: 'needs',
+  name: 'needs',
+  label: config.labels.needs,
+  placeholder: config.placeholders.needs || 'Choose needs',
+  dataAttribute: 'data-journal-needs',
+  ariaLabel: 'Choose one or more needs',
+});
 
 const buildTagsField = (config) => {
   const id = `${config.idPrefix}-tags`;
@@ -594,12 +680,7 @@ export function renderJournalForm(root, overrides = {}) {
 
   const grid = createElement('div', { classes: ['journal-meta-group'] });
 
-  const emotionId = `${config.idPrefix}-emotion`;
-  const emotionInput = createElement('input', {
-    attrs: { id: emotionId, name: 'emotion', type: 'text', autocomplete: 'off', placeholder: config.placeholders.emotion || '' },
-  });
-  emotionInput.setAttribute('data-journal-emotion', '');
-  grid.append(buildJournalMetaRow({ label: config.labels.emotion, id: emotionId, input: emotionInput, modifier: 'feeling' }));
+  grid.append(buildFeelingField(config));
 
   const intensityId = `${config.idPrefix}-intensity`;
   const intensityInput = createElement('input', {
@@ -725,10 +806,6 @@ class JournalFormController {
     this.statusEl = this.root.querySelector('[data-journal-status]');
     this.messageEl = this.root.querySelector('[data-journal-message]');
     this.needsSelect = this.root.querySelector('[data-journal-needs]');
-    this.needsSuggestionsEl = this.root.querySelector('[data-journal-need-suggestions]');
-    this.needsSummaryEl = this.root.querySelector('[data-journal-needs-summary]');
-    this.needsSummaryList = this.root.querySelector('[data-journal-needs-summary-list]');
-    this.needsSummaryStatus = this.root.querySelector('[data-journal-needs-summary-status]');
     this.emotionInput = this.root.querySelector('[data-journal-emotion]');
     this.intensityInput = this.root.querySelector('[data-journal-intensity]');
     this.intensityDisplay = this.root.querySelector('[data-journal-intensity-display]');
@@ -737,12 +814,12 @@ class JournalFormController {
     this.notesInput = this.root.querySelector('[data-journal-notes]');
     this.clearButton = this.root.querySelector('[data-journal-clear]');
     this.saveButton = this.root.querySelector('[data-journal-submit]');
+    this.feelingSelectRoot = this.root.querySelector('[data-journal-catalog-select="feeling"]');
+    this.needsSelectRoot = this.root.querySelector('[data-journal-catalog-select="needs"]');
     this.notesBaseHeight = null;
 
-    this.emotionDatalist = null;
     this.emotionOptions = [];
     this.needsOptions = [];
-    this.needsActiveIndex = -1;
 
     this.draftPath = this.options.draftPath;
     this.draftTimer = null;
@@ -803,9 +880,7 @@ class JournalFormController {
           this.options.intensityRange.min,
           this.options.intensityRange.max,
         );
-        if (value !== undefined) {
-          this.updateIntensityDisplay(value);
-        }
+        if (value !== undefined) this.updateIntensityDisplay(value);
         this.scheduleDraftSave();
       });
     }
@@ -819,15 +894,9 @@ class JournalFormController {
         this.scheduleDraftSave();
         this.updateTagSuggestions();
       });
-      this.tagsInput.addEventListener('focus', () => {
-        this.updateTagSuggestions();
-      });
-      this.tagsInput.addEventListener('blur', () => {
-        this.hideTagSuggestions();
-      });
-      this.tagsInput.addEventListener('keydown', (event) => {
-        this.handleTagKeydown(event);
-      });
+      this.tagsInput.addEventListener('focus', () => this.updateTagSuggestions());
+      this.tagsInput.addEventListener('blur', () => this.hideTagSuggestions());
+      this.tagsInput.addEventListener('keydown', (event) => this.handleTagKeydown(event));
     }
 
     if (this.tagSuggestionsEl) {
@@ -845,39 +914,19 @@ class JournalFormController {
     }
 
     if (this.emotionInput) {
-      this.emotionInput.addEventListener('input', () => {
+      this.emotionInput.addEventListener('change', () => {
         this.resetSaveButton();
         this.scheduleDraftSave();
       });
     }
-
-    if (this.needsSelect instanceof HTMLSelectElement) {
+    if (this.needsSelect) {
       this.needsSelect.addEventListener('change', () => {
         this.resetSaveButton();
         this.scheduleDraftSave();
-        this.updateNeedsSummary();
-      });
-      this.needsSelect.addEventListener('mousedown', (event) => this.handleNeedPointerToggle(event));
-    } else if (this.needsSelect) {
-      this.needsSelect.setAttribute('role', 'combobox');
-      this.needsSelect.setAttribute('aria-autocomplete', 'list');
-      this.needsSelect.setAttribute('aria-expanded', 'false');
-      this.needsSelect.addEventListener('input', () => {
-        this.resetSaveButton();
-        this.scheduleDraftSave();
-        this.updateNeedsSuggestions();
-      });
-      this.needsSelect.addEventListener('keydown', (event) => this.handleNeedKeydown(event));
-      this.needsSelect.addEventListener('focus', () => {
-        this.updateNeedsSuggestions();
       });
     }
 
-    if (this.needsSuggestionsEl) {
-      this.needsSuggestionsEl.addEventListener('mousedown', (event) => event.preventDefault());
-      this.needsSuggestionsEl.addEventListener('mousemove', (event) => this.handleNeedSuggestionMouseOver(event));
-      this.needsSuggestionsEl.addEventListener('click', (event) => this.handleNeedSuggestionClick(event));
-    }
+    this.attachCatalogSelectEvents();
 
     if (this.clearButton) {
       this.clearButton.addEventListener('click', (event) => {
@@ -885,6 +934,195 @@ class JournalFormController {
         this.resetForm();
       });
     }
+  }
+
+  attachCatalogSelectEvents() {
+    ['feeling', 'needs'].forEach((kind) => {
+      const root = this.getCatalogRoot(kind);
+      if (!root) return;
+      const trigger = root.querySelector('[data-journal-catalog-trigger]');
+      const search = root.querySelector('[data-journal-catalog-search]');
+      const options = root.querySelector('[data-journal-catalog-options]');
+      const clear = root.querySelector('[data-journal-catalog-clear]');
+      const done = root.querySelector('[data-journal-catalog-done]');
+
+      trigger?.addEventListener('click', () => {
+        const expanded = trigger.getAttribute('aria-expanded') === 'true';
+        if (expanded) this.closeCatalogSelect(kind);
+        else this.openCatalogSelect(kind);
+      });
+      search?.addEventListener('input', () => this.renderCatalogOptions(kind));
+      options?.addEventListener('click', (event) => {
+        const option = event.target.closest('[data-journal-catalog-option]');
+        if (!option) return;
+        this.toggleCatalogValue(kind, option.dataset.value || '');
+      });
+      clear?.addEventListener('click', () => {
+        this.setCatalogValues(kind, []);
+        this.dispatchCatalogChange(kind);
+        this.renderCatalogOptions(kind);
+      });
+      done?.addEventListener('click', () => {
+        this.closeCatalogSelect(kind);
+        trigger?.focus();
+      });
+      root.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          this.closeCatalogSelect(kind);
+          trigger?.focus();
+        }
+      });
+    });
+
+    this.catalogOutsidePointerHandler = (event) => {
+      ['feeling', 'needs'].forEach((kind) => {
+        const root = this.getCatalogRoot(kind);
+        if (root && !root.contains(event.target)) this.closeCatalogSelect(kind);
+      });
+    };
+    document.addEventListener('pointerdown', this.catalogOutsidePointerHandler);
+  }
+
+  getCatalogRoot(kind) {
+    return kind === 'feeling' ? this.feelingSelectRoot : this.needsSelectRoot;
+  }
+
+  getCatalogInput(kind) {
+    return kind === 'feeling' ? this.emotionInput : this.needsSelect;
+  }
+
+  getCatalogOptions(kind) {
+    if (kind === 'feeling') return this.emotionOptions.map((label) => ({ label, value: label }));
+    return this.needsOptions.map((option) => ({ label: option.label, value: option.label, slug: option.slug || '' }));
+  }
+
+  getCatalogPlaceholder(kind) {
+    return kind === 'feeling' ? 'Choose feelings' : 'Choose needs';
+  }
+
+  getCatalogValues(kind) {
+    const input = this.getCatalogInput(kind);
+    return normalizeList(input?.value || '');
+  }
+
+  normalizeCatalogValues(kind, values) {
+    const incoming = normalizeList(values);
+    const catalog = this.getCatalogOptions(kind);
+    if (!catalog.length) {
+      const seen = new Set();
+      return incoming.filter((value) => {
+        const key = value.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+    const normalized = [];
+    const seen = new Set();
+    incoming.forEach((value) => {
+      const key = value.toLowerCase();
+      const match = catalog.find((option) => {
+        if (option.label.toLowerCase() === key || option.value.toLowerCase() === key) return true;
+        return option.slug && option.slug.toLowerCase() === key;
+      });
+      if (!match) return;
+      const matchKey = match.label.toLowerCase();
+      if (seen.has(matchKey)) return;
+      seen.add(matchKey);
+      normalized.push(match.label);
+    });
+    return normalized;
+  }
+
+  setCatalogValues(kind, values) {
+    const input = this.getCatalogInput(kind);
+    if (!input) return;
+    const normalized = this.normalizeCatalogValues(kind, values);
+    input.value = joinListValues(normalized);
+    this.updateCatalogSummary(kind);
+    const root = this.getCatalogRoot(kind);
+    const popover = root?.querySelector('[data-journal-catalog-popover]');
+    if (popover && !popover.hidden) this.renderCatalogOptions(kind);
+  }
+
+  dispatchCatalogChange(kind) {
+    const input = this.getCatalogInput(kind);
+    input?.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  updateCatalogSummary(kind) {
+    const root = this.getCatalogRoot(kind);
+    const valueEl = root?.querySelector('[data-journal-catalog-value]');
+    if (!valueEl) return;
+    const values = this.getCatalogValues(kind);
+    if (!values.length) {
+      valueEl.textContent = this.getCatalogPlaceholder(kind);
+      valueEl.classList.add('is-placeholder');
+      return;
+    }
+    valueEl.classList.remove('is-placeholder');
+    valueEl.textContent = values.length <= 2 ? values.join(', ') : `${values[0]}, ${values[1]} +${values.length - 2}`;
+  }
+
+  openCatalogSelect(kind) {
+    ['feeling', 'needs'].forEach((other) => { if (other !== kind) this.closeCatalogSelect(other); });
+    const root = this.getCatalogRoot(kind);
+    const trigger = root?.querySelector('[data-journal-catalog-trigger]');
+    const popover = root?.querySelector('[data-journal-catalog-popover]');
+    if (!root || !trigger || !popover) return;
+    const search = root.querySelector('[data-journal-catalog-search]');
+    if (search) search.value = '';
+    this.renderCatalogOptions(kind);
+    popover.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+
+  closeCatalogSelect(kind) {
+    const root = this.getCatalogRoot(kind);
+    const trigger = root?.querySelector('[data-journal-catalog-trigger]');
+    const popover = root?.querySelector('[data-journal-catalog-popover]');
+    if (popover) popover.hidden = true;
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  renderCatalogOptions(kind) {
+    const root = this.getCatalogRoot(kind);
+    const list = root?.querySelector('[data-journal-catalog-options]');
+    const search = root?.querySelector('[data-journal-catalog-search]');
+    if (!list) return;
+    const query = (search?.value || '').trim().toLowerCase();
+    const selected = new Set(this.getCatalogValues(kind).map((value) => value.toLowerCase()));
+    const options = this.getCatalogOptions(kind).filter((option) => !query || option.label.toLowerCase().includes(query));
+    list.innerHTML = '';
+    if (!options.length) {
+      const empty = createElement('p', { classes: ['journal-catalog-popover__empty'], text: 'No matches' });
+      list.append(empty);
+      return;
+    }
+    options.forEach((option) => {
+      const isSelected = selected.has(option.label.toLowerCase());
+      const button = createElement('button', {
+        classes: ['journal-catalog-option', ...(isSelected ? ['is-selected'] : [])],
+        attrs: { type: 'button', role: 'option', 'aria-selected': isSelected ? 'true' : 'false' },
+      });
+      button.setAttribute('data-journal-catalog-option', '');
+      button.dataset.value = option.label;
+      const label = createElement('span', { text: option.label });
+      const check = createElement('span', { classes: ['journal-catalog-option__check'], attrs: { 'aria-hidden': 'true' }, text: isSelected ? '✓' : '' });
+      button.append(label, check);
+      list.append(button);
+    });
+  }
+
+  toggleCatalogValue(kind, value) {
+    if (!value) return;
+    const values = this.getCatalogValues(kind);
+    const key = value.toLowerCase();
+    const index = values.findIndex((item) => item.toLowerCase() === key);
+    if (index >= 0) values.splice(index, 1);
+    else values.push(value);
+    this.setCatalogValues(kind, values);
+    this.dispatchCatalogChange(kind);
   }
 
   autoResizeNotes() {
@@ -900,47 +1138,6 @@ class JournalFormController {
     const minHeight = this.notesBaseHeight || Math.max(textarea.scrollHeight, textarea.clientHeight);
     const targetHeight = Math.max(textarea.scrollHeight, minHeight);
     textarea.style.height = `${targetHeight}px`;
-  }
-
-  updateNeedsSummary() {
-    if (!this.needsSummaryEl || !this.needsSummaryList) {
-      return;
-    }
-    if (!(this.needsSelect instanceof HTMLSelectElement)) {
-      this.needsSummaryList.innerHTML = '';
-      if (this.needsSummaryEmpty) {
-        this.needsSummaryEmpty.hidden = true;
-      }
-      if (this.needsSummaryStatus) {
-        this.needsSummaryStatus.textContent = '';
-      }
-      delete this.needsSummaryEl.dataset.count;
-      return;
-    }
-    const selectedOptions = Array.from(this.needsSelect.selectedOptions || []).filter((option) => option.value);
-    this.needsSummaryList.innerHTML = '';
-    const labels = [];
-    selectedOptions.forEach((option) => {
-      const label = option.textContent?.trim() || option.value;
-      if (!label) {
-        return;
-      }
-      labels.push(label);
-      const item = document.createElement('li');
-      item.className = 'journal-needs-summary__item';
-      item.textContent = label;
-      this.needsSummaryList.append(item);
-    });
-    const hasSelection = labels.length > 0;
-    if (this.needsSummaryEl) {
-      this.needsSummaryEl.hidden = !hasSelection;
-    }
-    this.needsSummaryEl.dataset.count = String(labels.length);
-    if (this.needsSummaryStatus) {
-      this.needsSummaryStatus.textContent = hasSelection
-        ? `Selected needs: ${labels.join(', ')}.`
-        : 'No needs selected.';
-    }
   }
 
   refreshTagSource() {
@@ -1008,9 +1205,7 @@ class JournalFormController {
 
   setValues(values = {}, { trailingTags = false } = {}) {
     const data = values && typeof values === 'object' ? values : {};
-    if (this.emotionInput) {
-      this.emotionInput.value = data.emotion || '';
-    }
+    this.setCatalogValues('feeling', normalizeList(data.emotion));
     if (this.notesInput) {
       this.notesInput.value = data.notes || '';
       this.autoResizeNotes();
@@ -1024,17 +1219,7 @@ class JournalFormController {
       this.intensityInput.value = intensityValue !== undefined ? String(intensityValue) : String(this.defaultIntensity);
       this.updateIntensityDisplay(intensityValue ?? this.defaultIntensity);
     }
-    if (this.needsSelect instanceof HTMLSelectElement) {
-      const needs = normalizeList(data.needs);
-      Array.from(this.needsSelect.options).forEach((option) => {
-        option.selected = needs.includes(option.value);
-      });
-    } else if (this.needsSelect) {
-      const needs = normalizeList(data.needs).map((need) => this.resolveNeedValue(need)).filter(Boolean);
-      this.needsSelect.value = joinListValues(needs);
-      this.updateNeedsSuggestions();
-    }
-    this.updateNeedsSummary();
+    this.setCatalogValues('needs', normalizeList(data.needs));
     if (this.tagsInput) {
       const tags = normalizeTags(data.tags);
       this.tagsInput.value = joinTags(tags, { trailing: trailingTags });
@@ -1043,34 +1228,19 @@ class JournalFormController {
   }
 
   resetForm({ keepStatus = false, focusNotes = true } = {}) {
-    if (this.formEl) {
-      this.formEl.reset();
-    }
-    if (this.intensityInput) {
-      this.intensityInput.value = String(this.defaultIntensity);
-    }
+    if (this.formEl) this.formEl.reset();
+    if (this.intensityInput) this.intensityInput.value = String(this.defaultIntensity);
     this.updateIntensityDisplay(this.defaultIntensity);
-    if (this.tagsInput) {
-      this.tagsInput.value = '';
-    }
-    if (this.needsSelect instanceof HTMLSelectElement) {
-      Array.from(this.needsSelect.options).forEach((option) => {
-        option.selected = false;
-      });
-    } else if (this.needsSelect) {
-      this.needsSelect.value = '';
-    }
-    this.updateNeedsSummary();
-    this.hideNeedSuggestions();
+    if (this.tagsInput) this.tagsInput.value = '';
+    this.setCatalogValues('feeling', []);
+    this.setCatalogValues('needs', []);
+    this.closeCatalogSelect('feeling');
+    this.closeCatalogSelect('needs');
     this.resetSaveButton();
     this.hideTagSuggestions();
-    if (this.statusEl && !keepStatus) {
-      this.statusEl.textContent = '';
-    }
+    if (this.statusEl && !keepStatus) this.statusEl.textContent = '';
     this.showMessage('');
-    if (this.options.autoDraft) {
-      this.clearDraft();
-    }
+    if (this.options.autoDraft) this.clearDraft();
     if (this.notesInput) {
       this.autoResizeNotes();
       if (focusNotes) {
@@ -1082,9 +1252,6 @@ class JournalFormController {
   }
 
   setNeedsOptions(needs = []) {
-    if (!this.needsSelect) {
-      return;
-    }
     const normalizedList = Array.isArray(needs)
       ? needs
           .map((item) => normalizeNeedOption(item))
@@ -1092,39 +1259,14 @@ class JournalFormController {
           .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
       : [];
     this.needsOptions = normalizedList;
-    if (this.needsSelect instanceof HTMLSelectElement) {
-      const currentValues = new Set(Array.from(this.needsSelect.selectedOptions || []).map((option) => option.value));
-      this.needsSelect.innerHTML = '';
-      normalizedList.forEach((need) => {
-        const option = document.createElement('option');
-        option.value = need.value;
-        option.textContent = need.label;
-        if (currentValues.has(option.value)) {
-          option.selected = true;
-        }
-        this.needsSelect.append(option);
-      });
-    } else {
-      const trailing = /,\s*$/.test(this.needsSelect.value || '');
-      const needsValues = normalizeList(this.needsSelect.value).map((need) => this.resolveNeedValue(need)).filter(Boolean);
-      this.needsSelect.value = needsValues.length
-        ? joinListValues(needsValues, { trailing })
-        : '';
-      this.updateNeedsSuggestions();
-    }
-    this.updateNeedsSummary();
+    this.setCatalogValues('needs', this.getCatalogValues('needs'));
   }
 
   setEmotionOptions(feelings = []) {
-    if (!this.emotionInput) {
-      return;
-    }
     const options = Array.isArray(feelings)
       ? feelings
           .map((item) => {
-            if (typeof item === 'string') {
-              return item.trim();
-            }
+            if (typeof item === 'string') return item.trim();
             if (item && typeof item === 'object') {
               const label = item.title || item.label || item.name || item.slug || '';
               return label ? label.toString().trim() : '';
@@ -1134,28 +1276,8 @@ class JournalFormController {
           .filter(Boolean)
           .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
       : [];
-    this.emotionOptions = options;
-    if (!options.length) {
-      if (this.emotionDatalist) {
-        this.emotionDatalist.remove();
-        this.emotionDatalist = null;
-      }
-      this.emotionInput.removeAttribute('list');
-      return;
-    }
-    if (!this.emotionDatalist) {
-      this.emotionDatalist = document.createElement('datalist');
-      this.emotionDatalist.id = createUniqueId('journal-emotion-options');
-      document.body.appendChild(this.emotionDatalist);
-      this.emotionInput.setAttribute('list', this.emotionDatalist.id);
-      this.emotionInput.setAttribute('aria-autocomplete', 'list');
-    }
-    this.emotionDatalist.innerHTML = '';
-    options.forEach((label) => {
-      const option = document.createElement('option');
-      option.value = label;
-      this.emotionDatalist.append(option);
-    });
+    this.emotionOptions = [...new Map(options.map((label) => [label.toLowerCase(), label])).values()];
+    this.setCatalogValues('feeling', this.getCatalogValues('feeling'));
   }
 
   showStatus(message = '') {
@@ -1412,172 +1534,6 @@ class JournalFormController {
     this.scheduleDraftSave();
   }
 
-  updateNeedsSuggestions() {
-    if (!this.needsSuggestionsEl || !this.needsSelect || this.needsSelect instanceof HTMLSelectElement) {
-      return;
-    }
-    const fragment = getNeedFragment(this.needsSelect.value || '');
-    const limit = Math.max(this.options.tagLimit, DEFAULT_TAG_LIMIT);
-    const normalizedFragment = fragment.trim().toLowerCase();
-    const matches = [];
-    const seen = new Set();
-    const source = Array.isArray(this.needsOptions) ? this.needsOptions : [];
-    source.forEach((option) => {
-      if (!option || !option.label) {
-        return;
-      }
-      const labelKey = option.label.trim().toLowerCase();
-      if (seen.has(labelKey)) {
-        return;
-      }
-      const slugKey = option.slug ? option.slug.toLowerCase() : '';
-      if (!normalizedFragment || labelKey.includes(normalizedFragment) || (slugKey && slugKey.includes(normalizedFragment))) {
-        seen.add(labelKey);
-        matches.push(option);
-      }
-    });
-    const suggestions = matches.slice(0, limit);
-    if (!suggestions.length) {
-      this.hideNeedSuggestions();
-      return;
-    }
-    this.needsSuggestionsEl.innerHTML = '';
-    suggestions.forEach((option, index) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'journal-tag-suggestions__option';
-      button.textContent = option.label;
-      button.dataset.journalNeedSuggestion = option.label;
-      if (option.slug) {
-        button.dataset.needSlug = option.slug;
-      }
-      button.setAttribute('role', 'option');
-      button.setAttribute('data-index', String(index));
-      this.needsSuggestionsEl.append(button);
-    });
-    this.needsSuggestionsEl.hidden = false;
-    this.needsSelect.setAttribute('aria-expanded', 'true');
-    this.needsActiveIndex = -1;
-  }
-
-  hideNeedSuggestions() {
-    if (!this.needsSuggestionsEl || !this.needsSelect) {
-      return;
-    }
-    this.needsSuggestionsEl.hidden = true;
-    this.needsSuggestionsEl.innerHTML = '';
-    this.needsSelect.setAttribute('aria-expanded', 'false');
-    this.needsActiveIndex = -1;
-  }
-
-  handleNeedSuggestionMouseOver(event) {
-    if (!this.needsSuggestionsEl) {
-      return;
-    }
-    const button = event.target.closest('[data-journal-need-suggestion]');
-    if (!button) {
-      return;
-    }
-    const index = Number(button.dataset.index);
-    if (Number.isFinite(index)) {
-      this.needsActiveIndex = index;
-      this.highlightActiveNeed();
-    }
-  }
-
-  highlightActiveNeed() {
-    if (!this.needsSuggestionsEl) {
-      return;
-    }
-    const buttons = this.needsSuggestionsEl.querySelectorAll('[data-journal-need-suggestion]');
-    buttons.forEach((button, index) => {
-      if (index === this.needsActiveIndex) {
-        button.classList.add('is-active');
-      } else {
-        button.classList.remove('is-active');
-      }
-    });
-  }
-
-  handleNeedSuggestionClick(event) {
-    const button = event.target.closest('[data-journal-need-suggestion]');
-    if (!button) {
-      return;
-    }
-    const label = button.dataset.journalNeedSuggestion || '';
-    if (label) {
-      const slug = button.dataset.needSlug || '';
-      this.applyNeedSuggestion({ label, slug });
-    }
-  }
-
-  handleNeedPointerToggle(event) {
-    if (!(this.needsSelect instanceof HTMLSelectElement)) {
-      return;
-    }
-    const option = event.target;
-    if (!(option instanceof HTMLOptionElement)) {
-      return;
-    }
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
-      return;
-    }
-    event.preventDefault();
-    option.selected = !option.selected;
-    this.needsSelect.dispatchEvent(new Event('change', { bubbles: true }));
-    requestAnimationFrame(() => {
-      this.needsSelect?.focus();
-    });
-  }
-
-  handleNeedKeydown(event) {
-    if (!this.needsSuggestionsEl || this.needsSuggestionsEl.hidden) {
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        this.updateNeedsSuggestions();
-      }
-      return;
-    }
-    const buttons = this.needsSuggestionsEl.querySelectorAll('[data-journal-need-suggestion]');
-    if (!buttons.length) {
-      return;
-    }
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault();
-      const direction = event.key === 'ArrowDown' ? 1 : -1;
-      this.needsActiveIndex = (this.needsActiveIndex + direction + buttons.length) % buttons.length;
-      this.highlightActiveNeed();
-    } else if ((event.key === 'Enter' || event.key === 'Tab') && this.needsActiveIndex >= 0) {
-      event.preventDefault();
-      const button = buttons[this.needsActiveIndex];
-      if (button) {
-        this.applyNeedSuggestion({
-          label: button.dataset.journalNeedSuggestion || '',
-          slug: button.dataset.needSlug || '',
-        });
-      }
-    } else if (event.key === 'Escape') {
-      this.hideNeedSuggestions();
-    }
-  }
-
-  applyNeedSuggestion(option) {
-    if (!this.needsSelect || this.needsSelect instanceof HTMLSelectElement) {
-      return;
-    }
-    const label = typeof option === 'string' ? option : option?.label;
-    if (!label) {
-      return;
-    }
-    const current = this.needsSelect.value || '';
-    const segments = current.split(',');
-    segments[segments.length - 1] = ` ${label}`;
-    const normalized = segments.join(',').replace(/^\s+/, '');
-    this.needsSelect.value = `${normalized.trim()}, `;
-    this.hideNeedSuggestions();
-    this.needsSelect.focus();
-    this.resetSaveButton();
-    this.scheduleDraftSave();
-  }
 }
 
 export function createJournalForm(root, options = {}) {
