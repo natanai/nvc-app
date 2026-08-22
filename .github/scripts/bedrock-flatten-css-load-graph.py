@@ -22,6 +22,13 @@ replace_once(
 """,
     '',
 )
+# This late import is invalid/dormant because it occurs after ordinary rules.
+# Generated pages already receive repaired nav-critical CSS from the compiler.
+replace_once(
+    'styles.css',
+    "@import url('./styles/nav-critical.css');\n\n",
+    '',
+)
 
 # Keep the existing styles.css preload exactly where it is. Replace only the
 # main stylesheet line with the formerly imported dependencies followed by the
@@ -86,7 +93,7 @@ test('shared styles are parser-discovered directly with the established cascade 
   let checked = 0;
   for (const file of htmlFiles) {
     const html = await fs.readFile(file, 'utf8');
-    const mainMatch = html.match(/<link rel="stylesheet" href="([^"]*styles[.]css)"(?: fetchpriority="high")? \/>/);
+    const mainMatch = html.match(/<link rel="stylesheet" href="([^"]*styles[.]css)"(?: fetchpriority="high")? [/]>/);
     if (!mainMatch) continue;
     checked += 1;
     const mainHref = mainMatch[1];
