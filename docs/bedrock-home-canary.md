@@ -51,20 +51,31 @@ Before applying the same loading model to more routes, verify Home on both deskt
 
 Any visible, interaction, persistence, or conditional-behavior difference from the pre-canary Home should be treated as a regression unless separately approved.
 
-## Magnet object-permanence acceptance
+## Mobile magnet-paint regression acceptance
 
-The Feelings, Needs, and Faux Feelings hubs now use the same compiler-owned prepaint persistence path as navigation magnets. A saved hub layout is restored before the normal magnet module reveals the board, generated hub magnets have deterministic tilt/offset values, and runtime hydration preserves those authored values rather than replacing them with a new random pose.
+Real-phone A/B testing isolated a rendering regression to the page-canonicalization boundary:
 
-On phone, verify this specifically:
+- immediately before canonicalization: page flash **no**, Feeling-art scroll flicker **no**;
+- immediately after canonicalization: page flash **yes**, Feeling-art scroll flicker **yes**.
 
-1. Move several Feelings and Needs magnets to unmistakable positions, leave the page, return, and reload. The first visible frame should already show the saved positions; there should be no tiny seed-layout flash or second-stage pose change.
-2. Scroll the Feelings hub repeatedly with normal and momentum scrolling. The illustrated SVG art inside the magnets should remain continuously painted rather than blinking while the magnet shell remains visible.
-3. Repeat the scroll check after toggling magnet physics on and off and after a shuffle.
-4. Verify the overall page background/scroll behavior is unchanged from the accepted Bedrock appearance. The final flicker repair is intentionally scoped to the Feeling illustration compositor layer rather than changing the root page compositing model.
-5. Verify Needs and Faux Feelings retain stable labels/poses and saved positions even though they do not use the Feeling illustration layer.
+Canonicalization had begun inlining the full `styles/nav-critical.css`, which activated two previously dormant paint behaviors: a global hidden-until-`data-ready` magnet visibility gate and `background-attachment: fixed` on the root page. The Bedrock repair removes both behaviors at their canonical CSS owner.
 
-The earlier root-scoped offline-cache canary has now been retired because it made rapid real-device acceptance harder by putting Cache Storage in front of ordinary test-branch assets. A small retirement shim replaces any previously installed worker, removes only `allneeds-static-*` caches, and unregisters itself; Home also performs the same cleanup after load/idle as a belt-and-suspenders path. On a phone that installed the old canary, allow one ordinary Home load and reload before judging this rendering milestone so stale cached CSS/JS is not part of the comparison.
+The later compensating architecture is intentionally gone. Category hubs do not have a second compiler-owned saved-layout prepaint owner, generated hub magnets do not carry compiler-authored deterministic tilt/offset values, and Feeling art does not use a special GPU/compositor workaround. The normal magnet runtime remains the owner of hub saved-position restoration and handmade tilt/offset. Navigation alone retains its lightweight saved-layout prepaint path because that is part of the established shell contract.
+
+Permanent regression tests now require that:
+
+1. critical CSS does not hide the whole magnet board pending JavaScript readiness;
+2. critical CSS does not install a fixed root background;
+3. Feeling art uses the normal paint path without a compensating `translateZ(0)`/backface-visibility layer;
+4. category hubs do not inline a second saved-position restore owner;
+5. the magnet runtime remains the single owner of hub tilt and offset.
+
+### Accepted mobile result — 2026-08-22
+
+After the root-cause repair was published to `bedrock/production-finalization-v2`, repeat testing on the same mobile device no longer reproduced the page flash or Feeling-art scrolling flicker. This closes the mobile rendering regression itself as accepted. Saved-position persistence remains part of the broader persistence/browser acceptance checklist and should continue to be checked while finishing Bedrock.
+
+The earlier root-scoped offline-cache canary has been retired because it made rapid real-device acceptance harder by putting Cache Storage in front of ordinary test-branch assets. A small retirement shim replaces any previously installed worker, removes only `allneeds-static-*` caches, and unregisters itself; Home also performs the same cleanup after load/idle as a belt-and-suspenders path.
 
 ## Rollout gate
 
-Do not remove `scripts/inventory.js` from additional ordinary routes solely because Home's source-level tests pass. Expand this loading model only after the Home canary has passed the browser acceptance checklist and each candidate route has been audited for route-specific immediate Inventory/controller behavior.
+Do not remove `scripts/inventory.js` from additional ordinary routes solely because Home's source-level tests pass. Expand this loading model only after the Home canary has passed the relevant browser acceptance checklist and each candidate route has been audited for route-specific immediate Inventory/controller behavior.
