@@ -1,18 +1,19 @@
 feeling,zones,regionId,regionLabel,optionId,title,note,intensityMin,intensityMax,arousal,relativeWeight,evidenceKey
-anxiety,high-unpleasant,chest,Chest or heart space,chest-tight,Tight or constricted,"Band squeezing, armor, or breath held high",5,10,high,0.1,chest-tight
-anxiety,high-unpleasant,chest,Chest or heart space,chest-pounding,Pounding or racing heartbeat,"Heart racing, flutter, sudden surges of beats",5,10,high,0.1,chest-pounding
-anxiety,high-unpleasant,limbs,"Arms, hands, or legs",limbs-restless,Restless or fidgety,"Urge to pace, bounce, or shake",5,10,high,0.1,limbs-restless
-anxiety,high-unpleasant,gut,Stomach or gut,gut-rolling,Rolling or fluttering,"Butterflies, swirls, churning movement",6,10,high,0.1,gut-rolling
-anxiety,high-unpleasant,head,Head and mind space,head-buzzing,Buzzing or static,"Quick thoughts, humming energy",6,10,high,0.1,head-buzzing
-anxiety,high-unpleasant,shoulders,Shoulders and upper back,shoulders-braced,Lifted or braced,"Raised, ready to act, armor-like",6,10,high,0.1,shoulders-braced
-anxiety,high-unpleasant,temperature,Temperature shifts,temp-chill,Chill or cold rush,"Goosebumps, cold core, shivers",6,10,high,0.1,temp-chill
-anxiety,high-unpleasant,temperature,Temperature shifts,temp-prickly,Prickly or sweaty skin,"Prickles, sudden sweat, tingling heat",6,10,high,0.1,temp-prickly
-anxiety,high-unpleasant,gut,Stomach or gut,gut-nausea,Nausea or queasy,"Churned up, unsettled, urge to vomit",6,10,high,0.1,gut-nausea
-anxiety,high-unpleasant,throat,Throat and voice,throat-dry,Dry or closed off,"Scratchy, hard to speak, voice fades",6,10,high,0.1,throat-dry
-anxiety,high-unpleasant,jaw,"Jaw, mouth, or fists",jaw-clench,Clenched or grinding,"Teeth locked, fists tight, rigid tongue",6,10,high,0.1,jaw-clench
-anxiety,high-unpleasant,jaw,"Jaw, mouth, or fists",jaw-tremble,Tremble or quiver,"Jaw shaking, lips or hands quivering",6,10,high,0.1,jaw-tremble
-anxiety,high-unpleasant,overall,Whole-body sense,overall-floating,Floating or unreal,"Drifting, spaced out, not quite here",6,10,high,0.1,overall-floating
-anxiety,high-unpleasant,throat,Throat and voice,throat-tight,Tight or gripped,"Squeezing band, hard to swallow",7,10,high,0.1,throat-tight
+anxiety,high-unpleasant|medium-unpleasant,chest,Chest or heart space,chest-tight,Tight or constricted,"Band squeezing, armor, or breath held high",5,10,high,0.1,chest-tight
+anxiety,high-unpleasant|medium-unpleasant,chest,Chest or heart space,chest-pounding,Pounding or racing heartbeat,"Heart racing, flutter, sudden surges of beats",5,10,high,0.1,chest-pounding
+anxiety,high-unpleasant|medium-unpleasant,limbs,"Arms, hands, or legs",limbs-restless,Restless or fidgety,"Urge to pace, bounce, or shake",5,10,high,0.1,limbs-restless
+anxiety,high-unpleasant|medium-unpleasant,gut,Stomach or gut,gut-rolling,Rolling or fluttering,"Butterflies, swirls, churning movement",6,10,high,0.1,gut-rolling
+anxiety,high-unpleasant|medium-unpleasant,head,Head and mind space,head-pressure,Pressure or band,"Helmet feeling, squeezing temples",5,9,medium,0.1,head-pressure
+anxiety,high-unpleasant|medium-unpleasant,head,Head and mind space,head-buzzing,Buzzing or static,"Quick thoughts, humming energy",6,10,high,0.1,head-buzzing
+anxiety,high-unpleasant|medium-unpleasant,shoulders,Shoulders and upper back,shoulders-braced,Lifted or braced,"Raised, ready to act, armor-like",6,10,high,0.1,shoulders-braced
+anxiety,high-unpleasant|medium-unpleasant,temperature,Temperature shifts,temp-chill,Chill or cold rush,"Goosebumps, cold core, shivers",6,10,high,0.1,temp-chill
+anxiety,high-unpleasant|medium-unpleasant,temperature,Temperature shifts,temp-prickly,Prickly or sweaty skin,"Prickles, sudden sweat, tingling heat",6,10,high,0.1,temp-prickly
+anxiety,high-unpleasant|medium-unpleasant,gut,Stomach or gut,gut-nausea,Nausea or queasy,"Churned up, unsettled, urge to vomit",6,10,high,0.1,gut-nausea
+anxiety,high-unpleasant|medium-unpleasant,throat,Throat and voice,throat-dry,Dry or closed off,"Scratchy, hard to speak, voice fades",6,10,high,0.1,throat-dry
+anxiety,high-unpleasant|medium-unpleasant,jaw,"Jaw, mouth, or fists",jaw-clench,Clenched or grinding,"Teeth locked, fists tight, rigid tongue",6,10,high,0.1,jaw-clench
+anxiety,high-unpleasant|medium-unpleasant,jaw,"Jaw, mouth, or fists",jaw-tremble,Tremble or quiver,"Jaw shaking, lips or hands quivering",6,10,high,0.1,jaw-tremble
+anxiety,high-unpleasant|medium-unpleasant,overall,Whole-body sense,overall-floating,Floating or unreal,"Drifting, spaced out, not quite here",6,10,high,0.1,overall-floating
+anxiety,high-unpleasant|medium-unpleasant,throat,Throat and voice,throat-tight,Tight or gripped,"Squeezing band, hard to swallow",7,10,high,0.1,throat-tight
 fear,high-unpleasant,temperature,Temperature shifts,temp-chill,Chill or cold rush,"Goosebumps, cold core, shivers",5,10,high,0.13,temp-chill
 fear,high-unpleasant,chest,Chest or heart space,chest-tight,Tight or constricted,"Band squeezing, armor, or breath held high",6,10,high,0.12,chest-tight
 fear,high-unpleasant,chest,Chest or heart space,chest-pounding,Pounding or racing heartbeat,"Heart racing, flutter, sudden surges of beats",6,10,high,0.12,chest-pounding
@@ -66,32 +67,23 @@ stress,high-unpleasant|medium-unpleasant,temperature,Temperature shifts,temp-pri
 guilt,medium-unpleasant,shoulders,Shoulders and upper back,shoulders-weighted,Weighted or burdened,"Heavy load, sagging posture, tight knots",4,9,medium,0.41,shoulders-weighted
 guilt,medium-unpleasant,chest,Chest or heart space,chest-pressure,Weighted or pressured,"Heavy stone, shoulders collapsing inward",5,9,medium,0.33,chest-pressure
 guilt,medium-unpleasant,jaw,"Jaw, mouth, or fists",jaw-heat,Heat or flush,"Warm cheeks, heat pooling in jaw",6,9,medium,0.26,jaw-heat
-excitement,high-pleasant,limbs,"Arms, hands, or legs",limbs-tingly,Tingly or sparkly,"Buzzing skin, energetic tingles",6,10,high,0.16,limbs-tingly
-excitement,high-pleasant,chest,Chest or heart space,chest-pounding,Pounding or racing heartbeat,"Heart racing, flutter, sudden surges of beats",6,10,high,0.15,chest-pounding
-excitement,high-pleasant,limbs,"Arms, hands, or legs",limbs-restless,Restless or fidgety,"Urge to pace, bounce, or shake",6,10,high,0.15,limbs-restless
-excitement,high-pleasant,temperature,Temperature shifts,temp-flush,Flush of heat,"Cheeks glowing, warmth rushing outward",6,10,high,0.15,temp-flush
-excitement,high-pleasant,gut,Stomach or gut,gut-rolling,Rolling or fluttering,"Butterflies, swirls, churning movement",6,10,high,0.13,gut-rolling
-excitement,high-pleasant,head,Head and mind space,head-buzzing,Buzzing or static,"Quick thoughts, humming energy",6,10,high,0.13,head-buzzing
-excitement,high-pleasant,temperature,Temperature shifts,temp-prickly,Prickly or sweaty skin,"Prickles, sudden sweat, tingling heat",6,10,high,0.13,temp-prickly
-anticipation,high-neutral,limbs,"Arms, hands, or legs",limbs-tingly,Tingly or sparkly,"Buzzing skin, energetic tingles",5,10,high,0.17,limbs-tingly
-anticipation,high-neutral,limbs,"Arms, hands, or legs",limbs-restless,Restless or fidgety,"Urge to pace, bounce, or shake",6,10,high,0.16,limbs-restless
-anticipation,high-neutral,chest,Chest or heart space,chest-pounding,Pounding or racing heartbeat,"Heart racing, flutter, sudden surges of beats",6,10,high,0.14,chest-pounding
-anticipation,high-neutral,gut,Stomach or gut,gut-rolling,Rolling or fluttering,"Butterflies, swirls, churning movement",6,10,high,0.14,gut-rolling
-anticipation,high-neutral,temperature,Temperature shifts,temp-prickly,Prickly or sweaty skin,"Prickles, sudden sweat, tingling heat",6,10,high,0.14,temp-prickly
-anticipation,high-neutral,head,Head and mind space,head-buzzing,Buzzing or static,"Quick thoughts, humming energy",6,10,high,0.13,head-buzzing
-anticipation,high-neutral,throat,Throat and voice,throat-dry,Dry or closed off,"Scratchy, hard to speak, voice fades",7,10,high,0.11,throat-dry
+excited,high-pleasant,limbs,"Arms, hands, or legs",limbs-tingly,Tingly or sparkly,"Buzzing skin, energetic tingles",6,10,high,0.16,limbs-tingly
+excited,high-pleasant,chest,Chest or heart space,chest-pounding,Pounding or racing heartbeat,"Heart racing, flutter, sudden surges of beats",6,10,high,0.15,chest-pounding
+excited,high-pleasant,limbs,"Arms, hands, or legs",limbs-restless,Restless or fidgety,"Urge to pace, bounce, or shake",6,10,high,0.15,limbs-restless
+excited,high-pleasant,temperature,Temperature shifts,temp-flush,Flush of heat,"Cheeks glowing, warmth rushing outward",6,10,high,0.15,temp-flush
+excited,high-pleasant,gut,Stomach or gut,gut-rolling,Rolling or fluttering,"Butterflies, swirls, churning movement",6,10,high,0.13,gut-rolling
+excited,high-pleasant,head,Head and mind space,head-buzzing,Buzzing or static,"Quick thoughts, humming energy",6,10,high,0.13,head-buzzing
+excited,high-pleasant,temperature,Temperature shifts,temp-prickly,Prickly or sweaty skin,"Prickles, sudden sweat, tingling heat",6,10,high,0.13,temp-prickly
 calm,low-pleasant,overall,Whole-body sense,overall-calm,Grounded or calm,"Steady, anchored, peacefully present",1,7,low,0.37,overall-calm
 calm,low-pleasant,chest,Chest or heart space,chest-open,"Open, warm, or expansive","Soft chest, easy breathing, gentle warmth",2,7,low,0.34,chest-open
 calm,low-pleasant,gut,Stomach or gut,gut-warm,Settled or warm,"Grounded fullness, gentle ease",2,7,low,0.29,gut-warm
 relief,low-pleasant,chest,Chest or heart space,chest-open,"Open, warm, or expansive","Soft chest, easy breathing, gentle warmth",2,7,low,0.5,chest-open
 relief,low-pleasant,overall,Whole-body sense,overall-calm,Grounded or calm,"Steady, anchored, peacefully present",2,7,low,0.5,overall-calm
-joy,high-pleasant,chest,Chest or heart space,chest-open,"Open, warm, or expansive","Soft chest, easy breathing, gentle warmth",7,10,high,0.5,chest-open
-joy,high-pleasant,limbs,"Arms, hands, or legs",limbs-tingly,Tingly or sparkly,"Buzzing skin, energetic tingles",7,10,high,0.5,limbs-tingly
+joyful,high-pleasant,chest,Chest or heart space,chest-open,"Open, warm, or expansive","Soft chest, easy breathing, gentle warmth",7,10,high,0.5,chest-open
+joyful,high-pleasant,limbs,"Arms, hands, or legs",limbs-tingly,Tingly or sparkly,"Buzzing skin, energetic tingles",7,10,high,0.5,limbs-tingly
 gratitude,medium-pleasant,overall,Whole-body sense,overall-calm,Grounded or calm,"Steady, anchored, peacefully present",5,9,medium,0.36,overall-calm
 gratitude,medium-pleasant,chest,Chest or heart space,chest-open,"Open, warm, or expansive","Soft chest, easy breathing, gentle warmth",5,9,medium,0.32,chest-open
 gratitude,medium-pleasant,gut,Stomach or gut,gut-warm,Settled or warm,"Grounded fullness, gentle ease",5,9,medium,0.32,gut-warm
-worry,medium-unpleasant,gut,Stomach or gut,gut-rolling,Rolling or fluttering,"Butterflies, swirls, churning movement",5,9,medium,0.5,gut-rolling
-worry,medium-unpleasant,head,Head and mind space,head-pressure,Pressure or band,"Helmet feeling, squeezing temples",5,9,medium,0.5,head-pressure
 lonely,low-unpleasant,gut,Stomach or gut,gut-emptiness,Hollow or empty,"Sinking, dropping, missing center",2,7,low,0.5,gut-emptiness
 lonely,low-unpleasant,throat,Throat and voice,throat-lump,Lump or swelling,"Tears hovering, voice shaking, lump rising",2,7,low,0.5,throat-lump
 numb,low-neutral,overall,Whole-body sense,overall-numb,Muted or numb,"Blank, disconnected, hard to feel",1,7,low,0.23,overall-numb
@@ -100,9 +92,9 @@ numb,low-neutral,head,Head and mind space,head-fog,Foggy or heavy,"Hard to focus
 numb,low-neutral,shoulders,Shoulders and upper back,shoulders-droop,Drooping or collapsed,"Slumped, no lift, giving way",3,7,low,0.15,shoulders-droop
 numb,low-neutral,overall,Whole-body sense,overall-floating,Floating or unreal,"Drifting, spaced out, not quite here",3,7,low,0.15,overall-floating
 numb,low-neutral,gut,Stomach or gut,gut-emptiness,Hollow or empty,"Sinking, dropping, missing center",3,7,low,0.13,gut-emptiness
-hope,medium-pleasant,gut,Stomach or gut,gut-warm,Settled or warm,"Grounded fullness, gentle ease",5,9,medium,1,gut-warm
-contentment,medium-pleasant|low-pleasant,overall,Whole-body sense,overall-calm,Grounded or calm,"Steady, anchored, peacefully present",4,9,medium,0.52,overall-calm
-contentment,medium-pleasant|low-pleasant,gut,Stomach or gut,gut-warm,Settled or warm,"Grounded fullness, gentle ease",5,9,medium,0.48,gut-warm
+hopeful,medium-pleasant,gut,Stomach or gut,gut-warm,Settled or warm,"Grounded fullness, gentle ease",5,9,medium,1,gut-warm
+contented,medium-pleasant|low-pleasant,overall,Whole-body sense,overall-calm,Grounded or calm,"Steady, anchored, peacefully present",4,9,medium,0.52,overall-calm
+contented,medium-pleasant|low-pleasant,gut,Stomach or gut,gut-warm,Settled or warm,"Grounded fullness, gentle ease",5,9,medium,0.48,gut-warm
 shame,medium-unpleasant,jaw,"Jaw, mouth, or fists",jaw-heat,Heat or flush,"Warm cheeks, heat pooling in jaw",5,9,medium,0.28,jaw-heat
 shame,medium-unpleasant,temperature,Temperature shifts,temp-flush,Flush of heat,"Cheeks glowing, warmth rushing outward",5,9,medium,0.28,temp-flush
 shame,medium-unpleasant,throat,Throat and voice,throat-tight,Tight or gripped,"Squeezing band, hard to swallow",5,9,medium,0.25,throat-tight
