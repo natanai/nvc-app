@@ -22,9 +22,10 @@ Home must arrive with the same visible and persisted shell state it had before t
 
 - restore the Home Inventory-count badge;
 - warm/load the canonical classic `scripts/inventory.js` controller when an interaction needs a capability it owns;
-- hold and replay direct Customizer, Journal, backup/restore, profile save/load, and personal-sharing activation until the canonical controller is ready.
+- hold and replay direct Customizer, Journal, backup/restore, profile save/load, and personal-sharing activation until the canonical controller is ready;
+- retire the abandoned Bedrock root service-worker/cache namespace on browsers that installed the earlier offline experiment.
 
-It must not become a second implementation of Inventory, Journal, Customizer, account sync, restore, or sharing behavior.
+It must not become a second implementation of Inventory, Journal, Customizer, account sync, restore, sharing, or static navigation caching behavior.
 
 When `scripts/inventory.js` loads, `buildPaletteUi()` must adopt the already-rendered Home Customizer container and button rather than replacing the visible desktop control.
 
@@ -62,7 +63,7 @@ On phone, verify this specifically:
 4. Verify the page background still looks intentional on phone. Touch-first devices intentionally use a scrolling root background rather than the desktop fixed-root treatment to avoid full-page mobile recomposition during momentum scrolling.
 5. Verify Needs and Faux Feelings retain stable labels/poses and saved positions even though they do not use the Feeling illustration layer.
 
-The published Bedrock test branch advances the service-worker static cache version with this repair so a phone that previously installed the cache can fetch the new CSS and magnet runtime. After a new deployment, allow one normal load for the worker update and then reload before judging whether an older cached rendering behavior remains.
+The earlier root-scoped offline-cache canary has now been retired because it made rapid real-device acceptance harder by putting Cache Storage in front of ordinary test-branch assets. A small retirement shim replaces any previously installed worker, removes only `allneeds-static-*` caches, and unregisters itself; Home also performs the same cleanup after load/idle as a belt-and-suspenders path. On a phone that installed the old canary, allow one ordinary Home load and reload before judging this rendering milestone so stale cached CSS/JS is not part of the comparison.
 
 ## Rollout gate
 
