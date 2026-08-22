@@ -2087,6 +2087,7 @@ ${strategiesNote}
     ],
     main,
         scripts: [
+      { src: 'scripts/strategy-deck.js', defer: true },
       { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
     ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
