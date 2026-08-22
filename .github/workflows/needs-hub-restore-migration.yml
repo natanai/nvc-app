@@ -1,0 +1,69 @@
+name: Needs Hub Restore Migration
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+
+jobs:
+  migrate:
+    if: ${{ github.head_ref == 'bedrock/production-finalization-v2' }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Bedrock head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Detect pending migration
+        id: detect
+        shell: bash
+        run: |
+          if [ -f .github/scripts/needs-hub-restore-migration.py ]; then
+            echo "pending=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pending=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        if: steps.detect.outputs.pending == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.detect.outputs.pending == 'true'
+        run: npm ci
+
+      - name: Apply dense hub restore repair
+        if: steps.detect.outputs.pending == 'true'
+        run: python3 .github/scripts/needs-hub-restore-migration.py
+
+      - name: Remove migration script before validation
+        if: steps.detect.outputs.pending == 'true'
+        run: rm -f .github/scripts/needs-hub-restore-migration.py
+
+      - name: Validate restore and Bedrock contracts
+        if: steps.detect.outputs.pending == 'true'
+        run: |
+          npm run test:flicker-jitter
+          npm run test:customizer
+          npm run test:obsolete
+          npm run test:performance
+          npm run lint:entrypoints
+          git diff --check
+
+      - name: Publish dense hub restore repair
+        if: steps.detect.outputs.pending == 'true'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- ':!.github/workflows/needs-hub-restore-migration.yml'
+          git diff --cached --check
+          git commit -m "Preserve dense category hub magnet layouts"
+          git push origin HEAD:"${HEAD_REF}"
