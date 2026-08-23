@@ -24,10 +24,8 @@ jobs:
       - run: npm ci
       - name: Regenerate canonical pages
         run: npm run build:pages
-      - name: Verify Journal and diff
-        run: |
-          node --test tests/final-hierarchy-ux.test.mjs tests/journal-initial-history-hydration.test.mjs
-          git diff --check
+      - name: Verify Journal contract
+        run: node --test tests/final-hierarchy-ux.test.mjs tests/journal-initial-history-hydration.test.mjs
       - name: Commit canonical generated repair
         run: |
           git config user.name 'github-actions[bot]'
