@@ -38,20 +38,26 @@ test('Observation task order is authored in DOM rather than CSS order patches', 
   assert.ok(html.includes('id="observation-suggestions" class="observation-suggestions" aria-live="polite" data-mode="editing"'));
 });
 
-test('Exact and nearby provenance is post-load and sourced from loaded matches', async () => {
+test('Exact and nearby provenance is post-load inside the match explanation disclosure', async () => {
   const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
   const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
 
   const heading = html.indexOf('class="observation-suggestions__heading"');
-  const summary = html.indexOf('id="observation-detection-summary"');
   const actionRow = html.indexOf('class="observation-suggestions__action-row"');
-  assert.ok(heading >= 0 && summary > heading && actionRow > summary);
-  assert.ok(html.slice(summary, actionRow).includes('hidden'));
+  const panels = html.indexOf('class="observation-suggestions__panels"');
+  const why = html.indexOf('class="observation-suggestions__why-details"');
+  const summary = html.indexOf('id="observation-detection-summary"');
+  const explanation = html.indexOf('id="suggested-why"');
+  assert.ok(heading >= 0 && actionRow > heading && panels > actionRow && why > panels && summary > why && explanation > summary);
+  assert.ok(!html.slice(heading, actionRow).includes('observation-detection-summary'));
+  assert.ok(html.slice(summary, explanation).includes('hidden'));
+  assert.ok(html.includes('Match rationale &amp; counts'));
   assert.ok(editor.includes("const moduleCount = Array.isArray(suggestions?.modules) ? suggestions.modules.length : 0;"));
   assert.ok(editor.includes('state.detectionMatchLimit = Math.max(exactTotal, 1);'));
   assert.ok(editor.includes('renderDetectionSummary();'));
   assert.ok(css.includes(".observation-suggestions__action[data-action='done']"));
+  assert.ok(css.includes('.observation-suggestions__why-body'));
   assert.ok(css.includes("content: '•';"));
 });
 
@@ -70,4 +76,33 @@ test('Equivalent Observation disclosures use one chevron language on phones', as
   assert.ok(css.includes("content: '›';"));
   assert.ok(css.includes('var(--obs-group-bg)'));
   assert.ok(css.includes('var(--obs-separator)'));
+  assert.ok(html.includes('Writing example'));
+  assert.ok(html.includes('Step-by-step prompts'));
+  assert.ok(html.includes('Why observations help'));
+  assert.ok(html.includes('Detailed reference'));
+});
+
+test('Desktop results use the full editor width and keep completed actions quiet', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
+
+  assert.ok(css.includes('width: min(100%, 1120px);'));
+  assert.ok(css.includes('@media (min-width: 641px)'));
+  assert.ok(css.includes(".observation-suggestions[data-mode='results'] .observation-suggestions__header"));
+  assert.ok(css.includes(".observation-suggestions__action[data-action='done'] {\n    display: none;"));
+  assert.ok(css.includes('.observation-panel--feelings'));
+  assert.ok(css.includes('background: var(--obs-group-bg);'));
+});
+
+test('Journal conversion prefills before opening without a fixed-delay retry', async () => {
+  const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
+
+  const moduleReady = editor.indexOf("await import('./journal/module.js');");
+  const openJournal = editor.indexOf('journalButton.click();', moduleReady);
+  const prefillJournal = editor.indexOf('notesField.value = notes;', openJournal);
+  assert.ok(moduleReady >= 0 && openJournal > moduleReady && prefillJournal > openJournal);
+  assert.ok(editor.includes('async function convertObservationToJournal()'));
+  assert.ok(editor.includes('journalButton.click();'));
+  assert.ok(editor.includes("notesField.dispatchEvent(new Event('input', { bubbles: true }));"));
+  assert.ok(editor.includes("convertButton.textContent = 'Preparing journal…';"));
+  assert.ok(!editor.includes('}, 200);'));
 });

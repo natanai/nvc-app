@@ -1198,12 +1198,12 @@ function renderSuggestions() {
         message += ` Showing the top ${cueLabels.length} groups to keep things focused.`;
       }
       if (slotSupportSummary) {
-        message += `. They reinforce your ${slotSupportSummary} in the observation formula.`;
+        message += ` They reinforce your ${slotSupportSummary} in the observation formula.`;
         if (slotGapSummary) {
           message += ` You're still missing the ${slotGapSummary}.`;
         }
       } else if (slotGapSummary) {
-        message += `. Focus next on the ${slotGapSummary}.`;
+        message += ` Focus next on the ${slotGapSummary}.`;
       }
       whyHost.textContent = message;
     } else if (!hasDirect && state.fallback.message && !state.fallback.shouldPrompt && !state.fallback.running) {
@@ -1918,34 +1918,43 @@ function renderJournalConversion() {
   convertButton.disabled = !isReady;
 }
 
-function convertObservationToJournal() {
+async function convertObservationToJournal() {
   const convertButton = document.getElementById('observation-journal-convert');
   const notes = (state.lastSubmitted || '').trim();
   if (!convertButton || !notes) {
     return;
   }
   convertButton.disabled = true;
-  convertButton.textContent = 'Opening journal…';
-
-  const journalButton = document.querySelector('[data-support-journal-open]');
+  convertButton.textContent = 'Preparing journal…';
   blurObservationEditor();
-  const applyNotesToJournal = () => {
-    const notesField = document.querySelector('[data-journal-notes]');
-    if (notesField instanceof HTMLTextAreaElement) {
-      notesField.value = notes;
-      notesField.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-  };
 
-  applyNotesToJournal();
-  if (journalButton instanceof HTMLElement) {
+  try {
+    await import('./journal/module.js');
+    const journalButton = document.querySelector('[data-support-journal-open][data-journal-overlay-bound="true"]')
+      || document.querySelector('[data-support-journal-open]');
+    if (!(journalButton instanceof HTMLElement)) {
+      throw new Error('Journal opener is unavailable');
+    }
+
     journalButton.click();
-  }
-  window.setTimeout(() => {
-    applyNotesToJournal();
+    const notesField = document.querySelector('[data-journal-notes]');
+    if (!(notesField instanceof HTMLTextAreaElement)) {
+      throw new Error('Journal form did not initialize');
+    }
+
+    notesField.value = notes;
+    notesField.dispatchEvent(new Event('input', { bubbles: true }));
+  } catch (error) {
+    console.warn('Unable to prepare Journal from Observation', error);
+    const journalLayer = document.querySelector('[data-support-journal-layer]');
+    if (journalLayer?.getAttribute('data-state') === 'open') {
+      document.querySelector('[data-support-journal-close]')?.click();
+    }
+    setValidityStatus('error', 'Journal unavailable. Refresh and try again.');
+  } finally {
     convertButton.textContent = 'Convert into journal entry';
     convertButton.disabled = false;
-  }, 200);
+  }
 }
 
 function handleClear() {

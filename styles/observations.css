@@ -11,7 +11,7 @@
     --obs-separator: color-mix(in srgb, var(--outline) 10%, transparent);
     --obs-secondary: color-mix(in srgb, var(--ink-soft) 72%, transparent);
     --obs-focus: color-mix(in srgb, var(--plum) 62%, #ffffff);
-    width: min(100%, 960px);
+    width: min(100%, 1120px);
     margin: 0 auto clamp(2rem, 5vw, 3.5rem);
     display: grid;
     gap: clamp(1.6rem, 4vw, 2.75rem);
@@ -1632,6 +1632,21 @@
     color: color-mix(in srgb, var(--outline) 64%, transparent);
   }
 
+  .observation-suggestions__why-body {
+    display: grid;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--obs-separator);
+  }
+
+  .observation-suggestions__why-body .observation-editor__match-summary {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
   .observation-suggestions__panels {
     display: grid;
     gap: clamp(1.25rem, 3vw, 1.75rem);
@@ -2048,6 +2063,237 @@
     gap: 0.45rem;
     padding-inline-start: 1.2rem;
   }
+
+/* Shared disclosure grammar: one affordance, with secondary labels that explain each row's job. */
+.observation-disclosure__copy,
+.observation-editor__recipe-heading {
+  display: grid;
+  gap: 0.16rem;
+  min-width: 0;
+  text-align: left;
+}
+
+.observation-disclosure__title {
+  color: var(--ink);
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.observation-disclosure__purpose {
+  color: var(--obs-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1.25;
+}
+
+.observation-suggestions__why-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  min-height: 52px;
+  list-style: none;
+}
+
+.observation-suggestions__why-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.observation-suggestions__why-toggle::marker {
+  content: '';
+}
+
+.observation-suggestions__why-toggle::after,
+.observation-editor__example-toggle::after,
+.observation-editor__recipe-toggle::after {
+  content: '›';
+  flex: 0 0 auto;
+  color: var(--obs-secondary);
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: transform 0.16s ease;
+}
+
+.observation-suggestions__why-details[open] .observation-suggestions__why-toggle::after,
+.observation-editor__example-toggle[aria-expanded='true']::after,
+.observation-editor__recipe-toggle[aria-expanded='true']::after {
+  transform: rotate(90deg);
+}
+
+.observation-suggestions__why-toggle:focus-visible,
+.observation-editor__example-toggle:focus-visible,
+.observation-editor__recipe-toggle:focus-visible {
+  outline: 2px solid var(--obs-focus);
+  outline-offset: -2px;
+  border-radius: var(--radius-xl);
+}
+
+@media (min-width: 641px) {
+  .observation-editor__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .observation-suggestions[data-mode='results'] .observation-suggestions__header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem 1.5rem;
+    align-items: end;
+  }
+
+  .observation-suggestions[data-mode='results'] .observation-suggestions__action-row {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .observation-suggestions__action[data-action='done'] {
+    display: none;
+  }
+
+  .observation-suggestions__panels {
+    gap: 1.25rem;
+  }
+
+  .observation-panel,
+  .observation-panel--needs,
+  .observation-panel--feelings {
+    min-height: 100%;
+    border: 1px solid var(--obs-group-border);
+    border-radius: var(--radius-2xl);
+    background: var(--obs-group-bg);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--outline) 6%, transparent);
+  }
+
+  .observation-panel__title {
+    color: var(--ink);
+    font-size: 1rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .observation-chip {
+    border-width: 1px;
+    background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
+    box-shadow: none;
+  }
+
+  .observation-chip:hover,
+  .observation-chip:focus-visible {
+    transform: none;
+    border-color: color-mix(in srgb, var(--outline) 34%, transparent);
+    background: color-mix(in srgb, #ffffff 72%, var(--mint) 28%);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--outline) 8%, transparent);
+  }
+
+  .observation-chip:active {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .need-status-toggle {
+    padding: 3px;
+    border: 1px solid var(--obs-group-border);
+    background: color-mix(in srgb, #ffffff 54%, var(--lavender) 46%);
+    box-shadow: inset 0 1px 2px color-mix(in srgb, var(--outline) 8%, transparent);
+  }
+
+  .need-status-toggle__option {
+    min-height: 42px;
+    border-radius: calc(var(--radius-pill) - 3px);
+    color: var(--obs-secondary);
+  }
+
+  .need-status-toggle__option--active {
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--outline) 10%, transparent),
+      0 2px 7px color-mix(in srgb, var(--outline) 10%, transparent);
+  }
+
+  .observation-editor__example-toggle,
+  .observation-editor__recipe,
+  .observation-suggestions__why-details {
+    width: 100%;
+    border: 1px solid var(--obs-group-border);
+    border-radius: var(--radius-2xl);
+    background: var(--obs-group-bg);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--outline) 5%, transparent);
+  }
+
+  .observation-editor__example-toggle {
+    justify-content: space-between;
+    min-height: 58px;
+    padding: 0.72rem 0.9rem;
+  }
+
+  .observation-editor__recipe {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0;
+    padding: 0;
+    border-style: solid;
+  }
+
+  .observation-editor__recipe-heading {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding: 0.72rem 0.9rem;
+  }
+
+  .observation-editor__recipe-title {
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .observation-editor__recipe-toggle {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    min-height: 58px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .observation-editor__recipe-body {
+    grid-column: 1 / -1;
+    padding: 1rem;
+    border-top: 1px solid var(--obs-separator);
+  }
+
+  .observation-editor__recipe[data-collapsed='true'] .observation-editor__recipe-body {
+    display: none;
+  }
+
+  .observation-suggestions__why-details {
+    padding: 0 0.9rem;
+  }
+
+  .observation-suggestions__why-body {
+    padding-bottom: 0.9rem;
+  }
+
+  .observation-editor__match-summary-main {
+    justify-content: flex-start;
+  }
+
+  .observation-editor__match-summary-note {
+    order: 2;
+  }
+
+  .observation-editor__match-summary-main .observation-info-button {
+    order: 1;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+}
 
 /* Native phone presentation: hierarchy first, grouped surfaces, one disclosure grammar. */
 @media (max-width: 640px) {
@@ -2652,6 +2898,17 @@
     text-transform: none;
   }
 
+  #main.observations-page .observation-editor__recipe-heading {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    padding: 0.62rem 0 0.62rem 0.78rem;
+  }
+
+  #main.observations-page .observation-editor__recipe-heading .observation-editor__recipe-title {
+    padding: 0;
+  }
+
   #main.observations-page .observation-editor__recipe-toggle {
     grid-column: 2;
     grid-row: 1;
@@ -2848,11 +3105,16 @@
 
   #main.observations-page .observation-suggestions__why {
     margin: 0;
-    padding: 0.72rem 0.76rem;
-    border-top: 1px solid var(--obs-separator);
+    padding: 0;
+    border-top: 0;
     font-size: 0.82rem;
     line-height: 1.45;
     color: var(--obs-secondary);
+  }
+
+  #main.observations-page .observation-suggestions__why-body {
+    gap: 0.65rem;
+    padding: 0.72rem 0.76rem;
   }
 
   #main.observations-page .observation-suggestions__fallback {
@@ -3125,6 +3387,14 @@
 
   #main.observations-page .observation-suggestions__why-details[open] .observation-suggestions__why-toggle::after {
     transform: rotate(90deg);
+  }
+
+  #main.observations-page .observation-suggestions__why-toggle:focus-visible,
+  #main.observations-page .observation-editor__example-toggle:focus-visible,
+  #main.observations-page .observation-editor__recipe-toggle:focus-visible {
+    outline: 2px solid var(--obs-focus);
+    outline-offset: -2px;
+    border-radius: var(--radius-xl);
   }
 
   #main.observations-page .observation-overview__details,

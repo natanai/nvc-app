@@ -1331,55 +1331,6 @@ button.site-nav__magnet {
                     <div class="observation-suggestions__heading">
                       <h2 class="observation-suggestions__title">Possible feelings &amp; needs to explore</h2>
                       <p id="observation-preview" class="observation-suggestions__preview"></p>
-                      <div
-                        id="observation-detection-summary"
-                        class="observation-editor__match-summary"
-                        aria-live="polite"
-                        hidden
-                      >
-                        <div class="observation-editor__match-summary-main">
-                          <p id="observation-detection-note" class="observation-editor__match-summary-note">
-                            No matches yet.
-                          </p>
-                          <button
-                            class="observation-info-button observation-info-button--subtle"
-                            type="button"
-                            data-observation-info="matching"
-                            aria-haspopup="dialog"
-                            aria-label="How matching works"
-                          >
-                            i
-                          </button>
-                        </div>
-                        <div class="observation-editor__match-summary-chips" aria-label="Match counts">
-                          <span class="observation-editor__match-summary-row">
-                            <span
-                              id="observation-detection-exact"
-                              class="observation-editor__match-summary-value"
-                            >
-                              0 exact
-                            </span>
-                          </span>
-                          <span class="observation-editor__match-summary-row">
-                            <span
-                              id="observation-detection-near"
-                              class="observation-editor__match-summary-value"
-                            >
-                              0 nearby
-                            </span>
-                          </span>
-                        </div>
-                        <p
-                          id="observation-detection-coverage"
-                          class="observation-editor__match-summary-coverage"
-                          hidden
-                        ></p>
-                        <p
-                          id="observation-detection-feelings"
-                          class="observation-editor__match-summary-coverage"
-                          hidden
-                        ></p>
-                      </div>
                     </div>
                     <div class="observation-suggestions__action-row">
                       <button
@@ -1459,8 +1410,64 @@ button.site-nav__magnet {
                     </div>
                   </div>
                   <details class="observation-suggestions__why-details">
-                    <summary class="observation-suggestions__why-toggle">Why these matches?</summary>
-                    <p id="suggested-why" class="observation-suggestions__why"></p>
+                    <summary class="observation-suggestions__why-toggle">
+                      <span class="observation-disclosure__copy">
+                        <span class="observation-disclosure__title">Why these matches?</span>
+                        <span class="observation-disclosure__purpose">Match rationale &amp; counts</span>
+                      </span>
+                    </summary>
+                    <div class="observation-suggestions__why-body">
+                      <div
+                        id="observation-detection-summary"
+                        class="observation-editor__match-summary"
+                        aria-live="polite"
+                        hidden
+                      >
+                        <div class="observation-editor__match-summary-main">
+                          <p id="observation-detection-note" class="observation-editor__match-summary-note">
+                            No matches yet.
+                          </p>
+                          <button
+                            class="observation-info-button observation-info-button--subtle"
+                            type="button"
+                            data-observation-info="matching"
+                            aria-haspopup="dialog"
+                            aria-label="How matching works"
+                          >
+                            i
+                          </button>
+                        </div>
+                        <div class="observation-editor__match-summary-chips" aria-label="Match counts">
+                          <span class="observation-editor__match-summary-row">
+                            <span
+                              id="observation-detection-exact"
+                              class="observation-editor__match-summary-value"
+                            >
+                              0 exact
+                            </span>
+                          </span>
+                          <span class="observation-editor__match-summary-row">
+                            <span
+                              id="observation-detection-near"
+                              class="observation-editor__match-summary-value"
+                            >
+                              0 nearby
+                            </span>
+                          </span>
+                        </div>
+                        <p
+                          id="observation-detection-coverage"
+                          class="observation-editor__match-summary-coverage"
+                          hidden
+                        ></p>
+                        <p
+                          id="observation-detection-feelings"
+                          class="observation-editor__match-summary-coverage"
+                          hidden
+                        ></p>
+                      </div>
+                      <p id="suggested-why" class="observation-suggestions__why"></p>
+                    </div>
                   </details>
                   <div id="observation-fallback-prompt" class="observation-suggestions__fallback" hidden>
                     <p class="observation-suggestions__fallback-text">
@@ -1543,7 +1550,10 @@ button.site-nav__magnet {
                     aria-expanded="false"
                     aria-controls="observation-example"
                   >
-                    Show an example sentence
+                    <span class="observation-disclosure__copy">
+                      <span class="observation-disclosure__title">Show an example sentence</span>
+                      <span class="observation-disclosure__purpose">Writing example</span>
+                    </span>
                   </button>
                   <div id="observation-example" class="observation-editor__example-body" hidden>
                     <p class="observation-editor__example-text">
@@ -1576,9 +1586,12 @@ button.site-nav__magnet {
                   aria-expanded="false"
                   aria-label="Expand observation recipe"
                 ></button>
-                <h2 class="observation-editor__recipe-title" id="observation-guidelines-title">
-                  Observation recipe
-                </h2>
+                <div class="observation-editor__recipe-heading">
+                  <h2 class="observation-editor__recipe-title" id="observation-guidelines-title">
+                    Observation recipe
+                  </h2>
+                  <span class="observation-disclosure__purpose">Step-by-step prompts</span>
+                </div>
                 <div
                   id="observation-guidelines-body"
                   class="observation-editor__recipe-body"
@@ -1617,7 +1630,7 @@ button.site-nav__magnet {
             <summary class="observation-overview__summary">
               <span class="observation-overview__summary-text">
                 <span id="observation-overview-title" class="observation-overview__title">Why try this?</span>
-                <span class="observation-overview__subtitle">Optional context</span>
+                <span class="observation-overview__subtitle">Why observations help</span>
               </span>
               <span class="observation-overview__summary-icon" aria-hidden="true">›</span>
             </summary>
@@ -1717,7 +1730,7 @@ button.site-nav__magnet {
           <!-- observation-guide:start -->
           <summary class="observation-guide__toggle">
             <span class="observation-guide__toggle-text">
-              <span class="observation-guide__eyebrow">Optional</span>
+              <span class="observation-guide__eyebrow">Detailed reference</span>
               <span class="observation-guide__toggle-title">Full guide &amp; research</span>
             </span>
             <span class="observation-guide__toggle-icon" aria-hidden="true">›</span>
