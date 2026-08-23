@@ -39,9 +39,16 @@ build = replaceOnce(
 
 build = replaceOnce(
   build,
-  "    scripts: [\n      { src: 'scripts/magnets.js', type: 'module' },\n      { src: 'scripts/feeling-reverse-inference.js', type: 'module' },\n    ],\n    mainAttributes: ` data-feeling-slug=\\\"${escapeHtml(item.slug)}\\\"`,\n    activeNav: 'feelings',\n    canonicalPath: `feelings/${item.slug}/`,\n    description: item.description,\n  });",
-  "    scripts: [\n      shellRuntimeLoaderScript,\n      { src: 'scripts/magnets.js', type: 'module' },\n      { src: 'scripts/feeling-reverse-inference.js', type: 'module' },\n    ],\n    mainAttributes: ` data-feeling-slug=\\\"${escapeHtml(item.slug)}\\\"`,\n    activeNav: 'feelings',\n    canonicalPath: `feelings/${item.slug}/`,\n    description: item.description,\n    includeInventoryRuntime: false,\n  });",
-  'Feeling detail intent-load Inventory runtime',
+  "    scripts: [\n      { src: 'scripts/magnets.js', type: 'module' },\n      { src: 'scripts/feeling-reverse-inference.js', type: 'module' },\n    ],",
+  "    scripts: [\n      shellRuntimeLoaderScript,\n      { src: 'scripts/magnets.js', type: 'module' },\n      { src: 'scripts/feeling-reverse-inference.js', type: 'module' },\n    ],",
+  'Feeling detail loader insertion',
+);
+
+build = replaceOnce(
+  build,
+  "    canonicalPath: `feelings/${item.slug}/`,\n    description: item.description,\n  });",
+  "    canonicalPath: `feelings/${item.slug}/`,\n    description: item.description,\n    includeInventoryRuntime: false,\n  });",
+  'Feeling detail direct Inventory removal',
 );
 
 build = replaceOnce(
