@@ -48,12 +48,32 @@ test('routes with immediately visible controller-owned features remain eager', a
   assert.ok(journal.includes('assets/js/journal/module.js'), 'Dedicated Journal module must remain eager');
 });
 
-test('candidate content classes stay unchanged until their explicit browser-audited migration', async () => {
-  const [feeling, fauxFeeling] = await Promise.all([
+test('post-Bedrock content canaries keep route features eager while intent-loading the shared controller', async () => {
+  const [feelingsIndex, needsIndex, fauxIndex, feeling, fauxFeeling, bodyCues] = await Promise.all([
+    read('feelings/index.html'),
+    read('needs/index.html'),
+    read('faux-feelings/index.html'),
     read('feelings/afraid/index.html'),
     read('faux-feelings/abandoned/index.html'),
+    read('feelings/body-cues/index.html'),
   ]);
 
-  assert.ok(hasInventoryScript(feeling, '../../scripts/inventory.js'), 'Feeling details must not be bulk-deferred before Home acceptance');
-  assert.ok(hasInventoryScript(fauxFeeling, '../../scripts/inventory.js'), 'Faux-feeling details must not be bulk-deferred before Home acceptance');
+  const lazyFixtures = [
+    ['Feelings index', feelingsIndex, '../scripts/inventory.js', '../scripts/shell-runtime-loader.js'],
+    ['Needs index', needsIndex, '../scripts/inventory.js', '../scripts/shell-runtime-loader.js'],
+    ['Faux-feelings index', fauxIndex, '../scripts/inventory.js', '../scripts/shell-runtime-loader.js'],
+    ['Feeling detail', feeling, '../../scripts/inventory.js', '../../scripts/shell-runtime-loader.js'],
+    ['Faux-feeling detail', fauxFeeling, '../../scripts/inventory.js', '../../scripts/shell-runtime-loader.js'],
+    ['Body Cues', bodyCues, '../../scripts/inventory.js', '../../scripts/shell-runtime-loader.js'],
+  ];
+
+  for (const [label, html, inventorySrc, loaderSrc] of lazyFixtures) {
+    assert.ok(!hasInventoryScript(html, inventorySrc), label + ' must keep the large shared controller off parser first load');
+    assert.ok(hasInventoryScript(html, loaderSrc), label + ' must retain the shell intent loader');
+    assert.ok(html.includes('scripts/inventory-core-shell.js'), label + ' must keep the shared Menu/navigation shell eager');
+    assert.ok(html.includes('scripts/magnets.js'), label + ' must keep magnet interaction eager');
+  }
+
+  assert.ok(feeling.includes('scripts/feeling-reverse-inference.js'), 'Feeling reverse inference must remain an eager route-owned feature');
+  assert.ok(bodyCues.includes('scripts/body-cues-tool.js'), 'Body Cues interaction must remain an eager route-owned feature');
 });

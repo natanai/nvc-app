@@ -789,6 +789,12 @@ const customizerShellPlaceholderHtml = `    <div class="palette-corner" data-she
       </button>
     </div>`;
 
+const shellRuntimeLoaderScript = Object.freeze({
+  src: 'scripts/shell-runtime-loader.js',
+  defer: true,
+  beforeBase: true,
+});
+
 function normalizeScripts(scripts, options = {}) {
   const includeInventoryRuntime = options.includeInventoryRuntime !== false;
   const baseScripts = [
@@ -1464,7 +1470,7 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
-    scripts: [{ src: 'scripts/shell-runtime-loader.js', defer: true, beforeBase: true }],
+    scripts: [shellRuntimeLoaderScript],
     activeNav: 'home',
     canonicalPath: '/',
     bodyExtras: customizerShellPlaceholderHtml,
@@ -1706,9 +1712,10 @@ function renderCategory(type, items) {
     ],
     main,
     headExtras: magnetHubStyles,
-    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    scripts: [shellRuntimeLoaderScript, { src: 'scripts/magnets.js', type: 'module' }],
     activeNav: type,
     canonicalPath: `${type}/`,
+    includeInventoryRuntime: false,
   });
 
   writePage(`${type}/index.html`, html);
@@ -1835,10 +1842,11 @@ function renderBodyCuesPage() {
     ],
     main,
     headExtras: bodyCuesStyles,
-    scripts: [{ src: 'scripts/body-cues-tool.js', type: 'module' }],
+    scripts: [shellRuntimeLoaderScript, { src: 'scripts/body-cues-tool.js', type: 'module' }],
     activeNav: 'feelings',
     mainClass: 'page body-cues-page',
     canonicalPath: 'feelings/body-cues/',
+    includeInventoryRuntime: false,
   });
 
   writePage('feelings/body-cues/index.html', html);
@@ -1862,9 +1870,10 @@ function renderFauxFeeling(item) {
       { label: item.title }
     ],
     main,
-    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    scripts: [shellRuntimeLoaderScript, { src: 'scripts/magnets.js', type: 'module' }],
     activeNav: 'faux-feelings',
     canonicalPath: `faux-feelings/${item.slug}/`,
+    includeInventoryRuntime: false,
   });
 
   writePage(`faux-feelings/${item.slug}/index.html`, html);
@@ -1923,6 +1932,7 @@ function renderFeeling(item) {
     ],
     main,
     scripts: [
+      shellRuntimeLoaderScript,
       { src: 'scripts/magnets.js', type: 'module' },
       { src: 'scripts/feeling-reverse-inference.js', type: 'module' },
     ],
@@ -1930,6 +1940,7 @@ function renderFeeling(item) {
     activeNav: 'feelings',
     canonicalPath: `feelings/${item.slug}/`,
     description: item.description,
+    includeInventoryRuntime: false,
     headExtras: '    <link rel="stylesheet" href="../../styles/feeling-inference-mobile.css" />',
   });
 
