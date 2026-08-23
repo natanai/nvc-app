@@ -15,8 +15,9 @@ const HUBS = [
 ];
 
 test('navigation alone keeps the lightweight saved-layout prepaint path', async () => {
-  const compiler = await read('scripts/build-pages.mjs');
-  assert.ok(compiler.includes('const magnetPrefillScript = (storageKey) => String.raw`'));
+  const [compiler, prepaint] = await Promise.all([read('scripts/build-pages.mjs'), read('scripts/nav-prepaint.mjs')]);
+  assert.ok(compiler.includes("import { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } from './nav-prepaint.mjs';"));
+  assert.ok(prepaint.includes('export const magnetPrefillScript = (storageKey) => String.raw`'));
   assert.ok(compiler.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
   assert.ok(!compiler.includes("magnetPrefillScript(type + '-hub-v4'"));
   assert.ok(!compiler.includes('stableHubMagnetDecorationStyle'));
@@ -42,7 +43,7 @@ test('critical paint never gates all magnets on JavaScript readiness', async () 
 test('critical paint never installs a fixed root background on mobile', async () => {
   const criticalCss = await read('styles/nav-critical.css');
   assert.ok(!criticalCss.includes('background-attachment: fixed'));
-  for (const relativePath of ['feelings/index.html', 'feelings/afraid/index.html', 'needs/index.html']) {
+  for (const relativePath of ['feelings/index.html', 'feelings/afraid/index.html', 'needs/index.html', 'observations/index.html']) {
     const html = await read(relativePath);
     assert.ok(!html.includes('background-attachment: fixed'), `${relativePath} must not inline the mobile repaint trigger`);
   }
@@ -63,4 +64,21 @@ test('magnet runtime remains the single owner of handmade tilt and offset', asyn
   assert.ok(runtime.includes('const offset = randomFrom(OFFSET_OPTIONS);'));
   assert.ok(!runtime.includes("element.style.getPropertyValue('--magnet-tilt')"));
   assert.ok(!runtime.includes("element.style.getPropertyValue('--magnet-offset')"));
+});
+
+test('Observations compiles the same responsive navigation first-paint contract as generated pages', async () => {
+  const [html, criticalCss] = await Promise.all([
+    read('observations/index.html'),
+    read('styles/nav-critical.css'),
+  ]);
+  const { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } = await import('../scripts/nav-prepaint.mjs');
+  assert.ok(html.includes('<!-- shared-nav-critical:start -->'));
+  assert.ok(html.includes('<!-- shared-nav-critical:end -->'));
+  assert.ok(html.includes(`<style>${criticalCss.trim()}</style>`));
+  assert.ok(html.includes('<!-- shared-nav-prefill:start -->'));
+  assert.ok(html.includes('<!-- shared-nav-prefill:end -->'));
+  assert.ok(html.includes(magnetPrefillScript(NAV_MAGNET_STORAGE_KEY).trim()));
+  assert.ok(html.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:site-nav';"));
+  assert.ok(html.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
+  assert.ok(!html.includes("var STORAGE_KEY = 'magnetPositions:site-nav';"));
 });

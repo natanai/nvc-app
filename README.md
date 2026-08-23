@@ -46,7 +46,7 @@ The core page and data authoring pipelines have completed their canonicalization
 - `npm run build` runs both canonical compilers directly. Site Quality CI validates the committed site first, runs the real authoring build, and fails if generated artifacts differ from the committed tree.
 - the **Push Poems**, rebuild, and fact-checking workflows route regeneration through these same declared owners rather than a second repair layer or broad collateral staging.
 - representative first-load JavaScript graphs and the largest shared browser assets have explicit regression ceilings in `tests/performance-budget.test.mjs`, so validated lazy-loading gains cannot silently disappear as the codebase evolves.
-- category hubs paint normally and let the existing magnet runtime own saved-position restoration and handmade tilt/offset. Navigation alone retains the established lightweight saved-layout prepaint path. Permanent regressions forbid the global JavaScript-readiness visibility gate, mobile fixed-root-background trigger, and compensating Feeling-art compositor hack identified during Bedrock phone testing.
+- category hubs paint normally and let the existing magnet runtime own saved-position restoration and handmade tilt/offset. Navigation alone retains the established lightweight saved-layout prepaint path. Permanent regressions forbid the global JavaScript-readiness visibility gate, mobile fixed-root-background trigger, and compensating Feeling-art compositor hack identified during Bedrock phone testing. `scripts/nav-prepaint.mjs` is the shared build-time owner for that responsive navigation prefill; the Observations compiler synchronizes its inline first-paint navigation CSS from `styles/nav-critical.css` and its prefill from the same shared renderer, preventing the hand-owned route from drifting into a second startup contract.
 - the Need strategy-card deck has been extracted byte-for-byte from the former `inventory.js` tail into route-owned `scripts/strategy-deck.js`. Need pages still load the Inventory runtime for their real save controls, while unrelated routes do not need to parse deck behavior.
 - the legacy Inventory `#journal-dashboard` compatibility redirect is owned by `scripts/inventory-legacy-journal-redirect.js` rather than the shared controller. The obsolete-architecture guard keeps that hash and the deleted safe-build/finalizer layers from drifting back into shared ownership.
 - shared CSS dependencies are parser-discovered directly rather than hidden behind nested imports. Google Fonts consumers preconnect to both font origins before requesting font CSS, and `tests/font-delivery.test.mjs` makes that delivery order permanent.
@@ -186,6 +186,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
 └── scripts/
     ├── build-data.mjs          # canonical data compiler
     ├── build-pages.mjs         # canonical page compiler
+    ├── nav-prepaint.mjs        # shared build-time responsive navigation prefill owner
     ├── strategy-deck.js        # Need-only strategy card deck runtime
     ├── inventory-legacy-journal-redirect.js # Inventory-only compatibility redirect
     └── shell-runtime-loader.js # shared shell intent-loader + retired-cache cleanup owner

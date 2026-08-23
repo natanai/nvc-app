@@ -1,14 +1,31 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } from './nav-prepaint.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'observation-guide.json');
 const pagePath = join(rootDir, 'observations', 'index.html');
+const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
+const SHARED_NAV_CRITICAL_START = '<!-- shared-nav-critical:start -->';
+const SHARED_NAV_CRITICAL_END = '<!-- shared-nav-critical:end -->';
+const SHARED_NAV_PREFILL_START = '<!-- shared-nav-prefill:start -->';
+const SHARED_NAV_PREFILL_END = '<!-- shared-nav-prefill:end -->';
 
 const START_MARKER = '<!-- observation-guide:start -->';
 const END_MARKER = '<!-- observation-guide:end -->';
+
+function replaceOwnedRegion(html, startMarker, endMarker, content, label) {
+  const startIndex = html.indexOf(startMarker);
+  const endIndex = html.indexOf(endMarker);
+  if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
+    throw new Error(`Unable to locate ${label} ownership markers in observations/index.html`);
+  }
+  const before = html.slice(0, startIndex + startMarker.length);
+  const after = html.slice(endIndex);
+  return `${before}\n${content.trim()}\n${after}`;
+}
 
 export function readObservationGuideData() {
   const raw = readFileSync(dataPath, 'utf8');
@@ -325,6 +342,21 @@ export function updateObservationGuidePage() {
   const before = html.slice(0, startIndex + START_MARKER.length);
   const after = html.slice(endIndex);
   const content = `\n${markup}\n          `;
-  const updated = `${before}${content}${after}`;
+  let updated = `${before}${content}${after}`;
+  const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
+  updated = replaceOwnedRegion(
+    updated,
+    SHARED_NAV_CRITICAL_START,
+    SHARED_NAV_CRITICAL_END,
+    `<style>${navCriticalCss}</style>`,
+    'shared navigation critical CSS',
+  );
+  updated = replaceOwnedRegion(
+    updated,
+    SHARED_NAV_PREFILL_START,
+    SHARED_NAV_PREFILL_END,
+    magnetPrefillScript(NAV_MAGNET_STORAGE_KEY),
+    'shared navigation prefill',
+  );
   writeFileSync(pagePath, updated);
 }
