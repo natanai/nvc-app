@@ -3407,26 +3407,18 @@ function renderInventoryJournalPage(needsList = []) {
       }
 
       main[data-page-id='inventory-journal'] .journal-history-controls__filters {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         width: 100%;
         min-width: 0;
         max-width: 100%;
         gap: 0.34rem;
-        overflow-x: auto;
-        overflow-y: hidden;
-        overscroll-behavior-inline: contain;
-        scrollbar-width: none;
-        contain: inline-size;
-        padding-bottom: 0.08rem;
-      }
-
-      main[data-page-id='inventory-journal'] .journal-history-controls__filters::-webkit-scrollbar {
-        display: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-history-control {
-        flex: 0 0 auto;
         display: block;
+        min-width: 0;
+        max-width: 100%;
       }
 
       main[data-page-id='inventory-journal'] .journal-history-control > span {
@@ -3442,8 +3434,9 @@ function renderInventoryJournalPage(needsList = []) {
       }
 
       main[data-page-id='inventory-journal'] .journal-history-control select {
-        width: auto;
-        min-width: 7rem;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
         min-height: 44px;
         padding: 0.42rem 1.55rem 0.42rem 0.68rem;
         border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
@@ -3726,8 +3719,7 @@ function renderInventoryJournalPage(needsList = []) {
         }
 
         main[data-page-id='inventory-journal'] .journal-history-controls__filters {
-          overflow-x: visible;
-          flex-wrap: wrap;
+          grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
         }
       }
 

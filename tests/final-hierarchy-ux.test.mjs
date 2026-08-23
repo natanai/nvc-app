@@ -46,11 +46,16 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(runtime.includes("control.hidden = entries.length === 0"), 'empty filter dimensions must stay out of the UI');
   assert.ok(runtime.includes("'No matches'"), 'filtered-empty history must distinguish no matches from no entries');
 
-  // Regression target: populated Journal content may scroll inside the filter
-  // rail, but its intrinsic width must never make the document itself pan.
+  // Regression target: populated Journal filters must fit the viewport by
+  // construction. A wide horizontal select rail proved capable of exporting
+  // intrinsic width to mobile Safari's document even when ancestors had
+  // min-width:0. Use a bounded grid instead; no document or filter-rail pan is
+  // part of the final mobile interaction contract.
   for (const source of [build, html]) {
-    assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-history-controls__filters {"), 'Journal must own its populated filter rail at the generator layer');
-    assert.ok(source.includes('contain: inline-size;'), 'the horizontal Journal filter rail must contain its intrinsic width instead of widening the document');
+    assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-history-controls__filters {"), 'Journal must own its populated filters at the generator layer');
+    assert.ok(source.includes('grid-template-columns: repeat(2, minmax(0, 1fr));'), 'mobile Journal filters must use bounded tracks');
+    assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-history-control select {\n        width: 100%;\n        min-width: 0;\n        max-width: 100%;"), 'native selects must shrink inside their grid tracks');
+    assert.equal(source.includes('overflow-x: auto;\n        overflow-y: hidden;\n        overscroll-behavior-inline: contain;'), false, 'the retired horizontal filter rail must not return');
     assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-summary__stat,"), 'Patterns cards must participate in the Journal shrink-to-viewport contract');
     assert.ok(source.includes("main[data-page-id='inventory-journal'] .journal-entry__title-row {"), 'populated entries must participate in the Journal shrink-to-viewport contract');
     assert.ok(source.includes('grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));'), 'Patterns grid minimums must never exceed their available inline size');
