@@ -109,3 +109,5 @@ jobs:
           git add -A
           git commit -m "Unify Observations navigation first-paint ownership"
           git push origin HEAD:performance/immediate-response-v1
+
+# Trigger after workflow installation; the workflow removes itself after a successful canonical migration.
