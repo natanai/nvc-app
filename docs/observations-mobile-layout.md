@@ -24,3 +24,5 @@ The density layer must not rename/remove existing DOM hooks or change observatio
 Permanent coverage lives in `tests/shared-density-polish.test.mjs`, including parser discovery, full-width phone ownership, grouped Quick check rows, disclosure treatment, minimum touch target sizing, the overlay paint/scroll synchronization contract, compact result actions, segmented Unmet/Met ownership, and the ban on `!important` patch chains.
 
 Live-device acceptance should include a filled observation long enough to scroll inside the textarea: scroll it repeatedly on iOS, confirm the green highlights stay aligned without duplicated text, then load matches and verify the compact result controls remain fully tappable.
+
+Current CI checkpoint for this refinement: Site Quality run 676 passed the full canonical build, zero-diff generated-artifact check, performance budgets, navigation/flicker contracts, and the permanent interaction regressions.
