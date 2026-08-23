@@ -14,10 +14,13 @@ const root = path.resolve(__dirname, '..');
 const ROUTE_BUDGETS = [
   { label: 'Home', html: 'index.html', maxBytes: 110_000 },
   { label: 'Shared Strategies', html: 'feed/index.html', maxBytes: 125_000 },
+  { label: 'Feelings index', html: 'feelings/index.html', maxBytes: 115_000 },
+  { label: 'Needs index', html: 'needs/index.html', maxBytes: 115_000 },
+  { label: 'Faux-feelings index', html: 'faux-feelings/index.html', maxBytes: 115_000 },
   { label: 'Need detail', html: 'needs/acceptance/index.html', maxBytes: 355_000 },
-  { label: 'Feeling detail', html: 'feelings/afraid/index.html', maxBytes: 355_000 },
-  { label: 'Faux-feeling detail', html: 'faux-feelings/abandoned/index.html', maxBytes: 337_000 },
-  { label: 'Body Cues', html: 'feelings/body-cues/index.html', maxBytes: 355_000 },
+  { label: 'Feeling detail', html: 'feelings/afraid/index.html', maxBytes: 130_000 },
+  { label: 'Faux-feeling detail', html: 'faux-feelings/abandoned/index.html', maxBytes: 115_000 },
+  { label: 'Body Cues', html: 'feelings/body-cues/index.html', maxBytes: 130_000 },
   { label: 'Inventory', html: 'inventory/index.html', maxBytes: 345_000 },
   { label: 'Journal', html: 'inventory/journal/index.html', maxBytes: 415_000 },
 ];
@@ -98,6 +101,15 @@ test('representative routes stay within parser-discovered JavaScript budgets', a
     home <= need * 0.4,
     `Home lost its lightweight canary advantage: ${home} bytes vs Need detail ${need} bytes.`,
   );
+
+  for (const label of ['Feelings index', 'Needs index', 'Faux-feelings index', 'Feeling detail', 'Faux-feeling detail', 'Body Cues']) {
+    const candidate = results.get(label)?.totalBytes || 0;
+    assert.ok(candidate > 0, `${label} must remain measurable`);
+    assert.ok(
+      candidate <= need * 0.4,
+      `${label} lost the post-Bedrock intent-loaded advantage: ${candidate} bytes vs Need detail ${need} bytes.`,
+    );
+  }
 });
 
 test('largest shared browser assets stay inside explicit raw-size ceilings', async () => {
