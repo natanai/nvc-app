@@ -35,6 +35,7 @@ jobs:
           node --check assets/js/journal/module.js
           node --check scripts/inventory.js
           node --check scripts/magnets.js
+          npm run build:pages
           node --test tests/desktop-bedrock-finalization.test.mjs tests/final-hierarchy-ux.test.mjs
           npm run build
           npm run test:flicker-jitter
