@@ -111,3 +111,17 @@ test('strategy Needs multiselect remains visible and preserves page defaults', (
   assert.ok(inventorySelect, 'Inventory must render the shared Needs transport select');
   assert.equal(inventorySelect.includes(' selected'), false, 'Inventory add form must start without an arbitrary Need selected');
 });
+
+
+test('strategy editor uses desktop width without clipping the Needs catalog', () => {
+  const css = read('styles.css');
+  const needPage = read('needs/acceptance/index.html');
+
+  assert.ok(css.includes(".strategy-card--form .strategy-form:has(.strategy-form__field--needs) {\n    grid-template-columns: repeat(2, minmax(0, 1fr));"), 'desktop strategy editor must use two bounded columns');
+  assert.ok(css.includes(".strategy-card--form .strategy-form__field:has(input[name='title']) {\n    grid-column: 1;\n    grid-row: 1;"), 'strategy name must occupy the first desktop column');
+  assert.ok(css.includes('.strategy-card--form .strategy-form__field--needs {\n    grid-column: 2;\n    grid-row: 1;'), 'Needs must share the first desktop row');
+  assert.ok(css.includes(".strategy-card--form .strategy-form__field:has(textarea[name='description']) {\n    grid-column: 1 / -1;\n    grid-row: 2;"), 'strategy details must keep the full desktop width');
+  assert.ok(css.includes('.strategy-card--form .strategy-need-catalog .journal-catalog-select__trigger {\n  width: 100%;\n  padding-inline: 0.62rem 0.76rem;'), 'Needs trigger must keep its chevron inside the field border');
+  assert.ok(css.includes('.strategy-card--form .strategy-need-catalog .journal-catalog-popover {\n  left: 0;\n  right: auto;\n  width: 100%;\n  max-width: 100%;'), 'Needs popup must be bounded by its strategy field');
+  assert.equal(needPage.includes('journal-feeling-rating'), false, 'Needs selector must not acquire Feeling intensity controls');
+});
