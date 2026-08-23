@@ -7,26 +7,32 @@ on:
         description: 'Branch to rebuild (published branch by default).'
         required: true
         default: inventory-core-overhaul
+  pull_request:
+    branches:
+      - inventory-core-overhaul
+    types: [synchronize]
 
 permissions:
   contents: write
 
 concurrency:
-  group: observation-guide-builder-${{ inputs.target_branch }}
+  group: observation-guide-builder-${{ github.event_name == 'workflow_dispatch' && inputs.target_branch || github.head_ref }}
   cancel-in-progress: false
 
 jobs:
   rebuild:
     name: Rebuild observation guide page
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'performance/immediate-response-v1'
     runs-on: ubuntu-latest
     env:
-      TARGET_BRANCH: ${{ inputs.target_branch }}
+      TARGET_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.target_branch || github.head_ref }}
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v4
         with:
           ref: ${{ env.TARGET_BRANCH }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,10 +43,65 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Apply one-time Observations navigation ownership migration
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .github/scripts/repair-observations-nav-first-paint.mjs
+          node --check .github/scripts/repair-observations-nav-first-paint.mjs
+          node .github/scripts/repair-observations-nav-first-paint.mjs
+          npm run build
+          npm run test:data-integrity
+          npm run test:customizer
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+          npm run test:performance
+          npm run test:delivery
+          npm run test:generator-ownership
+
       - name: Rebuild observation guide page
+        if: github.event_name == 'workflow_dispatch'
         run: node scripts/build-pages.mjs --scope=observation-guide
 
+      - name: Finalize one-time migration
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/scripts/repair-observations-nav-first-paint.mjs
+          rm -f .github/workflows/repair-observations-nav-first-paint.yml
+          git checkout origin/inventory-core-overhaul -- .github/workflows/observation-guide-builder.yml
+          npm run test:obsolete
+          npm run build
+          git diff --check
+
+          bad=0
+          while IFS= read -r path; do
+            [[ -z "$path" ]] && continue
+            case "$path" in
+              README.md|scripts/build-pages.mjs|scripts/observation-guide.mjs|scripts/nav-prepaint.mjs|observations/index.html|tests/bedrock-state-contract.test.mjs|tests/magnet-prepaint.test.mjs|.github/scripts/repair-observations-nav-first-paint.mjs|.github/workflows/repair-observations-nav-first-paint.yml|.github/workflows/observation-guide-builder.yml)
+                ;;
+              *)
+                echo "Unexpected changed path: $path" >&2
+                bad=1
+                ;;
+            esac
+          done < <(git status --porcelain | sed -E 's/^.. //')
+          exit "$bad"
+
+      - name: Commit canonical navigation repair
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Unify Observations navigation first-paint ownership"
+          git push origin HEAD:${{ env.TARGET_BRANCH }}
+
       - name: Commit updated observation guide
+        if: github.event_name == 'workflow_dispatch'
         id: commit
         run: |
           if [[ -z "$(git status --porcelain)" ]]; then
@@ -56,10 +117,11 @@ jobs:
           echo "changes=true" >> "$GITHUB_OUTPUT"
 
       - name: Push changes
-        if: steps.commit.outputs.changes == 'true'
+        if: github.event_name == 'workflow_dispatch' && steps.commit.outputs.changes == 'true'
         run: git push origin HEAD:${{ env.TARGET_BRANCH }}
 
       - name: Summarize run
+        if: github.event_name == 'workflow_dispatch'
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
             SUMMARY="Rebuilt the observation guide and pushed updated markup to ${{ env.TARGET_BRANCH }}."
