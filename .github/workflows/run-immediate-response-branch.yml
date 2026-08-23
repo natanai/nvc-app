@@ -96,3 +96,5 @@ jobs:
           git rm .github/workflows/run-immediate-response-branch.yml
           git commit -m "Remove one-time immediate response branch runner"
           git push origin HEAD:inventory-core-overhaul
+
+# Trigger after the runner is installed on the default branch.
