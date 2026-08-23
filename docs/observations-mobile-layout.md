@@ -21,6 +21,8 @@ The highlight layer is paint-only: highlighted text is explicitly transparent (i
 
 The generated `data/observation_cue_modules.json` artifact is sufficient to preserve exact-match detection and its feeling/need suggestions even if the supplemental cue-row CSV cannot be delivered. The CSV still enriches cue-level and nearby/fallback behavior when available. Runtime loading treats those assets independently instead of allowing one failed fetch to silently zero the entire detector. The built-in example is a permanent regression fixture and must produce at least one exact module hit under the normal runtime limits.
 
+`tests/observation-suggest.test.mjs` now exercises both the full cue library and module-artifact-only path, and it runs inside `npm run test:data-integrity` so normal Site Quality checks protect this runtime contract rather than leaving it as an optional standalone test.
+
 ## Non-negotiable behavior
 
 The density layer must not rename/remove existing DOM hooks or change observation analysis, matching, example insertion, Quick check state, suggestion behavior, guide behavior, dialogs, Journal conversion, or navigation magnets. Touch targets remain at least 44px where controls are interactive.
