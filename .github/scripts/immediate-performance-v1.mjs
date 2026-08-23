@@ -82,4 +82,13 @@ const newCandidateTest = `test('post-Bedrock content canaries keep route feature
 routeTest = replaceOnce(routeTest, oldCandidateTest, newCandidateTest, 'route-runtime canary contract');
 write('tests/route-runtime-ownership.test.mjs', routeTest);
 
+let homeTest = read('tests/home-runtime-canary.test.mjs');
+homeTest = replaceOnce(
+  homeTest,
+  `  assert.ok(generator.includes("scripts: [{ src: 'scripts/shell-runtime-loader.js', defer: true, beforeBase: true }],"));\n`,
+  `  assert.ok(generator.includes('const shellRuntimeLoaderScript = Object.freeze({'));\n  assert.ok(generator.includes("src: 'scripts/shell-runtime-loader.js'"));\n  assert.ok(generator.includes('scripts: [shellRuntimeLoaderScript],'));\n`,
+  'Home generator test follows shared loader descriptor',
+);
+write('tests/home-runtime-canary.test.mjs', homeTest);
+
 console.log('Immediate-response v1 canonical source migration applied.');
