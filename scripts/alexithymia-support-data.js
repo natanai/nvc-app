@@ -97,92 +97,92 @@ const BODY_SENSATION_OPTIONS = new Map();
 export const QUADRANT_SUGGESTIONS = {
   'low-unpleasant': {
     label: 'Low energy · Unpleasant',
-    description: 'Feeling heavy, foggy, or slowed down often pairs with sadness, grief, or depletion.',
+    description: 'Low activation with unpleasant affect can be associated with sadness, grief, fatigue, or loneliness.',
     emotions: ['sadness', 'grief', 'tired', 'lonely'],
     care: [
-      'Offer gentle comfort: wrap in a blanket, hold a warm mug, or play soothing sounds.',
-      'If it feels right, reach out to someone who can sit with you or send a caring message.',
-      'Try progressive muscle relaxation or a gentle stretch to reassure weighted muscles.',
+      'Reduce stimulation and choose a physically comfortable setting if possible.',
+      'Consider contacting someone you trust for company or practical support.',
+      'Try slow breathing, stretching, or progressive muscle relaxation and notice whether tension changes.',
     ],
   },
   'medium-unpleasant': {
     label: 'Steady energy · Unpleasant',
-    description: 'Uneasy steadiness can align with anxiousness, guilt, or shame when something important feels off.',
+    description: 'Moderate activation with unpleasant affect can be associated with anxiety, guilt, shame, or stress.',
     emotions: ['anxiety', 'guilt', 'shame', 'stress'],
     care: [
-      'Name what feels out of alignment and what value or need wants attention.',
+      'Identify the situation, thought, value, or need that seems most relevant.',
       'Try a grounding check: notice 5 things you see, 4 you feel, 3 you hear, 2 you smell, 1 you taste.',
-      'Follow a mindful stretch or mobility flow to ease tension as you journal patterns.',
+      'Use a brief grounding or movement exercise and note whether activation changes.',
     ],
   },
   'high-unpleasant': {
     label: 'High energy · Unpleasant',
-    description: 'Revved-up distress can accompany anxiety, anger, fear, or overwhelm.',
+    description: 'High activation with unpleasant affect can be associated with anxiety, fear, anger, or overwhelm.',
     emotions: ['anxiety', 'fear', 'anger', 'overwhelm'],
     care: [
-      'Lengthen your exhale or press your feet into the floor to remind your body it is supported.',
-      'Shake out your hands or shoulders to release excess adrenaline before responding.',
-      'Move through progressive muscle relaxation or mindful stretching to discharge the surge.',
+      'Lengthen the exhale or press your feet into the floor and notice whether arousal changes.',
+      'Use brief movement if remaining still increases agitation.',
+      'Delay non-urgent responses until activation has decreased when possible.',
     ],
   },
   'low-neutral': {
     label: 'Low energy · Neutral',
-    description: 'Feeling flat or disconnected might relate to numbness, boredom, or simple fatigue.',
+    description: 'Low activation with neutral affect can occur with numbness, boredom, or fatigue.',
     emotions: ['numb', 'bored', 'tired'],
     care: [
-      'Take a sensory inventory: notice texture, temperature, or gentle movement to wake up interoception.',
-      'Try a small action such as stretching, stepping outside, or sipping water.',
-      'Experiment with mindful stretching or tai chi to invite subtle sensations back online.',
+      'Check basic sensory information such as texture, temperature, pressure, or movement and note what is easiest to detect.',
+      'Try one small change in movement, light, temperature, or activity and notice whether the state changes.',
+      'Use slow movement or stretching if it helps make body sensations easier to notice.',
     ],
   },
   'medium-neutral': {
     label: 'Steady energy · Neutral',
-    description: 'Balanced energy can signal curiosity or being deep in thought while you evaluate what comes next.',
+    description: 'Moderate activation with neutral affect can occur with curiosity, reflection, or uncertainty.',
     emotions: ['curiosity', 'thoughtful', 'uncertain'],
     care: [
-      'Jot down what you know and what questions you still have—naming them can clarify direction.',
-      'Check whether you need more information, reassurance, or time before acting.',
-      'Tag the situation in your journal so you can track what helps clarity return.',
+      'Write down what is known, what remains uncertain, and what information would help.',
+      'Allow additional time before deciding if the situation remains unclear.',
+      'Record the context if you want to compare it with future patterns.',
     ],
   },
   'high-neutral': {
     label: 'High energy · Neutral',
-    description: 'Buzzing but not distressed may indicate determination or anticipation before taking action.',
+    description: 'High activation without clear distress can occur with determination, focus, or anticipation.',
     emotions: ['determined', 'focused', 'excited'],
     care: [
-      'Channel the energy into a clear next step or into movement like a brisk walk.',
-      'Double-check your plan with a supportive person if you want validation before moving forward.',
-      'Try mindful stretching, dance, or shaking to partner with the momentum without burning out.',
+      'Direct the energy toward one specific next step or a brief period of movement.',
+      'Check whether urgency is necessary before acting, and seek another perspective if useful.',
+      'Plan a transition or break if sustained activation or focus is becoming tiring.',
     ],
   },
   'low-pleasant': {
     label: 'Low energy · Pleasant',
-    description: 'Easeful and grounded sensations often pair with calm or relief after effort.',
+    description: 'Low activation with pleasant affect can occur with calm, relief, or contentment.',
     emotions: ['calm', 'relief', 'contented'],
     care: [
-      'Savor the ease—lengthen the exhale, stretch gently, or notice what feels safe.',
-      'Thank your body for the steadiness.',
-      'Take a slow stretch or relaxation pause to anchor the memory so you can revisit it later.',
+      'Notice what conditions are present while the state feels calm or relieved.',
+      'Use the state as an opportunity for rest or recovery if needed.',
+      'Record the context if it may be useful to recreate later.',
     ],
   },
   'medium-pleasant': {
     label: 'Steady energy · Pleasant',
-    description: 'Balanced warmth can signal feeling contented, hopeful, or grateful.',
+    description: 'Moderate activation with pleasant affect can occur with contentment, hope, or gratitude.',
     emotions: ['contented', 'hopeful', 'gratitude'],
     care: [
-      'Write down what is working right now so you can return to it later.',
-      'Share appreciation with someone involved if that feels good.',
-      'Log a gratitude entry with tags so future-you can spot what supports you.',
+      'Identify what is contributing to the state.',
+      'Express appreciation if another person contributed and you want to.',
+      'Record the context if tracking supportive conditions is useful.',
     ],
   },
   'high-pleasant': {
     label: 'High energy · Pleasant',
-    description: 'Sparkly energy often aligns with feeling joyful, excited, or proud.',
+    description: 'High activation with pleasant affect can occur with joy, excitement, or pride.',
     emotions: ['joyful', 'excited', 'pride'],
     care: [
-      'Let yourself celebrate—move, dance, or tell someone the good news.',
-      'Anchor the moment by noting what contributed to the joy.',
-      'Capture quick journal tags so you remember what sparked the delight.',
+      'Enjoy or express the positive activation in a way that fits the situation.',
+      'Notice what contributed to the experience.',
+      'Record it if you want to compare positive patterns over time.',
     ],
   },
 };
@@ -190,7 +190,7 @@ export const QUADRANT_SUGGESTIONS = {
 export const EMOTION_LIBRARY = {
   anxiety: {
     name: 'Anxiety',
-    definition: 'An activated, future-focused alert that wants to keep you prepared for possible danger.',
+    definition: 'A state of apprehension or heightened arousal associated with anticipated threat, uncertainty, or possible negative outcomes.',
     bodySignals: ['Tight or fluttery chest', 'Fast heartbeat', 'Butterflies in the stomach', 'Restless energy in hands or feet'],
     thoughts: ['“What if something goes wrong?”', 'Planning every possible outcome', 'Scanning for threats or mistakes'],
     contexts: [
@@ -211,7 +211,7 @@ export const EMOTION_LIBRARY = {
   },
   fear: {
     name: 'Fear',
-    definition: 'A protective alarm that signals you may be in danger or facing something threatening.',
+    definition: 'An emotional response to a perceived immediate or specific threat.',
     bodySignals: ['Cold hands', 'Wide eyes', 'Tense muscles ready to flee or freeze'],
     thoughts: ['“I might get hurt.”', '“This is risky.”'],
     contexts: ['Perceiving physical or emotional threat', 'Entering unfamiliar spaces without support'],
@@ -224,7 +224,7 @@ export const EMOTION_LIBRARY = {
   },
   anger: {
     name: 'Anger',
-    definition: 'A fiery surge that appears when a boundary, value, or need for respect is threatened.',
+    definition: 'An activated emotional state that often occurs in response to perceived obstruction, unfairness, threat, or boundary violation.',
     bodySignals: ['Heat in face or hands', 'Clenched jaw or fists', 'Quick breathing'],
     thoughts: ['“This isn’t fair.”', '“Stop this now.”'],
     contexts: ['Experiencing injustice or disrespect', 'Sensing a boundary violation'],
@@ -237,7 +237,7 @@ export const EMOTION_LIBRARY = {
   },
   overwhelm: {
     name: 'Overwhelm',
-    definition: 'A sense that there is more input or responsibility than you can process at once.',
+    definition: 'A state in which demands, sensory input, or emotional load feel greater than available processing capacity.',
     bodySignals: ['Pressure in the head', 'Difficulty focusing', 'Sighing or shallow breath'],
     thoughts: ['“It’s too much.”', '“I can’t keep up.”'],
     contexts: ['Juggling competing demands', 'Taking in intense sensory or emotional input'],
@@ -250,7 +250,7 @@ export const EMOTION_LIBRARY = {
   },
   excited: {
     name: 'Excited',
-    definition: 'High, sparkling energy that appears when something desired is about to happen.',
+    definition: 'A high-arousal positive state associated with anticipation, interest, or a desired event.',
     bodySignals: ['Bouncing legs', 'Quick speech', 'Warmth in the face'],
     thoughts: ['“This is going to be great!”', '“I can’t wait.”'],
     contexts: ['Anticipating a positive event', 'Working on an inspiring idea', 'Waiting for news'],
@@ -260,7 +260,7 @@ export const EMOTION_LIBRARY = {
   },
   sadness: {
     name: 'Sadness',
-    definition: 'A low, heavy feeling that accompanies loss or unmet needs for connection or meaning.',
+    definition: 'A low-arousal unpleasant state commonly associated with loss, disappointment, or unmet expectations.',
     bodySignals: ['Heavy chest or throat', 'Tears or eye pressure', 'Slower movements'],
     thoughts: ['“This hurts.”', '“I miss what was possible.”'],
     contexts: ['After disappointments', 'Missing someone or something important'],
@@ -273,7 +273,7 @@ export const EMOTION_LIBRARY = {
   },
   grief: {
     name: 'Grief',
-    definition: 'A deep ache that honors the loss of someone, something, or a future you hoped for.',
+    definition: 'An emotional response to significant loss that may include sadness, yearning, anger, numbness, or changes in energy.',
     bodySignals: ['Hollowness in the chest or stomach', 'Wave-like surges of emotion', 'Exhaustion after crying'],
     thoughts: ['“This shouldn’t be gone.”', '“I don’t know who I am without it.”'],
     contexts: ['Bereavement', 'Major life transitions', 'Letting go of a dream'],
@@ -286,7 +286,7 @@ export const EMOTION_LIBRARY = {
   },
   tired: {
     name: 'Tired',
-    definition: 'Low physical or emotional fuel signalling the need for rest or recovery.',
+    definition: 'A state of reduced physical or mental energy associated with a need for rest or recovery.',
     bodySignals: ['Heavy limbs', 'Yawning', 'Difficulty concentrating'],
     thoughts: ['“I can’t push much more.”', '“I need a break.”'],
     contexts: ['Long stretches of effort', 'Emotional caregiving', 'Lack of sleep or nutrition'],
@@ -296,7 +296,7 @@ export const EMOTION_LIBRARY = {
   },
   lonely: {
     name: 'Lonely',
-    definition: 'A signal that you long for connection, understanding, or companionship.',
+    definition: 'Distress associated with a perceived gap between desired and available social connection.',
     bodySignals: ['Ache in the chest', 'Hollow stomach', 'Tears without clear reason'],
     thoughts: ['“No one gets me.”', '“I wish someone were here.”'],
     contexts: ['Being isolated', 'Feeling unseen in a crowd', 'Transitions away from familiar people'],
@@ -309,7 +309,7 @@ export const EMOTION_LIBRARY = {
   },
   guilt: {
     name: 'Guilt',
-    definition: 'An uneasy feeling that signals you may have stepped away from your values or impacted someone.',
+    definition: 'An unpleasant self-evaluative emotion associated with believing that a specific action or omission violated your standards or harmed someone.',
     bodySignals: ['Weighted shoulders', 'Knotted stomach', 'Downcast gaze'],
     thoughts: ['“I should make this right.”', '“I let them down.”'],
     contexts: ['Hurting someone unintentionally', 'Not living up to your own standards'],
@@ -322,7 +322,7 @@ export const EMOTION_LIBRARY = {
   },
   shame: {
     name: 'Shame',
-    definition: 'A painful belief that who you are is unworthy of belonging.',
+    definition: 'A painful self-evaluative emotion associated with a negative judgment of the self and concern about rejection or social exposure.',
     bodySignals: ['Heat in the face', 'Desire to hide', 'Collapsed posture'],
     thoughts: ['“I am the problem.”', '“People will reject me.”'],
     contexts: ['Receiving harsh criticism', 'Reliving past hurts', 'Comparing yourself to others'],
@@ -335,7 +335,7 @@ export const EMOTION_LIBRARY = {
   },
   stress: {
     name: 'Stress',
-    definition: 'The tension of carrying more demands than the current resources make comfortable.',
+    definition: 'A state of psychological or physiological strain that can occur when perceived demands exceed available resources.',
     bodySignals: ['Tight shoulders', 'Headaches', 'Shallow breathing'],
     thoughts: ['“There’s so much to do.”', '“I can’t drop any balls.”'],
     contexts: ['High workloads', 'Caregiving with few breaks', 'Competing deadlines'],
@@ -348,7 +348,7 @@ export const EMOTION_LIBRARY = {
   },
   frustration: {
     name: 'Frustration',
-    definition: 'Irritated energy that shows up when progress feels blocked.',
+    definition: 'An unpleasant activated state that commonly occurs when progress toward a goal is blocked or delayed.',
     bodySignals: ['Tense jaw', 'Sighing', 'Fidgeting'],
     thoughts: ['“Why isn’t this working?”', '“I’m stuck.”'],
     contexts: ['Technical issues', 'Miscommunication', 'Delays outside your control'],
@@ -361,7 +361,7 @@ export const EMOTION_LIBRARY = {
   },
   numb: {
     name: 'Numb',
-    definition: 'A muted state where feelings feel distant or inaccessible.',
+    definition: 'A state of reduced emotional awareness, intensity, or access to feeling.',
     bodySignals: ['Flat or absent sensation', 'Difficulty naming emotions', 'Detached awareness'],
     thoughts: ['“I don’t know what I feel.”', '“It’s just blank.”'],
     contexts: ['Overload after intense emotions', 'Protective shutdown when overwhelmed'],
@@ -374,7 +374,7 @@ export const EMOTION_LIBRARY = {
   },
   bored: {
     name: 'Bored',
-    definition: 'Low stimulation that longs for novelty, purpose, or engagement.',
+    definition: 'An unpleasant low-engagement state associated with insufficient stimulation, interest, or meaning.',
     bodySignals: ['Restless legs', 'Sighing', 'Difficulty focusing'],
     thoughts: ['“This is pointless.”', '“I want something different.”'],
     contexts: ['Repeating tasks', 'Lack of creative outlet'],
@@ -387,7 +387,7 @@ export const EMOTION_LIBRARY = {
   },
   curiosity: {
     name: 'Curiosity',
-    definition: 'Open, exploratory interest in learning more about something.',
+    definition: 'An interest-driven state characterized by motivation to seek information, explore, or understand.',
     bodySignals: ['Leaning forward', 'Eyes widening', 'Gentle alertness'],
     thoughts: ['“What is this about?”', '“I want to understand.”'],
     contexts: ['Encountering new ideas', 'Having space to explore without pressure'],
@@ -397,7 +397,7 @@ export const EMOTION_LIBRARY = {
   },
   thoughtful: {
     name: 'Thoughtful',
-    definition: 'A reflective mood that turns inward to process meaning or possibilities.',
+    definition: 'A reflective state characterized by sustained attention to meaning, decisions, or possibilities.',
     bodySignals: ['Soft gaze', 'Slower pace', 'Focus on inner imagery'],
     thoughts: ['“Let me think this through.”', '“How does this fit?”'],
     contexts: ['Making decisions', 'Integrating new insight'],
@@ -407,7 +407,7 @@ export const EMOTION_LIBRARY = {
   },
   uncertain: {
     name: 'Uncertain',
-    definition: 'Not yet sure what to feel or choose because information is incomplete.',
+    definition: 'A state of unresolved judgment or choice when available information does not support a clear conclusion.',
     bodySignals: ['Mixed sensations', 'Alternating tension and release'],
     thoughts: ['“I need more data.”', '“I’m on the fence.”'],
     contexts: ['Facing ambiguous outcomes', 'Transition periods'],
@@ -417,7 +417,7 @@ export const EMOTION_LIBRARY = {
   },
   determined: {
     name: 'Determined',
-    definition: 'Focused drive to push toward a goal despite challenges.',
+    definition: 'A goal-directed state marked by sustained motivation despite difficulty or delay.',
     bodySignals: ['Tight jaw', 'Forward posture', 'Strong grip'],
     thoughts: ['“I will make this happen.”', '“Keep going.”'],
     contexts: ['Working toward a meaningful goal', 'Protecting someone or something important'],
@@ -427,7 +427,7 @@ export const EMOTION_LIBRARY = {
   },
   focused: {
     name: 'Focused',
-    definition: 'Sharpened attention directed at a task or outcome.',
+    definition: 'A state of concentrated attention directed toward a task, problem, or goal.',
     bodySignals: ['Steady gaze', 'Still body with poised energy'],
     thoughts: ['“Stay on target.”', '“One step at a time.”'],
     contexts: ['Working through complex tasks', 'Solving a problem'],
@@ -437,7 +437,7 @@ export const EMOTION_LIBRARY = {
   },
   calm: {
     name: 'Calm',
-    definition: 'Settled ease when your body senses safety and nothing demands urgent action.',
+    definition: 'A low-arousal state marked by relative physiological and emotional steadiness.',
     bodySignals: ['Even breathing', 'Relaxed muscles', 'Warm, steady presence'],
     thoughts: ['“I can breathe.”', '“I have enough for this moment.”'],
     contexts: ['After soothing connection', 'When needs are met'],
@@ -447,7 +447,7 @@ export const EMOTION_LIBRARY = {
   },
   relief: {
     name: 'Relief',
-    definition: 'Release of tension after a feared outcome does not happen or support arrives.',
+    definition: 'A reduction in tension or distress after a threat, demand, or uncertainty decreases.',
     bodySignals: ['Deep exhale', 'Softening shoulders', 'Warmth spreading'],
     thoughts: ['“It’s over.”', '“I can rest now.”'],
     contexts: ['Receiving good news', 'After a stressful event ends'],
@@ -457,7 +457,7 @@ export const EMOTION_LIBRARY = {
   },
   contented: {
     name: 'Contented',
-    definition: 'Quiet satisfaction when needs feel sufficiently met.',
+    definition: 'A low-to-moderate arousal positive state characterized by satisfaction with current conditions.',
     bodySignals: ['Soft smile', 'Relaxed belly', 'Balanced posture'],
     thoughts: ['“This is enough for now.”', '“I can enjoy this.”'],
     contexts: ['Simple pleasures', 'Quality time with loved ones', 'Finishing meaningful work'],
@@ -467,7 +467,7 @@ export const EMOTION_LIBRARY = {
   },
   hopeful: {
     name: 'Hopeful',
-    definition: 'A forward-looking belief that improvement or support is possible.',
+    definition: 'A future-oriented positive state associated with perceiving that a desired outcome remains possible.',
     bodySignals: ['Light chest', 'Lifted gaze', 'Gentle energy'],
     thoughts: ['“Something good could happen.”', '“There are options.”'],
     contexts: ['Glimpsing new possibilities', 'Receiving encouragement'],
@@ -477,7 +477,7 @@ export const EMOTION_LIBRARY = {
   },
   gratitude: {
     name: 'Gratitude',
-    definition: 'Warm appreciation for kindness, support, or meaningful experiences.',
+    definition: 'Positive appreciation in response to a valued benefit, experience, or contribution.',
     bodySignals: ['Warm chest', 'Soft smile', 'Moist eyes'],
     thoughts: ['“Thank you.”', '“This matters to me.”'],
     contexts: ['Receiving help', 'Noticing beauty', 'Moments of generosity'],
@@ -487,7 +487,7 @@ export const EMOTION_LIBRARY = {
   },
   joyful: {
     name: 'Joyful',
-    definition: 'Expansive delight when something deeply meaningful or playful lands well.',
+    definition: 'A positive emotional state associated with pleasure, connection, accomplishment, or other valued experiences.',
     bodySignals: ['Light, bouncy energy', 'Laughing', 'Sparkling eyes'],
     thoughts: ['“This is wonderful!”', '“I love this.”'],
     contexts: ['Celebrations', 'Shared laughter', 'Creative breakthroughs'],
@@ -497,7 +497,7 @@ export const EMOTION_LIBRARY = {
   },
   pride: {
     name: 'Pride',
-    definition: 'A warm sense of achievement or self-respect after meeting a challenge.',
+    definition: 'A positive self-evaluative emotion associated with achievement, effort, competence, or acting in accordance with your values.',
     bodySignals: ['Expanded chest', 'Lifted chin', 'Steady stance'],
     thoughts: ['“I did it.”', '“I’m proud of myself.”'],
     contexts: ['Finishing a tough task', 'Living your values', 'Showing up bravely'],

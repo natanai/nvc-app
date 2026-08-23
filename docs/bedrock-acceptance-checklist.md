@@ -138,7 +138,7 @@ Pass condition: the eye immediately reads one editor containing controls, not a 
 Spot-check these because their HTML/CSS ownership differs from the main generated-page path:
 
 - Observations;
-- Alexithymia Support;
+- Alexithymia Support: on phone, confirm the lane uses most of the available viewport width, Step 3 selected-emotion details are not trapped inside a heavily inset nested card, explanatory language is neutral/professional rather than anthropomorphic, and Journal opens once from Step 4;
 - Shared Strategies/Feed.
 
 Pass condition: each page looks normally styled, navigation works, and there is no obvious first-paint flash or missing UI.

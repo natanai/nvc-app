@@ -870,9 +870,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
 
     const zoneLine = zoneEvidenceKey && QUADRANT_SUGGESTIONS[state.quadrant]
       ? `• Affective zone estimate: ${QUADRANT_SUGGESTIONS[state.quadrant].label}.`
-      : '• Affective zone estimate: not clear yet (that’s okay).';
+      : '• Affective zone estimate: indeterminate.';
 
-    const messageParts = [...notes, zoneLine, 'Use these as invitations, not rules.'];
+    const messageParts = [...notes, zoneLine, 'Treat these as possibilities rather than conclusions.'];
     const message = messageParts.join(' ');
 
     state.bodyCandidates = entries.slice(0, 5).map(({ key, confidence }) => ({ key, confidence }));
@@ -1308,7 +1308,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       .join('');
     return `
       <div>
-        <h4 class="emotion-suggestions__title">Possible needs this feeling can point to (hypotheses)</h4>
+        <h4 class="emotion-suggestions__title">Needs that may be relevant</h4>
         <ul class="emotion-detail__list emotion-detail__list--links">${items}</ul>
       </div>
     `;
@@ -1335,12 +1335,12 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       <div class="emotion-detail">
         <h3 class="emotion-detail__name">${emotion.name}</h3>
         <p class="emotion-detail__definition">${emotion.definition}</p>
-        ${renderListSection('Common body cues', emotion.bodySignals)}
-        ${renderListSection('Typical thoughts', emotion.thoughts)}
-        ${renderListSection('When it often appears', emotion.contexts)}
+        ${renderListSection('Possible body cues', emotion.bodySignals)}
+        ${renderListSection('Possible thoughts', emotion.thoughts)}
+        ${renderListSection('Common contexts', emotion.contexts)}
         ${renderNeedLinks(emotion.needs)}
-        ${renderListSection('Care ideas to experiment with', emotion.regulation)}
-        <p class="support-note">Everyone feels emotions uniquely. Use these clues as invitations, not rules.</p>
+        ${renderListSection('Regulation options to consider', emotion.regulation)}
+        <p class="support-note">These patterns vary by person. Treat them as possibilities rather than conclusions.</p>
       </div>
     `;
     emotionLibrary.innerHTML = html;
@@ -1354,24 +1354,24 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   function renderRegulationCard(emotion) {
     if (!regulationCard) return;
     const quadrantInfo = state.quadrant ? QUADRANT_SUGGESTIONS[state.quadrant] : null;
-    const extraCare = quadrantInfo?.care ? renderListSection(`Support when you feel ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
+    const extraCare = quadrantInfo?.care ? renderListSection(`Options for ${quadrantInfo.label.toLowerCase()}`, quadrantInfo.care) : '';
     const journalLink = `${basePath}inventory/journal/`;
     const breathingRecommendation = getBreathingRecommendation();
     const breathingSection = `
       <div class="regulation-breathing">
-        <h4 class="emotion-suggestions__title">Matched breathing option</h4>
+        <h4 class="emotion-suggestions__title">Breathing option</h4>
         <p>${breathingRecommendation.summary}</p>
         <button type="button" class="support-button support-button--ghost" data-action="breathing-start" data-breath-pattern="${breathingRecommendation.pattern}">Start ${breathingRecommendation.label}</button>
       </div>
     `;
     const evidenceNote =
-      '<p class="support-note support-note--mini">Affect labeling and exhale-biased breathing can reduce distress (see “Why these?”).</p>';
+      '<p class="support-note support-note--mini">Evidence for affect labeling and paced breathing is summarized in “Why these?”.</p>';
     regulationCard.innerHTML = `
       <h4 class="emotion-suggestions__title">Support for ${emotion.name}</h4>
-      ${renderListSection('Try one of these nurturing steps', emotion.regulation)}
+      ${renderListSection('Regulation options to consider', emotion.regulation)}
       ${extraCare}
       ${breathingSection}
-      <p class="support-note">Experiment kindly. If none of these help, it simply means your body wants something different today. Track what works or needs tweaking so future-you can adjust with care.</p>
+      <p class="support-note">Responses vary. If these options are not useful, another strategy may fit better. Record what changes, if anything, so you can compare patterns over time.</p>
       ${evidenceNote}
       <div class="regulation-actions">
         <a class="support-button support-button--link" href="${journalLink}">Open Journal History</a>
@@ -1391,7 +1391,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
         <button class="support-button support-button--ghost" type="button" data-action="speak-template">Read it aloud</button>
       </div>
       <p class="support-note" data-communication-status role="status"></p>
-      <p class="support-note">It is okay to say, “I’m still figuring out my feelings.” The goal is practice, not perfection.</p>
+      <p class="support-note">It is also valid to say, “I’m still figuring out what I feel.” A label can remain uncertain or change with more information.</p>
     `;
   }
 
@@ -1602,7 +1602,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     const notice = document.createElement('div');
     notice.className = 'evidence-note';
     const message = document.createElement('p');
-    message.textContent = 'Suggestions are hypotheses based on affect science; tap “Why these?” for sources.';
+    message.textContent = 'Suggestions are hypotheses based on affect science, not diagnoses. Use “Why these?” to review sources and limitations.';
     notice.appendChild(message);
     const dismiss = document.createElement('button');
     dismiss.type = 'button';

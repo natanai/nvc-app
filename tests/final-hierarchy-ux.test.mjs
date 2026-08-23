@@ -102,3 +102,45 @@ test('Need strategy browsing and personal strategy editing use compact final hie
   assert.equal((css.match(/\n\.strategy-form \{/g) || []).length, 1, 'personal strategy form must have one canonical base rule');
   assert.equal(css.includes('min-height: 6.5rem'), false, 'prototype textarea height must stay retired');
 });
+
+
+test('Alexithymia Support uses mobile-first width and neutral professional language', async () => {
+  const html = await load('alexithymia-support/index.html');
+  const runtime = await load('scripts/alexithymia-support.js');
+  const data = await load('scripts/alexithymia-support-data.js');
+
+  assert.ok(html.includes('body.alexithymia-support-page {\n    padding-left: max(0.5rem, env(safe-area-inset-left));'), 'Support Lane must reduce the route-level phone gutter at its prepaint owner');
+  assert.ok(html.includes('.alexithymia-support-page .page {\n    padding: 1rem 0.72rem 1.15rem;'), 'Support Lane page shell must use phone-appropriate inline padding');
+  assert.ok(html.includes('.alexithymia-support-page .support-step {\n    min-width: 0;'), 'Support steps must shrink inside the phone viewport by construction');
+  assert.ok(html.includes('.alexithymia-support-page .emotion-suggestions {\n    min-width: 0;'), 'emotion candidate surfaces must not export nested intrinsic width');
+  assert.ok(html.includes('.alexithymia-support-page .emotion-library {\n    min-width: 0;'), 'selected-emotion detail must own a shrinkable mobile surface');
+  assert.ok(html.includes('border-top: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);'), 'selected-emotion detail must flatten its nested card on mobile');
+  assert.ok(html.includes('Alexithymia can make it difficult to identify, distinguish, or describe emotions.'), 'page introduction must explain the construct directly');
+  assert.ok(html.includes('body sensations and affect dimensions'), 'page introduction must describe the actual method');
+
+  assert.ok(data.includes('A state of apprehension or heightened arousal associated with anticipated threat, uncertainty, or possible negative outcomes.'), 'emotion definitions must use neutral descriptive language');
+  assert.ok(data.includes('High activation with pleasant affect can occur with joy, excitement, or pride.'), 'affect-zone copy must use descriptive rather than decorative language');
+  assert.ok(runtime.includes("renderListSection('Possible body cues', emotion.bodySignals)"), 'selected-emotion details must use probabilistic section framing');
+  assert.ok(runtime.includes('These patterns vary by person. Treat them as possibilities rather than conclusions.'), 'selected-emotion detail must state its uncertainty plainly');
+  assert.ok(runtime.includes('Suggestions are hypotheses based on affect science, not diagnoses.'), 'the evidence notice must state the non-diagnostic boundary');
+
+  const combined = [html, runtime, data].join('\n');
+  for (const retired of [
+    'gentle structure',
+    'caring next steps',
+    'areas that speak up',
+    'If you feel revved up',
+    'Keep practicing gently',
+    'You did courageous work',
+    'future-focused alert that wants',
+    'protective alarm',
+    'fiery surge',
+    'High, sparkling energy',
+    'deep ache that honors',
+    'Low stimulation that longs',
+    'future-you',
+    'your body wants something different',
+  ]) {
+    assert.equal(combined.includes(retired), false, 'retired anthropomorphic/conversational copy must stay retired: ' + retired);
+  }
+});
