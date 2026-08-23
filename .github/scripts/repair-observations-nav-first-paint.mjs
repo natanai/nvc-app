@@ -237,7 +237,7 @@ write(magnetPath, magnet);
 
 // Document the new canonical owner for contributors and researchers.
 let readme = read('README.md');
-const statusNeedle = '- category hubs paint normally and let the existing magnet runtime own saved-position restoration and handmade tilt/offset. Navigation alone retains the established lightweight saved-layout prepaint path. Permanent regressions forbid the global JavaScript-readiness visibility gate, mobile fixed-root-background trigger, and compensating Feeling-art compositor hack that were identified during Bedrock phone testing.';
+const statusNeedle = '- category hubs paint normally and let the existing magnet runtime own saved-position restoration and handmade tilt/offset. Navigation alone retains the established lightweight saved-layout prepaint path. Permanent regressions forbid the global JavaScript-readiness visibility gate, mobile fixed-root-background trigger, and compensating Feeling-art compositor hack identified during Bedrock phone testing.';
 readme = replaceOnce(
   readme,
   statusNeedle,
